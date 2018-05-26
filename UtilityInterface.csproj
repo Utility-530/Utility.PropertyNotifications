@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageId>dt_UtilityInterface</PackageId>
+    <Description>utility interfaces</Description>
+    <PackageTags>interface utility</PackageTags>
+    <PackageProjectUrl>https://github.com/dtaylor-530/UtilityInterface</PackageProjectUrl>
+  </PropertyGroup>
+
+</Project>
