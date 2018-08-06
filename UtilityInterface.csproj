@@ -3,9 +3,16 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>dt_UtilityInterface</PackageId>
-    <Description>utility interfaces</Description>
+    <Description>utility interfaces:
+IKey, IDbRow, IDbTimeValue, IDbPeriod, IPeriodic, IPeriod,IParent, ITimeValue, IDistributed</Description>
     <PackageTags>interface utility</PackageTags>
     <PackageProjectUrl>https://github.com/dtaylor-530/UtilityInterface</PackageProjectUrl>
+    <Authors />
+    <Company />
+    <Product />
+    <Copyright></Copyright>
+    <PackageReleaseNotes>utility interfaces</PackageReleaseNotes>
+    <Version>1.0.3</Version>
   </PropertyGroup>
 
 </Project>

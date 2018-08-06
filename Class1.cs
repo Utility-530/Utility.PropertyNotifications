@@ -1,51 +1,52 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace UtilityInterface
 {
-    public class Class1
+
+
+
+
+    public interface IPeriod
     {
-        public interface IKey
-        {
-            string Key { get; set; }
 
-        }
+        DateTime Start { get; set; }
+        DateTime End { get; set; }
 
-
-        public interface IPeriodic
-        {
-
-            DateTime Start { get; set; }
-            DateTime End { get; set; }
-
-        }
-
-
-
-
-
-        public interface ITimeValue
-        {
-
-            double Value { get; set; }
-            DateTime Time { get; set; }
-
-
-        }
-
-
-
-        public interface IDistibuted
-        {
-
-            double Weight { get; set; }
-
-        }
-
-
-        public interface IDbRow
-        {
-            Int64 Id { get; set; }
-            Int64 ParentId { get; set; }
-        }
     }
+
+    public interface IParent<T>
+    {
+        IList<T> Children { get; set; }
+
+    }
+
+
+
+    public interface ITimeValue
+    {
+
+        double Value { get; set; }
+        DateTime Time { get; set; }
+
+
+    }
+
+
+    public interface IPeriodic
+    {
+        IList<DateTime> Dates { get; set; } 
+    }
+
+
+    public interface IDistributed
+    {
+
+        double Weight { get; set; }
+
+    }
+
+
+
+
 }
