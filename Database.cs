@@ -42,4 +42,13 @@ namespace UtilityInterface.Database
         
     }
 
+    public interface IContainer<T>
+    {
+        T Object { get; }
+    }
+
+    public interface IContainer
+    {
+        Object Object { get; }
+    }
 }
