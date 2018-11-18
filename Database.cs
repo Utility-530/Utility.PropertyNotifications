@@ -42,5 +42,9 @@ namespace UtilityInterface.Database
         
     }
 
+    public interface IPeriodic
+    {
+        IEnumerable<Int64> Dates { get; set; }
+    }
 
 }

@@ -20,7 +20,7 @@ namespace UtilityInterface
 
     public interface IParent<T>
     {
-        IList<T> Children { get; set; }
+        IEnumerable<T> Children { get; set; }
 
     }
 
@@ -42,7 +42,7 @@ namespace UtilityInterface
 
     public interface IPeriodic
     {
-        IList<DateTime> Dates { get; set; } 
+        IEnumerable<DateTime> Dates { get; set; } 
     }
 
 
@@ -57,9 +57,15 @@ namespace UtilityInterface
     public interface IPermanent<T>
     {
 
-        bool Save(object o);
+        bool Save(T o);
         T Load();
 
+    }
+    public interface IPermanent
+    {
+
+        bool Save(object o);
+        object Load();
     }
 
     public interface IPlayer
@@ -108,6 +114,16 @@ namespace UtilityInterface
 
     public interface IContainer
     {
-        Object Object { get; }
+        object Object { get; }
+    }
+
+    public interface IMethod
+    {
+        Func<object,object> Method  { get; }
+    }
+
+    public interface IMethod<T,R>
+    {
+        Func<T,R> Method  { get; }
     }
 }
