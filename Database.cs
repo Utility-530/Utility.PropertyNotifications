@@ -4,11 +4,7 @@ using System.Text;
 
 namespace UtilityInterface.Database
 {
-    public interface IKey
-    {
-        String Key { get; set; }
 
-    }
 
     public interface IId
     {

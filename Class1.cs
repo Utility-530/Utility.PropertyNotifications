@@ -45,13 +45,16 @@ namespace UtilityInterface
         IEnumerable<DateTime> Dates { get; set; } 
     }
 
+    public interface IKey
+    {
+        String Key { get; set; }
+
+    }
+
 
     public interface IDistributed
     { 
-
         double Weight { get; set; }
-
-
     }
 
     public interface IPermanent<T>
@@ -125,5 +128,15 @@ namespace UtilityInterface
     public interface IMethod<T,R>
     {
         Func<T,R> Method  { get; }
+    }
+
+    public interface IFunction
+    {
+        object Function(object t);
+    }
+
+    public interface IFunction<T, R>
+    {
+        R Function(T t);
     }
 }

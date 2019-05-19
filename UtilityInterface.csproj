@@ -7,14 +7,16 @@
 IKey,IId, IRow,IChildRow, ITimeValue,  IPeriodic, IPeriod,IParent, ITimeValue, IDistributed,IPermanent,IPlayer</Description>
     <PackageTags>interface utility</PackageTags>
     <PackageProjectUrl>https://github.com/dtaylor-530/UtilityInterface</PackageProjectUrl>
-    <Authors />
+    <Authors>Declan Taylor</Authors>
     <Company />
     <Product />
     <Copyright></Copyright>
     <PackageReleaseNotes>utility interfaces</PackageReleaseNotes>
-    <Version>1.0.7</Version>
-    <AssemblyVersion>1.0.7.0</AssemblyVersion>
-    <FileVersion>1.0.7.0</FileVersion>
+    <Version>1.1.1</Version>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
 </Project>
