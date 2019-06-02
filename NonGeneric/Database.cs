@@ -1,46 +1,109 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace UtilityInterface.Database
+namespace UtilityInterface.NonGeneric.Database
 {
+
+
+
+    public interface ISelectAll
+    {
+        IEnumerable SelectAll();
+    }
+
+
+    public interface ISelect
+    {
+        object Select(object item);
+    }
+
+    public interface ISelectById
+    {
+        object SelectById(object item);
+    }
+    public interface IInsert
+    {
+        bool Insert(object item);
+    }
+
+    public interface IInsertBulk
+    {
+        int InsertBulk(IEnumerable item);
+    }
+
+
+    public interface IUpdate
+    {
+        bool Update(object item);
+
+    }
+
+    public interface IUpdateBulk
+    {
+        int UpdateBulk(IEnumerable item);
+    }
+
+    public interface IDelete
+    {
+        bool Delete(object item);
+    }
+
+    public interface IDeleteBulk
+    {
+        int DeleteBulk(IEnumerable item);
+    }
+
+    public interface IDeleteById
+    {
+        bool DeleteById(object item);
+    }
+
+
+    public interface IDbService : IDisposable,ISelectAll, ISelect, ISelectById,IInsert,IInsertBulk,IUpdate,IUpdateBulk,IDelete,IDeleteBulk,IDeleteById
+    {
+     
+    }
 
 
     public interface IId
     {
-        Int64 Id { get; set; }
+        long Id { get; set; }
     }
 
 
-    public interface IChildRow: IId
+    public interface IChildRow : IId
     {
-        Int64 ParentId { get; set; }
+        long ParentId { get; set; }
     }
 
 
-    public interface IChildRow<T> : IChildRow where T: IId
+
+    public interface ITime
     {
-        T Parent { get; set; }
+        long Time { get; set; }
+    }
+    public interface IValue
+    {
+        long Value { get; set; }
     }
 
-
-    public interface ITimeValue
+    public interface ITimeValue:ITime,IValue
     {
-        Int64 Time { get; set; }
-        Int64 Value { get; set; }
     }
 
     public interface IPeriod
     {
 
-        Int64 Start { get; set; }
-        Int64 End { get; set; }
-        
+        long Start { get; set; }
+        long End { get; set; }
+
     }
 
     public interface IPeriodic
     {
-        IEnumerable<Int64> Dates { get; set; }
+        IEnumerable<long> Dates { get; set; }
     }
 
 }

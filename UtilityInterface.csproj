@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageId>dt_UtilityInterface</PackageId>
-    <Description>utility interfaces:
-IKey,IId, IRow,IChildRow, ITimeValue,  IPeriodic, IPeriod,IParent, ITimeValue, IDistributed,IPermanent,IPlayer</Description>
+    <PackageId>UtilityInterface</PackageId>
+    <Description>IKey,IId, IRow,IChildRow, IPeriodic, IPeriod,IParent, IDistributed, ISelectAll,
+ISelect, ISelectById, IInsert, IInsertBulk, IUpdate  , IUpdateBulk, IDelete, IDeleteBulk, IDeleteById, IDbService, IValue, ITimeValue, IPermanent, IPlayer ...</Description>
     <PackageTags>interface utility</PackageTags>
     <PackageProjectUrl>https://github.com/dtaylor-530/UtilityInterface</PackageProjectUrl>
     <Authors>Declan Taylor</Authors>
@@ -12,9 +12,9 @@ IKey,IId, IRow,IChildRow, ITimeValue,  IPeriodic, IPeriod,IParent, ITimeValue, I
     <Product />
     <Copyright></Copyright>
     <PackageReleaseNotes>utility interfaces</PackageReleaseNotes>
-    <Version>1.1.1</Version>
-    <AssemblyVersion>1.1.0.0</AssemblyVersion>
-    <FileVersion>1.1.0.0</FileVersion>
+    <Version>2.0.1-alpha</Version>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>

@@ -1,22 +1,75 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UtilityInterface.NonGeneric.Database;
 
-namespace UtilityInterface.Database
+namespace UtilityInterface.Generic.Database
 {
 
-
-    public interface IId
+    public interface ISelectAll<T>
     {
-        Int64 Id { get; set; }
+        IEnumerable<T> SelectAll();
     }
 
 
-    public interface IChildRow: IId
+    public interface ISelect<T>
     {
-        Int64 ParentId { get; set; }
+        T Select(T item);
     }
 
+    public interface ISelectById<T,R>
+    {
+        T SelectById(R id);
+    }
+
+    public interface ISelectBy<T>
+    {
+        IEnumerable<T> SelectBy(Func<T,bool> id);
+    }
+
+
+    public interface IInsert<T>
+    {
+        bool Insert(T item);
+    }
+
+    public interface IInsertBulk<T>
+    {
+        int InsertBulk(IEnumerable<T> item);
+    }
+
+
+    public interface IUpdate<T>
+    {
+        bool Update(T item);
+
+    }
+
+    public interface IUpdateBulk<T>
+    {
+        int UpdateBulk(IEnumerable<T> item);
+    }
+
+    public interface IDelete<T>
+    {
+        bool Delete(T item);
+    }
+
+    public interface IDeleteBulk<T>
+    {
+        int DeleteBulk(IEnumerable<T> item);
+    }
+
+    public interface IDeleteById<R>
+    {
+        bool DeleteById(R id);
+    }
+
+
+    public interface IDbService<T,R> : IDisposable, ISelectAll<T>, ISelect<T>, ISelectById<T,R>, IInsert<T>, IInsertBulk<T>, IUpdate<T>, IUpdateBulk<T>, IDelete<T>, IDeleteBulk<T>, IDeleteById<R>
+    {
+
+    }
 
     public interface IChildRow<T> : IChildRow where T: IId
     {
@@ -24,23 +77,13 @@ namespace UtilityInterface.Database
     }
 
 
-    public interface ITimeValue
+    public interface IValue<T>
     {
-        Int64 Time { get; set; }
-        Int64 Value { get; set; }
+        T Value { get; set; }
     }
 
-    public interface IPeriod
+    public interface ITimeValue<T> : ITime, IValue<T>
     {
-
-        Int64 Start { get; set; }
-        Int64 End { get; set; }
-        
-    }
-
-    public interface IPeriodic
-    {
-        IEnumerable<Int64> Dates { get; set; }
     }
 
 }

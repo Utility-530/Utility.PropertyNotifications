@@ -1,69 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UtilityInterface
+namespace UtilityInterface.NonGeneric
 {
 
-
-
-
-
-    public interface IPeriod
+    public interface IStart
     {
-
         DateTime Start { get; set; }
+
+    }
+
+    public interface IEnd
+    {
         DateTime End { get; set; }
 
-
     }
 
-
-    public interface IParent<T>
+    public interface ITime
     {
-        IEnumerable<T> Children { get; set; }
-
-    }
-
-
-
-    public interface ITimeValue
-    {
-
-        double Value { get; set; }
         DateTime Time { get; set; }
+    }
+    public interface IValue
+    {
+        double Value { get; set; }
+    }
 
+
+    public interface IPeriod:IStart,IEnd
+    { 
 
     }
 
-    public interface IService<R>
+
+    public interface ITimeValue:ITime,IValue
     {
-        IObservable<R> Resource { get; }
+
     }
 
     public interface IPeriodic
     {
-        IEnumerable<DateTime> Dates { get; set; } 
+        IEnumerable<DateTime> DateTimes { get; set; } 
     }
 
     public interface IKey
     {
-        String Key { get; set; }
+        string Key { get; set; }
 
     }
+    public interface IName
+    {
+        string Name { get; set; }
 
+    }
 
     public interface IDistributed
     { 
         double Weight { get; set; }
     }
 
-    public interface IPermanent<T>
-    {
-
-        bool Save(T o);
-        T Load();
-
-    }
+   
     public interface IPermanent
     {
 
@@ -71,13 +66,22 @@ namespace UtilityInterface
         object Load();
     }
 
-    public interface IPlayer
+
+    public interface IPlay
+    {
+        void Play();
+    }
+    public interface IPause
     {
         void Pause();
-
-        void Resume();
-
+    }
+    public interface ICancel
+    {
         void Cancel();
+    }
+
+    public interface IPlayer:IPlay,IPause,ICancel
+    {
     }
 
 
@@ -87,35 +91,22 @@ namespace UtilityInterface
 
     }
 
-    public interface IFilter<T>
-    {
-        bool Filter(T o);
-
-    }
-
-    public interface ISorter
+    public interface ISort
     {
         bool Sort(object o);
 
     }
 
-    public interface ISorter<T>
-    {
-        bool Sort(T o);
 
+
+    public interface IInitialise
+    {
+         void Initialise(object o);
     }
 
-    public interface IDelayedConstuctor
-    {
-         void Init(object o);
-    }
 
-    public interface IContainer<T>
-    {
-        T Object { get; }
-    }
 
-    public interface IContainer
+    public interface IObject
     {
         object Object { get; }
     }
@@ -125,18 +116,11 @@ namespace UtilityInterface
         Func<object,object> Method  { get; }
     }
 
-    public interface IMethod<T,R>
-    {
-        Func<T,R> Method  { get; }
-    }
 
     public interface IFunction
     {
         object Function(object t);
     }
 
-    public interface IFunction<T, R>
-    {
-        R Function(T t);
-    }
+
 }
