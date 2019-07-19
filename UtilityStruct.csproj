@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Declan Taylor</Authors>
+    <Version>1.0.3</Version>
+  </PropertyGroup>
+  
+
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+     <ShouldCreateLogs>True</ShouldCreateLogs>
+     <AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
+     <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
+     <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
+     <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+     <UpdatePackageVersion>True</UpdatePackageVersion>
+     <PackageVersionSettings>AssemblyVersion.IncrementWithAutoReset.None</PackageVersionSettings>
+     <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+     <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
+             <AssemblyVersion>1.0.4.0</AssemblyVersion>
+        <FileVersion>1.0.4.0</FileVersion>
+   </PropertyGroup> 
+
+   <PropertyGroup>
+        <FileName>"$(ProjectDir)\bin\debug\$(ProjectName)*nupkg"</FileName>
+        <DestinationFolder>C:\Users\rytal\Documents\Visual Studio 2019\NugetPackages</DestinationFolder>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+    </PropertyGroup>    
+    <ItemGroup>
+       <MySourceFiles Include="$(ProjectDir)\bin\debug\$(ProjectName)*nupkg" />
+    </ItemGroup>
+    <Target Name="CopyFiles" AfterTargets="Build">
+        <Message Text="@(MySourceFiles)" Importance="high" /> 
+        <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(DestinationFolder)" />
+    </Target>
+</Project>
