@@ -11,48 +11,47 @@ namespace UtilityStruct
     using System;
 
     /// <summary>
-    /// Structure for representing a pair of coordinates of double type.
+    /// Structure for representing a pair of coordinates of integer type.
     /// </summary>
     /// 
-    /// <remarks><para>The structure is used to store a pair of floating point
-    /// coordinates with double precision.</para>
+    /// <remarks><para>The structure is used to store a pair of integer coordinates.</para>
     /// 
     /// <para>Sample usage:</para>
     /// <code>
     /// // assigning coordinates in the constructor
-    /// DoublePoint p1 = new DoublePoint( 10, 20 );
+    /// IntPoint p1 = new IntPoint( 10, 20 );
     /// // creating a point and assigning coordinates later
-    /// DoublePoint p2;
+    /// IntPoint p2;
     /// p2.X = 30;
     /// p2.Y = 40;
     /// // calculating distance between two points
-    /// double distance = p1.DistanceTo( p2 );
+    /// float distance = p1.DistanceTo( p2 );
     /// </code>
     /// </remarks>
     /// 
     [Serializable]
-    public struct Point
+    public struct IntPoint : IComparable<IntPoint>
     {
         /// <summary> 
         /// X coordinate.
         /// </summary> 
         /// 
-        public double X;
+        public int X;
 
         /// <summary> 
         /// Y coordinate.
         /// </summary> 
         /// 
-        public double Y;
+        public int Y;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Point"/> structure.
+        /// Initializes a new instance of the <see cref="IntPoint"/> structure.
         /// </summary>
         /// 
         /// <param name="x">X axis coordinate.</param>
         /// <param name="y">Y axis coordinate.</param>
         /// 
-        public Point(double x, double y)
+        public IntPoint(int x, int y)
         {
             this.X = x;
             this.Y = y;
@@ -67,12 +66,12 @@ namespace UtilityStruct
         /// <returns>Returns Euclidean distance between this point and
         /// <paramref name="anotherPoint"/> points.</returns>
         /// 
-        public double DistanceTo(Point anotherPoint)
+        public float DistanceTo(IntPoint anotherPoint)
         {
-            double dx = X - anotherPoint.X;
-            double dy = Y - anotherPoint.Y;
+            int dx = X - anotherPoint.X;
+            int dy = Y - anotherPoint.Y;
 
-            return System.Math.Sqrt(dx * dx + dy * dy);
+            return (float)System.Math.Sqrt(dx * dx + dy * dy);
         }
 
         /// <summary>
@@ -102,9 +101,9 @@ namespace UtilityStruct
         /// <returns>Returns new point which coordinates equal to sum of corresponding
         /// coordinates of specified points.</returns>
         /// 
-        public static Point operator +(Point point1, Point point2)
+        public static IntPoint operator +(IntPoint point1, IntPoint point2)
         {
-            return new Point(point1.X + point2.X, point1.Y + point2.Y);
+            return new IntPoint(point1.X + point2.X, point1.Y + point2.Y);
         }
 
         /// <summary>
@@ -117,9 +116,9 @@ namespace UtilityStruct
         /// <returns>Returns new point which coordinates equal to sum of corresponding
         /// coordinates of specified points.</returns>
         /// 
-        public static Point Add(Point point1, Point point2)
+        public static IntPoint Add(IntPoint point1, IntPoint point2)
         {
-            return new Point(point1.X + point2.X, point1.Y + point2.Y);
+            return new IntPoint(point1.X + point2.X, point1.Y + point2.Y);
         }
 
         /// <summary>
@@ -132,9 +131,9 @@ namespace UtilityStruct
         /// <returns>Returns new point which coordinates equal to difference of corresponding
         /// coordinates of specified points.</returns>
         ///
-        public static Point operator -(Point point1, Point point2)
+        public static IntPoint operator -(IntPoint point1, IntPoint point2)
         {
-            return new Point(point1.X - point2.X, point1.Y - point2.Y);
+            return new IntPoint(point1.X - point2.X, point1.Y - point2.Y);
         }
 
         /// <summary>
@@ -147,9 +146,9 @@ namespace UtilityStruct
         /// <returns>Returns new point which coordinates equal to difference of corresponding
         /// coordinates of specified points.</returns>
         ///
-        public static Point Subtract(Point point1, Point point2)
+        public static IntPoint Subtract(IntPoint point1, IntPoint point2)
         {
-            return new Point(point1.X - point2.X, point1.Y - point2.Y);
+            return new IntPoint(point1.X - point2.X, point1.Y - point2.Y);
         }
 
         /// <summary>
@@ -162,9 +161,9 @@ namespace UtilityStruct
         /// <returns>Returns new point which coordinates equal to coordinates of
         /// the specified point increased by specified value.</returns>
         /// 
-        public static Point operator +(Point point, double valueToAdd)
+        public static IntPoint operator +(IntPoint point, int valueToAdd)
         {
-            return new Point(point.X + valueToAdd, point.Y + valueToAdd);
+            return new IntPoint(point.X + valueToAdd, point.Y + valueToAdd);
         }
 
         /// <summary>
@@ -177,9 +176,9 @@ namespace UtilityStruct
         /// <returns>Returns new point which coordinates equal to coordinates of
         /// the specified point increased by specified value.</returns>
         /// 
-        public static Point Add(Point point, double valueToAdd)
+        public static IntPoint Add(IntPoint point, int valueToAdd)
         {
-            return new Point(point.X + valueToAdd, point.Y + valueToAdd);
+            return new IntPoint(point.X + valueToAdd, point.Y + valueToAdd);
         }
 
         /// <summary>
@@ -192,9 +191,9 @@ namespace UtilityStruct
         /// <returns>Returns new point which coordinates equal to coordinates of
         /// the specified point decreased by specified value.</returns>
         /// 
-        public static Point operator -(Point point, double valueToSubtract)
+        public static IntPoint operator -(IntPoint point, int valueToSubtract)
         {
-            return new Point(point.X - valueToSubtract, point.Y - valueToSubtract);
+            return new IntPoint(point.X - valueToSubtract, point.Y - valueToSubtract);
         }
 
         /// <summary>
@@ -207,9 +206,9 @@ namespace UtilityStruct
         /// <returns>Returns new point which coordinates equal to coordinates of
         /// the specified point decreased by specified value.</returns>
         /// 
-        public static Point Subtract(Point point, double valueToSubtract)
+        public static IntPoint Subtract(IntPoint point, int valueToSubtract)
         {
-            return new Point(point.X - valueToSubtract, point.Y - valueToSubtract);
+            return new IntPoint(point.X - valueToSubtract, point.Y - valueToSubtract);
         }
 
         /// <summary>
@@ -222,9 +221,9 @@ namespace UtilityStruct
         /// <returns>Returns new point which coordinates equal to coordinates of
         /// the specified point multiplied by specified value.</returns>
         ///
-        public static Point operator *(Point point, double factor)
+        public static IntPoint operator *(IntPoint point, int factor)
         {
-            return new Point(point.X * factor, point.Y * factor);
+            return new IntPoint(point.X * factor, point.Y * factor);
         }
 
         /// <summary>
@@ -237,9 +236,9 @@ namespace UtilityStruct
         /// <returns>Returns new point which coordinates equal to coordinates of
         /// the specified point multiplied by specified value.</returns>
         ///
-        public static Point Multiply(Point point, double factor)
+        public static IntPoint Multiply(IntPoint point, int factor)
         {
-            return new Point(point.X * factor, point.Y * factor);
+            return new IntPoint(point.X * factor, point.Y * factor);
         }
 
         /// <summary>
@@ -252,9 +251,9 @@ namespace UtilityStruct
         /// <returns>Returns new point which coordinates equal to coordinates of
         /// the specified point divided by specified value.</returns>
         /// 
-        public static Point operator /(Point point, double factor)
+        public static IntPoint operator /(IntPoint point, int factor)
         {
-            return new Point(point.X / factor, point.Y / factor);
+            return new IntPoint(point.X / factor, point.Y / factor);
         }
 
         /// <summary>
@@ -267,9 +266,9 @@ namespace UtilityStruct
         /// <returns>Returns new point which coordinates equal to coordinates of
         /// the specified point divided by specified value.</returns>
         /// 
-        public static Point Divide(Point point, double factor)
+        public static IntPoint Divide(IntPoint point, int factor)
         {
-            return new Point(point.X / factor, point.Y / factor);
+            return new IntPoint(point.X / factor, point.Y / factor);
         }
 
         /// <summary>
@@ -282,7 +281,7 @@ namespace UtilityStruct
         /// <returns>Returns <see langword="true"/> if coordinates of specified
         /// points are equal.</returns>
         ///
-        public static bool operator ==(Point point1, Point point2)
+        public static bool operator ==(IntPoint point1, IntPoint point2)
         {
             return ((point1.X == point2.X) && (point1.Y == point2.Y));
         }
@@ -297,13 +296,13 @@ namespace UtilityStruct
         /// <returns>Returns <see langword="true"/> if coordinates of specified
         /// points are not equal.</returns>
         ///
-        public static bool operator !=(Point point1, Point point2)
+        public static bool operator !=(IntPoint point1, IntPoint point2)
         {
             return ((point1.X != point2.X) || (point1.Y != point2.Y));
         }
 
         /// <summary>
-        /// Check if this instance of <see cref="Point"/> equal to the specified one.
+        /// Check if this instance of <see cref="IntPoint"/> equal to the specified one.
         /// </summary>
         /// 
         /// <param name="obj">Another point to check equalty to.</param>
@@ -312,7 +311,7 @@ namespace UtilityStruct
         /// 
         public override bool Equals(object obj)
         {
-            return (obj is Point) ? (this == (Point)obj) : false;
+            return (obj is IntPoint) ? (this == (IntPoint)obj) : false;
         }
 
         /// <summary>
@@ -327,32 +326,19 @@ namespace UtilityStruct
         }
 
         /// <summary>
-        /// Explicit conversion to <see cref="IntPoint"/>.
+        /// Implicit conversion to <see cref="Point"/>.
         /// </summary>
         /// 
-        /// <param name="point">Double precision point to convert to integer point.</param>
+        /// <param name="point">Integer point to convert to single precision point.</param>
         /// 
-        /// <returns>Returns new integer point which coordinates are explicitly converted
-        /// to integers from coordinates of the specified double precision point by
-        /// casting double values to integers value.</returns>
+        /// <returns>Returns new single precision point which coordinates are implicitly converted
+        /// to floats from coordinates of the specified integer point.</returns>
         /// 
-        public static explicit operator IntPoint(Point point)
+        public static implicit operator Point(IntPoint point)
         {
-            return new IntPoint((int)point.X, (int)point.Y);
+            return new Point(point.X, point.Y);
         }
 
-
-        /// <summary>
-        /// Rounds the double precision point.
-        /// </summary>
-        /// 
-        /// <returns>Returns new integer point, which coordinates equal to whole numbers
-        /// nearest to the corresponding coordinates of the double precision point.</returns>
-        /// 
-        public IntPoint Round()
-        {
-            return new IntPoint((int)System.Math.Round(X), (int)System.Math.Round(Y));
-        }
 
         /// <summary>
         /// Get string representation of the class.
@@ -372,9 +358,22 @@ namespace UtilityStruct
         /// 
         /// <returns>Returns point's distance from (0, 0) point.</returns>
         /// 
-        public double EuclideanNorm()
+        public float EuclideanNorm()
         {
-            return System.Math.Sqrt(X * X + Y * Y);
+            return (float)System.Math.Sqrt(X * X + Y * Y);
+        }
+
+        /// <summary>
+        /// Compares the current instance with another object of the same type and returns an integer that indicates whether the current instance precedes, follows, or occurs in the same position in the sort order as the other object.
+        /// </summary>
+        /// <param name="other">An object to compare with this instance.</param>
+        /// <returns>A value that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance precedes <paramref name="other" /> in the sort order.  Zero This instance occurs in the same position in the sort order as <paramref name="other" />. Greater than zero This instance follows <paramref name="other" /> in the sort order.</returns>
+        public int CompareTo(IntPoint other)
+        {
+            int line = this.Y.CompareTo(other.Y);
+            if (line == 0)
+                return this.X.CompareTo(other.X);
+            return line;
         }
     }
 }
