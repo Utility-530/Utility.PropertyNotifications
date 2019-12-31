@@ -61,9 +61,9 @@ namespace UtilityInterface.NonGeneric.Database
     }
 
 
-    public interface IDbService : IDisposable,ISelectAll, ISelect, ISelectById,IInsert,IInsertBulk,IUpdate,IUpdateBulk,IDelete,IDeleteBulk,IDeleteById
+    public interface IDbService : IDisposable, ISelectAll, ISelect, ISelectById, IInsert, IInsertBulk, IUpdate, IUpdateBulk, IDelete, IDeleteBulk, IDeleteById
     {
-     
+
     }
 
 
@@ -89,7 +89,7 @@ namespace UtilityInterface.NonGeneric.Database
         long Value { get; set; }
     }
 
-    public interface ITimeValue:ITime,IValue
+    public interface ITimeValue : ITime, IValue
     {
     }
 
@@ -105,5 +105,13 @@ namespace UtilityInterface.NonGeneric.Database
     {
         IEnumerable<long> Dates { get; set; }
     }
+
+    public interface IPair
+    {
+        long One { get; set; }
+
+        long Two { get; set; }
+    }
+
 
 }

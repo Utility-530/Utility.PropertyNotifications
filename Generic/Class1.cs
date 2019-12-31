@@ -59,4 +59,25 @@ namespace UtilityInterface.Generic
     {
         R Function(T t);
     }
+
+    public interface IPair<T>
+    {
+        T One { get; set; }
+
+        T Two { get; set; }
+    }
+
+
+    public interface IKey<T>
+    {
+        T Key { get; set; }
+    }
+
+    public interface IRange<T>
+    {
+        T Min { get; set; }
+
+        T Max { get; set; }
+    }
+
 }

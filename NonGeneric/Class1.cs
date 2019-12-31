@@ -122,5 +122,18 @@ namespace UtilityInterface.NonGeneric
         object Function(object t);
     }
 
+    public interface IPair
+    {
+        string One { get; set; }
+
+        string Two { get; set; }
+    }
+
+    public interface IRange
+    {
+        double Min { get; set; }
+
+        double Max { get; set; }
+    }
 
 }

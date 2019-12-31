@@ -6,6 +6,7 @@ using UtilityInterface.NonGeneric.Database;
 namespace UtilityInterface.Generic.Database
 {
 
+
     public interface ISelectAll<T>
     {
         IEnumerable<T> SelectAll();
@@ -69,6 +70,11 @@ namespace UtilityInterface.Generic.Database
     public interface IDbService<T,R> : IDisposable, ISelectAll<T>, ISelect<T>, ISelectById<T,R>, IInsert<T>, IInsertBulk<T>, IUpdate<T>, IUpdateBulk<T>, IDelete<T>, IDeleteBulk<T>, IDeleteById<R>
     {
 
+    }
+
+    public interface IId<T>
+    {
+        T Id { get; set; }
     }
 
     public interface IChildRow<T> : IChildRow where T: IId
