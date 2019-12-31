@@ -4,8 +4,6 @@ namespace UtilityStruct
 {
     public struct Probability
     {
-
-
         public Probability(decimal val) 
         {
             if (val < 1 && val > 0)
@@ -41,6 +39,24 @@ namespace UtilityStruct
             return i.Decimal;
         }
 
+        public static implicit operator double(Probability i)
+        {
+            return (double)i.Decimal;
+        }
+
+
+        // User-defined conversion from Probability to decimal
+        public static implicit operator int(Probability i)
+        {
+            return i.Percent;
+        }
+
+        public static implicit operator Percent(Probability i)
+        {
+            return i.Decimal;
+        }
+
+
         public static implicit operator Probability(decimal i)
         {
             return new Probability(i);
@@ -52,9 +68,23 @@ namespace UtilityStruct
             return new Probability((decimal)i);
         }
 
+
+        public static implicit operator Probability(int i)
+        {
+            return new Probability(i);
+        }
+
+
+        public static implicit operator Probability(Percent i)
+        {
+            return new Probability(i);
+        }
+
+
         public decimal Decimal { get; }
 
         public int Percent => (int)(Decimal * 100m);
+
 
         /// <summary>
         /// EuropeanOdd
@@ -130,5 +160,6 @@ namespace UtilityStruct
 
         public static Probability GetFromPercent(int value) => new Probability(value / 100m);
 
+        public static Probability GetFromPercent(double value) => new Probability(value/100d);
     }
 }

@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Declan Taylor</Authors>
-    <Version>1.0.3</Version>
+    <Version>1.0.4</Version>
   </PropertyGroup>
   
 
@@ -26,6 +26,8 @@
         <FileName>"$(ProjectDir)\bin\debug\$(ProjectName)*nupkg"</FileName>
         <DestinationFolder>C:\Users\rytal\Documents\Visual Studio 2019\NugetPackages</DestinationFolder>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <AssemblyVersion>1.0.5.0</AssemblyVersion>
+        <FileVersion>1.0.5.0</FileVersion>
 
     </PropertyGroup>    
     <ItemGroup>
