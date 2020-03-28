@@ -8,11 +8,15 @@ namespace UtilityStruct
     {
         public string Value { get; }
 
-        public Name(string value)
+        public Name(string value): this(value,0)
         {
-            Value = value;
-
         }
 
+        public Name(string value, int position)
+        {
+            Value = value;
+            Order = position;
+        }
+        public int Order { get; }
     }
 }
