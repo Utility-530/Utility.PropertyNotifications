@@ -10,9 +10,9 @@ namespace UtilityInterface.Generic
 
     }
 
-    public interface IService<R>
+    public interface IObservableService<R>
     {
-        IObservable<R> Resource { get; }
+        IObservable<R> Service { get; }
     }
 
     public interface ISave<T>
@@ -43,41 +43,41 @@ namespace UtilityInterface.Generic
 
     }
 
-    public interface IContain<T>
+    public interface IObject<T>
     {
         T Object { get; }
     }
 
    
-    public interface IMethod<T,R>
+    public interface IFunction<T,R>
     {
-        Func<T,R> Method  { get; }
+        Func<T,R> Function { get; }
     }
 
   
-    public interface IFunction<T, R>
+    public interface IMethod<T, R>
     {
-        R Function(T t);
+        R Method(T t);
     }
 
     public interface IPair<T>
     {
-        T One { get; set; }
+        T One { get; }
 
-        T Two { get; set; }
+        T Two { get;  }
     }
 
 
     public interface IKey<T>
     {
-        T Key { get; set; }
+        T Key { get; }
     }
 
     public interface IRange<T>
     {
-        T Min { get; set; }
+        T Min { get; }
 
-        T Max { get; set; }
+        T Max { get; }
     }
 
 }

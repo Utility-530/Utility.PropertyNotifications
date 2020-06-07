@@ -26,45 +26,53 @@ namespace UtilityInterface.NonGeneric
     }
 
 
-    public interface IPeriod:IStart,IEnd
-    { 
+    public interface IPeriod : IStart, IEnd
+    {
 
     }
 
 
-    public interface ITimeValue:ITime,IValue
+    public interface ITimeValue : ITime, IValue
     {
 
     }
 
     public interface IPeriodic
     {
-        IEnumerable<DateTime> DateTimes { get; set; } 
+        IEnumerable<DateTime> DateTimes { get; }
     }
 
     public interface IKey
     {
-        string Key { get; set; }
+        string Key { get; }
 
     }
     public interface IName
     {
-        string Name { get; set; }
+        string Name { get; }
 
     }
 
-    public interface IDistributed
-    { 
-        double Weight { get; set; }
-    }
-
-   
-    public interface IPermanent
+    public interface IWeight
     {
+        double Weight { get; }
+    }
 
+    public interface ISave
+    {
         bool Save(object o);
+    }
+
+    public interface ILoad
+    {
         object Load();
     }
+
+    public interface IPermanent : ISave, ILoad
+    {
+
+    }
+
 
 
     public interface IPlay
@@ -80,7 +88,7 @@ namespace UtilityInterface.NonGeneric
         void Cancel();
     }
 
-    public interface IPlayer:IPlay,IPause,ICancel
+    public interface IPlayer : IPlay, IPause, ICancel
     {
     }
 
@@ -101,7 +109,7 @@ namespace UtilityInterface.NonGeneric
 
     public interface IInitialise
     {
-         void Initialise(object o);
+        void Initialise(object o);
     }
 
 
@@ -111,29 +119,33 @@ namespace UtilityInterface.NonGeneric
         object Object { get; }
     }
 
-    public interface IMethod
+    public interface IFunction
     {
-        Func<object,object> Method  { get; }
+        Func<object, object> Function { get; }
     }
 
 
-    public interface IFunction
+    public interface IMethod
     {
-        object Function(object t);
+        object Method(object t);
     }
 
     public interface IPair
     {
-        string One { get; set; }
+        string One { get; }
 
-        string Two { get; set; }
+        string Two { get; }
     }
 
     public interface IRange
     {
-        double Min { get; set; }
+        double Min { get; }
 
-        double Max { get; set; }
+        double Max { get; }
     }
 
+    public interface INameGetter
+    {
+        string GetName(object value);
+    }
 }
