@@ -69,49 +69,18 @@ namespace UtilityInterface.NonGeneric.Database
 
     public interface IId
     {
-        long Id { get; set; }
+        long Id { get; }
     }
+
+    public interface IGuid
+    {
+        Guid Guid { get; }
+    }
+
 
 
     public interface IChildRow : IId
     {
-        long ParentId { get; set; }
+        long ParentId { get; }
     }
-
-
-
-    public interface ITime
-    {
-        long Time { get; set; }
-    }
-    public interface IValue
-    {
-        long Value { get; set; }
-    }
-
-    public interface ITimeValue : ITime, IValue
-    {
-    }
-
-    public interface IPeriod
-    {
-
-        long Start { get; set; }
-        long End { get; set; }
-
-    }
-
-    public interface IPeriodic
-    {
-        IEnumerable<long> Dates { get; set; }
-    }
-
-    public interface IPair
-    {
-        long One { get; set; }
-
-        long Two { get; set; }
-    }
-
-
 }
