@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace UtilityStruct
 {
     public struct Probability
     {
-        public Probability(decimal val) 
+        public Probability(decimal val)
         {
             if (val < 1 && val > 0)
             {
@@ -18,13 +20,13 @@ namespace UtilityStruct
 
         public Probability(double val) : this((decimal)val)
         { }
-  
 
-        public Probability(int percent) 
+
+        public Probability(int percent)
         {
             if (percent <= 100 && percent >= 0)
             {
-                this.Decimal = percent/100m;
+                this.Decimal = percent / 100m;
             }
             else
             {
@@ -160,6 +162,51 @@ namespace UtilityStruct
 
         public static Probability GetFromPercent(int value) => new Probability(value / 100m);
 
-        public static Probability GetFromPercent(double value) => new Probability(value/100d);
+        public static Probability GetFromPercent(double value) => new Probability(value / 100d);
+
+        public static IEnumerable<(decimal dcml, Probability probability)> ToProbabilities(this ICollection<decimal> odds)
+        {
+            decimal sum = Sum();
+
+            foreach (decimal o in odds)
+            {
+                yield return (o, new Probability(1 / (o * sum)));
+            }
+
+            decimal Sum()
+            {
+                decimal sum_ = 0;
+
+                foreach (decimal o in odds)
+                {
+                    if (o < 1) throw new Exception("values are not odds ");
+                    sum_ += 1 / o;
+                }
+
+                return sum_;
+            }
+        }
+
+        /// <summary>
+        /// returns  'perfect percent' - all percent sums to zero
+        /// </summary>
+        /// <param name="match"></param>
+        /// <param name="props"></param>
+        /// <returns></returns>
+        public static (Probability home, Probability draw, Probability away) GetPerfectProbability(Probability home, Probability draw, Probability away)
+        {
+            var margin = GetMargin(home, draw, away);
+            return (home.Decimal / margin, draw.Decimal / margin, away.Decimal / margin);
+        }
+
+
+        /// <summary>
+        /// Gets the remainder of the sums after dividing by zero.
+        /// </summary>
+        /// <param name="match"></param>
+        /// <param name="props"></param>
+        /// <returns></returns>
+        public static decimal GetMargin(Probability home, Probability draw, Probability away) => new[] { home, draw, away }.Sum(val => val.Decimal) - 1;
+
     }
 }
