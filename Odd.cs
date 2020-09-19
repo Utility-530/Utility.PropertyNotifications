@@ -5,15 +5,13 @@ namespace UtilityStruct
 
     public struct Odd
     {
+        public Odd(Probability value) : this(PriceType.Bid, value)
+        {
+        }
 
         public Odd(PriceType priceType, Probability value)
         {
             Type = priceType;
-            Value = value;
-        }
-        public Odd(Probability value)
-        {
-            Type = PriceType.Bid;
             Value = value;
         }
 
@@ -23,15 +21,15 @@ namespace UtilityStruct
 
 
         // User-defined conversion from Digit to double
-        public static implicit operator double(Odd d)
+        public static implicit operator double(Odd odd)
         {
-            return (d.Type == PriceType.Offer ? -1 : 1) * (double)d.Value.EuropeanOdd;
+            return (odd.Type == PriceType.Offer ? -1 : 1) * odd.Value.EuropeanOdd;
         }
 
         // User-defined conversion from Digit to double
-        public static implicit operator decimal(Odd d)
+        public static implicit operator decimal(Odd odd)
         {
-            return (d.Type == PriceType.Offer ? -1 : 1) * d.Value.EuropeanOdd;
+            return (odd.Type == PriceType.Offer ? -1 : 1) * (decimal)odd.Value.EuropeanOdd;
         }
 
         public enum PriceType
@@ -39,8 +37,11 @@ namespace UtilityStruct
             Bid, Offer
         }
 
+        public override string ToString()
+        {
+            return Value.ToString() + " " + Type.ToString();
+        }
     }
-
 
 
     public static class OddExtension
@@ -56,8 +57,6 @@ namespace UtilityStruct
         /// <returns></returns>
         public static decimal AdjustedPrice(this Odd odd) => odd - 1m;
     }
-
-
 }
 
 

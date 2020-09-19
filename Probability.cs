@@ -6,11 +6,11 @@ namespace UtilityStruct
 {
     public struct Probability
     {
-        public Probability(decimal val)
+        public Probability(double val)
         {
             if (val < 1 && val > 0)
             {
-                this.Decimal = val;
+                this.Value = val;
             }
             else
             {
@@ -18,7 +18,7 @@ namespace UtilityStruct
             }
         }
 
-        public Probability(double val) : this((decimal)val)
+        public Probability(decimal val) : this((double)val)
         { }
 
 
@@ -26,7 +26,7 @@ namespace UtilityStruct
         {
             if (percent <= 100 && percent >= 0)
             {
-                this.Decimal = percent / 100m;
+                this.Value = percent / 100d;
             }
             else
             {
@@ -43,19 +43,19 @@ namespace UtilityStruct
 
         public static implicit operator double(Probability i)
         {
-            return (double)i.Decimal;
+            return (double)i.Value;
         }
 
 
         // User-defined conversion from Probability to decimal
         public static implicit operator int(Probability i)
         {
-            return i.Percent;
+            return (int)i.Percent;
         }
 
         public static implicit operator Percent(Probability i)
         {
-            return i.Decimal;
+            return i.Value;
         }
 
 
@@ -83,26 +83,27 @@ namespace UtilityStruct
         }
 
 
-        public decimal Decimal { get; }
+        public double Value { get; }
+        public decimal Decimal => (decimal)Value;
 
-        public int Percent => (int)(Decimal * 100m);
+        public double Percent => Value * 100d;
 
 
         /// <summary>
         /// EuropeanOdd
         /// </summary>
-        public decimal EuropeanOdd => 1 / Decimal;
+        public double EuropeanOdd => 1 / Value;
 
 
         public int MoneyLine
         {
             get
             {
-                int percent = Percent;
-                if (Decimal > 0.5m)
-                    return (int)(-(percent / (100m - percent)) * 100);
+                var percent = Percent;
+                if (Value > 0.5d)
+                    return (int)(-(percent / (100d - percent)) * 100);
                 else
-                    return (int)(((100m - percent) / percent) * 100);
+                    return (int)((100d - percent) / percent * 100);
             }
         }
 
@@ -111,8 +112,8 @@ namespace UtilityStruct
         {
             get
             {
-                var fraction = GetFraction((double)Decimal);
-                return ((fraction.Item1 + fraction.Item2), fraction.Item2);
+                var fraction = GetFraction((double)Value);
+                return (fraction.Item1 + fraction.Item2, fraction.Item2);
             }
         }
 
@@ -137,6 +138,11 @@ namespace UtilityStruct
                 return (b_r, a_t * b_r + 1);
             else
                 return (c * b_t + 1, c * a_t * b_t + a_t + c);
+        }
+
+        public override string ToString()
+        {
+            return Value.ToString("N2") + " %";
         }
     }
 
@@ -196,7 +202,7 @@ namespace UtilityStruct
         public static (Probability home, Probability draw, Probability away) GetPerfectProbability(Probability home, Probability draw, Probability away)
         {
             var margin = GetMargin(home, draw, away);
-            return (home.Decimal / margin, draw.Decimal / margin, away.Decimal / margin);
+            return (home.Value / margin, draw.Value / margin, away.Value / margin);
         }
 
 
@@ -206,7 +212,7 @@ namespace UtilityStruct
         /// <param name="match"></param>
         /// <param name="props"></param>
         /// <returns></returns>
-        public static decimal GetMargin(Probability home, Probability draw, Probability away) => new[] { home, draw, away }.Sum(val => val.Decimal) - 1;
+        public static double GetMargin(Probability home, Probability draw, Probability away) => new[] { home, draw, away }.Sum(val => val.Value) - 1;
 
     }
 }
