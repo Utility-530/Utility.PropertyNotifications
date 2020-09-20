@@ -2,7 +2,7 @@
 {
     public interface IValue<T>
     {
-        T Value { get; set; }
+        T Value { get; }
     }
 
 }

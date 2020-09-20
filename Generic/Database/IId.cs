@@ -2,7 +2,7 @@
 {
     public interface IId<T>
     {
-        T Id { get; set; }
+        T Id { get; }
     }
 
 }
