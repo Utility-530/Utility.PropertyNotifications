@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+    
+    <ResourceDictionary.MergedDictionaries>
+        <!--<ResourceDictionary  Source="/ReactiveAsyncWorker.Wpf;component/Themes/FileDownloaderQueueControl.xaml"/>
+        <ResourceDictionary  Source="/ReactiveAsyncWorker.Wpf;component/Themes/BackgroundQueueWorkerControl.xaml"/>
+        <ResourceDictionary  Source="/ReactiveAsyncWorker.Wpf;component/Themes/TPLQueueControl.xaml"/>
+        <ResourceDictionary  Source="/ReactiveAsyncWorker.Wpf;component/Themes/TPLQueueStringControl.xaml"/>-->
+        <ResourceDictionary  Source="/ReactiveAsyncWorker.Wpf;component/Themes/AsyncQueueWorkerControl.xaml"/>
+        <ResourceDictionary  Source="/ReactiveAsyncWorker.Wpf;component/DataTemplate/FileDownloaderDataTemplate.xaml"/>
+        <ResourceDictionary  Source="/ReactiveAsyncWorker.Wpf;component/DataTemplate/ProgressWorkerItemDataTemplate.xaml"/>
+        <ResourceDictionary  Source="/ReactiveAsyncWorker.Wpf;component/DataTemplate/WorkerItemDataTemplate.xaml"/>
+
+    </ResourceDictionary.MergedDictionaries>
+
+   
+
+</ResourceDictionary>

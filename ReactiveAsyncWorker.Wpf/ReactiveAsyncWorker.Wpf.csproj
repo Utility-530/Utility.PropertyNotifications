@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ReactiveAsyncWorker.ViewModel\ReactiveAsyncWorker.ViewModel.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="DataTemplate\FileDownloaderDataTemplate.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="DataTemplate\ProgressWorkerItemDataTemplate.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="DataTemplate\WorkerItemDataTemplate.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Deprecated\Themes\AsyncQueueWorkerControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Deprecated\FileDownloaderQueueControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Deprecated\Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Update="Deprecated\TPLQueueControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Deprecated\TPLQueueStringControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\KeyCollectionView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="View\ReactiveProcessPairView.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Deprecated\ViewModel\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ReactiveUI.Events.WPF" Version="13.2.2" />
+    <PackageReference Include="ReactiveUI.WPF" Version="13.0.38" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="View\KeyCollectionView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\ReactiveProcessPairView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>
