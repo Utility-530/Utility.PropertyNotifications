@@ -4,7 +4,7 @@ using System.Reactive.Disposables;
 namespace ReactiveAsyncWorker.Wpf.View
 {
     /// <summary>
-    /// Interaction logic for AsyncTaskStatusView.xaml
+    /// Interaction logic for MultiTaskView.xaml
     /// </summary>
     public partial class KeyCollectionView 
     {

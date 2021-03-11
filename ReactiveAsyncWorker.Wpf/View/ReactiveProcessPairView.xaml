@@ -17,13 +17,14 @@
             <RowDefinition MinHeight="100" ></RowDefinition>
         </Grid.RowDefinitions>
         <TextBlock x:Name="KeyTextBlock" ></TextBlock>
-        <ItemsControl x:Name="ValueItemsControl" Grid.Row="1">
+        <TextBlock x:Name="ValueTextBlock" Grid.Row="1"></TextBlock>
+        <!--<ItemsControl x:Name="ValueItemsControl" Grid.Row="1">
             <ItemsControl.ItemTemplate>
                 <DataTemplate >
                     <Ellipse Fill="Tomato" Height="15" Width="15" Margin="4"></Ellipse>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        </ItemsControl>-->
     </Grid>
 
 </rui:ReactiveUserControl>

@@ -11,10 +11,10 @@
     xmlns:model1="clr-namespace:ReactiveAsyncWorker.ViewModel;assembly=ReactiveAsyncWorker.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UniformGrid>
-        <Label Content="IsFree"></Label>
-        <TextBlock x:Name="IsFreeTextBlock"></TextBlock>
-        <Label Content="Count"></Label>
-        <TextBlock x:Name="CountTextBlock"></TextBlock>    
+    <UniformGrid  Width="140">
+        <Label Content="IsFree" VerticalContentAlignment="Center"></Label>
+        <TextBlock x:Name="IsFreeTextBlock" VerticalAlignment="Center"></TextBlock>
+        <Label Content="Count" VerticalContentAlignment="Center"></Label>
+        <TextBlock x:Name="CountTextBlock" VerticalAlignment="Center"></TextBlock>    
     </UniformGrid>
 </rui:ReactiveUserControl>

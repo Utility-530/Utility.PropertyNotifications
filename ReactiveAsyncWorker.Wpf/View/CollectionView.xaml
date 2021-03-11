@@ -14,14 +14,20 @@
 
 
     <Grid VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
         <StackPanel>
-            <TextBlock x:Name="TitleTextBlock"></TextBlock>
-            <TextBlock x:Name="CountTextBlock"></TextBlock>
+            <WrapPanel>                
+            <TextBlock x:Name="TitleTextBlock" Margin="2"></TextBlock>
+                <TextBlock x:Name="CountTextBlock" Margin="2"></TextBlock>
+            </WrapPanel>
+
             <ItemsControl 
                     x:Name="CollectionItemsControl"  
                     Margin="15"
                     ItemTemplate="{StaticResource ViewModelViewHostTemplate}" >
-
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Columns="1"></UniformGrid>
@@ -29,7 +35,13 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </StackPanel>
-        <TextBlock x:Name="RemainingTextBlock" VerticalAlignment="Bottom" ToolTip="non-visible items"></TextBlock>
+        
+        <TextBlock x:Name="RemainingTextBlock" 
+                   Grid.Row="1"
+                   MinHeight="30" Margin="20,0"
+                   Foreground="Tomato"                
+                   VerticalAlignment="Bottom" ToolTip="non-visible items">            
+        </TextBlock>
     </Grid>
 
 </rui:ReactiveUserControl>

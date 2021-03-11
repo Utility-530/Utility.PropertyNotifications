@@ -10,9 +10,6 @@ using System.Reactive.Linq;
 
 namespace ReactiveAsyncWorker
 {
-
-
-
      class BackgroundWorkerDoWork
     {
         private ManualResetEvent _busy;

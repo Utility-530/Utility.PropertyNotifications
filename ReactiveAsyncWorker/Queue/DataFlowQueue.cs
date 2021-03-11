@@ -107,7 +107,7 @@ namespace ReactiveAsyncWorker
                 .Distinct(a => (a.Key, a.State))
                 .Subscribe(a =>
                 {
-                    if (a.State == ProcessState.Running)
+                    if (a.State == ProcessState.Ready)
                         coll.Add(a);
                     if (a.State == ProcessState.Terminated)
                         coll.Remove(a);

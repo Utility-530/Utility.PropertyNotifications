@@ -10,7 +10,10 @@
     <TabControl>
         
         <TabItem Header="TPL">
-            <local:TPLUserControl></local:TPLUserControl>
+            <reactiveui:ViewModelViewHost VerticalContentAlignment="Stretch"
+                                          HorizontalContentAlignment="Stretch" 
+                x:Name="TPLViewModelViewHost">
+            </reactiveui:ViewModelViewHost>
         </TabItem>
 
         <TabItem Header="Factory">

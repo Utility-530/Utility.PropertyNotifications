@@ -1,11 +1,15 @@
-﻿<UserControl x:Class="DemoApp.TPLUserControl"
+﻿<reactiveui:ReactiveUserControl 
+    x:TypeArguments="demoapp:DemoTPLViewModel"
+    x:Class="ReactiveAsyncWorker.DemoApp.View.DemoTPLView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              xmlns:reactiveui="http://reactiveui.net"
-             FontWeight="DemiBold"
+             xmlns:controls="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
+    xmlns:demoapp="clr-namespace:ReactiveAsyncWorker.DemoApp.ViewModel"
+    FontWeight="DemiBold"
              FontSize="16"
              d:DesignHeight="450" d:DesignWidth="800">
     
@@ -16,14 +20,15 @@
                     x:Name="StartButton"
                     Content="start" 
                     Width="200"
-                    Height="40"></Button>
+                   ></Button>
             <Button Command="{Binding ConfigurationViewModel.StartManyCommand}"             
                     x:Name="StartManyButton"
                     Content="start many" 
                     Width="200"
-                    Height="40"></Button>
-
+                   ></Button>
+            <controls:OversizedNumberSpinner x:Name="MainOversizedNumberSpinner"></controls:OversizedNumberSpinner>
             <reactiveui:ViewModelViewHost x:Name="CollectionModelViewHost" 
+                                          Margin="40,0,0,0"
                                       VerticalContentAlignment="Stretch" 
                                       HorizontalContentAlignment="Stretch">
             </reactiveui:ViewModelViewHost>
@@ -44,4 +49,4 @@
   
     </DockPanel>
 
-</UserControl>
+</reactiveui:ReactiveUserControl>

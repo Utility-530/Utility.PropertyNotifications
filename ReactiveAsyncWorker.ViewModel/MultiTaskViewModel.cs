@@ -10,54 +10,64 @@ using UtilityEnum;
 using ReactiveUI;
 using ReactiveAsyncWorker.Model;
 using DynamicData.Binding;
-using System.Collections;
+using Endless;
 
 namespace ReactiveAsyncWorker.ViewModel
 {
-    public class AsyncTaskStatusViewModel : ReactiveObject, IObserver<ProgressState>
+    public class MultiTaskViewModel : ReactiveObject, IObserver<ProgressState>
     {
         private readonly CollectionViewModel<ProgressState, string> readyViewModel;
         private readonly CollectionViewModel<ProgressState, string> runningViewModel;
-        private readonly CollectionViewModel<ProgressState, string> terminatedViewModel;
-        private readonly ReadOnlyObservableCollection<ReactiveProcessPair> items;
+        private readonly CollectionViewModel<ProgressState,  string> terminatedViewModel;
+        private readonly ReadOnlyObservableCollection<KeyCollection> combinedItems;
         private readonly ReadOnlyObservableCollection<KeyCollection> keyGroups;
         private readonly ISubject<ProgressState> progressStateSubject = new ReplaySubject<ProgressState>();
 
-
-        public AsyncTaskStatusViewModel(IObservable<ProgressState> progressState, IScheduler scheduler)
+        public MultiTaskViewModel(IObservable<ProgressState> progressState, IScheduler scheduler)
         {
             progressState.Subscribe(progressStateSubject.OnNext);
 
-            progressStateSubject
-                .ObserveOn(scheduler)
-                .SubscribeOn(scheduler)
-                .ToObservableChangeSet()
-                .GroupOn(a => a.Key)
-                .Transform(a =>
-                {
-                    a.List.Connect().Bind(out var gitems).Subscribe();
-                    return new KeyCollection(a.GroupKey, gitems);
-                })
-                .Bind(out keyGroups)
-                .Subscribe();
+            keyGroups = ChangeSetHelper.SelectKeyGroups(progressStateSubject, scheduler, a => new ProgressStateSummary(a.Key, a.State, a.Date), out _);
 
-            var transforms = ChangeSetHelper.SelectGroups<ProgressState, ProcessState, string>(progressStateSubject, scheduler);
+            var transforms = ChangeSetHelper
+                            .SelectGroups<ProgressState, ProcessState, string>(progressStateSubject, scheduler);
+                           
 
-            transforms
-                .Transform(a => ReactiveProcessPair.Create(a.Key, a.Cache.Items))
-                .Bind(out items)
-                .Subscribe();
+            combinedItems = ChangeSetHelper
+                     .SelectGroupGroups2<ProgressState,ProcessState, ProgressStateSummary>(progressStateSubject, scheduler,
+                     a=>new ProgressStateSummary(a.Key, a.State, a.Date), out _);
+
+            //transforms2
+            //  //.Transform(a => ReactiveProcessPair.Create(a.Key, a.Cache.Items))
+            //  .Bind(out combinedItems)
+            //  .Subscribe();
 
             readyViewModel = CollectionViewModel.Create(nameof(ProcessState.Ready),
                 transforms.FilterAndSelect(a => a.Key == ProcessState.Ready, a => a.Key, a => a?.Cache));
 
-
             runningViewModel = CollectionViewModel.Create(nameof(ProcessState.Running),
                 transforms.FilterAndSelect(a => a.Key == ProcessState.Running, a => a.Key, a => a?.Cache));
 
-            terminatedViewModel = CollectionViewModel.Create(nameof(ProcessState.Terminated), 
+            terminatedViewModel = CollectionViewModel.Create(nameof(ProcessState.Terminated),
                 transforms.FilterAndSelect(a => a.Key == ProcessState.Terminated, a => a.Key, a => a?.Cache));
+        }
 
+        public static IObservable<IChangeSet<TOut, TKey>>
+    FilterAndSelect<T, TKey, TOut>(
+    IObservable<IChangeSet<T, TKey>> observable,
+    Func<T, bool> predicate,
+    Func<TOut, TKey> keySelector,
+    Func<T?, IObservableCache<TOut, TKey>?> selector)
+        {
+            var collection =
+                observable
+            .Filter(a => predicate(a))
+            .ToCollection()
+            .WhereNotNull()
+            .Select(a => selector(a.FirstOrDefault()) ?? new SourceCache<TOut, TKey>(keySelector))
+            .SelectMany(a => a.Connect());
+
+            return collection;
         }
 
 
@@ -67,7 +77,7 @@ namespace ReactiveAsyncWorker.ViewModel
 
         public CollectionViewModel TerminatedViewModel => terminatedViewModel;
 
-        public ReadOnlyObservableCollection<ReactiveProcessPair> CombinedCollection => items;
+        public ReadOnlyObservableCollection<KeyCollection> CombinedCollection => combinedItems;
 
         public ReadOnlyObservableCollection<KeyCollection> GroupedCollection => keyGroups;
 
@@ -99,5 +109,4 @@ namespace ReactiveAsyncWorker.ViewModel
             return new ReactiveProcessPair(key, value);
         }
     }
-
 }

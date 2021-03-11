@@ -17,21 +17,7 @@
             <RowDefinition MinHeight="100" ></RowDefinition>
         </Grid.RowDefinitions>
         <TextBlock x:Name="KeyTextBlock"  Background="Tomato" Height="30" Width="200" ></TextBlock>
-        <ItemsControl x:Name="CollectionItemsControl" Grid.Row="1" Background="GhostWhite">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate >
-                    <Grid Width="180" Height="40" >
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-
-                        <TextBlock Padding="1" Grid.Row="0"  VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding State,Mode=OneWay}"></TextBlock>
-                        <TextBlock Padding="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center"  Text="{Binding Date,Mode=OneWay}"></TextBlock>
-                    </Grid>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-
+        <ItemsControl x:Name="CollectionItemsControl" Grid.Row="1" Background="GhostWhite">        
         </ItemsControl>
     </Grid>
 

@@ -18,7 +18,7 @@ namespace ReactiveAsyncWorker.ViewModel.Infrastructure
         private static void RegisterViewModels(ContainerBuilder builder)
         {
             builder.RegisterType<FactoryViewModel>().SingleInstance().AsSelf().AsImplementedInterfaces();     
-            builder.RegisterType<AsyncTaskStatusViewModel>().SingleInstance().AsSelf().AsImplementedInterfaces();
+            builder.RegisterType<MultiTaskViewModel>().SingleInstance().AsSelf().AsImplementedInterfaces();
             builder.RegisterType<LimitCollection<ProgressState>>().AsSelf().AsImplementedInterfaces().SingleInstance();
         }
 

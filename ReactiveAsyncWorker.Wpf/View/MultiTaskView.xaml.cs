@@ -1,14 +1,13 @@
 ﻿using ReactiveUI;
-using System.Reactive.Disposables;
 
 namespace ReactiveAsyncWorker.Wpf.View
 {
     /// <summary>
-    /// Interaction logic for AsyncTaskStatusView.xaml
+    /// Interaction logic for MultiTaskView.xaml
     /// </summary>
-    public partial class AsyncTaskStatusView
+    public partial class MultiTaskView
     {
-        public AsyncTaskStatusView()
+        public MultiTaskView()
         {
             InitializeComponent();
 

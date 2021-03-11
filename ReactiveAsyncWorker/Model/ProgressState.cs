@@ -66,4 +66,20 @@ namespace ReactiveAsyncWorker.Model
             return !(left == right);
         }
     }
+
+    public class ProgressStateSummary 
+    {
+        public ProgressStateSummary(string key, ProcessState state, DateTime date = default)
+        {
+            Key = key;
+            State = state;   
+            Date = date.Equals(default) ? DateTime.Now : date;
+        }
+
+        public string Key { get; }
+
+        public DateTime Date { get; }
+
+        public ProcessState State { get; }
+    }
 }

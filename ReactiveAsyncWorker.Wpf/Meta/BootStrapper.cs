@@ -16,13 +16,14 @@ namespace ReactiveAsyncWorker.Wpf.View.Infrastructure
 
         private static void RegisterViews(ContainerBuilder builder)
         {
-            builder.RegisterType<AsyncTaskStatusView>().As<IViewFor<AsyncTaskStatusViewModel>>();
+            builder.RegisterType<MultiTaskView>().As<IViewFor<MultiTaskViewModel>>();
             builder.RegisterType<CollectionView>().As<IViewFor<CollectionViewModel>>();
             builder.RegisterType<FactoryView>().As<IViewFor<FactoryViewModel>>();
             builder.RegisterType<KeyCollectionView>().As<IViewFor<KeyCollection>>();
             builder.RegisterType<LimitCollectionView>().As<IViewFor<LimitCollection>>();
             builder.RegisterType<ProgressStateView>().As<IViewFor<ProgressState>>();
             builder.RegisterType<ReactiveProcessPairView>().As<IViewFor<ReactiveProcessPair>>();
+            builder.RegisterType<ProgressStateSummaryView>().As<IViewFor<ProgressStateSummary>>();
   
 
         }

@@ -1,6 +1,6 @@
 ﻿<rui:ReactiveUserControl 
-    x:TypeArguments="viewmodel:AsyncTaskStatusViewModel"
-    x:Class="ReactiveAsyncWorker.Wpf.View.AsyncTaskStatusView"
+    x:TypeArguments="viewmodel:MultiTaskViewModel"
+    x:Class="ReactiveAsyncWorker.Wpf.View.MultiTaskView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 

@@ -16,11 +16,14 @@ using System.Threading;
 using System.Threading.Tasks;
 
 
-namespace DemoApp
+namespace ReactiveAsyncWorker.DemoApp.ViewModel
 {
-    public class MasterTPLViewModel
+    public class DemoTPLViewModel
     {
-        public MasterTPLViewModel(TPLConfigurationViewModel tplViewModel, TPLMainViewModel tplViewModel2, TPLOutputViewModel tPLOutputModel)
+        public DemoTPLViewModel(
+            TPLConfigurationViewModel tplViewModel,
+            TPLMainViewModel tplViewModel2,
+            TPLOutputViewModel tPLOutputModel)
         {
             ConfigurationViewModel = tplViewModel;
             MainViewModel = tplViewModel2;
@@ -37,6 +40,7 @@ namespace DemoApp
         public class TPLConfigurationViewModel : IObservable<TaskItem<StringTaskOutput>>, IObservable<Capacity>
         {
             readonly ReplaySubject<TaskItem<StringTaskOutput>> replaySubject = new ReplaySubject<TaskItem<StringTaskOutput>>();
+            readonly ReplaySubject<Capacity> capacitySubject = new ReplaySubject<Capacity>();
 
             public TPLConfigurationViewModel(IScheduler scheduler)
             {
@@ -74,13 +78,15 @@ namespace DemoApp
 
                 CapacityCommand = ReactiveCommand.Create<int, Capacity>(a => new Capacity((uint)a));
 
+                CapacityCommand.Subscribe(capacitySubject.OnNext);
+
                 static Task<StringTaskOutput> GetTask(int i)
                 {
                     try
                     {
                         return new Task<StringTaskOutput>(() =>
                         {
-                            Thread.Sleep(5000);
+                            Thread.Sleep(2000);
                             return new StringTaskOutput(new string(new[] { "task"[i % 4] }));
                         });// client.GetStringAsync("https://msdn.microsoft.com");
                     }
@@ -105,7 +111,7 @@ namespace DemoApp
 
             public IDisposable Subscribe(IObserver<Capacity> observer)
             {
-                return CapacityCommand.Subscribe(observer);
+                return capacitySubject.Subscribe(observer.OnNext);
             }
         }
 
@@ -134,7 +140,7 @@ namespace DemoApp
             public TPLMainViewModel(
                         IObservable<Capacity> capacityObservable,
                         LimitCollection<ProgressState> basicCollection,
-                        AsyncTaskStatusViewModel service)
+                        MultiTaskViewModel service)
             {
 
                 Collection = basicCollection;
@@ -144,7 +150,7 @@ namespace DemoApp
                 Service = service;
             }
 
-            public AsyncTaskStatusViewModel Service { get; }
+            public MultiTaskViewModel Service { get; }
 
             public LimitCollection Collection { get; }
         }

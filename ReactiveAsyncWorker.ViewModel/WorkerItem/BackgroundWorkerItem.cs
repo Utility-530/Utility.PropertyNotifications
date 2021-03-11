@@ -21,7 +21,6 @@ namespace ReactiveAsyncWorker.ViewModel
 
     public class BackgroundWorkerItem<T> : ProgressWorkerItem<T>
     {
-
         public BackgroundWorkerItem(WorkerArgument<T> wa, int key, BackgroundWorker<WorkerArgument<T>, T, T> backgroundWorker)
             : base(
                  progress: backgroundWorker.GetProgress(),

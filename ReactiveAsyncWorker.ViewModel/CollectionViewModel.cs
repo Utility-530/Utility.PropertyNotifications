@@ -64,7 +64,7 @@ namespace ReactiveAsyncWorker.ViewModel
 
         public override IDisposable Subscribe(IObserver<NotifyCollectionChangedEventArgs> observer)
         {
-            throw new NotImplementedException();
+            return collectionChangeSubject.Subscribe(observer);
         }
 
         class Comparer<T> : IComparer<T> where T : IComparable<T>

@@ -27,17 +27,18 @@ namespace DemoApp
 
             // View
             builder.RegisterType<ReactiveAsyncWorker.DemoApp.View.FactoryView>().As<IViewFor<DemoFactoryViewModel>>();  
+            builder.RegisterType<ReactiveAsyncWorker.DemoApp.View.DemoTPLView>().As<IViewFor<DemoTPLViewModel>>();  
 
 
             // ViewModel          
             builder.RegisterType<DemoConfigurationViewModel>().SingleInstance().AsSelf().AsImplementedInterfaces();
             builder.RegisterType<DemoFactoryViewModel>().SingleInstance().AsSelf().AsImplementedInterfaces();
+  
 
-
-            builder.RegisterType<MasterTPLViewModel.TPLConfigurationViewModel>().AsSelf().SingleInstance().AsImplementedInterfaces();
-            builder.RegisterType<MasterTPLViewModel.TPLMainViewModel>().AsSelf().SingleInstance();
-            builder.RegisterType<MasterTPLViewModel.TPLOutputViewModel>().AsSelf().SingleInstance();
-            builder.RegisterType<MasterTPLViewModel>().AsSelf().SingleInstance();            
+            builder.RegisterType<DemoTPLViewModel.TPLConfigurationViewModel>().AsSelf().SingleInstance().AsImplementedInterfaces();
+            builder.RegisterType<DemoTPLViewModel.TPLMainViewModel>().AsSelf().SingleInstance();
+            builder.RegisterType<DemoTPLViewModel.TPLOutputViewModel>().AsSelf().SingleInstance();
+            builder.RegisterType<DemoTPLViewModel>().AsSelf().SingleInstance();            
            
 
             // Service

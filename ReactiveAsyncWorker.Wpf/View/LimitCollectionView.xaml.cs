@@ -1,17 +1,10 @@
 ﻿using ReactiveUI;
 using System;
-using System.Collections.Generic;
+using System.Reactive;
 using System.Reactive.Disposables;
-using System.Text;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ReactiveAsyncWorker.Wpf.View
 {
@@ -25,9 +18,22 @@ namespace ReactiveAsyncWorker.Wpf.View
             InitializeComponent();
             this.WhenActivated(diposable =>
             {
-                this.OneWayBind(this.ViewModel, vm => vm.IsFree, v => v.IsFreeTextBlock).DisposeWith(diposable);
+                this.ViewModel.WhenAnyValue(a => a.IsFree)
+                .DistinctUntilChanged()
+                .Subscribe(c =>
+                {
+                    var text = c.ToString();
+                    RxApp.MainThreadScheduler.Schedule(Unit.Default, (a, b) =>
+                    {
+                        IsFreeTextBlock.Text = text;
+                        return Disposable.Empty;
+                    });
+                });
 
-                this.OneWayBind(this.ViewModel, vm => vm.Count, v => v.CountTextBlock).DisposeWith(diposable);
+                // This doesn't work
+                //this.OneWayBind(this.ViewModel, vm => vm.IsFree, v => v.IsFreeTextBlock.Text, a=>a.ToString()).DisposeWith(diposable);
+
+                this.OneWayBind(this.ViewModel, vm => vm.Count, v => v.CountTextBlock.Text).DisposeWith(diposable);
 
             });
         }
