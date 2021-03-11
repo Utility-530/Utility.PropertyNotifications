@@ -19,10 +19,17 @@
         </rui:ViewModelViewHost>
     </DataTemplate>
 
-    <Style TargetType="{x:Type ItemsControl}">
+    <Style TargetType="{x:Type ItemsControl}" BasedOn="{StaticResource {x:Type ItemsControl}}">
         <Style.Setters>
             <Setter Property="ItemTemplate" Value="{StaticResource ViewModelViewHostTemplate}"></Setter>
             <Setter Property="Margin" Value="10"></Setter>
+            <!--<Setter Property="ItemsPanel">
+                <Setter.Value>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="1"></UniformGrid>
+                    </ItemsPanelTemplate>
+                </Setter.Value>
+            </Setter>-->
         </Style.Setters>
     </Style>
 

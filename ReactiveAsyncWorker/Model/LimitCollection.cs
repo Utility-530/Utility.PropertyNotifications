@@ -13,7 +13,7 @@ namespace ReactiveAsyncWorker.Model
         public uint Value { get; }
     }
 
-    public interface IBasicCollection<T> : IObservable<T>
+    public interface IBasicObservableCollection<T> : IObservable<T>
     {
         void Remove(T obj);
 

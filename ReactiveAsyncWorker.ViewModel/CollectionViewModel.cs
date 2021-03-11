@@ -29,13 +29,15 @@ namespace ReactiveAsyncWorker.ViewModel
 
             subject
                 .Sort(SortExpressionComparer<T>.Descending(t => t))
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Bind(out itemsAll)
                 .Top(new Comparer<T>(), topCount)
                 .Bind(out itemsTop)
                 .Subscribe();
 
-            itemsTop
+            itemsTop      
                 .ObserveCollectionChanges()
+                .ObserveOn(RxApp.MainThreadScheduler)
                 .Select(a => a.EventArgs)
                 .Subscribe(a =>
                 {

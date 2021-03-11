@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ReactiveAsyncWorker
 {
-    public class AsyncWorkerItem<T> : WorkerItem<T> //, IAsync<T>
+    public class AsyncWorkerItem<T> : WorkerItem<T> 
     {
         private readonly Task<T> task;
 

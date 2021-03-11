@@ -17,6 +17,7 @@ namespace ReactiveAsyncWorker
         TOutput State { get; }
 
         UtilityEnum.ProcessState Status { get; }
+
         IObservable<TOutput> StateChanges { get; }
     }
 }

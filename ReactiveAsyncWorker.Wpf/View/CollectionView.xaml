@@ -15,32 +15,35 @@
 
     <Grid VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel>
+    
             <WrapPanel>                
-            <TextBlock x:Name="TitleTextBlock" Margin="2"></TextBlock>
-                <TextBlock x:Name="CountTextBlock" Margin="2"></TextBlock>
+                <TextBlock x:Name="TitleTextBlock" Margin="4"></TextBlock>
+                <TextBlock x:Name="CountTextBlock" Margin="4"></TextBlock>
             </WrapPanel>
 
             <ItemsControl 
+                Grid.Row="1"
                     x:Name="CollectionItemsControl"  
-                    Margin="15"
+                    Margin="5"
                     ItemTemplate="{StaticResource ViewModelViewHostTemplate}" >
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <UniformGrid Columns="1"></UniformGrid>
-                    </ItemsPanelTemplate>
+                        <UniformGrid Columns="1"></UniformGrid>          
+                </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
-        </StackPanel>
-        
+        <!--<controls:UniformGridPanel Columns="1"></controls:UniformGridPanel>-->
+
         <TextBlock x:Name="RemainingTextBlock" 
-                   Grid.Row="1"
+                   Grid.Row="2"
                    MinHeight="30" Margin="20,0"
                    Foreground="Tomato"                
-                   VerticalAlignment="Bottom" ToolTip="non-visible items">            
+                   VerticalAlignment="Bottom" 
+                   ToolTip="non-visible items">            
         </TextBlock>
     </Grid>
 

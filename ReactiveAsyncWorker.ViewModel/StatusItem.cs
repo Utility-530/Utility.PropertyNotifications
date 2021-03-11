@@ -13,13 +13,21 @@ namespace ReactiveAsyncWorker
     {
         protected readonly ISubject<Unit> completed = new ReplaySubject<Unit>();
         protected readonly ISubject<Unit> started = new ReplaySubject<Unit>();
-        protected readonly IConnectableObservable<ProgressState> changes;
+        protected readonly ISubject<ProgressState> changes = new ReplaySubject<ProgressState>();
         protected readonly ObservableAsPropertyHelper<ProcessState> status;
 
         public StatusItem(string key)
         {
+            completed.Subscribe(a =>
+            {
+                var pr = new ProgressState(this.Key,
+                           ProcessState.Terminated,
+                           1, false);
+                changes.OnNext(pr);
+            });
+
             Key = key;
-            changes = completed
+            _ = completed
                        .Select(a => ProcessState.Terminated)
                        .Merge(started.Select(a => ProcessState.Running))
                        .Select(processState => new ProgressState(this.Key,
@@ -33,9 +41,9 @@ namespace ReactiveAsyncWorker
                            },
                            processState == ProcessState.Running))
                        .StartWith(new ProgressState(this.Key, ProcessState.Ready, 0, false))
-                       .Replay();
+                        .Subscribe(a =>
+                        changes.OnNext(a));
 
-            changes.Connect();
             status = changes.Select(a => a.State).ToProperty(this, a => a.Status, initialValue: ProcessState.Ready);
         }
 
@@ -45,13 +53,6 @@ namespace ReactiveAsyncWorker
 
         public IDisposable Subscribe(IObserver<ProgressState> observer)
         {
-            //changes.Where(a =>
-            //{
-            //    return a.State == ProcessState.Terminated;
-            //}).Subscribe(a =>
-            //{
-            //    observer.OnCompleted();
-            //});
             return changes.Subscribe(observer);
         }
     }

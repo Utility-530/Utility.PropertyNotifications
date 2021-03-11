@@ -27,15 +27,13 @@
 
             <rui:ViewModelViewHost x:Name="TerminatedViewModelViewHost"/>
 
-            <Grid>
-                <ItemsControl x:Name="CombinedCollectionItemsControl"      />
-            </Grid>
 
-            <Grid>
-                <ScrollViewer>
-                    <ItemsControl  x:Name="GroupedCollectionItemsControl"   />
-                </ScrollViewer>
-            </Grid>
+            <rui:ViewModelViewHost x:Name="CombinedViewModelViewHost"/>
+
+            <rui:ViewModelViewHost x:Name="GroupedViewModelViewHost"/>
+
+            <rui:ViewModelViewHost x:Name="LatestViewModelViewHost"/>
+
         </UniformGrid>
     </DockPanel>
 

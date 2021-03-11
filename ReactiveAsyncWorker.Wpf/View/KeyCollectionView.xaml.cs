@@ -14,13 +14,11 @@ namespace ReactiveAsyncWorker.Wpf.View
 
             this.WhenActivated(disposable =>
             {
-
                 this.OneWayBind(this.ViewModel, vm => vm.Key, v => v.KeyTextBlock.Text)
                 .DisposeWith(disposable);
 
                 this.OneWayBind(this.ViewModel, vm => vm.Collection, v => v.CollectionItemsControl.ItemsSource)
                 .DisposeWith(disposable);
-
             });
         }
     }

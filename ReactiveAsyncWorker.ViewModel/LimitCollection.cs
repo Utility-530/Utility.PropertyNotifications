@@ -9,16 +9,12 @@ using System.Reactive.Subjects;
 
 namespace ReactiveAsyncWorker.ViewModel
 {
-
-    public class LimitCollection : ReactiveObject
-    {
-        public virtual uint Count { get; }
-
-        public virtual bool IsFree { get; }
-    }
-
-
-    public class LimitCollection<T> : LimitCollection, IBasicCollection<T>, IObserver<Capacity>, IObservable<T>
+    /// <summary>
+    /// Observable class that only notifies subscribers of items in the 
+    /// collection when the limit is not exceeded by the number of items added.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class LimitCollection<T> : LimitCollection, IBasicObservableCollection<T>, IObserver<Capacity>, IObservable<T>
         where T : UtilityInterface.Generic.IKey<string>, IEquatable<T>, IComparable<T>
     {
         readonly ReplaySubject<Capacity> capacitySubject = new ReplaySubject<Capacity>();
@@ -44,6 +40,7 @@ namespace ReactiveAsyncWorker.ViewModel
 
                     // SourceCache items are not ordered
                     if (initialSourceCache.Items.OrderBy(a => a).FirstOrDefault() is { } item &&
+                    // Only notify subscribers when the limit is not exceeded.
                        finalSourceCache.Count < b.Value)
                     {
                         finalSourceCache.AddOrUpdate(item);
@@ -113,4 +110,12 @@ namespace ReactiveAsyncWorker.ViewModel
             capacitySubject.OnNext(value);
         }
     }
+
+    public class LimitCollection : ReactiveObject
+    {
+        public virtual uint Count { get; }
+
+        public virtual bool IsFree { get; }
+    }
+
 }

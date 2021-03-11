@@ -18,16 +18,18 @@ namespace ReactiveAsyncWorker.Wpf.View
             InitializeComponent();
             this.WhenActivated(diposable =>
             {
-                this.ViewModel.WhenAnyValue(a => a.IsFree)
+                this.ViewModel
+                .WhenAnyValue(a => a.IsFree)
                 .DistinctUntilChanged()
+                .ObserveOnDispatcher()
                 .Subscribe(c =>
                 {
                     var text = c.ToString();
-                    RxApp.MainThreadScheduler.Schedule(Unit.Default, (a, b) =>
-                    {
+                    //RxApp.MainThreadScheduler.Schedule(Unit.Default, (a, b) =>
+                    //{
                         IsFreeTextBlock.Text = text;
-                        return Disposable.Empty;
-                    });
+                       // return Disposable.Empty;
+                    //});
                 });
 
                 // This doesn't work

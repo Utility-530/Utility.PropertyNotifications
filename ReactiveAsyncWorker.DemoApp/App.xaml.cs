@@ -12,6 +12,7 @@ using static ReactiveAsyncWorker.DemoApp.ViewModel.DemoFactoryViewModel;
 using System.Reactive;
 using Splat;
 using ReactiveAsyncWorker.DemoApp.Infrastructure;
+using ReactiveAsyncWorker;
 
 namespace DemoApp
 {
@@ -43,6 +44,7 @@ namespace DemoApp
 
             // Service
             builder.RegisterType<DemoFactory>().As<IFactory<StringFactoryOutput, Unit>>().SingleInstance();
+            builder.RegisterType<WorkerScheduler>().As<ISchedulerWrapper>().SingleInstance();
 
 
             ReactiveAsyncWorker.Wpf.View.Infrastructure.BootStrapper.Register(builder);
@@ -54,6 +56,11 @@ namespace DemoApp
             //var defaultViewLocator = Locator.Current.GetService<IViewLocator>();
             //Locator.CurrentMutable.RegisterLazySingleton<IViewLocator>(() => new ConventionBasedViewLocator(defaultViewLocator));
    
+        }
+
+        class WorkerScheduler: ISchedulerWrapper
+        {
+            public IScheduler Scheduler { get; } = RxApp.TaskpoolScheduler;
         }
 
 

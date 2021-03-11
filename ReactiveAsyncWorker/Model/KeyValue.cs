@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.ComponentModel;
+using UtilityInterface.Generic;
 
 namespace ReactiveAsyncWorker.ViewModel
 {
-    public class KeyValue
+    public class KeyValue : IKey<string>, IComparable
     {
         public KeyValue(string key, object value)
         {
@@ -14,9 +16,14 @@ namespace ReactiveAsyncWorker.ViewModel
         public string Key { get; }
 
         public object Value { get; }
+
+        public int CompareTo(object obj)
+        {
+            return obj is IKey<string> key ? this.Key.CompareTo(key.Key) : 0;
+        }
     }
 
-    public class KeyCollection
+    public class KeyCollection : IKey<string>, IComparable, IComparable<KeyCollection>
     {
         public KeyCollection(string key, IEnumerable value)
         {
@@ -27,9 +34,19 @@ namespace ReactiveAsyncWorker.ViewModel
         public string Key { get; }
 
         public IEnumerable Collection { get; }
+
+        public int CompareTo(object obj)
+        {
+            return obj is IKey<string> key ? this.Key.CompareTo(key.Key) : 0;
+        }
+
+        public int CompareTo(KeyCollection other)
+        {
+            return this.Key.CompareTo(other.Key);
+        }
     }
 
-    public class KeyRange : INotifyPropertyChanged
+    public class KeyRange : INotifyPropertyChanged, IKey<string>, IComparable
     {
         private double value;
 
@@ -48,5 +65,11 @@ namespace ReactiveAsyncWorker.ViewModel
         public double Max { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+
+        public int CompareTo(object obj)
+        {
+            return obj is IKey<string> key ? this.Key.CompareTo(key.Key) : 0;
+        }
     }
 }

@@ -19,9 +19,11 @@ namespace ReactiveAsyncWorker.Wpf.View
 
                 TerminatedViewModelViewHost.ViewModel = ViewModel.TerminatedViewModel;
 
-                CombinedCollectionItemsControl.ItemsSource = ViewModel.CombinedCollection;
+                CombinedViewModelViewHost.ViewModel = ViewModel.CombinedCollection;
 
-                GroupedCollectionItemsControl.ItemsSource = ViewModel.GroupedCollection;
+                GroupedViewModelViewHost.ViewModel = ViewModel.GroupedCollection;
+
+                LatestViewModelViewHost.ViewModel = ViewModel.LatestViewModel;
             });
         }
     }
