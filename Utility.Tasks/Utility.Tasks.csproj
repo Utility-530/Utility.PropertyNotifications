@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFrameworks>net5.0</TargetFrameworks>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+
+    <Company />
+    <Authors>Declan Taylor</Authors>
+    <Description>for carrying out tasks on a background thread but also getting the progress/completion as strongly typed observable sequence</Description>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    
+    <PackageReference Include="GenericBackgroundWorker" Version="2.0.0" />
+
+    <PackageReference Include="System.Threading.Tasks.Dataflow" Version="5.0.0" />
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Utility\Utility.csproj" />
+  </ItemGroup>
+
+</Project>

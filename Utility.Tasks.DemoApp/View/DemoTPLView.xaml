@@ -1,0 +1,73 @@
+﻿<reactiveui:ReactiveUserControl 
+    x:TypeArguments="demoapp:DemoTPLViewModel"
+    x:Class="Utility.Tasks.DemoApp.View.DemoTPLView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             xmlns:reactiveui="http://reactiveui.net"
+             xmlns:controls="clr-namespace:MaterialDesignExtensions.Controls;assembly=MaterialDesignExtensions"
+    xmlns:demoapp="clr-namespace:Utility.Tasks.DemoApp.ViewModel" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    FontWeight="DemiBold"
+             FontSize="16"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <materialDesign:DialogHost Identifier="RootDialog" >
+        <DockPanel>
+            <StatusBar DockPanel.Dock="Bottom">
+                <reactiveui:ViewModelViewHost x:Name="ProgressViewModelViewHost" 
+                                          Margin="0,0,0,0"
+                             Height="40" Width="300"
+                                      VerticalContentAlignment="Stretch" 
+                                      HorizontalContentAlignment="Stretch">
+                </reactiveui:ViewModelViewHost>
+            </StatusBar>
+            <ToolBar DockPanel.Dock="Top">
+                <Button             
+                    x:Name="StartButton"
+                    Content="start" 
+                    Width="200"
+                   ></Button>
+
+                <Button           
+                    x:Name="StartManyButton"
+                    Content="start many" 
+                    Width="200"
+                   ></Button>
+
+      
+                <controls:OversizedNumberSpinner x:Name="MainOversizedNumberSpinner">
+                    
+                </controls:OversizedNumberSpinner>
+                
+                <reactiveui:ViewModelViewHost x:Name="CollectionModelViewHost" 
+                                          Margin="40,0,0,0"
+                                      VerticalContentAlignment="Stretch" 
+                                      HorizontalContentAlignment="Stretch">
+                </reactiveui:ViewModelViewHost>
+
+                <reactiveui:ViewModelViewHost x:Name="LoginDialogViewModelViewHost" 
+                                               Margin="40,0,0,0"
+                                      VerticalContentAlignment="Stretch" 
+                                      HorizontalContentAlignment="Stretch">
+                </reactiveui:ViewModelViewHost>
+
+            </ToolBar>
+
+            <reactiveui:ViewModelViewHost x:Name="MainViewModelViewHost" 
+                                      VerticalContentAlignment="Stretch" 
+                                      HorizontalContentAlignment="Stretch">
+            </reactiveui:ViewModelViewHost>
+
+            <ItemsControl DockPanel.Dock="Right" x:Name="OutputItemsControl" >
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}"></TextBlock>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+        </DockPanel>
+    </materialDesign:DialogHost>
+    
+</reactiveui:ReactiveUserControl>
