@@ -5,6 +5,7 @@ using ReactiveUI;
 using System.Windows;
 using System.Text;
 using System;
+using System.Windows.Controls.Primitives;
 
 namespace Utility.View
 {
@@ -21,8 +22,15 @@ namespace Utility.View
             {
                 TitleTextBlock.Text = ViewModel.Name;
 
-                CollectionItemsControl.ItemsSource = this.ViewModel.CollectionTop;
-
+               
+                 MainToggleButton.Events().Checked.Select(a => true)
+                .Merge(MainToggleButton.Events().Unchecked.Select(a => false))
+                .StartWith(default(bool))
+                .Subscribe(a =>
+                {
+                    CollectionItemsControl.ItemsSource = a ? this.ViewModel.CollectionAll : this.ViewModel.CollectionTop;
+                });
+           
                 var remaining = this.ViewModel
                 .ObserveOnDispatcher()
                 .Select(args =>

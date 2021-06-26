@@ -62,7 +62,7 @@ namespace DemoApp
 
 
             builder.UseAutofacDependencyResolver();
-
+       
             //var defaultViewLocator = Locator.Current.GetService<IViewLocator>();
             //Locator.CurrentMutable.RegisterLazySingleton<IViewLocator>(() => new ConventionBasedViewLocator(defaultViewLocator));
 

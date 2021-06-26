@@ -18,23 +18,24 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
-    
-            <WrapPanel>                
-                <TextBlock x:Name="TitleTextBlock" Margin="4"></TextBlock>
-                <TextBlock x:Name="CountTextBlock" Margin="4"></TextBlock>
-            </WrapPanel>
 
-            <ItemsControl 
+        <WrapPanel>
+            <TextBlock x:Name="TitleTextBlock" Margin="4"></TextBlock>
+            <TextBlock x:Name="CountTextBlock" Margin="4"></TextBlock>
+            <ToggleButton x:Name="MainToggleButton" Margin="4"/>
+        </WrapPanel>
+
+        <ItemsControl 
                 Grid.Row="1"
                     x:Name="CollectionItemsControl"  
                     Margin="5"
                     ItemTemplate="{StaticResource ViewModelViewHostTemplate}" >
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Columns="1"></UniformGrid>          
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="1"></UniformGrid>
                 </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
         <!--<controls:UniformGridPanel Columns="1"></controls:UniformGridPanel>-->
         <TextBlock x:Name="InformationTextBlock" 
                    FontSize="10"
