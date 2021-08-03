@@ -31,19 +31,19 @@ namespace UtilityStruct
     /// </remarks>
     /// 
     [Serializable]
-    public struct Point
+    public readonly struct Point
     {
         /// <summary> 
         /// X coordinate.
         /// </summary> 
         /// 
-        public double X;
+        public double X { get; }
 
         /// <summary> 
         /// Y coordinate.
         /// </summary> 
         /// 
-        public double Y;
+        public double Y { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Point"/> structure.

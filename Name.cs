@@ -4,15 +4,15 @@ using System.Text;
 
 namespace UtilityStruct
 {
-    public class Name
+    public ref struct Name
     {
-        public string Value { get; }
+        public ReadOnlySpan<char> Value { get; }
 
-        public Name(string value): this(value,0)
+        public Name(ReadOnlySpan<char> value) : this(value, 0)
         {
         }
 
-        public Name(string value, int position)
+        public Name(ReadOnlySpan<char> value, int position)
         {
             Value = value;
             Order = position;

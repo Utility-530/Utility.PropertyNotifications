@@ -30,13 +30,13 @@ namespace UtilityStruct
 
 
     /// <summary>
-    ///   Represents a byte range with minimum and maximum values.
+    ///   Represents a byte range with Minimum and Maximum values.
     /// </summary>
     /// 
     /// <remarks>
     ///   This class represents a byt range with inclusive limits, where
-    ///   both minimum and maximum values of the range are included into it.
-    ///   Mathematical notation of such range is <b>[min, max]</b>.
+    ///   both Minimum and Maximum values of the range are included into it.
+    ///   Mathematical notation of such range is <b>[Min, Max]</b>.
     /// </remarks>
     /// 
     /// <example>
@@ -72,22 +72,22 @@ namespace UtilityStruct
     /// <seealso cref="Range"/>
     /// 
     [Serializable]
-    public struct ByteRange : /*IRange<byte>, */IEquatable<ByteRange>, IEnumerable<byte>
+    public readonly struct ByteRange : /*IRange<byte>, */IEquatable<ByteRange>, IEnumerable<byte>
     {
-        private byte min, max;
+   
 
         /// <summary>
         ///   Minimum value of the range.
         /// </summary>
         /// 
         /// <remarks>
-        ///   Represents minimum value (left side limit) of the range [<b>min</b>, max].
+        ///   Represents Minimum value (left side limit) of the range [<b>Min</b>, Max].
         /// </remarks>
         /// 
         public byte Min
         {
-            get { return min; }
-            set { min = value; }
+            get;
+    
         }
 
         /// <summary>
@@ -95,22 +95,21 @@ namespace UtilityStruct
         /// </summary>
         /// 
         /// <remarks>
-        ///   Represents maximum value (right side limit) of the range [min, <b>max</b>].
+        ///   Represents Maximum value (right side limit) of the range [Min, <b>Max</b>].
         /// </remarks>
         /// 
         public byte Max
         {
-            get { return max; }
-            set { max = value; }
+            get;
         }
 
         /// <summary>
-        ///   Gets the length of the range, defined as (max - min).
+        ///   Gets the length of the range, defined as (Max - Min).
         /// </summary>
         /// 
         public int Length
         {
-            get { return max - min; }
+            get { return Max - Min; }
         }
 
         /// <summary>
@@ -122,8 +121,8 @@ namespace UtilityStruct
         /// 
         public ByteRange(byte min, byte max)
         {
-            this.min = min;
-            this.max = max;
+            this.Min = min;
+            this.Max = max;
         }
 
         /// <summary>
@@ -138,7 +137,7 @@ namespace UtilityStruct
         /// 
         public bool IsInside(byte x)
         {
-            return ((x >= min) && (x <= max));
+            return ((x >= Min) && (x <= Max));
         }
 
         /// <summary>
@@ -153,7 +152,7 @@ namespace UtilityStruct
         /// 
         public bool IsInside(ByteRange range)
         {
-            return ((IsInside(range.min)) && (IsInside(range.max)));
+            return ((IsInside(range.Min)) && (IsInside(range.Max)));
         }
 
         /// <summary>
@@ -168,8 +167,8 @@ namespace UtilityStruct
         /// 
         public bool IsOverlapping(ByteRange range)
         {
-            return ((IsInside(range.min)) || (IsInside(range.max)) ||
-                     (range.IsInside(min)) || (range.IsInside(max)));
+            return ((IsInside(range.Min)) || (IsInside(range.Max)) ||
+                     (range.IsInside(Min)) || (range.IsInside(Max)));
         }
 
         /// <summary>
@@ -187,21 +186,21 @@ namespace UtilityStruct
         }
 
         /// <summary>
-        ///   Determines whether two instances are equal.
+        ///   DeterMines whether two instances are equal.
         /// </summary>
         /// 
         public static bool operator ==(ByteRange range1, ByteRange range2)
         {
-            return ((range1.min == range2.min) && (range1.max == range2.max));
+            return ((range1.Min == range2.Min) && (range1.Max == range2.Max));
         }
 
         /// <summary>
-        ///   Determines whether two instances are not equal.
+        ///   DeterMines whether two instances are not equal.
         /// </summary>
         /// 
         public static bool operator !=(ByteRange range1, ByteRange range2)
         {
-            return ((range1.min != range2.min) || (range1.max != range2.max));
+            return ((range1.Min != range2.Min) || (range1.Max != range2.Max));
         }
 
         /// <summary>
@@ -220,7 +219,7 @@ namespace UtilityStruct
         }
 
         /// <summary>
-        ///   Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        ///   DeterMines whether the specified <see cref="System.Object" />, is equal to this instance.
         /// </summary>
         /// 
         /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
@@ -247,8 +246,8 @@ namespace UtilityStruct
             unchecked
             {
                 int hash = 17;
-                hash = hash * 31 + min.GetHashCode();
-                hash = hash * 31 + max.GetHashCode();
+                hash = hash * 31 + Min.GetHashCode();
+                hash = hash * 31 + Max.GetHashCode();
                 return hash;
             }
         }
@@ -263,7 +262,7 @@ namespace UtilityStruct
         /// 
         public override string ToString()
         {
-            return String.Format("[{0}, {1}]", min, max);
+            return String.Format("[{0}, {1}]", Min, Max);
         }
 
         /// <summary>
@@ -280,8 +279,8 @@ namespace UtilityStruct
         public string ToString(string format, IFormatProvider formatProvider)
         {
             return String.Format("[{0}, {1}]",
-                min.ToString(format, formatProvider),
-                max.ToString(format, formatProvider));
+                Min.ToString(format, formatProvider),
+                Max.ToString(format, formatProvider));
         }
 
 
@@ -341,7 +340,7 @@ namespace UtilityStruct
         /// 
         public IEnumerator<byte> GetEnumerator()
         {
-            for (byte i = min; i < max; i++)
+            for (byte i = Min; i < Max; i++)
                 yield return i;
         }
 
@@ -355,7 +354,7 @@ namespace UtilityStruct
         /// 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            for (byte i = min; i < max; i++)
+            for (byte i = Min; i < Max; i++)
                 yield return i;
         }
     }

@@ -1,7 +1,7 @@
 ﻿
 namespace UtilityStruct
 {
-    public struct Point3
+    public readonly struct Point3
     {
         public Point3(double x, double y,double z)
         {

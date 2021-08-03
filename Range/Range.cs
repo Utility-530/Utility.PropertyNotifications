@@ -10,13 +10,13 @@ namespace UtilityStruct
     //answered Mar 17 '11 at 17:45    drharris
     /// <summary>The Range class.</summary>
     /// <typeparam name="T">Generic parameter.</typeparam>
-    public struct Range<T> where T : IComparable<T>
+    public readonly struct Range<T> where T : IComparable<T>
     {
         /// <summary>Minimum value of the range.</summary>
-        public T Minimum { get; set; }
+        public T Minimum { get; }
 
         /// <summary>Maximum value of the range.</summary>
-        public T Maximum { get; set; }
+        public T Maximum { get; }
 
         /// <summary>Presents the Range in readable format.</summary>
         /// <returns>String representation of the Range</returns>

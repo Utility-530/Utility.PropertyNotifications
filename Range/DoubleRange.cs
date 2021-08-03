@@ -23,18 +23,18 @@
 //    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 //
 
-namespace  UtilityStruct
+namespace UtilityStruct
 {
     using System;
 
     /// <summary>
-    ///   Represents a double range with minimum and maximum values.
+    ///   Represents a double range with Minimum and Maximum values.
     /// </summary>
     /// 
     /// <remarks>
     ///   This class represents a double range with inclusive limits, where
-    ///   both minimum and maximum values of the range are included into it.
-    ///   Mathematical notation of such range is <b>[min, max]</b>.
+    ///   both Minimum and Maximum values of the range are included into it.
+    ///   Mathematical notation of such range is <b>[Min, Max]</b>.
     /// </remarks>
     /// 
     /// <example>
@@ -70,45 +70,36 @@ namespace  UtilityStruct
     /// <seealso cref="Range"/>
     /// 
     [Serializable]
-    public struct DoubleRange : /*IRange<double>, */IEquatable<DoubleRange>
+    public readonly struct DoubleRange : /*IRange<double>, */IEquatable<DoubleRange>
     {
-        private double min, max;
 
         /// <summary>
         ///   Minimum value of the range.
         /// </summary>
         /// 
         /// <remarks>
-        ///   Represents minimum value (left side limit) of the range [<b>min</b>, max].
+        ///   Represents Minimum value (left side limit) of the range [<b>Min</b>, Max].
         /// </remarks>
         /// 
-        public double Min
-        {
-            get { return min; }
-            set { min = value; }
-        }
+        public double Min        {            get;        }
 
         /// <summary>
         ///   Maximum value of the range.
         /// </summary>
         /// 
         /// <remarks>
-        ///   Represents maximum value (right side limit) of the range [min, <b>max</b>].
+        ///   Represents Maximum value (right side limit) of the range [Min, <b>Max</b>].
         /// </remarks>
         /// 
-        public double Max
-        {
-            get { return max; }
-            set { max = value; }
-        }
+        public double Max        {            get;        }
 
         /// <summary>
-        ///   Gets the length of the range, defined as (max - min).
+        ///   Gets the length of the range, defined as (Max - Min).
         /// </summary>
         /// 
         public double Length
         {
-            get { return max - min; }
+            get { return Max - Min; }
         }
 
         /// <summary>
@@ -120,8 +111,8 @@ namespace  UtilityStruct
         /// 
         public DoubleRange(double min, double max)
         {
-            this.min = min;
-            this.max = max;
+            this.Min = min;
+            this.Max = max;
         }
 
         /// <summary>
@@ -136,7 +127,7 @@ namespace  UtilityStruct
         /// 
         public bool IsInside(double x)
         {
-            return ((x >= min) && (x <= max));
+            return ((x >= Min) && (x <= Max));
         }
 
         /// <summary>
@@ -151,7 +142,7 @@ namespace  UtilityStruct
         /// 
         public bool IsInside(DoubleRange range)
         {
-            return ((IsInside(range.min)) && (IsInside(range.max)));
+            return ((IsInside(range.Min)) && (IsInside(range.Max)));
         }
 
         /// <summary>
@@ -166,8 +157,8 @@ namespace  UtilityStruct
         /// 
         public bool IsOverlapping(DoubleRange range)
         {
-            return ((IsInside(range.min)) || (IsInside(range.max)) ||
-                     (range.IsInside(min)) || (range.IsInside(max)));
+            return ((IsInside(range.Min)) || (IsInside(range.Max)) ||
+                     (range.IsInside(Min)) || (range.IsInside(Max)));
         }
 
         /// <summary>
@@ -185,21 +176,21 @@ namespace  UtilityStruct
         }
 
         /// <summary>
-        ///   Determines whether two instances are equal.
+        ///   DeterMines whether two instances are equal.
         /// </summary>
         /// 
         public static bool operator ==(DoubleRange range1, DoubleRange range2)
         {
-            return ((range1.min == range2.min) && (range1.max == range2.max));
+            return ((range1.Min == range2.Min) && (range1.Max == range2.Max));
         }
 
         /// <summary>
-        ///   Determines whether two instances are not equal.
+        ///   DeterMines whether two instances are not equal.
         /// </summary>
         /// 
         public static bool operator !=(DoubleRange range1, DoubleRange range2)
         {
-            return ((range1.min != range2.min) || (range1.max != range2.max));
+            return ((range1.Min != range2.Min) || (range1.Max != range2.Max));
         }
 
         /// <summary>
@@ -218,7 +209,7 @@ namespace  UtilityStruct
         }
 
         /// <summary>
-        ///   Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        ///   DeterMines whether the specified <see cref="System.Object" />, is equal to this instance.
         /// </summary>
         /// 
         /// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
@@ -245,8 +236,8 @@ namespace  UtilityStruct
             unchecked
             {
                 int hash = 17;
-                hash = hash * 31 + min.GetHashCode();
-                hash = hash * 31 + max.GetHashCode();
+                hash = hash * 31 + Min.GetHashCode();
+                hash = hash * 31 + Max.GetHashCode();
                 return hash;
             }
         }
@@ -261,7 +252,7 @@ namespace  UtilityStruct
         /// 
         public override string ToString()
         {
-            return String.Format("[{0}, {1}]", min, max);
+            return String.Format("[{0}, {1}]", Min, Max);
         }
 
         /// <summary>
@@ -278,8 +269,8 @@ namespace  UtilityStruct
         public string ToString(string format, IFormatProvider formatProvider)
         {
             return String.Format("[{0}, {1}]",
-                min.ToString(format, formatProvider),
-                max.ToString(format, formatProvider));
+                Min.ToString(format, formatProvider),
+                Max.ToString(format, formatProvider));
         }
 
 
@@ -306,27 +297,27 @@ namespace  UtilityStruct
 
             if (provideInnerRange)
             {
-                iMin = (int)System.Math.Ceiling(min);
-                iMax = (int)System.Math.Floor(max);
+                iMin = (int)System.Math.Ceiling(Min);
+                iMax = (int)System.Math.Floor(Max);
             }
             else
             {
-                iMin = (int)System.Math.Floor(min);
-                iMax = (int)System.Math.Ceiling(max);
+                iMin = (int)System.Math.Floor(Min);
+                iMax = (int)System.Math.Ceiling(Max);
             }
 
             return new IntRange(iMin, iMax);
         }
 
         /// <summary>
-        /// Converts this <see cref="DoubleRange"/> to a <see cref="T:System.Double[]"/> of length 2 (using new [] { min, max }).
+        /// Converts this <see cref="DoubleRange"/> to a <see cref="T:System.Double[]"/> of length 2 (using new [] { Min, Max }).
         /// </summary>
         /// 
         /// <returns>The result of the conversion.</returns>
         /// 
         public double[] ToArray()
         {
-            return new[] { min, max };
+            return new[] { Min, Max };
         }
 
         /// <summary>

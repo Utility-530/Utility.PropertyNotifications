@@ -3,7 +3,7 @@
 namespace UtilityStruct
 {
 
-    public struct Odd
+    public readonly struct Odd
     {
         public Odd(Probability value) : this(PriceType.Bid, value)
         {

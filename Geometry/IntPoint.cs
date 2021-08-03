@@ -30,19 +30,19 @@ namespace UtilityStruct
     /// </remarks>
     /// 
     [Serializable]
-    public struct IntPoint : IComparable<IntPoint>
+    public readonly struct IntPoint : IComparable<IntPoint>
     {
         /// <summary> 
         /// X coordinate.
         /// </summary> 
         /// 
-        public int X;
+        public int X { get; }
 
         /// <summary> 
         /// Y coordinate.
         /// </summary> 
         /// 
-        public int Y;
+        public int Y { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IntPoint"/> structure.

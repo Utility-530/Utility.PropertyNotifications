@@ -4,10 +4,10 @@ using System.Text;
 
 namespace UtilityStruct
 { 
-    public struct Day
+    public readonly struct Day
     {
         public Day(int d) { Value = d; }
-        public int Value;
+        public int Value { get; }
 
         public static implicit operator int(Day d)
         {
@@ -35,6 +35,4 @@ namespace UtilityStruct
             return ((DateTime)this).ToString("ddd dd MM yy");
         }
     }
-
-
 }

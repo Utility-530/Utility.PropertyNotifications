@@ -2,7 +2,7 @@
 
 namespace UtilityStruct
 {
-    public struct Age
+    public readonly struct Age
     {
         public Age(int i)
         {
@@ -13,7 +13,7 @@ namespace UtilityStruct
             Value = i;
         }
 
-        public double Value;
+        public double Value { get; }
 
         public static implicit operator int(Age d)
         {

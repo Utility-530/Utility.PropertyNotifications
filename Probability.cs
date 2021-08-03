@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace UtilityStruct
 {
-    public struct Probability
+    public readonly struct Probability
     {
         public Probability(double val)
         {
