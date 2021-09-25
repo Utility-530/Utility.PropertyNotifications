@@ -13,12 +13,14 @@ namespace UtilityHelperEx
             {
                 return theFunction();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 logger.Write(ex, "Exception caught", LogLevel.Error);
                 return default;
                 // You'll need to either rethrow here, or return default(T) etc
             }
         }
+
+
     }
 }

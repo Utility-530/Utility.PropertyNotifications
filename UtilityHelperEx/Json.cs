@@ -17,7 +17,7 @@ namespace UtilityHelperEx
         /// </summary>
         /// <param name="data">The JSON data that should be deserialized</param>
         /// <returns>The T object that was deserialized</returns>
-        public static T? DeserializeJson<T>(string data) where T : class
+        public static T? Deserialize<T>(string data) 
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
             if (data.Length == 0) throw new ArgumentException(nameof(data));
@@ -26,45 +26,20 @@ namespace UtilityHelperEx
             return deserializeObject;
         }
 
-        /// <summary>
-        /// Deserialize JSON data into an T object
-        /// </summary>
-        /// <param name="data">The JSON data that should be deserialized</param>
-        /// <returns>The T object that was deserialized</returns>
-        public static T? DeserializeJsonStruct<T>(string data) where T : struct
-        {
-            if (data == null) throw new ArgumentNullException(nameof(data));
-            if (data.Length == 0) throw new ArgumentException(nameof(data));
-
-            var deserializeObject = JsonConvert.DeserializeObject<T>(data);
-            return deserializeObject;
-        }
         /// <summary>
         /// Deserialize JSON data into an T object asynchronously
         /// </summary>
         /// <param name="data">The JSON data that should be deserialized</param>
         /// <returns>The T object that was deserialized</returns>
-        public static async Task<T?> DeserializeJsonAsync<T>(string data) where T : class
+        public static async Task<T?> DeserializeAsync<T>(string data) 
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
             if (data.Length == 0) throw new ArgumentException(nameof(data));
 
             return await Task.Run(() => JsonConvert.DeserializeObject<T>(data));
-        }        /// <summary>
-                 /// Deserialize JSON data into an T object asynchronously
-                 /// </summary>
-                 /// <param name="data">The JSON data that should be deserialized</param>
-                 /// <returns>The T object that was deserialized</returns>
-        public static async Task<T?> DeserializeJsonAsyncToStruct<T>(string data) where T : struct
-        {
-            if (data == null) throw new ArgumentNullException(nameof(data));
-            if (data.Length == 0) throw new ArgumentException(nameof(data));
+        }      
 
-            return await Task.Run(() => JsonConvert.DeserializeObject<T>(data));
-        }
-
-
-        public static T DeserializeJson<T>(Stream stream, JsonSerializerSettings? settings = null)
+        public static T Deserialize<T>(Stream stream, JsonSerializerSettings? settings = null)
         {
             var serializer = settings == null ? new JsonSerializer() : JsonSerializer.Create(settings);
             using var sr = new StreamReader(stream);
@@ -72,41 +47,12 @@ namespace UtilityHelperEx
             return serializer.Deserialize<T>(jsonTextReader) ?? throw new InvalidOperationException();
         }
 
-        public static JsonSerializerSettings GetJsonSerializerSettings()
-        {
-            var jsonSerializerSettings = new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Auto,
-                NullValueHandling = NullValueHandling.Ignore,
-                Formatting = Formatting.Indented,
-                DateFormatHandling = DateFormatHandling.IsoDateFormat,
-                DateTimeZoneHandling = DateTimeZoneHandling.Utc
-            };
-            jsonSerializerSettings.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
-            return jsonSerializerSettings;
-            ;
-        }
-
-        public static JsonSerializer GetJsonSerializer()
-        {
-            var jsonSerializer = new JsonSerializer
-            {
-                TypeNameHandling = TypeNameHandling.Auto,
-                NullValueHandling = NullValueHandling.Ignore,
-                Formatting = Formatting.Indented,
-                DateFormatHandling = DateFormatHandling.IsoDateFormat,
-                DateTimeZoneHandling = DateTimeZoneHandling.Utc
-            };
-            jsonSerializer.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
-            return jsonSerializer;
-            ;
-        }
 
         public static void Serialize<T>(T combinedInformation, FileInfo filePath)
         {
             using StreamWriter sw = new StreamWriter(filePath.FullName);
             using JsonWriter writer = new JsonTextWriter(sw);
-            GetJsonSerializer().Serialize(writer, combinedInformation, typeof(T));
+            Serializer.Serialize(writer, combinedInformation, typeof(T));
         }
 
         public static string Serialize<T>(T combinedInformation)
@@ -125,6 +71,41 @@ namespace UtilityHelperEx
             serializer.Serialize(writer, combinedInformation, typeof(T));
             return sw.ToString();
         }
+
+        public static JsonSerializerSettings SerializerSettings
+        {
+            get
+            {
+                var jsonSerializerSettings = new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    NullValueHandling = NullValueHandling.Ignore,
+                    Formatting = Formatting.Indented,
+                    DateFormatHandling = DateFormatHandling.IsoDateFormat,
+                    DateTimeZoneHandling = DateTimeZoneHandling.Utc
+                };
+                jsonSerializerSettings.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+                return jsonSerializerSettings;
+            }
+        }
+
+        public static JsonSerializer Serializer
+        {
+            get
+            {
+                var jsonSerializer = new JsonSerializer
+                {
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    NullValueHandling = NullValueHandling.Ignore,
+                    Formatting = Formatting.Indented,
+                    DateFormatHandling = DateFormatHandling.IsoDateFormat,
+                    DateTimeZoneHandling = DateTimeZoneHandling.Utc
+                };
+                jsonSerializer.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+                return jsonSerializer;
+            }
+        }
+
     }
 
     public class FileSystemInfoConverter : JsonConverter
