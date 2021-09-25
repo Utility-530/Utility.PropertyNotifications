@@ -3,8 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>UtilityInterface</PackageId>
-    <Description>IKey,IId, IRow,IChildRow, IPeriodic, IPeriod,IParent, IDistributed, ISelectAll,
-ISelect, ISelectById, IAdd, IAddBulk, IUpdate  , IUpdateBulk, IDelete, IDeleteBulk, IDeleteById, IDbService, IValue, ITimeValue, IPermanent, IPlayer ...</Description>
+    <Description>Just interfaces for general usage</Description>
     <PackageTags>interface utility</PackageTags>
     <PackageProjectUrl>https://github.com/dtaylor-530/UtilityInterface</PackageProjectUrl>
     <Authors>Declan Taylor</Authors>
@@ -12,9 +11,9 @@ ISelect, ISelectById, IAdd, IAddBulk, IUpdate  , IUpdateBulk, IDelete, IDeleteBu
     <Product />
     <Copyright></Copyright>
     <PackageReleaseNotes>utility interfaces</PackageReleaseNotes>
-    <Version>4.0.4</Version>
-    <AssemblyVersion>4.0.2.0</AssemblyVersion>
-    <FileVersion>4.0.2.0</FileVersion>
+    <Version>5.0.0</Version>
+    <AssemblyVersion>5.0.0.0</AssemblyVersion>
+    <FileVersion>5.0.0.0</FileVersion>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
