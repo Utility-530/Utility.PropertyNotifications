@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace UtilityInterface.Generic.Database
+namespace UtilityInterface.Generic.Data
 {
     public interface IFind<T, TQueryResult>
     {
         TQueryResult Find(T item);
     }
 
-    public interface IFindMany<T, TQueryResult> 
+    public interface IFindMany<T, TQueryResult>
     {
         TQueryResult FindMany(IEnumerable<T> items);
     }
@@ -17,7 +17,7 @@ namespace UtilityInterface.Generic.Database
         TQueryResult FindBy(TQuery query);
     }
 
-    public interface IFindManyBy<TQuery, TQueryResult> 
+    public interface IFindManyBy<TQuery, TQueryResult>
     {
         TQueryResult FindManyBy(TQuery query);
     }

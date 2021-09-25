@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace UtilityInterface.Generic.Database
+namespace UtilityInterface.Generic.Data
 {
     public interface IUpdate<T, TQueryResult>
     {

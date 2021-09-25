@@ -1,4 +1,4 @@
-﻿namespace UtilityInterface.Generic.Database
+﻿namespace UtilityInterface.Generic.Data
 {
 
     public interface IRepository<T, TQuery, TQueryResult> : IBasicRepository<T, TQueryResult>, IQuerySingleRepository<T, TQuery, TQueryResult>, IQueryMultiRepository<T, TQuery, TQueryResult>

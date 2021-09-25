@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UtilityInterface.NonGeneric.Data;
 
-namespace UtilityInterface.Generic.Database
+namespace UtilityInterface.Generic.Data
 {
     public interface IEntity<T>: IEntity
     {

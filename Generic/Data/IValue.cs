@@ -1,4 +1,4 @@
-﻿namespace UtilityInterface.Generic.Database
+﻿namespace UtilityInterface.Generic.Data
 {
     public interface IValue<T>
     {
