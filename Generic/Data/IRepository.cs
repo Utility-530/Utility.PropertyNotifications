@@ -1,15 +1,14 @@
-﻿using UtilityInterface.NonGeneric.Data;
-
-namespace UtilityInterface.Generic.Database
+﻿namespace UtilityInterface.Generic.Database
 {
 
-    public interface IRepository<T, TQuery, TQueryResult> : IBasicRepository<T, TQueryResult>, IQueryRepository<T, TQuery, TQueryResult>
+    public interface IRepository<T, TQuery, TQueryResult> : IBasicRepository<T, TQueryResult>, IQuerySingleRepository<T, TQuery, TQueryResult>, IQueryMultiRepository<T, TQuery, TQueryResult>
     {
     }
 
     public interface IBasicRepository<T, TQueryResult> : ISingleRepository<T, TQueryResult>, IMultiRepository<T, TQueryResult>
     {
     }
+
 
     public interface IIdRepository<TId, TQueryResult> : IIdSingleRepository<TId, TQueryResult>, IIdMultiRepository<TId, TQueryResult>
     {
@@ -23,9 +22,14 @@ namespace UtilityInterface.Generic.Database
     {
     }
 
-    public interface IQueryRepository<T, TQuery, TQueryResult> : IFindBy<TQuery, TQueryResult>, IAddBy<TQuery, TQueryResult>, IUpdateBy<TQuery, TQueryResult>, IRemoveBy<TQuery, TQueryResult>
+    public interface IQuerySingleRepository<T, TQuery, TQueryResult> : IFindBy<TQuery, TQueryResult>, IAddBy<TQuery, TQueryResult>, IUpdateBy<TQuery, TQueryResult>, IRemoveBy<TQuery, TQueryResult>
     {
     }
+
+    public interface IQueryMultiRepository<T, TQuery, TQueryResult> : IFindManyBy<TQuery, TQueryResult>, IAddManyBy<TQuery, TQueryResult>, IUpdateManyBy<TQuery, TQueryResult>, IRemoveManyBy<TQuery, TQueryResult>
+    {
+    }
+
 
     public interface IIdSingleRepository<TId, TQueryResult> : IFindById<TId, TQueryResult>, IRemoveById<TId, TQueryResult>
     {

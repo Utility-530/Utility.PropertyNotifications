@@ -17,5 +17,10 @@ namespace UtilityInterface.NonGeneric.Data
     public interface IUpdateMany
     {
         IEnumerable UpdateMany(IEnumerable items);
+    }  
+    
+    public interface IUpdateManyBy
+    {
+        IEnumerable UpdateManyBy(IQuery query);
     }
 }

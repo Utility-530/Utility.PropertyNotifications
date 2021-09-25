@@ -17,6 +17,10 @@ namespace UtilityInterface.NonGeneric.Data
 
     public interface IAddMany
     {
-        IEnumerable IAddMany(IEnumerable items);
+        IEnumerable AddMany(IEnumerable items);
+    }   
+    public interface IAddManyBy
+    {
+        IEnumerable AddManyBy(IQuery query);
     }
 }

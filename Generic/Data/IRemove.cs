@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace UtilityInterface.Generic.Database
 {
@@ -23,7 +22,7 @@ namespace UtilityInterface.Generic.Database
         TQueryResult RemoveMany(IEnumerable<T> items);
     }   
     
-    public interface IRemoveManyBy<T, TQuery, TQueryResult>
+    public interface IRemoveManyBy<TQuery, TQueryResult>
     {
         TQueryResult RemoveManyBy(TQuery query);
     }

@@ -16,4 +16,9 @@ namespace UtilityInterface.Generic.Database
     {
         TQueryResult AddBy(TQuery query);
     }
+
+    public interface IAddManyBy<TQuery, TQueryResult>
+    {
+        TQueryResult AddManyBy(TQuery query);
+    }
 }

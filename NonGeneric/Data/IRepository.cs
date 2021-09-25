@@ -3,7 +3,7 @@
 
 namespace UtilityInterface.NonGeneric.Data
 {
-    public interface IRepository : IBasicRepository, IQueryRepository
+    public interface IRepository : IBasicRepository, IQuerySingleRepository, IQueryMultiRepository
     {
     }
 
@@ -23,7 +23,10 @@ namespace UtilityInterface.NonGeneric.Data
     {
     }
 
-    public interface IQueryRepository: IFindBy, IAddBy, IUpdateBy, IRemoveBy
+    public interface IQuerySingleRepository: IFindBy, IAddBy, IUpdateBy, IRemoveBy
+    {
+    }
+    public interface IQueryMultiRepository : IFindManyBy, IAddManyBy, IUpdateManyBy, IRemoveManyBy
     {
     }
 

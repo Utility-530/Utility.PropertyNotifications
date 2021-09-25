@@ -10,12 +10,17 @@ namespace UtilityInterface.Generic.Database
 
     public interface IUpdateMany<T, TQueryResult>
     {
-        TQueryResult UpdateMany(IEnumerable<T> item);
+        TQueryResult UpdateMany(IEnumerable<T> items);
     }  
     
     public interface IUpdateBy<TQuery, TQueryResult>
     {
-        TQueryResult UpdateBy(TQuery predicate);
+        TQueryResult UpdateBy(TQuery query);
+    }
+
+    public interface IUpdateManyBy<TQuery, TQueryResult>
+    {
+        TQueryResult UpdateManyBy(TQuery query);
     }
 
 }

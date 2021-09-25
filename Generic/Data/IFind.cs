@@ -14,12 +14,12 @@ namespace UtilityInterface.Generic.Database
 
     public interface IFindBy<TQuery, TQueryResult>
     {
-        TQueryResult FindBy(TQuery items);
+        TQueryResult FindBy(TQuery query);
     }
 
     public interface IFindManyBy<TQuery, TQueryResult> 
     {
-        TQueryResult FindManyBy(TQuery items);
+        TQueryResult FindManyBy(TQuery query);
     }
 
 
