@@ -1,8 +1,10 @@
-﻿namespace UtilityInterface.Generic
+﻿using System.Collections.Generic;
+
+namespace UtilityInterface.Generic
 {
     public interface IFilter<T>
     {
-        bool Filter(T o);
+        IEnumerable<T> Filter(IEnumerable<T> o);
 
     }
 

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UtilityInterface.NonGeneric.Data;
 
 namespace UtilityInterface.Generic.Database
 {
-    public interface ISetId<T>
+    public interface IEntity<T>: IEntity
     {
-        T Id { set; }
+        T Object { get; set; }
+
     }
 }

@@ -4,5 +4,9 @@
     {
         T Id { get; }
     }
-
+    public interface IIdSet<T>
+    {
+        T Id { set; }
+    }
 }
+

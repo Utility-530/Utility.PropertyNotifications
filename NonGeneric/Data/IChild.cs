@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace UtilityInterface.NonGeneric.Database
+namespace UtilityInterface.NonGeneric.Data
 {
 
-
-
-    public interface IChildRow : IId
+    public interface IChild : IId
     {
         long ParentId { get; }
     }

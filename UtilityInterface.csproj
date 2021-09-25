@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageId>UtilityInterface</PackageId>
     <Description>IKey,IId, IRow,IChildRow, IPeriodic, IPeriod,IParent, IDistributed, ISelectAll,
-ISelect, ISelectById, IInsert, IInsertBulk, IUpdate  , IUpdateBulk, IDelete, IDeleteBulk, IDeleteById, IDbService, IValue, ITimeValue, IPermanent, IPlayer ...</Description>
+ISelect, ISelectById, IAdd, IAddBulk, IUpdate  , IUpdateBulk, IDelete, IDeleteBulk, IDeleteById, IDbService, IValue, ITimeValue, IPermanent, IPlayer ...</Description>
     <PackageTags>interface utility</PackageTags>
     <PackageProjectUrl>https://github.com/dtaylor-530/UtilityInterface</PackageProjectUrl>
     <Authors>Declan Taylor</Authors>

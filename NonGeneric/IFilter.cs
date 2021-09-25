@@ -1,8 +1,10 @@
-﻿namespace UtilityInterface.NonGeneric
+﻿using System.Collections;
+
+namespace UtilityInterface.NonGeneric
 {
     public interface IFilter
     {
-        bool Filter(object o);
+        IEnumerable Filter(IEnumerable o);
 
     }
 }
