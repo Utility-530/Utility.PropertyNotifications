@@ -33,7 +33,7 @@ namespace UtilityInterface.NonGeneric.Data
 
     public interface IFindManyBy
     {
-        IEnumerable FindMany(IQuery query);
+        IEnumerable FindManyBy(IQuery query);
     }
 
     public interface IFindManyById
