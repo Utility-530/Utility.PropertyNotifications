@@ -1,6 +1,5 @@
-﻿using System.Text;
-
-namespace UtilityInterface.Generic.Database
+﻿
+namespace UtilityInterface.Generic
 {
 
     public interface ITimeValue<T> : NonGeneric.ITime, IValue<T>
