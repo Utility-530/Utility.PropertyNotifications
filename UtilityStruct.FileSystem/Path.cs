@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Files.Shared;
+using Files.Shared.PhysicalPath.Utilities;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq.Expressions;
+using UtilityStruct.Common;
 using UtilityStruct.FileSystem;
-using UtilityStruct.Helper;
 using static Files.Shared.PhysicalPath.Utilities.PathPolyfills;
-using Files.Shared;
-using Files.Shared.PhysicalPath.Utilities;
 
 namespace UtilityStruct.FileSystem
 {
@@ -975,11 +975,11 @@ namespace Files.Shared.PhysicalPath.Utilities
 
 namespace Files
 {
+    using Files.Shared;
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
-    using Files.Shared;
 
     /// <summary>
     ///     Provides information about special path characteristics in a file system implementation.
@@ -1277,7 +1277,7 @@ namespace Files.Shared.PhysicalPath.Utilities
         }
 #endif
 
-#if NETSTANDARD2_1 || NETCOREAPP2_2 || NETCOREAPP2_1 || NETCOREAPP2_0 || NETSTANDARD2_0 || UAP
+#if NETSTANDARD2_1 || NETCOREAPP2_2 || NETCOREAPP2_1 || NETCOREAPP2_0 || NETSTANDARD2_0 || UAP || NET5_0_OR_GREATER
         private const int WindowsDevicePrefixLength = 4;
         private const int WindowsUncPrefixLength = 2;
         private const int WindowsUncExtendedPrefixLength = 8;

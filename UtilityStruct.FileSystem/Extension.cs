@@ -6,8 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using UtilityStruct.Helper;
-using UtilityStruct.Infrastructure;
+using UtilityStruct.Common;
 
 namespace UtilityStruct.FileSystem
 {
