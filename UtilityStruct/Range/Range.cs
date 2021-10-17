@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace UtilityStruct
 {
@@ -12,6 +10,12 @@ namespace UtilityStruct
     /// <typeparam name="T">Generic parameter.</typeparam>
     public readonly struct Range<T> where T : IComparable<T>
     {
+        public Range(T minimum, T maximum)
+        {
+            Minimum = minimum;
+            Maximum = maximum;
+        }
+
         /// <summary>Minimum value of the range.</summary>
         public T Minimum { get; }
 
