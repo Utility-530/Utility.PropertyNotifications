@@ -1,5 +1,4 @@
 ﻿using System;
-using UtilityStruct.Common;
 
 namespace UtilityStruct
 {
@@ -8,17 +7,17 @@ namespace UtilityStruct
         public TypeRecord(ReadOnlySpan<char> assembly, ReadOnlySpan<char> nameSpace, ReadOnlySpan<char> name)
         {
             Assembly = assembly;
-            NameSpace = nameSpace;
+            Namespace = nameSpace;
             Name = name;
         }
 
         public ReadOnlySpan<char> Assembly { get; }
 
-        public ReadOnlySpan<char> NameSpace { get; }
+        public ReadOnlySpan<char> Namespace { get; }
 
         public ReadOnlySpan<char> Name { get; }
 
-        public Type ToType()
+        public Type? ToType()
         {
             return TypeRecordHelper.ToType(this);
         }
@@ -31,15 +30,31 @@ namespace UtilityStruct
 
     public static class TypeRecordHelper
     {
-        public static Type ToType(TypeRecord record)
+        public static Type? ToType(TypeRecord record)
         {
-
-            return ToType(record.Assembly, record.NameSpace, record.Name);
+            return ToType(record.Assembly, record.Namespace, record.Name);
         }
 
-        public static Type ToType(ReadOnlySpan<char> assemblyName, ReadOnlySpan<char> nameSpace, ReadOnlySpan<char> name)
+        public static Type? ToType(ReadOnlySpan<char> assemblyName, ReadOnlySpan<char> nameSpace, ReadOnlySpan<char> typeName)
         {
-            Type your = Type.GetType(SpanHelper.Concat(nameSpace, ".", name, ", ", assemblyName).ToString());
+            var resultSpan = new char[assemblyName.Length + nameSpace.Length + typeName.Length + 3].AsSpan();
+            // start with the type-name (including name-space)
+            nameSpace.CopyTo(resultSpan);
+            int from = nameSpace.Length;
+            resultSpan[from] = '.';
+            from++;
+            typeName.CopyTo(resultSpan[from..]);
+            from += typeName.Length;
+
+            // separate
+            resultSpan[from] = ',';
+            from++;
+            resultSpan[from] = ' ';
+            from++;
+
+            // append assembly-name
+            assemblyName.CopyTo(resultSpan[from..]);
+            Type? your = Type.GetType(resultSpan.ToString());
             return your;
         }
 
@@ -51,6 +66,5 @@ namespace UtilityStruct
             }
             return new TypeRecord(type.Assembly.FullName, type.Namespace, type.Name);
         }
-
     }
 }

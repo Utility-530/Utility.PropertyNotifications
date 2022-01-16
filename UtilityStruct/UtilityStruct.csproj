@@ -1,45 +1,40 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Authors>Declan Taylor</Authors>
-    <Version>1.0.9-alpha</Version>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-  
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>Declan Taylor</Authors>
+		<Version>1.0.10-alpha</Version>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-     <ShouldCreateLogs>True</ShouldCreateLogs>
-     <AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
-     <UpdateAssemblyVersion>False</UpdateAssemblyVersion>
-     <UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
-     <UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
-     <UpdatePackageVersion>False</UpdatePackageVersion>
-     <AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
-     <InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
-             <AssemblyVersion>1.0.4.0</AssemblyVersion>
-        <FileVersion>1.0.4.0</FileVersion>
-   </PropertyGroup> 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<ShouldCreateLogs>True</ShouldCreateLogs>
+		<AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
+		<UpdateAssemblyVersion>False</UpdateAssemblyVersion>
+		<UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
+		<UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+		<UpdatePackageVersion>False</UpdatePackageVersion>
+		<AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+		<InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
+		<AssemblyVersion>1.0.10.0</AssemblyVersion>
+		<FileVersion>1.0.10.0</FileVersion>
+	</PropertyGroup>
 
-   <PropertyGroup>
-        <FileName>"$(ProjectDir)\bin\debug\$(ProjectName)*nupkg"</FileName>
-        <DestinationFolder>C:\Users\rytal\Documents\Visual Studio 2019\NugetPackages</DestinationFolder>
-        <AssemblyVersion>1.0.9.0</AssemblyVersion>
-        <FileVersion>1.0.9.0</FileVersion>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    </PropertyGroup>   
-  
-    <ItemGroup>
-       <MySourceFiles Include="$(ProjectDir)\bin\debug\$(ProjectName)*nupkg" />
-    </ItemGroup>   
-  
-    <ItemGroup>
-      <ProjectReference Include="..\UtilityStruct.Common\UtilityStruct.Common.csproj" />
-    </ItemGroup>
-  
-    <Target Name="CopyFiles" AfterTargets="Build">
-        <Message Text="@(MySourceFiles)" Importance="high" /> 
-        <Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(DestinationFolder)" />
-    </Target>
+	<PropertyGroup>
+		<FileName>"$(ProjectDir)\bin\debug\$(ProjectName)*nupkg"</FileName>
+		<DestinationFolder>C:\Users\rytal\Documents\Visual Studio 2019\NugetPackages</DestinationFolder>
+		<AssemblyVersion>1.0.9.0</AssemblyVersion>
+		<FileVersion>1.0.9.0</FileVersion>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<MySourceFiles Include="$(ProjectDir)\bin\debug\$(ProjectName)*nupkg" />
+	</ItemGroup>
+
+	<Target Name="CopyFiles" AfterTargets="Build">
+		<Message Text="@(MySourceFiles)" Importance="high" />
+		<Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(DestinationFolder)" />
+	</Target>
 </Project>
