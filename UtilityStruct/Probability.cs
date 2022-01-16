@@ -21,7 +21,6 @@ namespace UtilityStruct
         public Probability(decimal val) : this((double)val)
         { }
 
-
         public Probability(int percent)
         {
             if (percent <= 100 && percent >= 0)
@@ -34,7 +33,6 @@ namespace UtilityStruct
             }
         }
 
-
         // User-defined conversion from Probability to decimal
         public static implicit operator decimal(Probability i)
         {
@@ -45,7 +43,6 @@ namespace UtilityStruct
         {
             return (double)i.Value;
         }
-
 
         // User-defined conversion from Probability to decimal
         public static implicit operator int(Probability i)
@@ -58,42 +55,35 @@ namespace UtilityStruct
             return i.Value;
         }
 
-
         public static implicit operator Probability(decimal i)
         {
             return new Probability(i);
         }
-
 
         public static implicit operator Probability(double i)
         {
             return new Probability((decimal)i);
         }
 
-
         public static implicit operator Probability(int i)
         {
             return new Probability(i);
         }
-
 
         public static implicit operator Probability(Percent i)
         {
             return new Probability(i);
         }
 
-
         public double Value { get; }
         public decimal Decimal => (decimal)Value;
 
         public double Percent => Value * 100d;
 
-
         /// <summary>
         /// EuropeanOdd
         /// </summary>
         public double EuropeanOdd => 1 / Value;
-
 
         public int MoneyLine
         {
@@ -107,7 +97,6 @@ namespace UtilityStruct
             }
         }
 
-
         public (int, int) EnglishOdd
         {
             get
@@ -116,8 +105,6 @@ namespace UtilityStruct
                 return (fraction.Item1 + fraction.Item2, fraction.Item2);
             }
         }
-
-
 
         //https://stackoverflow.com/questions/14320891/convert-percentage-to-nearest-fraction
         // answered Jan 14 '13 at 16:44    DasKrümelmonster
@@ -146,7 +133,6 @@ namespace UtilityStruct
         }
     }
 
-
     public static class ProbabilityEx
     {
         public static Probability GetFromMoneyLine(int value)
@@ -162,13 +148,13 @@ namespace UtilityStruct
 
         public static Probability GetFromEnglishOdd((int, int) value) => (((decimal)(value.Item1 + value.Item2)) / value.Item2) - 1;
 
-        public static Probability GetFromEuropeanOdd(double value) => new Probability(1 / value);
+        public static Probability GetFromEuropeanOdd(double value) => new(1 / value);
 
-        public static Probability GetFromEuropeanOdd(decimal value) => new Probability(1 / value);
+        public static Probability GetFromEuropeanOdd(decimal value) => new(1 / value);
 
-        public static Probability GetFromPercent(int value) => new Probability(value / 100m);
+        public static Probability GetFromPercent(int value) => new(value / 100m);
 
-        public static Probability GetFromPercent(double value) => new Probability(value / 100d);
+        public static Probability GetFromPercent(double value) => new(value / 100d);
 
         public static IEnumerable<(decimal dcml, Probability probability)> ToProbabilities(this ICollection<decimal> odds)
         {
@@ -205,7 +191,6 @@ namespace UtilityStruct
             return (home.Value / margin, draw.Value / margin, away.Value / margin);
         }
 
-
         /// <summary>
         /// Gets the remainder of the sums after dividing by zero.
         /// </summary>
@@ -213,6 +198,5 @@ namespace UtilityStruct
         /// <param name="props"></param>
         /// <returns></returns>
         public static double GetMargin(Probability home, Probability draw, Probability away) => new[] { home, draw, away }.Sum(val => val.Value) - 1;
-
     }
 }
