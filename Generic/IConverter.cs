@@ -1,17 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UtilityInterface.NonGeneric;
-
-namespace UtilityInterface.Generic
+﻿namespace UtilityInterface.Generic
 {
-    public interface IConverter<TIn, TOut>
+
+    public interface IConverter
     {
-        TOut To(TIn value);
+    }
+
+    public interface IConverter<TIn, TOut> : IConverter
+    {
+        TOut Convert(TIn value);
     }
 
     public interface ITwoWayConverter<TIn, TOut> : IConverter<TIn, TOut>
     {
-        TIn From(TOut value);
+        TIn ConvertBack(TOut value);
     }
 }
