@@ -27,13 +27,13 @@ namespace UtilityInterface.NonGeneric.Data
     public interface IRemoveMany
     {
         IEnumerable RemoveMany(IEnumerable items);
-    } 
+    }
 
     public interface IRemoveManyBy
     {
-        IEnumerable RemoveMany(IQuery query);
-    } 
-    
+        IEnumerable RemoveManyBy(IQuery query);
+    }
+
     public interface IRemoveManyById
     {
         IEnumerable RemoveManyById(IEnumerable<long> ids);
@@ -43,5 +43,4 @@ namespace UtilityInterface.NonGeneric.Data
     {
         IEnumerable RemoveManyById(IEnumerable<Guid> guids);
     }
-
 }
