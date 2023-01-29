@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Linq.Expressions;
-using UtilityStruct.Common;
 using UtilityStruct.Infrastructure;
 
 namespace UtilityStruct.FileSystem
@@ -42,7 +39,6 @@ namespace UtilityStruct.FileSystem
         {
             return new MultiValidater<string>(path,
                     new[] { new Validater<string, ErrorCode>(path, ErrorCode.FileNameContainsInvalidCharacter, a => PathHelper.IsFileNameCharactersValid(a)) });
-
         }
 
         public class Validator : Validater<string, ErrorCode>
@@ -56,12 +52,12 @@ namespace UtilityStruct.FileSystem
         {
             string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars()));
             string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
-            return SpanHelper.Replace(name, invalidRegStr, "_");
+            return ReadOnlySpanHelper.Replace(name, invalidRegStr, "_");
         }
 
         public FileName AddExtension(ReadOnlySpan<char> extension)
         {
-            return new FileName(SpanHelper.Concat(this.Value, ".", extension));
+            return new FileName(this.Value.Concat(".", extension));
         }
 
         /// <summary>

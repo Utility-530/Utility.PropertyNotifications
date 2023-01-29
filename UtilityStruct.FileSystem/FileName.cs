@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
 using System.Linq.Expressions;
-using UtilityStruct.Common;
 using UtilityStruct.Infrastructure;
 
 namespace UtilityStruct.FileSystem
@@ -15,6 +11,7 @@ namespace UtilityStruct.FileSystem
         {
             FileNameContainsInvalidCharacter
         }
+
         public FileName(string name) : this(name.AsSpan())
         {
             if (Validate(name) is { Failed: { Count: { } failures } failed } valids && failures > 0)
@@ -22,7 +19,7 @@ namespace UtilityStruct.FileSystem
         }
 
         public FileName(string name, string extension) : this(name.AsSpan(), extension.AsSpan())
-{
+        {
             if (Validate(name) is { Failed: { Count: { } failures } failed } valids && failures > 0)
                 throw new MultiValidationException<string>(valids);
         }
@@ -36,7 +33,7 @@ namespace UtilityStruct.FileSystem
 
         public FileName(ReadOnlySpan<char> name, ReadOnlySpan<char> extension)
         {
-            Value = SpanHelper.Concat(name, ".", extension);
+            Value = ReadOnlySpanHelper.Concat(name, ".", extension);
             WithOutExtension = name;
             Extension = new Extension(extension);
         }
@@ -61,7 +58,6 @@ namespace UtilityStruct.FileSystem
         {
             return new MultiValidater<string>(path,
                     new[] { new Validater<string, ErrorCode>(path, ErrorCode.FileNameContainsInvalidCharacter, a => PathHelper.IsFileNameCharactersValid(a)) });
-
         }
 
         public class Validator : Validater<string, ErrorCode>
@@ -75,12 +71,12 @@ namespace UtilityStruct.FileSystem
         {
             string invalidChars = System.Text.RegularExpressions.Regex.Escape(new string(System.IO.Path.GetInvalidFileNameChars()));
             string invalidRegStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
-            return SpanHelper.Replace(name, invalidRegStr, "_");
+            return ReadOnlySpanHelper.Replace(name, invalidRegStr, "_");
         }
 
         public FileName ChangeExtension(ReadOnlySpan<char> extension)
         {
-            return new FileName(SpanHelper.Concat(this.WithOutExtension, ".", extension));
+            return new FileName(ReadOnlySpanHelper.Concat(this.WithOutExtension, ".", extension));
         }
 
         /// <summary>

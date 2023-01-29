@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
-using UtilityStruct.Common;
 
 namespace UtilityStruct.FileSystem
 {
@@ -53,7 +52,7 @@ namespace UtilityStruct.FileSystem
         public static MultiValidater<string> GetValidator(string path)
         {
             return new MultiValidater<string>(path,
-                    new[] { new Validater<string, ErrorCode>(path, ErrorCode.ExtensionContainsInvalidCharacter, a => SpanHelper.IsAllLetters(a)) });
+                    new[] { new Validater<string, ErrorCode>(path, ErrorCode.ExtensionContainsInvalidCharacter, a => ReadOnlySpanHelper.IsAllLetters(a)) });
         }
 
         public class Validator : Validater<string, ErrorCode>

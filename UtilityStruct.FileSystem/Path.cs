@@ -4,13 +4,12 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq.Expressions;
-using UtilityStruct.Common;
 using UtilityStruct.FileSystem;
 using static Files.Shared.PhysicalPath.Utilities.PathPolyfills;
 
 namespace UtilityStruct.FileSystem
 {
-    static class PathConstants
+    internal static class PathConstants
     {
         public const int MAXPATH = 260;
 
@@ -50,6 +49,7 @@ namespace UtilityStruct.FileSystem
             Root = System.IO.Path.GetPathRoot(path);
             EndsWithDirectorySeparator = PathPolyfills.EndsWithDirectorySeparator(path);
         }
+
         public ReadOnlySpan<char> Value { get; }
 
         private ReadOnlySpan<char> Root { get; }
@@ -89,7 +89,6 @@ namespace UtilityStruct.FileSystem
                 new Validator(path, ErrorCode.OnlyContainsVolumeDesignator, a=>!(a.Contains(":") && a.IndexOf(':') != 1)),
                 });
         }
-
 
         /// <summary>
         ///     Attempts to trim one trailing directory separator character from this path and
@@ -139,7 +138,7 @@ namespace UtilityStruct.FileSystem
         /// <remarks>
         ///     As described, the method trims exactly one trailing directory separator character
         ///     from the path (if one exists - otherwise, the same path is returned).
-        ///     
+        ///
         ///     In comparison to .NET's <c>System.IO.Path.TrimEndingDirectorySeparator(string path)</c>
         ///     method, <see cref="TrimEndingDirectorySeparator"/> also trims a directory separator
         ///     character if the path is a root path.
@@ -167,7 +166,6 @@ namespace UtilityStruct.FileSystem
             }
 
             var trimmedPath = Value[0..^1];
-
 
             return new Path(trimmedPath);
         }
@@ -240,10 +238,10 @@ namespace UtilityStruct.FileSystem
         ///// <summary>
         /////     Attempts to concatenate the two paths while also ensuring that <i>at least one</i> directory separator
         /////     character is inserted between them.
-        /////     
+        /////
         /////     If <paramref name="other"/> is rooted or starts with a directory separator character,
         /////     this path is discarded and the resulting path will simply be <paramref name="other"/>.
-        /////     
+        /////
         /////     See remarks of <see cref="Combine(string)"/> for details and examples.
         ///// </summary>
         ///// <param name="other">
@@ -270,14 +268,13 @@ namespace UtilityStruct.FileSystem
         //    }
         //}
 
-
         ///// <summary>
         /////     Concatenates the two paths while also ensuring that <i>at least one</i> directory separator
         /////     character is present between them.
-        /////     
+        /////
         /////     If <paramref name="other"/> is rooted (i.e. it starts with a directory separator character),
         /////     this path is discarded and the resulting path will simply be <paramref name="other"/>.
-        /////     
+        /////
         /////     See remarks for details and examples.
         ///// </summary>
         ///// <param name="other">
@@ -287,41 +284,41 @@ namespace UtilityStruct.FileSystem
         ///// <remarks>
         /////     This method behaves like .NET's <see cref="System.IO.Path.Combine(string, string)"/>
         /////     method.
-        /////     
+        /////
         /////     In comparison to the alternatives (<see cref="Join(string)"/> and <see cref="Link(string)"/>),
         /////     <see cref="Combine(string)"/> discards this path if <paramref name="other"/> is rooted or
         /////     starts with a directory separator character.
         /////     Out of the three methods, <see cref="Combine(string)"/> is the method that might
         /////     remove the most information from the two specified paths.
-        /////     
+        /////
         /////     The following code demonstrates the behavior of <see cref="Combine(string)"/>:
-        /////     
+        /////
         /////     <code>
         /////     // Note: The code assumes that / is the file system's directory separator.
-        /////     
+        /////
         /////     Path first = fs.GetPath("firstPath");
         /////     first.Combine("secondPath");    // Returns "firstPath/secondPath".
         /////     first.Combine("/secondPath");   // Returns "/secondPath".
         /////     first.Combine("///secondPath"); // Returns "///secondPath".
-        /////     
+        /////
         /////     first = fs.GetPath("firstPath/");
         /////     first.Combine("secondPath");    // Returns "firstPath/secondPath".
         /////     first.Combine("/secondPath");   // Returns "/secondPath".
         /////     first.Combine("///secondPath"); // Returns "///secondPath".
-        /////     
+        /////
         /////     first = fs.GetPath("firstPath///");
         /////     first.Combine("secondPath");    // Returns "firstPath///secondPath".
         /////     first.Combine("/secondPath");   // Returns "/secondPath".
         /////     first.Combine("///secondPath"); // Returns "///secondPath".
-        /////     
+        /////
         /////     first = fs.GetPath("firstPath");
         /////     first.Join("");              // Returns "firstPath".
-        ///// 
+        /////
         /////     first = fs.GetPath("/");
         /////     first.Join("");              // Returns "/".
         /////     first.Join("/");             // Returns "/".
         /////     first.Join("//");            // Returns "//".
-        /////     
+        /////
         /////     first = fs.GetPath("//");
         /////     first.Join("");              // Returns "//".
         /////     first.Join("/");             // Returns "/".
@@ -341,7 +338,6 @@ namespace UtilityStruct.FileSystem
         ///// <seealso cref="Link(Path)"/>
         //public Path Combine(Path other)
         //{
-
         //    if (other.Value.Length == 0)
         //    {
         //        return this;
@@ -359,14 +355,13 @@ namespace UtilityStruct.FileSystem
         /// <inheritdoc cref="TryJoin(string?, out Path?)"/>
         public bool TryJoin(Path other, out Path result) => TryJoin(other, out result);
 
-
         /// <summary>
         ///     Attempts to concatenate the two paths while also ensuring that <i>at least one</i> directory separator
         ///     character is inserted between them.
-        ///     
+        ///
         ///     All leading/trailing directory separator chars of <paramref name="other"/> and this path
         ///     are preserved. Neither path is discarded.
-        ///     
+        ///
         ///     See remarks of <see cref="Join(string)"/> for details and examples.
         /// </summary>
         /// <param name="other">
@@ -396,10 +391,10 @@ namespace UtilityStruct.FileSystem
         /// <summary>
         ///     Concatenates the two paths while also ensuring that <i>at least one</i> directory separator
         ///     character is present between them.
-        ///     
+        ///
         ///     All leading/trailing directory separator chars of <paramref name="other"/> and this path
         ///     are preserved. Neither path is discarded.
-        ///     
+        ///
         ///     See remarks for details and examples.
         /// </summary>
         /// <param name="other">
@@ -409,42 +404,42 @@ namespace UtilityStruct.FileSystem
         /// <remarks>
         ///     This method behaves like .NET's
         ///     <c>System.IO.Path.Join(ReadOnlySpan&lt;char&gt;, ReadOnlySpan&lt;char&gt;)</c> method.
-        ///     
+        ///
         ///     In comparison to the alternatives (<see cref="Combine(string)"/> and <see cref="Link(string)"/>),
         ///     <see cref="Join(string)"/> preserves any leading/trailing directory separator chars of
         ///     <paramref name="other"/> and this path.
         ///     In comparison to <see cref="Combine(string)"/> specifically, neither path is discarded.
         ///     Out of the three methods, <see cref="Join(string)"/> is the safest one as it does not
         ///     remove any characters from either path.
-        ///     
+        ///
         ///     The following code demonstrates the behavior of <see cref="Join(string)"/>:
-        ///     
+        ///
         ///     <code>
         ///     // Note: The code assumes that / is the file system's directory separator.
-        ///     
+        ///
         ///     Path first = fs.GetPath("firstPath");
         ///     first.Join("secondPath");    // Returns "firstPath/secondPath".
         ///     first.Join("/secondPath");   // Returns "firstPath/secondPath".
         ///     first.Join("///secondPath"); // Returns "firstPath///secondPath".
-        ///     
+        ///
         ///     first = fs.GetPath("firstPath/");
         ///     first.Join("secondPath");    // Returns "firstPath/secondPath".
         ///     first.Join("/secondPath");   // Returns "firstPath//secondPath".
         ///     first.Join("///secondPath"); // Returns "firstPath////secondPath".
-        ///     
+        ///
         ///     first = fs.GetPath("firstPath///");
         ///     first.Join("secondPath");    // Returns "firstPath///secondPath".
         ///     first.Join("/secondPath");   // Returns "firstPath////secondPath".
         ///     first.Join("///secondPath"); // Returns "firstPath//////secondPath".
-        ///     
+        ///
         ///     first = fs.GetPath("firstPath");
         ///     first.Join("");              // Returns "firstPath".
-        /// 
+        ///
         ///     first = fs.GetPath("/");
         ///     first.Join("");              // Returns "/".
         ///     first.Join("/");             // Returns "//".
         ///     first.Join("//");            // Returns "///".
-        ///     
+        ///
         ///     first = fs.GetPath("//");
         ///     first.Join("");              // Returns "//".
         ///     first.Join("/");             // Returns "///".
@@ -472,20 +467,19 @@ namespace UtilityStruct.FileSystem
             var hasSeparator = IsDirectorySeparator(Value[Value.Length - 1]) || IsDirectorySeparator(other[0]);
 
             var joinedPath = hasSeparator
-                ? SpanHelper.Concat(Value, other)
-                : SpanHelper.Concat(Value, new[] { PathConstants.DirectorySeparatorChar }, other);
+                ? ReadOnlySpanHelper.Concat(Value, other)
+                : ReadOnlySpanHelper.Concat(Value, new[] { PathConstants.DirectorySeparatorChar }, other);
 
             return new Path(joinedPath);
         }
 
-
         ///// <summary>
         /////     Attempts to concatenate the two paths while also ensuring that <i>exactly one</i> directory separator
         /////     character is inserted between them.
-        /////     
+        /////
         /////     Excess leading/trailing directory separators are removed from <paramref name="other"/>/this path
         /////     in order to end up with exactly one separator between them. Neither path is discarded.
-        /////     
+        /////
         /////     See remarks of <see cref="Link(string)"/> for details and examples.
         ///// </summary>
         ///// <param name="other">
@@ -500,7 +494,6 @@ namespace UtilityStruct.FileSystem
         ///// </returns>
         //public bool TryLink(ReadOnlySpan<char> other, [NotNullWhen(true)] out ReadOnlySpan<char> result)
         //{
-
         //    try
         //    {
         //        result = Link(other);
@@ -516,14 +509,13 @@ namespace UtilityStruct.FileSystem
         ///// <inheritdoc cref="Link(string)"/>
         //public ReadOnlySpan<char> Link(Path other) => Link(other.Value);
 
-
         ///// <summary>
         /////     Concatenates the two paths while also ensuring that <i>exactly one</i> directory separator
         /////     character is present between them.
-        /////     
+        /////
         /////     Excess leading/trailing directory separators are removed from <paramref name="other"/>/this path
         /////     in order to end up with exactly one separator between them. Neither path is discarded.
-        /////     
+        /////
         /////     See remarks for details and examples.
         ///// </summary>
         ///// <param name="other">
@@ -536,7 +528,7 @@ namespace UtilityStruct.FileSystem
         /////     <c>System.IO.Path.Join(ReadOnlySpan&lt;char&gt;, ReadOnlySpan&lt;char&gt;)</c>,
         /////     but with the difference that excess directory separators are removed between the two
         /////     paths.
-        /////     
+        /////
         /////     In comparison to the alternatives (<see cref="Combine(string)"/> and <see cref="Join(string)"/>),
         /////     <see cref="Link(string)"/> removes excess leading/trailing directory separator chars of
         /////     <paramref name="other"/>/this path before concatenating them. This ensures that
@@ -546,41 +538,41 @@ namespace UtilityStruct.FileSystem
         /////     excess number of directory separator characters.
         /////     In comparison to <see cref="Join(string)"/> specifically, results like <c>firstPath//secondPath</c>
         /////     are not possible with this method.
-        /////     
+        /////
         /////     Be aware that using this method can change the meaning/format of <paramref name="other"/> if it
         /////     is a special path. If <paramref name="other"/> is, for example, a UNC path, trimming
         /////     the two leading directory separator chars <c>//</c> will inevitably change the path's meaning.
         /////     Then again, such a path (and absolute paths in general) should most likely not be
         /////     concatenated with other paths in the first place.
-        /////     
+        /////
         /////     The following code demonstrates the behavior of <see cref="Link(string)"/>:
-        /////     
+        /////
         /////     <code>
         /////     // Note: The code assumes that / is the file system's directory separator.
-        /////     
+        /////
         /////     Path first = fs.GetPath("firstPath");
         /////     first.Join("secondPath");    // Returns "firstPath/secondPath".
         /////     first.Join("/secondPath");   // Returns "firstPath/secondPath".
         /////     first.Join("///secondPath"); // Returns "firstPath/secondPath".
-        /////     
+        /////
         /////     first = fs.GetPath("firstPath/");
         /////     first.Join("secondPath");    // Returns "firstPath/secondPath".
         /////     first.Join("/secondPath");   // Returns "firstPath/secondPath".
         /////     first.Join("///secondPath"); // Returns "firstPath/secondPath".
-        /////     
+        /////
         /////     first = fs.GetPath("firstPath///");
         /////     first.Join("secondPath");    // Returns "firstPath/secondPath".
         /////     first.Join("/secondPath");   // Returns "firstPath/secondPath".
         /////     first.Join("///secondPath"); // Returns "firstPath/secondPath".
-        /////     
+        /////
         /////     first = fs.GetPath("firstPath");
         /////     first.Join("");              // Returns "firstPath".
-        ///// 
+        /////
         /////     first = fs.GetPath("/");
         /////     first.Join("");              // Returns "/".
         /////     first.Join("/");             // Returns "/".
         /////     first.Join("//");            // Returns "/".
-        /////     
+        /////
         /////     first = fs.GetPath("//");
         /////     first.Join("");              // Returns "//".
         /////     first.Join("/");             // Returns "/".
@@ -614,7 +606,6 @@ namespace UtilityStruct.FileSystem
         //public int CompareTo(Path? path, StringComparison stringComparison) =>
         //    CompareTo(this.ToString(), stringComparison);
 
-
         /// <summary>
         ///     Compares this path with another path based on the path strings.
         ///     The comparison is done using the specified <paramref name="stringComparison"/> value.
@@ -631,14 +622,9 @@ namespace UtilityStruct.FileSystem
         public int CompareTo(ReadOnlySpan<char> path, StringComparison stringComparison) =>
             this.Value.CompareTo(path, stringComparison);
 
-
-
         ///// <inheritdoc cref="Equals(string?, StringComparison)"/>
         //public bool Equals(Path path, StringComparison stringComparison) =>
         //    Equals(path, stringComparison);
-
-
-
 
         /// <inheritdoc cref="operator /(Path, string)"/>
         public static Path operator /(Path path1, Path path2)
@@ -734,9 +720,7 @@ namespace UtilityStruct.FileSystem
         /// </returns>
         [return: NotNullIfNotNull("path")]
         public static implicit operator Path(string path) => new Path(path);
-
     }
-
 
     public ref struct AbsolutePath
     {
@@ -775,7 +759,6 @@ namespace UtilityStruct.FileSystem
         //        });
         //}
 
-
         public static bool IsValidPath(string path, bool allowRelativePaths = false)
         {
             try
@@ -791,10 +774,6 @@ namespace UtilityStruct.FileSystem
         }
     }
 }
-
-
-
-
 
 //namespace Files.Shared.PhysicalPath
 //{
@@ -866,7 +845,6 @@ namespace UtilityStruct.FileSystem
 
 //        }
 
-
 //        static string GetFullPathOrThrow(string path)
 //        {
 //            // This method, apart from returning the full path, has another goal:
@@ -913,7 +891,6 @@ namespace UtilityStruct.FileSystem
 //    }
 //}
 
-
 namespace Files.Shared.PhysicalPath.Utilities
 {
     using System;
@@ -929,6 +906,7 @@ namespace Files.Shared.PhysicalPath.Utilities
         internal const char ExtensionSeparatorChar = '.';
         internal const string CurrentDirectorySegment = ".";
         internal const string ParentDirectorySegment = "..";
+
         internal static readonly char[] DirectorySeparatorChars = new[]
             {
                 Path.DirectorySeparatorChar,
@@ -989,7 +967,7 @@ namespace Files
         /// <summary>
         ///     Gets a list of characters which are not allowed to appear in a path targeting this
         ///     file system implementation.
-        ///     
+        ///
         ///     Depending on the underlying file system implementation, including such an invalid
         ///     character in a path will either throw during the creation of a <see cref="Path"/>
         ///     or while performing file I/O with that path.
@@ -999,7 +977,7 @@ namespace Files
         /// <summary>
         ///     Gets a list of characters which are not allowed to appear in the file name part of
         ///     a path targeting this file system implementation.
-        ///     
+        ///
         ///     Depending on the underlying file system implementation, including such an invalid
         ///     character in a path will either throw during the creation of a <see cref="Path"/>
         ///     or while performing file I/O with that path.
@@ -1015,7 +993,7 @@ namespace Files
         /// <summary>
         ///     Gets an alternative character which is used by this file system implementation to separate a path
         ///     into its various segments.
-        ///     
+        ///
         ///     Depending on the file system implementation, this property may return the same
         ///     character as <see cref="DirectorySeparatorChar"/>.
         /// </summary>
@@ -1058,7 +1036,7 @@ namespace Files
         /// <summary>
         ///     Gets the <see cref="StringComparison"/> which is, by default, used by this file system
         ///     implementation to compare paths.
-        ///     
+        ///
         ///     Please be aware of the fact that this property is named "Default" for a reason and
         ///     might, in certain situations, not reflect the real string comparison used in a file
         ///     system.
@@ -1165,19 +1143,13 @@ namespace Files
 
 namespace UtilityStruct
 {
-
 #pragma warning disable CA1036
     // Override methods on comparable types, i.e. implement <, >, <=, >= operators due to IComparable.
     // These operators are not implemented because .NET's string class also doesn't implement them.
     // Since a path is, at the end, just a string these operators are also not implemented here.
 
-
-
-
 #pragma warning restore CA1036
 }
-
-
 
 // Parts of this file are copied from the source files of the dotnet/runtime repository and adapted/enhanced.
 // The relevant files can be found at:
@@ -1205,7 +1177,7 @@ namespace Files.Shared.PhysicalPath.Utilities
             {
                 return path2;
             }
-            
+
             if (path2.Length == 0)
             {
                 return path1;
@@ -1266,6 +1238,7 @@ namespace Files.Shared.PhysicalPath.Utilities
             }
         }
 #else
+
         internal static string Join(string path1, string path2)
         {
             return Path.Join(path1, path2);
@@ -1275,6 +1248,7 @@ namespace Files.Shared.PhysicalPath.Utilities
         {
             return Path.IsPathFullyQualified(path);
         }
+
 #endif
 
 #if NETSTANDARD2_1 || NETCOREAPP2_2 || NETCOREAPP2_1 || NETCOREAPP2_0 || NETSTANDARD2_0 || UAP || NET5_0_OR_GREATER
@@ -1332,9 +1306,8 @@ namespace Files.Shared.PhysicalPath.Utilities
             return path.Length == GetRootLength(path);
         }
 
-
         // See https://github.com/dotnet/runtime/blob/f30675618fc379e112376acc6f1efa53733ee881/src/libraries/System.Private.CoreLib/src/System/IO/PathInternal.Windows.cs#L202
-        static int GetRootLength(string path)
+        private static int GetRootLength(string path)
         {
             var pathLength = path.Length;
             var i = 0;
@@ -1394,7 +1367,7 @@ namespace Files.Shared.PhysicalPath.Utilities
         }
 
         // See https://github.com/dotnet/runtime/blob/f30675618fc379e112376acc6f1efa53733ee881/src/libraries/System.Private.CoreLib/src/System/IO/PathInternal.Windows.cs#L202
-        static int GetRootLength(ReadOnlySpan<char> path)
+        private static int GetRootLength(ReadOnlySpan<char> path)
         {
             var pathLength = path.Length;
             var i = 0;
@@ -1452,8 +1425,6 @@ namespace Files.Shared.PhysicalPath.Utilities
 
             return i;
         }
-
-
 
         // See https://github.com/dotnet/runtime/blob/f30675618fc379e112376acc6f1efa53733ee881/src/libraries/System.Private.CoreLib/src/System/IO/PathInternal.Windows.cs#L301
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -1543,6 +1514,7 @@ namespace Files.Shared.PhysicalPath.Utilities
         {
             return (value >= 'A' && value <= 'Z') || (value >= 'a' && value <= 'z');
         }
+
 #else
         internal static bool EndsWithDirectorySeparator(string path)
         {
@@ -1554,11 +1526,8 @@ namespace Files.Shared.PhysicalPath.Utilities
             return Path.TrimEndingDirectorySeparator(path);
         }
 #endif
-
-
     }
 }
-
 
 namespace Files.Shared
 {

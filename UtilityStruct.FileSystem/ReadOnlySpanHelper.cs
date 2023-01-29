@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace UtilityStruct.Common
+namespace UtilityStruct.FileSystem
 {
     /// <summary>
     /// <a href="https://stackoverflow.com/questions/50634058/concatenate-readonlyspanchar"></a>
     /// </summary>
-    public static class SpanHelper
+    public static class ReadOnlySpanHelper
     {
         public static bool IsAllLetters(this ReadOnlySpan<char> span)
         {
