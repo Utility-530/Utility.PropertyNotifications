@@ -6,3 +6,6 @@
 /UtilityHelperEx/obj
 *.suo
 /UtilityHelperEx/.vs/UtilityHelperEx/DesignTimeBuild/.dtbcache.v2
+/.vs/UtilityHelperEx/DesignTimeBuild
+/.vs/UtilityHelperEx/v17
+*.vshistory

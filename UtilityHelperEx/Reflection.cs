@@ -5,7 +5,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using UtilityHelper;
 
@@ -18,7 +17,7 @@ namespace UtilityHelperEx
             return Observable.Create<Assembly>(obs =>
             {
                 var dis1 = ReflectionHelper.LoadedAssemblies().Subscribe(obs);
-                var dis2 =  Task.Run(() => UtilityHelper.ReflectionHelper.GetAssemblies())
+                var dis2 = Task.Run(() => UtilityHelper.ReflectionHelper.GetAssemblies())
                 .ToObservable()
                 .Subscribe(asses =>
                 {

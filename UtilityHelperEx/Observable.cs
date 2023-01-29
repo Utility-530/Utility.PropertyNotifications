@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
@@ -12,7 +11,6 @@ using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 
-
 namespace UtilityHelperEx
 {
     /// <summary>
@@ -21,20 +19,18 @@ namespace UtilityHelperEx
     public static partial class ObservableHelper
     {
         public static IObservable<T> ToObservable<TCollection, T>(this TCollection oc)
-            where TCollection:IEnumerable<T>, INotifyCollectionChanged =>
-    Observable.Create<T>(observer =>
-{
-    foreach (var obj in oc)
-        observer.OnNext(obj);
+            where TCollection : IEnumerable<T> =>
+            Observable.Create<T>(observer =>
+            {
+                foreach (var obj in oc)
+                    observer.OnNext(obj);
 
-    return oc is INotifyCollectionChanged notifyCollectionChanged
-    ? notifyCollectionChanged
-        .SelectNewItems<T>()
-        .Subscribe(observer.OnNext)
-    : Disposable.Empty;
-});
-
-
+                return oc is INotifyCollectionChanged notifyCollectionChanged
+                ? notifyCollectionChanged
+                    .SelectNewItems<T>()
+                    .Subscribe(observer.OnNext)
+                : Disposable.Empty;
+            });
 
         public static IDisposable SubscribeMany<T>(this IEnumerable<IObservable<T>> observable, IObserver<T> observer)
         {
@@ -67,6 +63,7 @@ namespace UtilityHelperEx
         {
             return observable.SelectMany(a => a);
         }
+
         //public static IObservable<T> WhereNotNull<T>(this IObservable<T> observable) where T : class
         //{
         //    return observable.Where(a => a != null);
@@ -113,13 +110,9 @@ namespace UtilityHelperEx
         //        .WhereNotDefault();
         //}
 
-
-
-
         /// <summary>
-        /// The events should be output at a maximum rate specified by a TimeSpan, but otherwise as soon as possible.
-        /// By James World
-        /// <a href="http://www.zerobugbuild.com/?p=323"/>
+        /// Outputs events at a maximum rate specified by <see cref="rate"></see>, but otherwise as soon as possible.
+        /// <a href="http://www.zerobugbuild.com/?p=323">By James World</a>
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
@@ -299,22 +292,20 @@ namespace UtilityHelperEx
             return observable.Where(a => !(a?.Equals(default(T)) ?? false));
         }
 
-        public static IObservable<T> WhereNotNull<T>(this IObservable<T> observable) where T : class
+        public static IObservable<T> WhereIsNotNull<T>(this IObservable<T> observable) where T : class
         {
             return observable.Where(a => a != null);
         }
-
-
 
         public static IObservable<T> BufferTakeLast<T>(this IObservable<T> observable, TimeSpan buffer)
         {
             return observable.Buffer(buffer).WhereAny().TakeLastItem();
         }
+
         public static IObservable<IEnumerable<T>> WhereEmpty<T>(this IObservable<IEnumerable<T>> observable)
         {
             return observable.Where(a => a.Any() == false);
         }
-
     }
 
     namespace NonGeneric

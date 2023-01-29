@@ -1,12 +1,12 @@
 ﻿#nullable enable
 
 using Newtonsoft.Json;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using NodaTime;
 using NodaTime.Serialization.JsonNet;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace UtilityHelperEx
 {
@@ -17,12 +17,15 @@ namespace UtilityHelperEx
         /// </summary>
         /// <param name="data">The JSON data that should be deserialized</param>
         /// <returns>The T object that was deserialized</returns>
-        public static T? Deserialize<T>(string data) 
+        public static T? Deserialize<T>(string data)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
             if (data.Length == 0) throw new ArgumentException(nameof(data));
 
-            var deserializeObject = JsonConvert.DeserializeObject<T>(data);
+            var deserializeObject = JsonConvert.DeserializeObject<T>(data, new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+            });
             return deserializeObject;
         }
 
@@ -31,13 +34,13 @@ namespace UtilityHelperEx
         /// </summary>
         /// <param name="data">The JSON data that should be deserialized</param>
         /// <returns>The T object that was deserialized</returns>
-        public static async Task<T?> DeserializeAsync<T>(string data) 
+        public static async Task<T?> DeserializeAsync<T>(string data)
         {
             if (data == null) throw new ArgumentNullException(nameof(data));
             if (data.Length == 0) throw new ArgumentException(nameof(data));
 
             return await Task.Run(() => JsonConvert.DeserializeObject<T>(data));
-        }      
+        }
 
         public static T Deserialize<T>(Stream stream, JsonSerializerSettings? settings = null)
         {
@@ -46,7 +49,6 @@ namespace UtilityHelperEx
             using var jsonTextReader = new JsonTextReader(sr);
             return serializer.Deserialize<T>(jsonTextReader) ?? throw new InvalidOperationException();
         }
-
 
         public static void Serialize<T>(T combinedInformation, FileInfo filePath)
         {
@@ -60,8 +62,8 @@ namespace UtilityHelperEx
             JsonSerializer serializer = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                TypeNameHandling = TypeNameHandling.Auto,
-                Formatting = Formatting.Indented
+                TypeNameHandling = TypeNameHandling.All,
+                Formatting = Formatting.Indented,
             };
 
             //serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
@@ -99,7 +101,7 @@ namespace UtilityHelperEx
                     NullValueHandling = NullValueHandling.Ignore,
                     Formatting = Formatting.Indented,
                     DateFormatHandling = DateFormatHandling.IsoDateFormat,
-                    DateTimeZoneHandling = DateTimeZoneHandling.Utc
+                    DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                 };
                 jsonSerializer.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
                 return jsonSerializer;
