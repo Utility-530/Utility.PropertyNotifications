@@ -13,7 +13,7 @@
 	  <ProjectReference Include="..\..\Utility.Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
 	  <ProjectReference Include="..\..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
 	  <ProjectReference Include="..\..\Utility.Reactive\Utility.Reactive\Utility.Reactive.csproj" />
-	  <ProjectReference Include="..\..\Utility.Struct\Utility.Struct\Utility.Struct.csproj" />
+	  <ProjectReference Include="..\..\Utility.Structs\Utility.Structs\Utility.Structs.csproj" />
 	  <ProjectReference Include="..\Utility.Observables\Utility.Observables.csproj" />
 	  <ProjectReference Include="..\Utility.Packages\Utility.Packages.csproj" />
 	</ItemGroup>
