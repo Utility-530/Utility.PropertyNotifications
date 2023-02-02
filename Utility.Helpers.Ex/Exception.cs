@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Splat;
 
-namespace UtilityHelperEx
+namespace Utility.Helpers.Ex
 {
     public static class ExceptionHelper
     {

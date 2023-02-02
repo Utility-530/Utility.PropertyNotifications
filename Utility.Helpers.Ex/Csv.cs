@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using UtilityHelper;
+using Utility.Helpers;
 
-namespace UtilityHelperEx
+namespace Utility.Helpers.Ex
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class CsvHeaderAttribute : Attribute

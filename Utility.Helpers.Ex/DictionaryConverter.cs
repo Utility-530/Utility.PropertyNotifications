@@ -7,9 +7,9 @@ using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using Humanizer;
-using UtilityHelper;
+using Utility.Helpers;
 
-namespace UtilityHelperEx
+namespace Utility.Helpers.Ex
 {
     /// <summary>
     /// For converting objects into a OrderedDictionaries

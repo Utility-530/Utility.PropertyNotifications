@@ -8,7 +8,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace UtilityHelperEx
+namespace Utility.Helpers.Ex
 {
     public class JsonHelper
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Splat;
 
-namespace UtilityHelperEx
+namespace Utility.Helpers.Ex
 {
     public class SplatHelper
     {
