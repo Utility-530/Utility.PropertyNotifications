@@ -29,23 +29,7 @@ namespace UtilityReactive
             return paced;
         }
 
-
-
-        // do first set of work immediately, and then every 5 seconds do it again
-        //    m_interval = Observable
-        //        .FromAsync(DoWork)
-        //.RepeatAfterDelay(TimeSpan.FromSeconds(5), scheduler)
-        //.Subscribe();
-
-        //    // wait 5 seconds, then do first set of work, then again every 5 seconds
-        //    m_interval = Observable
-        //        .Timer(TimeSpan.FromSeconds(5), scheduler)
-        //.SelectMany(_ => Observable
-        //    .FromAsync(DoWork)
-        //    .RepeatAfterDelay(TimeSpan.FromSeconds(5), scheduler))
-        //.Subscribe();
-
-        public static IObservable<T> RepeatAfterDelay<T>(this IObservable<T> source, TimeSpan delay, IScheduler scheduler)
+       public static IObservable<T> RepeatAfterDelay<T>(this IObservable<T> source, TimeSpan delay, IScheduler scheduler)
         {
             var repeatSignal = Observable
                 .Empty<T>()
