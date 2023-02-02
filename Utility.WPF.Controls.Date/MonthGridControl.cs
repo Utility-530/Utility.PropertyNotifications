@@ -8,8 +8,6 @@ using UtilityWpf;
 
 namespace Utility.WPF.Controls.Date
 {
-
-
     public class MonthGridControl : MonthControl
     {
 

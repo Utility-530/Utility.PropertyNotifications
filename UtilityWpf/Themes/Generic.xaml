@@ -1,7 +1,0 @@
-﻿<local:AutoResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                              xmlns:local="clr-namespace:UtilityWpf"
-                              xmlns:base="clr-namespace:UtilityWpf.Base"
-                              Type="{x:Type base:Controlx}">
-        
-</local:AutoResourceDictionary>

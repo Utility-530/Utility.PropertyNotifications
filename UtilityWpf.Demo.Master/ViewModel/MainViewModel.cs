@@ -3,7 +3,7 @@ using System.Reactive;
 using System.Windows.Input;
 using Utility.Common.EventArgs;
 
-namespace UtilityWpf.Demo.Master.ViewModel
+namespace UtilityWpf.Demo.Master.ViewModels
 {
     public class MainViewModel
     {

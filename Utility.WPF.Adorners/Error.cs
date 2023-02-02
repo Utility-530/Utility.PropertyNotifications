@@ -32,7 +32,7 @@ namespace Utility.WPF.Adorners
 
         private static void OnChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            Text.OnChanged2(sender, (string)e.NewValue, guids, (f, t) => new Text(f, t, Dock.Right, Place.Outside, Brushes.Red));
+            Text.AddAdorner(sender, (string)e.NewValue, guids, (f, t) => new Text(f, t, Dock.Right, Place.Outside, Brushes.Red));
         }
     }
 }

@@ -3,7 +3,7 @@ using LiveCharts.Defaults;
 using System;
 using System.Linq;
 using System.Windows.Controls;
-using UtilityHelper;
+using Utility.Helpers;
 using UtilityWpf.Controls.Infrastructure;
 using UtilityWpf.Demo.Data.Model;
 

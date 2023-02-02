@@ -3,9 +3,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using System.Windows.Media;
-using static UtilityWpf.Controls.Chart.ViewModel.MultiTimeModel;
+using static UtilityWpf.Controls.Chart.ViewModels.MultiTimeModel;
 
-namespace UtilityWpf.Chart.Demo.ViewModel
+namespace UtilityWpf.Chart.Demo.ViewModels
 {
     public class ChartDetailViewModel : ReactiveObject, IEquatable<ChartDetailViewModel>
     {

@@ -7,7 +7,7 @@ using System.Windows.Input;
 using Endless;
 using NetFabric.Hyperlinq;
 using UtilityWpf.Demo.Common.Meta;
-using UtilityWpf.Demo.Common.ViewModel;
+using UtilityWpf.Demo.Common.ViewModels;
 
 namespace UtilityWpf.Demo.Master.View
 {

@@ -2,7 +2,8 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:UtilityWpf.Controls"
-    xmlns:util="clr-namespace:UtilityWpf.Converter;assembly=UtilityWpf">
+    xmlns:util="http://schemas.utility.com/utilitywpf">
+    
     <util:DateTimeToStringConverter x:Key="DateTimeConverter" />
 
     <Style TargetType="{x:Type local:DateTimeControl}">

@@ -7,7 +7,7 @@
              xmlns:transc="clr-namespace:Transitionals.Controls;assembly=Transitionals"
              xmlns:trans="clr-namespace:Transitionals;assembly=Transitionals"
              xmlns:transt="clr-namespace:Transitionals.Transitions;assembly=Transitionals"
-             xmlns:conv="clr-namespace:UtilityWpf.Converter;assembly=UtilityWpf"
+             xmlns:conv="http://schemas.utility.com/utilitywpf"
              xmlns:local="clr-namespace:UtilityWpf.Demo.Animation"
              xmlns:extrinsic="http://schemas.utility.com"
              mc:Ignorable="d"

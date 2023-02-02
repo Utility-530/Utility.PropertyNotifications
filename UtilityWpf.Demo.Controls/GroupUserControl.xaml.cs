@@ -9,12 +9,12 @@ using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
 using Utility.Common;
-using Utility.ViewModel;
-using UtilityHelper.NonGeneric;
-using UtilityHelperEx;
+using Utility.Common.Helper;
+using Utility.WPF.Reactive;
+using Utility.Helpers.NonGeneric;
+using Utility.Helpers.Ex;
 using UtilityWpf.Demo.Data.Factory;
 using UtilityWpf.Demo.Data.Model;
-using Utility.WPF.Reactive;
 
 namespace UtilityWpf.Demo.Controls
 {
@@ -58,18 +58,18 @@ namespace UtilityWpf.Demo.Controls
                 .ObserveOnDispatcher()
                 .Subscribe(a => CompletedLabel.Content = a);
 
-            ListBox2.ItemsSource = group2UserControlViewModel.Collection;
+            //ListBox2.ItemsSource = group2UserControlViewModel.Collection;
 
-            var group3UserControlViewModel = StockObservableFactory.GenerateUnlimitedGroupableChangeSet(subject).ToGroupOnViewModel();
+            //var group3UserControlViewModel = StockObservableFactory.GenerateUnlimitedGroupableChangeSet(subject).ToGroupOnViewModel(out var disposable);
 
-            ListBox3.ItemsSource = group3UserControlViewModel.Collection;
-            ComboBox.ItemsSource = group3UserControlViewModel.Properties;
+            //ListBox3.ItemsSource = group3UserControlViewModel.Children;
+            //ComboBox.ItemsSource = group3UserControlViewModel.Properties;
         }
 
         public class Group2UserControlViewModel : ReactiveObject
         {
             private IObservable<IChangeSet<Groupable<Stock>, string>> changeSet;
-            private GroupCollectionViewModel viewmodel;
+            //private GroupCollectionViewModel viewmodel;
 
             public Group2UserControlViewModel(IObservable<ClassProperty> subject)
             {
@@ -81,12 +81,12 @@ namespace UtilityWpf.Demo.Controls
                         ErrorMessage = "Observer OnCompleted method called - unable to modify grouping list - hereafter";
                         this.RaisePropertyChanged(nameof(ErrorMessage));
                     });
-                viewmodel = changeSet.ToGroupOnViewModel();
+                //viewmodel = changeSet.ToGroupOnViewModel(out var disposable);
             }
 
             public string ErrorMessage { get; private set; }
-            public ICollection Collection => viewmodel.Collection;
-            public IEnumerable Properties => viewmodel.Properties;
+            //public IEnumerable Collection => viewmodel.Children;
+            //public IEnumerable Properties => viewmodel.Properties;
         }
 
         public class GroupUserControlViewModel : ReactiveObject, IObserver<string>
@@ -110,8 +110,8 @@ namespace UtilityWpf.Demo.Controls
             {
                 return str switch
                 {
-                    "Sector" => changeSet.ToGroupViewModel(g => g.Sector).Collection,
-                    "Arbitrary" => new CustomGroupCollectionViewModel(changeSet.Group(g => g.Name.Length.ToString())).Collection,
+                    //"Sector" => changeSet.ToGroupViewModel(g => g.Sector, out var disposable).Children,
+                    //"Arbitrary" => changeSet.Group(g => g.Name.Length.ToString()).SubscribeTo(()=>new CustomGroupCollectionViewModel(""), out var dis).Children,
                     _ => CollectStocks(changeSet)
                 };
 
@@ -151,38 +151,38 @@ namespace UtilityWpf.Demo.Controls
                                     return e.Item switch
                                     {
                                         Stock _ => ((FrameworkElement)e.Container)?.FindResource(new DataTemplateKey(typeof(Stock))),
-                                        CustomGroupViewModel _ => ((FrameworkElement)e.Container)?.FindResource("Group2Template"),
-                                        GroupViewModel<Stock, string, string> _ => ((FrameworkElement)e.Container)?.FindResource("GroupTemplate"),
+                                        //CustomGroupViewModel _ => ((FrameworkElement)e.Container)?.FindResource("Group2Template"),
+                                        //GroupViewModel<Stock, string, string> _ => ((FrameworkElement)e.Container)?.FindResource("GroupTemplate"),
                                         _ => throw new NotImplementedException(),
                                     } as DataTemplate;
                                 });
 
-        public class CustomGroupCollectionViewModel : GroupCollectionViewModel<Stock, string, string>
-        {
-            public CustomGroupCollectionViewModel(IObservable<IGroupChangeSet<Stock, string, string>> groups) : base(groups)
-            {
-            }
+        //public class CustomGroupCollectionViewModel : GroupCollectionViewModel<Stock, string, string>, IObserver<IGroupChangeSet<Stock, string, string>>
+        //{
+        //    public CustomGroupCollectionViewModel(string key/*IObservable<IGroupChangeSet<Stock, string, string>> groups*/) : base("groups")
+        //    {
+        //    }
 
-            public override CustomGroupViewModel Create(IGroup<Stock, string, string> group)
-            {
-                return new CustomGroupViewModel(group);
-            }
-        }
+        //    public override CustomGroupViewModel Create(IGroup<Stock, string, string> group)
+        //    {
+        //        return new CustomGroupViewModel(group);
+        //    }
+        //}
 
-        public class CustomGroupViewModel : GroupViewModel<Stock, string, string>
-        {
-            private readonly ObservableAsPropertyHelper<int> maxLength;
+        //public class CustomGroupViewModel : GroupViewModel<Stock, string, string>
+        //{
+        //    private readonly ObservableAsPropertyHelper<int> maxLength;
 
-            public CustomGroupViewModel(IGroup<Stock, string, string> group) : base(group)
-            {
-                maxLength = group.Cache
-                    .Connect()
-                    .ToCollection()
-                    .Select(a => a.Select(a => a.Sector.Length).Max())
-                    .ToProperty(this, a => a.MaxLength);
-            }
+        //    public CustomGroupViewModel(IGroup<Stock, string, string> group) : base(group)
+        //    {
+        //        maxLength = group.Cache
+        //            .Connect()
+        //            .ToCollection()
+        //            .Select(a => a.Select(a => a.Sector.Length).Max())
+        //            .ToProperty(this, a => a.MaxLength);
+        //    }
 
-            public int MaxLength => maxLength.Value;
-        }
+        //    public int MaxLength => maxLength.Value;
+        //}
     }
 }

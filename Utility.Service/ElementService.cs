@@ -2,7 +2,7 @@
 using System.Reactive.Subjects;
 using Utility.Common.Contract;
 using Utility.Common.Helper;
-using UtilityHelper.NonGeneric;
+using Utility.Helpers.NonGeneric;
 
 namespace Utility.Service
 {

@@ -5,11 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:drag="http://dragablz.net/winfx/xaml/dragablz"
              xmlns:util="http://schemas.utility.com/utilitywpf"
-             xmlns:cmn="clr-namespace:UtilityWpf.Demo.Common.ViewModel;assembly=UtilityWpf.Demo.Common"
-             xmlns:utilitywpf="clr-namespace:UtilityWpf;assembly=UtilityWpf"
+             xmlns:cmn="clr-namespace:UtilityWpf.Demo.Common.ViewModels;assembly=UtilityWpf.Demo.Common"
              xmlns:view1="http://schemas.utility.com/dragablz"
              xmlns:view2="http://schemas.utility.com/master"
-             xmlns:viewModel="clr-namespace:UtilityWpf.Demo.Master.ViewModel" xmlns:view21="http://schemas.utility.com" xmlns:view22="clr-namespace:UtilityWpf.Controls.Master;assembly=UtilityWpf.Controls"
+             xmlns:viewModel="clr-namespace:UtilityWpf.Demo.Master.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.DataContext>
@@ -40,7 +39,7 @@
             </view1:DragablzVerticalItemsControl>
 
             <ResourceDictionary.MergedDictionaries>
-                <utilitywpf:SharedResourceDictionary Source="/UtilityWpf.Controls.Dragablz;component/DragablzItemStyle.xaml" />
+                <util:SharedResourceDictionary Source="/UtilityWpf.Controls.Dragablz;component/DragablzItemStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>

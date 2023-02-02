@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:vm="clr-namespace:UtilityWpf.Demo.Common.ViewModel;assembly=UtilityWpf.Demo.Common"
+             xmlns:vm="clr-namespace:UtilityWpf.Demo.Common.ViewModels;assembly=UtilityWpf.Demo.Common"
              xmlns:mk="http://schemas.utility.com/utilitywpf"
              xmlns:view="http://schemas.utility.com/hybrid"
              mc:Ignorable="d"
@@ -13,10 +13,10 @@
     </FrameworkElement.DataContext>
     <Grid>
         <view:MasterButtonsControl
-            CommandPath="{mk:NameOf Type={x:Type vm:ButtonViewModel}, Member=Command}"
+            CommandPath="{mk:NameOf Type={x:Type vm:ButtonViewModel}, Path=Command}"
             ItemsSource="{Binding Data}"
             Change="MasterNotesControl_Change"
-            DisplayMemberPath="{mk:NameOf Type={x:Type vm:ButtonViewModel}, Member=Header}">
+            DisplayMemberPath="{mk:NameOf Type={x:Type vm:ButtonViewModel}, Path=Header}">
         </view:MasterButtonsControl>
     </Grid>
 </UserControl>

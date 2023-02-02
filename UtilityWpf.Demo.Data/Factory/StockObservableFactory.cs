@@ -4,7 +4,8 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using DynamicData;
 using Utility.Common;
-using UtilityHelperEx;
+using Utility.Helpers.Ex;
+using Utility.Reactive;
 using UtilityWpf.Demo.Data.Model;
 
 namespace UtilityWpf.Demo.Data.Factory

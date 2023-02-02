@@ -6,13 +6,13 @@
              xmlns:drag="http://dragablz.net/winfx/xaml/dragablz"
              xmlns:util="http://schemas.utility.com/utilitywpf"
              xmlns:local11="clr-namespace:UtilityWpf.Demo.Master.Infrastructure"
-             xmlns:cmn="clr-namespace:UtilityWpf.Demo.Common.ViewModel;assembly=UtilityWpf.Demo.Common"
-             xmlns:utilitywpf="clr-namespace:UtilityWpf;assembly=UtilityWpf"
+             xmlns:cmn="clr-namespace:UtilityWpf.Demo.Common.ViewModels;assembly=UtilityWpf.Demo.Common"
+ 
              xmlns:view1="http://schemas.utility.com/dragablz"
              xmlns:view2="http://schemas.utility.com/master"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:base="clr-namespace:UtilityWpf.Base;assembly=UtilityWpf"
-             xmlns:viewModel="clr-namespace:UtilityWpf.Demo.Master.ViewModel"
+             
+             xmlns:viewModel="clr-namespace:UtilityWpf.Demo.Master.ViewModels"
              xmlns:view="clr-namespace:UtilityWpf.Demo.Master.View"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -34,7 +34,7 @@
             </view1:DragablzVerticalItemsControl>
 
             <ResourceDictionary.MergedDictionaries>
-                <utilitywpf:SharedResourceDictionary Source="/UtilityWpf.Controls.Dragablz;component/DragablzItemStyle.xaml"></utilitywpf:SharedResourceDictionary>
+                <util:SharedResourceDictionary Source="/UtilityWpf.Controls.Dragablz;component/DragablzItemStyle.xaml"></util:SharedResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -53,7 +53,7 @@
                 <view2:ReadOnlyMasterDetail Converter="{x:Static view:CollectionConverter.Instance}"
                                             Orientation="{Binding ElementName=OrientationToggleButton, Path=Content}"
                                             UseDataContext="True">
-                    <base:LayOutListBox SelectedIndex="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                    <util:LayOutListBox SelectedIndex="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
                                         VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
                         <Grid>
                             <Rectangle Fill="DarkCyan" Height="20"></Rectangle>
@@ -71,7 +71,7 @@
                             <Rectangle Fill="Beige" Height="20"></Rectangle>
                             <TextBlock Text="ghg565dfgdf"></TextBlock>
                         </Grid>
-                    </base:LayOutListBox>
+                    </util:LayOutListBox>
                     <HeaderedContentControl.Header>
                         <DataGrid
                                 IsReadOnly="True"
@@ -106,7 +106,7 @@
                     </ListBox>
                     <view2:ReadOnlyMasterDetail
                         Orientation="{Binding ElementName=OrientationToggleButton, Path=Content}">
-                        <base:LayOutListBox SelectedIndex="{Binding ElementName=LayOutListBox1, Path=SelectedIndex}" MinWidth="50" MinHeight="50" >
+                        <util:LayOutListBox SelectedIndex="{Binding ElementName=LayOutListBox1, Path=SelectedIndex}" MinWidth="50" MinHeight="50" >
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Ellipse Height="50" Width="50" Fill="{Binding Children[0].Fill}"></Ellipse>
@@ -128,7 +128,7 @@
                                 <Rectangle Fill="Beige" Height="20"></Rectangle>
                                 <TextBlock Text="ghg565dfgdf"></TextBlock>
                             </Grid>
-                        </base:LayOutListBox>
+                        </util:LayOutListBox>
                         <HeaderedContentControl.HeaderTemplate>
                             <DataTemplate DataType="{x:Type Grid}">
                                 <TextBlock Text="{Binding Children[1].Text}"></TextBlock>
@@ -146,7 +146,7 @@
                             <Setter Property="FontWeight" Value="Bold"></Setter>
                         </Style>
                     </FrameworkElement.Resources>
-                    <base:LayOutListBox SelectedIndex="0">
+                    <util:LayOutListBox SelectedIndex="0">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Height="50" Width="50" Text="{Binding Header}"></TextBlock>
@@ -158,7 +158,7 @@
                         <HeaderedContentControl Header="Second">
                             <TextBlock Text="ghg565dfgdf" FontSize="12" FontWeight="Light"></TextBlock>
                         </HeaderedContentControl>
-                    </base:LayOutListBox>
+                    </util:LayOutListBox>
                 </view2:ReadOnlyMasterDetail>
             </TabItem>
         </TabControl>

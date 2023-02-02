@@ -1,9 +1,9 @@
 ﻿using System.Collections.ObjectModel;
-using UtilityWpf.Demo.Common.ViewModel;
+using UtilityWpf.Demo.Common.ViewModels;
 
-namespace UtilityWpf.Demo.Dragablz.ViewModel
+namespace UtilityWpf.Demo.Dragablz.ViewModels
 {
-    internal class NotesViewModel : Common.ViewModel.NotesViewModel
+    internal class NotesViewModel : Common.ViewModels.NotesViewModel
     {
         public override ObservableCollection<NoteViewModel> Collection { get; } = new ObservableCollection<NoteViewModel> {
         new NoteViewModel("sdsfd"),

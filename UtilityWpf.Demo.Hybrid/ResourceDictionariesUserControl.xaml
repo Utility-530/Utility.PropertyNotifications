@@ -4,10 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:mk="clr-namespace:UtilityWpf.Markup;assembly=UtilityWpf"
+    xmlns:mk="http://schemas.utility.com/utilitywpf"
     xmlns:view1="http://schemas.utility.com/hybrid"
-    xmlns:vm2="clr-namespace:UtilityWpf.Demo.Common.ViewModel;assembly=UtilityWpf.Demo.Common"
-    xmlns:localvm="clr-namespace:UtilityWpf.Demo.Hybrid.ViewModel"
+    xmlns:localvm="clr-namespace:UtilityWpf.Demo.Hybrid.ViewModels"
+    xmlns:vm2="clr-namespace:UtilityWpf.Demo.Common.ViewModels;assembly=UtilityWpf.Demo.Common"
     d:DesignHeight="450"
     d:Background="White"
     d:DesignWidth="800"
@@ -17,11 +17,14 @@
             <FrameworkElement.DataContext>
                 <localvm:ResourceDictionariesViewModel />
             </FrameworkElement.DataContext>
+            <FrameworkElement.Resources>
+            </FrameworkElement.Resources>
 
-            <view1:ResourceDictionariesControl
-                DisplayMemberPath="{mk:NameOf Type={x:Type vm2:TickViewModel}, Member=Text}"
-                CommandPath="{mk:NameOf Type={x:Type vm2:TickViewModel}, Member=Command}"
-            IsCheckedPath="{mk:NameOf Type={x:Type vm2:TickViewModel}, Member=IsChecked}"
+            <view1:ResourceDictionariesControl 
+                mk:NameOfExtension.Type="{x:Type vm2:TickViewModel}"
+                DisplayMemberPath="{mk:NameOf Path=Text}"
+                CommandPath="{mk:NameOf  Path=Command}"
+            IsCheckedPath="{mk:NameOf Path=IsChecked}"
             ItemsSource="{Binding Collection}">
             </view1:ResourceDictionariesControl>
         </UniformGrid>

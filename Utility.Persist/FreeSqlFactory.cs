@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 using System.Threading;
-using UtilityInterface.NonGeneric;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Persist {
    public static class FreeSqlFactory {

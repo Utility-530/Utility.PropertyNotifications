@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Utility.Persist.Infrastructure;
-using UtilityInterface.Generic.Data;
-using UtilityInterface.NonGeneric.Data;
+using Utility.Interfaces.Generic.Data;
+using Utility.Interfaces.NonGeneric.Data;
 
 namespace Utility.Persist
 {

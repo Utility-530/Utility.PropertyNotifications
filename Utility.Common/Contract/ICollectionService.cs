@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using UtilityInterface.NonGeneric.Data;
+using Utility.Interfaces.NonGeneric.Data;
 
 namespace Utility.Common.Contract;
 

@@ -43,8 +43,8 @@
             </view2:MasterDetail>
         </TabItem>
 
-        <TabItem Header="Deprecated">
+        <!--<TabItem Header="Deprecated">
             <view2:MasterDetailView Items="{StaticResource Characters}" />
-        </TabItem>
+        </TabItem>-->
     </TabControl>
 </Window>

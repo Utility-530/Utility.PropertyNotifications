@@ -8,9 +8,11 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.Common.Enum;
-using UtilityHelper;
-using UtilityHelper.NonGeneric;
+using Utility.WPF.Panels.Helper;
+using Utility.Helpers;
+using Utility.Helpers.NonGeneric;
+using Utility.Enums;
+using Orientation = System.Windows.Controls.Orientation;
 
 namespace Utility.WPF.Attached
 {
@@ -172,7 +174,7 @@ namespace Utility.WPF.Attached
 
         public static readonly DependencyProperty OrientationProperty =
             DependencyProperty.RegisterAttached("Orientation", typeof(Orientation), typeof(ItemsControlEx),
-                new FrameworkPropertyMetadata(LayOutHelper.OrientationChanged));
+                new FrameworkPropertyMetadata(OrientationChanged));
 
         #endregion Orientation
 
@@ -190,8 +192,30 @@ namespace Utility.WPF.Attached
 
         public static readonly DependencyProperty ArrangementProperty =
             DependencyProperty.RegisterAttached("Arrangement", typeof(Arrangement), typeof(ItemsControlEx),
-                new FrameworkPropertyMetadata(LayOutHelper.ArrangementChanged));
+                new FrameworkPropertyMetadata(ArrangementChanged));
 
         #endregion Arrangement
+
+        static void OrientationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is ItemsControl itemsControl)
+                if (e.NewValue is Orientation orientation)
+                {
+                    var arrangement = (Arrangement)d.GetValue(ItemsControlEx.ArrangementProperty);
+                    LayOutHelper.Changed(itemsControl, orientation, arrangement);
+                }
+
+        }
+
+        static void ArrangementChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is ItemsControl itemsControl)
+                if (e.NewValue is Arrangement arrangement)
+                {
+                    var orientation = (Orientation)d.GetValue(ItemsControlEx.OrientationProperty);
+                    LayOutHelper.Changed(itemsControl, orientation, arrangement);
+                }
+
+        }
     }
 }

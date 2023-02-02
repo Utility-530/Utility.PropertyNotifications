@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using Utility.WPF.Adorners.Infrastructure;
@@ -21,6 +22,28 @@ namespace Utility.WPF.Adorners
         Across,
         Inside,
         Outside
+    }
+
+
+    public abstract class FrameworkElementAdorner<T> : FrameworkElementAdorner where T : Control
+    {
+        private IDisposable? disposable;
+
+        public FrameworkElementAdorner(FrameworkElement adornedElement) : base(adornedElement)
+        {
+        }
+
+        public override void SetAdornedElement(DependencyObject adorner, FrameworkElement? adornedElement)
+        {
+            if (adornedElement == null)
+            {
+                disposable?.Dispose();
+                return;
+            }
+            disposable = SetAdornedElement(adorner as T ?? throw new Exception("gd6fnb54 fdgd,,f"), adornedElement);
+        }
+
+        protected abstract IDisposable SetAdornedElement(T control, FrameworkElement? adornedElement);
     }
 
     /// <summary>
@@ -70,9 +93,9 @@ namespace Utility.WPF.Adorners
 
         #region Dependency Properties
 
-        public AdornerCollection Adorners
+        public AdornerCollection? Adorners
         {
-            get => (AdornerCollection)GetValue(AdornersProperty);
+            get => (AdornerCollection?)GetValue(AdornersProperty);
             set => SetValue(AdornersProperty, value);
         }
 
@@ -389,7 +412,8 @@ namespace Utility.WPF.Adorners
         {
             get
             {
-                return Adorners.GetEnumerator();
+                // if Adorners is null then maybe wait until adorned element is loaded before applying the adorner
+                return Adorners?.GetEnumerator()?? throw new Exception("dfg bfdgfd ..v,v");
             }
         }
 

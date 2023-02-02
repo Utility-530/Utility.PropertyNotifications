@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:common="http://schemas.utility.com/utilitywpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:enum="clr-namespace:UtilityEnum;assembly=UtilityEnum"
+    xmlns:enum="clr-namespace:Utility.Enums;assembly=Utility.Enums"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:view="http://schemas.utility.com"
     d:DesignHeight="450"

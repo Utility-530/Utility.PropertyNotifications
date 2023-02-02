@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Utility.Common.Enum;
+using Utility.Enums;
 
 namespace Utility.Common.EventArgs
 {

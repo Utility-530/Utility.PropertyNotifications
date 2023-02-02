@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Utility.WPF.Utility\Utility.WPF.Helper.csproj" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+    <ProjectReference Include="..\Utility.WPF.Utility\Utility.WPF.Helper.csproj" />
   </ItemGroup>
 
 </Project>

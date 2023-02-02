@@ -5,12 +5,10 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using UtilityWpf.Base;
+using Utility.WPF.Controls.Base;
 
 namespace UtilityWpf.Controls
 {
-    using Mixins;
-
     //https://github.com/kentcb/YouIandReactiveUI
     //    [Sample(
     //        "Logging",

@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Deprecated\**" />
+    <Compile Remove="Infrastructure\**" />
+    <Compile Remove="Themes\**" />
+    <EmbeddedResource Remove="Deprecated\**" />
+    <EmbeddedResource Remove="Infrastructure\**" />
+    <EmbeddedResource Remove="Themes\**" />
+    <None Remove="Deprecated\**" />
+    <None Remove="Infrastructure\**" />
+    <None Remove="Themes\**" />
+    <Page Remove="Deprecated\**" />
+    <Page Remove="Infrastructure\**" />
+    <Page Remove="Themes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Utility.Models\Utility.Models.csproj" />
+    <ProjectReference Include="..\Utility.Common\Utility.Common.csproj" />
+  </ItemGroup>
+
+</Project>

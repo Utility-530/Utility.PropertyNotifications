@@ -3,6 +3,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using Utility.WPF.Helper;
 
 namespace Utility.WPF.Adorners;
 
@@ -32,6 +33,9 @@ public class Type
     public static readonly DependencyProperty ShowDimensionsProperty = DependencyProperty.RegisterAttached(
         "ShowDimensions", typeof(bool), typeof(System.Type), new FrameworkPropertyMetadata(false, OnChanged));
 
+    public static readonly DependencyProperty IsRecursiveProperty = DependencyProperty.RegisterAttached(
+        "IsRecursive", typeof(bool), typeof(System.Type), new FrameworkPropertyMetadata(false, OnChanged));
+
     public static void SetShowDataContext(UIElement adornedElement, bool value)
     {
         if (adornedElement == null)
@@ -52,7 +56,7 @@ public class Type
         adornedElement.SetValue(ShowDimensionsProperty, value);
     }
 
-    public static bool ShowDataContext(UIElement adornedElement)
+    public static bool GetShowDataContext(UIElement adornedElement)
     {
         if (adornedElement == null)
         {
@@ -62,7 +66,7 @@ public class Type
         return (bool)adornedElement.GetValue(ShowDataContextProperty);
     }
 
-    public static bool ShowDimensions(UIElement adornedElement)
+    public static bool GetShowDimensions(UIElement adornedElement)
     {
         if (adornedElement == null)
         {
@@ -71,6 +75,28 @@ public class Type
 
         return (bool)adornedElement.GetValue(ShowDimensionsProperty);
     }
+
+    public static void SetIsRecursive(UIElement adornedElement, bool value)
+    {
+        if (adornedElement == null)
+        {
+            throw new ArgumentNullException("adornedElement");
+        }
+
+        adornedElement.SetValue(IsRecursiveProperty, value);
+    }
+
+    public static bool GetIsRecursive(UIElement adornedElement)
+    {
+        if (adornedElement == null)
+        {
+            throw new ArgumentNullException("adornedElement");
+        }
+
+        return (bool)adornedElement.GetValue(IsRecursiveProperty);
+    }
+
+
 
     //public static readonly DependencyProperty HighlightColourProperty = DependencyProperty.RegisterAttached(
     //    "HighlightColour", typeof(bool), typeof(System.Type), new FrameworkPropertyMetadata(false, OnChanged));
@@ -94,6 +120,7 @@ public class Type
 
     //    adornedElement.SetValue(HighlightColourProperty, value);
     //}
+    static readonly Guid guid = Guid.NewGuid();
 
     private static void OnChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
     {
@@ -105,6 +132,17 @@ public class Type
         if (adornedElement.IsLoaded)
         {
             AddAdorner(adornedElement, e);
+            if(GetIsRecursive(adornedElement))
+            {
+                bool showDataContext = GetShowDataContext(adornedElement);
+                bool showDimensions = GetShowDimensions(adornedElement);
+                foreach(var child in adornedElement.Children<UIElement>())
+                {                   
+                    SetIsRecursive(child,true);
+                    SetShowDataContext(child, showDataContext);
+                    SetShowDimensions(child, showDimensions);
+                }
+            }
         }
         else
         {
@@ -118,7 +156,7 @@ public class Type
             bool flag = false;
             foreach (Adorner? adorner in adornerLayer.GetAdorners(adornedElement) ?? Array.Empty<Adorner>())
             {
-                if (adorner is Text text)
+                if (adorner is Text text && text.Guid == guid)
                 {
                     flag = true;
                     text.text = ToText(adornedElement);
@@ -127,7 +165,8 @@ public class Type
 
             if (flag == false)
             {
-                adornerLayer.Add(new Text(adornedElement, ToText(adornedElement), Dock.Bottom, Place.Inside));
+                adornerLayer.Add(new Text(adornedElement, ToText(adornedElement), Dock.Bottom, Place.Inside) { Guid = guid });
+                Text.InvalidateTextAdorners(adornerLayer, adornedElement);
             }
             else
             {
@@ -138,11 +177,11 @@ public class Type
             {
                 //System.Type? type = GetType(adornedElement);
                 StringBuilder stringBuilder = new();
-                if (ShowDataContext(adornedElement))
+                if (GetShowDataContext(adornedElement) && adornedElement.DataContext is not null)
                 {
                     stringBuilder.AppendLine(adornedElement.DataContext?.GetType().ToString());
                 }
-                if (ShowDimensions(adornedElement))
+                if (GetShowDimensions(adornedElement))
                 {
                     stringBuilder.AppendLine("height: " + adornedElement.Height + "  x  width: " + adornedElement.Width);
                 }

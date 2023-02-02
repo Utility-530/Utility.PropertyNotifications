@@ -8,9 +8,12 @@ namespace UtilityWpf.Model
         public abstract string Key { get; }
         public abstract object Value { get; }
 
-        public bool IsSelected { get; set; }
-        public bool IsChecked { get; set; }
+        public virtual string GroupKey { get; }
 
-        public virtual string GroupKey => Key.Split(".").First();
+        //public bool IsSelected { get; set; }
+        //public bool IsChecked { get; set; }
+
+
+
     }
 }

@@ -8,9 +8,9 @@ using System.Reactive.Subjects;
 using Endless;
 using Utility.Common.Contract;
 using Utility.Common.Helper;
-using UtilityHelperEx;
-using UtilityWpf;
+using Utility.Helpers.Ex;
 using UtilityWpf.Common;
+using Utility.Common.Collection;
 
 namespace Utility.Service
 {
@@ -105,7 +105,7 @@ namespace Utility.Service
                                 .Changes()
                                 .Subscribe(x =>
                                 {
-                                    observer.AddOrUpdate(x.source);
+                                    observer.AddOrUpdate(x.Source);
                                 });
                             }
                             observer.Edit(a =>

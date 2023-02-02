@@ -6,9 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Utility.Common.Helper;
+using Utility.Helpers.Ex;
 using UtilityWpf.Demo.Forms.Model;
-using UtilityWpf.Demo.Forms.ViewModel;
+using UtilityWpf.Demo.Forms.ViewModels;
 
 namespace UtilityWpf.Demo.Forms.Infrastructure
 {

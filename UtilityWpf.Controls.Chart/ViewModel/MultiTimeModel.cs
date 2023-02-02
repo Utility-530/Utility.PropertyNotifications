@@ -12,10 +12,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
-using UtilityHelper;
-using UtilityHelperEx;
+using Utility.Helpers;
+using Utility.Helpers.Ex;
 
-namespace UtilityWpf.Controls.Chart.ViewModel
+namespace UtilityWpf.Controls.Chart.ViewModels
 {
     public class MultiTimeModel :
         IObserver<IEnumerable<KeyValuePair<string, (DateTime date, double value)>>>,

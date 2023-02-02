@@ -63,7 +63,7 @@ namespace UtilityWpf.Controls
             this.SetValue(NextCommandProperty, nextCommand);
             this.SetValue(PreviousCommandProperty, previousCommand);
 
-            (nextCommand as ReactiveCommand<Unit, Unit>).Select(_ => UtilityEnum.Direction.Forward).Merge(previousCommand.Select(_ => UtilityEnum.Direction.Backward)).Subscribe(direction =>
+            (nextCommand as ReactiveCommand<Unit, Unit>).Select(_ => Utility.Enums.Direction.Forward).Merge(previousCommand.Select(_ => Utility.Enums.Direction.Backward)).Subscribe(direction =>
              {
                  this.Dispatcher.InvokeAsync(() => RaiseSkipEvent(direction), System.Windows.Threading.DispatcherPriority.Background, default(System.Threading.CancellationToken));
              });
@@ -77,7 +77,7 @@ namespace UtilityWpf.Controls
             remove { RemoveHandler(SkipEvent, value); }
         }
 
-        private void RaiseSkipEvent(UtilityEnum.Direction direction)
+        private void RaiseSkipEvent(Utility.Enums.Direction direction)
         {
             SkipRoutedEventArgs newEventArgs = new SkipRoutedEventArgs(SkipControl.SkipEvent) { Direction = direction };
             RaiseEvent(newEventArgs);
@@ -85,7 +85,7 @@ namespace UtilityWpf.Controls
 
         public class SkipRoutedEventArgs : RoutedEventArgs
         {
-            public UtilityEnum.Direction Direction { get; set; }
+            public Utility.Enums.Direction Direction { get; set; }
 
             public SkipRoutedEventArgs(RoutedEvent @event) : base(@event)
             {

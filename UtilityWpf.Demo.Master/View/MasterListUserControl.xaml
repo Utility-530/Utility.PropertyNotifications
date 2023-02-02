@@ -10,7 +10,7 @@
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local1="clr-namespace:UtilityWpf.Demo.Master.Controls"
     xmlns:view1="http://schemas.utility.com/dragablz"
-    xmlns:local2="clr-namespace:UtilityWpf.Demo.Master.ViewModel"
+    xmlns:local2="clr-namespace:UtilityWpf.Demo.Master.ViewModels"
     d:DesignHeight="450"
     d:Background="White"
     d:DesignWidth="800"

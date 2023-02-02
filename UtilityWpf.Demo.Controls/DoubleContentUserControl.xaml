@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:base="clr-namespace:UtilityWpf.Base;assembly=UtilityWpf" 
              xmlns:view="http://schemas.utility.com"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:utl="http://schemas.utility.com/utilitywpf"
@@ -46,23 +45,23 @@
         </WrapPanel>
 
         <UniformGrid>
-            <base:DoubleContentControl Orientation="{Binding ElementName=ToggleButton1, Path=Content}">
-                <base:DoubleContentControl.Header>
+            <utl:DoubleContentControl Orientation="{Binding ElementName=ToggleButton1, Path=Content}">
+                <utl:DoubleContentControl.Header>
                     <Grid Background="GreenYellow">
                         <Rectangle Fill="PaleVioletRed" ></Rectangle>
                         <TextBlock Text="Header" FontSize="30"  VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                     </Grid>
-                </base:DoubleContentControl.Header>
-            </base:DoubleContentControl>
+                </utl:DoubleContentControl.Header>
+            </utl:DoubleContentControl>
 
-            <base:DoubleContentControl  Orientation="{Binding ElementName=ToggleButton1, Path=Content}" x:Name="DoubleContentControl2">
+            <utl:DoubleContentControl  Orientation="{Binding ElementName=ToggleButton1, Path=Content}" x:Name="DoubleContentControl2">
                 <Grid Background="GreenYellow" HorizontalAlignment="Stretch" Width="{Binding ElementName=DoubleContentControl2, Path=ActualWidth}">
                     <Rectangle Fill="RoyalBlue" ></Rectangle>
                     <TextBlock Text="Content" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                 </Grid>
-            </base:DoubleContentControl>
+            </utl:DoubleContentControl>
 
-            <base:LayOutListBox x:Name="LayOutListBox1" SelectedIndex="0" Orientation="{Binding ElementName=ToggleButton1, Path=Content}">
+            <utl:LayOutListBox x:Name="LayOutListBox1" SelectedIndex="0" Orientation="{Binding ElementName=ToggleButton1, Path=Content}">
                 <FrameworkElement.Resources>
                     <Style TargetType="Grid">
                         <Setter Property="Width" Value="100"></Setter>
@@ -74,11 +73,11 @@
                 <ItemsControl.ItemsSource>
                     <StaticResource ResourceKey="Array"></StaticResource>
                 </ItemsControl.ItemsSource>
-            </base:LayOutListBox>
-            <base:DoubleContentControl Position="{Binding ElementName=EnumItemsControl, Path=Output, Mode=OneWay}" 
+            </utl:LayOutListBox>
+            <utl:DoubleContentControl Position="{Binding ElementName=EnumItemsControl, Path=Output, Mode=OneWay}" 
                                        Orientation="{Binding ElementName=ToggleButton1, Path=Content}"
                                        Header="{Binding ElementName=LayOutListBox2, Path=SelectedItem}">
-                <base:LayOutListBox  SelectedIndex="{Binding ElementName=LayOutListBox2, Path=SelectedIndex}">
+                <utl:LayOutListBox  SelectedIndex="{Binding ElementName=LayOutListBox2, Path=SelectedIndex}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Ellipse Height="50" Width="50" Fill="{Binding Children[0].Fill}"></Ellipse>
@@ -87,9 +86,9 @@
                     <ItemsControl.ItemsSource>
                         <StaticResource ResourceKey="Array"></StaticResource>
                     </ItemsControl.ItemsSource>
-                </base:LayOutListBox>
+                </utl:LayOutListBox>
              
-            </base:DoubleContentControl>
+            </utl:DoubleContentControl>
         </UniformGrid>
     </DockPanel>
 </UserControl>

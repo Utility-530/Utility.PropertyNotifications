@@ -1,32 +1,30 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Utility.Helpers;
 
 namespace UtilityWpf.Panels
 {
-    /// <summary>
-    /// DockPanel is used to size and position children inward from the edges of available space.
-    ///
-    /// A <see cref="Region" /> enum (see <see cref="SetDock" /> and <see cref="GetDock" />)
-    /// determines on which size a child is placed.  Children are stacked in order from these edges until
-    /// there is no more space; this happens when previous children have consumed all available space, or a child
-    /// with Dock set to Fill is encountered.
-    /// </summary>
     public class TransitionPanel : Panel
     {
-        /// <summary>
-        /// DependencyProperty for Dock property.
-        /// </summary>
-        /// <seealso cref="GetDock" />
-        /// <seealso cref="SetDock" />
-        //  [CommonDependencyProperty]
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.RegisterAttached("Value", typeof(object), typeof(TransitionPanel),
-                new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnValueChanged)), new ValidateValueCallback(IsValidCorner));
+                new FrameworkPropertyMetadata(null, new PropertyChangedCallback(OnValueChanged)));
 
         public static readonly DependencyProperty CurrentValueProperty = DependencyProperty.Register("CurrentValue", typeof(object), typeof(TransitionPanel),
-         new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsArrange));
+         new FrameworkPropertyMetadata(OnValueChanged, FrameworkPropertyMetadataOptions.AffectsArrange));
+
+        public static readonly DependencyProperty PropertyNameProperty =
+    DependencyProperty.Register("PropertyName", typeof(string), typeof(TransitionPanel), new PropertyMetadata(OnValueChanged));
+
+        public string PropertyName
+        {
+            get { return (string)GetValue(PropertyNameProperty); }
+            set { SetValue(PropertyNameProperty, value); }
+        }
 
         public object CurrentValue
         {
@@ -34,28 +32,12 @@ namespace UtilityWpf.Panels
             set { SetValue(CurrentValueProperty, value); }
         }
 
-        public TransitionPanel() : base()
-        {
-        }
-
-        /// <summary>
-        /// Reads the attached property Dock from the given element.
-        /// </summary>
-        /// <param name="element">UIElement from which to read the attached property.</param>
-        /// <returns>The property's value.</returns>
-        /// <seealso cref="CornerProperty" />
         [AttachedPropertyBrowsableForChildren()]
         public static object GetValue(UIElement element)
         {
             return element != null ? element.GetValue(ValueProperty) : throw new ArgumentNullException("element");
         }
 
-        /// <summary>
-        /// Writes the attached property Dock to the given element.
-        /// </summary>
-        /// <param name="element">UIElement to which to write the attached property.</param>
-        /// <param name="dock">The property value to set</param>
-        /// <seealso cref="CornerProperty" />
         public static void SetValue(UIElement element, object dock)
         {
             if (element == null) { throw new ArgumentNullException("element"); }
@@ -72,17 +54,6 @@ namespace UtilityWpf.Panels
             }
         }
 
-        /// <summary>
-        /// Updates DesiredSize of the DockPanel.  Called by parent UIElement.  This is the first pass of layout.
-        /// </summary>
-        /// <remarks>
-        /// Children are measured based on their sizing properties and <see cref="Region" />.
-        /// Each child is allowed to consume all of the space on the side on which it is docked; Left/Right docked
-        /// children are granted all vertical space for their entire width, and Top/Bottom docked children are
-        /// granted all horizontal space for their entire height.
-        /// </remarks>
-        /// <param name="constraint">Constraint size is an "upper limit" that the return value should not exceed.</param>
-        /// <returns>The Panel's desired size.</returns>
         protected override Size MeasureOverride(Size availableSize)
         {
             Size childSize = new Size(availableSize.Width, availableSize.Height / InternalChildren.Count);
@@ -104,61 +75,84 @@ namespace UtilityWpf.Panels
 
             if (CurrentValue == null)
             {
-                double childHeight = arrangeSize.Height / InternalChildren.Count;
-                Size childSize = new Size(arrangeSize.Width, childHeight);
-
-                double top = 0.0;
-                for (int i = 0; i < children.Count; i++)
-                {
-                    Rect r = new Rect(new Point(0.0, top), childSize);
-                    InternalChildren[i].Arrange(r);
-                    top += childHeight;
-                }
-
-                return arrangeSize;
+                return NewMethod(arrangeSize, children);
             }
 
-            Rect rcChild;
+            List<Action> actions = new();
+
+            Rect equlsRect;
             for (int i = 0; i < children.Count; ++i)
             {
                 UIElement child = children[i];
                 if (child == null)
                     continue;
 
-                if (GetValue(child)?.Equals(CurrentValue) ?? false)
+                // Uses the index of element if GetValue is null and Current is integer
+                // or use the Property of the child whose name matches PropertyName
+                if ((GetValue(child) ??
+                    (CurrentValue is int ?
+                    i :
+                    PropertyName is not null ?
+                    child.GetPropertyRefValue<object>(PropertyName) :
+                    null))?.Equals(CurrentValue) == true)
                 {
-                    rcChild = new Rect(0, 0, arrangeSize.Width, arrangeSize.Height);
-                }
+                    equlsRect = new Rect(0, -arrangeSize.Height, arrangeSize.Width, arrangeSize.Height);
+                    child.Arrange(equlsRect);
+                    AnimationHelper.AnimatePosition(child, 0, arrangeSize.Height, new Duration(TimeSpan.FromSeconds(1)));
 
-                child.Arrange(rcChild);
+                    actions.Add(async () =>
+                    {
+                        await Task.Delay(500);
+                        AnimationHelper.AnimateOpacityFromZero(child);
+                    });
+                }
+                else
+                {
+                    actions.Add(async () =>
+                    {
+                        equlsRect = new Rect(0, 0, arrangeSize.Width, arrangeSize.Height);
+                        child.Arrange(equlsRect);
+                        AnimationHelper.AnimatePosition(child, 0, arrangeSize.Height, new Duration(TimeSpan.FromSeconds(1)));
+                        AnimationHelper.AnimateOpacityToZero(child);
+                        await Task.Delay(1000);
+                        var rect = new Rect(0, 0, 0, 0);
+                        child.Arrange(rect);
+                    });
+                }
             }
 
-            if (rcChild == default)
+            if (equlsRect == default)
             {
-                double childHeight = arrangeSize.Height / InternalChildren.Count;
-                Size childSize = new Size(arrangeSize.Width, childHeight);
-
-                double top = 0.0;
-                for (int i = 0; i < children.Count; i++)
+                return NewMethod(arrangeSize, children);
+            }
+            else
+            {
+                foreach (var action in actions)
                 {
-                    Rect r = new Rect(new Point(0.0, top), childSize);
-                    InternalChildren[i].Arrange(r);
-                    top += childHeight;
+                    action();
                 }
-
-                return arrangeSize;
             }
 
             return arrangeSize;
         }
 
-        internal static bool IsValidCorner(object o)
+        private Size NewMethod(Size arrangeSize, UIElementCollection children)
         {
-            return true;
-            //return o is Corner dock && (dock == Corner.TopLeft
-            //        || dock == Corner.TopRight
-            //        || dock == Corner.BottomRight
-            //        || dock == Corner.BottomLeft);
+            double childHeight = arrangeSize.Height / InternalChildren.Count;
+            Size childSize = new Size(arrangeSize.Width, childHeight);
+
+            double top = 0.0;
+            for (int i = 0; i < children.Count; i++)
+            {
+                Rect r = new(new Point(0.0, 0), childSize);
+                InternalChildren[i].Arrange(r);
+                AnimationHelper.AnimatePosition(InternalChildren[i], 0, top, new Duration(TimeSpan.FromSeconds(1)));
+                if (InternalChildren[i].Opacity == 0)
+                    AnimationHelper.AnimateOpacityFromZero(InternalChildren[i]);
+                top += childHeight;
+            }
+
+            return arrangeSize;
         }
     }
 }

@@ -2,11 +2,11 @@
 using System;
 using System.Reactive;
 using Utility.Persist;
-using UtilityInterface.NonGeneric.Data;
-using UtilityWpf.Demo.Common.ViewModel;
+using Utility.Interfaces.NonGeneric.Data;
+using UtilityWpf.Demo.Common.ViewModels;
 using UtilityWpf.Demo.Master.Infrastructure;
 
-namespace UtilityWpf.Demo.Master.ViewModel
+namespace UtilityWpf.Demo.Master.ViewModels
 {
     public class MasterDetailVariableRepositoryViewModel : MasterDetailViewModel
     {

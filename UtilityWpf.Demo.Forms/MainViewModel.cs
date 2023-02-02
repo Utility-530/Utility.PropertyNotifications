@@ -2,10 +2,11 @@
 using System;
 using System.ComponentModel;
 using Utility.Common;
+using Utility.Common.Collection;
 using Utility.Persist;
 using UtilityWpf.Demo.Forms.Infrastructure;
 using UtilityWpf.Demo.Forms.Model;
-using UtilityWpf.Demo.Forms.ViewModel;
+using UtilityWpf.Demo.Forms.ViewModels;
 
 namespace UtilityWpf.Demo.Forms
 {
@@ -27,9 +28,9 @@ namespace UtilityWpf.Demo.Forms
                 .Changes(startWithSource: true)
                 .Subscribe(a =>
                 {
-                    EditModel = mapper.Map<EditModel>(a.source);
+                    EditModel = mapper.Map<EditModel>(a.Source);
                     databaseService.Upsert(EditModel);
-                    String = UtilityHelperEx.JsonHelper.Serialize(EditModel);
+                    String = Utility.Helpers.Ex.JsonHelper.Serialize(EditModel);
                     this.RaisePropertyChanged(new(nameof(EditModel)));
                     this.RaisePropertyChanged(new(nameof(String)));
                 });

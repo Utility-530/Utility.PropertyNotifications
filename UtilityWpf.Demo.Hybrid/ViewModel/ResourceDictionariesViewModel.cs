@@ -4,18 +4,18 @@ using System.Linq;
 using System.Reactive.Linq;
 using Utility.Persist;
 using Utility.Service;
-using UtilityInterface.NonGeneric.Data;
-using UtilityWpf.Demo.Common.ViewModel;
+using Utility.Interfaces.NonGeneric.Data;
+using UtilityWpf.Demo.Common.ViewModels;
 
-namespace UtilityWpf.Demo.Hybrid.ViewModel
+namespace UtilityWpf.Demo.Hybrid.ViewModels
 {
-    public class ResourceDictionariesViewModel : Common.ViewModel.ResourceDictionariesViewModel
+    public class ResourceDictionariesViewModel : Common.ViewModels.ResourceDictionariesViewModel
     {
         private readonly CollectionService collectionService = new();
 
         public ResourceDictionariesViewModel()
         {
-            var dictionaries = typeof(UtilityWpf.Demo.Common.ViewModel.ResourceDictionariesViewModel)
+            var dictionaries = typeof(UtilityWpf.Demo.Common.ViewModels.ResourceDictionariesViewModel)
                 .Assembly
                 .SelectResourceDictionaries(a => a.Key.ToString().EndsWith("themes.baml", System.StringComparison.CurrentCultureIgnoreCase))
                 .Single()

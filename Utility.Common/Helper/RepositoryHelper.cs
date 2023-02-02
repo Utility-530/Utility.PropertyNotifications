@@ -2,8 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UtilityInterface.Generic.Data;
-using UtilityInterface.NonGeneric.Data;
+using Utility.Interfaces.Generic.Data;
+using Utility.Interfaces.NonGeneric.Data;
 
 namespace Utility.Common.Helper
 {

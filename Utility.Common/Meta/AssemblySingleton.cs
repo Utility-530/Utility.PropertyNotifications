@@ -18,8 +18,10 @@ namespace Utility.Common
                 return files
                     //.Where(a => a.Contains("System") == false)
                     .Select(x =>
-                       Assembly.Load(AssemblyName.GetAssemblyName(x)))
-                    .Where(a => { return a == a; });
+                    {
+                        return Assembly.Load(AssemblyName.GetAssemblyName(x));
+                    });
+                    //.Where(a => { return a == a; });
             }
         }
 

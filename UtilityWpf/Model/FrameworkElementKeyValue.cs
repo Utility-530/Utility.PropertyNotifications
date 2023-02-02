@@ -11,7 +11,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Tynamix.ObjectFiller;
 using Utility.Common;
-using UtilityHelper;
+using Utility.Helpers;
 using UtilityWpf.Meta;
 
 namespace UtilityWpf.Model
@@ -24,7 +24,17 @@ namespace UtilityWpf.Model
         {
             Key = key;
             Type = type;
-            lazy = new(() => (FrameworkElement?)Activator.CreateInstance(Type));
+            lazy = new(() =>
+            {
+                try
+                {
+                    return (FrameworkElement?)Activator.CreateInstance(Type);
+                }
+                catch (Exception ex)
+                {
+                    return new TextBlock { Text = ex.Message };
+                }
+            });
         }
 
         public override string Key { get; }
@@ -36,6 +46,18 @@ namespace UtilityWpf.Model
         public static IEnumerable<FrameworkElementKeyValue> ViewTypes(Assembly assembly) => assembly
        .GetTypes()
        .Where(a => typeof(UserControl).IsAssignableFrom(a))
+       .GroupBy(type =>
+       (type.Name.Contains("UserControl") ? type.Name?.ReplaceLast("UserControl", string.Empty) :
+       type.Name.Contains("View") ? type.Name?.ReplaceLast("View", string.Empty) :
+       type.Name)!)
+       .OrderBy(a => a.Key)
+       .ToDictionaryOnIndex()
+       .Select(a => new FrameworkElementKeyValue(a.Key, a.Value));
+
+        public static IEnumerable<FrameworkElementKeyValue> Types(Assembly assembly) => assembly
+       .GetTypes()
+       .Where(a => typeof(FrameworkElement).IsAssignableFrom(a))
+       .Where(a => typeof(Application).IsAssignableFrom(a) == false && typeof(Window).IsAssignableFrom(a) == false)
        .GroupBy(type =>
        (type.Name.Contains("UserControl") ? type.Name?.ReplaceLast("UserControl", string.Empty) :
        type.Name.Contains("View") ? type.Name?.ReplaceLast("View", string.Empty) :
@@ -62,7 +84,7 @@ namespace UtilityWpf.Model
 
         public override FrameworkElement Value => lazy.Value;
 
-        public static IEnumerable<ResourceDictionaryKeyValue> ResourceViewTypes(Assembly assembly) => 
+        public static IEnumerable<ResourceDictionaryKeyValue> ResourceViewTypes(Assembly assembly) =>
             assembly
             .SelectResourceDictionaries(predicate: entry => Predicate(entry.Key.ToString()), ignoreXamlReaderExceptions: true)
        //.GroupBy(type =>
@@ -122,7 +144,7 @@ namespace UtilityWpf.Model
                                 {
                                     content = new Filler(datatype).Create();
                                 }
-                                catch(Exception ex)
+                                catch (Exception ex)
                                 {
                                     content = new AutoMoqer(datatype).Build().Service;
                                 }

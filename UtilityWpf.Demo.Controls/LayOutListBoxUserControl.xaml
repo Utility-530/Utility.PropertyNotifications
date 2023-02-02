@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:UtilityWpf.Demo.Controls"
-             xmlns:base="clr-namespace:UtilityWpf.Base;assembly=UtilityWpf"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:utl="http://schemas.utility.com/utilitywpf"
              xmlns:att="http://schemas.utility.com/attached"
@@ -20,7 +19,7 @@
             </ToggleButton>
         </WrapPanel>
         <UniformGrid>
-            <base:LayOutListBox SelectedIndex="0" Orientation="{Binding ElementName=ToggleButton1, Path=Content}">
+            <utl:LayOutListBox SelectedIndex="0" Orientation="{Binding ElementName=ToggleButton1, Path=Content}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Ellipse Height="50" Width="50" Fill="{Binding Children[0].Fill}"></Ellipse>
@@ -42,21 +41,21 @@
                     <Rectangle Fill="Beige" Height="20"></Rectangle>
                     <TextBlock Text="ghg565dfgdf"></TextBlock>
                 </Grid>
-            </base:LayOutListBox>
+            </utl:LayOutListBox>
             <GroupBox Header="LayOutListBox">
                 <StackPanel>
-                    <base:LayOutListBox Orientation="Horizontal" att:ItemsControlEx.Arrangement="Wrapped" Width="60">
+                    <utl:LayOutListBox Orientation="Horizontal" att:ItemsControlEx.Arrangement="Wrapped" Width="60">
                         <Ellipse Fill="PaleGoldenrod" Height="10" Width="10"></Ellipse>
                         <Ellipse Fill="PaleGoldenrod" Height="10" Width="10"></Ellipse>
                         <Ellipse Fill="PaleGoldenrod" Height="10" Width="10"></Ellipse>
                         <Ellipse Fill="PaleGoldenrod" Height="10" Width="10"></Ellipse>
-                    </base:LayOutListBox>
-                    <base:LayOutListBox Orientation="Vertical" Height="30">
+                    </utl:LayOutListBox>
+                    <utl:LayOutListBox Orientation="Vertical" Height="30">
                         <Ellipse Fill="PaleGoldenrod" Height="10" Width="10"></Ellipse>
                         <Ellipse Fill="PaleGoldenrod" Height="10" Width="10"></Ellipse>
                         <Ellipse Fill="PaleGoldenrod" Height="10" Width="10"></Ellipse>
                         <Ellipse Fill="PaleGoldenrod" Height="10" Width="10"></Ellipse>
-                    </base:LayOutListBox>
+                    </utl:LayOutListBox>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="HeaderedItemsControl">

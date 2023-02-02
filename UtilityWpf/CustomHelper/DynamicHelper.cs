@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UtilityHelper;
-using UtilityHelper.NonGeneric;
+using Utility.Helpers;
+using Utility.Helpers.NonGeneric;
 
 namespace CustomHelper
 {

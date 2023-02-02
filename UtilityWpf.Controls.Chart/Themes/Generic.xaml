@@ -2,7 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/UtilityWpf.Controls.Chart;component/Themes/OxyChart.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="/UtilityWpf.Controls.Chart;component/OxyChart.xaml"></ResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
 
     <!--<Style TargetType="{x:Type local:CustomControl1}">

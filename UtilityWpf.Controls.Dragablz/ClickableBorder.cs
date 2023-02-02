@@ -47,6 +47,7 @@ namespace UtilityWpf.Controls.Dragablz
         {
             base.OnMouseDown(e);
             CaptureMouse();
+            e.Handled = true;
         }
 
         protected override void OnMouseUp(MouseButtonEventArgs e)

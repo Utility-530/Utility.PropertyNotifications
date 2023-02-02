@@ -1,12 +1,10 @@
-﻿namespace Utility.WPF.Adorners
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Documents;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
 
+namespace Utility.WPF.Adorners
+{
     public class Footer
     {
         static List<Guid> guids = new();
@@ -30,35 +28,7 @@
 
         private static void OnChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            Text.OnChanged2(sender, (string)e.NewValue, guids, (f, t) => new Text(f, t, Dock.Bottom, Place.Inside));
-
-            //if (sender is not FrameworkElement adornedElement)
-            //    throw new Exception("s22df234 dfg f,l,lgd");
-            //if (adornedElement.IsLoaded)
-            //    AddAdorner(adornedElement, e);
-            //else
-            //    adornedElement.Loaded += (s, a) => AddAdorner((FrameworkElement)sender, e);
-
-            //static void AddAdorner(FrameworkElement adornedElement, DependencyPropertyChangedEventArgs e)
-            //{
-            //    AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(adornedElement);
-
-            //    bool flag = false;
-            //    foreach (var adorner in adornerLayer.GetAdorners(adornedElement) ?? Array.Empty<Adorner>())
-            //    {
-            //        if (adorner is Text text)
-            //        {
-
-            //            flag = true;
-            //            text.text = (string)e.NewValue;
-            //        }
-            //    }
-
-            //    if (flag == false)
-            //        adornerLayer.Add(new Text(adornedElement, (string)e.NewValue, Dock.Bottom, Place.Inside));
-            //    else
-            //        Text.InvalidateTextAdorners(adornerLayer, adornedElement);
-            //}
+            Text.AddAdorner(sender, (string)e.NewValue, guids, (f, t) => new Text(f, t, Dock.Bottom, Place.Inside));
         }
     }
 }

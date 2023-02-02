@@ -80,7 +80,7 @@ namespace Utility.WPF.Adorners.Infrastructure
 
         #region Dependency Properties Get And Set
 
-        public static AdornerCollection GetAdorners(DependencyObject d)
+        public static AdornerCollection GetAdorners(this DependencyObject d)
         {
             if (d.GetValue(AdornersProperty) is not AdornerCollection collection)
             {

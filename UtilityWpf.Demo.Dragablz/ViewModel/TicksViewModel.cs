@@ -1,6 +1,6 @@
-﻿namespace UtilityWpf.Demo.Dragablz.ViewModel
+﻿namespace UtilityWpf.Demo.Dragablz.ViewModels
 {
-    internal class TicksViewModel : UtilityWpf.Demo.Common.ViewModel.TicksViewModel
+    internal class TicksViewModel : UtilityWpf.Demo.Common.ViewModels.TicksViewModel
     {
     }
 }

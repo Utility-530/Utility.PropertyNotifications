@@ -8,9 +8,9 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Utility.WPF.Reactive;
 using UtilityWpf.Abstract;
 using UtilityWpf.Controls.Master;
-using UtilityWpf.Mixins;
 using UtilityWpf.Helper;
 
 namespace UtilityWpf.Controls.Chart

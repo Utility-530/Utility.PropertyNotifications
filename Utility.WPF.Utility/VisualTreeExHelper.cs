@@ -174,6 +174,40 @@ namespace Utility.WPF.Helper
         }
 
         /// <summary>
+        /// Finds all controls of a specific type in visual tree
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public static IEnumerable<T> Children<T>(this DependencyObject parent) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+
+                if (child is T childType)
+                {
+                    yield return childType;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Finds all controls of a specific type in visual tree
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        public static IEnumerable<DependencyObject> Children(this DependencyObject parent)
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+                yield return child;
+            }
+        }
+
+        /// <summary>
         /// Gets child of specific type
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -221,7 +255,7 @@ namespace Utility.WPF.Helper
         {
             DetachChild(parent, child);
         }
-         
+
         public static void DetachFromParent(this FrameworkElement child)
         {
             DetachChild(child.Parent, child);

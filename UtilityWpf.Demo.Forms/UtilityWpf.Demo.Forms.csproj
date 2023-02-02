@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Utility.Persist\Utility.Persist.csproj" />
-    <ProjectReference Include="..\Utility.ViewModel\Utility.ViewModel.csproj" />
+    <ProjectReference Include="..\Utility.ViewModels\Utility.ViewModels.csproj" />
     <ProjectReference Include="..\UtilityWpf.Controls.Hybrid\UtilityWpf.Controls.Hybrid.csproj" />
     <ProjectReference Include="..\UtilityWpf.Controls.Objects\UtilityWpf.Controls.Objects.csproj" />
   </ItemGroup>

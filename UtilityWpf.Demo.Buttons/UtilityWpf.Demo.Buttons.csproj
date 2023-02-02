@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Utility.ViewModel\Utility.ViewModel.csproj" />
+		<ProjectReference Include="..\Utility.ViewModels\Utility.ViewModels.csproj" />
 		<ProjectReference Include="..\UtilityWpf.Controls.Buttons\UtilityWpf.Controls.Buttons.csproj" />
 		<ProjectReference Include="..\UtilityWpf.Controls\UtilityWpf.Controls.csproj" />
 		<ProjectReference Include="..\UtilityWpf.Demo.Data\UtilityWpf.Demo.Data.csproj" />
@@ -19,20 +19,10 @@
 			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 			<SubType>Designer</SubType>
 		</Page>
-		<Page Update="ButtonsUserControl.xaml">
-			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-			<SubType>Designer</SubType>
-		</Page>
 		<Page Update="DualButtonUserControl.xaml">
 			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 			<SubType>Designer</SubType>
 		</Page>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Compile Update="ButtonsUserControl.xaml.cs">
-			<SubType>Code</SubType>
-		</Compile>
 	</ItemGroup>
 
 </Project>

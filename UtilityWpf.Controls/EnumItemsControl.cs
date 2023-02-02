@@ -7,10 +7,10 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Utility.Common.Enum;
 using Utility.WPF.Attached;
-using UtilityEnum;
-using UtilityWpf.Base;
+using Utility.Enums;
+using Utility.WPF.Controls.Base;
+using Utility.Enums;
 
 namespace UtilityWpf.Controls
 {

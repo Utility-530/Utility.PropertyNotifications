@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:extrinsic="http://schemas.utility.com/extrinsic"
-    xmlns:demo="clr-namespace:UtilityWpf.Chart.Demo.ViewModel"
+    xmlns:demo="clr-namespace:UtilityWpf.Chart.Demo.ViewModels"
     StartupUri="MainWindow.xaml">
 
     <Application.Resources>

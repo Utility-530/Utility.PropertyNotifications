@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using UtilityHelper.NonGeneric;
+using Utility.Helpers.NonGeneric;
 
 namespace UtilityWpf.Demo.Controls
 {

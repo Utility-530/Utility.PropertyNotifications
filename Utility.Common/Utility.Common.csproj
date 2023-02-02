@@ -5,51 +5,17 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Chronic-netstandard" Version="0.3.2.4" />
-		<PackageReference Include="DeepEqual" Version="2.0.0" />
-		<PackageReference Include="GuiLabs.Undo" Version="1.0.2" />
-		<PackageReference Include="Jellyfish" Version="1.0.42" />
-		<PackageReference Include="LanguageExt.Core" Version="4.0.8-beta" />
-		<PackageReference Include="MintPlayer.ObservableCollection" Version="1.5.0" />
-		<PackageReference Include="Newtonsoft.Json.Bson" Version="1.0.2" />
-		<PackageReference Include="ObjectCloner.Extensions" Version="2.0.1" />
-		<PackageReference Include="oops.UndoRedo.Framework" Version="1.0.2" />
-		<PackageReference Include="Optional" Version="5.0.0-alpha" />
-		<PackageReference Include="randomColorSharped.NetStandard" Version="1.0.2" />
-		<PackageReference Include="ReactiveUI" Version="18.0.7" />
-		<PackageReference Include="Splat.Autofac" Version="9.5.2" />
-		<PackageReference Include="fasterflect" Version="3.0.0" />
-		<PackageReference Include="Netsoft.Diff" Version="2.0.0" />
-		<PackageReference Include="TreeCollections" Version="1.0.4" />
-		<PackageReference Include="Kaos.Collections" Version="4.1.0" />
-		<PackageReference Include="TypeMerger" Version="2.1.1" />
-		<PackageReference Include="UnitsNet" Version="5.0.0-alpha005" />
-		<PackageReference Include="Soukoku.ExpressionParser" Version="3.1.0" />
-		<PackageReference Include="ObjectsComparer" Version="1.4.1" />
-		<PackageReference Include="morelinq" Version="3.3.2" />
-		<PackageReference Include="Nito.AsyncEx" Version="5.1.2" />
-		<PackageReference Include="NuGet.Build.Tasks.Pack" Version="6.1.0">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="akavache" Version="8.1.1" />
-		<PackageReference Include="CompareNETObjects" Version="4.76.0" />
-		<PackageReference Include="deniszykov.TypeConversion" Version="3.0.6" />
-		<PackageReference Include="Endless" Version="0.7.0-alpha1" />
-		<PackageReference Include="Soukoku.ExpressionParser" Version="3.1.0" />
-		<PackageReference Include="UtilityEnum" Version="2.4.0" />
-		<PackageReference Include="UtilityHelperEx" Version="0.0.2-alpha-02" />
-		<PackageReference Include="UtilityInterface" Version="6.1.1" />
-		<PackageReference Include="UtilityStruct" Version="1.0.10-alpha" />
-		<PackageReference Include="YetAnotherStringMatcher" Version="1.0.3" />
-		<PackageReference Include="Moq.AutoMock" Version="3.3.0" />
-		<PackageReference Include="AutoBogus" Version="2.13.1" />
-		<PackageReference Include="AutoMapper" Version="10.1.1" />
-	</ItemGroup>
+
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\Visual Studio 2019\Projects\Wpf Combobox\ObjectFiller.NET\Tynamix.ObjectFiller\Tynamix.ObjectFiller.csproj" />
+	  <ProjectReference Include="..\..\..\Projects\Wpf Combobox\ObjectFiller.NET\Tynamix.ObjectFiller\Tynamix.ObjectFiller.csproj" />
+	  <ProjectReference Include="..\..\Utility.Enums\Utility.Enums\Utility.Enums.csproj" />
+	  <ProjectReference Include="..\..\Utility.Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
+	  <ProjectReference Include="..\..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
+	  <ProjectReference Include="..\..\Utility.Reactive\Utility.Reactive\Utility.Reactive.csproj" />
+	  <ProjectReference Include="..\..\Utility.Struct\Utility.Struct\Utility.Struct.csproj" />
+	  <ProjectReference Include="..\Utility.Observables\Utility.Observables.csproj" />
+	  <ProjectReference Include="..\Utility.Packages\Utility.Packages.csproj" />
 	</ItemGroup>
 
 </Project>

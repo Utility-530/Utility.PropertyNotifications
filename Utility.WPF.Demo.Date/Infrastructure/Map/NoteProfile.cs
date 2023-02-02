@@ -1,5 +1,5 @@
 ﻿using Utility.WPF.Demo.Date.Infrastructure.Entity;
-using Utility.WPF.Demo.Date.Infrastructure.ViewModel;
+using Utility.WPF.Demo.Date.Infrastructure.ViewModels;
 
 namespace Utility.WPF.Demo.Date.Infrastructure.Map
 {

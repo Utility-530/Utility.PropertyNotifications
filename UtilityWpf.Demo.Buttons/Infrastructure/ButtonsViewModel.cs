@@ -3,7 +3,7 @@ using ReactiveUI;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using UtilityWpf.Demo.Common.ViewModel;
+using UtilityWpf.Demo.Common.ViewModels;
 
 namespace UtilityWpf.Demo.Buttons
 {

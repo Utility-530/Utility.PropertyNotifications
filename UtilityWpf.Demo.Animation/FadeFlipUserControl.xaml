@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:UtilityWpf.Demo.Animation"
-             xmlns:converters="clr-namespace:UtilityWpf.Converter;assembly=UtilityWpf"
+             xmlns:converters="http://schemas.utility.com/utilitywpf"
              xmlns:anim="http://schemas.utility.com/animation"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
@@ -15,10 +15,18 @@
     <StackPanel HorizontalAlignment="Center">
         <TextBox x:Name="IntegerIntegerUpDown" Text="10" FontSize="30" Margin="20"></TextBox>
 
+        <TextBlock FontSize="30" Margin="20"
+                    Text="{Binding ElementName=IntegerIntegerUpDown, UpdateSourceTrigger=PropertyChanged,   
+            Path=Text, Converter={x:Static converters:StringToIntConverter.Instance}}"
+                   ></TextBlock>
         <anim:FlipControl Margin="20"
-            Integer="{Binding ElementName=IntegerIntegerUpDown, Path=Text, Converter={x:Static converters:StringToIntConverter.Instance}}" />
+            Integer="{Binding ElementName=IntegerIntegerUpDown, UpdateSourceTrigger=PropertyChanged,
+            
+            Path=Text, Converter={x:Static converters:StringToIntConverter.Instance}}" />
 
         <anim:FlipControl Style="{StaticResource FadeFlipControl}" Margin="20"
-            Integer="{Binding ElementName=IntegerIntegerUpDown, Path=Text, Converter={x:Static converters:StringToIntConverter.Instance}}" />
+            Integer="{Binding ElementName=IntegerIntegerUpDown,
+             UpdateSourceTrigger=PropertyChanged,
+            Path=Text, Converter={x:Static converters:StringToIntConverter.Instance}}" />
     </StackPanel>
 </UserControl>

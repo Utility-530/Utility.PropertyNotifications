@@ -9,9 +9,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
-using Utility.Common.Enum;
 using UtilityWpf.Abstract;
-using UtilityWpf.Base;
+using Utility.WPF.Controls.Base;
+using Utility.Enums;
 
 namespace UtilityWpf.Controls.Master
 {

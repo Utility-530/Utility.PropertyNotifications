@@ -4,7 +4,7 @@
              xmlns:models="clr-namespace:DateWork.Models"
              xmlns:infra="clr-namespace:Utility.WPF.Demo.Date.Infrastructure"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:model="clr-namespace:Utility.WPF.Demo.Date.Infrastructure.ViewModel"
+             xmlns:model="clr-namespace:Utility.WPF.Demo.Date.Infrastructure.ViewModels"
              xmlns:entity="clr-namespace:Utility.WPF.Demo.Date.Infrastructure.Entity"
              xmlns:utl="http://schemas.utility.com/utilitywpf"
              StartupUri="MainWindow.xaml">

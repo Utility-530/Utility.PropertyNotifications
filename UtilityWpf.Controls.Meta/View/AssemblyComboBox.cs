@@ -1,22 +1,17 @@
-﻿using FreeSql;
-using System;
-using System.Windows;
-using UtilityInterface.NonGeneric;
-using UtilityWpf.Controls.Buttons;
+﻿using System.Windows;
+using Utility.WPF.Controls.Lists;
+using UtilityWpf.Controls.Meta.ViewModels;
 using UtilityWpf.Model;
-using Evan.Wpf;
-using UtilityWpf.Controls.Meta.ViewModel;
 
 namespace UtilityWpf.Controls.Meta
 {
     internal class AssemblyComboBox : CheckBoxesComboControl
     {
-        public static readonly DependencyProperty DemoTypeProperty = DependencyHelper.Register();
+        //public static readonly DependencyProperty DemoTypeProperty = DependencyHelper.Register();
 
-        public AssemblyComboBox(DemoType demoType) : this()
-        {
-            DemoType = demoType;
-        }
+        //public AssemblyComboBox(/*AssemblyType demoType*/) : this()
+        //{
+        //}
 
         public AssemblyComboBox()
         {
@@ -29,19 +24,18 @@ namespace UtilityWpf.Controls.Meta
             HorizontalAlignment = HorizontalAlignment.Stretch;
             Height = 80;
             DisplayMemberPath = nameof(AssemblyKeyValue.Key);
-            IsCheckedPath = nameof(Model.KeyValue.IsChecked);
-            IsSelectedPath = nameof(Model.KeyValue.IsSelected);
+            //IsCheckedPath = nameof(Model.KeyValue.IsChecked);
+            //IsSelectedPath = nameof(Model.KeyValue.IsSelected);
             SelectedValuePath = nameof(AssemblyKeyValue.Value);
 
             var dis = AssemblyComboBoxViewModelMapper.Connect(this, new AssemblyComboBoxViewModel());
             this.Unloaded += (s, e) => dis.Dispose();
         }
 
-
-        public DemoType DemoType
-        {
-            get => (DemoType)GetValue(DemoTypeProperty);
-            set => SetValue(DemoTypeProperty, value);
-        }
+        //public AssemblyType DemoType
+        //{
+        //    get => (AssemblyType)GetValue(DemoTypeProperty);
+        //    set => SetValue(DemoTypeProperty, value);
+        //}
     }
 }

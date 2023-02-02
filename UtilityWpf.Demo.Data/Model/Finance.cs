@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using Utility.Common.Helper;
+using Utility.Helpers;
 
 namespace UtilityWpf.Demo.Data.Model
 {

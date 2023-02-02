@@ -2,11 +2,12 @@
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
-using UtilityWpf.Base;
+using Utility.WPF.Controls.Base;
 
 namespace UtilityWpf.Controls
 {
-    using Mixins;
+    using Utility.WPF.Reactive;
+
     using static DependencyPropertyFactory<SizeControl>;
 
     public class SizeControl : Controlx

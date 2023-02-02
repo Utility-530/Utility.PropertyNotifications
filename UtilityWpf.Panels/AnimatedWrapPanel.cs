@@ -64,15 +64,6 @@ namespace UtilityWpf.Panels
 
             foreach (UIElement child in Children)
             {
-                var trans = child.RenderTransform as TranslateTransform;
-
-                if (trans == null)
-                {
-                    child.RenderTransformOrigin = new Point(0, 0);
-                    trans = new TranslateTransform();
-                    child.RenderTransform = trans;
-                }
-
                 if (curX + child.DesiredSize.Width > finalSize.Width)
                 { //Wrap to next line
                     curY += curLineHeight;
@@ -80,13 +71,11 @@ namespace UtilityWpf.Panels
                     curLineHeight = 0;
                 }
 
-                child.Arrange(new Rect(0, 0, child.DesiredSize.Width,
-                    child.DesiredSize.Height));
+                child.Arrange(new Rect(0, 0, child.DesiredSize.Width, child.DesiredSize.Height));
 
-                trans.BeginAnimation(TranslateTransform.XProperty, new DoubleAnimation(curX, AnimationTime), HandoffBehavior.Compose);
-                trans.BeginAnimation(TranslateTransform.YProperty, new DoubleAnimation(curY, AnimationTime), HandoffBehavior.Compose);
+                AnimationHelper.AnimatePosition(child, curX, curY, AnimationTime);
 
-                curX += child.DesiredSize.Width;
+                                curX += child.DesiredSize.Width;
                 if (child.DesiredSize.Height > curLineHeight)
                     curLineHeight = child.DesiredSize.Height;
             }

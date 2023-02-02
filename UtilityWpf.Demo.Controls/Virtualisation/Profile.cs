@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using UtilityWpf.Demo.Data.Factory;
 using UtilityWpf.Demo.Data.Model;
-using VirtualisationHelper = Utility.Common.Helper.VirtualisationHelper;
+using VirtualisationHelper = Utility.Helpers.Ex.VirtualisationHelper;
 
 namespace UtilityWpf.Demo.Controls
 {

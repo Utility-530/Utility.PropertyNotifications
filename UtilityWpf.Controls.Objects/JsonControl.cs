@@ -16,7 +16,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using UtilityHelper;
+using Utility.Helpers;
 using static LambdaConverters.TemplateSelector;
 using static LambdaConverters.ValueConverter;
 
@@ -86,10 +86,6 @@ namespace UtilityWpf.Controls.Objects
             {
                 e.CanExecute = true;
                 e.Handled = true;
-            }
-
-            static void Foo()
-            {
             }
         }
 
@@ -217,19 +213,34 @@ namespace UtilityWpf.Controls.Objects
                                  .Select((a, i) => Tuple.Create(i, (Color)ColorConverter.ConvertFromString(a.Value)))
                                  .ToDictionary(a => a.Item1, a => a.Item2));
 
-        public static IValueConverter JTokenTypeToColorConverter => Create<JTokenType, Color>(a => NiceColors.Value[(byte)a.Value]);
+        public static IValueConverter JTokenTypeToColorConverter { get; } = Create<JTokenType, Color>(a => NiceColors.Value[(byte)a.Value]);
 
-        public static IValueConverter MethodToValueConverter => Create<object, JEnumerable<JToken>?, string>(a =>
+        public static IValueConverter MethodToValueConverter { get; } = Create<object, JEnumerable<JToken>?, string>(a =>
                       {
                           if (a.Parameter != null && a.Value?.GetType().GetMethod(a.Parameter, Array.Empty<Type>()) is MethodInfo methodInfo)
                               return (JEnumerable<JToken>?)methodInfo.Invoke(a.Value, Array.Empty<object>());
                           return new JEnumerable<JToken>();
                       });
 
+        public static IValueConverter JArrayConverter { get; } = GetJArrayConverter();
+        public static IValueConverter GetJArrayConverter()
+        {
+            List<JToken> collection = new();
+            return Create<object, IEnumerable<JToken>?>(a =>
+            {
+                if (a.Value is JArray jarray)
+                {
+                    collection.AddRange(jarray);
+                    return collection;
+                } return new JEnumerable<JToken>();
+            });
+
+        }
+
         //public static IValueConverter ComplexPropertyMethodToValueConverter => Create<object, JEnumerable<JToken>?, string>(args =>
         //(JEnumerable<JToken>)MethodToValueConverter.Convert(args.Value, null, args.Parameter, args.Culture));
 
-        public static IValueConverter JArrayLengthConverter => Create<object, string>(jToken =>
+        public static IValueConverter JArrayLengthConverter { get; } = Create<object, string>(jToken =>
                       {
                           if (jToken.Value is JToken { Type: JTokenType type } jtoken)
                               return type switch
@@ -242,7 +253,7 @@ namespace UtilityWpf.Controls.Objects
                       }
         , errorStrategy: LambdaConverters.ConverterErrorStrategy.DoNothing);
 
-        public static IValueConverter JTokenConverter => Create<object, string>(jval => jval.Value switch
+        public static IValueConverter JTokenConverter { get; } = Create<object, string>(jval => jval.Value switch
                       {
                           JValue value when value.Type == JTokenType.Null => "null",
                           JValue value => value?.Value?.ToString() ?? string.Empty,

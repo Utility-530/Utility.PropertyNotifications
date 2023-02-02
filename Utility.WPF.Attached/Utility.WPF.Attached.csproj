@@ -6,7 +6,10 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+
+
   <ItemGroup>
+    <ProjectReference Include="..\Utility.WPF.Panels.Helper\Utility.WPF.Panels.Helper.csproj" />
     <ProjectReference Include="..\Utility.WPF.Reactive\Utility.WPF.Reactive.csproj" />
     <ProjectReference Include="..\Utility.WPF.Utility\Utility.WPF.Helper.csproj" />
   </ItemGroup>

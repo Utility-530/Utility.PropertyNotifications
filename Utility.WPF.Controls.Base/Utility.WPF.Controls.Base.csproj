@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Utility.WPF.Abstract\Utility.WPF.Abstract.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Utility\Utility.WPF.Helper.csproj" />
+		<ProjectReference Include="..\UtilityWpf.Panels\UtilityWpf.Panels.csproj" />
+		<ProjectReference Include="..\UtilityWpf\UtilityWpf.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Evan.Wpf" Version="1.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="DoubleContentControl.cs">
+			<DependentUpon>DoubleContentControl.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Page Update="DoubleContentControl.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="Themes\Generic.xaml">
+		  <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+		</Page>
+	</ItemGroup>
+
+</Project>

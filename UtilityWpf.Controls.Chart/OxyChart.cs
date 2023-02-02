@@ -1,6 +1,4 @@
-﻿using OxyPlot;
-using OxyPlot.Wpf;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,23 +7,27 @@ using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using UtilityHelperEx;
+using static Evan.Wpf.DependencyHelper;
+using OxyPlot;
+using OxyPlot.Wpf;
+using Utility.Helpers.Ex;
 using UtilityWpf.Abstract;
-using UtilityWpf.Base;
 
 namespace UtilityWpf.Controls.Chart
 {
     using Mixins;
-    using UtilityWpf.Controls.Chart.ViewModel;
-    using static DependencyPropertyFactory<OxyChart>;
-    using static UtilityWpf.Controls.Chart.ViewModel.MultiTimeModel;
+    using Utility.WPF.Controls.Base;
+    using UtilityWpf.Controls.Chart.ViewModels;
+
+    //using static DependencyPropertyFactory<OxyChart>;
+    using static UtilityWpf.Controls.Chart.ViewModels.MultiTimeModel;
 
     public class OxyChart : Controlx, IItemsSource
     {
-        public static readonly DependencyProperty ItemsSourceProperty = Register(nameof(ItemsSource), a => a.Observer<IEnumerable>());
-        public static readonly DependencyProperty IdProperty = Register(nameof(IdKey), a => a.Observer<string>(nameof(IdKey)));
-        public static readonly DependencyProperty DataKeyProperty = Register(nameof(DataKey), a => a.Observer<string>(nameof(DataKey)));
-        public static readonly DependencyProperty DataConverterProperty = Register(nameof(DataConverter), a => a.Observer<IValueConverter>());
+        public static readonly DependencyProperty ItemsSourceProperty = Register(new FrameworkPropertyMetadata((a, e) => (a as OxyChart).Observer<IEnumerable>().OnNext(e.NewValue as IEnumerable)));
+        public static readonly DependencyProperty IdProperty = Register(new FrameworkPropertyMetadata((a, e) => (a as OxyChart).Observer<string>().OnNext(e.NewValue as string)));
+        public static readonly DependencyProperty DataKeyProperty = Register(new FrameworkPropertyMetadata((a, e) => (a as OxyChart).Observer<string>().OnNext(e.NewValue as string)));
+        public static readonly DependencyProperty DataConverterProperty = Register(new FrameworkPropertyMetadata((a, e) => (a as OxyChart).Observer<IValueConverter>().OnNext(e.NewValue as IValueConverter)));
 
         static OxyChart()
         {
@@ -55,7 +57,7 @@ namespace UtilityWpf.Controls.Chart
                 }),
                 this.Observable<string>(nameof(DataKey)),
                 this.Observable<string>(nameof(DataConverter)),
-                 this.Observable<string>(nameof(IdKey)).Where(id => id != null))
+                this.Observable<string>(nameof(IdKey)).Where(id => id != null))
                 .ObserveOnDispatcher()
                 .Subscribe(combination =>
                 {

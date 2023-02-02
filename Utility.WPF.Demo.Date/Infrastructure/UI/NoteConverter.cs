@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using Utility.WPF.Demo.Date.Infrastructure.Repository;
-using Utility.WPF.Demo.Date.Infrastructure.ViewModel;
+using Utility.WPF.Demo.Date.Infrastructure.ViewModels;
 
 namespace Utility.WPF.Demo.Date
 {

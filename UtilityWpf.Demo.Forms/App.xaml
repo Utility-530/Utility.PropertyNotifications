@@ -1,7 +1,7 @@
 ﻿<Application x:Class="UtilityWpf.Demo.Forms.App"
             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            xmlns:vm="clr-namespace:UtilityWpf.Demo.Forms.ViewModel"
+            xmlns:vm="clr-namespace:UtilityWpf.Demo.Forms.ViewModels"
             xmlns:p="http://propertytools.org/wpf"
             xmlns:un="clr-namespace:UnitsNet.Units;assembly=UnitsNet"
             xmlns:view2="http://schemas.utility.com/hybrid"
@@ -24,8 +24,8 @@
         <DataTemplate DataType="{x:Type vm:ImagesViewModel}">
             <view11:ImagesControl
             ItemsSource="{Binding Collection}"
-            IsCheckedPath="{util:NameOf Type={x:Type vm:ImageViewModel},Member=IsChecked}"
-            DisplayMemberPath="{util:NameOf Type={x:Type vm:ImageViewModel},Member=URL}"
+            IsCheckedPath="{util:NameOf Type={x:Type vm:ImageViewModel},Path=IsChecked}"
+            DisplayMemberPath="{util:NameOf Type={x:Type vm:ImageViewModel},Path=URL}"
             Change="{util:Command ChangeCommand}">
             </view11:ImagesControl>
         </DataTemplate>

@@ -1,96 +1,41 @@
-﻿using DynamicData;
-using ReactiveUI;
-using System;
-using System.Collections.ObjectModel;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using UtilityInterface.NonGeneric;
-using UtilityWpf.Demo.Data.Model;
+﻿using UtilityWpf.Demo.Data.Model;
+using Utility.ViewModels.Filters;
 
 namespace UtilityWpf.Demo.Data.Factory
 {
-    public sealed class ProfileFilterCollectionObservable : IObservable<Filter>
+    public class ProfileFilterCollection
     {
-        private readonly Filter[] profiles =
+        public static readonly Filter[] Filters =
         {
-            new PositiveProfileFilter(),
-            new NegativeProfileFilter(),
-            new RandomProfileFilter(),
-            new TopFilter(5)
+            new TopFilter(5),
+            new StringMatchFilter(),
+            new PropertyFilter(nameof(Profile.IsAvailable)),
+            new TrueFilter(),
+            new FalseFilter(),
+            new RandomFilter(),
         };
+    }
 
-        public IDisposable Subscribe(IObserver<Filter> observer)
+    public class TopFilter : TopLimitFilter<Profile>
+    {
+        public TopFilter(int count) : base(count)
         {
-            return profiles
-                    .ToObservable()
-                    .Subscribe(observer);
         }
     }
 
-    public class PositiveProfileFilter : Filter, IPredicate
+    public class StringMatchFilter : StringMatchFilter<Profile>
     {
-        public PositiveProfileFilter() : base("Positive")
-        {
-        }
-
-        public override bool Invoke(object value)
-        {
-            return true;
-        }
     }
 
-    public class NegativeProfileFilter : Filter, IPredicate
+    public class PropertyFilter : PropertyFilter<Profile>
     {
-        public NegativeProfileFilter() : base("Negative")
+        public PropertyFilter(string property) : base(property)
         {
         }
 
-        public override bool Invoke(object value)
+        protected override object Set(string value)
         {
-            return false;
-        }
-    }
-
-    public class RandomProfileFilter : Filter, IPredicate
-    {
-        private readonly Random random = new();
-
-        public RandomProfileFilter() : base("Random")
-        {
-        }
-
-        public override bool Invoke(object value)
-        {
-            return random.Next(0, 2) > 0;
-        }
-    }
-
-    public class TopFilter : ObserverFilter<Profile>
-    {
-        private record ObjectFlag(object Value, int Index);
-        private int takeFromTopLimit;
-        private readonly Subject<IChangeSet<Profile>> subjects = new();
-        private readonly ReadOnlyObservableCollection<Profile> collection;
-
-        public TopFilter(int count) : base("Top")
-        {
-            takeFromTopLimit = count;
-
-            subjects
-                .Bind(out collection)
-                .Subscribe();
-        }
-
-        public override bool Invoke(object value)
-        {
-            return collection.IndexOf(value) < TakeFromTopLimit;
-        }
-
-        public int TakeFromTopLimit { get => takeFromTopLimit; set => this.RaiseAndSetIfChanged(ref takeFromTopLimit, value); }
-
-        public override void OnNext(IChangeSet<Profile> value)
-        {
-            subjects.OnNext(value);
+            return value;
         }
     }
 }

@@ -4,10 +4,9 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:mk="clr-namespace:UtilityWpf.Markup;assembly=UtilityWpf"
-    xmlns:utilitywpf="clr-namespace:UtilityWpf;assembly=UtilityWpf"
+    xmlns:mk="http://schemas.utility.com/utilitywpf"
     xmlns:view1="http://schemas.utility.com/dragablz"
-    xmlns:vm2="clr-namespace:UtilityWpf.Demo.Common.ViewModel;assembly=UtilityWpf.Demo.Common"
+    xmlns:vm2="clr-namespace:UtilityWpf.Demo.Common.ViewModels;assembly=UtilityWpf.Demo.Common"
     d:DesignHeight="450"
     d:Background="White"
     d:DesignWidth="800"
@@ -19,9 +18,9 @@
             </FrameworkElement.DataContext>
 
             <view1:ListControl
-                DisplayMemberPath="{mk:NameOf Type={x:Type vm2:TickViewModel}, Member=Text}"
-                CommandPath="{mk:NameOf Type={x:Type vm2:TickViewModel}, Member=Command}"
-            IsCheckedPath="{mk:NameOf Type={x:Type vm2:TickViewModel}, Member=IsChecked}"
+                DisplayMemberPath="{mk:NameOf Type={x:Type vm2:TickViewModel}, Path=Text}"
+                CommandPath="{mk:NameOf Type={x:Type vm2:TickViewModel}, Path=Command}"
+            IsCheckedPath="{mk:NameOf Type={x:Type vm2:TickViewModel}, Path=IsChecked}"
             ItemsSource="{Binding Collection}">
             </view1:ListControl>
         </UniformGrid>

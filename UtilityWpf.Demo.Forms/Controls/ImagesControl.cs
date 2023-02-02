@@ -1,4 +1,4 @@
-﻿using Utility.Common.Enum;
+﻿using Utility.Enums;
 using UtilityWpf.Controls.FileSystem;
 using UtilityWpf.Controls.Hybrid;
 

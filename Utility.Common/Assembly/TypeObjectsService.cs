@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Utility.Common;
-using UtilityInterface.NonGeneric;
+using Utility.Interfaces.NonGeneric;
 
 namespace UtilityWpf.Service
 {

@@ -2,7 +2,7 @@
 using UtilityWpf.Demo.Data.Factory;
 using UtilityWpf.Demo.Data.Model;
 
-namespace UtilityWpf.Demo.Master.ViewModel
+namespace UtilityWpf.Demo.Master.ViewModels
 {
     public class ItemsWrapViewModel
     {

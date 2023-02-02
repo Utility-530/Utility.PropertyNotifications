@@ -7,14 +7,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Update="ButtonsControl.cs">
+		<Compile Update="Deprecated\ButtonsControl.cs">
 			<DependentUpon>ButtonsControl.xaml</DependentUpon>
 		</Compile>
 		<Compile Update="CheckBoxesListControl.cs">
 			<DependentUpon>CheckBoxesListControl.xaml</DependentUpon>
-		</Compile>
-		<Compile Update="CheckBoxesComboControl.cs">
-			<DependentUpon>CheckBoxesComboControl.xaml</DependentUpon>
 		</Compile>
 		<Compile Update="GeometryButton.cs">
 			<DependentUpon>GeometryButton.xaml</DependentUpon>
@@ -39,7 +36,7 @@
 			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 			<SubType>Designer</SubType>
 		</Page>
-		<Page Update="ButtonsControl.xaml">
+		<Page Update="Deprecated\ButtonsControl.xaml">
 			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 			<SubType>Designer</SubType>
 		</Page>
@@ -75,6 +72,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Utility.WPF.Behavior\Utility.WPF.Behavior.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Themes\Utility.WPF.Themes.csproj" />
 		<ProjectReference Include="..\UtilityWpf.Controls.Extrinsic\UtilityWpf.Controls.Extrinsic.csproj" />
 	</ItemGroup>

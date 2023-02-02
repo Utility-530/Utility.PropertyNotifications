@@ -1,4 +1,5 @@
-﻿using MoreLinq;
+﻿using Evan.Wpf;
+using MoreLinq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
@@ -8,12 +9,12 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.WPF.Helper;
-using UtilityHelper;
+using Utility.Helpers;
 using UtilityWpf.Model;
 
-namespace UtilityWpf.Meta
+namespace UtilityWpf
 {
-    using resDic = UtilityWpf.DependencyPropertyFactory<ResourceDictionariesGrid>;
+    //using resDic = DependencyPropertyFactory<ResourceDictionariesGrid>;
 
     /// <summary>
     /// Master-Detail control for <see cref="UserControlsGrid"/> in <seet cref="UserControlsGrid.Assembly"></set>
@@ -93,7 +94,7 @@ namespace UtilityWpf.Meta
     public class ResourceDictionariesGrid : MasterDetailGrid
     {
         private readonly Subject<Assembly> subject = new();
-        public static readonly DependencyProperty AssemblyProperty = resDic.Register(nameof(Assembly), a => a.subject, initialValue: Assembly.GetEntryAssembly());
+        public static readonly DependencyProperty AssemblyProperty = DependencyHelper.Register(new PropertyMetadata(defaultValue: Assembly.GetEntryAssembly()));
 
         public ResourceDictionariesGrid(Assembly? assembly = null) :
             base(ResourceDictionaryKeyValue.ResourceViewTypes(assembly ?? Assembly.GetEntryAssembly()).ToArray())
@@ -208,7 +209,7 @@ namespace UtilityWpf.Meta
         }
     }
 
-    public static class Helper
+    public static class DictionaryHelper
     {
         public static Dictionary<string, T> ToDictionaryOnIndex<T>(this IEnumerable<IGrouping<string, T>> groupings)
             => groupings

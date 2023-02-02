@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Windows;
-using Utility.Common.Enum;
+using Utility.Enums;
 
 namespace UtilityWpf.Abstract
 {

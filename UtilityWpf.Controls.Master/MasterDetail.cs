@@ -4,9 +4,8 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using UtilityInterface.NonGeneric;
+using Utility.Interfaces.NonGeneric;
 using UtilityWpf.Abstract;
-using UtilityWpf.Base;
 using ItemsControl = System.Windows.Controls.ItemsControl;
 
 namespace UtilityWpf.Controls.Master
@@ -15,6 +14,9 @@ namespace UtilityWpf.Controls.Master
     using ReactiveUI;
     using System.Reactive.Subjects;
     using System.Windows.Controls.Primitives;
+    using Utility.Reactive;
+    using Utility.WPF.Abstract;
+    using Utility.WPF.Controls.Base;
     using Utility.WPF.Helper;
     using Utility.WPF.Reactive;
 
@@ -50,7 +52,7 @@ namespace UtilityWpf.Controls.Master
                     first.DataContext = second;
                 });
 
-            TransformObservable = UtilityHelperEx.ObservableHelper.ToReplaySubject(Transform(
+            TransformObservable = ObservableHelper.ToReplaySubject(Transform(
                 this.WhenAnyValue(a => a.Selector)
                     .WhereNotNull()
                     .ObserveOnDispatcher()
@@ -334,12 +336,12 @@ namespace UtilityWpf.Controls.Master
         {
             public static object? Convert(object selected, string key)
             {
-                return UtilityHelper.PropertyHelper.GetPropertyRefValue<object>(selected, key);
+                return Utility.Helpers.PropertyHelper.GetPropertyRefValue<object>(selected, key);
             }
 
             public static object ConvertBack(object selected, string k, object selectedValueOld)
             {
-                UtilityHelper.PropertyHelper.SetValue(selected, k, selectedValueOld);
+                Utility.Helpers.PropertyHelper.SetValue(selected, k, selectedValueOld);
                 return selectedValueOld;
             }
         }

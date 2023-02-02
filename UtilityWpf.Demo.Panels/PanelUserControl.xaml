@@ -210,50 +210,7 @@
                 </ItemsControl>
             </DockPanel>
         </TabItem>
-        <TabItem Header="Transition">
-            <DockPanel>
-                <ToolBar DockPanel.Dock="Top">
-                    <Button Click="Button_Click">Reset</Button>
-                    <ListBox x:Name="ListBox1">
-                        <ListBox.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal" />
-                            </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-
-                        <TextBlock Text="1" />
-                        <TextBlock Text="2" />
-                        <TextBlock Text="3" />
-                    </ListBox>
-                </ToolBar>
-                <pnls:TransitionPanel x:Name="MainTransitionPanel" CurrentValue="{Binding ElementName=ListBox1, Path=SelectedIndex}">
-                    <Button
-                        Margin="5"
-                        Click="Button_Click"
-                        Content="A">
-                        <pnls:TransitionPanel.Value>
-                            <sys:Int32>0</sys:Int32>
-                        </pnls:TransitionPanel.Value>
-                    </Button>
-                    <Button
-                        Margin="5"
-                        Click="Button_Click"
-                        Content="B">
-                        <pnls:TransitionPanel.Value>
-                            <sys:Int32>1</sys:Int32>
-                        </pnls:TransitionPanel.Value>
-                    </Button>
-                    <Button
-                        Margin="5"
-                        Click="Button_Click"
-                        Content="C">
-                        <pnls:TransitionPanel.Value>
-                            <sys:Int32>2</sys:Int32>
-                        </pnls:TransitionPanel.Value>
-                    </Button>
-                </pnls:TransitionPanel>
-            </DockPanel>
-        </TabItem>
+   
         <TabItem Header="UniformStackPanel">
             <pnls:UniformStackPanel Width="130" Height="400">
 

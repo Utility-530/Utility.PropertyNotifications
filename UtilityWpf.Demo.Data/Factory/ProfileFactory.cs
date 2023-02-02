@@ -4,6 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Media.Imaging;
 using Utility.Common.Helper;
+using Utility.Helpers;
 using UtilityWpf.Demo.Data.Model;
 
 namespace UtilityWpf.Demo.Data.Factory

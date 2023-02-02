@@ -20,8 +20,8 @@ using System.Windows.Media;
 
 namespace UtilityWpf.Controls.Objects
 {
+    using global::Utility.WPF.Converters;
     using Utility;
-    using UtilityWpf.Converter;
 
     public class ObjectControl : ContentControl, IEnableLogger
     {

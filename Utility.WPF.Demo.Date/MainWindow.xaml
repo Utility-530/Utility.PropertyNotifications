@@ -10,7 +10,7 @@
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:anim="http://schemas.utility.com/animation"
     xmlns:utl="http://schemas.utility.com/utilitywpf"
-    xmlns:viewModel="clr-namespace:Utility.WPF.Demo.Date.Infrastructure.ViewModel"
+    xmlns:viewModel="clr-namespace:Utility.WPF.Demo.Date.Infrastructure.ViewModels"
     Title="Utility Journal"
     Width="800"
     Height="850"

@@ -5,7 +5,7 @@ using System.Windows.Controls;
 namespace UtilityWpf.Panels
 {
     /// <summary>
-    /// namespace HandyControl.Controls
+    /// original namespace HandyControl.Controls
     /// </summary>
     public class HoneycombPanel : Panel
     {

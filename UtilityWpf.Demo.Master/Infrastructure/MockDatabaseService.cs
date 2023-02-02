@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UtilityInterface.NonGeneric.Data;
+using Utility.Interfaces.NonGeneric.Data;
 
 namespace UtilityWpf.Demo.Master.Infrastructure
 {

@@ -2,14 +2,14 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:view11="http://schemas.utility.com/hybrid"
                     xmlns:mk="http://schemas.utility.com/utilitywpf"
-                    xmlns:vm="clr-namespace:UtilityWpf.Demo.Common.ViewModel;assembly=UtilityWpf.Demo.Common">
+                    xmlns:vm="clr-namespace:UtilityWpf.Demo.Common.ViewModels;assembly=UtilityWpf.Demo.Common">
 
     <DataTemplate DataType="{x:Type vm:NotesViewModel}">
         <view11:MasterNotesControl
             Width="400"
             CommandParameter="{Binding NewItem}"
             ItemsSource="{Binding Collection}"
-            DisplayMemberPath="{mk:NameOf Type={x:Type vm:NoteViewModel}, Member=Text}">
+            DisplayMemberPath="{mk:NameOf Type={x:Type vm:NoteViewModel}, Path=Text}">
         </view11:MasterNotesControl>
     </DataTemplate>
 </ResourceDictionary>

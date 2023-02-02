@@ -7,9 +7,9 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using UtilityWpf.Demo.Data.Model;
-using static UtilityWpf.Controls.Chart.ViewModel.MultiTimeModel;
+using static UtilityWpf.Controls.Chart.ViewModels.MultiTimeModel;
 
-namespace UtilityWpf.Chart.Demo.ViewModel
+namespace UtilityWpf.Chart.Demo.ViewModels
 {
     internal class ChartDetailsViewModel
     {

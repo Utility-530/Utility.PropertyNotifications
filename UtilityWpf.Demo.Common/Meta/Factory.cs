@@ -3,9 +3,8 @@ using Splat;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Utility.Common.Helper;
-using UtilityHelper;
-using UtilityWpf.Demo.Common.ViewModel;
+using Utility.Helpers;
+using UtilityWpf.Demo.Common.ViewModels;
 
 namespace UtilityWpf.Demo.Common.Meta
 {
@@ -65,8 +64,8 @@ namespace UtilityWpf.Demo.Common.Meta
             {
                 Age = Statics.Random.Next(0, 100),
                 Id = Guid.NewGuid(),
-                Name = RandomHelper.NextWord(rand: Statics.Random),
-                Surname = RandomHelper.NextWord(rand: Statics.Random)
+                Name = Statics.Random.NextWord(),
+                Surname = Statics.Random.NextWord()
             };
         }
     }

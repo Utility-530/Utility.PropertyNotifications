@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="ColorCode.Core" Version="2.0.14" />
+		<PackageReference Include="Evan.Wpf" Version="1.2.0" />
+		<PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.1" />
+		<PackageReference Include="AdonisUI.NET5" Version="1.17.1" />
+		<PackageReference Include="FluentWPF" Version="0.10.2" />
+		<PackageReference Include="LambdaConverters" Version="4.0.0" />
+		<PackageReference Include="MathConverter" Version="2.1.0-alpha0001" />
+		<PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+		<PackageReference Include="ControlzEx" Version="6.0.0-alpha0218" />
+		<PackageReference Include="MaterialDesignThemes" Version="4.7.1" />
+		<PackageReference Include="MaterialDesignExtensions" Version="4.0.0-a02" />
+		<PackageReference Include="HandyControl" Version="3.4.0" />
+		<PackageReference Include="LambdaConverters" Version="4.0.0" />
+		<PackageReference Include="WPFTransitionals" Version="1.1.0" />
+	</ItemGroup>
+
+
+</Project>

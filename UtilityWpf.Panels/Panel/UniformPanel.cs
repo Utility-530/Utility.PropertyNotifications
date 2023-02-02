@@ -79,7 +79,10 @@
             {
                 child.Measure(individualSize);
             }
-
+            if (double.IsInfinity(availableSize.Height) || double.IsInfinity(availableSize.Width))
+            {
+                return new Size(0, 0);
+            }
             return availableSize;
         }
 

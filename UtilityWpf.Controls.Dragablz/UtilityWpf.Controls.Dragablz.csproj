@@ -8,6 +8,7 @@
   <ItemGroup>
 	<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
 	<ProjectReference Include="..\Utility.WPF.Behavior\Utility.WPF.Behavior.csproj" />
+	<ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
 	<ProjectReference Include="..\UtilityWpf\UtilityWpf.csproj" />
   </ItemGroup> 
   

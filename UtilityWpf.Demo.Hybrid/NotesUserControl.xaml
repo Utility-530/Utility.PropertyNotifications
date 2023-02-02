@@ -6,10 +6,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:view="http://schemas.utility.com/master"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:mk="clr-namespace:UtilityWpf.Markup;assembly=UtilityWpf"
+    xmlns:mk="http://schemas.utility.com/utilitywpf"
     xmlns:view1="http://schemas.utility.com/dragablz"
     xmlns:view2="http://schemas.utility.com/hybrid"
-    xmlns:vm21="clr-namespace:UtilityWpf.Demo.Common.ViewModel;assembly=UtilityWpf.Demo.Common"
+    xmlns:vm21="clr-namespace:UtilityWpf.Demo.Common.ViewModels;assembly=UtilityWpf.Demo.Common"
     xmlns:utilitywpf="http://schemas.utility.com/utilitywpf"
     d:DesignHeight="450"
     d:Background="White"
@@ -46,12 +46,12 @@
             CommandParameter="{Binding NewItem}"
             ItemsSource="{Binding Collection}"
             Change="MasterNotesControl_Change"
-            DisplayMemberPath="{mk:NameOf Type={x:Type vm21:NoteViewModel}, Member=Text}">
+            DisplayMemberPath="{mk:NameOf Type={x:Type vm21:NoteViewModel}, Path=Text}">
             </view2:MasterNotesControl>
 
             <view1:NotesControl
             ItemsSource="{Binding Collection}"
-            DisplayMemberPath="{mk:NameOf Type={x:Type vm21:NoteViewModel}, Member=Text}">
+            DisplayMemberPath="{mk:NameOf Type={x:Type vm21:NoteViewModel}, Path=Text}">
             </view1:NotesControl>
         </UniformGrid>
 
@@ -94,7 +94,7 @@
             CommandParameter="{Binding NewItem}"
             ItemsSource="{Binding Collection}"
             Change="MasterNotesControl_Change"
-            DisplayMemberPath="{mk:NameOf Type={x:Type vm21:NoteViewModel}, Member=Text}">
+            DisplayMemberPath="{mk:NameOf Type={x:Type vm21:NoteViewModel}, Path=Text}">
             </view2:MasterNotesControl>
         </UniformGrid>
     </UniformGrid>

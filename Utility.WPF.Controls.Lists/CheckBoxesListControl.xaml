@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:utl="http://schemas.utility.com/utilitywpf"
+                    xmlns:local="clr-namespace:Utility.WPF.Controls.Lists">
+
+    <ResourceDictionary.MergedDictionaries>
+        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Lists;component/Themes/Styles.xaml"></utl:SharedResourceDictionary>
+        <utl:SharedResourceDictionary Source="/Utility.WPF.Themes;component/Themes/CheckBox.xaml"></utl:SharedResourceDictionary>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="{x:Type local:CheckBoxesListControl}" BasedOn="{StaticResource GenericListBox}">
+        <Setter Property="Arrangement" Value="Custom"></Setter>
+        <Setter Property="Arrangement" Value="Custom"></Setter>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource OtherStyle}" />
+        <!--<Setter Property="ItemTemplateSelector" Value="{StaticResource CheckBoxesDataTemplateSelector}" />-->
+    </Style>
+
+
+</ResourceDictionary>

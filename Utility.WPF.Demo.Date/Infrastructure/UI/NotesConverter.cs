@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using Utility.ViewModels;
 using Utility.WPF.Demo.Date.Infrastructure.Repository;
 
 namespace Utility.WPF.Demo.Date
@@ -22,13 +23,13 @@ namespace Utility.WPF.Demo.Date
 
             App.CurrentDate = date;
 
-            var notesViewModel = new NotesViewModel();
+            var notesViewModel = new NotesViewModel("Notes");
 
             var _ = NotesRepository.Instance.FindAllAsync(date)
                 .ToObservable()
                 .Subscribe(notes =>
                 {
-                    notesViewModel.Replace(notes, notes.Last());
+                    notesViewModel.Replace(notes.ToArray(), notes.Last());
                 });
 
             return notesViewModel;

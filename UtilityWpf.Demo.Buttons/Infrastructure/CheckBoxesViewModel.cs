@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Utility.ViewModel;
+using Utility.ViewModels;
 
 namespace UtilityWpf.Demo.Buttons
 {

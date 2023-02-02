@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:command="clr-namespace:UtilityWpf;assembly=UtilityWpf"
     xmlns:command1="clr-namespace:UtilityWpf.Command;assembly=UtilityWpf"
-    xmlns:conv="clr-namespace:UtilityWpf.Converter;assembly=UtilityWpf"
+    xmlns:conv="clr-namespace:Utility.WPF.Converters;assembly=UtilityWpf"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local="clr-namespace:UtilityWpf.Demo.Controls"

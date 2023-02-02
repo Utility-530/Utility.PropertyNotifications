@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="clr-namespace:UtilityWpf.Chart.Demo.ViewModel"
+    xmlns:vm="clr-namespace:UtilityWpf.Chart.Demo.ViewModels"
     xmlns:util="http://schemas.utility.com/utilitywpf"
     xmlns:chart="http://schemas.utility.com/chart"
     xmlns:drg="http://schemas.utility.com/dragablz"

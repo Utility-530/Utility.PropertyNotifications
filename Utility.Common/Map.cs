@@ -16,7 +16,6 @@ namespace Utility.Common
 
         public static explicit operator Map<T, TR>(T b)
         {
-
             var types = (typeof(T), typeof(TR));
             if (types == (typeof(string), typeof(System.Version)))
             {

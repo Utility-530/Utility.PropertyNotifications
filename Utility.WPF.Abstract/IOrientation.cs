@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace UtilityWpf.Abstract;
+namespace Utility.WPF.Abstract;
 
 public interface IOrientation
 {

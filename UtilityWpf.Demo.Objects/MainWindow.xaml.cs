@@ -11,5 +11,14 @@ namespace UtilityWpf.Demo.Objects
         {
             InitializeComponent();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (Clipboard.ContainsText(TextDataFormat.Text))
+            {
+                string clipboardText = Clipboard.GetText(TextDataFormat.Text);
+                JsonControl.Json = clipboardText;
+            }
+        }
     }
 }

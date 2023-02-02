@@ -4,14 +4,13 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using UtilityEnum;
-using UtilityWpf.Base;
+using Utility.Enums;
+using Utility.WPF.Controls.Base;
 using UtilityWpf.Controls.Infrastructure;
 using Utility.WPF.Reactive;
 
 namespace UtilityWpf.Controls
 {
-    using Mixins;
     using Utility.WPF.Abstract;
 
     public class TimeSpanControl : Controlx
@@ -19,7 +18,6 @@ namespace UtilityWpf.Controls
         public static readonly RoutedEvent ValueChangedEvent = EventManager.RegisterRoutedEvent("ValueChanged", RoutingStrategy.Bubble, typeof(RoutedEventHandler<(decimal value, TimeInterval timeInterval)>), typeof(TimeSpanControl));
 
         public static DependencyProperty TimeIntervalProperty = DependencyHelper.Register<TimeInterval>();
-
         public static DependencyProperty ValueProperty = DependencyHelper.Register<decimal>();
 
         static TimeSpanControl()
@@ -53,7 +51,8 @@ namespace UtilityWpf.Controls
                     RaiseEvent(new RoutedEventArgs<(decimal value, TimeInterval timeInterval)>(a, ValueChangedEvent));
                 });
 
-            this.Control<SpinnerControl>().CombineLatest(this.Observable(ValueProperty.Name).Cast<decimal>().StartWith(1M).DistinctUntilChanged(), (a, b) => (a, b))
+            this.Control<SpinnerControl>()
+                .CombineLatest(this.Observable(ValueProperty.Name).Cast<decimal>().StartWith(1M).DistinctUntilChanged(), (a, b) => (a, b))
     .Subscribe(a =>
     {
         a.a.Value = a.b;

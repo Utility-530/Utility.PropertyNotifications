@@ -2,7 +2,7 @@
 using Splat.Autofac;
 using System.Windows;
 using Utility.Common;
-using UtilityWpf.Meta;
+using UtilityWpf;
 
 namespace Utility.WPF.Demo.Adorners
 {

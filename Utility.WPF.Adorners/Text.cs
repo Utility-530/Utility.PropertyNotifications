@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Xml.Linq;
 
 public enum Place
 {
@@ -15,22 +16,6 @@ public enum Place
 
 public class Text : Adorner
 {
-    //public static readonly DependencyProperty KeyProperty = DependencyProperty.RegisterAttached("Key", typeof(object), typeof(Text), new PropertyMetadata(null, PropertyChanged));
-
-    //public static string GetKey(DependencyObject d)
-    //{
-    //    return (string)d.GetValue(KeyProperty);
-    //}
-
-    //public static void SetKey(DependencyObject d, object value)
-    //{
-    //    d.SetValue(KeyProperty, value);
-    //}
-
-    private static void PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {
-    }
-
     public static readonly DependencyProperty TextProperty = DependencyProperty.RegisterAttached(
         "Text", typeof(string), typeof(Text), new FrameworkPropertyMetadata(string.Empty, OnChanged));
 
@@ -227,7 +212,7 @@ public class Text : Adorner
 
     #endregion Attached Property Getters and Setters
 
-    public static void OnChanged2(DependencyObject sender, string sText, List<Guid> guids, Func<FrameworkElement, string, Text> textFactory)
+    public static void AddAdorner(DependencyObject sender, string sText, List<Guid> guids, Func<FrameworkElement, string, Text> textFactory)
     {
         if (sender is not FrameworkElement adornedElement)
             throw new Exception("s42df234 dfg f,l,lgd");
@@ -352,7 +337,7 @@ public class Text : Adorner
                         }
 
                         left = -formattedText.Width - adornedElement.BorderThickness.Left - adornedElement.Padding.Left - 2.0;
-                        top = (adornedElement.Height - (formattedText?.Height ?? 0)) / 2d;
+                        top = HeightDifference(adornedElement, formattedText) / 2d;
                         drawingContext.DrawText(formattedText, new Point(left, top));
                         break;
                     }
@@ -363,8 +348,8 @@ public class Text : Adorner
                             throw new Exception("safasd Not Supported");
                         }
 
-                        left = +adornedElement.Width + adornedElement.BorderThickness.Left + adornedElement.Padding.Left + 2.0;
-                        top = (adornedElement.Height - (formattedText?.Height ?? 0)) / 2d;
+                        left = adornedElement.Width + adornedElement.BorderThickness.Left + adornedElement.Padding.Left + 2.0;
+                        top = HeightDifference(adornedElement, formattedText) / 2d;
                         drawingContext.DrawText(formattedText, new Point(left, top));
                         break;
                     }
@@ -383,22 +368,24 @@ public class Text : Adorner
                     }
                 case Dock.Bottom:
                     {
-                        drawingContext.DrawText(formattedText, new Point(2, +2 + element.Height));
+                        drawingContext.DrawText(formattedText, new Point(2, 2 + element.Height));
                         break;
                     }
                 case Dock.Left:
                     {
-                        drawingContext.DrawText(formattedText, new Point(-formattedText.Width - 2.0, (element.Height - (formattedText?.Height ?? 0)) / 2d));
+                        drawingContext.DrawText(formattedText, new Point(-formattedText.Width - 2.0, HeightDifference(element, formattedText) / 2d));
                         break;
                     }
                 case Dock.Right:
                     {
-                        drawingContext.DrawText(formattedText, new Point(element.Width + 2.0, (element.Height - (formattedText?.Height ?? 0)) / 2d));
+                        drawingContext.DrawText(formattedText, new Point(element.Width + 2.0, HeightDifference(element, formattedText) / 2d));
                         break;
                     }
             }
         }
     }
+
+    public const int MinimumWidth = 4;
 
     [Obsolete]
     private FormattedText? FormattedTextForFrameworkElement(string placeholderText)
@@ -407,7 +394,7 @@ public class Text : Adorner
         Brush foreground = brush ?? (Brush?)AdornedElement.GetValue(Control.ForegroundProperty) ?? SystemColors.GrayTextBrush.Clone();
         Size size = AdornedElement.RenderSize;
         double maxHeight = size.Height;
-        double maxWidth = size.Width - 4.0;
+        double maxWidth = size.Width - MinimumWidth;
         if (maxHeight <= 0 || maxWidth <= 0)
             return default;
 
@@ -437,7 +424,7 @@ public class Text : Adorner
         if (maxHeight <= 0 || maxWidth <= 0)
             return default;
 
-        Typeface typeface = new Typeface(adornedElement.FontFamily, FontStyles.Normal, adornedElement.FontWeight, adornedElement.FontStretch);
+        Typeface typeface = new Typeface(new FontFamily("Consolas"), FontStyles.Normal, adornedElement.FontWeight, adornedElement.FontStretch);
         return new FormattedText(
         placeholderText,
         CultureInfo.CurrentCulture,
@@ -508,11 +495,11 @@ public class Text : Adorner
                             {
                                 // Somehow everything got drawn reflected. Add a transform to correct.
                                 drawingContext.PushTransform(new ScaleTransform(-1.0, 1.0, RenderSize.Width / 2.0, 0.0));
-                                drawingContext.DrawText(formattedText, new Point(left, top + adornedElement.Height - formattedText.Height));
+                                drawingContext.DrawText(formattedText, new Point(left, top + HeightDifference(adornedElement, formattedText)));
                                 drawingContext.Pop();
                             }
                             else
-                                drawingContext.DrawText(formattedText, new Point(left, top + adornedElement.Height - formattedText.Height));
+                                drawingContext.DrawText(formattedText, new Point(left, top + HeightDifference(adornedElement, formattedText)));
                         break;
                     }
 
@@ -524,7 +511,7 @@ public class Text : Adorner
                         }
 
                         left = 2;
-                        top = (adornedElement.Height - formattedText?.Height ?? 0) / 2d;
+                        top = HeightDifference(adornedElement, formattedText) / 2d;
                         drawingContext.DrawText(formattedText, new Point(left, top));
                         break;
                     }
@@ -535,8 +522,8 @@ public class Text : Adorner
                             throw new Exception("safasd Not Supported");
                         }
 
-                        left = +adornedElement.Width + adornedElement.BorderThickness.Left + adornedElement.Padding.Left - 2.0 - formattedText.Width;
-                        top = (adornedElement.Height - formattedText?.Height ?? 0) / 2d;
+                        left = WidthDifference(adornedElement, formattedText) + adornedElement.BorderThickness.Left + adornedElement.Padding.Left - 2.0;
+                        top = HeightDifference(adornedElement, formattedText) / 2d;
                         drawingContext.DrawText(formattedText, new Point(left, top));
                         break;
                     }
@@ -544,35 +531,66 @@ public class Text : Adorner
         }
         else if (AdornedElement is FrameworkElement element)
         {
+            double margin = 2;
             isPlaceholderVisible = true;
+            if (AdornedElement.RenderSize.Height == 0 || AdornedElement.RenderSize.Width < (double)Text.MinimumWidth)
+            {
+                return;
+            }
             var formattedText = FormattedTextForFrameworkElement(placeholderText);
-
+            if (formattedText == null)
+                throw new Exception("t34 dfbvfdghbgfd");
             switch (position ?? GetPosition(element))
             {
                 case Dock.Top:
                     {
-                        drawingContext.DrawText(formattedText, new Point(2, 2));
+                        drawingContext.DrawText(formattedText, new Point(margin, margin));
                         break;
                     }
                 case Dock.Bottom:
                     {
-                        drawingContext.DrawText(formattedText, new Point(2, element.Height - formattedText.Height));
+                        drawingContext.DrawText(formattedText, new Point(margin, HeightDifference(element, formattedText)));
                         break;
                     }
                 case Dock.Left:
                     {
-                        drawingContext.DrawText(formattedText, new Point(2.0, (element.Height - formattedText.Height) / 2d));
+                        drawingContext.DrawText(formattedText, new Point(margin, HeightDifference(element, formattedText) / 2d));
                         break;
                     }
                 case Dock.Right:
                     {
-                        drawingContext.DrawText(formattedText, new Point(element.Width - formattedText.Width - 2.0, (element.Height - formattedText.Height) / 2d));
+                        drawingContext.DrawText(formattedText, new Point(WidthDifference(element, formattedText) - margin, HeightDifference(element, formattedText) / 2d));
                         break;
                     }
             }
         }
+
+
     }
 
+    double HeightDifference(FrameworkElement element, FormattedText formattedText)
+    {
+        if (double.IsNaN(element.Height) || element.Height == 0)
+        {
+            if (double.IsNaN(element.ActualHeight) || element.ActualHeight == 0)
+                return formattedText.Height;
+            else
+                return element.ActualHeight - formattedText.Height;
+        }
+        return element.Height - formattedText.Height;
+    }
+
+    double WidthDifference(FrameworkElement element, FormattedText formattedText)
+    {
+        if (double.IsNaN(element.Width) || element.Width == 0)
+        {
+            if (double.IsNaN(element.ActualWidth) || element.ActualWidth == 0)
+                return formattedText.Width;
+            else
+                return element.ActualWidth - formattedText.Width;
+        }
+        return element.Width - formattedText.Width;
+    }
     /// <returns>
     ///   the computed text alignment of the adorned element.
     /// </returns>

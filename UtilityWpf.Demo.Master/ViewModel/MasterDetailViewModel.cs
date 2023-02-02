@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Utility.Service;
-using UtilityWpf.Demo.Common.ViewModel;
+using UtilityWpf.Demo.Common.ViewModels;
 using UtilityWpf.Demo.Data.Factory;
 using UtilityWpf.Demo.Master.Infrastructure;
-using mdvm = Utility.ViewModel.MasterDetailViewModel;
+using mdvm = Utility.ViewModels.MasterDetailViewModel;
 
-namespace UtilityWpf.Demo.Master.ViewModel
+namespace UtilityWpf.Demo.Master.ViewModels
 {
     public class MasterDetailViewModel : mdvm
     {

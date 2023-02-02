@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:infra1="http://schemas.utility.com/panels"
     xmlns:local="clr-namespace:UtilityWpf.Controls"
-    xmlns:converter="clr-namespace:UtilityWpf.Converter;assembly=UtilityWpf">
+    xmlns:converter="http://schemas.utility.com/utilitywpf">
 
     <ResourceDictionary.MergedDictionaries />
     <converter:ThicknessConverter x:Key="ThicknessConverter"></converter:ThicknessConverter>

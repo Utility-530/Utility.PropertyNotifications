@@ -1,13 +1,12 @@
-﻿using UtilityWpf.Property;
-
-namespace Utility.ViewModel
+﻿namespace Utility.ViewModels
 {
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+    using Utility.Common.Models;
 
-    public class ObservablePairCollection<TKey, TValue> : ObservableCollection<ReactivePair<TKey, TValue>>
+    public class ObservablePairCollection<TKey, TValue> : ObservableCollection<ChangePair<TKey, TValue>>
     {
         public EventHandler KeyValueChanged;
 
@@ -15,12 +14,12 @@ namespace Utility.ViewModel
         {
         }
 
-        public ObservablePairCollection(IEnumerable<ReactivePair<TKey, TValue>> enumerable)
+        public ObservablePairCollection(IEnumerable<ChangePair<TKey, TValue>> enumerable)
             : base(enumerable)
         {
         }
 
-        public ObservablePairCollection(List<ReactivePair<TKey, TValue>> list)
+        public ObservablePairCollection(List<ChangePair<TKey, TValue>> list)
             : base(list)
         {
         }
@@ -35,7 +34,7 @@ namespace Utility.ViewModel
 
         public void Add(TKey key, TValue value)
         {
-            var pair = new ReactivePair<TKey, TValue>(key, value);
+            var pair = new ChangePair<TKey, TValue>(key, value);
             pair.PropertyChanged += (a, b) => Pair_PropertyChanged(key);
             Add(pair);
         }

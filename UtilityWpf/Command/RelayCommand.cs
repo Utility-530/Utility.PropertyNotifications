@@ -55,17 +55,17 @@ namespace UtilityWpf.Command
         /// <summary>
         /// Creates a new command that can always execute.
         /// </summary>
-        /// <param name="execute">The UtilityEnum.Execution logic.</param>
+        /// <param name="execute">The Utility.Enums.Execution logic.</param>
         public RelayCommand(Action<T?> execute)
             : this(execute, null)
         {
         }
 
         /// <summary>
-        /// Creates a new command with conditional UtilityEnum.Execution.
+        /// Creates a new command with conditional Utility.Enums.Execution.
         /// </summary>
-        /// <param name="execute">The UtilityEnum.Execution logic.</param>
-        /// <param name="canExecute">The UtilityEnum.Execution status logic.</param>
+        /// <param name="execute">The Utility.Enums.Execution logic.</param>
+        /// <param name="canExecute">The Utility.Enums.Execution status logic.</param>
         public RelayCommand(Action<T?>? execute, Predicate<T?>? canExecute)
         {
             this.execute = execute ?? throw new ArgumentNullException(nameof(execute));

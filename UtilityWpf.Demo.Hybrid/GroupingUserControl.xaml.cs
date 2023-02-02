@@ -4,9 +4,9 @@ using System.Reactive.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Utility.Common;
-using Utility.Common.Enum;
 using Utility.Common.EventArgs;
-using Utility.ViewModel;
+using Utility.Enums;
+using Utility.ViewModels;
 using UtilityWpf.Demo.Data.Factory;
 using UtilityWpf.Demo.Data.Model;
 using sim = Utility.Service.FilterDictionaryService<UtilityWpf.Demo.Data.Model.Stock>;
@@ -33,8 +33,7 @@ namespace UtilityWpf.Demo.Hybrid
         public GroupingViewModel()
         {
             var aa = new sim(a => a.Key);
-            CollectionViewModel = new(StockObservableFactory
-                .GenerateChangeSet(), aa, InitialPropertyName);
+            CollectionViewModel = new(StockObservableFactory.GenerateChangeSet(), aa, InitialPropertyName);
             selected = CollectionViewModel.Properties.First();
 
             this.WhenAnyValue(a => a.Selected)

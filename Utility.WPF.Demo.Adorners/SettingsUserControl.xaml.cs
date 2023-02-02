@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using Utility.WPF.Adorners.Infrastructure;
+using Utility.WPF.Controls.Adorners;
 using Utility.WPF.Demo.Adorners.Infrastructure;
-using UtilityWpf.Controls.Meta;
 using UtilityWpf.Demo.Data.Factory;
 
 namespace Utility.WPF.Demo.Adorners

@@ -6,8 +6,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Utility.Common;
-using UtilityHelper;
-using UtilityInterface.NonGeneric.Data;
+using Utility.Helpers;
+using Utility.Interfaces.NonGeneric.Data;
 using static Utility.Persist.LiteDbRepository;
 
 namespace Utility.Persist

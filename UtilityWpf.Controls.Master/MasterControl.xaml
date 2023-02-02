@@ -4,8 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:UtilityWpf.Controls.Master"
     xmlns:local1="http://schemas.utility.com/utilitywpf"
-    xmlns:base="clr-namespace:UtilityWpf.Base;assembly=UtilityWpf"
-    xmlns:wpf="clr-namespace:PropertyTools.Wpf;assembly=UtilityWpf">
+    xmlns:wpf1="clr-namespace:PropertyTools.Wpf;assembly=Utility.WPF.Controls.Base">
 
     <!--<ResourceDictionary.MergedDictionaries>
         <utilitywpf:SharedResourceDictionary Source="/UtilityWpf.Controls.Master;component/DoubleContentControl.xaml"></utilitywpf:SharedResourceDictionary>
@@ -17,7 +16,7 @@
     <local1:IsLastItemSelectedConverter x:Key="IsLastItemSelected" Invert="True" />
 
     <Style TargetType="{x:Type local:MasterControl}"
-           BasedOn="{StaticResource {x:Type base:DoubleContentControl}}">
+           BasedOn="{StaticResource {x:Type local1:DoubleContentControl}}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:MasterControl}">
@@ -77,9 +76,9 @@
                                 </WrapPanel>
                             </ContentPresenter.Content>
                         </ContentPresenter>
-                        <wpf:DockPanelSplitter x:Name="PART_DockPanelSplitter"
+                        <wpf1:DockPanelSplitter x:Name="PART_DockPanelSplitter"
                                                BorderThickness="2"
-                                               BorderBrush="WhiteSmoke"></wpf:DockPanelSplitter>
+                                               BorderBrush="WhiteSmoke"></wpf1:DockPanelSplitter>
                         <ContentPresenter x:Name="PART_ContentPresenter" />
                     </DockPanel>
                 </ControlTemplate>

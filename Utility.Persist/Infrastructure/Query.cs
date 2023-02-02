@@ -1,4 +1,4 @@
-﻿using UtilityInterface.NonGeneric.Data;
+﻿using Utility.Interfaces.NonGeneric.Data;
 
 namespace Utility.Persist.Infrastructure
 {

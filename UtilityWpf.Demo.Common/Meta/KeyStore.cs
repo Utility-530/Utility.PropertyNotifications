@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using UtilityHelper;
+using Utility.Helpers;
 
 namespace UtilityWpf.Demo.Common.Meta
 {
@@ -10,7 +10,7 @@ namespace UtilityWpf.Demo.Common.Meta
         public string CreateNewKey(string word = "")
         {
             while (string.IsNullOrEmpty(word) || Keys.Add(word) == false)
-                word = RandomHelper.NextWord(5, Statics.Random);
+                word = RandomHelper.NextWord(Statics.Random, 5);
             return word;
         }
     }

@@ -1,15 +1,16 @@
-﻿using System;
+﻿using NetFabric.Hyperlinq;
+using ReactiveUI;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
-using ReactiveUI;
 using Utility.Common;
-using Utility.Common.Helper;
+using Utility.Helpers.Ex;
 using Utility.WPF.Demo.Date.Infrastructure.Entity;
-using Utility.WPF.Demo.Date.Infrastructure.ViewModel;
+using Utility.WPF.Demo.Date.Infrastructure.ViewModels;
 
 namespace Utility.WPF.Demo.Date.Infrastructure.Repository
 {
@@ -19,7 +20,8 @@ namespace Utility.WPF.Demo.Date.Infrastructure.Repository
 
         public NoteViewModel FindMostRecent(DateTime date)
         {
-            NoteViewModel noteViewModel = new() { Date = date };
+            var key = new string(new[] { (char)random.Next(0, 100) });
+            NoteViewModel noteViewModel = new(key) { Date = date };
 
             if (notes.ContainsKey(date.Date) == false)
             {
@@ -53,6 +55,8 @@ namespace Utility.WPF.Demo.Date.Infrastructure.Repository
             return noteViewModel;
         }
 
+        private static Random random = new();
+
         public async Task<ObservableCollection<NoteViewModel>> FindAllAsync(DateTime date)
         {
             if (notes.ContainsKey(date))
@@ -71,7 +75,8 @@ namespace Utility.WPF.Demo.Date.Infrastructure.Repository
                 {
                     if (list == null || list.Count == 0)
                     {
-                        var noteViewModel = new NoteViewModel { Date = date };
+                        var key = new string(new[] { (char)random.Next(0, 100) });
+                        var noteViewModel = new NoteViewModel(key) { Date = date };
                         notes[date].InsertInOrderIfMissing(noteViewModel);
                     }
                     else
@@ -82,7 +87,6 @@ namespace Utility.WPF.Demo.Date.Infrastructure.Repository
 
                     return notes[date];
                 }).ToTask();
-
         }
 
         public async Task<NoteEntity?> Save(DateTime date)

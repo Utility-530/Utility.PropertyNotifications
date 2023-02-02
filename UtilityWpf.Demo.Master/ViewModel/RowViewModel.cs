@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xaml.Behaviors.Core;
-using Utility.Common.Enum;
 using Utility.Common.EventArgs;
+using Utility.Enums;
 
-namespace UtilityWpf.Demo.Master.ViewModel
+namespace UtilityWpf.Demo.Master.ViewModels
 {
-    public class RowViewModel : UtilityWpf.Demo.Common.ViewModel.RowBaseViewModel
+    public class RowViewModel : UtilityWpf.Demo.Common.ViewModels.RowBaseViewModel
     {
         public RowViewModel()
         {
@@ -14,7 +14,7 @@ namespace UtilityWpf.Demo.Master.ViewModel
                 {
                     case CollectionItemEventArgs { EventType: EventType.Add }:
                         if (NewItem.MoveNext())
-                            Data.Add(NewItem.Current as Common.ViewModel.ElementViewModel);
+                            Data.Add(NewItem.Current as Common.ViewModels.ElementViewModel);
                         break;
 
                     case MovementEventArgs eventArgs:

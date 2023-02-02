@@ -1,92 +1,104 @@
-﻿using Evan.Wpf;
+﻿using DynamicData;
+using Evan.Wpf;
 using FreeSql;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Windows.Data;
-using System.Windows;
-using Utility.Common;
-using Utility.Persist;
-using UtilityWpf.Model;
-using System.Reactive;
-using System.ComponentModel;
 using System.Reactive.Linq;
-using UtilityInterface.NonGeneric;
-using System.Windows.Controls;
 using System.Reactive.Threading.Tasks;
+using System.Reflection;
+using System.Windows;
+using System.Windows.Controls;
+using Utility.Common;
 using Utility.Common.Model;
+using Utility.Enums;
+using Utility.Persist;
+using Utility.ViewModels.Filters;
+using Utility.Interfaces.NonGeneric;
+using UtilityWpf.Model;
 
-namespace UtilityWpf.Controls.Meta.ViewModel
+namespace UtilityWpf.Controls.Meta.ViewModels
 {
+    public class StringMatchFilter : StringMatchFilter<AssemblyKeyValue>
+    {
+    }
+
+    public class AssemblyTypeFilter : PropertyFilter<AssemblyKeyValue>
+    {
+        public AssemblyTypeFilter() : base(nameof(AssemblyKeyValue.CategoryKey))
+        {
+        }
+
+        protected override object Set(string value)
+        {
+            return Enum.Parse(typeof(AssemblyType), value);
+        }
+    }
+
     internal class AssemblyComboBoxViewModel
     {
         public static readonly DependencyProperty DemoTypeProperty = DependencyHelper.Register();
 
-        public Connection<DemoType, ICollectionView> demoTypeViewModel;
-        public Connection<(object keyValue, DemoType demoType), object> selectedItemViewModel;
-        public Connection<(Buttons.Infrastructure.CheckedRoutedEventArgs, DemoType), Unit> checkedViewModel;
+        public OutputNode<FilteredCustomCheckBoxesViewModel> demoTypeViewModel;
+        public FunctionNode<object, object> selectedItemViewModel;
+        //public FunctionNode<(CheckedRoutedEventArgs, AssemblyType), Unit> checkedViewModel;
 
         public AssemblyComboBoxViewModel()
         {
             FreeSqlFactory.InitialiseSQLite();
 
-            demoTypeViewModel = Connection<DemoType, ICollectionView>.Create(@in =>
+            demoTypeViewModel = OutputNode<FilteredCustomCheckBoxesViewModel>.Create(() =>
+            {
+                var assemblies = FindAssemblies().Select(a => new AssemblyKeyValue(a.Item1, a.Item2));
+                var filters = new Filter[] { new StringMatchFilter(), new AssemblyTypeFilter() };
 
-              @in
-                .Select(demoType =>
+                return UpdateAndCreate(assemblies, filters);
+
+                static IObservable<FilteredCustomCheckBoxesViewModel> UpdateAndCreate(IEnumerable<AssemblyKeyValue> assemblies, Filter[] filters)
                 {
-                    return demoType switch
+                    return Update(assemblies.ToArray())
+                    .ToObservable()
+                    .Select(a =>
                     {
-                        DemoType.UserControl => (demoType, collection: FindDemoAppAssemblies()),
-                        DemoType.ResourceDictionary => (demoType, collection: FindResourceDictionaryAssemblies()),
-                        _ => throw new Exception("££!!!!$$4"),
-                    };
-                })
-                .Select(async tuple =>
+                        var viewModel = new FilteredCustomCheckBoxesViewModel(
+                            a.ToObservable().ToObservableChangeSet(),
+                            filters.ToObservable().ToObservableChangeSet());
+                        return viewModel;
+                        //var view = CollectionViewSource.GetDefaultView(array);
+                        //view.GroupDescriptions.Clear();
+                        //view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Model.KeyValue.GroupKey)));
+                    });
+                }
+            });
+            //.Select(demoType =>
+            //{
+            //    return demoType switch
+            //    {
+            //        AssemblyType.UserControl => (demoType, collection: FindDemoAppAssemblies()),
+            //        AssemblyType.ResourceDictionary => (demoType, collection: FindResourceDictionaryAssemblies()),
+            //        _ => throw new Exception("££!!!!$$4"),
+            //    };
+            //})
+
+            selectedItemViewModel = FunctionNode<object, object>.Create(@in =>
+            {
+                return @in
+                    .OfType<AssemblyKeyValue>()
+                    .Select(a => UpdateSelected(a))
+                    .SelectMany(a => a.ToObservable());
+
+                static async System.Threading.Tasks.Task<AssemblyKeyValue> UpdateSelected(AssemblyKeyValue item)
                 {
-                    //    var array2 = a.Select(a => new AssemblyKeyValue(a))
-                    //.Where(a => a.Key != null)
-                    //.Select(a => A<AssemblyEntity>.Order(a.Key))
-                    //.ToArray();
-
-                    AssemblyKeyValue[] array = ToKeyValues(tuple.collection);
-                    var items = await AssemblyEntity.WhereIf(true, a => a.Group == tuple.demoType).ToListAsync();
-                    for (int i = 0; i < array.Length; i++)
-                    {
-                        foreach (var item in items)
-                            if (array[i].Key == item.Key)
-                            {
-                                array[i].IsSelected = item.IsSelected;
-                                array[i].IsChecked = item.IsChecked;
-                            }
-                    }
-
-                    var view = CollectionViewSource.GetDefaultView(array);
-                    //view.GroupDescriptions.Clear();
-                    //view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Model.KeyValue.GroupKey)));
-                    return view;
-                    //SelectedIndex = 0;
-                })
-                .SelectMany(a => a.ToObservable())
-            );
-
-            selectedItemViewModel = Connection<(object keyValue, DemoType demoType), object>.Create(@in =>
-            @in
-                .Select(async a =>
-                {
-                    var item = (AssemblyKeyValue)a.keyValue;
-
                     if (item.Key != null)
                     {
-                        var match = await AssemblyEntity.Where(a => a.Key == item.Key).FirstAsync();
+                        var match = await ViewModelEntity.Where(a => a.Key == item.Key).FirstAsync();
                         if (match == null)
                         {
                             //repo.Add(new AssemblyRecord(item.Key, DateTime.Now));
-                            var assemblyEntity = new AssemblyEntity { Key = item.Key, IsChecked = true, Group = a.demoType };
-                            await assemblyEntity.InsertAsync();
-                            SelectAndUpdateOtherSelections(assemblyEntity);
+                            var viewModelEntity = new ViewModelEntity { Key = item.Key, IsChecked = true };
+                            await viewModelEntity.InsertAsync();
+                            SelectAndUpdateOtherSelections(viewModelEntity);
                         }
                         else if (match.IsSelected != true)
                         {
@@ -94,53 +106,39 @@ namespace UtilityWpf.Controls.Meta.ViewModel
                         }
                     }
                     return item;
-                })
-                .SelectMany(a => a.ToObservable()));
-
-
-
-            checkedViewModel = Connection<(Buttons.Infrastructure.CheckedRoutedEventArgs args, DemoType demoType), Unit>.Create(@in =>
-
-                @in
-                .Select(async a =>
-                {
-                    var enumerator = a.args.Dictionary.GetEnumerator();
-                    while (enumerator.MoveNext() && enumerator.Current is { Key: var key, New: var @new })
-                    {
-                        var match = await AssemblyEntity.Where(a => a.Key == key).FirstAsync();
-                        if (match == null)
-                        {
-                            var assemblyEntity = new AssemblyEntity { Key = key.ToString(), IsSelected = true, IsChecked = true, Group = a.demoType };
-                            await assemblyEntity.InsertAsync();
-                        }
-                        else
-                        {
-                            if (@new.HasValue)
-                            {
-                                match.IsChecked = @new ?? false;
-                                if (match.IsChecked == false)
-                                    match.IsSelected = false;
-                                await match.UpdateAsync();
-                            }
-                            else
-                            {
-                                throw new Exception("gref34 gdfg");
-                            }
-                        }
-                    }
-                    return Unit.Default;
-                })
-                .SelectMany(a => a.ToObservable()));
+                }
+            });
         }
 
-        private static AssemblyKeyValue[] ToKeyValues(IEnumerable<Assembly> a)
+        private static async System.Threading.Tasks.Task<ViewModelEntity[]> Update(AssemblyKeyValue[] collection)
         {
-            return a
-            .Select(a => new AssemblyKeyValue(a))
-            .Where(a => a.Key != null)
-            .OrderByDescending(a => BaseEntityOrderer<AssemblyEntity>.Order(a.Key))
-            .ToArray();
+            ViewModelEntity[] array = collection.Select(a => new ViewModelEntity { Key = a.Key }).OrderByDescending(a => BaseEntityOrderer<ViewModelEntity>.Order(a.Key)).ToArray();
+            var items = (await ViewModelEntity.Select.ToListAsync()).OrderBy(a => a.UpdateTime == default ? a.CreateTime : a.UpdateTime);
+
+            List<AssemblyKeyValue> list = new();
+            foreach (var item in items)
+                for (int i = 0; i < collection.Length; i++)
+                {
+                    if (collection[i].Key == item.Key)
+                    {
+                        //collection[i].IsSelected = item.IsSelected;
+                        //collection[i].IsChecked = item.IsChecked;
+                        //collection[i].Value = item.Value;
+                        list.Add(collection[i]);
+                    }
+                }
+
+            return array;
         }
+
+        //private static AssemblyKeyValue[] ToKeyValues(IEnumerable<Assembly> a)
+        //{
+        //    return a
+        //    .Select(a => new AssemblyKeyValue(a))
+        //    .Where(a => a.Key != null)
+        //    .OrderByDescending(a => BaseEntityOrderer<AssemblyEntity>.Order(a.Key))
+        //    .ToArray();
+        //}
 
         private class BaseEntityOrderer<T> where T : BaseEntity, IKey
         {
@@ -158,35 +156,38 @@ namespace UtilityWpf.Controls.Meta.ViewModel
 
         public record AssemblyRecord(string Key, DateTime Inserted);
 
-        public class AssemblyEntity : BaseEntity<AssemblyEntity, Guid>, IKey
-        {
-            public string Key { get; init; }
-            public DemoType Group { get; init; }
-            public bool IsSelected { get; set; }
-            public bool IsChecked { get; set; }
-        }
-
         private const string DemoAppNameAppendage = "Demo";
 
-        private static IEnumerable<Assembly> FindDemoAppAssemblies()
+        //private static IEnumerable<Assembly> FindDemoAppAssemblies()
+        //{
+        //    return from a in AssemblySingleton.Instance.Assemblies
+        //           where a.GetName().Name.Contains(DemoAppNameAppendage)
+        //           where a.DefinedTypes.Any(a => a.IsAssignableTo(typeof(UserControl)))
+        //           select a;
+        //}
+
+        //private static IEnumerable<Assembly> FindResourceDictionaryAssemblies(Predicate<string>? predicate = null)
+        //{
+        //    return from a in AssemblySingleton.Instance.Assemblies
+        //           let resNames = a.GetManifestResourceNames()
+        //           where resNames.Length > 0
+        //           select a;
+        //}
+
+        private static IEnumerable<(Assembly, AssemblyType)> FindAssemblies()
         {
             return from a in AssemblySingleton.Instance.Assemblies
-                   where a.GetName().Name.Contains(DemoAppNameAppendage)
-                   where a.DefinedTypes.Any(a => a.IsAssignableTo(typeof(UserControl)))
-                   select a;
+                   let contains = a.GetName().Name?.Contains(DemoAppNameAppendage) ?? false ? AssemblyType.Application : default
+                   let userControls = a.DefinedTypes.Any(a => a.IsAssignableTo(typeof(UserControl))) ? AssemblyType.UserControl : default
+                   let controls = a.DefinedTypes.Any(a => a.IsAssignableTo(typeof(Control))) ? AssemblyType.Control : default
+                   let viewModels = a.DefinedTypes.Any(a => a.IsAssignableTo(typeof(ReactiveObject))) ? AssemblyType.ViewModel : default
+                   let resNames = a.GetManifestResourceNames().Length > 0 ? AssemblyType.ResourceDictionary : default
+                   select (a, Utility.Helpers.EnumHelper.CombineFlags(new[] { contains, userControls, controls, viewModels, resNames }));
         }
 
-        private static IEnumerable<Assembly> FindResourceDictionaryAssemblies(Predicate<string>? predicate = null)
+        private static async void SelectAndUpdateOtherSelections(ViewModelEntity match)
         {
-            return from a in AssemblySingleton.Instance.Assemblies
-                   let resNames = a.GetManifestResourceNames()
-                   where resNames.Length > 0
-                   select a;
-        }
-
-        private static async void SelectAndUpdateOtherSelections(AssemblyEntity match)
-        {
-            var matches = await AssemblyEntity.Where(a => a.IsSelected).ToListAsync();
+            var matches = await ViewModelEntity.Where(a => a.IsSelected).ToListAsync();
             foreach (var match2 in matches)
             {
                 if (match2 != match)
@@ -198,11 +199,23 @@ namespace UtilityWpf.Controls.Meta.ViewModel
             match.IsSelected = true;
             await match.UpdateAsync();
 
-            var count = await AssemblyEntity.WhereIf(true, a => a.IsSelected).CountAsync();
+            var count = await ViewModelEntity.WhereIf(true, a => a.IsSelected).CountAsync();
             if (count != 1)
             {
                 throw new Exception("Expected count to be 1 since only item can be selected in any given moment");
             }
+        }
+
+        public class ViewModelEntity : BaseEntity<ViewModelEntity, Guid>, IKey
+        {
+            public string Key { get; init; }
+
+            //public string Group { get; init; }
+            //public AssemblyType Category { get; init; }
+            public string Value { get; set; }
+
+            public bool IsSelected { get; set; }
+            public bool IsChecked { get; set; }
         }
     }
 }

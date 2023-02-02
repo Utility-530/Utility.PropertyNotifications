@@ -1,4 +1,4 @@
-﻿using UtilityWpf.Demo.Common.ViewModel;
+﻿using UtilityWpf.Demo.Common.ViewModels;
 
 namespace UtilityWpf.Demo.Common.Infrastructure
 {

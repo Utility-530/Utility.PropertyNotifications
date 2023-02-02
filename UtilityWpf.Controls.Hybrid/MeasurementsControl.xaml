@@ -3,8 +3,8 @@
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:local11="http://schemas.utility.com/utilitywpf"
                     xmlns:local="clr-namespace:UtilityWpf.Controls.Hybrid"
-                    xmlns:base="clr-namespace:UtilityWpf.Base;assembly=UtilityWpf"
-                    xmlns:wpf="clr-namespace:PropertyTools.Wpf;assembly=UtilityWpf">
+                    xmlns:base="http://schemas.utility.com/utilitywpf"
+                    xmlns:wpf="http://propertytools.org/wpf">
 
     <!--<ResourceDictionary.MergedDictionaries>
         <local11:SharedResourceDictionary Source="/UtilityWpf.Controls.Master;component/DoubleContentControl.xaml" />

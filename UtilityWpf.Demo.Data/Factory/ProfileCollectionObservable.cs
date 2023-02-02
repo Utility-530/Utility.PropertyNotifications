@@ -34,7 +34,7 @@ namespace UtilityWpf.Demo.Data.Factory
               .Subscribe(profiles);
 
             return profiles
-                .Subscribe(a => dispatcher.Invoke(() => observer.OnNext(a)));
+                .Subscribe(a => dispatcher?.Invoke(() => observer.OnNext(a)));
         }
 
         public void Dispose()

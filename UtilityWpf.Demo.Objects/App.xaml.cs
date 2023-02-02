@@ -13,7 +13,7 @@ namespace UtilityWpf.Demo.Objects
         public App()
         {
             var builder = new ContainerBuilder();
-            var d = typeof(UtilityWpf.Demo.Common.ViewModel.Tick);
+            var d = typeof(UtilityWpf.Demo.Common.ViewModels.Tick);
             builder.AutoRegister();
             builder.UseAutofacDependencyResolver();
         }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using UtilityWpf.Base;
+using Utility.WPF.Controls.Base;
 
 namespace UtilityWpf.Controls
 {
@@ -51,7 +51,7 @@ namespace UtilityWpf.Controls
 
         protected override CriteriaItem InitialiseItem(CriteriaItem criteriaItem, object viewmodel)
         {
-            Binding myBinding = new Binding(PropertyName)
+            Binding myBinding = new (PropertyName)
             {
                 Source = viewmodel
             };
@@ -63,9 +63,9 @@ namespace UtilityWpf.Controls
 
         private void CriteriaItem_CriteriaChanged(object sender, RoutedEventArgs? e)
         {
-            List<int> indices = new List<int>();
-            List<object> metItems = new List<object>();
-            List<object> missedItems = new List<object>();
+            List<int> indices = new();
+            List<object> metItems = new();
+            List<object> missedItems = new();
 
             for (int i = this.Items.Count - 1; i >= 0; i--)
             {
@@ -150,7 +150,7 @@ namespace UtilityWpf.Controls
 
         private static void MeetsCriteriaChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            (d as CriteriaItem).RaiseEvent(new CriteriaChangedEventArgs(CriteriaItem.CriteriaChangedEvent) { CriteriaIsMet = (bool)e.NewValue });
+            (d as CriteriaItem)?.RaiseEvent(new CriteriaChangedEventArgs(CriteriaItem.CriteriaChangedEvent) { CriteriaIsMet = (bool)e.NewValue });
         }
 
         public class CriteriaChangedEventArgs : RoutedEventArgs

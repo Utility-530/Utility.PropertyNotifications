@@ -23,7 +23,7 @@ namespace UtilityWpf.Demo.Buttons
             //    .Select(a => (object?)null)
             //    .InvokeCommand(TransitionViewModel1?.SelectNext);
 
-            //MainViewModelViewHost.ViewModel = Locator.Current.GetService<TransitionViewModel>();
+            //MainViewModelViewHost.ViewModels = Locator.Current.GetService<TransitionViewModel>();
         }
     }
 

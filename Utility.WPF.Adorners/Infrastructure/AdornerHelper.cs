@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace Utility.WPF.Adorners.Infrastructure
 {
@@ -20,6 +21,10 @@ namespace Utility.WPF.Adorners.Infrastructure
             }
         }
 
-  
+        public static Adorner[]? Adorners(this UIElement adornedElement)
+        {
+            var adornerLayer = AdornerLayer.GetAdornerLayer(adornedElement);
+            return adornerLayer.GetAdorners(adornedElement);
+        }
     }
 }

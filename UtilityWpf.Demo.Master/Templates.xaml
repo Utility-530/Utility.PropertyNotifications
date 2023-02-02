@@ -4,7 +4,7 @@
                     xmlns:view="http://schemas.utility.com/dragablz"
                     xmlns:mk="http://schemas.utility.com/utilitywpf"
                     xmlns:common="clr-namespace:Utility.Common.EventArgs;assembly=Utility.Common"
-                    xmlns:vm="clr-namespace:UtilityWpf.Demo.Common.ViewModel;assembly=UtilityWpf.Demo.Common" xmlns:view11="http://schemas.utility.com" xmlns:view111="http://schemas.utility.com/master">
+                    xmlns:vm="clr-namespace:UtilityWpf.Demo.Common.ViewModels;assembly=UtilityWpf.Demo.Common" xmlns:view11="http://schemas.utility.com" xmlns:view111="http://schemas.utility.com/master">
 
     <ResourceDictionary.MergedDictionaries>
         <mk:SharedResourceDictionary Source="/UtilityWpf.Demo.Common;component/View/Templates.xaml" />
