@@ -1,7 +1,6 @@
-﻿using Utility.Models;
-using Utility.Interfaces.Generic;
+﻿using Utility.Interfaces.Generic;
 
-namespace Graph.Library
+namespace Utility.Models
 {
     public class Connection : IKey<Key>
     {

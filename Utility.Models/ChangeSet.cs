@@ -12,11 +12,6 @@ namespace Utility.Models
         Add, Remove, Update
     }
 
-    public enum Source
-    {
-        Internal, External
-    }
-
     public class ChangeSet<T> : ReadOnlyCollection<Change<T>>
     {
         public ChangeSet(IList<Change<T>> list) : base(list)
@@ -31,20 +26,21 @@ namespace Utility.Models
     public class Change<T>
     {
 
-        public Change(T value, ChangeType type, Source source)
+        public Change(T value, ChangeType type)
         {
             Value = value;
             Type = type;
-            Source = source;
         }
+
         public Change(T value)
         {
             Value = value;
         }
 
         public T Value { get; }
+
         public ChangeType Type { get; init; }
-        public Source Source { get; init; }
+  
 
         public ChangeSet<T> ToChangeSet()
         {
