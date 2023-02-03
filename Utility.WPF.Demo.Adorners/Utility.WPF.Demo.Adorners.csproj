@@ -7,9 +7,6 @@
 		<UseWPF>true</UseWPF>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Splat.Autofac" Version="9.5.2" />
-	</ItemGroup>
-	<ItemGroup>
 		<ProjectReference Include="..\Utility.WPF.Adorners\Utility.WPF.Adorners.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Controls.Adorners\Utility.WPF.Controls.Adorners.csproj" />
 		<ProjectReference Include="..\UtilityWpf.Demo.Data\UtilityWpf.Demo.Data.csproj" />
