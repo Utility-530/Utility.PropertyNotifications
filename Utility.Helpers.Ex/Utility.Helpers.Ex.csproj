@@ -18,7 +18,6 @@
 	  <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
 
-
   <ItemGroup>
     <ProjectReference Include="..\..\Utility.Helpers\Utility.Helpers\Utility.Helpers.csproj" />
     <ProjectReference Include="..\..\Utility.WPF\Utility.Packages\Utility.Packages.csproj" />
