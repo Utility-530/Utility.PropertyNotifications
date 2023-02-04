@@ -49,6 +49,7 @@
 		<PackageReference Include="System.Reactive" Version="5.0.0" />
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
 		<ProjectReference Include="..\UtilityWpf\UtilityWpf.csproj" />
 	</ItemGroup>
 

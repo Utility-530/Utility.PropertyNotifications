@@ -6,6 +6,7 @@ using Utility.Persist;
 using Utility.Service;
 using Utility.Interfaces.NonGeneric.Data;
 using UtilityWpf.Demo.Common.ViewModels;
+using Utility.WPF.Helper;
 
 namespace UtilityWpf.Demo.Hybrid.ViewModels
 {

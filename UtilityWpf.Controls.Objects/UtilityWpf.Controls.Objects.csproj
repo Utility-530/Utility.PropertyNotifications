@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
+    <ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
     <ProjectReference Include="..\UtilityWpf.Demo.Panels\UtilityWpf.Demo.Panels.csproj" />
     <ProjectReference Include="..\UtilityWpf\UtilityWpf.csproj" />
   </ItemGroup>

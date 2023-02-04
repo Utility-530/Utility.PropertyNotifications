@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reactive;
 
-namespace Utility.ViewModels.Filters;
+namespace Utility.Models.Filters;
 
 public abstract class SubjectFilter<TIn> : ObserverFilter<TIn>, IRefreshObservable
 {

@@ -13,7 +13,7 @@ using System.Reflection;
 using Utility.Common.Models;
 using Utility.Reactive;
 
-namespace Utility.ViewModels.Filters
+namespace Utility.Models.Filters
 {
     public abstract class PropertyFilter<T, TProperty> : PropertyFilter<T>
     {

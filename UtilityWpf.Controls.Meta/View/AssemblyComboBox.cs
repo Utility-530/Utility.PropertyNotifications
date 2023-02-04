@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using Utility.WPF.Controls.Lists;
+using Utility.WPF.Meta;
 using UtilityWpf.Controls.Meta.ViewModels;
-using UtilityWpf.Model;
 
 namespace UtilityWpf.Controls.Meta
 {

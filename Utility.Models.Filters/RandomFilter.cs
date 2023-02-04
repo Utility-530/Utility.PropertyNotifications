@@ -4,7 +4,7 @@ using Utility.Common.Models;
 using Utility.Reactive;
 using Utility.Interfaces.NonGeneric;
 
-namespace Utility.ViewModels.Filters
+namespace Utility.Models.Filters
 {
     public class RandomFilter : Filter, IPredicate
     {

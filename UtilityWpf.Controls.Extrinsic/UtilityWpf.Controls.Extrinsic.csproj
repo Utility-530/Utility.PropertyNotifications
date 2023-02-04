@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
     <ProjectReference Include="..\UtilityWpf\UtilityWpf.csproj" />
   </ItemGroup>
 

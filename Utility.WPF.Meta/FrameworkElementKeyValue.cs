@@ -12,15 +12,16 @@ using System.Windows.Shapes;
 using Tynamix.ObjectFiller;
 using Utility.Common;
 using Utility.Helpers;
-using UtilityWpf.Meta;
+using Utility.WPF.Helper;
+using UtilityWpf;
 
-namespace UtilityWpf.Model
+namespace Utility.WPF.Meta
 {
     public class FrameworkElementKeyValue : KeyValue
     {
         private readonly Lazy<FrameworkElement?> lazy;
 
-        public FrameworkElementKeyValue(string key, Type type)
+        public FrameworkElementKeyValue(string key, Type type) : base(key)
         {
             Key = key;
             Type = type;
@@ -37,7 +38,7 @@ namespace UtilityWpf.Model
             });
         }
 
-        public override string Key { get; }
+        public string Key { get; }
 
         public Type Type { get; }
 
@@ -71,14 +72,12 @@ namespace UtilityWpf.Model
     {
         private readonly Lazy<MasterDetailGrid> lazy;
 
-        public ResourceDictionaryKeyValue(string key, ResourceDictionary resourceDictionary)
+        public ResourceDictionaryKeyValue(string key, ResourceDictionary resourceDictionary) : base(key)
         {
-            Key = key;
             ResourceDictionary = resourceDictionary;
             lazy = new(() => new MasterDetailGrid(resourceDictionary.Cast<DictionaryEntry>().Select(a => new DataTemplateKeyValue(a)).ToArray()));
         }
 
-        public override string Key { get; }
 
         public ResourceDictionary ResourceDictionary { get; }
 
@@ -113,9 +112,8 @@ namespace UtilityWpf.Model
     {
         private readonly Lazy<FrameworkElement> lazy;
 
-        public DataTemplateKeyValue(DictionaryEntry entry)
+        public DataTemplateKeyValue(DictionaryEntry entry) : base(entry.Key.ToString() + " " + "(" + entry.Value?.GetType().Name.ToString() + ")")
         {
-            Key = entry.Key.ToString() + " " + "(" + entry.Value?.GetType().Name.ToString() + ")";
             Entry = entry;
             lazy = new(() =>
             {
@@ -193,8 +191,6 @@ style:
                 }
             }
         }
-
-        public override string Key { get; }
 
         public override FrameworkElement Value => lazy.Value;
 

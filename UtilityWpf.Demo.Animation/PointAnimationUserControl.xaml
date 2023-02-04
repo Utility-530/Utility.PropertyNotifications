@@ -2,7 +2,7 @@
     x:Class="UtilityWpf.Demo.Animation.PointAnimationUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:animation="clr-namespace:UtilityWpf.Animation;assembly=UtilityWpf.Animation"
+    xmlns:animation="http://schemas.utility.com/animation"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"

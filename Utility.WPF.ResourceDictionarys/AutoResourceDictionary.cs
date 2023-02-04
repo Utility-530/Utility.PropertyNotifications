@@ -1,6 +1,7 @@
 ﻿using System;
+using Utility.WPF.Helper;
 
-namespace UtilityWpf
+namespace Utility.WPF.ResourceDictionarys
 {
     public class AutoResourceDictionary : SharedResourceDictionary
     {

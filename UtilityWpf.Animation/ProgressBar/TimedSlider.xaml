@@ -1,11 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:testApp1="clr-namespace:UtilityWpf.Animation"
-                    xmlns:utilitywpf="clr-namespace:UtilityWpf;assembly=UtilityWpf">
+                    xmlns:utilitywpf="http://schemas.utility.com/utilitywpf">
 
     <ResourceDictionary.MergedDictionaries>
 
-        <utilitywpf:SharedResourceDictionary Source="pack://application:,,,/UtilityWpf.Animation;component/ProgressBar/FlashThumb.xaml" />
+        <utilitywpf:SharedResourceDictionary Source="pack://application:,,,/Utility.WPF.Animations;component/ProgressBar/FlashThumb.xaml" />
         <!--<utilitywpf:SharedResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ProgressBar.xaml" />-->
     </ResourceDictionary.MergedDictionaries>
 

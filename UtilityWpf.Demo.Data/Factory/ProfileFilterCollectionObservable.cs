@@ -1,5 +1,5 @@
 ﻿using UtilityWpf.Demo.Data.Model;
-using Utility.ViewModels.Filters;
+using Utility.Models.Filters;
 
 namespace UtilityWpf.Demo.Data.Factory
 {

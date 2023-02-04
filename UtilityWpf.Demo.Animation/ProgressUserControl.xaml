@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.Resources>
-            <ResourceDictionary Source="pack://application:,,,/UtilityWpf.Animation;component/ProgressBar/TimedSlider.xaml" />
+            <ResourceDictionary Source="pack://application:,,,/Utility.WPF.Animations;component/ProgressBar/TimedSlider.xaml" />
     </FrameworkElement.Resources>
     <Viewbox>
 

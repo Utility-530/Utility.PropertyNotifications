@@ -14,9 +14,9 @@ using Utility.Common;
 using Utility.Common.Model;
 using Utility.Enums;
 using Utility.Persist;
-using Utility.ViewModels.Filters;
 using Utility.Interfaces.NonGeneric;
-using UtilityWpf.Model;
+using Utility.WPF.Meta;
+using Utility.Models.Filters;
 
 namespace UtilityWpf.Controls.Meta.ViewModels
 {

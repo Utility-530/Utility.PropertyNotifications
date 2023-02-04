@@ -6,7 +6,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Utility.Service;
 using Utility.ViewModels;
-using Utility.ViewModels.Filters;
+using Utility.Models.Filters;
 using UtilityWpf.Demo.Data.Factory;
 using UtilityWpf.Demo.Data.Model;
 

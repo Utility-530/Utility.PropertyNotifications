@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Markup;
 
 [assembly: ThemeInfo(
@@ -9,7 +9,5 @@ using System.Windows.Markup;
                                               //(used if a resource is not found in the page,
                                               // app, or any theme specific resource dictionaries)
 )]
-[assembly: XmlnsPrefix("http://schemas.utility.com/animation", "anim")]
-[assembly: XmlnsDefinition("http://schemas.utility.com/animation", "UtilityWpf.Animation")] 
-[assembly: XmlnsDefinition("http://schemas.utility.com/animation", "Utility.WPF.Animations")] 
-[assembly: XmlnsDefinition("http://schemas.utility.com/animation", "animTextBox")] 
+[assembly: XmlnsPrefix("http://schemas.utility.com/utilitywpf", "utl")]
+[assembly: XmlnsDefinition("http://schemas.utility.com/utilitywpf", "Utility.WPF.ResourceDictionarys")]

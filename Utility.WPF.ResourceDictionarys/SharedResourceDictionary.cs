@@ -1,11 +1,11 @@
-﻿using HandyControl.Tools;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
+using Utility.WPF.Helper;
 
-namespace UtilityWpf
+namespace Utility.WPF.ResourceDictionarys
 {
     /// <summary>
     /// Loads singleton instance of ResourceDictionary to current scope
@@ -23,7 +23,7 @@ namespace UtilityWpf
         /// </summary>
         public new Uri? Source
         {
-            get => DesignerHelper.IsInDesignMode ? base.Source : source;
+            get => DesignModeHelper.IsInDesignMode ? base.Source : source;
             set
             {
                 if (source != value)
@@ -62,7 +62,7 @@ namespace UtilityWpf
 
                 var dd = keys.SequenceEqual(keys2);
                 var dde = z1.SequenceEqual(z);
-                var bb = ((keys.Any() && keys2.Any()) || (z.Any() && z1.Any())) && dd && dde;
+                var bb = (keys.Any() && keys2.Any() || z.Any() && z1.Any()) && dd && dde;
 
                 if (bb)
                 {
@@ -91,7 +91,7 @@ namespace UtilityWpf
 
         public override string? ToString()
         {
-            return this.source?.ToString() ?? "none" + " " + string.Join(',', this.Keys);
+            return source?.ToString() ?? "none" + " " + string.Join(',', Keys);
         }
     }
 

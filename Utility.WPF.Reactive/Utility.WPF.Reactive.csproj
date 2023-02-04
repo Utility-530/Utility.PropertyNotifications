@@ -6,6 +6,13 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Themes\**" />
+    <EmbeddedResource Remove="Themes\**" />
+    <None Remove="Themes\**" />
+    <Page Remove="Themes\**" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
 		<PackageReference Include="ReactiveUI.WPF" Version="18.1.8" />

@@ -7,7 +7,7 @@ using Utility.Observables;
 
 namespace Utility.Models
 {
-    public abstract class Subject<T> : ISubject<T>
+    public class Subject<T> : ISubject<T>
     {
         public Subject()
         {

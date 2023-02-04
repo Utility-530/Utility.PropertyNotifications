@@ -10,7 +10,7 @@ using Utility.Common.Models;
 using Utility.Reactive;
 //using Utility.Helpers.Ex;
 
-namespace Utility.ViewModels.Filters
+namespace Utility.Models.Filters
 {
     public class StringMatchFilter<T> : SubjectFilter<T>
     {
@@ -58,7 +58,7 @@ namespace Utility.ViewModels.Filters
         public override IDisposable Subscribe(IObserver<Unit> observer)
         {
             filters.Connect();
-            return filters              
+            return filters
                 .Subscribe(observer);
         }
     }

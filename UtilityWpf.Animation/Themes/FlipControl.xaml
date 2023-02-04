@@ -2,10 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:options="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
                     xmlns:anim="clr-namespace:UtilityWpf.Animation"
-                    xmlns:controls="clr-namespace:UtilityWpf;assembly=UtilityWpf">
+                    xmlns:controls="http://schemas.utility.com/utilitywpf">
 
     <ResourceDictionary.MergedDictionaries>
-        <controls:SharedResourceDictionary Source="/UtilityWpf.Animation;component/Themes/BorderFix.xaml" />
+        <controls:SharedResourceDictionary Source="/Utility.WPF.Animations;component/Themes/BorderFix.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!-- Theme -->

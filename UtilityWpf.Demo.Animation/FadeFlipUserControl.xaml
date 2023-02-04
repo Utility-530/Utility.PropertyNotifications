@@ -9,7 +9,7 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <ResourceDictionary Source="/UtilityWpf.Animation;component/Themes/FlipControl.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="/Utility.WPF.Animations;component/Themes/FlipControl.xaml"></ResourceDictionary>
     </UserControl.Resources>
 
     <StackPanel HorizontalAlignment="Center">

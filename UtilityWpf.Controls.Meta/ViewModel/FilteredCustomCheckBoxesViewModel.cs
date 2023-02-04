@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using Utility.Service;
-using Utility.ViewModels.Filters;
-using UtilityWpf.Model;
+using Utility.Models.Filters;
+using Utility.WPF.Meta;
 using static UtilityWpf.Controls.Meta.ViewModels.AssemblyComboBoxViewModel;
 
 namespace UtilityWpf.Controls.Meta.ViewModels

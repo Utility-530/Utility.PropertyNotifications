@@ -1,19 +1,18 @@
 ﻿using System.Linq;
 using System.Reflection;
+using Utility.Common;
 using Utility.Enums;
 
-namespace UtilityWpf.Model
+namespace Utility.WPF.Meta
 {
     public class AssemblyKeyValue : KeyValue
     {
         private readonly Assembly assembly;
-        public AssemblyKeyValue(Assembly assembly, AssemblyType categoryKey)
+        public AssemblyKeyValue(Assembly assembly, AssemblyType categoryKey) : base(assembly.FullName.Split(",").First())
         {
             this.assembly = assembly;
             CategoryKey = categoryKey;
         }
-
-        public override string? Key => assembly.FullName.Split(",").First();
 
         public override Assembly Value => assembly;
 

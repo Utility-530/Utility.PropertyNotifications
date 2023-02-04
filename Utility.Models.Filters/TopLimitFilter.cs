@@ -10,7 +10,7 @@ using Utility.Common.Models;
 using Utility.Helpers.Ex;
 using Utility.Reactive;
 
-namespace Utility.ViewModels.Filters
+namespace Utility.Models.Filters
 {
     public class TopLimitFilter<T> : SubjectFilter<T>
     {
@@ -31,7 +31,7 @@ namespace Utility.ViewModels.Filters
             return 0 <= collection.IndexOf((T)value) && collection.IndexOf((T)value) < Value.Value;
         }
 
-        public override ReactiveProperty<int> Value { get; } 
+        public override ReactiveProperty<int> Value { get; }
 
         public override void OnNext(IChangeSet<T> value)
         {
@@ -39,7 +39,7 @@ namespace Utility.ViewModels.Filters
         }
         public override IDisposable Subscribe(IObserver<Unit> observer)
         {
-            return this.Value.Select(a => Unit.Default).Subscribe(observer);
+            return Value.Select(a => Unit.Default).Subscribe(observer);
         }
     }
 }

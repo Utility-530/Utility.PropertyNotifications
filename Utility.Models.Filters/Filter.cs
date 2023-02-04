@@ -1,8 +1,7 @@
-﻿using ReactiveUI;
-using Utility.Common.Models;
+﻿using Utility.Common.Models;
 using Utility.Interfaces.NonGeneric;
 
-namespace Utility.ViewModels.Filters;
+namespace Utility.Models.Filters;
 
 public abstract class Filter : Model, IPredicate, IKey
 {

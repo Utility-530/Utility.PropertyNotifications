@@ -40,7 +40,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\Utility.ViewModels.Filters\Utility.Models.Filters.csproj" />
+    <ProjectReference Include="..\Utility.Models.Filters\Utility.Models.Filters.csproj" />
     <ProjectReference Include="..\UtilityWpf.Demo.Common\UtilityWpf.Demo.Common.csproj" />
   </ItemGroup>
   

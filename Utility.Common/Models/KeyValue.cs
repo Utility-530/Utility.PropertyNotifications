@@ -10,9 +10,16 @@ namespace Utility.Common
             Value = value;
         }
 
+        public KeyValue(string key)
+        {
+            Key = key;
+        }
+
         public string Key { get; }
 
-        public object Value { get; }
+        public virtual object? Value { get; }
+
+        public virtual string GroupKey { get; }
     }
 
     public class KeyRange : INotifyPropertyChanged

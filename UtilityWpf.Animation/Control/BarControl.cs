@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
-namespace UtilityWpf.Animation
+namespace Utility.WPF.Animations
 {
     public class BarControl : Control
     {
@@ -18,7 +18,7 @@ namespace UtilityWpf.Animation
 
         public override void OnApplyTemplate()
         {
-            rctMovingObject = this.GetTemplateChild("PART_MovingObject") as Rectangle;
+            rctMovingObject = GetTemplateChild("PART_MovingObject") as Rectangle;
         }
 
         public Orientation Orientation
@@ -51,16 +51,16 @@ namespace UtilityWpf.Animation
         private static void _SizeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             BarControl bc = d as BarControl;
-            DoubleAnimation animation = new DoubleAnimation((double)e.NewValue, TimeSpan.FromMilliseconds((int)bc.Duration));
+            DoubleAnimation animation = new DoubleAnimation((double)e.NewValue, TimeSpan.FromMilliseconds(bc.Duration));
             animation.From = 0;
             animation.RepeatBehavior = RepeatBehavior.Forever;
             if (bc.Orientation == Orientation.Horizontal)
             {
-                bc.rctMovingObject?.BeginAnimation(Rectangle.WidthProperty, animation);
+                bc.rctMovingObject?.BeginAnimation(WidthProperty, animation);
             }
             if (bc.Orientation == Orientation.Vertical)
             {
-                bc.rctMovingObject?.BeginAnimation(Rectangle.HeightProperty, animation);
+                bc.rctMovingObject?.BeginAnimation(HeightProperty, animation);
             }
         }
 
@@ -73,11 +73,11 @@ namespace UtilityWpf.Animation
 
             if (bc.Orientation == Orientation.Horizontal)
             {
-                bc.rctMovingObject?.BeginAnimation(Rectangle.WidthProperty, animation);
+                bc.rctMovingObject?.BeginAnimation(WidthProperty, animation);
             }
             if (bc.Orientation == Orientation.Vertical)
             {
-                bc.rctMovingObject?.BeginAnimation(Rectangle.HeightProperty, animation);
+                bc.rctMovingObject?.BeginAnimation(HeightProperty, animation);
             }
         }
 

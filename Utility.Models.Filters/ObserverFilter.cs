@@ -1,7 +1,7 @@
 ﻿using DynamicData;
 using System;
 
-namespace Utility.ViewModels.Filters;
+namespace Utility.Models.Filters;
 
 public abstract class ObserverFilter<T> : Filter, IObserver<IChangeSet<T>>
 {

@@ -8,7 +8,7 @@ using System.Resources;
 using System.Windows;
 using System.Windows.Baml2006;
 
-namespace UtilityWpf
+namespace Utility.WPF.Helper
 {
     public static class ResourceDictionaryExtensions
     {

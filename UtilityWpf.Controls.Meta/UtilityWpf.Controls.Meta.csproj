@@ -7,12 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Utility.Models.Filters\Utility.Models.Filters.csproj" />
     <ProjectReference Include="..\Utility.Persist\Utility.Persist.csproj" />
-    <ProjectReference Include="..\Utility.ViewModels.Filters\Utility.Models.Filters.csproj" />
     <ProjectReference Include="..\Utility.ViewModels\Utility.ViewModels.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Adorners\Utility.WPF.Adorners.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Base\Utility.WPF.Controls.Base.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Lists\Utility.WPF.Controls.Lists.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
     <ProjectReference Include="..\UtilityWpf.Controls.Master\UtilityWpf.Controls.Master.csproj" />
   </ItemGroup>
 	

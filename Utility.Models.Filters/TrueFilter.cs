@@ -1,7 +1,7 @@
 ﻿using Utility.Models;
 using Utility.Interfaces.NonGeneric;
 
-namespace Utility.ViewModels.Filters
+namespace Utility.Models.Filters
 {
     public class TrueFilter : Filter, IPredicate
     {

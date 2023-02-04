@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace UtilityWpf
+namespace Utility.WPF.Helper
 {
     public class DesignModeHelper
     {
@@ -12,7 +12,7 @@ namespace UtilityWpf
         /// http://blog.galasoft.ch/posts/2009/09/detecting-design-time-mode-in-wpf-and-silverlight/
         /// Laurent Bugnion (GalaSoft)
         /// </summary>
-        public static bool IsInDesignModeStatic
+        public static bool IsInDesignMode
         {
             get
             {

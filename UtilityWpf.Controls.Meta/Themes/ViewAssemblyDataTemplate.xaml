@@ -1,10 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:util="http://schemas.utility.com/utilitywpf">
+                    xmlns:meta="http://schemas.utility.com/meta">
 
     <!-- Used by ViewHostControl-->
 
-    <DataTemplate DataType="{x:Type util:AssemblyKeyValue}">
+    <DataTemplate DataType="{x:Type meta:AssemblyKeyValue}">
 
         <TextBlock MinHeight="20" MinWidth="100"
                             Margin="32,0,32,0"
