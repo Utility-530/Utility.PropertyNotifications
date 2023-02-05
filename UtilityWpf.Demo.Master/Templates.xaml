@@ -3,8 +3,11 @@
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:view="http://schemas.utility.com/dragablz"
                     xmlns:mk="http://schemas.utility.com/utilitywpf"
+                    xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:common="clr-namespace:Utility.Common.EventArgs;assembly=Utility.Common"
-                    xmlns:vm="clr-namespace:UtilityWpf.Demo.Common.ViewModels;assembly=UtilityWpf.Demo.Common" xmlns:view11="http://schemas.utility.com" xmlns:view111="http://schemas.utility.com/master">
+                    xmlns:vm="clr-namespace:UtilityWpf.Demo.Common.ViewModels;assembly=UtilityWpf.Demo.Common" 
+                    xmlns:view11="http://schemas.utility.com" 
+                    xmlns:view111="http://schemas.utility.com/master">
 
     <ResourceDictionary.MergedDictionaries>
         <mk:SharedResourceDictionary Source="/UtilityWpf.Demo.Common;component/View/Templates.xaml" />
@@ -21,7 +24,7 @@
                 <i:EventTrigger  EventName="Change">
                     <i:InvokeCommandAction Command="{Binding ChangeCommand}"
                                                            PassEventArgsToCommand="True"
-                                                           EventArgsConverter="{x:Static mk:AutoMapperConverter.Instance}"
+                                                           EventArgsConverter="{x:Static conv:AutoMapperConverter.Instance}"
                                                            EventArgsConverterParameter="{x:Type common:CollectionItemEventArgs}"></i:InvokeCommandAction>
                 </i:EventTrigger>
             </i:Interaction.Triggers>

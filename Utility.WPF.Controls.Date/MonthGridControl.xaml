@@ -4,6 +4,7 @@
     xmlns:aa="clr-namespace:Utility.WPF.Controls.Date.Helper"
     xmlns:ctrl="clr-namespace:Utility.WPF.Controls.Date"
     xmlns:utl="http://schemas.utility.com/utilitywpf"
+    xmlns:conv="http://schemas.utility.com/converters"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors">
 
     <ResourceDictionary.MergedDictionaries>
@@ -17,7 +18,7 @@
         <Setter Property="Padding" Value="0" />
     </Style>
 
-    <utl:DefaultConverter x:Key="DefaultConverter" />
+    <conv:DefaultConverter x:Key="DefaultConverter" />
 
     <Style x:Key="DayListBoxItem" TargetType="ListBoxItem">
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />

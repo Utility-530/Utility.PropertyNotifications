@@ -11,7 +11,8 @@
              xmlns:view1="http://schemas.utility.com/dragablz"
              xmlns:view2="http://schemas.utility.com/master"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             
+                 xmlns:conv="http://schemas.utility.com/converters"
+
              xmlns:viewModel="clr-namespace:UtilityWpf.Demo.Master.ViewModels"
              xmlns:view="clr-namespace:UtilityWpf.Demo.Master.View"
              mc:Ignorable="d"
@@ -25,7 +26,7 @@
                 <Setter Property="Margin" Value="10"></Setter>
                 <Setter Property="Padding" Value="5"></Setter>
             </Style>
-            <util:AutoMapperConverter x:Key="AutoValueConverter" ToType="{x:Type cmn:ReactiveFields}" FromType="{x:Type cmn:Fields}" />
+            <conv:AutoMapperConverter x:Key="AutoValueConverter" ToType="{x:Type cmn:ReactiveFields}" FromType="{x:Type cmn:Fields}" />
 
             <view1:DragablzVerticalItemsControl x:Key="DragablzItemsControl2"
                                                        VerticalAlignment="Center"

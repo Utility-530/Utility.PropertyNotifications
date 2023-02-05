@@ -10,6 +10,7 @@
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:anim="http://schemas.utility.com/animation"
     xmlns:utl="http://schemas.utility.com/utilitywpf"
+    xmlns:conv="http://schemas.utility.com/converters"
     xmlns:viewModel="clr-namespace:Utility.WPF.Demo.Date.Infrastructure.ViewModels"
     Title="Utility Journal"
     Width="800"
@@ -26,8 +27,8 @@
     <FrameworkElement.Resources>
         <local:NotesConverter x:Key="ValueConverter" />
         <local:NoteConverter x:Key="NoteConverter" />
-        <utl:DefaultConverter x:Key="DefaultConverter" />
-        <utl:CountToBooleanConverter x:Key="CountToBooleanConverter" />
+        <conv:DefaultConverter x:Key="DefaultConverter" />
+        <conv:CountToBooleanConverter x:Key="CountToBooleanConverter" />
     </FrameworkElement.Resources>
 
     <!--<TabControl>

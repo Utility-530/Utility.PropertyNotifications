@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:view="http://schemas.utility.com"
     xmlns:utl="http://schemas.utility.com/utilitywpf"
+    xmlns:conv="http://schemas.utility.com/converters"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -15,7 +16,7 @@
 
         <TabItem Header="Items">
             <TabItem.Resources>
-                <utl:BooleanToOrientationConverter x:Key="BooleanToOrientationConverter" />
+                <conv:BooleanToOrientationConverter x:Key="BooleanToOrientationConverter" />
             </TabItem.Resources>
 
             <DockPanel>
@@ -30,14 +31,14 @@
                             x:Name="ebdc"
                             Orientation="{Binding ElementName=ToggleButton1, Path=Content}"
                             Enum="{x:Type test:Emotion}" />
-                        <TextBlock Text="{Binding ElementName=ebdc, Path=Output, Mode=OneWay, Converter={x:Static utl:LambdaConverter.StringConverter}}" Margin="5" Background="AliceBlue" Height="30" />
+                        <TextBlock Text="{Binding ElementName=ebdc, Path=Output, Mode=OneWay, Converter={x:Static conv:LambdaConverter.StringConverter}}" Margin="5" Background="AliceBlue" Height="30" />
                     </StackPanel>
                     <StackPanel>
                         <view:EnumItemsControl
                             x:Name="ebdcs"
                             Orientation="Vertical"
                             Enum="{x:Type test:Emotion}" />
-                        <TextBlock Text="{Binding ElementName=ebdcs, Path=Output, Converter={x:Static utl:LambdaConverter.StringConverter}}" />
+                        <TextBlock Text="{Binding ElementName=ebdcs, Path=Output, Converter={x:Static conv:LambdaConverter.StringConverter}}" />
                     </StackPanel>
                     <view:EnumItemsControl Enum="{x:Type test:Emotion}" IsReadOnly="True" />
                 </UniformGrid>

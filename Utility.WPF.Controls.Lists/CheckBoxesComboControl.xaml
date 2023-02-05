@@ -2,6 +2,7 @@
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:utl="http://schemas.utility.com/utilitywpf"
+                    xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:local="clr-namespace:Utility.WPF.Controls.Lists"
                     xmlns:ctrl="http://schemas.utility.com/extrinsic">
 
@@ -243,7 +244,7 @@
                                                                Visibility="{Binding 
                                                                     RelativeSource={RelativeSource Mode=TemplatedParent},
                                                                     Path=FilterCollection,
-                                                                    Converter={x:Static utl:NullToVisibilityConverter.Instance}}"
+                                                                    Converter={x:Static conv:NullToVisibilityConverter.Instance}}"
                                                     Header="Type here to filter" 
                                                     DockPanel.Dock="Top"
                                                     TargetControl="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}" />
@@ -252,7 +253,7 @@
                                                                     Visibility="{Binding 
                                                                     RelativeSource={RelativeSource Mode=TemplatedParent},
                                                                     Path=FilterCollection,
-                                                                    Converter={x:Static utl:NullToInverseVisibilityConverter.Instance}}"
+                                                                    Converter={x:Static conv:NullToInverseVisibilityConverter.Instance}}"
                                                                     DockPanel.Dock="Top"
                                                                     SelectedValuePath="Header"
                                                                     ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=FilterCollection}"

@@ -4,7 +4,7 @@
                     xmlns:att="http://schemas.utility.com/utilitywpf"
                     xmlns:local="clr-namespace:UtilityWpf.Controls.Dragablz"
                     xmlns:dragablz1="clr-namespace:UtilityWpf.Controls.Dragablz"
-                    xmlns:conv="http://schemas.utility.com/utilitywpf">
+                    xmlns:conv="http://schemas.utility.com/converters">
 
     <ResourceDictionary.MergedDictionaries>
         <att:SharedResourceDictionary Source="/UtilityWpf.Controls.Dragablz;component/GeometryResources.xaml" />

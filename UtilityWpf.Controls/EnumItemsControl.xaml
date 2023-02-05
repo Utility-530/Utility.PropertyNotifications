@@ -2,9 +2,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:UtilityWpf.Controls"
-    xmlns:common1="http://schemas.utility.com/utilitywpf">
+    xmlns:conv="http://schemas.utility.com/converters">
 
-    <common1:ByteToColorConverter x:Key="ByteToColorConverter" />
+    <conv:ByteToColorConverter x:Key="ByteToColorConverter" />
 
     <Style TargetType="{x:Type local:EnumItemsControl}" BasedOn="{StaticResource {x:Type ItemsControl}}">
         <Style.Resources>

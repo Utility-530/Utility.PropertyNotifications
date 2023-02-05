@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:common="clr-namespace:Utility.Common.EventArgs;assembly=Utility.Common"
-    xmlns:util="http://schemas.utility.com/utilitywpf"
+    xmlns:conv="http://schemas.utility.com/converters"
     xmlns:view="http://schemas.utility.com/master"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local1="clr-namespace:UtilityWpf.Demo.Master.Controls"
@@ -34,7 +34,7 @@
                         <i:Interaction.Triggers>
                             <i:EventTrigger  EventName="Change">
                                 <i:InvokeCommandAction Command="{Binding ChangeCommand}" PassEventArgsToCommand="True"
-                                                       EventArgsConverter="{x:Static util:AutoMapperConverter.Instance}"
+                                                       EventArgsConverter="{x:Static conv:AutoMapperConverter.Instance}"
                                                        EventArgsConverterParameter="{x:Type common:CollectionEventArgs}"
                                                        ></i:InvokeCommandAction>
                             </i:EventTrigger>

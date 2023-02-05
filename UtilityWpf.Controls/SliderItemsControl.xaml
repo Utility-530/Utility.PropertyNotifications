@@ -2,12 +2,12 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:UtilityWpf.Controls"
-    xmlns:converter="http://schemas.utility.com/utilitywpf">
+    xmlns:conv="http://schemas.utility.com/converters">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/UtilityWpf.Controls;component/SliderWithTickLabels.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
-    <converter:MinMaxDivideConverter x:Key="MinMaxDivideConverter" Factor="10" />
+    <conv:MinMaxDivideConverter x:Key="MinMaxDivideConverter" Factor="10" />
 
     <Style TargetType="{x:Type local:SliderItemsControl}">
 

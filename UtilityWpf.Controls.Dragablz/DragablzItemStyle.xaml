@@ -6,7 +6,7 @@
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:utl="http://schemas.utility.com/utilitywpf"
     xmlns:dragablz1="clr-namespace:UtilityWpf.Controls.Dragablz"
-    xmlns:conv="http://schemas.utility.com/utilitywpf">
+    xmlns:conv="http://schemas.utility.com/converters">
 
     <ResourceDictionary.MergedDictionaries>
         <utl:SharedResourceDictionary  Source="/UtilityWpf.Controls.Dragablz;component/GeometryResources.xaml" />

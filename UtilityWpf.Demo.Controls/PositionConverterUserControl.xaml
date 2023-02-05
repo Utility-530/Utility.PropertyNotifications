@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:common="http://schemas.utility.com/utilitywpf"
+    xmlns:conv="http://schemas.utility.com/converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:UtilityWpf.Demo.Controls"
     xmlns:test="clr-namespace:UtilityWpf.Demo.Data.Model;assembly=UtilityWpf.Demo.Data"
@@ -13,9 +14,9 @@
     DataContext="{DynamicResource Characters}"
     mc:Ignorable="d">
     <UserControl.Resources>
-        <common:LastItemConverter x:Key="LastItemConverter" />
-        <common:FirstItemConverter x:Key="FirstItemConverter" />
-        <common:PositionItemConverter x:Key="PositionItemConverter" />
+        <conv:LastItemConverter x:Key="LastItemConverter" />
+        <conv:FirstItemConverter x:Key="FirstItemConverter" />
+        <conv:PositionItemConverter x:Key="PositionItemConverter" />
         <!--<DataTemplate  DataType="{x:Type local:Character}">
             <ContentPresenter Content="{Binding}"
                     ContentTemplate="{StaticResource BaseClass}" />

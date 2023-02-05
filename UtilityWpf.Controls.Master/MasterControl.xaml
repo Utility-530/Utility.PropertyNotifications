@@ -3,20 +3,21 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:UtilityWpf.Controls.Master"
-    xmlns:local1="http://schemas.utility.com/utilitywpf"
+    xmlns:utl="http://schemas.utility.com/utilitywpf"
+    xmlns:conv="http://schemas.utility.com/converters"
     xmlns:wpf1="clr-namespace:PropertyTools.Wpf;assembly=Utility.WPF.Controls.Base">
 
     <!--<ResourceDictionary.MergedDictionaries>
         <utilitywpf:SharedResourceDictionary Source="/UtilityWpf.Controls.Master;component/DoubleContentControl.xaml"></utilitywpf:SharedResourceDictionary>
     </ResourceDictionary.MergedDictionaries>-->
 
-    <local1:CountToBooleanConverter x:Key="CountToBoolean" />
-    <local1:InverseBooleanConverter x:Key="InverseBooleanConverter" />
-    <local1:IsFirstItemSelectedConverter x:Key="IsFirstItemSelected" Invert="True" />
-    <local1:IsLastItemSelectedConverter x:Key="IsLastItemSelected" Invert="True" />
+    <conv:CountToBooleanConverter x:Key="CountToBoolean" />
+    <conv:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+    <conv:IsFirstItemSelectedConverter x:Key="IsFirstItemSelected" Invert="True" />
+    <conv:IsLastItemSelectedConverter x:Key="IsLastItemSelected" Invert="True" />
 
     <Style TargetType="{x:Type local:MasterControl}"
-           BasedOn="{StaticResource {x:Type local1:DoubleContentControl}}">
+           BasedOn="{StaticResource {x:Type utl:DoubleContentControl}}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:MasterControl}">

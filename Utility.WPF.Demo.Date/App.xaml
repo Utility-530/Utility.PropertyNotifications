@@ -1,8 +1,7 @@
 ﻿<Application x:Class="Utility.WPF.Demo.Date.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:models="clr-namespace:DateWork.Models"
-             xmlns:infra="clr-namespace:Utility.WPF.Demo.Date.Infrastructure"
+             xmlns:conv="http://schemas.utility.com/converters"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:model="clr-namespace:Utility.WPF.Demo.Date.Infrastructure.ViewModels"
              xmlns:entity="clr-namespace:Utility.WPF.Demo.Date.Infrastructure.Entity"
@@ -16,7 +15,7 @@
             </ResourceDictionary.MergedDictionaries>
 
 
-            <utl:AbbreviationConverter x:Key="AbbreviationConverter" MaxLength="10"/>
+            <conv:AbbreviationConverter x:Key="AbbreviationConverter" MaxLength="10"/>
 
             <!--<DataTemplate DataType="{x:Type model:NoteViewModel}">
                 <TextBlock Text="{Binding Text, 

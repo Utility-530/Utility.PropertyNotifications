@@ -5,6 +5,7 @@
     xmlns:ctrl="clr-namespace:Utility.WPF.Controls.Date"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:utl="http://schemas.utility.com/utilitywpf"
+    xmlns:conv="http://schemas.utility.com/converters"
     xmlns:infrastructure="clr-namespace:Utility.WPF.Controls.Date.Infrastructure">
 
     <ResourceDictionary.MergedDictionaries>
@@ -20,7 +21,7 @@
         <Setter Property="Padding" Value="0" />
     </Style>
 
-    <utl:DefaultConverter x:Key="DefaultConverter" />
+    <conv:DefaultConverter x:Key="DefaultConverter" />
 
 
     <Style x:Key="Day2ListBoxItem" TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource DayListBoxItem}">

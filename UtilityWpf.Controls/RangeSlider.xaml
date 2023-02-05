@@ -3,10 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:infra1="http://schemas.utility.com/panels"
     xmlns:local="clr-namespace:UtilityWpf.Controls"
-    xmlns:converter="http://schemas.utility.com/utilitywpf">
+    xmlns:conv="http://schemas.utility.com/converters">
 
     <ResourceDictionary.MergedDictionaries />
-    <converter:ThicknessConverter x:Key="ThicknessConverter"></converter:ThicknessConverter>
+    <conv:ThicknessConverter x:Key="ThicknessConverter"></conv:ThicknessConverter>
     <Geometry x:Key="RightGeometry">M0,0 L50,50 L0,100</Geometry>
     <Geometry x:Key="LeftGeometry">M50,0 L0,50 L50,100</Geometry>
 
@@ -296,10 +296,7 @@
         <Setter Property="TickLabelTemplate">
             <Setter.Value>
                 <DataTemplate>
-
-                    <Label
-
-                            Content="{Binding Converter={x:Static converter:LambdaConverter.DaysToDateTimeConverter}}" />
+                    <Label Content="{Binding Converter={x:Static conv:LambdaConverter.DaysToDateTimeConverter}}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>
