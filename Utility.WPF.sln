@@ -133,7 +133,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Panels.Helper",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.ViewModels", "Utility.ViewModels\Utility.ViewModels.csproj", "{CCAD6F48-FAF8-44C1-A2AB-4A48B8A6F0DC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tynamix.ObjectFiller", "..\..\Projects\Wpf Combobox\ObjectFiller.NET\Tynamix.ObjectFiller\Tynamix.ObjectFiller.csproj", "{FA2E4FAB-12DF-4729-A7BC-455FFC997A09}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tynamix.ObjectFiller", "ObjectFiller.NET\Tynamix.ObjectFiller\Tynamix.ObjectFiller.csproj", "{FA2E4FAB-12DF-4729-A7BC-455FFC997A09}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Helpers", "..\Utility.Helpers\Utility.Helpers\Utility.Helpers.csproj", "{7CD8F8B5-3709-4C64-B7A3-BD42718C89FD}"
 EndProject
