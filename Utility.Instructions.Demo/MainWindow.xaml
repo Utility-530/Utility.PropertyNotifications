@@ -1,0 +1,74 @@
+﻿<Window x:Class="Utility.Instructions.Demo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Utility.Instructions.Demo"
+        xmlns:treeDemo="clr-namespace:WpfTreeDemo"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <UniformGrid Rows="1">
+            <Button Click="Next_Click">next</Button>
+            <Button  Click="Previous_Click">previous</Button>
+        </UniformGrid>
+        <UniformGrid Rows="1" Grid.Row="1">
+            <Button  Click="ContentChange_Click" x:Name="Content"></Button>
+            <Button  Click="Add_Click" x:Name="Add">add</Button>
+            <Button  Click="Remove_Click" x:Name="Remove">remove</Button>
+        </UniformGrid>
+        <UniformGrid  Grid.Row="2" Rows="1">
+            <ItemsControl x:Name="Instructions"/>
+            <ListBox x:Name="ProceduresListBox">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True" >
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="Foreground" Value="Red" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <ContentControl Content="{Binding}"></ContentControl>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <TreeView x:Name="TreeView" SelectedItemChanged="TreeView_OnSelectedItemChanged">
+                <TreeView.Resources>
+                    <Style TargetType="{x:Type TreeViewItem}" >
+                        <!--<Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>-->    
+                        <Setter Property="IsExpanded" Value="True"/>
+                        <!--<Setter Property="IsSelected" Value="{Binding IsSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                        <Setter Property="Header" Value="{Binding Data}"/>-->
+                    </Style>
+
+                    <HierarchicalDataTemplate DataType="{x:Type treeDemo:Tree}" ItemsSource="{Binding Items}">
+                        <ContentControl Content="{Binding Data}"/>
+                        <HierarchicalDataTemplate.ItemTemplate>
+                            <DataTemplate>
+                                
+                                <Grid Background="LightGreen" Height="30">                               
+                                    <!--<Ellipse Fill="Red" Width="20" Height="20"></Ellipse>-->
+
+                                    <ContentControl Content="{Binding Data}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </HierarchicalDataTemplate.ItemTemplate>             
+                    </HierarchicalDataTemplate>                
+                </TreeView.Resources>        
+            </TreeView>
+        </UniformGrid>
+      
+    </Grid>
+</Window>
