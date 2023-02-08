@@ -57,5 +57,12 @@ namespace Utility.Randoms
         {
             return Names.Random(Random);
         }
+
+        const string chars = "abcdefghijklmnopqrstuvwxyz";
+
+        public static char AlphabetCharacter(int index)
+        {
+            return chars[index % 26];
+        }
     }
 }
