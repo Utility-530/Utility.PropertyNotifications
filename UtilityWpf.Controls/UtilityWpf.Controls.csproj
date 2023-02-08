@@ -90,9 +90,6 @@
 		<Compile Update="EnumItemsControl.cs">
 			<DependentUpon>EnumItemsControl.xaml</DependentUpon>
 		</Compile>
-		<Compile Update="FlipControl.cs">
-			<DependentUpon>FlipControl.xaml</DependentUpon>
-		</Compile>
 		<Compile Update="HeaderedListBox.cs">
 			<DependentUpon>HeaderedListBox.xaml</DependentUpon>
 		</Compile>
@@ -208,10 +205,6 @@
 			<SubType>Designer</SubType>
 		</Page>
 		<Page Update="Themes\ExpandItemStyle.xaml">
-			<SubType>Designer</SubType>
-		</Page>
-		<Page Update="FlipControl.xaml">
-			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 			<SubType>Designer</SubType>
 		</Page>
 		<Page Update="Themes\Generic.xaml">
