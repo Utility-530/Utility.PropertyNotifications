@@ -5,30 +5,10 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 
-namespace WpfTreeDemo
+namespace Utility.Trees
 {
-    public interface ITree
-    {
-        bool HasItems { get; }
-        void Add(object data);
-
-        IList Items { get; }
-
-        object Data { get; }
-    }
 
 
-    public interface ITree<T> : ITree, IEnumerable<ITree<T>>
-    {
-        ITree<T> Parent { get; }
-        IEnumerable<ITree<T>> GetParents(bool includingThis);
-        IEnumerable<ITree<T>> GetChildren(bool includingThis);
-
-        ITree<T> this[T item] { get; set; }
-
-        T GenericData { get; }
-
-    }
 
     public abstract class Tree : ITree
     {
@@ -41,6 +21,11 @@ namespace WpfTreeDemo
         public abstract void Add(object data);
     }
 
+
+    /// <summary>
+    /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class Tree<T> : Tree, ITree<T>
     {
         private ObservableCollection<ITree<T>> m_items;
@@ -223,7 +208,7 @@ namespace WpfTreeDemo
         {
             if (typeof(T).IsValueType)
                 return Data.ToString();
-            return EqualityComparer<T>.Default.Equals(GenericData, default(T)) ? string.Empty : Data.ToString();
+            return EqualityComparer<T>.Default.Equals(GenericData, default) ? string.Empty : Data.ToString();
         }
     }
 
