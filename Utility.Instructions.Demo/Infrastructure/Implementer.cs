@@ -1,5 +1,5 @@
 ﻿using System;
-using WpfTreeDemo;
+using Utility.Trees;
 
 namespace Utility.Instructions.Demo.Infrastructure
 {

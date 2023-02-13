@@ -105,7 +105,7 @@ namespace Utility.Instructions.Demo
             }
             public void Dispose()
             {
-                throw new System.NotImplementedException();
+                PriorProcedures.Clear();
             }
 
             public void RemoveHistory()
@@ -140,6 +140,15 @@ namespace Utility.Instructions.Demo
             var last = procedures.PriorProcedures.Last(a => a.Type == ProcedureType.InsertLast).Value;
             procedures.PriorProcedures.Add(new Procedure { Type = ProcedureType.RemoveLast, Value = last });
             Next_Click(default, default);
+        }
+
+        private void Refresh_Click(object sender, RoutedEventArgs e)
+        {
+            TreeView.ItemTemplateSelector = null;
+            TreeView.ItemContainerStyleSelector = null;
+            TreeView.ItemContainerStyle = null;
+            TreeView.ItemTemplateSelector = MyDataTemplateSelector.Instance;
+            TreeView.ItemContainerStyleSelector =  MyStyleSelector.Instance;
         }
 
         private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
