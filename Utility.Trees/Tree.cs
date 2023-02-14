@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
 
 namespace Utility.Trees
 {
-
-
-
     public abstract class Tree : ITree
     {
+        public Guid Key { get; } = Guid.NewGuid();
+
+        public abstract ITree this[int index] { get; set; }
+
         public abstract bool HasItems { get; }
 
         public abstract IList Items { get; }
@@ -19,6 +17,20 @@ namespace Utility.Trees
         public abstract object Data { get; }
 
         public abstract void Add(object data);
+
+        public abstract void Remove(object data);
+
+        public bool Equals(ITree? other)
+        {
+            return this.Key == other?.Key;
+        }
+
+        public override string ToString()
+        {
+            if (Data.GetType().IsValueType)
+                return Data?.ToString();
+            return Data == default? string.Empty : Data.ToString();
+        }
     }
 
 
@@ -49,6 +61,7 @@ namespace Utility.Trees
             Add(items);
         }
 
+
         public ITree<T>? this[T item]
         {
             get
@@ -62,12 +75,54 @@ namespace Utility.Trees
                 }
                 return x;
             }
-
             set
             {
                 throw new NotImplementedException("rfgf 3422");
             }
         }
+
+
+        public ITree<T>? this[Guid key]
+        {
+            get
+            {
+                var x = TreeHelper.Match(this, a => a.Key.Equals(key) == true);
+                if (x == null)
+                {
+                    throw new Exception("4sd ss");
+                    //x = new Tree<T>(item);
+                    //this.Add(x);
+                }
+                return x;
+            }
+            set
+            {
+                var x = TreeHelper.Match(this, a => a.Key.Equals(key) == true);
+                if (x == null)
+                {
+                    throw new Exception("4sd ss");
+                    //x = new Tree<T>(item);
+                    //this.Add(x);
+                }
+                x.Parent[x.Parent.Items.IndexOf(x)] = x;
+            }
+        }
+
+        public override ITree this[int index]
+        {
+            get
+            {
+                return m_items.Count == 0 ? this : m_items[index];
+            }
+            set
+            {
+                if (m_items.Count == 0)
+                    throw new Exception(" rere4");
+                else
+                    m_items[index] = value as ITree<T>;
+            }
+        }
+
 
         public override void Add(object data)
         {
@@ -86,22 +141,61 @@ namespace Utility.Trees
                 Items.Add(CloneTree(t));
                 return;
             }
+            throw new Exception("t 44 redsdssd");
+            //var o = data as object[];
+            //if (o != null)
+            //{
+            //    foreach (var obj in o)
+            //        Add(obj);
+            //    return;
+            //}
 
-            var o = data as object[];
-            if (o != null)
+            //var e = data as IEnumerable;
+            //if (e != null && !(data is ITree))
+            //{
+            //    foreach (var obj in e)
+            //        Add(obj);
+            //    return;
+            //}
+
+            throw new InvalidOperationException("Cannot add unknown content type.");
+        }
+
+        public override void Remove(object data)
+        {
+            if (data == null)
+                return;
+
+            if (data is T)
             {
-                foreach (var obj in o)
-                    Add(obj);
+                var single = m_items.Single(a => a.Data == data);
+                Items.Remove(single);
                 return;
             }
 
-            var e = data as IEnumerable;
-            if (e != null && !(data is ITree))
+            var t = data as ITree<T>;
+            if (t != null)
             {
-                foreach (var obj in e)
-                    Add(obj);
+                var single = m_items.Single(a => a == data);
+                Items.Remove(single);
                 return;
             }
+            throw new Exception("t 44 redsdssd");
+            //var o = data as object[];
+            //if (o != null)
+            //{
+            //    foreach (var obj in o)
+            //        Add(obj);
+            //    return;
+            //}
+
+            //var e = data as IEnumerable;
+            //if (e != null && !(data is ITree))
+            //{
+            //    foreach (var obj in e)
+            //        Add(obj);
+            //    return;
+            //}
 
             throw new InvalidOperationException("Cannot add unknown content type.");
         }
@@ -113,8 +207,6 @@ namespace Utility.Trees
                 result.Add(item.Items);
             return result;
         }
-
-
 
         protected virtual ITree<T> CloneNode(ITree<T> item)
         {
@@ -204,12 +296,7 @@ namespace Utility.Trees
             return GetEnumerator();
         }
 
-        public override string ToString()
-        {
-            if (typeof(T).IsValueType)
-                return Data.ToString();
-            return EqualityComparer<T>.Default.Equals(GenericData, default) ? string.Empty : Data.ToString();
-        }
+
     }
 
     public static class TreeHelper
