@@ -4,25 +4,34 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Utility.Instructions.Demo"
+        xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="10*"></RowDefinition>
         </Grid.RowDefinitions>
+
         <UniformGrid Rows="1">
-            <Button Click="Next_Click">next</Button>
             <Button  Click="Previous_Click">previous</Button>
+            <Button Click="Next_Click">next</Button>
+            <Button  Click="Up_Click">up</Button>
+            <Button  Click="Forward_Click">forward</Button>
+            <Button  Click="Back_Click">back</Button>
         </UniformGrid>
-        <UniformGrid Rows="1" Grid.Row="1">
-            <Button  Click="ContentChange_Click" x:Name="Content"></Button>
+        <UniformGrid Grid.Row="1" Rows="1">
+            <Button  Click="ContentChange_Click" x:Name="Content">content change</Button>
             <Button  Click="Add_Click" x:Name="Add">add</Button>
-            <Button  Click="Remove_Click" x:Name="Remove">remove</Button>
+            <Button  Click="Remove_Click" x:Name="Remove">remove</Button>  
+        </UniformGrid>
+        <UniformGrid Grid.Row="2" Rows="1">
+            <Button  Click="RemoveHistory_Click" x:Name="RemoveHistory">remove history</Button>
             <Button  Click="Refresh_Click" x:Name="Refresh">refresh</Button>
         </UniformGrid>
-        <UniformGrid  Grid.Row="2" Rows="1">
+        <UniformGrid  Grid.Row="3" Rows="1">
             <ItemsControl x:Name="Instructions"/>
             <ListBox x:Name="ProceduresListBox">
                 <ListBox.ItemContainerStyle>
@@ -30,31 +39,68 @@
                         <Style.Triggers>
                             <Trigger Property="IsSelected" Value="True" >
                                 <Setter Property="FontWeight" Value="Bold" />
-                                <Setter Property="Foreground" Value="Red" />
                             </Trigger>
                         </Style.Triggers>
                     </Style>
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate DataType="{x:Type local:View}">
                         <Grid>
-                            <ContentControl Content="{Binding}"></ContentControl>
+                            <ContentControl Content="{Binding Value}">
+                                <ContentControl.Style>
+                                    <Style TargetType="ContentControl">
+                                        <Setter Property="Foreground" Value="Black" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static local:State.Current}" >
+                                                <Setter Property="Foreground" Value="Cyan" />
+
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static local:State.Forward}">
+                                                <Setter Property="Foreground" Value="DodgerBlue" />
+
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static local:State.Back}">
+                                                <Setter Property="Foreground" Value="IndianRed" />
+
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static local:State.Up}">
+                                                <Setter Property="Foreground" Value="Green" />
+
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
                         </Grid>
+
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
 
+            <TreeView x:Name="TreeView2" >
+                <TreeView.Resources>
+                    <Style TargetType="{x:Type TreeViewItem}" >
+                        <Setter Property="IsExpanded" Value="True"/>
+                    </Style>                    
+                </TreeView.Resources>
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate DataType="{x:Type tree:Tree}"  ItemsSource="{Binding Items}">
+                        <ContentControl Content="{Binding Data}"></ContentControl>
+                    </HierarchicalDataTemplate>                  
+                </TreeView.ItemTemplate>
+            </TreeView>   
+            
             <TreeView x:Name="TreeView" 
                       SelectedItemChanged="TreeView_OnSelectedItemChanged" 
                       ItemContainerStyle="{StaticResource TreeViewItemStyle}">
                 <TreeView.Resources>
                     <Style TargetType="{x:Type TreeViewItem}" >
-                        <!--<Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>-->    
+                        <!--<Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>-->
                         <Setter Property="IsExpanded" Value="True"/>
                         <!--<Setter Property="IsSelected" Value="{Binding IsSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                         <Setter Property="Header" Value="{Binding Data}"/>-->
                     </Style>
-                </TreeView.Resources>        
+                </TreeView.Resources>
             </TreeView>
         </UniformGrid>
     </Grid>
