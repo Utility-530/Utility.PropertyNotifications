@@ -16,42 +16,93 @@ namespace Utility.Instructions.Demo.Infrastructure
             Tree = new Tree<string>("root");
         }
 
-        public Procedure OnNext(Instruction instruction)
+        public void OnNext(Instruction instruction)
         {
             switch (instruction.Type)
             {
                 case (InstructionType.InsertLast):
                     {
-                        var add = instruction.Value.ToString();
-                        var tree = Tree["root"][character];
-                        tree.Add(add);
-                        return new Procedure { Type = ProcedureType.InsertLast, Value = add };
+                        InsertLast(instruction);
+                        break;
                     }
                 case (InstructionType.RemoveLast):
                     {
-                        var remove = Tree[character].Items[^1];
-                        Tree[character].Items.Remove(remove);
-                        return new Procedure { Type = ProcedureType.RemoveLast, Value = remove };
+                        RemoveLast(instruction);
+                        break;
+
                     }
                 case (InstructionType.ChangeContent):
                     {
-                        count++;
-                        Tree.Add(new Tree<string>(character));
-                        return new Procedure { Type = ProcedureType.ChangeContent };
-                    }            
+                        ChangeContent();
+                        break;
+
+                    }
                 case (InstructionType.RevertChangeContent):
                     {
-                        var remove = Tree["root"].Items[^1];
-                        Tree["root"].Items.Remove(remove);
-                        count--;
+                        RevertChangeContent();
+                        break;
+                    }
+                default:
+                    throw new Exception("3 dsfsd");
+            }
+        }
+           
+        public void OnPrevious(Instruction instruction)
+        {
+            switch (instruction.Type)
+            {
+                case (InstructionType.InsertLast):
+                    {
+                        RemoveLast(instruction);
+                        break;
+                    }
+                case (InstructionType.RemoveLast):
+                    {
+                        InsertLast(instruction);
+                        break;
 
-                        return new Procedure { Type = ProcedureType.RevertChangeContent };
+                    }
+                case (InstructionType.ChangeContent):
+                    {
+                        RevertChangeContent();
+                        break;
+
+                    }
+                case (InstructionType.RevertChangeContent):
+                    {
+                        ChangeContent();
+                        break;
                     }
                 default:
                     throw new Exception("3 dsfsd");
             }
         }
 
+        private void RevertChangeContent()
+        {
+            var remove = Tree["root"].Items[^1];
+            Tree["root"].Items.Remove(remove);
+            count--;
+        }
+
+        private void ChangeContent()
+        {
+            count++;
+            Tree.Add(new Tree<string>(character));
+        }
+
+        private void RemoveLast(Instruction instruction)
+        {
+            var remove = instruction.Value;
+            Tree[character].Remove(remove);
+        }
+
+        private void InsertLast(Instruction instruction)
+        {
+            var add = instruction.Value.ToString();
+            var tree = Tree["root"][character];
+            tree.Add(add);
+        }
 
         const string chars = "abcdefghijklmnopqrstuvwxyz";
 
