@@ -5,6 +5,8 @@ namespace Utility.Randoms
 {
     public static class Names
     {
+        static List<string> strings = new();
+
         public readonly static List<string> Values = new()
         {
             "Madeline Haggerty",
@@ -112,7 +114,12 @@ namespace Utility.Randoms
 
         public static string Random(this System.Random random)
         {
-            return Values[random.Next(0, Values.Count)];
+            string str;
+            while (strings.Contains(str = Values[random.Next(0, Values.Count)]))
+            {
+            }
+            strings.Add(str);
+            return str;
         }
 
         //public static Names Instance { get; } = new Names();
