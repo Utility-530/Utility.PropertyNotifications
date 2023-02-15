@@ -2,16 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-//using System.Windows.Input;
 using Utility.Instructions.Demo.Infrastructure;
 using Utility.Trees;
 
 namespace Utility.Instructions.Demo
 {
 
-    public record ProceduresState(int Index, ITree<Instruction> Current, ITree<Instruction> Forward, ITree<Instruction> Back, ITree<Instruction> Up, IReadOnlyCollection<ITree<Instruction>> Items);
+    public record ProceduresState(int Index, ITree<Instruction> Current, ITree<Instruction> Forward, ITree<Instruction> Back, ITree<Instruction> Up, ITree<Instruction> CurrentBranch);
 
 
 
@@ -24,13 +22,15 @@ namespace Utility.Instructions.Demo
         private List<IObserver<ProceduresState>> observers = new();
         int count = resetCount;
 
-        private ProceduresState State() => new(count, Current, Forward, Back, Up, children);
+
+
+        private ProceduresState State() => new(count, Current, Forward, Back, Up, currentBranch);
 
         Instruction root = new Instruction() { Value = "root" };
 
         public Procedures()
         {
-            tree = new Tree<Instruction>(root);
+            tree = new Tree<Instruction>(root) {  };
             currentBranch = Tree[root];
         }
 
@@ -43,12 +43,13 @@ namespace Utility.Instructions.Demo
 
         public ITree<Instruction> Up => currentBranch.Parent;
 
-        public ITree<Instruction> Back => count < 1 ? count < 0 ? null : currentBranch.Parent : children[count - 1];
+        public ITree<Instruction> Back => count < 1 ? (count < 0 ? currentBranch.Parent : currentBranch) : children[count - 1];
 
-        //public ITree<Instruction> Previous => children.Count <= count - 1 || count - 1 < 0 ? null : children[count - 1];
-        //public ITree<Instruction> Next => children.Count <= count - 1 || count - 1 < 0 ? null : children[count - 1];
+        public ITree<Instruction> Previous => Past.TryPeek(out var guid) ? tree[guid] : null;
 
-        public ITree<Instruction> Current => count < 0 ? null : children.Count <= count ? null: children[count] ;
+        public ITree<Instruction> Next => Future.TryPeek(out var guid) ? tree[ guid] : null;
+
+        public ITree<Instruction> Current => count < 0 ? currentBranch : children.Count <= count ? null :  children[count];
 
         public ITree<Instruction> Tree => tree;
 
@@ -70,13 +71,13 @@ namespace Utility.Instructions.Demo
                 currentBranch = currentBranch.Parent;
                 if (currentBranch == null)
                     yield break;
-                count = currentBranch.Parent.Items.IndexOf(currentBranch);
+                count = currentBranch.Parent.IndexOf(currentBranch);
             }
 
             SavePresentAsPast();
 
             foreach (var x in currentBranch.GetChildren(false))
-                yield return x.GenericData;
+                yield return x.Data;
 
             foreach (var observer in observers)
                 observer.OnNext(State());
@@ -94,7 +95,7 @@ namespace Utility.Instructions.Demo
             SavePresentAsPast();
             foreach (var observer in observers)
                 observer.OnNext(State());
-            return Current.GenericData;
+            return Current.Data;
         }
 
         public Instruction MoveBack()
@@ -117,32 +118,32 @@ namespace Utility.Instructions.Demo
 
             foreach (var observer in observers)
                 observer.OnNext(State());
-            return Forward.GenericData;
+            return Forward.Data;
         }
 
 
-        public bool MoveNext()
+        public Instruction MoveNext()
         {
             Past.Push(Current.Key);
             var current = Future.Pop();
             var x = tree[current];
-            count = x.Parent?.Items.IndexOf(x) - 1 ?? -1;
+            count = x.Parent?.IndexOf(x) - 1 ?? -1;
 
             foreach (var observer in observers)
                 observer.OnNext(State());
-            return true;
+            return Next.Data;
         }
 
-        public bool MovePrevious()
+        public Instruction MovePrevious()
         {
             var current = Past.Pop();
             Future.Push(current);
             var x = tree[current];
-            count = x.Parent?.Items.IndexOf(x) - 1 ?? -1;
+            count = x.Parent?.IndexOf(x) - 1 ?? -1;
 
             foreach (var observer in observers)
                 observer.OnNext(State());
-            return true;
+            return Previous.Data;
         }
 
         public void Reset()
@@ -178,7 +179,7 @@ namespace Utility.Instructions.Demo
             }
             if (count != -1)
             {
-                currentBranch = currentBranch[count] as ITree<Instruction>;
+                currentBranch = currentBranch[count];
                 Reset();
             }
             currentBranch.Add(instruction);

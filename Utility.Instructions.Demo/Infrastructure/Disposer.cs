@@ -1,5 +1,5 @@
 ﻿using System;
-//using System.Windows.Input;
+using System.Collections.Generic;
 
 namespace Utility.Instructions.Demo
 {
@@ -13,9 +13,25 @@ namespace Utility.Instructions.Demo
             (this.observers = observers).Add(observer);
             this.observer = observer;
         }
-        public Disposer(IObserver<T> observer, System.Collections.IList observers = null)
+        public System.Collections.IEnumerable Observers => observers;
+        public IObserver<T> Observer => observer;
+
+        public void Dispose()
         {
-            (this.observers = observers)?.Add(observer);
+            observers?.Remove(observer);
+        }
+    }  
+    
+    public sealed class Disposer<T, TKey> : IDisposable
+    {
+        private readonly IDictionary<TKey, IObserver<T>> observers;
+        private readonly TKey key;
+        private readonly IObserver<T> observer;
+
+        public Disposer(IDictionary<TKey, IObserver<T>> observers, TKey key, IObserver<T> observer)
+        {
+            (this.observers = observers).Add(key, observer);
+            this.key = key;
             this.observer = observer;
         }
 
@@ -24,7 +40,7 @@ namespace Utility.Instructions.Demo
 
         public void Dispose()
         {
-            observers?.Remove(observer);
+            observers?.Remove(key);
         }
     }
 }

@@ -7,87 +7,92 @@ using Utility.Instructions.Demo.Infrastructure;
 using System.Reactive.Linq;
 using System.Collections.Generic;
 using Utility.Trees;
+using System.Collections;
 
 namespace Utility.Instructions.Demo
 {
-    public enum State
-    {
-        Default, Current, Forward, Back, Up,
-    }
 
-    public class View
-    {
-        public State State { get; set; }
-
-        public object Value { get; set; }
-    }
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        Random random = new Random();
-        Procedures procedures = new();
-
+        readonly Random random = new Random();
+        readonly Procedures procedures = new();
+        readonly Service service;
         public Implementer implementor = new();
-        public ObservableCollection<Instruction> InstructionCollection { get; } = new();
-        //public ObservableCollection<Instruction> InstructionCollection { get; } = new();
+        private readonly View View;
 
+        public ObservableCollection<ProceduresState> StateCollection { get; } = new();
 
-
-
-
+        //public Tree<View> ViewModelTree { get; } = new(new View { Value = "root" });
+        readonly Dictionary<Guid, View> views = new();
+        readonly View root;
+        ObservableCollection<View> currentViews = new();
         public MainWindow()
         {
             InitializeComponent();
-            this.TreeView.ItemsSource = implementor.Tree.Items;
-            Instructions.ItemsSource = InstructionCollection;
+            service = new(procedures.Tree.Key);
 
+            root = views[service.Root.Key] = service.Root.CloneTree() as View;
+            root.IsExpanded = true;
+            this.TreeView.ItemsSource = implementor.Tree.Items;
             TreeView2.ItemsSource = procedures.Tree.Items;
+            TreeView3.ItemsSource = service.Root.Items;
+            TreeView4.ItemsSource = root.Items;
+            Instructions.ItemsSource = StateCollection;
+            ProceduresListBox.ItemsSource = currentViews;
+
             procedures.Subscribe(state =>
             {
-                var views = state.Items.Select(a=> new View { Value= a, State= GetState(a, state) }).ToArray();
+                int index = 0;
+                List<View> currentViews = new();
 
-                if (ProceduresListBox.ItemsSource?.OfType<object>().Contains(state.Current) == true)
+                Update(state, index);
+
+                if (state.CurrentBranch.Contains(state.Current) == true)
                     ProceduresListBox.SelectedItem = state.Current;
                 else
                     ProceduresListBox.SelectedItem = null;
 
-                ProceduresListBox.ItemsSource = views;
 
-                InstructionCollection.Add(state.Current?.Data as Instruction);
+                StateCollection.Add(state);
             });
         }
 
-        private State GetState(ITree<Instruction> tree, ProceduresState state)
+        private void Update(ProceduresState state, int index)
         {
-            if (tree == state.Current)
-                return State.Current;       
-            else if (tree == state.Forward)
-                return State.Forward;
-            else if(tree == state.Back)
-                return State.Back;
-            else if(tree == state.Up)
-                return State.Up;
-            return State.Default;
+            currentViews.Clear();
+            foreach (var item in state.CurrentBranch.Items)
+            {
+                if (views.ContainsKey(item.Key) == false)
+                {
+                    var view = new View(service, item.Data, item.Key) { };
+                    views.Add(item.Key, view);
+                }
+                var cView = views[item.Key];
+                cView.State = GetState(item, state);
+                currentViews.Add(cView);
+                service.OnNext(new Change<View, Key>(cView, new Key(state.CurrentBranch.Key), new Key(item.Key), index, ChangeType.Update));
+             }
+
+            State GetState(ITree<Instruction> tree, ProceduresState state)
+            {
+                if (tree == state.Current)
+                    return State.Current;
+                else if (tree == state.Forward)
+                    return State.Forward;
+                else if (tree == state.Back)
+                    return State.Back;
+                else if (tree == state.Up)
+                    return State.Up;
+                return State.Default;
+            }
         }
 
-        private void Next_Click(object sender, RoutedEventArgs e)
-        {
-            //if(procedures.MoveForward() == false)
-            //    throw new Exception("V3 fds");
 
-            //implementor.OnNext(procedures.Current.Data as Instruction);
-        }
 
-        private void Previous_Click(object sender, RoutedEventArgs e)
-        {
-            //if (procedures.MoveBack() == false)
-            //    throw new Exception("V3 fds");
-
-            //implementor.OnPrevious(procedures.Forward.Data as Instruction);
-        }
 
         private void ContentChange_Click(object sender, RoutedEventArgs e)
         {
@@ -106,16 +111,6 @@ namespace Utility.Instructions.Demo
         }
 
 
-
-
-        private void Refresh_Click(object sender, RoutedEventArgs e)
-        {
-            TreeView.ItemTemplateSelector = null;
-            TreeView.ItemContainerStyleSelector = null;
-            TreeView.ItemContainerStyle = null;
-            TreeView.ItemTemplateSelector = MyDataTemplateSelector.Instance;
-            TreeView.ItemContainerStyleSelector = MyStyleSelector.Instance;
-        }
 
         private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
@@ -150,6 +145,35 @@ namespace Utility.Instructions.Demo
                 throw new Exception("V3 fds");
 
             implementor.OnPrevious(instruction);
+        }
+
+
+        private void Next_Click(object sender, RoutedEventArgs e)
+        {
+            if (procedures.MoveNext() is not Instruction instruction)
+                throw new Exception("V3 fds");
+
+            implementor.OnNext(instruction);
+        }
+
+        private void Previous_Click(object sender, RoutedEventArgs e)
+        {
+            if (procedures.MovePrevious() is not Instruction instruction)
+                throw new Exception("V3 fds");
+
+            implementor.OnPrevious(instruction);
+        }
+
+
+
+
+        private void Refresh_Click(object sender, RoutedEventArgs e)
+        {
+            TreeView.ItemTemplateSelector = null;
+            TreeView.ItemContainerStyleSelector = null;
+            TreeView.ItemContainerStyle = null;
+            TreeView.ItemTemplateSelector = MyDataTemplateSelector.Instance;
+            TreeView.ItemContainerStyleSelector = MyStyleSelector.Instance;
         }
     }
 }
