@@ -3,14 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Utility.Instructions.Demo.Infrastructure;
-using Utility.Trees;
 
-namespace Utility.Instructions.Demo
+namespace Utility.Trees
 {
 
     public record TreeState(int Index, ITree Current, ITree Forward, ITree Back, ITree Up, ITree CurrentBranch);
- 
+
 
 
     public class DynamicTree<T> : IObservable<TreeState> where T : new()
@@ -43,7 +41,7 @@ namespace Utility.Instructions.Demo
 
         public ITree<T> Up => currentBranch.Parent;
 
-        public ITree<T> Back => count < 1 ? (count < 0 ? currentBranch.Parent : currentBranch) : children[count - 1];
+        public ITree<T> Back => count < 1 ? count < 0 ? currentBranch.Parent : currentBranch : children[count - 1];
 
         public ITree<T> Previous => Past.TryPeek(out var guid) ? tree[guid] : null;
 

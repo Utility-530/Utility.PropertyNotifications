@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Utility.Instructions.Demo
+namespace Utility.Trees
 {
     public sealed class Disposer<T> : IDisposable
     {
@@ -20,8 +20,8 @@ namespace Utility.Instructions.Demo
         {
             observers?.Remove(observer);
         }
-    }  
-    
+    }
+
     public sealed class Disposer<T, TKey> : IDisposable
     {
         private readonly IDictionary<TKey, IObserver<T>> observers;

@@ -5,13 +5,8 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace Utility.Instructions.Demo.Infrastructure
+namespace Utility.Instructions
 {
-
-    public enum InstructionType
-    {
-        InsertLast, RemoveLast, ChangeContent, RevertChangeContent
-    }
 
     public class Instruction
     {
