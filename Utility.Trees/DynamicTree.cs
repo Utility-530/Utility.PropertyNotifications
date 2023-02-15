@@ -7,160 +7,147 @@ using System.Linq;
 namespace Utility.Trees
 {
 
-    public record TreeState(int Index, ITree Current, ITree Forward, ITree Back, ITree Up, ITree CurrentBranch);
 
 
-
-    public class DynamicTree<T> : IObservable<TreeState> where T : new()
+    public class DynamicTree<T> : IObservable<TreeState>, IObserver<TreeState>
     {
-        const int resetCount = -1;
-        private new ObservableCollection<ITree<T>> children => currentBranch.Items as ObservableCollection<ITree<T>>;
-
+        private new ObservableCollection<ITree<T>> children => Current.Parent?.Items as ObservableCollection<ITree<T>>;
+        private Tree<T> tree;
+        //private ITree<T> currentBranch;
 
         private List<IObserver<TreeState>> observers = new();
-        int count = resetCount;
+        //private int index = resetCount;
+        private ITree<T> toRemove;
+        private ITree<T> current;
 
+        private TreeState TreeState() => new(
+            Index,
+            State,
+            Current,
+            CanMoveForward ? Forward : default,
+            CanMoveBack ? Back : default,
+            CanMoveUp ? Up : default,
+            CanMoveDown ? Down : default,
+            CanAdd ? ToAdd : default,
+            CanRemove ? ToRemove : default);
 
-
-        private TreeState State() => new(count, Current, Forward, Back, Up, currentBranch);
-
-        //T root = new T() { Value = "root" };
 
         public DynamicTree(T root)
         {
             tree = new Tree<T>(root) { };
-            currentBranch = Tree[root];
+            Current = Tree[root];
         }
 
-        private Tree<T> tree;
-        private ITree<T> currentBranch;
+        public bool CanMoveUp => Current.Parent != null;
+        public bool CanMoveDown => Current.HasItems;
+        public bool CanMoveForward => Index < children?.Count - 1;
 
-        public IEnumerable Children => children;
+        public bool CanMoveBack => Index > 0;
+        public bool CanAdd => ToAdd != null;
+        public bool CanRemove => Current?.Parent != null;
 
-        public ITree<T> Forward => children.Count <= count + 1 ? null : children[count + 1];
 
-        public ITree<T> Up => currentBranch.Parent;
+        public ITree<T> Up => Current.Parent;
 
-        public ITree<T> Back => count < 1 ? count < 0 ? currentBranch.Parent : currentBranch : children[count - 1];
+        public ITree<T> Down => Current[0];
 
-        public ITree<T> Previous => Past.TryPeek(out var guid) ? tree[guid] : null;
+        public ITree<T> Forward => children[Index + 1];
 
-        public ITree<T> Next => Future.TryPeek(out var guid) ? tree[guid] : null;
+        public ITree<T> Back => children[Index - 1];
 
-        public ITree<T> Current => count < 0 ? currentBranch : children.Count <= count ? null : children[count];
+        //public ITree<T> Previous => Past.TryPeek(out var guid) ? tree[guid] : null;
+
+        //public ITree<T> Next => Future.TryPeek(out var guid) ? tree[guid] : null;
+
+        public ITree<T> Current
+        {
+            get
+            {
+                return current;
+            }
+            private set
+            {
+                current = value;
+                //index = value.Parent.IndexOf(value);
+            }
+        }
+
+
+        public ITree<T> ToRemove => toRemove;
+
+        public ITree<T> ToAdd => toAdd;
+
+        private ITree<T> toAdd;
+        public T Data { get=> toAdd.Data; set=> toAdd = new Tree<T>(value) { Parent = Current }; }
+
+        public State State { get; set; }
 
         public ITree<T> Tree => tree;
 
-        public Stack<Guid> Past { get; set; } = new Stack<Guid>();
-        public Stack<Guid> Future { get; set; } = new Stack<Guid>();
-        public Dictionary<Guid, Stack<DateTime>> History { get; set; } = new Dictionary<Guid, Stack<DateTime>>();
+        public int Index => Current.Parent?.IndexOf(Current) ?? 0;
 
-
-        bool isDirty;
-
-
-        public IEnumerable<T> MoveUp()
+        public void MoveUp()
         {
-            isDirty = true;
-            if (count >= children.Count)
-                yield break;
-            if (count < 0)
-            {
-                currentBranch = currentBranch.Parent;
-                if (currentBranch == null)
-                    yield break;
-                count = currentBranch.Parent.IndexOf(currentBranch);
-            }
+            Current = Up;
 
-            SavePresentAsPast();
+            State = State.Up;
 
-            foreach (var x in currentBranch.GetChildren(false))
-                yield return x.Data;
+            Broadcast();
 
-            foreach (var observer in observers)
-                observer.OnNext(State());
         }
 
-        public T MoveForward()
+        public void MoveForward()
         {
-            isDirty = true;
+            Current = Forward;
+            State = State.Forward;
 
-            if (count >= children.Count)
-                return default;
+            Broadcast();
+                }
 
-            count++;
+        public void MoveDown()
+        {
+            Current = Down;
+            State = State.Down;
 
-            SavePresentAsPast();
-            foreach (var observer in observers)
-                observer.OnNext(State());
-            return Current.Data;
+            Broadcast();
         }
 
-        public T MoveBack()
+        public void MoveBack()
         {
-            if (count < 0)
-            {
-                if (count < -1)
-                    throw new Exception("g 4333");
-
-                currentBranch = currentBranch.Parent;
-                Reset();
-            }
-            else
-            {
-                count--;
-            }
-
-            isDirty = true;
-            SavePresentAsPast();
-
-            foreach (var observer in observers)
-                observer.OnNext(State());
-            return Forward.Data;
+            Current = Back;
+            State = State.Back;
+            Broadcast();
         }
 
-
-        public T MoveNext()
-        {
-            Past.Push(Current.Key);
-            var current = Future.Pop();
-            var x = tree[current];
-            count = x.Parent?.IndexOf(x) - 1 ?? -1;
-
-            foreach (var observer in observers)
-                observer.OnNext(State());
-            return Next.Data;
-        }
-
-        public T MovePrevious()
-        {
-            var current = Past.Pop();
-            Future.Push(current);
-            var x = tree[current];
-            count = x.Parent?.IndexOf(x) - 1 ?? -1;
-
-            foreach (var observer in observers)
-                observer.OnNext(State());
-            return Previous.Data;
-        }
-
-        public void Reset()
-        {
-            count = resetCount;
-            isDirty = false;
-        }
 
         public void Dispose()
         {
             children.Clear();
         }
 
-        public void RemoveFuture()
+        public void Add()
         {
-            while (children.Count > count + 2)
-                children.Remove(children[^1]);
+            toRemove = ToAdd;
+            Current.Add(toRemove);
+            Current = toRemove;
+            State = State.Add;
+            toAdd = null;
+            Broadcast();
+        }
 
+        public void Remove()
+        {
+            var parent = Current.Parent;
+            Current.Parent.Remove(Current);
+            Current = parent;
+            State = State.Remove;
+            Broadcast();
+        }
 
+        public void Broadcast()
+        {
+            foreach (var observer in observers)
+                observer.OnNext(TreeState());
         }
 
         public IDisposable Subscribe(IObserver<TreeState> observer)
@@ -168,64 +155,33 @@ namespace Utility.Trees
             return new Disposer<TreeState>(observers, observer);
         }
 
-        public void Add(T instruction)
-        {
-            if (isDirty)
-            {
-                RemoveFuture();
-                isDirty = false;
-            }
-            if (count != -1)
-            {
-                currentBranch = currentBranch[count];
-                Reset();
-            }
-            currentBranch.Add(instruction);
-            foreach (var observer in observers)
-                observer.OnNext(State());
-        }
-
-        //public void Remove(T instruction)
-        //{
-        //    if (isDirty)
-        //    {
-        //        RemoveFuture();
-        //        isDirty = false;
-        //    }
-        //    if (count < 0)
-        //    {
-        //        currentBranch = currentBranch.Parent;
-        //        count = currentBranch.Parent.Items.IndexOf(currentBranch);
-        //    }
-
-        //    currentBranch.Items.Remove(instruction);
-        //    foreach (var observer in observers)
-        //        observer.OnNext(State());
-        //}
-
-        public void SavePresentAsPast()
-        {
-            Past.Push(Current.Key);
-            (History.TryGetValue(Current.Key, out Stack<DateTime> value) ? value : History[Current.Key] = new Stack<DateTime>()).Push(DateTime.Now);
-        }
-
-        //public void SavePresentAsFuture()
-        //{
-        //    Future.Push(Current.Key);
-        //    History[Current.Key] = (History.ContainsKey(Current.Key) ? History[Current.Key] : new Stack<DateTime>()).Push(DateTime.Now);
-        //}
-
-
-
-        //public T Last(InstructionType insertLast)
-        //{
-        //    return children.LastOrDefault(a => (a.Data as T).Type == insertLast).Data as T;
-        //}
-
-
         public ITree<T> Last()
         {
             return children.LastOrDefault();
+        }
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(TreeState value)
+        {
+            //index = value.Index;
+            State = value.State;
+            Current = value.Current as ITree<T>;
+            Data = (value.Add as ITree<T>).Data;
+            toRemove = value.Remove as ITree<T>;
+        }
+
+        public void OnPrevious(TreeState data)
+        {
+            throw new NotImplementedException();
         }
     }
 }

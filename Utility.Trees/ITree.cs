@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.ObjectModel;
+using System.Text;
 
 //
 
@@ -7,7 +9,24 @@ namespace Utility.Trees
 {
     public enum State
     {
-        Default, Current, Forward, Back, Up,
+        Default, Current, Forward, Back, Up, Down, Add, Remove
+    }
+
+    public class Index
+    {
+        public IReadOnlyCollection<int> Collection { get; init; }
+
+        public override string ToString()
+        {
+            StringBuilder stringBuilder = new();
+            foreach (var item in Collection)
+            {
+                stringBuilder.Append(item);
+                stringBuilder.Append('.');
+            }
+            stringBuilder.Remove(stringBuilder.Length - 1, 1);
+            return stringBuilder.ToString();
+        }
     }
 
     /// <summary>
@@ -20,6 +39,8 @@ namespace Utility.Trees
         bool HasItems { get; }
         void Add(object data);
         void Remove(object data);
+
+        Index Index { get; }
 
         ITree Parent { get; }
 

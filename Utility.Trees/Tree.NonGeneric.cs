@@ -61,7 +61,9 @@ namespace Utility.Trees
     public class Tree : ITree, IEnumerable<ITree>
     {
         private IList items;
+        private object data;
 
+        protected ITree parent;
         bool flag;
         protected IList m_items
         {
@@ -76,7 +78,6 @@ namespace Utility.Trees
             }
         }
 
-        private object data;
 
 
         public Tree(object data)
@@ -171,13 +172,13 @@ namespace Utility.Trees
 
             if (data is ITree tree)
             {
-                m_items.Add(tree.CloneTree());
+                m_items.Add(tree);
                 return;
             }
             if (data is IEnumerable<ITree> treeCollection)
             {
                 foreach (var item in treeCollection)
-                    m_items.Add(item.CloneTree());
+                    m_items.Add(item);
                 return;
             }
             if (data is not null)
@@ -275,7 +276,7 @@ namespace Utility.Trees
             get { return m_items != null && m_items.Count > 0; }
         }
 
-        public ITree Parent { get; private set; }
+        public ITree Parent { get => parent;  set=> parent=value; }
 
 
         public IReadOnlyList<ITree> Items
@@ -295,6 +296,26 @@ namespace Utility.Trees
         }
 
         public State State { get; set; }
+
+        public Index Index
+        {
+            get
+            {
+                var indices = Indices();
+                return new Index { Collection = indices.Reverse().ToArray() };
+                IEnumerable<int> Indices()
+                {
+                    ITree parent = this.Parent;
+                    ITree child = this;
+                    while (parent != null)
+                    {
+                        yield return parent.IndexOf(child);
+                        child = parent;
+                        parent = parent.Parent;
+                    }
+                }
+            }
+        }
 
         private void ResetOnCollectionChangedEvent()
         {
@@ -375,7 +396,14 @@ namespace Utility.Trees
 
         public int IndexOf(ITree tree)
         {
-            return this.m_items.IndexOf(tree);
+            int i = 0;
+            foreach (var item in m_items)
+            {
+                if (item.Equals(tree))
+                    return i;
+                i++;
+            }
+            return -1;
         }
 
         public override string ToString()

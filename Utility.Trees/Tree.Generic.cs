@@ -82,7 +82,7 @@ namespace Utility.Trees
         {
             get
             {
-                return m_items.Count == 0 ? this : m_items[index] as ITree<T>;
+                return m_items.Count == 0 ? throw new Exception("vfd4") : m_items[index] as ITree<T>;
             }
             set
             {
@@ -102,13 +102,13 @@ namespace Utility.Trees
             if (data == null)
                 return;
 
-            var tree = new Tree<T>(data);
+            var tree = new Tree<T>(data) { Id = m_items.Count };
 
             m_items.Add(tree);
             return;
 
 
-       
+
         }
 
         public override void Add(object data)
@@ -119,18 +119,18 @@ namespace Utility.Trees
 
             if (data is ITree<T> tree)
             {
-                m_items.Add(CloneTree(tree));
+                m_items.Add((tree));
                 return;
             }
 
-            if (data is ITree )
+            if (data is ITree)
             {
                 throw new Exception("t 44 redsdssd");
             }
 
             if (data is T t)
             {
-                m_items.Add(CloneNode(new Tree(t)));
+                m_items.Add((new Tree(t)));
                 return;
             }
 
@@ -177,18 +177,20 @@ namespace Utility.Trees
         public new T Data { get => data; private set => data = value; }
 
 
-        public new ITree<T> Parent { get; private set; }
+        public new ITree<T> Parent { get => (ITree<T>)parent; set => parent = value; }
 
 
         public new IReadOnlyList<ITree<T>> Items
         {
             get
             {
-             
+
                 var x = m_items as ObservableCollection<ITree<T>>;
                 return x;
             }
         }
+
+        public int Id { get; private set; }
 
         protected override IList CreateChildren()
         {
@@ -252,9 +254,14 @@ namespace Utility.Trees
 
         public int IndexOf(ITree<T> tree)
         {
-
-            return this.m_items.IndexOf(tree);
-
+            int i = 0;
+            foreach (var item in m_items)
+            {
+                if (item.Equals(tree))
+                    return i;
+                i++;
+            }
+            return -1;
         }
 
         ITree<T> ITree<T>.CloneTree()
