@@ -18,6 +18,7 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="10*"></RowDefinition>
         </Grid.RowDefinitions>
         <UniformGrid Grid.Row="0"  Rows="1">
@@ -26,60 +27,26 @@
             <Button Click="Run_Click">run</Button>
         </UniformGrid>
         <UniformGrid Grid.Row="1"  Rows="1">
-            <Button  Click="Previous_Click">previous</Button>
-            <Button Click="Next_Click">next</Button>
-            <Button  Click="Up_Click">up</Button>
-            <Button  Click="Forward_Click">forward</Button>
-            <Button  Click="Back_Click">back</Button>
+            <Button x:Name="UpButton"  Click="Up_Click" >up</Button>
+            <Button x:Name="DownButton"   Click="Down_Click">down</Button>
+            <Button  x:Name="ForwardButton"  Click="Forward_Click">forward</Button>
+            <Button x:Name="BackButton"   Click="Back_Click">back</Button>
         </UniformGrid>
         <UniformGrid Grid.Row="2" Rows="1">
-            <Button  Click="ContentChange_Click" x:Name="Content">content change</Button>
-            <Button  Click="Add_Click" x:Name="Add">add</Button>
-            <Button  Click="Remove_Click" x:Name="Remove">remove</Button>
+            <Button  Click="Previous_Click">previous</Button>
+            <Button Click="Next_Click">next</Button>
         </UniformGrid>
         <UniformGrid Grid.Row="3" Rows="1">
-            <Button  Click="RemoveHistory_Click" x:Name="RemoveHistory">remove history</Button>
+            <Button  Click="Remove_Click" x:Name="RemoveButton">remove</Button>
+            <Button  Click="Add_Click" x:Name="AddButton">add</Button>
+        </UniformGrid>
+        <UniformGrid Grid.Row="4" Rows="1">
+            <!--<Button  Click="RemoveHistory_Click" x:Name="RemoveHistory">remove history</Button>-->
             <Button  Click="Refresh_Click" x:Name="Refresh">refresh</Button>
         </UniformGrid>
-        <UniformGrid  Grid.Row="4" Rows="1">
-            <DataGrid x:Name="Instructions" AutoGenerateColumns="False">
-        
-                <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Index}"></DataGridTextColumn>
-                    <!--Custom column that shows the published date-->
-                    <DataGridTemplateColumn Header="Current" Width="100"  >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate DataType="{x:Type local:TreeState}">
-                                <Viewbox>
-                                    <ContentControl Content="{Binding Current.Data}" BorderThickness="0" />
-                                </Viewbox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTemplateColumn Header="Forward"  Width="100"   >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate DataType="{x:Type local:TreeState}">
-                                <Viewbox>
-                                    <ContentControl Content="{Binding Forward.Data}" BorderThickness="0" />
+        <UniformGrid  Grid.Row="5" Rows="1">
 
-                                </Viewbox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn Header="CurrentBranch"  Width="100"   >
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate DataType="{x:Type local:TreeState}">
-                                <Viewbox>
-                                    <ContentControl Content="{Binding CurrentBranch.Data}" BorderThickness="0" />
-
-                                </Viewbox>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-            <ListBox x:Name="ProceduresListBox">
+            <!--<ListBox x:Name="ProceduresListBox">
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="ListBoxItem">
                         <Style.Triggers>
@@ -116,13 +83,13 @@
                                 </Style>
                             </Grid.Style>
                             <ContentControl Content="{Binding Data}" >
-                              
+
                             </ContentControl>
                         </Grid>
 
                     </DataTemplate>
                 </ListBox.ItemTemplate>
-            </ListBox>
+            </ListBox>-->
 
             <TreeView x:Name="TreeView2" >
                 <TreeView.Resources>
@@ -143,36 +110,59 @@
                     <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource TreeViewItemStyle}">
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                     </Style>
+                    <!--<DataTemplate DataType="{x:Type tree:Index}">
+                        <ItemsControl ItemsSource="{Binding Collection}" Width="50">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </DataTemplate>-->
                 </TreeView.Resources>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="{x:Type tree:Tree}"  ItemsSource="{Binding Items}">
                         <Grid>
-                            <ContentControl Content="{Binding Data}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <ContentControl Content="{Binding Index}"/>
+
+                            <ContentControl Grid.Column="2"  Content="{Binding Data}"/>
+
+                            <ContentControl Grid.Column="4"  Content="{Binding State}">
                                 <ContentControl.Style>
                                     <Style TargetType="ContentControl">
                                         <Setter Property="Foreground" Value="Black" />
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Current}" >
                                                 <Setter Property="Foreground" Value="Cyan" />
-
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Forward}">
                                                 <Setter Property="Foreground" Value="DodgerBlue" />
-
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Back}">
                                                 <Setter Property="Foreground" Value="IndianRed" />
-
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Up}">
                                                 <Setter Property="Foreground" Value="Green" />
-
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Add}">
+                                                <Setter Property="Foreground" Value="Maroon" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Remove}">
+                                                <Setter Property="Foreground" Value="Tomato" />
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
                                 </ContentControl.Style>
                             </ContentControl>
-                        </Grid>                   
+                           
+                        </Grid>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
@@ -218,6 +208,60 @@
 
 
 
+            <TreeView x:Name="TreeView5" ItemContainerStyle="{StaticResource StretchTreeViewItemStyle}">
+
+                <TreeView.Resources>
+                    <Style TargetType="{x:Type TreeViewItem}" >
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    </Style>
+
+                    <DataTemplate DataType="{x:Type tree:TreeState}">
+                        <Border BorderThickness="1" BorderBrush="Gray" >
+                        <UniformGrid Rows="1" >                            
+                            <ContentControl Content="{Binding Index}"></ContentControl>
+                            <ContentControl Content="{Binding Back}"></ContentControl>
+                            <ContentControl Content="{Binding Current}"></ContentControl>
+                            <ContentControl Content="{Binding Forward}"></ContentControl>
+                            <ContentControl Content="{Binding Up}"></ContentControl>
+                        </UniformGrid>
+                        </Border>
+                    </DataTemplate>
+                </TreeView.Resources>
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate DataType="{x:Type tree:Tree}"  ItemsSource="{Binding Items}">
+
+                        <ContentControl Content="{Binding Data}" HorizontalAlignment="Stretch" >
+                                <ContentControl.Style>
+                                    <Style TargetType="ContentControl" >
+                                        <Setter Property="Foreground" Value="Black" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Current}" >
+                                                <Setter Property="Foreground" Value="Cyan" />
+
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Forward}">
+                                                <Setter Property="Foreground" Value="DodgerBlue" />
+
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Back}">
+                                                <Setter Property="Foreground" Value="IndianRed" />
+
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Up}">
+                                                <Setter Property="Foreground" Value="Green" />
+
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
+                        
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+
+
+
 
 
             <TreeView x:Name="TreeView" 
@@ -226,10 +270,10 @@
                       ItemContainerStyleSelector="{x:Static local:MyStyleSelector.Instance}">
                 <TreeView.Resources>
                     <Style TargetType="{x:Type TreeViewItem}" >
-                        <!--<Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>-->
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                         <Setter Property="IsExpanded" Value="True"/>
-                        <!--<Setter Property="IsSelected" Value="{Binding IsSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-                        <Setter Property="Header" Value="{Binding Data}"/>-->
+                        <Setter Property="IsSelected" Value="{Binding IsSelected,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                        <Setter Property="Header" Value="{Binding Data}"/>
                     </Style>
                 </TreeView.Resources>
             </TreeView>

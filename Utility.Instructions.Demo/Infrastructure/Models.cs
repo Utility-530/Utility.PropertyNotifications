@@ -101,6 +101,8 @@ namespace Utility.Instructions.Demo
 
         public void OnNext(Change<View, Key> change)
         {
+            if (change.Value.Equals(Root))
+                return;
             var x = TreeHelper2.Match(Root, a => a.Key.Equals(change.ParentKey.Guid) == true) as View;
             if (x is not null)
             {
@@ -111,22 +113,22 @@ namespace Utility.Instructions.Demo
                 Modify(Root);
             }
 
-            if (observers.TryGetValue(change.ParentKey.Guid, out var observer))
-            {
-                if (TreeHelper2.Match(Root, a => a.Key.Equals(change.Key.Guid) == true) is null)
-                {
-                    var view = change.Value.CloneTree() as View;
-                    view.IsExpanded = true;
-                    var cloneChange = new Change<View, Key>(view, change.ParentKey, change.Key, change.Index, change.Type);
-                    observer.OnNext(cloneChange);
-                }
-                else
-                {
-                    observer.OnNext(change);
-                }
+            //if (observers.TryGetValue(change.ParentKey.Guid, out var observer))
+            //{
+            //    if (TreeHelper2.Match(Root, a => a.Key.Equals(change.Key.Guid) == true) is null)
+            //    {
+            //        var view = change.Value.CloneTree() as View;
+            //        view.IsExpanded = true;
+            //        var cloneChange = new Change<View, Key>(view, change.ParentKey, change.Key, change.Index, change.Type);
+            //        observer.OnNext(cloneChange);
+            //    }
+            //    else
+            //    {
+            //        observer.OnNext(change);
+            //    }
 
 
-            }
+            //}
             void Modify(View tree)
             {
                 tree.OnNext(change);
