@@ -1,23 +1,25 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿//using System.Collections.Generic;
+//using System.Collections.ObjectModel;
+//using System.Linq;
+//using System.Text;
+//using System.Text.Json;
+//using System.Threading.Tasks;
 
-namespace Utility.Instructions
-{
+//namespace Utility.Instructions
+//{
 
-    public class Instruction
-    {
-        public InstructionType Type { get; set; }
+//    public class Instruction
+//    {
+//        //public InstructionType Type { get; init; }
 
-        public object Value { get; init; }
+//        //public Guid Key { get; init; }
 
-        public override string ToString()
-        {
-            return JsonSerializer.Serialize(this);
-        }
-    }
+//        public object Value { get; init; }
 
-}
+//        public override string ToString()
+//        {
+//            return JsonSerializer.Serialize(this);
+//        }
+//    }
+
+//}
