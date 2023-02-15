@@ -17,26 +17,31 @@
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="10*"></RowDefinition>
         </Grid.RowDefinitions>
-
-        <UniformGrid Rows="1">
+        <UniformGrid Grid.Row="0"  Rows="1">
+            <Button  Click="Load_Click">load</Button>
+            <Button Click="Save_Click">save</Button>
+            <Button Click="Run_Click">run</Button>
+        </UniformGrid>
+        <UniformGrid Grid.Row="1"  Rows="1">
             <Button  Click="Previous_Click">previous</Button>
             <Button Click="Next_Click">next</Button>
             <Button  Click="Up_Click">up</Button>
             <Button  Click="Forward_Click">forward</Button>
             <Button  Click="Back_Click">back</Button>
         </UniformGrid>
-        <UniformGrid Grid.Row="1" Rows="1">
+        <UniformGrid Grid.Row="2" Rows="1">
             <Button  Click="ContentChange_Click" x:Name="Content">content change</Button>
             <Button  Click="Add_Click" x:Name="Add">add</Button>
             <Button  Click="Remove_Click" x:Name="Remove">remove</Button>
         </UniformGrid>
-        <UniformGrid Grid.Row="2" Rows="1">
+        <UniformGrid Grid.Row="3" Rows="1">
             <Button  Click="RemoveHistory_Click" x:Name="RemoveHistory">remove history</Button>
             <Button  Click="Refresh_Click" x:Name="Refresh">refresh</Button>
         </UniformGrid>
-        <UniformGrid  Grid.Row="3" Rows="1">
+        <UniformGrid  Grid.Row="4" Rows="1">
             <DataGrid x:Name="Instructions" AutoGenerateColumns="False">
         
                 <DataGrid.Columns>
@@ -44,7 +49,7 @@
                     <!--Custom column that shows the published date-->
                     <DataGridTemplateColumn Header="Current" Width="100"  >
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate DataType="{x:Type local:ProceduresState}">
+                            <DataTemplate DataType="{x:Type local:TreeState}">
                                 <Viewbox>
                                     <ContentControl Content="{Binding Current.Data}" BorderThickness="0" />
                                 </Viewbox>
@@ -53,7 +58,7 @@
                     </DataGridTemplateColumn>
                     <DataGridTemplateColumn Header="Forward"  Width="100"   >
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate DataType="{x:Type local:ProceduresState}">
+                            <DataTemplate DataType="{x:Type local:TreeState}">
                                 <Viewbox>
                                     <ContentControl Content="{Binding Forward.Data}" BorderThickness="0" />
 
@@ -64,7 +69,7 @@
 
                     <DataGridTemplateColumn Header="CurrentBranch"  Width="100"   >
                         <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate DataType="{x:Type local:ProceduresState}">
+                            <DataTemplate DataType="{x:Type local:TreeState}">
                                 <Viewbox>
                                     <ContentControl Content="{Binding CurrentBranch.Data}" BorderThickness="0" />
 

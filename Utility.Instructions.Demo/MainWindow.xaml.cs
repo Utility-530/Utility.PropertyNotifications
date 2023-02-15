@@ -19,12 +19,12 @@ namespace Utility.Instructions.Demo
     public partial class MainWindow : Window
     {
         readonly Random random = new Random();
-        readonly Procedures procedures = new();
+        readonly DynamicTree<Instruction> instructions;
         readonly Service service;
         public Implementer implementor = new();
         private readonly View View;
 
-        public ObservableCollection<ProceduresState> StateCollection { get; } = new();
+        public ObservableCollection<TreeState> StateCollection { get; } = new();
 
         //public Tree<View> ViewModelTree { get; } = new(new View { Value = "root" });
         readonly Dictionary<Guid, View> views = new();
@@ -33,18 +33,19 @@ namespace Utility.Instructions.Demo
         public MainWindow()
         {
             InitializeComponent();
-            service = new(procedures.Tree.Key);
+            instructions = new(new Instruction() { Value = "root" });
+            service = new(instructions.Tree.Key);
 
             root = views[service.Root.Key] = service.Root.CloneTree() as View;
             root.IsExpanded = true;
             this.TreeView.ItemsSource = implementor.Tree.Items;
-            TreeView2.ItemsSource = procedures.Tree.Items;
+            TreeView2.ItemsSource = instructions.Tree.Items;
             TreeView3.ItemsSource = service.Root.Items;
             TreeView4.ItemsSource = root.Items;
             Instructions.ItemsSource = StateCollection;
             ProceduresListBox.ItemsSource = currentViews;
 
-            procedures.Subscribe(state =>
+            instructions.Subscribe(state =>
             {
                 int index = 0;
                 List<View> currentViews = new();
@@ -61,7 +62,7 @@ namespace Utility.Instructions.Demo
             });
         }
 
-        private void Update(ProceduresState state, int index)
+        private void Update(TreeState state, int index)
         {
             currentViews.Clear();
             foreach (var item in state.CurrentBranch.Items)
@@ -77,7 +78,7 @@ namespace Utility.Instructions.Demo
                 service.OnNext(new Change<View, Key>(cView, new Key(state.CurrentBranch.Key), new Key(item.Key), index, ChangeType.Update));
              }
 
-            State GetState(ITree<Instruction> tree, ProceduresState state)
+            State GetState(ITree tree, TreeState state)
             {
                 if (tree == state.Current)
                     return State.Current;
@@ -96,18 +97,18 @@ namespace Utility.Instructions.Demo
 
         private void ContentChange_Click(object sender, RoutedEventArgs e)
         {
-            procedures.Add(new Instruction { Type = InstructionType.ChangeContent });
+            instructions.Add(new Instruction { Type = InstructionType.ChangeContent });
         }
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            procedures.Add(new Instruction { Type = InstructionType.InsertLast, Value = Randoms.Names.Random(random) });
+            instructions.Add(new Instruction { Type = InstructionType.InsertLast, Value = Randoms.Names.Random(random) });
         }
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
-            if (procedures.Last() is Instruction { Type: InstructionType.InsertLast, Value: var value } instruction)
-                procedures.Add(new Instruction { Type = InstructionType.RemoveLast, Value = value });
+            if (instructions.Last()?.Data is Instruction { Type: InstructionType.InsertLast, Value: var value } instruction)
+                instructions.Add(new Instruction { Type = InstructionType.RemoveLast, Value = value });
         }
 
 
@@ -119,21 +120,21 @@ namespace Utility.Instructions.Demo
 
         private void RemoveHistory_Click(object sender, RoutedEventArgs e)
         {
-            procedures.RemoveFuture();
+            instructions.RemoveFuture();
         }
 
         private void Up_Click(object sender, RoutedEventArgs e)
         {
-            if (procedures.MoveUp() is not IEnumerable<Instruction> instructions)
+            if (instructions.MoveUp() is not IEnumerable<Instruction> _instructions)
                 throw new Exception("V3 fds");
 
-            foreach (var instruction in instructions)
+            foreach (var instruction in _instructions)
                 implementor.OnPrevious(instruction);
         }
 
         private void Forward_Click(object sender, RoutedEventArgs e)
         {
-            if (procedures.MoveForward() is not Instruction instruction)
+            if (instructions.MoveForward() is not Instruction instruction)
                 throw new Exception("V3 fds");
 
             implementor.OnNext(instruction);
@@ -141,7 +142,7 @@ namespace Utility.Instructions.Demo
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            if (procedures.MoveBack() is not Instruction instruction)
+            if (instructions.MoveBack() is not Instruction instruction)
                 throw new Exception("V3 fds");
 
             implementor.OnPrevious(instruction);
@@ -150,7 +151,7 @@ namespace Utility.Instructions.Demo
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
-            if (procedures.MoveNext() is not Instruction instruction)
+            if (instructions.MoveNext() is not Instruction instruction)
                 throw new Exception("V3 fds");
 
             implementor.OnNext(instruction);
@@ -158,7 +159,7 @@ namespace Utility.Instructions.Demo
 
         private void Previous_Click(object sender, RoutedEventArgs e)
         {
-            if (procedures.MovePrevious() is not Instruction instruction)
+            if (instructions.MovePrevious() is not Instruction instruction)
                 throw new Exception("V3 fds");
 
             implementor.OnPrevious(instruction);
@@ -174,6 +175,21 @@ namespace Utility.Instructions.Demo
             TreeView.ItemContainerStyle = null;
             TreeView.ItemTemplateSelector = MyDataTemplateSelector.Instance;
             TreeView.ItemContainerStyleSelector = MyStyleSelector.Instance;
+        }
+
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Load_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Run_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

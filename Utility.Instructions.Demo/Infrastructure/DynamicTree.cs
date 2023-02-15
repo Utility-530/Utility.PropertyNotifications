@@ -9,49 +9,49 @@ using Utility.Trees;
 namespace Utility.Instructions.Demo
 {
 
-    public record ProceduresState(int Index, ITree<Instruction> Current, ITree<Instruction> Forward, ITree<Instruction> Back, ITree<Instruction> Up, ITree<Instruction> CurrentBranch);
+    public record TreeState(int Index, ITree Current, ITree Forward, ITree Back, ITree Up, ITree CurrentBranch);
+ 
 
 
-
-    public class Procedures : IObservable<ProceduresState>
+    public class DynamicTree<T> : IObservable<TreeState> where T : new()
     {
         const int resetCount = -1;
-        private new ObservableCollection<ITree<Instruction>> children => currentBranch.Items as ObservableCollection<ITree<Instruction>>;
+        private new ObservableCollection<ITree<T>> children => currentBranch.Items as ObservableCollection<ITree<T>>;
 
 
-        private List<IObserver<ProceduresState>> observers = new();
+        private List<IObserver<TreeState>> observers = new();
         int count = resetCount;
 
 
 
-        private ProceduresState State() => new(count, Current, Forward, Back, Up, currentBranch);
+        private TreeState State() => new(count, Current, Forward, Back, Up, currentBranch);
 
-        Instruction root = new Instruction() { Value = "root" };
+        //T root = new T() { Value = "root" };
 
-        public Procedures()
+        public DynamicTree(T root)
         {
-            tree = new Tree<Instruction>(root) {  };
+            tree = new Tree<T>(root) { };
             currentBranch = Tree[root];
         }
 
-        private Tree<Instruction> tree;
-        private ITree<Instruction> currentBranch;
+        private Tree<T> tree;
+        private ITree<T> currentBranch;
 
         public IEnumerable Children => children;
 
-        public ITree<Instruction> Forward => children.Count <= count + 1 ? null : children[count + 1];
+        public ITree<T> Forward => children.Count <= count + 1 ? null : children[count + 1];
 
-        public ITree<Instruction> Up => currentBranch.Parent;
+        public ITree<T> Up => currentBranch.Parent;
 
-        public ITree<Instruction> Back => count < 1 ? (count < 0 ? currentBranch.Parent : currentBranch) : children[count - 1];
+        public ITree<T> Back => count < 1 ? (count < 0 ? currentBranch.Parent : currentBranch) : children[count - 1];
 
-        public ITree<Instruction> Previous => Past.TryPeek(out var guid) ? tree[guid] : null;
+        public ITree<T> Previous => Past.TryPeek(out var guid) ? tree[guid] : null;
 
-        public ITree<Instruction> Next => Future.TryPeek(out var guid) ? tree[ guid] : null;
+        public ITree<T> Next => Future.TryPeek(out var guid) ? tree[guid] : null;
 
-        public ITree<Instruction> Current => count < 0 ? currentBranch : children.Count <= count ? null :  children[count];
+        public ITree<T> Current => count < 0 ? currentBranch : children.Count <= count ? null : children[count];
 
-        public ITree<Instruction> Tree => tree;
+        public ITree<T> Tree => tree;
 
         public Stack<Guid> Past { get; set; } = new Stack<Guid>();
         public Stack<Guid> Future { get; set; } = new Stack<Guid>();
@@ -61,7 +61,7 @@ namespace Utility.Instructions.Demo
         bool isDirty;
 
 
-        public IEnumerable<Instruction> MoveUp()
+        public IEnumerable<T> MoveUp()
         {
             isDirty = true;
             if (count >= children.Count)
@@ -83,12 +83,12 @@ namespace Utility.Instructions.Demo
                 observer.OnNext(State());
         }
 
-        public Instruction MoveForward()
+        public T MoveForward()
         {
             isDirty = true;
 
             if (count >= children.Count)
-                return null;
+                return default;
 
             count++;
 
@@ -98,7 +98,7 @@ namespace Utility.Instructions.Demo
             return Current.Data;
         }
 
-        public Instruction MoveBack()
+        public T MoveBack()
         {
             if (count < 0)
             {
@@ -122,7 +122,7 @@ namespace Utility.Instructions.Demo
         }
 
 
-        public Instruction MoveNext()
+        public T MoveNext()
         {
             Past.Push(Current.Key);
             var current = Future.Pop();
@@ -134,7 +134,7 @@ namespace Utility.Instructions.Demo
             return Next.Data;
         }
 
-        public Instruction MovePrevious()
+        public T MovePrevious()
         {
             var current = Past.Pop();
             Future.Push(current);
@@ -165,12 +165,12 @@ namespace Utility.Instructions.Demo
 
         }
 
-        public IDisposable Subscribe(IObserver<ProceduresState> observer)
+        public IDisposable Subscribe(IObserver<TreeState> observer)
         {
-            return new Disposer<ProceduresState>(observers, observer);
+            return new Disposer<TreeState>(observers, observer);
         }
 
-        public void Add(Instruction instruction)
+        public void Add(T instruction)
         {
             if (isDirty)
             {
@@ -187,7 +187,7 @@ namespace Utility.Instructions.Demo
                 observer.OnNext(State());
         }
 
-        //public void Remove(Instruction instruction)
+        //public void Remove(T instruction)
         //{
         //    if (isDirty)
         //    {
@@ -219,15 +219,15 @@ namespace Utility.Instructions.Demo
 
 
 
-        public Instruction Last(InstructionType insertLast)
-        {
-            return children.LastOrDefault(a => (a.Data as Instruction).Type == insertLast).Data as Instruction;
-        }
+        //public T Last(InstructionType insertLast)
+        //{
+        //    return children.LastOrDefault(a => (a.Data as T).Type == insertLast).Data as T;
+        //}
 
 
-        public Instruction Last()
+        public ITree<T> Last()
         {
-            return children.LastOrDefault()?.Data as Instruction;
+            return children.LastOrDefault();
         }
     }
 }
