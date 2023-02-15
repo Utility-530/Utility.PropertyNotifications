@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Markup;
 using Utility.Trees;
 
-namespace Utility.Instructions.Demo.Infrastructure
+namespace Utility.Instructions.Demo
 {
 
     class TemplateConstants

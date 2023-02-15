@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Utility.Trees;
 
 namespace Utility.Instructions.Demo.Infrastructure
@@ -80,8 +81,8 @@ namespace Utility.Instructions.Demo.Infrastructure
 
         private void RevertChangeContent()
         {
-            var remove = Tree["root"].Items[^1];
-            Tree["root"].Items.Remove(remove);
+            var remove = Tree["root"].Items.Last();
+            Tree["root"].Remove(remove);
             count--;
         }
 

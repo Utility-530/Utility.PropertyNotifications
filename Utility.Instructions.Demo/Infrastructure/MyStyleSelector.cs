@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
 
-namespace Utility.Instructions.Demo.Infrastructure
+namespace Utility.Instructions.Demo
 {
 
 
