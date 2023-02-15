@@ -1,76 +1,112 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Utility.Trees
 {
-    public abstract class Tree : ITree
+    public static class TreeHelper2
     {
-        public Guid Key { get; } = Guid.NewGuid();
-
-        public abstract ITree this[int index] { get; set; }
-
-        public abstract bool HasItems { get; }
-
-        public abstract IList Items { get; }
-
-        public abstract object Data { get; }
-
-        public abstract void Add(object data);
-
-        public abstract void Remove(object data);
-
-        public bool Equals(ITree? other)
+        public static ITree Create(object data)
         {
-            return this.Key == other?.Key;
+            return new Tree(data);
         }
 
-        public override string ToString()
+        public static ITree Create(object data, params ITree[] items)
         {
-            if (Data.GetType().IsValueType)
-                return Data?.ToString();
-            return Data == default? string.Empty : Data.ToString();
+            return new Tree(data, items);
+        }
+
+        public static ITree Create(object data, params object[] items)
+        {
+            return new Tree(data, items);
+        }
+
+        public static void Visit(ITree tree, Action<ITree> action)
+        {
+            action(tree);
+            if (tree.HasItems)
+                foreach (var item in tree)
+                    Visit(item, action);
+        }
+
+        public static ITree? Match(ITree tree, Predicate<ITree> action)
+        {
+            if (action(tree))
+            {
+                return tree;
+            }
+
+            foreach (var item in tree)
+            {
+                if (Match(item, action) is ITree sth)
+                {
+                    return sth;
+                }
+            }
+
+            return null;
+
         }
     }
-
 
     /// <summary>
     /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class Tree<T> : Tree, ITree<T>
+    /// <typeparam name="object"></typeparam>
+    public class Tree : ITree, IEnumerable<ITree>
     {
-        private ObservableCollection<ITree<T>> m_items;
-        private T data;
+        private IList items;
+
+        bool flag;
+        protected IList m_items
+        {
+            get
+            {
+                if (flag == false)
+                {
+                    items = CreateChildren();
+                    flag = true;
+                }
+                return items;
+            }
+        }
+
+        private object data;
 
 
-        public Tree(T data)
+        public Tree(object data)
             : this(data, null)
         {
         }
 
-        public Tree(T data, params object[] items)
+        public Tree(object data, params object[] items)
         {
             this.data = data;
             Add(items);
         }
 
-        public Tree(T data, params ITree<T>[] items)
+        public Tree(object data, params ITree[] items)
         {
             this.data = data;
             Add(items);
         }
 
+        public Guid Key { get; set; } = Guid.NewGuid();
 
-        public ITree<T>? this[T item]
+        public ITree? this[object item]
         {
             get
             {
-                var x = TreeHelper.Match(this, a => a.Data?.Equals(item) == true);
+                var x = TreeHelper2.Match(this, a => a.Data?.Equals(item) == true);
                 if (x == null)
                 {
                     throw new Exception("4sd ss");
-                    //x = new Tree<T>(item);
+                    //x = new Tree(item);
                     //this.Add(x);
                 }
                 return x;
@@ -82,65 +118,74 @@ namespace Utility.Trees
         }
 
 
-        public ITree<T>? this[Guid key]
+        public new ITree? this[Guid key]
         {
             get
             {
-                var x = TreeHelper.Match(this, a => a.Key.Equals(key) == true);
+                var x = TreeHelper2.Match(this, a => a.Key.Equals(key) == true);
                 if (x == null)
                 {
                     throw new Exception("4sd ss");
-                    //x = new Tree<T>(item);
+                    //x = new Tree(item);
                     //this.Add(x);
                 }
                 return x;
             }
             set
             {
-                var x = TreeHelper.Match(this, a => a.Key.Equals(key) == true);
+                var x = TreeHelper2.Match(this, a => a.Key.Equals(key) == true);
                 if (x == null)
                 {
                     throw new Exception("4sd ss");
-                    //x = new Tree<T>(item);
+                    //x = new Tree(item);
                     //this.Add(x);
                 }
-                x.Parent[x.Parent.Items.IndexOf(x)] = x;
+                x.Parent[x.Key] = value;
             }
         }
 
-        public override ITree this[int index]
+        public new ITree this[int index]
         {
             get
             {
-                return m_items.Count == 0 ? this : m_items[index];
+                return m_items.Count == 0 ? this : m_items[index] as ITree;
             }
             set
             {
                 if (m_items.Count == 0)
                     throw new Exception(" rere4");
                 else
-                    m_items[index] = value as ITree<T>;
+                    m_items[index] = value as ITree;
             }
         }
 
 
-        public override void Add(object data)
+
+
+
+        public virtual void Add(object data)
         {
             if (data == null)
                 return;
 
-            if (data is T)
+
+            if (data is ITree tree)
             {
-                Items.Add(CloneNode(new Tree<T>((T)data)));
+                m_items.Add(tree.CloneTree());
+                return;
+            }
+            if (data is IEnumerable<ITree> treeCollection)
+            {
+                foreach (var item in treeCollection)
+                    m_items.Add(item.CloneTree());
+                return;
+            }
+            if (data is not null)
+            {
+                m_items.Add(CloneNode(new Tree((object)data)));
                 return;
             }
 
-            var t = data as ITree<T>;
-            if (t != null)
-            {
-                Items.Add(CloneTree(t));
-                return;
-            }
             throw new Exception("t 44 redsdssd");
             //var o = data as object[];
             //if (o != null)
@@ -161,25 +206,34 @@ namespace Utility.Trees
             throw new InvalidOperationException("Cannot add unknown content type.");
         }
 
-        public override void Remove(object data)
+        public void Remove(object data)
         {
             if (data == null)
                 return;
 
-            if (data is T)
+
+            if (data is Guid key)
             {
-                var single = m_items.Single(a => a.Data == data);
-                Items.Remove(single);
+                var single = m_items.OfType<ITree>().Single(t => t.Key == key);
+                m_items.Remove(single);
                 return;
             }
 
-            var t = data as ITree<T>;
-            if (t != null)
+            if (data is ITree tree)
             {
-                var single = m_items.Single(a => a == data);
-                Items.Remove(single);
+                var single = m_items.OfType<ITree>().Single(t => t == tree);
+                m_items.Remove(single);
                 return;
             }
+
+            if (data is not null)
+            {
+                var single = m_items.OfType<ITree>().Single(t => t.Data == data);
+                m_items.Remove(single);
+                return;
+            }
+
+
             throw new Exception("t 44 redsdssd");
             //var o = data as object[];
             //if (o != null)
@@ -200,62 +254,66 @@ namespace Utility.Trees
             throw new InvalidOperationException("Cannot add unknown content type.");
         }
 
-        public ITree<T> CloneTree(ITree<T> item)
+        public ITree CloneTree()
         {
-            var result = CloneNode(item);
-            if (item.HasItems)
-                result.Add(item.Items);
+            var result = CloneNode(this);
+            if (this.HasItems)
+                result.Add(this.Items);
             return result;
         }
 
-        protected virtual ITree<T> CloneNode(ITree<T> item)
+        protected virtual ITree CloneNode(ITree item)
         {
-            return new Tree<T>(item.GenericData);
+            return new Tree(item.Data);
         }
 
-        public override object Data { get => data; }
 
-        public T GenericData { get => data; private set => data = value; }
+        public object Data { get => data; private set => data = value; }
 
-        public override bool HasItems
+        public virtual bool HasItems
         {
             get { return m_items != null && m_items.Count > 0; }
         }
 
-        public ITree<T> Parent { get; private set; }
+        public ITree Parent { get; private set; }
 
 
-        public override IList Items
+        public IReadOnlyList<ITree> Items
         {
             get
             {
-                if (m_items == null)
+
+                if (m_items is IReadOnlyList<ITree> list)
                 {
-                    m_items = new ObservableCollection<ITree<T>>();
-                    m_items.CollectionChanged += ItemsOnCollectionChanged;
+                    return list;
                 }
-                return m_items;
+                else
+                {
+                    return m_items.Cast<ITree>().ToArray();
+                }
             }
         }
+
+        public State State { get; set; }
 
         private void ResetOnCollectionChangedEvent()
         {
             if (m_items != null)
-                m_items.CollectionChanged -= ItemsOnCollectionChanged;
+                (m_items as ObservableCollection<ITree>).CollectionChanged -= ItemsOnCollectionChanged;
         }
 
         private void ItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
             if (args.Action == NotifyCollectionChangedAction.Add && args.NewItems != null)
             {
-                foreach (var item in args.NewItems.Cast<Tree<T>>())
+                foreach (var item in args.NewItems.Cast<Tree>())
                 {
                     item.Parent = this;
                 }
             }
             else if (args.Action != NotifyCollectionChangedAction.Move && args.OldItems != null)
             {
-                foreach (var item in args.OldItems.Cast<Tree<T>>())
+                foreach (var item in args.OldItems.Cast<Tree>())
                 {
                     item.Parent = null;
                     item.ResetOnCollectionChangedEvent();
@@ -263,7 +321,7 @@ namespace Utility.Trees
             }
         }
 
-        public IEnumerable<ITree<T>> GetParents(bool includingThis)
+        public IEnumerable<ITree> GetParents(bool includingThis)
         {
             if (includingThis)
                 yield return this;
@@ -276,19 +334,19 @@ namespace Utility.Trees
             }
         }
 
-        public IEnumerable<ITree<T>> GetChildren(bool includingThis)
+        public IEnumerable<ITree> GetChildren(bool includingThis)
         {
             if (includingThis)
                 yield return this;
 
             if (m_items != null)
-                foreach (var child in m_items.SelectMany(item => item.GetChildren(true)))
+                foreach (var child in m_items.OfType<ITree>().SelectMany(item => item.GetChildren(true)))
                     yield return child;
         }
 
-        public IEnumerator<ITree<T>> GetEnumerator()
+        public virtual IEnumerator<ITree> GetEnumerator()
         {
-            return m_items == null ? Enumerable.Empty<ITree<T>>().GetEnumerator() : m_items.GetEnumerator();
+            return m_items == null ? Enumerable.Empty<ITree>().GetEnumerator() : m_items.OfType<ITree>().GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -296,55 +354,36 @@ namespace Utility.Trees
             return GetEnumerator();
         }
 
-
-    }
-
-    public static class TreeHelper
-    {
-        public static ITree<T> Create<T>(T data)
+        public bool Equals(ITree? other)
         {
-            return new Tree<T>(data);
+            return other?.Key.Equals(this.Key) == true;
         }
 
-        public static ITree<T> Create<T>(T data, params ITree<T>[] items)
+        public void Remove(Guid index)
         {
-            return new Tree<T>(data, items);
+            var single = m_items.OfType<ITree>().Single(t => t.Key == index);
+            m_items.Remove(single);
         }
 
-        public static ITree<T> Create<T>(T data, params object[] items)
+
+        protected virtual IList CreateChildren()
         {
-            return new Tree<T>(data, items);
+            var collection = new ObservableCollection<ITree>();
+            collection.CollectionChanged += ItemsOnCollectionChanged;
+            return collection;
         }
 
-        public static void Visit<T>(ITree<T> tree, Action<ITree<T>> action)
+        public int IndexOf(ITree tree)
         {
-            action(tree);
-            if (tree.HasItems)
-                foreach (var item in tree)
-                    Visit(item, action);
+            return this.m_items.IndexOf(tree);
         }
 
-        public static ITree<T>? Match<T>(ITree<T> tree, Predicate<ITree<T>> action)
+        public override string ToString()
         {
-            if (action(tree))
-            {
-                return tree;
-            }
-            else if (tree.HasItems)
-            {
-                foreach (var item in tree)
-                {
-                    if (Match(item, action) is ITree<T> sth)
-                    {
-                        return sth;
-                    }
-                }
-
-            }
-
-
-            return null;
-
+            if (Data.GetType().IsValueType)
+                return Data?.ToString();
+            return Data == default ? string.Empty : Data.ToString();
         }
     }
+
 }
