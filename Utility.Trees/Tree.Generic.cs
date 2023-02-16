@@ -14,7 +14,6 @@ namespace Utility.Trees
         //private ObservableCollection<ITree<T>> m_items;
         private T data;
 
-
         public Tree(T data) : this(data, null)
         {
         }

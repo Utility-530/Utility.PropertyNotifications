@@ -33,8 +33,10 @@
             <Button x:Name="BackButton"   Click="Back_Click">back</Button>
         </UniformGrid>
         <UniformGrid Grid.Row="2" Rows="1">
-            <Button  Click="Previous_Click">previous</Button>
-            <Button Click="Next_Click">next</Button>
+            <Button x:Name="UpHistoryButton"  Click="UpHistory_Click" >up</Button>
+            <Button x:Name="DownHistoryButton"   Click="DownHistory_Click">down</Button>
+            <Button  x:Name="ForwardHistoryButton"  Click="ForwardHistory_Click">forward</Button>
+            <Button x:Name="BackHistoryButton"   Click="BackHistory_Click">back</Button>
         </UniformGrid>
         <UniformGrid Grid.Row="3" Rows="1">
             <Button  Click="Remove_Click" x:Name="RemoveButton">remove</Button>

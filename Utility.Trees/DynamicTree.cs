@@ -12,15 +12,13 @@ namespace Utility.Trees
     public class DynamicTree<T> : IObservable<TreeState>, IObserver<TreeState>
     {
         private new ObservableCollection<ITree<T>> children => Current.Parent?.Items as ObservableCollection<ITree<T>>;
-        private Tree<T> tree;
-        //private ITree<T> currentBranch;
-
+        private ITree<T> tree;
         private List<IObserver<TreeState>> observers = new();
-        //private int index = resetCount;
         private ITree<T> toRemove;
         private ITree<T> current;
+        private ITree<T> toAdd;
 
-        private TreeState TreeState() => new(
+        public TreeState TreeState() => new(
             Index,
             State,
             Current,
@@ -34,8 +32,7 @@ namespace Utility.Trees
 
         public DynamicTree(T root)
         {
-            tree = new Tree<T>(root) { };
-            Current = Tree[root];
+            Current = tree = new Tree<T>(root) { };
         }
 
         public bool CanMoveUp => Current.Parent != null;
@@ -55,21 +52,14 @@ namespace Utility.Trees
 
         public ITree<T> Back => children[Index - 1];
 
-        //public ITree<T> Previous => Past.TryPeek(out var guid) ? tree[guid] : null;
-
-        //public ITree<T> Next => Future.TryPeek(out var guid) ? tree[guid] : null;
-
         public ITree<T> Current
         {
             get
             {
-                return current;
+                return current ?? this.Tree;
             }
-            private set
-            {
-                current = value;
-                //index = value.Parent.IndexOf(value);
-            }
+
+            private set => current = value;
         }
 
 
@@ -77,10 +67,9 @@ namespace Utility.Trees
 
         public ITree<T> ToAdd => toAdd;
 
-        private ITree<T> toAdd;
         public T Data { get=> toAdd.Data; set=> toAdd = new Tree<T>(value) { Parent = Current }; }
 
-        public State State { get; set; }
+        public State State { get; set; } = State.Current;
 
         public ITree<T> Tree => tree;
 
@@ -173,10 +162,12 @@ namespace Utility.Trees
         public void OnNext(TreeState value)
         {
             //index = value.Index;
-            State = value.State;
-            Current = value.Current as ITree<T>;
-            Data = (value.Add as ITree<T>).Data;
+            var current = value.Current.Data as TreeState;
+            State = current.State;
+            Current = current.Current as ITree<T>;
+            Data = Current.Data;
             toRemove = value.Remove as ITree<T>;
+            Broadcast();
         }
 
         public void OnPrevious(TreeState data)

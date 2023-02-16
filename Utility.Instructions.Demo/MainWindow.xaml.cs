@@ -40,12 +40,13 @@ namespace Utility.Instructions.Demo
         //public Tree<View> ViewModelTree { get; } = new(new View { Value = "root" });
         readonly Dictionary<Guid, View> views = new();
         readonly View root;
+        bool historyFlag;
         //ObservableCollection<View> currentViews = new();
         public MainWindow()
         {
             InitializeComponent();
             instructions = new("root");
-            history = new(new TreeState(default, default, default, default, default, default, default, default, default));
+            history = new(instructions.TreeState());
 
             service = new(instructions.Tree.Key);
 
@@ -53,41 +54,43 @@ namespace Utility.Instructions.Demo
             root.IsExpanded = true;
 
             //this.TreeView.ItemsSource = implementor.Tree.Items;
+
+            instructions
+                .Subscribe(state =>
+                {
+                    int index = 0;
+
+                    Update(state, index);
+                    if (historyFlag == false)
+                    {
+
+                        history.Data = state;
+                        history.Add();
+                    }
+                });
+
+            history
+                .Subscribe(state =>
+                {
+                    if (historyFlag == true)
+                    {
+                        instructions.OnNext(state);
+                    }
+                });
+
             TreeView2.ItemsSource = instructions.Tree.Items;
             TreeView3.ItemsSource = service.Root.Items;
             TreeView4.ItemsSource = root.Items;
             TreeView5.ItemsSource = history.Tree.Items;
-            //ProceduresListBox.ItemsSource = currentViews;
-
-            instructions.Subscribe(state =>
-            {
-                int index = 0;
-
-                Update(state, index);
-
-
-                history.Data = state;
-                history.Add();
-                  //if (state.CurrentBranch.Contains(state.Current) == true)
-                //    ProceduresListBox.SelectedItem = state.Current;
-                //else
-                //    ProceduresListBox.SelectedItem = null;
-
-
-                //StateCollection.Add(state);
-            });
         }
 
         private void Update(TreeState state, int index)
         {
-            //currentViews.Clear();
-
-
             UpButton.IsEnabled = state.Up != null;
             DownButton.IsEnabled = state.Down != null;
             ForwardButton.IsEnabled = state.Forward != null;
             BackButton.IsEnabled = state.Back != null;
-           // AddButton.IsEnabled = state.Add != null;
+            // AddButton.IsEnabled = state.Add != null;
             RemoveButton.IsEnabled = state.Remove != null;
 
             foreach (var x in views.Values)
@@ -106,10 +109,10 @@ namespace Utility.Instructions.Demo
                 var cView = views[item.Key];
                 cView.State = GetState(cView, state);
                 //currentViews.Add(cView);
-           
+
             }
 
-            foreach(var view in views)
+            foreach (var view in views)
             {
                 service.OnNext(new Change<View, Key>(view.Value, new Key(view.Value.Parent?.Key ?? default), new Key(view.Key), index, ChangeType.Update));
             }
@@ -128,7 +131,7 @@ namespace Utility.Instructions.Demo
                     return State.Down;
                 //else if (tree.Equals(state.Add))
                 //    return State.Add;
-        
+
                 //else if (tree.Equals(state.Remove))
                 //    return State.Remove;
                 return State.Default;
@@ -142,7 +145,7 @@ namespace Utility.Instructions.Demo
         {
             //if (instructions.CanAdd == false)
 
-                instructions.Data = Randoms.Names.Random(random);
+            instructions.Data = Randoms.Names.Random(random);
             instructions.Add();
         }
 
@@ -165,6 +168,8 @@ namespace Utility.Instructions.Demo
 
         private void Up_Click(object sender, RoutedEventArgs e)
         {
+            historyFlag = false;
+
             if (instructions.CanMoveUp == false)
                 throw new Exception("V3 fds");
             instructions.MoveUp();
@@ -174,6 +179,8 @@ namespace Utility.Instructions.Demo
 
         private void Forward_Click(object sender, RoutedEventArgs e)
         {
+            historyFlag = false;
+
             if (instructions.CanMoveForward == false)
                 throw new Exception("V3 fds");
             instructions.MoveForward();
@@ -182,6 +189,8 @@ namespace Utility.Instructions.Demo
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
+            historyFlag = false;
+
             if (instructions.CanMoveBack == false)
                 throw new Exception("V3 fds");
             instructions.MoveBack();
@@ -190,6 +199,8 @@ namespace Utility.Instructions.Demo
 
         private void Down_Click(object sender, RoutedEventArgs e)
         {
+            historyFlag = false;
+
             if (instructions.CanMoveDown == false)
                 throw new Exception("V3 fds");
             instructions.MoveDown();
@@ -199,6 +210,7 @@ namespace Utility.Instructions.Demo
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
+            historyFlag = false;
             if (history.CanMoveDown == false)
                 throw new Exception("V3 fds");
 
@@ -209,12 +221,7 @@ namespace Utility.Instructions.Demo
 
         private void Previous_Click(object sender, RoutedEventArgs e)
         {
-            if (history.CanMoveUp == false)
-                throw new Exception("V3 fds");
 
-            var current = history.Current;
-
-            instructions.OnPrevious(current.Data);
 
         }
 
@@ -244,6 +251,38 @@ namespace Utility.Instructions.Demo
         {
 
         }
+
+        #region History
+
+
+        private void UpHistory_Click(object sender, RoutedEventArgs e)
+        {
+            historyFlag = true;
+            if (history.CanMoveUp == false)
+                throw new Exception("V3 fds");
+
+            history.MoveUp();
+            //var current = history.Current;
+
+            //instructions.OnPrevious(current.Data);
+        }
+
+        private void DownHistory_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ForwardHistory_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void BackHistory_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        #endregion History
     }
 
 }
