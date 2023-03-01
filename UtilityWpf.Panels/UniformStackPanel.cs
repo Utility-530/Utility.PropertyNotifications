@@ -7,6 +7,7 @@ namespace UtilityWpf.Panels
 {
     /// <summary>
     /// Helps boxing Booolean values.
+    /// https://xstatic2.wordpress.com/2011/10/21/tip-improving-boolean-dependency-properties-performance/
     /// </summary>
     public static class BooleanBoxes
     {
@@ -45,8 +46,21 @@ namespace UtilityWpf.Panels
         }
     }
 
+
     /// <summary>
-    /// https://xstatic2.wordpress.com/2011/10/21/tip-improving-boolean-dependency-properties-performance/
+    /// 
+    /// UniformStackPanel
+    ///   Filed under: WPF — Leave a comment
+    ///   September 30, 2012
+
+    ///  For a personal application I’m writing, I needed a panel that stacks my items, but unlike the regular StackPanel, which doesn’t limit the size of the items, I need mine to divide its items evenly among its available space.
+    ///   Also, I needed some of the items to be able to receive their desired size and not the size like the rest of the items, so I can use an Expander control, make them collapsed and make them using less space.
+    ///  This panel is usually useful when creating navigation buttons like Outlook has(the buttons to switch between Mail, Calendar, Notes and so on).
+    ///   For example, if this UniformStackPanel has 300 units to display 3 items, it will give each one 100 units.
+    ///  If I set the second one as UniformStackPanel.IsAutoSized=”True” and it only needs 20 units, then the first and third items will have a size of 140 units, and the second item will have a size of 20 units.
+    ///  Notice that “size” could be either height or width, depends on the orientation of the panel.
+    /// Also, notice that I’m using the Boolean boxes from my previous post: https://xstatic2.wordpress.com/2011/10/21/tip-improving-boolean-dependency-properties-performance/.
+    /// https://xstatic2.wordpress.com/2012/09/30/uniformstackpanel/
     /// </summary>
     public class UniformStackPanel : Panel
     {
