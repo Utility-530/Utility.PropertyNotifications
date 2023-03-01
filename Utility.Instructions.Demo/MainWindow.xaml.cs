@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Reactive.Linq;
 using System.Collections.Generic;
 using Utility.Trees;
 using System.Collections;
@@ -29,31 +28,22 @@ namespace Utility.Instructions.Demo
         public string character => AlphabetCharacter(count).ToString();
 
         readonly Random random = new Random();
-        readonly DynamicTree<object> instructions;
+        DynamicTree<Persist> instructions;
         readonly DynamicTree<TreeState> history;
         readonly Service service;
-        //public Implementer implementor = new();
-        //private readonly View View;
-
-
-
-        //public Tree<View> ViewModelTree { get; } = new(new View { Value = "root" });
         readonly Dictionary<Guid, View> views = new();
         readonly View root;
         bool historyFlag;
-        //ObservableCollection<View> currentViews = new();
+
         public MainWindow()
         {
             InitializeComponent();
-            instructions = new("root");
-            history = new(instructions.TreeState());
+            instructions = new(new Tree<Persist>(new Persist() { Name = "root" }) { });
+            history = new(new Tree<TreeState>(instructions.TreeState()));
 
             service = new(instructions.Tree.Key);
 
             root = views[service.Root.Key] = service.Root.CloneTree() as View;
-            root.IsExpanded = true;
-
-            //this.TreeView.ItemsSource = implementor.Tree.Items;
 
             instructions
                 .Subscribe(state =>
@@ -79,8 +69,9 @@ namespace Utility.Instructions.Demo
                 });
 
             TreeView2.ItemsSource = instructions.Tree.Items;
+
             TreeView3.ItemsSource = service.Root.Items;
-            TreeView4.ItemsSource = root.Items;
+            //TreeView4.ItemsSource = root.Items;
             TreeView5.ItemsSource = history.Tree.Items;
         }
 
@@ -143,18 +134,16 @@ namespace Utility.Instructions.Demo
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            //if (instructions.CanAdd == false)
-
-            instructions.Data = Randoms.Names.Random(random);
+            historyFlag = false;
+            instructions.Data = new Persist{ Name = Randoms.Names.Random(random)};
             instructions.Add();
         }
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
+            historyFlag = false;
             instructions.Remove();
         }
-
-
 
         private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
@@ -226,8 +215,6 @@ namespace Utility.Instructions.Demo
         }
 
 
-
-
         private void Refresh_Click(object sender, RoutedEventArgs e)
         {
             this.TreeView.ItemTemplateSelector = null;
@@ -239,12 +226,14 @@ namespace Utility.Instructions.Demo
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            //var seriealisation = JsonSerializer.Serialize(implementor.Tree);
+            TreePersist.Instance.Save(instructions.Tree);
         }
 
         private void Load_Click(object sender, RoutedEventArgs e)
         {
-
+            var load = TreePersist.Instance.Load<Persist>();
+            instructions = new(load);
+            TreeView2.ItemsSource = instructions.Tree.Items;
         }
 
         private void Run_Click(object sender, RoutedEventArgs e)
@@ -269,17 +258,29 @@ namespace Utility.Instructions.Demo
 
         private void DownHistory_Click(object sender, RoutedEventArgs e)
         {
+            historyFlag = true;
+            if (history.CanMoveDown == false)
+                throw new Exception("V3 fds");
 
+            history.MoveDown();
         }
 
         private void ForwardHistory_Click(object sender, RoutedEventArgs e)
         {
+            historyFlag = true;
 
+            if (history.CanMoveForward == false)
+                throw new Exception("V3 fds");
+            history.MoveForward();
         }
 
         private void BackHistory_Click(object sender, RoutedEventArgs e)
         {
+            historyFlag = true;
 
+            if (history.CanMoveBack == false)
+                throw new Exception("V3 fds");
+            history.MoveBack();
         }
 
         #endregion History

@@ -58,7 +58,6 @@ namespace Utility.Instructions.Demo
         {
             switch (value.Type)
             {
-
                 case ChangeType.Insert:
                     m_items.Add(value.Value);
                     break;

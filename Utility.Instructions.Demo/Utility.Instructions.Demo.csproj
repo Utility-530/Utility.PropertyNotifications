@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Utility.WPF\Utility.Persist\Utility.Persists.csproj" />
     <ProjectReference Include="..\Utility.Instructions\Utility.Instructions.csproj" />
     <ProjectReference Include="..\Utility.Trees\Utility.Trees.csproj" />
   </ItemGroup>
