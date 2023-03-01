@@ -14,20 +14,12 @@ namespace Utility.Trees
         //private ObservableCollection<ITree<T>> m_items;
         private T data;
 
-        public Tree(T data) : this(data, null)
-        {
-        }
 
         public Tree(T data, params object[] items) : base(data, items)
         {
             this.data = data;
-            Add(items);
-        }
-
-        public Tree(T data, params ITree<T>[] items) : base(data, items)
-        {
-            this.data = data;
-            Add(items);
+            if (items.Any())
+                Add(items);
         }
 
 
@@ -286,7 +278,7 @@ namespace Utility.Trees
             return new Tree<T>(data, items);
         }
 
-        public static void Visit<T>(ITree<T> tree, Action<ITree<T>> action)
+        public static void Visit<T>(this ITree<T> tree, Action<ITree<T>> action)
         {
             action(tree);
             if (tree.HasItems)
@@ -294,7 +286,7 @@ namespace Utility.Trees
                     Visit(item, action);
         }
 
-        public static ITree<T>? Match<T>(ITree<T> tree, Predicate<ITree<T>> action)
+        public static ITree<T>? Match<T>(this ITree<T> tree, Predicate<ITree<T>> action)
         {
             if (action(tree))
             {
@@ -315,6 +307,16 @@ namespace Utility.Trees
 
             return null;
 
+        }
+
+        public static ITree<T>? Match<T>(this ITree<T> tree, T data)
+        {
+            return Match(tree, a => a.Data?.Equals(data) == true);
+        }
+
+        public static ITree<T>? Match<T>(this ITree<T> tree, Guid guid)
+        {
+            return Match(tree, a => a.Key == guid);
         }
     }
 }

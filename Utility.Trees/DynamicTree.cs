@@ -30,9 +30,9 @@ namespace Utility.Trees
             CanRemove ? ToRemove : default);
 
 
-        public DynamicTree(T root)
+        public DynamicTree(ITree<T> root)
         {
-            Current = tree = new Tree<T>(root) { };
+            Current = tree = root;
         }
 
         public bool CanMoveUp => Current.Parent != null;
@@ -67,7 +67,7 @@ namespace Utility.Trees
 
         public ITree<T> ToAdd => toAdd;
 
-        public T Data { get=> toAdd.Data; set=> toAdd = new Tree<T>(value) { Parent = Current }; }
+        public T Data { get=> toAdd.Data; set=> toAdd = new Tree<T>(value) { Parent = Current, Key= Guid.NewGuid() }; }
 
         public State State { get; set; } = State.Current;
 
@@ -163,9 +163,14 @@ namespace Utility.Trees
         {
             //index = value.Index;
             var current = value.Current.Data as TreeState;
+
+            if (tree.Match(current.Current.Key) is null)
+            {
+                throw new Exception("rg 4!£");
+            }
             State = current.State;
             Current = current.Current as ITree<T>;
-            Data = Current.Data;
+       
             toRemove = value.Remove as ITree<T>;
             Broadcast();
         }

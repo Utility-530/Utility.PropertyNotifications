@@ -79,25 +79,14 @@ namespace Utility.Trees
         }
 
 
-
-        public Tree(object data)
-            : this(data, null)
-        {
-        }
-
         public Tree(object data, params object[] items)
         {
             this.data = data;
-            Add(items);
+            if (items.Any())
+                Add(items);
         }
 
-        public Tree(object data, params ITree[] items)
-        {
-            this.data = data;
-            Add(items);
-        }
-
-        public Guid Key { get; set; } = Guid.NewGuid();
+        public Guid Key { get; set; } 
 
         public ITree? this[object item]
         {
@@ -168,7 +157,6 @@ namespace Utility.Trees
         {
             if (data == null)
                 return;
-
 
             if (data is ITree tree)
             {
@@ -276,7 +264,7 @@ namespace Utility.Trees
             get { return m_items != null && m_items.Count > 0; }
         }
 
-        public ITree Parent { get => parent;  set=> parent=value; }
+        public ITree Parent { get => parent; set => parent = value; }
 
 
         public IReadOnlyList<ITree> Items
