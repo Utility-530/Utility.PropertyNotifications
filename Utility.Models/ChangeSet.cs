@@ -21,6 +21,17 @@ namespace Utility.Models
         public ChangeSet(Change<T> change) : base(new[] { change })
         {
         }
+    }  
+    
+    public class ChangeSet : ReadOnlyCollection<Change>
+    {
+        public ChangeSet(IList<Change> list) : base(list)
+        {
+        }
+
+        public ChangeSet(Change change) : base(new[] { change })
+        {
+        }
     }
 
     public class Change<T>
@@ -45,6 +56,27 @@ namespace Utility.Models
         public ChangeSet<T> ToChangeSet()
         {
             return new ChangeSet<T>(this);
+        }
+    }  
+    
+    public class Change
+    {
+
+        public Change(Key value, ChangeType type)
+        {
+            Value = value;
+            Type = type;
+        }
+
+
+        public Key Value { get; }
+
+        public ChangeType Type { get; init; }
+  
+
+        public ChangeSet ToChangeSet()
+        {
+            return new ChangeSet(this);
         }
     }
 
