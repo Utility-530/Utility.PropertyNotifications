@@ -16,19 +16,19 @@
         </ToolBar>
 
         <UniformGrid Rows="1">
-            <pnl:UniformPanel x:Name="UniformGridPanel1">
+            <pnl:UniformPanel x:Name="UniformGridPanel1" Orientation="Vertical">
 
                     <Ellipse
                             Width="100"
                             Height="40"
 
                             Fill="LawnGreen" />
-
-                    <Ellipse
-                            Width="130"
+                <Ellipse
+                            Width="430"
                             Height="230"
 
                             Fill="Pink" />
+    
             </pnl:UniformPanel>
 
             <ListBox ItemsSource="{Binding Path=Collection, Source={x:Static controls:DemoViewModel.Instance}}" Height="400" Width="500">

@@ -210,14 +210,15 @@
                 </ItemsControl>
             </DockPanel>
         </TabItem>
-   
+
         <TabItem Header="UniformStackPanel">
             <pnls:UniformStackPanel Width="130" Height="400">
 
                 <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                FontSize="20"
+                FontSize="70"      
+                    
                 FontWeight="Bold"
                 Text=" Salary" />
 
@@ -230,11 +231,42 @@
                 <TextBlock
                 HorizontalAlignment="Center"
                 FontSize="15"
+                pnls:UniformStackPanel.IsAutoSized="true"
+                Foreground="Gray"
+                Text="Occupation" />
+                <TextBlock
+                HorizontalAlignment="Center"
+                FontSize="15"
+                pnls:UniformStackPanel.IsAutoSized="false"
                 Foreground="Gray"
                 Text="Occupation" />
             </pnls:UniformStackPanel>
         </TabItem>
+        <TabItem Header="UniformStackPanel">
 
+            <ItemsControl>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="pnls:UniformStackPanel.IsAutoSized" Value="{Binding }" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <FrameworkElement.Resources>
+                    <DataTemplate DataType="{x:Type sys:Boolean}">
+                        <Border BorderThickness="1" BorderBrush="LightGray">
+                            <Ellipse Fill="Blue" Height="20" Width="20"  ></Ellipse>
+                        </Border>
+                    </DataTemplate>
+                </FrameworkElement.Resources>
+                <sys:Boolean>true</sys:Boolean>
+                <sys:Boolean>false</sys:Boolean>
+                <sys:Boolean>true</sys:Boolean>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <pnls:UniformStackPanel Width="130" Height="400"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </TabItem>
         <TabItem Header="B">
             <UniformGrid Rows="1">
                 <pnls:CornerPanel IsLastChildFilled="False">
