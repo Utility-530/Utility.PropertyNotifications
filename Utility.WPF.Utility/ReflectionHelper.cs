@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Markup.Primitives;
 
-namespace UtilityWpf.Property
+namespace UtilityWpf.Properties
 {
     public static class ReflectionHelper
     {

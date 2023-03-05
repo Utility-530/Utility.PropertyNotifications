@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using UtilityWpf.Property;
+using UtilityWpf.Properties;
 
 namespace UtilityWpf.Mixins
 {

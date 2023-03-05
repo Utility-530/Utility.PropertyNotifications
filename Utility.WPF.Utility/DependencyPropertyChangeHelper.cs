@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Data;
 
-namespace UtilityWpf.Property
+namespace UtilityWpf.Properties
 {
     public sealed class PropertyChangeNotifier :
     DependencyObject,
