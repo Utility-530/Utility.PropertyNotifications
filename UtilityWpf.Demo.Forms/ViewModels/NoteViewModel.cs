@@ -1,4 +1,5 @@
-﻿using Utility.ViewModels;
+﻿using Utility.Models;
+using Utility.ViewModels;
 
 namespace UtilityWpf.Demo.Forms.ViewModels
 {
@@ -9,7 +10,7 @@ namespace UtilityWpf.Demo.Forms.ViewModels
             //Model = new StringProperty(text);
         }
 
-        public override Utility.Common.Models.Model Model { get; }
+        public override Property Model { get; }
 
         //public override Model Model { get; }
     }

@@ -11,6 +11,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Utility.Common;
 using Utility.Common.Models;
+using Utility.Models;
 using Utility.Service;
 
 namespace Utility.ViewModels;
@@ -45,7 +46,7 @@ public class CollectionViewModel<T> : ViewModel, IObserver<IChangeSet<T>>
 
     public override ICollection<T> Children => collection;
 
-    public override Model Model { get; }
+    public override Property Model => throw new NotImplementedException();
 
     public void OnNext(IChangeSet<T> value)
     {
@@ -135,8 +136,8 @@ public class CollectionGroupViewModel<T, TKey> : ViewModel, IObserver<ClassPrope
 
     public override ICollection Children => collection;
 
-    public override Model Model { get; }
 
+    public override Property Model => throw new NotImplementedException();
     //public override Model Model { get; }
 
     public void OnCompleted()
@@ -227,7 +228,7 @@ public class CollectionGroupViewModel<T> : ViewModel, IObserver<Dictionary<strin
             .Subscribe();
     }
 
-    public override Model Model { get; }
+    public override Property Model => throw new NotImplementedException();
 
     //public override ICollection Children => viewModel.Collection;
 

@@ -1,36 +1,37 @@
-﻿//using DynamicData;
-//using ReactiveUI;
-//using System;
-//using System.Reactive.Linq;
-//using Utility.Common.Models;
-//using Utility.Service;
+﻿using DynamicData;
+using ReactiveUI;
+using System;
+using System.Reactive.Linq;
+using Utility.Common.Models;
+using Utility.Models;
+using Utility.Service;
 
-//namespace Utility.ViewModels;
+namespace Utility.ViewModels;
 
-//public class CountViewModel : ViewModel, IObserver<IChangeSet>
+public class CountViewModel : ViewModel, IObserver<IChangeSet>
+{
+    public CountViewModel() : base("Count")
+    {
+    }
+
+    public override Property<int> Model => new Property<int>();
+
+    public void OnNext(IChangeSet value)
+    {
+        Model.Value = Model.Value + value.Adds - value.Removes;
+    }
+}
+
+//public class FilteredCountViewModel<T> : ReactiveObject
 //{
-//    public CountViewModel():base("Count")
+//    private readonly ObservableAsPropertyHelper<int> count;
+
+//    public FilteredCountViewModel(IObservable<IChangeSet<T>> changeSet)
 //    {
+//        count = changeSet
+//                    .Scan(0, (a, b) => a + b.Adds - b.Removes)
+//                    .ToProperty(this, a => a.Count);
 //    }
 
-//    public override ReactiveProperty<int> Model => new ReactiveProperty<int>();
-
-//    public void OnNext(IChangeSet value)
-//    {
-//        Model.Value = Model.Value + value.Adds - value.Removes;
-//    }
+//    public int Count => count.Value;
 //}
-
-////public class FilteredCountViewModel<T> : ReactiveObject
-////{
-////    private readonly ObservableAsPropertyHelper<int> count;
-
-////    public FilteredCountViewModel(IObservable<IChangeSet<T>> changeSet)
-////    {
-////        count = changeSet
-////                    .Scan(0, (a, b) => a + b.Adds - b.Removes)
-////                    .ToProperty(this, a => a.Count);
-////    }
-
-////    public int Count => count.Value;
-////}

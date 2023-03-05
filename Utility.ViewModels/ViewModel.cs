@@ -15,6 +15,7 @@ using Utility.Common.Model;
 using Utility.Common.Models;
 using Utility.Helpers;
 using Utility.Helpers.Ex;
+using Utility.Models;
 using Utility.Observables;
 
 namespace Utility.ViewModels
@@ -78,7 +79,7 @@ namespace Utility.ViewModels
 
         //public Settings Settings { get; set; }
 
-        public abstract Model Model { get; }
+        public abstract Property Model { get; }
 
         public virtual IEnumerable Children
         {

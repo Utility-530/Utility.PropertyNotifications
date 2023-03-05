@@ -1,4 +1,5 @@
 ﻿using ReactiveUI;
+using Utility.Helpers.NonGeneric;
 
 namespace Utility.ViewModels
 {
@@ -12,19 +13,16 @@ namespace Utility.ViewModels
     //    public override ReactiveProperty<bool> Model { get; }
     //}
 
-    public class CheckViewModel : ReactiveObject
+    public class CheckViewModel : ViewModel<Utility.Models.Filters.Filter>
     {
         private bool isChecked;
 
-        public CheckViewModel(string header, bool isChecked)
+        public CheckViewModel(string header, bool isChecked) : base(header, default)
         {
             Header = header;
             IsChecked = isChecked;
         }
 
-        public CheckViewModel()
-        {
-        }
 
         public bool IsChecked { get => isChecked; set => this.RaiseAndSetIfChanged(ref isChecked, value); }
 
@@ -47,7 +45,7 @@ namespace Utility.ViewModels
             Content = content;
         }
 
-        public CheckContentViewModel()
+        public CheckContentViewModel() : base(default, default)
         {
         }
 

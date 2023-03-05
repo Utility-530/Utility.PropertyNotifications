@@ -13,6 +13,7 @@ using Utility.Common;
 using Utility.Common.Contract;
 using Utility.Common.Models;
 using Utility.Helpers.Ex;
+using Utility.Models;
 
 namespace Utility.ViewModels;
 
@@ -140,7 +141,7 @@ public class GroupCollectionViewModel<TGroupable, T, TKey, TGroupKey> : GroupCol
 
     public override ICollection Children => collection;
 
-    public override Model Model { get; }
+    public override Property Model => throw new NotImplementedException();
 
     public void OnNext(IGroupChangeSet<TGroupable, TKey, TGroupKey> value)
     {
@@ -160,7 +161,7 @@ public class GroupCollectionViewModel<T, TKey, TGroupKey> : GroupCollectionViewM
     public override IReadOnlyCollection<ClassProperty> Properties => typeof(T).GetProperties().Select(a => new ClassProperty(a.Name, typeof(T).Name)).ToArray();
 
     public override ICollection Children { get; }
-    public override Model Model { get; }
+    public override Property Model { get; }
 
     public virtual GroupViewModel<T, TKey, TGroupKey> Create(IGroup<T, TKey, TGroupKey> group)
     {
@@ -187,7 +188,7 @@ public class GroupCollection2ViewModel<TGroupable, T, TGroupKey> : GroupCollecti
     public override IReadOnlyCollection<ClassProperty> Properties => typeof(T).GetProperties().Select(a => new ClassProperty(a.Name, typeof(T).Name)).ToArray();
 
     public override ICollection Children { get; }
-    public override Model Model { get; }
+    public override Property Model { get; }
 
     public virtual GroupViewModel<T, TGroupKey> Create(IGroup<T, TGroupKey> group)
     {

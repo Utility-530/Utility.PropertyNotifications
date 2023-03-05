@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reactive;
 using System.Windows.Input;
 using Utility.Helpers.Ex;
+using Utility.Models;
 using UtilityWpf.Abstract;
 using _ViewModel = Utility.ViewModels.ViewModel;
 
@@ -66,7 +67,7 @@ namespace UtilityWpf.Demo.Forms.ViewModels
 
         public ICommand ChangeCommand => changeCommand ??= ReactiveCommand.Create<object, Unit>(Change);
 
-        public override Utility.Common.Models.Model Model { get; }
+        public override Property Model { get; }
 
         private Unit Change(object change)
         {

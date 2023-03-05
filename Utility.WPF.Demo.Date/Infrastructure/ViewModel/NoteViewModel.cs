@@ -1,6 +1,7 @@
 ﻿using ReactiveUI;
 using System;
 using Utility.Common.Models;
+using Utility.Models;
 using Utility.ViewModels;
 
 namespace Utility.WPF.Demo.Date.Infrastructure.ViewModels;
@@ -27,7 +28,7 @@ public class NoteViewModel : ViewModel, IEquatable<NoteViewModel>, IComparable<N
     }
 
     public DateTime CreateTime { get; set; }
-    public override Model Model { get; }
+    public override Property Model { get; }
 
     public int CompareTo(NoteViewModel? other)
     {

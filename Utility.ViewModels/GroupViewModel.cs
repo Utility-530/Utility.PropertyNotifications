@@ -6,6 +6,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Utility.Common.Models;
 using Utility.Helpers;
+using Utility.Models;
 
 namespace Utility.ViewModels;
 
@@ -40,7 +41,7 @@ public class GroupViewModel<T, TKey, TGroupKey> : ViewModel
 
     public override IReadOnlyCollection<T> Children => collection;
 
-    public override Model Model { get; }
+    public override Property Model => throw new NotImplementedException();
 
     //public override Model Model { get; }
 }
@@ -73,7 +74,7 @@ public class GroupViewModel<T, TGroupKey> : ViewModel
 
     public override IReadOnlyCollection<T> Children => collection;
 
-    public override Model Model { get; }
+    public override Property Model => throw new NotImplementedException();
 
     //public override Property Model { get; }
 }

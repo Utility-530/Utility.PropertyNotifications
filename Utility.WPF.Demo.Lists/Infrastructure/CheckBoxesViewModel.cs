@@ -11,7 +11,7 @@ using System.Reactive.Linq;
 using DynamicData;
 using System.Linq;
 using System.Reactive.Disposables;
-using Utility.ViewModels.Filters;
+using Utility.Models.Filters;
 
 namespace Utility.WPF.Demo.Lists.Infrastructure
 {
@@ -45,7 +45,7 @@ namespace Utility.WPF.Demo.Lists.Infrastructure
                      composite.Add(refresh.Subscribe(filterService));
             }
 
-            var changeSet = filters.Select(a => (CheckViewModel)new CheckContentViewModel(a, a.Header, false)).ToObservable().ToObservableChangeSet();
+            var changeSet = filters.Select(a => (ViewModel<Filter>)new CheckContentViewModel(a, a.Header, false)).ToObservable().ToObservableChangeSet();
             FilterCollectionViewModel = new(changeSet, filterService, default);
             Command = ReactiveCommand.Create<object, object>(a =>
             {

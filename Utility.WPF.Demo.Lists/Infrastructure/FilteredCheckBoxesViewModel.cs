@@ -6,10 +6,11 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Utility.Service;
 using Utility.ViewModels;
-using Utility.ViewModels.Filters;
 using Utility.Helpers.Ex;
 using UtilityWpf.Demo.Data.Factory;
 using UtilityWpf.Demo.Data.Model;
+using Utility.Models.Filters;
+using Utility.Reactive;
 
 namespace Utility.WPF.Demo.Lists.Infrastructure
 {
@@ -26,8 +27,8 @@ namespace Utility.WPF.Demo.Lists.Infrastructure
 
             var subject = changeSet.Filter(filter).ToReplaySubject();
 
-            CollectionViewModel = new(subject);
-            CountViewModel = new(subject);
+            CollectionViewModel = new();
+            CountViewModel = new();
         }
 
         public FilterCollectionViewModel<Profile> FilterCollectionViewModel { get; }
@@ -71,14 +72,14 @@ namespace Utility.WPF.Demo.Lists.Infrastructure
                 })
                 .Subscribe();
 
-            var checkFilters = filters.Transform(a => (CheckViewModel)new CheckContentViewModel(a, a.Header, false));
+            var checkFilters = filters.Transform(a => (ViewModel<Filter>)new CheckContentViewModel(a, a.Header, false));
             FilterCollectionViewModel = new(checkFilters, filterService, new(false));
 
             var subjects = profiles.Filter(filterService).ToReplaySubject(100);
 
-            CollectionViewModel = new(subjects);
-            CountViewModel = new(profiles);
-            FilteredCountViewModel = new(subjects);
+            CollectionViewModel = new();
+            CountViewModel = new();
+            FilteredCountViewModel = new();
         }
 
         public CheckedCollectionCommandViewModel<Profile, Filter> FilterCollectionViewModel { get; }

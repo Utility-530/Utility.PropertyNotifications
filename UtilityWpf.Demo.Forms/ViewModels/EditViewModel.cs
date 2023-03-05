@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using Utility.Common.Collection;
+using Utility.Models;
 using _ViewModel = Utility.ViewModels.ViewModel;
 
 namespace UtilityWpf.Demo.Forms.ViewModels
@@ -90,7 +91,7 @@ namespace UtilityWpf.Demo.Forms.ViewModels
 
         public override ICollection Children => new ObservableCollection<INotifyPropertyChanged>((this as ICollection<INotifyPropertyChanged>).Collection);
 
-        public override Utility.Common.Models.Model Model { get; }
+        public override Property Model { get; }
 
         public static bool operator ==(EditViewModel? left, EditViewModel? right)
         {
