@@ -3,7 +3,7 @@ using System;
 using System.ComponentModel;
 using Utility.Common;
 using Utility.Common.Collection;
-using Utility.Persist;
+using Utility.Persists;
 using UtilityWpf.Demo.Forms.Infrastructure;
 using UtilityWpf.Demo.Forms.Model;
 using UtilityWpf.Demo.Forms.ViewModels;

@@ -12,6 +12,7 @@
 		<ProjectReference Include="..\Utility.WPF.Controls.Lists\Utility.WPF.Controls.Lists.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Markup\Utility.WPF.Markup.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
 		<ProjectReference Include="..\UtilityWpf.Controls\UtilityWpf.Controls.csproj" />
 		<ProjectReference Include="..\UtilityWpf.Demo.Data\UtilityWpf.Demo.Data.csproj" />
 	</ItemGroup>

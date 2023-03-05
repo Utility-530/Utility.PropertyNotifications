@@ -12,7 +12,7 @@ namespace Utility.WPF.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value.GetType().IsEnum || value is byte)
-                return GetColor(System.Convert.ToByte(value));
+                return GetColor((byte)(System.Convert.ToByte(value) % niceColorsDictionary.Count));
             return Colors.BlanchedAlmond;
         }
 

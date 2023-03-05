@@ -15,7 +15,7 @@ using UtilityWpf.Abstract;
 
 namespace UtilityWpf.Controls.Chart
 {
-    using Mixins;
+    using ReactiveUI;
     using Utility.WPF.Controls.Base;
     using UtilityWpf.Controls.Chart.ViewModels;
 
@@ -57,7 +57,7 @@ namespace UtilityWpf.Controls.Chart
                 }),
                 this.Observable<string>(nameof(DataKey)),
                 this.Observable<string>(nameof(DataConverter)),
-                this.Observable<string>(nameof(IdKey)).Where(id => id != null))
+                this.Observable<string>(nameof(Id)).Where(id => id != null))
                 .ObserveOnDispatcher()
                 .Subscribe(combination =>
                 {
@@ -154,7 +154,7 @@ namespace UtilityWpf.Controls.Chart
             set { SetValue(DataConverterProperty, value); }
         }
 
-        public string IdKey
+        public string Id
         {
             get { return (string)GetValue(IdProperty); }
             set { SetValue(IdProperty, value); }

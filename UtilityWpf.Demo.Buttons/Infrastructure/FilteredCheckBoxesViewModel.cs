@@ -9,6 +9,7 @@ using Utility.ViewModels;
 using Utility.Models.Filters;
 using UtilityWpf.Demo.Data.Factory;
 using UtilityWpf.Demo.Data.Model;
+using Utility.Models;
 
 namespace UtilityWpf.Demo.Buttons.Infrastructure
 {
@@ -31,7 +32,7 @@ namespace UtilityWpf.Demo.Buttons.Infrastructure
             //filtered.Subscribe(CollectionViewModel);
         }
 
-        public override Utility.Common.Models.Model Model { get; }
+        public override Property Model { get; }
 
         //public FilterCollectionViewModel<Profile> FilterCollectionViewModel { get; }
         //public CollectionViewModel<Profile> CollectionViewModel { get; }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using Utility.Persist;
+using Utility.Persists;
 using Utility.WPF.Demo.Date.Infrastructure.Repository;
 
 namespace Utility.WPF.Demo.Date

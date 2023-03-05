@@ -37,7 +37,7 @@ namespace UtilityWpf.Controls.Chart
                 .Subscribe(a =>
                 {
                     //selector.Key = a;
-                    content.IdKey = a;
+                    content.Id = a;
                 });
 
             Content = content;
@@ -91,7 +91,7 @@ namespace UtilityWpf.Controls.Chart
                 oview.ItemsSource = enumerable;
                 oview.DataKey = DataKey;
                 oview.DataConverter = Converter;
-                oview.IdKey = IdKey;
+                oview.Id = IdKey;
             }
             else throw new Exception("Content is null");
         }

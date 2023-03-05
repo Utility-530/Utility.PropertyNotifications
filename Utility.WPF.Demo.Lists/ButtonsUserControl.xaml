@@ -4,19 +4,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:utl="http://schemas.utility.com/utilitywpf"
+    xmlns:utl="http://schemas.utility.com/converters"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:view="http://schemas.utility.com/lists"
     xmlns:btns="http://schemas.utility.com/buttons"
-    xmlns:enum="clr-namespace:Utility.Common.Enum;assembly=Utility.Common"
     xmlns:att="http://schemas.utility.com/attached"
     xmlns:infra1="clr-namespace:UtilityWpf.Demo.Common.ViewModels;assembly=UtilityWpf.Demo.Common"
     xmlns:demoApp="clr-namespace:Utility.WPF.Demo.Lists.Infrastructure"
+    xmlns:utl1="http://schemas.utility.com/utilitywpf"
+    xmlns:enum="clr-namespace:Utility.Enums;assembly=Utility.Enums"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    <FrameworkElement.Resources>
+    <!--<FrameworkElement.Resources>
         <utl:BooleanToOrientationConverter x:Key="BooleanToOrientationConverter" />
     </FrameworkElement.Resources>
 
@@ -27,7 +28,7 @@
         </btns:ToggleButton>
         <ComboBox x:Name="ComboBox" DockPanel.Dock="Top" Width="100" Margin="10">
             <i:Interaction.Behaviors>
-                <utl:EnumSelectorBehavior EnumType="{x:Type enum:Arrangement}" 
+                <utl1:EnumSelectorBehavior EnumType="{x:Type enum:Arrangement}" 
                                           SelectedEnum="{x:Static enum:Arrangement.Uniform}"/>
             </i:Interaction.Behaviors>
         </ComboBox>
@@ -46,7 +47,7 @@
                              DisplayMemberPath="Header">
                             </view:ButtonsControl>
 
-                            <ListBox ItemsSource="{Binding Numbers, Mode=OneTime}" SelectionChanged="{utl:Command Command }">
+                            <ListBox ItemsSource="{Binding Numbers, Mode=OneTime}" SelectionChanged="{utl1:Command Command }">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Value, Mode=OneTime}" FontSize="24" />
@@ -58,14 +59,14 @@
                 </GroupBox>
                 <GroupBox>
                     <DockPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        <!--<FrameworkElement.Resources>
+                        --><!--<FrameworkElement.Resources>
                 <utl:SharedResourceDictionary Source="/UtilityWpf.Demo.Common;component/Themes/Material.xaml" />
-            </FrameworkElement.Resources>-->
+            </FrameworkElement.Resources>--><!--
 
                         <view:ButtonsControl x:Name="ButtonsControl"
                                   Orientation="{Binding ElementName=ToggleButton, Path=IsChecked, Converter={StaticResource BooleanToOrientationConverter}}">
                             <i:Interaction.Behaviors>
-                                <utl:EnumSelectorBehavior EnumType="{x:Type Visibility}"></utl:EnumSelectorBehavior>
+                                <utl1:EnumSelectorBehavior EnumType="{x:Type Visibility}"></utl1:EnumSelectorBehavior>
                             </i:Interaction.Behaviors>
                         </view:ButtonsControl>
 
@@ -90,7 +91,7 @@
                                 </DataTemplate>
                             </FrameworkElement.Resources>
                             <i:Interaction.Behaviors>
-                                <utl:DataTemplateSelectorBehavior Type="{x:Type infra1:ButtonViewModel}" />
+                                <utl1:DataTemplateSelectorBehavior Type="{x:Type infra1:ButtonViewModel}" />
                             </i:Interaction.Behaviors>
                         </view:ButtonsControl>
                         <ContentControl ContentTemplate="{Binding ElementName=Buttons2Control, Path=Output}">
@@ -113,5 +114,5 @@
                 </GroupBox>
             </ItemsControl>
         </ScrollViewer>
-    </DockPanel>
+    </DockPanel>-->
 </UserControl>

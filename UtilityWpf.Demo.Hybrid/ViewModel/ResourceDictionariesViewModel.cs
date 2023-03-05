@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Linq;
 using System.Reactive.Linq;
-using Utility.Persist;
+using Utility.Persists;
 using Utility.Service;
 using Utility.Interfaces.NonGeneric.Data;
 using UtilityWpf.Demo.Common.ViewModels;

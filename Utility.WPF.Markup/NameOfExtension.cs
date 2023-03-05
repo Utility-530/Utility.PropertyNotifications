@@ -1,14 +1,9 @@
-﻿using Castle.Core.Internal;
-using Hardcodet.Wpf.DataBinding;
-using NetFabric.Hyperlinq;
+﻿using Hardcodet.Wpf.DataBinding;
 using System;
-using System.ComponentModel;
 using System.Linq;
-using System.Reactive;
 using System.Reactive.Subjects;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Markup;
 
 namespace Utility.WPF.Markup
@@ -23,8 +18,6 @@ namespace Utility.WPF.Markup
 
         public static readonly DependencyProperty TypeProperty = DependencyProperty.RegisterAttached("Type", typeof(Type), typeof(NameOfExtension), new PropertyMetadata(null, PropertyChanged));
         
-        private readonly ReplaySubject<Type> singleReplaySubject = new(1);
-
         private static void PropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             //.singleReplaySubject.OnNext(e.NewValue as Type);
@@ -53,7 +46,7 @@ namespace Utility.WPF.Markup
             if (Path == null)
                 throw new ArgumentNullException(nameof(Path));
 
-            if (Type == null || string.IsNullOrEmpty(Path.Path) || Path.Path.Contains("."))
+            if (Type == null || string.IsNullOrEmpty(Path.Path) || Path.Path.Contains('.'))
                 throw new ArgumentException("Syntax for x:NameOf is Type={x:Type [className]} Member=[propertyName]");
 
             var propertyInfo = Type.GetRuntimeProperties().FirstOrDefault(pi => pi.Name == Path.Path);

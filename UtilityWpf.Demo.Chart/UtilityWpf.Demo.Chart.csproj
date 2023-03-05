@@ -7,6 +7,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Utility.WPF.Markup\Utility.WPF.Markup.csproj" />
 	  <ProjectReference Include="..\UtilityWpf.Controls.Chart\UtilityWpf.Controls.Chart.csproj" />
 	  <ProjectReference Include="..\UtilityWpf.Controls.Dragablz\UtilityWpf.Controls.Dragablz.csproj" />
 	  <ProjectReference Include="..\UtilityWpf.Controls.Extrinsic\UtilityWpf.Controls.Extrinsic.csproj" />

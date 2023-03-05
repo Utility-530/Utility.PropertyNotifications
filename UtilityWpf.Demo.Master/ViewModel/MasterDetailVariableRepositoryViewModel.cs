@@ -1,7 +1,7 @@
 ﻿using ReactiveUI;
 using System;
 using System.Reactive;
-using Utility.Persist;
+using Utility.Persists;
 using Utility.Interfaces.NonGeneric.Data;
 using UtilityWpf.Demo.Common.ViewModels;
 using UtilityWpf.Demo.Master.Infrastructure;
