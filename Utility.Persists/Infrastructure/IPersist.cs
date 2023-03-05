@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Utility.Persist.Infrastructure
+namespace Utility.Persists.Infrastructure
 {
     public interface IPersist
     {

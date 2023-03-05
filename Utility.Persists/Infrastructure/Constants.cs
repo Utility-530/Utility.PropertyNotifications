@@ -1,4 +1,4 @@
-﻿namespace Utility.Persist.Infrastructure
+﻿namespace Utility.Persists.Infrastructure
 {
     public static class Constants
     {

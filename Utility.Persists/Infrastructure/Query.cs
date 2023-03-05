@@ -1,6 +1,6 @@
 ﻿using Utility.Interfaces.NonGeneric.Data;
 
-namespace Utility.Persist.Infrastructure
+namespace Utility.Persists.Infrastructure
 {
     public class MaxRowId : IQuery
     {

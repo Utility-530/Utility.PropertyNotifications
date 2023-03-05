@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Utility.Persist.Infrastructure;
+namespace Utility.Persists.Infrastructure;
 
 public static class DatabaseEx
 {

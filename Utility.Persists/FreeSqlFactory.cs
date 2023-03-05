@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading;
 using Utility.Interfaces.NonGeneric;
 
-namespace Utility.Persist {
+namespace Utility.Persists {
    public static class FreeSqlFactory {
       private static bool initialised;
 

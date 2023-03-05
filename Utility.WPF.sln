@@ -47,7 +47,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Common", "U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.View", "UtilityWpf.View\UtilityWpf.View.csproj", "{8333F9DC-6DFA-4E2E-A42A-BE70B5A5CECD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Persist", "Utility.Persist\Utility.Persist.csproj", "{C145BD0A-A5CB-4CB2-8240-384E0BA37983}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Persists", "Utility.Persists\Utility.Persists.csproj", "{C145BD0A-A5CB-4CB2-8240-384E0BA37983}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls.Extrinsic", "UtilityWpf.Controls.Extrinsic\UtilityWpf.Controls.Extrinsic.csproj", "{F827F0DB-6405-4FBD-BDD9-30AB5C0DD12C}"
 EndProject

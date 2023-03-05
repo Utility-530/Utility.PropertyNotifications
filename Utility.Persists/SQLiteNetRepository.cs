@@ -2,11 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Utility.Persist.Infrastructure;
+using Utility.Persists.Infrastructure;
 using Utility.Interfaces.Generic.Data;
 using Utility.Interfaces.NonGeneric.Data;
 
-namespace Utility.Persist
+namespace Utility.Persists
 {
     public class Repository_Legacy<T, R, S> : SQLiteNetRepository<T, IConvertible, R, S> where T : new()
     {
