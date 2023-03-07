@@ -12,8 +12,9 @@
                 <local:EnumItemTemplateSelector x:Key="DataTemplateSelector">
                     <local:EnumItemTemplateSelector.InteractiveTemplate>
                         <DataTemplate>
-                            <Button
+                            <RadioButton
                                 Margin="3"
+                                IsChecked="{Binding IsChecked}"
                                 Command="{Binding Command}"
                                 Content="{Binding Enum}" />
                         </DataTemplate>

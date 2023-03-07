@@ -10,18 +10,26 @@ using System.Windows.Controls;
 using Utility.WPF.Attached;
 using Utility.Enums;
 using Utility.WPF.Controls.Base;
-using Utility.Enums;
+using Evan.Wpf;
+using Jellyfish;
+using Utility.Helpers;
+using System.Windows.Input;
+using System.Reactive.Subjects;
+using LanguageExt.TypeClasses;
+using MintPlayer.ObservableCollection;
 
 namespace UtilityWpf.Controls
 {
     public class EnumItemsControl : LayOutItemsControl
     {
         private static readonly DependencyPropertyKey OutputPropertyKey = DependencyProperty.RegisterReadOnly(nameof(Output), typeof(Enum), typeof(EnumItemsControl), new FrameworkPropertyMetadata(default(Enum)));
-
-        public static readonly DependencyProperty EnumProperty = DependencyProperty.Register("Enum", typeof(Type), typeof(EnumItemsControl), new PropertyMetadata(typeof(Switch)));
-        public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register("IsReadOnly", typeof(bool), typeof(EnumItemsControl), new PropertyMetadata(false));
+        public static readonly DependencyProperty EnumProperty = DependencyHelper.Register<Type>(new FrameworkPropertyMetadata(typeof(Switch)));
+        public static readonly DependencyProperty IsReadOnlyProperty = DependencyHelper.Register<bool>();
         public static readonly DependencyProperty OutputProperty = OutputPropertyKey.DependencyProperty;
-
+        public static readonly DependencyProperty IsMultiSelectProperty = DependencyHelper.Register<bool>();
+        public static readonly DependencyProperty ClearCommandProperty = DependencyHelper.Register<ICommand>();
+        private Subject<Type> subject = new();
+        private ObservableCollection<EnumItem> items = new();
         static EnumItemsControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(EnumItemsControl), new FrameworkPropertyMetadata(typeof(EnumItemsControl)));
@@ -31,23 +39,49 @@ namespace UtilityWpf.Controls
         {
             this.SetValue(ItemsControlEx.ArrangementProperty, Arrangement.Wrapped);
             CompositeDisposable? disposable = null;
+            ClearCommand = new RelayCommand(a => subject.OnNext(Enum));
+            ItemsSource = items;
             this.WhenAnyValue(a => a.Enum)
+                .Merge(subject)
                 .CombineLatest(this.WhenAnyValue(a => a.IsReadOnly))
                 .Select(a => BuildFromEnum(a.First, a.Second).ToArray())
                 .Subscribe(enums =>
                 {
-                    Output = enums.First().Enum;
+                    items.Clear();
+                    items.AddRange(enums);
+                    items.AddRange(enums);
                     disposable?.Dispose();
                     disposable = new();
-                    ItemsSource = enums;
+           
                     foreach (var item in enums)
                     {
                         item.Command.Subscribe(a =>
                         {
-                            Output = a;
+
+                            if (IsMultiSelect == false)
+                            {
+                                Output = a;
+                                foreach (var x in enums)
+                                {
+                                    if (x.Enum != a)
+                                        x.IsChecked = false;
+                                }
+                            }
+                            else
+                            {
+                                Output = a.HasFlag(a) ?
+                                EnumHelper.CombineFlags(enums.Where(a => a.IsChecked).Select(e => e.Enum), Enum) :
+                                a;
+                            }
+
                         }).DisposeWith(disposable);
                     }
                 });
+
+            static IEnumerable<EnumItem> BuildFromEnum(Type t, bool isReadOnly)
+            {
+                return System.Enum.GetValues(t).Cast<Enum>().Select(a => new EnumItem(a, ReactiveCommand.Create(() => a), isReadOnly));
+            }
         }
 
         #region properties
@@ -56,6 +90,12 @@ namespace UtilityWpf.Controls
         {
             get => (bool)GetValue(IsReadOnlyProperty);
             set => SetValue(IsReadOnlyProperty, value);
+        }
+
+        public bool IsMultiSelect
+        {
+            get => (bool)GetValue(IsMultiSelectProperty);
+            set => SetValue(IsMultiSelectProperty, value);
         }
 
         public Type Enum
@@ -69,16 +109,19 @@ namespace UtilityWpf.Controls
             get => (Enum)GetValue(OutputProperty);
             protected set => SetValue(OutputPropertyKey, value);
         }
+            
+        public ICommand ClearCommand
+        {
+            get => (ICommand)GetValue(ClearCommandProperty);
+            set => SetValue(ClearCommandProperty, value);
+        }
 
         #endregion properties
 
-        public static IEnumerable<EnumItem> BuildFromEnum(Type t, bool isReadOnly)
+        public class EnumItem : ViewModel
         {
-            return System.Enum.GetValues(t).Cast<Enum>().Select(a => new EnumItem(a, ReactiveCommand.Create(() => a), isReadOnly));
-        }
+            private bool isChecked;
 
-        public class EnumItem
-        {
             public EnumItem(Enum @enum, ReactiveCommand<Unit, Enum> command, bool isReadOnly)
             {
                 Enum = @enum;
@@ -91,6 +134,14 @@ namespace UtilityWpf.Controls
             public ReactiveCommand<Unit, Enum> Command { get; }
 
             public bool IsReadOnly { get; }
+            public bool IsChecked
+            {
+                get => isChecked; set
+                {
+                    isChecked = value;
+                    this.OnPropertyChanged();
+                }
+            }
         }
     }
 
@@ -102,7 +153,7 @@ namespace UtilityWpf.Controls
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item is not EnumItemsControl.EnumItem { IsReadOnly: { } isReadonly } enumItem)
+            if (item is not EnumItemsControl.EnumItem { IsReadOnly: bool isReadonly })
             {
                 throw new ArgumentException($"Unexpected type. Expected {nameof(EnumItemsControl.EnumItem)}");
             }
