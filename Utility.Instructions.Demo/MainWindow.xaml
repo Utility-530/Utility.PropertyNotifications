@@ -270,6 +270,10 @@
                 </TreeView>
             </HeaderedContentControl>
 
+            <HeaderedContentControl Header="Content"  Style="{StaticResource HeaderStyle2}">
+
+                <TextBox x:Name="TextBoxContent"></TextBox>
+            </HeaderedContentControl>
 
 
             <HeaderedContentControl Header="Modify"  Style="{StaticResource HeaderStyle2}">
