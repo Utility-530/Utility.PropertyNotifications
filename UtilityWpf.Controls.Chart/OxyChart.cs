@@ -15,31 +15,40 @@ using UtilityWpf.Abstract;
 
 namespace UtilityWpf.Controls.Chart
 {
+    using Evan.Wpf;
     using ReactiveUI;
+    using System.Windows.Controls;
     using Utility.WPF.Controls.Base;
     using UtilityWpf.Controls.Chart.ViewModels;
 
-    //using static DependencyPropertyFactory<OxyChart>;
     using static UtilityWpf.Controls.Chart.ViewModels.MultiTimeModel;
 
-    public class OxyChart : Controlx, IItemsSource
+    public class OxyChart : Control, IItemsSource
     {
-        public static readonly DependencyProperty ItemsSourceProperty = Register(new FrameworkPropertyMetadata((a, e) => (a as OxyChart).Observer<IEnumerable>().OnNext(e.NewValue as IEnumerable)));
-        public static readonly DependencyProperty IdProperty = Register(new FrameworkPropertyMetadata((a, e) => (a as OxyChart).Observer<string>().OnNext(e.NewValue as string)));
-        public static readonly DependencyProperty DataKeyProperty = Register(new FrameworkPropertyMetadata((a, e) => (a as OxyChart).Observer<string>().OnNext(e.NewValue as string)));
-        public static readonly DependencyProperty DataConverterProperty = Register(new FrameworkPropertyMetadata((a, e) => (a as OxyChart).Observer<IValueConverter>().OnNext(e.NewValue as IValueConverter)));
+        public static readonly DependencyProperty ItemsSourceProperty = DependencyHelper.Register<IEnumerable>();
+        public static readonly DependencyProperty IdProperty = DependencyHelper.Register<string>();
+        public static readonly DependencyProperty DataKeyProperty = DependencyHelper.Register<string>();
+        public static readonly DependencyProperty DataConverterProperty = DependencyHelper.Register<IValueConverter>();
+        private ReplaySubject<PlotView> replaySubject = new(1);
 
         static OxyChart()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(OxyChart), new FrameworkPropertyMetadata(typeof(OxyChart)));
         }
 
+        public override void OnApplyTemplate()
+        {
+            ;
+            replaySubject.OnNext(this.FindName("PlotView1") as PlotView);
+            base.OnApplyTemplate();
+        }
+
         public OxyChart()
         {
             ISubject<MultiTimeModel> modelSubject = new Subject<MultiTimeModel>();
 
-            var modelChanges = this
-                .Control<PlotView>()
+            var modelChanges =
+                replaySubject
                 .Subscribe(plotView =>
                 {
                     plotView.Model ??= new PlotModel();
@@ -49,22 +58,22 @@ namespace UtilityWpf.Controls.Chart
 
             modelSubject
                 .CombineLatest(
-                this.Observable<IEnumerable>()
+                this.WhenAnyValue(a => a.ItemsSource)
                 .WhereNotNull()
                 .Select(cc =>
                 {
                     return cc.MakeObservable().Select(a => cc);
                 }),
-                this.Observable<string>(nameof(DataKey)),
-                this.Observable<string>(nameof(DataConverter)),
-                this.Observable<string>(nameof(Id)).Where(id => id != null))
+                   this.WhenAnyValue(a => a.DataKey),
+                   this.WhenAnyValue(a => a.DataConverter),
+                this.WhenAnyValue(a => a.Id).Where(id => id != null))
                 .ObserveOnDispatcher()
                 .Subscribe(combination =>
                 {
                     Combine(combination.First, combination.Second, combination.Third, combination.Fourth, combination.Fifth);
                 });
 
-            static void Combine(MultiTimeModel model, IObservable<IEnumerable> items, string dataKey, string converter, string idKey)
+            static void Combine(MultiTimeModel model, IObservable<IEnumerable> items, string dataKey, IValueConverter converter, string idKey)
             {
                 if (items == default(IObservable<string>))
                     model.Filter(null);
@@ -83,7 +92,7 @@ namespace UtilityWpf.Controls.Chart
                     () =>
                     { });
 
-                static HashSet<string> GetIds(MultiTimeModel model, string key, string converter, string idKey, IEnumerable collection)
+                static HashSet<string> GetIds(MultiTimeModel model, string key, IValueConverter converter, string idKey, IEnumerable collection)
                 {
                     // var itt = ItemsSource.Cast<object>().Select(o => o.GetType().GetProperty(IdProperty).GetValue(o).ToString());
                     HashSet<string> ids = new HashSet<string>();
