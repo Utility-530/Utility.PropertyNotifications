@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Instructions", "Uti
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{0E77E344-1EED-4EDC-BDF9-744CF0425AAF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Persists", "..\Utility.WPF\Utility.Persist\Utility.Persists.csproj", "{D610148D-A6BC-47B7-8636-0A4F02C6C919}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Persists", "..\Utility.WPF\Utility.Persists\Utility.Persists.csproj", "{D610148D-A6BC-47B7-8636-0A4F02C6C919}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Common", "..\Utility.WPF\Utility.Common\Utility.Common.csproj", "{2735C7FF-EBD1-4560-B96D-6AFEDAC9DB77}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "..\Utility.WPF\Utility.Observables\Utility.Observables.csproj", "{8E968750-6230-4DD5-B319-9D52B27DEB4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +49,10 @@ Global
 		{2735C7FF-EBD1-4560-B96D-6AFEDAC9DB77}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2735C7FF-EBD1-4560-B96D-6AFEDAC9DB77}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2735C7FF-EBD1-4560-B96D-6AFEDAC9DB77}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E968750-6230-4DD5-B319-9D52B27DEB4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E968750-6230-4DD5-B319-9D52B27DEB4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E968750-6230-4DD5-B319-9D52B27DEB4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E968750-6230-4DD5-B319-9D52B27DEB4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
