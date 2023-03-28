@@ -13,7 +13,7 @@ namespace UtilityWpf.Demo.Master
         public App()
         {
             var builder = new ContainerBuilder();
-            builder.AutoRegister();
+            Resolver.Instance.AutoRegister();
             builder.UseAutofacDependencyResolver();
         }
     }

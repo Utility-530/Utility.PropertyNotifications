@@ -6,6 +6,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using Endless;
 using NetFabric.Hyperlinq;
+using Utility.Common;
 using UtilityWpf.Demo.Common.Meta;
 using UtilityWpf.Demo.Common.ViewModels;
 
@@ -33,7 +34,7 @@ namespace UtilityWpf.Demo.Master.View
         {
             try
             {
-                return Statics.Service<Factory>().Create<Fields>(Statics.Random.Next(10, 20)).Cached();
+                return Resolver.Instance.Resolve<Factory>().Create<Fields>(Statics.Random.Next(10, 20)).Cached();
 
             }
             catch

@@ -13,9 +13,7 @@ namespace UtilityWpf.Demo
     {
         public App()
         {
-            new ContainerBuilder()
-            .AutoRegister()
-            .UseAutofacDependencyResolver();
+            Resolver.Instance.AutoRegister();
 
             new Window
             {

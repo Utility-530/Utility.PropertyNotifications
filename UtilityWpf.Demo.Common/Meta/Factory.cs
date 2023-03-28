@@ -3,6 +3,7 @@ using Splat;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Utility.Common;
 using Utility.Helpers;
 using UtilityWpf.Demo.Common.ViewModels;
 
@@ -25,7 +26,7 @@ namespace UtilityWpf.Demo.Common.Meta
 
     public class Factory
     {
-        private FactoryLogger logger = Locator.Current.GetService<FactoryLogger>() ?? throw new Exception("mm,,ffjr");
+        private FactoryLogger logger = Resolver.Instance.Resolve<FactoryLogger>();
 
         public T Create<T>() where T : class
         {
@@ -55,7 +56,7 @@ namespace UtilityWpf.Demo.Common.Meta
 
         private class Shelf
         {
-            private static KeyStore Store = Locator.Current.GetService<KeyStore>() ?? throw new Exception("m6776m,,ffjr");
+            private static KeyStore Store = Resolver.Instance.Resolve<KeyStore>();
 
             public static TickViewModel TickViewModel => new(Guid.NewGuid(), Store.CreateNewKey()) { IsChecked = Statics.Random.NextBoolean() };
             public static ButtonViewModel ButtonViewModel => new(Store.CreateNewKey(), new ActionCommand(() => { })) { IsRefreshable = Statics.Random.NextBoolean() };

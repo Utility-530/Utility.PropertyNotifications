@@ -37,18 +37,18 @@ namespace UtilityWpf.Demo.Hybrid.ViewModels
             collectionService
                 .Select(a => a.change)
                 .Subscribe(a =>
-              {
-                  if (a.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
-                  a.Action ==  System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
-                  {
-                      foreach (var item in a.Items)
-                      {
-                          service.OnNext(item as TickViewModel);
-                      }
-                      return;
-                  }
-                  throw new Exception("gd77fdfwe");
-              });
+                {
+                    if (a.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add ||
+                    a.Action ==  System.Collections.Specialized.NotifyCollectionChangedAction.Replace)
+                    {
+                        foreach (var item in a.Items)
+                        {
+                            service.OnNext(item as TickViewModel);
+                        }
+                        return;
+                    }
+                    throw new Exception("gd77fdfwe");
+                });
 
             collectionService.OnNext(new(Repository()));
 

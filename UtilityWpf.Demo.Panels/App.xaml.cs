@@ -15,7 +15,7 @@ namespace UtilityWpf.Demo.Panels
         {
             var builder = new ContainerBuilder();
             //var d = typeof(UtilityWpf.Demo.Common.ViewModels.Tick);
-            builder.AutoRegister();
+            Resolver.Instance.AutoRegister();
             builder.UseAutofacDependencyResolver();
 
             new Window

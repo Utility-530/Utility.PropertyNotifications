@@ -13,9 +13,7 @@ namespace Utility.WPF.Demo.Adorners
     {
         public App()
         {
-            new ContainerBuilder()
-            .AutoRegister()
-            .UseAutofacDependencyResolver();
+               Resolver.Instance.AutoRegister();
 
             new Window
             {

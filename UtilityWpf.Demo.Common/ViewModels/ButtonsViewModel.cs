@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using Utility.Common;
 using Utility.Helpers.Ex;
 using UtilityWpf.Demo.Common.Meta;
 
@@ -35,7 +36,7 @@ namespace UtilityWpf.Demo.Common.ViewModels
     {
         public ButtonsViewModel()
         {
-            Data = (Locator.Current.GetService<Factory>() ?? throw new Exception("df___fsd")).Create<ButtonViewModel>(3).ToObservableCollection();
+            Data = (Resolver.Instance.Resolve<Factory>() ?? throw new Exception("df___fsd")).Create<ButtonViewModel>(3).ToObservableCollection();
         }
 
         public ObservableCollection<ButtonViewModel> Data { get; }

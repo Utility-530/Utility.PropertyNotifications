@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using Utility.Common;
 using UtilityWpf.Demo.Common.Meta;
 
 namespace UtilityWpf.Demo.Hybrid
@@ -11,7 +12,7 @@ namespace UtilityWpf.Demo.Hybrid
         public FactoryLogUserControl()
         {
             InitializeComponent();
-            MainDataGrid.ItemsSource = Statics.Service<FactoryLogger>().Logs;
+            MainDataGrid.ItemsSource =Resolver.Instance.Resolve<FactoryLogger>().Logs;
         }
     }
 }

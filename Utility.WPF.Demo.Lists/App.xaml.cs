@@ -13,10 +13,10 @@ namespace Utility.WPF.Demo.Lists
     {
         public App()
         {
-            var builder = new ContainerBuilder();
+ 
             var d = typeof(UtilityWpf.Demo.Common.ViewModels.Tick);
-            builder.AutoRegister();
-            builder.UseAutofacDependencyResolver();
+            Resolver.Instance.AutoRegister();
+            //builder.UseAutofacDependencyResolver();
 
             new Window
             {
