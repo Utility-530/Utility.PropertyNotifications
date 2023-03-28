@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Utility.WPF\Utility.Observables\Utility.Observables.csproj" />
+  </ItemGroup>
+
 </Project>

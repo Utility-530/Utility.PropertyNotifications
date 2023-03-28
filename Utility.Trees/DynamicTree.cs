@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Utility.Observables;
 
 namespace Utility.Trees
 {
@@ -168,9 +169,8 @@ namespace Utility.Trees
             {
                 throw new Exception("rg 4!£");
             }
-            State = current.State;
-            Current = current.Current as ITree<T>;
-       
+            State = State.Default;
+            Current = current.Current as ITree<T>;       
             toRemove = value.Remove as ITree<T>;
             Broadcast();
         }
