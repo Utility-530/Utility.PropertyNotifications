@@ -8,8 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Utility.Persist;
-using Utility.Persist.Infrastructure;
+using Utility.Persists;
+using Utility.Persists.Infrastructure;
 using Utility.Trees;
 
 namespace Utility.Instructions.Demo
