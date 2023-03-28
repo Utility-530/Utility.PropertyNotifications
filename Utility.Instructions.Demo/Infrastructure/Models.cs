@@ -69,6 +69,7 @@ namespace Utility.Instructions.Demo
 
     public class Service : IService
     {
+        private readonly Guid root;
 
         //View tree;
         Dictionary<Guid, IObserver<Change<View>>> observers = new();
@@ -76,6 +77,7 @@ namespace Utility.Instructions.Demo
         public Service(Guid root)
         {
             Root = new View(this, "root", root) { };
+            this.root = root;
         }
 
         public View Root { get; }
@@ -149,7 +151,7 @@ namespace Utility.Instructions.Demo
                     i++;
                 }
             }
-            return new Disposer<Change<View>, Guid>(observers, key, observer);
+            return new Utility.Observables.Disposer<Change<View>, Guid>(observers, new(root, observer));
         }
     }
 
