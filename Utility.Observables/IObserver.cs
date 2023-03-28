@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Utility.Observables
 {
-    public interface IObserver
+    public interface IObserver //: IKey
     {
         public List<object> Observations { get; }
         void OnNext(object value)

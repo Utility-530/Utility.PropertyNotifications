@@ -49,4 +49,24 @@ namespace Utility.Observables
             observers?.Remove(observer);
         }
     }
+
+    public sealed class Disposer<T, TKey> : IDisposable
+    {
+        private readonly IDictionary<TKey, IObserver<T>> observers;
+        private readonly KeyValuePair<TKey, IObserver<T>> observer;
+
+        public Disposer(IDictionary<TKey, IObserver<T>> observers, KeyValuePair<TKey, IObserver<T>> observer)
+        {
+            (this.observers = observers).Add(observer.Key, observer.Value);
+            this.observer = observer;
+        }
+
+        public System.Collections.IEnumerable Observers => observers;
+        public IObserver<T> Observer => observer.Value;
+
+        public void Dispose()
+        {
+            observers?.Remove(observer);
+        }
+    }
 }
