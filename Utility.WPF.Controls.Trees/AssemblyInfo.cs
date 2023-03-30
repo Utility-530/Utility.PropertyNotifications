@@ -9,5 +9,5 @@ using System.Windows.Markup;
                                               //(used if a resource is not found in the page,
                                               // app, or any theme specific resource dictionaries)
 )]
-[assembly: XmlnsPrefix("http://schemas.utility.com/buttons", "btn")]
-[assembly: XmlnsDefinition("http://schemas.utility.com/buttons", "UtilityWpf.Controls.Buttons")] 
+[assembly: XmlnsPrefix("http://schemas.utility.com/trees", "tree")]
+[assembly: XmlnsDefinition("http://schemas.utility.com/trees", "Utility.WPF.Controls.Trees")] 
