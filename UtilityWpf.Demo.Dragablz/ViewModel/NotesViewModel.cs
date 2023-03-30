@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using UtilityWpf.Demo.Common.ViewModels;
+using Utility.WPF.Demo.Common.ViewModels;
 
 namespace UtilityWpf.Demo.Dragablz.ViewModels
 {

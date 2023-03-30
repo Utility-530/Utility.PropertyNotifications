@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.WPF.Controls.Date.Model;
-using UtilityWpf.Controls.Buttons;
+using Utility.WPF.Controls.Buttons;
 
 namespace Utility.WPF.Controls.Date
 {

@@ -26,7 +26,7 @@
     <ProjectReference Include="..\Utility.WPF.Markup\Utility.WPF.Markup.csproj" />
     <ProjectReference Include="..\UtilityWpf.Controls.Dragablz\UtilityWpf.Controls.Dragablz.csproj" />
     <ProjectReference Include="..\UtilityWpf.Controls.Master\UtilityWpf.Controls.Master.csproj" />
-    <ProjectReference Include="..\UtilityWpf.Demo.Common\UtilityWpf.Demo.Common.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Common\Utility.WPF.Demo.Common.csproj" />
     <ProjectReference Include="..\UtilityWpf.Demo.Data\UtilityWpf.Demo.Data.csproj" />
   </ItemGroup>
 

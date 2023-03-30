@@ -4,7 +4,7 @@ using Utility.Enums;
 
 namespace UtilityWpf.Demo.Master.ViewModels
 {
-    public class RowViewModel : UtilityWpf.Demo.Common.ViewModels.RowBaseViewModel
+    public class RowViewModel : Utility.WPF.Demo.Common.ViewModels.RowBaseViewModel
     {
         public RowViewModel()
         {

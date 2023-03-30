@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Linq;
 using Utility.WPF.Helper;
-using UtilityWpf.Demo.Common.ViewModels;
+using Utility.WPF.Demo.Common.ViewModels;
 
 namespace UtilityWpf.Demo.Dragablz.ViewModels
 {
@@ -11,7 +11,7 @@ namespace UtilityWpf.Demo.Dragablz.ViewModels
 
         public ResourceDictionariesViewModel()
         {
-            var dictionaries = typeof(UtilityWpf.Demo.Common.ViewModels.ResourceDictionariesViewModel)
+            var dictionaries = typeof(Utility.WPF.Demo.Common.ViewModels.ResourceDictionariesViewModel)
                  .Assembly
                  .SelectResourceDictionaries(a => a.Key.ToString().EndsWith("themes.baml", System.StringComparison.CurrentCultureIgnoreCase))
                  .Single()

@@ -5,12 +5,12 @@
                     xmlns:mk="http://schemas.utility.com/utilitywpf"
                     xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:common="clr-namespace:Utility.Common.EventArgs;assembly=Utility.Common"
-                    xmlns:vm="clr-namespace:UtilityWpf.Demo.Common.ViewModels;assembly=UtilityWpf.Demo.Common" 
+                    xmlns:vm="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common" 
                     xmlns:view11="http://schemas.utility.com" 
                     xmlns:view111="http://schemas.utility.com/master">
 
     <ResourceDictionary.MergedDictionaries>
-        <mk:SharedResourceDictionary Source="/UtilityWpf.Demo.Common;component/View/Templates.xaml" />
+        <mk:SharedResourceDictionary Source="/Utility.WPF.Demo.Common;component/View/Templates.xaml" />
         <mk:SharedResourceDictionary Source="/UtilityWpf.Controls.Dragablz;component/DragablzItemStyle.xaml" />
     </ResourceDictionary.MergedDictionaries>
 

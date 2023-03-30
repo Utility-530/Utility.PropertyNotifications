@@ -4,7 +4,7 @@
                     xmlns:btn="http://schemas.utility.com/buttons">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/UtilityWPF.Controls.Buttons;component/DualButtonControl.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="/Utility.WPF.Controls.Buttons;component/DualButtonControl.xaml"></ResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
     <Style TargetType="ctrl:CalendarControl">
         <!--<Setter Property="Background" Value="#FFB900"></Setter>

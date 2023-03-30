@@ -18,7 +18,7 @@
     <ProjectReference Include="..\Utility.WPF.Demo.Date\Utility.WPF.Demo.Date.csproj" />
     <ProjectReference Include="..\UtilityWpf.Controls.Meta\UtilityWpf.Controls.Meta.csproj" />
     <ProjectReference Include="..\UtilityWpf.Demo.Animation\Utility.WPF.Demo.Animations.csproj" />
-    <ProjectReference Include="..\UtilityWpf.Demo.Buttons\UtilityWpf.Demo.Buttons.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Buttons\Utility.WPF.Demo.Buttons.csproj" />
     <ProjectReference Include="..\UtilityWpf.Demo.Clocks\UtilityWpf.Demo.Clocks.csproj" />
     <ProjectReference Include="..\UtilityWpf.Demo.Controls\UtilityWpf.Demo.Controls.csproj" />
     <ProjectReference Include="..\UtilityWpf.Demo.Data\UtilityWpf.Demo.Data.csproj" />

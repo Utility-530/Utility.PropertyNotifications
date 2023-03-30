@@ -8,7 +8,7 @@
 
     <ResourceDictionary.MergedDictionaries>
         <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Lists;component/Themes/Styles.xaml"></utl:SharedResourceDictionary>
-        <!--<utl:SharedResourceDictionary Source="/UtilityWpf.Controls.Buttons;component/Themes/Button.xaml"></utl:SharedResourceDictionary>-->
+        <!--<utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Buttons;component/Themes/Button.xaml"></utl:SharedResourceDictionary>-->
         <utl:SharedResourceDictionary Source="/Utility.WPF.Themes;component/Themes/CheckBox.xaml"></utl:SharedResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Utility.Service;
-using UtilityWpf.Demo.Common.ViewModels;
+using Utility.WPF.Demo.Common.ViewModels;
 using UtilityWpf.Demo.Data.Factory;
 using UtilityWpf.Demo.Master.Infrastructure;
 using mdvm = Utility.ViewModels.MasterDetailViewModel;

@@ -7,7 +7,7 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:view1="http://schemas.utility.com/hybrid"
              xmlns:local11="clr-namespace:UtilityWpf.Demo.Hybrid"
-             xmlns:local111="clr-namespace:UtilityWpf.Demo.Common.ViewModels;assembly=UtilityWpf.Demo.Common"
+             xmlns:local111="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
 

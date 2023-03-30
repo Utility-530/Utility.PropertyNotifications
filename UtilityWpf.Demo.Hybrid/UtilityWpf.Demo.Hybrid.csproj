@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\UtilityWpf.Controls.Hybrid\UtilityWpf.Controls.Hybrid.csproj" />
-    <ProjectReference Include="..\UtilityWpf.Demo.Common\UtilityWpf.Demo.Common.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Common\Utility.WPF.Demo.Common.csproj" />
     <ProjectReference Include="..\UtilityWpf.Demo.Master\UtilityWpf.Demo.Master.csproj" />
   </ItemGroup>
 

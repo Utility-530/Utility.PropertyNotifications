@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:view11="http://schemas.utility.com/hybrid"
                     xmlns:mk="http://schemas.utility.com/utilitywpf"
-                    xmlns:vm="clr-namespace:UtilityWpf.Demo.Common.ViewModels;assembly=UtilityWpf.Demo.Common">
+                    xmlns:vm="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common">
 
     <DataTemplate DataType="{x:Type vm:NotesViewModel}">
         <view11:MasterNotesControl

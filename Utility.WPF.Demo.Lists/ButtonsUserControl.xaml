@@ -9,7 +9,7 @@
     xmlns:view="http://schemas.utility.com/lists"
     xmlns:btns="http://schemas.utility.com/buttons"
     xmlns:att="http://schemas.utility.com/attached"
-    xmlns:infra1="clr-namespace:UtilityWpf.Demo.Common.ViewModels;assembly=UtilityWpf.Demo.Common"
+    xmlns:infra1="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common"
     xmlns:demoApp="clr-namespace:Utility.WPF.Demo.Lists.Infrastructure"
     xmlns:utl1="http://schemas.utility.com/utilitywpf"
     xmlns:enum="clr-namespace:Utility.Enums;assembly=Utility.Enums"
@@ -60,7 +60,7 @@
                 <GroupBox>
                     <DockPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                         --><!--<FrameworkElement.Resources>
-                <utl:SharedResourceDictionary Source="/UtilityWpf.Demo.Common;component/Themes/Material.xaml" />
+                <utl:SharedResourceDictionary Source="/Utility.WPF.Demo.Common;component/Themes/Material.xaml" />
             </FrameworkElement.Resources>--><!--
 
                         <view:ButtonsControl x:Name="ButtonsControl"

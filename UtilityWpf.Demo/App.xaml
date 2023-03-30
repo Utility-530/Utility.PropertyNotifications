@@ -22,7 +22,7 @@
                 <ResourceDictionary Source="/UtilityWpf.Demo.Hybrid;component/View/Templates.xaml" />
                 <ResourceDictionary Source="/UtilityWpf.Demo.Data;component/Themes/Generic.xaml" />
                 <ResourceDictionary Source="/UtilityWpf.Controls;component/Themes/Generic.xaml" />
-                <ResourceDictionary Source="/UtilityWpf.Demo.Common;component/View/Templates.xaml" />
+                <ResourceDictionary Source="/Utility.WPF.Demo.Common;component/View/Templates.xaml" />
                 <ResourceDictionary Source="/UtilityWpf.Controls.Dragablz;component/Themes/Generic.xaml" />
                 <ResourceDictionary Source="/Utility.WPF.Controls.Base;component/Themes/Generic.xaml" />
                 <ResourceDictionary Source="/Utility.WPF.Controls.Lists;component/Themes/Generic.xaml" />

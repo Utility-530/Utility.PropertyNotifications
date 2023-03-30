@@ -7,7 +7,7 @@
 
         <ResourceDictionary Source="View/Templates.xaml">
             <ResourceDictionary.MergedDictionaries>
-                <utilitywpf:SharedResourceDictionary Source="/UtilityWpf.Demo.Common;component/View/Templates.xaml" />
+                <utilitywpf:SharedResourceDictionary Source="/Utility.WPF.Demo.Common;component/View/Templates.xaml" />
                 <utilitywpf:SharedResourceDictionary Source="/UtilityWpf.Demo.Master;component/Templates.xaml" />
                 <utilitywpf:SharedResourceDictionary Source="/UtilityWpf.Controls.Dragablz;component/Themes/Generic.xaml" />
                 <utilitywpf:SharedResourceDictionary Source="/UtilityWpf.Demo.Data;component/Themes/Generic.xaml" />

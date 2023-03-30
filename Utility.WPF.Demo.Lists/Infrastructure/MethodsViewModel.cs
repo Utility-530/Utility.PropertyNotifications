@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Utility.Helpers.Ex;
 using UtilityWpf.Demo.Buttons.Infrastructure;
-using UtilityWpf.Demo.Common.ViewModels;
+using Utility.WPF.Demo.Common.ViewModels;
 
 namespace Utility.WPF.Demo.Lists.Infrastructure
 {

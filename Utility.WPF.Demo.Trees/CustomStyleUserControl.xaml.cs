@@ -10,7 +10,7 @@ using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using UtilityWpf.Demo.Common.ViewModels;
+using Utility.WPF.Demo.Common.ViewModels;
 
 namespace Utility.WPF.Demo.Trees
 {

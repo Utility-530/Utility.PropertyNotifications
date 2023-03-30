@@ -43,7 +43,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Dragablz", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Common", "Utility.Common\Utility.Common.csproj", "{74C75AA4-2DDF-48B6-B4AB-E166D821F86C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Common", "UtilityWpf.Demo.Common\UtilityWpf.Demo.Common.csproj", "{C48F5E34-9293-4B33-B4CF-C0A4DCEE2013}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Common", "Utility.WPF.Demo.Common\Utility.WPF.Demo.Common.csproj", "{C48F5E34-9293-4B33-B4CF-C0A4DCEE2013}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.View", "UtilityWpf.View\UtilityWpf.View.csproj", "{8333F9DC-6DFA-4E2E-A42A-BE70B5A5CECD}"
 EndProject
@@ -67,7 +67,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utility", "Utility", "{CF03
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Objects", "UtilityWpf.Demo.Objects\UtilityWpf.Demo.Objects.csproj", "{05031E8C-1856-424C-BAAF-1E73DD371FF4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Buttons", "UtilityWpf.Demo.Buttons\UtilityWpf.Demo.Buttons.csproj", "{264763D8-97E3-4B10-91F6-D2966F427E2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Buttons", "Utility.WPF.Demo.Buttons\Utility.WPF.Demo.Buttons.csproj", "{264763D8-97E3-4B10-91F6-D2966F427E2E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls.Meta", "UtilityWpf.Controls.Meta\UtilityWpf.Controls.Meta.csproj", "{E9415085-0C61-4C60-9F77-77B114F30240}"
 EndProject
@@ -93,7 +93,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Forms", "Ut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Themes", "Utility.WPF.Themes\Utility.WPF.Themes.csproj", "{4F780377-F98A-4EFD-A218-7D13AE23EE67}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls.Buttons", "UtilityWpf.Controls.Buttons\UtilityWpf.Controls.Buttons.csproj", "{A2FE11D7-F281-4D17-98D0-0BCA832873ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Buttons", "Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj", "{A2FE11D7-F281-4D17-98D0-0BCA832873ED}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Date", "Utility.WPF.Controls.Date\Utility.WPF.Controls.Date.csproj", "{FD37DAF5-FE10-4553-AFE0-81D02C46A805}"
 EndProject

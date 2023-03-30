@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 using Utility.Common;
-using UtilityWpf.Demo.Common.Meta;
+using Utility.WPF.Demo.Common.Meta;
 
 namespace UtilityWpf.Demo.Hybrid
 {

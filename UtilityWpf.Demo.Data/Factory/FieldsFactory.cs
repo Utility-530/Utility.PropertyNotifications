@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoBogus;
-using UtilityWpf.Demo.Common.ViewModels;
+using Utility.WPF.Demo.Common.ViewModels;
 
 namespace UtilityWpf.Demo.Data.Factory
 {

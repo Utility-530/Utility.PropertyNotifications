@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using Utility.Persists;
 using Utility.Service;
 using Utility.Interfaces.NonGeneric.Data;
-using UtilityWpf.Demo.Common.ViewModels;
+using Utility.WPF.Demo.Common.ViewModels;
 using Utility.WPF.Helper;
 
 namespace UtilityWpf.Demo.Hybrid.ViewModels
@@ -16,7 +16,7 @@ namespace UtilityWpf.Demo.Hybrid.ViewModels
 
         public ResourceDictionariesViewModel()
         {
-            var dictionaries = typeof(UtilityWpf.Demo.Common.ViewModels.ResourceDictionariesViewModel)
+            var dictionaries = typeof(Utility.WPF.Demo.Common.ViewModels.ResourceDictionariesViewModel)
                 .Assembly
                 .SelectResourceDictionaries(a => a.Key.ToString().EndsWith("themes.baml", System.StringComparison.CurrentCultureIgnoreCase))
                 .Single()

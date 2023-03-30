@@ -13,7 +13,7 @@ namespace UtilityWpf.Demo.Clocks
         public App()
         {
             var builder = new ContainerBuilder();
-            var d = typeof(UtilityWpf.Demo.Common.ViewModels.Tick);
+            var d = typeof(Utility.WPF.Demo.Common.ViewModels.Tick);
             Resolver.Instance.AutoRegister();
             builder.UseAutofacDependencyResolver();
         }

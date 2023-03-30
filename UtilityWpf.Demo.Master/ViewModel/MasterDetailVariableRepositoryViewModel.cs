@@ -3,7 +3,7 @@ using System;
 using System.Reactive;
 using Utility.Persists;
 using Utility.Interfaces.NonGeneric.Data;
-using UtilityWpf.Demo.Common.ViewModels;
+using Utility.WPF.Demo.Common.ViewModels;
 using UtilityWpf.Demo.Master.Infrastructure;
 
 namespace UtilityWpf.Demo.Master.ViewModels
