@@ -7,9 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Update="Deprecated\ButtonsControl.cs">
-			<DependentUpon>ButtonsControl.xaml</DependentUpon>
-		</Compile>
 		<Compile Update="CheckBoxesListControl.cs">
 			<DependentUpon>CheckBoxesListControl.xaml</DependentUpon>
 		</Compile>
@@ -28,6 +25,9 @@
 		<Compile Update="SwitchControl.cs">
 			<DependentUpon>SwitchControl.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="EnumButtons.cs">
+			<DependentUpon>EnumButtons.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -36,10 +36,6 @@
 			<SubType>Designer</SubType>
 		</Page>
 		<Page Update="CheckBoxesListControl.xaml">
-			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-			<SubType>Designer</SubType>
-		</Page>
-		<Page Update="Deprecated\ButtonsControl.xaml">
 			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 			<SubType>Designer</SubType>
 		</Page>
