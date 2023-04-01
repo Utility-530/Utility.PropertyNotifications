@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Jellyfish" Version="1.0.42" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Utility.WPF\Utility.Observables\Utility.Observables.csproj" />
   </ItemGroup>
 

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 using Utility.Observables;
 
 namespace Utility.Trees
@@ -10,25 +6,26 @@ namespace Utility.Trees
 
 
 
-    public class DynamicTree<T> : IObservable<TreeState>, IObserver<TreeState>
+    public class DynamicTree<T> : IObservable<ITree<T>>, IObserver<ITree<T>>
     {
         private new ObservableCollection<ITree<T>> children => Current.Parent?.Items as ObservableCollection<ITree<T>>;
         private ITree<T> tree;
-        private List<IObserver<TreeState>> observers = new();
+        private List<IObserver<ITree<T>>> observers = new();
         private ITree<T> toRemove;
         private ITree<T> current;
         private ITree<T> toAdd;
+        private State state = State.Current;
 
-        public TreeState TreeState() => new(
-            Index,
-            State,
-            Current,
-            CanMoveForward ? Forward : default,
-            CanMoveBack ? Back : default,
-            CanMoveUp ? Up : default,
-            CanMoveDown ? Down : default,
-            CanAdd ? ToAdd : default,
-            CanRemove ? ToRemove : default);
+        //public TreeState TreeState() => new(
+        //    Index,
+        //    State,
+        //    Current,
+        //    CanMoveForward ? Forward : default,
+        //    CanMoveBack ? Back : default,
+        //    CanMoveUp ? Up : default,
+        //    CanMoveDown ? Down : default,
+        //    CanAdd ? ToAdd : default,
+        //    CanRemove ? ToRemove : default);
 
 
         public DynamicTree(ITree<T> root)
@@ -63,51 +60,103 @@ namespace Utility.Trees
             private set => current = value;
         }
 
+        public State Allowed
+        {
+            get
+            {
+                State state = State.Default;
+                if (CanMoveUp)
+                    state |= State.Up;
+                if (CanMoveDown)
+                    state |= State.Down;
+                if (CanMoveBack)
+                    state |= State.Back;
+                if (CanMoveForward)
+                    state |= State.Forward;
+                if (CanAdd)
+                    state |= State.Add;  
+                if (CanRemove)
+                    state |= State.Remove;
+                return state;
+            }
+        }
+
 
         public ITree<T> ToRemove => toRemove;
 
         public ITree<T> ToAdd => toAdd;
 
-        public T Data { get=> toAdd.Data; set=> toAdd = new Tree<T>(value) { Parent = Current, Key= Guid.NewGuid() }; }
+        public T Data { get => toAdd.Data; set => toAdd = new Tree<T>(value) { Parent = Current, Key = Guid.NewGuid() }; }
 
-        public State State { get; set; } = State.Current;
+        public State State
+        {
+            get => state;
+            set
+            {
+                state = value;
+                Current.State = State.Default;
+                switch (value)
+                {
 
+                    case State.Forward:
+                        if (CanMoveForward == false)
+                            throw new Exception($"{State.Forward} V3 fds");
+                        Current = Forward;
+                        Current.State = State.Forward;
+                        break;
+                    case State.Back:
+                        if (CanMoveBack == false)
+                            throw new Exception($"{State.Back} V3 fds");
+                        Current = Back;
+                        Current.State = State.Back;
+                        break;
+                    case State.Down:
+                        if (CanMoveDown == false)
+                            throw new Exception($"{State.Down} V3 fds");
+                        Current = Down;
+                        Current.State = State.Back;
+                        break;
+                    case State.Up:
+                        if (CanMoveUp == false)
+                            throw new Exception($"{State.Up} V3 fds");
+                        Current = Up;
+                        Current.State = State.Back;
+                        break;
+                    case State.Add:
+                        if (CanAdd == false)
+                            throw new Exception($"{State.Add} V3 fds");
+                        Add();
+                        Current.State = State.Add;
+                        break;
+                    case State.Remove:
+                        if (CanRemove == false)
+                            throw new Exception($"{State.Remove} V3 fds");
+                        Remove();
+                        Current.State = State.Remove;
+                        break;
+
+                }
+                Broadcast();
+                Current.State = value;
+
+                void Add()
+                {
+                    toRemove = ToAdd;
+                    Current.Add(toRemove);
+                    Current = toRemove;
+                }
+
+                void Remove()
+                {
+                    var parent = Current.Parent;
+                    Current.Parent.Remove(Current);
+                    Current = parent;
+                }
+            }
+        }
         public ITree<T> Tree => tree;
 
         public int Index => Current.Parent?.IndexOf(Current) ?? 0;
-
-        public void MoveUp()
-        {
-            Current = Up;
-
-            State = State.Up;
-
-            Broadcast();
-
-        }
-
-        public void MoveForward()
-        {
-            Current = Forward;
-            State = State.Forward;
-
-            Broadcast();
-                }
-
-        public void MoveDown()
-        {
-            Current = Down;
-            State = State.Down;
-
-            Broadcast();
-        }
-
-        public void MoveBack()
-        {
-            Current = Back;
-            State = State.Back;
-            Broadcast();
-        }
 
 
         public void Dispose()
@@ -115,34 +164,16 @@ namespace Utility.Trees
             children.Clear();
         }
 
-        public void Add()
-        {
-            toRemove = ToAdd;
-            Current.Add(toRemove);
-            Current = toRemove;
-            State = State.Add;
-            toAdd = null;
-            Broadcast();
-        }
-
-        public void Remove()
-        {
-            var parent = Current.Parent;
-            Current.Parent.Remove(Current);
-            Current = parent;
-            State = State.Remove;
-            Broadcast();
-        }
 
         public void Broadcast()
         {
             foreach (var observer in observers)
-                observer.OnNext(TreeState());
+                observer.OnNext(Current);
         }
 
-        public IDisposable Subscribe(IObserver<TreeState> observer)
+        public IDisposable Subscribe(IObserver<ITree<T>> observer)
         {
-            return new Disposer<TreeState>(observers, observer);
+            return new Disposer<ITree<T>>(observers, observer);
         }
 
         public ITree<T> Last()
@@ -160,24 +191,24 @@ namespace Utility.Trees
             throw new NotImplementedException();
         }
 
-        public void OnNext(TreeState value)
+        public void OnNext(ITree<T> value)
         {
             //index = value.Index;
-            var current = value.Current.Data as TreeState;
+            //var current = value.Data as TreeState;
 
-            if (tree.Match(current.Current.Key) is null)
-            {
-                throw new Exception("rg 4!£");
-            }
-            State = State.Default;
-            Current = current.Current as ITree<T>;       
-            toRemove = value.Remove as ITree<T>;
+            //if (tree.Match(current.Current.Key) is null)
+            //{
+            //    throw new Exception("rg 4!£");
+            //}
+            //State = State.Default;
+            Current = value as ITree<T>;
+            //toRemove = value.Remove as ITree<T>;
             Broadcast();
         }
 
-        public void OnPrevious(TreeState data)
-        {
-            throw new NotImplementedException();
-        }
+        //public void OnPrevious(TreeState data)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

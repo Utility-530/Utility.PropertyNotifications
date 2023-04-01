@@ -16,7 +16,7 @@ namespace Utility.Instructions.Demo
     public partial class MainWindow : Window
     {
         DynamicTree<Persist> instructions;
-        readonly DynamicTree<TreeState> history;
+        readonly DynamicTree<ITree<Persist>> history;
         readonly Service service;
         readonly Dictionary<Guid, View> views = new();
         readonly View root;
@@ -25,7 +25,7 @@ namespace Utility.Instructions.Demo
         {
             InitializeComponent();
             instructions = new(new Tree<Persist>(new Persist() { Name = "root" }) { });
-            history = new(new Tree<TreeState>(instructions.TreeState()));
+            history = new(new Tree<ITree<Persist>>(instructions.Current));
 
             service = new(instructions.Tree.Key);
 
@@ -36,12 +36,12 @@ namespace Utility.Instructions.Demo
                 {
                     int index = 0;
 
-                    Update(state, index);
-                    if (state.State!=State.Default)
+                   // Update(state, index);
+                    if (state.State != State.Default)
                     {
 
                         history.Data = state;
-                        history.Add();
+                        history.State = State.Add;
                     }
                 });
 
@@ -50,69 +50,69 @@ namespace Utility.Instructions.Demo
                 {
                     if (state.State != State.Add)
                     {
-                        instructions.OnNext(state);
+                        //instructions.OnNext(state);
                     }
                 });
 
-            TreeView2.ItemsSource = instructions.Tree.Items;
+            //TreeView2.ItemsSource = instructions.Tree.Items;
 
-            TreeView3.ItemsSource = service.Root.Items;
- 
+            TreeView3.ItemsSource = instructions.Tree.Items; // service.Root.Items;
+
             TreeView5.ItemsSource = history.Tree.Items;
         }
 
         private void Update(TreeState state, int index)
         {
-            UpButton.IsEnabled = state.Up != null;
-            DownButton.IsEnabled = state.Down != null;
-            ForwardButton.IsEnabled = state.Forward != null;
-            BackButton.IsEnabled = state.Back != null;
-            // AddButton.IsEnabled = state.Add != null;
-            RemoveButton.IsEnabled = state.Remove != null;
+            //UpButton.IsEnabled = state.Up != null;
+            //DownButton.IsEnabled = state.Down != null;
+            //ForwardButton.IsEnabled = state.Forward != null;
+            //BackButton.IsEnabled = state.Back != null;
+            //// AddButton.IsEnabled = state.Add != null;
+            //RemoveButton.IsEnabled = state.Remove != null;
 
-            foreach (var x in views.Values)
-            {
-                x.State = State.Default;
-            }
-            foreach (var item in new[] { state.Current, state.Up, state.Down, state.Forward, state.Back, state.Add })
-            {
-                if (item == null)
-                    continue;
-                if (views.ContainsKey(item.Key) == false)
-                {
-                    var view = new View(service, item.Data, item.Key) { Parent = views[item.Parent.Key] };
-                    views.Add(item.Key, view);
-                }
-                var cView = views[item.Key];
-                cView.State = GetState(cView, state);
-                //currentViews.Add(cView);
+            //foreach (var x in views.Values)
+            //{
+            //    x.State = State.Default;
+            //}
+            //foreach (var item in new[] { state.Current, state.Up, state.Down, state.Forward, state.Back, state.Add })
+            //{
+            //    if (item == null)
+            //        continue;
+            //    if (views.ContainsKey(item.Key) == false)
+            //    {
+            //        var view = new View(service, item.Data, item.Key) { Parent = views[item.Parent.Key] };
+            //        views.Add(item.Key, view);
+            //    }
+            //    var cView = views[item.Key];
+            //    cView.State = GetState(cView, state);
+            //    //currentViews.Add(cView);
 
-            }
+            //}
 
-            foreach (var view in views)
-            {
-                service.OnNext(new Change<View, Key>(view.Value, new Key(view.Value.Parent?.Key ?? default), new Key(view.Key), index, ChangeType.Update));
-            }
+            //foreach (var view in views)
+            //{
+            //    service.OnNext(new Change<View, Key>(view.Value, new Key(view.Value.Parent?.Key ?? default), new Key(view.Key), index, ChangeType.Update));
+            //}
 
-            State GetState(ITree tree, TreeState state)
-            {
-                if (tree.Equals(state.Current))
-                    return State.Current;
-                else if (tree.Equals(state.Forward))
-                    return State.Forward;
-                else if (tree.Equals(state.Back))
-                    return State.Back;
-                else if (tree.Equals(state.Up))
-                    return State.Up;
-                else if (tree.Equals(state.Down))
-                    return State.Down;
-                //else if (tree.Equals(state.Add))
-                //    return State.Add;
+            //State GetState(ITree tree, TreeState state)
+            //{
+            //    if (tree.Equals(state.Current))
+            //        return State.Current;
+            //    else if (tree.Equals(state.Forward))
+            //        return State.Forward;
+            //    else if (tree.Equals(state.Back))
+            //        return State.Back;
+            //    else if (tree.Equals(state.Up))
+            //        return State.Up;
+            //    else if (tree.Equals(state.Down))
+            //        return State.Down;
+            //    //else if (tree.Equals(state.Add))
+            //    //    return State.Add;
 
-                //else if (tree.Equals(state.Remove))
-                //    return State.Remove;
-                return State.Default;
-            }
+            //    //else if (tree.Equals(state.Remove))
+            //    //    return State.Remove;
+            //    return State.Default;
+            //}
         }
 
 
@@ -120,13 +120,13 @@ namespace Utility.Instructions.Demo
 
         private void Add_Click(object sender, RoutedEventArgs e)
         {
-            instructions.Data = new Persist{ Name = TextBoxContent.Text};
-            instructions.Add();
+            instructions.Data = new Persist { Name = TextBoxContent.Text };
+            instructions.State = State.Add;
         }
 
         private void Remove_Click(object sender, RoutedEventArgs e)
         {
-            instructions.Remove();
+            instructions.State = State.Remove;
         }
 
         private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -136,38 +136,32 @@ namespace Utility.Instructions.Demo
 
         private void Up_Click(object sender, RoutedEventArgs e)
         {
-            if (instructions.CanMoveUp == false)
-                throw new Exception("V3 fds");
-            instructions.MoveUp();
+            instructions.State = State.Up;
         }
 
         private void Forward_Click(object sender, RoutedEventArgs e)
         {
-            if (instructions.CanMoveForward == false)
-                throw new Exception("V3 fds");
-            instructions.MoveForward();
+
+            instructions.State = State.Up;
+
         }
 
         private void Back_Click(object sender, RoutedEventArgs e)
         {
-            if (instructions.CanMoveBack == false)
-                throw new Exception("V3 fds");
-            instructions.MoveBack();
+            instructions.State = State.Up;
+
         }
 
         private void Down_Click(object sender, RoutedEventArgs e)
         {
-            if (instructions.CanMoveDown == false)
-                throw new Exception("V3 fds");
-            instructions.MoveDown();
+
+            instructions.State = State.Up;
+
         }
 
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
-            if (history.CanMoveDown == false)
-                throw new Exception("V3 fds");
-
             var current = history.Current;
             instructions.OnNext(current.Data);
 
@@ -211,32 +205,25 @@ namespace Utility.Instructions.Demo
 
         private void UpHistory_Click(object sender, RoutedEventArgs e)
         {
-            if (history.CanMoveUp == false)
-                throw new Exception("V3 fds");
-
-            history.MoveUp();
+            history.State = State.Up;
         }
 
         private void DownHistory_Click(object sender, RoutedEventArgs e)
         {
-            if (history.CanMoveDown == false)
-                throw new Exception("V3 fds");
 
-            history.MoveDown();
+            history.State = State.Down;
         }
 
         private void ForwardHistory_Click(object sender, RoutedEventArgs e)
         {
-            if (history.CanMoveForward == false)
-                throw new Exception("V3 fds");
-            history.MoveForward();
+
+            history.State = State.Forward;
         }
 
         private void BackHistory_Click(object sender, RoutedEventArgs e)
         {
-            if (history.CanMoveBack == false)
-                throw new Exception("V3 fds");
-            history.MoveBack();
+
+            history.State = State.Back;
         }
 
         #endregion History

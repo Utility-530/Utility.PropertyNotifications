@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jellyfish;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -58,13 +59,15 @@ namespace Utility.Trees
     /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
     /// </summary>
     /// <typeparam name="object"></typeparam>
-    public class Tree : ITree, IEnumerable<ITree>
+    public class Tree : ViewModel, ITree, IEnumerable<ITree>
     {
         private IList items;
         private object data;
 
         protected ITree parent;
         bool flag;
+        private State state;
+
         protected IList m_items
         {
             get
@@ -86,7 +89,7 @@ namespace Utility.Trees
                 Add(items);
         }
 
-        public Guid Key { get; set; } 
+        public Guid Key { get; set; }
 
         public ITree? this[object item]
         {
@@ -283,7 +286,7 @@ namespace Utility.Trees
             }
         }
 
-        public State State { get; set; }
+        public State State { get => state; set => Set(ref state, value); }
 
         public Index Index
         {
