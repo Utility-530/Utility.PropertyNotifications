@@ -19,6 +19,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Common", "..\Utilit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "..\Utility.WPF\Utility.Observables\Utility.Observables.csproj", "{8E968750-6230-4DD5-B319-9D52B27DEB4D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Buttons", "..\Utility.WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj", "{CDD164EC-845D-425A-A289-3D5F17D0AFCF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Packages", "..\Utility.WPF\Utility.WPF.Packages\Utility.WPF.Packages.csproj", "{1629AB1D-04CE-4476-942E-FECAB133074A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Enums", "..\Utility.Enums\Utility.Enums\Utility.Enums.csproj", "{9E172ABA-CA97-4CEC-8CE9-D3201FA19F4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +59,18 @@ Global
 		{8E968750-6230-4DD5-B319-9D52B27DEB4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E968750-6230-4DD5-B319-9D52B27DEB4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E968750-6230-4DD5-B319-9D52B27DEB4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDD164EC-845D-425A-A289-3D5F17D0AFCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDD164EC-845D-425A-A289-3D5F17D0AFCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDD164EC-845D-425A-A289-3D5F17D0AFCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDD164EC-845D-425A-A289-3D5F17D0AFCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1629AB1D-04CE-4476-942E-FECAB133074A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1629AB1D-04CE-4476-942E-FECAB133074A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1629AB1D-04CE-4476-942E-FECAB133074A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1629AB1D-04CE-4476-942E-FECAB133074A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E172ABA-CA97-4CEC-8CE9-D3201FA19F4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E172ABA-CA97-4CEC-8CE9-D3201FA19F4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E172ABA-CA97-4CEC-8CE9-D3201FA19F4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E172ABA-CA97-4CEC-8CE9-D3201FA19F4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
