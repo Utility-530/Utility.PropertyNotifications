@@ -114,10 +114,10 @@ namespace Utility.Trees
                 return;
             }
 
-            if (data is ITree)
-            {
-                throw new Exception("t 44 redsdssd");
-            }
+            //if (data is ITree)
+            //{
+            //    throw new Exception("t 44 redsdssd");
+            //}
 
             if (data is T t)
             {

@@ -141,7 +141,7 @@ namespace Utility.Trees
         {
             get
             {
-                return m_items.Count == 0 ? this : m_items[index] as ITree;
+                return m_items.Count == 0 ? throw new Exception(" 434 ") : m_items[index] as ITree;
             }
             set
             {
@@ -302,6 +302,8 @@ namespace Utility.Trees
                     {
                         yield return parent.IndexOf(child);
                         child = parent;
+                        if (parent.Parent == parent)
+                            throw new Exception("r sdfsd3232 bf");
                         parent = parent.Parent;
                     }
                 }

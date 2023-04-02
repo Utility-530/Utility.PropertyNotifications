@@ -7,9 +7,17 @@ using System.Text;
 
 namespace Utility.Trees
 {
+    [Flags]
     public enum State
     {
-        Default, Current, Forward, Back, Up, Down, Add, Remove
+        Default,
+        Current =1,
+        Forward = 2, 
+        Back = 4,
+        Up =8,
+        Down= 16, 
+        Add=32, 
+        Remove =64
     }
 
     public class Index
@@ -19,6 +27,8 @@ namespace Utility.Trees
         public override string ToString()
         {
             StringBuilder stringBuilder = new();
+            if (Collection.Count == 0)
+                return string.Empty;
             foreach (var item in Collection)
             {
                 stringBuilder.Append(item);
