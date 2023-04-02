@@ -12,6 +12,11 @@ namespace Utility.WPF.Controls.Trees
 {
     public class MyTreeView : TreeView
     {
+        static MyTreeView()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(MyTreeView), new FrameworkPropertyMetadata(typeof(MyTreeView)));
+        }
+
         protected override DependencyObject GetContainerForItemOverride()
         {
             return new MyTreeViewItem();
@@ -44,6 +49,11 @@ namespace Utility.WPF.Controls.Trees
 
     public class MyTreeViewItem : TreeViewItem
     {
+        static MyTreeViewItem()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(MyTreeViewItem), new FrameworkPropertyMetadata(typeof(MyTreeViewItem)));
+        }
+
         protected override DependencyObject GetContainerForItemOverride()
         {
             return new MyTreeViewItem();
