@@ -80,10 +80,10 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                        <!--<ToggleButton x:Name="Expander"
+                        <ToggleButton x:Name="Expander"
                   Style="{StaticResource ExpandCollapseToggleStyle}"
                   IsChecked="True"
-                  ClickMode="Press"/>-->
+                  ClickMode="Press"/>
                         <Border Name="Bd"
               Grid.Column="1"
               Background="{TemplateBinding Background}"
