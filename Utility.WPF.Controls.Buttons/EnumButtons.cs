@@ -154,7 +154,8 @@ namespace Utility.WPF.Controls.Buttons
 
         private void Value_Click(object sender, RoutedEventArgs e)
         {
-            Command?.Execute(Map[(Button)sender]);
+            var map = Map[(Button)sender];
+            Command?.Execute(map);
             e.Handled = true;
         }
 
