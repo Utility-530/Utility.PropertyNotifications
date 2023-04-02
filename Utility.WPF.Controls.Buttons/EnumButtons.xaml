@@ -62,7 +62,7 @@
             <Button x:Name="Load" Margin="{TemplateBinding Margins}">
                 <Viewbox>
                     <materialDesign:PackIcon
-                                Kind="File"
+                                Kind="ContentSaveOutline"
                               />
                 </Viewbox>
             </Button>
