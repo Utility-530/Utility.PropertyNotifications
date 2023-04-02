@@ -105,11 +105,13 @@ namespace Utility.Instructions.Demo
                 var persist = pairs.GetEnumerator();
                 while(keys.Count > 0) 
                 {
-                    if( persist.MoveNext()==false)
-                        persist =  pairs.GetEnumerator();
-
+                    if (persist.MoveNext() == false)
+                    {
+                        persist = pairs.GetEnumerator();
+                    }
                     var pair = persist.Current;
-
+                    if (pair == null)
+                        return tree;
 
                     if (tree == null)
                     {
