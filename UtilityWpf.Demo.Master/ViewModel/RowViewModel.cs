@@ -14,7 +14,7 @@ namespace UtilityWpf.Demo.Master.ViewModels
                 {
                     case CollectionItemEventArgs { EventType: EventType.Add }:
                         if (NewItem.MoveNext())
-                            Data.Add(NewItem.Current as Common.ViewModels.ElementViewModel);
+                            Data.Add(NewItem.Current as Utility.WPF.Demo.Common.ViewModels.ElementViewModel);
                         break;
 
                     case MovementEventArgs eventArgs:

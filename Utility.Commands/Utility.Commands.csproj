@@ -17,6 +17,6 @@
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\Utility.Observables\Utility.Observables.csproj" />
+		<ProjectReference Include="..\..\Utility.Observables\Utility.Observables\Utility.Observables.csproj" />
 	</ItemGroup>
 </Project>

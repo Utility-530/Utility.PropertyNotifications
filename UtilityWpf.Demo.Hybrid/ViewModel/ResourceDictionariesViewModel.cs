@@ -10,7 +10,7 @@ using Utility.WPF.Helper;
 
 namespace UtilityWpf.Demo.Hybrid.ViewModels
 {
-    public class ResourceDictionariesViewModel : Common.ViewModels.ResourceDictionariesViewModel
+    public class ResourceDictionariesViewModel : Utility.WPF.Demo.Common.ViewModels.ResourceDictionariesViewModel
     {
         private readonly CollectionService collectionService = new();
 

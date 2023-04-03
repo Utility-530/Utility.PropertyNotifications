@@ -3,7 +3,7 @@ using Utility.WPF.Demo.Common.ViewModels;
 
 namespace UtilityWpf.Demo.Dragablz.ViewModels
 {
-    internal class NotesViewModel : Common.ViewModels.NotesViewModel
+    internal class NotesViewModel : Utility.WPF.Demo.Common.ViewModels.NotesViewModel
     {
         public override ObservableCollection<NoteViewModel> Collection { get; } = new ObservableCollection<NoteViewModel> {
         new NoteViewModel("sdsfd"),

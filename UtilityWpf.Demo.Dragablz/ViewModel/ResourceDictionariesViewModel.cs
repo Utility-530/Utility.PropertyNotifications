@@ -5,7 +5,7 @@ using Utility.WPF.Demo.Common.ViewModels;
 
 namespace UtilityWpf.Demo.Dragablz.ViewModels
 {
-    public class ResourceDictionariesViewModel : Common.ViewModels.ResourceDictionariesViewModel
+    public class ResourceDictionariesViewModel : Utility.WPF.Demo.Common.ViewModels.ResourceDictionariesViewModel
     {
         private readonly TickViewModel[] collection;
 

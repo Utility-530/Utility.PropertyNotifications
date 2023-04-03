@@ -9,8 +9,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
     <ProjectReference Include="..\Utility.Common\Utility.Common.csproj" />
-    <ProjectReference Include="..\Utility.Observables\Utility.Observables.csproj" />
-    <ProjectReference Include="..\Utility.Randoms\Utility.Randoms.csproj" />
+	  <ProjectReference Include="..\..\Utility.Observables\Utility.Observables\Utility.Observables.csproj" />
+    <ProjectReference Include="..\..\Utility.Randoms\Utility.Randoms\Utility.Randoms.csproj" />
   </ItemGroup>
 
 </Project>

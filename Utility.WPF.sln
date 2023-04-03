@@ -47,7 +47,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Common", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.View", "UtilityWpf.View\UtilityWpf.View.csproj", "{8333F9DC-6DFA-4E2E-A42A-BE70B5A5CECD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Persists", "Utility.Persists\Utility.Persists.csproj", "{C145BD0A-A5CB-4CB2-8240-384E0BA37983}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Persists", "..\Utility.Persists\Utility.Persists\Utility.Persists.csproj", "{C145BD0A-A5CB-4CB2-8240-384E0BA37983}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls.Extrinsic", "UtilityWpf.Controls.Extrinsic\UtilityWpf.Controls.Extrinsic.csproj", "{F827F0DB-6405-4FBD-BDD9-30AB5C0DD12C}"
 EndProject
@@ -143,7 +143,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commands", "Utility
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Reactive", "..\Utility.Reactive\Utility.Reactive\Utility.Reactive.csproj", "{BE36909B-6426-468A-8936-CE10F8655F5F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "Utility.Observables\Utility.Observables.csproj", "{65C68EB3-45B9-48F1-A4F5-E56E560ACE2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "..\Utility.Observables\Utility.Observables\Utility.Observables.csproj", "{65C68EB3-45B9-48F1-A4F5-E56E560ACE2A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models", "Utility.Models\Utility.Models.csproj", "{D8E45214-6F52-494E-B478-EDC01B767C86}"
 EndProject
@@ -151,7 +151,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Interfaces", "..\Ut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Enums", "..\Utility.Enums\Utility.Enums\Utility.Enums.csproj", "{63FD7FC7-9580-46B1-9845-5BBCC0AA0B05}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Randoms", "Utility.Randoms\Utility.Randoms.csproj", "{CAB4302D-BBC7-49C6-AD73-B1DB68A66FE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Randoms", "..\Utility.Randoms\Utility.Randoms\Utility.Randoms.csproj", "{CAB4302D-BBC7-49C6-AD73-B1DB68A66FE0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Structs", "..\Utility.Structs\Utility.Structs\Utility.Structs.csproj", "{13BE1365-3CA3-4CC3-B404-32063CB8E48D}"
 EndProject
