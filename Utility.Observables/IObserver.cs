@@ -8,11 +8,9 @@ namespace Utility.Observables
 {
     public interface IObserver //: IKey
     {
-        public List<object> Observations { get; }
-        void OnNext(object value)
-        {
-            Observations.Add(value);
-        }
+        //public List<object> Observations { get; }
+        void OnNext(object value);
+    
 
         void OnCompleted();
 

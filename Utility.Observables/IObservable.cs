@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Utility.Observables
 {
-    public interface IObservable
+    public interface IObservable : IEnumerable
     {
 
         public List<IObserver> Observers { get; }
