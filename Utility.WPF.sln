@@ -167,9 +167,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Adorners", "Uti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Meta", "Utility.WPF.Meta\Utility.WPF.Meta.csproj", "{8C2813FC-8121-4247-AF4A-0A2EDA7038AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.Trees", "Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj", "{A9C15A91-D211-4DFD-9A85-5C10A579998F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Trees", "Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj", "{A9C15A91-D211-4DFD-9A85-5C10A579998F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Demo.Trees", "Utility.WPF.Demo.Trees\Utility.WPF.Demo.Trees.csproj", "{AF2CA47F-893C-42F7-8C2F-1F9C7AA149C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Trees", "Utility.WPF.Demo.Trees\Utility.WPF.Demo.Trees.csproj", "{AF2CA47F-893C-42F7-8C2F-1F9C7AA149C4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees", "..\Utility.Trees\Utility.Trees\Utility.Trees.csproj", "{670473E2-E1E0-4B88-86C6-6429E39803FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -493,6 +495,10 @@ Global
 		{AF2CA47F-893C-42F7-8C2F-1F9C7AA149C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF2CA47F-893C-42F7-8C2F-1F9C7AA149C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF2CA47F-893C-42F7-8C2F-1F9C7AA149C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{670473E2-E1E0-4B88-86C6-6429E39803FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{670473E2-E1E0-4B88-86C6-6429E39803FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{670473E2-E1E0-4B88-86C6-6429E39803FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{670473E2-E1E0-4B88-86C6-6429E39803FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -578,6 +584,7 @@ Global
 		{8C2813FC-8121-4247-AF4A-0A2EDA7038AC} = {392FD82C-ADC4-4230-8881-89BD4E2B84EE}
 		{A9C15A91-D211-4DFD-9A85-5C10A579998F} = {2ED92AB3-1BF8-4B9F-85BF-2739EDF1915C}
 		{AF2CA47F-893C-42F7-8C2F-1F9C7AA149C4} = {3E8F851B-BECA-4BAA-9275-2104CDEAEC3D}
+		{670473E2-E1E0-4B88-86C6-6429E39803FC} = {CF03926E-9E72-4A61-B447-2EF7E3C17461}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D60CFCE-498F-4A6D-9B9B-5546561C117E}
