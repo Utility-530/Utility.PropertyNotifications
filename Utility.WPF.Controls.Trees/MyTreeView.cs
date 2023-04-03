@@ -35,6 +35,7 @@ namespace Utility.WPF.Controls.Trees
         private void CollectionChanged_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             HasItems2 = ItemsSource.Cast<object>().Any();
+            
         }
 
         public bool HasItems2
@@ -68,6 +69,7 @@ namespace Utility.WPF.Controls.Trees
         {
             if (newValue is INotifyCollectionChanged collectionChanged)
                 collectionChanged.CollectionChanged += CollectionChanged_CollectionChanged;
+            HasItems2 = HasItems;
         }
 
         private void CollectionChanged_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
