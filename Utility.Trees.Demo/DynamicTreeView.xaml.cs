@@ -7,7 +7,7 @@ using Utility.Helpers;
 using Utility.Trees;
 using static Evan.Wpf.DependencyHelper;
 
-namespace Utility.Instructions.Demo
+namespace Utility.Trees.Demo
 {
     /// <summary>
     /// Interaction logic for TreeView.xaml

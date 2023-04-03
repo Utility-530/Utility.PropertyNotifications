@@ -12,7 +12,7 @@ using Utility.Persists;
 using Utility.Persists.Infrastructure;
 using Utility.Trees;
 
-namespace Utility.Instructions.Demo
+namespace Utility.Trees.Demo
 {
 
     public interface IOrm

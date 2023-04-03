@@ -8,13 +8,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
 
-namespace Utility.Instructions.Demo
+namespace Utility.Trees.Demo
 {
 
 
     class StyleSelectorConstants
     {
-        public const string FileName = @"C:\Users\rytal\source\repos\UtilityStandard\Utility.Instructions\Utility.Instructions.Resources\Styles.xaml";
+        public const string FileName = @"C:\Users\rytal\source\repos\UtilityStandard\Utility.Trees\Utility.Trees.Resources\Styles.xaml";
     }
 
     public class MyStyleSelector : StyleSelector

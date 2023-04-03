@@ -174,7 +174,7 @@ namespace Utility.Trees
             }
             if (data is not null)
             {
-                m_items.Add(CloneNode(new Tree((object)data)));
+                m_items.Add(new Tree((object)data));
                 return;
             }
 

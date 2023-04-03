@@ -3,13 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Instructions.Demo", "Utility.Instructions.Demo\Utility.Instructions.Demo.csproj", "{65861572-3539-494B-AD03-BBA4D7C8E082}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Instructions.Resources", "Utility.Instructions.Resources\Utility.Instructions.Resources.csproj", "{E11BDEA4-8563-4C8F-BE84-3F3FD132EAF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees.Demo", "Utility.Trees.Demo\Utility.Trees.Demo.csproj", "{65861572-3539-494B-AD03-BBA4D7C8E082}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees", "Utility.Trees\Utility.Trees.csproj", "{FC3F1B17-8502-4EF2-A786-4427F45AAF32}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Instructions", "Utility.Instructions\Utility.Instructions.csproj", "{EB01581B-4EF0-4AFC-BF74-296F3BCC48F0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{0E77E344-1EED-4EDC-BDF9-744CF0425AAF}"
 EndProject
@@ -25,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Packages", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Enums", "..\Utility.Enums\Utility.Enums\Utility.Enums.csproj", "{9E172ABA-CA97-4CEC-8CE9-D3201FA19F4D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Trees", "..\Utility.WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj", "{33B74157-D926-4A2E-9ECD-1ED989882A5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,18 +33,10 @@ Global
 		{65861572-3539-494B-AD03-BBA4D7C8E082}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65861572-3539-494B-AD03-BBA4D7C8E082}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65861572-3539-494B-AD03-BBA4D7C8E082}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E11BDEA4-8563-4C8F-BE84-3F3FD132EAF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E11BDEA4-8563-4C8F-BE84-3F3FD132EAF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E11BDEA4-8563-4C8F-BE84-3F3FD132EAF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E11BDEA4-8563-4C8F-BE84-3F3FD132EAF1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FC3F1B17-8502-4EF2-A786-4427F45AAF32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FC3F1B17-8502-4EF2-A786-4427F45AAF32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FC3F1B17-8502-4EF2-A786-4427F45AAF32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FC3F1B17-8502-4EF2-A786-4427F45AAF32}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EB01581B-4EF0-4AFC-BF74-296F3BCC48F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EB01581B-4EF0-4AFC-BF74-296F3BCC48F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EB01581B-4EF0-4AFC-BF74-296F3BCC48F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EB01581B-4EF0-4AFC-BF74-296F3BCC48F0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D610148D-A6BC-47B7-8636-0A4F02C6C919}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D610148D-A6BC-47B7-8636-0A4F02C6C919}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D610148D-A6BC-47B7-8636-0A4F02C6C919}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -71,6 +61,10 @@ Global
 		{9E172ABA-CA97-4CEC-8CE9-D3201FA19F4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E172ABA-CA97-4CEC-8CE9-D3201FA19F4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E172ABA-CA97-4CEC-8CE9-D3201FA19F4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33B74157-D926-4A2E-9ECD-1ED989882A5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33B74157-D926-4A2E-9ECD-1ED989882A5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33B74157-D926-4A2E-9ECD-1ED989882A5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33B74157-D926-4A2E-9ECD-1ED989882A5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

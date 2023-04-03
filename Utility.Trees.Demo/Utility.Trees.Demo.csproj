@@ -15,8 +15,8 @@
     <ProjectReference Include="..\..\Utility.WPF\Utility.Observables\Utility.Observables.csproj" />
     <ProjectReference Include="..\..\Utility.WPF\Utility.Persists\Utility.Persists.csproj" />
     <ProjectReference Include="..\..\Utility.WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
+    <ProjectReference Include="..\..\Utility.WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
     <ProjectReference Include="..\..\Utility.WPF\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
-    <ProjectReference Include="..\Utility.Instructions\Utility.Instructions.csproj" />
     <ProjectReference Include="..\Utility.Trees\Utility.Trees.csproj" />
   </ItemGroup>
 

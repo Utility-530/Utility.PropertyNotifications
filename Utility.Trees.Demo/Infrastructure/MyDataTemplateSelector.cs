@@ -5,12 +5,12 @@ using System.Windows.Controls;
 using System.Windows.Markup;
 using Utility.Trees;
 
-namespace Utility.Instructions.Demo
+namespace Utility.Trees.Demo
 {
 
     class TemplateConstants
     {
-        public const string FileName = @"C:\Users\rytal\source\repos\UtilityStandard\Utility.Instructions\Utility.Instructions.Resources\Templates.xaml";
+        public const string FileName = @"C:\Users\rytal\source\repos\UtilityStandard\Utility.Trees\Utility.Trees.Resources\Templates.xaml";
     }
 
     public class MyDataTemplateSelector : DataTemplateSelector

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Utility.Trees;
-namespace Utility.Instructions.Demo
+namespace Utility.Trees.Demo
 {
     public class View : Tree, IObserver<Change<View>>
     {

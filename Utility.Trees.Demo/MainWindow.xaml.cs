@@ -2,22 +2,22 @@
 using System.Windows;
 using Utility.Trees;
 
-namespace Utility.Instructions.Demo
+namespace Utility.Trees.Demo
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        DynamicTree instructions;
+        DynamicTree Trees;
         readonly DynamicTree history;
 
         public MainWindow()
         {
             InitializeComponent();
-            instructions = new(new Tree<Persist>(new Persist() { Name = "root" }) { });
+            Trees = new(new Tree<Persist>(new Persist() { Name = "root" }) { });
             history = new();
-            instructions
+            Trees
                 .Subscribe(tree =>
                 {
                     int index = 0;
@@ -39,11 +39,11 @@ namespace Utility.Instructions.Demo
                 {
                     if (tree.State != State.Add)
                     {
-                        instructions.Current = tree.Data as ITree<Persist>;
+                        Trees.Current = tree.Data as ITree<Persist>;
                     }
                 });
 
-            ContentControl1.Content = instructions;
+            ContentControl1.Content = Trees;
             ContentControl2.Content = history;
 
         }
