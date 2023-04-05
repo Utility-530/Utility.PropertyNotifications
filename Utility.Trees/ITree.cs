@@ -1,43 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.ObjectModel;
-using System.Text;
 
 //
 
 namespace Utility.Trees
 {
-    [Flags]
-    public enum State
-    {
-        Default,
-        Current =1,
-        Forward = 2, 
-        Back = 4,
-        Up =8,
-        Down= 16, 
-        Add=32, 
-        Remove =64
-    }
-
-    public class Index
-    {
-        public IReadOnlyCollection<int> Collection { get; init; }
-
-        public override string ToString()
-        {
-            StringBuilder stringBuilder = new();
-            if (Collection.Count == 0)
-                return string.Empty;
-            foreach (var item in Collection)
-            {
-                stringBuilder.Append(item);
-                stringBuilder.Append('.');
-            }
-            stringBuilder.Remove(stringBuilder.Length - 1, 1);
-            return stringBuilder.ToString();
-        }
-    }
 
     /// <summary>
     /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>

@@ -32,7 +32,6 @@ namespace Utility.Trees
         public bool CanAdd => ToAdd != null;
         public bool CanRemove => current?.Parent != null;
 
-
         public ITree Up => Current.Parent;
 
         public ITree Down => current.HasItems? Current[0]: toAdd;
