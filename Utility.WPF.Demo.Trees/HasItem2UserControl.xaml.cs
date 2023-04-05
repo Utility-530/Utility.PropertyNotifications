@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Linq;
+using System.Windows.Controls;
 using Utility.Trees;
 
 namespace Utility.WPF.Demo.Trees
@@ -12,11 +13,11 @@ namespace Utility.WPF.Demo.Trees
         {
             InitializeComponent();
 
-            TreeView.ItemsSource = new[] { tree }; 
-            MyTreeView.ItemsSource = new[] { tree }; 
+            TreeView.ItemsSource = new[] { tree };
+            MyTreeView.ItemsSource = new[] { tree };
         }
 
-        Tree tree = new Tree("root")
+        ITree tree = new Tree("root")
         {
 
         };
@@ -26,8 +27,13 @@ namespace Utility.WPF.Demo.Trees
         {
             tree.Add("new");
         }
+
+        private void Button_Click_Drop(object sender, System.Windows.RoutedEventArgs e)
+        {
+            tree = tree.Items.LastOrDefault() ?? tree;
+        }
     }
 
 
-    
+
 }
