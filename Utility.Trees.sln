@@ -5,15 +5,15 @@ VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees.Demo", "Utility.Trees.Demo\Utility.Trees.Demo.csproj", "{65861572-3539-494B-AD03-BBA4D7C8E082}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees", "Utility.Trees\Utility.Trees.csproj", "{FC3F1B17-8502-4EF2-A786-4427F45AAF32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees", "..\Utility.Trees\Utility.Trees\Utility.Trees.csproj", "{FC3F1B17-8502-4EF2-A786-4427F45AAF32}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{0E77E344-1EED-4EDC-BDF9-744CF0425AAF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Persists", "..\Utility.WPF\Utility.Persists\Utility.Persists.csproj", "{D610148D-A6BC-47B7-8636-0A4F02C6C919}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Persists", "..\Utility.Persists\Utility.Persists\Utility.Persists.csproj", "{D610148D-A6BC-47B7-8636-0A4F02C6C919}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Common", "..\Utility.WPF\Utility.Common\Utility.Common.csproj", "{2735C7FF-EBD1-4560-B96D-6AFEDAC9DB77}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "..\Utility.WPF\Utility.Observables\Utility.Observables.csproj", "{8E968750-6230-4DD5-B319-9D52B27DEB4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "..\Utility.Observables\Utility.Observables\Utility.Observables.csproj", "{8E968750-6230-4DD5-B319-9D52B27DEB4D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Buttons", "..\Utility.WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj", "{CDD164EC-845D-425A-A289-3D5F17D0AFCF}"
 EndProject
@@ -22,6 +22,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Enums", "..\Utility.Enums\Utility.Enums\Utility.Enums.csproj", "{9E172ABA-CA97-4CEC-8CE9-D3201FA19F4D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Trees", "..\Utility.WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj", "{33B74157-D926-4A2E-9ECD-1ED989882A5B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PropertyGrid", "PropertyGrid", "{369B6C92-C218-4262-AA91-C6390DB5FC1F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyGrid", "..\Utility.PropertyGrid\SoftFluent.Windows\PropertyGrid\PropertyGrid.csproj", "{8278409C-098A-402D-8026-36E04EDA1478}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyGrid.Abstractions", "..\Utility.PropertyGrid\SoftFluent.Windows\PropertyGrid.Abstractions\PropertyGrid.Abstractions.csproj", "{8782AA10-5F62-4F4E-A601-8305D1B9F9AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,12 +71,22 @@ Global
 		{33B74157-D926-4A2E-9ECD-1ED989882A5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33B74157-D926-4A2E-9ECD-1ED989882A5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33B74157-D926-4A2E-9ECD-1ED989882A5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8278409C-098A-402D-8026-36E04EDA1478}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8278409C-098A-402D-8026-36E04EDA1478}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8278409C-098A-402D-8026-36E04EDA1478}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8278409C-098A-402D-8026-36E04EDA1478}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8782AA10-5F62-4F4E-A601-8305D1B9F9AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8782AA10-5F62-4F4E-A601-8305D1B9F9AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8782AA10-5F62-4F4E-A601-8305D1B9F9AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8782AA10-5F62-4F4E-A601-8305D1B9F9AE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{65861572-3539-494B-AD03-BBA4D7C8E082} = {0E77E344-1EED-4EDC-BDF9-744CF0425AAF}
+		{8278409C-098A-402D-8026-36E04EDA1478} = {369B6C92-C218-4262-AA91-C6390DB5FC1F}
+		{8782AA10-5F62-4F4E-A601-8305D1B9F9AE} = {369B6C92-C218-4262-AA91-C6390DB5FC1F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {00EBD15C-E22A-4F19-88DE-BC9861507581}
