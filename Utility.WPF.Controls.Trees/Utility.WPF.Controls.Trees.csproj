@@ -11,6 +11,9 @@
 		<Compile Update="MyTreeView.cs">
 			<DependentUpon>MyTreeView.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="TreeListView.cs">
+			<DependentUpon>TreeListView.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
