@@ -78,9 +78,11 @@ namespace Utility.WPF.Controls.Trees
                 //Move up the visual tree and count the number of TreeViewItem's.
                 for (; Element != null; Element = VisualTreeHelper.GetParent(Element))
                     //Check whether the current elemeent is a TreeViewItem
-                    if (typeof(TreeViewItem).IsAssignableFrom(Element.GetType()))
+                    if (Element is TreeViewItem treeViewItem)
+                    { 
                         //Increase the level counter
                         Level++;
+                    }
                 //Return the indentation as a double
                 return Indentation * Level;
             }

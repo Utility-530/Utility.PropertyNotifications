@@ -30,7 +30,7 @@
         <!--Grid containing the current information and the subnodes.-->
         <StackPanel>
             <!--Border wrapping the content presenter.-->
-            <Border x:Name="Border">
+            <Border x:Name="Border" Background="Transparent">
                 <!--GridViewRowPrsenter containing the current information.-->
                 <GridViewRowPresenter Content="{TemplateBinding Header}"
                     Columns="{Binding Columns, 
@@ -163,17 +163,18 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <!--Apply this style to all controls of type 'TreeListView'.-->
+
+    <Style x:Key="TreeListViewItemStyle"  TargetType="TreeViewItem">
+        <Setter Property="Template" Value="{StaticResource TreeListViewItem}"/>
+    </Style>
+
     <Style TargetType="{x:Type tree:TreeListView}">
+        <Setter Property="ItemContainerStyle" Value="{StaticResource TreeListViewItemStyle}"></Setter>
         <!--Set the control template.-->
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type tree:TreeListView}">
+                <ControlTemplate TargetType="{x:Type tree:TreeListView}" >
                     <ControlTemplate.Resources>
-                        <!--Apply this style to all 'TreeViewItem's.-->
-                        <Style TargetType="TreeViewItem">
-                            <Setter Property="Template" Value="{StaticResource TreeListViewItem}"/>
-                        </Style>
                         <!--Apply this style to all 'TreeListViewExpander's.-->
                         <Style TargetType="tree:TreeListViewExpander">
                             <Setter Property="Template" Value="{StaticResource TreeListViewExpander}"/>
