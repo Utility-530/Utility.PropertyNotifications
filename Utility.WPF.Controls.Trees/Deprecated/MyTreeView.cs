@@ -10,6 +10,10 @@ using System.Windows.Controls;
 
 namespace Utility.WPF.Controls.Trees
 {
+    [Obsolete]
+    /// <summary>
+    /// Fixes problem that doesn't exist
+    /// </summary>
     public class MyTreeView : TreeView
     {
         static MyTreeView()
