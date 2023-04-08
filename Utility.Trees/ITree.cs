@@ -35,8 +35,6 @@ namespace Utility.Trees
         void Remove(Guid index);
 
         int IndexOf(ITree tree);
-        ITree CloneTree();
-
         State State { get; set; }
 
     }
@@ -49,9 +47,6 @@ namespace Utility.Trees
     {
         new ITree<T> Parent { get; }
 
-        IEnumerable<ITree<T>> GetParents(bool includingThis);
-        IEnumerable<ITree<T>> GetChildren(bool includingThis);
-
         ITree<T> this[T item] { get; set; }
         new IReadOnlyList<ITree<T>> Items { get; }
         new T Data { get; }
@@ -62,7 +57,6 @@ namespace Utility.Trees
         void Add(T data);
         void Remove(T data);
 
-        new ITree<T> CloneTree();
         int IndexOf(ITree<T> tree);
 
     }
