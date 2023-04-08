@@ -90,10 +90,9 @@ namespace Utility.WPF.Demo.Trees
 
 
 
-        }
-
-
     }
+
+
 
     public class TreeItemContainerStyleSelector : StyleSelector
     {
