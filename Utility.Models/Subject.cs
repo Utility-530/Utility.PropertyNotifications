@@ -34,12 +34,6 @@ namespace Utility.Models
             throw new NotImplementedException();
         }
 
-        public void Broadcast(T message)
-        {
-            Messages.Add(message);
-            foreach (var observer in Observers.ToArray())
-                observer.OnNext(message);
-        }
 
         public virtual IDisposable Subscribe(IObserver<T> observer)
         {
