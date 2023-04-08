@@ -155,6 +155,31 @@ namespace Utility.WPF.Helper
         /// <typeparam name="T"></typeparam>
         /// <param name="parent"></param>
         /// <returns></returns>
+        public static IEnumerable<T> ChildrenOfType<T>(this DependencyObject parent) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                var child = VisualTreeHelper.GetChild(parent, i);
+
+                if (child is T childType)
+                {
+                    yield return childType;
+                }
+
+                foreach (var other in FindChildren<T>(child))
+                {
+                    yield return other;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Finds all controls of a specific type in visual tree
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="parent"></param>
+        /// <returns></returns>
+        [Obsolete]
         public static IEnumerable<T> FindChildren<T>(this DependencyObject parent) where T : DependencyObject
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
