@@ -29,6 +29,10 @@
         <DockPanel>
             <btn:PersistenceButtons x:Name="PersistenceButtons" ></btn:PersistenceButtons>
         </DockPanel>
+
+        <DockPanel>
+            <btn:StepButtons x:Name="StepButtons" ></btn:StepButtons>
+        </DockPanel>
         <ListBox x:Name="OutputListBox"></ListBox>
     </UniformGrid>
 

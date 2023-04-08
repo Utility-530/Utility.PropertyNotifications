@@ -37,7 +37,7 @@
             </Button>
         </UniformGrid>
     </ControlTemplate>
-    
+
     <ControlTemplate x:Key="EditCollectionTemplate"  TargetType="{x:Type local:EditCollectionButtons}">
         <UniformGrid Rows="1" >
             <Button x:Name="Add" Margin="{TemplateBinding Margins}">
@@ -72,8 +72,37 @@
                                 Kind="ContentSave"
                               />
                 </Viewbox>
-            </Button>           
+            </Button>
 
+        </UniformGrid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="StepTemplate"  TargetType="{x:Type local:StepButtons}">
+        <UniformGrid Rows="1" >
+            <Button x:Name="Backward" Margin="{TemplateBinding Margins}">
+                <Viewbox>
+                    <materialDesign:PackIcon
+                                Kind="StepBackward"/>
+                </Viewbox>
+            </Button>
+            <Button x:Name="Walk" Margin="{TemplateBinding Margins}">
+                <Viewbox>
+                    <materialDesign:PackIcon
+                                Kind="Play"/>
+                </Viewbox>
+            </Button>
+            <Button x:Name="Wait" Margin="{TemplateBinding Margins}">
+                <Viewbox>
+                    <materialDesign:PackIcon
+                                Kind="Pause"/>
+                </Viewbox>
+            </Button>
+            <Button x:Name="Forward" Margin="{TemplateBinding Margins}">
+                <Viewbox>
+                    <materialDesign:PackIcon
+                                Kind="StepForward"/>
+                </Viewbox>
+            </Button>
         </UniformGrid>
     </ControlTemplate>
 
@@ -86,5 +115,8 @@
     </Style>
     <Style TargetType="{x:Type local:PersistenceButtons}">
         <Setter Property="Template" Value="{StaticResource PersistenceTemplate}"/>
+    </Style>
+    <Style TargetType="{x:Type local:StepButtons}">
+        <Setter Property="Template" Value="{StaticResource StepTemplate}"/>
     </Style>
 </ResourceDictionary>

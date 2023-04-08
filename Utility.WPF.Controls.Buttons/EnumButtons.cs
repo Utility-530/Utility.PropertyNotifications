@@ -108,6 +108,15 @@ namespace Utility.WPF.Controls.Buttons
             DefaultStyleKeyProperty.OverrideMetadata(typeof(PersistenceButtons), new FrameworkPropertyMetadata(typeof(PersistenceButtons)));
         }
     }
+    
+    public class StepButtons : EnumButtons<Step>
+    {
+        static StepButtons()
+        {
+
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(StepButtons), new FrameworkPropertyMetadata(typeof(StepButtons)));
+        }
+    }
 
     public abstract class EnumButtons<TEnum> : EnumButtons where TEnum : struct, Enum
     {

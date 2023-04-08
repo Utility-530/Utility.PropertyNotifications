@@ -1,6 +1,8 @@
 ﻿using Jellyfish;
 using System.Windows;
 using System.Windows.Controls;
+using Utility.WPF.Controls.Buttons;
+using Utility.WPF.Helper;
 
 namespace Utility.WPF.Demo.Buttons
 {
@@ -13,9 +15,14 @@ namespace Utility.WPF.Demo.Buttons
         {
             InitializeComponent();
 
-            EditCollectionButtons.Command = 
-            NavigationButtons.Command =
-            PersistenceButtons.Command = new RelayCommand((a) => OutputListBox.Items.Add(new ListBoxItem { Content = a.ToString() }));
+            this.Loaded += EnumButtonsUserControl_Loaded;
+        }
+
+        private void EnumButtonsUserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            var command = new RelayCommand((a) => OutputListBox.Items.Add(new ListBoxItem { Content = a.ToString() }));
+            foreach (var child in this.ChildrenOfType<EnumButtons>())
+                child.Command = command;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
