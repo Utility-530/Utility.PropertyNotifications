@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MaterialDesignThemes" Version="4.6.0-ci211" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
     <ProjectReference Include="..\Utility.WPF.Utility\Utility.WPF.Helper.csproj" />
   </ItemGroup>
