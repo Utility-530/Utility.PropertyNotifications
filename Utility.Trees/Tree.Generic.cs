@@ -254,11 +254,6 @@ namespace Utility.Trees
             }
             return -1;
         }
-
-        ITree<T> ITree<T>.CloneTree()
-        {
-            throw new NotImplementedException();
-        }
     }
 
     public static class TreeHelper
