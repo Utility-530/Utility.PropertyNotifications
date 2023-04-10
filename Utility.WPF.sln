@@ -145,7 +145,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Reactive", "..\Util
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "..\Utility.Observables\Utility.Observables\Utility.Observables.csproj", "{65C68EB3-45B9-48F1-A4F5-E56E560ACE2A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models", "Utility.Models\Utility.Models.csproj", "{D8E45214-6F52-494E-B478-EDC01B767C86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models", "..\..\Utility.Model\Utility.Models\Utility.Models.csproj", "{D8E45214-6F52-494E-B478-EDC01B767C86}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Interfaces", "..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj", "{B475E9CE-2FB9-43B6-AD44-A00030BD14E6}"
 EndProject
@@ -161,7 +161,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Meta", "Utility.Met
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.ResourceDictionarys", "Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj", "{64D837FE-60EE-40C0-ABC5-43E31DCAADD5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models.Filters", "Utility.Models.Filters\Utility.Models.Filters.csproj", "{9AD7CE04-60ED-43E4-9065-6D06984AF5B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models.Filters", "..\..\Utility.Models.Filters\Utility.Models.Filters\Utility.Models.Filters.csproj", "{9AD7CE04-60ED-43E4-9065-6D06984AF5B6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Adorners", "Utility.WPF.Adorners\Utility.WPF.Adorners.csproj", "{313D1C78-F365-429C-BC13-F36830FC331C}"
 EndProject
@@ -173,7 +173,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Trees", "U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees", "..\Utility.Trees\Utility.Trees\Utility.Trees.csproj", "{670473E2-E1E0-4B88-86C6-6429E39803FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Demo.Drawing", "Utility.WPF.Demo.Drawing\Utility.WPF.Demo.Drawing.csproj", "{3FB08627-AEF9-4AED-8749-517275D0C68D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Drawing", "Utility.WPF.Demo.Drawing\Utility.WPF.Demo.Drawing.csproj", "{3FB08627-AEF9-4AED-8749-517275D0C68D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees.Abstractions", "..\Utility.Trees\Utility.Trees.Abstractions\Utility.Trees.Abstractions.csproj", "{CF4E9D81-FB88-4935-A41B-8287DC730784}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models", "..\Utility.Model\Utility.Models\Utility.Models.csproj", "{0A4C46E8-0CFC-4D1E-81E7-17923E6F1C2E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models.Filters", "..\Utility.Model\Utility.Models.Filters\Utility.Models.Filters.csproj", "{D101BF6A-F829-4CF8-A84E-69525582F42B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commons", "..\Utility.Model\Utility.Commons\Utility.Commons.csproj", "{9F33F5F3-0B06-4945-BD0A-643CDCFA63AF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Packages", "..\Utility.Model\Utility.Packages\Utility.Packages.csproj", "{22AD003E-5540-41F6-A90E-C367A221AC97}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -505,6 +515,26 @@ Global
 		{3FB08627-AEF9-4AED-8749-517275D0C68D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FB08627-AEF9-4AED-8749-517275D0C68D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FB08627-AEF9-4AED-8749-517275D0C68D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF4E9D81-FB88-4935-A41B-8287DC730784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF4E9D81-FB88-4935-A41B-8287DC730784}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF4E9D81-FB88-4935-A41B-8287DC730784}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF4E9D81-FB88-4935-A41B-8287DC730784}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A4C46E8-0CFC-4D1E-81E7-17923E6F1C2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A4C46E8-0CFC-4D1E-81E7-17923E6F1C2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A4C46E8-0CFC-4D1E-81E7-17923E6F1C2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A4C46E8-0CFC-4D1E-81E7-17923E6F1C2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D101BF6A-F829-4CF8-A84E-69525582F42B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D101BF6A-F829-4CF8-A84E-69525582F42B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D101BF6A-F829-4CF8-A84E-69525582F42B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D101BF6A-F829-4CF8-A84E-69525582F42B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F33F5F3-0B06-4945-BD0A-643CDCFA63AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F33F5F3-0B06-4945-BD0A-643CDCFA63AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F33F5F3-0B06-4945-BD0A-643CDCFA63AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F33F5F3-0B06-4945-BD0A-643CDCFA63AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22AD003E-5540-41F6-A90E-C367A221AC97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22AD003E-5540-41F6-A90E-C367A221AC97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22AD003E-5540-41F6-A90E-C367A221AC97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22AD003E-5540-41F6-A90E-C367A221AC97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -592,6 +622,11 @@ Global
 		{AF2CA47F-893C-42F7-8C2F-1F9C7AA149C4} = {3E8F851B-BECA-4BAA-9275-2104CDEAEC3D}
 		{670473E2-E1E0-4B88-86C6-6429E39803FC} = {CF03926E-9E72-4A61-B447-2EF7E3C17461}
 		{3FB08627-AEF9-4AED-8749-517275D0C68D} = {3E8F851B-BECA-4BAA-9275-2104CDEAEC3D}
+		{CF4E9D81-FB88-4935-A41B-8287DC730784} = {CF03926E-9E72-4A61-B447-2EF7E3C17461}
+		{0A4C46E8-0CFC-4D1E-81E7-17923E6F1C2E} = {392FD82C-ADC4-4230-8881-89BD4E2B84EE}
+		{D101BF6A-F829-4CF8-A84E-69525582F42B} = {392FD82C-ADC4-4230-8881-89BD4E2B84EE}
+		{9F33F5F3-0B06-4945-BD0A-643CDCFA63AF} = {392FD82C-ADC4-4230-8881-89BD4E2B84EE}
+		{22AD003E-5540-41F6-A90E-C367A221AC97} = {392FD82C-ADC4-4230-8881-89BD4E2B84EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D60CFCE-498F-4A6D-9B9B-5546561C117E}

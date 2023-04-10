@@ -8,14 +8,14 @@
              xmlns:tree="http://schemas.utility.com/trees"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <tree:TreeListView AllowsColumnReorder="True">
+    <tree:TreeListView AllowsColumnReorder="True" Background="GhostWhite">
         <!--Create an item template to specify the ItemsSource-->
         <tree:TreeListView.ItemTemplate>
             <HierarchicalDataTemplate ItemsSource="{Binding Children}" />
         </tree:TreeListView.ItemTemplate>
         <tree:TreeListView.Columns>
             <!--Create the first column containing the expand button and the type name.-->
-            <GridViewColumn Header="Name" julmar:ListViewColumnAutoSizeBehavior.Width="100">
+            <GridViewColumn Header="Name" julmar:ListViewColumnAutoSizeBehavior.Width="200">
                 <GridViewColumn.CellTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -28,7 +28,7 @@
                 </GridViewColumn.CellTemplate>
             </GridViewColumn>
             <!--Create a second column containing the number of children.-->
-            <GridViewColumn Header="Children" julmar:ListViewColumnAutoSizeBehavior.Width="2*">
+            <GridViewColumn Header="Children" julmar:ListViewColumnAutoSizeBehavior.Width="Auto">
                 <GridViewColumn.CellTemplate>
                     <DataTemplate>
                         <!--Display the size of the DataElement-->
@@ -37,7 +37,7 @@
                 </GridViewColumn.CellTemplate>
             </GridViewColumn>
             <!--Create a third column containing the brush of the material.-->
-            <GridViewColumn Header="Brush" julmar:ListViewColumnAutoSizeBehavior.Width="2*">
+            <GridViewColumn Header="Brush" julmar:ListViewColumnAutoSizeBehavior.Width="*">
                 <GridViewColumn.CellTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">

@@ -15,8 +15,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Utility.Models.Filters\Utility.Models.Filters.csproj" />
-		<ProjectReference Include="..\Utility.Models\Utility.Models.csproj" />
 		<ProjectReference Include="..\..\Utility.Observables\Utility.Observables\Utility.Observables.csproj" />
 		<ProjectReference Include="..\Utility.Service\Utility.Service.csproj" />
 	</ItemGroup>

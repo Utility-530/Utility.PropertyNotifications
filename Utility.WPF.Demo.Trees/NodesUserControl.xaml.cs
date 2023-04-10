@@ -1,0 +1,88 @@
+﻿using Jellyfish;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace Utility.WPF.Demo.Trees
+{
+    /// <summary>
+    /// Interaction logic for NodesUserControl.xaml
+    /// </summary>
+    public partial class NodesUserControl : UserControl
+    {
+        public NodesUserControl()
+        {
+            InitializeComponent();
+            this.Node.DataContext = new NodeViewModel();
+        }
+
+
+
+    }
+
+    public class NodeViewModel
+    {
+        public IEnumerable Input { get; } = new ConnectorViewModel[] {  new ConnectorViewModel { Title = "1" },new ConnectorViewModel { Title = "1" }, new ConnectorViewModel { Title = "3" } };
+        public IEnumerable Output { get; } = new ConnectorViewModel[] { new ConnectorViewModel { Title = "1" }, new ConnectorViewModel { Title = "1" }, new ConnectorViewModel { Title = "3" } };
+    }
+
+    public class ConnectorViewModel : ViewModel
+    {
+        private string? _title;
+        public string? Title
+        {
+            get => _title;
+            set => Set(ref _title, value);
+        }
+
+        private double _value;
+        public double Value
+        {
+            get => _value;
+            set => Set(ref _value, value);
+                //.Then(() => ValueObservers.ForEach(o => o.Value = value));
+        }
+
+        private bool _isConnected;
+        public bool IsConnected
+        {
+            get => _isConnected;
+            set => Set(ref _isConnected, value);
+        }
+
+        private bool _isInput;
+        public bool IsInput
+        {
+            get => _isInput;
+            set => Set(ref _isInput, value);
+        }
+
+        private Point _anchor;
+        public Point Anchor
+        {
+            get => _anchor;
+            set => Set(ref _anchor, value);
+        }
+
+        //private OperationViewModel _operation = default!;
+        //public OperationViewModel Operation
+        //{
+        //    get => _operation;
+        //    set => SetProperty(ref _operation, value);
+        //}
+
+        public List<ConnectorViewModel> ValueObservers { get; } = new List<ConnectorViewModel>();
+    }
+}
