@@ -1,4 +1,5 @@
-﻿using Utility.Interfaces.NonGeneric.Data;
+﻿using Utility.Enums;
+using Utility.Interfaces.NonGeneric.Data;
 
 namespace Utility.Common
 {
@@ -56,10 +57,6 @@ namespace Utility.Common
         public AbsoluteOrder AbsoluteOrder { get; }
     }
 
-    public enum AbsoluteOrder
-    {
-        First, Last
-    }
     public class CountQuery : IQuery
     {
     }
