@@ -15,7 +15,6 @@ namespace Utility.Models
         public int GridRowSpan { get; set; }
 
 
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public Property(object? value = null) => _value = value;
 
@@ -31,11 +30,15 @@ namespace Utility.Models
                 }
             }
         }
+        #region propertyChanged
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+        #endregion
+
     }
 
     public class Property<T> : Property
