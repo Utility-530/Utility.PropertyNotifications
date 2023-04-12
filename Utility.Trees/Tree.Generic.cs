@@ -97,9 +97,6 @@ namespace Utility.Trees
 
             m_items.Add(tree);
             return;
-
-
-
         }
 
         public override void Add(object data)

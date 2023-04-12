@@ -1,4 +1,6 @@
-﻿namespace Utility.Trees
+﻿using Utility.Trees.Abstractions;
+
+namespace Utility.Trees
 {
     public interface IDynamicTree : IObservable<ITree>
     {

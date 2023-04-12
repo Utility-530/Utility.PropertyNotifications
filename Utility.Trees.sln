@@ -5,13 +5,11 @@ VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees.Demo", "Utility.Trees.Demo\Utility.Trees.Demo.csproj", "{65861572-3539-494B-AD03-BBA4D7C8E082}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees", "..\Utility.Trees\Utility.Trees\Utility.Trees.csproj", "{FC3F1B17-8502-4EF2-A786-4427F45AAF32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees", "Utility.Trees\Utility.Trees.csproj", "{FC3F1B17-8502-4EF2-A786-4427F45AAF32}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{0E77E344-1EED-4EDC-BDF9-744CF0425AAF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Persists", "..\Utility.Persists\Utility.Persists\Utility.Persists.csproj", "{D610148D-A6BC-47B7-8636-0A4F02C6C919}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Common", "..\Utility.WPF\Utility.Common\Utility.Common.csproj", "{2735C7FF-EBD1-4560-B96D-6AFEDAC9DB77}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "..\Utility.Observables\Utility.Observables\Utility.Observables.csproj", "{8E968750-6230-4DD5-B319-9D52B27DEB4D}"
 EndProject
@@ -28,6 +26,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyGrid", "..\Utility.PropertyGrid\SoftFluent.Windows\PropertyGrid\PropertyGrid.csproj", "{8278409C-098A-402D-8026-36E04EDA1478}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyGrid.Abstractions", "..\Utility.PropertyGrid\SoftFluent.Windows\PropertyGrid.Abstractions\PropertyGrid.Abstractions.csproj", "{8782AA10-5F62-4F4E-A601-8305D1B9F9AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Trees.Abstractions", "Utility.Trees.Abstractions\Utility.Trees.Abstractions.csproj", "{EC3E7892-006E-4A6C-B5C2-1B475FFDC68E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commons", "..\Utility.Model\Utility.Commons\Utility.Commons.csproj", "{A08CD4BB-2A31-4C58-A70E-BA5CB29964C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +49,6 @@ Global
 		{D610148D-A6BC-47B7-8636-0A4F02C6C919}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D610148D-A6BC-47B7-8636-0A4F02C6C919}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D610148D-A6BC-47B7-8636-0A4F02C6C919}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2735C7FF-EBD1-4560-B96D-6AFEDAC9DB77}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2735C7FF-EBD1-4560-B96D-6AFEDAC9DB77}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2735C7FF-EBD1-4560-B96D-6AFEDAC9DB77}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2735C7FF-EBD1-4560-B96D-6AFEDAC9DB77}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8E968750-6230-4DD5-B319-9D52B27DEB4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8E968750-6230-4DD5-B319-9D52B27DEB4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E968750-6230-4DD5-B319-9D52B27DEB4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -79,6 +77,14 @@ Global
 		{8782AA10-5F62-4F4E-A601-8305D1B9F9AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8782AA10-5F62-4F4E-A601-8305D1B9F9AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8782AA10-5F62-4F4E-A601-8305D1B9F9AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC3E7892-006E-4A6C-B5C2-1B475FFDC68E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC3E7892-006E-4A6C-B5C2-1B475FFDC68E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC3E7892-006E-4A6C-B5C2-1B475FFDC68E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC3E7892-006E-4A6C-B5C2-1B475FFDC68E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A08CD4BB-2A31-4C58-A70E-BA5CB29964C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A08CD4BB-2A31-4C58-A70E-BA5CB29964C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A08CD4BB-2A31-4C58-A70E-BA5CB29964C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A08CD4BB-2A31-4C58-A70E-BA5CB29964C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Utility.Observables;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Trees
 {

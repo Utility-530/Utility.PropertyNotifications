@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Utility.Enums;
 using Utility.Helpers;
-using Utility.Trees;
+using Utility.Trees.Abstractions;
 using static Evan.Wpf.DependencyHelper;
 
 namespace Utility.Trees.Demo

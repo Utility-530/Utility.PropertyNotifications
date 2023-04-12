@@ -1,12 +1,14 @@
-﻿using Jellyfish;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Trees
 {
@@ -55,6 +57,19 @@ namespace Utility.Trees
         }
     }
 
+    public class ViewModel
+    {
+
+        #region propertyChanged
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
+    }
+
     /// <summary>
     /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
     /// </summary>
@@ -82,9 +97,12 @@ namespace Utility.Trees
         }
 
 
-        public Tree(object data, params object[] items)
+        public Tree(object? data = null, params object[] items)
         {
-            this.data = data;
+            if (data != null)
+                this.data = data;
+            else
+                this.data = "root";
             if (items.Any())
                 Add(items);
         }
@@ -111,17 +129,17 @@ namespace Utility.Trees
         }
 
 
-        public new ITree? this[Guid key]
+        public ITree? this[Guid key]
         {
             get
             {
                 var x = TreeHelper2.Match(this, a => a.Key.Equals(key) == true);
-                if (x == null)
-                {
-                    throw new Exception("4sd ss");
-                    //x = new Tree(item);
-                    //this.Add(x);
-                }
+                //if (x == null)
+                //{
+                //    throw new Exception("4sd ss");
+                //    //x = new Tree(item);
+                //    //this.Add(x);
+                //}
                 return x;
             }
             set
@@ -137,11 +155,11 @@ namespace Utility.Trees
             }
         }
 
-        public new ITree this[int index]
+        public ITree? this[int index]
         {
             get
             {
-                return m_items.Count == 0 ? throw new Exception(" 434 ") : m_items[index] as ITree;
+                return m_items.Count == 0 ? null : m_items[index] as ITree;
             }
             set
             {
@@ -286,7 +304,11 @@ namespace Utility.Trees
             }
         }
 
-        public State State { get => state; set => Set(ref state, value); }
+        public State State
+        { 
+            get => state; 
+            set { state = value; OnPropertyChanged(); } 
+        }
 
         public Index Index
         {

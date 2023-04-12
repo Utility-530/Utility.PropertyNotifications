@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows;
-using Utility.Trees;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Trees.Demo
 {

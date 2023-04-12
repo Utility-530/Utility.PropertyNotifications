@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.ObjectModel;
-
-//
+﻿using Utility.Trees.Abstractions;
 
 namespace Utility.Trees
 {
@@ -26,8 +22,8 @@ namespace Utility.Trees
 
         object Data { get; }
 
-        ITree this[int index] { get; set; }
-        ITree this[Guid index] { get; set; }
+        ITree? this[int index] { get; set; }
+        ITree? this[Guid index] { get; set; }
 
         IEnumerable<ITree> GetParents(bool includingThis);
         IEnumerable<ITree> GetChildren(bool includingThis);

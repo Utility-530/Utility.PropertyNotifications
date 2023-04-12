@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:Utility.Trees.Demo"
              xmlns:btns="http://schemas.utility.com/buttons"
              xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
+             xmlns:abs="clr-namespace:Utility.Trees.Abstractions;assembly=Utility.Trees.Abstractions"
              xmlns:trees="http://schemas.utility.com/trees"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -22,15 +23,16 @@
         <btns:PersistenceButtons x:Name="PersistenceButtons"   Grid.Row="2" Margins="2"/>
 
 
-        <trees:MyTreeView x:Name="TreeView3"   Grid.Row="3" >
+        <trees:TreeListView x:Name="TreeView3"   Grid.Row="3" >
             <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type trees:MyTreeViewItem}">
+                <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="IsExpanded" Value="True" />
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate DataType="{x:Type tree:Tree}" ItemsSource="{Binding Items}" >
-                    <Grid>
+                    
+                    <!--<Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="30"/>
@@ -49,25 +51,25 @@
                                 <Style TargetType="ContentControl">
                                     <Setter Property="Foreground" Value="Black" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Current}" >
+                                        <DataTrigger Binding="{Binding State}" Value="{x:Static abs:State.Current}" >
                                             <Setter Property="Foreground" Value="Cyan" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Forward}">
+                                        <DataTrigger Binding="{Binding State}" Value="{x:Static abs:State.Forward}">
                                             <Setter Property="Foreground" Value="DodgerBlue" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Back}">
+                                        <DataTrigger Binding="{Binding State}" Value="{x:Static abs:State.Back}">
                                             <Setter Property="Foreground" Value="IndianRed" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Up}">
+                                        <DataTrigger Binding="{Binding State}" Value="{x:Static abs:State.Up}">
                                             <Setter Property="Foreground" Value="Green" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Down}">
+                                        <DataTrigger Binding="{Binding State}" Value="{x:Static abs:State.Down}">
                                             <Setter Property="Foreground" Value="Peru" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Add}">
+                                        <DataTrigger Binding="{Binding State}" Value="{x:Static abs:State.Add}">
                                             <Setter Property="Foreground" Value="Maroon" />
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding State}" Value="{x:Static tree:State.Remove}">
+                                        <DataTrigger Binding="{Binding State}" Value="{x:Static abs:State.Remove}">
                                             <Setter Property="Foreground" Value="Tomato" />
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -76,9 +78,68 @@
                         </ContentControl>
 
                         <ContentControl Grid.Column="6"  Content="{Binding Data.Key}"/>
-                    </Grid>
+                    </Grid>-->
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
-        </trees:MyTreeView>
+            <trees:TreeListView.Columns>
+                <!--Create the first column containing the expand button and the type name.-->
+                <GridViewColumn Header="Index" Width="200">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <!--The Expander Button (can be used in any column (typically the first one))-->
+                                <trees:TreeListViewExpander/>
+                                <ContentControl Content="{Binding Index}"/>
+                                <!--Display the name of the DataElement-->
+                                <!--<TextBlock Text="{Binding Content}"/>-->
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn Header="State" Width="200">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <ContentControl Grid.Column="4"  Content="{Binding State}">
+                                <ContentControl.Style>
+                                    <Style TargetType="ContentControl">
+                                        <Setter Property="Foreground" Value="Black" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static abs:State.Current}" >
+                                                <Setter Property="Foreground" Value="Cyan" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static abs:State.Forward}">
+                                                <Setter Property="Foreground" Value="DodgerBlue" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static abs:State.Back}">
+                                                <Setter Property="Foreground" Value="IndianRed" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static abs:State.Up}">
+                                                <Setter Property="Foreground" Value="Green" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static abs:State.Down}">
+                                                <Setter Property="Foreground" Value="Peru" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static abs:State.Add}">
+                                                <Setter Property="Foreground" Value="Maroon" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="{x:Static abs:State.Remove}">
+                                                <Setter Property="Foreground" Value="Tomato" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ContentControl.Style>
+                            </ContentControl>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn Header="Data" julmar:ListViewColumnAutoSizeBehavior.Width="Auto">
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <ContentControl Content="{Binding Data}"/>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+            </trees:TreeListView.Columns>
+        </trees:TreeListView>
     </Grid>
 </UserControl>

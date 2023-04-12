@@ -6,8 +6,8 @@
     <Application.Resources>
         <ResourceDictionary >
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Utility.Trees.Demo;component/Themes/Generic.xaml"/>
-                <ResourceDictionary Source="/Utility.Trees.Demo;component/Themes/Style.TreeView.xaml"/>
+                <!--<ResourceDictionary Source="/Utility.Trees.Demo;component/Themes/Generic.xaml"/>
+                <ResourceDictionary Source="/Utility.Trees.Demo;component/Themes/Style.TreeView.xaml"/>-->
                 <!--<ResourceDictionary Source="/Utility.Trees.Demo;component/Themes/TreeViewItemStyle.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
