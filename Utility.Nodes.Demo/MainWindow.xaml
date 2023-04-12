@@ -18,7 +18,7 @@
 
 
         <DataTemplate DataType="{x:Type infra:ViewModel}">
-            <st:AutoGrid Columns="2*,*" Rows="1" Height="24">
+            <st:AutoGrid Columns="*,*" Rows="*" Height="24">
                 <materialDesign:PackIcon Kind="{Binding Icon}"/>
                 <TextBlock Text="{Binding Name}"></TextBlock>
             </st:AutoGrid>
