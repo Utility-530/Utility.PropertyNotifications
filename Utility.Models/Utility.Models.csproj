@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -8,13 +8,16 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
-    <ProjectReference Include="..\Utility.Commons\Utility.Commons.csproj" />
 	  <ProjectReference Include="..\..\Utility.Observables\Utility.Observables\Utility.Observables.csproj" />
     <ProjectReference Include="..\..\Utility.Randoms\Utility.Randoms\Utility.Randoms.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Infrastructure\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 
 </Project>
