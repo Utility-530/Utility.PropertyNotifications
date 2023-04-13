@@ -1,0 +1,147 @@
+<UserControl
+    x:Class="Utility.WPF.Demo.Controls.GroupUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:model="clr-namespace:Utility.WPF.Demo.Data.Model;assembly=Utility.WPF.Demo.Data"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+    xmlns:local="clr-namespace:Utility.WPF.Demo.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:com="clr-namespace:Utility.Common;assembly=Utility.Common"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <FrameworkElement.Resources>
+
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/BackContent.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--<DataTemplate DataType="{x:Type com:Groupable}">
+                <ContentControl Content="{Binding Value}"></ContentControl>
+            </DataTemplate>-->
+
+            <DataTemplate x:Key="GroupTemplate">
+                <Viewbox>
+                    <materialDesign:Flipper Style="{DynamicResource MaterialDesignCardFlipper}">
+                        <materialDesign:Flipper.FrontContent>
+                            <Button
+                            Width="200"
+                            Height="200"
+                            Margin="8"
+                            Command="{x:Static materialDesign:Flipper.FlipCommand}">
+                                <UniformGrid Margin="10" Columns="1">
+                                    <TextBlock
+                                    Margin="10"
+                                    FontSize="20"
+                                    Text="{Binding Key}" />
+                                    <TextBlock Margin="10" Text="{Binding Count}" />
+                                </UniformGrid>
+                            </Button>
+                        </materialDesign:Flipper.FrontContent>
+                        <materialDesign:Flipper.BackContent>
+                            <ContentControl Content="{StaticResource BackContent}" />
+                        </materialDesign:Flipper.BackContent>
+                    </materialDesign:Flipper>
+                </Viewbox>
+            </DataTemplate>
+
+            <DataTemplate x:Key="Group2Template">
+                <Viewbox>
+                    <ContentControl FontSize="20">
+                        <UniformGrid Margin="10" Columns="2">
+                            <TextBlock Margin="10" Text="Key" />
+                            <TextBlock Margin="10" Text="{Binding Key}" />
+                            <TextBlock Margin="10" Text="Count" />
+                            <TextBlock Margin="10" Text="{Binding Count}" />
+                            <TextBlock Margin="10" Text="Max-Length" />
+                            <TextBlock Margin="10" Text="{Binding MaxLength}" />
+                        </UniformGrid>
+                    </ContentControl>
+                </Viewbox>
+            </DataTemplate>
+
+            <DataTemplate x:Key="Group3Template">
+                <Viewbox>
+                    <ContentControl FontSize="16">
+                        <UniformGrid Rows="1">
+
+                            <TextBlock
+                            Width="200"
+                            Margin="10"
+                            FontWeight="DemiBold"
+                            Text="{Binding Key}" />
+
+                            <ItemsControl ItemsSource="{Binding Collection}" />
+                        </UniformGrid>
+                    </ContentControl>
+                </Viewbox>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type model:Stock}">
+                <Viewbox>
+                    <UniformGrid Margin="10" Columns="1">
+                        <TextBlock
+                        Margin="10"
+                        FontSize="20"
+                        Text="{Binding Key}" />
+                        <TextBlock Margin="10" Text="{Binding Name}" />
+                        <TextBlock Margin="10" Text="{Binding Sector}" />
+                    </UniformGrid>
+                </Viewbox>
+            </DataTemplate>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+
+    <DockPanel>
+        <ToolBar DockPanel.Dock="Top">
+
+            <Label Margin="70,0,0,0">
+                Change DataTemplate Property
+            </Label>
+            <ComboBox x:Name="Combobox1" SelectedIndex="0" FontSize="18">
+        
+            </ComboBox>
+
+            <Label Margin="70,0,0,0">
+                Change Group Property
+            </Label>
+
+            <ComboBox x:Name="ComboBox" SelectedIndex="0"></ComboBox>
+
+            <Label x:Name="CompletedLabel" Margin="70,0,0,0" />
+        </ToolBar>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <ListBox x:Name="ListBox1"  ItemTemplateSelector="{x:Static local:GroupUserControl.DataTemplateSelector}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+
+            <ListBox x:Name="ListBox2" Grid.Row="1" ItemTemplate="{StaticResource Group3Template}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+
+            <ListBox x:Name="ListBox3" Grid.Row="2" ItemTemplate="{StaticResource Group3Template}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+            </ListBox>
+        </Grid>
+    </DockPanel>
+</UserControl>

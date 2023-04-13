@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Utility.WPF.CommonCore": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "NugetPath": "C:\\Users\\rytal\\Documents\\Visual Studio 2019\\NugetPackages"
+      }
+    }
+  }
+}

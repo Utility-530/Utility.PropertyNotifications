@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net6.0-windows</TargetFramework>
+	<UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Utility.WPF.Markup\Utility.WPF.Markup.csproj" />
+	  <ProjectReference Include="..\Utility.WPF.Controls.Chart\Utility.WPF.Controls.Chart.csproj" />
+	  <ProjectReference Include="..\Utility.WPF.Controls.Dragablz\Utility.WPF.Controls.Dragablz.csproj" />
+	  <ProjectReference Include="..\Utility.WPF.Controls.Extrinsic\Utility.WPF.Controls.Extrinsic.csproj" />
+	  <ProjectReference Include="..\Utility.WPF.Demo.Data\Utility.WPF.Demo.Data.csproj" />
+	</ItemGroup>
+
+  <ItemGroup>
+	<Compile Update="MasterChartDetailView.xaml.cs">
+	  <SubType>Code</SubType>
+	</Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+	<Page Update="MainWindow.xaml">
+	  <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	  <SubType>Designer</SubType>
+	</Page>
+	<Page Update="MasterChartDetailView.xaml">
+	  <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+	  <SubType>Designer</SubType>
+	</Page>
+  </ItemGroup>
+
+</Project>

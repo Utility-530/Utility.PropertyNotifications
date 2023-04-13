@@ -1,0 +1,94 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\bar-chart.png" />
+    <None Remove="Images\bart.png" />
+    <None Remove="Images\Cancel.png" />
+    <None Remove="Images\homer.png" />
+    <None Remove="Images\lisa.png" />
+    <None Remove="Images\maggie.png" />
+    <None Remove="Images\marge.png" />
+    <None Remove="Images\Pause.png" />
+    <None Remove="Images\Play.png" />
+    <None Remove="Images\Settings.png" />
+    <None Remove="Images\Stop.png" />
+    <None Remove="ProfilePics\00_Wide.png" />
+    <None Remove="ProfilePics\01_Paria.png" />
+    <None Remove="ProfilePics\02_Morexandra.png" />
+    <None Remove="ProfilePics\03_Smennifer.png" />
+    <None Remove="ProfilePics\04_Anyetlana.png" />
+    <None Remove="ProfilePics\05_Korko.png" />
+    <None Remove="ProfilePics\06_Kowel.png" />
+    <None Remove="ProfilePics\07_Sinia.png" />
+    <None Remove="ProfilePics\08_Wonathan.png" />
+    <None Remove="ProfilePics\09_Matban.png" />
+    <None Remove="ProfilePics\10_Surgiana.png" />
+    <None Remove="ProfilePics\11_Jogory.png" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="BitmapTools.Wpf" Version="1.1.0" />
+    <PackageReference Include="Csv" Version="2.0.84" />
+    <PackageReference Include="LambdaConverters" Version="4.0.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.6.0-ci211" />
+    <PackageReference Include="PropertyTools.Wpf" Version="3.1.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Utility.WPF.Demo.Common\Utility.WPF.Demo.Common.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Resource Include="Images\bar-chart.png" />
+    <Resource Include="Simpsons\bart.png" />
+    <Resource Include="Images\Cancel.png" />
+    <Resource Include="Simpsons\homer.png" />
+    <Resource Include="Simpsons\lisa.png" />
+    <Resource Include="Simpsons\maggie.png" />
+    <Resource Include="Simpsons\marge.png" />
+    <Resource Include="Images\Pause.png" />
+    <Resource Include="Images\Play.png" />
+    <Resource Include="Images\Settings.png" />
+    <Resource Include="Images\Stop.png" />
+    <Resource Include="ProfilePics\00_Wide.png" />
+    <Resource Include="ProfilePics\01_Paria.png" />
+    <Resource Include="ProfilePics\02_Morexandra.png" />
+    <Resource Include="ProfilePics\03_Smennifer.png" />
+    <Resource Include="ProfilePics\04_Anyetlana.png" />
+    <Resource Include="ProfilePics\05_Korko.png" />
+    <Resource Include="ProfilePics\06_Kowel.png" />
+    <Resource Include="ProfilePics\07_Sinia.png" />
+    <Resource Include="ProfilePics\08_Wonathan.png" />
+    <Resource Include="ProfilePics\09_Matban.png" />
+    <Resource Include="ProfilePics\10_Surgiana.png" />
+    <Resource Include="ProfilePics\11_Jogory.png" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="Resource1.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource1.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Update="Resource1.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Page Update="DataTemplate\Profile.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  
+</Project>

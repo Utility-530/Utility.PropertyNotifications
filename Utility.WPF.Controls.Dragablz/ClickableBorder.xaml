@@ -1,0 +1,77 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:att="http://schemas.utility.com/attached"
+                    xmlns:local="clr-namespace:Utility.WPF.Controls.Dragablz">
+
+    <Style TargetType="{x:Type local:ClickableBorder}">
+        <Setter Property="BorderBrush" Value="Black" />
+        <Setter Property="Background" Value="LightGray" />
+        <Style.Triggers>
+            <!--<MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsMouseOver"  Value="True" />
+                    <Condition Property="att:Ex.IsPressed"  Value="False" />
+                    <Condition Property="IsEnabled"  Value="True" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Duration="0:0:0.200" To="White" Storyboard.TargetProperty="BorderBrush.Color" />
+                            <ColorAnimation Duration="0:0:0.200" To="DarkGray" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </MultiTrigger.EnterActions>
+                <MultiTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard FillBehavior="Stop">
+                            <ColorAnimation Duration="0:0:0.400" To="Black" Storyboard.TargetProperty="BorderBrush.Color" />
+                            <ColorAnimation Duration="0:0:0.400" To="LightGray" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </MultiTrigger.ExitActions>
+            </MultiTrigger>-->
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="Black" />
+                <Setter Property="Background" Value="DarkGray" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="False">
+                <Setter Property="BorderBrush" Value="Black" />
+                <Setter Property="Background" Value="LightGray" />
+            </Trigger>
+            <Trigger Property="att:Ex.IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="Black" />
+                <Setter Property="Background" Value="DarkGray" />
+            </Trigger>
+            <Trigger Property="att:Ex.IsMouseOver" Value="False">
+                <Setter Property="BorderBrush" Value="Black" />
+                <Setter Property="Background" Value="LightGray" />
+            </Trigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="att:Ex.IsPressed"  Value="True" />
+                    <Condition Property="IsEnabled"  Value="True" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Duration="0:0:0.3" To="CadetBlue" Storyboard.TargetProperty="BorderBrush.Color" />
+                            <ColorAnimation Duration="0:0:0.3" To="CadetBlue" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" />
+                            <DoubleAnimation Duration="0:0:0.0" To="0.2" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Opacity)" />
+                            <ThicknessAnimation Duration="0:0:0.0" To="1.0" Storyboard.TargetProperty="BorderThickness" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </MultiTrigger.EnterActions>
+                <MultiTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Duration="0:0:1" To="Black" Storyboard.TargetProperty="BorderBrush.Color" />
+                            <ColorAnimation Duration="0:0:1" To="DarkGray" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" />
+                            <DoubleAnimation Duration="0:0:1.00" To="1.0" Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Opacity)" />
+                            <ThicknessAnimation Duration="0:0:1.00" To="0.0" Storyboard.TargetProperty="BorderThickness" />
+                        </Storyboard>
+                    </BeginStoryboard>
+                </MultiTrigger.ExitActions>
+            </MultiTrigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

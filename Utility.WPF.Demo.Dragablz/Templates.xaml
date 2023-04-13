@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:view="http://schemas.utility.com/dragablz"
+                    xmlns:utl="http://schemas.utility.com/utilitywpf"
+                    xmlns:vm="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Utility.WPF.Demo.Common;component/View/Templates.xaml" />
+        <utl:SharedResourceDictionary Source="/Utility.WPF.Demo.Common;component/View/DragablzNoteStyle.xaml" />
+        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Dragablz;component/DragablzItemStyle.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <DataTemplate DataType="{x:Type vm:NotesViewModel}">
+        <view:DragablzVerticalItemsControl
+                                                       ItemsSource="{Binding Collection}"
+                                                       VerticalAlignment="Center"
+                                                       ItemContainerStyle="{StaticResource DragablzNoteStyle}">
+        </view:DragablzVerticalItemsControl>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:RowBaseViewModel}">
+
+        <view:DragablzHorizontalItemsControl
+                                                       ItemsSource="{Binding Data}"
+                                                       VerticalAlignment="Center"
+                                                       ItemContainerStyle="{StaticResource DragablzItemStyle2}"
+                                                       ItemTemplate="{StaticResource Int32Template}">
+        </view:DragablzHorizontalItemsControl>
+    </DataTemplate>
+</ResourceDictionary>

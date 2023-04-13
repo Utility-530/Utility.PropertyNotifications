@@ -1,0 +1,79 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Update="CheckBoxesListControl.cs">
+			<DependentUpon>CheckBoxesListControl.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="GeometryButton.cs">
+			<DependentUpon>GeometryButton.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="ImageButton.cs">
+			<DependentUpon>ImageButton.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="DualButtonControl.cs">
+			<DependentUpon>DualButtonControl.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="SwitchControl - Copy.cs">
+		  <DependentUpon>SwitchControl.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="SwitchControl.cs">
+			<DependentUpon>SwitchControl.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="EnumButtons.cs">
+			<DependentUpon>EnumButtons.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Page Update="CheckBoxesListControl.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="CheckBoxesListControl.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="DualButtonControl.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="Geometry.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="GeometryButton.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="ImageButton.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="SwitchControl.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="Themes\Button.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+		<Page Update="Themes\Generic.xaml">
+			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+			<SubType>Designer</SubType>
+		</Page>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Utility.WPF.Behavior\Utility.WPF.Behavior.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Themes\Utility.WPF.Themes.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Controls.Extrinsic\Utility.WPF.Controls.Extrinsic.csproj" />
+	</ItemGroup>
+
+</Project>

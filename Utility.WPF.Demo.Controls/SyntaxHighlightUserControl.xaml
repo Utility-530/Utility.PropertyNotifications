@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="Utility.WPF.Demo.Controls.HighlightUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:utl="http://schemas.utility.com/utilitywpf"
+             xmlns:fluentWPF="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UniformGrid Rows="1">
+        <RichTextBox x:Name="jrtb">
+            <i:Interaction.Behaviors>
+                <utl:JsonSyntaxHighlightBehavior x:Name="JsonSyntaxHighlightTextBox"></utl:JsonSyntaxHighlightBehavior>
+            </i:Interaction.Behaviors>
+        </RichTextBox>
+        <DockPanel>
+            <ToolBar DockPanel.Dock="Top">
+                <ComboBox x:Name="Languages" DisplayMemberPath="Name" SelectedIndex="1">
+                </ComboBox>
+                <ComboBox x:Name="Themes">
+                    <i:Interaction.Behaviors>
+                        <utl:EnumSelectorBehavior x:Name="EnumSelectorBehavior" EnumType="{x:Type fluentWPF:ElementTheme}"></utl:EnumSelectorBehavior>
+                    </i:Interaction.Behaviors>
+                </ComboBox>
+            </ToolBar>
+
+            <UniformGrid Columns="1">
+                <TextBox x:Name="TextBox" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True">
+                </TextBox>
+
+                <RichTextBox x:Name="srtb">
+                    <i:Interaction.Behaviors>
+                        <utl:SyntaxHighlightBehavior x:Name="SyntaxHighlightTextBox"
+                                             Text="{Binding ElementName=TextBox, Path=Text}"
+                                             Language="{Binding ElementName=Languages, Path=SelectedItem}"
+                                             ElementTheme="{Binding ElementName=EnumSelectorBehavior, Path=SelectedEnum}" />
+                    </i:Interaction.Behaviors>
+                </RichTextBox>
+            </UniformGrid>
+        </DockPanel>
+    </UniformGrid>
+</UserControl>

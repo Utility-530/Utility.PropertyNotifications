@@ -1,0 +1,30 @@
+﻿<UserControl
+    x:Class="Utility.WPF.Demo.Dragablz.ResourceDictionariesUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mk="http://schemas.utility.com/utilitywpf"
+    xmlns:view1="http://schemas.utility.com/dragablz"
+    xmlns:local="clr-namespace:Utility.WPF.Demo.Dragablz.ViewModels"
+    xmlns:vm="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common"
+    d:DesignHeight="450"
+    d:Background="White"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+
+    <UniformGrid Columns="1">
+        <UniformGrid Rows="1">
+            <FrameworkElement.DataContext>
+                <local:ResourceDictionariesViewModel />
+            </FrameworkElement.DataContext>
+
+            <view1:ListControl
+                DisplayMemberPath="{mk:NameOf Type={x:Type vm:TickViewModel}, Path=Text}"
+                CommandPath="{mk:NameOf Type={x:Type vm:TickViewModel}, Path=Command}"
+                IsCheckedPath="{mk:NameOf Type={x:Type vm:TickViewModel}, Path=IsChecked}"
+                ItemsSource="{Binding Collection}">
+            </view1:ListControl>
+        </UniformGrid>
+    </UniformGrid>
+</UserControl>

@@ -1,0 +1,10 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Utility.WPF.Controls;component/KeyValuePairDataTemplate.xaml" />
+        <ResourceDictionary Source="/Utility.WPF.Controls;component/PathDataTemplate.xaml" />
+        <ResourceDictionary Source="/Utility.WPF.Controls;component/PropertyDataTemplateSelector.xaml" />
+        <ResourceDictionary Source="/Utility.WPF.Controls;component/TypeDataTemplate.xaml" />
+        <ResourceDictionary Source="/Utility.WPF.Controls;component/TypeObjectDataTemplate.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>

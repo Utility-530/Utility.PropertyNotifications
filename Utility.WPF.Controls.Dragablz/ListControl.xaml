@@ -1,0 +1,105 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:att="http://schemas.utility.com/attached"
+                    xmlns:utl="http://schemas.utility.com/utilitywpf"
+                    xmlns:local="clr-namespace:Utility.WPF.Controls.Dragablz"
+                    xmlns:dragablz1="clr-namespace:Utility.WPF.Controls.Dragablz"
+                    xmlns:conv="http://schemas.utility.com/converters">
+
+    <ResourceDictionary.MergedDictionaries>
+        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Dragablz;component/GeometryResources.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Color x:Key="ControlPressedColor">#FF211AA9</Color>
+    <Color x:Key="PressedBorderLightColor">#FF888888</Color>
+    <Color x:Key="PressedBorderDarkColor">#FF444444</Color>
+
+    <Style x:Key="DragablzTickStyle" TargetType="dragablz:DragablzItem">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+        <Setter Property="Width">
+            <Setter.Value>
+                <MultiBinding Converter="{x:Static conv:ActualWidthConverter.Instance}">
+                    <Binding RelativeSource="{RelativeSource AncestorType=ItemsControl}" Path="ActualWidth" ></Binding>
+                    <Binding RelativeSource="{RelativeSource AncestorType=ScrollViewer}" ></Binding>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="MinWidth" Value="100"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type dragablz:DragablzItem}">
+                    <Grid x:Name="MainGrid">
+                        <local:ItemContainerBorder
+                            IsDragging="{Binding IsDragging, RelativeSource={RelativeSource TemplatedParent}}"
+                            IsSelected="{Binding IsSelected, RelativeSource={RelativeSource TemplatedParent}}"
+                            IsSelectable="{Binding IsMouseOver, ElementName=Main_ViewBox}" />
+                        <Viewbox x:Name="Main_ViewBox" HorizontalAlignment="Stretch" RenderTransformOrigin=".5, .5" Margin="0.5">
+                            <Viewbox.RenderTransform>
+                                <ScaleTransform x:Name="ScaleTransform" ScaleX="1" ScaleY="1" />
+                            </Viewbox.RenderTransform>
+                            <Grid x:Name="ViewBoxGrid">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                    <ColumnDefinition Width="*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+
+                                <dragablz1:GeometryThumb Command="{Binding Path=(att:Ex.Command), RelativeSource={RelativeSource Mode=Self}}"
+                                                         x:Name="GeometryThumb"
+                                                         Margin="2"
+                                                         VerticalAlignment="Center"
+                                                            HorizontalAlignment="Left"
+                                                            dragablz:DragablzItem.IsCustomThumb="True"
+                                                            Height="15"
+                                                            Width="15"
+                                                            Geometry="{StaticResource TickGeometry}">
+                                </dragablz1:GeometryThumb>
+
+                                <TextBox x:Name="PART_TextBox"
+                                         Margin="2,1,17,2"
+                                         MinWidth="100"
+                                         HorizontalAlignment="Stretch" FontSize="5"
+                                         TextWrapping="Wrap"
+                                         AcceptsReturn="True"
+                                         MinLines="2"
+                                         Grid.Column="1">
+                                    <TextBox.Style>
+                                        <Style TargetType="TextBox">
+                                            <Setter Property="BorderThickness" Value="0"></Setter>
+                                            <Setter Property="Background" Value="Transparent"></Setter>
+                                        </Style>
+                                    </TextBox.Style>
+                                </TextBox>
+                            </Grid>
+                        </Viewbox>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Path=(att:Ex.State), RelativeSource={RelativeSource Mode=Self}}" Value="{x:Static att:State.Ticked}">
+                            <Setter Property="Geometry" Value="{StaticResource TickGeometry}" TargetName="GeometryThumb" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=(att:Ex.State), RelativeSource={RelativeSource Mode=Self}}" Value="{x:Static att:State.Crossed}">
+                            <Setter Property="Geometry" Value="{StaticResource XGeometry}" TargetName="GeometryThumb" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=(att:Ex.State), RelativeSource={RelativeSource Mode=Self}}" Value="{x:Static att:State.Refreshable}">
+                            <Setter Property="Geometry" Value="{StaticResource RefreshGeometry}" TargetName="GeometryThumb" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=(att:Ex.State), RelativeSource={RelativeSource Mode=Self}}" Value="{x:Static att:State.None}">
+                            <Setter Property="Geometry" Value="{StaticResource NoneGeometry}" TargetName="GeometryThumb" />
+                            <Setter Property="IsEnabled" Value="False" TargetName="GeometryThumb" />
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+           TargetType="{x:Type local:ListControl}"
+           BasedOn="{StaticResource {x:Type dragablz:DragablzItemsControl}}">
+        <Style.Setters>
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="ItemContainerStyle" Value="{StaticResource DragablzTickStyle}" />
+        </Style.Setters>
+    </Style>
+</ResourceDictionary>
