@@ -35,8 +35,6 @@
 		<InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
 	</PropertyGroup>
 
-
-
 	<ItemGroup>
 		<ProjectReference Include="..\..\Utility.Model\Utility.Common\Utility.Common.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
@@ -50,7 +48,6 @@
 	  <Folder Include="Deprecated\Base\" />
 	  <Folder Include="Deprecated\Events\" />
 	  <Folder Include="Deprecated\Markup\" />
-	  <Folder Include="Templates\" />
 	</ItemGroup>
 
 	<!-- Only packs project if Configuration set to Release-->
