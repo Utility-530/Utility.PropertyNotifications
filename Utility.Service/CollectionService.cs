@@ -9,8 +9,8 @@ using Endless;
 using Utility.Common.Contract;
 using Utility.Common.Helper;
 using Utility.Helpers.Ex;
-using Utility.WPF.Common;
 using Utility.Common.Collection;
+using Utility.Common.Collections;
 
 namespace Utility.Service
 {
