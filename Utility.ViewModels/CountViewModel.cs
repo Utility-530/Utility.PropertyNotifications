@@ -1,10 +1,6 @@
 ﻿using DynamicData;
-using ReactiveUI;
 using System;
-using System.Reactive.Linq;
-using Utility.Common.Models;
 using Utility.Models;
-using Utility.Service;
 
 namespace Utility.ViewModels;
 
@@ -18,7 +14,7 @@ public class CountViewModel : ViewModel, IObserver<IChangeSet>
 
     public void OnNext(IChangeSet value)
     {
-        Model.Value = Model.Value + value.Adds - value.Removes;
+        Model.SetValue(Model.GetValue() + value.Adds - value.Removes);
     }
 }
 

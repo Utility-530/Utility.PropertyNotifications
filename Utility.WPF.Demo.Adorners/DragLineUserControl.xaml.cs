@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Utility.WPF.Attached;
-using Utility.WPF.Helper;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Demo.Adorners
 {
