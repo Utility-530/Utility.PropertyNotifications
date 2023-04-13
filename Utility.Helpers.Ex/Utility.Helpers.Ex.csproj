@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Utility.Helpers\Utility.Helpers\Utility.Helpers.csproj" />
-    <ProjectReference Include="..\..\Utility.WPF\Utility.Packages\Utility.Packages.csproj" />
+    <ProjectReference Include="..\..\Utility.Model\Utility.Packages\Utility.Packages.csproj" />
   </ItemGroup>
 
 </Project>
