@@ -2,9 +2,9 @@
 using Nito.AsyncEx;
 using System.Threading.Tasks;
 using Utility.Common;
-using UtilityWpf.Service;
+using Utility.WPF.Model;
 
-namespace UtilityWpf.Model
+namespace Utility.Common.Assembly
 {
     public class ViewModelAssemblyModel //: IViewModelAssemblyModel
     {

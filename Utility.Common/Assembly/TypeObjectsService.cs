@@ -3,7 +3,7 @@ using System.Linq;
 using Utility.Common;
 using Utility.Interfaces.NonGeneric;
 
-namespace UtilityWpf.Service
+namespace Utility.Common.Assembly
 {
     public class TypeObjectsService //: ITypeObjectsService
     {

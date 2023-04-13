@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace UtilityWpf.Service
+namespace Utility.Common.Meta
 {
     public class PropertyMerger<TChange> : IEnableLogger
     {

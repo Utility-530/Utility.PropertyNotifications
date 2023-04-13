@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 
-namespace UtilityWpf.Common
+namespace Utility.Common.Collections
 {
     /// <summary>
     /// <a href="https://stackoverflow.com/questions/3300845/observablecollection-calling-oncollectionchanged-with-multiple-new-items"></a>
