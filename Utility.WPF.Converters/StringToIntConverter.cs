@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Data;
-using UtilityWpf.Service;
+using Utility.WPF.Service;
 
 namespace Utility.WPF.Converters
 {

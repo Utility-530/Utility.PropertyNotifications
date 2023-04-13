@@ -6,7 +6,7 @@ using Utility.WPF.Controls.Base;
 using Utility.WPF.Controls.Lists.Infrastructure;
 using Utility.WPF.Controls.Templates;
 using Utility.WPF.Templates;
-using UtilityWpf.Abstract;
+using Utility.WPF.Abstract;
 
 
 namespace Utility.WPF.Controls.Lists

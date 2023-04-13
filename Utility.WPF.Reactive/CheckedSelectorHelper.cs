@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using UtilityWpf.Abstract;
-using UtilityWpf.Events;
+using Utility.WPF.Abstract;
+using Utility.WPF.Events;
 
 namespace Utility.WPF.Reactive
 {

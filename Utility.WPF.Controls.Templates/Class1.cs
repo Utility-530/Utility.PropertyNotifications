@@ -9,7 +9,7 @@
 //using System.Windows.Markup;
 //using Utility.WPF.Adorners;
 //using Utility.WPF.Controls.Adorners;
-//using Utility.WPF.Helper;
+//using Utility.WPF.Helpers;
 //using Utility.WPF.Templates;
 
 //namespace Utility.WPF.Controls.Templates
@@ -87,7 +87,7 @@
 //                return EnumerableDataTemplate ??= base.Templates["Enumerable"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Enumerable");
 //            if (type == typeof(Color))
 //                return ColorTemplate ??= base.Templates["Color"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Color");
-//            //if (type == typeof(UtilityWpf.Abstract.Icon))
+//            //if (type == typeof(Utility.WPF.Abstract.Icon))
 //            //    return IconDataTemplate;
 //            if (type == typeof(bool))
 //                return BooleanDataTemplate ??= base.Templates["Boolean"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Boolean");

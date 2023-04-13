@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using Utility.Enums;
 using Utility.WPF.Abstract;
-using Utility.WPF.Panels.Helper;
+using Utility.WPF.Helpers;
 using Orientation = System.Windows.Controls.Orientation;
 
 namespace Utility.WPF.Controls.Base

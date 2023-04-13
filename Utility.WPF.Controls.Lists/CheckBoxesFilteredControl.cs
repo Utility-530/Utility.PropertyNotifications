@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
-using Utility.WPF.Helper;
-using UtilityWpf.Abstract;
+using Utility.WPF.Helpers;
+using Utility.WPF.Abstract;
 
 namespace Utility.WPF.Controls.Lists
 {

@@ -1,5 +1,5 @@
 ﻿using System;
-using Utility.WPF.Helper;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.ResourceDictionarys
 {

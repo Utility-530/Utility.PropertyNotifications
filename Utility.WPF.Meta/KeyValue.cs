@@ -1,7 +1,7 @@
 ﻿//using MoreLinq;
 //using System.Linq;
 
-//namespace UtilityWpf.Model
+//namespace Utility.WPF.Model
 //{
 //    public abstract class KeyValue
 //    {

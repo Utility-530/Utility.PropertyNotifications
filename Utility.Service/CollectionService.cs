@@ -9,7 +9,7 @@ using Endless;
 using Utility.Common.Contract;
 using Utility.Common.Helper;
 using Utility.Helpers.Ex;
-using UtilityWpf.Common;
+using Utility.WPF.Common;
 using Utility.Common.Collection;
 
 namespace Utility.Service

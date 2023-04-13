@@ -73,7 +73,7 @@
 		<ProjectReference Include="..\Utility.WPF.Behavior\Utility.WPF.Behavior.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Themes\Utility.WPF.Themes.csproj" />
-		<ProjectReference Include="..\UtilityWpf.Controls.Extrinsic\UtilityWpf.Controls.Extrinsic.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Controls.Extrinsic\Utility.WPF.Controls.Extrinsic.csproj" />
 	</ItemGroup>
 
 </Project>

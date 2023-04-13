@@ -1,8 +1,0 @@
-﻿<ResourceDictionary
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-
-    <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/UtilityWpf.Demo.Data;component/DataTemplate/Character.xaml" />
-        <ResourceDictionary Source="/UtilityWpf.Demo.Data;component/DataTemplate/Profile.xaml" />
-    </ResourceDictionary.MergedDictionaries>
-</ResourceDictionary>

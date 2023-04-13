@@ -9,8 +9,8 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Utility.WPF.Controls.Adorners\Utility.WPF.Controls.Adorners.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
-		<ProjectReference Include="..\UtilityWpf.Demo.Data\UtilityWpf.Demo.Data.csproj" />
-		<ProjectReference Include="..\UtilityWpf\UtilityWpf.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Demo.Data\Utility.WPF.Demo.Data.csproj" />
+		<ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 	  <Compile Update="HoverUserControl.xaml.cs">

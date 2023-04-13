@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using Utility.WPF.Adorners.Infrastructure;
 using Utility.WPF.Controls.Adorners;
 using Utility.WPF.Demo.Adorners.Infrastructure;
-using UtilityWpf.Demo.Data.Factory;
+using Utility.WPF.Demo.Data.Factory;
 
 namespace Utility.WPF.Demo.Adorners
 {

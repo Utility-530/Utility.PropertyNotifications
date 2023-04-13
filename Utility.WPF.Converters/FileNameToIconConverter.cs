@@ -3,7 +3,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows;
 using System.ComponentModel.Design;
-using Utility.WPF.Helper;
+using Utility.WPF.Helpers;
 using System.Runtime.InteropServices;
 
 

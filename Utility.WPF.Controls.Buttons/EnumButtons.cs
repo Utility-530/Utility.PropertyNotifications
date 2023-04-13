@@ -13,7 +13,7 @@ using System.Windows.Input;
 using Utility.Common.Collections;
 using Utility.Enums;
 using Utility.Helpers;
-using Utility.WPF.Helper;
+using Utility.WPF.Helpers;
 using static Evan.Wpf.DependencyHelper;
 
 

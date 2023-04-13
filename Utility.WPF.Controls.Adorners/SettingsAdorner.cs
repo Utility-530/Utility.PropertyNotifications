@@ -9,7 +9,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Utility.WPF.Adorners;
 using Utility.WPF.Adorners.Infrastructure;
-using Utility.WPF.Helper;
+using Utility.WPF.Helpers;
 using static Utility.WPF.Controls.Adorners.SettingsControl;
 using Type = Utility.WPF.Adorners.Type;
 using System.Reactive.Linq;

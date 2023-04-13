@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace UtilityWpf.Demo
+namespace Utility.WPF.Demo
 {
     /// <summary>
     /// Interaction logic for TextUserControl.xaml

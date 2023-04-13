@@ -9,8 +9,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type local:CheckBoxesListControl}" BasedOn="{StaticResource GenericListBox}">
-        <Setter Property="Arrangement" Value="Custom"></Setter>
-        <Setter Property="Arrangement" Value="Custom"></Setter>
+        <Setter Property="Arrangement" Value="Stacked"></Setter>
         <Setter Property="ItemContainerStyle" Value="{StaticResource OtherStyle}" />
         <!--<Setter Property="ItemTemplateSelector" Value="{StaticResource CheckBoxesDataTemplateSelector}" />-->
     </Style>

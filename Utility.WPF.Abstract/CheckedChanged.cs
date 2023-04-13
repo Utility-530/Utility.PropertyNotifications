@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 
-namespace UtilityWpf.Events
+namespace Utility.WPF.Events
 {
     public delegate void CheckedChangedEventHandler(object sender, CheckedChangedEventArgs e);
 

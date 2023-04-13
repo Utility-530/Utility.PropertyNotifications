@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using Utility.WPF.Adorners;
 using Utility.WPF.Adorners.Infrastructure;
-using Utility.WPF.Helper;
+using Utility.WPF.Helpers;
 using Utility.Helpers;
 
 namespace Utility.WPF.Demo.Adorners

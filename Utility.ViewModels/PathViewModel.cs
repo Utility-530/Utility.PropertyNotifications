@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace UtilityWpf.Model
+namespace Utility.WPF.Model
 {
     public class PathViewModel : FileSystemInfo
     {

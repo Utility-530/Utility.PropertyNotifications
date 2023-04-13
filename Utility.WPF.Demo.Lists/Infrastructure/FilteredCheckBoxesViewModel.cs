@@ -7,8 +7,8 @@ using System.Reactive.Linq;
 using Utility.Service;
 using Utility.ViewModels;
 using Utility.Helpers.Ex;
-using UtilityWpf.Demo.Data.Factory;
-using UtilityWpf.Demo.Data.Model;
+using Utility.WPF.Demo.Data.Factory;
+using Utility.WPF.Demo.Data.Model;
 using Utility.Models.Filters;
 using Utility.Reactive;
 

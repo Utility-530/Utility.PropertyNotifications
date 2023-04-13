@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Utility.Common;
-using UtilityWpf;
+using Utility.WPF;
 
 namespace Utility.WPF.Demo.Drawing
 {

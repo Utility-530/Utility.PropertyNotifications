@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using Utility.WPF.Controls.Buttons;
-using Utility.WPF.Helper;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Demo.Buttons
 {

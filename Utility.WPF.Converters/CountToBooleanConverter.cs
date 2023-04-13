@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.WPF.Helper;
+using Utility.WPF.Helpers;
 using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
 

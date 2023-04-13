@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Xaml.Behaviors;
 using System.Windows.Controls.Primitives;
-using Utility.WPF.Helper;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Behavior.UniformGrids
 {

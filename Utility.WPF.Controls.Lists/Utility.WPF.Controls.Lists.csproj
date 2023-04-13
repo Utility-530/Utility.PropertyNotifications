@@ -13,7 +13,7 @@
     <ProjectReference Include="..\Utility.WPF.Markup\Utility.WPF.Markup.csproj" />
     <ProjectReference Include="..\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
     <ProjectReference Include="..\Utility.WPF.Themes\Utility.WPF.Themes.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Utility\Utility.WPF.Helper.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
   </ItemGroup>
 

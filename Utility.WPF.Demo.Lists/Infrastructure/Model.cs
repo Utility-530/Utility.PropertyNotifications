@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 
-namespace UtilityWpf.Demo.Buttons.Infrastructure
+namespace Utility.WPF.Demo.Buttons.Infrastructure
 {
     public class Model
     {

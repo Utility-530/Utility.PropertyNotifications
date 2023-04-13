@@ -12,8 +12,8 @@ using System.Windows.Shapes;
 using Tynamix.ObjectFiller;
 using Utility.Common;
 using Utility.Helpers;
-using Utility.WPF.Helper;
-using UtilityWpf;
+using Utility.WPF.Helpers;
+using Utility.WPF;
 
 namespace Utility.WPF.Meta
 {

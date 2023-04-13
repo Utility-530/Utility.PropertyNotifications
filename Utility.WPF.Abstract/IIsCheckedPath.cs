@@ -1,4 +1,4 @@
-﻿namespace UtilityWpf.Abstract
+﻿namespace Utility.WPF.Abstract
 {
     public interface IIsCheckedPath
     {

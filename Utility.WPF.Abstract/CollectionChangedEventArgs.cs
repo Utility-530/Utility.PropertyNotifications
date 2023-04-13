@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using Utility.Enums;
 
-namespace UtilityWpf.Abstract
+namespace Utility.WPF.Abstract
 {
     public class CollectionEventArgs : RoutedEventArgs
     {

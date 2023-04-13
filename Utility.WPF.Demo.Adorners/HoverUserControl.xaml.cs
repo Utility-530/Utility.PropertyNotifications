@@ -15,7 +15,7 @@ namespace Utility.WPF.Demo.Adorners
         public HoverUserControl()
         {
             InitializeComponent();
-            TextCommand = new UtilityWpf.Command.RelayCommand(() => TextBlock1.Text += " New Text");
+            TextCommand = new Utility.WPF.Command.RelayCommand(() => TextBlock1.Text += " New Text");
             Grid1.DataContext = this;
 
             //adornerController = new(Square3Grid);

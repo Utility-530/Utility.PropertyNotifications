@@ -6,8 +6,8 @@ using System.Windows.Controls;
 using System.Xml.Linq;
 using Utility.WPF.Controls.Base;
 using Utility.WPF.Controls.Lists.Infrastructure;
-using Utility.WPF.Helper;
-using UtilityWpf.Abstract;
+using Utility.WPF.Helpers;
+using Utility.WPF.Abstract;
 
 namespace Utility.WPF.Controls.Lists
 {

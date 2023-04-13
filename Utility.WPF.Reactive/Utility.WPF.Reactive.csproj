@@ -20,6 +20,6 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Utility.WPF.Abstract\Utility.WPF.Abstract.csproj" />
-	  <ProjectReference Include="..\Utility.WPF.Utility\Utility.WPF.Helper.csproj" />
+	  <ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
 	</ItemGroup>
 </Project>

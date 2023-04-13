@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using Utility.WPF.Helper;
+using Utility.WPF.Helpers;
 using Utility.WPF.Reactive;
 
 namespace Utility.WPF.Behavior

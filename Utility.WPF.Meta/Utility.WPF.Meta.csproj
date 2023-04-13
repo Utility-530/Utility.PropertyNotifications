@@ -9,7 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Utility.Common\Utility.Common.csproj" />
     <ProjectReference Include="..\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Utility\Utility.WPF.Helper.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
   </ItemGroup>
 
 </Project>

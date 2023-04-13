@@ -3,93 +3,93 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31612.314
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo", "UtilityWpf.Demo\UtilityWpf.Demo.csproj", "{DD952243-0875-4A4F-BFD0-E4DBD73FB7D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo", "Utility.WPF.Demo\Utility.WPF.Demo.csproj", "{DD952243-0875-4A4F-BFD0-E4DBD73FB7D5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{3E8F851B-BECA-4BAA-9275-2104CDEAEC3D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls", "UtilityWpf.Controls\UtilityWpf.Controls.csproj", "{662E0F27-75E5-4FB4-9B99-BBEF2CF28594}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls", "Utility.WPF.Controls\Utility.WPF.Controls.csproj", "{662E0F27-75E5-4FB4-9B99-BBEF2CF28594}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf", "UtilityWpf\UtilityWpf.csproj", "{264293EB-59CF-4DAB-80AC-5BEE28AC1B88}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF", "Utility.WPF\Utility.WPF.csproj", "{264293EB-59CF-4DAB-80AC-5BEE28AC1B88}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Master", "UtilityWpf.Demo.Master\UtilityWpf.Demo.Master.csproj", "{16A7EE28-A173-4F13-8297-C5301C416121}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Master", "Utility.WPF.Demo.Master\Utility.WPF.Demo.Master.csproj", "{16A7EE28-A173-4F13-8297-C5301C416121}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Animations", "UtilityWpf.Animation\Utility.WPF.Animations.csproj", "{A4169ED7-F5DC-4C15-A76C-FC770F732751}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Animations", "Utility.WPF.Animation\Utility.WPF.Animations.csproj", "{A4169ED7-F5DC-4C15-A76C-FC770F732751}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Test", "UtilityWpf.Test\UtilityWpf.Test.csproj", "{DA0183DA-2510-4844-B81B-5193D6D80D62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Test", "Utility.WPF.Test\Utility.WPF.Test.csproj", "{DA0183DA-2510-4844-B81B-5193D6D80D62}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Panels", "UtilityWpf.Demo.Panels\UtilityWpf.Demo.Panels.csproj", "{A4557F4E-9AE5-495B-BD94-CF60EE5C6EBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Panels", "Utility.WPF.Demo.Panels\Utility.WPF.Demo.Panels.csproj", "{A4557F4E-9AE5-495B-BD94-CF60EE5C6EBE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Data", "UtilityWpf.Demo.Data\UtilityWpf.Demo.Data.csproj", "{49F7599C-4295-4541-BBF2-BFC9ACC2B376}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Data", "Utility.WPF.Demo.Data\Utility.WPF.Demo.Data.csproj", "{49F7599C-4295-4541-BBF2-BFC9ACC2B376}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Controls", "UtilityWpf.Demo.Controls\UtilityWpf.Demo.Controls.csproj", "{CA7E7B79-77F0-4372-BB8F-B932B6012374}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Controls", "Utility.WPF.Demo.Controls\Utility.WPF.Demo.Controls.csproj", "{CA7E7B79-77F0-4372-BB8F-B932B6012374}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Animations", "UtilityWpf.Demo.Animation\Utility.WPF.Demo.Animations.csproj", "{BAD08594-D5E8-414F-AF1C-0D720D1A1ABA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Animations", "Utility.WPF.Demo.Animation\Utility.WPF.Demo.Animations.csproj", "{BAD08594-D5E8-414F-AF1C-0D720D1A1ABA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.SandBox", "UtilityWpf.Demo.SandBox\UtilityWpf.Demo.SandBox.csproj", "{D9E450B2-E245-4814-8574-8F5F06EB8BF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.SandBox", "Utility.WPF.Demo.SandBox\Utility.WPF.Demo.SandBox.csproj", "{D9E450B2-E245-4814-8574-8F5F06EB8BF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.FileSystem", "UtilityWpf.Demo.FileSystem\UtilityWpf.Demo.FileSystem.csproj", "{C29F816F-0E6E-4151-B210-F510AE288D42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.FileSystem", "Utility.WPF.Demo.FileSystem\Utility.WPF.Demo.FileSystem.csproj", "{C29F816F-0E6E-4151-B210-F510AE288D42}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls.Master", "UtilityWpf.Controls.Master\UtilityWpf.Controls.Master.csproj", "{6CE9DA9D-0502-48AB-B4C5-C44AFA8BA7B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Master", "Utility.WPF.Controls.Master\Utility.WPF.Controls.Master.csproj", "{6CE9DA9D-0502-48AB-B4C5-C44AFA8BA7B3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls.Dragablz", "UtilityWpf.Controls.Dragablz\UtilityWpf.Controls.Dragablz.csproj", "{1313FE46-216F-4CCD-A569-4D58D62DE82F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Dragablz", "Utility.WPF.Controls.Dragablz\Utility.WPF.Controls.Dragablz.csproj", "{1313FE46-216F-4CCD-A569-4D58D62DE82F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls.Hybrid", "UtilityWpf.Controls.Hybrid\UtilityWpf.Controls.Hybrid.csproj", "{D2C4AB55-2170-47AA-B972-C7A4C3C1949A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Hybrid", "Utility.WPF.Controls.Hybrid\Utility.WPF.Controls.Hybrid.csproj", "{D2C4AB55-2170-47AA-B972-C7A4C3C1949A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Hybrid", "UtilityWpf.Demo.Hybrid\UtilityWpf.Demo.Hybrid.csproj", "{DBF3DD1A-A647-4983-A93E-2DE6FC41D666}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Hybrid", "Utility.WPF.Demo.Hybrid\Utility.WPF.Demo.Hybrid.csproj", "{DBF3DD1A-A647-4983-A93E-2DE6FC41D666}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls.FileSystem", "UtilityWpf.Controls.FileSystem\UtilityWpf.Controls.FileSystem.csproj", "{3EF5C76B-182B-4AD2-A968-E4DE109F6E8E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.FileSystem", "Utility.WPF.Controls.FileSystem\Utility.WPF.Controls.FileSystem.csproj", "{3EF5C76B-182B-4AD2-A968-E4DE109F6E8E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Dragablz", "UtilityWpf.Demo.Dragablz\UtilityWpf.Demo.Dragablz.csproj", "{261A23B6-74B5-4D2A-80AD-A47AD71B3253}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Dragablz", "Utility.WPF.Demo.Dragablz\Utility.WPF.Demo.Dragablz.csproj", "{261A23B6-74B5-4D2A-80AD-A47AD71B3253}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Common", "Utility.Common\Utility.Common.csproj", "{74C75AA4-2DDF-48B6-B4AB-E166D821F86C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Common", "Utility.WPF.Demo.Common\Utility.WPF.Demo.Common.csproj", "{C48F5E34-9293-4B33-B4CF-C0A4DCEE2013}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.View", "UtilityWpf.View\UtilityWpf.View.csproj", "{8333F9DC-6DFA-4E2E-A42A-BE70B5A5CECD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.View", "Utility.WPF.View\Utility.WPF.View.csproj", "{8333F9DC-6DFA-4E2E-A42A-BE70B5A5CECD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Persists", "..\Utility.Persists\Utility.Persists\Utility.Persists.csproj", "{C145BD0A-A5CB-4CB2-8240-384E0BA37983}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls.Extrinsic", "UtilityWpf.Controls.Extrinsic\UtilityWpf.Controls.Extrinsic.csproj", "{F827F0DB-6405-4FBD-BDD9-30AB5C0DD12C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Extrinsic", "Utility.WPF.Controls.Extrinsic\Utility.WPF.Controls.Extrinsic.csproj", "{F827F0DB-6405-4FBD-BDD9-30AB5C0DD12C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Panels", "UtilityWpf.Panels\UtilityWpf.Panels.csproj", "{4F4AE404-3F68-4864-A2C4-7FAB675DDA42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Panels", "Utility.WPF.Panels\Utility.WPF.Panels.csproj", "{4F4AE404-3F68-4864-A2C4-7FAB675DDA42}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls.Objects", "UtilityWpf.Controls.Objects\UtilityWpf.Controls.Objects.csproj", "{9B728381-1103-4A77-A48F-B8C53393D890}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Objects", "Utility.WPF.Controls.Objects\Utility.WPF.Controls.Objects.csproj", "{9B728381-1103-4A77-A48F-B8C53393D890}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls.Clocks", "UtilityWpf.Controls.Clock\UtilityWpf.Controls.Clocks.csproj", "{4CA2A2A1-5416-45A8-9CCE-6FE63FA38FEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Clocks", "Utility.WPF.Controls.Clocks\Utility.WPF.Controls.Clocks.csproj", "{4CA2A2A1-5416-45A8-9CCE-6FE63FA38FEC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls.Dialog", "UtilityWpf.Controls.Dialog\UtilityWpf.Controls.Dialog.csproj", "{0D8F3016-007C-424D-963A-196770369F06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Dialog", "Utility.WPF.Controls.Dialog\Utility.WPF.Controls.Dialog.csproj", "{0D8F3016-007C-424D-963A-196770369F06}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls.Progress", "UtilityWpf.Controls.Progress\UtilityWpf.Controls.Progress.csproj", "{CED6BC94-F22D-4170-8F76-EC1936A26567}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Progress", "Utility.WPF.Controls.Progress\Utility.WPF.Controls.Progress.csproj", "{CED6BC94-F22D-4170-8F76-EC1936A26567}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Clocks", "UtilityWpf.Demo.Clocks\UtilityWpf.Demo.Clocks.csproj", "{5DB79019-7829-402D-B17E-D62717019E01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Clocks", "Utility.WPF.Demo.Clocks\Utility.WPF.Demo.Clocks.csproj", "{5DB79019-7829-402D-B17E-D62717019E01}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utility", "Utility", "{CF03926E-9E72-4A61-B447-2EF7E3C17461}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Objects", "UtilityWpf.Demo.Objects\UtilityWpf.Demo.Objects.csproj", "{05031E8C-1856-424C-BAAF-1E73DD371FF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Objects", "Utility.WPF.Demo.Objects\Utility.WPF.Demo.Objects.csproj", "{05031E8C-1856-424C-BAAF-1E73DD371FF4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Buttons", "Utility.WPF.Demo.Buttons\Utility.WPF.Demo.Buttons.csproj", "{264763D8-97E3-4B10-91F6-D2966F427E2E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls.Meta", "UtilityWpf.Controls.Meta\UtilityWpf.Controls.Meta.csproj", "{E9415085-0C61-4C60-9F77-77B114F30240}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Meta", "Utility.WPF.Controls.Meta\Utility.WPF.Controls.Meta.csproj", "{E9415085-0C61-4C60-9F77-77B114F30240}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Extrinsic", "UtilityWpf.Demo.Extrinsic\UtilityWpf.Demo.Extrinsic.csproj", "{4EB35CF5-478A-4D50-AF5F-D423E0027ADD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Extrinsic", "Utility.WPF.Demo.Extrinsic\Utility.WPF.Demo.Extrinsic.csproj", "{4EB35CF5-478A-4D50-AF5F-D423E0027ADD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Dialogs", "UtilityWpf.Demo.Dialogs\UtilityWpf.Demo.Dialogs.csproj", "{035AFF34-5D0E-40A7-88E5-0105DD66A009}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Dialogs", "Utility.WPF.Demo.Dialogs\Utility.WPF.Demo.Dialogs.csproj", "{035AFF34-5D0E-40A7-88E5-0105DD66A009}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Progress", "UtilityWpf.Demo.Progress\UtilityWpf.Demo.Progress.csproj", "{2B519584-AE82-4CA2-8369-A703DD1E91D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Progress", "Utility.WPF.Demo.Progress\Utility.WPF.Demo.Progress.csproj", "{2B519584-AE82-4CA2-8369-A703DD1E91D9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Controls", "Controls", "{2ED92AB3-1BF8-4B9F-85BF-2739EDF1915C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{392FD82C-ADC4-4230-8881-89BD4E2B84EE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Chart", "UtilityWpf.Demo.Chart\UtilityWpf.Demo.Chart.csproj", "{A6618B1D-8B71-49B5-B71C-4B5C822FA6DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Chart", "Utility.WPF.Demo.Chart\Utility.WPF.Demo.Chart.csproj", "{A6618B1D-8B71-49B5-B71C-4B5C822FA6DD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Controls.Chart", "UtilityWpf.Controls.Chart\UtilityWpf.Controls.Chart.csproj", "{7E193DBF-9E8F-44E6-AE31-2731707849FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Chart", "Utility.WPF.Controls.Chart\Utility.WPF.Controls.Chart.csproj", "{7E193DBF-9E8F-44E6-AE31-2731707849FF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{CEA05C1B-CDCB-4555-9370-0425F31A8C7C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Service", "Utility.Service\Utility.Service.csproj", "{143618EB-D8C2-47C0-B4AF-7F8779E149D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UtilityWpf.Demo.Forms", "UtilityWpf.Demo.Forms\UtilityWpf.Demo.Forms.csproj", "{458341AD-70C0-4F08-91E8-2E32554E2077}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Forms", "Utility.WPF.Demo.Forms\Utility.WPF.Demo.Forms.csproj", "{458341AD-70C0-4F08-91E8-2E32554E2077}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Themes", "Utility.WPF.Themes\Utility.WPF.Themes.csproj", "{4F780377-F98A-4EFD-A218-7D13AE23EE67}"
 EndProject
@@ -99,7 +99,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Date",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Date", "Utility.WPF.Demo.Date\Utility.WPF.Demo.Date.csproj", "{8E6EE9F9-80F1-4F87-A017-25C6001BC70E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Helper", "Utility.WPF.Utility\Utility.WPF.Helper.csproj", "{5E43B4B1-281B-4E23-B60E-0665FD5846FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Helpers", "Utility.WPF.Helpers\Utility.WPF.Helpers.csproj", "{5E43B4B1-281B-4E23-B60E-0665FD5846FA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Adorners", "Utility.WPF.Demo.Adorners\Utility.WPF.Demo.Adorners.csproj", "{3587E9C2-7255-415C-9FE0-80B11AC3939A}"
 EndProject
@@ -129,7 +129,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Packages", "Uti
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Templates", "Utility.WPF.Controls.Templates\Utility.WPF.Controls.Templates.csproj", "{F7DA0BC3-66DD-48D6-994B-3C29FDE622F4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Panels.Helper", "Utility.WPF.Panels.Helper\Utility.WPF.Panels.Helper.csproj", "{C3CB3ECB-8B2E-4472-BD1B-D6413C29BDDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Panels.Helpers", "Utility.WPF.Panels.Helpers\Utility.WPF.Panels.Helpers.csproj", "{C3CB3ECB-8B2E-4472-BD1B-D6413C29BDDC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.ViewModels", "Utility.ViewModels\Utility.ViewModels.csproj", "{CCAD6F48-FAF8-44C1-A2AB-4A48B8A6F0DC}"
 EndProject

@@ -9,9 +9,9 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Utility.WPF.Abstract\Utility.WPF.Abstract.csproj" />
 		<ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
-		<ProjectReference Include="..\Utility.WPF.Utility\Utility.WPF.Helper.csproj" />
-		<ProjectReference Include="..\UtilityWpf.Panels\UtilityWpf.Panels.csproj" />
-		<ProjectReference Include="..\UtilityWpf\UtilityWpf.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Panels\Utility.WPF.Panels.csproj" />
+		<ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

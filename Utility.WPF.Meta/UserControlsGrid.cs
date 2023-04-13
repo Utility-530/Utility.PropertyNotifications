@@ -8,13 +8,13 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.WPF.Helper;
+using Utility.WPF.Helpers;
 using Utility.Helpers;
-using UtilityWpf.Model;
+using Utility.WPF.Model;
 using Utility.WPF.Meta;
 using Utility.Common;
 
-namespace UtilityWpf
+namespace Utility.WPF
 {
     //using resDic = DependencyPropertyFactory<ResourceDictionariesGrid>;
 

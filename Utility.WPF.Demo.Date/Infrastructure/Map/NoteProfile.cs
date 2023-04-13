@@ -6,7 +6,7 @@ namespace Utility.WPF.Demo.Date.Infrastructure.Map
 
     public class Profile : AutoMapper.Profile
     {
-        public Profile() : base(nameof(UtilityWpf.Meta))
+        public Profile() : base(nameof(Utility.WPF.Meta))
         {
             CreateMap<NoteEntity, NoteViewModel>().ReverseMap();
         }

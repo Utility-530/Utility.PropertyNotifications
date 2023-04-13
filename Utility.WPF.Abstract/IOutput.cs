@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace UtilityWpf.Abstract
+namespace Utility.WPF.Abstract
 {
 
     public delegate void OutputChangedEventHandler(object sender, RoutedEventArgs args);

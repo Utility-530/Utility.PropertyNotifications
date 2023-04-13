@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Utility.WPF.Attached;
-using Utility.WPF.Helper;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Demo.Adorners.Infrastructure
 {

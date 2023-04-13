@@ -5,8 +5,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Utility.WPF.Controls.Lists.Infrastructure;
-using Utility.WPF.Helper;
-using UtilityWpf.Abstract;
+using Utility.WPF.Helpers;
+using Utility.WPF.Abstract;
 
 namespace Utility.WPF.Controls.Lists.Infrastructure
 {

@@ -12,7 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Utility.WPF.Reactive;
 using Utility.Helpers;
-using UtilityWpf.Properties;
+using Utility.WPF.Properties;
 
 namespace Utility.WPF.Controls.Base
 {

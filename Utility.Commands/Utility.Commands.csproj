@@ -8,6 +8,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Themes\**" />
+	  <EmbeddedResource Remove="Themes\**" />
+	  <None Remove="Themes\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="System.Reactive" Version="5.0.0" />
 	</ItemGroup>
 

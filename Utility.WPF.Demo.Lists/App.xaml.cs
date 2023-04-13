@@ -2,7 +2,7 @@
 using Splat.Autofac;
 using System.Windows;
 using Utility.Common;
-using UtilityWpf;
+using Utility.WPF;
 
 namespace Utility.WPF.Demo.Lists
 {

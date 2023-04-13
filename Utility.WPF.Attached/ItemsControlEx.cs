@@ -8,11 +8,11 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.WPF.Panels.Helper;
 using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
 using Utility.Enums;
 using Orientation = System.Windows.Controls.Orientation;
+using Utility.WPF.Panels.Helpers;
 
 namespace Utility.WPF.Attached
 {

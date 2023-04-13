@@ -8,7 +8,7 @@
     xmlns:utl1="http://schemas.utility.com/utilitywpf"
     xmlns:view="http://schemas.utility.com/lists"
     xmlns:controls="http://schemas.utility.com"
-    xmlns:factory="clr-namespace:UtilityWpf.Demo.Data.Factory;assembly=UtilityWpf.Demo.Data"
+    xmlns:factory="clr-namespace:Utility.WPF.Demo.Data.Factory;assembly=Utility.WPF.Demo.Data"
     xmlns:viewModel="clr-namespace:Utility.ViewModels;assembly=Utility.ViewModels" 
     xmlns:ad="http://schemas.utility.com/adorners"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"

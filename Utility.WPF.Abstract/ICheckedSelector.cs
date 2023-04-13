@@ -1,7 +1,7 @@
 ﻿using System.Collections;
-using UtilityWpf.Events;
+using Utility.WPF.Events;
 
-namespace UtilityWpf.Abstract
+namespace Utility.WPF.Abstract
 {
     public interface ICheckedSelector
     {

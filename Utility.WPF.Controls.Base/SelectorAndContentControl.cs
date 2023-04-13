@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Utility.Helpers.NonGeneric;
-using UtilityWpf.Abstract;
+using Utility.WPF.Abstract;
 
 namespace Utility.WPF.Controls.Base
 {
