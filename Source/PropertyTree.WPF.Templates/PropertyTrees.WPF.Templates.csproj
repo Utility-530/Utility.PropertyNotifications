@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure.WPF\Infrastructure.WPF.csproj" />
+    <ProjectReference Include="..\PropertyTree.WPF\PropertyTrees.WPF.csproj" />
+    <ProjectReference Include="..\PropertyTree\PropertyTrees.csproj" />
+    <ProjectReference Include="..\UniversalConverter\UniversalConverter.csproj" />
+  </ItemGroup>
+
+</Project>
