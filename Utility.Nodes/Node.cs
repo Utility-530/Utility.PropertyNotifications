@@ -1,5 +1,4 @@
-﻿
-using System.Collections;
+﻿using System.Collections;
 using Utility.Collections;
 using Utility.Nodes.Abstractions;
 using Utility.Observables;
@@ -12,11 +11,15 @@ namespace Utility.Nodes
         protected Collection _children = new();
         protected Collection _leaves = new();
         protected Collection _branches = new();
+
         public abstract Task<object?> GetChildren();
+
         public virtual Task<object?> GetLeaves() => throw new NotImplementedException();
+
         public virtual Task<object?> GetBranches() => throw new NotImplementedException();
 
         public abstract Task<bool> HasMoreChildren();
+
         public abstract INode ToNode(object value);
 
         public abstract object Content { get; }
@@ -61,10 +64,12 @@ namespace Utility.Nodes
                 parent = parent.Parent;
             }
         }
+
         protected virtual Task<bool> RefreshBranchesAsync()
         {
             return Task.FromResult(true);
         }
+
         protected virtual Task<bool> RefreshLeavesAsync()
         {
             return Task.FromResult(true);
@@ -121,5 +126,4 @@ namespace Utility.Nodes
             }
         }
     }
-
 }

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using Utility.Observables;
 
 namespace Utility.Nodes.Abstractions
 {
-
     public interface INode
     {
         object Content { get; }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using Utility.Observables;
+﻿using Utility.Observables;
 
 namespace Utility.Nodes
 {
@@ -25,12 +20,11 @@ namespace Utility.Nodes
             path = info.Name;
         }
 
-        Subject subject = new();
+        private Subject subject = new();
 
         private DirectoryNode()
         {
             subject.Subscribe(this);
-
         }
 
         public override DirectoryInfo Content => lazyContent.Value;
@@ -54,10 +48,8 @@ namespace Utility.Nodes
             throw new Exception("r 3 33");
         }
 
-
-
-        bool propertyflag;
-        bool childrenflag;
+        private bool propertyflag;
+        private bool childrenflag;
 
         protected override async Task<bool> RefreshChildrenAsync()
         {
@@ -86,7 +78,6 @@ namespace Utility.Nodes
                 }
                 catch (Exception ex)
                 {
-
                 }
             });
             return Task.FromResult(true);
@@ -114,9 +105,7 @@ namespace Utility.Nodes
                 }
                 catch (Exception ex)
                 {
-
                 }
-
             });
             return Task.FromResult(true);
         }
@@ -128,14 +117,12 @@ namespace Utility.Nodes
 
         public void OnNext(object value)
         {
-
             if (value is DirectoryInfo directoryInfo)
                 _branches.Add(directoryInfo);
             else if (value is FileInfo fileInfo)
                 _leaves.Add(fileInfo);
 
             _children.Add(ToNode(value));
-
         }
 
         public void OnCompleted()
