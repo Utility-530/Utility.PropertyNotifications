@@ -11,10 +11,6 @@ namespace Utility.Nodes.Abstractions
 
         IObservable Children { get; }
 
-        IObservable Leaves { get; }
-
-        IObservable Branches { get; }
-
         IEnumerable Ancestors { get; }
     }
 }

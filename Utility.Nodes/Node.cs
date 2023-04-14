@@ -9,14 +9,8 @@ namespace Utility.Nodes
     {
         private bool _isRefreshing;
         protected Collection _children = new();
-        protected Collection _leaves = new();
-        protected Collection _branches = new();
 
         public abstract Task<object?> GetChildren();
-
-        public virtual Task<object?> GetLeaves() => throw new NotImplementedException();
-
-        public virtual Task<object?> GetBranches() => throw new NotImplementedException();
 
         public abstract Task<bool> HasMoreChildren();
 
@@ -37,24 +31,6 @@ namespace Utility.Nodes
             }
         }
 
-        public virtual IObservable Branches
-        {
-            get
-            {
-                _ = RefreshBranchesAsync();
-                return _branches;
-            }
-        }
-
-        public virtual IObservable Leaves
-        {
-            get
-            {
-                _ = RefreshChildrenAsync();
-                return _leaves;
-            }
-        }
-
         private IEnumerable GetAncestors()
         {
             INode parent = this;
@@ -65,15 +41,6 @@ namespace Utility.Nodes
             }
         }
 
-        protected virtual Task<bool> RefreshBranchesAsync()
-        {
-            return Task.FromResult(true);
-        }
-
-        protected virtual Task<bool> RefreshLeavesAsync()
-        {
-            return Task.FromResult(true);
-        }
 
         protected virtual async Task<bool> RefreshChildrenAsync()
         {
