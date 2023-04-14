@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace UtilityModel
+﻿namespace UtilityModel
 {
-
     /// <summary>
     /// Collection of methods that utilise the metaphone algorithm
     /// </summary>
     public static class StringSimilarity
     {
-
         public static bool IsSimilarToAny(this string str, params string[] strings)
         {
             return strings.Any(s => s.IsSimilarTo(str));
@@ -27,7 +20,6 @@ namespace UtilityModel
             var m = new Metaphone();
             return m.Encode(str) == m.Encode(otherStr);
         }
-
 
         public static string[] SimilarWords(this string str, string otherStr, bool caseSensitive = false, string splitBy = " ", int minWordLength = 2, bool includeMistyped = true)
         {
@@ -86,12 +78,12 @@ namespace UtilityModel
             return str.SimilarWords(otherStrings, false, " ", 2).Any();
         }
 
-        static bool ContainsAll(this string str, params string[] strings)
+        private static bool ContainsAll(this string str, params string[] strings)
         {
             return strings.All(str.Contains);
         }
 
-        static string[] Split(this string str, string separator, bool includeSeparator = false)
+        private static string[] Split(this string str, string separator, bool includeSeparator = false)
         {
             var split = str.Split(new[] { separator }, StringSplitOptions.RemoveEmptyEntries);
 
@@ -110,6 +102,5 @@ namespace UtilityModel
             }
             return split;
         }
-
     }
 }

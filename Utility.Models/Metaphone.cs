@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 
 namespace UtilityModel
 {
-
-
-
     /// <summary>
     /// Implements the Metaphone algorithm
     /// </summary>
@@ -14,11 +9,13 @@ namespace UtilityModel
     {
         // Constants
         protected const int MaxEncodedLength = 6;
+
         protected const char NullChar = (char)0;
         protected const string Vowels = "AEIOU";
 
         // For tracking position within current string
         protected string _text;
+
         protected int _pos;
 
         /// <summary>
@@ -240,7 +237,7 @@ namespace UtilityModel
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="text"></param>
         protected void InitializeText(string text)
@@ -261,7 +258,7 @@ namespace UtilityModel
         /// <summary>
         /// Moves the current position ahead one character.
         /// </summary>
-        void MoveAhead()
+        private void MoveAhead()
         {
             MoveAhead(1);
         }
@@ -272,7 +269,7 @@ namespace UtilityModel
         /// </summary>
         /// <param name="count">Number of characters to move
         /// ahead.</param>
-        void MoveAhead(int count)
+        private void MoveAhead(int count)
         {
             _pos = Math.Min(_pos + count, _text.Length);
         }
@@ -331,5 +328,3 @@ namespace UtilityModel
         }
     }
 }
-
-

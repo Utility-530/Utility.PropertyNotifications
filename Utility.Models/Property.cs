@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Windows.Input;
 
 namespace Utility.Models
 {
@@ -13,8 +11,6 @@ namespace Utility.Models
         public int GridColumn { get; set; }
         public int GridColumnSpan { get; set; }
         public int GridRowSpan { get; set; }
-
-
 
         public Property(object? value = null) => _value = value;
 
@@ -30,21 +26,25 @@ namespace Utility.Models
                 }
             }
         }
+
         #region propertyChanged
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
 
+        #endregion propertyChanged
     }
 
     public class Property<T> : Property
     {
         public Property(T value) => Value = value;
-        public Property() { }
+
+        public Property()
+        { }
 
         public T GetValue() => (T)Value;
 

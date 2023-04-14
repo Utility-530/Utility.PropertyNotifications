@@ -1,10 +1,5 @@
 ﻿//using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Utility.Randoms;
 
 namespace Utility.Models
@@ -27,7 +22,6 @@ namespace Utility.Models
             var obj = JsonSerializer.Serialize(this);
             return obj;
         }
-
 
         public static Key Random()
         {

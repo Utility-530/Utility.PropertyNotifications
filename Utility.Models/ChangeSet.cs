@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 
 namespace Utility.Models
 {
@@ -21,8 +16,8 @@ namespace Utility.Models
         public ChangeSet(Change<T> change) : base(new[] { change })
         {
         }
-    }  
-    
+    }
+
     public class ChangeSet : ReadOnlyCollection<Change>
     {
         public ChangeSet(IList<Change> list) : base(list)
@@ -36,7 +31,6 @@ namespace Utility.Models
 
     public class Change<T>
     {
-
         public Change(T value, ChangeType type)
         {
             Value = value;
@@ -51,33 +45,28 @@ namespace Utility.Models
         public T Value { get; }
 
         public ChangeType Type { get; init; }
-  
 
         public ChangeSet<T> ToChangeSet()
         {
             return new ChangeSet<T>(this);
         }
-    }  
-    
+    }
+
     public class Change
     {
-
         public Change(Key value, ChangeType type)
         {
             Value = value;
             Type = type;
         }
 
-
         public Key Value { get; }
 
         public ChangeType Type { get; init; }
-  
 
         public ChangeSet ToChangeSet()
         {
             return new ChangeSet(this);
         }
     }
-
 }

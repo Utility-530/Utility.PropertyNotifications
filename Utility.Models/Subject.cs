@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Subjects;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reactive.Subjects;
 using Utility.Observables;
 
 namespace Utility.Models
@@ -13,7 +8,6 @@ namespace Utility.Models
         public Subject()
         {
         }
-
 
         public List<IObserver<T>> Observers { get; } = new();
 
@@ -33,7 +27,6 @@ namespace Utility.Models
         {
             throw new NotImplementedException();
         }
-
 
         public virtual IDisposable Subscribe(IObserver<T> observer)
         {

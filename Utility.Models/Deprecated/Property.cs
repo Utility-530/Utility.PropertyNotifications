@@ -25,7 +25,6 @@
 //            Value = value;
 //        }
 
-
 //        public virtual T Value
 //        {
 //            get => value;
@@ -37,7 +36,6 @@
 //            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(callerMemberName));
 //        }
 
-
 //        public IDisposable Subscribe(IObserver<T> observer)
 //        {
 //            throw new NotImplementedException();
@@ -47,7 +45,6 @@
 
 //    public class Property
 //    {
-
 //    }
 
 //    public class StringProperty : Property
