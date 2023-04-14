@@ -28,7 +28,6 @@
                             Height="230"
 
                             Fill="Pink" />
-    
             </pnl:UniformPanel>
 
             <ListBox ItemsSource="{Binding Path=Collection, Source={x:Static controls:DemoViewModel.Instance}}" Height="400" Width="500">

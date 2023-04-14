@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Linq;
-using System.Text;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Utility.Observables;
 
 namespace Utility.Commands
@@ -12,12 +8,10 @@ namespace Utility.Commands
         private bool canExecute;
         private readonly object? id;
 
-
         public ObservableCommand(object? id = null)
         {
             this.id = id;
         }
-
 
         public event EventHandler? CanExecuteChanged
         {
@@ -64,6 +58,4 @@ namespace Utility.Commands
             CommandManager.InvalidateRequerySuggested();
         }
     }
-
- 
 }

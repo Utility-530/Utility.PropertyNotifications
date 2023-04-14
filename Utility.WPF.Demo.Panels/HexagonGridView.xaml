@@ -95,18 +95,16 @@
             </local:HexagonGrid.Resources>
             <Button />
             <Button />
-            <Button  />
-            <Button  />       
             <Button />
             <Button />
-            <Button  />
-            <Button  />       
             <Button />
             <Button />
-            <Button  />
-            <Button  />
-
-
+            <Button />
+            <Button />
+            <Button />
+            <Button />
+            <Button />
+            <Button />
         </local:HexagonGrid>
     </UniformGrid>
 </UserControl>

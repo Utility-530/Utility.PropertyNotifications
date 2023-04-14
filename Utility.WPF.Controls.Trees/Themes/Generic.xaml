@@ -4,8 +4,6 @@
                              xmlns:local="clr-namespace:Utility.WPF.Controls.Trees"
                              Type="{x:Type local:MyTreeView}">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/TreeListView.xaml"/>
+        <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/TreeListView.xaml" />
     </ResourceDictionary.MergedDictionaries>
-
-    
 </utl:AutoResourceDictionary>

@@ -1,11 +1,11 @@
 using System;
 using System.Globalization;
-using System.Windows.Data;
 using System.Windows;
+using System.Windows.Data;
 
 namespace Utility.WPF.Controls.Trees
 {
-    class AlternationEqualityConverter : IMultiValueConverter
+    internal class AlternationEqualityConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

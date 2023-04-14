@@ -17,8 +17,6 @@
 //            {
 //                return (arrangement, orientation) switch
 //                {
-                  
-
 //                    _ => throw new Exception("WGE vgfd vvf")
 //                };
 //            }

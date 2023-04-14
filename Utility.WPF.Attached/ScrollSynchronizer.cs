@@ -120,8 +120,8 @@ namespace SoftwareArchitects.Windows.Controls
         {
             if (e.VerticalChange != 0 || e.HorizontalChange != 0)
             {
-                if(sender is ScrollViewer scrollViewer)
-                Scroll(scrollViewer);
+                if (sender is ScrollViewer scrollViewer)
+                    Scroll(scrollViewer);
             }
         }
 

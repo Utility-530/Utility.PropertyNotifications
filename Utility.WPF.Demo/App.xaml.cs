@@ -1,6 +1,4 @@
-﻿using Autofac;
-using Splat.Autofac;
-using System.Windows;
+﻿using System.Windows;
 using Utility.Common;
 using Utility.WPF.Controls.Meta;
 
@@ -21,6 +19,5 @@ namespace Utility.WPF.Demo
                 Content = new AssemblyViewsControl()
             }.Show();
         }
-
     }
 }

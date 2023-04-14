@@ -13,7 +13,6 @@ namespace Utility.WPF.Controls.Buttons
     {
         public delegate void ToggleEventHandler(object sender, ToggleEventArgs size);
 
-
         private readonly ReactiveCommand<object, object> setValueCommand;
         protected ButtonBase EditButton;
 
@@ -35,7 +34,6 @@ namespace Utility.WPF.Controls.Buttons
             DependencyProperty.Register("ButtonWidth", typeof(double), typeof(SwitchControl), new PropertyMetadata(120d));
 
         public static readonly RoutedEvent ButtonToggleEvent = EventManager.RegisterRoutedEvent("ButtonToggle", RoutingStrategy.Bubble, typeof(ToggleEventHandler), typeof(SwitchControl));
-
 
         static SwitchControl()
         {
@@ -151,9 +149,8 @@ namespace Utility.WPF.Controls.Buttons
 
     public static class SwitchControlHelper
     {
-        public static IObservable<ToggleEventArgs> Toggles(this SwitchControl selector) => 
+        public static IObservable<ToggleEventArgs> Toggles(this SwitchControl selector) =>
             from x in Observable.FromEventPattern<ToggleEventHandler, ToggleEventArgs>(a => selector.ButtonToggle += a, a => selector.ButtonToggle -= a)
             select x.EventArgs;
-
     }
 }

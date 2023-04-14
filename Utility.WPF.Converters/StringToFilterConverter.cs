@@ -9,7 +9,6 @@ namespace Utility.WPF.Converters
     [ValueConversion(typeof(string), typeof(IFilter))]
     public class StringToFilterConverter : IValueConverter
     {
-
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return new ContainsFilter((string)value, (string)parameter);
@@ -19,6 +18,5 @@ namespace Utility.WPF.Converters
         {
             return !(bool)value ? new object() : null;
         }
-
     }
 }

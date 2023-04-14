@@ -36,7 +36,6 @@ namespace Utility.WPF.Controls.Buttons
 
         public static readonly DependencyProperty OrientationProperty = WrapPanel.OrientationProperty.AddOwner(typeof(DualButtonControl));
 
-
         public Orientation Orientation
         {
             get => (Orientation)GetValue(OrientationProperty);

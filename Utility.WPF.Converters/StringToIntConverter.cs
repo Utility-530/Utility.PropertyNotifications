@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Data;
-using Utility.WPF.Service;
 
 namespace Utility.WPF.Converters
 {
     [ValueConversion(typeof(string), typeof(int))]
     public class StringToIntConverter : IValueConverter
     {
-
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return int.TryParse(value.ToString(), out var number) ? number : DependencyProperty.UnsetValue;
@@ -20,6 +18,5 @@ namespace Utility.WPF.Converters
         }
 
         public static StringToIntConverter Instance { get; } = new();
-
     }
 }

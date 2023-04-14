@@ -14,7 +14,6 @@ public class Enumerator<T> : IEnumerator<T>
         collection = list.ToList();
     }
 
-
     public void Add(T value)
     {
         collection.Add(value);

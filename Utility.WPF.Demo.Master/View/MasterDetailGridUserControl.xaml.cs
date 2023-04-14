@@ -1,11 +1,9 @@
-﻿using System;
+﻿using Endless;
+using System;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using Endless;
-using NetFabric.Hyperlinq;
 using Utility.Common;
 using Utility.WPF.Demo.Common.Meta;
 using Utility.WPF.Demo.Common.ViewModels;
@@ -35,7 +33,6 @@ namespace Utility.WPF.Demo.Master.View
             try
             {
                 return Resolver.Instance.Resolve<Factory>().Create<Fields>(Statics.Random.Next(10, 20)).Cached();
-
             }
             catch
             {

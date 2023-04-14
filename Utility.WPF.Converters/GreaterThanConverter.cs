@@ -21,6 +21,5 @@ namespace Utility.WPF.Converters
         {
             throw new NotSupportedException();
         }
-
     }
 }

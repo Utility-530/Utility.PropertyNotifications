@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Windows.Controls.Primitives;
-using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Controls;
 using static Utility.WPF.Helpers.TemplateGenerator;
-using Orientation = System.Windows.Controls.Orientation;
 using Arrangement = Utility.Enums.Arrangement;
+using Orientation = System.Windows.Controls.Orientation;
 
 namespace Utility.WPF.Panels.Helpers
 {

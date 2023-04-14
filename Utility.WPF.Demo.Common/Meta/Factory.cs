@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xaml.Behaviors.Core;
-using Splat;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

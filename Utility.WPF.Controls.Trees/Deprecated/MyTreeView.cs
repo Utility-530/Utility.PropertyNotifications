@@ -1,19 +1,13 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace Utility.WPF.Controls.Trees
 {
     [Obsolete]
-    /// <summary>
-    /// Fixes problem that doesn't exist
-    /// </summary>
     public class MyTreeView : TreeView
     {
         static MyTreeView()
@@ -30,6 +24,7 @@ namespace Utility.WPF.Controls.Trees
         {
             return item is MyTreeViewItem;
         }
+
         protected override void OnItemsSourceChanged(IEnumerable oldValue, IEnumerable newValue)
         {
             if (newValue is INotifyCollectionChanged collectionChanged)
@@ -39,7 +34,6 @@ namespace Utility.WPF.Controls.Trees
         private void CollectionChanged_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             HasItems2 = ItemsSource.Cast<object>().Any();
-            
         }
 
         public bool HasItems2
@@ -89,7 +83,5 @@ namespace Utility.WPF.Controls.Trees
 
         public static readonly DependencyProperty HasItems2Property =
             DependencyProperty.Register("HasItems2", typeof(bool), typeof(MyTreeViewItem), new PropertyMetadata(false));
-
-
     }
 }

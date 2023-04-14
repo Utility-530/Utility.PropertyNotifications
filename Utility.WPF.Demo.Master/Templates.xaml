@@ -1,13 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                    xmlns:view="http://schemas.utility.com/dragablz"
-                    xmlns:mk="http://schemas.utility.com/utilitywpf"
                     xmlns:conv="http://schemas.utility.com/converters"
+                    xmlns:view="http://schemas.utility.com/dragablz"
+                    xmlns:view111="http://schemas.utility.com/master"
+                    xmlns:mk="http://schemas.utility.com/utilitywpf"
                     xmlns:common="clr-namespace:Utility.Common.EventArgs;assembly=Utility.Common"
-                    xmlns:vm="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common" 
-                    xmlns:view11="http://schemas.utility.com" 
-                    xmlns:view111="http://schemas.utility.com/master">
+                    xmlns:vm="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common">
 
     <ResourceDictionary.MergedDictionaries>
         <mk:SharedResourceDictionary Source="/Utility.WPF.Demo.Common;component/View/Templates.xaml" />

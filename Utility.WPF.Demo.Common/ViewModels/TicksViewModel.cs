@@ -17,7 +17,7 @@ namespace Utility.WPF.Demo.Common.ViewModels
 
         public ObservableCollection<TickViewModel> Collection { get; } = new ObservableCollection<TickViewModel>(Resolver.Instance.Resolve<Factory>().Create<TickViewModel>(3).ToObservableCollection());
 
-        public System.Collections.IEnumerator NewItem { get => 0.Repeat().Select(a =>Resolver.Instance.Resolve<Factory>().Create<TickViewModel>()).GetEnumerator(); }
+        public System.Collections.IEnumerator NewItem { get => 0.Repeat().Select(a => Resolver.Instance.Resolve<Factory>().Create<TickViewModel>()).GetEnumerator(); }
 
         public ICommand ChangeCommand => changeCommand ??= new ActionCommand(Change);
 

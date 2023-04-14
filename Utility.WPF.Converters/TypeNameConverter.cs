@@ -24,6 +24,6 @@ namespace Utility.WPF.Converters
             throw new NotImplementedException();
         }
 
-        public static TypeNameConverter Instance { get; } = new ();
+        public static TypeNameConverter Instance { get; } = new();
     }
 }

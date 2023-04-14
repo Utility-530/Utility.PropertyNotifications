@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Media;
-using System.Windows.Controls.Primitives;
 
 namespace Utility.WPF.Controls.Trees
 {
@@ -30,8 +30,9 @@ namespace Utility.WPF.Controls.Trees
         }
 
         #region Properties
+
         /// <summary>
-        /// Gets or sets the collection of System.Windows.Controls.GridViewColumn 
+        /// Gets or sets the collection of System.Windows.Controls.GridViewColumn
         /// objects that is defined for this TreeListView.
         /// </summary>
         public GridViewColumnCollection Columns
@@ -49,13 +50,15 @@ namespace Utility.WPF.Controls.Trees
             get { return (bool)GetValue(AllowsColumnReorderProperty); }
             set { SetValue(AllowsColumnReorderProperty, value); }
         }
-        #endregion
+
+        #endregion Properties
     }
 
     /// <summary>
     /// Represents a control that can switch states in order to expand a node of a TreeListView.
     /// </summary>
-    public class TreeListViewExpander : ToggleButton { }
+    public class TreeListViewExpander : ToggleButton
+    { }
 
     /// <summary>
     /// Represents a convert that can calculate the indentation of any element in a class derived from TreeView.
@@ -79,7 +82,7 @@ namespace Utility.WPF.Controls.Trees
                 for (; Element != null; Element = VisualTreeHelper.GetParent(Element))
                     //Check whether the current elemeent is a TreeViewItem
                     if (Element is TreeViewItem treeViewItem)
-                    { 
+                    {
                         //Increase the level counter
                         Level++;
                     }
@@ -97,5 +100,4 @@ namespace Utility.WPF.Controls.Trees
             throw new NotSupportedException("This method is not supported.");
         }
     }
-
 }

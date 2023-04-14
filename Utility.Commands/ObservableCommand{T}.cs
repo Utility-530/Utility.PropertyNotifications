@@ -13,12 +13,9 @@ namespace Utility.Commands
         /// <param name="execute">The Utility.Enums.Execution logic.</param>
         public ObservableCommand(T? id = default, bool canExecute = true)
         {
-
             this.id = id;
             this.canExecute = canExecute;
         }
-
-
 
         public event EventHandler? CanExecuteChanged
         {
@@ -33,7 +30,6 @@ namespace Utility.Commands
                     CommandManager.RequerySuggested -= value;
             }
         }
-
 
         public List<IObserver<T?>> Observers { get; } = new();
 

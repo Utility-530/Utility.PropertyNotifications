@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace Utility.WPF.Demo.Panels
 {
@@ -13,7 +11,5 @@ namespace Utility.WPF.Demo.Panels
         {
             InitializeComponent();
         }
-
-    
     }
 }

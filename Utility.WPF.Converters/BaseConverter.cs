@@ -34,7 +34,7 @@ namespace Utility.WPF.Converters
         protected abstract R Convert(object value);
     }
 
-    public abstract class BaseConverter<T> : BaseConverter<T, object>  
+    public abstract class BaseConverter<T> : BaseConverter<T, object>
     {
         protected BaseConverter(T trueValue, T falseValue) : base(trueValue, falseValue)
         {

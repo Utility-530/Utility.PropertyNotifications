@@ -6,8 +6,7 @@ namespace Utility.WPF.Converters
 {
     public class GravatarConverter : IValueConverter
     {
-
-        HandyControl.Tools.GithubGravatarGenerator generator = new HandyControl.Tools.GithubGravatarGenerator();
+        private HandyControl.Tools.GithubGravatarGenerator generator = new HandyControl.Tools.GithubGravatarGenerator();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

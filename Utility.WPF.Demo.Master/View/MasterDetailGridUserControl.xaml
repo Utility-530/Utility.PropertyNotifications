@@ -7,7 +7,7 @@
              xmlns:util="http://schemas.utility.com/utilitywpf"
              xmlns:local11="clr-namespace:Utility.WPF.Demo.Master.Infrastructure"
              xmlns:cmn="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common"
- 
+
              xmlns:view1="http://schemas.utility.com/dragablz"
              xmlns:view2="http://schemas.utility.com/master"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
@@ -54,7 +54,7 @@
                 <view2:ReadOnlyMasterDetail Converter="{x:Static view:CollectionConverter.Instance}"
                                             Orientation="{Binding ElementName=OrientationToggleButton, Path=Content}"
                                             UseDataContext="True">
-                    <util:LayOutListBox SelectedIndex="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                    <util:LayOutListBox SelectedIndex="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                         VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
                         <Grid>
                             <Rectangle Fill="DarkCyan" Height="20"></Rectangle>
@@ -88,7 +88,7 @@
                                 <Setter Property="Width" Value="{Binding ElementName=LayOutListBox1, Path=ActualWidth}"></Setter>
                             </Style>
                         </ListBox.Resources>
-                        <Grid >
+                        <Grid>
                             <Rectangle Fill="DarkCyan" Height="40" ></Rectangle>
                             <TextBlock Text="6"></TextBlock>
                         </Grid>
@@ -107,7 +107,7 @@
                     </ListBox>
                     <view2:ReadOnlyMasterDetail
                         Orientation="{Binding ElementName=OrientationToggleButton, Path=Content}">
-                        <util:LayOutListBox SelectedIndex="{Binding ElementName=LayOutListBox1, Path=SelectedIndex}" MinWidth="50" MinHeight="50" >
+                        <util:LayOutListBox SelectedIndex="{Binding ElementName=LayOutListBox1, Path=SelectedIndex}" MinWidth="50" MinHeight="50">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Ellipse Height="50" Width="50" Fill="{Binding Children[0].Fill}"></Ellipse>
@@ -137,7 +137,6 @@
                         </HeaderedContentControl.HeaderTemplate>
                     </view2:ReadOnlyMasterDetail>
                 </UniformGrid>
-
             </TabItem>
             <TabItem Header="Third">
                 <view2:ReadOnlyMasterDetail Orientation="{Binding ElementName=OrientationToggleButton, Path=Content}">

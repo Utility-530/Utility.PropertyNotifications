@@ -4,5 +4,4 @@
     <Application.Resources>
         <!--<ResourceDictionary Source="/Utility.WPF.Demo.Data;component/Themes/Generic.xaml" />-->
     </Application.Resources>
-    
 </Application>

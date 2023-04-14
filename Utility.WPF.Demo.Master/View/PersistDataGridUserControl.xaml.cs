@@ -16,7 +16,6 @@ namespace Utility.WPF.Demo.Master.View
 
         private void DragablzItemsControl_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
         }
     }
 }

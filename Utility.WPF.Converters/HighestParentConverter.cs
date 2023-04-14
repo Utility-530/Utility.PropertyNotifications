@@ -1,10 +1,7 @@
-﻿
-using System;
+﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Windows;
 using System.Windows.Data;
-using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Converters
 {

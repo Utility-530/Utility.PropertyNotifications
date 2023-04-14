@@ -8,11 +8,11 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Utility.Enums;
 using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
-using Utility.Enums;
-using Orientation = System.Windows.Controls.Orientation;
 using Utility.WPF.Panels.Helpers;
+using Orientation = System.Windows.Controls.Orientation;
 
 namespace Utility.WPF.Attached
 {
@@ -196,7 +196,7 @@ namespace Utility.WPF.Attached
 
         #endregion Arrangement
 
-        static void OrientationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OrientationChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is ItemsControl itemsControl)
                 if (e.NewValue is Orientation orientation)
@@ -204,10 +204,9 @@ namespace Utility.WPF.Attached
                     var arrangement = (Arrangement)d.GetValue(ItemsControlEx.ArrangementProperty);
                     LayOutHelper.Changed(itemsControl, orientation, arrangement);
                 }
-
         }
 
-        static void ArrangementChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void ArrangementChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is ItemsControl itemsControl)
                 if (e.NewValue is Arrangement arrangement)
@@ -215,7 +214,6 @@ namespace Utility.WPF.Attached
                     var orientation = (Orientation)d.GetValue(ItemsControlEx.OrientationProperty);
                     LayOutHelper.Changed(itemsControl, orientation, arrangement);
                 }
-
         }
     }
 }

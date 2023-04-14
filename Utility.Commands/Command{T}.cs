@@ -4,7 +4,6 @@ namespace Utility.Commands
 {
     public class Command<T> : ICommand
     {
-
         private readonly Action<T?>? execute = null;
         private readonly Predicate<T?>? canExecute = null;
 
@@ -27,7 +26,6 @@ namespace Utility.Commands
             this.execute = execute ?? throw new ArgumentNullException(nameof(execute));
             this.canExecute = canExecute;
         }
-
 
         public bool CanExecute(object? parameter)
         {

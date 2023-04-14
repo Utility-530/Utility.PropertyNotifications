@@ -1,5 +1,4 @@
-﻿using Splat;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Utility.Common;
@@ -19,7 +18,9 @@ namespace Utility.WPF.Demo.Common.ViewModels
             Header = header;
             Command = command;
         }
+
 #pragma warning disable CS8618
+
         public ButtonViewModel()
 #pragma warning restore CS8618
         {

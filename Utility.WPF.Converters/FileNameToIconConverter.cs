@@ -1,11 +1,9 @@
 ﻿using System;
+using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
-using System.Windows;
-using System.ComponentModel.Design;
 using Utility.WPF.Helpers;
-using System.Runtime.InteropServices;
-
 
 namespace Utility.WPF.Converters
 {
@@ -18,7 +16,7 @@ namespace Utility.WPF.Converters
     public class FilenameToIconConverter : IValueConverter
     {
         /// <summary>
-        /// Converts a value. 
+        /// Converts a value.
         /// </summary>
         /// <returns>
         /// A converted value. If the method returns null, the valid null value is used.
@@ -49,7 +47,7 @@ namespace Utility.WPF.Converters
         }
 
         /// <summary>
-        /// Converts a value. 
+        /// Converts a value.
         /// </summary>
         /// <returns>
         /// A converted value. If the method returns null, the valid null value is used.
@@ -64,30 +62,31 @@ namespace Utility.WPF.Converters
             throw new NotSupportedException();
         }
 
-
         [StructLayout(LayoutKind.Sequential)]
-        struct SHFILEINFO
+        private struct SHFILEINFO
         {
             public IntPtr hIcon;
             public IntPtr iIcon;
             public uint dwAttributes;
+
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
             public string szDisplayName;
+
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
             public string szTypeName;
         };
 
-        class Win32
+        private class Win32
         {
             public const uint SHGFI_ICON = 0x100;
             public const uint SHGFI_LARGEICON = 0x0; // Large icon
             public const uint SHGFI_SMALLICON = 0x1; // Small icon
 
             [DllImport("shell32.dll")]
-            static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
+            private static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
 
             [DllImport("User32.dll", SetLastError = true)]
-            static extern bool DestroyIcon(IntPtr handle);
+            private static extern bool DestroyIcon(IntPtr handle);
 
             public static ImageSource LoadIcon(string name)
             {

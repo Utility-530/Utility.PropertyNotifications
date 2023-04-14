@@ -1,5 +1,4 @@
-﻿using Splat;
-using System;
+﻿using System;
 
 namespace Utility.WPF.Demo.Common.Meta
 {

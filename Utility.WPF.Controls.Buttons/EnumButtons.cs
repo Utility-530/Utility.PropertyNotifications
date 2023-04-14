@@ -4,11 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Utility.Common.Collections;
 using Utility.Enums;
@@ -16,16 +13,11 @@ using Utility.Helpers;
 using Utility.WPF.Helpers;
 using static Evan.Wpf.DependencyHelper;
 
-
 namespace Utility.WPF.Controls.Buttons
 {
-
-
     public partial class DirectionButtons : EnumButtons
     {
-
-        Map<Enum, Button>? map;
-
+        private Map<Enum, Button>? map;
 
         protected override Map<Enum, Button> Map => map;
 
@@ -35,7 +27,6 @@ namespace Utility.WPF.Controls.Buttons
             VisibleProperty.OverrideMetadata(forType: typeof(DirectionButtons), typeMetadata: new(Direction.Left | Direction.Right | Direction.Up | Direction.Down));
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DirectionButtons), new FrameworkPropertyMetadata(typeof(DirectionButtons)));
         }
-
 
         public override void OnApplyTemplate()
         {
@@ -72,8 +63,6 @@ namespace Utility.WPF.Controls.Buttons
                 });
         }
 
-
-
         private void Value_Click(object sender, RoutedEventArgs e)
         {
             Command?.Execute(Map[(Button)sender]);
@@ -81,12 +70,10 @@ namespace Utility.WPF.Controls.Buttons
         }
     }
 
-
     //public class DirectionButtons : EnumButtons<Direction>
     //{
     //    static DirectionButtons()
     //    {
-
     //        DefaultStyleKeyProperty.OverrideMetadata(typeof(DirectionButtons), new FrameworkPropertyMetadata(typeof(DirectionButtons)));
     //    }
     //}
@@ -95,7 +82,6 @@ namespace Utility.WPF.Controls.Buttons
     {
         static EditCollectionButtons()
         {
-
             DefaultStyleKeyProperty.OverrideMetadata(typeof(EditCollectionButtons), new FrameworkPropertyMetadata(typeof(EditCollectionButtons)));
         }
     }
@@ -104,16 +90,14 @@ namespace Utility.WPF.Controls.Buttons
     {
         static PersistenceButtons()
         {
-
             DefaultStyleKeyProperty.OverrideMetadata(typeof(PersistenceButtons), new FrameworkPropertyMetadata(typeof(PersistenceButtons)));
         }
     }
-    
+
     public class StepButtons : EnumButtons<Step>
     {
         static StepButtons()
         {
-
             DefaultStyleKeyProperty.OverrideMetadata(typeof(StepButtons), new FrameworkPropertyMetadata(typeof(StepButtons)));
         }
     }
@@ -126,7 +110,6 @@ namespace Utility.WPF.Controls.Buttons
 
         public EnumButtons()
         {
-
         }
 
         public override void OnApplyTemplate()
@@ -157,7 +140,6 @@ namespace Utility.WPF.Controls.Buttons
                     }
                 });
 
-
             base.OnApplyTemplate();
         }
 
@@ -179,18 +161,14 @@ namespace Utility.WPF.Controls.Buttons
             // Cast the maximum value to the enum type and return it
             return (T)Enum.ToObject(typeof(T), maxValue);
         }
-
     }
-
-
 
     public abstract class EnumButtons : Control
     {
-
         public static readonly DependencyProperty
-            CommandProperty = Register(), 
+            CommandProperty = Register(),
             EnabledProperty = Register(),
-            VisibleProperty = Register(), 
+            VisibleProperty = Register(),
             MarginsProperty = Register(new PropertyMetadata(new Thickness(8)));
 
         protected abstract Map<Enum, Button> Map { get; }
@@ -198,9 +176,7 @@ namespace Utility.WPF.Controls.Buttons
         public EnumButtons()
         {
             //   addRemove = new() { { Direction.Left, LeftButton }, { Direction.Right, RightButton }, { Direction.Down, DownButton }, { Direction.Up, UpButton } };
-
         }
-
 
         public static IEnumerable<T> GetIndividualFlags<T>(T flags) where T : Enum
         {
@@ -214,7 +190,6 @@ namespace Utility.WPF.Controls.Buttons
 
             return individualFlags;
         }
-
 
         #region dependencyproperties
 
@@ -230,21 +205,17 @@ namespace Utility.WPF.Controls.Buttons
             set { SetValue(VisibleProperty, value); }
         }
 
-
         public ICommand Command
         {
             get { return (ICommand)GetValue(CommandProperty); }
             set { SetValue(CommandProperty, value); }
         }
 
-
-
         public Thickness Margins
         {
             get { return (Thickness)GetValue(MarginsProperty); }
             set { SetValue(MarginsProperty, value); }
         }
-
 
         #endregion dependencyproperties
     }

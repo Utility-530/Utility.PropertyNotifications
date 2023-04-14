@@ -15,14 +15,14 @@ namespace Utility.WPF.Converters
                 switch (ts.Days)
                 {
                     case 0:
-                        return $"{ts.Hours }:{ts.Minutes}:{ts.Seconds}";
+                        return $"{ts.Hours}:{ts.Minutes}:{ts.Seconds}";
 
                     case 1:
-                        return $"1 day { ts.Hours } hours";
+                        return $"1 day {ts.Hours} hours";
 
                     default:
                         if (ts.Days > 1)
-                            return $"{ts.Days} days {ts.Hours }:{ts.Minutes}:{ts.Seconds}";
+                            return $"{ts.Days} days {ts.Hours}:{ts.Minutes}:{ts.Seconds}";
                         else
                             return ((DateTime)values[0]).ToString("D", CultureInfo.CurrentCulture);
                 }

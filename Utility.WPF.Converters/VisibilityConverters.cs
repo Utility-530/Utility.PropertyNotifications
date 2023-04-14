@@ -87,12 +87,14 @@ namespace Utility.WPF.Converters
         { }
 
         protected override bool Check(object value) => value != null;
+
         public static NullToInverseVisibilityConverter Instance => new();
     }
 
     public class HasDataTemplateToVisibilityConverter : IValueConverter
     {
         public static HasDataTemplateToVisibilityConverter Instance => new();
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var dataTemplate = Application.Current.Resources[value];

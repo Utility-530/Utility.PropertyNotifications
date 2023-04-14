@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
@@ -73,6 +72,7 @@ namespace Utility.WPF.Demo.Panels
                     RegionPanel.SetRegion(item as UIElement, region);
             }
         }
+
         public static T DeepClone2<T>(T from)
         {
             string gridXaml = XamlWriter.Save(from);

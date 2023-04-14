@@ -32,6 +32,5 @@ namespace Utility.WPF.Converters
         }
 
         public static EqualToVisibilityConverter Instance => new EqualToVisibilityConverter();
-
     }
 }

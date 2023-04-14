@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:util="http://schemas.utility.com/utilitywpf"  
+             xmlns:util="http://schemas.utility.com/utilitywpf"
              xmlns:conv="http://schemas.utility.com/converters"
              xmlns:view2="http://schemas.utility.com/master"
              mc:Ignorable="d"
@@ -18,13 +18,12 @@
                 <Setter Property="Padding" Value="5"></Setter>
             </Style>-->
 
-            <conv:AutoMapperConverter x:Key="AutoValueConverter"/>
+            <conv:AutoMapperConverter x:Key="AutoValueConverter" />
 
             <!--<view1:DragablzVerticalItemsControl x:Key="DragablzItemsControl2"
                                                        VerticalAlignment="Center"
                                                        ItemContainerStyle="{StaticResource VerticalItemStyle}"
                                                        MouseDown="DragablzItemsControl_MouseDown">
-
             </view1:DragablzVerticalItemsControl>-->
 
             <!--<ResourceDictionary.MergedDictionaries>
@@ -37,7 +36,7 @@
         <!--<TabControl>
             <TabItem Header="With Detail">-->
         <view2:MasterDetail Converter="{StaticResource AutoValueConverter}">
-                <DataGrid ItemsSource="{Binding Data, Mode=OneTime}"/>
+                <DataGrid ItemsSource="{Binding Data, Mode=OneTime}" />
         </view2:MasterDetail>
         <!--</TabItem>
 
@@ -46,12 +45,11 @@
                 <view2:MasterControl ItemsSource="{Binding Data, Mode=OneTime}"
                                      Change="{util:EventBinding ChangeCommand}"
                                      CommandParameter="{Binding NewItem}"
-                                     ButtonTypes="Add,Remove"  >
+                                     ButtonTypes="Add,Remove">
                     <StaticResource ResourceKey="DragablzItemsControl2"></StaticResource>
                 </view2:MasterControl>
             </TabItem>-->
         <!--
         </TabControl>-->
-
     </DockPanel>
 </UserControl>

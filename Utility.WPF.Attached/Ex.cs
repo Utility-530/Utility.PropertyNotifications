@@ -37,9 +37,8 @@ namespace Utility.WPF.Attached
         public static void SetSecurityId(DependencyObject d, object value)
         {
             d.SetValue(SecurityIdProperty, value);
-        }      
-        
-        
+        }
+
         public static readonly DependencyProperty TypeProperty = DependencyProperty.RegisterAttached("Type", typeof(object), typeof(Ex), new PropertyMetadata(null));
 
         public static string GetType(DependencyObject d)

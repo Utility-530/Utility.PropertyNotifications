@@ -6,7 +6,6 @@ namespace Utility.WPF.Converters
     [ValueConversion(typeof(object), typeof(bool))]
     public class NullToBooleanConverter : IValueConverter
     {
-
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
@@ -25,7 +24,6 @@ namespace Utility.WPF.Converters
     [ValueConversion(typeof(object), typeof(bool))]
     public class InverseNullToBooleanConverter : IValueConverter
     {
-
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
@@ -38,7 +36,6 @@ namespace Utility.WPF.Converters
             return (bool)value ? new object() : null;
         }
 
-        public static InverseNullToBooleanConverter Instance { get; } = new ();
-
+        public static InverseNullToBooleanConverter Instance { get; } = new();
     }
 }

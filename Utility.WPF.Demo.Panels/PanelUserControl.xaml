@@ -217,8 +217,8 @@
                 <TextBlock
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center"
-                FontSize="70"      
-                    
+                FontSize="70"
+
                 FontWeight="Bold"
                 Text=" Salary" />
 
@@ -262,7 +262,7 @@
                 <sys:Boolean>true</sys:Boolean>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <pnls:UniformStackPanel Width="130" Height="400"/>
+                        <pnls:UniformStackPanel Width="130" Height="400" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
