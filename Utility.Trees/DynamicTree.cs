@@ -4,8 +4,6 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Trees
 {
-
-
     public class DynamicTree : IDynamicTree, IObservable<ITree>, IObserver<ITree>
     {
         private new ObservableCollection<ITree> children => Current.Parent?.Items as ObservableCollection<ITree>;
@@ -21,13 +19,14 @@ namespace Utility.Trees
             Current = tree = root;
             items = new(new[] { root });
         }
+
         public DynamicTree()
         {
             items = new();
         }
 
         public bool CanMoveUp => current?.Parent != null;
-        public bool CanMoveDown => current?.HasItems==true || toAdd != null;
+        public bool CanMoveDown => current?.HasItems == true || toAdd != null;
         public bool CanMoveForward => Index < children?.Count - 1;
         public bool CanMoveBack => Index > 0;
         public bool CanAdd => ToAdd != null;
@@ -35,7 +34,7 @@ namespace Utility.Trees
 
         public ITree Up => Current.Parent;
 
-        public ITree Down => current.HasItems? Current[0]: toAdd;
+        public ITree Down => current.HasItems ? Current[0] : toAdd;
 
         public ITree Forward => children[Index + 1];
 
@@ -46,8 +45,7 @@ namespace Utility.Trees
             get => current ?? Tree as ITree ?? throw new Exception("g 3 ew33");
             set
             {
-
-                if(tree == null)
+                if (tree == null)
                 {
                     tree = value;
                     items.Add(tree);
@@ -56,12 +54,11 @@ namespace Utility.Trees
                 if (current != value)
                 {
                     Reset();
-                    current = value; 
+                    current = value;
                     State = State.Current;
                 }
                 else
                 {
-
                 }
             }
         }
@@ -95,7 +92,7 @@ namespace Utility.Trees
             {
                 Reset();
                 state = value;
-           
+
                 SetCurrent(value);
 
                 Update();
@@ -111,11 +108,13 @@ namespace Utility.Trees
                                 throw new Exception($"{State.Forward} V3 fds");
                             current = Forward;
                             break;
+
                         case State.Back:
                             if (CanMoveBack == false)
                                 throw new Exception($"{State.Back} V3 fds");
                             current = Back;
                             break;
+
                         case State.Down:
                             if (CanMoveDown == false)
                                 throw new Exception($"{State.Down} V3 fds");
@@ -125,6 +124,7 @@ namespace Utility.Trees
                             }
                             current = Down;
                             break;
+
                         case State.Up:
                             if (CanMoveUp == false)
                                 throw new Exception($"{State.Up} V3 fds");
@@ -137,6 +137,7 @@ namespace Utility.Trees
                             Add();
                             current.State = State.Add;
                             break;
+
                         case State.Remove:
                             if (CanRemove == false)
                                 throw new Exception($"{State.Remove} V3 fds");
@@ -158,11 +159,10 @@ namespace Utility.Trees
                         current.Parent.Remove(Current);
                         current = Current.Parent;
                     }
-
                 }
 
                 void Update()
-                {         
+                {
                     if (CanMoveUp)
                         Up.State = State.Up;
                     if (CanMoveDown)

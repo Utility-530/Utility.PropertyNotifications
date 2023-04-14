@@ -2,7 +2,6 @@
 
 namespace Utility.Trees
 {
-
     /// <summary>
     /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
     /// </summary>
@@ -11,7 +10,9 @@ namespace Utility.Trees
     {
         public Guid Key { get; }
         bool HasItems { get; }
+
         void Add(object data);
+
         void Remove(object data);
 
         Index Index { get; }
@@ -26,13 +27,14 @@ namespace Utility.Trees
         ITree? this[Guid index] { get; set; }
 
         IEnumerable<ITree> GetParents(bool includingThis);
+
         IEnumerable<ITree> GetChildren(bool includingThis);
 
         void Remove(Guid index);
 
         int IndexOf(ITree tree);
-        State State { get; set; }
 
+        State State { get; set; }
     }
 
     /// <summary>
@@ -51,9 +53,9 @@ namespace Utility.Trees
         new ITree<T> this[Guid index] { get; set; }
 
         void Add(T data);
+
         void Remove(T data);
 
         int IndexOf(ITree<T> tree);
-
     }
 }

@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 
 namespace Utility.Trees
 {
-
     /// <summary>
     /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
     /// </summary>
@@ -14,14 +13,12 @@ namespace Utility.Trees
         //private ObservableCollection<ITree<T>> m_items;
         private T data;
 
-
         public Tree(T data, params object[] items) : base(data, items)
         {
             this.data = data;
             if (items.Any())
                 Add(items);
         }
-
 
         public ITree<T>? this[T item]
         {
@@ -41,7 +38,6 @@ namespace Utility.Trees
                 throw new NotImplementedException("rfgf 3422");
             }
         }
-
 
         public new ITree<T>? this[Guid key]
         {
@@ -84,10 +80,6 @@ namespace Utility.Trees
             }
         }
 
-
-
-
-
         public void Add(T data)
         {
             if (data == null)
@@ -103,7 +95,6 @@ namespace Utility.Trees
         {
             if (data == null)
                 return;
-
 
             if (data is ITree<T> tree)
             {
@@ -161,18 +152,14 @@ namespace Utility.Trees
             return new Tree<T>(item.Data);
         }
 
-
         public new T Data { get => data; private set => data = value; }
 
-
         public new ITree<T> Parent { get => (ITree<T>)parent; set => parent = value; }
-
 
         public new IReadOnlyList<ITree<T>> Items
         {
             get
             {
-
                 var x = m_items as ObservableCollection<ITree<T>>;
                 return x;
             }
@@ -293,12 +280,9 @@ namespace Utility.Trees
                         return sth;
                     }
                 }
-
             }
 
-
             return null;
-
         }
 
         public static ITree<T>? Match<T>(this ITree<T> tree, T data)

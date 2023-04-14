@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Trees
@@ -53,21 +48,21 @@ namespace Utility.Trees
             }
 
             return null;
-
         }
     }
 
     public class ViewModel
     {
-
         #region propertyChanged
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
+
+        #endregion propertyChanged
     }
 
     /// <summary>
@@ -80,7 +75,7 @@ namespace Utility.Trees
         private object data;
 
         protected ITree parent;
-        bool flag;
+        private bool flag;
         private State state;
 
         protected IList m_items
@@ -95,7 +90,6 @@ namespace Utility.Trees
                 return items;
             }
         }
-
 
         public Tree(object? data = null, params object[] items)
         {
@@ -127,7 +121,6 @@ namespace Utility.Trees
                 throw new NotImplementedException("rfgf 3422");
             }
         }
-
 
         public ITree? this[Guid key]
         {
@@ -169,10 +162,6 @@ namespace Utility.Trees
                     m_items[index] = value as ITree;
             }
         }
-
-
-
-
 
         public virtual void Add(object data)
         {
@@ -221,7 +210,6 @@ namespace Utility.Trees
             if (data == null)
                 return;
 
-
             if (data is Guid key)
             {
                 var single = m_items.OfType<ITree>().Single(t => t.Key == key);
@@ -242,7 +230,6 @@ namespace Utility.Trees
                 m_items.Remove(single);
                 return;
             }
-
 
             throw new Exception("t 44 redsdssd");
             //var o = data as object[];
@@ -277,7 +264,6 @@ namespace Utility.Trees
             return new Tree(item.Data);
         }
 
-
         public object Data { get => data; private set => data = value; }
 
         public virtual bool HasItems
@@ -287,12 +273,10 @@ namespace Utility.Trees
 
         public ITree Parent { get => parent; set => parent = value; }
 
-
         public IReadOnlyList<ITree> Items
         {
             get
             {
-
                 if (m_items is IReadOnlyList<ITree> list)
                 {
                     return list;
@@ -305,9 +289,9 @@ namespace Utility.Trees
         }
 
         public State State
-        { 
-            get => state; 
-            set { state = value; OnPropertyChanged(); } 
+        {
+            get => state;
+            set { state = value; OnPropertyChanged(); }
         }
 
         public Index Index
@@ -401,7 +385,6 @@ namespace Utility.Trees
             m_items.Remove(single);
         }
 
-
         protected virtual IList CreateChildren()
         {
             var collection = new ObservableCollection<ITree>();
@@ -428,5 +411,4 @@ namespace Utility.Trees
             return Data == default ? string.Empty : Data.ToString();
         }
     }
-
 }
