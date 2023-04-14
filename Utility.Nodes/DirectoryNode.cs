@@ -1,4 +1,6 @@
-﻿using Utility.Observables;
+﻿
+using Utility.Collections;
+using Utility.Observables;
 
 namespace Utility.Nodes
 {
@@ -6,6 +8,10 @@ namespace Utility.Nodes
     {
         private readonly Lazy<DirectoryInfo> lazyContent;
         private readonly string path;
+        private readonly Collection _leaves = new();
+        private readonly Collection _branches = new();
+        private bool propertyflag;
+        private bool childrenflag;
         private bool flag;
 
         public DirectoryNode(string path) : this()
@@ -48,8 +54,25 @@ namespace Utility.Nodes
             throw new Exception("r 3 33");
         }
 
-        private bool propertyflag;
-        private bool childrenflag;
+        public virtual IObservable Folders
+        {
+            get
+            {
+                _ = RefreshBranchesAsync();
+                return _branches;
+            }
+        }
+
+
+        public virtual IObservable Files
+        {
+            get
+            {
+                _ = RefreshLeavesAsync();
+                return _leaves;
+            }
+        }
+
 
         protected override async Task<bool> RefreshChildrenAsync()
         {
@@ -57,7 +80,7 @@ namespace Utility.Nodes
             return await RefreshLeavesAsync();
         }
 
-        protected override Task<bool> RefreshBranchesAsync()
+        protected Task<bool> RefreshBranchesAsync()
         {
             if (childrenflag == false)
                 childrenflag = true;
@@ -83,7 +106,7 @@ namespace Utility.Nodes
             return Task.FromResult(true);
         }
 
-        protected override Task<bool> RefreshLeavesAsync()
+        protected Task<bool> RefreshLeavesAsync()
         {
             if (propertyflag == false)
                 propertyflag = true;
@@ -110,7 +133,7 @@ namespace Utility.Nodes
             return Task.FromResult(true);
         }
 
-        public override Task<object> GetChildren()
+        public override Task<object?> GetChildren()
         {
             throw new NotImplementedException();
         }
