@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using Utility.Common;
 using Utility.WPF.Model;
 
-namespace Utility.Common.Assembly
+namespace Utility.Common.Assemblies
 {
-    public class ViewModelAssemblyModel //: IViewModelAssemblyModel
+    public class ViewModelAssemblyModel
     {
         private readonly AsyncLazy<TypeObject[]> typeObjects;
 
