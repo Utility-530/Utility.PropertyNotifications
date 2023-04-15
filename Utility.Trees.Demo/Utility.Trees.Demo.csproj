@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Utility.Model\Utility.Commons\Utility.Commons.csproj" />
+    <ProjectReference Include="..\..\Utility.Model\Utility.Common\Utility.Common.csproj" />
     <ProjectReference Include="..\..\Utility.Persists\Utility.Persists\Utility.Persists.csproj" />
     <ProjectReference Include="..\..\Utility.WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
     <ProjectReference Include="..\..\Utility.WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />

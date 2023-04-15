@@ -22,7 +22,6 @@ namespace Utility.Trees.Demo
                 {
                     int index = 0;
 
-                    // Update(state, index);
                     if (history.Items.Count == 0)
                     {
                         history.Current = new Tree(tree);
