@@ -7,13 +7,32 @@
              d:Background="White"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    
 
-    
-    <Grid x:Name="Grid">
-        <UniformGrid Rows="1">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Aligned.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="TreeViewItem" BasedOn="{StaticResource AlignedTreeViewitemStyle}">
+                <Setter Property="IsExpanded" Value="True" />
+                <Setter Property="Background" Value="GhostWhite" />
+            </Style>
+        </ResourceDictionary>
+
+
+    </FrameworkElement.Resources>
+
+    <Grid x:Name="Grid" >
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="500"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
             <TreeView x:Name="MyTreeView"    Background="Transparent" 
-                  SelectedItemChanged="MyTreeView_SelectedItemChanged"            >
+                  SelectedItemChanged="MyTreeView_SelectedItemChanged"  
+                      
+                      PreviewMouseUp="MyTreeView1_PreviewMouseUp">
                 <TreeViewItem Header="Item2" >
                     <TreeViewItem Header="SubItem1"/>
                     <TreeViewItem Header="SubItem2" />
@@ -33,9 +52,10 @@
                 </TreeViewItem>
 
             </TreeView>
-            <Rectangle Width="200"></Rectangle>
-            <TreeView x:Name="MyTreeView2"    Background="Transparent" 
+            <TreeView x:Name="MiddleTreeView"  Grid.Column="1"  Background="Transparent"></TreeView>
+            <TreeView Grid.Column="2"  x:Name="MyTreeView2"    Background="Transparent" PreviewMouseUp="MyTreeView2_PreviewMouseUp"
                   SelectedItemChanged="MyTreeView2_SelectedItemChanged"            >
+
                 <TreeViewItem Header="Item2" >
                     <TreeViewItem Header="SubItem1"/>
                     <TreeViewItem Header="SubItem2" />
@@ -55,10 +75,10 @@
                 </TreeViewItem>
 
             </TreeView>
-        </UniformGrid>
- 
+        </Grid>
 
-        <ItemsControl x:Name="ItemsControl">
+
+        <ItemsControl x:Name="ItemsControl" >
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas IsItemsHost="True"/>
