@@ -80,5 +80,7 @@ namespace Utility.PropertyTrees.Infrastructure
 
             return property;
         }
+
+        public static BaseActivator Instance { get; } = new();
     }
 }

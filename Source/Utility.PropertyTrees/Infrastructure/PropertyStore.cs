@@ -3,38 +3,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Utility.Trees;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
-    //public enum HistoryState
-    //{
-    //    None,
-    //    Past,
-    //    Present,
-    //    Future
-    //}
-
-    public record PropertyChange(IKey Key, object Value) : IPropertyChange;
-
-    public class Order : BaseViewModel
-    {
-        private Exception exception;
-        private int progress;
-
-        public Key Key { get; set; }
-        public HistoryState State { get; set; }
-        public OrderType OrderType { get; set; }
-        public object Value { get; set; }
-        public int Progress
-        { get => progress; set { progress = value; OnPropertyChanged(); } }
-
-        public Exception Exception
-        {
-            get => exception; set { exception = value; OnPropertyChanged(); }
-        }
-    }
-
     public class DispatcherTimer : IObservable<DateTime>
     {
         private Subject<DateTime> subject = new();
