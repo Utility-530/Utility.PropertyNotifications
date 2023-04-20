@@ -1,23 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
-	  <ProjectReference Include="..\..\Utility.Observables\Utility.Observables\Utility.Observables.csproj" />
-    <ProjectReference Include="..\..\Utility.Randoms\Utility.Randoms\Utility.Randoms.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
+		<ProjectReference Include="..\..\Utility.Randoms\Utility.Randoms\Utility.Randoms.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Infrastructure\" />
-  </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Reactive" Version="5.0.0" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<PackageReference Include="System.Reactive" Version="5.0.0" />
+	</ItemGroup>
 </Project>

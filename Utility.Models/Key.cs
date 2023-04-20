@@ -1,13 +1,28 @@
 ﻿//using Newtonsoft.Json;
 using System.Text.Json;
+using Utility.Interfaces.NonGeneric;
+using Utility.Interfaces.NonGeneric.Data;
 using Utility.Randoms;
 
 namespace Utility.Models
 {
-    public class Key : ISerialise, IEquatable<Key>, IEquatable<ISerialise>
+    public class Key : ISerialise, IGuid, IType, IName, IEquatable, IEquatable<ISerialise>
     {
+        public Key(Guid guid, string name, Type type)
+        {
+            Guid = guid;
+            Name = name;
+            Type = type;
+        }
+
+        public Key()
+        {
+        }
+
         public Guid Guid { get; set; }
         public string Name { get; set; }
+
+        public Type Type { get; set; } 
 
         public ISerialise FromString(string str)
         {
@@ -25,11 +40,16 @@ namespace Utility.Models
 
         public static Key Random()
         {
-            return new Key
+            return new Key()
             {
                 Guid = Guid.NewGuid(),
                 Name = Names.Values[(int)(DateTime.Now.Ticks % Names.Values.Count)]
             };
+        }
+
+        public bool Equals(IEquatable? other)
+        {
+            return Equals(other as Key);
         }
 
         public bool Equals(Key? other)
