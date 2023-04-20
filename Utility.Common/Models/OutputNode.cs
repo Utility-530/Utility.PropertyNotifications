@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Subjects;
 using Utility.Observables;
+using Utility.Observables.Generic;
 
 namespace Utility.Common.Model
 {
