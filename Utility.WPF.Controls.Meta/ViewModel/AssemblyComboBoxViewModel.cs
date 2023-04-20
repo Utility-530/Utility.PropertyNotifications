@@ -140,11 +140,11 @@ namespace Utility.WPF.Controls.Meta.ViewModels
         //    .ToArray();
         //}
 
-        private class BaseEntityOrderer<T> where T : BaseEntity, IKey
+        private class BaseEntityOrderer<T> where T : BaseEntity, IEquatable
         {
             public static DateTime Order(string key)
             {
-                var where = BaseEntity.Orm.Select<T>().Where(a => a.Key == key);
+                var where = BaseEntity.Orm.Select<T>().Where(a => a.Equals(key));
                 var match = where.MaxAsync(a => a.UpdateTime);
                 if (match.Result == default)
                 {
@@ -206,7 +206,7 @@ namespace Utility.WPF.Controls.Meta.ViewModels
             }
         }
 
-        public class ViewModelEntity : BaseEntity<ViewModelEntity, Guid>, IKey
+        public class ViewModelEntity : BaseEntity<ViewModelEntity, Guid>, IEquatable, IKey
         {
             public string Key { get; init; }
 
@@ -216,6 +216,11 @@ namespace Utility.WPF.Controls.Meta.ViewModels
 
             public bool IsSelected { get; set; }
             public bool IsChecked { get; set; }
+
+            public bool Equals(IEquatable? other)
+            {
+                return (other as IKey).Equals(this);
+            }
         }
     }
 }

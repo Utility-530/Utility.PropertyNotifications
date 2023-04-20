@@ -42,19 +42,19 @@ public class FilterCollectionBaseViewModel<TR> : ReactiveObject
     public virtual ICollection FilterCollection => filterCollection;
 }
 
-public class FilterCollectionKeyBaseViewModel<TR> : FilterCheckContentCollectionViewModel<TR> where TR : IPredicate, IKey
+public class FilterCollectionKeyBaseViewModel<TR> : FilterCheckContentCollectionViewModel<TR> where TR : IPredicate, IEquatable
 {
     public FilterCollectionKeyBaseViewModel(IObservable<IChangeSet<TR>> changeSet, Settings settings) :
         base(changeSet
-            .Transform(a => (ViewModel<TR>)new ViewModel<TR>(a.Key, a) { /*Settings = settings*/ }), settings)
+            .Transform(a => (ViewModel<TR>)new ViewModel<TR>(a.ToString(), a) { /*Settings = settings*/ }), settings)
     {
     }
 }
 
-public class FilterCheckContentCollectionViewModel<TR> : ReactiveObject where TR : IPredicate, IKey
+public class FilterCheckContentCollectionViewModel<TR> : ReactiveObject where TR : IPredicate, IEquatable
 {
     protected readonly ReadOnlyObservableCollection<ViewModel<TR>> filterCollection;
-    protected readonly ReplaySubject<IChangeSet<ViewModel<TR>, string>> replaySubject = new();
+    protected readonly ReplaySubject<IChangeSet<ViewModel<TR>, TR>> replaySubject = new();
 
     public FilterCheckContentCollectionViewModel(IObservable<IChangeSet<ViewModel<TR>>> changeSet, Settings settings)
     {
@@ -63,7 +63,7 @@ public class FilterCheckContentCollectionViewModel<TR> : ReactiveObject where TR
             .OnItemAdded(item => item
                                 .WhenAnyValue(c => c.IsChecked)
                                 .Select(b => item)
-                                .ToObservableChangeSet(r => ((TR)r.Model.Value).Key)
+                                .ToObservableChangeSet(r => ((TR)r.Model.Value))
                                 .Subscribe(replaySubject))
             .Subscribe();
     }
@@ -92,7 +92,7 @@ public class FilterCollectionViewModel<T> : FilterCollectionBaseViewModel<T>
     public ICommand Command => command;
 }
 
-public class CheckedCollectionCommandViewModel<T, TR> : FilterCheckContentCollectionViewModel<TR> where TR : IPredicate, IKey
+public class CheckedCollectionCommandViewModel<T, TR> : FilterCheckContentCollectionViewModel<TR> where TR : IPredicate, IEquatable
 {
     private readonly ReactiveCommand<Dictionary<object, bool?>, Func<T, bool>> command;
 
@@ -112,7 +112,7 @@ public class CheckedCollectionCommandViewModel<T, TR> : FilterCheckContentCollec
     public ICommand Command => command;
 }
 
-public class FilterCollectionViewModel<T, TR> : FilterCollectionKeyBaseViewModel<TR> where TR : IPredicate, IKey
+public class FilterCollectionViewModel<T, TR> : FilterCollectionKeyBaseViewModel<TR> where TR : IPredicate, IEquatable
 {
     public FilterCollectionViewModel(IObservable<IChangeSet<TR>> changeSet, Func<T, bool> filter, FilterService<T> filterService, Settings settings) : base(changeSet, settings)
     {

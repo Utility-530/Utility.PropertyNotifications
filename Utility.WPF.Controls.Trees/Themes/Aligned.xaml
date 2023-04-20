@@ -104,7 +104,7 @@
                                 ContentStringFormat="{TemplateBinding HeaderedItemsControl.HeaderStringFormat}"
                                 ContentTemplateSelector="{TemplateBinding HeaderedItemsControl.HeaderTemplateSelector}"
                                 ContentSource="Header"
-                                HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                                HorizontalAlignment="Left"
                                 SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
                             </Border>
                             <ItemsPresenter x:Name="ItemsHost"

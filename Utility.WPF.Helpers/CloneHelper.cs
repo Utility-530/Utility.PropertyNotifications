@@ -17,17 +17,5 @@ namespace Utility.WPF.Helpers
             T newGrid = (T)XamlReader.Load(xmlReader);
             return newGrid;
         }
-
-        public static T DeepClone<T>(T from)
-        {
-            using (MemoryStream s = new())
-            {
-                BinaryFormatter f = new();
-                f.Serialize(s, from);
-                s.Position = 0;
-                object clone = f.Deserialize(s);
-                return (T)clone;
-            }
-        }
     }
 }

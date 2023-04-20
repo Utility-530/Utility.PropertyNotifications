@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:common="clr-namespace:Utility.Common.EventArgs;assembly=Utility.Common"
     xmlns:conv="http://schemas.utility.com/converters"
+    xmlns:conv2="clr-namespace:Utility.WPF.Converters"
     xmlns:view="http://schemas.utility.com/master"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:local1="clr-namespace:Utility.WPF.Demo.Master.Controls"
@@ -34,7 +35,7 @@
                         <i:Interaction.Triggers>
                             <i:EventTrigger  EventName="Change">
                                 <i:InvokeCommandAction Command="{Binding ChangeCommand}" PassEventArgsToCommand="True"
-                                                       EventArgsConverter="{x:Static conv:AutoMapperConverter.Instance}"
+                                                       EventArgsConverter="{x:Static conv2:AutoMapperConverter.Instance}"
                                                        EventArgsConverterParameter="{x:Type common:CollectionEventArgs}"
                                                        ></i:InvokeCommandAction>
                             </i:EventTrigger>

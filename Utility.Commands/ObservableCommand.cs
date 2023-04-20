@@ -1,9 +1,11 @@
-﻿using System.Windows.Input;
+﻿using System.Collections;
+using System.Windows.Input;
 using Utility.Observables;
+using Utility.Observables.NonGeneric;
 
 namespace Utility.Commands
 {
-    public class ObservableCommand : ICommand, IObservable<object?>, IObserver<bool>
+    public class ObservableCommand : ICommand, IObservable
     {
         private bool canExecute;
         private readonly object? id;
@@ -19,7 +21,8 @@ namespace Utility.Commands
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        public List<IObserver<object?>> Observers { get; } = new();
+        public List<IObserver> Observers { get; } = new();
+
         public List<object?> Outputs { get; } = new();
 
         public bool CanExecute(object? parameter) => canExecute;
@@ -35,11 +38,11 @@ namespace Utility.Commands
             }
         }
 
-        public IDisposable Subscribe(IObserver<object?> observer)
+        public IDisposable Subscribe(IObserver observer)
         {
             foreach (var output in Outputs)
                 observer.OnNext(output);
-            return new Disposer<object>(Observers, observer);
+            return new Disposer(Observers, observer);
         }
 
         public void OnCompleted()
@@ -56,6 +59,11 @@ namespace Utility.Commands
         {
             canExecute = value;
             CommandManager.InvalidateRequerySuggested();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            return Outputs.GetEnumerator();
         }
     }
 }

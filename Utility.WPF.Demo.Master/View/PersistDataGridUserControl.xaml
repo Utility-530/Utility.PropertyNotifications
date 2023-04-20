@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:util="http://schemas.utility.com/utilitywpf"
-             xmlns:conv="http://schemas.utility.com/converters"
+             xmlns:conv="clr-namespace:Utility.WPF.Converters"
              xmlns:view2="http://schemas.utility.com/master"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">

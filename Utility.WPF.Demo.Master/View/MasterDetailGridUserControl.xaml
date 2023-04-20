@@ -7,12 +7,10 @@
              xmlns:util="http://schemas.utility.com/utilitywpf"
              xmlns:local11="clr-namespace:Utility.WPF.Demo.Master.Infrastructure"
              xmlns:cmn="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common"
-
              xmlns:view1="http://schemas.utility.com/dragablz"
              xmlns:view2="http://schemas.utility.com/master"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                 xmlns:conv="http://schemas.utility.com/converters"
-
+             xmlns:conv="clr-namespace:Utility.WPF.Converters"
              xmlns:viewModel="clr-namespace:Utility.WPF.Demo.Master.ViewModels"
              xmlns:view="clr-namespace:Utility.WPF.Demo.Master.View"
              mc:Ignorable="d"
