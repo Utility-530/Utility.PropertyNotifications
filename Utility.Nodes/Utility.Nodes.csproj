@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Utility.Collections\Utility.Collections\Utility.Collections.csproj" />
-    <ProjectReference Include="..\..\Utility.Observables\Utility.Observables\Utility.Observables.csproj" />
     <ProjectReference Include="..\Utility.Nodes.Abstractions\Utility.Nodes.Abstractions.csproj" />
   </ItemGroup>
 
