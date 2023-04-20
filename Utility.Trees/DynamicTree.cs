@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using Utility.Observables;
+using Utility.Observables.Generic;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Trees
