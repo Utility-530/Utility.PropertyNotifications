@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<LangVersion>Latest</LangVersion>
 		<Nullable>enable</Nullable>
@@ -14,15 +14,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="System.Reactive" Version="5.0.0" />
+	  <ProjectReference Include="..\..\Utility.Model\Utility.Models\Utility.Models.csproj" />
+	  <ProjectReference Include="..\..\Utility.Observables\Utility.Observables\Utility.Observables.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Include="PresentationCore">
 			<HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\PresentationCore.dll</HintPath>
 		</Reference>
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\..\Utility.Observables\Utility.Observables\Utility.Observables.csproj" />
 	</ItemGroup>
 </Project>
