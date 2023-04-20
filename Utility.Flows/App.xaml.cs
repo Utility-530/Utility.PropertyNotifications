@@ -1,12 +1,5 @@
 ﻿using CoffeeFlow.WPF.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Reactive.Concurrency;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using Utility.Collections;
 
@@ -33,6 +26,5 @@ namespace CoffeeFlow.Demo
             Globals.Instance.MainWindow = window;
             window.Show();
         }
-
     }
 }

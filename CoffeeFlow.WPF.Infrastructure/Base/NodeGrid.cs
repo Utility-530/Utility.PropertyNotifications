@@ -26,7 +26,7 @@ namespace CoffeeFlow.Base
     public class NodeGrid : ItemsControl
     {
         public static readonly DependencyProperty ConnectionStrengthProperty =
-            DependencyProperty.Register("ConnectionStrength", typeof(double), typeof(NodeGrid), new PropertyMetadata());
+            DependencyProperty.Register("ConnectionStrength", typeof(double), typeof(NodeGrid), new PropertyMetadata(1.0));
 
         private DateTime previousDrawTime;
 
@@ -46,7 +46,6 @@ namespace CoffeeFlow.Base
 
         private SolidColorBrush GridConnectionColor;
 
-        private NetworkViewModel networkView;
         private double elapsedTime;
         private SolidColorBrush GridColor = new SolidColorBrush(Color.FromArgb(255, (byte)50, (byte)50, (byte)50));
         const int POINTS_ON_CURVE = 30;
@@ -63,7 +62,8 @@ namespace CoffeeFlow.Base
         {
             //InitializeComponent();
 
-            FrameworkElementFactory factoryPanel = new FrameworkElementFactory(typeof(UniformPanel));
+            FrameworkElementFactory factoryPanel = new FrameworkElementFactory(typeof(Canvas));
+            //FrameworkElementFactory factoryPanel = new FrameworkElementFactory(typeof(UniformPanel));
             factoryPanel.SetValue(Canvas.IsItemsHostProperty, true);
             ItemsPanelTemplate template = new ItemsPanelTemplate();
             template.VisualTree = factoryPanel;
@@ -92,9 +92,6 @@ namespace CoffeeFlow.Base
             this.MouseWheel += OnMouseWheel;
 
             NodeViewModel.GlobalScaleDelta = 0;
-
-            if (networkView == null)
-                networkView = new NetworkViewModel();
 
             elapsedTime = 0;
 

@@ -94,7 +94,7 @@ namespace CoffeeFlow.Base
         public Double Y { get; set; }
 
         public bool IsDraggable = true;
-        public TranslateTransform Transform { get; set; }
+        public TranslateTransform Transform => translateTransform;
         public bool IsMouseDown;
         private string _nodeName;
 
@@ -104,7 +104,7 @@ namespace CoffeeFlow.Base
         public static bool IsNodeDragging = false;
         public static double GlobalScaleDelta { get; set; }
 
-        public ScaleTransform ScaleTransform { get; private set; }
+        public ScaleTransform ScaleTransform => scaleTransform;
 
         public virtual void Populate(SerializeableNodeViewModel node)
         {
@@ -138,11 +138,12 @@ namespace CoffeeFlow.Base
             TotalIDCount++;
             ID = TotalIDCount;
             Scale = 1;
-            MakeDraggable(this, this);
+            MakeDraggable();
 
             DataContext = this;
 
-            ScaleBy(GlobalScaleDelta);
+            //ScaleBy(GlobalScaleDelta);
+
         }
 
         public void ScaleBy(double increment)
@@ -153,57 +154,60 @@ namespace CoffeeFlow.Base
         }
 
 
+        public void MoveBy(double x, double y)
+        {
+            translateTransform.X = x;
+            translateTransform.Y = y;
+        }
+
+
         bool captured = false;
         UIElement source = null;
+        ScaleTransform scaleTransform;
+        TranslateTransform translateTransform = new(0, 0);
 
-        public void MakeDraggable(System.Windows.UIElement moveThisElement, System.Windows.UIElement movedByElement)
+        public void MakeDraggable()
         {
-            ScaleTransform scaleTransform = new (Scale, Scale);
-            TranslateTransform transform = new (0, 0);
-
-            ScaleTransform = scaleTransform;
-
+            scaleTransform = new(Scale, Scale);
             TransformGroup group = new TransformGroup();
             group.Children.Add(scaleTransform);
-            group.Children.Add(transform); 
+            group.Children.Add(translateTransform); 
 
-            moveThisElement.RenderTransform = group;
-            
-            this.Transform = transform;
-
+            this.RenderTransform = group;
+           
             System.Windows.Point originalPoint = new System.Windows.Point(0, 0), currentPoint;
-            
+
             //
-            movedByElement.MouseLeftButtonDown += (sender, b) =>
+            this.MouseLeftButtonDown += (sender, b) =>
             {
                 source = (UIElement)sender;
                 Mouse.Capture(source);
                 captured = true;
 
                 IsNodeDragging = true;
-                originalPoint = ((System.Windows.Input.MouseEventArgs)b).GetPosition(moveThisElement);
+                originalPoint = ((System.Windows.Input.MouseEventArgs)b).GetPosition(this);
             };
 
-            movedByElement.MouseLeftButtonUp += (a, b) =>
+            this.MouseLeftButtonUp += (a, b) =>
                 {
                     Mouse.Capture(null);
                     captured = false;
 
                     IsNodeDragging = false;
-                    transform.X = 0;
-                    transform.Y = 0;
+                    //transform.X = 0;
+                    //transform.Y = 0;
                 };
 
-            movedByElement.MouseMove += (a, b) =>
+            this.MouseMove += (a, b) =>
             {
                 if (!IsDraggable) return;
 
                 if (captured)
                 {
-                    currentPoint = ((System.Windows.Input.MouseEventArgs)b).GetPosition(moveThisElement);
+                    currentPoint = ((System.Windows.Input.MouseEventArgs)b).GetPosition(this);
 
-                    transform.X += currentPoint.X - originalPoint.X;
-                    transform.Y += currentPoint.Y - originalPoint.Y;
+                    translateTransform.X += currentPoint.X - originalPoint.X;
+                    translateTransform.Y += currentPoint.Y - originalPoint.Y;
                 }
             };
  

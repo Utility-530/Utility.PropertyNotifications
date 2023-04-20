@@ -14,8 +14,6 @@ using Application = System.Windows.Application;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using UnityFlow;
 using Utility.Commands;
-using System.DirectoryServices.ActiveDirectory;
-using CoffeeFlow.WPF.Infrastructure.Infrastructure;
 using CoffeeFlow.WPF.Infrastructure;
 
 namespace CoffeeFlow.ViewModel
@@ -26,15 +24,12 @@ namespace CoffeeFlow.ViewModel
    *                                                      * Nick @ http://immersivenick.wordpress.com 
    *                                                      * Free for non-commercial use
    * *********************************************************************************************************/
-    public class NetworkViewModel
+    public class NetworkViewModel : Jellyfish.ViewModel
     {
-        public Stack<ICommand> UndoStack;
-        public List<NodeViewModel> AddedNodesOrder;
-        public List<NodeViewModel> RemovedNodesOrder;
-        public int UndoCount = 0;
+        private ObservableCollection<NodeViewModel> nodes = null;
+        private int bezierStrength = 80;
 
         private Command<NodeWrapper> _addNodeToGridCommand;
-
 
         public NetworkViewModel()
         {
@@ -43,7 +38,10 @@ namespace CoffeeFlow.ViewModel
         }
 
 
-
+        public Stack<ICommand> UndoStack;
+        public List<NodeViewModel> AddedNodesOrder;
+        public List<NodeViewModel> RemovedNodesOrder;
+        public int UndoCount = 0;
 
         public ICommand AddNodeToGridCommand
         {
@@ -82,7 +80,7 @@ namespace CoffeeFlow.ViewModel
         }
 
         //public DependencyObject MainWindow;
-        public int BezierStrength = 80;
+        public int BezierStrength { get => bezierStrength; set { bezierStrength = value; this.OnPropertyChanged(); } }
 
         private Command increaseBezier;
         public ICommand IncreaseBezierStrengthCommand
@@ -106,6 +104,7 @@ namespace CoffeeFlow.ViewModel
         public void IncreaseBezier()
         {
             BezierStrength += 40;
+
         }
 
         public void DecreaseBezier()
@@ -147,7 +146,7 @@ namespace CoffeeFlow.ViewModel
             {
                 Random r = new Random();
                 int increment = r.Next(-400, 400);
-                p = new Point(p.X + increment, p.Y + increment); 
+                p = new Point(p.X + increment, p.Y + increment);
             }
 
 
@@ -155,8 +154,8 @@ namespace CoffeeFlow.ViewModel
             {
                 RootNode n = new RootNode();
                 n.NodeName = node.NodeName;
-
-           //     n.Margin = new Thickness(p.X, p.Y, 0, 0);
+     
+                //n.Transform = new Thickness(p.X, p.Y, 0, 0);
                 nodeToAdd = n;
             }
 
@@ -165,12 +164,12 @@ namespace CoffeeFlow.ViewModel
                 ConditionNode n = new ConditionNode();
                 n.NodeName = node.NodeName;
 
-            //    n.Margin = new Thickness(p.X, p.Y, 0, 0);
+                //    n.Margin = new Thickness(p.X, p.Y, 0, 0);
                 nodeToAdd = n;
             }
 
 
-            if(node.TypeOfNode == NodeType.MethodNode)
+            if (node.TypeOfNode == NodeType.MethodNode)
             {
                 DynamicNode n = new DynamicNode();
                 n.NodeName = node.NodeName;
@@ -180,7 +179,7 @@ namespace CoffeeFlow.ViewModel
                     n.AddArgument(arg.ArgTypeString, arg.Name, false, 0, null);
                 }
 
-              //  n.Margin = new Thickness(p.X, p.Y, 0, 0);
+                //  n.Margin = new Thickness(p.X, p.Y, 0, 0);
                 n.CallingClass = node.CallingClass;
                 nodeToAdd = n;
             }
@@ -191,19 +190,21 @@ namespace CoffeeFlow.ViewModel
                 n.NodeName = node.NodeName;
                 n.Type = node.BaseAssemblyType;
 
-               // n.Margin = new Thickness(p.X, p.Y, 0, 0);
+                // n.Margin = new Thickness(p.X, p.Y, 0, 0);
                 n.CallingClass = node.CallingClass;
                 nodeToAdd = n;
             }
 
-            if(nodeToAdd != null)
+            nodeToAdd.MoveBy(p.X, p.Y);
+
+            if (nodeToAdd != null)
             {
                 this.Nodes.Add(nodeToAdd);
-               // MainViewModel.Instance.LogStatus("Added node " + nodeToAdd.NodeName + " to grid");
+                // MainViewModel.Instance.LogStatus("Added node " + nodeToAdd.NodeName + " to grid");
             }
             else
             {
-              //  MainViewModel.Instance.LogStatus("Couldn't add node " + node.NodeName + " to grid");
+                //  MainViewModel.Instance.LogStatus("Couldn't add node " + node.NodeName + " to grid");
             }
 
             //Close the node view window
@@ -242,7 +243,7 @@ namespace CoffeeFlow.ViewModel
         public void SaveNodes()
         {
             Microsoft.Win32.SaveFileDialog saveFileDialog1 = new Microsoft.Win32.SaveFileDialog();
-    
+
             // Set filter options and filter index.
             saveFileDialog1.Filter = "XML Files (.xml)|*.xml|All Files (*.*)|*.*";
             saveFileDialog1.FilterIndex = 1;
@@ -256,7 +257,7 @@ namespace CoffeeFlow.ViewModel
             {
                 path = saveFileDialog1.FileName;
                 Stream myStream = saveFileDialog1.OpenFile();
-                if (myStream  != null)
+                if (myStream != null)
                 {
                     #region Nodes
                     XmlWriterSettings xmlWriterSettings = new XmlWriterSettings()
@@ -317,7 +318,7 @@ namespace CoffeeFlow.ViewModel
                             varSerial.NodeName = varNode.NodeName;
                             varSerial.TypeString = varNode.Type;
                             varSerial.NodeType = varNode.NodeType;
-                            
+
                             varSerial.MarginX = varNode.Margin.Left + varNode.Transform.X;
                             varSerial.MarginY = varNode.Margin.Top + varNode.Transform.Y;
                             varSerial.ID = varNode.ID;
@@ -363,7 +364,7 @@ namespace CoffeeFlow.ViewModel
                     myStream.Close();
 
                     System.Windows.Clipboard.SetText(path);
-                   // MainViewModel.Instance.LogStatus("Save completed. Path: " + path + " copied to clipboard", true);
+                    // MainViewModel.Instance.LogStatus("Save completed. Path: " + path + " copied to clipboard", true);
                     #endregion
                 }
             }
@@ -458,12 +459,12 @@ namespace CoffeeFlow.ViewModel
                     Connector.ConnectPins(rootNode.OutputConnector, connectedTo);
                 }
 
-                if(node is ConditionNode)
+                if (node is ConditionNode)
                 {
                     ConditionNode conNode = node as ConditionNode;
 
                     //bool value Input
-                    if(conNode.boolInput.ConnectionNodeID > 0)
+                    if (conNode.boolInput.ConnectionNodeID > 0)
                     {
                         //we're connected to a parameter
                         Connector connectedToVar = GetOutConnectorBasedOnNode(conNode.boolInput.ConnectionNodeID); //variable
@@ -492,18 +493,18 @@ namespace CoffeeFlow.ViewModel
                         Connector.ConnectPins(conNode.OutExecutionConnectorFalse, connectedTo);
                     }
                 }
-                
+
                 if (node is DynamicNode)
                 {
                     //Connect output
                     DynamicNode dynNode = node as DynamicNode;
-                    
+
                     //Connect parameters
                     for (int i = 0; i < dynNode.ArgumentCache.Count(); i++)
                     {
                         Argument arg = dynNode.ArgumentCache.ElementAt(i);
 
-                        if(arg.ArgIsExistingVariable)
+                        if (arg.ArgIsExistingVariable)
                         {
                             Connector conID = dynNode.GetConnectorAtIndex(i);
                             int connectedToVar = arg.ArgumentConnectedToNodeID;
@@ -513,7 +514,7 @@ namespace CoffeeFlow.ViewModel
                         }
                     }
 
-                    if(dynNode.OutExecutionConnector.ConnectionNodeID > 0)
+                    if (dynNode.OutExecutionConnector.ConnectionNodeID > 0)
                     {
                         //Connect this output to the connection's input
                         Connector connectedTo = GetInConnectorBasedOnNode(dynNode.OutExecutionConnector.ConnectionNodeID);
@@ -545,7 +546,7 @@ namespace CoffeeFlow.ViewModel
             }
         }
 
-        private ObservableCollection<NodeViewModel> nodes = null;
+
         public ObservableCollection<NodeViewModel> Nodes
         {
             get
@@ -573,8 +574,8 @@ namespace CoffeeFlow.ViewModel
         public Connector GetInConnectorBasedOnNode(int nodeID)
         {
             NodeViewModel node = GetNodeByID(nodeID);
-            
-            if(node == null)
+
+            if (node == null)
                 return null;
 
             if (node is DynamicNode)
@@ -626,7 +627,7 @@ namespace CoffeeFlow.ViewModel
                        where n.ID == nodeID
                        select n;
 
-            if(node.Count() == 1)
+            if (node.Count() == 1)
             {
                 return node.First();
             }

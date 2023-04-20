@@ -157,50 +157,13 @@ VerticalAlignment="Center"/>
         </Grid.ColumnDefinitions>
 
 
-        <!--<ItemsControl Name="lol" ItemsSource="{Binding Network.Nodes}"></ItemsControl> -->
-        <!--<ItemsControl HorizontalAlignment="Stretch" ItemsSource="{Binding Network.Nodes}" Background="Red"  VerticalAlignment="Stretch"  x:Name="nodeGrid" Grid.Column="1" Grid.Row="1"  Grid.ColumnSpan="2" Margin="0" Grid.RowSpan="2"  >
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <nodes:DynamicNode/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>-->
-        <base:NodeGrid HorizontalAlignment="Stretch" ItemsSource="{Binding Network.Nodes}"  Grid.Row="1" VerticalAlignment="Stretch"  x:Name="nodeGrid" Grid.ColumnSpan="2" Margin="0" Grid.RowSpan="1"  >
-            <!--<ItemsControl.ItemContainerStyle>
-                <Style TargetType="ContentPresenter">
-                    <Setter Property="HorizontalAlignment" Value="Stretch" />
-                    <Setter Property="VerticalAlignment" Value="Stretch" />
-                </Style>
-            </ItemsControl.ItemContainerStyle>-->
-            <!--<ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Button></Button>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>-->
-        </base:NodeGrid>
 
-        <!--<ItemsControl  Grid.ColumnSpan="2" Margin="0" Grid.RowSpan="2">
-            <base:BezierCurve></base:BezierCurve>
-            <base:BezierCurve></base:BezierCurve>
-            <base:BezierCurve></base:BezierCurve>
-            <base:BezierCurve></base:BezierCurve>
-            <ItemsControl.ItemContainerStyle>
-                <Style TargetType="ContentPresenter">
-                    <Setter Property="VerticalAlignment" Value="Stretch" />
-                    <Setter Property="HorizontalAlignment" Value="Stretch" />
-                </Style>
-            </ItemsControl.ItemContainerStyle>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid></UniformGrid>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <nodes:ConditionNode></nodes:ConditionNode>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>-->
+        <base:NodeGrid HorizontalAlignment="Stretch" ItemsSource="{Binding Network.Nodes}" ConnectionStrength="{Binding Network.BezierStrength}" Grid.Row="0" VerticalAlignment="Stretch"  x:Name="nodeGrid" 
+                       Grid.ColumnSpan="2" Margin="0"
+                       Grid.RowSpan="2"  />
+
+
+
 
         <views:NodeListWindow x:Name="lstAvailableNodes" IsCenter="False" Visibility="Collapsed" Background="#CC0E0E0E" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.RowSpan="2" ></views:NodeListWindow>
 
