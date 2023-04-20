@@ -3,7 +3,7 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Models.Filters;
 
-public abstract class Filter : Model, IPredicate, IKey
+public abstract class Filter : Model, IPredicate, IEquatable
 {
     protected Filter(string header)
     {
@@ -13,6 +13,11 @@ public abstract class Filter : Model, IPredicate, IKey
     public string Header { get; }
 
     public abstract bool Invoke(object value);
+
+    public bool Equals(IEquatable? other)
+    {
+        return (other as Filter)?.Header.Equals(this.Header);
+    }
 
     public string Key => Header;
 
