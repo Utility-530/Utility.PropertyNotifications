@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodes", "Utility.Nodes\Utility.Nodes.csproj", "{8303AFA8-924A-49C0-8015-803F7D209A08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodes", "Utility.Nodes\Utility.Nodes.csproj", "{8303AFA8-924A-49C0-8015-803F7D209A08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodes.Abstractions", "Utility.Nodes.Abstractions\Utility.Nodes.Abstractions.csproj", "{6D6BF4E8-C060-4544-BC3C-36535ECBF92D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodes.Abstractions", "Utility.Nodes.Abstractions\Utility.Nodes.Abstractions.csproj", "{6D6BF4E8-C060-4544-BC3C-36535ECBF92D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodes.Demo", "Utility.Nodes.Demo\Utility.Nodes.Demo.csproj", "{EB1AC222-47CC-4D9B-ABC5-4ED8BE47B82A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodes.Demo", "Utility.Nodes.Demo\Utility.Nodes.Demo.csproj", "{EB1AC222-47CC-4D9B-ABC5-4ED8BE47B82A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{28597BEF-6983-4377-A102-82F69FF978DE}"
 EndProject
@@ -22,8 +22,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees", "..\Utility.Trees\Utility.Trees\Utility.Trees.csproj", "{A42C48DE-44F6-4F82-B7F8-1ECA36C57156}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Converters", "..\Utility.WPF\Utility.WPF.Converters\Utility.WPF.Converters.csproj", "{3E645622-5D94-4110-BB50-2F60D7445DA5}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commons", "..\Utility.Model\Utility.Commons\Utility.Commons.csproj", "{B7D3FED9-A019-4E9B-ADD0-559E0EBA8A08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,10 +61,6 @@ Global
 		{3E645622-5D94-4110-BB50-2F60D7445DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E645622-5D94-4110-BB50-2F60D7445DA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E645622-5D94-4110-BB50-2F60D7445DA5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B7D3FED9-A019-4E9B-ADD0-559E0EBA8A08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B7D3FED9-A019-4E9B-ADD0-559E0EBA8A08}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B7D3FED9-A019-4E9B-ADD0-559E0EBA8A08}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B7D3FED9-A019-4E9B-ADD0-559E0EBA8A08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,7 +72,6 @@ Global
 		{8A9E9CB0-1EBA-4F67-92BB-5833BA2315FE} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{A42C48DE-44F6-4F82-B7F8-1ECA36C57156} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{3E645622-5D94-4110-BB50-2F60D7445DA5} = {3E113198-90F6-4584-81A9-8CA2724455B2}
-		{B7D3FED9-A019-4E9B-ADD0-559E0EBA8A08} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1F5991F-9180-4F40-A959-E24A6DDA6C5C}

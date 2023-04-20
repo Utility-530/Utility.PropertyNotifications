@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using Utility.Collections;
 using Utility.Nodes.Abstractions;
-using Utility.Observables;
 
 namespace Utility.Nodes.Demo.Infrastructure
 {
@@ -24,7 +17,7 @@ namespace Utility.Nodes.Demo.Infrastructure
 
         public override object Content => Activator.CreateInstance(type);
 
-        public override IObservable Leaves => new Collection();
+        //public override IObservable Leaves => new Collection();
 
         public override async Task<object?> GetChildren()
         {
@@ -46,14 +39,6 @@ namespace Utility.Nodes.Demo.Infrastructure
         public override Task<bool> HasMoreChildren()
         {
             return Task.FromResult(flag == false);
-        }
-
-        protected override void SetChildrenCache(List<INode> childrenCache)
-        {
-            _branches.Clear();
-            _branches.AddRange(childrenCache);
-            _branches.Complete();
-            base.SetChildrenCache(childrenCache);
         }
     }
 }

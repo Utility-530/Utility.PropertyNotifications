@@ -56,13 +56,5 @@ namespace Utility.Nodes.Demo.Infrastructure
         {
             return Task.FromResult(flag == false);
         }
-
-        protected override void SetChildrenCache(List<INode> childrenCache)
-        {
-            _branches.Clear();
-            _branches.AddRange(childrenCache);
-            _branches.Complete();
-            base.SetChildrenCache(childrenCache);
-        }
     }
 }

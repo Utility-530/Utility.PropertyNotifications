@@ -1,6 +1,8 @@
 ﻿
 using Utility.Collections;
+using Utility.Interfaces.NonGeneric;
 using Utility.Observables;
+using Utility.Observables.NonGeneric;
 
 namespace Utility.Nodes
 {
@@ -156,6 +158,11 @@ namespace Utility.Nodes
         public void OnError(Exception error)
         {
             throw new NotImplementedException();
+        }
+
+        public bool Equals(IEquatable? other)
+        {
+            return (other as DirectoryNode)?.path == path;  
         }
     }
 }
