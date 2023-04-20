@@ -29,7 +29,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyGrid.Abstractions",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Trees.Abstractions", "Utility.Trees.Abstractions\Utility.Trees.Abstractions.csproj", "{EC3E7892-006E-4A6C-B5C2-1B475FFDC68E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commons", "..\Utility.Model\Utility.Commons\Utility.Commons.csproj", "{A08CD4BB-2A31-4C58-A70E-BA5CB29964C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Common", "..\Utility.Model\Utility.Common\Utility.Common.csproj", "{A08CD4BB-2A31-4C58-A70E-BA5CB29964C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
