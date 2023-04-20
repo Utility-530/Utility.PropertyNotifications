@@ -51,25 +51,13 @@ namespace Utility.Trees
         }
     }
 
-    public class ViewModel
-    {
-        #region propertyChanged
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        #endregion propertyChanged
-    }
 
     /// <summary>
     /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
     /// </summary>
     /// <typeparam name="object"></typeparam>
-    public class Tree : ViewModel, ITree, IEnumerable<ITree>
+    public class Tree : ITree, IEnumerable<ITree>, INotifyPropertyChanged
     {
         private IList items;
         private object data;
@@ -410,5 +398,16 @@ namespace Utility.Trees
                 return Data?.ToString();
             return Data == default ? string.Empty : Data.ToString();
         }
+
+        #region propertyChanged
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion propertyChanged
     }
 }
