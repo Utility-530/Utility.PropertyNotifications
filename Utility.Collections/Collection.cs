@@ -11,7 +11,8 @@ namespace Utility.Collections
     public class Collection : SortableObservableCollection<object>, IObservable
     {
         private DeferredEventsCollection _deferredEvents;
-        public List<IObserver> Observers { get; } = new();
+        List<IObserver> observers = new List<IObserver>();
+        public IEnumerable<IObserver> Observers => observers;
 
         public Collection()
         {
@@ -66,7 +67,7 @@ namespace Utility.Collections
         public IDisposable Subscribe(IObserver observer)
         {
             observer.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, this));
-            return new Disposer(Observers, observer);
+            return new Disposer(observers, observer);
         }
 
         protected override IDisposable DeferEvents() => new DeferredEventsCollection(this);
