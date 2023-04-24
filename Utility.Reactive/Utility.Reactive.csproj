@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Authors>Declan Taylor</Authors>
     <Version>1.1.13</Version>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
