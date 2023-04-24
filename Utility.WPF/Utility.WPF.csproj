@@ -40,7 +40,6 @@
 		<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Reactive\Utility.WPF.Reactive.csproj" />
-		<ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
 	</ItemGroup>
 	
 	<ItemGroup>

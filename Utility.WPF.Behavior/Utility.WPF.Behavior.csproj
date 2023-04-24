@@ -16,7 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Utility.WPF.Abstract\Utility.WPF.Abstract.csproj" />
     <ProjectReference Include="..\Utility.WPF.Reactive\Utility.WPF.Reactive.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
   </ItemGroup>
 
 </Project>

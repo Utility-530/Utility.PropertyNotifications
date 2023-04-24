@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
   </ItemGroup>
 
   <ItemGroup>
