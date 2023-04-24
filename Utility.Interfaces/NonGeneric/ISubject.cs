@@ -1,7 +1,6 @@
 ﻿namespace Utility.Interfaces.NonGeneric
 {
-    public interface IKey
+    public interface ISubject : IObservable, IObserver
     {
-        string Key { get; }
     }
 }
