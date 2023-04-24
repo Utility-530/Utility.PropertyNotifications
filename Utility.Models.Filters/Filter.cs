@@ -16,10 +16,10 @@ public abstract class Filter : Model, IPredicate, IEquatable
 
     public bool Equals(IEquatable? other)
     {
-        return (other as Filter)?.Header.Equals(this.Header);
+        return (other as Filter)?.Header.Equals(this.Header) == true;
     }
 
     public string Key => Header;
 
-    public abstract object Value { get;  }
+    public abstract object Value { get; }
 }
