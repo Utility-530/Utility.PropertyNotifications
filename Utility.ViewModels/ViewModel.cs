@@ -15,8 +15,8 @@ using Utility.Common.Model;
 using Utility.Common.Models;
 using Utility.Helpers;
 using Utility.Helpers.Ex;
+using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using Utility.Observables;
 
 namespace Utility.ViewModels
 {

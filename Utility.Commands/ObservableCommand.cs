@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Windows.Input;
-using Utility.Observables;
+using Utility.Interfaces.NonGeneric;
 using Utility.Observables.NonGeneric;
 
 namespace Utility.Commands
@@ -21,7 +21,8 @@ namespace Utility.Commands
             remove => CommandManager.RequerySuggested -= value;
         }
 
-        public List<IObserver> Observers { get; } = new();
+         List<IObserver> observers  = new();
+        public IEnumerable<IObserver> Observers => observers;
 
         public List<object?> Outputs { get; } = new();
 
@@ -42,7 +43,7 @@ namespace Utility.Commands
         {
             foreach (var output in Outputs)
                 observer.OnNext(output);
-            return new Disposer(Observers, observer);
+            return new Disposer(observers, observer);
         }
 
         public void OnCompleted()
