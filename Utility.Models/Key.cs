@@ -1,8 +1,5 @@
-﻿//using Newtonsoft.Json;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Utility.Interfaces.NonGeneric;
-using Utility.Interfaces.NonGeneric.Data;
-using Utility.Randoms;
 
 namespace Utility.Models
 {
@@ -22,7 +19,7 @@ namespace Utility.Models
         public Guid Guid { get; set; }
         public string Name { get; set; }
 
-        public Type Type { get; set; } 
+        public Type Type { get; set; }
 
         public ISerialise FromString(string str)
         {
@@ -38,14 +35,6 @@ namespace Utility.Models
             return obj;
         }
 
-        public static Key Random()
-        {
-            return new Key()
-            {
-                Guid = Guid.NewGuid(),
-                Name = Names.Values[(int)(DateTime.Now.Ticks % Names.Values.Count)]
-            };
-        }
 
         public bool Equals(IEquatable? other)
         {
