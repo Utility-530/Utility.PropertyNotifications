@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Utility.Infrastructure.Abstractions;
+using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Observables.NonGeneric;
 
 namespace Utility.Infrastructure
 {
-    public abstract class BaseObject : IObservable
+    public abstract class BaseObject : IObservable, IKey<Key>
     {
         public abstract Key Key { get; }
 
+        List<object> list = new();
         public IEnumerable<IObserver> Observers => Resolver.Observers(Key);
 
         public static IResolver? Resolver { get; set; }
@@ -24,20 +22,29 @@ namespace Utility.Infrastructure
         {
             return new Disposer(Resolver.Observers(Key), observer);
         }
-
+        public bool Equals(IKey<Key>? other)
+        {
+            return other?.Key.Equals(Key) ?? false;
+        }
 
         public bool Equals(IEquatable? other)
         {
-            return other.Equals(this.Key);
+            return (other as IKey<Key>)?.Equals(this.Key) ?? false;
         }
 
-        public abstract IEnumerator GetEnumerator();
+        public IEnumerator GetEnumerator() => list.GetEnumerator();
 
         protected void Broadcast(object obj)
         {
-            foreach (var observer in Observers)
-                observer.OnNext(obj);
+            list.Add(obj);
+            (Context ?? throw new Exception("missing context"))
+                .Post(a =>
+            {
+                foreach (var observer in Observers)
+                    observer.OnNext(obj);
+            }, default);
         }
+
 
     }
 }

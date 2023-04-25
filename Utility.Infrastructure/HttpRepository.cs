@@ -12,7 +12,7 @@ namespace Utility.PropertyTrees.Infrastructure
 
         public HttpRepository()
         {
-            client = new HttpClient { BaseAddress = new Uri("http://localhost:5084/"), Timeout= TimeSpan.FromSeconds(1) };
+            client = new HttpClient { BaseAddress = new Uri("http://localhost:5084/"), Timeout= TimeSpan.FromSeconds(5) };
         }
 
         public async Task<IEquatable> FindKeyByParent(IEquatable key)

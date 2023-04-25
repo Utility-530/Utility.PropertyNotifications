@@ -1,97 +1,23 @@
-﻿using Utility.PropertyTrees.Abstractions;
-using System.Diagnostics.CodeAnalysis;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
+﻿using System.Diagnostics.CodeAnalysis;
 using Utility.Infrastructure.Abstractions;
 using Utility.Interfaces.NonGeneric;
 using Utility.Enums;
-using Utility.Models;
-using Utility.Observables;
 using Utility.Infrastructure;
-using System.Collections;
-using Utility.Observables.NonGeneric;
+using Utility.Models;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
-
-
-    public class PropertyStore : IPropertyStore
+    public class PropertyStore : BaseObject, IPropertyStore
     {
-        private readonly Dictionary<IEquatable, IObserver> dictionary = new();
+        private readonly IRepository repository;
+        public override Key Key => new(Guid, nameof(PropertyStore), typeof(PropertyStore));
 
-        //readonly Repository repo;
-        //private readonly History history = new();
-
-        //private readonly Controllable controllable = new();
-        //private DispatcherTimer timer = new();
-
-        private Lazy<IRepository> repository = new(() =>
+        public PropertyStore(IRepository repository)
         {
-            var directory = Directory.CreateDirectory("../../../Data");
-            return new SqliteRepository(directory.FullName);
-        });
-
-        public PropertyStore()
-        {
-            //controllable.Subscribe(this);
-            //history.Subscribe(this);
-            //timer.Subscribe(a =>
-            //{
-            //    if (history.Future.GetEnumerator().MoveNext())
-            //        history.Forward();
-            //});
+            this.repository = repository;
         }
 
-        protected virtual IRepository Repository
-        {
-            get => repository.Value;
-        }
-
-        public IEnumerable<IObserver> Observers => dictionary.Values;
-
-        //public IHistory History => history;
-        //public IControllable Controllable => controllable;
-
-        //public void GetValue(IEquatable key)
-        //{
-        //    if (key is not Key { } _key)
-        //    {
-        //        throw new Exception("reg 43cs ");
-        //    }
-
-        //    Observable
-        //        .Return(new Order { Key = _key, Access = Access.Get })
-        //        .Subscribe(history.OnNext);
-        //}
-
-        //public void SetValue(IEquatable key, object value)
-        //{
-        //    if (key is not Key { } _key)
-        //    {
-        //        throw new Exception("reg 43cs ");
-        //    }
-        //    Observable
-        //        .Return(new Order { Key = _key, Access = Access.Set, Value = value })
-        //        .Subscribe(history.OnNext);
-        //}
-
-        public IDisposable Subscribe(IObserver observer)
-        {
-            dictionary.Add(observer, observer);
-            return new Disposer<IEquatable>(dictionary, observer, observer);
-        }
-
-        //public string Validate(string memberName)
-        //{
-        //    return string.Empty;
-        //}
-
-        // Move this into history
-        //public async Task<Guid> GetGuidByParent(IEquatable key)
-        //{
-        //    var childKey = await Repository.FindKeyByParent(key);
-        //    return (childKey as Key)?.Guid ?? throw new Exception("dfb 43 4df");
-        //}
+        public Guid Guid => Guid.Parse("f04c2e55-bf33-480c-a4e7-b4b7804d1735");
 
         public void OnCompleted()
         {
@@ -117,9 +43,9 @@ namespace Utility.PropertyTrees.Infrastructure
                     {
                         try
                         {
-                            var guid = await Repository.FindKeyByParent(order.Key);
+                            var guid = await repository.FindKeyByParent(order.Key);
                             order.Progress = 50;
-                            var find = await Repository.FindValue(guid);
+                            var find = await repository.FindValue(guid);
                             order.Progress = 100;
 
                             if (find != null)
@@ -138,10 +64,10 @@ namespace Utility.PropertyTrees.Infrastructure
                     {
                         try
                         {
-                            var guid = await Repository.FindKeyByParent(order.Key);
+                            var guid = await repository.FindKeyByParent(order.Key);
                             order.Progress = 50;
-                            var find = await Repository.FindValue(guid);
-                            await Repository.UpdateValue(guid, order.Value);
+                            var find = await repository.FindValue(guid);
+                            await repository.UpdateValue(guid, order.Value);
                             order.Progress = 100;
                             Update(find, order);
                         }
@@ -157,23 +83,11 @@ namespace Utility.PropertyTrees.Infrastructure
 
         private void Update(object newValue, Order order)
         {
-            if (dictionary.TryGetValue(order.Key, out var observer))
-            {
-                observer.OnNext(new PropertyChange(order.Key, newValue, order.Value));
-            }
+            Broadcast(new PropertyChange(order.Key, newValue, order.Value));
         }
 
-        public bool Equals(IEquatable? other)
-        {
-            throw new NotImplementedException();
-        }
 
-        public IEnumerator GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
 
-        //public static PropertyStore Instance { get; } = new();
 
         private class KeyComparer : IEqualityComparer<IEquatable>
         {

@@ -108,11 +108,5 @@ namespace Utility.PropertyTrees.Infrastructure
         {
             throw new NotImplementedException();
         }
-
-
-        public override IEnumerator GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

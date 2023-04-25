@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Reactive.Subjects;
 using Utility.Enums;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
@@ -11,10 +10,9 @@ namespace Utility.Infrastructure
 {
     public class Playback : BaseObject, IPlayback
     {
-        List<IObserver> observers = new();
+        List<Direction> directions = new();
         public System.Timers.Timer Timer { get; set; } = new(TimeSpan.FromSeconds(0.1));
 
-        public IEnumerable<IObserver> Observers => observers;
 
         public override Key Key => new(default, nameof(Playback), typeof(Playback));
 
@@ -46,17 +44,9 @@ namespace Utility.Infrastructure
 
         private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            Context.Post(a => Forward(), null);
+            Forward();
         }
 
-
-        private void Broadcast(playback type)
-        { foreach (var observer in Observers) observer.OnNext(type); }
-
-        public IDisposable Subscribe(IObserver observer)
-        {
-            return new Disposer(observers, observer);
-        }
 
         public void OnNext(object value)
         {
@@ -86,11 +76,6 @@ namespace Utility.Infrastructure
         }
 
         public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override IEnumerator GetEnumerator()
         {
             throw new NotImplementedException();
         }

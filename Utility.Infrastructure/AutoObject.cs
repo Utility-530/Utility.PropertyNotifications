@@ -7,9 +7,6 @@ using Utility.Models;
 using Utility.Conversions;
 using Utility.Enums;
 using Utility.Infrastructure;
-using System.Collections;
-using Utility.Infrastructure.Abstractions;
-using Utility.Observables.NonGeneric;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
@@ -35,8 +32,6 @@ namespace Utility.PropertyTrees.Infrastructure
         }
 
         public override Key Key => new (guid, nameof(AutoObject), typeof(AutoObject));
-
-        private List<Order> orders = new();
 
         //public static IPropertyStore PropertyStore { get; set; }
         private async void Initialise()
@@ -169,13 +164,7 @@ namespace Utility.PropertyTrees.Infrastructure
                 return (value as IValueChange).NewValue;
             }
             var order = new Order { Key = key, Access = Access.Get };
-            orders.Add(order);
             this.Broadcast(order);
-
-
-            //order.Subscribe(this);
-            //PropertyStore.OnNext(order);
-
             return default;
         }
 
@@ -217,9 +206,6 @@ namespace Utility.PropertyTrees.Infrastructure
             //disposable ??= PropertyStore.Subscribe(this);
             var key = new Key(guid, name, type);
             var order = new Order { Key = key, Access = Access.Set, Value = value };
-            //order.Subscribe(this);
-            orders.Add(order);
-            //PropertyStore.SetValue(order.Key, value);
             this.Broadcast(order);
             return true;
         }
@@ -273,24 +259,6 @@ namespace Utility.PropertyTrees.Infrastructure
         public void OnError(Exception error)
         {
             throw new NotImplementedException();
-        }
-
-
-        //public IDisposable Subscribe(IObserver value)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        public override IEnumerator GetEnumerator()
-        {
-            return orders.GetEnumerator();
-        }
-
-
-        private void Broadcast(object obj)
-        {
-            foreach (var observer in Observers)
-                observer.OnNext(obj);
         }
     }
 }
