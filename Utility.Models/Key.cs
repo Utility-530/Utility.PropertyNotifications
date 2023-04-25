@@ -1,4 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Formats.Asn1;
+using System.Globalization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Models
@@ -19,6 +22,7 @@ namespace Utility.Models
         public Guid Guid { get; set; }
         public string Name { get; set; }
 
+        [JsonConverter(typeof(TypeConverter))]
         public Type Type { get; set; }
 
         public ISerialise FromString(string str)
@@ -60,5 +64,20 @@ namespace Utility.Models
         {
             return Equals(other as Key);
         }
+    }
+
+    public class TypeConverter : JsonConverter<Type>
+    {
+        public override Type Read(
+            ref Utf8JsonReader reader,
+            Type typeToConvert,
+            JsonSerializerOptions options) =>
+               Type.GetType(reader.GetString());
+
+        public override void Write(
+            Utf8JsonWriter writer,
+            Type dateTimeValue,
+            JsonSerializerOptions options) =>
+                writer.WriteStringValue($"{dateTimeValue.Namespace}.{dateTimeValue.Name}, {dateTimeValue.AssemblyQualifiedName}");
     }
 }
