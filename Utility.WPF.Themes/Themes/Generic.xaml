@@ -5,8 +5,7 @@
                              xmlns:converter="http://schemas.utility.com/converters"
                              Type="{x:Type local:DefaultType}">
 
-    <!--<converter:DescriptionConverter x:Key="DescriptionConverter" />-->
-    <!--<converter:DefaultConverter x:Key="DefaultConverter" />-->
+
 
     <Style BasedOn="{StaticResource {x:Type HeaderedContentControl}}" TargetType="HeaderedContentControl">
         <Setter Property="Template">
