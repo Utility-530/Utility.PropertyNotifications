@@ -6,18 +6,10 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using Utility.WPF.Panels;
-using AutoBogus;
-using Bogus;
-using Builder;
-using AbstractBuilder;
-using System.Threading;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
-    /// <summary>
-    /// Interaction logic for PropertyView.xaml
-    /// </summary>
     public partial class PropertyView : UserControl
     {
         public PropertyView()

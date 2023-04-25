@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Threading;
 using Utility.Commands;
 using Utility.Enums;
 using Utility.Infrastructure.Abstractions;
 using Utility.PropertyTrees.Abstractions;
-using Utility.Observables;
 using Autofac;
 using Utility.Interfaces.NonGeneric;
-using Utility.PropertyTrees.Infrastructure;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
@@ -61,14 +58,7 @@ namespace Utility.PropertyTrees.WPF.Demo
                     case Step.All:
                         break;
                 }
-            });
-
-            //history.Subscribe(a =>
-            //{
-            //    Update();
-            //});
-
-    
+            });    
         }
 
         public bool Equals(IEquatable? other)

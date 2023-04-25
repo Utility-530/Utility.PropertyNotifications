@@ -1,5 +1,4 @@
 using System;
-using SoftFluent.Windows;
 
 namespace Utility.PropertyTrees.WPF.Infrastructure
 {

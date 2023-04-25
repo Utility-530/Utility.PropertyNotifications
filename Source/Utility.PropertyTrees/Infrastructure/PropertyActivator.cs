@@ -1,6 +1,4 @@
-﻿using Utility.PropertyTrees;
-using Utility.PropertyTrees.Abstractions;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Utility.Models;
 using Utility.Infrastructure.Abstractions;
 
@@ -20,16 +18,12 @@ namespace Utility.PropertyTrees.Infrastructure
             }
 
             var childKey = await Repository.FindKeyByParent(new Key(parent, name, propertyType));
-            Guid cx = (childKey as Key)?.Guid ?? throw new Exception("dfb 43 4df");
-
-            var args = new object[]
-            {
-               cx
-            };
+            Guid guid = (childKey as Key)?.Guid ?? throw new Exception("dfb 43 4df");
+            var args = new object[] { guid };
             return Activator.CreateInstance(type, args);
         }
 
-        public async Task<IProperty> CreateReferenceProperty(Guid parent, PropertyDescriptor descriptor, object data)
+        public async Task<ReferenceProperty> CreateReferenceProperty(Guid parent, PropertyDescriptor descriptor, object data)
         {
             var item = descriptor.GetValue(data);
             if (descriptor == null)
@@ -56,7 +50,7 @@ namespace Utility.PropertyTrees.Infrastructure
             return property;
         }
 
-        public async Task<IProperty> CreateValueProperty(Guid parent, PropertyDescriptor descriptor, object data)
+        public async Task<ValueProperty> CreateValueProperty(Guid parent, PropertyDescriptor descriptor, object data)
         {
             if (descriptor == null)
             {
@@ -74,7 +68,7 @@ namespace Utility.PropertyTrees.Infrastructure
             return property;
         }
 
-        public async Task<IProperty> CreateCollectionItemProperty(Guid parent, int index, object data)
+        public async Task<CollectionItemProperty> CreateCollectionItemProperty(Guid parent, int index, object data)
         {
             var property = (CollectionItemProperty)await CreateInstance(parent, index.ToString(), data.GetType(), typeof(CollectionItemProperty));
 

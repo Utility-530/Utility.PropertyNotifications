@@ -7,12 +7,11 @@ using System.Reactive.Linq;
 using Utility.Collections;
 using Utility.Nodes.Abstractions;
 using Utility.Interfaces.NonGeneric;
-using System.Collections.ObjectModel;
 using Utility.Helpers;
 
 namespace Utility.PropertyTrees
 {
-    public class PropertyNode : AutoObject, INode, IPropertyNode, INotifyCollectionChanged
+    public class PropertyNode : AutoObject, INode, INotifyCollectionChanged, IPropertyNode
     {
         protected Collection _children = new();
         protected Collection _branches = new();
@@ -32,13 +31,7 @@ namespace Utility.PropertyTrees
 
         public INode Parent { get; set; }
 
-        public virtual IEnumerable Ancestors
-        {
-            get
-            {
-                return GetAncestors();
-            }
-        }
+        public virtual IEnumerable Ancestors => GetAncestors();
 
         public virtual IObservable Children
         {
@@ -48,7 +41,6 @@ namespace Utility.PropertyTrees
                 return _children;
             }
         }
-
 
         private IEnumerable GetAncestors()
         {
@@ -80,20 +72,10 @@ namespace Utility.PropertyTrees
 
             flag = true;
 
-
             PropertyFilter
                 .Instance
                 .FilterProperties(Data, Guid, Predicates)
-                .Subscribe(prop =>
-                {
-                    //if (prop.IsValueType || prop.IsString)
-                    //{
-                    //    _leaves.Add(prop);
-                    //}
-                    //else
-                    //    _branches.Add(prop);
-                    _children.Add(prop);
-                },
+                .Subscribe(_children.Add,
                 e =>
                 {
                     Errors.Add(ExceptionHelper.CombineMessages(e));                   

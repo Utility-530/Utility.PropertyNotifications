@@ -2,26 +2,9 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Reactive.Subjects;
-using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
-    //public interface IGuidConverter
-    //{
-    //    Guid Convert(object data);
-    //}
-
-    //public class GuidConverter : IGuidConverter
-    //{
-    //    public Guid Convert(object data)
-    //    {
-    //        if (data is IGuid iguid)
-    //        {
-    //            return iguid.Guid;
-    //        }
-    //        throw new Exception("esfdd 33");
-    //    }
-    //}
 
     public abstract class DescriptorFilters : IEnumerable<Predicate<PropertyDescriptor>>
     {
@@ -35,9 +18,9 @@ namespace Utility.PropertyTrees.Infrastructure
 
     internal class PropertyFilter
     {
-        public IObservable<IProperty> FilterProperties(object data, Guid guid, DescriptorFilters? filters = null)
+        public IObservable<PropertyNode> FilterProperties(object data, Guid guid, DescriptorFilters? filters = null)
         {
-            Subject<IProperty> subject = new();
+            Subject<PropertyNode> subject = new();
 
             Task.Run(() =>
             {

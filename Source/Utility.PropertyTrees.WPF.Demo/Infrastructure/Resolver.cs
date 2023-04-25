@@ -1,9 +1,6 @@
 ﻿using Autofac;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Utility.Infrastructure.Abstractions;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
@@ -35,16 +32,18 @@ namespace Utility.Infrastructure
 
             else if (key.Name == nameof(History))
             {
-                return new IObserver[] { container.Resolve<HistoryWindow>() };
+                return new IObserver[] { container.Resolve<HistoryWindow>(), container.Resolve<IPropertyStore>() };
             }
 
             else if (key.Name == nameof(HistoryWindow))
             {
                 return new IObserver[] { container.Resolve<Playback>() };
             }
+            else if (key.Name == nameof(Playback))
+            {
+                return new IObserver[] { container.Resolve<History>() };
+            }
             throw new Exception("nnnnndsfs s");
         }
-
-    
     }
 }

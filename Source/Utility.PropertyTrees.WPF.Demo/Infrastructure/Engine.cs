@@ -1,5 +1,4 @@
 ﻿using Utility.PropertyTrees.Abstractions;
-using SoftFluent.Windows;
 using System;
 
 namespace Utility.PropertyTrees.WPF.Demo.Infrastructure

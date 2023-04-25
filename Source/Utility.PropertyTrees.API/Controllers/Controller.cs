@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Runtime.CompilerServices;
 using Utility.Trees;
 
 namespace Utility.PropertyTrees.API.Controllers
@@ -34,7 +35,7 @@ namespace Utility.PropertyTrees.API.Controllers
         [HttpPost()]
         public void PostValue(Guid key, string value)
         {
-            Console.WriteLine(nameof(PostValue));
+            Log();
             Console.WriteLine("Key: " + key);
             Console.WriteLine("Value: " + value);
             var parent = tree[key];
@@ -45,7 +46,7 @@ namespace Utility.PropertyTrees.API.Controllers
         [HttpGet]
         public KeyValue[] GetChanges(Guid? guid)
         {
-            Console.WriteLine(nameof(GetChanges));
+            Log();
             Console.WriteLine("Key: " + guid);
             List<KeyValue> keyValueList = new List<KeyValue>();
             foreach (var keyValue in Dictionary.ElementsBetween(guid ?? Dictionary.MinKey, Dictionary.MaxKey))
@@ -59,7 +60,7 @@ namespace Utility.PropertyTrees.API.Controllers
         [HttpGet]
         public Guid GetKeyByParent(Guid key, string name)
         {
-            Console.WriteLine(nameof(GetKeyByParent));
+            Log();
             Console.WriteLine("Key: " + key);
             Console.WriteLine("Name: " + name);
             lock (tree)
@@ -106,6 +107,13 @@ namespace Utility.PropertyTrees.API.Controllers
                 return (string)data;
             }
             return default;
+        }
+
+        public void Log([CallerMemberName] string? callerMemberName = null)
+        {
+            Console.WriteLine();
+            Console.WriteLine(DateTime.Now.ToString("G"));
+            Console.WriteLine(callerMemberName);
         }
     }
 }

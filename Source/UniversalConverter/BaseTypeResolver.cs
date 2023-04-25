@@ -1,4 +1,6 @@
-﻿namespace SoftFluent.Windows
+﻿using System;
+
+namespace UniversalConverter
 {
     public class BaseTypeResolver
     {

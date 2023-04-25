@@ -2,7 +2,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Reflection;
-using Utility.PropertyTrees.Abstractions;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
@@ -10,10 +9,10 @@ namespace Utility.PropertyTrees.Infrastructure
     {
         private static PropertyActivator activator = PropertyActivator.Instance;
 
-        public static IEnumerable<IProperty?> EnumerateProperties(object data, Guid guid, DescriptorFilters? filters = null)
+        public static IEnumerable<PropertyNode> EnumerateProperties(object data, Guid guid, DescriptorFilters? filters = null)
         {
 
-            if (data is IEnumerable enumerable)
+            if (data is IEnumerable enumerable && filters == null)
             {
                 int i = 0;
                 foreach (var item in enumerable)
@@ -22,26 +21,17 @@ namespace Utility.PropertyTrees.Infrastructure
                     i++;
                 }
             }
-            else
+
+            var descriptors = PropertyDescriptors(data).ToArray();
+            foreach (var descriptor in descriptors)
             {
-                var descriptors = PropertyDescriptors(data).ToArray();
-                foreach (var descriptor in descriptors)
-                {
-                    yield return FromPropertyDescriptor(descriptor);
-                }
+                yield return FromPropertyDescriptor(descriptor);
             }
 
-            IProperty? FromIndex(int i, object? item)
-            {
-                try
-                {
-                    return activator.CreateCollectionItemProperty(guid, i, item).Result;
-                }
-                catch (Exception ex)
-                {
-                }
 
-                return null;
+            PropertyNode? FromIndex(int i, object? item)
+            {
+                return activator.CreateCollectionItemProperty(guid, i, item).Result;
             }
 
             IEnumerable<PropertyDescriptor> PropertyDescriptors(object data)
@@ -55,7 +45,7 @@ namespace Utility.PropertyTrees.Infrastructure
                 }
             }
 
-            IProperty? FromPropertyDescriptor(PropertyDescriptor descriptor)
+            PropertyNode? FromPropertyDescriptor(PropertyDescriptor descriptor)
             {
                 if (descriptor.PropertyType == typeof(MethodBase))
                     return null;
@@ -64,9 +54,9 @@ namespace Utility.PropertyTrees.Infrastructure
 
                 return CreateProperty(data, guid, descriptor);
 
-                IProperty CreateProperty(object data, Guid guid, PropertyDescriptor descriptor)
+                PropertyNode CreateProperty(object data, Guid guid, PropertyDescriptor descriptor)
                 {
-                    IProperty property;
+                    PropertyNode property;
                     if (IsValueOrStringProperty(descriptor))
                     {
                         property = activator.CreateValueProperty(guid, descriptor, data).Result;

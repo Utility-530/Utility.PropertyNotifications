@@ -11,8 +11,6 @@ using Utility.Common;
 using Autofac;
 using System.Reflection;
 using Utility.Infrastructure;
-using Utility.Interfaces.NonGeneric;
-using Utility.Helpers.Ex;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
@@ -28,8 +26,6 @@ namespace Utility.PropertyTrees.WPF.Demo
             PropertyActivator.Instance.Repository = container.Resolve<IRepository>();
             PropertyActivator.Instance.Interfaces = new() { { typeof(IViewModel), typeof(ViewModel) } };
 
-
-         
             AutoObject.Resolver = new Utility.Infrastructure.Resolver(container);
             Collection.Context = BaseObject.Context = SynchronizationContext.Current;
 
@@ -54,29 +50,6 @@ namespace Utility.PropertyTrees.WPF.Demo
             System.Drawing.Rectangle r = s.WorkingArea;
             window.Top = r.Top;
             window.Left = r.Left;
-        }
-
-
-        public class BootStrapper
-        {
-            public static IContainer Build()
-            {
-                var builder = new ContainerBuilder();
-
-                // Register individual components
-                builder.RegisterType<History>().AsSelf().As<IHistory>().SingleInstance();
-                builder.RegisterType<Playback>().AsSelf().As<IPlayback>().SingleInstance();
-                builder.RegisterType<HttpRepository>().AsSelf().As<IRepository>().SingleInstance();
-                builder.RegisterType<HistoryWindow>().AsSelf().As<IObserver>().SingleInstance();
-                builder.RegisterSelf();
-                // Scan an assembly for components
-                //builder.RegisterAssemblyTypes(myAssembly)
-                //       .Where(t => t.Name.EndsWith("Repository"))
-                //       .AsImplementedInterfaces();
-
-                var container = builder.Build();
-                return container;
-            }
         }
     }
 }
