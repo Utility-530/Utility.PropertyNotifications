@@ -23,9 +23,7 @@
   </ItemGroup>
 
 <ItemGroup>
-    <!--  <ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
-    <ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />-->
-    <ProjectReference Include="..\..\..\Utility.Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
+     <ProjectReference Include="..\..\..\Utility.Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
     <ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
     <ProjectReference Include="..\Infrastructure.WPF\Infrastructure.WPF.csproj" />
