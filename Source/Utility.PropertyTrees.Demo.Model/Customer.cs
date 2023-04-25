@@ -2,6 +2,8 @@
 using Jellyfish;
 using System.ComponentModel;
 using System.Security;
+using Utility.Interfaces.NonGeneric.Data;
+using Utility.Interfaces.NonGeneric;
 
 namespace SoftFluent.Windows.Samples
 {

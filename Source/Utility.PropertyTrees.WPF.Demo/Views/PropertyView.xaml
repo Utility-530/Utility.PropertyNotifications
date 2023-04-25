@@ -6,22 +6,29 @@
              xmlns:local="clr-namespace:Utility.PropertyTrees.WPF.Demo"
              xmlns:prop="clr-namespace:Utility.PropertyTrees.WPF;assembly=Utility.PropertyTrees.WPF"
              xmlns:infr="clr-namespace:Utility.PropertyTrees.WPF.Demo.Infrastructure"
+             xmlns:ui="http://schemas.modernwpf.com/2019" 
+             xmlns:st="http://schemas.spicytaco.io/"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"   
+       
+             >
     <DockPanel>
         <ToolBar DockPanel.Dock="Top">
             <Button Click="refresh_click">refresh</Button>
         </ToolBar>
-        <UniformGrid>
-            <prop:PropertyTree
+        <st:AutoGrid Columns="2*,*" Rows="*">
+
+            <Grid x:Name="ContentGrid">
+            </Grid>
+
+            <UniformGrid Columns="1">
+                <prop:PropertyTree
                         x:Name="PropertyTree"
                         Engine="{x:Static infr:Engine.Instance}"
-                        TreeView.SelectedItemChanged="PropertyTree_SelectedItemChanged" />
-            
-            <prop:PropertyTree x:Name="ViewModelTree" />
-
-            <Grid x:Name="ContentGrid"></Grid>
-            
-        </UniformGrid>
+                        TreeView.SelectedItemChanged="PropertyTree_SelectedItemChanged" />       
+                
+                <prop:PropertyTree x:Name="ViewModelTree" />             
+            </UniformGrid>
+        </st:AutoGrid>
     </DockPanel>
 </UserControl>

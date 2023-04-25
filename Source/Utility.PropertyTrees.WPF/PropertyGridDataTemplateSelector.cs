@@ -6,8 +6,8 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Markup;
-using Utilities;
 using PropertyTree.WPF.Infrastructure;
+using Utility.Helpers;
 
 namespace Utility.PropertyTrees.WPF
 {
@@ -112,7 +112,7 @@ namespace Utility.PropertyTrees.WPF
             {
                 Type enumType;
                 bool nullable;
-                Extensions.IsEnumOrNullableEnum(propertyType, out enumType, out nullable);
+                propertyType.IsEnumOrNullableEnum(out enumType, out nullable);
                 if (nullable)
                     return true;
             }

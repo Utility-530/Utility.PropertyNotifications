@@ -1,7 +1,7 @@
-using SoftFluent.Windows;
 using System.ComponentModel;
 using System.Globalization;
-using Extensions = Utilities.Extensions;
+using Utility.Conversions;
+using Utility.Helpers;
 
 namespace Utility.PropertyTrees
 {
@@ -14,10 +14,9 @@ namespace Utility.PropertyTrees
         public override string Name => Descriptor.Name;
         public string DisplayName => Descriptor.DisplayName;
         public override bool IsReadOnly => Descriptor.IsReadOnly;
-        public bool IsFlagsEnum => Extensions.IsFlagsEnum(PropertyType);
 
         public virtual string? Category => string.IsNullOrWhiteSpace(Descriptor.Category) ||
-                Extensions.EqualsIgnoreCase(Descriptor.Category, CategoryAttribute.Default.Category)
+                Descriptor.Category.EqualsIgnoreCase(CategoryAttribute.Default.Category)
                     ? null
                     : Descriptor.Category;
 
@@ -70,45 +69,5 @@ namespace Utility.PropertyTrees
         {
             return Name;
         }
-
-        protected virtual bool TryChangeType(object value, Type type, IFormatProvider provider, out object changedValue)
-        {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
-
-            return ConversionHelper.TryChangeType(value, type, provider, out changedValue);
-        }
-
-        //int IComparable.CompareTo(object? obj)
-        //{
-        //    return CompareTo(obj as Property);
-        //}
-
-        //public virtual int CompareTo(Property? other)
-        //{
-        //    if (other == null)
-        //    {
-        //        throw new ArgumentNullException("other");
-        //    }
-
-        //    if (SortOrder != 0)
-        //    {
-        //        return SortOrder.CompareTo(other.SortOrder);
-        //    }
-
-        //    if (other.SortOrder != 0)
-        //    {
-        //        return -other.SortOrder.CompareTo(0);
-        //    }
-
-        //    if (DisplayName == null)
-        //    {
-        //        return 1;
-        //    }
-
-        //    return string.Compare(DisplayName, other.DisplayName, StringComparison.OrdinalIgnoreCase);
-        //}
     }
 }

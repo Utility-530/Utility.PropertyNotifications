@@ -1,8 +1,7 @@
 using Utility.PropertyTrees.Abstractions;
-using SoftFluent.Windows;
 using System.Collections;
-using Extensions = Utilities.Extensions;
-using Utility.PropertyTrees.Abstractions;
+using Utility.Conversions;
+using Utility.Helpers;
 
 namespace Utility.PropertyTrees
 {
@@ -14,12 +13,15 @@ namespace Utility.PropertyTrees
 
         public virtual string Name { get; }
         public bool IsCollection => PropertyType != null ? PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(PropertyType) : false;
-        public bool IsFlagsEnum => Extensions.IsFlagsEnum(PropertyType);
+        public bool IsFlagsEnum => PropertyType.IsFlagsEnum();
         public bool IsValueType => PropertyType.IsValueType;
         public virtual int CollectionCount => Value is IEnumerable enumerable ? enumerable.Cast<object>().Count() : 0;
-        public virtual Type CollectionItemPropertyType => !IsCollection ? null : Extensions.GetElementType(PropertyType);
+        public virtual Type CollectionItemPropertyType => !IsCollection ? null : PropertyType.GetElementType();
         public virtual bool IsCollectionItemValueType => CollectionItemPropertyType != null && CollectionItemPropertyType.IsValueType;
         public virtual bool IsError { get => GetProperty<bool>(); set => SetProperty(value); }
+
+        //public bool IsValid => throw new NotImplementedException();
+
         public virtual Type PropertyType => Data.GetType();
         public abstract bool IsReadOnly { get; }
         public override object Content => Name;
@@ -36,6 +38,8 @@ namespace Utility.PropertyTrees
         public abstract object Value { get; set; }
 
         public bool IsString => PropertyType == typeof(string);
+
+    
 
         public override string ToString()
         {

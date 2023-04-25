@@ -6,16 +6,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
- 
-    <PackageReference Include="sqlite-net-base" Version="1.8.116" />
- 
+  <ItemGroup> 
     <PackageReference Include="System.Reactive" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Utility.Collections\Utility.Collections\Utility.Collections.csproj" />
+    <ProjectReference Include="..\..\..\Utility.Conversions\Utility.Conversions\Utility.Conversions.csproj" />
     <ProjectReference Include="..\..\..\Utility.Enums\Utility.Enums\Utility.Enums.csproj" />
+    <ProjectReference Include="..\..\..\Utility.Helpers\Utility.Helpers\Utility.Helpers.csproj" />
+    <ProjectReference Include="..\..\..\Utility.Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\Utility.Nodes\Utility.Nodes.Abstractions\Utility.Nodes.Abstractions.csproj" />
     <ProjectReference Include="..\..\..\Utility.Trees\Utility.Trees\Utility.Trees.csproj" />
     <ProjectReference Include="..\..\..\Utility.WPF\Utility.Commands\Utility.Commands.csproj" />

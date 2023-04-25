@@ -26,7 +26,7 @@
     public class Panel
     {
         public Grid Grid { get; set; }
-        public string Type { get; set; } = "StackPanel";
+        public string Type { get; set; } = "WrapPanel";
     }
 
     public class Dock

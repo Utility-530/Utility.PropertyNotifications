@@ -1,13 +1,14 @@
 using Utility.PropertyTrees.Abstractions;
 using Utility.PropertyTrees.Infrastructure;
-using SoftFluent.Windows.Utilities;
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Reactive.Linq;
 using Utility.Collections;
 using Utility.Nodes.Abstractions;
-using Utility.Observables;
+using Utility.Interfaces.NonGeneric;
+using System.Collections.ObjectModel;
+using Utility.Helpers;
 
 namespace Utility.PropertyTrees
 {
@@ -83,20 +84,29 @@ namespace Utility.PropertyTrees
             PropertyFilter
                 .Instance
                 .FilterProperties(Data, Guid, Predicates)
-                   .Subscribe(prop =>
-                   {
-                       //if (prop.IsValueType || prop.IsString)
-                       //{
-                       //    _leaves.Add(prop);
-                       //}
-                       //else
-                       //    _branches.Add(prop);
+                .Subscribe(prop =>
+                {
+                    //if (prop.IsValueType || prop.IsString)
+                    //{
+                    //    _leaves.Add(prop);
+                    //}
+                    //else
+                    //    _branches.Add(prop);
+                    _children.Add(prop);
+                },
+                e =>
+                {
+                    Errors.Add(ExceptionHelper.CombineMessages(e));                   
+                },
+                () =>
+                {
 
-                       _children.Add(prop);
-                   });
+                });
 
             return await Task.FromResult(true);
         }
+
+        public Collection Errors { get; } = new();
 
         public Task<bool> HasMoreChildren()
         {

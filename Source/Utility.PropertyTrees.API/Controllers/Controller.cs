@@ -34,6 +34,9 @@ namespace Utility.PropertyTrees.API.Controllers
         [HttpPost()]
         public void PostValue(Guid key, string value)
         {
+            Console.WriteLine(nameof(PostValue));
+            Console.WriteLine("Key: " + key);
+            Console.WriteLine("Value: " + value);
             var parent = tree[key];
             parent.Add(new Tree(value) { Key = Guid.NewGuid(), Parent = parent });
             Dictionary[Guid.NewGuid()] = key;
@@ -42,6 +45,8 @@ namespace Utility.PropertyTrees.API.Controllers
         [HttpGet]
         public KeyValue[] GetChanges(Guid? guid)
         {
+            Console.WriteLine(nameof(GetChanges));
+            Console.WriteLine("Key: " + guid);
             List<KeyValue> keyValueList = new List<KeyValue>();
             foreach (var keyValue in Dictionary.ElementsBetween(guid ?? Dictionary.MinKey, Dictionary.MaxKey))
             {
@@ -54,6 +59,9 @@ namespace Utility.PropertyTrees.API.Controllers
         [HttpGet]
         public Guid GetKeyByParent(Guid key, string name)
         {
+            Console.WriteLine(nameof(GetKeyByParent));
+            Console.WriteLine("Key: " + key);
+            Console.WriteLine("Name: " + name);
             lock (tree)
             {
                 ITree? parent = tree[key];
@@ -90,8 +98,14 @@ namespace Utility.PropertyTrees.API.Controllers
         [HttpGet]
         public string GetValue(Guid key)
         {
-            var data = (tree[key] ?? throw new Exception("82228df 44gfgdf"))?.Items.LastOrDefault()?.Data;
-            return (string)data;
+            Console.WriteLine(nameof(GetValue));
+            Console.WriteLine("Key: " + key);
+            if ((tree[key] ?? throw new Exception("82228df 44gfgdf")).Any())
+            {
+                object? data = tree[key].Items[^1].Data;
+                return (string)data;
+            }
+            return default;
         }
     }
 }

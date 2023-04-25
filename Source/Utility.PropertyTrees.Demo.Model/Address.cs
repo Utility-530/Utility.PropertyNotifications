@@ -1,6 +1,7 @@
 ﻿using Utility.PropertyTrees.Abstractions;
 using Jellyfish;
 using System.Text;
+using Utility.Interfaces.NonGeneric;
 
 namespace SoftFluent.Windows.Samples
 {

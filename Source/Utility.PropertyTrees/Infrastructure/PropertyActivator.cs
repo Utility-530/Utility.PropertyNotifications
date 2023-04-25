@@ -1,14 +1,16 @@
 ﻿using Utility.PropertyTrees;
 using Utility.PropertyTrees.Abstractions;
 using System.ComponentModel;
+using Utility.Models;
+using Utility.Infrastructure.Abstractions;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
-    public class BaseActivator
+    public class PropertyActivator
     {
-        public static Dictionary<Type, Type> Interfaces { get; set; }
+        public Dictionary<Type, Type> Interfaces { get; set; }
 
-        public static PropertyStore PropertyStore { get; set; }
+        public IRepository Repository { get; set; }
 
         public virtual async Task<object?> CreateInstance(Guid parent, string name, Type propertyType, Type type)
         {
@@ -17,7 +19,8 @@ namespace Utility.PropertyTrees.Infrastructure
                 throw new ArgumentNullException("type");
             }
 
-            var cx = await PropertyStore.GetGuidByParent(new Key(parent, name, propertyType));
+            var childKey = await Repository.FindKeyByParent(new Key(parent, name, propertyType));
+            Guid cx = (childKey as Key)?.Guid ?? throw new Exception("dfb 43 4df");
 
             var args = new object[]
             {
@@ -81,6 +84,6 @@ namespace Utility.PropertyTrees.Infrastructure
             return property;
         }
 
-        public static BaseActivator Instance { get; } = new();
+        public static PropertyActivator Instance { get; } = new();
     }
 }

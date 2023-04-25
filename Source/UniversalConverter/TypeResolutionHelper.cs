@@ -1,4 +1,7 @@
-﻿namespace SoftFluent.Windows
+﻿using SoftFluent.Windows;
+using System;
+
+namespace UniversalConverter
 {
     public static class TypeResolutionHelper
     {
@@ -9,7 +12,7 @@
 
         public static Type? ResolveType(string fullName, bool throwOnError)
         {
-            return BaseTypeResolver.ResolveType(fullName, throwOnError);
+            return BaseTypeResolver.ResolveType(fullName, throwOnError) ?? throw new Exception("dsv fsd");
         }
     }
 }

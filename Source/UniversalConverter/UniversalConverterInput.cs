@@ -1,4 +1,6 @@
 ﻿using System;
+using UniversalConverter;
+using Utility.Conversions;
 
 namespace SoftFluent.Windows
 {
@@ -398,7 +400,7 @@ namespace SoftFluent.Windows
                 return null;
             }
 
-            return TypeResolutionHelper.ResolveType(name);
+            return TypeResolutionHelper.ResolveType(name)?? throw new Exception("vvdfs 33 ");
         }
 
         private string ValueToString(IFormatProvider provider)

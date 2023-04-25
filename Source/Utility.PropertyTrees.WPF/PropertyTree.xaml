@@ -42,7 +42,7 @@
                             <TextBox.Style>
                                 <Style TargetType="TextBox">
                                     <Setter Property = "att:InputBindingsManager.UpdatePropertySourceWhenEnterPressed" Value="TextBox.Text" />
-                                <Setter Property="BorderThickness" Value="0"></Setter>
+                                    <Setter Property="BorderThickness" Value="0"></Setter>
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="{x:Type TextBox}">
@@ -71,13 +71,19 @@
                     </DataTemplate>
                 </GridViewColumn.CellTemplate>
             </GridViewColumn>
-            <!--<GridViewColumn Header="Set" Width="100">
+            <GridViewColumn Header="Set" Width="100">
                 <GridViewColumn.CellTemplate>
                     <DataTemplate>
-                        <Button
+                        <ItemsControl ItemsSource="{Binding Errors}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding }" Foreground="Red" FontSize="6"></TextBlock>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </DataTemplate>
                 </GridViewColumn.CellTemplate>
-            </GridViewColumn>-->
+            </GridViewColumn>
         </tree:TreeListView.Columns>
     </tree:TreeListView>
 </UserControl>
