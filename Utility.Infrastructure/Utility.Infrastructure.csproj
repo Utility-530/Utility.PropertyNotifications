@@ -14,8 +14,8 @@
 		<ProjectReference Include="..\..\Utility.Conversions\Utility.Conversions\Utility.Conversions.csproj" />
 		<ProjectReference Include="..\..\Utility.Enums\Utility.Enums\Utility.Enums.csproj" />
 		<ProjectReference Include="..\..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
-		<ProjectReference Include="..\..\Utility.Model\Utility.Models\Utility.Models.csproj" />
-		<ProjectReference Include="..\..\Utility.Model\Utility.Packages\Utility.Packages.csproj" />
+		<ProjectReference Include="..\..\Utility.Models\Utility.Models\Utility.Models.csproj" />
+		<ProjectReference Include="..\..\Utility.Models\Utility.Packages\Utility.Packages.csproj" />
 		<ProjectReference Include="..\..\Utility.Trees\Utility.Trees\Utility.Trees.csproj" />
 	</ItemGroup>
 
