@@ -37,8 +37,9 @@ namespace Utility.PropertyTrees.WPF.Demo
             //ModernWpf.Controls.Primitives.WindowHelper.SetUseModernWindowStyle(window, true);
             window.Show();
             var controlWindow = container.Resolve<HistoryWindow>();
-            SetOnSecondScreen(controlWindow);
             controlWindow.Show();
+            SetOnLastScreen(controlWindow);
+
             //ModernWpf.Controls.Primitives.WindowHelper.SetUseModernWindowStyle(controlWindow, true);
 
             base.OnStartup(e);
@@ -47,9 +48,9 @@ namespace Utility.PropertyTrees.WPF.Demo
 #endif
         }
 
-        private void SetOnSecondScreen(Window window)
+        private void SetOnLastScreen(Window window)
         {
-            Screen s = Screen.AllScreens[1];
+            Screen s = Screen.AllScreens[Screen.AllScreens.Length-1];
             System.Drawing.Rectangle r = s.WorkingArea;
             window.Top = r.Top;
             window.Left = r.Left;
