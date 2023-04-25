@@ -36,17 +36,29 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Utility.Model\Utility.Common\Utility.Common.csproj" />
+	  <Compile Remove="Deprecated\Base\**" />
+	  <Compile Remove="Deprecated\Converter\**" />
+	  <Compile Remove="Deprecated\Events\**" />
+	  <Compile Remove="Deprecated\Markup\**" />
+	  <EmbeddedResource Remove="Deprecated\Base\**" />
+	  <EmbeddedResource Remove="Deprecated\Converter\**" />
+	  <EmbeddedResource Remove="Deprecated\Events\**" />
+	  <EmbeddedResource Remove="Deprecated\Markup\**" />
+	  <None Remove="Deprecated\Base\**" />
+	  <None Remove="Deprecated\Converter\**" />
+	  <None Remove="Deprecated\Events\**" />
+	  <None Remove="Deprecated\Markup\**" />
+	  <Page Remove="Deprecated\Base\**" />
+	  <Page Remove="Deprecated\Converter\**" />
+	  <Page Remove="Deprecated\Events\**" />
+	  <Page Remove="Deprecated\Markup\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Utility.Models\Utility.Common\Utility.Common.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Reactive\Utility.WPF.Reactive.csproj" />
-	</ItemGroup>
-	
-	<ItemGroup>
-	  <Folder Include="Deprecated\Converter\" />
-	  <Folder Include="Deprecated\Base\" />
-	  <Folder Include="Deprecated\Events\" />
-	  <Folder Include="Deprecated\Markup\" />
 	</ItemGroup>
 
 	<!-- Only packs project if Configuration set to Release-->
