@@ -1,12 +1,15 @@
-﻿using Utility.PropertyTrees.Abstractions;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using SoftFluent.Windows;
+using Utility.Conversions;
+using Utility.Enums;
+using Utility.Infrastructure;
+using System.Collections;
 using Utility.Infrastructure.Abstractions;
+using Utility.Observables.NonGeneric;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
@@ -14,16 +17,13 @@ namespace Utility.PropertyTrees.Infrastructure
     /// Defines a utility class to implement objects with typed properties without private fields.
     /// This class supports automatically property change notifications and error validations.
     /// </summary>
-    public abstract class AutoObject : IDataErrorInfo, INotifyPropertyChanged, IKey,  IGuid, IObserver<IValueChange>
+    public abstract class AutoObject : BaseObject, IObserver, IDataErrorInfo, INotifyPropertyChanged, IGuid, IObservable
     {
-        //private readonly Dictionary<string, object> _defaultValues = new Dictionary<string, object>();
         private readonly Guid guid;
 
         private IDisposable disposable;
 
-        //private ObservableCommand getCommand = new ObservableCommand(GetSet.Get);
-        //private ObservableCommand<GetSet> setCommand = new ObservableCommand<GetSet>(GetSet.Set);
-        private HashSet<IKey> store = new();
+        private HashSet<IEquatable> store = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoObject"/> class.
@@ -32,21 +32,13 @@ namespace Utility.PropertyTrees.Infrastructure
         {
             this.guid = guid;
             Initialise();
-
-            //getCommand.Subscribe(a =>
-            //{
-            //});
-
-            //setCommand.Subscribe(a =>
-            //{
-            //});
         }
 
-        //public ICommand GetCommand => getCommand;
-        //public ICommand SetCommand => setCommand;
+        public override Key Key => new (guid, nameof(AutoObject), typeof(AutoObject));
 
-        public static IPropertyStore PropertyStore { get; set; }
+        private List<Order> orders = new();
 
+        //public static IPropertyStore PropertyStore { get; set; }
         private async void Initialise()
         {
             //lock (PropertyStore)
@@ -83,6 +75,7 @@ namespace Utility.PropertyTrees.Infrastructure
         [XmlIgnore]
         [Browsable(false)]
         public virtual bool IsValid => Validate(null) == null;
+
 
         /// <summary>
         /// Occurs when a property value changes.
@@ -168,17 +161,17 @@ namespace Utility.PropertyTrees.Infrastructure
         [MethodImpl(MethodImplOptions.NoInlining)]
         protected virtual object GetProperty(Type type, [CallerMemberName] string? name = null)
         {
-            disposable ??= PropertyStore.Subscribe(this);
+            //disposable ??= PropertyStore.Subscribe(this);
             var key = new Key(guid, name, type);
 
             if (store.TryGetValue(key, out var value))
             {
                 return (value as IValueChange).NewValue;
             }
+            var order = new Order { Key = key, Access = Access.Get };
+            orders.Add(order);
+            this.Broadcast(order);
 
-            PropertyStore.GetValue(key);
-
-            //var order = new Order { Key = key, OrderType = OrderType.Get };
 
             //order.Subscribe(this);
             //PropertyStore.OnNext(order);
@@ -221,12 +214,13 @@ namespace Utility.PropertyTrees.Infrastructure
         [MethodImpl(MethodImplOptions.NoInlining)]
         public bool SetProperty(object value, Type type, [CallerMemberName] string name = null)
         {
-            disposable ??= PropertyStore.Subscribe(this);
+            //disposable ??= PropertyStore.Subscribe(this);
             var key = new Key(guid, name, type);
-            var order = new Order { Key = key, Access = OrderType.Set, Value=value };
+            var order = new Order { Key = key, Access = Access.Set, Value = value };
             //order.Subscribe(this);
-   
-            PropertyStore.SetValue(order.Key, value);
+            orders.Add(order);
+            //PropertyStore.SetValue(order.Key, value);
+            this.Broadcast(order);
             return true;
         }
 
@@ -241,7 +235,7 @@ namespace Utility.PropertyTrees.Infrastructure
             return default;
         }
 
-        public bool Equals(IKey? other)
+        public bool Equals(IEquatable? other)
         {
             return Guid == ((other as AutoObject)?.Guid ?? (other as Key)?.Guid);
         }
@@ -251,8 +245,13 @@ namespace Utility.PropertyTrees.Infrastructure
             return Guid.GetHashCode();
         }
 
-        public void OnNext(IValueChange valueChange)
+        public void OnNext(object obj)
         {
+            if (obj is not IValueChange valueChange)
+            {
+                throw new Exception("sdf 33 a");
+            }
+
             if (store.Contains(valueChange))
                 store.Remove(valueChange);
             store.Add(valueChange);
@@ -274,6 +273,24 @@ namespace Utility.PropertyTrees.Infrastructure
         public void OnError(Exception error)
         {
             throw new NotImplementedException();
+        }
+
+
+        //public IDisposable Subscribe(IObserver value)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public override IEnumerator GetEnumerator()
+        {
+            return orders.GetEnumerator();
+        }
+
+
+        private void Broadcast(object obj)
+        {
+            foreach (var observer in Observers)
+                observer.OnNext(obj);
         }
     }
 }

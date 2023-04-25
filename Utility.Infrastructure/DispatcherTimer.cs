@@ -1,82 +1,82 @@
-﻿//using Utility.PropertyTrees.Abstractions;
-//using Utility.PropertyTrees.WPF.Demo;
-//using System.Reactive.Subjects;
-//using Utility.Enums;
+﻿using Utility.PropertyTrees.Abstractions;
+using System.Reactive.Subjects;
+using Utility.Enums;
 
-//namespace Utility.PropertyTrees.Infrastructure
-//{
-//    public record Step(DateTime Date, Direction Direction);
+namespace Utility.PropertyTrees.Infrastructure
+{
 
-//    public class DispatcherTimer : IObserver<ControlType>, IObservable<Step>
-//    {
-//        private Subject<Step> subject = new();
-//        private Direction direction;
+    //    public record Step(DateTime Date, Direction Direction);
 
-//        public static SynchronizationContext Context { get; set; }
-//        public Direction Direction => direction;
+    //    public class DispatcherTimer : IObserver<Playback>, IObservable<Step>
+    //    {
+    //        private Subject<Step> subject = new();
+    //        private Direction direction;
 
-//        public System.Timers.Timer Timer { get; set; } = new(TimeSpan.FromSeconds(0.1));
+    //        public static SynchronizationContext Context { get; set; }
+    //        public Direction Direction => direction;
 
-//        public DispatcherTimer()
-//        {
-//            Timer.Elapsed += Timer_Elapsed;
-//        }
+    //        public System.Timers.Timer Timer { get; set; } = new(TimeSpan.FromSeconds(0.1));
 
-//        private void Start()
-//        {
-//            Timer.Start();
-//        }
+    //        public DispatcherTimer()
+    //        {
+    //            Timer.Elapsed += Timer_Elapsed;
+    //        }
 
-//        private void Stop()
-//        {
-//            Timer.Stop();
-//        }
+    //        private void Start()
+    //        {
+    //            Timer.Start();
+    //        }
 
-//        private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
-//        {
-//            Context.Post(a => subject.OnNext(new Step(e.SignalTime, Direction)), null);
-//        }
+    //        private void Stop()
+    //        {
+    //            Timer.Stop();
+    //        }
 
-//        public IDisposable Subscribe(IObserver<Step> observer)
-//        {
-//            return subject.Subscribe(observer);
-//        }
+    //        private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
+    //        {
+    //            Context.Post(a => subject.OnNext(new Step(e.SignalTime, Direction)), null);
+    //        }
 
-//        public void OnNext(ControlType value)
-//        {
-//            switch (value)
-//            {
-//                case ControlType.Pause:
-//                    Stop();
-//                    break;
+    //        public IDisposable Subscribe(IObserver<Step> observer)
+    //        {
+    //            return subject.Subscribe(observer);
+    //        }
 
-//                case ControlType.Play:
-//                    direction = Direction.Forward;
-//                    Start();
-//                    break;
+    //        public void OnNext(Playback value)
+    //        {
+    //            switch (value)
+    //            {
+    //                case Playback.Pause:
+    //                    Stop();
+    //                    break;
 
-//                case ControlType.Forward:
-//                    Stop();
-//                    direction = Direction.Forward;
-//                    subject.OnNext(new Step(DateTime.Now, Direction));
-//                    break;
+    //                case Playback.Play:
+    //                    direction = Direction.Forward;
+    //                    Start();
+    //                    break;
 
-//                case ControlType.Back:
-//                    Stop();
-//                    direction = Direction.Forward;
-//                    subject.OnNext(new Step(DateTime.Now, Direction));
-//                    break;
-//            }
-//        }
+    //                case Playback.Forward:
+    //                    Stop();
+    //                    direction = Direction.Forward;
+    //                    subject.OnNext(new Step(DateTime.Now, Direction));
+    //                    break;
 
-//        public void OnCompleted()
-//        {
-//            throw new NotImplementedException();
-//        }
+    //                case Playback.Back:
+    //                    Stop();
+    //                    direction = Direction.Forward;
+    //                    subject.OnNext(new Step(DateTime.Now, Direction));
+    //                    break;
+    //            }
+    //        }
 
-//        public void OnError(Exception error)
-//        {
-//            throw new NotImplementedException();
-//        }
-//    }
-//}
+    //        public void OnCompleted()
+    //        {
+    //            throw new NotImplementedException();
+    //        }
+
+    //        public void OnError(Exception error)
+    //        {
+    //            throw new NotImplementedException();
+    //        }
+    //    }
+}

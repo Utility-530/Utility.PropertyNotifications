@@ -1,8 +1,10 @@
-﻿using SoftFluent.Windows;
-using SQLite;
+﻿using SQLite;
 using System.Globalization;
 using System.Reflection;
+using Utility.Conversions;
 using Utility.Infrastructure.Abstractions;
+using Utility.Interfaces.NonGeneric;
+using Utility.Models;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
@@ -60,7 +62,7 @@ namespace Utility.PropertyTrees.Infrastructure
              });
         }
 
-        public async Task UpdateValue(IKey key, object value)
+        public async Task UpdateValue(IEquatable key, object value)
         {
             if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
             {
@@ -138,7 +140,7 @@ namespace Utility.PropertyTrees.Infrastructure
         //    }
         //}
 
-        public async Task<IKey> FindKeyByParent(IKey key)
+        public async Task<IEquatable> FindKeyByParent(IEquatable key)
         {
             if (key is not Key { Guid: var parent, Name: var name, Type: var type } _key)
             {
@@ -188,7 +190,7 @@ namespace Utility.PropertyTrees.Infrastructure
             }
         }
 
-        public async Task<object> FindValue(IKey key)
+        public async Task<object> FindValue(IEquatable key)
         {
             if (key is not Key { Guid: var guid } _key)
             {

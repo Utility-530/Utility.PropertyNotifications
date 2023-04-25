@@ -1,23 +1,26 @@
-﻿namespace Utility.Infrastructure.Abstractions
+﻿using Utility.Interfaces.NonGeneric;
+using Utility.Observables;
+
+namespace Utility.Infrastructure.Abstractions
 {
-    public record KeyValue(IKey Key, object Value);
+    //public record KeyValue(IKey Key, object Value);
 
-    public interface IKey : IEquatable<IKey>
-    {
-    }
+    //public interface IKey : IEquatable<IKey>
+    //{
+    //}
 
-    public interface IObserver : IKey
-    {
-        public void OnNext(IPropertyChange propertyResult);
-    }
+    //public interface IObserver : IKey
+    //{
+    //    public void OnNext(IPropertyChange propertyResult);
+    //}
 
-    public interface IPropertyChange
-    {
-        //public IEnumerable<IPropertyResult> Results { get; set; }
-        public IKey Key { get; }
+    //public interface IPropertyChange
+    //{
+    //    //public IEnumerable<IPropertyResult> Results { get; set; }
+    //    public IKey Key { get; }
 
-        public object Value { get; }
-    }
+    //    public object Value { get; }
+    //}
 
     //public interface IPropertyResult
     //{
@@ -37,16 +40,16 @@
     //}
 
 
-    public interface IPropertyStore : IObserver<object>
+    public interface IPropertyStore : IObserver, IObservable
     {
-        public void GetValue(IKey key);
+        //public void GetValue(IEquatable key);
 
-        public void SetValue(IKey key, object value);
+        //public void SetValue(IEquatable key, object value);
 
-        public Task<Guid> GetGuidByParent(IKey key);
+       // public Task<Guid> Get*/GuidByParent(IEquatable key);
 
-        IDisposable Subscribe(IObserver observer);
+        //IDisposable Subscribe(IObserver observer);
 
-        string Validate(string memberName);
+        // string Validate(string memberName);
     }
 }

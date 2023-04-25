@@ -1,6 +1,8 @@
 ﻿using SQLite;
 using Utility.Trees;
 using Utility.Infrastructure.Abstractions;
+using Utility.Interfaces.NonGeneric;
+using Utility.Models;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
@@ -9,7 +11,7 @@ namespace Utility.PropertyTrees.Infrastructure
         protected readonly SQLiteAsyncConnection connection;
         private Task initialisationTask;
 
-        private Dictionary<Guid, IKey> Dictionary = new();
+        private Dictionary<Guid, IEquatable> Dictionary = new();
 
         public Repository2(string? dbDirectory)
         {
@@ -29,7 +31,7 @@ namespace Utility.PropertyTrees.Infrastructure
 
         private Tree tree = new();
 
-        public async Task UpdateValue(IKey key, object value)
+        public async Task UpdateValue(IEquatable key, object value)
         {
             if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
             {
@@ -39,7 +41,7 @@ namespace Utility.PropertyTrees.Infrastructure
             Dictionary[Guid.NewGuid()] = key;
         }
 
-        public Task<IKey> FindKeyByParent(IKey key)
+        public Task<IEquatable> FindKeyByParent(IEquatable key)
         {
             if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
             {
@@ -55,7 +57,7 @@ namespace Utility.PropertyTrees.Infrastructure
                     tree.Add(_key);
                 }
 
-                IKey? childKey = ((tree[_key] ?? throw new Exception("vdf 44gfgdf"))
+                IEquatable? childKey = ((tree[_key] ?? throw new Exception("vdf 44gfgdf"))
                 .Items
                 .Select(a =>
                 {
@@ -63,7 +65,7 @@ namespace Utility.PropertyTrees.Infrastructure
                     {
                         if (name == _key.Name && type == _key.Type)
                         {
-                            return (IKey)new Key(guid, name, type);
+                            return (IEquatable)new Key(guid, name, type);
                         }
                     }
 
@@ -80,7 +82,7 @@ namespace Utility.PropertyTrees.Infrastructure
             });
         }
 
-        public Task<object> FindValue(IKey key)
+        public Task<object> FindValue(IEquatable key)
         {
             if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
             {

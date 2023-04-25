@@ -1,56 +1,29 @@
 ﻿using Utility.PropertyTrees.Abstractions;
 using System.Diagnostics.CodeAnalysis;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Utility.Infrastructure.Abstractions;
 using Utility.Interfaces.NonGeneric;
 using Utility.Enums;
+using Utility.Models;
+using Utility.Observables;
+using Utility.Infrastructure;
+using System.Collections;
+using Utility.Observables.NonGeneric;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
-    public class DispatcherTimer : IObservable<DateTime>
+
+
+    public class PropertyStore : IPropertyStore
     {
-        private Subject<DateTime> subject = new();
-        public static SynchronizationContext Context { get; set; }
-
-        public System.Timers.Timer Timer { get; set; } = new(TimeSpan.FromSeconds(0.1));
-
-        public DispatcherTimer()
-        {
-            Timer.Elapsed += Timer_Elapsed;
-        }
-
-        public void Start()
-        {
-            Timer.Start();
-        }
-
-        public void Stop()
-        {
-            Timer.Stop();
-        }
-
-        private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
-        {
-            Context.Post(a => subject.OnNext(e.SignalTime), null);
-        }
-
-        public IDisposable Subscribe(IObserver<DateTime> observer)
-        {
-            return subject.Subscribe(observer);
-        }
-    }
-
-    public class PropertyStore : IPropertyStore, IObserver<ControlType>, IObserver<object>
-    {
-        private readonly Dictionary<IKey, IObserver> dictionary = new(new KeyComparer());
+        private readonly Dictionary<IEquatable, IObserver> dictionary = new();
 
         //readonly Repository repo;
-        private readonly History history = new();
+        //private readonly History history = new();
 
-        private readonly Controllable controllable = new();
-        private DispatcherTimer timer = new();
+        //private readonly Controllable controllable = new();
+        //private DispatcherTimer timer = new();
 
         private Lazy<IRepository> repository = new(() =>
         {
@@ -60,13 +33,13 @@ namespace Utility.PropertyTrees.Infrastructure
 
         public PropertyStore()
         {
-            controllable.Subscribe(this);
-            history.Subscribe(this);
-            timer.Subscribe(a =>
-            {
-                if (history.Future.GetEnumerator().MoveNext())
-                    history.Forward();
-            });
+            //controllable.Subscribe(this);
+            //history.Subscribe(this);
+            //timer.Subscribe(a =>
+            //{
+            //    if (history.Future.GetEnumerator().MoveNext())
+            //        history.Forward();
+            //});
         }
 
         protected virtual IRepository Repository
@@ -74,49 +47,51 @@ namespace Utility.PropertyTrees.Infrastructure
             get => repository.Value;
         }
 
-        public IHistory History => history;
-        public IControllable Controllable => controllable;
+        public IEnumerable<IObserver> Observers => dictionary.Values;
 
-        public void GetValue(IKey key)
-        {
-            if (key is not Key { } _key)
-            {
-                throw new Exception("reg 43cs ");
-            }
+        //public IHistory History => history;
+        //public IControllable Controllable => controllable;
 
-            Observable
-                .Return(new Order { Key = _key, Access = Access.Get })
-                .Subscribe(history.OnNext);
-        }
+        //public void GetValue(IEquatable key)
+        //{
+        //    if (key is not Key { } _key)
+        //    {
+        //        throw new Exception("reg 43cs ");
+        //    }
 
-        public void SetValue(IKey key, object value)
-        {
-            if (key is not Key { } _key)
-            {
-                throw new Exception("reg 43cs ");
-            }
-            Observable
-                .Return(new Order { Key = _key, Access = Access.Set, Value = value })
-                .Subscribe(history.OnNext);
-        }
+        //    Observable
+        //        .Return(new Order { Key = _key, Access = Access.Get })
+        //        .Subscribe(history.OnNext);
+        //}
+
+        //public void SetValue(IEquatable key, object value)
+        //{
+        //    if (key is not Key { } _key)
+        //    {
+        //        throw new Exception("reg 43cs ");
+        //    }
+        //    Observable
+        //        .Return(new Order { Key = _key, Access = Access.Set, Value = value })
+        //        .Subscribe(history.OnNext);
+        //}
 
         public IDisposable Subscribe(IObserver observer)
         {
-            dictionary[observer] = observer;
-            return Disposable.Empty;
+            dictionary.Add(observer, observer);
+            return new Disposer<IEquatable>(dictionary, observer, observer);
         }
 
-        public string Validate(string memberName)
-        {
-            return string.Empty;
-        }
+        //public string Validate(string memberName)
+        //{
+        //    return string.Empty;
+        //}
 
         // Move this into history
-        public async Task<Guid> GetGuidByParent(IKey key)
-        {
-            var childKey = await Repository.FindKeyByParent(key);
-            return (childKey as Key)?.Guid ?? throw new Exception("dfb 43 4df");
-        }
+        //public async Task<Guid> GetGuidByParent(IEquatable key)
+        //{
+        //    var childKey = await Repository.FindKeyByParent(key);
+        //    return (childKey as Key)?.Guid ?? throw new Exception("dfb 43 4df");
+        //}
 
         public void OnCompleted()
         {
@@ -126,30 +101,6 @@ namespace Utility.PropertyTrees.Infrastructure
         public void OnError(Exception error)
         {
             throw new NotImplementedException();
-        }
-
-        public void OnNext(ControlType value)
-        {
-            switch (value)
-            {
-                case ControlType.Pause:
-                    timer.Stop();
-                    break;
-
-                case ControlType.Play:
-                    timer.Start();
-                    break;
-
-                case ControlType.Forward:
-                    timer.Stop();
-                    history.Forward();
-                    break;
-
-                case ControlType.Back:
-                    timer.Stop();
-                    history.Back();
-                    break;
-            }
         }
 
         public async void OnNext(object value)
@@ -162,7 +113,7 @@ namespace Utility.PropertyTrees.Infrastructure
             order.Progress = 0;
             switch (order.Access)
             {
-                case OrderType.Get:
+                case Access.Get:
                     {
                         try
                         {
@@ -183,15 +134,16 @@ namespace Utility.PropertyTrees.Infrastructure
 
                         break;
                     }
-                case OrderType.Set:
+                case Access.Set:
                     {
                         try
                         {
                             var guid = await Repository.FindKeyByParent(order.Key);
                             order.Progress = 50;
+                            var find = await Repository.FindValue(guid);
                             await Repository.UpdateValue(guid, order.Value);
                             order.Progress = 100;
-                            Update(order.Value, order);
+                            Update(find, order);
                         }
                         catch (Exception ex)
                         {
@@ -203,21 +155,34 @@ namespace Utility.PropertyTrees.Infrastructure
             }
         }
 
-        private void Update(object a, Order order)
+        private void Update(object newValue, Order order)
         {
-            dictionary[order.Key].OnNext(new PropertyChange(order.Key, a));
+            if (dictionary.TryGetValue(order.Key, out var observer))
+            {
+                observer.OnNext(new PropertyChange(order.Key, newValue, order.Value));
+            }
+        }
+
+        public bool Equals(IEquatable? other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator GetEnumerator()
+        {
+            throw new NotImplementedException();
         }
 
         //public static PropertyStore Instance { get; } = new();
 
-        private class KeyComparer : IEqualityComparer<IKey>
+        private class KeyComparer : IEqualityComparer<IEquatable>
         {
-            public bool Equals(IKey? x, IKey? y)
+            public bool Equals(IEquatable? x, IEquatable? y)
             {
                 return x.Equals(y);
             }
 
-            public int GetHashCode([DisallowNull] IKey obj)
+            public int GetHashCode([DisallowNull] IEquatable obj)
             {
                 return obj.GetHashCode();
             }

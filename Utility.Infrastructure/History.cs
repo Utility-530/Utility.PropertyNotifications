@@ -1,22 +1,23 @@
 ﻿using System.Collections;
-using System.Reactive.Linq;
 using Utility.Collections;
+using Utility.Enums;
+using Utility.Infrastructure;
 using Utility.Infrastructure.Abstractions;
+using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+
 
 namespace Utility.PropertyTrees.Infrastructure
 {
-    public class History : IHistory
+    public class History : BaseObject, IHistory
     {
-        public List<IObserver<object>> observers = new();
-
         private ThreadSafeObservableCollection<Order> past = new();
         private ThreadSafeObservableCollection<Order> present = new();
         private ThreadSafeObservableCollection<Order> future = new();
 
         public History()
         {
-            ThreadSafeObservableCollection<Order>.Context = SynchronizationContext.Current;
+            ThreadSafeObservableCollection<Order>.Context = Context;
         }
 
         public IEnumerable Past => past;
@@ -25,8 +26,30 @@ namespace Utility.PropertyTrees.Infrastructure
 
         public IEnumerable Future => future;
 
+        public override Key Key => new(default, nameof(History), typeof(History));
+
         public void OnNext(object order)
         {
+            if (order is Direction direction)
+            {
+                switch (direction)
+                {
+                    //case Playback.Pause:
+                    //    return;
+
+                    //case Playback.Play:
+                    //    return;
+
+                    case Direction.Forward:
+                        Forward();
+                        return;
+
+                    case Direction.Backward:
+                        Back();
+                        return;
+                }
+            }
+
             if (isDirty)
             {
                 future.Clear();
@@ -45,6 +68,7 @@ namespace Utility.PropertyTrees.Infrastructure
             if (present.Any())
                 Broadcast(present[0]);
         }
+
 
         public void Forward()
         {
@@ -75,20 +99,18 @@ namespace Utility.PropertyTrees.Infrastructure
             Broadcast(present[0]);
         }
 
-        private void Broadcast(object obj)
-        { foreach (var observer in observers) observer.OnNext(obj); }
-
-        public IDisposable Subscribe(IObserver<object> observer)
-        {
-            return new Disposer<object>(observers, observer);
-        }
-
         public void OnCompleted()
         {
             throw new NotImplementedException();
         }
 
         public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public override IEnumerator GetEnumerator()
         {
             throw new NotImplementedException();
         }

@@ -1,6 +1,8 @@
 ﻿using System.Text.Json;
 using System.Web;
 using Utility.Infrastructure.Abstractions;
+using Utility.Interfaces.NonGeneric;
+using Utility.Models;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
@@ -10,10 +12,10 @@ namespace Utility.PropertyTrees.Infrastructure
 
         public HttpRepository()
         {
-            client = new HttpClient { BaseAddress = new Uri("http://localhost:5084/") };
+            client = new HttpClient { BaseAddress = new Uri("http://localhost:5084/"), Timeout= TimeSpan.FromSeconds(1) };
         }
 
-        public async Task<IKey> FindKeyByParent(IKey key)
+        public async Task<IEquatable> FindKeyByParent(IEquatable key)
         {
             if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
             {
@@ -24,7 +26,7 @@ namespace Utility.PropertyTrees.Infrastructure
             query["key"] = guid.ToString();
             query["name"] = name.ToString();
             string queryString = query.ToString();
-            var response = await client.GetAsync("GetKeyByParent?" + queryString);
+            HttpResponseMessage response = await client.GetAsync("GetKeyByParent?" + queryString);
             response.EnsureSuccessStatusCode();
             string jsonResponseBody = await response.Content.ReadAsStringAsync();
             Guid? model = JsonSerializer.Deserialize<Guid>(jsonResponseBody);
@@ -33,7 +35,7 @@ namespace Utility.PropertyTrees.Infrastructure
             return new Key(model.Value, name, type);
         }
 
-        public async Task<object?> FindValue(IKey key)
+        public async Task<object?> FindValue(IEquatable key)
         {
             if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
             {
@@ -52,7 +54,7 @@ namespace Utility.PropertyTrees.Infrastructure
             return default;
         }
 
-        public async Task UpdateValue(IKey key, object value)
+        public async Task UpdateValue(IEquatable key, object value)
         {
             if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
             {

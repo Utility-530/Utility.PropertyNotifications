@@ -1,11 +1,13 @@
-﻿namespace Utility.Infrastructure.Abstractions
+﻿using Utility.Interfaces.NonGeneric;
+
+namespace Utility.Infrastructure.Abstractions
 {
     public interface IRepository
     {
-        Task<object> FindValue(IKey key);
+        Task<object> FindValue(IEquatable key);
 
-        Task<IKey> FindKeyByParent(IKey key);
+        Task<IEquatable> FindKeyByParent(IEquatable key);
 
-        Task UpdateValue(IKey key, object value);
+        Task UpdateValue(IEquatable key, object value);
     }
 }

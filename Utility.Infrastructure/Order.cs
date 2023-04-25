@@ -1,33 +1,46 @@
 ﻿using Utility.PropertyTrees.Abstractions;
-using System.Reactive.Subjects;
-using Utility.Trees;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using Utility.Infrastructure.Abstractions;
+using Utility.Enums;
+using Utility.Observables.Generic;
+using Utility.Interfaces.Generic;
+using Utility.PropertyTrees.Infrastructure;
 
-namespace Utility.PropertyTrees.Infrastructure
+namespace Utility.Infrastructure
 {
-    public class Order : BaseViewModel, IObservable<PropertyChange>, IKey
+    public class Order : BaseViewModel, IObservable<PropertyChange>, IKey<Key>
     {
         private Exception exception;
         private int progress;
-        Subject<PropertyChange> changes = new();
+        Relay<PropertyChange> changes = new();
 
         public Key Key { get; set; }
-        public HistoryState State { get; set; }
-        public OrderType Access { get; set; }
+        public Enums.History State { get; set; }
+        public Access Access { get; set; }
         public object Value { get; set; }
         public int Progress
-        { get => progress; set { progress = value; OnPropertyChanged(); } }
+        {
+            get => progress;
+            set
+            {
+                progress = value;
+                OnPropertyChanged();
+            }
+        }
 
         public Exception Exception
         {
-            get => exception; set { exception = value; OnPropertyChanged(); }
+            get => exception;
+            set
+            {
+                exception = value;
+                OnPropertyChanged();
+            }
         }
 
-        public bool Equals(IKey? other)
+        public bool Equals(IKey<Key>? other)
         {
-            throw new NotImplementedException();
+            return other?.Key.Equals(Key) == true;
         }
 
         public IDisposable Subscribe(IObserver<PropertyChange> observer)
