@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using Utility.Collections;
+using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Abstractions;
-using Utility.Observables;
 
 namespace Utility.Nodes
 {
