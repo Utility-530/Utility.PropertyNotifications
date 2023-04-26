@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Models
 {
@@ -20,9 +21,11 @@ namespace Utility.Models
 
     public class ChangeSet : ReadOnlyCollection<Change>
     {
-        public ChangeSet(IList<Change> list) : base(list)
+        public ChangeSet(IEquatable key, IList<Change> list) : base(list)
         {
+            Key = key;
         }
+        public virtual IEquatable Key { get; }
 
         public ChangeSet(Change change) : base(new[] { change })
         {
@@ -54,15 +57,17 @@ namespace Utility.Models
 
     public class Change
     {
-        public Change(Key value, ChangeType type)
+        public Change(IEquatable value, ChangeType type, int? count = default)
         {
             Value = value;
             Type = type;
+            Count = count;
         }
 
-        public Key Value { get; }
+        public IEquatable Value { get; }
 
         public ChangeType Type { get; init; }
+        public int? Count { get; }
 
         public ChangeSet ToChangeSet()
         {

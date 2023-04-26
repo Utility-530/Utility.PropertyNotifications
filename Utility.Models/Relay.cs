@@ -1,4 +1,5 @@
 ﻿using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
 using Utility.Observables.Generic;
 
 namespace Utility.Models
@@ -10,6 +11,10 @@ namespace Utility.Models
         public bool Equals(IKey<Key>? other)
         {
             return other?.Key == Key;
+        }
+        public bool Equals(IEquatable? other)
+        {
+            return Equals(other as IKey<Key>);
         }
     }
 
