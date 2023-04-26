@@ -7,9 +7,7 @@ using Utility.Collections;
 using Application = System.Windows.Application;
 using Utility.Infrastructure.Abstractions;
 using System.Threading;
-using Utility.Common;
 using Autofac;
-using System.Reflection;
 using Utility.Infrastructure;
 
 namespace Utility.PropertyTrees.WPF.Demo
@@ -32,7 +30,7 @@ namespace Utility.PropertyTrees.WPF.Demo
             var window = new Window { Content = new PropertyView { DataContext = new PropertyTrees.Demo.Model.Model() } };
             //ModernWpf.Controls.Primitives.WindowHelper.SetUseModernWindowStyle(window, true);
             window.Show();
-            var controlWindow = container.Resolve<HistoryWindow>();
+            var controlWindow = new Window { Content = container.Resolve<HistoryController>(), WindowState = WindowState.Maximized };        
             controlWindow.Show();
             SetOnLastScreen(controlWindow);
 

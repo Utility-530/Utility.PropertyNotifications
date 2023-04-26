@@ -20,7 +20,7 @@ namespace Utility.PropertyTrees.WPF.Demo
                 builder.RegisterType<History>().AsSelf().As<IHistory>().SingleInstance();
                 builder.RegisterType<Playback>().AsSelf().As<IPlayback>().SingleInstance();
                 builder.RegisterType<HttpRepository>().AsSelf().As<IRepository>().SingleInstance();
-                builder.RegisterType<HistoryWindow>().AsSelf().As<IObserver>().SingleInstance();
+                builder.RegisterType<HistoryController>().AsSelf().As<IObserver>().SingleInstance();
                 builder.RegisterType<PropertyStore>().AsSelf().As<IPropertyStore>().SingleInstance();
                 builder.RegisterSelf();
                 // Scan an assembly for components

@@ -24,18 +24,15 @@ namespace Utility.Infrastructure
             {
                 throw new Exception("£ dfgdf");
             }
-
             else if (key.Name == nameof(AutoObject))
             {
                 return new IObserver[] { container.Resolve<IHistory>() };
             }
-
             else if (key.Name == nameof(History))
             {
-                return new IObserver[] { container.Resolve<HistoryWindow>(), container.Resolve<IPropertyStore>() };
+                return new IObserver[] { container.Resolve<HistoryController>(), container.Resolve<IPropertyStore>() };
             }
-
-            else if (key.Name == nameof(HistoryWindow))
+            else if (key.Name == nameof(HistoryController))
             {
                 return new IObserver[] { container.Resolve<Playback>() };
             }
