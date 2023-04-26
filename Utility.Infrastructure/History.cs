@@ -1,5 +1,5 @@
 ﻿using System.Collections;
-using Utility.Collections;
+using System.Collections.ObjectModel;
 using Utility.Enums;
 using Utility.Infrastructure;
 using Utility.Infrastructure.Abstractions;
@@ -11,14 +11,13 @@ namespace Utility.PropertyTrees.Infrastructure
 {
     public class History : BaseObject, IHistory
     {
-        private ThreadSafeObservableCollection<Order> past = new();
-        private ThreadSafeObservableCollection<Order> present = new();
-        private ThreadSafeObservableCollection<Order> future = new();
+        private readonly Collection<Order> past = new(), present = new(), future = new();
 
         public History()
         {
-            ThreadSafeObservableCollection<Order>.Context = Context;
         }
+
+        public Guid Guid => Guid.Parse("58a13c8e-d9f4-4117-ab37-dacd58c45340");
 
         public IEnumerable Past => past;
 
@@ -28,24 +27,17 @@ namespace Utility.PropertyTrees.Infrastructure
 
         public override Key Key => new(default, nameof(History), typeof(History));
 
-        public void OnNext(object order)
+        public void OnNext(object value)
         {
-            if (order is Direction direction)
+            if (value is Direction direction)
             {
                 switch (direction)
                 {
-                    //case Playback.Pause:
-                    //    return;
-
-                    //case Playback.Play:
-                    //    return;
-
                     case Direction.Forward:
-                        Forward();
+                        Broadcast(new ChangeSet(this.Key, Forward().ToList()));
                         return;
-
                     case Direction.Backward:
-                        Back();
+                        Broadcast(new ChangeSet(this.Key, Back().ToList()));
                         return;
                 }
             }
@@ -54,49 +46,63 @@ namespace Utility.PropertyTrees.Infrastructure
             {
                 future.Clear();
             }
-            if (order is not Order o)
+            if (value is not Order order)
             {
                 throw new Exception("rfe w3");
             }
 
-            if (future.Any(a => a.Key == o.Key && a.Access == o.Access && a.Value == o.Value))
+            if (future.Any(a => a.Key == order.Key && a.Access == order.Access && a.Value == order.Value))
             {
                 return;
             }
 
-            future.Add(o);
-            if (present.Any())
-                Broadcast(present[0]);
+            future.Add(order);
+            Broadcast(new ChangeSet(this.Key, new[] { new Change(new HistoryOrder(Enums.History.Future, order), ChangeType.Add, future.Count) }));
         }
 
 
-        public void Forward()
+        private IEnumerable<Change> Forward()
         {
-            var d = future[0];
+            var order = future[0];
             if (present.Count > 0)
             {
+                yield return new Change(new HistoryOrder(Enums.History.Past, present[0]), ChangeType.Add, past.Count);
                 past.Add(present[0]);
             }
             if (present.Count > 0)
+            {
+                yield return new Change(new HistoryOrder(Enums.History.Present, present[0]), ChangeType.Remove, present.Count);
                 present.RemoveAt(0);
-            present.Add(d);
-            future.RemoveAt(0);
-            Broadcast(present[0]);
+
+            }
+            yield return new Change(new HistoryOrder(Enums.History.Present, order), ChangeType.Add, present.Count);
+            yield return new Change(new HistoryOrder(Enums.History.Future, order), ChangeType.Remove, future.Count);
+            present.Add(order);
+            future.Remove(order);
         }
 
         private bool isDirty;
 
-        public void Back()
+        private IEnumerable<Change> Back()
         {
             isDirty = true;
-            var d = past[^1];
+            var order = past[^1];
             //if (past.Any())
-            future.Insert(0, present[0]);
             if (present.Count > 0)
+            {
+                yield return new Change(new HistoryOrder(Enums.History.Future, present[0]), ChangeType.Remove, future.Count);
+                future.Insert(0, present[0]);
+            }
+            if (present.Count > 0)
+            {
+                yield return new Change(new HistoryOrder(Enums.History.Present, present[0]), ChangeType.Remove, present.Count);
                 present.RemoveAt(0);
-            present.Add(d);
-            past.Remove(d);
-            Broadcast(present[0]);
+            }
+
+            yield return new Change(new HistoryOrder(Enums.History.Present, order), ChangeType.Add, present.Count);
+            yield return new Change(new HistoryOrder(Enums.History.Past, order), ChangeType.Remove, past.Count);
+            present.Add(order);
+            past.Remove(order);
         }
 
         public void OnCompleted()
@@ -107,6 +113,14 @@ namespace Utility.PropertyTrees.Infrastructure
         public void OnError(Exception error)
         {
             throw new NotImplementedException();
+        }
+    }
+
+    public record HistoryOrder(Enums.History History, Order Order) : IEquatable
+    {
+        public bool Equals(IEquatable? other)
+        {
+            return (other as HistoryOrder)?.Order.Key == Order.Key;
         }
     }
 }

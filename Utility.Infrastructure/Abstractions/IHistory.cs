@@ -9,9 +9,5 @@ namespace Utility.Infrastructure.Abstractions
         IEnumerable Past { get; }
         IEnumerable Present { get; }
         IEnumerable Future { get; }
-
-        void Back();
-
-        void Forward();
     }
 }

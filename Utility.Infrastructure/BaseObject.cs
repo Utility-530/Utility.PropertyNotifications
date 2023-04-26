@@ -8,11 +8,12 @@ using Utility.Observables.NonGeneric;
 
 namespace Utility.Infrastructure
 {
-    public abstract class BaseObject : IObservable, IKey<Key>
+    public abstract class BaseObject : BaseViewModel, IObservable, IKey<Key>
     {
+        private readonly List<object> list = new();
+
         public abstract Key Key { get; }
 
-        List<object> list = new();
         public IEnumerable<IObserver> Observers => Resolver.Observers(Key);
 
         public static IResolver? Resolver { get; set; }
@@ -44,7 +45,5 @@ namespace Utility.Infrastructure
                     observer.OnNext(obj);
             }, default);
         }
-
-
     }
 }

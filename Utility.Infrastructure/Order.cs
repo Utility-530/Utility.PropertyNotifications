@@ -43,6 +43,11 @@ namespace Utility.Infrastructure
             return other?.Key.Equals(Key) == true;
         }
 
+        public bool Equals(IEquatable? other)
+        {
+            return Equals(other as IKey<Key>);
+        }
+
         public IDisposable Subscribe(IObserver<PropertyChange> observer)
         {
             return changes.Subscribe(observer);

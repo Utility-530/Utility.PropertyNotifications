@@ -29,13 +29,30 @@ namespace Utility.PropertyTrees.Infrastructure
             throw new NotImplementedException();
         }
 
-        public async void OnNext(object value)
+        public void OnNext(object value)
         {
-            if (value is not Order order)
+            if (value is not ChangeSet { } changeSet)
             {
-                throw new Exception("g 3434 3");
+                throw new Exception("ujuj  sdsdf");
             }
 
+            foreach (var item in changeSet)
+            {
+                if (item is not Change { Type: var type, Value: HistoryOrder { History: var history, Order: var order } })
+                {
+                    throw new Exception("22 j  sdsdf");
+                }
+                switch (history, type)
+                {
+                    case (Enums.History.Present, ChangeType.Add):
+                        Process(order);
+                        break;
+                }
+            }
+        }
+
+        async void Process(Order order)
+        {
             order.Progress = 0;
             switch (order.Access)
             {
