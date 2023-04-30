@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using Utility.Models;
-using Utility.Infrastructure.Abstractions;
 using Utility.Infrastructure;
 using System.Reactive.Linq;
 
@@ -10,11 +9,7 @@ namespace Utility.PropertyTrees.Infrastructure
     {
         Guid guid = Guid.Parse("24fadcc6-ac25-41a7-b482-fdf1a58b0ecd");
         public override Key Key => new Key(guid, nameof(PropertyActivator), typeof(PropertyActivator));
-
-        //public IRepository Repository { get; set; }
-
-        //public static PropertyActivator Instance { get; } = new();
-
+      
         public override async void OnNext(object value)
         {
             if (value is GuidValue { Value: ActivationRequest { Guid: var guid, Data: var data, Descriptor: var descriptor, PropertyType: var propertyType } } guidValue)

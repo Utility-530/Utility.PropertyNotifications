@@ -26,10 +26,6 @@ namespace Utility.PropertyTrees
             }
         }
 
-        public bool IsValueType => PropertyType.IsValueType;
-
-        //public bool IsFlagsEnum => throw new NotImplementedException();
-
         public PropertyDescriptor Descriptor { get; set; }
 
         public override string ToString()

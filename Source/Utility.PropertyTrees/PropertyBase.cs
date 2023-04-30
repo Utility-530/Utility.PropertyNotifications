@@ -56,41 +56,6 @@ namespace Utility.PropertyTrees
 
             return ConversionHelper.TryChangeType(value, type, provider, out changedValue);
         }
-
-        //public string TemplateKey { get => GetProperty<string>(); set => SetProperty(value); }
-
-        //public string EditorTemplateKey { get => GetProperty<string>(); set => SetProperty(value); }
-
-        //public string PanelKey { get => GetProperty<string>(); set => SetProperty(value); }
-
-        //int IComparable.CompareTo(object? obj)
-        //{
-        //    return CompareTo(obj as Property);
-        //}
-
-        //public virtual int CompareTo(Property? other)
-        //{
-        //    if (other == null)
-        //    {
-        //        throw new ArgumentNullException("other");
-        //    }
-
-        //    if (SortOrder != 0)
-        //    {
-        //        return SortOrder.CompareTo(other.SortOrder);
-        //    }
-
-        //    if (other.SortOrder != 0)
-        //    {
-        //        return -other.SortOrder.CompareTo(0);
-        //    }
-
-        //    if (DisplayName == null)
-        //    {
-        //        return 1;
-        //    }
-
-        //    return string.Compare(DisplayName, other.DisplayName, StringComparison.OrdinalIgnoreCase);
-        //}
+     
     }
 }
