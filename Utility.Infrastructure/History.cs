@@ -5,13 +5,14 @@ using Utility.Infrastructure;
 using Utility.Infrastructure.Abstractions;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-
+using h = Utility.Enums.History;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
-    public class History : BaseObject, IHistory
+    public class History : BaseObject
     {
-        private readonly Collection<Order> past = new(), present = new(), future = new();
+        private bool isDirty;
+        private readonly Collection<object> past = new(), present = new(), future = new();
 
         public History()
         {
@@ -25,9 +26,9 @@ namespace Utility.PropertyTrees.Infrastructure
 
         public IEnumerable Future => future;
 
-        public override Key Key => new(default, nameof(History), typeof(History));
+        public override Key Key => new(Guid, nameof(History), typeof(History));
 
-        public void OnNext(object value)
+        public override void OnNext(object value)
         {
             if (value is Direction direction)
             {
@@ -46,81 +47,65 @@ namespace Utility.PropertyTrees.Infrastructure
             {
                 future.Clear();
             }
-            if (value is not Order order)
-            {
-                throw new Exception("rfe w3");
-            }
 
-            if (future.Any(a => a.Key == order.Key && a.Access == order.Access && a.Value == order.Value))
+            if (future.Any(a => a.Equals(value)))
             {
                 return;
             }
 
-            future.Add(order);
-            Broadcast(new ChangeSet(this.Key, new[] { new Change(new HistoryOrder(Enums.History.Future, order), ChangeType.Add, future.Count) }));
-        }
+            future.Add(value);
+            Broadcast(new ChangeSet(this.Key, new[] { new Change(new HistoryOrder(h.Future, value), ChangeType.Add, future.Count) }));
 
-
-        private IEnumerable<Change> Forward()
-        {
-            var order = future[0];
-            if (present.Count > 0)
+            IEnumerable<Change> Forward()
             {
-                yield return new Change(new HistoryOrder(Enums.History.Past, present[0]), ChangeType.Add, past.Count);
-                past.Add(present[0]);
-            }
-            if (present.Count > 0)
-            {
-                yield return new Change(new HistoryOrder(Enums.History.Present, present[0]), ChangeType.Remove, present.Count);
-                present.RemoveAt(0);
+                if (future.Any() == false)
+                    yield break;
+                var order = future[0];
+                if (present.Count > 0)
+                {
+                    yield return new Change(new HistoryOrder(h.Past, present[0]), ChangeType.Add, past.Count);
+                    past.Add(present[0]);
+                }
+                if (present.Count > 0)
+                {
+                    yield return new Change(new HistoryOrder(h.Present, present[0]), ChangeType.Remove, present.Count);
+                    present.RemoveAt(0);
 
-            }
-            yield return new Change(new HistoryOrder(Enums.History.Present, order), ChangeType.Add, present.Count);
-            yield return new Change(new HistoryOrder(Enums.History.Future, order), ChangeType.Remove, future.Count);
-            present.Add(order);
-            future.Remove(order);
-        }
-
-        private bool isDirty;
-
-        private IEnumerable<Change> Back()
-        {
-            isDirty = true;
-            var order = past[^1];
-            //if (past.Any())
-            if (present.Count > 0)
-            {
-                yield return new Change(new HistoryOrder(Enums.History.Future, present[0]), ChangeType.Remove, future.Count);
-                future.Insert(0, present[0]);
-            }
-            if (present.Count > 0)
-            {
-                yield return new Change(new HistoryOrder(Enums.History.Present, present[0]), ChangeType.Remove, present.Count);
-                present.RemoveAt(0);
+                }
+                yield return new Change(new HistoryOrder(h.Present, order), ChangeType.Add, present.Count);
+                yield return new Change(new HistoryOrder(h.Future, order), ChangeType.Remove, future.Count);
+                present.Add(order);
+                future.Remove(order);
             }
 
-            yield return new Change(new HistoryOrder(Enums.History.Present, order), ChangeType.Add, present.Count);
-            yield return new Change(new HistoryOrder(Enums.History.Past, order), ChangeType.Remove, past.Count);
-            present.Add(order);
-            past.Remove(order);
-        }
+            IEnumerable<Change> Back()
+            {
+                isDirty = true;
+                var order = past[^1];
+                if (present.Count > 0)
+                {
+                    yield return new Change(new HistoryOrder(h.Future, present[0]), ChangeType.Remove, future.Count);
+                    future.Insert(0, present[0]);
+                }
+                if (present.Count > 0)
+                {
+                    yield return new Change(new HistoryOrder(h.Present, present[0]), ChangeType.Remove, present.Count);
+                    present.RemoveAt(0);
+                }
 
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
+                yield return new Change(new HistoryOrder(h.Present, order), ChangeType.Add, present.Count);
+                yield return new Change(new HistoryOrder(h.Past, order), ChangeType.Remove, past.Count);
+                present.Add(order);
+                past.Remove(order);
+            }
         }
     }
 
-    public record HistoryOrder(Enums.History History, Order Order) : IEquatable
+    public record HistoryOrder(h History, object Order) : IEquatable
     {
         public bool Equals(IEquatable? other)
         {
-            return (other as HistoryOrder)?.Order.Key == Order.Key;
+            return (other as HistoryOrder)?.Order.Equals(Order) == true;
         }
     }
 }

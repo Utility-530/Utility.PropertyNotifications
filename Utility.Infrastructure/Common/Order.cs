@@ -1,5 +1,4 @@
-﻿using Utility.PropertyTrees.Abstractions;
-using Utility.Interfaces.NonGeneric;
+﻿using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Enums;
 using Utility.Observables.Generic;
@@ -8,7 +7,7 @@ using Utility.PropertyTrees.Infrastructure;
 
 namespace Utility.Infrastructure
 {
-    public class Order : BaseViewModel, IObservable<PropertyChange>, IKey<Key>
+    public class PropertyOrder : BaseViewModel, IObservable<PropertyChange>, IKey<Key>
     {
         private Exception exception;
         private int progress;
@@ -53,4 +52,5 @@ namespace Utility.Infrastructure
             return changes.Subscribe(observer);
         }
     }
+
 }

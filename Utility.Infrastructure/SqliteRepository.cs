@@ -26,7 +26,6 @@ namespace Utility.PropertyTrees.Infrastructure
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-
         public string? Assembly { get; set; }
         public string? Namespace { get; set; }
         public string Name { get; set; }
@@ -36,7 +35,6 @@ namespace Utility.PropertyTrees.Infrastructure
     {
         [PrimaryKey]
         public Guid Guid { get; set; }
-
         public DateTime Added { get; set; }
         public DateTime? Removed { get; set; }
         public string Value { get; set; }

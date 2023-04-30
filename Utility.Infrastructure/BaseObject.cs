@@ -1,28 +1,31 @@
-﻿using System;
-using System.Collections;
-using Utility.Infrastructure.Abstractions;
+﻿using System.Collections.Concurrent;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using Utility.Collections;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using Utility.Observables.NonGeneric;
 
 namespace Utility.Infrastructure
 {
-    public abstract class BaseObject : BaseViewModel, IObservable, IKey<Key>
+    public interface IBase : IKey<Key>, IObserver, IValue
     {
-        private readonly List<object> list = new();
+
+    }
+
+    public record GuidValue(Guid Guid, object Value, int Remaining);
+
+    public abstract class BaseObject : BaseViewModel, IBase
+    {
+        private ConcurrentDictionary<Guid, Subject<GuidValue>> dictionary = new();
+        public static Resolver Resolver { get; set; }
 
         public abstract Key Key { get; }
 
-        public IEnumerable<IObserver> Observers => Resolver.Observers(Key);
 
-        public static IResolver? Resolver { get; set; }
-        public static SynchronizationContext? Context { get; set; }
+        public Collection Errors { get; } = new();
 
-        public IDisposable Subscribe(IObserver observer)
-        {
-            return new Disposer(Resolver.Observers(Key), observer);
-        }
+
         public bool Equals(IKey<Key>? other)
         {
             return other?.Key.Equals(Key) ?? false;
@@ -33,17 +36,66 @@ namespace Utility.Infrastructure
             return (other as IKey<Key>)?.Equals(this.Key) ?? false;
         }
 
-        public IEnumerator GetEnumerator() => list.GetEnumerator();
+        public object? Value { get; set; }
 
-        protected void Broadcast(object obj)
+        //public IEnumerator GetEnumerator() => Messages.GetEnumerator();
+
+        protected virtual void Broadcast(object obj)
         {
-            list.Add(obj);
-            (Context ?? throw new Exception("missing context"))
-                .Post(a =>
+            Value = obj;
+            Resolver.OnNext(this);
+        }
+
+        protected IObservable<T> Observe<T, TR>(TR tr)
+        {
+            var guid = Guid.NewGuid();
+            var subject = new Subject<GuidValue>();
+            dictionary[guid] = subject;
+            Broadcast(new GuidValue(guid, tr, 0));
+            var output = new Subject<T>();
+            subject.Subscribe(a =>
             {
-                foreach (var observer in Observers)
-                    observer.OnNext(obj);
-            }, default);
+                switch (a.Value)
+                {
+                    case Exception e:
+                        Errors.Add(e);
+                        output.OnError(e);
+                        output.OnCompleted();
+                        break;
+                    case T t:
+                        output.OnNext(t);
+                        break;
+                    default:
+                        break;
+                }
+                if (a.Remaining == 0)
+                    output.OnCompleted();
+            });
+            return output;
+        }
+
+        public virtual void OnNext(object value)
+        {
+            if (value is GuidValue { Guid: var guid } keyType)
+            {
+                if (dictionary.ContainsKey(guid))
+                    dictionary[guid].OnNext(keyType);
+            }
+        }
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            return Key.Name;
         }
     }
 }

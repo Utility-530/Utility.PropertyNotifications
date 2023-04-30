@@ -16,7 +16,9 @@
 		<ProjectReference Include="..\..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
 		<ProjectReference Include="..\..\Utility.Models\Utility.Models\Utility.Models.csproj" />
 		<ProjectReference Include="..\..\Utility.Models\Utility.Packages\Utility.Packages.csproj" />
+		<ProjectReference Include="..\..\Utility.Reactive\Utility.Reactive\Utility.Reactive.csproj" />
 		<ProjectReference Include="..\..\Utility.Trees\Utility.Trees\Utility.Trees.csproj" />
+		<ProjectReference Include="..\..\Utility.WPF\Utility.Commands\Utility.Commands.csproj" />
 	</ItemGroup>
 
 </Project>

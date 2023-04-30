@@ -1,5 +1,4 @@
-﻿using Utility.Infrastructure.Abstractions;
-using Utility.Interfaces.NonGeneric;
+﻿using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 
 namespace Utility.PropertyTrees.Infrastructure

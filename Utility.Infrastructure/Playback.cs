@@ -1,17 +1,16 @@
 ﻿using Utility.Enums;
 using Utility.Models;
-using Utility.PropertyTrees.Abstractions;
 using playback = Utility.Enums.Playback;
 
 namespace Utility.Infrastructure
 {
-    public class Playback : BaseObject, IPlayback
+    public class Playback : BaseObject //, IPlayback
     {
         List<Direction> directions = new();
-        public System.Timers.Timer Timer { get; set; } = new(TimeSpan.FromSeconds(0.1));
+        public System.Timers.Timer Timer { get; set; } = new(TimeSpan.FromSeconds(0.01));
 
 
-        public override Key Key => new(default, nameof(Playback), typeof(Playback));
+        public override Key Key => Keys.Playback;
 
         public Playback()
         {
@@ -45,7 +44,7 @@ namespace Utility.Infrastructure
         }
 
 
-        public void OnNext(object value)
+        public override void OnNext(object value)
         {
             if (value is playback playback)
             {
@@ -65,16 +64,6 @@ namespace Utility.Infrastructure
                         return;
                 }
             }
-        }
-
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
         }
     }
 }
