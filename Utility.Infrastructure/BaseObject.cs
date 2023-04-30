@@ -38,8 +38,6 @@ namespace Utility.Infrastructure
 
         public object? Value { get; set; }
 
-        //public IEnumerator GetEnumerator() => Messages.GetEnumerator();
-
         protected virtual void Broadcast(object obj)
         {
             Value = obj;
