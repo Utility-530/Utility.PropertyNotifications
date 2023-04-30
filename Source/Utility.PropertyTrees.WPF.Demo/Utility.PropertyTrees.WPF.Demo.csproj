@@ -7,14 +7,13 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-
-
-  <ItemGroup>
+	<ItemGroup>
     <None Remove="Infrastructure\PropertyStore.cs~RF6dda7ca0.TMP" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AbstractBuilder" Version="1.5.0" />
+    <PackageReference Include="LightInject" Version="6.6.3" />
     <PackageReference Include="LochNessBuilder" Version="4.1.0" />
     <PackageReference Include="ModernWpfUI" Version="0.9.6" />
     <PackageReference Include="Object.Builder" Version="1.2.0" />
@@ -27,6 +26,7 @@
     <ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
     <ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
     <ProjectReference Include="..\Infrastructure.WPF\Infrastructure.WPF.csproj" />
+    <ProjectReference Include="..\Utility.Graph.Shapes\Utility.Graph.Shapes.csproj" />
     <ProjectReference Include="..\Utility.PropertyTrees.Demo.Model\Utility.PropertyTrees.Demo.Model.csproj" />
     <ProjectReference Include="..\Utility.PropertyTrees.WPF\Utility.PropertyTrees.WPF.csproj" />
     <ProjectReference Include="..\Utility.PropertyTrees\Utility.PropertyTrees.csproj" />

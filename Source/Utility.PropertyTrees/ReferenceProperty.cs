@@ -9,7 +9,7 @@ namespace Utility.PropertyTrees
         {
         }
 
-        public override string Name => Descriptor.Name;
+        public override string Name => Descriptor?.Name ?? "Descriptor not set";
         public string DisplayName => Descriptor.DisplayName;
         public override bool IsReadOnly => Descriptor.IsReadOnly;
         public bool IsFlagsEnum => PropertyType.IsFlagsEnum();

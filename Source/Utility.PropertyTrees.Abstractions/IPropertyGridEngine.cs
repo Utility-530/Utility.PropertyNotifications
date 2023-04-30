@@ -2,6 +2,6 @@
 {
     public interface IPropertyGridEngine
     {
-        IPropertyNode Convert(object options);
+        Task<IPropertyNode> Convert(object options);
     }
 }

@@ -2,6 +2,7 @@ using Utility.PropertyTrees.Abstractions;
 using System.Collections;
 using Utility.Conversions;
 using Utility.Helpers;
+using Utility.PropertyTrees.Infrastructure;
 
 namespace Utility.PropertyTrees
 {
@@ -18,7 +19,7 @@ namespace Utility.PropertyTrees
         public virtual int CollectionCount => Value is IEnumerable enumerable ? enumerable.Cast<object>().Count() : 0;
         public virtual Type CollectionItemPropertyType => !IsCollection ? null : PropertyType.GetElementType();
         public virtual bool IsCollectionItemValueType => CollectionItemPropertyType != null && CollectionItemPropertyType.IsValueType;
-        public virtual bool IsError { get => GetProperty<bool>(); set => SetProperty(value); }
+        public virtual bool IsError { get => this.GetProperty<bool>(); set => this.SetProperty(value); }
 
         //public bool IsValid => throw new NotImplementedException();
 

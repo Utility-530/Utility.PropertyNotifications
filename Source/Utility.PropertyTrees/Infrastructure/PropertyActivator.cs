@@ -1,83 +1,141 @@
 ﻿using System.ComponentModel;
 using Utility.Models;
 using Utility.Infrastructure.Abstractions;
+using Utility.Infrastructure;
+using System.Reactive.Linq;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
-    public class PropertyActivator
+    public class PropertyActivator : BaseObject
     {
-        public Dictionary<Type, Type> Interfaces { get; set; }
+        Guid guid = Guid.Parse("24fadcc6-ac25-41a7-b482-fdf1a58b0ecd");
+        public override Key Key => new Key(guid, nameof(PropertyActivator), typeof(PropertyActivator));
 
-        public IRepository Repository { get; set; }
+        //public IRepository Repository { get; set; }
 
-        public virtual async Task<object?> CreateInstance(Guid parent, string name, Type propertyType, Type type)
+        //public static PropertyActivator Instance { get; } = new();
+
+        public override async void OnNext(object value)
         {
-            if (type == null)
+            if (value is GuidValue { Value: ActivationRequest { Guid: var guid, Data: var data, Descriptor: var descriptor, PropertyType: var propertyType } } guidValue)
             {
-                throw new ArgumentNullException("type");
+                var newValue = new GuidValue(guidValue.Guid, await ToProperty(), 0);
+                Broadcast(newValue);
+            }
+            else
+            {
+                base.OnNext(value);
             }
 
-            var childKey = await Repository.FindKeyByParent(new Key(parent, name, propertyType));
-            Guid guid = (childKey as Key)?.Guid ?? throw new Exception("dfb 43 4df");
-            var args = new object[] { guid };
-            return Activator.CreateInstance(type, args);
-        }
-
-        public async Task<ReferenceProperty> CreateReferenceProperty(Guid parent, PropertyDescriptor descriptor, object data)
-        {
-            var item = descriptor.GetValue(data);
-            if (descriptor == null)
+            Task<PropertyBase> ToProperty()
             {
-                throw new ArgumentNullException("descriptor");
-            }
-            if (item == null)
-            {
-                if (descriptor.PropertyType.IsInterface)
+                return propertyType switch
                 {
-                    item = Activator.CreateInstance(Interfaces[descriptor.PropertyType]);
-                }
-                else
+                    PropertyType.Reference => CreateReferenceProperty(guid, descriptor, data),
+                    PropertyType.Value => CreateValueProperty(guid, descriptor, data),
+                    PropertyType.CollectionItem => CreateCollectionItemProperty(guid, descriptor, data),
+                    PropertyType.Root => CreateRootProperty(guid, descriptor, data),
+                    _ => throw new Exception("f 33 dsf"),
+                };
+
+                async Task<PropertyBase> CreateReferenceProperty(Guid parent, PropertyDescriptor descriptor, object data)
                 {
-                    item = Activator.CreateInstance(descriptor.PropertyType);
+                    var item = descriptor.GetValue(data);
+                    if (descriptor == null)
+                    {
+                        throw new ArgumentNullException("descriptor");
+                    }
+                    if (item == null)
+                    {
+                        if (descriptor.PropertyType.IsInterface)
+                        {
+                            item = Activator.CreateInstance(await Observe<Type, Type>(descriptor.PropertyType));
+                        }
+                        else
+                        {
+                            item = Activator.CreateInstance(descriptor.PropertyType);
+                        }
+                        descriptor.SetValue(data, item);
+                    }
+                    var property = (ReferenceProperty)await CreateInstance(parent, descriptor.Name, descriptor.PropertyType, typeof(ReferenceProperty));
+
+                    property.Descriptor = descriptor;
+                    property.Data = item;
+
+                    return property;
                 }
-                descriptor.SetValue(data, item);
+
+                async Task<PropertyBase> CreateValueProperty(Guid parent, PropertyDescriptor descriptor, object data)
+                {
+                    if (descriptor == null)
+                    {
+                        throw new ArgumentNullException("descriptor");
+                    }
+                    if (data == null)
+                    {
+                        throw new Exception("f 33 gfg");
+                    }
+                    var property = (ValueProperty)await CreateInstance(parent, descriptor.Name, descriptor.PropertyType, typeof(ValueProperty));
+
+                    property.Descriptor = descriptor;
+                    property.Data = data;
+
+                    return property;
+                }
+
+                async Task<PropertyBase> CreateCollectionItemProperty(Guid parent, PropertyDescriptor descriptor, object data)
+                {
+                    if (descriptor == null)
+                    {
+                        throw new ArgumentNullException("descriptor");
+                    }
+                    if (data == null)
+                    {
+                        throw new Exception("f 33 gfg");
+                    }
+                    var property = (CollectionItemProperty)await CreateInstance(parent, descriptor.Name, descriptor.PropertyType, typeof(CollectionItemProperty));
+
+                    property.Descriptor = descriptor;
+                    property.Data = data;
+
+                    return property;
+                }
+
+                async Task<PropertyBase> CreateRootProperty(Guid parent, PropertyDescriptor descriptor, object data)
+                {
+                    if (descriptor == null)
+                    {
+                        throw new ArgumentNullException("descriptor");
+                    }
+                    if (data == null)
+                    {
+                        throw new Exception("f 33 gfg");
+                    }
+                    var property = (RootProperty)await CreateInstance(parent, descriptor.Name, descriptor.PropertyType, typeof(RootProperty));
+
+                    property.Data = data;
+
+                    return property;
+                }
+
+                async Task<PropertyBase> CreateInstance(Guid parent, string name, Type propertyType, Type type)
+                {
+                    if (type == null)
+                    {
+                        throw new ArgumentNullException("type");
+                    }
+
+                    var result = await Observe<FindResult, FindOrder>(new(new Key(parent, name, propertyType)));
+                    Guid guid = (result.Key as Key)?.Guid ?? throw new Exception("dfb 43 4df");
+                    var args = new object[] { guid };
+                    var response = await Observe<ObjectCreationResponse, ObjectCreationRequest>(new(type, typeof(PropertyNode), args));
+                    return response.Instance as PropertyBase ?? throw new Exception("fg e4  ll;");
+                }
             }
-            var property = (ReferenceProperty)await CreateInstance(parent, descriptor.Name, descriptor.PropertyType, typeof(ReferenceProperty));
-
-            property.Descriptor = descriptor;
-            property.Data = item;
-
-            return property;
         }
-
-        public async Task<ValueProperty> CreateValueProperty(Guid parent, PropertyDescriptor descriptor, object data)
-        {
-            if (descriptor == null)
-            {
-                throw new ArgumentNullException("descriptor");
-            }
-            if (data == null)
-            {
-                throw new Exception("f 33 gfg");
-            }
-            var property = (ValueProperty)await CreateInstance(parent, descriptor.Name, descriptor.PropertyType, typeof(ValueProperty));
-
-            property.Descriptor = descriptor;
-            property.Data = data;
-
-            return property;
-        }
-
-        public async Task<CollectionItemProperty> CreateCollectionItemProperty(Guid parent, int index, object data)
-        {
-            var property = (CollectionItemProperty)await CreateInstance(parent, index.ToString(), data.GetType(), typeof(CollectionItemProperty));
-
-            property.Index = index;
-            property.Data = data;
-
-            return property;
-        }
-
-        public static PropertyActivator Instance { get; } = new();
     }
+
+    public record ObjectCreationRequest(Type Type, Type RegistrationType, object[] Args);
+    public record ObjectCreationResponse(object Instance);
+
 }

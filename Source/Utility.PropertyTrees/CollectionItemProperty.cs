@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Utility.Conversions;
 
 namespace Utility.PropertyTrees
@@ -8,9 +9,9 @@ namespace Utility.PropertyTrees
         {
         }
 
-        public int Index { get; set; }
+        //public int Index { get; set; }
 
-        public override string Name => Index.ToString();
+        public override string Name => Descriptor.Name;
         public string DisplayName => Name;
         public override bool IsReadOnly => true;
 
@@ -27,7 +28,9 @@ namespace Utility.PropertyTrees
 
         public bool IsValueType => PropertyType.IsValueType;
 
-        public bool IsFlagsEnum => throw new NotImplementedException();
+        //public bool IsFlagsEnum => throw new NotImplementedException();
+
+        public PropertyDescriptor Descriptor { get; set; }
 
         public override string ToString()
         {

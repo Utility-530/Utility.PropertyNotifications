@@ -226,3 +226,4 @@ SoftFluent.Windows/nuget/*.nupkg
 /SoftFluent.Windows/PropertyGrid.WPF.Demo/Data/data.sqlite
 /Source/.vs/PropertyTree/DesignTimeBuild/.dtbcache.v2
 *.sqlite
+/Source/packages

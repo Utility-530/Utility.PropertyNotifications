@@ -1,21 +1,23 @@
 ﻿using Utility.PropertyTrees.Abstractions;
 using System;
+using System.Threading.Tasks;
 
 namespace Utility.PropertyTrees.WPF.Demo.Infrastructure
 {
     public class Engine : IPropertyGridEngine
     {
-        public Guid Guid { get; } = Guid.Parse("7e0c787a-30d0-4038-9376-2808cc66a389");
+        private readonly PropertyNode propertyNode;
 
-        public Engine()
+
+        public Engine(PropertyNode propertyNode)
         {
+            this.propertyNode = propertyNode;
         }
 
-        public IPropertyNode Convert(object data)
+        public Task<IPropertyNode> Convert(object data)
         {
-            return new PropertyNode(Guid) { Data = data };
+            propertyNode.Data = data;
+            return Task.FromResult((IPropertyNode)propertyNode);
         }
-
-        public static Engine Instance { get; } = new Engine();
     }
 }

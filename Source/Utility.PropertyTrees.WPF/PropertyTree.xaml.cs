@@ -73,7 +73,7 @@ namespace Utility.PropertyTrees.WPF
                 return;
             }
 
-            Source = engine.Convert(SelectedObject);
+            Source = await engine.Convert(SelectedObject);
             Tree.ItemsSource = new[] { Source };
         }
 

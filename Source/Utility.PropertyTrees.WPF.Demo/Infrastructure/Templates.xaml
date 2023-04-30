@@ -152,7 +152,7 @@
         </Viewbox>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type local:HistoryController}">
+    <DataTemplate DataType="{x:Type local:HistoryViewModel}">
         <st:AutoGrid Rows="50,30,*" Columns="*" x:Name="Top">
 
             <btn:StepButtons x:Name="StepButtons" Enabled="{Binding Enabled, Mode=OneWay}" Command="{Binding Command, Mode=OneTime}" ></btn:StepButtons>

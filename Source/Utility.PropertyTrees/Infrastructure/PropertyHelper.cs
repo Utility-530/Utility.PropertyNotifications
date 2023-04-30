@@ -1,37 +1,41 @@
 ﻿using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Reflection;
+using Utility.Helpers.NonGeneric;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
-    public static class PropertyHelper
+    public partial class PropertyFilter
     {
-        private static PropertyActivator activator = PropertyActivator.Instance;
-
-        public static IEnumerable<PropertyNode> EnumerateProperties(object data, Guid guid, DescriptorFilters? filters = null)
+        public IEnumerable<(Task<PropertyNode?>, int remaining)> EnumerateProperties(object data, Guid guid, DescriptorFilters? filters = null)
         {
+            var descriptors = PropertyDescriptors(data).ToArray();
+            var count = descriptors.Length;
+            int i = 0;
 
             if (data is IEnumerable enumerable && filters == null)
             {
-                int i = 0;
+                count += enumerable.Count();
                 foreach (var item in enumerable)
                 {
-                    yield return FromIndex(i, item);
                     i++;
+                    yield return (FromIndex(i, item), enumerable.Count() - i);
                 }
             }
 
-            var descriptors = PropertyDescriptors(data).ToArray();
             foreach (var descriptor in descriptors)
             {
-                yield return FromPropertyDescriptor(descriptor);
+                i++;
+                yield return (FromPropertyDescriptor(descriptor), count - i);
             }
 
 
-            PropertyNode? FromIndex(int i, object? item)
+            Task<PropertyNode?> FromIndex(int i, object? item)
             {
-                return activator.CreateCollectionItemProperty(guid, i, item).Result;
+                return Observe<PropertyNode?, ActivationRequest>(new(guid, new CollectionItemDescriptor(item, i), item, PropertyType.CollectionItem)).ToTask();
             }
 
             IEnumerable<PropertyDescriptor> PropertyDescriptors(object data)
@@ -45,7 +49,7 @@ namespace Utility.PropertyTrees.Infrastructure
                 }
             }
 
-            PropertyNode? FromPropertyDescriptor(PropertyDescriptor descriptor)
+            Task<PropertyNode?> FromPropertyDescriptor(PropertyDescriptor descriptor)
             {
                 if (descriptor.PropertyType == typeof(MethodBase))
                     return null;
@@ -54,22 +58,17 @@ namespace Utility.PropertyTrees.Infrastructure
 
                 return CreateProperty(data, guid, descriptor);
 
-                PropertyNode CreateProperty(object data, Guid guid, PropertyDescriptor descriptor)
+                async Task<PropertyNode?> CreateProperty(object data, Guid guid, PropertyDescriptor descriptor)
                 {
                     PropertyNode property;
                     if (IsValueOrStringProperty(descriptor))
                     {
-                        property = activator.CreateValueProperty(guid, descriptor, data).Result;
+                        property = await Observe<PropertyNode, ActivationRequest>(new(guid, descriptor, data, PropertyType.Value)).ToTask();
                     }
-                    else/* if(IsCollectionProperty(descriptor))*/
+                    else
                     {
-                        property = activator.CreateReferenceProperty(guid, descriptor, data).Result;
+                        property = await Observe<PropertyNode, ActivationRequest>(new(guid, descriptor, data, PropertyType.Reference)).ToTask();
                     }
-                    //else
-                    //{
-                    //    var item = descriptor.GetValue(data);
-                    //    property = activator.CreateProperty(guid, descriptor, item).Result;
-                    //}
 
                     return property;
 
@@ -85,7 +84,93 @@ namespace Utility.PropertyTrees.Infrastructure
                 }
             }
         }
+    }
 
+    public class CollectionItemDescriptor : PropertyDescriptor
+    {
+        public CollectionItemDescriptor(object item, int index) : base(index.ToString(), null)
+        {
+            Item = item;
+            Index = index;
+        }
+
+        public object Item { get; }
+
+        public int Index { get; }
+
+        public override Type ComponentType => throw new NotImplementedException();
+
+        public override bool IsReadOnly => throw new NotImplementedException();
+
+        public override Type PropertyType => Item.GetType();
+
+
+        public override bool CanResetValue(object component)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override object? GetValue(object? component)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ResetValue(object component)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetValue(object? component, object? value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool ShouldSerializeValue(object component)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class RootDescriptor : PropertyDescriptor
+    {
+        public RootDescriptor(object item) : base("root", null)
+        {
+            Item = item;
+        }
+
+        public object Item { get; }
+
+        public override Type ComponentType => throw new NotImplementedException();
+
+        public override bool IsReadOnly => throw new NotImplementedException();
+
+        public override Type PropertyType => Item.GetType();
+
+
+        public override bool CanResetValue(object component)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override object? GetValue(object? component)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void ResetValue(object component)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override void SetValue(object? component, object? value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool ShouldSerializeValue(object component)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

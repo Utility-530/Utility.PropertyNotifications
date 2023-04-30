@@ -8,6 +8,7 @@ using Utility.Collections;
 using Utility.Nodes.Abstractions;
 using Utility.Interfaces.NonGeneric;
 using Utility.Helpers;
+using Utility.Models;
 
 namespace Utility.PropertyTrees
 {
@@ -28,6 +29,8 @@ namespace Utility.PropertyTrees
             lazyPredicates = new(() => new DefaultFilter(Data));
             _children.CollectionChanged += (s, e) => CollectionChanged?.Invoke(this, e);
         }
+
+        public override Key Key => new(Guid, nameof(PropertyNode), typeof(PropertyNode));
 
         public INode Parent { get; set; }
 
@@ -72,23 +75,15 @@ namespace Utility.PropertyTrees
 
             flag = true;
 
-            PropertyFilter
-                .Instance
-                .FilterProperties(Data, Guid, Predicates)
-                .Subscribe(_children.Add,
-                e =>
+            Observe<PropertyNode, ChildrenRequest>(new ChildrenRequest(Data, Guid, Predicates))
+                .Subscribe(a =>
                 {
-                    Errors.Add(ExceptionHelper.CombineMessages(e));                   
-                },
-                () =>
-                {
-
+                    if (a is PropertyNode)
+                        _children.Add(a);
                 });
 
             return await Task.FromResult(true);
         }
-
-        public Collection Errors { get; } = new();
 
         public Task<bool> HasMoreChildren()
         {
@@ -119,4 +114,6 @@ namespace Utility.PropertyTrees
             return predicates.GetEnumerator();
         }
     }
+
+    public record ChildrenRequest(object Data, Guid Guid, DescriptorFilters Filters);
 }

@@ -13,11 +13,11 @@ using Utility.Collections;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
-    public class HistoryController : BaseObject, IObserver
+    public class HistoryViewModel : BaseObject
     {
         private Step enabled;
 
-        public HistoryController()
+        public HistoryViewModel()
         {
             Command = new Command<Step>(step =>
             {
@@ -45,7 +45,7 @@ namespace Utility.PropertyTrees.WPF.Demo
             });
         }
 
-        public override Models.Key Key => new(Guid, nameof(HistoryController), typeof(HistoryController));
+        public override Models.Key Key => new(Guid, nameof(HistoryViewModel), typeof(HistoryViewModel));
 
         public Guid Guid => Guid.Parse("9dde99db-73b6-4cdc-974e-615ece9b4806");
 
@@ -53,20 +53,21 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         public ICommand Command { get; }
 
-        private Dictionary<Enums.History, Collection> dictionary = new() { 
-            { Enums.History.Future, new Collection() }, 
+        private readonly Dictionary<Enums.History, Collection> dictionary = new() {
+            { Enums.History.Future, new Collection() },
             { Enums.History.Present, new Collection() },
             { Enums.History.Past, new Collection() } };
 
-        public Collection Past  => dictionary[Enums.History.Past];  
+        public Collection Past => dictionary[Enums.History.Past];
         public Collection Future => dictionary[Enums.History.Future];
         public Collection Present => dictionary[Enums.History.Present];
 
-        public void OnNext(object value)
+        public override void OnNext(object value)
         {
             if (value is not ChangeSet { } changeSet)
             {
-                throw new Exception("ujuj  sdsdf");
+                base.OnNext(value);
+                return;
             }
 
             foreach (var item in changeSet)
@@ -87,8 +88,9 @@ namespace Utility.PropertyTrees.WPF.Demo
                         throw new Exception("ggv 4 sdsss");
                 }
             }
-
-            Enabled = Steps().Aggregate((x, y) => x |= y);
+            var steps = Steps().ToArray();
+            if (steps.Length > 0)
+                Enabled = steps.Aggregate((x, y) => x |= y);
 
             IEnumerable<Step> Steps()
             {
@@ -101,18 +103,6 @@ namespace Utility.PropertyTrees.WPF.Demo
                     yield return Step.Backward;
             }
         }
-
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
-
     }
 
     public class HeaderedList
@@ -123,5 +113,5 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         public Collection Collection { get; } = new Collection();
     }
- 
+
 }

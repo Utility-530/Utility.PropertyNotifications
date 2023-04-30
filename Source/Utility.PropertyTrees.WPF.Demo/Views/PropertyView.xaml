@@ -3,10 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:Utility.PropertyTrees.WPF.Demo"
              xmlns:prop="clr-namespace:Utility.PropertyTrees.WPF;assembly=Utility.PropertyTrees.WPF"
-             xmlns:infr="clr-namespace:Utility.PropertyTrees.WPF.Demo.Infrastructure"
-             xmlns:ui="http://schemas.modernwpf.com/2019" 
              xmlns:st="http://schemas.spicytaco.io/"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"   
@@ -15,6 +12,7 @@
     <DockPanel>
         <ToolBar DockPanel.Dock="Top">
             <Button Click="refresh_click">refresh</Button>
+            <Button Click="initialise_click">initialise</Button>
         </ToolBar>
         <st:AutoGrid Columns="2*,*" Rows="*">
 
@@ -24,7 +22,7 @@
             <UniformGrid Columns="1">
                 <prop:PropertyTree
                         x:Name="PropertyTree"
-                        Engine="{x:Static infr:Engine.Instance}"
+                        
                         TreeView.SelectedItemChanged="PropertyTree_SelectedItemChanged" />       
                 
                 <prop:PropertyTree x:Name="ViewModelTree" />             

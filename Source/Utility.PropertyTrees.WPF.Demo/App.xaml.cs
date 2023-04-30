@@ -1,42 +1,39 @@
 ﻿using System.Windows.Forms;
-using Utility.PropertyTrees.Abstractions;
-using Utility.PropertyTrees.Infrastructure;
 using SoftFluent.Windows.Diagnostics;
 using System.Windows;
 using Utility.Collections;
 using Application = System.Windows.Application;
-using Utility.Infrastructure.Abstractions;
-using System.Threading;
-using Autofac;
 using Utility.Infrastructure;
+using System.Threading;
+using DryIoc;
+using Utility.GraphShapes;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
     public partial class App : Application
     {
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
             SQLitePCL.Batteries.Init();
+            Collection.Context = Utility.Infrastructure.Resolver.Context = SynchronizationContext.Current?? throw new System.Exception("sd w3w");
 
-            var container = BootStrapper.Build();
+            var container = new LightBootStrapper().Build();
 
-            //var propertyStore = repository
-            PropertyActivator.Instance.Repository = container.Resolve<IRepository>();
-            PropertyActivator.Instance.Interfaces = new() { { typeof(IViewModel), typeof(ViewModel) } };
+            BaseObject.Resolver = new Utility.Infrastructure.Resolver(container);
 
-            AutoObject.Resolver = new Utility.Infrastructure.Resolver(container);
-            Collection.Context = BaseObject.Context = SynchronizationContext.Current;
-
-            var window = new Window { Content = new PropertyView { DataContext = new PropertyTrees.Demo.Model.Model() } };
+            var window = new Window { Content = new PropertyView(container) { DataContext = new PropertyTrees.Demo.Model.Model() } };
             //ModernWpf.Controls.Primitives.WindowHelper.SetUseModernWindowStyle(window, true);
             window.Show();
-            var controlWindow = new Window { Content = container.Resolve<HistoryController>(), WindowState = WindowState.Maximized };        
+            var controlWindow = new Window { Content = container.Resolve<HistoryViewModel>(), WindowState = WindowState.Maximized };
             controlWindow.Show();
             SetOnLastScreen(controlWindow);
 
+            new Window { Content = new UserControl1(container) }.Show();
             //ModernWpf.Controls.Primitives.WindowHelper.SetUseModernWindowStyle(controlWindow, true);
 
             base.OnStartup(e);
+            //
+
 #if DEBUG
             Tracing.Enable();
 #endif
@@ -44,10 +41,13 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         private void SetOnLastScreen(Window window)
         {
-            Screen s = Screen.AllScreens[Screen.AllScreens.Length-1];
+            Screen s = Screen.AllScreens[Screen.AllScreens.Length - 1];
             System.Drawing.Rectangle r = s.WorkingArea;
             window.Top = r.Top;
             window.Left = r.Left;
         }
     }
+
+
+
 }
