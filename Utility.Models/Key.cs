@@ -22,7 +22,7 @@ namespace Utility.Models
         public Guid Guid { get; set; }
         public string Name { get; set; }
 
-        [JsonConverter(typeof(TypeConverter))]
+        [JsonConverter(typeof(JsonTypeConverter))]
         public Type Type { get; set; }
 
         public ISerialise FromString(string str)
@@ -66,7 +66,7 @@ namespace Utility.Models
         }
     }
 
-    public class TypeConverter : JsonConverter<Type>
+    public class JsonTypeConverter : JsonConverter<Type>
     {
         public override Type Read(
             ref Utf8JsonReader reader,
