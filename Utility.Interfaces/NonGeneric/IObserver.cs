@@ -11,6 +11,8 @@ namespace Utility.Interfaces.NonGeneric
         //public List<object> Observations { get; }
         void OnNext(object value);
 
+        void OnStarted();
+
         void OnCompleted();
 
         void OnError(Exception error);

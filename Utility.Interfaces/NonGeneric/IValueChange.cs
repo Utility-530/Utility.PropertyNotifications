@@ -1,6 +1,6 @@
 ﻿namespace Utility.Interfaces.NonGeneric
 {
-    public interface IValueChange : IName, IEquatable
+    public interface IValueChange : IName
     {
         object NewValue { get; }
 
