@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Reflection;
 using Utility.Interfaces.NonGeneric;
+using Utility.Observables.Generic;
 using Utility.Observables.NonGeneric;
 
 namespace Utility.Collections
@@ -12,6 +13,8 @@ namespace Utility.Collections
     {
         private DeferredEventsCollection _deferredEvents;
         List<IObserver> observers = new List<IObserver>();
+        private bool isCompleted;
+
         public IEnumerable<IObserver> Observers => observers;
 
         public Collection()
@@ -55,9 +58,13 @@ namespace Utility.Collections
                 observer.OnNext(e);
             }
         }
-
+        public void Reset()
+        {
+            isCompleted = false;
+        }
         public void Complete()
         {
+            isCompleted = true;
             foreach (var observer in Observers.ToArray())
             {
                 observer.OnCompleted();
@@ -66,7 +73,18 @@ namespace Utility.Collections
 
         public IDisposable Subscribe(IObserver observer)
         {
-            observer.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, this));
+            // send all the items already in the collection
+            if (this.Any())
+            {
+                observer.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, this));
+            }
+            if (isCompleted)
+            {
+                observer.OnCompleted();
+                return Disposer.Empty;
+            }
+            isCompleted = false;
+   
             return new Disposer(observers, observer);
         }
 
