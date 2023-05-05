@@ -97,8 +97,6 @@ namespace Utility.PropertyTrees.WPF.Demo
                 if (instance == null)
                     throw new Exception("hyh dfgdfs3");
                 container.RegisterInstance(regType, instance);
-                //container.RegisterInstance(typeof(AutoObject), instance);
-                //container.RegisterMapping(typeof(AutoObject), regType);
                 Broadcast(new GuidValue(keyType.Guid, new ObjectCreationResponse(instance), 0));
             }
         }
