@@ -40,12 +40,17 @@ namespace Utility.Infrastructure
 
         private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            Forward();
+            Context.Post(a => Forward(), default);
         }
 
 
         public override void OnNext(object value)
         {
+            if(value is ChangeSet changeSet)
+            {
+                if(changeSet.Any()==false)
+                    Pause();
+            }
             if (value is playback playback)
             {
                 switch (playback)

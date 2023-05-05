@@ -41,7 +41,7 @@ namespace Utility.Infrastructure
         }
 
         public bool IsPriority { get; set; } = true;
-        public bool SkipContext { get; set; } = false;
+        public bool SkipContext { get; set; } = true;
         public IEnumerable<IObserver> Observers => container.ResolveMany<TObserver>().Cast<IObserver>();
 
         public override string ToString()

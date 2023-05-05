@@ -5,6 +5,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Enums;
 using Utility.Infrastructure;
+using Utility.Infrastructure.Common;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
@@ -12,13 +13,13 @@ namespace Utility.PropertyTrees.Infrastructure
     /// Defines a utility class to implement objects with typed properties without private fields.
     /// This class supports automatically property change notifications and error validations.
     /// </summary>
-    public abstract class AutoObject : BaseObject, IObserver, IDataErrorInfo, INotifyPropertyChanged, IGuid
+    public abstract class AutoObject : BaseObject, IDataErrorInfo, INotifyPropertyChanged, IGuid
     {
         private readonly Guid guid;
 
         private IDisposable disposable;
 
-        private HashSet<IEquatable> store = new();
+        private Dictionary<IEquatable, PropertyChange> store = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoObject"/> class.
@@ -28,7 +29,7 @@ namespace Utility.PropertyTrees.Infrastructure
             this.guid = guid;
         }
 
-        public override Key Key => new (guid, nameof(AutoObject), typeof(AutoObject));
+        public override Key Key => new(guid, nameof(AutoObject), typeof(AutoObject));
 
         public Guid Guid => guid;
 
@@ -40,6 +41,8 @@ namespace Utility.PropertyTrees.Infrastructure
 
         [Browsable(false)]
         public virtual bool IsValid => Validate(null) == null;
+
+        public virtual object? Value { get; set; }
 
         string IDataErrorInfo.this[string columnName] => Validate(columnName);
 
@@ -65,6 +68,7 @@ namespace Utility.PropertyTrees.Infrastructure
             //disposable ??= PropertyStore.Subscribe(this);
             var key = new Key(guid, name, type);
             var order = new PropertyOrder { Key = key, Access = Access.Set, Value = value };
+            store[key] = new PropertyChange(key, value, default);
             this.Broadcast(order);
             return true;
         }
@@ -78,33 +82,33 @@ namespace Utility.PropertyTrees.Infrastructure
 
         public override void OnNext(object obj)
         {
-            if (obj is not IValueChange valueChange)
+            if (obj is not PropertyChange { Key: Key { Guid: var guid } } valueChange)
             {
                 base.OnNext(obj);
                 return;
             }
+            if (this.guid != guid)
+            {
+                return;
+            }
 
-            if (store.Contains(valueChange))
+            if (store.ContainsKey(valueChange.Key))
+            {
+                if (store[valueChange.Key].NewValue == valueChange.NewValue)
+                {
+                    return;
+                }
                 store.Remove(valueChange);
-            store.Add(valueChange);
+            }
+            store.Add(valueChange.Key, valueChange);
 
-            //store[propertyResult] = propertyResult.Value;
-            if (valueChange is IName { Name: var name })
+            if (valueChange is IName { Name: var name } && valueChange.NewValue != null)
             {
                 OnPropertyChanged(name);
+                OnPropertyChanged(nameof(Value));
                 return;
             }
             throw new Exception("zg 34422111");
-        }
-
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
         }
     }
 }

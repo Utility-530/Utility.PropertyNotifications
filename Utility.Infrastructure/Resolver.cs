@@ -15,7 +15,7 @@ namespace Utility.Infrastructure
         private readonly History history;
         Guid Guid = Guid.Parse("222b7df3-9ae7-49d6-aabc-a492c6254718");
         public override Key Key => new(Guid, nameof(Resolver), typeof(Resolver));
-        public static SynchronizationContext? Context { get; set; }
+
 
         public Resolver(Container container)
         {
@@ -41,7 +41,7 @@ namespace Utility.Infrastructure
 
             if (next is History)
             {
-                if (@base.Value is not ChangeSet { } changeSet)
+                if (@base.Output is not ChangeSet { } changeSet)
                 {
                     throw new Exception("ujuj  sdsdf");
                 }
@@ -57,7 +57,7 @@ namespace Utility.Infrastructure
             else
             {
                 var connections = Connections(@base.Key);
-                var _value = @base.Value;
+                var _value = @base.Output;
 
 
                 //foreach (var connection in connections)
@@ -79,7 +79,7 @@ namespace Utility.Infrastructure
 
         protected override void Broadcast(object obj)
         {
-            Value = obj;
+            Output = obj;
             this.OnNext(this);
         }
 
@@ -104,14 +104,19 @@ namespace Utility.Infrastructure
 
         private void Broadcast(object order, IConnection connection)
         {
+            //if (connection.Observers.Any() == false)
+            //    throw new Exception("kl99dsf  sdffdsdff");
+
             try
 
             {
-                if (connection.SkipContext == false && SynchronizationContext.Current?.Equals(Context) != true)
+                //if (connection.SkipContext == false || SynchronizationContext.Current ==null)
+                if (true)
                 {
                     (Context ?? throw new Exception("missing context"))
                         .Post(a =>
                         {
+        
                             foreach (var observer in connection.Observers)
                             {
                                 observer.OnNext(order);

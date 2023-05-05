@@ -8,55 +8,57 @@ using Utility.Models;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
-    public class Table
-    {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
-
-        public Guid Guid { get; set; }
-
-        public Guid? Parent { get; set; }
-
-        public string Name { get; set; }
-
-        public int Type { get; set; }
-    }
-
-    public class Model
-    {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
-        public string? Assembly { get; set; }
-        public string? Namespace { get; set; }
-        public string Name { get; set; }
-    }
-
-    public class Property
-    {
-        [PrimaryKey]
-        public Guid Guid { get; set; }
-        public DateTime Added { get; set; }
-        public DateTime? Removed { get; set; }
-        public string Value { get; set; }
-    }
 
     public class SqliteRepository : IRepository
     {
+        public class Table
+        {
+            [PrimaryKey, AutoIncrement]
+            public int Id { get; set; }
+
+            public Guid Guid { get; set; }
+
+            public Guid? Parent { get; set; }
+
+            public string Name { get; set; }
+
+            public int Type { get; set; }
+        }
+
+        public class Type
+        {
+            [PrimaryKey, AutoIncrement]
+            public int Id { get; set; }
+            public string? Assembly { get; set; }
+            public string? Namespace { get; set; }
+            public string Name { get; set; }
+        }
+
+        public class Property
+        {
+            [PrimaryKey]
+            public Guid Guid { get; set; }
+            public DateTime Added { get; set; }
+            public DateTime? Removed { get; set; }
+            public string Value { get; set; }
+        }
+
+
         protected readonly SQLiteAsyncConnection connection;
         private Task initialisationTask;
 
-        public SqliteRepository(string? dbDirectory)
+        public SqliteRepository(string? dbDirectory = default)
         {
-            connection = new SQLiteAsyncConnection(Path.Combine(dbDirectory, "data" + "." + "sqlite"));
+            connection = new SQLiteAsyncConnection(Path.Combine(dbDirectory ?? string.Empty, "data" + "." + "sqlite"));
             Initialise();
         }
 
-        private async void Initialise()
+        private void Initialise()
         {
             initialisationTask = Task.WhenAll(
              new[]{
                  connection.CreateTableAsync<Table>(),
-                 connection.CreateTableAsync<Model>()
+                 connection.CreateTableAsync<Type>()
              });
         }
 
@@ -158,12 +160,12 @@ namespace Utility.PropertyTrees.Infrastructure
                     var tables = c.Query<Table>($"Select * from 'Table' where Parent = '{parent}' AND Name = '{name}'");
                     if (tables.Count != 0)
                         return;
-                    var types = c.Query<Model>($"Select * from 'Type' where Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}'");
+                    var types = c.Query<Type>($"Select * from 'Type' where Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}'");
                     int typeId;
 
                     if (types.Count == 0)
                     {
-                        c.Insert(new Model { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name });
+                        c.Insert(new Type { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name });
                         typeId = c.ExecuteScalar<int>("Select Max(Id) from 'Type'");
                     }
                     else if (types.Count == 1)
@@ -188,7 +190,7 @@ namespace Utility.PropertyTrees.Infrastructure
             }
         }
 
-        public async Task<object> FindValue(IEquatable key)
+        public async Task<object?> FindValue(IEquatable key)
         {
             if (key is not Key { Guid: var guid } _key)
             {
@@ -210,10 +212,10 @@ namespace Utility.PropertyTrees.Infrastructure
 
                 if (count == 0)
                 {
-                    return new();
+                    return null;
                 }
 
-                var type = await connection.Table<Model>().Where(v => v.Id.Equals(table.Type)).FirstAsync();
+                var type = await connection.Table<Type>().Where(v => v.Id.Equals(table.Type)).FirstAsync();
                 string assemblyQualifiedName = Assembly.CreateQualifiedName(type.Assembly, $"{type.Namespace}.{type.Name}");
                 var _type = System.Type.GetType(assemblyQualifiedName);
                 //await connection.InsertOrReplaceAsync(new KeyValue { Id = x.Single().Id, Key = key, Value = JsonConvert.SerializeObject(value) });
@@ -227,7 +229,7 @@ namespace Utility.PropertyTrees.Infrastructure
                         else
                             throw new Exception("332 b64ere 4323");
                     }
-                    return list.LastOrDefault();
+                    return list.LastOrDefault()?? null;
                 }
             }
             else

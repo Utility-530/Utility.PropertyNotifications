@@ -8,9 +8,9 @@ using Utility.Models;
 
 namespace Utility.Infrastructure
 {
-    public interface IBase : IKey<Key>, IObserver, IValue
+    public interface IBase : IKey<Key>, IObserver
     {
-
+        object Output { get; }
     }
 
     public record GuidValue(Guid Guid, object Value, int Remaining);
@@ -18,7 +18,11 @@ namespace Utility.Infrastructure
     public abstract class BaseObject : BaseViewModel, IBase
     {
         private ConcurrentDictionary<Guid, Subject<GuidValue>> dictionary = new();
+        private static SynchronizationContext? context;
+
         public static Resolver Resolver { get; set; }
+
+        public static SynchronizationContext Context { get => context?? throw new Exception("Mising Context"); set => context = value; }
 
         public abstract Key Key { get; }
 
@@ -36,11 +40,12 @@ namespace Utility.Infrastructure
             return (other as IKey<Key>)?.Equals(this.Key) ?? false;
         }
 
-        public object? Value { get; set; }
+
+        public virtual object? Output { get; set; }
 
         protected virtual void Broadcast(object obj)
         {
-            Value = obj;
+            Output = obj;
             Resolver.OnNext(this);
         }
 
@@ -55,6 +60,9 @@ namespace Utility.Infrastructure
             {
                 switch (a.Value)
                 {
+                    case nameof(OnCompleted):
+                        output.OnCompleted();
+                        break;
                     case Exception e:
                         Errors.Add(e);
                         output.OnError(e);
@@ -81,6 +89,10 @@ namespace Utility.Infrastructure
             }
         }
 
+        public void OnStarted()
+        {
+            throw new NotImplementedException();
+        }
         public void OnCompleted()
         {
             throw new NotImplementedException();
