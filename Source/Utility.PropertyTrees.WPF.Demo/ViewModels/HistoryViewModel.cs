@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive.Linq;
 using Utility.Commands;
 using Utility.Enums;
-using Utility.Interfaces.NonGeneric;
 using Utility.Infrastructure;
 using System.Windows.Input;
 using Utility.PropertyTrees.Infrastructure;
@@ -16,10 +15,17 @@ namespace Utility.PropertyTrees.WPF.Demo
     public class HistoryViewModel : BaseObject
     {
         private Step enabled;
+        public Guid Guid => Guid.Parse("9dde99db-73b6-4cdc-974e-615ece9b4806");
+        public override Models.Key Key => new(Guid, nameof(HistoryViewModel), typeof(HistoryViewModel));
 
         public HistoryViewModel()
         {
             Command = new Command<Step>(step =>
+            {
+                ToPlayback(step);
+            });
+            
+            void ToPlayback(Step step)
             {
                 switch (step)
                 {
@@ -42,12 +48,8 @@ namespace Utility.PropertyTrees.WPF.Demo
                     case Step.All:
                         break;
                 }
-            });
+            }
         }
-
-        public override Models.Key Key => new(Guid, nameof(HistoryViewModel), typeof(HistoryViewModel));
-
-        public Guid Guid => Guid.Parse("9dde99db-73b6-4cdc-974e-615ece9b4806");
 
         public Step Enabled { get => enabled; set => Set(ref enabled, value); }
 

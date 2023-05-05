@@ -7,13 +7,11 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Infrastructure/Templates.xaml" />
-                <ResourceDictionary Source="/Infrastructure/Styles.xaml" />
+                <ResourceDictionary Source="/Themes/Templates.xaml" />
+                <ResourceDictionary Source="/Themes/Styles.xaml" />
                 <ui:ThemeResources RequestedTheme="Light" />
                 <ui:XamlControlsResources />
             </ResourceDictionary.MergedDictionaries>
-
-
             <!--<DataTemplate DataType="{x:Type samples1:Customer2}">
                 <local1:PropertyView
                         DataContext="{Binding }" />

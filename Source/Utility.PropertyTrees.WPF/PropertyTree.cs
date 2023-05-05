@@ -1,17 +1,20 @@
-﻿using Utility.PropertyTrees.Abstractions;
-using Utility.PropertyTrees.WPF.Infrastructure;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Text;
 using System.Threading;
-using System.Windows;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Utility.WPF.Controls.Trees;
+using System.Windows;
+using Utility.PropertyTrees.Abstractions;
 using static Evan.Wpf.DependencyHelper;
+using Utility.WPF.Controls.Trees;
 
 namespace Utility.PropertyTrees.WPF
 {
-    public partial class PropertyTree : UserControl
+    public class PropertyTree : ContentControl
     {
         public static readonly DependencyProperty
 
@@ -34,36 +37,19 @@ namespace Utility.PropertyTrees.WPF
             }
         }
 
-        public static RoutedCommand
-            BrowseCommand = new(), NavigateCommand = new(), RefreshCommand = new();
+        public static RoutedCommand BrowseCommand = new(), NavigateCommand = new(), RefreshCommand = new();
 
         private IPropertyGridEngine engine;
         public SynchronizationContext context;
+        TreeListView treeListView = new();
 
         public PropertyTree()
         {
-            InitializeComponent();
-            Tree.SelectedItemChanged += Tree_SelectedItemChanged;
-
             context = SynchronizationContext.Current ?? throw new Exception("4g4e&&&&&");
-        }
-
-        private void Tree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
+            treeListView = new PropertyTreeList();            
         }
 
         public virtual string DefaultCategoryName { get; set; } = CategoryAttribute.Default.Category;
-
-        private void Tree_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            TreeListView _ListView = sender as TreeListView;
-            var _ActualWidth = _ListView.ActualWidth - SystemParameters.VerticalScrollBarWidth - _ListView.Columns[0].Width;
-            var separateWidth = (_ActualWidth * 1d) / (_ListView.Columns.Count - 1);
-            for (int i = 1; i < _ListView.Columns.Count; i++)
-            {
-                _ListView.Columns[i].Width = separateWidth;
-            }
-        }
 
         public virtual async void RefreshSelectedObject()
         {
@@ -74,7 +60,8 @@ namespace Utility.PropertyTrees.WPF
             }
 
             Source = await engine.Convert(SelectedObject);
-            Tree.ItemsSource = new[] { Source };
+            this.Content = treeListView;
+            treeListView.ItemsSource = new[] { Source };
         }
 
         #region DependencyProperties

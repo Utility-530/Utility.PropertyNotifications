@@ -1,48 +1,17 @@
-﻿using System.Windows;
-using GraphShape.Controls;
-using System.Windows.Controls;
-using Utility.Infrastructure;
+﻿using Utility.Infrastructure;
 using Utility.Models;
 using System.Collections.Generic;
 using System;
 using Utility.Interfaces.Generic;
-using DryIoc;
 using System.Linq;
 
 namespace Utility.GraphShapes
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class UserControl1 : UserControl
-    {
-
-        public UserControl1(IContainer container)
-        {
-            InitializeComponent();
-            this.DockPanel.DataContext = container.Resolve<Interface>();
-        }
-   
-        private void OnRelayoutClick(object sender, RoutedEventArgs args)
-        {
-            Layout.Relayout();
-        }
-
-        private void OnSelectedVertexChangeClick(object sender, RoutedEventArgs e)
-        {
-
-        }
-    }
-
-    public class PocGraphLayout : GraphLayout<PocVertex, PocEdge, PocGraph>
-    {
-    }
-
-    public class Interface : BaseObject
+    public class GraphController : BaseObject
     {
         public static Guid Guid => System.Guid.Parse("0bd8ea77-29c7-4039-aac2-94405423c398");
 
-        public override Key Key => new(Guid, nameof(Interface), typeof(Interface));
+        public override Key Key => new(Guid, nameof(GraphController), typeof(GraphController));
         List<object> events = new();
 
         public override void OnNext(object value)

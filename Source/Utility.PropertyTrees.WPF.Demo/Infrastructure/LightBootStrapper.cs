@@ -12,8 +12,16 @@ namespace Utility.PropertyTrees.WPF.Demo
     public class LightBootStrapper : BaseObject
     {
 
-        Guid Guid = Guid.Parse("111b7df3-9ae7-49d6-aabc-a492c6254718");
-        public override Key Key => new(Guid, nameof(LightBootStrapper), typeof(LightBootStrapper));
+        Guid MyGuid = Guid.Parse("111b7df3-9ae7-49d6-aabc-a492c6254718");
+
+        class Guids
+        {
+            public static readonly Guid Model = Guid.Parse("01b52a3b-6e73-4204-a4e7-ca9ed3cf3c24");
+            public static readonly Guid Server = Guid.Parse("7e0c787a-30d0-4038-9376-2808cc66a389");
+            //public static readonly Guid Guid3 = Guid.Parse("af561734-bd38-472a-85e8-fdb17193bc12");
+        }
+  
+        public override Key Key => new(MyGuid, nameof(LightBootStrapper), typeof(LightBootStrapper));
 
         DryIoc.Container container = new DryIoc.Container();
 
@@ -23,20 +31,28 @@ namespace Utility.PropertyTrees.WPF.Demo
             // Register individual components
             container.Register<History>(Reuse.Singleton);
             container.Register<Playback>(Reuse.Singleton);
-            container.Register<IRepository, HttpRepository>(Reuse.Singleton);
+            //container.Register<IRepository, HttpRepository>(Reuse.Singleton);
+            container.Register<IRepository, SqliteRepository>(Reuse.Singleton);
             container.Register<HistoryViewModel>(Reuse.Singleton);
             container.Register<PropertyStore>(Reuse.Singleton);
             container.Register<PropertyActivator>(Reuse.Singleton);
             container.Register<PropertyFilter>(Reuse.Singleton);
             container.Register<InterfaceStore>(Reuse.Singleton);
-            container.Register<Utility.GraphShapes.Interface>(Reuse.Singleton);
+            container.Register<Utility.GraphShapes.GraphController>(Reuse.Singleton);
             container.Register<ViewModelEngine>(Reuse.Singleton);
             container.RegisterInstance(this);
             foreach (var connection in Outputs)
                 container.RegisterInstance(connection);
-            var propertyNode = new PropertyNode(Guid.Parse("7e0c787a-30d0-4038-9376-2808cc66a389"));
-            container.RegisterInstance(propertyNode, serviceKey: PropertyView.Key1);
-
+            container.RegisterInstance(new PropertyNode(Guids.Model), serviceKey: PropertyView.Keys.Model);
+            container.RegisterInstance(new PropertyNode(Guids.Server), serviceKey: PropertyView.Keys.Server);
+            //container.RegisterInstance(new PropertyNode(Guids.Guid1), serviceKey: PropertyView.Keys.Screensaver);
+            //container.RegisterInstance(new PropertyNode(Guids.Guid2), serviceKey: PropertyView.Keys.PrizeWheel);
+            //container.RegisterInstance(new PropertyNode(Guids.Guid3), serviceKey: PropertyView.Keys.Leaderboard);
+            container.Register<PropertyViewModel>(Reuse.Singleton);
+            container.Register<ViewBuilder>(Reuse.Singleton);
+            container.Register<PropertyController>(Reuse.Singleton);
+            container.Register<UdpServerController>(Reuse.Singleton);
+         
             //container.RegisterSelf();
             // Scan an assembly for components
             //builder.RegisterAssemblyTypes(myAssembly)
@@ -49,22 +65,29 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         private Outputs[] Outputs => new[]
         {
-            new Outputs(key => key.Type.IsAssignableTo(typeof(AutoObject)), new IConnection[] { new Connection<PropertyStore>(container) {}}),
+            new Outputs(key => key.Type.IsAssignableTo(typeof(AutoObject)), new IConnection[] { new Connection<PropertyStore>(container) {}, new Connection<PropertyController>(container) { } }),
             new Outputs(key => key.Name == nameof(LightBootStrapper), new IConnection[] { new Connection<PropertyActivator>(container) }),
-            new Outputs(key => key.Name == nameof(History), new IConnection[] { new Connection<HistoryViewModel>(container) { IsPriority = true, SkipContext =false } }),
+            new Outputs(key => key.Name == nameof(History), new IConnection[] { new Connection<HistoryViewModel>(container) { IsPriority = true, SkipContext =false },  new Connection<Playback>(container) { IsPriority = true, SkipContext =false } }),
             new Outputs(key => key.Name == nameof(HistoryViewModel), new IConnection[] { new Connection<Playback>(container) { IsPriority = true,  SkipContext =false } }),
             new Outputs(key => key.Name == nameof(Playback), new IConnection[] { new Connection<History>(container) { IsPriority = true } }),
             new Outputs(key => key.Name == nameof(PropertyActivator), new IConnection[] { new Connection<InterfaceStore>(container) { SkipContext = false }, new Connection<LightBootStrapper>(container) { }, 
-                new Connection<PropertyFilter>(container){ }, new Connection<ViewModelEngine>(container),new Connection<PropertyStore>(container)  }),
+                new Connection<PropertyFilter>(container){ }, 
+                new Connection<ViewModelEngine>(container),new Connection<PropertyStore>(container),  
+                new Connection<ViewBuilder>(container),
+            }),
             new Outputs(key => key.Name == nameof(InterfaceStore), new IConnection[] {  new Connection<PropertyActivator>(container){  } }),
             new Outputs(key => key.Name == nameof(PropertyFilter), new IConnection[] { new Connection<PropertyNode>(container) { SkipContext = false }, new Connection<PropertyActivator>(container) { } }),
-            new Outputs(key => key.Name == nameof(PropertyNode), new IConnection[] { new Connection<PropertyFilter>(container) { IsPriority= false } }),
-            new Outputs(key => key.Name == nameof(Utility.Infrastructure.Resolver), new IConnection[]{ new Connection<Utility.GraphShapes.Interface>(container){ IsPriority = true, SkipContext = false } }),
+            new Outputs(key => key.Name == nameof(PropertyNode), new IConnection[] { new Connection<PropertyFilter>(container) { IsPriority= true /*false*/ } }),
+            new Outputs(key => key.Name == nameof(Utility.Infrastructure.Resolver), new IConnection[]{ new Connection<Utility.GraphShapes.GraphController>(container){ IsPriority = true, SkipContext = false } }),
             new Outputs(key => key.Name == nameof(ViewModelEngine), new IConnection[]{ new Connection<PropertyActivator>(container){ IsPriority = true, SkipContext = false } }),
-            new Outputs(key => key.Name == nameof(PropertyStore), new IConnection[]{ new Connection<PropertyActivator>(container){ IsPriority = true, SkipContext = false } })
+            new Outputs(key => key.Name == nameof(PropertyStore), new IConnection[]{ new Connection<PropertyActivator>(container){ IsPriority = true, SkipContext = false }, new Connection<PropertyNode>(container){ IsPriority = true, SkipContext = false } }),
+            new Outputs(key => key.Name == nameof(PropertyViewModel), new IConnection[]{ new Connection<ViewBuilder>(container){ IsPriority = true, SkipContext = false }, new Connection<UdpServerController>(container){ IsPriority = true, SkipContext = false } }),
+            new Outputs(key => key.Name == nameof(ViewBuilder), new IConnection[]{
+                new Connection<PropertyViewModel>(container){ IsPriority = true, SkipContext = false }, 
+                new Connection<PropertyActivator>(container){ IsPriority = true, SkipContext = false } }),
+            new Outputs(key => key.Name == nameof(UdpServerController), new IConnection[] { new Connection<PropertyViewModel>(container) { IsPriority= true /*false*/ } }),
+
         };
-
-
 
         public override void OnNext(object value)
         {
@@ -74,6 +97,8 @@ namespace Utility.PropertyTrees.WPF.Demo
                 if (instance == null)
                     throw new Exception("hyh dfgdfs3");
                 container.RegisterInstance(regType, instance);
+                //container.RegisterInstance(typeof(AutoObject), instance);
+                //container.RegisterMapping(typeof(AutoObject), regType);
                 Broadcast(new GuidValue(keyType.Guid, new ObjectCreationResponse(instance), 0));
             }
         }

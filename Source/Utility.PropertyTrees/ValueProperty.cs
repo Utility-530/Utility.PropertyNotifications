@@ -1,6 +1,8 @@
 using System.ComponentModel;
 using System.Globalization;
 using Utility.Helpers;
+using Utility.Infrastructure.Common;
+using Utility.Models;
 
 namespace Utility.PropertyTrees
 {
@@ -27,13 +29,14 @@ namespace Utility.PropertyTrees
 
         public override object Content => Name;
 
-        protected override async Task<bool> RefreshAsync()
-        {
-            if ((PropertyType.IsValueType || PropertyType == typeof(string)) != true)
-                return await base.RefreshAsync();
+        //protected override async Task<bool> RefreshAsync()
+        //{
+        //    if ((PropertyType.IsValueType || PropertyType == typeof(string)) != true)
+        //        return await base.RefreshAsync();
 
-            return await Task.FromResult(true);
-        }
+        //    _children.Complete();
+        //    return await Task.FromResult(true);
+        //}
 
         public override object? Value
         {
@@ -43,6 +46,7 @@ namespace Utility.PropertyTrees
             }
             set
             {
+
                 if (!TryChangeType(value, PropertyType, CultureInfo.CurrentCulture, out object changedValue))
                 {
                     throw new ArgumentException("Cannot convert value {" + value + "} to type '" + PropertyType.FullName + "'.");
@@ -67,6 +71,21 @@ namespace Utility.PropertyTrees
         public override string ToString()
         {
             return Name;
+        }
+
+        public override void OnNext(object obj)
+        {
+            if (obj is PropertyChange { Key: Key { Guid: var guid }, NewValue: var newValue } valueChange && guid == this.Guid)
+            {
+                if (!TryChangeType(newValue, PropertyType, CultureInfo.CurrentCulture, out object changedValue))
+                {
+                    throw new ArgumentException("Cannot convert value {" + newValue + "} to type '" + PropertyType.FullName + "'.");
+                }
+
+                Descriptor?.SetValue(Data, newValue);
+            }
+
+            base.OnNext(obj);
         }
     }
 }

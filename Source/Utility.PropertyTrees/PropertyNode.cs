@@ -75,12 +75,8 @@ namespace Utility.PropertyTrees
 
             flag = true;
 
-            Observe<PropertyNode, ChildrenRequest>(new ChildrenRequest(Data, Guid, Predicates))
-                .Subscribe(a =>
-                {
-                    if (a is PropertyNode)
-                        _children.Add(a);
-                });
+            _ = Observe<PropertyNode, ChildrenRequest>(new ChildrenRequest(Data, Guid, Predicates))
+                .Subscribe(a=> _children.Add(a), _children.Complete);
 
             return await Task.FromResult(true);
         }

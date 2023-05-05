@@ -104,10 +104,47 @@
         </Setter>-->
     <!--
     </Style>-->
+    <DataTemplate x:Key="StringTemplate">
+        <TextBox Text="{Binding Value}"></TextBox>
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="BooleanTemplate">
+        <CheckBox IsChecked="{Binding Value}"></CheckBox>
+    </DataTemplate>
+    
+    <DataTemplate x:Key="IntegerTemplate">
+        <!--<ui:NumberBox    
+                    Value="{Binding Value}"
+                    SpinButtonPlacementMode="Compact"
+                    SmallChange="1"
+                    LargeChange="10" />-->
+        <TextBox Text="{Binding Value}"></TextBox>
+    </DataTemplate>   
+    
+    <DataTemplate x:Key="DoubleTemplate">
+        <ui:NumberBox  
+                    Value="{Binding Value}"             
+                    SmallChange="0.1"
+                    LargeChange="1" />
+    </DataTemplate>
+
+    <local:ContentTemplateSelector 
+        x:Key="ContentTemplateSelector"
+        StringTemplate="{StaticResource StringTemplate}"
+        BooleanTemplate="{StaticResource BooleanTemplate}"
+        IntegerTemplate="{StaticResource IntegerTemplate}"
+        DoubleTemplate="{StaticResource DoubleTemplate}"
+        
+        />
 
     <DataTemplate DataType="{x:Type trees:PropertyNode}">
-        <HeaderedContentControl Header="{Binding Content, Mode=OneWay}" Content="{Binding Value, Mode=OneWay}"/>
+        <HeaderedContentControl Header="{Binding Content, Mode=OneWay}" 
+                                Content="{Binding }" 
+                                ContentTemplateSelector="{StaticResource ContentTemplateSelector}"/>
     </DataTemplate>
+    
+
 
 
 

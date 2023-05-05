@@ -2,20 +2,27 @@
 using Utility.Models;
 using Utility.Infrastructure;
 using System.Reactive.Linq;
+using System.Collections.Concurrent;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
     public class PropertyActivator : BaseObject
     {
         Guid guid = Guid.Parse("24fadcc6-ac25-41a7-b482-fdf1a58b0ecd");
-        public override Key Key => new Key(guid, nameof(PropertyActivator), typeof(PropertyActivator));
-      
+        public override Key Key => new(guid, nameof(PropertyActivator), typeof(PropertyActivator));
+        ConcurrentDictionary<Guid, PropertyBase> guids = new();
+
         public override async void OnNext(object value)
         {
-            if (value is GuidValue { Value: ActivationRequest { Guid: var guid, Data: var data, Descriptor: var descriptor, PropertyType: var propertyType } } guidValue)
+            if (value is GuidValue { Value: ActivationRequest { Guid: var parentGuid, Data: var data, Descriptor: var descriptor, PropertyType: var propertyType } } guidValue)
             {
-                var newValue = new GuidValue(guidValue.Guid, await ToProperty(), 0);
-                Broadcast(newValue);
+                //if (guids.ContainsKey(data))
+                //{
+                //    Broadcast(new GuidValue(guidValue.Guid, guids[data], 0));
+                //    return;
+                //}
+                var property = await ToProperty();
+                Broadcast(new GuidValue(guidValue.Guid, property, 0));
             }
             else
             {
@@ -26,10 +33,10 @@ namespace Utility.PropertyTrees.Infrastructure
             {
                 return propertyType switch
                 {
-                    PropertyType.Reference => CreateReferenceProperty(guid, descriptor, data),
-                    PropertyType.Value => CreateValueProperty(guid, descriptor, data),
-                    PropertyType.CollectionItem => CreateCollectionItemProperty(guid, descriptor, data),
-                    PropertyType.Root => CreateRootProperty(guid, descriptor, data),
+                    PropertyType.Reference => CreateReferenceProperty(parentGuid, descriptor, data),
+                    PropertyType.Value => CreateValueProperty(parentGuid, descriptor, data),
+                    PropertyType.CollectionItem => CreateCollectionItemProperty(parentGuid, descriptor, data),
+                    PropertyType.Root => CreateRootProperty(parentGuid, descriptor, data),
                     _ => throw new Exception("f 33 dsf"),
                 };
 
@@ -44,7 +51,7 @@ namespace Utility.PropertyTrees.Infrastructure
                     {
                         if (descriptor.PropertyType.IsInterface)
                         {
-                            item = Activator.CreateInstance(await Observe<Type, Type>(descriptor.PropertyType));
+                            item = Activator.CreateInstance(await Observe<System.Type, System.Type>(descriptor.PropertyType));
                         }
                         else
                         {
@@ -113,24 +120,28 @@ namespace Utility.PropertyTrees.Infrastructure
                     return property;
                 }
 
-                async Task<PropertyBase> CreateInstance(Guid parent, string name, Type propertyType, Type type)
+                async Task<PropertyBase> CreateInstance(Guid parent, string name, System.Type propertyType, System.Type type)
                 {
                     if (type == null)
                     {
                         throw new ArgumentNullException("type");
                     }
 
-                    var result = await Observe<FindResult, FindOrder>(new(new Key(parent, name, propertyType)));
+                    var result = await Observe<FindResult, FindRequest>(new(new Key(parent, name, propertyType)));
                     Guid guid = (result.Key as Key)?.Guid ?? throw new Exception("dfb 43 4df");
+                    if (guids.ContainsKey(guid))
+                        return guids[guid];
                     var args = new object[] { guid };
                     var response = await Observe<ObjectCreationResponse, ObjectCreationRequest>(new(type, typeof(PropertyNode), args));
-                    return response.Instance as PropertyBase ?? throw new Exception("fg e4  ll;");
+                    var instance = response.Instance as PropertyBase ?? throw new Exception("fg e4  ll;");
+                    guids[guid] = instance;
+                    return instance;
                 }
             }
         }
     }
 
-    public record ObjectCreationRequest(Type Type, Type RegistrationType, object[] Args);
+    public record ObjectCreationRequest(System.Type Type, System.Type RegistrationType, object[] Args);
     public record ObjectCreationResponse(object Instance);
 
 }

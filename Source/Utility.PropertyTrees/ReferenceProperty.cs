@@ -27,13 +27,14 @@ namespace Utility.PropertyTrees
 
         public override object Content => Name;
 
-        protected override async Task<bool> RefreshAsync()
-        {
-            if ((PropertyType.IsValueType || PropertyType == typeof(string)) != true)
-                return await base.RefreshAsync();
+        //protected override async Task<bool> RefreshAsync()
+        //{
+        //    if ((PropertyType.IsValueType || PropertyType == typeof(string)) != true)
+        //        return await base.RefreshAsync();
 
-            return await Task.FromResult(true);
-        }
+        //    _children.Complete();
+        //    return await Task.FromResult(true);
+        //}
 
         public override object? Value
         {

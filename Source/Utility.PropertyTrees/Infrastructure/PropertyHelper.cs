@@ -1,175 +1,110 @@
-﻿using System;
-using System.Collections;
-using System.ComponentModel;
+﻿using System.Collections.Specialized;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
-using System.Reflection;
-using Utility.Helpers.NonGeneric;
+using Utility.Observables;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
-    public partial class PropertyFilter
+    public static class PropertyHelper
     {
-        public IEnumerable<(Task<PropertyNode?>, int remaining)> EnumerateProperties(object data, Guid guid, DescriptorFilters? filters = null)
+        public enum State
         {
-            var descriptors = PropertyDescriptors(data).ToArray();
-            var count = descriptors.Length;
-            int i = 0;
+            Started, Completed
+        }
 
-            if (data is IEnumerable enumerable && filters == null)
-            {
-                count += enumerable.Count();
-                foreach (var item in enumerable)
+        public static IObservable<double> ExploreTree<T>(T items, Func<T, PropertyBase, T> func, PropertyNode property)
+        {
+            Subject<State> subject = new();
+            int totalCount = 1;
+            int completed = 1;
+            Subject<double> progress = new();
+            subject
+                 .Subscribe(a =>
+                 {
+                     if (a == State.Started)
+                         totalCount++;
+                     else if (a == State.Completed)
+                         completed++;
+
+                     progress.OnNext(completed / (1d * totalCount));
+
+                     if (totalCount - completed == 0)
+                     {
+                         progress.OnCompleted();
+                     }
+                 });
+
+            _ = ExploreTree(items, func, property, subject);
+
+            return progress;
+        }
+
+        public static IObservable<double> ExploreTree(PropertyNode propertyNode)
+        {
+            return ExploreTree(new List<object>(), (a, b) => a, propertyNode);
+           
+        }
+
+
+        public static IDisposable ExploreTree<T>(T items, Func<T, PropertyBase, T> func, PropertyNode property, Subject<State> state)
+        {
+            state.OnNext(State.Started);
+            var disposable = property
+                .Children
+                .Subscribe(async item =>
                 {
-                    i++;
-                    yield return (FromIndex(i, item), enumerable.Count() - i);
-                }
-            }
+                    if (item is not NotifyCollectionChangedEventArgs args)
+                        throw new Exception("rev re");
+                    var p = property;
 
-            foreach (var descriptor in descriptors)
-            {
-                i++;
-                yield return (FromPropertyDescriptor(descriptor), count - i);
-            }
-
-
-            Task<PropertyNode?> FromIndex(int i, object? item)
-            {
-                return Observe<PropertyNode?, ActivationRequest>(new(guid, new CollectionItemDescriptor(item, i), item, PropertyType.CollectionItem)).ToTask();
-            }
-
-            IEnumerable<PropertyDescriptor> PropertyDescriptors(object data)
-            {
-                foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(data)
-                    .Cast<PropertyDescriptor>()
-                    .Where(a => filters?.All(f => f.Invoke(a)) != false)
-                    .OrderBy(d => d.Name))
+                    state.OnNext(State.Started);
+                    foreach (PropertyBase node in SelectNewItems<PropertyBase>(args))
+                    {
+                        _ = ExploreTree(func(items, node), func, node, state);
+                    }
+                    state.OnNext(State.Completed);
+                },
+                e =>
                 {
-                    yield return descriptor;
-                }
-            }
 
-            Task<PropertyNode?> FromPropertyDescriptor(PropertyDescriptor descriptor)
-            {
-                if (descriptor.PropertyType == typeof(MethodBase))
-                    return null;
-                if (descriptor.PropertyType == typeof(Model))
-                    return null;
-
-                return CreateProperty(data, guid, descriptor);
-
-                async Task<PropertyNode?> CreateProperty(object data, Guid guid, PropertyDescriptor descriptor)
+                },
+                () =>
                 {
-                    PropertyNode property;
-                    if (IsValueOrStringProperty(descriptor))
-                    {
-                        property = await Observe<PropertyNode, ActivationRequest>(new(guid, descriptor, data, PropertyType.Value)).ToTask();
-                    }
-                    else
-                    {
-                        property = await Observe<PropertyNode, ActivationRequest>(new(guid, descriptor, data, PropertyType.Reference)).ToTask();
-                    }
-
-                    return property;
-
-                    static bool IsValueOrStringProperty(PropertyDescriptor? descriptor)
-                    {
-                        return descriptor.PropertyType.IsValueType || descriptor.PropertyType == typeof(string);
-                    }
-
-                    static bool IsCollectionProperty(PropertyDescriptor? descriptor)
-                    {
-                        return descriptor.PropertyType != null ? descriptor.PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(descriptor.PropertyType) : false;
-                    }
+                    state.OnNext(State.Completed);
                 }
-            }
-        }
-    }
+              );
+            return disposable;
 
-    public class CollectionItemDescriptor : PropertyDescriptor
-    {
-        public CollectionItemDescriptor(object item, int index) : base(index.ToString(), null)
-        {
-            Item = item;
-            Index = index;
         }
 
-        public object Item { get; }
-
-        public int Index { get; }
-
-        public override Type ComponentType => throw new NotImplementedException();
-
-        public override bool IsReadOnly => throw new NotImplementedException();
-
-        public override Type PropertyType => Item.GetType();
 
 
-        public override bool CanResetValue(object component)
+        public static IObservable<PropertyNode> FindNode(PropertyNode node, Predicate<PropertyNode> predicate)
         {
-            throw new NotImplementedException();
+            ReplaySubject<PropertyNode> list = new(1);
+            CompositeDisposable composite = new();
+            var dis = ExploreTree(list, (a, b) => { if (predicate(b)) { a.OnNext(b); composite.Dispose(); a.OnCompleted(); } return (a); }, node).Subscribe(a =>
+            {
+            }, list.OnCompleted);
+            composite.Add(dis);
+            return list;
         }
 
-        public override object? GetValue(object? component)
+        public static IObservable<PropertyNode> FindNodes(PropertyNode node, Predicate<PropertyNode> predicate)
         {
-            throw new NotImplementedException();
+            Subject<PropertyNode> list = new();
+
+            ExploreTree(list, (a, b) => { if (predicate(b)) a.OnNext(b); return a; }, node).Subscribe(a =>
+            {
+            }, list.OnCompleted);
+            return list;
         }
 
-        public override void ResetValue(object component)
+        private static System.Collections.Generic.IEnumerable<T> SelectNewItems<T>(NotifyCollectionChangedEventArgs args)
         {
-            throw new NotImplementedException();
-        }
-
-        public override void SetValue(object? component, object? value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool ShouldSerializeValue(object component)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class RootDescriptor : PropertyDescriptor
-    {
-        public RootDescriptor(object item) : base("root", null)
-        {
-            Item = item;
-        }
-
-        public object Item { get; }
-
-        public override Type ComponentType => throw new NotImplementedException();
-
-        public override bool IsReadOnly => throw new NotImplementedException();
-
-        public override Type PropertyType => Item.GetType();
-
-
-        public override bool CanResetValue(object component)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override object? GetValue(object? component)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void ResetValue(object component)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void SetValue(object? component, object? value)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool ShouldSerializeValue(object component)
-        {
-            throw new NotImplementedException();
+            return args.NewItems?.Cast<T>() ?? Array.Empty<T>();
         }
     }
 }

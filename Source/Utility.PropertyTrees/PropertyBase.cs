@@ -3,6 +3,7 @@ using System.Collections;
 using Utility.Conversions;
 using Utility.Helpers;
 using Utility.PropertyTrees.Infrastructure;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyTrees
 {
@@ -17,13 +18,13 @@ namespace Utility.PropertyTrees
         public bool IsFlagsEnum => PropertyType.IsFlagsEnum();
         public bool IsValueType => PropertyType.IsValueType;
         public virtual int CollectionCount => Value is IEnumerable enumerable ? enumerable.Cast<object>().Count() : 0;
-        public virtual Type CollectionItemPropertyType => !IsCollection ? null : PropertyType.GetElementType();
+        public virtual System.Type CollectionItemPropertyType => !IsCollection ? null : PropertyType.GetElementType();
         public virtual bool IsCollectionItemValueType => CollectionItemPropertyType != null && CollectionItemPropertyType.IsValueType;
         public virtual bool IsError { get => this.GetProperty<bool>(); set => this.SetProperty(value); }
 
         //public bool IsValid => throw new NotImplementedException();
 
-        public virtual Type PropertyType => Data.GetType();
+        public virtual System.Type PropertyType => Data.GetType();
         public abstract bool IsReadOnly { get; }
         public override object Content => Name;
         public IViewModel ViewModel { get; set; }
@@ -33,21 +34,18 @@ namespace Utility.PropertyTrees
             if ((PropertyType.IsValueType || PropertyType == typeof(string)) != true)
                 return await base.RefreshAsync();
 
-            return await Task.FromResult(true);
+            _children.Complete();
+            return await Task.FromResult(false);
         }
 
-        public abstract object Value { get; set; }
-
         public bool IsString => PropertyType == typeof(string);
-
-    
 
         public override string ToString()
         {
             return Name;
         }
 
-        protected virtual bool TryChangeType(object value, Type type, IFormatProvider provider, out object changedValue)
+        protected virtual bool TryChangeType(object value, System.Type type, IFormatProvider provider, out object changedValue)
         {
             if (type == null)
             {

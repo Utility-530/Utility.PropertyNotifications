@@ -7,15 +7,14 @@ using Utility.PropertyTrees.Abstractions;
 
 namespace Utility.PropertyTrees.WPF.Demo.Infrastructure
 {
-    internal class InterfaceStore : BaseObject, IObserver
+    internal class InterfaceStore : BaseObject
     {
+        Guid Guid = Guid.Parse("8eeb7df3-9ae7-49d6-aabc-a492c6254718");
         Dictionary<Type, Type> dictionary = new() { { typeof(IViewModel), typeof(ViewModel) } };
 
         public InterfaceStore()
         {
         }
-
-        Guid Guid = Guid.Parse("8eeb7df3-9ae7-49d6-aabc-a492c6254718");
 
         public override Key Key => new(Guid, nameof(InterfaceStore), typeof(InterfaceStore));
 

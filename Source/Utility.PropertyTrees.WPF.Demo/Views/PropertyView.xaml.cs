@@ -1,38 +1,51 @@
 ﻿using Utility.PropertyTrees.Abstractions;
 using Utility.PropertyTrees.Infrastructure;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using Utility.WPF.Panels;
-using Utility.Interfaces.NonGeneric;
 using DryIoc;
-using Utility.Infrastructure;
-using Utility.Models;
+using Utility.PropertyTrees.WPF.Demo.Infrastructure;
+using Utility.GraphShapes;
+using Utility.PropertyTrees.Demo.Model;
+using System.Reactive.Linq;
+using Utility.Observables;
 using System.Threading.Tasks;
-using System.Reactive.Threading.Tasks;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
     public partial class PropertyView : UserControl
     {
-        public const string Key1 = nameof(PropertyView) + "1";
-        //public const string Key2 = nameof(PropertyView) + "2";
-        private readonly DryIoc.IContainer container;
-
-        public PropertyView(DryIoc.IContainer container)
+        public class Keys
         {
-            InitializeComponent();
-            ViewModelTree.Engine = container.Resolve<ViewModelEngine>();
-            PropertyTree.Engine = new Infrastructure.Engine(container.Resolve<PropertyNode>(Key1));
-            this.Loaded += PropertyView_Loaded;
-            this.container = container;
+            public const string Model = nameof(PropertyView) + "." + nameof(Model);
+            public const string Server = nameof(PropertyView) + "." + nameof(Server);
         }
 
-        private void PropertyView_Loaded(object sender, RoutedEventArgs e)
+        private readonly IContainer container;
+        private PropertyViewModel viewModel => container.Resolve<PropertyViewModel>();
+        private PropertyNode masterNode => container.Resolve<PropertyNode>(Keys.Model);
+        private PropertyNode serverNode => container.Resolve<PropertyNode>(Keys.Server);
+
+        public PropertyView(IContainer container)
         {
-            this.PropertyTree.SelectedObject = this.DataContext;
+            this.container = container;
+
+            InitializeComponent();
+            masterNode.Data = viewModel.Model;
+            serverNode.Data = viewModel.Server;
+            ViewModelTree.Engine = container.Resolve<ViewModelEngine>();
+            PropertyTree.Engine = new Engine(masterNode);
+            ScreensaverSend.Command = viewModel.SendScreensaver;
+            LeaderboardSend.Command = viewModel.SendLeaderboard;
+            PrizeWheelSend.Command = viewModel.SendPrizewheel;
+            ServerConnect.Command = viewModel.Connect;
+            viewModel.Subscribe(a =>
+            {
+                if (a is ViewModelEvent { Name: var name, TreeView: var treeView } clientResponseEvent)
+                {      
+                    ResponsePanel.Children.Add(treeView);
+                }
+            });
         }
 
         private void PropertyTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -43,100 +56,82 @@ namespace Utility.PropertyTrees.WPF.Demo
             }
         }
 
-        private void refresh_click(object sender, RoutedEventArgs e)
+
+        // move to viewmodel
+        private async void refresh_click(object sender, RoutedEventArgs e)
         {
-            var treeView = new TreeView { };
-            var property = PropertyTree.Source as PropertyNode;
-            Create(treeView.Items, property);
-            ContentGrid.Children.Clear();
-            ContentGrid.Children.Add(treeView);
+            viewModel.TreeView(serverNode).Subscribe(treeView =>
+            {
+                ServerGrid.Children.Clear();
+                ServerGrid.Children.Add(treeView);
+
+            });        
         }
 
-        private static void Create(ItemCollection items, PropertyNode property)
+        private void refresh_2_click(object sender, RoutedEventArgs e)
         {
-            foreach (var item in property.Children)
             {
-                if (item is PropertyBase node)
-                {
-                    ItemsPanelTemplate? panelTemplate = default;
-                    DataTemplate? headerTemplate = default;
-                    //if (node.ViewModel == null)
-                    //{
-                    //}
+                PropertyHelper.FindNode(masterNode, a => a is PropertyBase { Name: nameof(Model.ScreenSaver) })
+                      .Subscribe(node =>
+                      {
+                          viewModel.TreeView(node).Subscribe(treeView =>
+                          {
+                              ScreensaverGrid.Children.Clear();
+                              ScreensaverGrid.Children.Add(treeView);
+                          });
+                      });
+            }
 
-                    ViewModel viewModel = new ViewModel { CollectionPanel = new() { Grid = new() }, Panel = new() { Grid = new() { } }, Template = new() { } };
-                    node.ViewModel = viewModel;
-                    panelTemplate = viewModel.Panel?.Type != null ? (ItemsPanelTemplate)Application.Current.TryFindResource(viewModel.Panel.Type) : DefaultItemsPanelTemplate();
-                    if (viewModel.Template.DataTemplateKey != null)
-                        headerTemplate = (DataTemplate)Application.Current.TryFindResource(viewModel.Template.DataTemplateKey);
-                    else
+            {
+                PropertyHelper.FindNode(masterNode, a => a is PropertyBase { Name: nameof(Model.Leaderboard) })
+                     .Subscribe(node =>
+                     {
+                         viewModel.TreeView(node).Subscribe(treeView =>
+                         {
+                             LeaderboardGrid.Children.Clear();
+                             LeaderboardGrid.Children.Add(treeView);
+                         });
+                     });
+            }
+
+            {
+                PropertyHelper.FindNode(masterNode, a => a is PropertyBase { Name: nameof(Model.PrizeWheel) })
+
+                    .Subscribe(node =>
                     {
-                        var key = new DataTemplateKey(node.PropertyType);
-                        headerTemplate = (DataTemplate)Application.Current.TryFindResource(key);
-                    }
-
-                    var treeViewItem = new TreeViewItem() { Header = node/*, HeaderTemplate = headerTemplate*/, ItemsPanel = panelTemplate, IsExpanded = true };
-                    //treeViewItem.ItemsPanel =
-                    items.Add(treeViewItem);
-                    Create(treeViewItem.Items, node);
-                }
+                        viewModel.TreeView(node).Subscribe(treeView =>
+                        {
+                            PrizeWheelGrid.Children.Clear();
+                            PrizeWheelGrid.Children.Add(treeView);
+                        });
+                    });
             }
         }
 
-        static ItemsPanelTemplate DefaultItemsPanelTemplate()
+        private void show_graph_click(object sender, RoutedEventArgs e)
         {
-            FrameworkElementFactory factoryPanel = new FrameworkElementFactory(typeof(UniformStackPanel));
-            factoryPanel.SetValue(Canvas.IsItemsHostProperty, true);
-            ItemsPanelTemplate template = new ItemsPanelTemplate();
-            template.VisualTree = factoryPanel;
-            return template;
+            new Window { Content = new GraphUserControl(container) }.Show();
+            AutoObject.Resolver.Initialise();
         }
 
         private void initialise_click(object sender, RoutedEventArgs e)
         {
-            AutoObject.Resolver.Initialise();
+            this.PropertyTree.SelectedObject = viewModel.Model;
+
         }
+
+        private void show_history_click(object sender, RoutedEventArgs e)
+        {
+            var controlWindow = new Window { Content = container.Resolve<HistoryViewModel>() };
+            ScreenHelper.SetOnFirstScreen(controlWindow);
+            controlWindow.Show();
+
+        }
+
+
     }
 
-    public class ViewModelEngine : BaseObject, IPropertyGridEngine
-    {
-        Guid guid = Guid.Parse("78f35bd1-fc3c-44ca-8d86-f3a8a9d69d33");
+    public record TreeViewRequest(TreeView TreeView, PropertyNode PropertyNode);
 
-        public ViewModelEngine()
-        {
-        }
-
-        public override Key Key => new (guid, nameof(ViewModelEngine), typeof(ViewModelEngine));
-
-        public async Task<IPropertyNode> Convert(object data)
-        {
-            if (data is IGuid guid)
-            {
-                var propertyNode = await Observe<PropertyNode, ActivationRequest>(new(guid.Guid, new RootDescriptor(data), data, PropertyType.Root)).ToTask();
-                propertyNode.Data = data;
-                propertyNode.Predicates = new ViewModelPredicate() ;
-                return propertyNode;
-            }
-            throw new Exception(" 4 wewfwe");
-        }
-
-        public class ViewModelPredicate : DescriptorFilters
-        {
-            private List<Predicate<PropertyDescriptor>> predicates;
-
-            public ViewModelPredicate()
-            {
-                predicates = new(){
-                new Predicate<PropertyDescriptor>(descriptor=>
-            {
-                   return descriptor.PropertyType==typeof(IViewModel);
-            }) };
-            }
-
-            public override IEnumerator<Predicate<PropertyDescriptor>> GetEnumerator()
-            {
-                return predicates.GetEnumerator();
-            }
-        }
-    }
+    public record TreeViewResponse(TreeView TreeView);
 }
