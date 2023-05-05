@@ -4,16 +4,18 @@
     {
         //public Guid Guid => Guid.Parse("1edf3c6d-1424-4771-8672-0b77d7c44342");
 
-        public Game CurrentGame { get; set; }
-        public Game PreviousGame { get; set; }
+        //public Game CurrentGame { get; set; }
+        //public Game PreviousGame { get; set; }
 
-        public Animation Animation { get; set; }
-        public Game StartGame { get; set; }
-        public Game EndGame { get; set; }
+        //public Animation Animation { get; set; }
+        //public Game StartGame { get; set; }
+        //public Game EndGame { get; set; }
 
-        public PrizeWheelUpdate PrizeWheelUpdate { get; set; }
+        //public PrizeWheelUpdate PrizeWheelUpdate { get; set; }
 
         public ScreenSaver ScreenSaver { get; set; }
+        public PrizeWheel PrizeWheel { get; set; }
+        public Leaderboard Leaderboard { get; set; }
     }
 
     public class Game
@@ -49,7 +51,7 @@
         public int Sequence { get; set; }
     }
 
-    public class PrizeWheelUpdate
+    public class PrizeWheel
     {
         public int SegmentSequence { get; set; }
         public string Name { get; set; }
@@ -57,6 +59,11 @@
         public bool PrintTicket { get; set; }
         public int Size { get; set; }
         public bool AllowWin { get; set; }
+    }
+
+    public class Leaderboard
+    {
+
     }
 
     public class ScreenSaver
