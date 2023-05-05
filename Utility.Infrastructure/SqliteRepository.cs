@@ -229,7 +229,7 @@ namespace Utility.PropertyTrees.Infrastructure
                         else
                             throw new Exception("332 b64ere 4323");
                     }
-                    return list.LastOrDefault()?? null;
+                    return list.LastOrDefault() ?? null;
                 }
             }
             else

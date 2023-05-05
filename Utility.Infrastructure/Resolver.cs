@@ -115,8 +115,7 @@ namespace Utility.Infrastructure
                 {
                     (Context ?? throw new Exception("missing context"))
                         .Post(a =>
-                        {
-        
+                        {        
                             foreach (var observer in connection.Observers)
                             {
                                 observer.OnNext(order);
