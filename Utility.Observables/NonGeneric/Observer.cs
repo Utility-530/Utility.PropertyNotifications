@@ -16,17 +16,18 @@ namespace Utility.Observables.NonGeneric
             this.onCompleted = onCompleted;
         }
 
-        public Observer()
-        {
+        //public Observer()
+        //{
 
-        }
+        //}
 
         public List<object> Observations { get; } = new();
 
 
-        public virtual void OnNext(object value)
+        public void OnNext(object value)
         {
             Observations.Add(value);
+            onNext(value);
             (onNext ?? throw new NotImplementedException()).Invoke(value);
         }
 
