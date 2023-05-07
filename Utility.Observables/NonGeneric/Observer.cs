@@ -27,7 +27,6 @@ namespace Utility.Observables.NonGeneric
         public void OnNext(object value)
         {
             Observations.Add(value);
-            onNext(value);
             (onNext ?? throw new NotImplementedException()).Invoke(value);
         }
 
