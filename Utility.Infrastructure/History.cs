@@ -28,7 +28,7 @@ namespace Utility.PropertyTrees.Infrastructure
 
         public override Key Key => new(Guid, nameof(History), typeof(History));
 
-        public override void OnNext(object value)
+        public override bool OnNext(object value)
         {
             if (value is Direction direction)
             {
@@ -36,10 +36,10 @@ namespace Utility.PropertyTrees.Infrastructure
                 {
                     case Direction.Forward:
                         Broadcast(new ChangeSet(this.Key, Forward().ToList()));
-                        return;
+                        return true;
                     case Direction.Backward:
                         Broadcast(new ChangeSet(this.Key, Back().ToList()));
-                        return;
+                        return true;
                 }
             }
 
@@ -50,12 +50,12 @@ namespace Utility.PropertyTrees.Infrastructure
 
             if (future.Any(a => a.Equals(value)))
             {
-                return;
+                return false;
             }
 
             future.Add(value);
             Broadcast(new ChangeSet(this.Key, new[] { new Change(new HistoryOrder(h.Future, value), ChangeType.Add, future.Count) }));
-
+            return true;
             IEnumerable<Change> Forward()
             {
                 if (future.Any() == false)

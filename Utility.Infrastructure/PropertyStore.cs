@@ -21,15 +21,16 @@ namespace Utility.PropertyTrees.Infrastructure
             this.repository = repository;
         }
 
-        public override void OnNext(object value)
+        public override bool OnNext(object value)
         {
             if (value is PropertyOrder order)
                 Process(order);         
             if (value is GuidValue findOrder)
                 Process2(findOrder);
             else
-                base.OnNext(value);
+                return base.OnNext(value);
 
+            return true;
 
             async void Process2(GuidValue order)
             {

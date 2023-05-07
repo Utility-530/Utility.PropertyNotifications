@@ -32,7 +32,7 @@ namespace Utility.Infrastructure
             Broadcast(connections);
         }
 
-        public override void OnNext(object next)
+        public override bool OnNext(object next)
         {
             if (next is not IBase @base)
             {
@@ -75,6 +75,7 @@ namespace Utility.Infrastructure
                     history.OnNext(order);
                 }
             }
+            return true;
         }
 
         protected override void Broadcast(object obj)
@@ -118,7 +119,10 @@ namespace Utility.Infrastructure
                         {        
                             foreach (var observer in connection.Observers)
                             {
-                                observer.OnNext(order);
+                                if(observer.OnNext(order))
+                                {
+
+                                }
 
                                 foreach(var conn in Connections(this.Key))
                                 {

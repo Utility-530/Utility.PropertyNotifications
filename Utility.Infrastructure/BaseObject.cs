@@ -55,7 +55,7 @@ namespace Utility.Infrastructure
             var subject = new Subject<GuidValue>();
             dictionary[guid] = subject;
             Broadcast(new GuidValue(guid, tr, 0));
-            var output = new Subject<T>();
+            var output = new ReplaySubject<T>(1);
             subject.Subscribe(a =>
             {
                 switch (a.Value)
@@ -80,13 +80,17 @@ namespace Utility.Infrastructure
             return output;
         }
 
-        public virtual void OnNext(object value)
+        public virtual bool OnNext(object value)
         {
             if (value is GuidValue { Guid: var guid } keyType)
             {
                 if (dictionary.ContainsKey(guid))
+                {
                     dictionary[guid].OnNext(keyType);
+                    return true;
+                }
             }
+            return false;
         }
 
         public void OnStarted()

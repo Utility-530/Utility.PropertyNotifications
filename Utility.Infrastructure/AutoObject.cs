@@ -80,23 +80,22 @@ namespace Utility.PropertyTrees.Infrastructure
             return default;
         }
 
-        public override void OnNext(object obj)
+        public override bool OnNext(object obj)
         {
             if (obj is not PropertyChange { Key: Key { Guid: var guid } } valueChange)
             {
-                base.OnNext(obj);
-                return;
+                return base.OnNext(obj);
             }
             if (this.guid != guid)
             {
-                return;
+                return false;
             }
 
             if (store.ContainsKey(valueChange.Key))
             {
                 if (store[valueChange.Key].NewValue == valueChange.NewValue)
                 {
-                    return;
+                    return true;
                 }
                 store.Remove(valueChange);
             }
@@ -106,7 +105,7 @@ namespace Utility.PropertyTrees.Infrastructure
             {
                 OnPropertyChanged(name);
                 OnPropertyChanged(nameof(Value));
-                return;
+                return true;
             }
             throw new Exception("zg 34422111");
         }
