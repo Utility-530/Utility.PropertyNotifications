@@ -9,7 +9,6 @@ using Utility.GraphShapes;
 using Utility.PropertyTrees.Demo.Model;
 using System.Reactive.Linq;
 using Utility.Observables;
-using System.Threading.Tasks;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
@@ -42,8 +41,9 @@ namespace Utility.PropertyTrees.WPF.Demo
             viewModel.Subscribe(a =>
             {
                 if (a is ViewModelEvent { Name: var name, TreeView: var treeView } clientResponseEvent)
-                {      
-                    ResponsePanel.Children.Add(treeView);
+                {
+                    var group = new Expander { Header = name, FontSize = 12, Content = treeView, IsExpanded=false };
+                    ResponsePanel.Children.Add(group);
                 }
             });
         }
@@ -56,9 +56,8 @@ namespace Utility.PropertyTrees.WPF.Demo
             }
         }
 
-
         // move to viewmodel
-        private async void refresh_click(object sender, RoutedEventArgs e)
+        private void refresh_click(object sender, RoutedEventArgs e)
         {
             viewModel.TreeView(serverNode).Subscribe(treeView =>
             {
@@ -125,10 +124,7 @@ namespace Utility.PropertyTrees.WPF.Demo
             var controlWindow = new Window { Content = container.Resolve<HistoryViewModel>() };
             ScreenHelper.SetOnFirstScreen(controlWindow);
             controlWindow.Show();
-
         }
-
-
     }
 
     public record TreeViewRequest(TreeView TreeView, PropertyNode PropertyNode);

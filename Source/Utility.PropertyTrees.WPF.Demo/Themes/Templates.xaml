@@ -107,6 +107,10 @@
     <DataTemplate x:Key="StringTemplate">
         <TextBox Text="{Binding Value}"></TextBox>
     </DataTemplate>
+    
+    <DataTemplate x:Key="UnknownTemplate">
+        <TextBlock Text="Unknown Type"></TextBlock>
+    </DataTemplate>
 
 
     <DataTemplate x:Key="BooleanTemplate">
@@ -135,7 +139,7 @@
         BooleanTemplate="{StaticResource BooleanTemplate}"
         IntegerTemplate="{StaticResource IntegerTemplate}"
         DoubleTemplate="{StaticResource DoubleTemplate}"
-        
+        UnknownTemplate="{StaticResource UnknownTemplate}"
         />
 
     <DataTemplate DataType="{x:Type trees:PropertyNode}">

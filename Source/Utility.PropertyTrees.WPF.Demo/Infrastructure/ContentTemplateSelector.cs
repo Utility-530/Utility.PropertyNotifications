@@ -8,14 +8,16 @@ using System.Windows.Controls;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
-    internal class ContentTemplateSelector:DataTemplateSelector
+    internal class ContentTemplateSelector : DataTemplateSelector
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if(item is not ValueProperty{ Descriptor.PropertyType: var propertyType } propertyNode) {
-                throw new Exception("vdf fee333");
+            if (item is not ValueProperty { Descriptor: { PropertyType: var propertyType } } propertyNode)
+            {
+                //throw new Exception("vdf fee333");
+                return StringTemplate;
             }
-            if(propertyType == typeof(string))
+            if (propertyType == typeof(string))
             {
                 return StringTemplate;
             }
@@ -43,5 +45,6 @@ namespace Utility.PropertyTrees.WPF.Demo
         public DataTemplate BooleanTemplate { get; set; }
         public DataTemplate DoubleTemplate { get; set; }
         public DataTemplate IntegerTemplate { get; set; }
+        public DataTemplate UnknownTemplate { get; set; }
     }
 }

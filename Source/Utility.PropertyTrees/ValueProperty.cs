@@ -12,7 +12,7 @@ namespace Utility.PropertyTrees
         {
         }
 
-        public override string Name => Descriptor?.Name ?? $"{Descriptor} not set";
+        public override string Name => Descriptor?.Name ?? $"{nameof(Descriptor)} not set";
         public string DisplayName => Descriptor.DisplayName;
         public override bool IsReadOnly => Descriptor.IsReadOnly;
 
@@ -64,7 +64,7 @@ namespace Utility.PropertyTrees
             return Name;
         }
 
-        public override void OnNext(object obj)
+        public override bool OnNext(object obj)
         {
             if (obj is PropertyChange { Key: Key { Guid: var guid }, NewValue: var newValue } valueChange && guid == this.Guid)
             {
@@ -75,8 +75,8 @@ namespace Utility.PropertyTrees
 
                 Descriptor?.SetValue(Data, newValue);
             }
-
-            base.OnNext(obj);
+            // property change dealt with by base
+            return base.OnNext(obj);
         }
     }
 }

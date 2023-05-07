@@ -16,7 +16,7 @@ namespace Utility.PropertyTrees.Infrastructure
 
         public override Key Key => new(Guid, nameof(PropertyFilter), typeof(PropertyFilter));
 
-        public override void OnNext(object value)
+        public override bool OnNext(object value)
         {
             if (value is GuidValue { Guid: var guid, Value: ChildrenRequest { Data: var data, Filters: var filters } request })
             {
@@ -28,7 +28,7 @@ namespace Utility.PropertyTrees.Infrastructure
                     {
                         var (propertyNode, i) = a;
                         Broadcast(new GuidValue(guid, propertyNode, i));
-                    },default);
+                    }, default);
                 },
                 e =>
                 {
@@ -41,10 +41,12 @@ namespace Utility.PropertyTrees.Infrastructure
                         Broadcast(new GuidValue(guid, nameof(OnCompleted), 0));
                     }, default);
                 });
+                return true;
+
             }
             else
             {
-                base.OnNext(value);
+                return base.OnNext(value);
             }
 
 
@@ -59,7 +61,10 @@ namespace Utility.PropertyTrees.Infrastructure
                         foreach (var prop in EnumerateProperties(data, guid, filters))
                         {
                             if (prop.Item1 != null)
-                                subject.OnNext((await prop.Item1, prop.Item2));
+                            {
+                                var item1 = await prop.Item1;
+                                subject.OnNext((item1, prop.Item2));
+                            }
                             else
                             {
 

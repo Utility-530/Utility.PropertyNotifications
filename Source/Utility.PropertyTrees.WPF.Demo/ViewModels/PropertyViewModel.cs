@@ -14,38 +14,40 @@ using System.Collections.Generic;
 using Utility.Interfaces.NonGeneric;
 using System.Collections;
 using Utility.Observables.NonGeneric;
+using DryIoc;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
     public class PropertyViewModel : BaseObject, IObservable
     {
         Guid Guid = Guid.Parse("e123dab9-9022-4649-9dc4-754d492dd5a6");
-        private ICommand sendScreensaver, sendPrizewheel, sendLeaderboard, connect;
+        private readonly Command sendScreensaver, sendPrizewheel, sendLeaderboard, connect;
 
         public override Models.Key Key => new(Guid, nameof(PropertyViewModel), typeof(PropertyViewModel));
 
-        public PropertyViewModel()
+        public PropertyViewModel(IContainer container)
         {
             sendLeaderboard = new Command(() =>
             {
                 var message = JsonSerializer.Serialize(Model.Leaderboard);
-                Broadcast(new ClientMessageRequest(message));
+                Broadcast(new ClientMessageRequest(nameof(Model.Leaderboard), message));
             });
             sendPrizewheel = new Command(() =>
             {
                 var message = JsonSerializer.Serialize(Model.PrizeWheel);
-                Broadcast(new ClientMessageRequest(message));
+                Broadcast(new ClientMessageRequest(nameof(Model.PrizeWheel), message));
             });
             sendScreensaver = new Command(() =>
             {
                 var message = JsonSerializer.Serialize(Model.ScreenSaver);
-                Broadcast(new ClientMessageRequest(message));
+                Broadcast(new ClientMessageRequest(nameof(Model.ScreenSaver), message));
             });
 
             connect = new Command(() =>
             {
                 Broadcast(new ServerRequest(Server.IP, Server.Port));
             });
+            this.container = container;
         }
 
         public Model Model { get; } = new();
@@ -66,28 +68,32 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         List<object> messages = new();
 
-        public override void OnNext(object value)
+        public override bool OnNext(object value)
         {
-            if (value is ClientResponseEvent message)
+            if (value is ServerEvent)
             {
+                //if (value is ClientResponseEvent message)
+                //{
                 var newNode = new PropertyNode(Guid.NewGuid())
                 {
-                    Data = message
+                    Data = value
                 };
+                container.RegisterInstance(newNode);
                 TreeView(newNode)
-                    .Select(a => new ViewModelEvent(message.ClientData.Header, a))
-                .Subscribe(a =>
-                {
-
-                    foreach (var observer in observers)
-                        observer.OnNext(message);
-                });
-                return;
+                    .Select(a => new ViewModelEvent(value.GetType().Name, a))
+                    .Subscribe(a =>
+                    {
+                        foreach (var observer in observers)
+                            observer.OnNext(a);
+                    });
+                return true;
+                //}
             }
-            base.OnNext(value);
+            return base.OnNext(value);
         }
 
         public List<IObserver> observers = new();
+        private readonly IContainer container;
 
         public IDisposable Subscribe(IObserver observer)
         {

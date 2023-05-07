@@ -89,7 +89,7 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         };
 
-        public override void OnNext(object value)
+        public override bool OnNext(object value)
         {
             if (value is GuidValue { Value: ObjectCreationRequest { Args: var args, Type: var type, RegistrationType: var regType } } keyType)
             {
@@ -98,7 +98,9 @@ namespace Utility.PropertyTrees.WPF.Demo
                     throw new Exception("hyh dfgdfs3");
                 container.RegisterInstance(regType, instance);
                 Broadcast(new GuidValue(keyType.Guid, new ObjectCreationResponse(instance), 0));
+                return true;
             }
+            return base.OnNext(value);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Utility.GraphShapes
         public override Key Key => new(Guid, nameof(GraphController), typeof(GraphController));
         List<object> events = new();
 
-        public override void OnNext(object value)
+        public override bool OnNext(object value)
         {
             if (value is Outputs[] connections)
             {
@@ -24,6 +24,7 @@ namespace Utility.GraphShapes
                 {
                     OnNext(@event);
                 }
+                return true;    
             }
             else if (value is InitialisedEvent initialisedEvent)
             {
@@ -62,6 +63,7 @@ namespace Utility.GraphShapes
                             }
                         }
                 }
+                return true;
             }  
             else if (value is BroadcastEvent broadcastEvent)
             {
@@ -100,8 +102,9 @@ namespace Utility.GraphShapes
                             }
                         }
                 }
+                return true;
             }
-            base.OnNext(value);
+            return base.OnNext(value);
         }
 
         public PocGraph Graph { get; } = new PocGraph();

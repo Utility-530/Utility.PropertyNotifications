@@ -3,6 +3,8 @@ using Utility.Models;
 using Utility.Infrastructure;
 using System.Reactive.Linq;
 using System.Collections.Concurrent;
+using Utility.Observables;
+using System.Reactive.Threading.Tasks;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
@@ -12,7 +14,7 @@ namespace Utility.PropertyTrees.Infrastructure
         public override Key Key => new(guid, nameof(PropertyActivator), typeof(PropertyActivator));
         ConcurrentDictionary<Guid, PropertyBase> guids = new();
 
-        public override async void OnNext(object value)
+        public override bool OnNext(object value)
         {
             if (value is GuidValue { Value: ActivationRequest { Guid: var parentGuid, Data: var data, Descriptor: var descriptor, PropertyType: var propertyType } } guidValue)
             {
@@ -21,12 +23,15 @@ namespace Utility.PropertyTrees.Infrastructure
                 //    Broadcast(new GuidValue(guidValue.Guid, guids[data], 0));
                 //    return;
                 //}
-                var property = await ToProperty();
-                Broadcast(new GuidValue(guidValue.Guid, property, 0));
+                var property = ToProperty().ToObservable().Subscribe(property =>
+                {
+                    Broadcast(new GuidValue(guidValue.Guid, property, 0));
+                });
+                return true;
             }
             else
             {
-                base.OnNext(value);
+                return base.OnNext(value);
             }
 
             Task<PropertyBase> ToProperty()

@@ -64,14 +64,14 @@ namespace Utility.PropertyTrees.WPF.Demo
         public Collection Future => dictionary[Enums.History.Future];
         public Collection Present => dictionary[Enums.History.Present];
 
-        public override void OnNext(object value)
+        public override bool OnNext(object value)
         {
             if (value is not ChangeSet { } changeSet)
             {
-                base.OnNext(value);
-                return;
+                return base.OnNext(value);
+                
             }
-
+            return true;
             foreach (var item in changeSet)
             {
                 if (item is not Change { Type: var type, Value: HistoryOrder { History: var history, Order: var order } })

@@ -24,12 +24,11 @@ namespace Utility.PropertyTrees.WPF.Demo.Infrastructure
         public override Key Key => new(Guid, nameof(ViewBuilder), typeof(ViewBuilder));
 
 
-        public override void OnNext(object value)
+        public override bool OnNext(object value)
         {
             if (value is not GuidValue { Guid: var guid, Value: TreeViewRequest { PropertyNode: var propertyNode, TreeView: var treeView } request })
             {
-                base.OnNext(value);
-                return;
+                return base.OnNext(value);
             }
 
             BuildTree(treeView, propertyNode)
@@ -37,6 +36,7 @@ namespace Utility.PropertyTrees.WPF.Demo.Infrastructure
                 {
                     Broadcast(new GuidValue(guid, new TreeViewResponse(treeView), 0));
                 });
+            return true;
         }
 
         public IObservable<double> BuildTree(TreeView treeView, PropertyNode property)

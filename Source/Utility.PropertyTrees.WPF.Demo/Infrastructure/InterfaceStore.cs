@@ -18,12 +18,14 @@ namespace Utility.PropertyTrees.WPF.Demo.Infrastructure
 
         public override Key Key => new(Guid, nameof(InterfaceStore), typeof(InterfaceStore));
 
-        public override void OnNext(object value)
+        public override bool OnNext(object value)
         {
             if (value is GuidValue { Value: Type type } keyType)
             {
                 Broadcast(new GuidValue(keyType.Guid, dictionary[type], 0));
+                return true;
             }
+            return false;
         }
     }
 }

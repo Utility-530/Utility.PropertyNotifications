@@ -26,11 +26,11 @@ public class UdpServerController : BaseObject
 
     public override Key Key => new(guid, nameof(UdpServerController), typeof(UdpServerController));
 
-    public override void OnNext(object value)
+    public override bool OnNext(object value)
     {
         if (value is ServerRequest { IP: var ip, Port: var port } serverRequest)
         {
-            if (server?.Host.IPEndPoint.Address.ToString() != ip || server.Host.Port != port)
+            if (server?.Host.IPEndPoint.Address.ToString() != ip || server?.Host.Port != port)
             {
                 OnNewRequest(serverRequest);
             }
@@ -41,8 +41,9 @@ public class UdpServerController : BaseObject
         }
         else
         {
-            base.OnNext(value);
+            return base.OnNext(value);
         }
+        return true;
 
         void OnNextMessage(ClientMessageRequest clientMessageRequest)
         {
@@ -53,9 +54,9 @@ public class UdpServerController : BaseObject
             //Check for exit conditions
             //line = Console.ReadLine();
             using Writer w = new();
-            //w.Write("8000");
-            //w.Write(false);
-            //w.Write("*");
+            w.Write("8000");
+            w.Write(false);
+            w.Write(clientMessageRequest.Name);
             w.Write(clientMessageRequest.Message);
             server.ToEvent("chat", w.GetBytes());
         }
@@ -121,7 +122,7 @@ public class UdpServerController : BaseObject
     }
     public record ServerRequest(string IP, int Port);
 
-    public record ClientMessageRequest(string Message);
+    public record ClientMessageRequest(string Name, string Message);
     public record ServerEvent();
     public record ServerOpenEvent() : ServerEvent;
     public record ServerCloseEvent() : ServerEvent;
@@ -130,7 +131,18 @@ public class UdpServerController : BaseObject
     public record ServerExitEvent(UdpClient Client) : ServerEvent;
     public record ClientResponseEvent(UdpClient Client, ClientData ClientData) : ServerEvent;
 
-    public record ClientData(string Header, object? Message);
+    public class ClientData
+    {
+        public ClientData(string header, string message)
+        {
+            Header = header;
+            Message = message;
+        }
+        public ClientData() { }
+
+        public string Header { get; set; }
+        public string Message { get; set; }
+    }
     public record ServerDataEvent(string Message) : ServerEvent;
 
 

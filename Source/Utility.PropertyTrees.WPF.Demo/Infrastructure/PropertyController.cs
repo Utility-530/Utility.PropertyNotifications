@@ -16,13 +16,13 @@ namespace Utility.PropertyTrees.Infrastructure
         {
         }
 
-        public override void OnNext(object value)
+        public override bool OnNext(object value)
         {
             if (value is PropertyOrder order)
                 Process(order);
             else
-                base.OnNext(value);
-
+                return base.OnNext(value);
+            return true;
             void Process(PropertyOrder order)
             {
                 order.Progress = 0;
