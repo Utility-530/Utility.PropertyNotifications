@@ -15,6 +15,8 @@ using Utility.Helpers.NonGeneric;
 using Utility.Helpers.Ex;
 using Utility.WPF.Demo.Data.Factory;
 using Utility.WPF.Demo.Data.Model;
+using Utility.ViewModels;
+using Utility.Reactive.Helpers;
 
 namespace Utility.WPF.Demo.Controls
 {
@@ -110,7 +112,7 @@ namespace Utility.WPF.Demo.Controls
             {
                 return str switch
                 {
-                    //"Sector" => changeSet.ToGroupViewModel(g => g.Sector, out var disposable).Children,
+                    "Sector" => changeSet.ToGroupViewModel(g => g.Sector, out var disposable).Children,
                     //"Arbitrary" => changeSet.Group(g => g.Name.Length.ToString()).SubscribeTo(()=>new CustomGroupCollectionViewModel(""), out var dis).Children,
                     _ => CollectStocks(changeSet)
                 };
