@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.PropertyTrees.WPF", "Utility.PropertyTrees.WPF\Utility.PropertyTrees.WPF.csproj", "{CD4DB2BD-272E-43F2-8ABA-D269082AF3A4}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure.WPF", "Infrastructure.WPF\Infrastructure.WPF.csproj", "{48282F61-A64B-4A08-805E-CEF17091C435}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.PropertyTrees.WPF.Demo", "Utility.PropertyTrees.WPF.Demo\Utility.PropertyTrees.WPF.Demo.csproj", "{27B2639A-ECB1-4364-8880-906BDFDA5DF0}"
@@ -97,7 +95,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Themes", "..\..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF", "..\..\Utility.WPF\Utility.WPF\Utility.WPF.csproj", "{6F5E3930-7B91-4575-8836-CD15A3490F2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Graph.Shapes", "Utility.Graph.Shapes\Utility.Graph.Shapes.csproj", "{52613CB0-125A-4224-8B57-BC8DB26ED1A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Graph.Shapes", "Utility.Graph.Shapes\Utility.Graph.Shapes.csproj", "{52613CB0-125A-4224-8B57-BC8DB26ED1A7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.PropertyTrees.WPF", "Utility.PropertyTrees.WPF\Utility.PropertyTrees.WPF.csproj", "{616BD76E-F2A8-4934-9C23-6579E88A8588}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -277,6 +277,10 @@ Global
 		{52613CB0-125A-4224-8B57-BC8DB26ED1A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52613CB0-125A-4224-8B57-BC8DB26ED1A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52613CB0-125A-4224-8B57-BC8DB26ED1A7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{616BD76E-F2A8-4934-9C23-6579E88A8588}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{616BD76E-F2A8-4934-9C23-6579E88A8588}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{616BD76E-F2A8-4934-9C23-6579E88A8588}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{616BD76E-F2A8-4934-9C23-6579E88A8588}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -324,6 +328,7 @@ Global
 		{134F7AAC-DB52-4D47-85D6-7483347F6C33} = {299B3356-A14D-4F79-96D4-400DB0656D47}
 		{6F5E3930-7B91-4575-8836-CD15A3490F2C} = {299B3356-A14D-4F79-96D4-400DB0656D47}
 		{52613CB0-125A-4224-8B57-BC8DB26ED1A7} = {CA795782-60B4-4351-AFD4-6A93795002D9}
+		{616BD76E-F2A8-4934-9C23-6579E88A8588} = {CA795782-60B4-4351-AFD4-6A93795002D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF120994-60DE-4F74-B89D-2710E31F33BC}
