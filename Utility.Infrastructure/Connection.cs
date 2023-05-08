@@ -9,27 +9,27 @@ namespace Utility.Infrastructure
     {
         private IConnection[] connections;
 
-        public Outputs(Predicate<Key> predicate, IConnection[] observers)
+        public Outputs(Key key, IConnection[] observers)
         {
-            Predicate = predicate;
+            Key = key;
             this.connections = observers;
         }
 
-        public Predicate<Key> Predicate { get; }
+        public Key Key { get; }
 
         public IConnection[] Connections => connections;
 
-        public bool Match(IBase @base, IObserver observer)
-        {
-            if (Predicate(@base.Key))
-                return Connections.Any(a => a.Equals(observer));
-            return false;
+        public bool Match(Key key)
+        { 
+            return Key.Type.IsAssignableFrom(key.Type);
         }
     }
 
-    public record InitialisedEvent(object Source);
+    public record Event(object Source);
 
-    public record BroadcastEvent(object Source);
+    public record InitialisedEvent(object Source) : Event(Source);
+
+    public record BroadcastEvent(object Source, bool Success) : Event(Source);
 
     public class Connection<TObserver> : IConnection where TObserver : IObserver
     {
