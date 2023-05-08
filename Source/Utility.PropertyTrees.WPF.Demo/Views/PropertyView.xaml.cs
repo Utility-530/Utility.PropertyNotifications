@@ -63,8 +63,7 @@ namespace Utility.PropertyTrees.WPF.Demo
             {
                 ServerGrid.Children.Clear();
                 ServerGrid.Children.Add(treeView);
-
-            });        
+            });
         }
 
         private void refresh_2_click(object sender, RoutedEventArgs e)

@@ -10,6 +10,10 @@
                     xmlns:btn="http://schemas.utility.com/buttons"
                     xmlns:st="http://schemas.spicytaco.io/">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Utility.PropertyTrees.WPF.Demo;component/Themes/Styles.xaml"></ResourceDictionary>
+    </ResourceDictionary.MergedDictionaries>
+    
     <DataTemplate DataType="{x:Type sys:Int32}">
         <ui:NumberBox
         Value="{Binding Mode=OneTime}"
@@ -22,70 +26,6 @@
                     IsThreeState="False"
                     IsChecked="{Binding Mode=OneTime}" />
     </DataTemplate>
-
-    <Style TargetType="{x:Type HeaderedContentControl}">
-        <Setter Property="FontSize" Value="16" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type HeaderedContentControl}">
-                    <Grid
-                        x:Name="PART_StackPanel"
-                        Margin="5,5"
-                        HorizontalAlignment="Left">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="2*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <!--<Label x:Name="PART_Label" />-->
-                        <ContentPresenter ContentSource="Header"
-                                          x:Name="PART_HeaderPresenter"
-                                          Grid.Column="0"
-                                          Width="160"
-                                          Margin="4,0,8,0"
-                                          VerticalAlignment="Center">
-                            <ContentPresenter.ContentTemplate>
-                                <DataTemplate>
-                                    <Label
-                                        Content="{Binding }"
-                                        HorizontalContentAlignment="Right"
-                                        FontWeight="DemiBold">
-                                    </Label>
-                                </DataTemplate>
-                            </ContentPresenter.ContentTemplate>
-                        </ContentPresenter>
-                        <ContentPresenter
-                            x:Name="PART_ContentPresenter"
-                            Grid.Column="1"
-                            Margin="4,0"
-                            VerticalAlignment="Center">
-                        </ContentPresenter>
-
-                        <!--<TextBlock
-                            x:Name="HintTextBox"
-                            Grid.Column="2"
-                            Margin="4,0"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontSize="12"
-                            Foreground="{Binding ElementName=PART_ContentPresenter, Path=Content.BorderBrush}"
-                            Visibility="{Binding RelativeSource={RelativeSource Self}, Path=IsEnabled, Converter={x:Static converter:BooleanToVisibilityConverter.Instance}}">
-                                <TextBlock.IsEnabled>
-                                    <MultiBinding Converter="{x:Static converter:MultiBooleanValueConverter.Instance}">
-                                        <Binding ElementName="PART_ContentPresenter" Path="Content.IsFocused" />
-                                        <Binding
-                                        Converter="{x:Static converter:NullOrEmptyToInverseBooleanConverter.Instance}"
-                                        Path="Text"
-                                        RelativeSource="{RelativeSource Self}" />
-                                    </MultiBinding>
-                                </TextBlock.IsEnabled>
-                            </TextBlock>-->
-                    </Grid>
-
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
 
     <!--<Style TargetType="HeaderedContentControl">
@@ -144,15 +84,11 @@
 
     <DataTemplate DataType="{x:Type trees:PropertyNode}">
         <HeaderedContentControl Header="{Binding Content, Mode=OneWay}" 
+                                Style="{StaticResource Horizontal}"
                                 Content="{Binding }" 
                                 ContentTemplateSelector="{StaticResource ContentTemplateSelector}"/>
     </DataTemplate>
     
-
-
-
-
-
     <DataTemplate DataType="{x:Type m:Key}">
         <UniformGrid Height="10" Rows="1">
             <Viewbox>

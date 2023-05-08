@@ -35,7 +35,7 @@
                             Margin="12,14" />
             </ui:CommandBar.Content>-->
         </ui:CommandBar>
-        <st:AutoGrid Columns="3*,2*,*" Rows="*">
+        <st:AutoGrid Columns="3*,2*,2*" Rows="*">
             <ScrollViewer>
                 <StackPanel>
                     <GroupBox Header="Server">
@@ -64,12 +64,15 @@
                     </GroupBox>
                 </StackPanel>
             </ScrollViewer>
-            
-            <ScrollViewer>
-                <StackPanel x:Name="ResponsePanel">
 
-                </StackPanel>
-            </ScrollViewer>
+            <HeaderedContentControl Header="Server" Style="{StaticResource Vertical}">
+                <ScrollViewer>
+                    <StackPanel x:Name="ResponsePanel">
+
+                    </StackPanel>
+                </ScrollViewer>
+            </HeaderedContentControl>
+     
     
             <UniformGrid Columns="1">
                 <prop:PropertyTree
