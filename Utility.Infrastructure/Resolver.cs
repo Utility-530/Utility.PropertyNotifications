@@ -8,7 +8,7 @@ using History = Utility.PropertyTrees.Infrastructure.History;
 
 namespace Utility.Infrastructure
 {
-    public class Resolver : BaseObject 
+    public class Resolver : BaseObject
     {
         private readonly Container container;
         private readonly Outputs[] connections;
@@ -56,9 +56,14 @@ namespace Utility.Infrastructure
             }
             else
             {
-                var connections = Connections(@base.Key);
-                var _value = @base.Output;
+                Dispatch(() =>
+                {
+                    SpreadBroadcastEvent(@base, true);
+                });
 
+                var connections = Connections(@base.Key);
+
+                var _value = @base.Output;
 
                 //foreach (var connection in connections)
                 //{
@@ -114,23 +119,14 @@ namespace Utility.Infrastructure
                 //if (connection.SkipContext == false || SynchronizationContext.Current ==null)
                 if (true)
                 {
-                    (Context ?? throw new Exception("missing context"))
-                        .Post(a =>
-                        {        
-                            foreach (var observer in connection.Observers)
-                            {
-                                if(observer.OnNext(order))
-                                {
-
-                                }
-
-                                foreach(var conn in Connections(this.Key))
-                                {
-                                    foreach (var obs in conn.Observers)
-                                        obs.OnNext(new BroadcastEvent(observer));
-                                }
-                            }
-                        }, default);
+                    Dispatch(() =>
+                    {
+                        foreach (var observer in connection.Observers)
+                        {
+                            var result = observer.OnNext(order);
+                            SpreadBroadcastEvent(observer, result);
+                        }
+                    });
                 }
                 else
                 {
@@ -147,6 +143,25 @@ namespace Utility.Infrastructure
             }
         }
 
+        private void SpreadBroadcastEvent(IObserver observer, bool result)
+        {
+            foreach (var conn in Connections(this.Key))
+            {
+                foreach (var obs in conn.Observers)
+                    obs.OnNext(new BroadcastEvent(observer, result));
+            }
+        }
+
+        private void Dispatch(Action action)
+        {
+            (Context ?? throw new Exception("missing context"))
+                  .Post(a =>
+                  {
+                      action();
+                  }, default);
+
+        }
+
         ICollection<IConnection> Connections(IEquatable equatable)
         {
             if (equatable is not Key key)
@@ -159,7 +174,7 @@ namespace Utility.Infrastructure
             //foreach (var outputConnection in container.ResolveMany<Outputs>())
             foreach (var outputConnection in connections)
             {
-                if (outputConnection.Predicate(key))
+                if (outputConnection.Match(key))
                 {
                     observers.AddRange(outputConnection.Connections);
                 }
