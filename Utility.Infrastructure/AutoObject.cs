@@ -97,7 +97,7 @@ namespace Utility.PropertyTrees.Infrastructure
                 {
                     return true;
                 }
-                store.Remove(valueChange);
+                store.Remove(valueChange.Key);
             }
             store.Add(valueChange.Key, valueChange);
 
