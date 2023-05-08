@@ -18,7 +18,6 @@ namespace Utility.PropertyTrees.WPF.Demo
         {
             public static readonly Guid Model = Guid.Parse("01b52a3b-6e73-4204-a4e7-ca9ed3cf3c24");
             public static readonly Guid Server = Guid.Parse("7e0c787a-30d0-4038-9376-2808cc66a389");
-            //public static readonly Guid Guid3 = Guid.Parse("af561734-bd38-472a-85e8-fdb17193bc12");
         }
   
         public override Key Key => new(MyGuid, nameof(LightBootStrapper), typeof(LightBootStrapper));
@@ -37,7 +36,7 @@ namespace Utility.PropertyTrees.WPF.Demo
             container.Register<PropertyStore>(Reuse.Singleton);
             container.Register<PropertyActivator>(Reuse.Singleton);
             container.Register<PropertyFilter>(Reuse.Singleton);
-            container.Register<InterfaceStore>(Reuse.Singleton);
+            container.Register<InterfaceController>(Reuse.Singleton);
             container.Register<Utility.GraphShapes.GraphController>(Reuse.Singleton);
             container.Register<ViewModelEngine>(Reuse.Singleton);
             container.RegisterInstance(this);
@@ -71,12 +70,12 @@ namespace Utility.PropertyTrees.WPF.Demo
             new Outputs(new Key(Guid.Empty, nameof(History), typeof(History)), new IConnection[] { new Connection<HistoryViewModel>(container) { IsPriority = true, SkipContext =false },  new Connection<Playback>(container) { IsPriority = true, SkipContext =false } }),
             new Outputs(new Key(Guid.Empty, nameof(HistoryViewModel), typeof(HistoryViewModel)), new IConnection[] { new Connection<Playback>(container) { IsPriority = true,  SkipContext =false } }),
             new Outputs(new Key(Guid.Empty, nameof(Playback), typeof(Playback)), new IConnection[] { new Connection<History>(container) { IsPriority = true } }),
-            new Outputs(new Key(Guid.Empty, nameof(PropertyActivator), typeof(PropertyActivator)), new IConnection[] { new Connection<InterfaceStore>(container) { SkipContext = false }, new Connection<LightBootStrapper>(container) { }, 
+            new Outputs(new Key(Guid.Empty, nameof(PropertyActivator), typeof(PropertyActivator)), new IConnection[] { new Connection<InterfaceController>(container) { SkipContext = false }, new Connection<LightBootStrapper>(container) { }, 
                 new Connection<PropertyFilter>(container){ }, 
                 new Connection<ViewModelEngine>(container),new Connection<PropertyStore>(container),  
                 new Connection<ViewBuilder>(container),
             }),
-            new Outputs(new Key(Guid.Empty, nameof(InterfaceStore), typeof(InterfaceStore)), new IConnection[] {  new Connection<PropertyActivator>(container){  } }),
+            new Outputs(new Key(Guid.Empty, nameof(InterfaceController), typeof(InterfaceController)), new IConnection[] {  new Connection<PropertyActivator>(container){  } }),
             new Outputs(new Key(Guid.Empty, nameof(PropertyFilter), typeof(PropertyFilter)), new IConnection[] { new Connection<PropertyNode>(container) { SkipContext = false }, new Connection<PropertyActivator>(container) { } }),
             new Outputs(new Key(Guid.Empty, nameof(PropertyNode), typeof(PropertyNode)), new IConnection[] { new Connection<PropertyFilter>(container) { IsPriority= true /*false*/ } }),
             new Outputs(new Key(Guid.Empty, nameof(Utility.Infrastructure.Resolver), typeof(Utility.Infrastructure.Resolver)), new IConnection[]{ new Connection<Utility.GraphShapes.GraphController>(container){ IsPriority = true, SkipContext = false } }),

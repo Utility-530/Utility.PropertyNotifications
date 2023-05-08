@@ -132,7 +132,5 @@ namespace Utility.PropertyTrees.WPF.Demo
         }
     }
 
-    public record TreeViewRequest(TreeView TreeView, PropertyNode PropertyNode);
 
-    public record TreeViewResponse(TreeView TreeView);
 }
