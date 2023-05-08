@@ -8,23 +8,22 @@ namespace Utility.GraphShapes
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class GraphUserControl : UserControl
+    public partial class GraphUserControl : DockPanel
     {
+        private readonly IContainer container;
+
+        GraphController graphController => container.Resolve<GraphController>();
 
         public GraphUserControl(IContainer container)
         {
             InitializeComponent();
-            this.DockPanel.DataContext = container.Resolve<GraphController>();
+            this.container = container;
+            this.DataContext = graphController;
         }
    
         private void OnRelayoutClick(object sender, RoutedEventArgs args)
         {
             Layout.Relayout();
-        }
-
-        private void OnSelectedVertexChangeClick(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 
