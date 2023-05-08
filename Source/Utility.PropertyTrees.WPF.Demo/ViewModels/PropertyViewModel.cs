@@ -18,14 +18,14 @@ using DryIoc;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
-    public class PropertyViewModel : BaseObject, IObservable
+    public class MainViewModel : BaseObject, IObservable
     {
         Guid Guid = Guid.Parse("e123dab9-9022-4649-9dc4-754d492dd5a6");
         private readonly Command sendScreensaver, sendPrizewheel, sendLeaderboard, connect;
 
-        public override Models.Key Key => new(Guid, nameof(PropertyViewModel), typeof(PropertyViewModel));
+        public override Models.Key Key => new(Guid, nameof(MainViewModel), typeof(MainViewModel));
 
-        public PropertyViewModel(IContainer container)
+        public MainViewModel(IContainer container)
         {
             sendLeaderboard = new Command(() =>
             {

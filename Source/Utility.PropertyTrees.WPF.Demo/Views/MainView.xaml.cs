@@ -9,23 +9,24 @@ using Utility.GraphShapes;
 using Utility.PropertyTrees.Demo.Model;
 using System.Reactive.Linq;
 using Utility.Observables;
+using Utility.PropertyTrees.WPF.Demo.Views;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
-    public partial class PropertyView : UserControl
+    public partial class MainView : UserControl
     {
         public class Keys
         {
-            public const string Model = nameof(PropertyView) + "." + nameof(Model);
-            public const string Server = nameof(PropertyView) + "." + nameof(Server);
+            public const string Model = nameof(MainView) + "." + nameof(Model);
+            public const string Server = nameof(MainView) + "." + nameof(Server);
         }
 
         private readonly IContainer container;
-        private PropertyViewModel viewModel => container.Resolve<PropertyViewModel>();
+        private MainViewModel viewModel => container.Resolve<MainViewModel>();
         private PropertyNode masterNode => container.Resolve<PropertyNode>(Keys.Model);
         private PropertyNode serverNode => container.Resolve<PropertyNode>(Keys.Server);
 
-        public PropertyView(IContainer container)
+        public MainView(IContainer container)
         {
             this.container = container;
 
@@ -123,6 +124,11 @@ namespace Utility.PropertyTrees.WPF.Demo
             var controlWindow = new Window { Content = container.Resolve<HistoryViewModel>() };
             ScreenHelper.SetOnFirstScreen(controlWindow);
             controlWindow.Show();
+        }
+
+        private void show_templates_click(object sender, RoutedEventArgs e)
+        {
+            new Window { Content = new TemplatesView(container) }.Show();
         }
     }
 

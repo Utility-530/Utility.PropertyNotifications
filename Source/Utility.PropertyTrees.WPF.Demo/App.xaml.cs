@@ -14,6 +14,7 @@ namespace Utility.PropertyTrees.WPF.Demo
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+           
             SQLitePCL.Batteries.Init();
             Collection.Context = BaseObject.Context = SynchronizationContext.Current?? throw new System.Exception("sd w3w");
 
@@ -21,7 +22,7 @@ namespace Utility.PropertyTrees.WPF.Demo
 
             BaseObject.Resolver = new Utility.Infrastructure.Resolver(container);
 
-            var window = new Window { Content = new PropertyView(container) {  } };
+            var window = new Window { Content = new MainView(container) {  } };
             //ModernWpf.Controls.Primitives.WindowHelper.SetUseModernWindowStyle(window, true);
             window.Show();
 

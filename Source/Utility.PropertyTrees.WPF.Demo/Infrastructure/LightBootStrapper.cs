@@ -43,15 +43,16 @@ namespace Utility.PropertyTrees.WPF.Demo
             container.RegisterInstance(this);
             foreach (var connection in Outputs)
                 container.RegisterInstance(connection);
-            container.RegisterInstance(new PropertyNode(Guids.Model), serviceKey: PropertyView.Keys.Model);
-            container.RegisterInstance(new PropertyNode(Guids.Server), serviceKey: PropertyView.Keys.Server);
-            //container.RegisterInstance(new PropertyNode(Guids.Guid1), serviceKey: PropertyView.Keys.Screensaver);
-            //container.RegisterInstance(new PropertyNode(Guids.Guid2), serviceKey: PropertyView.Keys.PrizeWheel);
-            //container.RegisterInstance(new PropertyNode(Guids.Guid3), serviceKey: PropertyView.Keys.Leaderboard);
-            container.Register<PropertyViewModel>(Reuse.Singleton);
+            container.RegisterInstance(new PropertyNode(Guids.Model), serviceKey: MainView.Keys.Model);
+            container.RegisterInstance(new PropertyNode(Guids.Server), serviceKey: MainView.Keys.Server);
+            //container.RegisterInstance(new PropertyNode(Guids.Guid1), serviceKey: MainView.Keys.Screensaver);
+            //container.RegisterInstance(new PropertyNode(Guids.Guid2), serviceKey: MainView.Keys.PrizeWheel);
+            //container.RegisterInstance(new PropertyNode(Guids.Guid3), serviceKey: MainView.Keys.Leaderboard);
+            container.Register<MainViewModel>(Reuse.Singleton);
             container.Register<ViewBuilder>(Reuse.Singleton);
             container.Register<PropertyController>(Reuse.Singleton);
             container.Register<UdpServerController>(Reuse.Singleton);
+            container.RegisterInstance(App.Current.Resources["ContentTemplateSelector"] as ContentTemplateSelector);
          
             //container.RegisterSelf();
             // Scan an assembly for components
@@ -81,11 +82,11 @@ namespace Utility.PropertyTrees.WPF.Demo
             new Outputs(new Key(Guid.Empty, nameof(Utility.Infrastructure.Resolver), typeof(Utility.Infrastructure.Resolver)), new IConnection[]{ new Connection<Utility.GraphShapes.GraphController>(container){ IsPriority = true, SkipContext = false } }),
             new Outputs(new Key(Guid.Empty, nameof(ViewModelEngine), typeof(ViewModelEngine)), new IConnection[]{ new Connection<PropertyActivator>(container){ IsPriority = true, SkipContext = false } }),
             new Outputs(new Key(Guid.Empty, nameof(PropertyStore), typeof(PropertyStore)), new IConnection[]{ new Connection<PropertyActivator>(container){ IsPriority = true, SkipContext = false }, new Connection<PropertyNode>(container){ IsPriority = true, SkipContext = false } }),
-            new Outputs(new Key(Guid.Empty, nameof(PropertyViewModel),typeof(PropertyViewModel)), new IConnection[]{ new Connection<ViewBuilder>(container){ IsPriority = true, SkipContext = false }, new Connection<UdpServerController>(container){ IsPriority = true, SkipContext = false } }),
+            new Outputs(new Key(Guid.Empty, nameof(MainViewModel),typeof(MainViewModel)), new IConnection[]{ new Connection<ViewBuilder>(container){ IsPriority = true, SkipContext = false }, new Connection<UdpServerController>(container){ IsPriority = true, SkipContext = false } }),
             new Outputs(new Key(Guid.Empty, nameof(ViewBuilder), typeof(ViewBuilder)), new IConnection[]{
-                new Connection<PropertyViewModel>(container){ IsPriority = true, SkipContext = false }, 
+                new Connection<MainViewModel>(container){ IsPriority = true, SkipContext = false }, 
                 new Connection<PropertyActivator>(container){ IsPriority = true, SkipContext = false } }),
-            new Outputs(new Key(Guid.Empty, nameof(UdpServerController), typeof(UdpServerController)), new IConnection[] { new Connection<PropertyViewModel>(container) { IsPriority= true /*false*/ } }),
+            new Outputs(new Key(Guid.Empty, nameof(UdpServerController), typeof(UdpServerController)), new IConnection[] { new Connection<MainViewModel>(container) { IsPriority= true /*false*/ } }),
 
         };
 

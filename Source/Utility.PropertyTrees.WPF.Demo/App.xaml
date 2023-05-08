@@ -13,7 +13,7 @@
                 <ui:XamlControlsResources />
             </ResourceDictionary.MergedDictionaries>
             <!--<DataTemplate DataType="{x:Type samples1:Customer2}">
-                <local1:PropertyView
+                <local1:MainView
                         DataContext="{Binding }" />
             </DataTemplate>-->
 
