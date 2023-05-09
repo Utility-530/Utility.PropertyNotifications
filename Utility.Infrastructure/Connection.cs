@@ -1,4 +1,5 @@
 ﻿using DryIoc;
+using Jellyfish;
 using System;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
@@ -29,19 +30,25 @@ namespace Utility.Infrastructure
 
     public record InitialisedEvent(object Source) : Event(Source);
 
-    public record BroadcastEvent(object Source, bool Success) : Event(Source);
+    public record BroadcastEvent(object Source, object Target) : Event(Source);
+    public record BroadcastSuccessEvent(object Source, object Target) : BroadcastEvent(Source, Target);
+    public record BroadcastFailureEvent(object Source, object Target) : BroadcastEvent(Source, Target);
 
-    public class Connection<TObserver> : IConnection where TObserver : IObserver
+    public class Connection<TObserver> : BaseViewModel, IConnection where TObserver : IObserver
     {
         private IContainer container;
+        private bool isPriority = true;
+        private bool skipContext = true;
 
         public Connection(IContainer container)
         {
             this.container = container;
         }
 
-        public bool IsPriority { get; set; } = true;
-        public bool SkipContext { get; set; } = true;
+        public bool IsPriority { get => isPriority; set => Set(ref isPriority, value); }
+
+        public bool SkipContext { get => skipContext; set => Set(ref skipContext, value); }
+
         public IEnumerable<IObserver> Observers => container.ResolveMany<TObserver>().Cast<IObserver>();
 
         public override string ToString()
