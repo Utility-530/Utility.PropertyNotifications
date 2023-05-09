@@ -1,6 +1,6 @@
 ﻿using QuikGraph;
 
-namespace Utility.GraphShapes
+namespace Utility.Graph.Shapes
 {
     /// <summary>
     /// Simple bidirectional graph.

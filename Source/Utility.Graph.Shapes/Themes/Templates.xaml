@@ -1,9 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Utility.GraphShapes"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"          
+                    xmlns:local="clr-namespace:Utility.Graph.Shapes"
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:contextualLayout="clr-namespace:GraphShape.Algorithms.Layout.Contextual;assembly=GraphShape"
-                    xmlns:controls="clr-namespace:GraphShape.Controls;assembly=GraphShape.Controls" >
+                    xmlns:controls="clr-namespace:GraphShape.Controls;assembly=GraphShape.Controls" 
+                    xmlns:infra="clr-namespace:Utility.Infrastructure;assembly=Utility.Infrastructure"
+                    xmlns:conv="http://schemas.utility.com/converters">
 
     <Style TargetType="{x:Type controls:VertexControl}">
         <Style.Triggers>
@@ -26,14 +28,14 @@
     </Style>
 
     <DataTemplate DataType="{x:Type local:PocVertex}">
-        <Border Padding="50" Background="WhiteSmoke">
+        <Border Padding="30" Background="WhiteSmoke">
             <StackPanel>
                 <Button x:Name="Button1"
                         Content="{Binding ID, Mode=OneWay}"
                         Tag="{Binding}"
                         Command="{Binding SelectCommand, Mode=OneTime}" >
                     <i:Interaction.Triggers>
-                        <i:PropertyChangedTrigger Binding="{Binding Events.Count}">
+                        <!--<i:PropertyChangedTrigger Binding="{Binding Events.Count}">
                             <i:PropertyChangedTrigger.Actions>
                                 <i:ControlStoryboardAction >
                                     <i:ControlStoryboardAction.Storyboard>
@@ -47,9 +49,56 @@
                                     </i:ControlStoryboardAction.Storyboard>
                                 </i:ControlStoryboardAction>
                             </i:PropertyChangedTrigger.Actions>
-                        </i:PropertyChangedTrigger>
+                        </i:PropertyChangedTrigger>-->
+                        <i:DataTrigger Binding="{Binding Path=LastEvent,Converter={x:Static conv:TypeComparisonConverter.Instance}, ConverterParameter={x:Type infra:InitialisedEvent}}" Value="True">
+                            <i:PropertyChangedTrigger.Actions>
+                                <i:ControlStoryboardAction >
+                                    <i:ControlStoryboardAction.Storyboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="Background.Color"
+                                                                    Storyboard.TargetName="Button1"
+                                                                    AutoReverse="True"
+                                                                    To="Yellow"
+                                                                    Duration="0:0:1.5" />
+                                        </Storyboard>
+                                    </i:ControlStoryboardAction.Storyboard>
+                                </i:ControlStoryboardAction>
+                            </i:PropertyChangedTrigger.Actions>
+                        </i:DataTrigger>
+                        <i:DataTrigger Binding="{Binding Path=LastEvent,Converter={x:Static conv:TypeComparisonConverter.Instance}, ConverterParameter={x:Type infra:BroadcastSuccessEvent}}" Value="True">
+                            <i:PropertyChangedTrigger.Actions>
+                                <i:ControlStoryboardAction >
+                                    <i:ControlStoryboardAction.Storyboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="Background.Color"
+                                                                    Storyboard.TargetName="Button1"
+                                                                    AutoReverse="True"
+                                                                    To="Green"
+                                                                    Duration="0:0:1.5" />
+                                        </Storyboard>
+                                    </i:ControlStoryboardAction.Storyboard>
+                                </i:ControlStoryboardAction>
+                            </i:PropertyChangedTrigger.Actions>
+                        </i:DataTrigger>
+                        <i:DataTrigger Binding="{Binding Path=LastEvent,Converter={x:Static conv:TypeComparisonConverter.Instance}, ConverterParameter={x:Type infra:BroadcastFailureEvent}}" Value="True">
+                            <i:PropertyChangedTrigger.Actions>
+                                <i:ControlStoryboardAction >
+                                    <i:ControlStoryboardAction.Storyboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="Background.Color"
+                                                                    Storyboard.TargetName="Button1"
+                                                                    AutoReverse="True"
+                                                                    To="Red"
+                                                                    Duration="0:0:1.5" />
+                                        </Storyboard>
+                                    </i:ControlStoryboardAction.Storyboard>
+                                </i:ControlStoryboardAction>
+                            </i:PropertyChangedTrigger.Actions>
+                        </i:DataTrigger>
                     </i:Interaction.Triggers>
+
                 </Button>
+                <Button   Command="{Binding BreakCommand, Mode=OneTime}" >Break</Button>
                 <TextBlock Text="{Binding Events.Count}"></TextBlock>
             </StackPanel>
         </Border>

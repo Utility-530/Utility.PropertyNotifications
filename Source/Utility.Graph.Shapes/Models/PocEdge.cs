@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System;
 
-namespace Utility.GraphShapes
+namespace Utility.Graph.Shapes
 {
     /// <summary>
     /// A simple identifiable edge.

@@ -3,7 +3,7 @@ using GraphShape.Controls;
 using System.Windows.Controls;
 using DryIoc;
 
-namespace Utility.GraphShapes
+namespace Utility.Graph.Shapes
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

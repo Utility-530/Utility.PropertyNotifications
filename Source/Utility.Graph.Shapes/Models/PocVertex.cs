@@ -4,13 +4,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Input;
 using Utility.Commands;
 using Utility.Infrastructure;
 using Utility.Interfaces.NonGeneric;
 using Utility.Observables.NonGeneric;
 
-namespace Utility.GraphShapes
+namespace Utility.Graph.Shapes
 {
     /// <summary>
     /// A simple identifiable vertex.
@@ -38,19 +39,37 @@ namespace Utility.GraphShapes
                     observer.OnNext(selectEvent);   
                 }              
             });
+
+            BreakCommand = new Command(() =>
+            {
+                var breakEvent = new BreakEvent(this);
+                viewModelEvents.Add(breakEvent);
+                foreach (var observer in Observers)
+                {
+                    observer.OnNext(breakEvent);   
+                }              
+            });
+
+            Events.CollectionChanged += Events_CollectionChanged;
+        }
+
+        private void Events_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            LastEvent = Events.LastOrDefault();
+            this.OnPropertyChanged(nameof(LastEvent));  
         }
 
         public ICommand SelectCommand { get; }
+        public ICommand BreakCommand { get; }
 
         public string ID { get; }
 
-        //public int Count { get => count; set => this.Set(ref count, value); }
-
         public PocVertex SelectedVertex { get => selectedVertex; set => this.Set(ref selectedVertex, value); }
+
+        public Event LastEvent { get; set; }
 
         public ObservableCollection<Event> Events { get; } = new();
 
-        public int Broadcast { get => broadcast; set => this.Set(ref broadcast, value); }
 
         public IEnumerable<IObserver> Observers => observers;
 
@@ -93,5 +112,7 @@ namespace Utility.GraphShapes
     }
 
     public record ViewModelEvent();
+
     public record SelectEvent(PocVertex Vertex) : ViewModelEvent;
+    public record BreakEvent(PocVertex Vertex) : ViewModelEvent;
 }
