@@ -23,10 +23,12 @@ namespace Utility.PropertyTrees.Infrastructure
                 //    Broadcast(new GuidValue(guidValue.Guid, guids[data], 0));
                 //    return;
                 //}
-                var property = ToProperty().ToObservable().Subscribe(property =>
-                {
-                    Broadcast(new GuidValue(guidValue.Guid, property, 0));
-                });
+                var property = ToProperty(parentGuid ?? Guid.NewGuid())
+                    .ToObservable()
+                    .Subscribe(property =>
+                    {
+                        Broadcast(new GuidValue(guidValue.Guid, property, 0));
+                    });
                 return true;
             }
             else
@@ -34,14 +36,14 @@ namespace Utility.PropertyTrees.Infrastructure
                 return base.OnNext(value);
             }
 
-            Task<PropertyBase> ToProperty()
+            Task<PropertyBase> ToProperty(Guid guid)
             {
                 return propertyType switch
                 {
-                    PropertyType.Reference => CreateReferenceProperty(parentGuid, descriptor, data),
-                    PropertyType.Value => CreateValueProperty(parentGuid, descriptor, data),
-                    PropertyType.CollectionItem => CreateCollectionItemProperty(parentGuid, descriptor, data),
-                    PropertyType.Root => CreateRootProperty(parentGuid, descriptor, data),
+                    PropertyType.Reference => CreateReferenceProperty(guid, descriptor, data),
+                    PropertyType.Value => CreateValueProperty(guid, descriptor, data),
+                    PropertyType.CollectionItem => CreateCollectionItemProperty(guid, descriptor, data),
+                    PropertyType.Root => CreateRootProperty(guid, descriptor, data),
                     _ => throw new Exception("f 33 dsf"),
                 };
 
