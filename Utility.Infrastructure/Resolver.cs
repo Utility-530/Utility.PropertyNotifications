@@ -19,9 +19,10 @@ namespace Utility.Infrastructure
 
         public Resolver(Container container)
         {
-            this.container = container;
+            this.container = container;       
             history = container.Resolve<History>();
             connections = this.container.Resolve<Outputs[]>();
+            Initialise();
             // vertices
             //var nodes = container.Resolve<IBase>();
         }
@@ -29,6 +30,8 @@ namespace Utility.Infrastructure
         public void Initialise()
         {
             container.RegisterInitializer<object>((initialized, b) => { Broadcast(new InitialisedEvent(initialized)); });
+            Broadcast(new InitialisedEvent(this));
+            Broadcast(new InitialisedEvent(history));
             Broadcast(connections);
         }
 
@@ -47,7 +50,7 @@ namespace Utility.Infrastructure
                 }
 
                 foreach (var connection in Connections(@base.Key))
-                    Broadcast(changeSet, connection);
+                    Broadcast(@base, changeSet, connection);
 
                 foreach (var item in changeSet)
                 {
@@ -56,27 +59,17 @@ namespace Utility.Infrastructure
             }
             else
             {
-                Dispatch(() =>
-                {
-                    SpreadBroadcastEvent(@base, true);
-                });
-
                 var connections = Connections(@base.Key);
 
                 var _value = @base.Output;
 
-                //foreach (var connection in connections)
-                //{
-                //    Broadcast(_value, connection);
-                //}
-
                 foreach (var connection in connections.Where(a => a.IsPriority))
                 {
-                    Broadcast(_value, connection);
+                    Broadcast(@base, _value, connection);
                 }
                 foreach (var connection in connections.Where(a => a.IsPriority == false))
                 {
-                    var order = new Order(Guid.NewGuid(), _value, connection);
+                    var order = new Order(Guid.NewGuid(), @base, _value, connection);
                     history.OnNext(order);
                 }
             }
@@ -98,9 +91,9 @@ namespace Utility.Infrastructure
             switch (hist, type)
             {
                 case (Enums.History.Present, Models.ChangeType.Add):
-                    if (order is Order { Value: var value, Connection: var connection })
+                    if (order is Order { Value: var value, Base: var @base, Connection: var connection })
                     {
-                        Broadcast(value, connection);
+                        Broadcast(@base, value, connection);
                         break;
                     }
                     else
@@ -108,13 +101,12 @@ namespace Utility.Infrastructure
             }
         }
 
-        private void Broadcast(object order, IConnection connection)
+        private void Broadcast(IBase @base, object order, IConnection connection)
         {
             //if (connection.Observers.Any() == false)
             //    throw new Exception("kl99dsf  sdffdsdff");
 
             try
-
             {
                 //if (connection.SkipContext == false || SynchronizationContext.Current ==null)
                 if (true)
@@ -124,7 +116,7 @@ namespace Utility.Infrastructure
                         foreach (var observer in connection.Observers)
                         {
                             var result = observer.OnNext(order);
-                            SpreadBroadcastEvent(observer, result);
+                            SpreadBroadcastEvent(@base, observer, result);
                         }
                     });
                 }
@@ -143,12 +135,17 @@ namespace Utility.Infrastructure
             }
         }
 
-        private void SpreadBroadcastEvent(IObserver observer, bool result)
+        private void SpreadBroadcastEvent(IBase @base, IObserver observer, bool result)
         {
             foreach (var conn in Connections(this.Key))
             {
                 foreach (var obs in conn.Observers)
-                    obs.OnNext(new BroadcastEvent(observer, result));
+                {
+                    if (result)
+                        obs.OnNext(new BroadcastSuccessEvent(@base, observer));
+                    else
+                        obs.OnNext(new BroadcastFailureEvent(@base, observer));
+                }
             }
         }
 
@@ -185,6 +182,6 @@ namespace Utility.Infrastructure
 
     }
 
-    public record Order(Guid Key, object Value, IConnection Connection);
+    public record Order(Guid Key, IBase Base, object Value, IConnection Connection);
 
 }
