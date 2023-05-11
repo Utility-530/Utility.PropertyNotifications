@@ -1,8 +1,9 @@
 ﻿using Jellyfish;
-using MintPlayer.ObservableCollection;
+using Swordfish.NET.Collections;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
@@ -17,15 +18,14 @@ namespace Utility.Graph.Shapes
     /// A simple identifiable vertex.
     /// </summary>
     [DebuggerDisplay("{" + nameof(ID) + "}")]
-    public class PocVertex : ObservableObject,  IEquatable<PocVertex>, IObservable
+    public class PocVertex : ObservableObject, IEquatable<PocVertex>, IObservable
     {
-        private int broadcast;
         private PocVertex selectedVertex;
         private List<IObserver> observers = new();
 
         //public event Action Visited;
         public List<ViewModelEvent> viewModelEvents = new();
-        
+
         public PocVertex(string id)
         {
             ID = id ?? throw new ArgumentNullException(nameof(id));
@@ -34,10 +34,10 @@ namespace Utility.Graph.Shapes
             {
                 var selectEvent = new SelectEvent(this);
                 viewModelEvents.Add(selectEvent);
-                foreach(var observer in Observers)
+                foreach (var observer in Observers)
                 {
-                    observer.OnNext(selectEvent);   
-                }              
+                    observer.OnNext(selectEvent);
+                }
             });
 
             BreakCommand = new Command(() =>
@@ -46,8 +46,8 @@ namespace Utility.Graph.Shapes
                 viewModelEvents.Add(breakEvent);
                 foreach (var observer in Observers)
                 {
-                    observer.OnNext(breakEvent);   
-                }              
+                    observer.OnNext(breakEvent);
+                }
             });
 
             Events.CollectionChanged += Events_CollectionChanged;
@@ -56,7 +56,16 @@ namespace Utility.Graph.Shapes
         private void Events_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             LastEvent = Events.LastOrDefault();
-            this.OnPropertyChanged(nameof(LastEvent));  
+            foreach (Event item in e.NewItems)
+            {
+                var key = item.GetType().Name;
+                if (EventsDictionary.ContainsKey(item.GetType().Name) == false)
+                {
+                    EventsDictionary[key] = new ObservableCollection<Event>();
+                }
+                EventsDictionary[key].Add(item);
+            }
+            this.OnPropertyChanged(nameof(LastEvent));
         }
 
         public ICommand SelectCommand { get; }
@@ -69,6 +78,8 @@ namespace Utility.Graph.Shapes
         public Event LastEvent { get; set; }
 
         public ObservableCollection<Event> Events { get; } = new();
+
+        public ConcurrentObservableDictionary<string, ObservableCollection<Event>> EventsDictionary { get; } = new();
 
 
         public IEnumerable<IObserver> Observers => observers;
