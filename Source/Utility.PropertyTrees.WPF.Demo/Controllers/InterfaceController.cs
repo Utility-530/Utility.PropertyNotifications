@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Utility.Infrastructure;
-using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.PropertyTrees.Abstractions;
 

@@ -43,6 +43,7 @@ public class UdpServerController : BaseObject
         {
             return base.OnNext(value);
         }
+
         return true;
 
         void OnNextMessage(ClientMessageRequest clientMessageRequest)
@@ -112,7 +113,7 @@ public class UdpServerController : BaseObject
                 var output = reader.Read<string>();
                 //var type = TypeConverter.Instance.ToType(output);
                 //var serialised = JsonSerializer.Deserialize(output, type);
-                Broadcast(new ClientResponseEvent(client, new ClientData(name, output)));
+                Broadcast(new ClientMessageEvent(client, new ClientData(name, output)));
             });
 
             // open connection
@@ -129,7 +130,7 @@ public class UdpServerController : BaseObject
     public record ServerErrorEvent(Exception Exception) : ServerEvent;
     public record ServerEnterEvent(UdpClient Client) : ServerEvent;
     public record ServerExitEvent(UdpClient Client) : ServerEvent;
-    public record ClientResponseEvent(UdpClient Client, ClientData ClientData) : ServerEvent;
+    public record ClientMessageEvent(UdpClient Client, ClientData ClientData) : ServerEvent;
 
     public class ClientData
     {

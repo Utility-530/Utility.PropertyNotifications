@@ -71,7 +71,7 @@ namespace Utility.PropertyTrees.WPF.Demo
                 return base.OnNext(value);
                 
             }
-            return true;
+     
             foreach (var item in changeSet)
             {
                 if (item is not Change { Type: var type, Value: HistoryOrder { History: var history, Order: var order } })
@@ -94,6 +94,8 @@ namespace Utility.PropertyTrees.WPF.Demo
             if (steps.Length > 0)
                 Enabled = steps.Aggregate((x, y) => x |= y);
 
+            return true;
+
             IEnumerable<Step> Steps()
             {
                 if (dictionary[Enums.History.Future].Count > 0)
@@ -115,5 +117,4 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         public Collection Collection { get; } = new Collection();
     }
-
 }

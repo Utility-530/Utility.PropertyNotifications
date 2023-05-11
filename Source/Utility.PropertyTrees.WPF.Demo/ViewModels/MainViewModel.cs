@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using Utility.Interfaces.NonGeneric;
 using System.Collections;
 using Utility.Observables.NonGeneric;
-using DryIoc;
+using Utility.PropertyTrees.Infrastructure;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
@@ -22,10 +22,12 @@ namespace Utility.PropertyTrees.WPF.Demo
     {
         Guid Guid = Guid.Parse("e123dab9-9022-4649-9dc4-754d492dd5a6");
         private readonly Command sendScreensaver, sendPrizewheel, sendLeaderboard, connect;
+        List<object> messages = new();
+        List<IObserver> observers = new();
 
         public override Models.Key Key => new(Guid, nameof(MainViewModel), typeof(MainViewModel));
 
-        public MainViewModel(IContainer container)
+        public MainViewModel()
         {
             sendLeaderboard = new Command(() =>
             {
@@ -42,15 +44,14 @@ namespace Utility.PropertyTrees.WPF.Demo
                 var message = JsonSerializer.Serialize(Model.ScreenSaver);
                 Broadcast(new ClientMessageRequest(nameof(Model.ScreenSaver), message));
             });
-
             connect = new Command(() =>
             {
                 Broadcast(new ServerRequest(Server.IP, Server.Port));
             });
-            this.container = container;
         }
 
         public Model Model { get; } = new();
+
         public Server Server { get; } = new();
 
         public ICommand SendLeaderboard => sendLeaderboard;
@@ -58,42 +59,33 @@ namespace Utility.PropertyTrees.WPF.Demo
         public ICommand SendScreensaver => sendScreensaver;
         public ICommand Connect => connect;
 
-        public IEnumerable<IObserver> Observers => throw new NotImplementedException();
-
-        public IObservable<TreeView> TreeView(PropertyNode propertyNode)
+        public IObservable<TreeView> TreeView(PropertyNode propertyNode, TreeView treeView)
         {
-            return Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(new TreeView(), propertyNode))
+            return Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(treeView, propertyNode))
                 .Select(a => a.TreeView);
         }
-
-        List<object> messages = new();
 
         public override bool OnNext(object value)
         {
             if (value is ServerEvent)
             {
-                //if (value is ClientResponseEvent message)
-                //{
-                var newNode = new PropertyNode(Guid.NewGuid())
-                {
-                    Data = value
-                };
-                container.RegisterInstance(newNode);
-                TreeView(newNode)
-                    .Select(a => new ViewModelEvent(value.GetType().Name, a))
-                    .Subscribe(a =>
+                Observe<PropertyNode, ActivationRequest>(new(null, new RootDescriptor(value), value, PropertyType.Root))
+                    .Subscribe(newNode =>
                     {
-                        foreach (var observer in observers)
-                            observer.OnNext(a);
+                        TreeView(newNode, new TreeView())
+                        .Select(a => new ViewModelEvent(value.GetType().Name, a))
+                        .Subscribe(a =>
+                        {
+                            foreach (var observer in observers)
+                                observer.OnNext(a);
+                        });
                     });
                 return true;
-                //}
             }
             return base.OnNext(value);
         }
 
-        public List<IObserver> observers = new();
-        private readonly IContainer container;
+        public IEnumerable<IObserver> Observers => observers;
 
         public IDisposable Subscribe(IObserver observer)
         {

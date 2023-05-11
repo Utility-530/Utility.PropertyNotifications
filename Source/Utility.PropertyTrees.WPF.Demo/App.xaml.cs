@@ -6,7 +6,7 @@ using Application = System.Windows.Application;
 using Utility.Infrastructure;
 using System.Threading;
 using DryIoc;
-using Utility.GraphShapes;
+using Utility.Graph.Shapes;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
