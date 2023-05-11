@@ -6,7 +6,7 @@
         {
         }
 
-        public override string Name => PropertyType.Name;
+        public override string Name => PropertyType?.Name ?? "PropertyType not set";
 
         public override bool IsReadOnly => false;
 

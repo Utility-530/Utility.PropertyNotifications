@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.ComponentModel;
-using System.Reactive.Subjects;
-using System.Reactive.Threading.Tasks;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Reflection;
 using Utility.Helpers.NonGeneric;
 using Utility.Infrastructure;
@@ -24,11 +24,8 @@ namespace Utility.PropertyTrees.Infrastructure
                 FilterProperties(data, request.Guid, filters)
                 .Subscribe(a =>
                 {
-                    Context.Post(_ =>
-                    {
-                        var (propertyNode, i) = a;
-                        Broadcast(new GuidValue(guid, propertyNode, i));
-                    }, default);
+                    var (propertyNode, i) = a;
+                    Broadcast(new GuidValue(guid, propertyNode, i));
                 },
                 e =>
                 {
@@ -36,10 +33,7 @@ namespace Utility.PropertyTrees.Infrastructure
                 },
                 () =>
                 {
-                    Context.Post(_ =>
-                    {
-                        Broadcast(new GuidValue(guid, nameof(OnCompleted), 0));
-                    }, default);
+                    Broadcast(new GuidValue(guid, nameof(OnCompleted), 0));
                 });
                 return true;
 
@@ -49,109 +43,97 @@ namespace Utility.PropertyTrees.Infrastructure
                 return base.OnNext(value);
             }
 
-
-            IObservable<(PropertyNode, int i)> FilterProperties(object data, Guid guid, DescriptorFilters? filters = null)
+            IObservable<(PropertyNode?, int)> FilterProperties(object data, Guid guid, DescriptorFilters? filters = null)
             {
-                Subject<(PropertyNode, int i)> subject = new();
+                var descriptors = PropertyDescriptors(data).ToArray();
+                var count = descriptors.Length;
+                int i = 0;
 
-                Task.Run(async () =>
+                return Observable.Create<(PropertyNode?, int)>(observer =>
                 {
-                    try
-                    {
-                        foreach (var prop in EnumerateProperties(data, guid, filters))
-                        {
-                            if (prop.Item1 != null)
-                            {
-                                var item1 = await prop.Item1;
-                                subject.OnNext((item1, prop.Item2));
-                            }
-                            else
-                            {
-
-                            }
-                        }
-                        subject.OnCompleted();
-                    }
-                    catch (Exception ex)
-                    {
-                        subject.OnError(ex);
-                    }
-                });
-
-                return subject;
-
-
-                IEnumerable<(Task<PropertyNode?>, int remaining)> EnumerateProperties(object data, Guid guid, DescriptorFilters? filters = null)
-                {
-                    var descriptors = PropertyDescriptors(data).ToArray();
-                    var count = descriptors.Length;
-                    int i = 0;
-
+                    CompositeDisposable composite = new();
                     if (data is IEnumerable enumerable && filters == null)
                     {
                         count += enumerable.Count();
                         foreach (var item in enumerable)
                         {
                             i++;
-                            yield return (FromIndex(i, item), enumerable.Count() - i);
+                            count++;
+                            FromIndex(i, item)
+                            .Subscribe(a =>
+                            {
+                                observer.OnNext((a, count));
+                                if (--count == 0)
+                                    observer.OnCompleted();
+                            })
+                            .DisposeWith(composite);
                         }
                     }
 
                     foreach (var descriptor in descriptors)
                     {
-                        i++;
-                        yield return (FromPropertyDescriptor(descriptor), count - i);
-                    }
-
-
-                    Task<PropertyNode?> FromIndex(int i, object? item)
-                    {
-                        return Observe<PropertyNode?, ActivationRequest>(new(guid, new CollectionItemDescriptor(item, i), item, PropertyType.CollectionItem)).ToTask();
-                    }
-
-                    IEnumerable<PropertyDescriptor> PropertyDescriptors(object data)
-                    {
-                        foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(data)
-                            .Cast<PropertyDescriptor>()
-                            .Where(a => filters?.All(f => f.Invoke(a)) != false)
-                            .OrderBy(d => d.Name))
+                        FromPropertyDescriptor(descriptor)
+                        .Subscribe(a =>
                         {
-                            yield return descriptor;
-                        }
+                            observer.OnNext((a, count));
+                            if (--count == 0)
+                                observer.OnCompleted();
+                        })
+                        .DisposeWith(composite);
                     }
+                    return composite;
+                });
 
-                    Task<PropertyNode?> FromPropertyDescriptor(PropertyDescriptor descriptor)
+                IObservable<PropertyNode?> FromIndex(int i, object? item)
+                {
+                    return Observe<PropertyNode?, ActivationRequest>(new(guid, new CollectionItemDescriptor(item, i), item, PropertyType.CollectionItem));
+                }
+
+                IEnumerable<PropertyDescriptor> PropertyDescriptors(object data)
+                {
+                    foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(data)
+                        .Cast<PropertyDescriptor>()
+                        .Where(a => filters?.All(f => f.Invoke(a)) != false)
+                        .OrderBy(d => d.Name))
                     {
-                        if (descriptor.PropertyType == typeof(MethodBase))
-                            return null;
-                        if (descriptor.PropertyType == typeof(Type))
-                            return null;
+                        yield return descriptor;
+                    }
+                }
 
-                        return CreateProperty(data, guid, descriptor);
+                IObservable<PropertyNode?> FromPropertyDescriptor(PropertyDescriptor descriptor)
+                {
+                    if (descriptor.PropertyType == typeof(MethodBase))
+                        return Observable.Return<PropertyNode?>(default);
+                    if (descriptor.PropertyType == typeof(Type))
+                        return Observable.Return<PropertyNode?>(default);
 
-                        async Task<PropertyNode?> CreateProperty(object data, Guid guid, PropertyDescriptor descriptor)
+                    return CreateProperty(data, guid, descriptor);
+
+                    IObservable<PropertyNode> CreateProperty(object data, Guid guid, PropertyDescriptor descriptor)
+                    {
+                        return Observable.Create<PropertyNode>(observer =>
                         {
-                            PropertyNode property;
                             if (IsValueOrStringProperty(descriptor))
                             {
-                                property = await Observe<PropertyNode, ActivationRequest>(new(guid, descriptor, data, PropertyType.Value)).ToTask();
+                                return Observe<PropertyNode, ActivationRequest>(new(guid, descriptor, data, PropertyType.Value))
+                                        .Subscribe(a => { observer.OnNext(a); observer.OnCompleted(); });
                             }
                             else
                             {
-                                property = await Observe<PropertyNode, ActivationRequest>(new(guid, descriptor, data, PropertyType.Reference)).ToTask();
-                            }
+                                return Observe<PropertyNode, ActivationRequest>(new(guid, descriptor, data, PropertyType.Reference))
+                                         .Subscribe(a => { observer.OnNext(a); observer.OnCompleted(); });
 
-                            return property;
-
-                            static bool IsValueOrStringProperty(PropertyDescriptor? descriptor)
-                            {
-                                return descriptor.PropertyType.IsValueType || descriptor.PropertyType == typeof(string);
                             }
+                        });
 
-                            static bool IsCollectionProperty(PropertyDescriptor? descriptor)
-                            {
-                                return descriptor.PropertyType != null ? descriptor.PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(descriptor.PropertyType) : false;
-                            }
+                        static bool IsValueOrStringProperty(PropertyDescriptor? descriptor)
+                        {
+                            return descriptor.PropertyType.IsValueType || descriptor.PropertyType == typeof(string);
+                        }
+
+                        static bool IsCollectionProperty(PropertyDescriptor? descriptor)
+                        {
+                            return descriptor.PropertyType != null ? descriptor.PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(descriptor.PropertyType) : false;
                         }
                     }
                 }

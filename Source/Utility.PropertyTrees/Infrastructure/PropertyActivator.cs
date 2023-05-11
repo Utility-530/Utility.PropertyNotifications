@@ -4,7 +4,7 @@ using Utility.Infrastructure;
 using System.Reactive.Linq;
 using System.Collections.Concurrent;
 using Utility.Observables;
-using System.Reactive.Threading.Tasks;
+using System.Reactive.Disposables;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
@@ -18,13 +18,7 @@ namespace Utility.PropertyTrees.Infrastructure
         {
             if (value is GuidValue { Value: ActivationRequest { Guid: var parentGuid, Data: var data, Descriptor: var descriptor, PropertyType: var propertyType } } guidValue)
             {
-                //if (guids.ContainsKey(data))
-                //{
-                //    Broadcast(new GuidValue(guidValue.Guid, guids[data], 0));
-                //    return;
-                //}
-                var property = ToProperty(parentGuid ?? Guid.NewGuid())
-                    .ToObservable()
+                _ =  ToProperty(parentGuid ?? Guid.NewGuid())
                     .Subscribe(property =>
                     {
                         Broadcast(new GuidValue(guidValue.Guid, property, 0));
@@ -36,7 +30,7 @@ namespace Utility.PropertyTrees.Infrastructure
                 return base.OnNext(value);
             }
 
-            Task<PropertyBase> ToProperty(Guid guid)
+            IObservable<PropertyBase> ToProperty(Guid guid)
             {
                 return propertyType switch
                 {
@@ -47,34 +41,55 @@ namespace Utility.PropertyTrees.Infrastructure
                     _ => throw new Exception("f 33 dsf"),
                 };
 
-                async Task<PropertyBase> CreateReferenceProperty(Guid parent, PropertyDescriptor descriptor, object data)
+                IObservable<PropertyBase> CreateReferenceProperty(Guid parent, PropertyDescriptor descriptor, object data)
                 {
                     var item = descriptor.GetValue(data);
                     if (descriptor == null)
                     {
                         throw new ArgumentNullException("descriptor");
                     }
-                    if (item == null)
+
+                    return Observable.Create<PropertyBase>(observer2 =>
                     {
-                        if (descriptor.PropertyType.IsInterface)
+                        return Observable.Create<object>(observer =>
                         {
-                            item = Activator.CreateInstance(await Observe<System.Type, System.Type>(descriptor.PropertyType));
-                        }
-                        else
+                            if (item == null)
+                            {
+                                if (descriptor.PropertyType.IsInterface)
+                                {
+                                    return Observe<Type, Type>(descriptor.PropertyType)
+                                    .Subscribe(type =>
+                                    {
+                                        observer.OnNext(Activator.CreateInstance(type));
+                                        observer.OnCompleted();
+                                    });
+                                }
+                                else
+                                {
+                                    observer.OnNext(Activator.CreateInstance(descriptor.PropertyType));
+                                    observer.OnCompleted();
+                                } 
+                          
+                            }
+                            return Disposable.Empty;
+                        }).Subscribe(item =>
                         {
-                            item = Activator.CreateInstance(descriptor.PropertyType);
-                        }
-                        descriptor.SetValue(data, item);
-                    }
-                    var property = (ReferenceProperty)await CreateInstance(parent, descriptor.Name, descriptor.PropertyType, typeof(ReferenceProperty));
+                            descriptor.SetValue(data, item);
+                            CreateInstance(parent, descriptor.Name, descriptor.PropertyType, typeof(ReferenceProperty))
+                            .Cast<ReferenceProperty>()
+                            .Subscribe(property =>
+                            {
 
-                    property.Descriptor = descriptor;
-                    property.Data = item;
-
-                    return property;
+                                property.Descriptor = descriptor;
+                                property.Data = item;
+                                observer2.OnNext(property);
+                            },() => observer2.OnCompleted());
+                   
+                        });
+                    });
                 }
 
-                async Task<PropertyBase> CreateValueProperty(Guid parent, PropertyDescriptor descriptor, object data)
+                IObservable<PropertyBase> CreateValueProperty(Guid parent, PropertyDescriptor descriptor, object data)
                 {
                     if (descriptor == null)
                     {
@@ -84,15 +99,21 @@ namespace Utility.PropertyTrees.Infrastructure
                     {
                         throw new Exception("f 33 gfg");
                     }
-                    var property = (ValueProperty)await CreateInstance(parent, descriptor.Name, descriptor.PropertyType, typeof(ValueProperty));
-
-                    property.Descriptor = descriptor;
-                    property.Data = data;
-
-                    return property;
+                    return Observable.Create<PropertyBase>(observer =>
+                    {
+                        return CreateInstance(parent, descriptor.Name, descriptor.PropertyType, typeof(ValueProperty))
+                        .Cast<ValueProperty>()
+                        .Subscribe(property =>
+                        {
+                            property.Descriptor = descriptor;
+                            property.Data = data;
+                            observer.OnNext(property);
+                        }, 
+                        () => observer.OnCompleted());
+                    });
                 }
 
-                async Task<PropertyBase> CreateCollectionItemProperty(Guid parent, PropertyDescriptor descriptor, object data)
+                IObservable<PropertyBase> CreateCollectionItemProperty(Guid parent, PropertyDescriptor descriptor, object data)
                 {
                     if (descriptor == null)
                     {
@@ -102,15 +123,23 @@ namespace Utility.PropertyTrees.Infrastructure
                     {
                         throw new Exception("f 33 gfg");
                     }
-                    var property = (CollectionItemProperty)await CreateInstance(parent, descriptor.Name, descriptor.PropertyType, typeof(CollectionItemProperty));
 
-                    property.Descriptor = descriptor;
-                    property.Data = data;
+                    return Observable.Create<PropertyBase>(observer =>
+                    {
+                        return CreateInstance(parent, descriptor.Name, descriptor.PropertyType, typeof(CollectionItemProperty))
+                        .Cast<CollectionItemProperty>()
+                        .Subscribe(property =>
+                        {
+                            property.Descriptor = descriptor;
+                            property.Data = data;
 
-                    return property;
+                            observer.OnNext(property);
+                        },
+                        () => observer.OnCompleted());
+                    });
                 }
 
-                async Task<PropertyBase> CreateRootProperty(Guid parent, PropertyDescriptor descriptor, object data)
+                IObservable<PropertyBase> CreateRootProperty(Guid parent, PropertyDescriptor descriptor, object data)
                 {
                     if (descriptor == null)
                     {
@@ -120,29 +149,44 @@ namespace Utility.PropertyTrees.Infrastructure
                     {
                         throw new Exception("f 33 gfg");
                     }
-                    var property = (RootProperty)await CreateInstance(parent, descriptor.Name, descriptor.PropertyType, typeof(RootProperty));
-
-                    property.Data = data;
-
-                    return property;
+                    return Observable.Create<PropertyBase>(observer =>
+                    {
+                        return CreateInstance(parent, descriptor.Name, descriptor.PropertyType, typeof(RootProperty))
+                        .Cast<RootProperty>()
+                        .Subscribe(property =>
+                        {
+                            property.Data = data;
+                            observer.OnNext(property);
+                        },
+                        () => observer.OnCompleted());
+                    });
                 }
 
-                async Task<PropertyBase> CreateInstance(Guid parent, string name, System.Type propertyType, System.Type type)
+                IObservable<PropertyBase> CreateInstance(Guid parent, string name, System.Type propertyType, System.Type type)
                 {
                     if (type == null)
                     {
                         throw new ArgumentNullException("type");
                     }
-
-                    var result = await Observe<FindResult, FindRequest>(new(new Key(parent, name, propertyType)));
-                    Guid guid = (result.Key as Key)?.Guid ?? throw new Exception("dfb 43 4df");
-                    if (guids.ContainsKey(guid))
-                        return guids[guid];
-                    var args = new object[] { guid };
-                    var response = await Observe<ObjectCreationResponse, ObjectCreationRequest>(new(type, typeof(PropertyNode), args));
-                    var instance = response.Instance as PropertyBase ?? throw new Exception("fg e4  ll;");
-                    guids[guid] = instance;
-                    return instance;
+                    return Observable.Create<PropertyBase>(observer =>
+                    {
+                        return Observe<FindResult, FindRequest>(new(new Key(parent, name, propertyType)))
+                           .Subscribe(result =>
+                           {
+                               Guid guid = (result.Key as Key)?.Guid ?? throw new Exception("dfb 43 4df");
+                               if (guids.ContainsKey(guid))
+                                   observer.OnNext(guids[guid]);
+                               var args = new object[] { guid };
+                               Observe<ObjectCreationResponse, ObjectCreationRequest>(new(type, typeof(PropertyNode), args))
+                               .Subscribe(response =>
+                               {
+                                   var instance = response.Instance as PropertyBase ?? throw new Exception("fg e4  ll;");
+                                   guids[guid] = instance;
+                                   observer.OnNext(instance);
+                               },
+                               () => observer.OnCompleted());
+                           });
+                    });
                 }
             }
         }
