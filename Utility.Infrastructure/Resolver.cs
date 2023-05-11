@@ -31,9 +31,9 @@ namespace Utility.Infrastructure
         public void Initialise()
         {
             container.RegisterInitializer<object>((initialized, b) => { Broadcast(new InitialisedEvent(initialized)); });
+            Broadcast(connections);
             Broadcast(new InitialisedEvent(this));
             Broadcast(new InitialisedEvent(history));
-            Broadcast(connections);
         }
 
         public override bool OnNext(object next)
@@ -99,8 +99,8 @@ namespace Utility.Infrastructure
                     {
                         Broadcast(@base, value, connection).Subscribe(a =>
                         {
-                            if (a == false)
-                                throw new Exception("no path for message");
+                            //if (a == false)
+                            //    throw new Exception("no path for message");
                         });
                         break;
                     }
