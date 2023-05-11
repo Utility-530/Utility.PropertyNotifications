@@ -84,7 +84,6 @@ namespace Utility.PropertyTrees.WPF.Demo
                         {
                             foreach (var observer in observers)
                                 observer.OnNext(a);
-
                         });
                     });
                 return true;
