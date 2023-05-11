@@ -74,7 +74,7 @@
                                                                     Storyboard.TargetName="Button1"
                                                                     AutoReverse="True"
                                                                     To="Green"
-                                                                    Duration="0:0:1.5" />
+                                                                    Duration="0:0:5" />
                                         </Storyboard>
                                     </i:ControlStoryboardAction.Storyboard>
                                 </i:ControlStoryboardAction>
@@ -89,7 +89,7 @@
                                                                     Storyboard.TargetName="Button1"
                                                                     AutoReverse="True"
                                                                     To="Red"
-                                                                    Duration="0:0:1.5" />
+                                                                    Duration="0:0:5" />
                                         </Storyboard>
                                     </i:ControlStoryboardAction.Storyboard>
                                 </i:ControlStoryboardAction>
