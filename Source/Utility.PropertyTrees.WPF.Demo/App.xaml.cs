@@ -22,7 +22,7 @@ namespace Utility.PropertyTrees.WPF.Demo
 
             BaseObject.Resolver = new Utility.Infrastructure.Resolver(container);
 
-            var window = new Window { Content = new MainView(container) {  } };
+            var window = new Window { Content = new MainView() {  } };
             //ModernWpf.Controls.Primitives.WindowHelper.SetUseModernWindowStyle(window, true);
             window.Show();
 

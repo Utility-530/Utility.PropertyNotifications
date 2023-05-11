@@ -7,6 +7,7 @@ using System;
 using Utility.Models;
 using Outputs = Utility.Infrastructure.Outputs;
 using System.Threading;
+using Utility.PropertyTrees.WPF.Demo.Views;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
@@ -23,7 +24,7 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         public override Key Key => new(MyGuid, nameof(LightBootStrapper), typeof(LightBootStrapper));
 
-        DryIoc.Container container = new DryIoc.Container();
+        public static DryIoc.Container container { get; } = new DryIoc.Container();
 
         public Container Build()
         {
@@ -43,8 +44,8 @@ namespace Utility.PropertyTrees.WPF.Demo
             container.RegisterInstance(this);
             foreach (var connection in Outputs)
                 container.RegisterInstance(connection);
-            container.RegisterInstance(new PropertyNode(Guids.Model), serviceKey: MainView.Keys.Model);
-            container.RegisterInstance(new PropertyNode(Guids.Server), serviceKey: MainView.Keys.Server);
+            container.RegisterInstance(new PropertyNode(Guids.Model), serviceKey: PropertyView.Keys.Model);
+            container.RegisterInstance(new PropertyNode(Guids.Server), serviceKey: PropertyView.Keys.Server);
             //container.RegisterInstance(new PropertyNode(Guids.Guid1), serviceKey: MainView.Keys.Screensaver);
             //container.RegisterInstance(new PropertyNode(Guids.Guid2), serviceKey: MainView.Keys.PrizeWheel);
             //container.RegisterInstance(new PropertyNode(Guids.Guid3), serviceKey: MainView.Keys.Leaderboard);

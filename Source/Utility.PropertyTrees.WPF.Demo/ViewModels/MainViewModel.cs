@@ -15,6 +15,7 @@ using Utility.Interfaces.NonGeneric;
 using System.Collections;
 using Utility.Observables.NonGeneric;
 using Utility.PropertyTrees.Infrastructure;
+using Utility.PropertyTrees.WPF.Demo.Views;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
@@ -67,6 +68,11 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         public override bool OnNext(object value)
         {
+            if(value is RefreshRequest)
+            {
+                foreach (var observer in observers)
+                    observer.OnNext(new RefreshEvent());
+            }
             if (value is ServerEvent)
             {
                 Observe<PropertyNode, ActivationRequest>(new(null, new RootDescriptor(value), value, PropertyType.Root))
@@ -78,6 +84,7 @@ namespace Utility.PropertyTrees.WPF.Demo
                         {
                             foreach (var observer in observers)
                                 observer.OnNext(a);
+
                         });
                     });
                 return true;
@@ -99,4 +106,6 @@ namespace Utility.PropertyTrees.WPF.Demo
     }
 
     public record ViewModelEvent(string Name, TreeView TreeView);
+
+    public record RefreshRequest();
 }

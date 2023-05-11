@@ -8,6 +8,7 @@ using Utility.Infrastructure;
 using Utility.Models;
 using System.Threading.Tasks;
 using System.Reactive.Threading.Tasks;
+using System.Reactive.Linq;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
@@ -21,14 +22,23 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         public override Key Key => new(guid, nameof(ViewModelEngine), typeof(ViewModelEngine));
 
-        public async Task<IPropertyNode> Convert(object data)
+        public Task<IPropertyNode> Convert(object data) => Observe(data).ToTask();
+
+        public IObservable<IPropertyNode> Observe(object data)
         {
             if (data is IGuid guid)
             {
-                var propertyNode = await Observe<PropertyNode, ActivationRequest>(new(guid.Guid, new RootDescriptor(data), data, PropertyType.Root)).ToTask();
-                propertyNode.Data = data;
-                propertyNode.Predicates = new ViewModelPredicate();
-                return propertyNode;
+                return Observable.Create<PropertyNode>(observer =>
+                {
+                    return Observe<PropertyNode, ActivationRequest>(new(guid.Guid, new RootDescriptor(data), data, PropertyType.Root))
+                         .Subscribe(propertyNode =>
+                         {
+                             propertyNode.Data = data;
+                             propertyNode.Predicates = new ViewModelPredicate();
+                             observer.OnNext(propertyNode);
+                             observer.OnCompleted();
+                         });
+                });
             }
             throw new Exception(" 4 wewfwe");
         }
