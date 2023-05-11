@@ -80,13 +80,13 @@ namespace Utility.Infrastructure
             return output;
         }
 
-        public virtual bool OnNext(object value)
+        public virtual bool OnNext(object next)
         {
-            if (value is GuidValue { Guid: var guid } keyType)
+            if (next is GuidValue { Guid: var guid } keyType)
             {
-                if (dictionary.ContainsKey(guid))
+                if (dictionary.TryGetValue(guid, out var value))
                 {
-                    dictionary[guid].OnNext(keyType);
+                    value.OnNext(keyType);
                     return true;
                 }
             }

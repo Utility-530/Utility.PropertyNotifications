@@ -1,6 +1,7 @@
 ﻿using DryIoc;
 using DynamicData;
 using System.Collections.ObjectModel;
+using System.Reactive.Subjects;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.PropertyTrees.Infrastructure;
@@ -19,7 +20,7 @@ namespace Utility.Infrastructure
 
         public Resolver(Container container)
         {
-            this.container = container;       
+            this.container = container;
             history = container.Resolve<History>();
             connections = this.container.Resolve<Outputs[]>();
             Initialise();
@@ -63,10 +64,13 @@ namespace Utility.Infrastructure
 
                 var _value = @base.Output;
 
+        
                 foreach (var connection in connections.Where(a => a.IsPriority))
                 {
-                    Broadcast(@base, _value, connection);
+                    Broadcast(@base, _value, connection)
+                        .Subscribe();
                 }
+
                 foreach (var connection in connections.Where(a => a.IsPriority == false))
                 {
                     var order = new Order(Guid.NewGuid(), @base, _value, connection);
@@ -93,7 +97,11 @@ namespace Utility.Infrastructure
                 case (Enums.History.Present, Models.ChangeType.Add):
                     if (order is Order { Value: var value, Base: var @base, Connection: var connection })
                     {
-                        Broadcast(@base, value, connection);
+                        Broadcast(@base, value, connection).Subscribe(a =>
+                        {
+                            if (a == false)
+                                throw new Exception("no path for message");
+                        });
                         break;
                     }
                     else
@@ -101,11 +109,12 @@ namespace Utility.Infrastructure
             }
         }
 
-        private void Broadcast(IBase @base, object order, IConnection connection)
+        private IObservable<bool> Broadcast(IBase @base, object order, IConnection connection)
         {
             //if (connection.Observers.Any() == false)
             //    throw new Exception("kl99dsf  sdffdsdff");
-
+            bool success = false;
+            ReplaySubject<bool> subject = new(1);
             try
             {
                 //if (connection.SkipContext == false || SynchronizationContext.Current ==null)
@@ -116,8 +125,10 @@ namespace Utility.Infrastructure
                         foreach (var observer in connection.Observers)
                         {
                             var result = observer.OnNext(order);
+                            success |= result;
                             SpreadBroadcastEvent(@base, observer, result);
                         }
+                        subject.OnNext(success);
                     });
                 }
                 else
@@ -133,6 +144,7 @@ namespace Utility.Infrastructure
             {
 
             }
+            return subject;
         }
 
         private void SpreadBroadcastEvent(IBase @base, IObserver observer, bool result)
@@ -156,7 +168,6 @@ namespace Utility.Infrastructure
                   {
                       action();
                   }, default);
-
         }
 
         ICollection<IConnection> Connections(IEquatable equatable)
@@ -179,9 +190,7 @@ namespace Utility.Infrastructure
 
             return observers;
         }
-
     }
 
     public record Order(Guid Key, IBase Base, object Value, IConnection Connection);
-
 }
