@@ -1,7 +1,6 @@
 ﻿using Hardcodet.Wpf.DataBinding;
 using System;
 using System.Linq;
-using System.Reactive.Subjects;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Markup;

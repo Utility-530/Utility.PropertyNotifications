@@ -31,10 +31,6 @@ namespace Utility.WPF.Markup
 
     public class GenericTypeExtension : MarkupExtension
     {
-        //public GenericTypeExtension()
-        //{
-        //}
-
         public GenericTypeExtension(Type baseType, Type innerType)
         {
             BaseType = baseType;
