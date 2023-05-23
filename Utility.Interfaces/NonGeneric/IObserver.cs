@@ -4,10 +4,9 @@ namespace Utility.Interfaces.NonGeneric
 {
     public interface IObserver : IEquatable
     {
-        //public List<object> Observations { get; }
-        bool OnNext(object value);
+        void OnNext(object value);
 
-        void OnStarted();
+        void OnProgress(int complete, int total);
 
         void OnCompleted();
 
