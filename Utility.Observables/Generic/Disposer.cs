@@ -1,8 +1,10 @@
-﻿namespace Utility.Observables.Generic
+﻿using System.Collections;
+
+namespace Utility.Observables.Generic
 {
     public sealed class Disposer<T> : IDisposable
     {
-        private readonly System.Collections.Generic.ICollection<IObserver<T>> observers;
+        private readonly ICollection<IObserver<T>> observers;
         private readonly IObserver<T> observer;
 
         //public Disposer(System.Collections.IList observers, IObserver<T> observer)
@@ -11,7 +13,7 @@
         //    this.observer = observer;
         //}
 
-        public Disposer(System.Collections.Generic.ICollection<IObserver<T>> observers, IObserver<T> observer)
+        public Disposer(ICollection<IObserver<T>> observers, IObserver<T> observer)
         {
             (this.observers = observers).Add(observer);
             this.observer = observer;
@@ -22,7 +24,7 @@
         //    this.observer = observer;
         //}
 
-        public System.Collections.IEnumerable Observers => observers;
+        public IEnumerable Observers => observers;
         public IObserver<T> Observer => observer;
 
         public void Dispose()

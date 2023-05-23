@@ -1,32 +1,30 @@
 ﻿using System.Collections;
 using Utility.Interfaces.NonGeneric;
 
-namespace Utility.Observables.NonGeneric
+namespace Utility.Observables.Generic
 {
-    public class Observer : IObserver
+    public class CustomObserver<T> : IObserver<T>
     {
         private Action<object> onNext;
         private Action<Exception> onError;
         private Action onCompleted;
 
-        public Observer(Action<object> onNext, Action<Exception> onError, Action onCompleted)
+        public CustomObserver(Action<object> onNext, Action<Exception> onError, Action onCompleted)
         {
             this.onNext = onNext;
             this.onError = onError;
             this.onCompleted = onCompleted;
         }
 
-        public Observer()
+        public CustomObserver()
         {
-
         }
 
         public List<object> Observations { get; } = new();
 
 
-        public virtual void OnNext(object value)
+        public virtual void OnNext(T value)
         {
-            Observations.Add(value);
             (onNext ?? throw new NotImplementedException()).Invoke(value);
         }
 

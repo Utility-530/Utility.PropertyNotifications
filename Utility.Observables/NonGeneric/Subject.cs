@@ -48,5 +48,10 @@ namespace Utility.Observables.NonGeneric
         {
             throw new NotImplementedException();
         }
+
+        public void OnStarted()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
