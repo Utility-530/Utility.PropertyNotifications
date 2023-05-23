@@ -16,10 +16,11 @@ namespace Utility.Observables.NonGeneric
             this.onCompleted = onCompleted;
         }
 
-        //public Observer()
-        //{
+        // Used by disposer
+        internal Observer()
+        {
 
-        //}
+        }
 
         public List<object> Observations { get; } = new();
 
