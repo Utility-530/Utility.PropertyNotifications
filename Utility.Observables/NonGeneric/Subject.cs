@@ -49,7 +49,7 @@ namespace Utility.Observables.NonGeneric
             throw new NotImplementedException();
         }
 
-        public void OnStarted()
+        public void OnProgress(int i, int total)
         {
             throw new NotImplementedException();
         }
