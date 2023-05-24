@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Reflection;
-using Utility.Observables;
+using Utility.Interfaces.NonGeneric;
 using Utility.Observables.NonGeneric;
 
 namespace Utility.Collections
