@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Utility.WPF\Utility.Commands\Utility.Commands.csproj" />
+		<ProjectReference Include="..\..\Utility.WPF\Utility.WPF.Controls.Tabs\Utility.WPF.Controls.Tabs.csproj" />
+		<ProjectReference Include="..\Utility.Nodify.Operations\Utility.Nodify.Operations.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="DevZest.WpfDocking.Net60" Version="3.0.0" />
+		<PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.72.0" />
+		<!--<PackageReference Include="DryIoc" Version="5.4.0" />-->
+		<PackageReference Include="SpicyTaco.AutoGrid" Version="1.2.29" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Update="Views\DockWindow.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+	</ItemGroup>
+
+</Project>
