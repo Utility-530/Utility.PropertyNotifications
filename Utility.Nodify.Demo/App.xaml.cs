@@ -7,6 +7,7 @@ using System;
 using System.Windows;
 using Utility.Models;
 using Utility.Nodify.Operations.Infrastructure;
+using Utility.Nodify.Engine.ViewModels;
 
 namespace Utility.Nodify.Demo
 {
@@ -29,8 +30,6 @@ namespace Utility.Nodify.Demo
             container.Register<IOperationsFactory, CustomOperationsFactory>();
             container.Register<IOperationsFactory, InterfaceOperationsFactory>();
 
-            OperationNodeViewModel.Observer = container.Resolve<IObserver<BaseViewModel>>();
-            OperationConnectionViewModel.Observer = container.Resolve<IObserver<BaseViewModel>>();
 
             DockWindow dockWindow = new()
             {

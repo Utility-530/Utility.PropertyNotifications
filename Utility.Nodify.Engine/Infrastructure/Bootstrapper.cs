@@ -15,6 +15,7 @@ using Utility.Commands;
 using Utility.Models;
 using System.Collections.ObjectModel;
 using Message = Utility.Nodify.Operations.Message;
+using Utility.Nodify.Engine.ViewModels;
 
 namespace Utility.Nodify.Demo.Infrastructure
 {
@@ -60,6 +61,10 @@ namespace Utility.Nodify.Demo.Infrastructure
             builder.Register<RangeObservableCollection<Message>>(serviceKey: OperationKeys.Future);
             builder.Register<RangeObservableCollection<Message>>(serviceKey: OperationKeys.Current);
             builder.Register<RangeObservableCollection<Message>>(serviceKey: OperationKeys.Past);
+
+
+            OperationNodeViewModel.Observer = builder.Resolve<IObserver<BaseViewModel>>();
+            OperationConnectionViewModel.Observer = builder.Resolve<IObserver<BaseViewModel>>();
 
             builder.RegisterInitializer<BaseViewModel>((a, context) =>
             {
