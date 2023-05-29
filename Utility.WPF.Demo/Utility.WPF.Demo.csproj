@@ -14,6 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Utility.WPF.Controls.Tabs\Utility.WPF.Controls.Tabs.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Controls.Texts\Utility.WPF.Controls.Texts.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Adorners\Utility.WPF.Demo.Adorners.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Date\Utility.WPF.Demo.Date.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Meta\Utility.WPF.Controls.Meta.csproj" />

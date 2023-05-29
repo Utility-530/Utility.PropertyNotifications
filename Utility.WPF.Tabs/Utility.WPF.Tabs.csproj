@@ -6,8 +6,4 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Utility.Models\Utility.Common\Utility.Common.csproj" />
-  </ItemGroup>
-
 </Project>

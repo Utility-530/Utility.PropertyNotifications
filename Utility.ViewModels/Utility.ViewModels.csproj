@@ -15,7 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Utility.Model\Utility.Models.Filters\Utility.Models.Filters.csproj" />
+		<ProjectReference Include="..\..\Utility.Models\Utility.Models.Filters\Utility.Models.Filters.csproj" />
 		<ProjectReference Include="..\Utility.Service\Utility.Service.csproj" />
 	</ItemGroup>
 

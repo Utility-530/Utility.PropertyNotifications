@@ -169,13 +169,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Drawing", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees.Abstractions", "..\Utility.Trees\Utility.Trees.Abstractions\Utility.Trees.Abstractions.csproj", "{CF4E9D81-FB88-4935-A41B-8287DC730784}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models", "..\Utility.Model\Utility.Models\Utility.Models.csproj", "{0A4C46E8-0CFC-4D1E-81E7-17923E6F1C2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models", "..\Utility.Models\Utility.Models\Utility.Models.csproj", "{0A4C46E8-0CFC-4D1E-81E7-17923E6F1C2E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models.Filters", "..\Utility.Model\Utility.Models.Filters\Utility.Models.Filters.csproj", "{D101BF6A-F829-4CF8-A84E-69525582F42B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models.Filters", "..\Utility.Models\Utility.Models.Filters\Utility.Models.Filters.csproj", "{D101BF6A-F829-4CF8-A84E-69525582F42B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Packages", "..\Utility.Model\Utility.Packages\Utility.Packages.csproj", "{22AD003E-5540-41F6-A90E-C367A221AC97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Packages", "..\Utility.Models\Utility.Packages\Utility.Packages.csproj", "{22AD003E-5540-41F6-A90E-C367A221AC97}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Common", "..\Utility.Model\Utility.Common\Utility.Common.csproj", "{7FD81F5A-4EDC-414C-9C27-937DA8E9F9B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Common", "..\Utility.Models\Utility.Common\Utility.Common.csproj", "{7FD81F5A-4EDC-414C-9C27-937DA8E9F9B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.Texts", "Utility.WPF.Controls.Texts\Utility.WPF.Controls.Texts.csproj", "{F8CBA3D6-53C2-47F4-96E8-9467C0474055}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.Tabs", "Utility.WPF.Controls.Tabs\Utility.WPF.Controls.Tabs.csproj", "{EC3E0CB6-B6B6-40E8-AEEF-84D0C752B205}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -511,6 +515,14 @@ Global
 		{7FD81F5A-4EDC-414C-9C27-937DA8E9F9B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FD81F5A-4EDC-414C-9C27-937DA8E9F9B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FD81F5A-4EDC-414C-9C27-937DA8E9F9B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8CBA3D6-53C2-47F4-96E8-9467C0474055}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8CBA3D6-53C2-47F4-96E8-9467C0474055}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8CBA3D6-53C2-47F4-96E8-9467C0474055}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8CBA3D6-53C2-47F4-96E8-9467C0474055}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC3E0CB6-B6B6-40E8-AEEF-84D0C752B205}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC3E0CB6-B6B6-40E8-AEEF-84D0C752B205}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC3E0CB6-B6B6-40E8-AEEF-84D0C752B205}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC3E0CB6-B6B6-40E8-AEEF-84D0C752B205}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -599,6 +611,8 @@ Global
 		{D101BF6A-F829-4CF8-A84E-69525582F42B} = {CF03926E-9E72-4A61-B447-2EF7E3C17461}
 		{22AD003E-5540-41F6-A90E-C367A221AC97} = {CF03926E-9E72-4A61-B447-2EF7E3C17461}
 		{7FD81F5A-4EDC-414C-9C27-937DA8E9F9B9} = {CF03926E-9E72-4A61-B447-2EF7E3C17461}
+		{F8CBA3D6-53C2-47F4-96E8-9467C0474055} = {2ED92AB3-1BF8-4B9F-85BF-2739EDF1915C}
+		{EC3E0CB6-B6B6-40E8-AEEF-84D0C752B205} = {2ED92AB3-1BF8-4B9F-85BF-2739EDF1915C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D60CFCE-498F-4A6D-9B9B-5546561C117E}
