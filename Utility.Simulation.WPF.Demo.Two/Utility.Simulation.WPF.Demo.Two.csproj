@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\Utility.Helpers\Utility.Helpers\Utility.Helpers.csproj" />
+		<ProjectReference Include="..\..\Utility.Nodify\Utility.Nodify.Core\Utility.Nodify.Core.csproj" />
+		<ProjectReference Include="..\..\Utility.Nodify\Utility.Nodify.Operations\Utility.Nodify.Operations.csproj" />
+		<ProjectReference Include="..\..\Utility.Nodify\Utility.Nodify.Engine\Utility.Nodify.Engine.csproj" />
+		<ProjectReference Include="..\..\Utility.Observables\Utility.Observables\Utility.Observables.csproj" />
+		<ProjectReference Include="..\Utility.Simulation.Wpf\Utility.Simulation.Wpf.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+
+</Project>
