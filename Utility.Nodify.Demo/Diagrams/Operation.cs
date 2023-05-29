@@ -78,11 +78,11 @@ namespace Utility.Nodify.Demo.Infrastructure
     {
         public IOValue[] Execute(params IOValue[] operands)
         {
-            if (operands.Single(a => a.Title == "Input3").Value is PropertyChange { Source: BooleanViewModel { Guid: var guid, Value: bool value } })
+            if (operands.Single(a => a.Title == OperationInterfaceNodeViewModel.Input0 ).Value is PropertyChange { Source: BooleanViewModel { Guid: var guid, Value: bool value } })
             {
                 if (guid == Guids.Boolean)
                 {
-                    return new[] { new IOValue("Output1", value)/*, new IOValue { Title="Output2", Value = default} */};
+                    return new[] { new IOValue(OperationInterfaceNodeViewModel.Output0, value)/*, new IOValue { Title="Output2", Value = default} */};
                 }
             }
             return new IOValue[0];

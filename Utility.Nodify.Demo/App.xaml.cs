@@ -7,7 +7,6 @@ using System;
 using System.Windows;
 using Utility.Models;
 using Utility.Nodify.Operations.Infrastructure;
-using static Utility.Nodify.Demo.Infrastructure.CustomOperationsFactory;
 
 namespace Utility.Nodify.Demo
 {

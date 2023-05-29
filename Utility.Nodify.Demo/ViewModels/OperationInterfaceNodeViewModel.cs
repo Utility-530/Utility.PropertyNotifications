@@ -14,6 +14,13 @@ namespace Utility.Nodify.Demo
     {
         private readonly IContainer container;
 
+
+        public const string Input0 = "Dinosaur";
+        public const string Input1 = "Giraffe" ;
+        public const string Output0 = "Hippo";
+        public const string Output1 = "Ant";
+
+
         IObservable<PropertyChange> observable => container.Resolve<IObservable<PropertyChange>>(Keys.Pipe);
 
         public OperationInterfaceNodeViewModel(IContainer container)
@@ -31,14 +38,14 @@ namespace Utility.Nodify.Demo
                     if (a.Name == nameof(Size))
                         return;
 
-                    foreach (var input in Input.Where(a => a.Title == "Input3"))
+                    foreach (var input in Input.Where(a => a.Title == Input0))
                         input.Value = a;
                 });
         }
 
         public override void OnInputValueChanged(ConnectorViewModel connectorViewModel)
         {
-            if (connectorViewModel.Title == "Input4")
+            if (connectorViewModel.Title == Input1)
             {
                 if (connectorViewModel.Value is var value)
                 {

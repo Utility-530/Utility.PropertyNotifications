@@ -5,18 +5,18 @@ using IContainer = DryIoc.IContainer;
 
 namespace Utility.Nodify.Demo.Infrastructure
 {
-    public class Diagram1 : Diagram
+    public class Diagram3 : Diagram
     {
 
-        public Diagram1(IContainer container)
+        public Diagram3(IContainer container)
         {
-            Name = "One";
+            Name = "Three";
 
             var @interface = container.Resolve<OperationInterfaceNodeViewModel>();
-            var input3 = new ConnectorViewModel() { Title = OperationInterfaceNodeViewModel.Input0 };
-            var input4 = new ConnectorViewModel() { Title = OperationInterfaceNodeViewModel.Input1 };
-            var output3 = new ConnectorViewModel() { Title = OperationInterfaceNodeViewModel.Output0, };
-            var output4 = new ConnectorViewModel() { Title = OperationInterfaceNodeViewModel.Output1, };
+            var input3 = new ConnectorViewModel() { Title = "Input3" };
+            var input4 = new ConnectorViewModel() { Title = "Input4" };
+            var output3 = new ConnectorViewModel() { Title = "Output1", };
+            var output4 = new ConnectorViewModel() { Title = "Output2", };
             @interface.Input.Add(input3);
             @interface.Input.Add(input4);
             @interface.Output.Add(output3);
