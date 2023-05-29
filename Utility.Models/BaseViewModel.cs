@@ -35,15 +35,15 @@ namespace Utility.Models
         /// <param name="field">A reference to the backing field from the property</param>
         /// <param name="value">The new value being set</param>
         /// <param name="callerName">The caller member name of the property (auto-set)</param>
-        protected void Set<T>(ref T field, T value, [CallerMemberName] string? callerName = default)
+        protected bool Set<T>(ref T field, T value, [CallerMemberName] string? callerName = default)
         {
-            if (field?.Equals(value) == true)
+            if (field?.Equals(value) != true)
             {
-                return;
-            }
-
-            field = value;
-            OnPropertyChanged(callerName);
+                field = value;
+                OnPropertyChanged(callerName);
+                return true;
+            } 
+            return false;
         }
     }
 }
