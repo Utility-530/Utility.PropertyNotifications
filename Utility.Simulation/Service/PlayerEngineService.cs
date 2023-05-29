@@ -2,12 +2,13 @@
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using Utility.Simulation.ViewModel;
 using static Utility.Simulation.ViewModel.PlayerViewModel;
 using static Utility.Simulation.ViewModel.RateViewModel;
 
 namespace Utility.Simulation.Service
 {
-    public class PlayerEngineService : IObserver<CommandType>, IObserver<Rate>, IObservable<Engine.Instruction>
+    public class PlayerEngineService : IObserver<Command>, IObserver<Rate>, IObservable<Engine.Instruction>
     {
         private readonly Subject<CommandType> commands = new();
         private readonly Subject<Rate> rates = new();
@@ -41,9 +42,9 @@ namespace Utility.Simulation.Service
             throw new NotImplementedException();
         }
 
-        public void OnNext(CommandType value)
+        public void OnNext(Command value)
         {
-            commands.OnNext(value);
+            commands.OnNext(value.Type);
         }
 
         public void OnNext(Rate value)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -14,23 +15,25 @@ namespace Utility.Simulation.ViewModel
         Playing, Stopped
     }
 
-    public partial class PlayerViewModel : ReactiveObject, IObservable<PlayerViewModel.CommandType>, IObserver<Engine.Position>
+    public record Command(CommandType Type);
+    public enum CommandType
     {
-        readonly Subject<CommandType> subject = new();
+        Play, Pause, Repeat, Backward, Forward, Stop
+    }
+    public partial class PlayerViewModel : ReactiveObject, IObservable<Command>, IObserver<Engine.Position>
+    {
+        readonly Subject<Command> subject = new();
         readonly Subject<Engine.Position> positionSubject = new();
         private PlayerState state = PlayerState.Stopped;
 
-        public enum CommandType
-        {
-            Play, Pause, Repeat, Backward, Forward, Stop
-        }
+
 
         public PlayerViewModel(SynchronizationContext context)
         {
-            var playCommand = new Jellyfish.RelayCommand((a) => subject.OnNext(CommandType.Play));
-            var pauseCommand = new Jellyfish.RelayCommand((a) => subject.OnNext(CommandType.Pause));
-            var stopCommand = new Jellyfish.RelayCommand((a) => subject.OnNext(CommandType.Stop));
-            var forwardCommand = new Jellyfish.RelayCommand((a) => subject.OnNext(CommandType.Forward));
+            var playCommand = new Jellyfish.RelayCommand((a) => subject.OnNext(new Command(CommandType.Play)));
+            var pauseCommand = new Jellyfish.RelayCommand((a) => subject.OnNext(new Command(CommandType.Pause)));
+            var stopCommand = new Jellyfish.RelayCommand((a) => subject.OnNext(new Command(CommandType.Stop)));
+            var forwardCommand = new Jellyfish.RelayCommand((a) => subject.OnNext(new Command(CommandType.Forward)));
 
             //var repeatCommand = ReactiveCommand.Create(() => CommandType.Repeat);
             //var backCommand = ReactiveCommand.Create(() => CommandType.Backward, Observable.Return(false));
@@ -76,7 +79,7 @@ namespace Utility.Simulation.ViewModel
 
         public PlayerState State { get => state; private set => this.RaiseAndSetIfChanged(ref state, value); }
 
-        public IDisposable Subscribe(IObserver<CommandType> observer)
+        public IDisposable Subscribe(IObserver<Command> observer)
         {
             return subject.Subscribe(observer);
         }
