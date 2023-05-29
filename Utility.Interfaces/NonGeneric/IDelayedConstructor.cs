@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Utility.Interface.NonGeneric
+namespace Utility.Interfaces.NonGeneric
 {
     public interface IDelayedConstructor
     {
