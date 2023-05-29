@@ -1,27 +1,28 @@
-﻿using System.Collections;
+﻿
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Observables.Generic
 {
-    public class CustomObserver<T> : IObserver<T>
+    public class Observer<T> : Utility.Interfaces.Generic.IObserver<T>
     {
-        private Action<object> onNext;
-        private Action<Exception> onError;
-        private Action onCompleted;
+        private readonly Action<T> onNext;
+        private readonly Action<Exception> onError;
+        private readonly Action onCompleted;
+        private readonly Action<int, int> onProgress;
 
-        public CustomObserver(Action<object> onNext, Action<Exception> onError, Action onCompleted)
+        public Observer(Action<T> onNext, Action<Exception> onError, Action onCompleted, Action<int, int> onProgress)
         {
             this.onNext = onNext;
             this.onError = onError;
             this.onCompleted = onCompleted;
+            this.onProgress = onProgress;
         }
 
-        public CustomObserver()
+        public Observer()
         {
         }
 
         public List<object> Observations { get; } = new();
-
 
         public virtual void OnNext(T value)
         {
@@ -38,6 +39,10 @@ namespace Utility.Observables.Generic
             (onError ?? throw new NotImplementedException()).Invoke(error);
         }
 
+        public void OnProgress(int amount, int total)
+        {
+            (onProgress ?? throw new NotImplementedException()).Invoke(amount, total);
+        }
 
         public bool Equals(IEquatable? other)
         {

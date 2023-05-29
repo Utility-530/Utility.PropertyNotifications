@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Utility.Interfaces.NonGeneric;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Utility.Observables.NonGeneric
 {
@@ -8,12 +9,14 @@ namespace Utility.Observables.NonGeneric
         private Action<object> onNext;
         private Action<Exception> onError;
         private Action onCompleted;
+        private readonly Action<int, int> onProgress;
 
-        public Observer(Action<object> onNext, Action<Exception> onError, Action onCompleted)
+        public Observer(Action<object> onNext, Action<Exception> onError, Action onCompleted, Action<int,int> onProgress)
         {
             this.onNext = onNext;
             this.onError = onError;
             this.onCompleted = onCompleted;
+            this.onProgress = onProgress;
         }
 
         // Used by disposer
@@ -41,15 +44,15 @@ namespace Utility.Observables.NonGeneric
             (onError ?? throw new NotImplementedException()).Invoke(error);
         }
 
+        public void OnProgress(int i, int total)
+        {
+            (onProgress ?? throw new NotImplementedException()).Invoke(i, total);
+        }
 
         public bool Equals(IEquatable? other)
         {
             throw new NotImplementedException();
         }
 
-        public void OnProgress(int i, int total)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

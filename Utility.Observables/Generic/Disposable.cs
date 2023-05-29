@@ -8,10 +8,9 @@ namespace Utility.Observables.Generic
 {
     public class Disposable : IObservableCollection<IDisposable>, ICollection<IDisposable>
     {
-
         private bool disposed;
-
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
+        Collection<IObserver<NotifyCollectionChangedEventArgs>> observers = new();
 
         public Disposable(IDisposable disposable) : this()
         {
@@ -31,7 +30,7 @@ namespace Utility.Observables.Generic
 
         public ObservableCollection<IDisposable> Disposables { get; } = new();
 
-        public Collection<IObserver<NotifyCollectionChangedEventArgs>> Observers { get; } = new();
+        public IEnumerable<IObserver<NotifyCollectionChangedEventArgs>> Observers => observers;
 
 
         public void Dispose(bool disposing)
@@ -110,12 +109,14 @@ namespace Utility.Observables.Generic
 
         public IDisposable Subscribe(IObserver<NotifyCollectionChangedEventArgs> observer)
         {
-            return new Disposer<NotifyCollectionChangedEventArgs>(Observers, observer);
+            return new Disposer<NotifyCollectionChangedEventArgs>(observers, observer);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return Disposables.GetEnumerator();
         }
+
+
     }
 }
