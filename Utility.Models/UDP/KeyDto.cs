@@ -12,4 +12,6 @@ namespace Utility.Models.UDP
 
     public record TypeDto(string InName, string OutName);
 
+    public record TypeGuidDto(Guid Guid, GuidDto GuidDto, TypeDto TypeDto);
+
 }
