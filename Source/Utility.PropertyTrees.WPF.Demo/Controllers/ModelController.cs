@@ -31,14 +31,14 @@ internal class ModelController : BaseObject, IModelController
 
     public override object? Model => model;
 
-    Command sendLeaderboard, sendPrizewheel, sendScreensaver;
+    ObservableCommand sendLeaderboard, sendPrizewheel, sendScreensaver;
     public ModelController()
     {
         model.Model = container.Resolve<ModelProperty>().Data as Model ?? throw new Exception("dfs ooo");
         model.Server = container.Resolve<ServerProperty>().Data as Server ?? throw new Exception("dfs ppp");
 
 
-        sendLeaderboard = new Command((observer) =>
+        sendLeaderboard = new ObservableCommand((observer) =>
         {
             observer.OnNext(false);
             var message = JsonSerializer.Serialize(model.Model.Leaderboard);
@@ -48,7 +48,7 @@ internal class ModelController : BaseObject, IModelController
                 observer.OnNext(true);
             });
         }, false);
-        sendPrizewheel = new Command((observer) =>
+        sendPrizewheel = new ObservableCommand((observer) =>
         {
             observer.OnNext(false);
             var message = JsonSerializer.Serialize(model.Model.PrizeWheel);
@@ -58,7 +58,7 @@ internal class ModelController : BaseObject, IModelController
                  observer.OnNext(true);
              });
         }, false);
-       sendScreensaver = new Command((observer) =>
+       sendScreensaver = new ObservableCommand((observer) =>
         {
             observer.OnNext(false);
             var message = JsonSerializer.Serialize(model.Model.ScreenSaver);
@@ -68,7 +68,7 @@ internal class ModelController : BaseObject, IModelController
                  observer.OnNext(true);
              });
         }, false);
-        model.Connect = new Command((observer) =>
+        model.Connect = new ObservableCommand((observer) =>
         {
             observer.OnNext(false);
             Observe<ServerResponse, ServerRequest>(new(model.Server.IP, model.Server.Port))
