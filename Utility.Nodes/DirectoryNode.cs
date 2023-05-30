@@ -164,5 +164,10 @@ namespace Utility.Nodes
         {
             return (other as DirectoryNode)?.path == path;  
         }
+
+        public void OnProgress(int complete, int total)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
