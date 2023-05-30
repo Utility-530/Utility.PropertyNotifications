@@ -1,34 +1,81 @@
 ﻿using System.Collections.Concurrent;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reflection;
 using Utility.Collections;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+using Utility.Observables.Generic;
+using Utility.Observables.NonGeneric;
+using LanguageExt;
+using Utility.Helpers;
 
 namespace Utility.Infrastructure
 {
-    public interface IBase : IKey<Key>, IObserver
+
+    public interface IBase : IKey<Key>, System.IObserver<object>
     {
-        object Output { get; }
+        public object Output { get; }
     }
 
-    public record GuidValue(Guid Guid, object Value, int Remaining);
+    public record GuidValue(IGuid Value, Guid Node)
+    {
+
+        public GuidValue(IGuid Value, Guid Node, GuidValue? Previous = default) : this(Value, Node)
+        {
+            this.Previous = Previous;
+        }
+
+        //public GuidValue(IGuid Value, int Remaining, GuidValue? Previous = default) : this(Value, Previous)
+        //{
+        //    this.Remaining = Remaining;
+        //}
+
+        //public GuidValue(IGuid Value, Exception Exception, GuidValue? Previous = default) : this(Value, Previous)
+        //{
+        //    this.Exception = Exception;
+        //}
+
+        public Guid Target => Value.Guid;
+
+        public Guid Source
+        {
+            get
+            {
+                GuidValue previous = this;
+                while (previous.Previous != default)
+                {
+                    previous = previous.Previous;
+                }
+                return previous.Target;
+            }
+        }
+
+        public int Remaining { get; }
+
+        public bool IsCompleted => Remaining == 0;
+
+        public Exception Exception { get; }
+        public GuidValue? Previous { get; }
+    }
+
+    public record SubjectKey(Guid Source, Guid Target, Guid Node);
 
     public abstract class BaseObject : BaseViewModel, IBase
     {
-        private ConcurrentDictionary<Guid, Subject<GuidValue>> dictionary = new();
-        private static SynchronizationContext? context;
-
         public static Resolver Resolver { get; set; }
 
-        public static SynchronizationContext Context { get => context?? throw new Exception("Mising Context"); set => context = value; }
+        private static SynchronizationContext? context;
+        public static SynchronizationContext Context { get => context ?? throw new Exception("Mising Context"); set => context = value; }
+
+        public BaseObject()
+        {
+        }
 
         public abstract Key Key { get; }
 
-
-        public Collection Errors { get; } = new();
-
+        public virtual object Model { get; }
 
         public bool Equals(IKey<Key>? other)
         {
@@ -40,63 +87,19 @@ namespace Utility.Infrastructure
             return (other as IKey<Key>)?.Equals(this.Key) ?? false;
         }
 
-
         public virtual object? Output { get; set; }
 
-        protected virtual void Broadcast(object obj)
+        protected Utility.Interfaces.Generic.IObservable<TOutput> Observe<TOutput, TInput>(TInput tInput) where TInput : IGuid
         {
-            Output = obj;
-            Resolver.OnNext(this);
+            return Resolver.Register<TOutput, TInput>(this, tInput);
         }
 
-        protected IObservable<T> Observe<T, TR>(TR tr)
+        public void OnNext(object value)
         {
-            var guid = Guid.NewGuid();
-            var subject = new Subject<GuidValue>();
-            dictionary[guid] = subject;
-            Broadcast(new GuidValue(guid, tr, 0));
-            var output = new ReplaySubject<T>(1);
-            subject.Subscribe(a =>
-            {
-                switch (a.Value)
-                {
-                    case nameof(OnCompleted):
-                        output.OnCompleted();
-                        break;
-                    case Exception e:
-                        Errors.Add(e);
-                        output.OnError(e);
-                        output.OnCompleted();
-                        break;
-                    case T t:
-                        output.OnNext(t);
-                        break;
-                    default:
-                        break;
-                }
-                if (a.Remaining == 0)
-                    output.OnCompleted();
-            });
-            return output;
+            Output = value;
+            Resolver.OnBase(this);
         }
 
-        public virtual bool OnNext(object next)
-        {
-            if (next is GuidValue { Guid: var guid } keyType)
-            {
-                if (dictionary.TryGetValue(guid, out var value))
-                {
-                    value.OnNext(keyType);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        public void OnStarted()
-        {
-            throw new NotImplementedException();
-        }
         public void OnCompleted()
         {
             throw new NotImplementedException();
@@ -107,9 +110,207 @@ namespace Utility.Infrastructure
             throw new NotImplementedException();
         }
 
+        //public void OnProgress(int complete, int total)
+        //{
+        //    throw new NotImplementedException();
+        //}
         public override string ToString()
         {
             return Key.Name;
         }
+
+
+        protected void Dispatch(Action action)
+        {
+            (Context ?? throw new Exception("missing context"))
+                  .Post(a =>
+                  {
+                      action();
+                  }, default);
+        }
     }
+
+
+    static class ReflectionHelper
+    {
+        public static Dictionary<Guid, SingleParameterMethod> GetSingleParameterMethods(this IBase instance)
+        {
+            return instance.GetType()
+                    .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                    .Where(m => m.Name == nameof(IObserver.OnNext) && m.GetParameters().Length == 1)
+                        .ToDictionary(m =>
+                        m.GetParameters().Single().ParameterType.GUID,
+                        m => new SingleParameterMethod(instance, m));
+        }
+
+        public static bool TrySubscribe(object instance, Action<object> action, Action<Exception> onError, Action onCompleted, Action<int, int> onProgress)
+        {
+            var methods = instance
+                            .GetType()
+                            .GetMethods(/*BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly*/);
+
+            var single = methods
+                            .SingleOrDefault(m => m.Name == nameof(IObservable.Subscribe));
+
+            // if return type is not an observable
+            if (single == default)
+            {
+
+                if (instance.TryGetPrivateFieldValue("_source", out var source))
+                    return TrySubscribe(source, action, onError, onCompleted, onProgress);
+                else if (instance.TryGetPrivateFieldValue("_value", out var value))
+                {
+                    action.Invoke(value);
+                    return true;
+                }
+                return false;
+            }
+
+            var arg = instance.GetType().GetGenericArguments().SingleOrDefault();
+            if (arg != null)
+            {
+                var observer = Activator.CreateInstance(
+                            typeof(Observer<>).MakeGenericType(arg), action, onError, onCompleted, onProgress);
+
+                single.Invoke(instance, new[] { observer });
+            }
+            else
+            {
+                single.Invoke(instance, new[] { new Observer(action, onError, onCompleted, onProgress) });
+            }
+
+            return true;
+        }
+    }
+    public interface IIOType
+    {
+        Type InType { get; }
+        Type OutType { get; }
+    }
+
+    public interface IObserverIOType : Utility.Interfaces.Generic.IObserver<GuidValue>, IIOType
+    {
+    }
+
+    public class SingleParameterMethod : IObserverIOType
+    {
+        private readonly MethodInfo methodInfo;
+        private readonly IBase instance;
+
+        public SingleParameterMethod(IBase instance, MethodInfo methodInfo)
+        {
+            this.methodInfo = methodInfo;
+            InType = methodInfo.GetParameters().Single().ParameterType;
+            OutType = GetOutType();
+            this.instance = instance;
+        }
+
+        //public Guid Key => Combine(instance.Key.Guid, InType.GUID);
+        public Guid Guid => instance.Key.Guid;
+
+        public Type InType { get; }
+
+        public Type OutType { get; }
+
+        public void OnNext(GuidValue parameter)
+        {
+            object? output;
+            try
+            {
+                output = methodInfo.Invoke(instance, new object[] { parameter.Value });
+            }
+            catch (Exception ex)
+            {
+                instance.OnNext(new GuidValue(GuidBase.OnError(GetGuid(), ex), Guid, parameter));
+                return;
+            }
+
+            if (ReflectionHelper.TrySubscribe(output, a =>
+            {
+                if (a is not IGuid guid)
+                    throw new Exception("6 dfdfff444");
+                instance.OnNext(new GuidValue(guid, Guid, parameter));
+            },
+            e => instance.OnNext(new GuidValue(GuidBase.OnError(GetGuid(), e), Guid, parameter)),
+            () => instance.OnNext(new GuidValue(GuidBase.OnCompleted(GetGuid()), Guid, parameter)),
+            (a, b) => instance.OnNext(new GuidValue(GuidBase.OnProgress(GetGuid(), a, b), Guid, parameter))))
+            {
+
+            }
+            else
+            {
+                if (output is not IGuid guid)
+                    throw new Exception(" dfdfff444");
+                instance.OnNext(new GuidValue(guid, Guid, parameter));
+            }
+
+
+        }
+
+        Type GetOutType()
+        {
+            if (methodInfo.ReturnType.GetGenericArguments().SingleOrDefault() is Type type)
+                return type;
+            else
+                return methodInfo.ReturnType;
+        }
+
+
+        Guid GetGuid()
+        {
+            return GetOutType().GUID;
+        }
+
+        public void OnProgress(int arg1, int arg2)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(IEquatable? other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(SingleParameterMethod? other)
+        {
+            return other?.InType.Equals(this.InType) ==
+                other?.OutType.Equals(this.OutType) == true;
+        }
+
+
+        public override string ToString()
+        {
+            return InType.Name.ToString() + " " + OutType.Name.ToString();
+        }
+
+        //public IDisposable Subscribe(IObserver<GuidValue> observer)
+        //{
+        //    return new Disposer<GuidValue>(observers, observer);
+        //}
+
+        public static Guid Combine(Guid guid1, Guid guid2)
+        {
+            const int BYTECOUNT = 16;
+            byte[] destByte = new byte[BYTECOUNT];
+            byte[] guid1Byte = guid1.ToByteArray();
+            byte[] guid2Byte = guid2.ToByteArray();
+
+            for (int i = 0; i < BYTECOUNT; i++)
+            {
+                destByte[i] = (byte)(guid1Byte[i] ^ guid2Byte[i]);
+            }
+            return new Guid(destByte);
+        }
+    }
+
 }

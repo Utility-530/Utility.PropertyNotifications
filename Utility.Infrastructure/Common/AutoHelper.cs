@@ -2,6 +2,8 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using Utility.Conversions;
+using Utility.Interfaces.NonGeneric;
+using Utility.Models;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
@@ -14,10 +16,21 @@ namespace Utility.PropertyTrees.Infrastructure
         /// <param name="value">The value.</param>
         /// <returns>true if the value has changed; otherwise false.</returns>
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static bool SetProperty<T>(this AutoObject autoObject, T value, [CallerMemberName] string name = null)
+        public static bool SetProperty<T>(this AutoObject autoObject, T value, [CallerMemberName] string? name = null)
         {
-            autoObject.SetProperty(value, typeof(T), name);
+            autoObject.SetProperty(new Key(autoObject.Guid, name, typeof(T)), value);
             return true;
+        }
+
+        /// <summary>
+        /// Gets a property value.
+        /// </summary>
+        /// <typeparam name="T">The property type</typeparam>
+        /// <returns>The value automatically converted into the requested type.</returns>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static T GetProperty<T>(this AutoObject autoObject, [CallerMemberName] string? name = null)
+        {
+            return (T)autoObject.GetProperty(new Key(autoObject.Guid, name, typeof(T)));
         }
 
         /// <summary>
@@ -27,9 +40,10 @@ namespace Utility.PropertyTrees.Infrastructure
         /// <param name="value">The value.</param>
         /// <returns>true if the value has changed; otherwise false.</returns>
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static bool SetProperty(this AutoObject autoObject, object value, [CallerMemberName] string name = null)
+        public static bool SetProperty<T>(this T autoObject, object value)
+            where T : AutoObject, IType
         {
-            autoObject.SetProperty(value, value.GetType(), name);
+            autoObject.SetProperty(autoObject.Key, value);
             return true;
         }
 
@@ -40,11 +54,38 @@ namespace Utility.PropertyTrees.Infrastructure
         /// <typeparam name="T">The property type</typeparam>
         /// <returns>The value automatically converted into the requested type.</returns>
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static T GetProperty<T>(this AutoObject autoObject, [CallerMemberName] string? name = null)
+        public static object GetProperty<T>(this T autoObject)
+            where T : AutoObject, IType
         {
-            return (T)(autoObject.GetProperty(typeof(T), name));
+            return autoObject.GetProperty(autoObject.Key);
+        }
+        
+        /// <summary>
+        /// Sets a property value.
+        /// </summary>
+        /// <typeparam name="T">The property type</typeparam>
+        /// <param name="value">The value.</param>
+        /// <returns>true if the value has changed; otherwise false.</returns>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static bool SetProperty<T, TValue>(this T autoObject, TValue value, [CallerMemberName] string? name = null)
+            where T : AutoObject, IType
+        {
+            autoObject.SetProperty((new Key(autoObject.Guid, name, typeof(T))), value);
+            return true;
         }
 
+
+        /// <summary>
+        /// Gets a property value.
+        /// </summary>
+        /// <typeparam name="T">The property type</typeparam>
+        /// <returns>The value automatically converted into the requested type.</returns>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static TValue GetProperty<T, TValue>(this T autoObject, [CallerMemberName] string? name = null)
+            where T : AutoObject, IType
+        {
+            return (TValue)autoObject.GetProperty(new Key(autoObject.Guid, name, typeof(TValue)));
+        }
 
         /// <summary>
         /// Gets the default value for a given property.
