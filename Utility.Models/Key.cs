@@ -7,17 +7,6 @@ using Utility.Interfaces.NonGeneric;
 namespace Utility.Models
 {
 
-    public class Key<T> : Key
-    {
-        public Key() : base(Guid.Empty, typeof(T).Name, typeof(T))
-        {
-
-        }
-        public Key(Guid guid) : base(guid, typeof(T).Name, typeof(T))
-        {
-
-        }
-    }
 
     public class Key : ISerialise, IGuid, IType, IName, IEquatable, IEquatable<ISerialise>
     {
