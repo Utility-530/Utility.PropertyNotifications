@@ -1,54 +1,37 @@
-﻿using Utility.Enums;
-using Utility.Infrastructure;
-using Utility.Models;
-using System;
-using Utility.Infrastructure.Common;
+﻿//using Utility.Enums;
+//using Utility.Infrastructure;
+//using Utility.Models;
 
-namespace Utility.PropertyTrees.Infrastructure
-{
-    public class PropertyController : BaseObject
-    {
-        public static Guid Guid => Guid.Parse("e15c2e55-bf33-480c-a4e7-b4b7804d1735");
+//internal sealed class PropertyController : BaseObject
+//{
+//    //public static Guid Guid => Guid.Parse("e15c2e55-bf33-480c-a4e7-b4b7804d1735");
 
-        public override Key Key => new(Guid, nameof(PropertyController), typeof(PropertyController));
+//    public override Key Key => new(Guids.Property, nameof(PropertyController), typeof(PropertyController));
 
-        public PropertyController()
-        {
-        }
+//    public PropertyController()
+//    {
+//    }
 
-        public override bool OnNext(object value)
-        {
-            if (value is PropertyOrder order)
-                Process(order);
-            else
-                return base.OnNext(value);
-            return true;
-            void Process(PropertyOrder order)
-            {
-                order.Progress = 0;
-                switch (order.Access)
-                {
-                    case Access.Set:
-                        {
-                            try
-                            {
-                                
-                            }
-                            catch (Exception ex)
-                            {
-                                order.Exception = ex;
-                                throw;
-                            }
+//    //public IObservable<PropertyChange> OnNext(PropertyRequest order)
+//    //{
+//    //    switch (order.Access)
+//    //    {
+//    //        case Access.Set:
+//    //            {
+//    //                try
+//    //                {
 
-                            break;
-                        }
-                }
-                void Update(object newValue, PropertyOrder order)
-                {
-                    Broadcast(new PropertyChange(order.Key, newValue, order.Value));
-                }
-            }
-        }
+//    //                }
+//    //                catch (Exception ex)
+//    //                {
+//    //                    order.Exception = ex;
+//    //                    throw;
+//    //                }
 
-    }
-}
+//    //                break;
+//    //            }
+//    //    }
+//    //    return Return(new PropertyChange(order.Key, default, order.Value));
+//    //}
+//}
+

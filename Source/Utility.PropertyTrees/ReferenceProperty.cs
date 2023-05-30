@@ -21,12 +21,9 @@ namespace Utility.PropertyTrees
 
         public virtual TypeConverter Converter => Descriptor.Converter;
 
-        public virtual PropertyDescriptor Descriptor { get; set; }
-
         public override Type PropertyType => Descriptor.PropertyType;
 
         public override object Content => Name;
-
 
         public override object? Value
         {
@@ -37,6 +34,8 @@ namespace Utility.PropertyTrees
             }
             set => throw new Exception("aa 4 43321``");
         }
+
+        public override bool HasChildren => PropertyType != typeof(string);
 
         public override string ToString()
         {

@@ -1,7 +1,5 @@
 ﻿using DryIoc;
 using MintPlayer.ObservableCollection;
-using System;
-using System.Windows.Controls;
 
 namespace Utility.PropertyTrees.WPF.Demo.Views
 {

@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using Utility.Conversions;
 
 namespace Utility.PropertyTrees
@@ -26,14 +25,14 @@ namespace Utility.PropertyTrees
             }
         }
 
-        public PropertyDescriptor Descriptor { get; set; }
+        public override bool HasChildren => PropertyType != typeof(string);
 
         public override string ToString()
         {
             return Name;
         }
 
-        protected virtual bool TryChangeType(object value, Type type, IFormatProvider provider, out object changedValue)
+        protected override bool TryChangeType(object value, Type type, IFormatProvider provider, out object changedValue)
         {
             if (type == null)
             {

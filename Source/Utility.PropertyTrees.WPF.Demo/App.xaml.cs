@@ -6,23 +6,24 @@ using Application = System.Windows.Application;
 using Utility.Infrastructure;
 using System.Threading;
 using DryIoc;
-using Utility.Graph.Shapes;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
     public partial class App : Application
     {
         protected override void OnStartup(StartupEventArgs e)
-        {
-           
+        {           
             SQLitePCL.Batteries.Init();
+
             Collection.Context = BaseObject.Context = SynchronizationContext.Current?? throw new System.Exception("sd w3w");
 
-            var container = new LightBootStrapper().Build();
+            var container = new BootStrapper().Build();
 
-            BaseObject.Resolver = new Utility.Infrastructure.Resolver(container);
+            var resolver = new Utility.Infrastructure.Resolver(container);
+            BaseObject.Resolver = resolver;
+            resolver.Initialise();
 
-            var window = new Window { Content = new MainView() {  } };
+            var window = new Window { Content = new MainView(container) {  } };
             //ModernWpf.Controls.Primitives.WindowHelper.SetUseModernWindowStyle(window, true);
             window.Show();
 
@@ -34,10 +35,5 @@ namespace Utility.PropertyTrees.WPF.Demo
             Tracing.Enable();
 #endif
         }
-
-
     }
-
-
-
 }

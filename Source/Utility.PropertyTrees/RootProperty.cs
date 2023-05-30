@@ -11,5 +11,7 @@
         public override bool IsReadOnly => false;
 
         public override object Value { get; set; }
+
+        public override bool HasChildren => true;
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Utility.PropertyTrees.Demo.Model
+﻿using System.Collections.ObjectModel;
+
+namespace Utility.PropertyTrees.Demo.Model
 {
     public class Model
     {
@@ -63,7 +65,14 @@
 
     public class Leaderboard
     {
+        public Collection<Leader> Leaders { get; set; }
+    }
 
+    public class Leader
+    {
+        public string Name { get; set; }    
+
+        public int Score { get; set; }
     }
 
     public class ScreenSaver

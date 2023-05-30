@@ -1,46 +1,69 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
-    <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
-  </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<TargetFramework>net7.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
 
 
-  <ItemGroup>
-    <PackageReference Include="AbstractBuilder" Version="1.5.0" />
-    <PackageReference Include="LightInject" Version="6.6.3" />
-    <PackageReference Include="LochNessBuilder" Version="4.1.0" />
-    <PackageReference Include="ModernWpfUI" Version="0.9.6" />
-    <PackageReference Include="Netly" Version="2.4.0" />
-    <PackageReference Include="Object.Builder" Version="1.2.0" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
-    <PackageReference Include="System.Reactive" Version="5.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="AbstractBuilder" Version="1.5.0" />
+		<PackageReference Include="LightInject" Version="6.6.3" />
+		<PackageReference Include="LochNessBuilder" Version="4.1.0" />
+		<PackageReference Include="ModernWpfUI" Version="0.9.6" />
+		<PackageReference Include="Netly" Version="2.4.0" />
+		<PackageReference Include="Object.Builder" Version="1.2.0" />
+		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
+		<PackageReference Include="System.Reactive" Version="5.0.0" />
+	</ItemGroup>
 
-<ItemGroup>
-     <ProjectReference Include="..\..\..\Utility.Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
-    <ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
-    <ProjectReference Include="..\Infrastructure.WPF\Infrastructure.WPF.csproj" />
-    <ProjectReference Include="..\Utility.Graph.Shapes\Utility.Graph.Shapes.csproj" />
-    <ProjectReference Include="..\Utility.PropertyTrees.Demo.Model\Utility.PropertyTrees.Demo.Model.csproj" />
-    <ProjectReference Include="..\Utility.PropertyTrees.WPF\Utility.PropertyTrees.WPF.csproj" />
-    <ProjectReference Include="..\Utility.PropertyTrees\Utility.PropertyTrees.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Utility.Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\..\Utility.Repos\Utility.Repos\Utility.Repos.csproj" />
+		<ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
+		<ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
+		<ProjectReference Include="..\Infrastructure.WPF\Infrastructure.WPF.csproj" />
+		<ProjectReference Include="..\Utility.Graph.Shapes\Utility.Graph.Shapes.csproj" />
+		<ProjectReference Include="..\Utility.PropertyTrees.Demo.Model\Utility.PropertyTrees.Demo.Model.csproj" />
+		<ProjectReference Include="..\Utility.PropertyTrees.WPF\Utility.PropertyTrees.WPF.csproj" />
+		<ProjectReference Include="..\Utility.PropertyTrees\Utility.PropertyTrees.csproj" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ApplicationDefinition Update="App.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </ApplicationDefinition>
-  </ItemGroup>
+	<ItemGroup>
+		<ApplicationDefinition Update="App.xaml">
+			<SubType>Designer</SubType>
+			<Generator>MSBuild:Compile</Generator>
+		</ApplicationDefinition>
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="App.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Update="App.xaml.cs">
+			<SubType>Code</SubType>
+		</Compile>
+	</ItemGroup>
 
+	<ItemGroup>
+		<Using Include="System" />
+		<Using Include="System.Text.Json" />
+		<Using Include="System.Text.Json.Serialization" />
+		<Using Include="System.Collections.Generic" />
+		<Using Include="System.Linq" />
+		<Using Include="System.ComponentModel" />
+		<Using Include="System.Collections" />
+		<Using Include="System.Globalization" />
+	</ItemGroup>
+	
+	<ItemGroup>
+		<Using Include="System.Threading" />
+		<Using Include="System.Threading.Tasks" />
+		<Using Include="System.Reactive.Threading.Tasks" />
+		<Using Include="System.Reactive.Linq" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="System.Windows" />
+		<Using Include="System.Windows.Controls" />
+	</ItemGroup>
 </Project>

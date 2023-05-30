@@ -3,13 +3,13 @@ using System.ComponentModel;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
-    public abstract class DescriptorFilters : IEnumerable<Predicate<PropertyDescriptor>>
-    {
-        public abstract IEnumerator<Predicate<PropertyDescriptor>> GetEnumerator();
+    //public abstract class Filters : IEnumerable<Predicate<object>>
+    //{
+    //    public abstract IEnumerator<Predicate<object>> GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-    }
+    //    IEnumerator IEnumerable.GetEnumerator()
+    //    {
+    //        return GetEnumerator();
+    //    }
+    //}
 }

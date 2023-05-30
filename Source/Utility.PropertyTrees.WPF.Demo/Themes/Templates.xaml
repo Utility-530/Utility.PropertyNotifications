@@ -3,9 +3,11 @@
                     xmlns:ui="http://schemas.modernwpf.com/2019"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:trees="clr-namespace:Utility.PropertyTrees;assembly=Utility.PropertyTrees"                    
+                    xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"                    
                     xmlns:local="clr-namespace:Utility.PropertyTrees.WPF.Demo"    
                     xmlns:m="clr-namespace:Utility.Models;assembly=Utility.Models"
                     xmlns:infra="clr-namespace:Utility.Infrastructure;assembly=Utility.Infrastructure"
+                    xmlns:views="clr-namespace:Utility.PropertyTrees.WPF.Demo.Views"
                     xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:btn="http://schemas.utility.com/buttons"
                     xmlns:st="http://schemas.spicytaco.io/">
@@ -73,6 +75,10 @@
                     LargeChange="1" />
     </DataTemplate>
 
+    <DataTemplate x:Key="CollectionTemplate">
+        <views:CollectionView Collection="{Binding Value}"></views:CollectionView>
+    </DataTemplate>
+
     <local:ContentTemplateSelector 
         x:Key="ContentTemplateSelector"
         StringTemplate="{StaticResource StringTemplate}"
@@ -80,9 +86,10 @@
         IntegerTemplate="{StaticResource IntegerTemplate}"
         DoubleTemplate="{StaticResource DoubleTemplate}"
         UnknownTemplate="{StaticResource UnknownTemplate}"
+        CollectionTemplate="{StaticResource CollectionTemplate}"
         />
 
-    <DataTemplate DataType="{x:Type trees:PropertyNode}">
+    <DataTemplate DataType="{x:Type nodes:ValueNode}">
         <HeaderedContentControl Header="{Binding Content, Mode=OneWay}" 
                                 Style="{StaticResource Horizontal}"
                                 Content="{Binding }" 
@@ -103,7 +110,7 @@
         </UniformGrid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type infra:Order}">
+    <!--<DataTemplate DataType="{x:Type infra:Order}">
         <Viewbox Margin="8,8,8,8">
             <FrameworkElement.Resources>
                 <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
@@ -127,9 +134,9 @@
 
             </st:AutoGrid>
         </Viewbox>
-    </DataTemplate>
+    </DataTemplate>-->
 
-    <DataTemplate DataType="{x:Type local:HistoryViewModel}">
+    <DataTemplate DataType="{x:Type infra:HistoryViewModel}">
         <st:AutoGrid Rows="50,30,*" Columns="*" x:Name="Top">
 
             <btn:StepButtons x:Name="StepButtons" Enabled="{Binding Enabled, Mode=OneWay}" Command="{Binding Command, Mode=OneTime}" ></btn:StepButtons>
@@ -155,32 +162,32 @@
 
                 <ScrollViewer>
                     <ItemsControl x:Name="Past"  ItemsSource="{Binding Past}">
-                        <ItemsControl.Background>
+                        <!--<ItemsControl.Background>
                             <LinearGradientBrush EndPoint="0,1" StartPoint="0,0" Opacity="0.2">
                                 <GradientStop Color="#FF001B48" Offset="0.25" />
                                 <GradientStop Color="White" Offset="0.99" />
                             </LinearGradientBrush>
-                        </ItemsControl.Background>
+                        </ItemsControl.Background>-->
                     </ItemsControl>
                 </ScrollViewer>
                 <Border  Grid.Row="1" BorderBrush="Gray" BorderThickness="2">
                     <Viewbox>
                         <ItemsControl x:Name="Present" ItemsSource="{Binding Present}">
-                            <ItemsControl.Background>
+                            <!--<ItemsControl.Background>
                                 <SolidColorBrush Color="Transparent"  Opacity="1" />
-                            </ItemsControl.Background>
+                            </ItemsControl.Background>-->
                         </ItemsControl>
                     </Viewbox>
                 </Border>
 
                 <ScrollViewer Grid.Row="2">
                     <ItemsControl x:Name="Future"  ItemsSource="{Binding Future}">
-                        <ItemsControl.Background>
+                        <!--<ItemsControl.Background>
                             <LinearGradientBrush EndPoint="0,1" StartPoint="0,0" Opacity="0.2">
                                 <GradientStop Color="White" Offset="0.01" />
                                 <GradientStop Color="#FF4A0000" Offset="0.75" />
                             </LinearGradientBrush>
-                        </ItemsControl.Background>
+                        </ItemsControl.Background>-->
                     </ItemsControl>
                 </ScrollViewer>
             </Grid>

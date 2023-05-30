@@ -9,35 +9,42 @@ using Utility.Infrastructure;
 using Utility.Models;
 using System.Reactive.Linq;
 using System.ComponentModel;
+using Utility.PropertyTrees.WPF.Meta;
+using Utility.Nodes;
+using static Utility.Observables.Generic.ObservableExtensions;
+using Utility.Interfaces.NonGeneric;
+using Utility.Observables.Generic;
 
 namespace Utility.PropertyTrees.WPF
 {
     public class ViewBuilder : BaseObject
     {
+        public override Key Key => new(Guids.ViewBuilder, nameof(ViewBuilder), typeof(ViewBuilder));
 
-        Guid Guid = Guid.Parse("26bb7df3-9ae7-49d6-aabc-a492c6254718");
-
-        public override Key Key => new(Guid, nameof(ViewBuilder), typeof(ViewBuilder));
-
-
-        public override bool OnNext(object value)
+        public Utility.Interfaces.Generic.IObservable<TreeViewResponse> OnNext(TreeViewRequest request)
         {
-            if (value is not GuidValue { Guid: var guid, Value: TreeViewRequest { PropertyNode: var propertyNode, TreeView: var treeView } request })
+            return Create<TreeViewResponse>(observer =>
             {
-                return base.OnNext(value);
-            }
-
-            BuildTree(treeView, propertyNode)
-                .Subscribe(a => { }, () =>
+                return BuildTree(request.TreeView, request.PropertyNode)
+                .Subscribe(a =>
                 {
-                    Broadcast(new GuidValue(guid, new TreeViewResponse(treeView), 0));
+                    observer.OnProgress(a.Item1, a.Item2);
+                    observer.OnNext(new TreeViewResponse(request.TreeView));
+                },
+                e =>
+                {
+
+                },
+                () =>
+                {
+
                 });
-            return true;
+            }); 
         }
 
-        public IObservable<double> BuildTree(TreeView treeView, PropertyNode property)
+        public IObservable<(int,int)> BuildTree(TreeView treeView, ValueNode property)
         {
-            return PropertyHelper.ExploreTree(treeView.Items, (items, prop) =>
+            return PropertyExplorer.ExploreTree(treeView.Items, (items, prop) =>
             {
                 var treeViewItem = MakeTreeViewItem(prop);
                 items.Add(treeViewItem);
@@ -56,26 +63,33 @@ namespace Utility.PropertyTrees.WPF
 
                 var treeViewItem = new TreeViewItem() { Header = node/*, HeaderTemplate = headerTemplate*/, /*ItemsPanel = panelTemplate, */IsExpanded = true };
 
-                _ = Observe<PropertyNode, ActivationRequest>(new(node.Guid, new RootDescriptor(node), node, PropertyType.Root))
-                .Subscribe(propertyNode =>
-                {
-                    propertyNode.Predicates = new ViewModelPredicate();
-                    PropertyHelper.ExploreTree(new List<object>(), (a, b) => a, propertyNode).Subscribe(a => { },
-                    () =>
-                    {
-                        var viewModel = node.ViewModel as ViewModel;
-                        panelTemplate = viewModel.Panel?.Type != null ? (ItemsPanelTemplate)Application.Current.TryFindResource(viewModel.Panel.Type) : DefaultItemsPanelTemplate();
-                        if (viewModel.Template.DataTemplateKey != null)
-                            headerTemplate = (DataTemplate)Application.Current.TryFindResource(viewModel.Template.DataTemplateKey);
-                        else
-                        {
-                            var key = new DataTemplateKey(node.PropertyType);
-                            headerTemplate = (DataTemplate)Application.Current.TryFindResource(key);
-                        }
-                        //treeViewItem.HeaderTemplate = headerTemplate;
-                        treeViewItem.ItemsPanel = panelTemplate;
-                    });
-                });
+
+
+
+                //_ = Observe<ActivationResponse, ActivationRequest>(new(node.Guid, new RootDescriptor(node), node, PropertyType.Root))
+                //    .Select(a => a.PropertyNode)
+                //.Subscribe(propertyNode =>
+                //{
+                //    propertyNode.Predicates = new ViewModelPredicate();
+                //    PropertyExplorer.ExploreTree(new List<object>(), (a, b) => a, propertyNode)
+                //    .Subscribe(a => { },
+                //    () =>
+                //    {
+                //        var viewModel = node.ViewModel as ViewModel;
+                //        panelTemplate = viewModel.Panel?.Type != null ? (ItemsPanelTemplate)Application.Current.TryFindResource(viewModel.Panel.Type) : DefaultItemsPanelTemplate();
+                //        if (viewModel.Template.DataTemplateKey != null)
+                //            headerTemplate = (DataTemplate)Application.Current.TryFindResource(viewModel.Template.DataTemplateKey);
+                //        else
+                //        {
+                //            var key = new DataTemplateKey(node.PropertyType);
+                //            headerTemplate = (DataTemplate)Application.Current.TryFindResource(key);
+                //        }
+                //        //treeViewItem.HeaderTemplate = headerTemplate;
+                //        treeViewItem.ItemsPanel = panelTemplate;
+                //    });
+                //});
+
+
 
                 return treeViewItem;
                 //}
@@ -100,34 +114,8 @@ namespace Utility.PropertyTrees.WPF
     }
 
 
-    public record TreeViewRequest(TreeView TreeView, PropertyNode PropertyNode);
 
-    public record TreeViewResponse(TreeView TreeView);
-    //static IDisposable AddToTree(ItemCollection items, PropertyNode property, Subject<State> state)
-    //{
-    //    state.OnNext(State.Started);
-
-    //    var disposable = property
-    //        .Children
-    //        .Subscribe(item =>
-    //        {
-    //            if (item is not NotifyCollectionChangedEventArgs args)
-    //                throw new Exception("rev re");
-
-    //            foreach (PropertyBase node in SelectNewItems<PropertyBase>(args))
-    //            {
-    //                TreeViewItem treeViewItem = MakeTreeViewItem(items, node);
-    //                _ = AddToTree(treeViewItem.Items, node, state);
-    //            }
-    //        },
-    //        () =>
-    //        {
-    //            state.OnNext(State.Completed);
-    //        });
-    //    return disposable;
-    //}
-
-    public class ViewModelPredicate : DescriptorFilters
+    public class ViewModelPredicate : Filters
     {
         private List<Predicate<PropertyDescriptor>> predicates;
 

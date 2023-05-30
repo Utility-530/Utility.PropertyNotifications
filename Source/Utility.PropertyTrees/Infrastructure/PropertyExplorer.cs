@@ -1,25 +1,24 @@
 ﻿using System.Collections.Specialized;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Reactive.Threading.Tasks;
-using Utility.Observables;
+using Utility.Nodes;
+using Utility.Observables.NonGeneric;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
-    public static class PropertyHelper
+    public static class PropertyExplorer
     {
         public enum State
         {
             Started, Completed
         }
 
-        public static IObservable<double> ExploreTree<T>(T items, Func<T, PropertyBase, T> func, PropertyNode property)
+        public static IObservable<(int,int)> ExploreTree<T>(T items, Func<T, PropertyBase, T> func, ValueNode property)
         {
             Subject<State> subject = new();
             int totalCount = 1;
             int completed = 1;
-            Subject<double> progress = new();
+            Subject<(int,int)> progress = new();
             subject
                  .Subscribe(a =>
                  {
@@ -28,7 +27,7 @@ namespace Utility.PropertyTrees.Infrastructure
                      else if (a == State.Completed)
                          completed++;
 
-                     progress.OnNext(completed / (1d * totalCount));
+                     progress.OnNext((completed, totalCount));
 
                      if (totalCount - completed == 0)
                      {
@@ -41,14 +40,14 @@ namespace Utility.PropertyTrees.Infrastructure
             return progress;
         }
 
-        public static IObservable<double> ExploreTree(PropertyNode propertyNode)
+        public static IObservable<(int, int)> ExploreTree(ValueNode propertyNode)
         {
             return ExploreTree(new List<object>(), (a, b) => a, propertyNode);
            
         }
 
 
-        public static IDisposable ExploreTree<T>(T items, Func<T, PropertyBase, T> func, PropertyNode property, Subject<State> state)
+        public static IDisposable ExploreTree<T>(T items, Func<T, PropertyBase, T> func, ValueNode property, Subject<State> state)
         {
             state.OnNext(State.Started);
             var disposable = property
@@ -81,10 +80,10 @@ namespace Utility.PropertyTrees.Infrastructure
 
 
 
-        public static IObservable<PropertyNode> FindNode(PropertyNode node, Predicate<PropertyNode> predicate)
+        public static IObservable<ValueNode> FindNode(ValueNode node, Predicate<ValueNode> predicate)
         {
-            ReplaySubject<PropertyNode> list = new(1);
-            CompositeDisposable composite = new();
+            ReplaySubject<ValueNode> list = new(1);
+            System.Reactive.Disposables.CompositeDisposable composite = new();
             var dis = ExploreTree(list, (a, b) => { if (predicate(b)) { a.OnNext(b); composite.Dispose(); a.OnCompleted(); } return (a); }, node).Subscribe(a =>
             {
             }, list.OnCompleted);
@@ -92,9 +91,9 @@ namespace Utility.PropertyTrees.Infrastructure
             return list;
         }
 
-        public static IObservable<PropertyNode> FindNodes(PropertyNode node, Predicate<PropertyNode> predicate)
+        public static IObservable<ValueNode> FindNodes(ValueNode node, Predicate<ValueNode> predicate)
         {
-            Subject<PropertyNode> list = new();
+            Subject<ValueNode> list = new();
 
             ExploreTree(list, (a, b) => { if (predicate(b)) a.OnNext(b); return a; }, node).Subscribe(a =>
             {

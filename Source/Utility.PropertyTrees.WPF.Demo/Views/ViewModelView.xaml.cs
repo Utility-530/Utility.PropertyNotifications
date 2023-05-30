@@ -1,14 +1,8 @@
 ﻿using DryIoc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using static Utility.PropertyTrees.WPF.Demo.LightBootStrapper;
+using Utility.Nodes;
 using static Utility.PropertyTrees.WPF.Demo.Views.PropertyView;
+using Utility.Observables.NonGeneric;
+using Utility.Observables.Generic;
 
 namespace Utility.PropertyTrees.WPF.Demo.Views
 {
@@ -18,8 +12,8 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
     public partial class ViewModelView : UserControl
     {
         private ViewModelEngine viewModelEngine => container.Resolve<ViewModelEngine>();
-        private MainViewModel viewModel => container.Resolve<MainViewModel>();
-        private PropertyNode masterNode => container.Resolve<PropertyNode>(Keys.Model);
+        private ModelController controller => container.Resolve<ModelController>();
+        private ValueNode masterNode => container.Resolve<ValueNode>(Keys.Model);
 
         public ViewModelView()
         {
@@ -30,7 +24,8 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
         private void initialise_click(object sender, RoutedEventArgs e)
         {
             //this.PropertyTree.SelectedObject = viewModel.Model;
-            viewModel.TreeView(masterNode, PropertyTree).Subscribe(treeView =>
+            controller.TreeView(masterNode, PropertyTree)
+                .Subscribe(treeView =>
             {
                 //PropertyTree.Children.Clear();
                 //PropertyTree.Children.Add(treeView);
@@ -39,18 +34,22 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
 
         private void PropertyTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            if (e.NewValue is TreeViewItem { Header: PropertyNode propertyNode })
+            if (e.NewValue is TreeViewItem { Header: ValueNode propertyNode })
             {
                 viewModelEngine
-                    .Observe(propertyNode)
-                    .Cast<PropertyNode>()
+                    .OnNext(propertyNode)
                      .Subscribe(node =>
                      {
-                         ViewModelTree.Items.Clear();
-                         viewModel.TreeView(node, ViewModelTree)
-                             .Subscribe(treeView =>
-                             {
-                             });
+                         if (node is ValueNode valueNode)
+                         {
+                             ViewModelTree.Items.Clear();
+                             controller.TreeView(valueNode, ViewModelTree)
+                                 .Subscribe(treeView =>
+                                 {
+                                 });
+                         }
+                         else
+                             throw new Exception("F33dsssd22");
                      });
                 //ViewModelTree.SelectedObject = property;
             }

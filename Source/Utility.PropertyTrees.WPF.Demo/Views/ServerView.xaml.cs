@@ -1,8 +1,5 @@
 ﻿using DryIoc;
-using System;
-using System.Windows.Controls;
-using Utility.Observables;
-using static Utility.PropertyTrees.WPF.Demo.LightBootStrapper;
+using Utility.Observables.NonGeneric;
 
 namespace Utility.PropertyTrees.WPF.Demo.Views
 {
@@ -11,14 +8,14 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
     /// </summary>
     public partial class ServerView : UserControl
     {
-        private MainViewModel viewModel => container.Resolve<MainViewModel>();
+        private IModelController viewModel => container.Resolve<IModelController>();
 
         public ServerView()
         {
             InitializeComponent();
 
-
-            viewModel.Subscribe(a =>
+            viewModel
+                .Subscribe(a =>
             {
                 if (a is ViewModelEvent { Name: var name, TreeView: var treeView } clientResponseEvent)
                 {

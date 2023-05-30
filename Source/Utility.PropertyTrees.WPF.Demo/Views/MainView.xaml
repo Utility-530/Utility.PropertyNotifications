@@ -16,12 +16,9 @@
 
     <DockPanel Background="{DynamicResource ApplicationPageBackgroundThemeBrush}">
         <views:CommandView DockPanel.Dock="Top" ></views:CommandView>
-        <st:AutoGrid Columns="3*,2*" Rows="*">
+        <st:AutoGrid x:Name="AutoGrid"  Columns="3*,2*" Rows="*">
             
-            <views:PropertyView></views:PropertyView>
-
-            <views:ServerView></views:ServerView>          
-            
+         
         </st:AutoGrid>
     </DockPanel>
 </UserControl>

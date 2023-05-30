@@ -28,7 +28,7 @@ namespace Utility.PropertyTrees.Infrastructure
 
         public override object? GetValue(object? component)
         {
-            throw new NotImplementedException();
+            return Item;
         }
 
         public override void ResetValue(object component)

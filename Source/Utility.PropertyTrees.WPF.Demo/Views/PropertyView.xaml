@@ -6,32 +6,33 @@
              xmlns:local="clr-namespace:Utility.PropertyTrees.WPF.Demo"
              xmlns:st="http://schemas.spicytaco.io/" 
              mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance local:ModelViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
 
     <ScrollViewer>
-        <StackPanel>
+        <StackPanel x:Name="Panel">       
             <GroupBox Header="Server">
                 <st:AutoGrid Rows="*, Auto" Columns="*">
                     <TreeView x:Name="ServerGrid"></TreeView>
-                    <Button x:Name="ServerConnect">Connect</Button>
+                    <Button x:Name="ServerConnect" Command="{Binding Connect, Mode=OneWay}">Connect</Button>
                 </st:AutoGrid>
             </GroupBox>
             <GroupBox Header="Screen-Saver">
                 <st:AutoGrid Rows="*, Auto" Columns="*">
                     <TreeView x:Name="ScreensaverGrid"></TreeView>
-                    <Button x:Name="ScreensaverSend">Send</Button>
+                    <Button x:Name="ScreensaverSend" Command="{Binding SendScreensaver}">Send</Button>
                 </st:AutoGrid>
             </GroupBox>
             <GroupBox Header="Leader-Board">
                 <st:AutoGrid Rows="*, Auto" Columns="*">
                     <TreeView x:Name="LeaderboardGrid"></TreeView>
-                    <Button x:Name="LeaderboardSend">Send</Button>
+                    <Button x:Name="LeaderboardSend" Command="{Binding SendLeaderboard}" >Send</Button>
                 </st:AutoGrid>
             </GroupBox>
             <GroupBox Header="Prize-Wheel">
                 <st:AutoGrid Rows="*, Auto" Columns="*">
                     <TreeView x:Name="PrizeWheelGrid"></TreeView>
-                    <Button x:Name="PrizeWheelSend">Send</Button>
+                    <Button x:Name="PrizeWheelSend" Command="{Binding SendPrizewheel}" >Send</Button>
                 </st:AutoGrid>
             </GroupBox>
         </StackPanel>

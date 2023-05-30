@@ -1,10 +1,6 @@
 ﻿using DryIoc;
-using System.Windows;
-using System.Windows.Controls;
-using Utility.Collections;
-using Utility.Graph.Shapes;
+using Utility.Infrastructure;
 using Utility.PropertyTrees.WPF.Demo.Infrastructure;
-using static Utility.PropertyTrees.WPF.Demo.LightBootStrapper;
 
 namespace Utility.PropertyTrees.WPF.Demo.Views
 {
@@ -13,12 +9,12 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
     /// </summary>
     public partial class CommandView : UserControl
     {
-        private MainViewModel viewModel => container.Resolve<MainViewModel>();
+        private ModelViewModel viewModel => container.Resolve<ModelViewModel>();
+        private IModelController controller => container.Resolve<IModelController>();
 
         public CommandView()
         {
-            InitializeComponent();
-          
+            InitializeComponent();          
         }
 
         private void show_viewModels_click(object sender, RoutedEventArgs e)
@@ -30,9 +26,9 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
 
         private void show_graph_click(object sender, RoutedEventArgs e)
         {
-            var graphWindow = new Window { Content = new GraphUserControl(container) };
-            ScreenHelper.SetOnFirstScreen(graphWindow);
-            graphWindow.Show();
+            //var graphWindow = new Window { Content = new GraphUserControl(container) };
+            //ScreenHelper.SetOnFirstScreen(graphWindow);
+            //graphWindow.Show();
             //AutoObject.Resolver.Initialise();
         }
 
@@ -50,7 +46,7 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
 
         private void refresh_click(object sender, RoutedEventArgs e)
         {
-            viewModel.OnNext(new RefreshRequest());
+            controller.OnNext(new RefreshRequest());
         }
     }
 }

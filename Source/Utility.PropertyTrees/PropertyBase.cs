@@ -1,19 +1,18 @@
 using Utility.PropertyTrees.Abstractions;
-using System.Collections;
-using Utility.Conversions;
 using Utility.Helpers;
 using Utility.PropertyTrees.Infrastructure;
-using Utility.Interfaces.NonGeneric;
+using Utility.Nodes;
 
 namespace Utility.PropertyTrees
 {
-    public abstract class PropertyBase : PropertyNode, IProperty
+    public abstract class PropertyBase : ValueNode, IProperty
     {
+        private Lazy<Filters> lazyPredicates => new(() => new DefaultFilter(Data));
         public PropertyBase(Guid guid) : base(guid)
         {
         }
 
-        public virtual string Name { get; }
+        //public abstract string Name { get; }
         public bool IsCollection => PropertyType != null ? PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(PropertyType) : false;
         public bool IsFlagsEnum => PropertyType.IsFlagsEnum();
         public bool IsValueType => PropertyType.IsValueType;
@@ -21,13 +20,14 @@ namespace Utility.PropertyTrees
         public virtual System.Type CollectionItemPropertyType => !IsCollection ? null : PropertyType.GetElementType();
         public virtual bool IsCollectionItemValueType => CollectionItemPropertyType != null && CollectionItemPropertyType.IsValueType;
         public virtual bool IsError { get => this.GetProperty<bool>(); set => this.SetProperty(value); }
-
-        //public bool IsValid => throw new NotImplementedException();
-
-        public virtual System.Type PropertyType => Data.GetType();
         public abstract bool IsReadOnly { get; }
         public override object Content => Name;
         public IViewModel ViewModel { get; set; }
+        public virtual Type Type { get; set; }
+
+        public PropertyDescriptor Descriptor { get; set; }
+
+        public override Filters Predicates => predicates ?? lazyPredicates.Value;
 
         protected override async Task<bool> RefreshAsync()
         {
@@ -44,16 +44,31 @@ namespace Utility.PropertyTrees
         {
             return Name;
         }
+    }
 
-        protected virtual bool TryChangeType(object value, System.Type type, IFormatProvider provider, out object changedValue)
+    public class DefaultFilter : Filters
+    {
+        private List<Predicate<object>> predicates;
+
+        public DefaultFilter(object data)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
+            var type = data.GetType();
+            predicates = new(){
+                    new Predicate<object>(value=>
+                {
+                    if(value is PropertyDescriptor descriptor)
+                    {
+                          int level = descriptor.ComponentType.InheritanceLevel(type);
 
-            return ConversionHelper.TryChangeType(value, type, provider, out changedValue);
+                       return level == 0 /*<= options.InheritanceLevel*/ && descriptor.IsBrowsable;
+                    }
+                    return false;
+                }) };
         }
-     
+
+        public override IEnumerator<Predicate<object>> GetEnumerator()
+        {
+            return predicates.GetEnumerator();
+        }
     }
 }

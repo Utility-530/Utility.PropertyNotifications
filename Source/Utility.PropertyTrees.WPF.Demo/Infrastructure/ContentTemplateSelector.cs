@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using Utility.Observables.Generic;
+﻿using Utility.Observables.Generic;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
@@ -12,36 +8,41 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
+            if(item is PropertyBase { IsCollection : true }) {
+
+                this.broadcast(new(item, CollectionTemplate, container));
+                return CollectionTemplate;
+            }
             if (item is not ValueProperty { Descriptor: { PropertyType: var propertyType } } propertyNode)
             {
-                Broadcast(new(item, UnknownTemplate, container));
+                this.broadcast(new(item, UnknownTemplate, container));
                 return UnknownTemplate;
             }
             if (propertyType == typeof(string))
             {
-                Broadcast(new(item, StringTemplate, container));
+                this.broadcast(new(item, StringTemplate, container));
                 return StringTemplate;
             }
             if (propertyType == typeof(bool))
             {
-                Broadcast(new(item, BooleanTemplate, container));
+                this.broadcast(new(item, BooleanTemplate, container));
                 return BooleanTemplate;
             }
             if (propertyType == typeof(double))
             {
-                Broadcast(new(item, DoubleTemplate, container));
+                this.broadcast(new(item, DoubleTemplate, container));
                 return DoubleTemplate;
             }
             if (propertyType == typeof(int))
             {
-                Broadcast(new(item, IntegerTemplate, container));
+                this.broadcast(new(item, IntegerTemplate, container));
                 return IntegerTemplate;
             }
 
             return base.SelectTemplate(item, container);
         }
 
-        private void Broadcast(SelectTemplateEvent selectTemplateEvent)
+        private void broadcast(SelectTemplateEvent selectTemplateEvent)
         {
             foreach(var observer in observers)
             {
@@ -61,6 +62,7 @@ namespace Utility.PropertyTrees.WPF.Demo
         public DataTemplate DoubleTemplate { get; set; }
         public DataTemplate IntegerTemplate { get; set; }
         public DataTemplate UnknownTemplate { get; set; }
+        public DataTemplate CollectionTemplate { get; set; }
     }
 
     public record SelectTemplateEvent(object Item, DataTemplate Template, DependencyObject Container);
