@@ -4,10 +4,11 @@ using Utility.Observables.Generic;
 
 namespace Utility.Commands
 {
-    public class ObservableCommand<T> : ICommand, IObservable<T>
+    public class ObservableCommand<T> : ICommand, IObservable<T>, IObserver<bool>
     {
         private T? id;
         private bool canExecute;
+        private readonly Action<IObserver<bool>> methodToExecute;
 
         /// Creates a new command that can always execute.
         /// </summary>
@@ -17,6 +18,12 @@ namespace Utility.Commands
             this.id = id;
             this.canExecute = canExecute;
         }
+
+        public ObservableCommand(Action<IObserver<bool>> methodToExecute)
+        {
+            this.methodToExecute = methodToExecute;
+        }
+
 
         public event EventHandler? CanExecuteChanged
         {
@@ -41,6 +48,7 @@ namespace Utility.Commands
         public void Execute(object? parameter)
         {
             T? output = id ?? (T)parameter;
+            methodToExecute.Invoke(this);
             Outputs.Add(output);
 
             foreach (var observer in Observers)
