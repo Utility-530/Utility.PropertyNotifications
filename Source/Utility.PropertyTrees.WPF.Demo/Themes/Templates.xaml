@@ -10,7 +10,8 @@
                     xmlns:views="clr-namespace:Utility.PropertyTrees.WPF.Demo.Views"
                     xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:btn="http://schemas.utility.com/buttons"
-                    xmlns:st="http://schemas.spicytaco.io/">
+                    xmlns:st="http://schemas.spicytaco.io/" 
+                    xmlns:view="http://schemas.utility.com">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Utility.PropertyTrees.WPF.Demo;component/Themes/Styles.xaml"></ResourceDictionary>
@@ -78,7 +79,12 @@
     <DataTemplate x:Key="CollectionTemplate">
         <views:CollectionView Collection="{Binding Value}"></views:CollectionView>
     </DataTemplate>
-
+    
+    <DataTemplate       x:Key="EnumTemplate">
+        <view:EnumItemsControl                     
+                            Orientation="Horizontal"
+                            Value="{Binding Value}" />
+    </DataTemplate>
     <local:ContentTemplateSelector 
         x:Key="ContentTemplateSelector"
         StringTemplate="{StaticResource StringTemplate}"
@@ -87,6 +93,7 @@
         DoubleTemplate="{StaticResource DoubleTemplate}"
         UnknownTemplate="{StaticResource UnknownTemplate}"
         CollectionTemplate="{StaticResource CollectionTemplate}"
+        EnumTemplate="{StaticResource EnumTemplate}"
         />
 
     <DataTemplate DataType="{x:Type nodes:ValueNode}">

@@ -38,6 +38,11 @@ namespace Utility.PropertyTrees.WPF.Demo
                 this.broadcast(new(item, IntegerTemplate, container));
                 return IntegerTemplate;
             }
+            if (propertyType.IsEnum)
+            {
+                this.broadcast(new(item, EnumTemplate, container));
+                return EnumTemplate;
+            }
 
             return base.SelectTemplate(item, container);
         }
@@ -63,6 +68,7 @@ namespace Utility.PropertyTrees.WPF.Demo
         public DataTemplate IntegerTemplate { get; set; }
         public DataTemplate UnknownTemplate { get; set; }
         public DataTemplate CollectionTemplate { get; set; }
+        public DataTemplate EnumTemplate { get; set; }
     }
 
     public record SelectTemplateEvent(object Item, DataTemplate Template, DependencyObject Container);
