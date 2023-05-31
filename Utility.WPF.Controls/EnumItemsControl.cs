@@ -22,11 +22,9 @@ namespace Utility.WPF.Controls
 {
     public class EnumItemsControl : LayOutItemsControl
     {
-        //private static readonly DependencyPropertyKey OutputPropertyKey = DependencyProperty.RegisterReadOnly(nameof(Output), typeof(Enum), typeof(EnumItemsControl), new FrameworkPropertyMetadata());
         public static readonly DependencyProperty ValueProperty = DependencyHelper.Register<Enum>(new FrameworkPropertyMetadata(default, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
         public static readonly DependencyProperty EnumProperty = DependencyHelper.Register<Type>(new FrameworkPropertyMetadata());
         public static readonly DependencyProperty IsReadOnlyProperty = DependencyHelper.Register<bool>();
-        //public static readonly DependencyProperty OutputProperty = OutputPropertyKey.DependencyProperty;
         public static readonly DependencyProperty IsMultiSelectProperty = DependencyHelper.Register<bool>();
         public static readonly DependencyProperty ClearCommandProperty = DependencyHelper.Register<ICommand>();
         private Subject<Type> subject = new();
@@ -48,8 +46,19 @@ namespace Utility.WPF.Controls
         {
             this.SetValue(ItemsControlEx.ArrangementProperty, Arrangement.Wrapped);
             CompositeDisposable? disposable = null;
-            ClearCommand = new RelayCommand(a => subject.OnNext(Enum));
+
+            ClearCommand = new RelayCommand(a =>
+            {
+                Value = (Enum)System.Enum.ToObject(Value?.GetType() ?? Enum, 0);
+            });
             ItemsSource = items;
+
+            this.WhenAnyValue(a => a.Enum)
+                .WhereNotNull()
+                .Subscribe(e =>
+                {
+                    Value = (Enum)System.Enum.ToObject(e, 0);
+                });
 
             this.WhenAnyValue(a => a.Enum)
                 .Merge(subject)
@@ -95,9 +104,11 @@ namespace Utility.WPF.Controls
             {
                 return System.Enum.GetValues(t)
                     .Cast<Enum>()
-                    .Select(e => new EnumItem(e, ReactiveCommand.Create(() => e), isReadOnly) {
-                        IsChecked = Value.Equals(e) })
-                    .ToArray();               
+                    .Select(e => new EnumItem(e, ReactiveCommand.Create(() => e), isReadOnly)
+                    {
+                        IsChecked = Value?.Equals(e) == true
+                    })
+                    .ToArray();
             }
         }
 
