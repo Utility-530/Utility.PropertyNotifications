@@ -15,25 +15,34 @@ using Jellyfish;
 using Utility.Helpers;
 using System.Windows.Input;
 using System.Reactive.Subjects;
-using LanguageExt.TypeClasses;
 using MintPlayer.ObservableCollection;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Controls
 {
     public class EnumItemsControl : LayOutItemsControl
     {
-        private static readonly DependencyPropertyKey OutputPropertyKey = DependencyProperty.RegisterReadOnly(nameof(Output), typeof(Enum), typeof(EnumItemsControl), new FrameworkPropertyMetadata(default(Enum)));
-        public static readonly DependencyProperty EnumProperty = DependencyHelper.Register<Type>(new FrameworkPropertyMetadata(typeof(Switch)));
+        //private static readonly DependencyPropertyKey OutputPropertyKey = DependencyProperty.RegisterReadOnly(nameof(Output), typeof(Enum), typeof(EnumItemsControl), new FrameworkPropertyMetadata());
+        public static readonly DependencyProperty ValueProperty = DependencyHelper.Register<Enum>(new FrameworkPropertyMetadata(default, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+        public static readonly DependencyProperty EnumProperty = DependencyHelper.Register<Type>(new FrameworkPropertyMetadata());
         public static readonly DependencyProperty IsReadOnlyProperty = DependencyHelper.Register<bool>();
-        public static readonly DependencyProperty OutputProperty = OutputPropertyKey.DependencyProperty;
+        //public static readonly DependencyProperty OutputProperty = OutputPropertyKey.DependencyProperty;
         public static readonly DependencyProperty IsMultiSelectProperty = DependencyHelper.Register<bool>();
         public static readonly DependencyProperty ClearCommandProperty = DependencyHelper.Register<ICommand>();
         private Subject<Type> subject = new();
         private ObservableCollection<EnumItem> items = new();
+
         static EnumItemsControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(EnumItemsControl), new FrameworkPropertyMetadata(typeof(EnumItemsControl)));
+
+            if (DesignModeHelper.IsInDesignMode)
+            {
+                EnumProperty.OverrideMetadata(typeof(EnumItemsControl), new FrameworkPropertyMetadata(typeof(Switch)));
+            }
         }
+        Enum internalValue;
+        record EnumType(Type Type, Enum? Value);
 
         public EnumItemsControl()
         {
@@ -41,46 +50,54 @@ namespace Utility.WPF.Controls
             CompositeDisposable? disposable = null;
             ClearCommand = new RelayCommand(a => subject.OnNext(Enum));
             ItemsSource = items;
+
             this.WhenAnyValue(a => a.Enum)
                 .Merge(subject)
+                .WhereNotNull()
+                .Select(a => new EnumType(a, null))
+                .Merge(this.WhenAnyValue(a => a.Value).WhereNotNull().Where(a => a != internalValue).Select(a => new EnumType(a.GetType(), a)))
                 .CombineLatest(this.WhenAnyValue(a => a.IsReadOnly))
-                .Select(a => BuildFromEnum(a.First, a.Second).ToArray())
+                .Select(a => BuildFromEnum(a.First.Type, a.First.Value, a.Second))
                 .Subscribe(enums =>
                 {
                     items.Clear();
                     items.AddRange(enums);
-                    items.AddRange(enums);
                     disposable?.Dispose();
                     disposable = new();
-           
+
                     foreach (var item in enums)
                     {
-                        item.Command.Subscribe(a =>
+                        item.Command.Subscribe(e =>
                         {
-
                             if (IsMultiSelect == false)
                             {
-                                Output = a;
+                                internalValue = e;
                                 foreach (var x in enums)
                                 {
-                                    if (x.Enum != a)
+                                    if (x.Enum != e)
                                         x.IsChecked = false;
                                 }
                             }
                             else
                             {
-                                Output = a.HasFlag(a) ?
+                                internalValue = e.HasFlag(e) ?
                                 EnumHelper.CombineFlags(enums.Where(a => a.IsChecked).Select(e => e.Enum), Enum) :
-                                a;
+                                e;
+
                             }
+                            Value = internalValue;
 
                         }).DisposeWith(disposable);
                     }
                 });
 
-            static IEnumerable<EnumItem> BuildFromEnum(Type t, bool isReadOnly)
+            static EnumItem[] BuildFromEnum(Type t, Enum? Value, bool isReadOnly)
             {
-                return System.Enum.GetValues(t).Cast<Enum>().Select(a => new EnumItem(a, ReactiveCommand.Create(() => a), isReadOnly));
+                return System.Enum.GetValues(t)
+                    .Cast<Enum>()
+                    .Select(e => new EnumItem(e, ReactiveCommand.Create(() => e), isReadOnly) {
+                        IsChecked = Value.Equals(e) })
+                    .ToArray();               
             }
         }
 
@@ -104,12 +121,12 @@ namespace Utility.WPF.Controls
             set => SetValue(EnumProperty, Enum);
         }
 
-        public Enum Output
+        public Enum Value
         {
-            get => (Enum)GetValue(OutputProperty);
-            protected set => SetValue(OutputPropertyKey, value);
+            get => (Enum)GetValue(ValueProperty);
+            set => SetValue(ValueProperty, value);
         }
-            
+
         public ICommand ClearCommand
         {
             get => (ICommand)GetValue(ClearCommandProperty);
