@@ -3,11 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using Utility.Enums;
 using Utility.Infrastructure;
-using System.Globalization;
-using Utility.Conversions;
-using Utility.Observables;
 using Utility.Observables.Generic;
 
 namespace Utility.PropertyTrees.Infrastructure
@@ -17,7 +13,7 @@ namespace Utility.PropertyTrees.Infrastructure
     {
         private Dictionary<IEquatable, object> store = new();
 
-        public object this[IEquatable key]
+        public object? this[IEquatable key]
         {
             get
             {
@@ -71,7 +67,6 @@ namespace Utility.PropertyTrees.Infrastructure
 
         string IDataErrorInfo.this[string columnName] => Validate(columnName);
 
-        //public abstract  Type PropertyType { get; }
         public DateTime? LastUpdate { get; set; }
 
         protected virtual object? GetValue(IEquatable name)
@@ -85,41 +80,32 @@ namespace Utility.PropertyTrees.Infrastructure
             OnPropertyChanged((name as Key)?.Name);
         }
 
-
         [MethodImpl(MethodImplOptions.NoInlining)]
         public object? GetProperty(Key key)
         {
-            if (LastUpdate is DateTime value)
+            if (LastUpdate is not DateTime value)
             {
-                return GetValue(key);
+                //TODO: show progress
+                this.Observe<GetPropertyResponse, GetPropertyRequest>(new(key))
+                    .Select(a => a.Value)
+                    .Subscribe(a =>
+                    {
+                        LastUpdate = DateTime.Now;
+                        SetValue(key, a);                     
+                    });
             }
 
-            //var key = new Key(guid, name, type);
-
-            // show progress
-            this.Observe<GetPropertyResponse, GetPropertyRequest>(new(key))
-                .Select(a => a.Value)
-                .Subscribe(a =>
-                {
-                    SetValue(key, a);
-                    LastUpdate = DateTime.Now;
-                    //OnPropertyChanged(nameof(Value));
-                });
-            return default;
+            return GetValue(key);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void SetProperty(Key key, object value)
         {
-            //SetValue(name, value);
-
-            //var key = new Key(guid, name, type);
-            var order = new SetPropertyRequest(key, value);
             this.Observe<SetPropertyResponse, SetPropertyRequest>(new(key, value))
                 .Subscribe(a =>
                 {
-                    SetValue(key, a.Value);
                     LastUpdate = DateTime.Now;
+                    SetValue(key, a.Value);                   
                     // Validation response
                 });
         }
@@ -130,42 +116,5 @@ namespace Utility.PropertyTrees.Infrastructure
             //return PropertyStore.Validate(memberName);
             return default;
         }
-
-
-        #region PropertyChange
-        /// <inheritdoc />
-        /// <summary>
-        ///     The event on property changed
-        /// </summary>
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        /// <summary>
-        ///     Raise the <see cref="PropertyChanged" /> event
-        /// </summary>
-        /// <param name="propertyName">The caller member name of the property (auto-set)</param>
-        //[NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = default)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        /// <summary>
-        ///     Set a property and raise the <see cref="PropertyChanged" /> event
-        /// </summary>
-        /// <typeparam name="T">The type of the Property</typeparam>
-        /// <param name="field">A reference to the backing field from the property</param>
-        /// <param name="value">The new value being set</param>
-        /// <param name="callerName">The caller member name of the property (auto-set)</param>
-        protected void Set<T>(ref T field, T value, [CallerMemberName] string? callerName = default)
-        {
-            if (field?.Equals(value) == true)
-            {
-                return;
-            }
-
-            field = value;
-            OnPropertyChanged(callerName);
-        }
-        #endregion PropertyChange
     }
 }
