@@ -48,7 +48,7 @@ namespace Utility.PropertyTrees.WPF
             {
                 var treeViewItem = MakeTreeViewItem(prop);
                 items.Add(treeViewItem);
-                return items;
+                return treeViewItem.Items;
             }, property);
 
             TreeViewItem MakeTreeViewItem(PropertyBase node)

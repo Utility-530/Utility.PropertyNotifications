@@ -13,12 +13,12 @@ namespace Utility.PropertyTrees.Infrastructure
             Started, Completed
         }
 
-        public static IObservable<(int,int)> ExploreTree<T>(T items, Func<T, PropertyBase, T> func, ValueNode property)
+        public static IObservable<(int, int)> ExploreTree<T>(T items, Func<T, PropertyBase, T> func, ValueNode property)
         {
             Subject<State> subject = new();
             int totalCount = 1;
             int completed = 1;
-            Subject<(int,int)> progress = new();
+            Subject<(int, int)> progress = new();
             subject
                  .Subscribe(a =>
                  {
@@ -43,25 +43,28 @@ namespace Utility.PropertyTrees.Infrastructure
         public static IObservable<(int, int)> ExploreTree(ValueNode propertyNode)
         {
             return ExploreTree(new List<object>(), (a, b) => a, propertyNode);
-           
+
         }
 
 
         public static IDisposable ExploreTree<T>(T items, Func<T, PropertyBase, T> func, ValueNode property, Subject<State> state)
         {
             state.OnNext(State.Started);
+
+            if (property is PropertyBase @base)
+                items = func(items, @base);
+
             var disposable = property
                 .Children
                 .Subscribe(async item =>
                 {
                     if (item is not NotifyCollectionChangedEventArgs args)
                         throw new Exception("rev re");
-                    var p = property;
 
                     state.OnNext(State.Started);
                     foreach (PropertyBase node in SelectNewItems<PropertyBase>(args))
                     {
-                        _ = ExploreTree(func(items, node), func, node, state);
+                        _ = ExploreTree(items, func, node, state);
                     }
                     state.OnNext(State.Completed);
                 },
