@@ -12,7 +12,7 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
     public partial class ViewModelView : UserControl
     {
         private ViewModelEngine viewModelEngine => container.Resolve<ViewModelEngine>();
-        private ModelController controller => container.Resolve<ModelController>();
+        private IModelController controller => container.Resolve<IModelController>();
         private ValueNode masterNode => container.Resolve<ValueNode>(Keys.Model);
 
         public ViewModelView()

@@ -9,7 +9,7 @@
              mc:Ignorable="d">
     <ui:CommandBar x:Name="CommandBar" DefaultLabelPosition="Bottom"  HorizontalAlignment="Center" >
         <ui:AppBarButton Icon="Refresh" Label="Refresh"  Click="refresh_click"/>
-        <ui:AppBarButton Icon="Library" Label="Graph" Click="show_graph_click"/>
+        <ui:AppBarButton Icon="Library" Label="Clear" Click="show_graph_click"/>
         <ui:AppBarButton Icon="Forward"  Label="Templates" Click="show_templates_click"/>
         <!--<ui:AppBarButton Icon="Emoji2" Label="Initialise" Click="initialise_click"/>-->
         <ui:AppBarButton Icon="Directions" Label="history"  Click="show_history_click" />

@@ -1,8 +1,12 @@
 ﻿namespace Utility.PropertyTrees.Infrastructure
 {
+    [Flags]
     public enum PropertyType
     {
-        Root, Reference, Value, CollectionItem
+        Root = 1,
+        Reference =2, 
+        Value =4, 
+        CollectionItem = 8
     }
 }
 

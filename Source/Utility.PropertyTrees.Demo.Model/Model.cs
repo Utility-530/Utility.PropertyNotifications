@@ -14,7 +14,6 @@ namespace Utility.PropertyTrees.Demo.Model
         //public Game EndGame { get; set; }
 
         //public PrizeWheelUpdate PrizeWheelUpdate { get; set; }
-
         public ScreenSaver ScreenSaver { get; set; }
         public PrizeWheel PrizeWheel { get; set; }
         public Leaderboard Leaderboard { get; set; }
@@ -53,19 +52,50 @@ namespace Utility.PropertyTrees.Demo.Model
         public int Sequence { get; set; }
     }
 
+    public enum PrizeWheelState
+    {
+        Running, Stopping
+    }
+
     public class PrizeWheel
     {
-        public int SegmentSequence { get; set; }
-        public string Name { get; set; }
-        public int ColourScheme { get; set; }
-        public bool PrintTicket { get; set; }
-        public int Size { get; set; }
-        public bool AllowWin { get; set; }
+        public PrizeWheelState State { get; set; }
+        public PrizeWheelRunning Running { get; set; }
+
+        public PrizeWheelStopping Stopping { get; set; }
+
+        //public int SegmentSequence { get; set; }
+        //public string Name { get; set; }
+        //public int ColourScheme { get; set; }
+        //public bool PrintTicket { get; set; }
+        //public int Size { get; set; }
+        //public bool AllowWin { get; set; }
     }
+
+    public class PrizeWheelRunning 
+    {
+        public int Speed { get; set; }
+    }
+
+    public class PrizeWheelStopping 
+    {
+        public int ItemNumber { get; set; }
+        public int Time { get; set; }
+    }
+
+    //public class PrizeWheel
+    //{
+    //    public int SegmentSequence { get; set; }
+    //    public string Name { get; set; }
+    //    public int ColourScheme { get; set; }
+    //    public bool PrintTicket { get; set; }
+    //    public int Size { get; set; }
+    //    public bool AllowWin { get; set; }
+    //}
 
     public class Leaderboard
     {
-        public Collection<Leader> Leaders { get; set; }
+        public Collection<Leader> Leaders { get; set; } = new() { new Leader { Name = "John", Score = 1000 } };
     }
 
     public class Leader

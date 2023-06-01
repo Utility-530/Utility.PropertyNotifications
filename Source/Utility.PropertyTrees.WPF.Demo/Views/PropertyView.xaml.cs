@@ -5,6 +5,8 @@ using Utility.PropertyTrees.Infrastructure;
 using Utility.Observables.Generic;
 using Utility.Observables.NonGeneric;
 using Utility.Nodes;
+using System.Reactive.Disposables;
+using System.Net;
 
 namespace Utility.PropertyTrees.WPF.Demo.Views
 {
@@ -47,51 +49,60 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
 
 
 
-
+        IDisposable? disposable;
         // move to viewmodel
         private void refresh()
         {
-            ServerGrid.Items.Clear();
-            //controller.TreeView(serverNode, ServerGrid).Subscribe(treeView =>
-            //{
-            //    modelViewModel.IsConnected = true;
-            //    System.Windows.Input.CommandManager.InvalidateRequerySuggested();
-            //});
+            disposable?.Dispose();
+            CompositeDisposable disposables = new();
+            {
+                ServerGrid.Items.Clear();
+                controller.TreeView(serverNode, ServerGrid).Subscribe(treeView =>
+                {
 
-   
-            //{
-            //    ScreensaverGrid.Items.Clear();
-            //    PropertyExplorer.FindNode(masterNode, a => a is PropertyBase { Name: nameof(Model.ScreenSaver) })
-            //          .Subscribe(node =>
-            //          {
-            //              controller.TreeView(node, ScreensaverGrid).Subscribe(treeView =>
-            //              {
-            //              });
-            //          });
-            //}
+                    modelViewModel.IsConnected = true;
+                    System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+                });
+            }
+
+            {
+                ScreensaverGrid.Items.Clear();
+                PropertyExplorer.FindNode(masterNode, a => a is PropertyBase { Name: nameof(Model.ScreenSaver) }, out var dis)
+                      .Subscribe(node =>
+                      {
+
+                          controller.TreeView(node, ScreensaverGrid).Subscribe(treeView =>
+                          {
+                          });
+                      });
+            }
 
             {
                 LeaderboardGrid.Items.Clear();
-                PropertyExplorer.FindNode(masterNode, a => a is PropertyBase { Name: nameof(Model.Leaderboard) })
+                PropertyExplorer.FindNode(masterNode, a => a is PropertyBase { Name: nameof(Model.Leaderboard) }, out var dis)
                      .Subscribe(node =>
                      {
-                         controller.TreeView(node, LeaderboardGrid).Subscribe(treeView =>
+                         controller.TreeView(node, LeaderboardGrid)
+                         .Subscribe(treeView =>
                          {
-                         });
-                     });
+                         }).DisposeWith(disposables);
+                     }).DisposeWith(disposables);
+                disposables.Add(dis);
             }
 
-            //{
-            //    PrizeWheelGrid.Items.Clear();
-            //    PropertyExplorer.FindNode(masterNode, a => a is PropertyBase { Name: nameof(Model.PrizeWheel) })
+            {
+                PrizeWheelGrid.Items.Clear();
+                PropertyExplorer.FindNode(masterNode, a => a is PropertyBase { Name: nameof(Model.PrizeWheel) }, out var dis)
+                    .Subscribe(node =>
+                    {
 
-            //        .Subscribe(node =>
-            //        {
-            //            controller.TreeView(node, PrizeWheelGrid).Subscribe(treeView =>
-            //            {
-            //            });
-            //        });
-            //}
+                        controller.TreeView(node, PrizeWheelGrid).Subscribe(treeView =>
+                        {
+                        });
+                    });
+            }
+            disposable = disposables;
+
         }
     }
 

@@ -13,6 +13,16 @@ namespace Utility.PropertyTrees.WPF.Demo
                 this.broadcast(new(item, CollectionTemplate, container));
                 return CollectionTemplate;
             }
+            if (item is RootProperty)
+            {
+                this.broadcast(new(item, ReferenceTemplate, container));
+                return RootTemplate;
+            }
+            if (item is ReferenceProperty)
+            {
+                this.broadcast(new(item, ReferenceTemplate, container));
+                return ReferenceTemplate;
+            }
             if (item is not ValueProperty { Descriptor: { PropertyType: var propertyType } } propertyNode)
             {
                 this.broadcast(new(item, UnknownTemplate, container));
@@ -69,6 +79,8 @@ namespace Utility.PropertyTrees.WPF.Demo
         public DataTemplate UnknownTemplate { get; set; }
         public DataTemplate CollectionTemplate { get; set; }
         public DataTemplate EnumTemplate { get; set; }
+        public DataTemplate ReferenceTemplate { get; set; }
+        public DataTemplate RootTemplate { get; set; }
     }
 
     public record SelectTemplateEvent(object Item, DataTemplate Template, DependencyObject Container);

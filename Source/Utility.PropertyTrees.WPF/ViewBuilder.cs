@@ -12,8 +12,8 @@ using System.ComponentModel;
 using Utility.PropertyTrees.WPF.Meta;
 using Utility.Nodes;
 using static Utility.Observables.Generic.ObservableExtensions;
-using Utility.Interfaces.NonGeneric;
 using Utility.Observables.Generic;
+using System.Reactive.Disposables;
 
 namespace Utility.PropertyTrees.WPF
 {
@@ -25,7 +25,8 @@ namespace Utility.PropertyTrees.WPF
         {
             return Create<TreeViewResponse>(observer =>
             {
-                return BuildTree(request.TreeView, request.PropertyNode)
+                CompositeDisposable disposables = new();
+                var dis = BuildTree(request.TreeView, request.PropertyNode, out var disposable)
                 .Subscribe(a =>
                 {
                     observer.OnProgress(a.Item1, a.Item2);
@@ -38,18 +39,20 @@ namespace Utility.PropertyTrees.WPF
                 () =>
                 {
 
-                });
+                }).DisposeWith(disposables);
+                disposables.Add(disposable);
+                return disposables;
             }); 
         }
 
-        public IObservable<(int,int)> BuildTree(TreeView treeView, ValueNode property)
+        public IObservable<(int,int)> BuildTree(TreeView treeView, ValueNode property, out IDisposable disposable)
         {
             return PropertyExplorer.ExploreTree(treeView.Items, (items, prop) =>
             {
                 var treeViewItem = MakeTreeViewItem(prop);
                 items.Add(treeViewItem);
                 return treeViewItem.Items;
-            }, property);
+            }, property, out disposable);
 
             TreeViewItem MakeTreeViewItem(PropertyBase node)
             {

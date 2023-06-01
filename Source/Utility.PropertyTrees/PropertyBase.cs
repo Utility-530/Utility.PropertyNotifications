@@ -13,7 +13,7 @@ namespace Utility.PropertyTrees
         }
 
         //public abstract string Name { get; }
-        public bool IsCollection => PropertyType != null ? PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(PropertyType) : false;
+        public bool IsCollection => PropertyType != null && PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(PropertyType);
         public bool IsFlagsEnum => PropertyType.IsFlagsEnum();
         public bool IsValueType => PropertyType.IsValueType;
         public virtual int CollectionCount => Value is IEnumerable enumerable ? enumerable.Cast<object>().Count() : 0;
@@ -25,7 +25,7 @@ namespace Utility.PropertyTrees
         public IViewModel ViewModel { get; set; }
         public virtual Type Type { get; set; }
 
-        public PropertyDescriptor Descriptor { get; set; }
+        public virtual PropertyDescriptor Descriptor { get; set; }
 
         public override Filters Predicates => predicates ?? lazyPredicates.Value;
 
@@ -46,6 +46,11 @@ namespace Utility.PropertyTrees
         }
     }
 
+    public static class PropertyTypeHelper
+    {
+        public static bool IsCollection(this Type propertyType) => propertyType != null && propertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(propertyType);
+    }
+
     public class DefaultFilter : Filters
     {
         private List<Predicate<object>> predicates;
@@ -56,13 +61,20 @@ namespace Utility.PropertyTrees
             predicates = new(){
                     new Predicate<object>(value=>
                 {
+                    if(value is CollectionItemDescriptor collectionItemDescriptor)
+                        return true;
                     if(value is PropertyDescriptor descriptor)
                     {
-                          int level = descriptor.ComponentType.InheritanceLevel(type);
+                        if(type.IsCollection())
+                        {
+                            return false;
+                        }
+                        int level = descriptor.ComponentType.InheritanceLevel(type);
 
-                       return level == 0 /*<= options.InheritanceLevel*/ && descriptor.IsBrowsable;
+                        return level == 0 /*<= options.InheritanceLevel*/ && descriptor.IsBrowsable;
                     }
-                    return false;
+
+                    return true;
                 }) };
         }
 

@@ -11,6 +11,7 @@ using Utility.Nodes;
 using Utility.Observables.Generic;
 using Utility.Collections;
 using ReactiveUI;
+using System.Reactive.Disposables;
 
 namespace Utility.PropertyTrees.WPF.Demo;
 
@@ -34,6 +35,7 @@ internal class ModelController : BaseObject, IModelController
     ObservableCommand sendLeaderboard, sendPrizewheel, sendScreensaver;
     public ModelController()
     {
+        CompositeDisposable composite = new();
         model.Model = container.Resolve<ModelProperty>().Data as Model ?? throw new Exception("dfs ooo");
         model.Server = container.Resolve<ServerProperty>().Data as Server ?? throw new Exception("dfs ppp");
 
@@ -102,7 +104,7 @@ internal class ModelController : BaseObject, IModelController
 
     public void OnNext(ServerEvent serverEvent)
     {
-        Observe<ActivationResponse, ActivationRequest>(new(null, new RootDescriptor(serverEvent), serverEvent, PropertyType.Root))
+        Observe<ActivationResponse, ActivationRequest>(new(default, new RootDescriptor(serverEvent), serverEvent, PropertyType.Root))
             .Select(a => a.PropertyNode)
             .Subscribe(newNode =>
             {
@@ -112,7 +114,13 @@ internal class ModelController : BaseObject, IModelController
                     {
                         foreach (var observer in observers)
                             observer.OnNext(a);
+                    }, () =>
+                    {
+
                     });
+            }, () =>
+            {
+
             });
     }
 

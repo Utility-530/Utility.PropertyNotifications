@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Utility.Nodes;
@@ -13,13 +14,13 @@ namespace Utility.PropertyTrees.Infrastructure
             Started, Completed
         }
 
-        public static IObservable<(int, int)> ExploreTree<T>(T items, Func<T, PropertyBase, T> func, ValueNode property)
+        public static IObservable<(int, int)> ExploreTree<T>(T items, Func<T, PropertyBase, T> func, ValueNode property, out IDisposable disposable)
         {
             Subject<State> subject = new();
             int totalCount = 1;
             int completed = 1;
             Subject<(int, int)> progress = new();
-            subject
+            disposable = subject
                  .Subscribe(a =>
                  {
                      if (a == State.Started)
@@ -40,9 +41,9 @@ namespace Utility.PropertyTrees.Infrastructure
             return progress;
         }
 
-        public static IObservable<(int, int)> ExploreTree(ValueNode propertyNode)
+        public static IObservable<(int, int)> ExploreTree(ValueNode propertyNode, out IDisposable disposable)
         {
-            return ExploreTree(new List<object>(), (a, b) => a, propertyNode);
+            return ExploreTree(new List<object>(), (a, b) => a, propertyNode, out disposable);
 
         }
 
@@ -83,14 +84,16 @@ namespace Utility.PropertyTrees.Infrastructure
 
 
 
-        public static IObservable<ValueNode> FindNode(ValueNode node, Predicate<ValueNode> predicate)
+        public static IObservable<ValueNode> FindNode(ValueNode node, Predicate<ValueNode> predicate, out IDisposable disposable)
         {
             ReplaySubject<ValueNode> list = new(1);
             System.Reactive.Disposables.CompositeDisposable composite = new();
-            var dis = ExploreTree(list, (a, b) => { if (predicate(b)) { a.OnNext(b); composite.Dispose(); a.OnCompleted(); } return (a); }, node).Subscribe(a =>
-            {
-            }, list.OnCompleted);
-            composite.Add(dis);
+            ExploreTree(list, (a, b) => { if (predicate(b)) { a.OnNext(b); composite.Dispose(); a.OnCompleted(); } return (a); }, node, out IDisposable _dis)
+                .Subscribe(a =>
+                {
+                }, list.OnCompleted).DisposeWith(composite);
+            composite.Add(_dis);
+            disposable = composite;
             return list;
         }
 
@@ -98,7 +101,7 @@ namespace Utility.PropertyTrees.Infrastructure
         {
             Subject<ValueNode> list = new();
 
-            ExploreTree(list, (a, b) => { if (predicate(b)) a.OnNext(b); return a; }, node).Subscribe(a =>
+            ExploreTree(list, (a, b) => { if (predicate(b)) a.OnNext(b); return a; }, node, out IDisposable disposable).Subscribe(a =>
             {
             }, list.OnCompleted);
             return list;

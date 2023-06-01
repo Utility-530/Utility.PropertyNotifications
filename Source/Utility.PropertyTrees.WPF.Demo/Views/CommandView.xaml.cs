@@ -26,6 +26,7 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
 
         private void show_graph_click(object sender, RoutedEventArgs e)
         {
+            BaseObject.Resolver.Clear();
             //var graphWindow = new Window { Content = new GraphUserControl(container) };
             //ScreenHelper.SetOnFirstScreen(graphWindow);
             //graphWindow.Show();

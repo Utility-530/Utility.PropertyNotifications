@@ -13,24 +13,24 @@
         <StackPanel x:Name="Panel">
             <st:AutoGrid Rows="*, Auto" Columns="*">
                 <TreeView x:Name="ServerGrid"></TreeView>
-                <Button x:Name="ServerConnect" Command="{Binding Connect, Mode=OneWay}">Connect</Button>
+                <Button x:Name="ServerConnect" Command="{Binding Connect, Mode=OneWay}" HorizontalAlignment="Center">Connect</Button>
             </st:AutoGrid>
 
             <st:AutoGrid Rows="*, Auto" Columns="*">
                 <TreeView x:Name="ScreensaverGrid"></TreeView>
-                <Button x:Name="ScreensaverSend" Command="{Binding SendScreensaver}">Send</Button>
+                <Button x:Name="ScreensaverSend" Command="{Binding SendScreensaver}" HorizontalAlignment="Center">Send</Button>
             </st:AutoGrid>
 
 
             <st:AutoGrid Rows="*, Auto" Columns="*">
                 <TreeView x:Name="LeaderboardGrid"></TreeView>
-                <Button x:Name="LeaderboardSend" Command="{Binding SendLeaderboard}" >Send</Button>
+                <Button x:Name="LeaderboardSend" Command="{Binding SendLeaderboard}"  HorizontalAlignment="Center" >Send</Button>
             </st:AutoGrid>
 
 
             <st:AutoGrid Rows="*, Auto" Columns="*">
                 <TreeView x:Name="PrizeWheelGrid"></TreeView>
-                <Button x:Name="PrizeWheelSend" Command="{Binding SendPrizewheel}" >Send</Button>
+                <Button x:Name="PrizeWheelSend" Command="{Binding SendPrizewheel}" HorizontalAlignment="Center" >Send</Button>
             </st:AutoGrid>
         </StackPanel>
     </ScrollViewer>
