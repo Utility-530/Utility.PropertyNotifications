@@ -93,18 +93,25 @@ namespace Utility.Nodes
 
         public object Data { get; set; }
 
+        IDisposable? disposable = null;
+
         protected virtual async Task<bool> RefreshAsync()
         {
             if (flag == true)
             {
-                await Task.Delay(1000);
+                await Task.Delay(10000);
+                disposable?.Dispose();
                 flag = false;
                 return await Task.FromResult(true);
             }
             flag = true;
 
-            _ = Observe<ChildrenResponse, ChildrenRequest>(new ChildrenRequest(Data, Guid, Predicates))
-                .Subscribe(a => _children.Add(a.PropertyNode), () => _children.Complete());
+            disposable = Observe<ChildrenResponse, ChildrenRequest>(new ChildrenRequest(Guid, Data, Predicates))
+                .Subscribe(a =>
+                {
+                    if (_children.Any(ass => a.PropertyNode.Key.Guid == (ass as ValueNode)?.Key.Guid) == false)
+                        _children.Add(a.PropertyNode);
+                }, () => _children.Complete());
 
             return await Task.FromResult(true);
         }
@@ -123,7 +130,7 @@ namespace Utility.Nodes
     }
 
 
-    public record ChildrenRequest(object Data, Guid Guid, Filters Filters) : Request;
+    public record ChildrenRequest(Guid Guid, object Data,  Filters Filters) : Request();
 
     public record ChildrenResponse(ValueNode PropertyNode, double Completed, double Total) : Response(PropertyNode);
 
