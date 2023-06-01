@@ -27,16 +27,6 @@ namespace Utility.Infrastructure
             this.Previous = Previous;
         }
 
-        //public GuidValue(IGuid Value, int Remaining, GuidValue? Previous = default) : this(Value, Previous)
-        //{
-        //    this.Remaining = Remaining;
-        //}
-
-        //public GuidValue(IGuid Value, Exception Exception, GuidValue? Previous = default) : this(Value, Previous)
-        //{
-        //    this.Exception = Exception;
-        //}
-
         public Guid Target => Value.Guid;
 
         public Guid Source
@@ -143,11 +133,11 @@ namespace Utility.Infrastructure
                         m => new SingleParameterMethod(instance, m));
         }
 
-        public static bool TrySubscribe(object instance, Action<object> action, Action<Exception> onError, Action onCompleted, Action<int, int> onProgress)
+        public static IDisposable? TrySubscribe(object instance, Action<object> action, Action<Exception> onError, Action onCompleted, Action<int, int> onProgress)
         {
             var methods = instance
                             .GetType()
-                            .GetMethods(/*BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly*/);
+                            .GetMethods();
 
             var single = methods
                             .SingleOrDefault(m => m.Name == nameof(IObservable.Subscribe));
@@ -161,9 +151,9 @@ namespace Utility.Infrastructure
                 else if (instance.TryGetPrivateFieldValue("_value", out var value))
                 {
                     action.Invoke(value);
-                    return true;
+                    return default;
                 }
-                return false;
+                throw new Exception("DSVds sss");
             }
 
             var arg = instance.GetType().GetGenericArguments().SingleOrDefault();
@@ -172,14 +162,14 @@ namespace Utility.Infrastructure
                 var observer = Activator.CreateInstance(
                             typeof(Observer<>).MakeGenericType(arg), action, onError, onCompleted, onProgress);
 
-                single.Invoke(instance, new[] { observer });
+                return (IDisposable?)single.Invoke(instance, new[] { observer });
             }
             else
             {
-                single.Invoke(instance, new[] { new Observer(action, onError, onCompleted, onProgress) });
+                return (IDisposable?)single.Invoke(instance, new[] { new Observer(action, onError, onCompleted, onProgress) });
             }
 
-            return true;
+            throw new Exception("D5 666SVds sss");
         }
     }
     public interface IIOType
@@ -212,12 +202,17 @@ namespace Utility.Infrastructure
 
         public Type OutType { get; }
 
+        public List<IDisposable> disposables { get; } = new();
         public void OnNext(GuidValue parameter)
         {
+            IDisposable? disposable = null;
             object? output;
             try
             {
                 output = methodInfo.Invoke(instance, new object[] { parameter.Value });
+
+                if (methodInfo.ReturnType == typeof(void))
+                    return;
             }
             catch (Exception ex)
             {
@@ -232,10 +227,20 @@ namespace Utility.Infrastructure
                 instance.OnNext(new GuidValue(guid, Guid, parameter));
             },
             e => instance.OnNext(new GuidValue(GuidBase.OnError(GetGuid(), e), Guid, parameter)),
-            () => instance.OnNext(new GuidValue(GuidBase.OnCompleted(GetGuid()), Guid, parameter)),
-            (a, b) => instance.OnNext(new GuidValue(GuidBase.OnProgress(GetGuid(), a, b), Guid, parameter))))
-            {
+            () => {
 
+                if (disposable is not null)
+                {
+                    disposable?.Dispose();
+                    disposables.Remove(disposable);
+                }
+                instance.OnNext(new GuidValue(GuidBase.OnCompleted(GetGuid()), Guid, parameter));
+            },
+            (a, b) => instance.OnNext(new GuidValue(GuidBase.OnProgress(GetGuid(), a, b), Guid, parameter)))
+                is IDisposable _disposable)
+            {
+                disposable = _disposable;
+                disposables.Add(disposable);
             }
             else
             {

@@ -1,14 +1,9 @@
-﻿using Castle.Core.Logging;
-using DryIoc;
+﻿using DryIoc;
 using DynamicData;
-using NetFabric.Hyperlinq;
 using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
-using System.Reactive.Subjects;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Observables.Generic;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Utility.Infrastructure
 {
@@ -79,7 +74,7 @@ namespace Utility.Infrastructure
             {
                 await Logger.Send(guidValue, observer);
 
-                if (observer is GuidBase { } guidBase)
+                if (guidValue.Value is GuidBase { } guidBase)
                 {
                     if (guidBase.IsComplete)
                     {
@@ -116,15 +111,15 @@ namespace Utility.Infrastructure
                         return;
                     }
             }
-            if(@base.Output is GuidValue { Value: GuidBase { Exception:var exception } })
+            if(@base.Output is GuidValue { Value: GuidBase { Exception: var exception } })
             {
                 return;
             }
-            if(@base.Output is GuidValue { Value: GuidBase { IsComplete:true} })
+            if(@base.Output is GuidValue { Value: GuidBase { IsComplete: true} })
             {
                 return;
             }
-            if(@base.Output is GuidValue { Value: GuidBase { Progress:var progress } })
+            if(@base.Output is GuidValue { Value: GuidBase { Progress: var progress } })
             {
                 return;
             }
@@ -133,17 +128,7 @@ namespace Utility.Infrastructure
 
 
             }
-            //foreach (var connection in connections)
-            //{
-            //    Broadcast(@base, connection)
-            //        .Subscribe();
-            //}
 
-            //foreach (var connection in connections.Where(a => a.IsPriority == false))
-            //{
-            //    var order = new Order(Guid.NewGuid(), @base, _value, connection);
-            //    history.OnNext(order);
-            //}
         }
 
         internal Utility.Interfaces.Generic.IObservable<TOutput> Register<TOutput, TInput>(BaseObject baseObject, TInput tInput) where TInput : IGuid
@@ -187,139 +172,26 @@ namespace Utility.Infrastructure
             return replay;
         }
 
-
-
-        //public void OnNext(History history)
-        //{
-        //    if (history.Output is not ChangeSet { } changeSet)
-        //    {
-        //        throw new Exception("ujuj  sdsdf");
-        //    }
-
-        //    foreach (var connection in Connections(history.Key))
-        //        Broadcast(history, changeSet, connection);
-
-        //    foreach (var item in changeSet)
-        //    {
-        //        Broadcast(item);
-        //    }
-        //}
-
-        //protected override void Broadcast(object obj)
-        //{
-        //    Output = obj;
-        //    this.OnNext(this);
-        //}
-
-        //private void Broadcast(Change item)
-        //{
-        //    //if (item is not Change { Type: var type, Value: HistoryOrder { History: var hist, Order: var order } })
-        //    //{
-        //    //    throw new Exception("22 j  sdsdf");
-        //    //}
-        //    //switch (hist, type)
-        //    //{
-        //    //    case (Enums.History.Present, Models.ChangeType.Add):
-        //    //        if (order is Order { Value: var value, Base: var @base, Connection: var connection })
-        //    //        {
-        //    //            Broadcast(@base, value, connection).Subscribe(a =>
-        //    //            {
-        //    //                //if (a == false)
-        //    //                //    throw new Exception("no path for message");
-        //    //            });
-        //    //            break;
-        //    //        }
-        //    //        else
-        //    //            throw new Exception("s44 dv3 ");
-        //    //}
-        //}
-
-        //private IObservable<bool> Broadcast(IBase @base, IBase connection)
-        //{
-        //    //if (connection.Observers.Any() == false)
-        //    //    throw new Exception("kl99dsf  sdffdsdff");
-        //    //bool success = false;
-        //    ReplaySubject<bool> subject = new(1);
-        //    try
-        //    {
-
-        //        //if (connection.SkipContext == false || SynchronizationContext.Current ==null)
-        //        //if (SynchronizationContext.Current != Context)
-        //        //{
-        //        //    Dispatch(() =>
-        //        //    {
-
-        //        connection.OnNext(@base.Output);
-
-        //        if (@base.Output is GuidValue { Value: ObjectCreationResponse response })
-        //        {
-        //            isDirty = true;
-        //        }
-        //        //success |= result;
-        //        //SpreadBroadcastEvent(@base, observer, result);
-
-        //        //        subject.OnNext(success);
-        //        //    });
-        //        //}
-        //        //else
-        //        //{
-        //        //    connection.OnNext(@base.Output);
-
-        //        //    //foreach (var observer in connection.Outputs)
-        //        //    //{
-        //        //    //    observer.OnNext(order);
-        //        //    //    //Broadcast(new BroadcastEvent(observer));
-        //        //    //}
-        //        //}
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //    }
-        //    return subject;
-        //}
-
-        //private void SpreadBroadcastEvent(IBase @base, IObserver observer, bool result)
-        //{
-        //    foreach (var conn in Connections(this.Key))
-        //    {
-        //        foreach (var obs in conn.Outputs)
-        //        {
-        //            if (result)
-        //                obs.OnNext(new BroadcastSuccessEvent(@base, observer));
-        //            else
-        //                obs.OnNext(new BroadcastFailureEvent(@base, observer));
-        //        }
-        //    }
-        //}
-
-
-
-        //ICollection<IBase> Connections(IEquatable equatable)
-        //{
-        //    if (equatable is not Key key)
-        //    {
-        //        throw new Exception("£ dfgdf");
-        //    }
-        //    if (isDirty)
-        //    {
-        //        nodes = this.container.Resolve<IBase[]>();
-        //        isDirty = false;
-        //    }
-        //    Collection<IBase> observers = new();
-
-        //    foreach (var outputConnection in outputs)
-        //    {
-        //        if (outputConnection.Connection.Match(key))
-        //        {
-        //            foreach (var x in outputConnection.Connections)
-        //            {
-        //                observers.AddRange(nodes.Where(a => x.Match(a.Key)));
-        //            }
-        //        }
-        //    }
-        //    return observers;
-        //}
+        public void Clear()
+        {
+            foreach(var keyValuePair in dictionary) { 
+            
+                if(keyValuePair.Value is SingleParameterMethod singleParameterMethod)
+                {
+                    foreach (var disposable in singleParameterMethod.disposables)
+                        disposable.Dispose();
+                }
+                else
+                {
+                    dictionary.Remove(keyValuePair.Key, out var observer);
+                    if(observer is Utility.Observables.Generic.Subject subject)
+                    {
+                        subject.Outputs.Clear();
+                        subject.Observers.Clear();
+                    }
+                }
+            }
+        }
     }
 
     public class CustomSubject<TInput, TOutput> : Subject<GuidValue, TOutput>, IObserverIOType

@@ -8,115 +8,6 @@ using Utility.Observables.NonGeneric;
 
 namespace Utility.Infrastructure
 {
-    //public class PropertyStore : BaseObject
-    //{
-    //    private readonly IRepository repository;
-
-    //    public override Key Key => new(Guids.PropertyStore, nameof(PropertyStore), typeof(PropertyStore));
-
-    //    public PropertyStore(IRepository repository)
-    //    {
-    //        this.repository = repository;
-    //    }
-
-    //    public override object? Model => repository;
-
-    //    public IObservable OnNext(FindPropertyRequest request)
-    //    {
-    //        if (request.Key.Name == "Size")
-    //            return Create(observer => Disposer.Empty);
-    //        if (request.Key.Name == "root")
-    //            return Create(observer => Disposer.Empty);
-
-    //        return Create(observer =>
-    //        {
-    //            return repository
-    //            .FindKeyByParent(request.Key)
-    //            .ToObservable()
-    //            .Select(childKey => new FindPropertyResponse(childKey))
-    //            .ObserveOn(Context)
-    //            .Subscribe(a =>
-    //            {
-    //                observer.OnNext(a);
-    //            });
-    //        });
-    //    }
-
-    //    public IObservable OnNext(SetPropertyRequest order)
-    //    {
-    //        return Create(observer =>
-    //        {
-    //            CompositeDisposable composite = new();
-
-    //            observer.OnProgress(0, 3);
-    //            repository
-    //            .FindKeyByParent(order.Key)
-    //            .ToObservable()
-    //            .ObserveOn(Context)
-    //            .Subscribe(key =>
-    //            {
-    //                observer.OnProgress(1, 3);
-    //                repository.FindValue(key)
-    //                .ToObservable()
-    //                .ObserveOn(Context)
-    //                .Subscribe(find =>
-    //                {
-    //                    observer.OnProgress(2, 3);
-
-    //                    repository
-    //                    .UpdateValue(key, order.Value)
-    //                    .ToObservable()
-    //                    .Subscribe(a =>
-    //                    {
-    //                        observer.OnProgress(3, 3);
-    //                        observer.OnNext(new SetPropertyResponse(order.Value));
-    //                    }).DisposeWith(composite);
-    //                }).DisposeWith(composite);
-    //            }).DisposeWith(composite);
-    //            return composite;
-    //        });
-    //    }
-
-
-    //    public IObservable OnNext(GetPropertyRequest order)
-    //    {
-    //        return Create(observer =>
-    //        {
-    //            CompositeDisposable composite = new();
-
-    //            observer.OnProgress(0, 2);
-
-    //            repository.FindKeyByParent(order.Key)
-    //                .ToObservable()
-    //                .ObserveOn(Context)
-    //                .Subscribe(key =>
-    //                {
-    //                    //observer.OnNext(new GetPropertyResponse(order.Key));
-    //                    observer.OnProgress(1, 2);
-    //                    repository
-    //                        .FindValue(key)
-    //                        .ToObservable()
-    //                        .ObserveOn(Context)
-    //                        .Subscribe(find =>
-    //                        {
-    //                            if (find != null)
-    //                            {
-    //                                observer.OnNext(new GetPropertyResponse(find));
-    //                                observer.OnProgress(2, 2);
-    //                            }
-    //                            else
-    //                            {
-    //                                //observer.OnNext(new GetPropertyResponse(find));
-    //                                observer.OnProgress(2, 2);
-    //                            }
-    //                        }).DisposeWith(composite);
-    //                }).DisposeWith(composite);
-    //            return composite;
-    //        });
-    //    }
-    //}
-
-
     public class PropertyStore : BaseObject
     {
         private readonly IRepository repository;
@@ -134,9 +25,7 @@ namespace Utility.Infrastructure
         {
             if (request.Key.Name == "Size")
                 return Create(observer => Disposer.Empty);
-            if (request.Key.Name == "root")
-                return Create(observer => Disposer.Empty);
-
+ 
             return Create(observer =>
             {
                 return repository
@@ -147,6 +36,7 @@ namespace Utility.Infrastructure
                 .Subscribe(a =>
                 {
                     observer.OnNext(a);
+                    observer.OnCompleted();
                 });
             });
         }
@@ -157,9 +47,9 @@ namespace Utility.Infrastructure
             {
                 CompositeDisposable composite = new();
 
-
                 observer.OnProgress(1, 3);
-                return repository.FindValue(order.Key)
+                return repository
+                .FindValue(order.Key)
                 .ToObservable()
                 .ObserveOn(Context)
                 .Subscribe(find =>
@@ -173,12 +63,12 @@ namespace Utility.Infrastructure
                     {
                         observer.OnProgress(3, 3);
                         observer.OnNext(new SetPropertyResponse(order.Value));
+                        observer.OnCompleted();
                     }).DisposeWith(composite);
                 }).DisposeWith(composite);
 
             });
         }
-
 
         public IObservable OnNext(GetPropertyRequest order)
         {
@@ -205,9 +95,8 @@ namespace Utility.Infrastructure
                             //observer.OnNext(new GetPropertyResponse(find));
                             observer.OnProgress(2, 2);
                         }
+                        observer.OnCompleted();
                     }).DisposeWith(composite);
-
-
             });
         }
     }

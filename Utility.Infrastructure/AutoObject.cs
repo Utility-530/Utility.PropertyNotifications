@@ -41,7 +41,7 @@ namespace Utility.PropertyTrees.Infrastructure
     public abstract class AutoObject : BaseObject, IDataErrorInfo, INotifyPropertyChanged, IGuid
     {
         private readonly Guid guid;
-        private IDisposable disposable;
+        private IDisposable? disposable;
 
 
         /// <summary>
@@ -101,7 +101,8 @@ namespace Utility.PropertyTrees.Infrastructure
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void SetProperty(Key key, object value)
         {
-            this.Observe<SetPropertyResponse, SetPropertyRequest>(new(key, value))
+            disposable?.Dispose();
+            disposable = this.Observe<SetPropertyResponse, SetPropertyRequest>(new(key, value))
                 .Subscribe(a =>
                 {
                     LastUpdate = DateTime.Now;
