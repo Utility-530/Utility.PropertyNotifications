@@ -1,5 +1,6 @@
 ﻿using System;
 using Utility.Interfaces.NonGeneric;
+using Utility.Observables.Generic;
 
 namespace Utility.Models
 {
@@ -43,5 +44,4 @@ namespace Utility.Models
             return new GuidBase(guid, new Progress(a,b));
         }
     }
-    public record Progress(int Amount, int Total);
 }
