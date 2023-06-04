@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace SoftFluent.Windows
+namespace UniversalConverter
 {
     /// <summary>
     /// Defines a case for the UniversalConverter class.

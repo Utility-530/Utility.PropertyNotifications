@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SoftFluent.Windows
+namespace UniversalConverter
 {
     /// <summary>
     /// Defines validation options for the UniversalConverter.
