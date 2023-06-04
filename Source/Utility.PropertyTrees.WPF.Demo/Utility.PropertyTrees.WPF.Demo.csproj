@@ -29,7 +29,6 @@
 		<ProjectReference Include="..\UniversalConverter\UniversalConverter.csproj" />
 		<ProjectReference Include="..\Utility.PropertyTrees.Demo.Model\Utility.PropertyTrees.Demo.Model.csproj" />
 		<ProjectReference Include="..\Utility.PropertyTrees.WPF\Utility.PropertyTrees.WPF.csproj" />
-		<ProjectReference Include="..\Utility.PropertyTrees\Utility.PropertyTrees.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

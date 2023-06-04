@@ -10,14 +10,16 @@ using Utility.Nodes;
 using Utility.Observables.NonGeneric;
 using static Utility.Observables.Generic.ObservableExtensions;
 using Utility.Observables.Generic;
+using static Utility.PropertyTrees.Events;
+using Utility.PropertyTrees.Infrastructure;
 
-namespace Utility.PropertyTrees.Infrastructure
+namespace Utility.PropertyTrees.Services
 {
     public partial class ChildPropertyExplorer : BaseObject
     {
         public override Key Key => new(Guids.PropertyFilter, nameof(ChildPropertyExplorer), typeof(ChildPropertyExplorer));
 
-        public Utility.Interfaces.Generic.IObservable<ChildrenResponse> OnNext(ChildrenRequest value)
+        public Interfaces.Generic.IObservable<ChildrenResponse> OnNext(ChildrenRequest value)
         {
             var descriptors = PropertyDescriptors(value.Data).ToArray();
             var collectionDescriptors = CollectionItemDescriptors(value.Data).ToArray();

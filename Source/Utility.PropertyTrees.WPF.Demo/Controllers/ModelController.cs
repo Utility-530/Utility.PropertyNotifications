@@ -12,6 +12,7 @@ using Utility.Observables.Generic;
 using Utility.Collections;
 using ReactiveUI;
 using System.Reactive.Disposables;
+using static Utility.PropertyTrees.Events;
 
 namespace Utility.PropertyTrees.WPF.Demo;
 

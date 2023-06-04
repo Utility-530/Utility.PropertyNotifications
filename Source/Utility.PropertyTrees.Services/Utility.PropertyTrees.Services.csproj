@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Events\" />
+    <ProjectReference Include="..\Utility.PropertyTrees\Utility.PropertyTrees.csproj" />
   </ItemGroup>
 
 </Project>

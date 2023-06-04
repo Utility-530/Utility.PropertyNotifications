@@ -5,6 +5,7 @@ using Utility.Infrastructure;
 using ObservableExtensions = Utility.Observables.NonGeneric.ObservableExtensions;
 using Utility.Observables.NonGeneric;
 using Utility.Observables.Generic;
+using static Utility.PropertyTrees.Events;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {

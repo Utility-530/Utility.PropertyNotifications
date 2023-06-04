@@ -6,7 +6,7 @@
                     xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"                    
                     xmlns:local="clr-namespace:Utility.PropertyTrees.WPF.Demo"    
                     xmlns:m="clr-namespace:Utility.Models;assembly=Utility.Models"
-                    xmlns:infra="clr-namespace:Utility.Infrastructure;assembly=Utility.Infrastructure"
+                    xmlns:infra="clr-namespace:Utility.PropertyTrees.Services;assembly=Utility.PropertyTrees.Services"
                     xmlns:views="clr-namespace:Utility.PropertyTrees.WPF.Demo.Views"
                     xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:btn="http://schemas.utility.com/buttons"

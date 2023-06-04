@@ -14,6 +14,7 @@ using Utility.Nodes;
 using static Utility.Observables.Generic.ObservableExtensions;
 using Utility.Observables.Generic;
 using System.Reactive.Disposables;
+using Utility.PropertyTrees.Services;
 
 namespace Utility.PropertyTrees.WPF
 {

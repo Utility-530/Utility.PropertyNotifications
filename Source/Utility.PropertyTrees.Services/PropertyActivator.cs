@@ -7,8 +7,11 @@ using static Utility.Observables.Generic.ObservableExtensions;
 using Utility.Observables.NonGeneric;
 using Utility.Observables.Generic;
 using System.Reactive.Disposables;
+using System.ComponentModel;
+using static Utility.PropertyTrees.Events;
+using Utility.PropertyTrees.Infrastructure;
 
-namespace Utility.PropertyTrees.Infrastructure
+namespace Utility.PropertyTrees.Services
 {
     public class PropertyActivator : BaseObject
     {
@@ -18,7 +21,7 @@ namespace Utility.PropertyTrees.Infrastructure
 
         public override object? Model => guids;
 
-        public Utility.Interfaces.Generic.IObservable<ActivationResponse> OnNext(ActivationRequest value)
+        public Interfaces.Generic.IObservable<ActivationResponse> OnNext(ActivationRequest value)
         {
             var descriptor = value.Descriptor;
             var propertyType = value.PropertyType;
@@ -33,7 +36,7 @@ namespace Utility.PropertyTrees.Infrastructure
                 });
             });
 
-            Utility.Interfaces.Generic.IObservable<PropertyBase> ToProperty(Guid guid)
+            Interfaces.Generic.IObservable<PropertyBase> ToProperty(Guid guid)
             {
                 return propertyType switch
                 {
@@ -45,7 +48,7 @@ namespace Utility.PropertyTrees.Infrastructure
                     _ => throw new Exception("f 33 dsf"),
                 };
 
-                Utility.Interfaces.Generic.IObservable<PropertyBase> CreateReferenceProperty(Guid parent, PropertyDescriptor descriptor, object data)
+                Interfaces.Generic.IObservable<PropertyBase> CreateReferenceProperty(Guid parent, PropertyDescriptor descriptor, object data)
                 {
                     var item = descriptor.GetValue(data);
                     if (descriptor == null)
@@ -96,7 +99,7 @@ namespace Utility.PropertyTrees.Infrastructure
                     });
                 }
 
-                Utility.Interfaces.Generic.IObservable<PropertyBase> CreateValueProperty(Guid parent, PropertyDescriptor descriptor, object data)
+                Interfaces.Generic.IObservable<PropertyBase> CreateValueProperty(Guid parent, PropertyDescriptor descriptor, object data)
                 {
                     if (descriptor == null)
                     {
@@ -120,7 +123,7 @@ namespace Utility.PropertyTrees.Infrastructure
                     });
                 }
 
-                Utility.Interfaces.Generic.IObservable<PropertyBase> CreateCollectionItemReferenceProperty(Guid parent, PropertyDescriptor descriptor, object data)
+                Interfaces.Generic.IObservable<PropertyBase> CreateCollectionItemReferenceProperty(Guid parent, PropertyDescriptor descriptor, object data)
                 {
                     if (descriptor == null)
                     {
@@ -145,7 +148,7 @@ namespace Utility.PropertyTrees.Infrastructure
                     });
                 }
 
-                Utility.Interfaces.Generic.IObservable<PropertyBase> CreateCollectionItemValueProperty(Guid parent, PropertyDescriptor descriptor, object data)
+                Interfaces.Generic.IObservable<PropertyBase> CreateCollectionItemValueProperty(Guid parent, PropertyDescriptor descriptor, object data)
                 {
                     if (descriptor == null)
                     {
@@ -170,7 +173,7 @@ namespace Utility.PropertyTrees.Infrastructure
                     });
                 }
 
-                Utility.Interfaces.Generic.IObservable<PropertyBase> CreateRootProperty(Guid parent, PropertyDescriptor descriptor, object data)
+                Interfaces.Generic.IObservable<PropertyBase> CreateRootProperty(Guid parent, PropertyDescriptor descriptor, object data)
                 {
                     if (descriptor == null)
                     {
@@ -192,7 +195,7 @@ namespace Utility.PropertyTrees.Infrastructure
                     });
                 }
 
-                Utility.Interfaces.Generic.IObservable<PropertyBase> CreateInstance(Guid parent, string name, System.Type propertyType, System.Type type)
+                Interfaces.Generic.IObservable<PropertyBase> CreateInstance(Guid parent, string name, Type propertyType, Type type)
                 {
                     if (type == null)
                     {
@@ -204,7 +207,7 @@ namespace Utility.PropertyTrees.Infrastructure
                         Observe<FindPropertyResponse, FindPropertyRequest>(new(new Key(parent, name, propertyType)))
                         .Subscribe(result =>
                         {
-                            Key key = (result.Key as Key) ?? throw new Exception("dfb 43 4df");
+                            Key key = result.Key as Key ?? throw new Exception("dfb 43 4df");
                             //if (guids.ContainsKey(key))
                             //      observer.OnNext(guids[key]);
                             var args = new object[] { key.Guid };
@@ -227,10 +230,6 @@ namespace Utility.PropertyTrees.Infrastructure
 
 
 
-    public record TypeRequest(Type Type) : Request;
-    public record TypeResponse(Type Type) : Response(Type);
 
-    public record ActivationRequest(Guid? Key, PropertyDescriptor Descriptor, object Data, PropertyType PropertyType) : Request;
-    public record ActivationResponse(ValueNode PropertyNode) : Response(PropertyNode);
 
 }

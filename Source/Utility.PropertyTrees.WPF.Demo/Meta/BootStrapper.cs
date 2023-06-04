@@ -1,5 +1,4 @@
-﻿using Utility.PropertyTrees.Infrastructure;
-using Utility.Infrastructure.Abstractions;
+﻿using Utility.Infrastructure.Abstractions;
 using DryIoc;
 using Utility.Infrastructure;
 using Utility.Models;
@@ -12,6 +11,7 @@ using Utility.PropertyTrees.WPF;
 using Utility.PropertyTrees.Demo.Model;
 using Utility.Nodes;
 using Utility.Observables.NonGeneric;
+using Utility.PropertyTrees.Services;
 
 internal class BootStrapper : BaseObject
 {

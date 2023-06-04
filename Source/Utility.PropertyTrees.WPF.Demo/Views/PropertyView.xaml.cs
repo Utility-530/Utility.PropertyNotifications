@@ -1,12 +1,12 @@
 ﻿using System.Reactive.Linq;
 using DryIoc;
 using Utility.PropertyTrees.Demo.Model;
-using Utility.PropertyTrees.Infrastructure;
 using Utility.Observables.Generic;
 using Utility.Observables.NonGeneric;
 using Utility.Nodes;
 using System.Reactive.Disposables;
 using System.Net;
+using Utility.PropertyTrees.Services;
 
 namespace Utility.PropertyTrees.WPF.Demo.Views
 {

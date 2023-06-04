@@ -6,6 +6,7 @@ using Application = System.Windows.Application;
 using Utility.Infrastructure;
 using System.Threading;
 using DryIoc;
+using Resolver = Utility.PropertyTrees.Services.Resolver;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
@@ -19,7 +20,7 @@ namespace Utility.PropertyTrees.WPF.Demo
 
             var container = new BootStrapper().Build();
 
-            var resolver = new Utility.Infrastructure.Resolver(container);
+            var resolver = new Resolver(container);
             BaseObject.Resolver = resolver;
             resolver.Initialise();
 

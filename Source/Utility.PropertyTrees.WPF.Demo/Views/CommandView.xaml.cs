@@ -1,5 +1,6 @@
 ﻿using DryIoc;
 using Utility.Infrastructure;
+using Utility.PropertyTrees.Services;
 using Utility.PropertyTrees.WPF.Demo.Infrastructure;
 
 namespace Utility.PropertyTrees.WPF.Demo.Views

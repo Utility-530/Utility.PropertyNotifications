@@ -5,7 +5,7 @@ using System.Reactive.Subjects;
 using Utility.Nodes;
 using Utility.Observables.NonGeneric;
 
-namespace Utility.PropertyTrees.Infrastructure
+namespace Utility.PropertyTrees.Services
 {
     public static class PropertyExplorer
     {
@@ -87,8 +87,8 @@ namespace Utility.PropertyTrees.Infrastructure
         public static IObservable<ValueNode> FindNode(ValueNode node, Predicate<ValueNode> predicate, out IDisposable disposable)
         {
             ReplaySubject<ValueNode> list = new(1);
-            System.Reactive.Disposables.CompositeDisposable composite = new();
-            ExploreTree(list, (a, b) => { if (predicate(b)) { a.OnNext(b); composite.Dispose(); a.OnCompleted(); } return (a); }, node, out IDisposable _dis)
+            CompositeDisposable composite = new();
+            ExploreTree(list, (a, b) => { if (predicate(b)) { a.OnNext(b); composite.Dispose(); a.OnCompleted(); } return a; }, node, out IDisposable _dis)
                 .Subscribe(a =>
                 {
                 }, list.OnCompleted).DisposeWith(composite);
@@ -107,7 +107,7 @@ namespace Utility.PropertyTrees.Infrastructure
             return list;
         }
 
-        private static System.Collections.Generic.IEnumerable<T> SelectNewItems<T>(NotifyCollectionChangedEventArgs args)
+        private static IEnumerable<T> SelectNewItems<T>(NotifyCollectionChangedEventArgs args)
         {
             return args.NewItems?.Cast<T>() ?? Array.Empty<T>();
         }
