@@ -3,7 +3,8 @@ using System.Globalization;
 using System.Windows.Data;
 using Utility.Conversions;
 
-namespace SoftFluent.Windows
+//namespace SoftFluent.Windows
+namespace Infrastructure.WPF.Converter
 {
     public class ChangeTypeConverter : IValueConverter
     {
