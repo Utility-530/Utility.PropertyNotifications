@@ -115,7 +115,7 @@ namespace Utility.PropertyTrees.Infrastructure
             DefaultValueAttribute att = Attribute.GetCustomAttribute(propertyInfo, typeof(DefaultValueAttribute), true) as DefaultValueAttribute;
             if (att != null)
             {
-                return ConversionHelper.ChangeType(att.Value, defaultValue);
+                return ConversionHelper.ChangeType(att.Value, defaultValue: defaultValue);
             }
 
             return defaultValue;
