@@ -19,4 +19,11 @@ namespace Utility.WPF.Demo.View
             shortTimeSpanControl1.Value = TimeSpan.Zero;
         }
     }
+
+    public class SpinnerViewModel
+    {
+        private int value = 10;
+
+        public int Value { get => value; set => this.value = value; }
+    }
 }
