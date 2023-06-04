@@ -11,7 +11,5 @@ namespace Utility.Infrastructure
     {
         static readonly Guid playback = Guid.Parse("07e2070f-3aa6-43e6-8924-d705c7f958af");
 
-        public static readonly Key Playback = new(playback, nameof(Playback), typeof(Playback));
-
     }
 }

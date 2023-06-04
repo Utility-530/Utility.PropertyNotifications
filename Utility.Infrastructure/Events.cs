@@ -1,4 +1,5 @@
-﻿using Utility.Interfaces.NonGeneric;
+﻿using System.ComponentModel;
+using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 
 namespace Utility.Infrastructure;
@@ -23,6 +24,9 @@ public record BackEvent() : Event();
 
 public record ObjectCreationRequest(Type Type, Type[] RegistrationTypes, object[] Args) : Request;
 public record ObjectCreationResponse(object Instance) : Response(Instance);
+
+public record TypeRequest(Type Type) : Request;
+public record TypeResponse(Type Type) : Response(Type);
 
 
 

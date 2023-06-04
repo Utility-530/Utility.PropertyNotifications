@@ -16,7 +16,7 @@ namespace Utility.Infrastructure
 
     public interface IBase : IKey<Key>, System.IObserver<object>
     {
-        public object Output { get; }
+        public object Output { get; set; }
     }
 
     public record GuidValue(IGuid Value, Guid Node)
@@ -54,7 +54,7 @@ namespace Utility.Infrastructure
 
     public abstract class BaseObject : BaseViewModel, IBase
     {
-        public static Resolver Resolver { get; set; }
+        public static IResolver Resolver { get; set; }
 
         private static SynchronizationContext? context;
         public static SynchronizationContext Context { get => context ?? throw new Exception("Mising Context"); set => context = value; }
@@ -121,7 +121,7 @@ namespace Utility.Infrastructure
     }
 
 
-    static class ReflectionHelper
+    public static class ReflectionHelper
     {
         public static Dictionary<Guid, SingleParameterMethod> GetSingleParameterMethods(this IBase instance)
         {
