@@ -11,18 +11,22 @@
                     xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:btn="http://schemas.utility.com/buttons"
                     xmlns:st="http://schemas.spicytaco.io/" 
+                    xmlns:uni="UniversalConverter"
                     xmlns:view="http://schemas.utility.com">
 
+    
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Utility.PropertyTrees.WPF.Demo;component/Themes/Styles.xaml"></ResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
-    
-    <DataTemplate DataType="{x:Type sys:Int32}">
+
+    <uni:UniversalConverter x:Key="UniversalConverter"></uni:UniversalConverter>
+
+    <!--<DataTemplate DataType="{x:Type sys:Int32}">
         <ui:NumberBox
         Value="{Binding Mode=OneTime}"
                 Width="200"
                 HorizontalAlignment="Left" />
-    </DataTemplate>
+    </DataTemplate>-->
 
     <DataTemplate DataType="{x:Type sys:Boolean}">
         <CheckBox                   
@@ -52,27 +56,28 @@
     </DataTemplate>
     
     <DataTemplate x:Key="UnknownTemplate">
-        <TextBlock Text="Unknown Type"></TextBlock>
+        <TextBlock Text="Unknown Type" Foreground="Red" Opacity="0.5"></TextBlock>
     </DataTemplate>
 
 
     <DataTemplate x:Key="BooleanTemplate">
         <CheckBox IsChecked="{Binding Value}"></CheckBox>
     </DataTemplate>
-    
+
     <DataTemplate x:Key="IntegerTemplate">
-        <!--<ui:NumberBox    
-                    Value="{Binding Value}"
-                    SpinButtonPlacementMode="Compact"
+        <ui:NumberBox    
+                    Value="{Binding Value, Mode=Twoway, Converter={x:Static local:NumberBoxConverter.Instance}}"
+                    SpinButtonPlacementMode="Inline"
                     SmallChange="1"
-                    LargeChange="10" />-->
-        <TextBox Text="{Binding Value}"></TextBox>
-    </DataTemplate>   
-    
+                    LargeChange="10" />
+        <!--<TextBox Text="{Binding Value}"></TextBox>-->
+    </DataTemplate>
+
     <DataTemplate x:Key="DoubleTemplate">
         <ui:NumberBox  
-                    Value="{Binding Value}"             
+                    Value="{Binding Value}"            
                     SmallChange="0.1"
+                    SpinButtonPlacementMode="Inline"
                     LargeChange="1" />
     </DataTemplate>
 
