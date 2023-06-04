@@ -8,22 +8,21 @@ using Utility.Models;
 
 internal sealed class UdpServerController : BaseObject
 {
-    private UdpServer? server;
+    private UdpServer? server = new ();
 
     public override Key Key => new(Guids.UdpServer, nameof(UdpServerController), typeof(UdpServerController));
 
-    public IObservable<Response> OnNext(ServerRequest serverRequest)
+    public IObservable<ServerResponse> OnNext(ServerRequest serverRequest)
     {
-        if (server?.Host.IPEndPoint.Address.ToString() != serverRequest.IP || server?.Host.Port != serverRequest.Port)
+        if (server.Host?.IPEndPoint.Address.ToString() != serverRequest.IP || server.Host?.Port != serverRequest.Port)
         {
             OnNewRequest(serverRequest);
-            return Return<Response>(new ServerResponse(true));
+            return Return(new ServerResponse(true));
         }
-        return Return<Response>(new ServerResponse(false));
+        return Return(new ServerResponse(false));
 
         void OnNewRequest(ServerRequest serverRequest)
         {
-            server = new UdpServer();
 
             var serverHost = new Host(serverRequest.IP, serverRequest.Port);
             //var serverhost = new Host("127.0.0.1", 8000);
@@ -31,48 +30,62 @@ internal sealed class UdpServerController : BaseObject
             server.OnOpen(() =>
             {
                 // connection opened: server start listen client
-                this.OnNext(new ServerOpenEvent());
+                //this.OnNext(new ServerOpenEvent());
+
+                Context.Post((a) => this.OnNext(new ServerEvent(ServerEventType.Open)), null);
             });
 
             server.OnClose(() =>
             {
                 // connection closed: server stop listen client
-                this.OnNext(new ServerCloseEvent());
-
+                //this.OnNext(new ServerCloseEvent());
+                Context.Post((a) => this.OnNext(new ServerEvent(ServerEventType.Open)), null);
             });
 
             server.OnError((exception) =>
             {
+                Context.Post((a) => this.OnNext(new ServerEvent2(ServerEventType.Error) { Exception = exception}), null);
                 // error on open connection
-                this.OnNext(new ServerErrorEvent(exception));
+                //this.OnNext(new ServerErrorEvent(exception));
             });
 
             server.OnEnter((client) =>
             {
                 // client connected: connection accepted
-                this.OnNext(new ServerEnterEvent(client));
+                //this.OnNext(new ServerEnterEvent(client));
+                this.OnNext(new ServerEvent(ServerEventType.Enter));
             });
 
             server.OnExit((client) =>
             {
                 // client disconnected: connection closed
-                this.OnNext(new ServerExitEvent(client));
+                //this.OnNext(new ServerExitEvent(client));
+                this.OnNext(new ServerEvent2(ServerEventType.Exit) { Client = client});
+
             });
 
             server.OnData((client, data) =>
             {
                 // buffer/data received: {client: client instance} {data: buffer/data received} 
                 //Broadcast(new ServerMessageReceivedEvent(client, new data));
-                throw new Exception("898cdd w");
+                Reader reader = new(data);
+                var output = reader.Read<string>();
+                output = reader.Read<string>();
+                //throw new Exception("898cdd w");
+                //this.OnNext(new ServerEvent());
+                Context.Post((a) => this.OnNext(new ServerEvent(ServerEventType.Data)), null);
             });
 
             server.OnEvent((client, name, data) =>
             {
                 Reader reader = new(data);
                 var output = reader.Read<string>();
+                output = reader.Read<string>();
                 //var type = TypeConverter.Instance.ToType(output);
                 //var serialised = JsonSerializer.Deserialize(output, type);
-                this.OnNext(new ClientMessageEvent(client, new ClientData(name, output)));
+                //this.OnNext(new ClientMessageEvent(client, new ClientData(name, output)));
+                //Context.Post((a) => this.OnNext(new ServerEvent2(ServerEventType.Message) { Client = client, Data = new ClientData(name, output)}), null);
+                Context.Post((a) => this.OnNext(new ServerEvent(ServerEventType.Message)), null);
             });
 
             // open connection
@@ -81,7 +94,7 @@ internal sealed class UdpServerController : BaseObject
         }
     }
 
-    public IObservable<Response> OnNext(ClientMessageRequest request)
+    public IObservable<ClientMessageResponse> OnNext(ClientMessageRequest request)
     {
         if (server is null)
         {
@@ -94,8 +107,8 @@ internal sealed class UdpServerController : BaseObject
         w.Write(false);
         w.Write(request.Name);
         w.Write(request.Message);
-        server.ToEvent("chat", w.GetBytes());
-        return Return(new ClientMessageResponse());
+        server. ToEvent("chat", w.GetBytes());
+        return Return(new ClientMessageResponse(DateTime.Now));
     }
 }
 
@@ -119,7 +132,7 @@ public class ClientData
     public string Header { get; set; }
     public string Message { get; set; }
 }
-public record ServerDataEvent(string Message) : ServerEvent;
+//public record ServerDataEvent(string Message) : ServerEvent;
 
 
 public class TypeConverter
