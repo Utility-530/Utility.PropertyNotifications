@@ -26,7 +26,7 @@
 		<ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
 		<ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
 		<ProjectReference Include="..\Infrastructure.WPF\Infrastructure.WPF.csproj" />
-		<ProjectReference Include="..\Utility.Graph.Shapes\Utility.Graph.Shapes.csproj" />
+		<ProjectReference Include="..\UniversalConverter\UniversalConverter.csproj" />
 		<ProjectReference Include="..\Utility.PropertyTrees.Demo.Model\Utility.PropertyTrees.Demo.Model.csproj" />
 		<ProjectReference Include="..\Utility.PropertyTrees.WPF\Utility.PropertyTrees.WPF.csproj" />
 		<ProjectReference Include="..\Utility.PropertyTrees\Utility.PropertyTrees.csproj" />

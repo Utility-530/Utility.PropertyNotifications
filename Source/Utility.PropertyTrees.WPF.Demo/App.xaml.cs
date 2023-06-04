@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-using SoftFluent.Windows.Diagnostics;
+using UniversalConverter.Diagnostics;
 using System.Windows;
 using Utility.Collections;
 using Application = System.Windows.Application;

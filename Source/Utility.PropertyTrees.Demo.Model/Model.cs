@@ -19,38 +19,38 @@ namespace Utility.PropertyTrees.Demo.Model
         public Leaderboard Leaderboard { get; set; }
     }
 
-    public class Game
-    {
-        public string Name { get; set; }
+    //public class Game
+    //{
+    //    public string Name { get; set; }
 
-        public List<Hole> Holes { get; set; }
-    }
+    //    public List<Hole> Holes { get; set; }
+    //}
 
-    public class Hole
-    {
-        public string Course { get; set; }
-        public string HoleNumber { get; set; }
-        public string HoleName { get; set; }
-        public int Points { get; set; }
-        public bool Supertube { get; set; }
-        public bool Hazard { get; set; }
-        public bool HoleInOne { get; set; }
-    }
+    //public class Hole
+    //{
+    //    public string Course { get; set; }
+    //    public string HoleNumber { get; set; }
+    //    public string HoleName { get; set; }
+    //    public int Points { get; set; }
+    //    public bool Supertube { get; set; }
+    //    public bool Hazard { get; set; }
+    //    public bool HoleInOne { get; set; }
+    //}
 
-    public class Animation
-    {
-        public bool SuperTube { get; set; }
-        public bool HoleInOne { get; set; }
-        public bool Hazard { get; set; }
-        public PointCalculator PointCalculator { get; set; }
-        public bool ShotTaken { get; set; }
-    }
+    //public class Animation
+    //{
+    //    public bool SuperTube { get; set; }
+    //    public bool HoleInOne { get; set; }
+    //    public bool Hazard { get; set; }
+    //    public PointCalculator PointCalculator { get; set; }
+    //    public bool ShotTaken { get; set; }
+    //}
 
-    public class PointCalculator
-    {
-        public int Points { get; set; }
-        public int Sequence { get; set; }
-    }
+    //public class PointCalculator
+    //{
+    //    public int Points { get; set; }
+    //    public int Sequence { get; set; }
+    //}
 
     public enum PrizeWheelState
     {
@@ -64,12 +64,6 @@ namespace Utility.PropertyTrees.Demo.Model
 
         public PrizeWheelStopping Stopping { get; set; }
 
-        //public int SegmentSequence { get; set; }
-        //public string Name { get; set; }
-        //public int ColourScheme { get; set; }
-        //public bool PrintTicket { get; set; }
-        //public int Size { get; set; }
-        //public bool AllowWin { get; set; }
     }
 
     public class PrizeWheelRunning 

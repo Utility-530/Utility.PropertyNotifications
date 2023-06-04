@@ -2,7 +2,6 @@
 using Utility.PropertyTrees.Infrastructure;
 using Utility.Interfaces.NonGeneric;
 using Utility.Infrastructure;
-using Utility.Models;
 using ObservableExtensions = Utility.Observables.NonGeneric.ObservableExtensions;
 using Utility.Observables.NonGeneric;
 using Utility.Observables.Generic;
