@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Collections;
 using Utility.Conversions;
 using Utility.Observables.Generic;
+using System.ComponentModel;
 
 namespace Utility.Nodes
 {
@@ -19,6 +20,9 @@ namespace Utility.Nodes
         protected Collection _leaves = new();
         private bool flag = false;
         protected Filters predicates;
+        IDisposable? disposable = null;
+        private object data;
+
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         protected ValueNode(Guid guid) : base(guid)
@@ -91,9 +95,29 @@ namespace Utility.Nodes
 
         public virtual object Content => Data.GetType().Name;
 
-        public object Data { get; set; }
+        public object Data
+        {
+            get => data; set
+            {
+                data = value;
+                if (data is INotifyPropertyChanged propertyChanged)
+                {
+                    propertyChanged.PropertyChanged += PropertyChanged_PropertyChanged;
+                }
+            }
+        }
 
-        IDisposable? disposable = null;
+        private void PropertyChanged_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            foreach (var child in Children)
+            {
+                if (child is ValueNode { Key: Key { Name: var name } } valueNode)
+                    if (e.PropertyName == name)
+                    {
+                        valueNode.OnPropertyChanged(nameof(ValueNode.Value));
+                    }
+            }
+        }
 
         protected virtual async Task<bool> RefreshAsync()
         {
@@ -130,7 +154,7 @@ namespace Utility.Nodes
     }
 
 
-    public record ChildrenRequest(Guid Guid, object Data,  Filters Filters) : Request();
+    public record ChildrenRequest(Guid Guid, object Data, Filters Filters) : Request();
 
     public record ChildrenResponse(ValueNode PropertyNode, double Completed, double Total) : Response(PropertyNode);
 
