@@ -4,7 +4,6 @@ using Byter;
 using Netly;
 using Netly.Core;
 using Utility.Infrastructure;
-using Utility.Models;
 
 internal sealed class UdpServerController : BaseObject
 {
@@ -112,13 +111,6 @@ internal sealed class UdpServerController : BaseObject
     }
 }
 
-
-
-public class Server
-{
-    public string IP { get; set; }
-    public int Port { get; set; }
-}
 
 public class ClientData
 {

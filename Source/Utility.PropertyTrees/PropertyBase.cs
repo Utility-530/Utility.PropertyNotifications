@@ -2,6 +2,7 @@ using Utility.PropertyTrees.Abstractions;
 using Utility.Helpers;
 using Utility.PropertyTrees.Infrastructure;
 using Utility.Nodes;
+using System.Collections.Specialized;
 
 namespace Utility.PropertyTrees
 {
@@ -14,6 +15,7 @@ namespace Utility.PropertyTrees
 
         //public abstract string Name { get; }
         public bool IsCollection => PropertyType != null && PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(PropertyType);
+        public bool IsObservableCollection => PropertyType != null && typeof(INotifyCollectionChanged).IsAssignableFrom(PropertyType);
         public bool IsFlagsEnum => PropertyType.IsFlagsEnum();
         public bool IsValueType => PropertyType.IsValueType;
         public virtual int CollectionCount => Value is IEnumerable enumerable ? enumerable.Cast<object>().Count() : 0;
@@ -22,7 +24,7 @@ namespace Utility.PropertyTrees
         public virtual bool IsError { get => this.GetProperty<bool>(); set => this.SetProperty(value); }
         public abstract bool IsReadOnly { get; }
         public override object Content => Name;
-        public IViewModel ViewModel { get; set; }
+        //public IViewModel ViewModel { get; set; }
         public virtual Type Type { get; set; }
 
         public virtual PropertyDescriptor Descriptor { get; set; }

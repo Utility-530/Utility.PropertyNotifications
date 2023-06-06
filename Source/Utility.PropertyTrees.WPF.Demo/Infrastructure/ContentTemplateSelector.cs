@@ -8,7 +8,7 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if(item is PropertyBase { IsCollection : true }) {
+            if (item is PropertyBase { IsObservableCollection : true }) {
 
                 this.broadcast(new(item, CollectionTemplate, container));
                 return CollectionTemplate;

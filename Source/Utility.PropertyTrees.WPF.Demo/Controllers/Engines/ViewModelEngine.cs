@@ -35,11 +35,11 @@ namespace Utility.PropertyTrees.WPF.Demo
 
             public ViewModelPredicate()
             {
-                predicates = new(){
-                new Predicate<PropertyDescriptor>(descriptor=>
-            {
-                   return descriptor.PropertyType==typeof(IViewModel);
-            }) };
+            //    predicates = new(){
+            //    new Predicate<PropertyDescriptor>(descriptor=>
+            //{
+            //       return descriptor.PropertyType==typeof(IViewModel);
+            //}) };
             }
 
             public override IEnumerator<Predicate<PropertyDescriptor>> GetEnumerator()

@@ -9,7 +9,7 @@ using Utility.Observables.Generic;
 using System.Reactive.Disposables;
 using System.ComponentModel;
 using static Utility.PropertyTrees.Events;
-using Utility.PropertyTrees.Infrastructure;
+using Utility.PropertyTrees.Abstractions;
 
 namespace Utility.PropertyTrees.Services
 {
@@ -33,6 +33,7 @@ namespace Utility.PropertyTrees.Services
                 .Subscribe(a =>
                 {
                     observer.OnNext(new ActivationResponse(a));
+                    observer.OnCompleted();
                 });
             });
 
@@ -227,9 +228,4 @@ namespace Utility.PropertyTrees.Services
             }
         }
     }
-
-
-
-
-
 }

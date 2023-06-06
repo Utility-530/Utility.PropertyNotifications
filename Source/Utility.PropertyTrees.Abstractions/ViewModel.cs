@@ -1,6 +1,6 @@
 ﻿namespace Utility.PropertyTrees.Abstractions
 {
-    public class ViewModel : IViewModel
+    public class ViewModel //: IViewModel
     {
         public ViewModel()
         {

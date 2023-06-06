@@ -10,7 +10,7 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
     /// </summary>
     public partial class CommandView : UserControl
     {
-        private ModelViewModel viewModel => container.Resolve<ModelViewModel>();
+        //private ModelViewModel viewModel => container.Resolve<ModelViewModel>();
         private IModelController controller => container.Resolve<IModelController>();
 
         public CommandView()
@@ -18,37 +18,58 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
             InitializeComponent();          
         }
 
-        private void show_viewModels_click(object sender, RoutedEventArgs e)
-        {
-            var controlWindow = new Window { Content = new ViewModelView() };
-            ScreenHelper.SetOnLastScreen(controlWindow);
-            controlWindow.Show();
-        }
+        //private void show_viewModels_click(object sender, RoutedEventArgs e)
+        //{
+        //    var controlWindow = new Window { Content = new ViewModelView() };
+        //    ScreenHelper.SetOnLastScreen(controlWindow);
+        //    controlWindow.Show();
+        //}
 
-        private void show_graph_click(object sender, RoutedEventArgs e)
-        {
-            BaseObject.Resolver.Clear();
-            //var graphWindow = new Window { Content = new GraphUserControl(container) };
-            //ScreenHelper.SetOnFirstScreen(graphWindow);
-            //graphWindow.Show();
-            //AutoObject.Resolver.Initialise();
-        }
+        //private void show_graph_click(object sender, RoutedEventArgs e)
+        //{
+        //    //BaseObject.Resolver.Clear();
+        //    //var graphWindow = new Window { Content = new GraphUserControl(container) };
+        //    //ScreenHelper.SetOnFirstScreen(graphWindow);
+        //    //graphWindow.Show();
+        //    //AutoObject.Resolver.Initialise();
+        //}
 
-        private void show_history_click(object sender, RoutedEventArgs e)
-        {
-            var controlWindow = new Window { Content = container.Resolve<HistoryViewModel>() };
-            ScreenHelper.SetOnLastScreen(controlWindow);
-            controlWindow.Show();
-        }
+        //private void show_history_click(object sender, RoutedEventArgs e)
+        //{
+        //    var controlWindow = new Window { Content = container.Resolve<HistoryViewModel>() };
+        //    ScreenHelper.SetOnLastScreen(controlWindow);
+        //    controlWindow.Show();
+        //}
 
-        private void show_templates_click(object sender, RoutedEventArgs e)
-        {
-            new Window { Content = new TemplatesView(container) }.Show();
-        }
+        //private void show_templates_click(object sender, RoutedEventArgs e)
+        //{
+        //    new Window { Content = new TemplatesView(container) }.Show();
+        //}
 
         private void refresh_click(object sender, RoutedEventArgs e)
         {
             controller.OnNext(new RefreshRequest());
+        }
+
+  
+        private void connect_click(object sender, RoutedEventArgs e)
+        {
+            controller.OnNext(new ConnectRequest());
+        }
+
+        private void screensaver_click(object sender, RoutedEventArgs e)
+        {
+            controller.OnNext(new ScreensaverRequest());
+        }
+
+        private void prizewheel_click(object sender, RoutedEventArgs e)
+        {
+            controller.OnNext(new PrizeWheelRequest());
+        }
+
+        private void leaderboard_click(object sender, RoutedEventArgs e)
+        {
+            controller.OnNext(new LeaderboardRequest());
         }
     }
 }

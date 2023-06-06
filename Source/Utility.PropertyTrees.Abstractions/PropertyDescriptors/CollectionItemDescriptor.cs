@@ -4,7 +4,7 @@ namespace Utility.PropertyTrees.Infrastructure
 {
     public class CollectionItemDescriptor : PropertyDescriptor
     {
-        public CollectionItemDescriptor(object item, int index) : base(index.ToString(), null)
+        public CollectionItemDescriptor(object item, int index) : base(item.GetType().Name + $" [{index}]", null)
         {
             Item = item;
             Index = index;

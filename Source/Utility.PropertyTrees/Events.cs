@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Nodes;
-using Utility.PropertyTrees.Infrastructure;
+using Utility.PropertyTrees.Abstractions;
 
 namespace Utility.PropertyTrees
 {
@@ -14,5 +9,8 @@ namespace Utility.PropertyTrees
     {
         public record ActivationRequest(Guid? Key, PropertyDescriptor Descriptor, object Data, PropertyType PropertyType) : Request;
         public record ActivationResponse(ValueNode PropertyNode) : Response(PropertyNode);
+
+        public record GetViewModelResponse(IViewModel ViewModel) : Response(ViewModel);
+        public record GetViewModelRequest(IEquatable Key) : Request();
     }
 }

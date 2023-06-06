@@ -2,7 +2,7 @@
 
 namespace Utility.PropertyTrees.Demo.Model
 {
-    public class Model
+    public class GameModel
     {
         //public Guid Guid => Guid.Parse("1edf3c6d-1424-4771-8672-0b77d7c44342");
 
@@ -89,7 +89,7 @@ namespace Utility.PropertyTrees.Demo.Model
 
     public class Leaderboard
     {
-        public Collection<Leader> Leaders { get; set; } = new() { new Leader { Name = "John", Score = 1000 } };
+        public ObservableCollection<Leader> Leaders { get; set; } = new() { new Leader { Name = "John", Score = 1000 } };
     }
 
     public class Leader

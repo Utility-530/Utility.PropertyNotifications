@@ -46,6 +46,7 @@ namespace Utility.PropertyTrees.Services
                 model.Present.Add(order);
                 model.Future.Remove(order);
                 observer.OnNext(new HistoryResponse(forwardEvent));
+                observer.OnCompleted();
                 return Disposable.Empty;
             });
         }
@@ -69,6 +70,7 @@ namespace Utility.PropertyTrees.Services
                 model.Past.Remove(order);
 
                 observer.OnNext(new HistoryResponse(order));
+                observer.OnCompleted();
                 return Disposable.Empty;
             });
         }

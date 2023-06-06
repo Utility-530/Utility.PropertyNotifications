@@ -12,6 +12,9 @@ using static Utility.Observables.Generic.ObservableExtensions;
 using Utility.Observables.Generic;
 using static Utility.PropertyTrees.Events;
 using Utility.PropertyTrees.Infrastructure;
+using Utility.PropertyTrees.Abstractions;
+using System.Collections.Specialized;
+using Utility.Helpers.Ex;
 
 namespace Utility.PropertyTrees.Services
 {
@@ -22,45 +25,78 @@ namespace Utility.PropertyTrees.Services
         public Interfaces.Generic.IObservable<ChildrenResponse> OnNext(ChildrenRequest value)
         {
             var descriptors = PropertyDescriptors(value.Data).ToArray();
-            var collectionDescriptors = CollectionItemDescriptors(value.Data).ToArray();
-            var count = descriptors.Length + collectionDescriptors.Length;
+
+
+            var count = descriptors.Length + Count(value.Data); //+ collectionDescriptors.Length;
             int i = 0;
 
             return Create<ChildrenResponse>(observer =>
             {
                 CompositeDisposable composite = new();
 
-                if (count == 0)
-                    observer.OnCompleted();
-
-                foreach (var descriptor in collectionDescriptors)
+                Create<ChildrenResponse>(obs =>
                 {
-                    FromCollectionDescriptor(descriptor)
-                    .Subscribe(p =>
+                    CompositeDisposable comp = new();
+                    if (descriptors.Length == 0)
+                        obs.OnCompleted();           
+                    foreach (var descriptor in descriptors)
                     {
-                        i++;
-                        observer.OnNext(new ChildrenResponse(p, i, count));
-                        if (count == i)
+                        FromPropertyDescriptor(descriptor)
+                        .Subscribe(p =>
+                        {
+                            i++;
+                            obs.OnNext(new ChildrenResponse(p, i, count));
+                            observer.OnProgress(i, count);
+                            if (descriptors.Length == i)
+                                obs.OnCompleted();
+                        }, e =>
+                        {
+                            obs.OnError(e);
+                        })
+                        .DisposeWith(comp);
+                    }
+                    return comp;
+                })
+                .Subscribe(a => observer.OnNext(a),
+                    e => observer.OnError(e),
+                    () =>
+                    {
+                        var collectionDescriptors =
+                        CollectionItemDescriptors(value.Data)
+                        .Subscribe(descriptor =>
+                        {
+                            FromCollectionDescriptor(descriptor)
+                            .Subscribe(p =>
+                            {
+                                observer.OnNext(new ChildrenResponse(p, i, count));
+                                observer.OnProgress(i, count);
+                                i++;
+                            }, e =>
+                            {
+                                observer.OnError(e);
+                            })
+                            .DisposeWith(composite);
+                        },
+                        () =>
+                        {
                             observer.OnCompleted();
-                    })
-                    .DisposeWith(composite);
-                }
+                        });
+                    },
 
-                foreach (var descriptor in descriptors)
-                {
-                    FromPropertyDescriptor(descriptor)
-                    .Subscribe(p =>
-                    {
-                        i++;
-                        observer.OnNext(new ChildrenResponse(p, i, count));
-                        if (count == i)
-                            observer.OnCompleted();
-                    })
-                    .DisposeWith(composite);
-                }
+                (a, b) => observer.OnProgress(a, b));
 
                 return composite;
             });
+
+
+            int Count(object data)
+            {
+                if (data is IEnumerable enumerable)
+                {
+                    return enumerable.Count();
+                }
+                return 0;
+            }
 
             Interfaces.Generic.IObservable<ValueNode> FromCollectionDescriptor(CollectionItemDescriptor descriptor)
             {
@@ -102,8 +138,7 @@ namespace Utility.PropertyTrees.Services
                         else
                         {
                             return Observe<ActivationResponse, ActivationRequest>(new(guid, descriptor, data, PropertyType.Reference))
-                                     .Subscribe(a => { observer.OnNext(a.PropertyNode); observer.OnCompleted(); });
-
+                                    .Subscribe(a => { observer.OnNext(a.PropertyNode); observer.OnCompleted(); });
                         }
                     });
                 }
@@ -120,19 +155,38 @@ namespace Utility.PropertyTrees.Services
                     .Where(a => value.Filters?.Any(f => f.Invoke(a) == false) == false)
                     .OrderBy(d => d.Name);
 
-            IEnumerable<CollectionItemDescriptor> CollectionItemDescriptors(object data)
+            Utility.Interfaces.Generic.IObservable<CollectionItemDescriptor> CollectionItemDescriptors(object data)
             {
-                int i = 0;
-                if (data is IEnumerable enumerable && data is not string s)
-                    foreach (var item in enumerable)
+                return Create<CollectionItemDescriptor>(observer =>
+                {
+                    int i = 0;
+                    if (data is IEnumerable enumerable && data is not string s)
+                        foreach (var item in enumerable)
+                        {
+                            Next(value, observer, item, ref i);
+                        }
+                    if (data is INotifyCollectionChanged collectionChanged)
                     {
-                        var descriptor = new CollectionItemDescriptor(item, i);
-                        if (value.Filters?.Any(f => f.Invoke(descriptor) == false) == false)
-                            yield return descriptor;
-                        i++;
+                        return collectionChanged.SelectNewItems<object>()
+                        .Subscribe(item =>
+                        {
+                            Next(value, observer, item, ref i);
+                        });
                     }
-                else
-                    yield break;
+                    else
+                    {
+                        observer.OnCompleted();
+                        return Disposer.Empty;
+                    }
+
+                });
+                static void Next(ChildrenRequest value, Interfaces.Generic.IObserver<CollectionItemDescriptor> observer, object item, ref int i)
+                {
+                    var descriptor = new CollectionItemDescriptor(item, i);
+                    if (value.Filters?.Any(f => f.Invoke(descriptor) == false) == false)
+                        observer.OnNext(descriptor);
+                    i++;
+                }
             }
         }
     }

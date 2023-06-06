@@ -2,7 +2,7 @@
 using Utility.Models;
 
 public record ViewModelEvent(string Name, TreeView TreeView);
-public record RefreshRequest();
+
 
 
 public record ServerRequest(string IP, int Port) : Request;

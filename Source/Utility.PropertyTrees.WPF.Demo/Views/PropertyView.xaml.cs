@@ -22,17 +22,17 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
             public const string Server = nameof(MainView) + "." + nameof(Server);
         }
 
-        private ValueNode masterNode => container.Resolve<ModelProperty>();
-        private ValueNode serverNode => container.Resolve<ServerProperty>();
+        private ValueNode masterNode => container.Resolve<RootModelProperty>();
+     
         private IModelController controller => container.Resolve<IModelController>();
-        ModelViewModel modelViewModel => container.Resolve<ModelViewModel>();
+        //ModelViewModel modelViewModel => container.Resolve<ModelViewModel>();
 
         public PropertyView(IContainer  container)
         {
  
             InitializeComponent();
           
-            this.DataContext = modelViewModel;
+            //this.DataContext = modelViewModel;
           
             controller.Subscribe(a =>
             {
@@ -57,50 +57,50 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
             CompositeDisposable disposables = new();
             {
                 ServerGrid.Items.Clear();
-                controller.TreeView(serverNode, ServerGrid).Subscribe(treeView =>
+                controller.TreeView(masterNode, ServerGrid).Subscribe(treeView =>
                 {
 
-                    modelViewModel.IsConnected = true;
+                    //modelViewModel.IsConnected = true;
                     System.Windows.Input.CommandManager.InvalidateRequerySuggested();
                 });
             }
 
-            {
-                ScreensaverGrid.Items.Clear();
-                PropertyExplorer.FindNode(masterNode, a => a is PropertyBase { Name: nameof(Model.ScreenSaver) }, out var dis)
-                      .Subscribe(node =>
-                      {
+            //{
+            //    ScreensaverGrid.Items.Clear();
+            //    PropertyExplorer.FindNode(masterNode, a => a is PropertyBase { Name: nameof(GameModel.ScreenSaver) }, out var dis)
+            //          .Subscribe(node =>
+            //          {
 
-                          controller.TreeView(node, ScreensaverGrid).Subscribe(treeView =>
-                          {
-                          });
-                      });
-            }
+            //              controller.TreeView(node, ScreensaverGrid).Subscribe(treeView =>
+            //              {
+            //              });
+            //          });
+            //}
 
-            {
-                LeaderboardGrid.Items.Clear();
-                PropertyExplorer.FindNode(masterNode, a => a is PropertyBase { Name: nameof(Model.Leaderboard) }, out var dis)
-                     .Subscribe(node =>
-                     {
-                         controller.TreeView(node, LeaderboardGrid)
-                         .Subscribe(treeView =>
-                         {
-                         }).DisposeWith(disposables);
-                     }).DisposeWith(disposables);
-                disposables.Add(dis);
-            }
+            //{
+            //    LeaderboardGrid.Items.Clear();
+            //    PropertyExplorer.FindNode(masterNode, a => a is PropertyBase { Name: nameof(GameModel.Leaderboard) }, out var dis)
+            //         .Subscribe(node =>
+            //         {
+            //             controller.TreeView(node, LeaderboardGrid)
+            //             .Subscribe(treeView =>
+            //             {
+            //             }).DisposeWith(disposables);
+            //         }).DisposeWith(disposables);
+            //    disposables.Add(dis);
+            //}
 
-            {
-                PrizeWheelGrid.Items.Clear();
-                PropertyExplorer.FindNode(masterNode, a => a is PropertyBase { Name: nameof(Model.PrizeWheel) }, out var dis)
-                    .Subscribe(node =>
-                    {
+            //{
+            //    PrizeWheelGrid.Items.Clear();
+            //    PropertyExplorer.FindNode(masterNode, a => a is PropertyBase { Name: nameof(GameModel.PrizeWheel) }, out var dis)
+            //        .Subscribe(node =>
+            //        {
 
-                        controller.TreeView(node, PrizeWheelGrid).Subscribe(treeView =>
-                        {
-                        });
-                    });
-            }
+            //            controller.TreeView(node, PrizeWheelGrid).Subscribe(treeView =>
+            //            {
+            //            });
+            //        });
+            //}
             disposable = disposables;
 
         }

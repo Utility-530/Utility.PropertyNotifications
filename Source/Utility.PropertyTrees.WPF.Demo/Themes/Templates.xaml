@@ -52,7 +52,9 @@
     <!--
     </Style>-->
     <DataTemplate x:Key="StringTemplate">
-        <TextBox Text="{Binding Value}"></TextBox>
+        <Viewbox>
+            <TextBox Text="{Binding Value}" MinWidth="100" ></TextBox>
+        </Viewbox>       
     </DataTemplate>
     
     <DataTemplate x:Key="UnknownTemplate">
@@ -106,9 +108,11 @@
    CornerRadius="{Binding Path=ActualHeight, ElementName=circularBorder}" 
    Width="{Binding Path=ActualHeight, ElementName=circularBorder}"
         Padding="1,2,2,2"
+                  Opacity="0.5"
         BorderBrush="CornflowerBlue"
         BorderThickness="1">
             <TextBlock HorizontalAlignment="Center"
+                       
                        Foreground="CornflowerBlue"
                         Text="{Binding Count, Mode=OneWay}"
                         FontSize="9">

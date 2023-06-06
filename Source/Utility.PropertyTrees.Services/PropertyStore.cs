@@ -3,7 +3,7 @@ using Utility.Models;
 using System.Reactive.Threading.Tasks;
 using System.Reactive.Linq;
 using Utility.Interfaces.NonGeneric;
-using static Utility.Observables.NonGeneric.ObservableExtensions;
+using static Utility.Observables.Generic.ObservableExtensions;
 using Utility.Observables.NonGeneric;
 using System.Reactive.Disposables;
 using Utility.Infrastructure;
@@ -23,13 +23,14 @@ namespace Utility.PropertyTrees.Services
 
         public override object? Model => repository;
 
-        public IObservable OnNext(FindPropertyRequest request)
+        public Utility.Interfaces.Generic.IObservable<FindPropertyResponse> OnNext(FindPropertyRequest request)
         {
             if (request.Key.Name == "Size")
-                return Create(observer => Disposer.Empty);
+                return Create<FindPropertyResponse>(observer => Disposer.Empty);
 
-            return Create(observer =>
+            return Create<FindPropertyResponse>(observer =>
             {
+                observer.OnProgress(1, 2);
                 return repository
                 .FindKeyByParent(request.Key)
                 .ToObservable()
@@ -37,15 +38,17 @@ namespace Utility.PropertyTrees.Services
                 .ObserveOn(Context)
                 .Subscribe(a =>
                 {
+               
                     observer.OnNext(a);
+                    observer.OnProgress(2, 2);
                     observer.OnCompleted();
                 });
             });
         }
 
-        public IObservable OnNext(SetPropertyRequest order)
+        public Utility.Interfaces.Generic.IObservable<SetPropertyResponse> OnNext(SetPropertyRequest order)
         {
-            return Create(observer =>
+            return Create<SetPropertyResponse>(observer =>
             {
                 CompositeDisposable composite = new();
 
@@ -63,8 +66,8 @@ namespace Utility.PropertyTrees.Services
                     .ToObservable()
                     .Subscribe(a =>
                     {
-                        observer.OnProgress(3, 3);
                         observer.OnNext(new SetPropertyResponse(order.Value));
+                        observer.OnProgress(3, 3);
                         observer.OnCompleted();
                     }).DisposeWith(composite);
                 }).DisposeWith(composite);
@@ -72,14 +75,11 @@ namespace Utility.PropertyTrees.Services
             });
         }
 
-        public IObservable OnNext(GetPropertyRequest order)
+        public Utility.Interfaces.Generic.IObservable<GetPropertyResponse> OnNext(GetPropertyRequest order)
         {
-            return Create(observer =>
+            return Create<GetPropertyResponse>(observer =>
             {
                 CompositeDisposable composite = new();
-
-                observer.OnProgress(0, 2);
-                //observer.OnNext(new GetPropertyResponse(order.Key));
                 observer.OnProgress(1, 2);
                 return repository
                     .FindValue(order.Key)
@@ -90,13 +90,13 @@ namespace Utility.PropertyTrees.Services
                         if (find != null)
                         {
                             observer.OnNext(new GetPropertyResponse(find));
-                            observer.OnProgress(2, 2);
+                        
                         }
                         else
                         {
-                            //observer.OnNext(new GetPropertyResponse(find));
-                            observer.OnProgress(2, 2);
+                            //observer.OnNext(new GetPropertyResponse(find));                         
                         }
+                        observer.OnProgress(2, 2);
                         observer.OnCompleted();
                     }).DisposeWith(composite);
             });

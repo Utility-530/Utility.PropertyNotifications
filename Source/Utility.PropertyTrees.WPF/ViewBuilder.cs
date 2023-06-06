@@ -15,11 +15,21 @@ using static Utility.Observables.Generic.ObservableExtensions;
 using Utility.Observables.Generic;
 using System.Reactive.Disposables;
 using Utility.PropertyTrees.Services;
+using static Utility.PropertyTrees.Events;
+using Grid = System.Windows.Controls.Grid;
+using Dock = System.Windows.Controls.Dock;
+using Utility.Helpers;
+using Utility.Enums;
+using Utility.WPF.Helpers;
+using Swordfish.NET.Collections.Auxiliary;
 
 namespace Utility.PropertyTrees.WPF
 {
     public class ViewBuilder : BaseObject
     {
+        readonly Dictionary<PanelKey, ItemsPanelTemplate> panelsDictionary = new() { { new(0, System.Windows.Controls.Orientation.Vertical, Arrangement.Stacked), defaultTemplate } };
+        static readonly ItemsPanelTemplate defaultTemplate = LayOutHelper.ItemsPanelTemplate(0, System.Windows.Controls.Orientation.Vertical, Arrangement.Stacked);
+
         public override Key Key => new(Guids.ViewBuilder, nameof(ViewBuilder), typeof(ViewBuilder));
 
         public Utility.Interfaces.Generic.IObservable<TreeViewResponse> OnNext(TreeViewRequest request)
@@ -43,10 +53,10 @@ namespace Utility.PropertyTrees.WPF
                 }).DisposeWith(disposables);
                 disposables.Add(disposable);
                 return disposables;
-            }); 
+            });
         }
 
-        public IObservable<(int,int)> BuildTree(TreeView treeView, ValueNode property, out IDisposable disposable)
+        public IObservable<(int, int)> BuildTree(TreeView treeView, ValueNode property, out IDisposable disposable)
         {
             return PropertyExplorer.ExploreTree(treeView.Items, (items, prop) =>
             {
@@ -59,7 +69,7 @@ namespace Utility.PropertyTrees.WPF
             {
                 //try
                 //{
-                ItemsPanelTemplate? panelTemplate = default;
+                ItemsPanelTemplate? panelTemplate = DefaultItemsPanelTemplate();
                 DataTemplate? headerTemplate = default;
 
                 //ViewModel viewModel = new() { CollectionPanel = new() { Grid = new() }, Panel = new() { Grid = new() { } }, Template = new() { } };
@@ -67,15 +77,12 @@ namespace Utility.PropertyTrees.WPF
 
                 var treeViewItem = new TreeViewItem() { Header = node/*, HeaderTemplate = headerTemplate*/, /*ItemsPanel = panelTemplate, */IsExpanded = true };
 
-
-
-
                 //_ = Observe<ActivationResponse, ActivationRequest>(new(node.Guid, new RootDescriptor(node), node, PropertyType.Root))
                 //    .Select(a => a.PropertyNode)
                 //.Subscribe(propertyNode =>
                 //{
                 //    propertyNode.Predicates = new ViewModelPredicate();
-                //    PropertyExplorer.ExploreTree(new List<object>(), (a, b) => a, propertyNode)
+                //    PropertyExplorer.ExploreTree(new List<object>(), (a, b) => a, propertyNode, out var disposable)
                 //    .Subscribe(a => { },
                 //    () =>
                 //    {
@@ -93,7 +100,29 @@ namespace Utility.PropertyTrees.WPF
                 //    });
                 //});
 
+                _ = Observe<GetViewModelResponse, GetViewModelRequest>(new(node.Key))
+                    .Subscribe(x =>
+                    {
+                        var viewModel = x.ViewModel;
+                        try
+                        {
+                            panelTemplate = GetPanelsTemplate(panelTemplate, viewModel);
+                            treeViewItem.ItemsPanel = panelTemplate;
+                            treeViewItem.IsExpanded = viewModel.IsExpanded;
+                            Grid.SetRow(treeViewItem, viewModel.GridRow);
+                            Grid.SetColumn(treeViewItem, viewModel.GridColumn);
+                            DockPanel.SetDock(treeViewItem, (Dock)viewModel.Dock);
+                            if (viewModel.DataTemplateKey != null)
+                            {
+                                var headerTemplate = (DataTemplate)Application.Current.TryFindResource(viewModel.DataTemplateKey);
+                                treeViewItem.HeaderTemplate = headerTemplate;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
 
+                        }
+                    });
 
                 return treeViewItem;
                 //}
@@ -104,6 +133,30 @@ namespace Utility.PropertyTrees.WPF
             }
         }
 
+        private ItemsPanelTemplate GetPanelsTemplate(ItemsPanelTemplate panelTemplate, IViewModel viewModel)
+        {
+            if (viewModel.Arrangement != null)
+                if (System.Enum.TryParse(typeof(Arrangement), viewModel.Arrangement, out var result))
+                {
+                    panelTemplate = panelsDictionary.GetValueOrCreate(new PanelKey(0, System.Windows.Controls.Orientation.Vertical, (Arrangement)result), () => LayOutHelper.ItemsPanelTemplate(0, System.Windows.Controls.Orientation.Vertical, (Arrangement)result));
+                }
+                else if (Application.Current.TryFindResource(viewModel.Arrangement.ToString()) is ItemsPanelTemplate template)
+                {
+                    panelTemplate = template;
+                }
+                else
+                {
+                    panelTemplate = defaultTemplate;
+                }
+            else
+            {
+                panelTemplate = defaultTemplate;
+            }
+
+            return panelTemplate;
+        }
+
+        record PanelKey(int Index, System.Windows.Controls.Orientation Orientation, Arrangement Arrangement);
 
         static ItemsPanelTemplate DefaultItemsPanelTemplate()
         {

@@ -8,8 +8,6 @@ namespace Utility.PropertyTrees.WPF.Demo
         public MainView(IContainer container)
         {
             InitializeComponent();
-            AutoGrid.Children.Add(new PropertyView(container));
-            AutoGrid.Children.Add(new ServerView());
         }
     }
 }

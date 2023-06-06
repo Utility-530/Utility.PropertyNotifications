@@ -1,6 +1,6 @@
 ﻿using DryIoc;
-using DynamicData;
 using System.Collections.Concurrent;
+using System.Collections.ObjectModel;
 using Utility.Infrastructure;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
@@ -13,13 +13,15 @@ namespace Utility.PropertyTrees.Services
         private readonly IContainer container;
         private IBase[] nodes;
 
-
+        Subject<Key> completedSubject = new();
+        BlockingCollection<IObserverIOType> observers = new();
+        BlockingCollection<IObserverIOType> completed = new();
         public ILogger Logger => container.Resolve<ILogger>();
 
         //private readonly History history;
         public override Key Key => new(Guids.Resolver, nameof(Services.Resolver), typeof(Resolver));
 
-        public ConcurrentDictionary<Guid, IObserverIOType> dictionary { get; } = new();
+        public IList<IObserverIOType> dictionary => this.container.Resolve<IObserverIOType[]>();
 
         public Resolver(IContainer container)
         {
@@ -32,11 +34,22 @@ namespace Utility.PropertyTrees.Services
 
             foreach (var node in nodes)
             {
-                foreach (var keyValuePairs in node.GetSingleParameterMethods())
+                foreach (var spMethod in node.GetSingleParameterMethods())
                 {
-                    dictionary[SingleParameterMethod.Combine(node.Key.Guid, keyValuePairs.Key)] = keyValuePairs.Value;
+                    //dictionary[SingleParameterMethod.Combine(node.Key.Guid, keyValuePairs.Key)] = keyValuePairs.Value;
+                    //container.RegisterInstance<IObserverIOType>(spMethod);
+                    observers.Add(spMethod);
+                    Logger.Add(spMethod).Wait();
                 }
             }
+
+            completedSubject
+                .Subscribe(obs =>
+                {
+                    var nodes = this.container.Resolve<IBase[]>();
+                    var single = observers.Single(a => a.Key == obs);
+                    completed.Add(single);
+                });
         }
 
         public void Initialise()
@@ -48,11 +61,11 @@ namespace Utility.PropertyTrees.Services
                     Logger.Send(@base);
                 }
 
-                OnNext(new InitialisedEvent(initialized));
+                //  OnNext(new InitialisedEvent(initialized));
             });
-            //broadcast(outputs);
-            OnNext(new InitialisedEvent(this));
-            //Broadcast(new InitialisedEvent(history));
+
+            //  OnNext(new InitialisedEvent(this));
+
         }
 
         public async void OnBase(IBase @base)
@@ -64,55 +77,29 @@ namespace Utility.PropertyTrees.Services
                     throw new Exception("vdf2111 ww");
                 }
 
-                guidValue = new GuidValue(guid, @base.Key.Guid);
+                guidValue = new GuidValue(guid, new GuidValue(@base.Key));
                 source = guidValue.Source;
                 target = guidValue.Target;
             }
 
             SynchronizationContext.SetSynchronizationContext(Context);
 
-            if (dictionary.TryGetValue(SingleParameterMethod.Combine(source, target), out var observer))
-            {
-                await Logger.Send(guidValue, observer);
+            //var observers = container.Resolve<IObserverIOType[]>();
 
-                if (guidValue.Value is GuidBase { } guidBase)
+            bool success = false;
+            foreach (var item in observers)
+            {
+                if (item.Unlock(guidValue))
                 {
-                    if (guidBase.IsComplete)
-                    {
-                        observer.OnCompleted();
-                        if (dictionary.TryRemove(SingleParameterMethod.Combine(source, target), out var _) == false)
-                        {
-
-                        }
-                        return;
-                    }
-                    else if (guidBase.Exception != null)
-                    {
-                        observer.OnError(guidBase.Exception);
-                        return;
-                    }
-                    else if (guidBase.Progress is Progress { Amount: var amount, Total: var total })
-                    {
-                        observer.OnProgress(amount, total);
-                        return;
-                    }
+                    success = true;
+                    item.OnNext(guidValue);
                 }
-                observer.OnNext(guidValue);
-                return;
             }
-            else
-            {
-                foreach (var node in nodes)
-                    if (dictionary.TryGetValue(SingleParameterMethod.Combine(node.Key.Guid, target), out var _observer))
-                    {
-                        await Logger.Send(guidValue, _observer);
-                        SynchronizationContext.SetSynchronizationContext(Context);
 
-                        _observer.OnNext(guidValue);
-                        return;
-                    }
-            }
-            if (@base.Output is GuidValue { Value: GuidBase { Exception: var exception } })
+            if (success == true)
+                return;
+
+            if (@base.Output is GuidValue { Value: GuidBase { Exception: Exception exception } })
             {
                 return;
             }
@@ -120,7 +107,7 @@ namespace Utility.PropertyTrees.Services
             {
                 return;
             }
-            if (@base.Output is GuidValue { Value: GuidBase { Progress: var progress } })
+            if (@base.Output is GuidValue { Value: GuidBase { Progress: Progress progress } })
             {
                 return;
             }
@@ -132,20 +119,22 @@ namespace Utility.PropertyTrees.Services
 
         }
 
-        public Interfaces.Generic.IObservable<TOutput> Register<TOutput, TInput>(IBase baseObject, TInput tInput) where TInput : IGuid
+        public Interfaces.Generic.IObservable<TOutput> Register<TInput, TOutput>(IBase baseObject, TInput tInput) where TInput : IGuid
         {
-            var guid = new GuidBase();
-            var source = new GuidValue(tInput, baseObject.Key.Guid, new(guid, baseObject.Key.Guid));
+            //var guid = new GuidBase();
+
             //var guidKey = new GuidKey(guid.Guid);
 
             var replay = new Subject<TOutput>();
-            var subject = new CustomSubject<TInput, TOutput>(a =>
+            var key = new Key(Guid.NewGuid(), nameof(CustomSubject<TInput, TOutput>), typeof(CustomSubject<TInput, TOutput>));
+
+            var subject = new CustomSubject<TInput, TOutput>(key, baseObject.Key, a =>
             {
                 if (a.Value is GuidBase guidBase)
                 {
                     if (guidBase.IsComplete)
                     {
-                        dictionary.Remove(SingleParameterMethod.Combine(guid.Guid, typeof(TOutput).GUID), out var value);
+                        completedSubject.OnNext(key);
                         replay.OnCompleted();
                     }
                     else if (guidBase.Exception is Exception ex)
@@ -162,49 +151,99 @@ namespace Utility.PropertyTrees.Services
                 return default;
             });
 
-            if (dictionary.ContainsKey(guid.Guid))
-            {
-                throw new InvalidOperationException("ds es");
-            }
-            dictionary[SingleParameterMethod.Combine(guid.Guid, typeof(TOutput).GUID)] = subject;
+            var source = new GuidValue(tInput, new GuidValue(key)/*, new(guid, subject.Key)*/);
+
+            //container.RegisterInstance<IObserverIOType>(subject);
+            observers.Add(subject);
+
+            //if (dictionary.ContainsKey(guid.Guid))
+            //{
+            //    throw new InvalidOperationException("ds es");
+            //}
+            //dictionary[SingleParameterMethod.Combine(guid.Guid, typeof(TOutput).GUID)] = subject;
+            Logger.Add(subject).Wait();
 
             baseObject.Output = source;
             OnBase(baseObject);
             return replay;
         }
 
-        public void Clear()
-        {
-            foreach (var keyValuePair in dictionary)
-            {
+        //public void Clear()
+        //{
+        //    foreach (var keyValuePair in dictionary)
+        //    {
 
-                if (keyValuePair.Value is SingleParameterMethod singleParameterMethod)
-                {
-                    foreach (var disposable in singleParameterMethod.disposables)
-                        disposable.Dispose();
-                }
-                else
-                {
-                    dictionary.Remove(keyValuePair.Key, out var observer);
-                    if (observer is Subject subject)
-                    {
-                        subject.Outputs.Clear();
-                        subject.Observers.Clear();
-                    }
-                }
-            }
-        }
+        //        if (keyValuePair.Value is SingleParameterMethod singleParameterMethod)
+        //        {
+        //            foreach (var disposable in singleParameterMethod.disposables)
+        //                disposable.Dispose();
+        //        }
+        //        else
+        //        {
+        //            dictionary.Remove(keyValuePair.Key, out var observer);              
+        //            if (observer is Subject subject)
+        //            {
+        //                subject.Outputs.Clear();
+        //                subject.Observers.Clear();
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private void Add(IObserverIOType add)
+        //{
+        //    foreach (var observer in Observers)
+        //    {
+        //        observer.OnNext(new ChangeSet<IObserverIOType>(new Change<IObserverIOType>(add, ChangeType.Add)));
+        //    }
+        //}
+
+        //private void Remove(IObserverIOType remove)
+        //{
+        //    foreach (var observer in Observers)
+        //    {
+        //        observer.OnNext(new ChangeSet<IObserverIOType>(new Change<IObserverIOType>(remove, ChangeType.Remove)));
+        //    }
+        //}
+
+        //public List<IObserver<ChangeSet<IObserverIOType>>> Observers { get; } = new();
+
+        //public IDisposable Subscribe(IObserver<ChangeSet<IObserverIOType>> observer)
+        //{
+        //    return new Disposer<ChangeSet<IObserverIOType>>(Observers, observer);
+        //}
     }
 
     public class CustomSubject<TInput, TOutput> : Subject<GuidValue, TOutput>, IObserverIOType
     {
-        public CustomSubject(Func<GuidValue, TOutput> onNext) : base(onNext)
+        public CustomSubject(Key key, Key parentKey, Func<GuidValue, TOutput> onNext) : base(onNext)
         {
+            Key = key;
+            this.ParentKey = parentKey;
         }
+
+        public Key ParentKey { get; set; }
+
+        public Key Key { get; }
 
         public override Type InType => typeof(TInput);
 
         public override Type OutType => typeof(TOutput);
+
+
+        ObservableCollection<object> IObserverIOType.Observers => throw new NotImplementedException();
+
+        ObservableCollection<object> IObserverIOType.Outputs => throw new NotImplementedException();
+
+        public bool Unlock(GuidValue guidValue)
+        {
+            return guidValue.Target.Equals(typeof(TOutput).GUID) && guidValue.Source.Equals(Key.Guid);
+        }
+
+        public override string ToString()
+        {
+            return typeof(TInput).Name + " ~ " + typeof(TOutput).Name;
+        }
 
     }
     //public record Order(Guid Key, IBase Base, object Value, IConnection Connection);
