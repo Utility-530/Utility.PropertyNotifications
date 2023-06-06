@@ -49,7 +49,7 @@ namespace Utility.Models
 
         public bool Equals(Key? other)
         {
-            return Name == other?.Name && Guid == other?.Guid;
+            return Name.Equals(other?.Name) && Guid.Equals(other?.Guid);// && Type.Equals(other?.Type);
         }
 
         public override bool Equals(object? obj)
