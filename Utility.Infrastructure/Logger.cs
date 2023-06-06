@@ -17,6 +17,9 @@ using Utility.Models;
 using Utility.Interfaces.Generic;
 using Utility.Models.UDP;
 using DryIoc;
+using Utility.Collections;
+using System.Windows.Input;
+using Utility.Commands;
 
 namespace Utility.Infrastructure
 {
@@ -31,27 +34,80 @@ namespace Utility.Infrastructure
         Task<Unit> Send(GuidValue guidValue, IObserverIOType observer);
         void Send(IBase[] nodes);
         void Send(IBase node);
+        Task Add(IObserverIOType node);
+        Task Remove(IObserverIOType node);
     }
 
     public class DummyLogger : ILogger
     {
+        private readonly IContainer container;
+        Queue<Subject<Unit>> _subjects = new();
+
+        public DummyLogger(IContainer container)
+        {
+            Command = new ObservableCommand(b =>
+            {
+                if (_subjects.Any())
+                {
+                    var sub = _subjects.Dequeue();
+                    sub.OnNext(Unit.Default);
+                    sub.OnCompleted();
+                }
+            });
+            this.container = container;
+        }
+
+        public ICommand Command { get; }
+
+        public Collection Collection { get; } = new();
+
+        public Task Add(IObserverIOType node)
+        {
+            //node.Observers.CollectionChanged += Observers_CollectionChanged;
+            Collection.Add(node);
+            return Task.CompletedTask;
+        }
+
+        private void Observers_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            {
+
+            }
+            //if (e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            //{
+
+            //}
+        }
+
+        public Task Remove(IObserverIOType node)
+        {
+            Collection.Remove(node);
+            return Task.CompletedTask;
+        }
+
         public async Task<Unit> Send(GuidValue guidValue, IObserverIOType observer)
         {
-            return await Task.FromResult(Unit.Default);
+            var subject = new Subject<Unit>();
+            _subjects.Enqueue(subject);
+            return await subject.ToTask(container.Resolve<SynchronizationContext>());
         }
 
         public void Send(IBase[] nodes)
         {
-         
+            foreach (var node in nodes)
+                Collection.Add(node);
         }
 
         public void Send(IBase node)
         {
-      
+            Collection.Add(node);
         }
     }
 
-    public class Logger:ILogger
+
+
+    public class Logger : ILogger
     {
         private readonly IContainer container;
         UdpClient client = new();
@@ -134,14 +190,14 @@ namespace Utility.Infrastructure
         public Task<Unit> Send(GuidValue guidValue, IObserverIOType observer)
         {
             //var str = JsonSerializer.Serialize(guidValue);
-            var guidDto = new GuidDto(guidValue.Node);
+            var guidDto = new GuidDto(guidValue.Source);
             var serialized = JsonSerializer.Serialize(guidDto);
             var dto = new TypeDto(observer.InType.Name, observer.OutType.Name);
             var serialized2 = JsonSerializer.Serialize(dto);
 
             //var message = new Message(Guid.NewGuid(), x);
             var guid = Guid.NewGuid();
-            var subject = new ReplaySubject<Unit>(1); 
+            var subject = new ReplaySubject<Unit>(1);
             observables[guid] = subject;
 
             Writer writer = new();
@@ -176,6 +232,15 @@ namespace Utility.Infrastructure
             client.ToEvent(nameof(KeyDto), bytes);
         }
 
+        public Task Add(IObserverIOType node)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Remove(IObserverIOType node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

@@ -27,6 +27,3 @@ public record ObjectCreationResponse(object Instance) : Response(Instance);
 
 public record TypeRequest(Type Type) : Request;
 public record TypeResponse(Type Type) : Response(Type);
-
-
-

@@ -1,8 +1,5 @@
-﻿using System.Collections.Concurrent;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
+﻿using System.Reactive.Linq;
 using System.Reflection;
-using Utility.Collections;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
@@ -10,6 +7,7 @@ using Utility.Observables.Generic;
 using Utility.Observables.NonGeneric;
 using LanguageExt;
 using Utility.Helpers;
+using System.Collections.ObjectModel;
 
 namespace Utility.Infrastructure
 {
@@ -19,15 +17,13 @@ namespace Utility.Infrastructure
         public object Output { get; set; }
     }
 
-    public record GuidValue(IGuid Value, Guid Node)
+    public record GuidValue(IGuid Value)
     {
 
-        public GuidValue(IGuid Value, Guid Node, GuidValue? Previous = default) : this(Value, Node)
+        public GuidValue(IGuid Value, GuidValue? Previous = default) : this(Value)
         {
             this.Previous = Previous;
         }
-
-        public Guid Target => Value.Guid;
 
         public Guid Source
         {
@@ -42,11 +38,8 @@ namespace Utility.Infrastructure
             }
         }
 
-        public int Remaining { get; }
+        public Guid Target => Value.Guid;
 
-        public bool IsCompleted => Remaining == 0;
-
-        public Exception Exception { get; }
         public GuidValue? Previous { get; }
     }
 
@@ -81,7 +74,7 @@ namespace Utility.Infrastructure
 
         protected Utility.Interfaces.Generic.IObservable<TOutput> Observe<TOutput, TInput>(TInput tInput) where TInput : IGuid
         {
-            return Resolver.Register<TOutput, TInput>(this, tInput);
+            return Resolver.Register<TInput, TOutput>(this, tInput);
         }
 
         public void OnNext(object value)
@@ -100,10 +93,6 @@ namespace Utility.Infrastructure
             throw new NotImplementedException();
         }
 
-        //public void OnProgress(int complete, int total)
-        //{
-        //    throw new NotImplementedException();
-        //}
         public override string ToString()
         {
             return Key.Name;
@@ -123,14 +112,12 @@ namespace Utility.Infrastructure
 
     public static class ReflectionHelper
     {
-        public static Dictionary<Guid, SingleParameterMethod> GetSingleParameterMethods(this IBase instance)
+        public static IEnumerable<SingleParameterMethod> GetSingleParameterMethods(this IBase instance)
         {
             return instance.GetType()
                     .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                     .Where(m => m.Name == nameof(IObserver.OnNext) && m.GetParameters().Length == 1)
-                        .ToDictionary(m =>
-                        m.GetParameters().Single().ParameterType.GUID,
-                        m => new SingleParameterMethod(instance, m));
+                    .Select(m => new SingleParameterMethod(instance, m));
         }
 
         public static IDisposable? TrySubscribe(object instance, Action<object> action, Action<Exception> onError, Action onCompleted, Action<int, int> onProgress)
@@ -180,6 +167,11 @@ namespace Utility.Infrastructure
 
     public interface IObserverIOType : Utility.Interfaces.Generic.IObserver<GuidValue>, IIOType
     {
+        public Key Key { get; }
+        public Key ParentKey { get; }
+        ObservableCollection<object> Observers { get; }
+        ObservableCollection<object> Outputs { get; }
+        bool Unlock(GuidValue guidValue); 
     }
 
     public class SingleParameterMethod : IObserverIOType
@@ -193,20 +185,30 @@ namespace Utility.Infrastructure
             InType = methodInfo.GetParameters().Single().ParameterType;
             OutType = GetOutType();
             this.instance = instance;
+            Key = new Key(instance.Key.Guid, InType.Name, InType);
         }
 
-        //public Guid Key => Combine(instance.Key.Guid, InType.GUID);
-        public Guid Guid => instance.Key.Guid;
+
+        public Key Key { get; }
+
+        public Key ParentKey => instance.Key;
 
         public Type InType { get; }
 
         public Type OutType { get; }
 
         public List<IDisposable> disposables { get; } = new();
+
+        public ObservableCollection<object> Observers => new(new[] { instance });
+
+        public ObservableCollection<object> Outputs { get; } = new();
+
         public void OnNext(GuidValue parameter)
         {
             IDisposable? disposable = null;
             object? output;
+
+            var guidValue = new GuidValue(ParentKey, parameter);
             try
             {
                 output = methodInfo.Invoke(instance, new object[] { parameter.Value });
@@ -216,7 +218,7 @@ namespace Utility.Infrastructure
             }
             catch (Exception ex)
             {
-                instance.OnNext(new GuidValue(GuidBase.OnError(GetGuid(), ex), Guid, parameter));
+                instance.OnNext(new GuidValue(GuidBase.OnError(GetGuid(), ex), guidValue));
                 return;
             }
 
@@ -224,19 +226,22 @@ namespace Utility.Infrastructure
             {
                 if (a is not IGuid guid)
                     throw new Exception("6 dfdfff444");
-                instance.OnNext(new GuidValue(guid, Guid, parameter));
+                var value = new GuidValue(guid, guidValue);
+                Outputs.Add(value);
+                instance.OnNext(value);
             },
-            e => instance.OnNext(new GuidValue(GuidBase.OnError(GetGuid(), e), Guid, parameter)),
-            () => {
+            e => instance.OnNext(new GuidValue(GuidBase.OnError(GetGuid(), e), guidValue)),
+            () =>
+            {
 
                 if (disposable is not null)
                 {
                     disposable?.Dispose();
                     disposables.Remove(disposable);
                 }
-                instance.OnNext(new GuidValue(GuidBase.OnCompleted(GetGuid()), Guid, parameter));
+                instance.OnNext(new GuidValue(GuidBase.OnCompleted(GetGuid()), guidValue));
             },
-            (a, b) => instance.OnNext(new GuidValue(GuidBase.OnProgress(GetGuid(), a, b), Guid, parameter)))
+            (a, b) => instance.OnNext(new GuidValue(GuidBase.OnProgress(GetGuid(), a, b), guidValue)))
                 is IDisposable _disposable)
             {
                 disposable = _disposable;
@@ -246,7 +251,7 @@ namespace Utility.Infrastructure
             {
                 if (output is not IGuid guid)
                     throw new Exception(" dfdfff444");
-                instance.OnNext(new GuidValue(guid, Guid, parameter));
+                instance.OnNext(new GuidValue(guid, guidValue));
             }
 
 
@@ -316,6 +321,10 @@ namespace Utility.Infrastructure
             }
             return new Guid(destByte);
         }
-    }
 
+        public bool Unlock(GuidValue guidValue)
+        {
+            return guidValue.Target == this.InType.GUID;
+        }
+    }
 }
