@@ -60,9 +60,9 @@ internal class BootStrapper : BaseObject
 #if DEBUG
         container.RegisterInstance<SqliteRepository.DatabaseDirectory>(new("../../../Data"));
         container.RegisterInstance<LiteDBRepository.DatabaseSettings>(new("../../../Data", typeof(ViewModel)));
-#elif Release
-        container.RegisterInstance<SqliteRepository.DatabaseDirectory>(new(""));
-        container.RegisterInstance<LiteDBRepository.DatabaseDirectory>(new("", typeof(ViewModel).Name));
+#else
+        container.RegisterInstance<SqliteRepository.DatabaseDirectory>(new("Data"));
+        container.RegisterInstance<LiteDBRepository.DatabaseSettings>(new("Data", typeof(ViewModel)));
 #endif
 
         return container;

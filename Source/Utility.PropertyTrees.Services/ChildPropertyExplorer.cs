@@ -120,9 +120,9 @@ namespace Utility.PropertyTrees.Services
             IObservable<ValueNode?> FromPropertyDescriptor(PropertyDescriptor descriptor)
             {
                 if (descriptor.PropertyType == typeof(MethodBase))
-                    return Observable.Return<ValueNode?>(default);
+                    return Observable.Empty<ValueNode?>();
                 if (descriptor.PropertyType == typeof(Type))
-                    return Observable.Return<ValueNode?>(default);
+                    return Observable.Empty<ValueNode?>();
 
                 return CreateProperty(value.Data, value.Guid, descriptor);
 

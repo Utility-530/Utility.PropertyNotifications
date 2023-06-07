@@ -14,6 +14,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Themes/Templates.xaml" />
                 <ResourceDictionary Source="/Themes/Styles.xaml" />
+                <ResourceDictionary Source="/Themes/SyntaxBoxTemplate.xaml" />
                 <ui:ThemeResources RequestedTheme="Light" />
                 <ui:XamlControlsResources />
             </ResourceDictionary.MergedDictionaries>
@@ -43,8 +44,19 @@
 
 
             <ItemsPanelTemplate x:Key="CustomGrid">
-                <st:AutoGrid Rows="1*,1*,1*" Columns="1*,1*">                    
-                </st:AutoGrid>
+                <!--<st:AutoGrid Rows="1*,1*,1*" Columns="1*,1*">                    
+                </st:AutoGrid>-->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
             </ItemsPanelTemplate>
 
 
@@ -62,20 +74,7 @@
                          BorderThickness="2"></TextBox>
             </DataTemplate>
 
-
-            <DataTemplate x:Key="JsonTemplate">
-               
-                
-            </DataTemplate>
-
-            <!--<DataTemplate DataType="{x:Type model:Leader}">
-                <st:AutoGrid Columns="70,70">
-                    <TextBlock Text="Name"></TextBlock>
-                    <TextBox Text="{Binding Name}"/>
-                    <TextBlock Text="Score"></TextBlock>
-                    <TextBox Text="{Binding Score}"/>
-                </st:AutoGrid>
-            </DataTemplate>-->
+            
 
 
             <DataTemplate DataType="{x:Type obs:Subject}">
