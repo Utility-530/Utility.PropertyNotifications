@@ -133,6 +133,10 @@ namespace Utility.Nodes
             disposable = Observe<ChildrenResponse, ChildrenRequest>(new ChildrenRequest(Guid, Data, Predicates))
                 .Subscribe(a =>
                 {
+                    if(a.PropertyNode==null)
+                    {
+                        throw new Exception("dsv2s331hj f");
+                    }
                     if (_children.Any(ass => a.PropertyNode.Key.Guid == (ass as ValueNode)?.Key.Guid) == false)
                         _children.Add(a.PropertyNode);
                 }, () => _children.Complete());
