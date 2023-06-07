@@ -68,7 +68,7 @@
 
     <DataTemplate x:Key="IntegerTemplate">
         <ui:NumberBox    
-                    Value="{Binding Value, Mode=Twoway, Converter={x:Static local:NumberBoxConverter.Instance}}"
+                    Value="{Binding Value, Mode=Twoway, Converter={x:Static conv:IntToDoubleConverter.Instance}}"
                     SpinButtonPlacementMode="Inline"
                     SmallChange="1"
                     LargeChange="10" />
