@@ -14,7 +14,7 @@
                     xmlns:uni="UniversalConverter"
                     xmlns:view="http://schemas.utility.com">
 
-    
+
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Utility.PropertyTrees.WPF.Demo;component/Themes/Styles.xaml"></ResourceDictionary>
     </ResourceDictionary.MergedDictionaries>
@@ -52,11 +52,13 @@
     <!--
     </Style>-->
     <DataTemplate x:Key="StringTemplate">
-        <Viewbox>
-            <TextBox Text="{Binding Value}" MinWidth="100" ></TextBox>
-        </Viewbox>       
+        <TextBox Text="{Binding Value}" MinWidth="100" ></TextBox>
     </DataTemplate>
-    
+
+    <DataTemplate x:Key="ServerTypeTemplate">    
+        <TextBlock Text="{Binding Value}" ></TextBlock>
+    </DataTemplate>
+
     <DataTemplate x:Key="UnknownTemplate">
         <TextBlock Text="Unknown Type" Foreground="Red" Opacity="0.5"></TextBlock>
     </DataTemplate>
@@ -83,7 +85,7 @@
                     LargeChange="1" />
     </DataTemplate>
 
-    
+
     <DataTemplate       x:Key="EnumTemplate">
         <view:EnumItemsControl                     
                             Orientation="Horizontal"
@@ -102,9 +104,9 @@
                     Foreground="IndianRed"></TextBlock>
         </Grid>
     </DataTemplate>
-    
+
     <DataTemplate       x:Key="ReferenceTemplate">
-         <Border x:Name="circularBorder" 
+        <Border x:Name="circularBorder" 
    CornerRadius="{Binding Path=ActualHeight, ElementName=circularBorder}" 
    Width="{Binding Path=ActualHeight, ElementName=circularBorder}"
         Padding="1,2,2,2"
@@ -124,7 +126,7 @@
     <DataTemplate       x:Key="CollectionTemplate">
         <Button Command="{Binding AddCommand}">+</Button>
     </DataTemplate>
-    
+
     <local:ContentTemplateSelector 
         x:Key="ContentTemplateSelector"
         StringTemplate="{StaticResource StringTemplate}"
@@ -144,7 +146,7 @@
                                 Content="{Binding }" 
                                 ContentTemplateSelector="{StaticResource ContentTemplateSelector}"/>
     </DataTemplate>
-    
+
     <DataTemplate DataType="{x:Type m:Key}">
         <UniformGrid Height="10" Rows="1">
             <Viewbox>

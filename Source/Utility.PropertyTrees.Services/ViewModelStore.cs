@@ -94,7 +94,7 @@ namespace Utility.PropertyTrees.Services
                     {
                         if (find != null)
                         {
-                    
+
                             observer.OnNext(new GetViewModelResponse((ViewModel)find));
                             observer.OnProgress(2, 2);
                         }
@@ -109,15 +109,19 @@ namespace Utility.PropertyTrees.Services
         }
     }
 
-    public class ViewModel: IViewModel
+    public class ViewModel : IViewModel
     {
         public bool IsExpanded { get; set; }
         public Position2D Dock { get; set; }
         public int GridRow { get; set; }
         public int GridColumn { get; set; }
-        public int GridRowSpan { get; set; }
-        public int GridColumnSpan { get; set; }
-        public string Arrangement { get; set; } = string.Empty;
-        public string DataTemplateKey { get; set; } = string.Empty;
+        public int GridRowSpan { get; set; } = 1;
+        public int GridColumnSpan { get; set; } = 1;
+        public string Arrangement { get; set; }
+        public string DataTemplateKey { get; set; }
+        public double Left { get; set; }
+        public double Right { get; set; }
+        public double Top { get; set; }
+        public double Bottom { get; set; }
     }
 }

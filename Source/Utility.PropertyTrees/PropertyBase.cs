@@ -14,6 +14,7 @@ namespace Utility.PropertyTrees
         }
 
         //public abstract string Name { get; }
+        public bool IsException => PropertyType == typeof(Exception);
         public bool IsCollection => PropertyType != null && PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(PropertyType);
         public bool IsObservableCollection => PropertyType != null && typeof(INotifyCollectionChanged).IsAssignableFrom(PropertyType);
         public bool IsFlagsEnum => PropertyType.IsFlagsEnum();
@@ -25,6 +26,8 @@ namespace Utility.PropertyTrees
         public abstract bool IsReadOnly { get; }
         public override object Content => Name;
         //public IViewModel ViewModel { get; set; }
+        public string? DataTemplateKey { get; set; }
+
         public virtual Type Type { get; set; }
 
         public virtual PropertyDescriptor Descriptor { get; set; }
@@ -51,6 +54,7 @@ namespace Utility.PropertyTrees
     public static class PropertyTypeHelper
     {
         public static bool IsCollection(this Type propertyType) => propertyType != null && propertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(propertyType);
+        public static bool IsException(this PropertyDescriptor descriptor) => typeof(Exception).IsAssignableFrom(descriptor.PropertyType);
     }
 
     public class DefaultFilter : Filters
@@ -63,10 +67,13 @@ namespace Utility.PropertyTrees
             predicates = new(){
                     new Predicate<object>(value=>
                 {
+
                     if(value is CollectionItemDescriptor collectionItemDescriptor)
                         return true;
                     if(value is PropertyDescriptor descriptor)
                     {
+                        if(descriptor.IsException())
+                            return false;
                         if(type.IsCollection())
                         {
                             return false;

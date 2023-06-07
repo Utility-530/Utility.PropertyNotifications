@@ -4,11 +4,24 @@ namespace Utility.PropertyTrees.WPF.Demo
 {
     internal class ContentTemplateSelector : DataTemplateSelector, IObservable<SelectTemplateEvent>
     {
-        private List<IObserver<SelectTemplateEvent>> observers = new();        
+        private List<IObserver<SelectTemplateEvent>> observers = new();
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item is PropertyBase { IsObservableCollection : true }) {
+            if (item is PropertyBase { DataTemplateKey: string key })
+            {
+                var template = (DataTemplate)Application.Current.TryFindResource(key);
+                if (template == null)
+                {
+                    template = UnknownTemplate;
+                }
+
+                this.broadcast(new(item, template, container));
+                return template;
+            }
+
+            if (item is PropertyBase { IsObservableCollection: true })
+            {
 
                 this.broadcast(new(item, CollectionTemplate, container));
                 return CollectionTemplate;
@@ -59,7 +72,7 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         private void broadcast(SelectTemplateEvent selectTemplateEvent)
         {
-            foreach(var observer in observers)
+            foreach (var observer in observers)
             {
                 observer.OnNext(selectTemplateEvent);
             }

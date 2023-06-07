@@ -111,11 +111,15 @@ namespace Utility.PropertyTrees.WPF
                             treeViewItem.IsExpanded = viewModel.IsExpanded;
                             Grid.SetRow(treeViewItem, viewModel.GridRow);
                             Grid.SetColumn(treeViewItem, viewModel.GridColumn);
+                            Grid.SetRowSpan(treeViewItem, viewModel.GridRowSpan);
+                            Grid.SetColumnSpan(treeViewItem, viewModel.GridColumnSpan);
                             DockPanel.SetDock(treeViewItem, (Dock)viewModel.Dock);
-                            if (viewModel.DataTemplateKey != null)
+                            treeViewItem.Margin = new Thickness(viewModel.Left, viewModel.Top, viewModel.Right, viewModel.Bottom);
+                            if (string.IsNullOrEmpty(viewModel.DataTemplateKey)==false)
                             {
-                                var headerTemplate = (DataTemplate)Application.Current.TryFindResource(viewModel.DataTemplateKey);
-                                treeViewItem.HeaderTemplate = headerTemplate;
+                                node.DataTemplateKey = viewModel.DataTemplateKey;   
+                                //var headerTemplate = (DataTemplate)Application.Current.TryFindResource(viewModel.DataTemplateKey);
+                                //treeViewItem.HeaderTemplate = headerTemplate;
                             }
                         }
                         catch (Exception ex)
