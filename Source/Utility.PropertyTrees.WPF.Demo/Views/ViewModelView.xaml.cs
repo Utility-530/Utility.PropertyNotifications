@@ -1,6 +1,5 @@
 ﻿using DryIoc;
 using Utility.Nodes;
-using static Utility.PropertyTrees.WPF.Demo.Views.PropertyView;
 using Utility.Observables.NonGeneric;
 using Utility.Observables.Generic;
 
@@ -13,7 +12,7 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
     {
         private ViewModelEngine viewModelEngine => container.Resolve<ViewModelEngine>();
         private IModelController controller => container.Resolve<IModelController>();
-        private ValueNode masterNode => container.Resolve<ValueNode>(Keys.Model);
+        //private ValueNode masterNode => container.Resolve<ValueNode>(Keys.Model);
 
         public ViewModelView()
         {
@@ -24,12 +23,12 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
         private void initialise_click(object sender, RoutedEventArgs e)
         {
             //this.PropertyTree.SelectedObject = viewModel.Model;
-            controller.TreeView(masterNode, PropertyTree)
-                .Subscribe(treeView =>
-            {
-                //PropertyTree.Children.Clear();
-                //PropertyTree.Children.Add(treeView);
-            });
+            //controller.TreeView(masterNode, PropertyTree)
+            //    .Subscribe(treeView =>
+            //{
+            //    //PropertyTree.Children.Clear();
+            //    //PropertyTree.Children.Add(treeView);
+            //});
         }
 
         private void PropertyTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

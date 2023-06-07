@@ -15,11 +15,11 @@
         <ui:AppBarButton Icon="Directions" Label="history"  Click="show_history_click" />
         <ui:AppBarButton Icon="Go" Label="ViewModel"  Click="show_viewModels_click" />-->
               <!--<ui:AppBarToggleButton Icon="Play" Label="Play" />-->
-        <ui:AppBarToggleButton Icon="Link" Label="Connect" Click="connect_click" />
+        <ui:AppBarButton Icon="Link" Label="Connect" Click="connect_click" />
         <ui:AppBarSeparator />
-        <ui:AppBarToggleButton Icon="Target" Label="PrizeWheel" Click="prizewheel_click"/>
-        <ui:AppBarToggleButton Icon="ZeroBars" Label="Leaders" Click="leaderboard_click"/>
-        <ui:AppBarToggleButton Icon="FullScreen" Label="Screensaver" Click="screensaver_click"/>
+        <ui:AppBarButton Icon="Target" Label="PrizeWheel" Click="prizewheel_click"/>
+        <ui:AppBarButton Icon="ZeroBars" Label="Leaders" Click="leaderboard_click"/>
+        <ui:AppBarButton Icon="FullScreen" Label="Screensaver" Click="screensaver_click"/>
         <ui:AppBarSeparator />
         <ui:AppBarButton Icon="Refresh" Label="Refresh"  Click="refresh_click"/>
     </ui:CommandBar>
