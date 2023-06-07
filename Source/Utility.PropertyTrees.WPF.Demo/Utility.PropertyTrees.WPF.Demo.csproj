@@ -5,7 +5,9 @@
 		<TargetFramework>net7.0-windows</TargetFramework>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
+		<EmulatorPath Condition="'$(EmulatorPath)' == ''">C:\Users\declan\source\Puttshack\Gaming_Core_HUD\Emulator</EmulatorPath>
 	</PropertyGroup>
+
 
 
 	<ItemGroup>
@@ -67,4 +69,15 @@
 		<Using Include="System.Windows" />
 		<Using Include="System.Windows.Controls" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Data\data.litedb">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Data\data.sqlite">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+
 </Project>
