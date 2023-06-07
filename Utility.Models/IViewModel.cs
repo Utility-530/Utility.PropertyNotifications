@@ -10,10 +10,18 @@ namespace Utility.Models
 
         int GridRow { get; set; }
 
-        int GridColumn { get; set; }
+        int GridColumn { get; set; }     
+        int GridRowSpan { get; set; }
+
+        int GridColumnSpan { get; set; }
 
         bool IsExpanded { get; set; }
 
         string DataTemplateKey { get; set; }
+
+        double Left { get; set; }
+        double Right { get; set; }
+        double Top { get; set; }
+        double Bottom { get; set; }
     }
 }
