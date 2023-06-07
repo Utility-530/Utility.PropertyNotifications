@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Bogus.Bson;
+using System.Collections.ObjectModel;
 using Utility.Models;
 using Utility.PropertyTrees.Demo.Model;
 
@@ -37,10 +38,24 @@ namespace Utility.PropertyTrees.WPF.Demo
     {
     }
 
-    public class Server
+    public class Server: INotifyPropertyChanged
     {
+        private bool isConnected;
+
         public string IP { get; set; }
         public int Port { get; set; }
+
+        public bool IsConnected
+        {
+            get => isConnected; set
+            {
+                isConnected = value;
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsConnected)));
+
+            }
+        }
+        public event PropertyChangedEventHandler? PropertyChanged;
+
     }
 
     public class Icon

@@ -20,18 +20,49 @@ public enum ServerEventType
 
 public record ServerEvent(ServerEventType Type) : Event
 {
+        public Exception? Exception { get; init; }
+        public UdpClient? Client { get; init; }
+        public ClientData? Data { get; init; }
+}
 
-}
-public record ServerEvent2(ServerEventType Type) : ServerEvent(Type)
+//public record ServerEvent(ServerEventType Type) : Event;
+//public record ServerOpenEvent() : ServerEvent(ServerEventType.Open);
+//public record ServerCloseEvent() : ServerEvent(ServerEventType.Close);
+//public record ServerErrorEvent(Exception Exception) : ServerEvent(ServerEventType.Error);
+//public record ServerEnterEvent(UdpClient Client) : ServerEvent(ServerEventType.Enter);
+//public record ServerExitEvent(UdpClient Client) : ServerEvent(ServerEventType.Exit);
+//public record ServerMessageEvent(UdpClient Client, ClientData ClientData) : ServerEvent(ServerEventType.Message);
+internal static class ServerEventsFactory
 {
-    public Exception? Exception { get; init; }
-    public UdpClient? Client { get; init; }
-    public ClientData? Data { get; init; }
+    public static ServerEvent ErrorEvent(Exception exception)
+    {
+        return new ServerEvent(ServerEventType.Error) { Exception = exception };
+    }   
+    
+    public static ServerEvent OpenEvent()
+    {
+        return new ServerEvent(ServerEventType.Open) { };
+    }
+    public static ServerEvent CloseEvent()
+    {
+        return new ServerEvent(ServerEventType.Close) {  };
+    }
+    public static ServerEvent EnterEvent(UdpClient Client)
+    {
+        return new ServerEvent(ServerEventType.Enter) { Client = Client };
+    }
+    public static ServerEvent ExitEvent(UdpClient Client)
+    {
+        return new ServerEvent(ServerEventType.Exit) {  Client = Client };
+    }
+    public static ServerEvent MessageEvent(UdpClient Client, ClientData ClientData)
+    {
+        return new ServerEvent(ServerEventType.Message) { Client = Client, Data = ClientData };
+    }
 }
-//public record ServerErrorEvent(Exception Exception) : ServerEvent(ServerEventType.Open);
-//public record ServerEnterEvent(UdpClient Client) : ServerEvent(ServerEventType.Open);
-//public record ServerExitEvent(UdpClient Client) : ServerEvent   ;
-//public record ClientMessageEvent(UdpClient Client, ClientData ClientData) : ServerEvent(ServerEventType.Open);
+
+
+
 
 public record RefreshEvent : Event;
 

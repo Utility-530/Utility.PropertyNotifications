@@ -147,6 +147,14 @@ internal class ModelController : BaseObject, IModelController
 
     public void OnNext(ServerEvent serverEvent)
     {
+        if(serverEvent.Type == ServerEventType.Open)
+        {
+            model.Server.IsConnected = true;
+        }
+        if (serverEvent.Type == ServerEventType.Close)
+        {
+            model.Server.IsConnected = false;
+        }
         model.Events.Add(serverEvent);
     }
 

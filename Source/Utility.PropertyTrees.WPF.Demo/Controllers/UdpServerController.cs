@@ -1,6 +1,4 @@
-﻿
-// Example udp client instance
-using Byter;
+﻿using Byter;
 using Netly;
 using Netly.Core;
 using Utility.Infrastructure;
@@ -31,19 +29,19 @@ internal sealed class UdpServerController : BaseObject
                 // connection opened: server start listen client
                 //this.OnNext(new ServerOpenEvent());
 
-                Context.Post((a) => this.OnNext(new ServerEvent(ServerEventType.Open)), null);
+                Context.Post((a) => this.OnNext(ServerEventsFactory.OpenEvent()), null);
             });
 
             server.OnClose(() =>
             {
                 // connection closed: server stop listen client
                 //this.OnNext(new ServerCloseEvent());
-                Context.Post((a) => this.OnNext(new ServerEvent(ServerEventType.Open)), null);
+                Context.Post((a) => this.OnNext( ServerEventsFactory.CloseEvent()), null);
             });
 
             server.OnError((exception) =>
             {
-                Context.Post((a) => this.OnNext(new ServerEvent2(ServerEventType.Error) { Exception = exception}), null);
+                Context.Post((a) => this.OnNext(ServerEventsFactory.ErrorEvent(exception)), null);
                 // error on open connection
                 //this.OnNext(new ServerErrorEvent(exception));
             });
@@ -52,14 +50,14 @@ internal sealed class UdpServerController : BaseObject
             {
                 // client connected: connection accepted
                 //this.OnNext(new ServerEnterEvent(client));
-                this.OnNext(new ServerEvent(ServerEventType.Enter));
+                this.OnNext(ServerEventsFactory.EnterEvent(client));
             });
 
             server.OnExit((client) =>
             {
                 // client disconnected: connection closed
                 //this.OnNext(new ServerExitEvent(client));
-                this.OnNext(new ServerEvent2(ServerEventType.Exit) { Client = client});
+                this.OnNext(ServerEventsFactory.ExitEvent(client));
 
             });
 
@@ -72,7 +70,7 @@ internal sealed class UdpServerController : BaseObject
                 output = reader.Read<string>();
                 //throw new Exception("898cdd w");
                 //this.OnNext(new ServerEvent());
-                Context.Post((a) => this.OnNext(new ServerEvent(ServerEventType.Data)), null);
+                Context.Post((a) => this.OnNext(ServerEventsFactory.MessageEvent(client, new ClientData(string.Empty, output))), null);
             });
 
             server.OnEvent((client, name, data) =>
@@ -84,7 +82,7 @@ internal sealed class UdpServerController : BaseObject
                 //var serialised = JsonSerializer.Deserialize(output, type);
                 //this.OnNext(new ClientMessageEvent(client, new ClientData(name, output)));
                 //Context.Post((a) => this.OnNext(new ServerEvent2(ServerEventType.Message) { Client = client, Data = new ClientData(name, output)}), null);
-                Context.Post((a) => this.OnNext(new ServerEvent(ServerEventType.Message)), null);
+                Context.Post((a) => this.OnNext(ServerEventsFactory.MessageEvent(client, new ClientData(name, output))), null);
             });
 
             // open connection
