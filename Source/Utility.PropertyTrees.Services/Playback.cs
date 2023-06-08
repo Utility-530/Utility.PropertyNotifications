@@ -52,12 +52,12 @@ public class Playback : BaseObject
 
     private void back()
     {
-        OnNext(new BackPlaybackEvent());
+        Send(new BackPlaybackEvent());
     }
 
     private void forward()
     {
-        OnNext(new ForwardPlaybackEvent());
+        Send(new ForwardPlaybackEvent());
     }
 
     private void pause()

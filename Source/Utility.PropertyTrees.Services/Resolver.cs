@@ -11,9 +11,12 @@ namespace Utility.PropertyTrees.Services
     public class Resolver : BaseObject, Utility.Infrastructure.IResolver
     {
         private readonly IContainer container;
-        private IBase[] nodes;
+        private BaseObject[] nodes;
 
         Subject<Key> completedSubject = new();
+        Subject<(Key, Exception)> exceptionSubject = new();
+        Subject<(Key, Progress)> progressSubject = new();
+
         BlockingCollection<IObserverIOType> observers = new();
         BlockingCollection<IObserverIOType> completed = new();
         public ILogger Logger => container.Resolve<ILogger>();
@@ -28,13 +31,13 @@ namespace Utility.PropertyTrees.Services
             this.container = container;
             //history = container.Resolve<History>();
             //outputs = this.container.Resolve<Outputs[]>();
-            nodes = this.container.Resolve<IBase[]>();
+            nodes = this.container.Resolve<BaseObject[]>();
 
             Logger.Send(nodes);
 
             foreach (var node in nodes)
             {
-                foreach (var spMethod in node.GetSingleParameterMethods())
+                foreach (var spMethod in node.GetSingleParameterMethods(this))
                 {
                     //dictionary[SingleParameterMethod.Combine(node.Key.Guid, keyValuePairs.Key)] = keyValuePairs.Value;
                     //container.RegisterInstance<IObserverIOType>(spMethod);
@@ -46,17 +49,31 @@ namespace Utility.PropertyTrees.Services
             completedSubject
                 .Subscribe(obs =>
                 {
-                    var nodes = this.container.Resolve<IBase[]>();
+                    var nodes = this.container.Resolve<BaseObject[]>();
                     var single = observers.Single(a => a.Key == obs);
                     completed.Add(single);
                 });
+
+            exceptionSubject
+      .Subscribe(obs =>
+      {
+          //var nodes = this.container.Resolve<BaseObject[]>();
+          //var single = observers.Single(a => a.Key == obs);
+          //completed.Add(single);
+      });
+
+            progressSubject
+      .Subscribe(obs =>
+      {
+    
+      });
         }
 
         public void Initialise()
         {
             container.RegisterInitializer<object>((initialized, b) =>
             {
-                if (initialized is IBase @base)
+                if (initialized is BaseObject @base)
                 {
                     Logger.Send(@base);
                 }
@@ -65,23 +82,10 @@ namespace Utility.PropertyTrees.Services
             });
 
             //  OnNext(new InitialisedEvent(this));
-
         }
 
-        public async void OnBase(IBase @base)
+        public void Send(GuidValue guidValue)
         {
-            if (@base.Output is not GuidValue { Value: var iguid, Target: Guid target, Source: Guid source } guidValue)
-            {
-                if (@base.Output is not IGuid guid)
-                {
-                    throw new Exception("vdf2111 ww");
-                }
-
-                guidValue = new GuidValue(guid, new GuidValue(@base.Key));
-                source = guidValue.Source;
-                target = guidValue.Target;
-            }
-
             SynchronizationContext.SetSynchronizationContext(Context);
 
             //var observers = container.Resolve<IObserverIOType[]>();
@@ -92,43 +96,33 @@ namespace Utility.PropertyTrees.Services
                 if (item.Unlock(guidValue))
                 {
                     success = true;
-                    item.OnNext(guidValue);
+                    item.Send(guidValue);
                 }
             }
 
             if (success == true)
                 return;
 
-            if (@base.Output is GuidValue { Value: GuidBase { Exception: Exception exception } })
+            if (guidValue is { Value: GuidBase { Exception: Exception exception } })
             {
                 return;
             }
-            if (@base.Output is GuidValue { Value: GuidBase { IsComplete: true } })
+            if (guidValue is { Value: GuidBase { IsComplete: true } })
             {
                 return;
             }
-            if (@base.Output is GuidValue { Value: GuidBase { Progress: Progress progress } })
+            if (guidValue is { Value: GuidBase { Progress: Progress progress } })
             {
                 return;
             }
-            if (@base.Output is not InitialisedEvent @event)
-            {
-
-
-            }
-
         }
 
-        public Interfaces.Generic.IObservable<TOutput> Register<TInput, TOutput>(IBase baseObject, TInput tInput) where TInput : IGuid
+        public Interfaces.Generic.IObservable<TOutput> Register<TInput, TOutput>(Key baseKey, TInput tInput) where TInput : IGuid
         {
-            //var guid = new GuidBase();
-
-            //var guidKey = new GuidKey(guid.Guid);
-
             var replay = new Subject<TOutput>();
             var key = new Key(Guid.NewGuid(), nameof(CustomSubject<TInput, TOutput>), typeof(CustomSubject<TInput, TOutput>));
 
-            var subject = new CustomSubject<TInput, TOutput>(key, baseObject.Key, a =>
+            var subject = new CustomSubject<TInput, TOutput>(key, baseKey, a =>
             {
                 if (a.Value is GuidBase guidBase)
                 {
@@ -139,10 +133,12 @@ namespace Utility.PropertyTrees.Services
                     }
                     else if (guidBase.Exception is Exception ex)
                     {
+                        exceptionSubject.OnNext((key, ex));
                         replay.OnError(ex);
                     }
                     else if (guidBase.Progress is Progress progress)
                     {
+                        progressSubject.OnNext((key, progress));
                         replay.OnProgress(progress.Amount, progress.Total);
                     }
                 }
@@ -163,8 +159,8 @@ namespace Utility.PropertyTrees.Services
             //dictionary[SingleParameterMethod.Combine(guid.Guid, typeof(TOutput).GUID)] = subject;
             Logger.Add(subject).Wait();
 
-            baseObject.Output = source;
-            OnBase(baseObject);
+            //baseObject.Output = source;
+            Send(source);
             return replay;
         }
 
@@ -214,26 +210,34 @@ namespace Utility.PropertyTrees.Services
         //}
     }
 
-    public class CustomSubject<TInput, TOutput> : Subject<GuidValue, TOutput>, IObserverIOType
+    public class CustomSubject<TInput, TOutput> : IObserverIOType
     {
-        public CustomSubject(Key key, Key parentKey, Func<GuidValue, TOutput> onNext) : base(onNext)
+
+        private readonly Func<GuidValue, TOutput> onNext;
+
+        public CustomSubject(Key key, Key parentKey, Func<GuidValue, TOutput> onNext)
         {
             Key = key;
             this.ParentKey = parentKey;
+            this.onNext = onNext;
         }
 
         public Key ParentKey { get; set; }
 
         public Key Key { get; }
 
-        public override Type InType => typeof(TInput);
+        public Type InType => typeof(TInput);
 
-        public override Type OutType => typeof(TOutput);
+        public Type OutType => typeof(TOutput);
 
+        public void Send(GuidValue guidValue)
+        {
+            onNext.Invoke(guidValue);
+        }
 
-        ObservableCollection<object> IObserverIOType.Observers => throw new NotImplementedException();
+        //ObservableCollection<object> IObserverIOType.Observers => throw new NotImplementedException();
 
-        ObservableCollection<object> IObserverIOType.Outputs => throw new NotImplementedException();
+        //ObservableCollection<object> IObserverIOType.Outputs => throw new NotImplementedException();
 
         public bool Unlock(GuidValue guidValue)
         {
@@ -244,7 +248,5 @@ namespace Utility.PropertyTrees.Services
         {
             return typeof(TInput).Name + " ~ " + typeof(TOutput).Name;
         }
-
     }
-    //public record Order(Guid Key, IBase Base, object Value, IConnection Connection);
 }
