@@ -8,18 +8,12 @@ using Utility.Observables.NonGeneric;
 using LanguageExt;
 using Utility.Helpers;
 using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 
 namespace Utility.Infrastructure
 {
-
-    public interface IBase : IKey<Key>, System.IObserver<object>
-    {
-        public object Output { get; set; }
-    }
-
     public record GuidValue(IGuid Value)
     {
-
         public GuidValue(IGuid Value, GuidValue? Previous = default) : this(Value)
         {
             this.Previous = Previous;
@@ -45,7 +39,7 @@ namespace Utility.Infrastructure
 
     public record SubjectKey(Guid Source, Guid Target, Guid Node);
 
-    public abstract class BaseObject : BaseViewModel, IBase
+    public abstract class BaseObject : BaseViewModel, IKey<Key> //, IBase
     {
         public static IResolver Resolver { get; set; }
 
@@ -70,27 +64,21 @@ namespace Utility.Infrastructure
             return (other as IKey<Key>)?.Equals(this.Key) ?? false;
         }
 
-        public virtual object? Output { get; set; }
-
-        protected Utility.Interfaces.Generic.IObservable<TOutput> Observe<TOutput, TInput>(TInput tInput) where TInput : IGuid
+        protected Utility.Interfaces.Generic.IObservable<TOutput> Observe<TOutput, TInput>(TInput tInput, [CallerMemberName] string? callerMemberName = null) where TInput : IGuid
         {
-            return Resolver.Register<TInput, TOutput>(this, tInput);
+            return Resolver.Register<TInput, TOutput>(this.Key, tInput);
         }
 
-        public void OnNext(object value)
+        protected void Send(IGuid guid, [CallerMemberName] string? callerMemberName = null)
         {
-            Output = value;
-            Resolver.OnBase(this);
-        }
+            if (guid is not GuidValue { Value: var iguid, Target: Guid target, Source: Guid source } guidValue)
+            {
+                guidValue = new GuidValue(guid, new GuidValue(this.Key));
+                source = guidValue.Source;
+                target = guidValue.Target;
+            }
 
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
+            Resolver.Send(guidValue);
         }
 
         public override string ToString()
@@ -98,26 +86,47 @@ namespace Utility.Infrastructure
             return Key.Name;
         }
 
-
         protected void Dispatch(Action action)
         {
             (Context ?? throw new Exception("missing context"))
-                  .Post(a =>
-                  {
-                      action();
-                  }, default);
+                .Post(a =>
+                {
+                    action();
+                }, default);
         }
     }
 
+    public class InvokeOne
+    {
+        private readonly MethodInfo methodInfo;
+        private readonly object instance;
+
+        public InvokeOne(MethodInfo methodInfo, object instance)
+        {
+            this.methodInfo = methodInfo;
+            this.instance = instance;
+        }
+
+        public MethodInfo MethodInfo => methodInfo;
+        public object Instance => instance;
+
+        public Type InType => MethodInfo.GetParameters().Single().ParameterType;
+        public Type OutType => MethodInfo.ReturnType;
+
+        public object? _(object value)
+        {
+            return methodInfo.Invoke(instance, new[] { value });
+        }
+    }
 
     public static class ReflectionHelper
     {
-        public static IEnumerable<SingleParameterMethod> GetSingleParameterMethods(this IBase instance)
+        public static IEnumerable<SingleParameterMethod> GetSingleParameterMethods(this IKey<Key> instance, IResolver resolver)
         {
             return instance.GetType()
                     .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                     .Where(m => m.Name == nameof(IObserver.OnNext) && m.GetParameters().Length == 1)
-                    .Select(m => new SingleParameterMethod(instance, m));
+                    .Select(m => new SingleParameterMethod(resolver, instance.Key, new InvokeOne(m, instance)));
         }
 
         public static IDisposable? TrySubscribe(object instance, Action<object> action, Action<Exception> onError, Action onCompleted, Action<int, int> onProgress)
@@ -165,60 +174,56 @@ namespace Utility.Infrastructure
         Type OutType { get; }
     }
 
-    public interface IObserverIOType : Utility.Interfaces.Generic.IObserver<GuidValue>, IIOType
+    public interface IObserverIOType : /*Utility.Interfaces.Generic.IObserver<GuidValue>,*/ IIOType
     {
         public Key Key { get; }
-        public Key ParentKey { get; }
-        ObservableCollection<object> Observers { get; }
-        ObservableCollection<object> Outputs { get; }
-        bool Unlock(GuidValue guidValue); 
+        //public Key ParentKey { get; }
+        //ObservableCollection<object> Observers { get; }
+        //ObservableCollection<object> Outputs { get; }
+        bool Unlock(GuidValue guidValue);
+        void Send(GuidValue guidValue);
     }
 
     public class SingleParameterMethod : IObserverIOType
     {
-        private readonly MethodInfo methodInfo;
-        private readonly IBase instance;
+        private readonly InvokeOne methodInfo;
+        private readonly IResolver resolver;
 
-        public SingleParameterMethod(IBase instance, MethodInfo methodInfo)
+        public SingleParameterMethod(IResolver resolver, Key key, InvokeOne methodInfo)
         {
             this.methodInfo = methodInfo;
-            InType = methodInfo.GetParameters().Single().ParameterType;
+            InType = methodInfo.InType;
             OutType = GetOutType();
-            this.instance = instance;
-            Key = new Key(instance.Key.Guid, InType.Name, InType);
+            this.resolver = resolver;
+            Key = new Key(key.Guid, InType.Name, InType);
         }
-
 
         public Key Key { get; }
 
-        public Key ParentKey => instance.Key;
-
         public Type InType { get; }
-
+        
         public Type OutType { get; }
 
         public List<IDisposable> disposables { get; } = new();
 
-        public ObservableCollection<object> Observers => new(new[] { instance });
-
         public ObservableCollection<object> Outputs { get; } = new();
 
-        public void OnNext(GuidValue parameter)
+        public void Send(GuidValue parameter)
         {
             IDisposable? disposable = null;
             object? output;
 
-            var guidValue = new GuidValue(ParentKey, parameter);
+            var guidValue = new GuidValue(Key, parameter);
             try
             {
-                output = methodInfo.Invoke(instance, new object[] { parameter.Value });
+                output = methodInfo._(parameter.Value);
 
-                if (methodInfo.ReturnType == typeof(void))
+                if (methodInfo.OutType == typeof(void))
                     return;
             }
             catch (Exception ex)
             {
-                instance.OnNext(new GuidValue(GuidBase.OnError(GetGuid(), ex), guidValue));
+                resolver.Send(new GuidValue(GuidBase.OnError(GetGuid(), ex), guidValue));
                 return;
             }
 
@@ -228,9 +233,9 @@ namespace Utility.Infrastructure
                     throw new Exception("6 dfdfff444");
                 var value = new GuidValue(guid, guidValue);
                 Outputs.Add(value);
-                instance.OnNext(value);
+                resolver.Send(value);
             },
-            e => instance.OnNext(new GuidValue(GuidBase.OnError(GetGuid(), e), guidValue)),
+            e => resolver.Send(new GuidValue(GuidBase.OnError(GetGuid(), e), guidValue)),
             () =>
             {
 
@@ -239,9 +244,9 @@ namespace Utility.Infrastructure
                     disposable?.Dispose();
                     disposables.Remove(disposable);
                 }
-                instance.OnNext(new GuidValue(GuidBase.OnCompleted(GetGuid()), guidValue));
+                resolver.Send(new GuidValue(GuidBase.OnCompleted(GetGuid()), guidValue));
             },
-            (a, b) => instance.OnNext(new GuidValue(GuidBase.OnProgress(GetGuid(), a, b), guidValue)))
+            (a, b) => resolver.Send(new GuidValue(GuidBase.OnProgress(GetGuid(), a, b), guidValue)))
                 is IDisposable _disposable)
             {
                 disposable = _disposable;
@@ -251,7 +256,7 @@ namespace Utility.Infrastructure
             {
                 if (output is not IGuid guid)
                     throw new Exception(" dfdfff444");
-                instance.OnNext(new GuidValue(guid, guidValue));
+                resolver.Send(new GuidValue(guid, guidValue));
             }
 
 
@@ -259,10 +264,10 @@ namespace Utility.Infrastructure
 
         Type GetOutType()
         {
-            if (methodInfo.ReturnType.GetGenericArguments().SingleOrDefault() is Type type)
+            if (methodInfo.OutType.GetGenericArguments().SingleOrDefault() is Type type)
                 return type;
             else
-                return methodInfo.ReturnType;
+                return methodInfo.OutType;
         }
 
 

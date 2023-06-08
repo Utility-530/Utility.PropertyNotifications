@@ -1,20 +1,11 @@
 ﻿using LanguageExt.Pipes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using Netly;
 using Netly.Core;
-using Netly.Abstract;
 using System.Reactive.Subjects;
 using System.Reactive;
 using Byter;
 using System.Reactive.Threading.Tasks;
 using System.Diagnostics;
-using Utility.Models;
-using Utility.Interfaces.Generic;
 using Utility.Models.UDP;
 using DryIoc;
 using Utility.Collections;
@@ -32,8 +23,8 @@ namespace Utility.Infrastructure
     public interface ILogger
     {
         Task<Unit> Send(GuidValue guidValue, IObserverIOType observer);
-        void Send(IBase[] nodes);
-        void Send(IBase node);
+        void Send(BaseObject[] nodes);
+        void Send(BaseObject node);
         Task Add(IObserverIOType node);
         Task Remove(IObserverIOType node);
     }
@@ -93,13 +84,13 @@ namespace Utility.Infrastructure
             return await subject.ToTask(container.Resolve<SynchronizationContext>());
         }
 
-        public void Send(IBase[] nodes)
+        public void Send(BaseObject[] nodes)
         {
             foreach (var node in nodes)
                 Collection.Add(node);
         }
 
-        public void Send(IBase node)
+        public void Send(BaseObject node)
         {
             Collection.Add(node);
         }
@@ -213,7 +204,7 @@ namespace Utility.Infrastructure
             return task;
         }
 
-        public void Send(IBase[] nodes)
+        public void Send(BaseObject[] nodes)
         {
             var dtos = nodes.Select(a => new KeyDto(a.Key.Guid, a.Key.Name)).ToArray();
             var serialized = JsonSerializer.Serialize(dtos, typeof(KeyDto[]));
@@ -222,7 +213,7 @@ namespace Utility.Infrastructure
             var bytes = writer.GetBytes();
             client.ToEvent(nameof(KeyDto), bytes);
         }
-        public void Send(IBase node)
+        public void Send(BaseObject node)
         {
             var dto = new KeyDto(node.Key.Guid, node.Key.Name);
             var serialized = JsonSerializer.Serialize(new[] { dto }, typeof(KeyDto[]));

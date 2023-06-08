@@ -1,4 +1,5 @@
 ﻿using Utility.Interfaces.NonGeneric;
+using Utility.Models;
 
 namespace Utility.Infrastructure
 {
@@ -6,7 +7,7 @@ namespace Utility.Infrastructure
     {
         //void Clear();
         void Initialise();
-        void OnBase(IBase @base);
-        Interfaces.Generic.IObservable<TOutput> Register<TInput, TOutput>(IBase baseObject, TInput tInput) where TInput : IGuid;
+        void Send(GuidValue @base);
+        Interfaces.Generic.IObservable<TOutput> Register<TInput, TOutput>(Key key, TInput tInput) where TInput : IGuid;
     }
 }
