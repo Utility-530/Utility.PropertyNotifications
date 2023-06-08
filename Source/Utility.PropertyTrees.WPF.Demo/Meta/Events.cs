@@ -1,7 +1,17 @@
 ﻿using Netly;
 using Utility.Models;
+using Utility.PropertyTrees;
 
-public record ViewModelEvent(string Name, TreeView TreeView);
+public record StartEvent(RootProperty Property):Event;
+public record RefreshRequest() : Request;
+public record ConnectRequest() : Request;
+public record ScreensaverRequest() : Request;
+public record PrizeWheelRequest() : Request;
+public record LeaderboardRequest() : Request;
+
+
+
+
 
 
 
@@ -10,6 +20,7 @@ public record ServerResponse(bool IsInitialised) : Response(IsInitialised);
 
 public record ClientMessageRequest(string Name, string Message) : Request;
 public record ClientMessageResponse(DateTime DateTime ) : Response(DateTime);
+
 
 public enum ServerEventType
 {
@@ -60,12 +71,3 @@ internal static class ServerEventsFactory
         return new ServerEvent(ServerEventType.Message) { Client = Client, Data = ClientData };
     }
 }
-
-
-
-
-public record RefreshEvent : Event;
-
-
-
-

@@ -5,7 +5,7 @@ using Utility.Infrastructure;
 
 internal sealed class UdpServerController : BaseObject
 {
-    private UdpServer? server = new ();
+    private UdpServer? server = new();
 
     public override Key Key => new(Guids.UdpServer, nameof(UdpServerController), typeof(UdpServerController));
 
@@ -22,26 +22,22 @@ internal sealed class UdpServerController : BaseObject
         {
 
             var serverHost = new Host(serverRequest.IP, serverRequest.Port);
-            //var serverhost = new Host("127.0.0.1", 8000);
 
             server.OnOpen(() =>
             {
                 // connection opened: server start listen client
-                //this.OnNext(new ServerOpenEvent());
-
-                Context.Post((a) => this.OnNext(ServerEventsFactory.OpenEvent()), null);
+                Context.Post((a) => this.Send(ServerEventsFactory.OpenEvent()), null);
             });
 
             server.OnClose(() =>
             {
                 // connection closed: server stop listen client
-                //this.OnNext(new ServerCloseEvent());
-                Context.Post((a) => this.OnNext( ServerEventsFactory.CloseEvent()), null);
+                Context.Post((a) => this.Send(ServerEventsFactory.CloseEvent()), null);
             });
 
             server.OnError((exception) =>
             {
-                Context.Post((a) => this.OnNext(ServerEventsFactory.ErrorEvent(exception)), null);
+                Context.Post((a) => this.Send(ServerEventsFactory.ErrorEvent(exception)), null);
                 // error on open connection
                 //this.OnNext(new ServerErrorEvent(exception));
             });
@@ -49,28 +45,22 @@ internal sealed class UdpServerController : BaseObject
             server.OnEnter((client) =>
             {
                 // client connected: connection accepted
-                //this.OnNext(new ServerEnterEvent(client));
-                this.OnNext(ServerEventsFactory.EnterEvent(client));
+                this.Send(ServerEventsFactory.EnterEvent(client));
             });
 
             server.OnExit((client) =>
             {
                 // client disconnected: connection closed
-                //this.OnNext(new ServerExitEvent(client));
-                this.OnNext(ServerEventsFactory.ExitEvent(client));
-
+                this.Send(ServerEventsFactory.ExitEvent(client));
             });
 
             server.OnData((client, data) =>
             {
                 // buffer/data received: {client: client instance} {data: buffer/data received} 
-                //Broadcast(new ServerMessageReceivedEvent(client, new data));
                 Reader reader = new(data);
                 var output = reader.Read<string>();
                 output = reader.Read<string>();
-                //throw new Exception("898cdd w");
-                //this.OnNext(new ServerEvent());
-                Context.Post((a) => this.OnNext(ServerEventsFactory.MessageEvent(client, new ClientData(string.Empty, output))), null);
+                Context.Post((a) => this.Send(ServerEventsFactory.MessageEvent(client, new ClientData(string.Empty, output))), null);
             });
 
             server.OnEvent((client, name, data) =>
@@ -78,11 +68,7 @@ internal sealed class UdpServerController : BaseObject
                 Reader reader = new(data);
                 var output = reader.Read<string>();
                 output = reader.Read<string>();
-                //var type = TypeConverter.Instance.ToType(output);
-                //var serialised = JsonSerializer.Deserialize(output, type);
-                //this.OnNext(new ClientMessageEvent(client, new ClientData(name, output)));
-                //Context.Post((a) => this.OnNext(new ServerEvent2(ServerEventType.Message) { Client = client, Data = new ClientData(name, output)}), null);
-                Context.Post((a) => this.OnNext(ServerEventsFactory.MessageEvent(client, new ClientData(name, output))), null);
+                Context.Post((a) => this.Send(ServerEventsFactory.MessageEvent(client, new ClientData(name, output))), null);
             });
 
             // open connection
@@ -104,7 +90,7 @@ internal sealed class UdpServerController : BaseObject
         w.Write(false);
         w.Write(request.Name);
         w.Write(request.Message);
-        server. ToEvent("chat", w.GetBytes());
+        server.ToEvent("chat", w.GetBytes());
         return Return(new ClientMessageResponse(DateTime.Now));
     }
 }
@@ -122,7 +108,6 @@ public class ClientData
     public string Header { get; set; }
     public string Message { get; set; }
 }
-//public record ServerDataEvent(string Message) : ServerEvent;
 
 
 public class TypeConverter

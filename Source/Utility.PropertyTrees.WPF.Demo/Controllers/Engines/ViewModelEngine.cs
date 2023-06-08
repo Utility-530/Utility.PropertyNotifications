@@ -9,7 +9,7 @@ using static Utility.PropertyTrees.Events;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
-    public class ViewModelEngine : BaseObject //, IPropertyGridEngine
+    public class ViewModelEngine : BaseObject
     {
         public override Key Key => new(Guids.ViewModelEngine, nameof(ViewModelEngine), typeof(ViewModelEngine));
 

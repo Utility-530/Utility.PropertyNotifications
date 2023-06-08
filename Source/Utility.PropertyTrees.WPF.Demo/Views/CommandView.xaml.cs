@@ -1,7 +1,4 @@
 ﻿using DryIoc;
-using Utility.Infrastructure;
-using Utility.PropertyTrees.Services;
-using Utility.PropertyTrees.WPF.Demo.Infrastructure;
 
 namespace Utility.PropertyTrees.WPF.Demo.Views
 {
@@ -11,7 +8,7 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
     public partial class CommandView : UserControl
     {
         //private ModelViewModel viewModel => container.Resolve<ModelViewModel>();
-        private IModelController controller => container.Resolve<IModelController>();
+        private ModelController controller => container.Resolve<ModelController>();
 
         public CommandView()
         {

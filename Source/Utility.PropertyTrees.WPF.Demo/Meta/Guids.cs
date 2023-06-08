@@ -9,4 +9,6 @@ internal class Guids
     //public static readonly Guid Server = Guid.Parse("7e0c787a-30d0-4038-9376-2808cc66a389");
     public static readonly Guid ViewModelEngine = Guid.Parse("78f35bd1-fc3c-44ca-8d86-f3a8a9d69d33");
     public static readonly Guid ModelController = Guid.Parse("e123dab9-9022-4649-9dc4-754d492dd5a6");
+    public static readonly Guid ViewModelController = Guid.Parse("605d53f3-c195-461f-bada-0e41ef2f658c");
+    public static readonly Guid ViewController = Guid.Parse("ab289f2b-2fab-4c87-9b85-0946bad7b1fd");
 }

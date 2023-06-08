@@ -18,51 +18,53 @@ internal class BootStrapper : BaseObject
         {
             rules = rules
                 .WithDefaultReuse(Reuse.Singleton)
+                .WithAutoConcreteTypeResolution(a => true)
                 .With(FactoryMethod.ConstructorWithResolvableArguments);
+
             return rules;
         }
 
     }
-    public IContainer Build()
+    public static IContainer Build()
     {
-        //using var browserScope = container.OpenScope();
         container.RegisterMany<History>();
         container.RegisterMany<Playback>();
         //container.Register<IRepository, HttpRepository>(Reuse.Singleton);
         container.Register<IRepository, SqliteRepository>(serviceKey: nameof(SqliteRepository));
-        container.Register<IRepository, LiteDBRepository>(serviceKey:nameof(LiteDBRepository));
+        container.Register<IRepository, LiteDBRepository>(serviceKey: nameof(LiteDBRepository));
         container.RegisterMany<HistoryViewModel>();
-        container.RegisterMany<PropertyStore>(made: Parameters.Of.Type<IRepository>(serviceKey:nameof(SqliteRepository)));
+        container.RegisterMany<PropertyStore>(made: Parameters.Of.Type<IRepository>(serviceKey: nameof(SqliteRepository)));
         container.RegisterMany<ViewModelStore>(made: Parameters.Of.Type<IRepository>(serviceKey: nameof(LiteDBRepository)));
         container.RegisterMany<PropertyActivator>();
         container.RegisterMany<ChildPropertyExplorer>();
         container.RegisterMany<InterfaceController>();
-       
+
         container.RegisterMany<ViewModelEngine>();
-        container.RegisterInstanceMany(this);
+        container.RegisterMany<BootStrapper>();
         //container.RegisterInstance<BaseObject>(this);
         //foreach (var connection in Outputs)
         //    container.RegisterInstance(connection);
-        //container.RegisterMany<ModelProperty>();
         container.RegisterMany<RootModelProperty>();
-        //container.RegisterMany<ModelViewModel>();
         container.RegisterMany<ViewBuilder>();
-        //container.RegisterMany<PropertyController>(Reuse.Singleton);
         container.RegisterMany<UdpServerController>();
         container.RegisterInstance(App.Current.Resources["ContentTemplateSelector"] as ContentTemplateSelector);
+
         container.RegisterInstance(SynchronizationContext.Current);
-        //container.RegisterMany<ModelController>(Reuse.Singleton);
-        container.RegisterMany<ModelController>();
+
+        //container.RegisterMany<ModelController>(nonPublicServiceTypes: true);
+        container.RegisterMany<ModelController>(Reuse.Singleton);
+        container.RegisterMany<ViewModelController>(Reuse.Singleton);
+        container.RegisterMany<ViewController>(Reuse.Singleton);
 
         //container.RegisterMany<Logger>();
         container.RegisterMany<DummyLogger>();
 
 #if DEBUG
-        container.RegisterInstance<SqliteRepository.DatabaseDirectory>(new("../../../Data"));
-        container.RegisterInstance<LiteDBRepository.DatabaseSettings>(new("../../../Data", typeof(ViewModel)));
-#else
         container.RegisterInstance<SqliteRepository.DatabaseDirectory>(new("Data"));
         container.RegisterInstance<LiteDBRepository.DatabaseSettings>(new("Data", typeof(ViewModel)));
+#else
+        container.RegisterInstance<SqliteRepository.DatabaseDirectory>(new("../../../Data"));
+        container.RegisterInstance<LiteDBRepository.DatabaseSettings>(new("../../../Data", typeof(ViewModel)));
 #endif
 
         return container;
@@ -77,11 +79,11 @@ internal class BootStrapper : BaseObject
         foreach (var type in value.RegistrationTypes)
             container.RegisterInstance(type, instance);
 
-        return Return(new ObjectCreationResponse(instance)); 
+        return Return(new ObjectCreationResponse(instance));
     }
 }
 
-public class  RootModelProperty : RootProperty
+public class RootModelProperty : RootProperty
 {
     static readonly Guid guid = Guid.Parse("febe5f0b-6024-4913-8017-74475096fc52");
 
