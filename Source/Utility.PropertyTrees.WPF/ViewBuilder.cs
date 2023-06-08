@@ -1,6 +1,5 @@
 ﻿using System.Windows.Controls;
 using System.Windows;
-using Utility.PropertyTrees.Abstractions;
 using Utility.WPF.Panels;
 using System;
 using System.Collections.Generic;
@@ -22,13 +21,15 @@ using Utility.Helpers;
 using Utility.Enums;
 using Utility.WPF.Helpers;
 using Swordfish.NET.Collections.Auxiliary;
+using Utility.WPF.Adorners.Infrastructure;
+using System.Windows.Media;
 
 namespace Utility.PropertyTrees.WPF
 {
     public class ViewBuilder : BaseObject
     {
         readonly Dictionary<PanelKey, ItemsPanelTemplate> panelsDictionary = new() { { new(0, System.Windows.Controls.Orientation.Vertical, Arrangement.Stacked), defaultTemplate } };
-        static readonly ItemsPanelTemplate defaultTemplate = LayOutHelper.ItemsPanelTemplate(0, System.Windows.Controls.Orientation.Vertical, Arrangement.Stacked);
+        static readonly ItemsPanelTemplate defaultTemplate = TemplateGenerator.CreateItemsPanelTemplate<StackPanel>(factory => factory.SetValue(Control.BackgroundProperty, new SolidColorBrush(Colors.LightGray) { Opacity = 0.1 }));
 
         public override Key Key => new(Guids.ViewBuilder, nameof(ViewBuilder), typeof(ViewBuilder));
 
@@ -75,7 +76,7 @@ namespace Utility.PropertyTrees.WPF
                 //ViewModel viewModel = new() { CollectionPanel = new() { Grid = new() }, Panel = new() { Grid = new() { } }, Template = new() { } };
                 //node.ViewModel = viewModel;
 
-                var treeViewItem = new TreeViewItem() { Header = node/*, HeaderTemplate = headerTemplate*/, /*ItemsPanel = panelTemplate, */IsExpanded = true };
+                var treeViewItem = new TreeViewItem() { Header = node, IsExpanded = true };
 
                 //_ = Observe<ActivationResponse, ActivationRequest>(new(node.Guid, new RootDescriptor(node), node, PropertyType.Root))
                 //    .Select(a => a.PropertyNode)
@@ -115,9 +116,10 @@ namespace Utility.PropertyTrees.WPF
                             Grid.SetColumnSpan(treeViewItem, viewModel.GridColumnSpan);
                             DockPanel.SetDock(treeViewItem, (Dock)viewModel.Dock);
                             treeViewItem.Margin = new Thickness(viewModel.Left, viewModel.Top, viewModel.Right, viewModel.Bottom);
-                            if (string.IsNullOrEmpty(viewModel.DataTemplateKey)==false)
+                            //treeViewItem.Background = new SolidColorBrush(Colors.LightGray) { Opacity = 0.2 };
+                            if (string.IsNullOrEmpty(viewModel.DataTemplateKey) == false)
                             {
-                                node.DataTemplateKey = viewModel.DataTemplateKey;   
+                                node.DataTemplateKey = viewModel.DataTemplateKey;
                                 //var headerTemplate = (DataTemplate)Application.Current.TryFindResource(viewModel.DataTemplateKey);
                                 //treeViewItem.HeaderTemplate = headerTemplate;
                             }
@@ -127,6 +129,20 @@ namespace Utility.PropertyTrees.WPF
 
                         }
                     });
+
+
+                var adorner = new Button
+                {
+                    Content = "click",
+                    Command = node.Command,
+                    CommandParameter = new TreeClickEvent(node),
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    VerticalAlignment = VerticalAlignment.Top
+                };
+
+                Utility.WPF.Adorners.Infrastructure.AdornerHelper.AddIfMissingAdorner(treeViewItem, adorner);
+
+                treeViewItem.SetValue(AdornerEx.IsEnabledProperty, true);
 
                 return treeViewItem;
                 //}
@@ -194,4 +210,5 @@ namespace Utility.PropertyTrees.WPF
             return predicates.GetEnumerator();
         }
     }
+
 }

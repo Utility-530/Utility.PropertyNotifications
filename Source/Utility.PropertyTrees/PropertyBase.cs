@@ -3,14 +3,26 @@ using Utility.Helpers;
 using Utility.PropertyTrees.Infrastructure;
 using Utility.Nodes;
 using System.Collections.Specialized;
+using System.Windows.Input;
+using Utility.Commands;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyTrees
 {
     public abstract class PropertyBase : ValueNode, IProperty
     {
         private Lazy<Filters> lazyPredicates => new(() => new DefaultFilter(Data));
+
+        Command<object> command;
         public PropertyBase(Guid guid) : base(guid)
         {
+            command = new Command<object>(a =>
+            {
+                if (a is IGuid guid)
+                    this.Send(guid);
+                else
+                    throw new Exception("sd sss");
+            });
         }
 
         //public abstract string Name { get; }
@@ -26,6 +38,8 @@ namespace Utility.PropertyTrees
         public abstract bool IsReadOnly { get; }
         public override object Content => Name;
         //public IViewModel ViewModel { get; set; }
+
+        public ICommand Command => command;
         public string? DataTemplateKey { get; set; }
 
         public virtual Type Type { get; set; }

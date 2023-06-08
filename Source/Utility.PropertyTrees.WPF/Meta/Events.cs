@@ -6,5 +6,6 @@ namespace Utility.PropertyTrees.WPF.Meta
 {
     public record TreeViewRequest(TreeView TreeView, ValueNode PropertyNode) : Request;
     public record TreeViewResponse(TreeView TreeView) : Response(TreeView);
+    public record TreeClickEvent(ValueNode ValueNode) : Event;
 
 }
