@@ -50,34 +50,34 @@ namespace Utility.PropertyTrees.Services
         //    });
         //}
 
-        //public Utility.Interfaces.Generic.IObservable<SetPropertyResponse> OnNext(SetPropertyRequest order)
-        //{
-        //    return Create<SetPropertyResponse>(observer =>
-        //    {
-        //        CompositeDisposable composite = new();
+        public Utility.Interfaces.Generic.IObservable<SetViewModelResponse> OnNext(SetViewModelRequest order)
+        {
+            return Create<SetViewModelResponse>(observer =>
+            {
+                CompositeDisposable composite = new();
 
-        //        observer.OnProgress(1, 3);
-        //        return repository
-        //        .FindValue(order.Key)
-        //        .ToObservable()
-        //        .ObserveOn(Context)
-        //        .Subscribe(find =>
-        //        {
-        //            observer.OnProgress(2, 3);
+                observer.OnProgress(1, 3);
+                return repository
+                .FindValue(order.Key)
+                .ToObservable()
+                .ObserveOn(Context)
+                .Subscribe(find =>
+                {
+                    observer.OnProgress(2, 3);
 
-        //            repository
-        //            .UpdateValue(order.Key, order.Value)
-        //            .ToObservable()
-        //            .Subscribe(a =>
-        //            {
-        //                observer.OnProgress(3, 3);
-        //                observer.OnNext(new SetPropertyResponse(order.Value));
-        //                observer.OnCompleted();
-        //            }).DisposeWith(composite);
-        //        }).DisposeWith(composite);
+                    repository
+                    .UpdateValue(order.Key, order.ViewModel)
+                    .ToObservable()
+                    .Subscribe(a =>
+                    {
+                        observer.OnProgress(3, 3);
+                        observer.OnNext(new SetViewModelResponse(order.ViewModel));
+                        observer.OnCompleted();
+                    }).DisposeWith(composite);
+                }).DisposeWith(composite);
 
-        //    });
-        //}
+            });
+        }
 
         public Utility.Interfaces.Generic.IObservable<GetViewModelResponse> OnNext(GetViewModelRequest order)
         {

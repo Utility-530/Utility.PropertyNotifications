@@ -11,6 +11,9 @@ namespace Utility.PropertyTrees
         public record ActivationResponse(ValueNode PropertyNode) : Response(PropertyNode);
 
         public record GetViewModelResponse(IViewModel ViewModel) : Response(ViewModel);
-        public record GetViewModelRequest(IEquatable Key) : Request();
+        public record GetViewModelRequest(IEquatable Key) : Request();    
+        
+        public record SetViewModelResponse(IViewModel ViewModel) : Response(ViewModel);
+        public record SetViewModelRequest(IEquatable Key, IViewModel ViewModel) : Request();
     }
 }
