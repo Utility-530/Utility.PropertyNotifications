@@ -7,5 +7,6 @@ internal class Guids
     public static readonly Guid Resolver = Guid.Parse("222b7df3-9ae7-49d6-aabc-a492c6254718");
     public static readonly Guid PropertyFilter = Guid.Parse("215cdcc6-ac25-41a7-b482-fdf1a58b0ecd");
     public static readonly Guid PropertyActivator = Guid.Parse("24fadcc6-ac25-41a7-b482-fdf1a58b0ecd");
+    public static readonly Guid DescriptorFilter = Guid.Parse("fca6811e-8d33-4863-a2cd-c200ac10189d");
 }
 

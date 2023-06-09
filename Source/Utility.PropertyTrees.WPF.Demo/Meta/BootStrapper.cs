@@ -39,7 +39,8 @@ internal class BootStrapper : BaseObject
         container.RegisterMany<ChildPropertyExplorer>();
         container.RegisterMany<InterfaceController>();
 
-        container.RegisterMany<ViewModelEngine>();
+        container.RegisterMany<DescriptorFilterController>();
+        container.RegisterMany<RepositorySwitchController>();
         container.RegisterMany<BootStrapper>();
         //container.RegisterInstance<BaseObject>(this);
         //foreach (var connection in Outputs)

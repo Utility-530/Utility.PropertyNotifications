@@ -38,23 +38,25 @@ namespace Utility.PropertyTrees.Services
                 {
                     CompositeDisposable comp = new();
                     if (descriptors.Length == 0)
-                        obs.OnCompleted();           
+                        obs.OnCompleted();
                     foreach (var descriptor in descriptors)
                     {
-                        FromPropertyDescriptor(descriptor)
-                        .Subscribe(p =>
+                        Observe<DescriptorFilterResponse, DescriptorFilterRequest>(new DescriptorFilterRequest(descriptor))
+                        .Subscribe(a =>
                         {
-                            i++;
-                            obs.OnNext(new ChildrenResponse(p, i, count));
-                            observer.OnProgress(i, count);
-                            if (descriptors.Length == i)
-                                obs.OnCompleted();
-                        }, e =>
-                        {
-                            obs.OnError(e);
-                        })
-                        .DisposeWith(comp);
+                            FromPropertyDescriptor(descriptor)
+                            .Subscribe(p =>
+                            {
+                                i++;
+                                if (a.Include)
+                                    obs.OnNext(new ChildrenResponse(p, i, count));
+                                observer.OnProgress(i, count);
+                                if (descriptors.Length == i)
+                                    obs.OnCompleted();
+                            }).DisposeWith(comp);
+                        }).DisposeWith(comp);
                     }
+
                     return comp;
                 })
                 .Subscribe(a => observer.OnNext(a),
@@ -71,9 +73,6 @@ namespace Utility.PropertyTrees.Services
                                 observer.OnNext(new ChildrenResponse(p, i, count));
                                 observer.OnProgress(i, count);
                                 i++;
-                            }, e =>
-                            {
-                                observer.OnError(e);
                             })
                             .DisposeWith(composite);
                         },
@@ -85,109 +84,109 @@ namespace Utility.PropertyTrees.Services
 
                 (a, b) => observer.OnProgress(a, b));
 
-                return composite;
-            });
+            return composite;
+        });
 
 
             int Count(object data)
+        {
+            if (data is IEnumerable enumerable)
             {
-                if (data is IEnumerable enumerable)
+                return enumerable.Count();
+            }
+            return 0;
+        }
+
+        Interfaces.Generic.IObservable<ValueNode> FromCollectionDescriptor(CollectionItemDescriptor descriptor)
+        {
+            return Observe<ActivationResponse, ActivationRequest>(new(value.Guid, descriptor, descriptor.Item, GetType()))
+                   .Select(a => a.PropertyNode);
+
+            PropertyType GetType()
+            {
+                if (IsValueOrStringProperty(descriptor))
                 {
-                    return enumerable.Count();
+                    return PropertyType.CollectionItem | PropertyType.Value;
                 }
-                return 0;
-            }
-
-            Interfaces.Generic.IObservable<ValueNode> FromCollectionDescriptor(CollectionItemDescriptor descriptor)
-            {
-                return Observe<ActivationResponse, ActivationRequest>(new(value.Guid, descriptor, descriptor.Item, GetType()))
-                       .Select(a => a.PropertyNode);
-
-                PropertyType GetType()
+                else
                 {
-                    if (IsValueOrStringProperty(descriptor))
-                    {
-                        return PropertyType.CollectionItem | PropertyType.Value;
-                    }
-                    else
-                    {
-                        return PropertyType.CollectionItem | PropertyType.Reference;
-                    }
-                }
-            }
-
-
-            IObservable<ValueNode?> FromPropertyDescriptor(PropertyDescriptor descriptor)
-            {
-                if (descriptor.PropertyType == typeof(MethodBase))
-                    return Observable.Empty<ValueNode?>();
-                if (descriptor.PropertyType == typeof(Type))
-                    return Observable.Empty<ValueNode?>();
-
-                return CreateProperty(value.Data, value.Guid, descriptor);
-
-                IObservable<ValueNode> CreateProperty(object data, Guid guid, PropertyDescriptor descriptor)
-                {
-                    return Observable.Create<ValueNode>(observer =>
-                    {
-                        if (IsValueOrStringProperty(descriptor))
-                        {
-                            return Observe<ActivationResponse, ActivationRequest>(new(guid, descriptor, data, PropertyType.Value))
-                                    .Subscribe(a => { observer.OnNext(a.PropertyNode); observer.OnCompleted(); });
-                        }
-                        else
-                        {
-                            return Observe<ActivationResponse, ActivationRequest>(new(guid, descriptor, data, PropertyType.Reference))
-                                    .Subscribe(a => { observer.OnNext(a.PropertyNode); observer.OnCompleted(); });
-                        }
-                    });
-                }
-            }
-
-            static bool IsValueOrStringProperty(PropertyDescriptor? descriptor)
-            {
-                return descriptor.PropertyType.IsValueType || descriptor.PropertyType == typeof(string);
-            }
-
-            IEnumerable<PropertyDescriptor> PropertyDescriptors(object data) =>
-                TypeDescriptor.GetProperties(data)
-                    .Cast<PropertyDescriptor>()
-                    .Where(a => value.Filters?.Any(f => f.Invoke(a) == false) == false)
-                    .OrderBy(d => d.Name);
-
-            Utility.Interfaces.Generic.IObservable<CollectionItemDescriptor> CollectionItemDescriptors(object data)
-            {
-                return Create<CollectionItemDescriptor>(observer =>
-                {
-                    int i = 0;
-                    if (data is IEnumerable enumerable && data is not string s)
-                        foreach (var item in enumerable)
-                        {
-                            Next(value, observer, item, ref i);
-                        }
-                    if (data is INotifyCollectionChanged collectionChanged)
-                    {
-                        return collectionChanged.SelectNewItems<object>()
-                        .Subscribe(item =>
-                        {
-                            Next(value, observer, item, ref i);
-                        });
-                    }
-                    else
-                    {
-                        observer.OnCompleted();
-                        return Disposer.Empty;
-                    }
-
-                });
-                static void Next(ChildrenRequest value, Interfaces.Generic.IObserver<CollectionItemDescriptor> observer, object item, ref int i)
-                {
-                    var descriptor = new CollectionItemDescriptor(item, i);
-                    if (value.Filters?.Any(f => f.Invoke(descriptor) == false) == false)
-                        observer.OnNext(descriptor);
-                    i++;
+                    return PropertyType.CollectionItem | PropertyType.Reference;
                 }
             }
         }
+
+
+        IObservable<ValueNode?> FromPropertyDescriptor(PropertyDescriptor descriptor)
+        {
+            if (descriptor.PropertyType == typeof(MethodBase))
+                return Observable.Empty<ValueNode?>();
+            if (descriptor.PropertyType == typeof(Type))
+                return Observable.Empty<ValueNode?>();
+
+            return CreateProperty(value.Data, value.Guid, descriptor);
+
+            IObservable<ValueNode> CreateProperty(object data, Guid guid, PropertyDescriptor descriptor)
+            {
+                return Observable.Create<ValueNode>(observer =>
+                {
+                    if (IsValueOrStringProperty(descriptor))
+                    {
+                        return Observe<ActivationResponse, ActivationRequest>(new(guid, descriptor, data, PropertyType.Value))
+                                .Subscribe(a => { observer.OnNext(a.PropertyNode); observer.OnCompleted(); });
+                    }
+                    else
+                    {
+                        return Observe<ActivationResponse, ActivationRequest>(new(guid, descriptor, data, PropertyType.Reference))
+                                .Subscribe(a => { observer.OnNext(a.PropertyNode); observer.OnCompleted(); });
+                    }
+                });
+            }
+        }
+
+        static bool IsValueOrStringProperty(PropertyDescriptor? descriptor)
+        {
+            return descriptor.PropertyType.IsValueType || descriptor.PropertyType == typeof(string);
+        }
+
+        IEnumerable<PropertyDescriptor> PropertyDescriptors(object data) =>
+            TypeDescriptor.GetProperties(data)
+                .Cast<PropertyDescriptor>()
+                //.Where(a => value.Filters?.Any(f => f.Invoke(a) == false) == false)
+                .OrderBy(d => d.Name);
+
+        Utility.Interfaces.Generic.IObservable<CollectionItemDescriptor> CollectionItemDescriptors(object data)
+        {
+            return Create<CollectionItemDescriptor>(observer =>
+            {
+                int i = 0;
+                if (data is IEnumerable enumerable && data is not string s)
+                    foreach (var item in enumerable)
+                    {
+                        Next(value, observer, item, ref i);
+                    }
+                if (data is INotifyCollectionChanged collectionChanged)
+                {
+                    return collectionChanged.SelectNewItems<object>()
+                    .Subscribe(item =>
+                    {
+                        Next(value, observer, item, ref i);
+                    });
+                }
+                else
+                {
+                    observer.OnCompleted();
+                    return Disposer.Empty;
+                }
+
+            });
+            static void Next(ChildrenRequest value, Interfaces.Generic.IObserver<CollectionItemDescriptor> observer, object item, ref int i)
+            {
+                var descriptor = new CollectionItemDescriptor(item, i);
+                //if (value.Filters?.Any(f => f.Invoke(descriptor) == false) == false)
+                observer.OnNext(descriptor);
+                i++;
+            }
+        }
     }
+}
 }

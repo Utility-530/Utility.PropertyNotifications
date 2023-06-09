@@ -1,16 +1,10 @@
 ﻿using Utility.Infrastructure;
-using NetFabric.Hyperlinq;
-using Utility.Interfaces.NonGeneric;
 using Utility.Observables.NonGeneric;
-using Utility.PropertyTrees.WPF.Meta;
 using DryIoc;
-using Utility.Nodes;
 using Utility.Observables.Generic;
-using System.Reactive.Disposables;
 using Utility.Helpers.Ex;
 
 namespace Utility.PropertyTrees.WPF.Demo;
-
 
 internal class ModelController : BaseObject
 {
@@ -18,13 +12,9 @@ internal class ModelController : BaseObject
 
     public override Key Key => new(Guids.ModelController, nameof(ModelController), typeof(ModelController));
 
-    //public override object? Model => model;
-
-    //RootModel model => (RootModel)container.Resolve<RootModelProperty>().Data;
 
     public ModelController()
     {
-
     }
 
     public void OnNext(StartEvent startEvent)
@@ -38,18 +28,18 @@ internal class ModelController : BaseObject
         {
             case ConnectRequest:
                 Observe<ServerResponse, ServerRequest>(new(model.Server.IP, model.Server.Port))
-               .Subscribe(a =>
-               {
-               });
+                .Subscribe(a =>
+                {
+                });
                 break;
             case ScreensaverRequest:
                 {
                     var message = JsonHelper.Serialize(model.GameModel.ScreenSaver);
                     model.JSON = message;
                     Observe<ClientMessageResponse, ClientMessageRequest>(new(nameof(model.GameModel.ScreenSaver), message))
-                     .Subscribe(a =>
-                     {
-                     });
+                        .Subscribe(a =>
+                        {
+                        });
                     break;
                 }
             case PrizeWheelRequest:
@@ -58,9 +48,9 @@ internal class ModelController : BaseObject
                     var message = JsonHelper.Serialize(model.GameModel.PrizeWheel);
                     model.JSON = message;
                     Observe<ClientMessageResponse, ClientMessageRequest>(new(nameof(model.GameModel.PrizeWheel), message))
-                     .Subscribe(a =>
-                     {
-                     });
+                        .Subscribe(a =>
+                        {
+                        });
                     break;
                 }
             case LeaderboardRequest:
@@ -70,7 +60,6 @@ internal class ModelController : BaseObject
                     Observe<ClientMessageResponse, ClientMessageRequest>(new(nameof(model.GameModel.Leaderboard), message))
                     .Subscribe(a =>
                     {
-
                     });
                     break;
                 }

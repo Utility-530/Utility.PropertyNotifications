@@ -23,6 +23,8 @@ using Utility.WPF.Helpers;
 using Swordfish.NET.Collections.Auxiliary;
 using Utility.WPF.Adorners.Infrastructure;
 using System.Windows.Media;
+using NetFabric.Hyperlinq;
+using System.Linq;
 
 namespace Utility.PropertyTrees.WPF
 {
@@ -68,43 +70,17 @@ namespace Utility.PropertyTrees.WPF
 
             TreeViewItem MakeTreeViewItem(PropertyBase node)
             {
-                //try
-                //{
                 ItemsPanelTemplate? panelTemplate = DefaultItemsPanelTemplate();
                 DataTemplate? headerTemplate = default;
 
-                //ViewModel viewModel = new() { CollectionPanel = new() { Grid = new() }, Panel = new() { Grid = new() { } }, Template = new() { } };
-                //node.ViewModel = viewModel;
-
                 var treeViewItem = new TreeViewItem() { Header = node, IsExpanded = true };
 
-                //_ = Observe<ActivationResponse, ActivationRequest>(new(node.Guid, new RootDescriptor(node), node, PropertyType.Root))
-                //    .Select(a => a.PropertyNode)
-                //.Subscribe(propertyNode =>
-                //{
-                //    propertyNode.Predicates = new ViewModelPredicate();
-                //    PropertyExplorer.ExploreTree(new List<object>(), (a, b) => a, propertyNode, out var disposable)
-                //    .Subscribe(a => { },
-                //    () =>
-                //    {
-                //        var viewModel = node.ViewModel as ViewModel;
-                //        panelTemplate = viewModel.Panel?.Type != null ? (ItemsPanelTemplate)Application.Current.TryFindResource(viewModel.Panel.Type) : DefaultItemsPanelTemplate();
-                //        if (viewModel.Template.DataTemplateKey != null)
-                //            headerTemplate = (DataTemplate)Application.Current.TryFindResource(viewModel.Template.DataTemplateKey);
-                //        else
-                //        {
-                //            var key = new DataTemplateKey(node.PropertyType);
-                //            headerTemplate = (DataTemplate)Application.Current.TryFindResource(key);
-                //        }
-                //        //treeViewItem.HeaderTemplate = headerTemplate;
-                //        treeViewItem.ItemsPanel = panelTemplate;
-                //    });
-                //});
+    
 
                 _ = Observe<GetViewModelResponse, GetViewModelRequest>(new(node.Key))
                     .Subscribe(x =>
                     {
-                        var viewModel = x.ViewModel;
+                        var viewModel = x.ViewModels.Single();
                         try
                         {
                             panelTemplate = GetPanelsTemplate(panelTemplate, viewModel);
@@ -144,12 +120,13 @@ namespace Utility.PropertyTrees.WPF
 
                 treeViewItem.SetValue(AdornerEx.IsEnabledProperty, true);
 
+
+                treeViewItem.MouseDoubleClick += (s, e) => {
+                        node.Command.Execute(new TreeMouseDoubleClickEvent(node));
+                };
+
                 return treeViewItem;
-                //}
-                //catch (Exception ex)
-                //{
-                //    return new TreeViewItem();
-                //}
+     
             }
         }
 
@@ -189,26 +166,4 @@ namespace Utility.PropertyTrees.WPF
             return template;
         }
     }
-
-
-
-    public class ViewModelPredicate : Filters
-    {
-        private List<Predicate<PropertyDescriptor>> predicates;
-
-        public ViewModelPredicate()
-        {
-            predicates = new(){
-                new Predicate<PropertyDescriptor>(descriptor=>
-            {
-                   return descriptor.PropertyType==typeof(IViewModel);
-            }) };
-        }
-
-        public override IEnumerator<Predicate<PropertyDescriptor>> GetEnumerator()
-        {
-            return predicates.GetEnumerator();
-        }
-    }
-
 }

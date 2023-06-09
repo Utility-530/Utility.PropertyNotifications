@@ -47,7 +47,6 @@ namespace Utility.PropertyTrees.Services
 
         }
 
-
         public static IDisposable ExploreTree<T>(T items, Func<T, PropertyBase, T> func, ValueNode property, Subject<State> state)
         {
             state.OnNext(State.Started);
@@ -79,10 +78,7 @@ namespace Utility.PropertyTrees.Services
                 }
               );
             return disposable;
-
         }
-
-
 
         public static IObservable<ValueNode> FindNode(ValueNode node, Predicate<ValueNode> predicate, out IDisposable disposable)
         {
