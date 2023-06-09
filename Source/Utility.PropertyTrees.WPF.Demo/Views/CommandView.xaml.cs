@@ -48,7 +48,6 @@ namespace Utility.PropertyTrees.WPF.Demo.Views
             controller.OnNext(new RefreshRequest());
         }
 
-  
         private void connect_click(object sender, RoutedEventArgs e)
         {
             controller.OnNext(new ConnectRequest());
