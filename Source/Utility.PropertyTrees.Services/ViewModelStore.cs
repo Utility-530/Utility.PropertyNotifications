@@ -9,6 +9,7 @@ using Utility.Infrastructure;
 using static Utility.PropertyTrees.Events;
 using LiteDB;
 using Utility.Enums;
+using System.Collections;
 
 namespace Utility.PropertyTrees.Services
 {
@@ -92,10 +93,14 @@ namespace Utility.PropertyTrees.Services
                     .ObserveOn(Context)
                     .Subscribe(find =>
                     {
-                        if (find != null)
+                        if (find is ViewModel viewModel)
                         {
-
-                            observer.OnNext(new GetViewModelResponse((ViewModel)find));
+                            observer.OnNext(new GetViewModelResponse(new[] { viewModel }));
+                            observer.OnProgress(2, 2);
+                        }
+                        if (find is IEnumerable viewModels)
+                        {
+                            observer.OnNext(new GetViewModelResponse(viewModels.OfType<ViewModel>().ToArray()));
                             observer.OnProgress(2, 2);
                         }
                         else
@@ -111,6 +116,7 @@ namespace Utility.PropertyTrees.Services
 
     public class ViewModel : IViewModel
     {
+        public string Name { get; set; }
         public bool IsExpanded { get; set; }
         public Position2D Dock { get; set; }
         public int GridRow { get; set; }
@@ -123,5 +129,8 @@ namespace Utility.PropertyTrees.Services
         public double Right { get; set; }
         public double Top { get; set; }
         public double Bottom { get; set; }
+        public string Tooltip { get; set; }
+
+
     }
 }
