@@ -23,8 +23,6 @@ using Utility.WPF.Helpers;
 using Swordfish.NET.Collections.Auxiliary;
 using Utility.WPF.Adorners.Infrastructure;
 using System.Windows.Media;
-using NetFabric.Hyperlinq;
-using System.Linq;
 
 namespace Utility.PropertyTrees.WPF
 {
@@ -58,9 +56,6 @@ namespace Utility.PropertyTrees.WPF
                 return disposables;
             });
         }
-
-        Dictionary<Key, ValueNode> dictionary = new();
-        Dictionary<string, ValueNode> dictionary2 = new();
 
         public IObservable<(int, int)> BuildTree(TreeView treeView, ValueNode property, out IDisposable disposable)
         {
@@ -105,13 +100,11 @@ namespace Utility.PropertyTrees.WPF
                 //        treeViewItem.ItemsPanel = panelTemplate;
                 //    });
                 //});
-                dictionary[node.Key] = node;
-                dictionary2[node.Key.Name] = node;
 
                 _ = Observe<GetViewModelResponse, GetViewModelRequest>(new(node.Key))
                     .Subscribe(x =>
                     {
-                        var viewModel = x.ViewModel.Single();
+                        var viewModel = x.ViewModel;
                         try
                         {
                             panelTemplate = GetPanelsTemplate(panelTemplate, viewModel);
@@ -123,7 +116,6 @@ namespace Utility.PropertyTrees.WPF
                             Grid.SetColumnSpan(treeViewItem, viewModel.GridColumnSpan);
                             DockPanel.SetDock(treeViewItem, (Dock)viewModel.Dock);
                             treeViewItem.Margin = new Thickness(viewModel.Left, viewModel.Top, viewModel.Right, viewModel.Bottom);
-                            treeViewItem.ToolTip = viewModel.Tooltip;
                             //treeViewItem.Background = new SolidColorBrush(Colors.LightGray) { Opacity = 0.2 };
                             if (string.IsNullOrEmpty(viewModel.DataTemplateKey) == false)
                             {
@@ -148,11 +140,6 @@ namespace Utility.PropertyTrees.WPF
                     VerticalAlignment = VerticalAlignment.Top
                 };
 
-                //treeViewItem.MouseDown += (s, e) => { node.Command.Execute(new TreeMouseDownEvent(node)); };
-                treeViewItem.MouseDoubleClick += (s, e) => {
-                    if(e.Source== treeViewItem)
-                        node.Command.Execute(new TreeMouseDoubleClickEvent(node)); };
-
                 Utility.WPF.Adorners.Infrastructure.AdornerHelper.AddIfMissingAdorner(treeViewItem, adorner);
 
                 treeViewItem.SetValue(AdornerEx.IsEnabledProperty, true);
@@ -164,11 +151,6 @@ namespace Utility.PropertyTrees.WPF
                 //    return new TreeViewItem();
                 //}
             }
-        }
-
-        private void TreeViewItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            throw new NotImplementedException();
         }
 
         private ItemsPanelTemplate GetPanelsTemplate(ItemsPanelTemplate panelTemplate, IViewModel viewModel)

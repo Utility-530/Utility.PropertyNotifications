@@ -4,7 +4,7 @@ using Application = System.Windows.Application;
 using Utility.Infrastructure;
 using DryIoc;
 using Resolver = Utility.PropertyTrees.Services.Resolver;
-using Utility.PropertyTrees.WPF.Demo.Views;
+
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
@@ -28,10 +28,7 @@ namespace Utility.PropertyTrees.WPF.Demo
 
             //var window2 = new Window { Content = container.Resolve<ILogger>() };
             //window2.Show();
-            //var window2 = new Window { Content =new TemplatesView(container) };
-            //window2.Show();
-            //var window2 = new Window { Content =new ViewEditorView() };
-            //window2.Show();
+
             base.OnStartup(e);
 
 #if DEBUG
