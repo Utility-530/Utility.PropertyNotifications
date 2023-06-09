@@ -130,7 +130,7 @@ namespace Utility.Nodes
             }
             flag = true;
 
-            disposable = Observe<ChildrenResponse, ChildrenRequest>(new ChildrenRequest(Guid, Data, Predicates))
+            disposable = Observe<ChildrenResponse, ChildrenRequest>(new ChildrenRequest(Guid, Data))
                 .Subscribe(a =>
                 {
                     if(a.PropertyNode==null)
@@ -158,7 +158,7 @@ namespace Utility.Nodes
     }
 
 
-    public record ChildrenRequest(Guid Guid, object Data, Filters Filters) : Request();
+    public record ChildrenRequest(Guid Guid, object Data) : Request();
 
     public record ChildrenResponse(ValueNode PropertyNode, double Completed, double Total) : Response(PropertyNode);
 
