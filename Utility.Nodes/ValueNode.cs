@@ -19,7 +19,6 @@ namespace Utility.Nodes
         protected Collection _branches = new();
         protected Collection _leaves = new();
         private bool flag = false;
-        protected Filters predicates;
         IDisposable? disposable = null;
         private object data;
 
@@ -149,8 +148,6 @@ namespace Utility.Nodes
             return Task.FromResult(flag == false);
         }
 
-        public virtual Filters Predicates { get => predicates; set => predicates = value; }
-
         public override string ToString()
         {
             return Data.GetType().Name;
@@ -161,5 +158,4 @@ namespace Utility.Nodes
     public record ChildrenRequest(Guid Guid, object Data) : Request();
 
     public record ChildrenResponse(ValueNode PropertyNode, double Completed, double Total) : Response(PropertyNode);
-
 }
