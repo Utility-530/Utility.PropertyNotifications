@@ -10,7 +10,7 @@ namespace Utility.PropertyTrees
         public record ActivationRequest(Guid? Key, PropertyDescriptor Descriptor, object Data, PropertyType PropertyType) : Request;
         public record ActivationResponse(ValueNode PropertyNode) : Response(PropertyNode);
 
-        public record GetViewModelResponse(IViewModel ViewModel) : Response(ViewModel);
+        public record GetViewModelResponse(IReadOnlyCollection<IViewModel> ViewModel) : Response(ViewModel);
         public record GetViewModelRequest(IEquatable Key) : Request();    
         
         public record SetViewModelResponse(IViewModel ViewModel) : Response(ViewModel);
