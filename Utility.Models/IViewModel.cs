@@ -19,9 +19,14 @@ namespace Utility.Models
 
         string DataTemplateKey { get; set; }
 
+        // margin
         double Left { get; set; }
         double Right { get; set; }
         double Top { get; set; }
         double Bottom { get; set; }
+        // margin
+
+
+        string Tooltip { get; set; }
     }
 }
