@@ -46,7 +46,7 @@
             <ItemsPanelTemplate x:Key="CustomGrid">
                 <!--<st:AutoGrid Rows="1*,1*,1*" Columns="1*,1*">                    
                 </st:AutoGrid>-->
-                <Grid>
+                <Grid Background="{DynamicResource ApplicationPageBackgroundThemeBrush}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="*"/>

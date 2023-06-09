@@ -10,6 +10,11 @@ namespace Utility.PropertyTrees.WPF.Demo
         public void OnNext(TreeClickEvent command)
         {
 
+        }       
+        
+        public void OnNext(TreeMouseDoubleClickEvent command)
+        {
+
         }
     }
 }

@@ -11,8 +11,6 @@ namespace Utility.PropertyTrees
 {
     public abstract class PropertyBase : ValueNode, IProperty
     {
-        private Lazy<Filters> lazyPredicates => new(() => new DefaultFilter(Data));
-
         Command<object> command;
         public PropertyBase(Guid guid) : base(guid)
         {
@@ -45,8 +43,6 @@ namespace Utility.PropertyTrees
         public virtual Type Type { get; set; }
 
         public virtual PropertyDescriptor Descriptor { get; set; }
-
-        public override Filters Predicates => predicates ?? lazyPredicates.Value;
 
         protected override async Task<bool> RefreshAsync()
         {
