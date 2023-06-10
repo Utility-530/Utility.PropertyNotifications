@@ -18,8 +18,8 @@ namespace Utility.Nodes
         protected Collection _children = new();
         protected Collection _branches = new();
         protected Collection _leaves = new();
-        private bool flag = false;
-        IDisposable? disposable = null;
+        protected bool flag = false;
+        protected IDisposable? disposable = null;
         private object data;
 
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
@@ -122,7 +122,7 @@ namespace Utility.Nodes
         {
             if (flag == true)
             {
-                await Task.Delay(10000);
+                await Task.Delay(1000);
                 disposable?.Dispose();
                 flag = false;
                 return await Task.FromResult(true);
