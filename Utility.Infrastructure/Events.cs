@@ -10,7 +10,7 @@ public record BroadcastEvent(object Source, object Target) : Event();
 public record BroadcastSuccessEvent(object Source, object Target) : BroadcastEvent(Source, Target);
 public record BroadcastFailureEvent(object Source, object Target) : BroadcastEvent(Source, Target);
 public record FindPropertyRequest(Key Key) : Request;
-public record FindPropertyResponse(IEquatable Key) : Response(Key);
+public record FindPropertyResponse(IEquatable[] Keys) : Response(Keys);
 public record GetPropertyResponse(object Value) : Response(Value);
 public record SetPropertyResponse(object Value) : Response(Value);
 public record PropertyRequest(IEquatable Key) : Request;
