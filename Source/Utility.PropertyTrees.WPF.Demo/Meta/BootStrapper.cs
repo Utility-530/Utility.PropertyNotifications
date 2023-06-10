@@ -32,6 +32,7 @@ internal class BootStrapper : BaseObject
         //container.Register<IRepository, HttpRepository>(Reuse.Singleton);
         container.Register<IRepository, SqliteRepository>(serviceKey: nameof(SqliteRepository));
         container.Register<IRepository, LiteDBRepository>(serviceKey: nameof(LiteDBRepository));
+        container.Register<IRepository, InMemoryRepository>(serviceKey: nameof(InMemoryRepository));
         container.RegisterMany<HistoryViewModel>();
         container.RegisterMany<PropertyStore>(made: Parameters.Of.Type<IRepository>(serviceKey: nameof(SqliteRepository)));
         container.RegisterMany<ViewModelStore>(made: Parameters.Of.Type<IRepository>(serviceKey: nameof(LiteDBRepository)));
