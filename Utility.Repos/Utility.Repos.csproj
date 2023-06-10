@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Utility.Conversions\Utility.Conversions\Utility.Conversions.csproj" />
+    <ProjectReference Include="..\..\Utility.Helpers\Utility.Helpers\Utility.Helpers.csproj" />
     <ProjectReference Include="..\..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
     <ProjectReference Include="..\..\Utility.Models\Utility.Models\Utility.Models.csproj" />
     <ProjectReference Include="..\..\Utility.Trees\Utility.Trees\Utility.Trees.csproj" />
