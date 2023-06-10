@@ -208,7 +208,7 @@ namespace Utility.PropertyTrees.Services
                         Observe<FindPropertyResponse, FindPropertyRequest>(new(new Key(parent, name, propertyType)))
                         .Subscribe(result =>
                         {
-                            Key key = result.Key as Key ?? throw new Exception("dfb 43 4df");
+                            Key key = result.Keys.SingleOrDefault() as Key ?? throw new Exception("dfb 43 4df");
                             //if (guids.ContainsKey(key))
                             //      observer.OnNext(guids[key]);
                             var args = new object[] { key.Guid };

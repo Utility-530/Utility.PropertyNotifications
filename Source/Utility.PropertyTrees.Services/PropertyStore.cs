@@ -39,7 +39,7 @@ namespace Utility.PropertyTrees.Services
                 .Subscribe(a =>
                 {
                     repositories[a.RepositoryKey]
-                    .FindKeyByParent(request.Key)
+                    .FindKeys(request.Key)
                     .ToObservable()
                     .Select(childKey => new FindPropertyResponse(childKey))
                     .ObserveOn(Context)
@@ -105,7 +105,6 @@ namespace Utility.PropertyTrees.Services
                             if (find != null)
                             {
                                 observer.OnNext(new GetPropertyResponse(find));
-
                             }
                             else
                             {
