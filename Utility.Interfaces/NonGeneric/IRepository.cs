@@ -9,7 +9,7 @@ namespace Utility.Infrastructure.Abstractions
 
         Task<object?> FindValue(IEquatable key);
 
-        Task<IEquatable> FindKeyByParent(IEquatable key);
+        Task<IEquatable[]> FindKeys(IEquatable key);
 
         Task UpdateValue(IEquatable key, object value);
     }
