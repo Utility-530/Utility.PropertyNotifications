@@ -15,7 +15,9 @@ namespace Utility.Repos
             client = new HttpClient { BaseAddress = new Uri("http://localhost:5084/"), Timeout = TimeSpan.FromSeconds(5) };
         }
 
-        public async Task<IEquatable> FindKeyByParent(IEquatable key)
+        public IEquatable Key => new Key<HttpRepository>(Guids.Http);
+
+        public async Task<IEquatable[]> FindKeys(IEquatable key)
         {
             if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
             {
@@ -32,7 +34,7 @@ namespace Utility.Repos
             Guid? model = JsonSerializer.Deserialize<Guid>(jsonResponseBody);
             if (model.HasValue == false)
                 throw new Exception("sdfklj3 fsdfsd3433");
-            return new Key(model.Value, name, type);
+            return new[] { new Key(model.Value, name, type) };
         }
 
         public async Task<object?> FindValue(IEquatable key)

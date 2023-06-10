@@ -18,16 +18,8 @@ namespace Utility.Repos
             connection = new SQLiteAsyncConnection(Path.Combine(dbDirectory, "data" + "." + "sqlite"));
             //Initialise();
         }
+        public IEquatable Key => new Key<Repository2>(Guids.Tree);
 
-        //async void Initialise()
-        //{
-        //    initialisationTask = Task.WhenAll(
-        //     new[]{
-        //         connection.CreateTableAsync<Table>(),
-        //         connection.CreateTableAsync<Type>()
-        //     });
-
-        //}
 
         private Tree tree = new();
 
@@ -41,7 +33,7 @@ namespace Utility.Repos
             Dictionary[Guid.NewGuid()] = key;
         }
 
-        public Task<IEquatable> FindKeyByParent(IEquatable key)
+        public Task<IEquatable[]> FindKeys(IEquatable key)
         {
             if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
             {
@@ -78,7 +70,7 @@ namespace Utility.Repos
                     (tree[_key] ?? throw new Exception("88df 44gfgdf")).Add(childKey);
                 }
 
-                return childKey;
+                return new[] { childKey };
             });
         }
 

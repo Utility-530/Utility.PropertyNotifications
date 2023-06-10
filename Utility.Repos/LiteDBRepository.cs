@@ -11,6 +11,9 @@ namespace Utility.Repos
         private BsonMapper _mapper = new() { SerializeNullValues = true };
         private readonly DatabaseSettings settings;
 
+        public IEquatable Key => new Key<LiteDBRepository>(Guids.LiteDB);
+
+
         public LiteDBRepository(DatabaseSettings settings)
         {
             Directory.CreateDirectory(settings.Path);
@@ -18,7 +21,7 @@ namespace Utility.Repos
         }
 
 
-        public Task<IEquatable> FindKeyByParent(IEquatable key)
+        public Task<IEquatable[]> FindKeys(IEquatable key)
         {
             throw new NotImplementedException();
         }

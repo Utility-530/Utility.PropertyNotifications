@@ -2,9 +2,11 @@
 using System.Globalization;
 using System.Reflection;
 using Utility.Conversions;
+using Utility.Helpers;
 using Utility.Infrastructure.Abstractions;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+using static Utility.Repos.SqliteRepository;
 
 namespace Utility.Repos
 {
@@ -53,9 +55,12 @@ namespace Utility.Repos
             Initialise();
         }
 
-        public SqliteRepository(DatabaseDirectory dbDirectory):this(dbDirectory.Path)
+        public SqliteRepository(DatabaseDirectory dbDirectory) : this(dbDirectory.Path)
         {
         }
+
+        public IEquatable Key => new Key<SqliteRepository>(Guids.SQLite);
+
 
         private void Initialise()
         {
@@ -108,54 +113,90 @@ namespace Utility.Repos
         }
 
 
-        public async Task<IEquatable> FindKeyByParent(IEquatable key)
+        public async Task<IEquatable[]> FindKeys(IEquatable key)
         {
-            if (key is not Key { Guid: var parent, Name: var name, Type: var type } _key)
+            if (key is not Key { Guid: var parent } _key)
             {
                 throw new Exception("reg 43cs ");
             }
 
             await initialisationTask;
 
-            var tables = await connection.QueryAsync<Table>($"Select * from 'Table' where Parent = '{parent}' AND Name = '{name}'");
-            if (tables.Count == 0)
+            if (key is Key { Name: null, Type: null })
             {
-                //throw new Exception("2241!43 ere 4323");
-                var guid = Guid.NewGuid();
-                //var max = await connection.ExecuteScalarAsync<int>("SELECT MAX(Id) FROM Table");
-                await connection.RunInTransactionAsync(c =>
+                var tables = await connection.QueryAsync<Table>($"Select * from 'Table' where Parent = '{parent}'");
+                List<IEquatable> childKeys = new();
+                foreach (var table in tables)
                 {
-                    var tables = c.Query<Table>($"Select * from 'Table' where Parent = '{parent}' AND Name = '{name}'");
-                    if (tables.Count != 0)
-                        return;
-                    var types = c.Query<Type>($"Select * from 'Type' where Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}'");
-                    int typeId;
+                    var types = await connection.QueryAsync<Type>($"Select * from 'Type' where Id = '{table.Type}'");
+                    var singleType = types.Single();
+                    var clrType = TypeHelper.ToType(singleType.Assembly, singleType.Namespace, singleType.Name);
+                    var childKey = new Key(table.Guid, table.Name, clrType);
+                    childKeys.Add(childKey);
+                }
+                return childKeys.ToArray();
+            }
 
-                    if (types.Count == 0)
+            if (key is Key { Name: var name, Type: System.Type type })
+            {
+                if (name == null)
+                {
+                    var types = await connection.QueryAsync<Type>($"Select * from 'Type' where Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}'");
+                    var singleType = types.Single();
+                    var tables = await connection.QueryAsync<Table>($"Select * from 'Table' where Parent = '{parent}' AND Type = '{singleType.Id}'");
+                    List<IEquatable> childKeys = new();
+                    foreach (var table in tables)
                     {
-                        c.Insert(new Type { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name });
-                        typeId = c.ExecuteScalar<int>("Select Max(Id) from 'Type'");
+                        var clrType = TypeHelper.ToType(singleType.Assembly, singleType.Namespace, singleType.Name);
+                        var childKey = new Key(table.Guid, table.Name, clrType);
+                        childKeys.Add(childKey);
                     }
-                    else if (types.Count == 1)
+                    return childKeys.ToArray();
+                }
+                else
+                {
+                    var tables = await connection.QueryAsync<Table>($"Select * from 'Table' where Parent = '{parent}' AND Name = '{name}'");
+                    if (tables.Count == 0)
                     {
-                        typeId = types.Single().Id;
+                        //throw new Exception("2241!43 ere 4323");
+                        var guid = Guid.NewGuid();
+                        //var max = await connection.ExecuteScalarAsync<int>("SELECT MAX(Id) FROM Table");
+                        await connection.RunInTransactionAsync(c =>
+                        {
+                            var tables = c.Query<Table>($"Select * from 'Table' where Parent = '{parent}' AND Name = '{name}'");
+                            if (tables.Count != 0)
+                                return;
+                            var types = c.Query<Type>($"Select * from 'Type' where Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}'");
+                            int typeId;
+
+                            if (types.Count == 0)
+                            {
+                                c.Insert(new Type { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name });
+                                typeId = c.ExecuteScalar<int>("Select Max(Id) from 'Type'");
+                            }
+                            else if (types.Count == 1)
+                            {
+                                typeId = types.Single().Id;
+                            }
+                            else
+                                throw new Exception("f 434 4");
+
+                            var i = c.Insert(new Table { Guid = guid, Name = name, Parent = parent, Type = typeId });
+                        });
+                        return new[] { new Key(guid, name, type) };
+                    }
+                    if (tables.Count == 1)
+                    {
+                        var table = tables.Single();
+                        return new[] { new Key(table.Guid, name, type) };
                     }
                     else
-                        throw new Exception("f 434 4");
-
-                    var i = c.Insert(new Table { Guid = guid, Name = name, Parent = parent, Type = typeId });
-                });
-                return new Key(guid, name, type);
+                    {
+                        throw new Exception("3e909re 4323");
+                    }
+                }
             }
-            if (tables.Count == 1)
-            {
-                var table = tables.Single();
-                return new Key(table.Guid, name, type);
-            }
-            else
-            {
-                throw new Exception("3e909re 4323");
-            }
+            throw new Exception(";d;d 3e9d 3209re 4323");
         }
 
         public async Task<object?> FindValue(IEquatable key)
@@ -169,8 +210,8 @@ namespace Utility.Repos
             var tables = await connection.Table<Table>().Where(v => v.Guid.Equals(guid)).ToListAsync();
 
             if (tables.Count == 0)
-            {     
-                throw new Exception("!43 ere 4323");
+            {
+                throw new Exception($"!43 ere 4323 {key}");
             }
             else if (tables.Count == 1)
             {
