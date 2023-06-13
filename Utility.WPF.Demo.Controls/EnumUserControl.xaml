@@ -29,7 +29,7 @@
                             x:Name="ebdc"
                             Orientation="{Binding ElementName=ToggleButton1, Path=Content}"
                             Enum="{x:Type test:Emotion}" />
-                <TextBlock Text="{Binding ElementName=ebdc, Path=Output, Mode=OneWay, Converter={x:Static conv:LambdaConverter.StringConverter}}" Margin="5" Background="AliceBlue" Height="30" />
+                <TextBlock Text="{Binding ElementName=ebdc, Path=Value, Mode=OneWay, Converter={x:Static conv:LambdaConverter.StringConverter}}" Margin="5" Background="AliceBlue" Height="30" />
             </StackPanel>
             <StackPanel>
                 <Button Command="{Binding ElementName=ebdcs, Path=ClearCommand}">
@@ -40,7 +40,7 @@
                             IsMultiSelect="true"
                             Orientation="Vertical"
                             Enum="{x:Type test:AssemblyType}" />
-                <TextBlock Text="{Binding ElementName=ebdcs, Path=Output, Converter={x:Static conv:LambdaConverter.StringConverter}}" Margin="5" Background="NavajoWhite" Height="30"/>
+                <TextBlock Text="{Binding ElementName=ebdcs, Path=Value, Converter={x:Static conv:LambdaConverter.StringConverter}}" Margin="5" Background="NavajoWhite" Height="30"/>
             </StackPanel>
             <view:EnumItemsControl Enum="{x:Type test:Emotion}" IsReadOnly="True" />
         </UniformGrid>

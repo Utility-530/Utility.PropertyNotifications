@@ -5,10 +5,18 @@ using Utility.Observables.NonGeneric;
 
 namespace Utility.Commands
 {
-    public class ObservableCommand : ICommand, IObservable
+    public class ObservableCommand : ICommand, IObservable, IObserver<bool>
     {
         private bool canExecute;
-        private readonly object? id;
+         List<IObserver> observers  = new();
+        private object? id;
+        private readonly Action<IObserver<bool>> methodToExecute;
+
+        public ObservableCommand(Action<IObserver<bool>> methodToExecute, bool canExecute =true)
+        {
+            this.canExecute = canExecute;
+            this.methodToExecute = methodToExecute;
+        }
 
         public ObservableCommand(object? id = null)
         {
@@ -21,7 +29,7 @@ namespace Utility.Commands
             remove => CommandManager.RequerySuggested -= value;
         }
 
-         List<IObserver> observers  = new();
+
         public IEnumerable<IObserver> Observers => observers;
 
         public List<object?> Outputs { get; } = new();
@@ -31,6 +39,9 @@ namespace Utility.Commands
         public void Execute(object? parameter)
         {
             var output = id ?? parameter;
+
+            methodToExecute.Invoke(this);
+
             Outputs.Add(output);
 
             foreach (var observer in Observers)

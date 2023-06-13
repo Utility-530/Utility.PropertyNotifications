@@ -13,10 +13,12 @@ using System.Windows.Controls;
 using Utility.WPF.Reactive;
 using Utility.Helpers;
 using Utility.WPF.Properties;
+using Utility.WPF.Helpers;
+using Utility.Reactive;
 
 namespace Utility.WPF.Controls.Base
 {
-    public abstract class Controlx : Control, IPropertyListener, IControlListener
+    public abstract class Controlx : Control, IPropertyListener, IControlListener, IDependencyObjectListener
     {
         private readonly NameTypeDictionary<SingleReplaySubject<object>> dict;
 
@@ -138,59 +140,60 @@ namespace Utility.WPF.Controls.Base
         }
     }
 
-    public interface IControlListener : IDependencyObjectListener
+    public interface IControlListener
     {
         protected IObservable<FrameworkElement> lazy { get; set; }
 
         public IObservable<T> Control<T>(string? name = null) where T : FrameworkElement
         {
-            return this.Control<T>();
-            //return Observable.Create<T>(observer =>
-            //{
-            //    lazy ??= Get().SelectMany();
-            //    var dis = (name == null ?
-            //     lazy.OfType<T>() :
-            //     lazy.OfType<T>().Where(a => a.Name == name))
-            //     .Subscribe(a =>
-            //     {
-            //         observer.OnNext(a);
-            //     });
-            //    //observer.OnCompleted();
-            //    return dis;
-            //})
-            //.ObserveOnDispatcher()
-            //.SubscribeOnDispatcher();
+            return Observable.Create<T>(observer =>
+            {
+                lazy ??= SelectFramworkElements();
+                var dis = (name == null ?
+                 lazy.OfType<T>() :
+                 lazy.OfType<T>().Where(a => a.Name == name))
+                 .Subscribe(a =>
+                 {
+                     observer.OnNext(a);
+                 });
+                //observer.OnCompleted();
+                return dis;
+            })
+            .ObserveOnDispatcher()
+            .SubscribeOnDispatcher();
         }
 
-        //protected IObservable<IEnumerable<FrameworkElement>> Get()
-        //{
-        //    var dependencyObject = this as DependencyObject ?? throw new Exception("Expected type to DependencyObject");
-        //    if (dependencyObject is FrameworkElement control)
-        //    {
-        //        if (control.IsLoaded == false)
-        //        {
-        //            return Observable.Create<FrameworkElement[]>(observer =>
-        //            {
-        //                return control
-        //                    .LoadedChanges()
-        //                    .Subscribe(a =>
-        //                    {
-        //                        var t = dependencyObject
-        //                        .FindVisualChildren<FrameworkElement>()
-        //                        .ToArray();
-        //                        observer.OnNext(t);
-        //                    });
-        //            })
-        //                 .ObserveOnDispatcher()
-        //                 .SubscribeOnDispatcher()
-        //                 .ToReplaySubject(1);
-        //        }
-        //    }
-        //    return Observable
-        //        .Return(dependencyObject
-        //        .FindVisualChildren<FrameworkElement>()
-        //        .ToArray());
-        //}
+        protected IObservable<FrameworkElement> SelectFramworkElements()
+        {
+            var dependencyObject = this as DependencyObject ?? throw new Exception("Expected type is DependencyObject");
+            if (dependencyObject is FrameworkElement control)
+            {
+                if (control.IsLoaded == false)
+                {
+                    return Observable.Create<FrameworkElement[]>(observer =>
+                    {
+                        return control
+                            .LoadedChanges()
+                            .Subscribe(a =>
+                            {                         
+                                var t = dependencyObject
+                                .FindChildren<FrameworkElement>()
+                                .ToArray();
+                                observer.OnNext(t);
+                            });
+                    })
+                         .ObserveOnDispatcher()
+                         .SubscribeOnDispatcher()
+                         .ToReplaySubject(1)
+                         .SelectMany();
+                }
+            }
+            return Observable
+                .Return(dependencyObject
+                .FindVisualChildren<FrameworkElement>()
+                .ToArray())
+                .SelectMany(); 
+        }
     }
 
     internal class Observer<T> : IObserver<T>

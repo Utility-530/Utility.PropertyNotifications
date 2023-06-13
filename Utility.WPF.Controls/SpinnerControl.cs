@@ -18,14 +18,19 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Evan.Wpf;
+using Utility.Common;
+using Utility.WPF.Controls.Base;
 
 namespace Utility.WPF.Controls
 {
     /// <summary>
     /// Interaction logic for SpinnerControl.xaml
     /// </summary>
-    public class SpinnerControl : UserControl
+    public class SpinnerControl : UserControl, IControlListener
     {
+        IObservable<FrameworkElement> IControlListener.lazy { get; set; }
+
         private static readonly DependencyProperty MinimumValueProperty = DependencyProperty.Register("Minimum", typeof(decimal), typeof(SpinnerControl), new PropertyMetadata(DefaultMinimumValue));
         private static readonly DependencyPropertyKey FormattedValuePropertyKey = DependencyProperty.RegisterAttachedReadOnly("FormattedValue", typeof(string), typeof(SpinnerControl), new PropertyMetadata(DefaultValue.ToString()));
         private static readonly DependencyProperty FormattedValueProperty = FormattedValuePropertyKey.DependencyProperty;
@@ -34,6 +39,9 @@ namespace Utility.WPF.Controls
         private static readonly DependencyProperty DecimalPlacesProperty = DependencyProperty.Register("DecimalPlaces", typeof(int), typeof(SpinnerControl), new PropertyMetadata(DefaultDecimalPlaces));
         private static readonly DependencyProperty ChangeProperty = DependencyProperty.Register("Change", typeof(decimal), typeof(SpinnerControl), new PropertyMetadata(DefaultChange));
         public static readonly DependencyProperty StringFormatProperty = DependencyProperty.Register("StringFormat", typeof(string), typeof(SpinnerControl), new PropertyMetadata("f"));
+        public static readonly DependencyProperty RatioProperty = DependencyHelper.Register<double>(new PropertyMetadata(2d));
+
+
 
         public static RoutedCommand IncreaseCommand { get; set; } = new RoutedCommand("IncreaseCommand", typeof(SpinnerControl));
         public static RoutedCommand DecreaseCommand { get; set; } = new RoutedCommand("DecreaseCommand", typeof(SpinnerControl));
@@ -55,9 +63,34 @@ namespace Utility.WPF.Controls
 
         public SpinnerControl()
         {
+            this.Control<TextBox>()
+                .Subscribe(textBox =>
+                {
+                    textBox.TextChanged += TextBox_TextChanged;
+                });
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            NumberFormatInfo numberFormatInfo = new NumberFormatInfo() { NumberDecimalDigits = DecimalPlaces };
+            var dec = decimal.Parse((sender as TextBox).Text, numberFormatInfo);
+            this.SetValue(ValueProperty, dec);
+
+        }
+
+        public override void OnApplyTemplate()
+        {
+
         }
 
         #region properties
+
+
+        public double Ratio
+        {
+            get { return (double)GetValue(RatioProperty); }
+            set { SetValue(RatioProperty, value); }
+        }
 
         public string StringFormat
         {
