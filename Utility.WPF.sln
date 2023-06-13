@@ -123,7 +123,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Markup", "Utili
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Adorners", "Utility.WPF.Controls.Adorners\Utility.WPF.Controls.Adorners.csproj", "{4E684344-A15E-4E8C-8EA3-1664F6EB5337}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Packages", "Utility.WPF.Packages\Utility.WPF.Packages.csproj", "{FAC12718-65A8-427E-A836-9322DFDF89AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Packages", "..\Utility.Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj", "{FAC12718-65A8-427E-A836-9322DFDF89AB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Templates", "Utility.WPF.Controls.Templates\Utility.WPF.Controls.Templates.csproj", "{F7DA0BC3-66DD-48D6-994B-3C29FDE622F4}"
 EndProject
@@ -169,9 +169,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models", "..\Utilit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models.Filters", "..\Utility.Models\Utility.Models.Filters\Utility.Models.Filters.csproj", "{D101BF6A-F829-4CF8-A84E-69525582F42B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Packages", "..\Utility.Models\Utility.Packages\Utility.Packages.csproj", "{22AD003E-5540-41F6-A90E-C367A221AC97}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Packages", "..\Utility.Packages\Utility.Packages\Utility.Packages.csproj", "{22AD003E-5540-41F6-A90E-C367A221AC97}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Common", "..\Utility.Models\Utility.Common\Utility.Common.csproj", "{7FD81F5A-4EDC-414C-9C27-937DA8E9F9B9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Common", "..\Utility.Common\Utility.Common\Utility.Common.csproj", "{7FD81F5A-4EDC-414C-9C27-937DA8E9F9B9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Texts", "Utility.WPF.Controls.Texts\Utility.WPF.Controls.Texts.csproj", "{F8CBA3D6-53C2-47F4-96E8-9467C0474055}"
 EndProject

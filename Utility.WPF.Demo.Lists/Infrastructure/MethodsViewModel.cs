@@ -12,7 +12,7 @@ namespace Utility.WPF.Demo.Lists.Infrastructure
         public MethodsViewModel()
         {
             Data = new ObservableCollection<ButtonViewModel>(
-                Utility.Helpers.ReflectionHelper.GetMethods(new Model())
+                Utility.Helpers.ReflectionHelper.GetMethods(new Utility.WPF.Demo.Buttons.Infrastructure.Model())
                 .Select(a => new ButtonViewModel(a.Item1, ReactiveCommand.Create(() => { _ = a.Item2(); }))));
         }
 

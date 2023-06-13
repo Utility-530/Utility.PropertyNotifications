@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Julmar.Wpf.Behaviors" Version="1.0.1" />
     <PackageReference Include="Nodify" Version="5.0.0" />
   </ItemGroup>
 
@@ -17,7 +18,7 @@
     <ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
     <ProjectReference Include="..\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Common\Utility.WPF.Demo.Common.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
+    <ProjectReference Include="..\..\Utility.Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
   </ItemGroup>
 
 </Project>
