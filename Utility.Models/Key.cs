@@ -9,15 +9,11 @@ namespace Utility.Models
 
     public class Key<T> : Key
     {
-        public Key() : base(Guid.Empty, typeof(T).Name, typeof(T))
-        {
-
-        }
-        public Key(Guid guid) : base(guid, typeof(T).Name, typeof(T))
-        {
-
+        public Key(Guid guid):base(guid,  typeof(T).Name,  typeof(T))
+        {   
         }
     }
+
 
     public class Key : ISerialise, IGuid, IType, IName, IEquatable, IEquatable<ISerialise>
     {
@@ -60,7 +56,7 @@ namespace Utility.Models
 
         public bool Equals(Key? other)
         {
-            return Name == other?.Name && Guid == other?.Guid;
+            return Name.Equals(other?.Name) && Guid.Equals(other?.Guid);// && Type.Equals(other?.Type);
         }
 
         public override bool Equals(object? obj)

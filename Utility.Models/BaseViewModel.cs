@@ -23,7 +23,7 @@ namespace Utility.Models
         /// </summary>
         /// <param name="propertyName">The caller member name of the property (auto-set)</param>
         //[NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = default)
+        public virtual void OnPropertyChanged([CallerMemberName] string? propertyName = default)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

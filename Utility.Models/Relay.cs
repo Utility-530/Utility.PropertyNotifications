@@ -18,18 +18,18 @@ namespace Utility.Models
     //    }
     //}
 
-    public interface IRelay : IRelay<Message>, IKey<Key>
-    {
+    //public interface IRelay : IRelay<Message>, IKey<Key>
+    //{
 
-    }
+    //}
 
 
-    public static class RelayHelper
-    {
-        public static void Broadcast(this IRelay relay, Message message)
-        {
-            foreach (var observer in relay.Observers)
-                observer.OnNext(message);
-        }
-    }
+    //public static class RelayHelper
+    //{
+    //    public static void Broadcast(this IRelay relay, Message message)
+    //    {
+    //        foreach (var observer in relay.Observers)
+    //            observer.OnNext(message);
+    //    }
+    //}
 }
