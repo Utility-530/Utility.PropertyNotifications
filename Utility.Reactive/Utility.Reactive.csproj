@@ -23,6 +23,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Infrastructure\**" />
+    <EmbeddedResource Remove="Infrastructure\**" />
+    <None Remove="Infrastructure\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="DynamicData" Version="6.5.0.2474" />
     <PackageReference Include="Range" Version="3.0.6" />
     <PackageReference Include="System.Collections.Immutable" Version="1.7.0" />
