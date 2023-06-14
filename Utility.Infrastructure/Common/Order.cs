@@ -1,14 +1,13 @@
-﻿using Utility.PropertyTrees.Abstractions;
-using Utility.Interfaces.NonGeneric;
+﻿using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Enums;
 using Utility.Observables.Generic;
 using Utility.Interfaces.Generic;
-using Utility.PropertyTrees.Infrastructure;
+using Utility.Infrastructure.Common;
 
 namespace Utility.Infrastructure
 {
-    public class Order : BaseViewModel, IObservable<PropertyChange>, IKey<Key>
+    public class PropertyOrder : BaseViewModel, IObservable<PropertyChange>, IKey<Key>
     {
         private Exception exception;
         private int progress;
@@ -43,9 +42,15 @@ namespace Utility.Infrastructure
             return other?.Key.Equals(Key) == true;
         }
 
+        public bool Equals(IEquatable? other)
+        {
+            return Equals(other as IKey<Key>);
+        }
+
         public IDisposable Subscribe(IObserver<PropertyChange> observer)
         {
             return changes.Subscribe(observer);
         }
     }
+
 }

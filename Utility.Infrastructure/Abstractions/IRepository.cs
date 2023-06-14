@@ -4,7 +4,7 @@ namespace Utility.Infrastructure.Abstractions
 {
     public interface IRepository
     {
-        Task<object> FindValue(IEquatable key);
+        Task<object?> FindValue(IEquatable key);
 
         Task<IEquatable> FindKeyByParent(IEquatable key);
 

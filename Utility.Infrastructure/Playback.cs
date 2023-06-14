@@ -1,22 +1,16 @@
-﻿using System.Collections;
-using System.Reactive.Subjects;
-using Utility.Enums;
-using Utility.Interfaces.NonGeneric;
+﻿using Utility.Enums;
 using Utility.Models;
-using Utility.Observables.NonGeneric;
-using Utility.PropertyTrees.Abstractions;
 using playback = Utility.Enums.Playback;
 
 namespace Utility.Infrastructure
 {
-    public class Playback : BaseObject, IPlayback
+    public class Playback : BaseObject //, IPlayback
     {
-        List<IObserver> observers = new();
-        public System.Timers.Timer Timer { get; set; } = new(TimeSpan.FromSeconds(0.1));
+        List<Direction> directions = new();
+        public System.Timers.Timer Timer { get; set; } = new(TimeSpan.FromSeconds(0.01));
 
-        public IEnumerable<IObserver> Observers => observers;
 
-        public override Key Key => new(default, nameof(Playback), typeof(Playback));
+        public override Key Key => Keys.Playback;
 
         public Playback()
         {
@@ -46,53 +40,38 @@ namespace Utility.Infrastructure
 
         private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            Context.Post(a => Forward(), null);
+            Context.Post(a => Forward(), default);
         }
 
 
-        private void Broadcast(playback type)
-        { foreach (var observer in Observers) observer.OnNext(type); }
-
-        public IDisposable Subscribe(IObserver observer)
+        public override bool OnNext(object value)
         {
-            return new Disposer(observers, observer);
-        }
-
-        public void OnNext(object value)
-        {
+            if(value is ChangeSet changeSet)
+            {
+                if(changeSet.Any()==false)
+                    Pause();
+                return true;
+            }
             if (value is playback playback)
             {
                 switch (playback)
                 {
                     case playback.Pause:
                         Pause();
-                        return;
+                        return true;
                     case playback.Play:
                         Play();
-                        return;
+                        return true;
                     case playback.Forward:
                         Forward();
-                        return;
+                        return true;
                     case playback.Back:
                         Back();
-                        return;
+                        return true;
                 }
+          
             }
-        }
-
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override IEnumerator GetEnumerator()
-        {
-            throw new NotImplementedException();
+            return false;
         }
     }
 }
