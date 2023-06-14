@@ -1,5 +1,4 @@
 ﻿using System.Windows.Input;
-using Utility.Models;
 using Utility.Observables.Generic;
 
 namespace Utility.Commands
