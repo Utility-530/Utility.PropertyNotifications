@@ -1,0 +1,33 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Utility.Simulation.ViewModel;assembly=Utility.Simulation">
+
+
+        <DataTemplate DataType="{x:Type local:ProgressViewModel}">
+            <StackPanel VerticalAlignment="Center" Margin="25" HorizontalAlignment="Stretch">
+                <Grid x:Name="ContainerWrapPanel"  >
+
+                    <Slider x:Name="positionSlider"
+                     
+                        HorizontalAlignment="Stretch"   
+                        Width="{Binding ElementName=ContainerWrapPanel, Path=ActualWidth}"
+                        HorizontalContentAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Maximum="{Binding Maximum, Mode=OneWay}"
+                        Minimum="{Binding Minimum, Mode=OneWay}"
+                        Orientation="Horizontal"           
+                        MinWidth="100"
+                        Value="{Binding Value, Mode=OneWay}"/>
+
+                </Grid>
+                <Grid >
+                    <TextBlock Text="{Binding Minimum, Mode=OneWay, StringFormat=N2}" HorizontalAlignment="Left"></TextBlock>
+                    <TextBlock Text="{Binding Value, Mode=OneWay, StringFormat=N2}" HorizontalAlignment="Center"></TextBlock>
+                    <TextBlock Text="{Binding Maximum, Mode=OneWay, StringFormat=N2}" HorizontalAlignment="Right"></TextBlock>
+                </Grid>
+            </StackPanel>
+        </DataTemplate>
+
+
+
+</ResourceDictionary>
