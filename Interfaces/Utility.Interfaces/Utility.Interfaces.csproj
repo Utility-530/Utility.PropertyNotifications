@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<PackageId>Utility.Interfaces</PackageId>
+		<Description>Basic interfaces for general usage in NonGeneric and Generic flavours</Description>
+		<PackageTags>interface utility interfaces</PackageTags>
+		<PackageProjectUrl>https://github.com/dtaylor-530/Utility.Interfaces</PackageProjectUrl>
+		<Authors>Declan Taylor</Authors>
+		<Company />
+		<Product />
+		<Copyright></Copyright>
+		<PackageReleaseNotes>utility interfaces</PackageReleaseNotes>
+		<Version>6.1.1</Version>
+		<AssemblyVersion>6.1.1.0</AssemblyVersion>
+		<FileVersion>6.1.1.0</FileVersion>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+		<ShouldCreateLogs>True</ShouldCreateLogs>
+		<AdvancedSettingsExpanded>False</AdvancedSettingsExpanded>
+		<UpdateAssemblyVersion>False</UpdateAssemblyVersion>
+		<UpdateAssemblyFileVersion>False</UpdateAssemblyFileVersion>
+		<UpdateAssemblyInfoVersion>False</UpdateAssemblyInfoVersion>
+		<UpdatePackageVersion>True</UpdatePackageVersion>
+		<PackageVersionSettings>AssemblyVersion.IncrementWithAutoReset.None</PackageVersionSettings>
+		<AssemblyInfoVersionType>SettingsVersion</AssemblyInfoVersionType>
+		<InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove=".gitattributes" />
+		<None Remove=".gitignore" />
+	</ItemGroup>
+
+</Project>
