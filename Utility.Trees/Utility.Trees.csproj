@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-		<ProjectReference Include="..\..\Utility.Observables\Utility.Observables\Utility.Observables.csproj" />
-		<ProjectReference Include="..\Utility.Trees.Abstractions\Utility.Trees.Abstractions.csproj" />
+		<ProjectReference Include="..\..\Observables\Utility.Observables\Utility.Observables.csproj" />
+		<ProjectReference Include="..\..\Trees\Utility.Trees.Abstractions\Utility.Trees.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>
