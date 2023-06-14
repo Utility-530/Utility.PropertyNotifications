@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Utility.Common\Utility.Common\Utility.Common.csproj" />
+    <ProjectReference Include="..\Utility.Models\Utility.Models.csproj" />
+  </ItemGroup>
+
+</Project>

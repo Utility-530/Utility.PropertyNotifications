@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Utility.Enums\Utility.Enums\Utility.Enums.csproj" />
+		<ProjectReference Include="..\..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
+		<ProjectReference Include="..\..\Utility.Observables\Utility.Observables\Utility.Observables.csproj" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="System.Reactive" Version="5.0.0" />
+	</ItemGroup>
+</Project>
