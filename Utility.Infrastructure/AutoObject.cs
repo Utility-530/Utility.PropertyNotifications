@@ -3,12 +3,37 @@ using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using Utility.Enums;
 using Utility.Infrastructure;
-using Utility.Infrastructure.Common;
+using Utility.Observables.Generic;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
+
+    public class Store
+    {
+        private Dictionary<IEquatable, object> store = new();
+
+        public object? this[IEquatable key]
+        {
+            get
+            {
+                if (store.TryGetValue(key, out var value))
+                {
+                    return value;
+                }
+                return default;
+            }
+            set
+            {
+                store[key] = value; 
+            }
+        }
+
+        //public void Set(IEquatable key, object value) => store[key] = value;
+
+        public static Store Instance { get; } = new Store();
+    }
+
     /// <summary>
     /// Defines a utility class to implement objects with typed properties without private fields.
     /// This class supports automatically property change notifications and error validations.
@@ -16,10 +41,8 @@ namespace Utility.PropertyTrees.Infrastructure
     public abstract class AutoObject : BaseObject, IDataErrorInfo, INotifyPropertyChanged, IGuid
     {
         private readonly Guid guid;
+        private IDisposable? disposable;
 
-        private IDisposable disposable;
-
-        private Dictionary<IEquatable, PropertyChange> store = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoObject"/> class.
@@ -42,35 +65,50 @@ namespace Utility.PropertyTrees.Infrastructure
         [Browsable(false)]
         public virtual bool IsValid => Validate(null) == null;
 
-        public virtual object? Value { get; set; }
-
         string IDataErrorInfo.this[string columnName] => Validate(columnName);
 
+        public DateTime? LastUpdate { get; set; }
 
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        public virtual object GetProperty(Type type, [CallerMemberName] string? name = null)
+        protected virtual object? GetValue(IEquatable name)
         {
-            //disposable ??= PropertyStore.Subscribe(this);
-            var key = new Key(guid, name, type);
+            return Store.Instance[name];
+        }
 
-            if (store.TryGetValue(key, out var value))
-            {
-                return (value as IValueChange)?.NewValue;
-            }
-            var order = new PropertyOrder { Key = key, Access = Access.Get };
-            this.Broadcast(order);
-            return default;
+        protected virtual void SetValue(IEquatable name, object value)
+        {
+            Store.Instance[name] = value;
+            OnPropertyChanged((name as Key)?.Name);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public bool SetProperty(object value, Type type, [CallerMemberName] string name = null)
+        public object? GetProperty(Key key)
         {
-            //disposable ??= PropertyStore.Subscribe(this);
-            var key = new Key(guid, name, type);
-            var order = new PropertyOrder { Key = key, Access = Access.Set, Value = value };
-            store[key] = new PropertyChange(key, value, default);
-            this.Broadcast(order);
-            return true;
+            if (LastUpdate is not DateTime value)
+            {
+                //TODO: show progress
+                this.Observe<GetPropertyResponse, GetPropertyRequest>(new(key))
+                    .Select(a => a.Value)
+                    .Subscribe(a =>
+                    {
+                        LastUpdate = DateTime.Now;
+                        SetValue(key, a);                     
+                    });
+            }
+
+            return GetValue(key);
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public void SetProperty(Key key, object value)
+        {
+            disposable?.Dispose();
+            disposable = this.Observe<SetPropertyResponse, SetPropertyRequest>(new(key, value))
+                .Subscribe(a =>
+                {
+                    LastUpdate = DateTime.Now;
+                    SetValue(key, a.Value);                   
+                    // Validation response
+                });
         }
 
 
@@ -78,36 +116,6 @@ namespace Utility.PropertyTrees.Infrastructure
         {
             //return PropertyStore.Validate(memberName);
             return default;
-        }
-
-        public override bool OnNext(object obj)
-        {
-            if (obj is not PropertyChange { Key: Key { Guid: var guid } } valueChange)
-            {
-                return base.OnNext(obj);
-            }
-            if (this.guid != guid)
-            {
-                return false;
-            }
-
-            if (store.ContainsKey(valueChange.Key))
-            {
-                if (store[valueChange.Key].NewValue == valueChange.NewValue)
-                {
-                    return true;
-                }
-                store.Remove(valueChange.Key);
-            }
-            store.Add(valueChange.Key, valueChange);
-
-            if (valueChange is IName { Name: var name } && valueChange.NewValue != null)
-            {
-                OnPropertyChanged(name);
-                OnPropertyChanged(nameof(Value));
-                return true;
-            }
-            throw new Exception("zg 34422111");
         }
     }
 }
