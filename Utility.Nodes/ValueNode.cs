@@ -136,12 +136,13 @@ namespace Utility.Nodes
             disposable = Observe<ChildrenResponse, ChildrenRequest>(new ChildrenRequest(Guid, Data))
                 .Subscribe(a =>
                 {
-                    if(a.PropertyNode==null)
+                    if (a.PropertyNode == null && a.Include)
                     {
                         throw new Exception("dsv2s331hj f");
                     }
-                    if (_children.Any(ass => a.PropertyNode.Key.Guid == (ass as ValueNode)?.Key.Guid) == false)
-                        _children.Add(a.PropertyNode);
+                    if (a.Include)
+                        if (_children.Any(ass => a.PropertyNode.Key.Guid == (ass as ValueNode)?.Key.Guid) == false)
+                            _children.Add(a.PropertyNode);
                 }, () => _children.Complete());
 
             return await Task.FromResult(true);
@@ -161,5 +162,5 @@ namespace Utility.Nodes
 
     public record ChildrenRequest(Guid Guid, object Data) : Request();
 
-    public record ChildrenResponse(ValueNode PropertyNode, double Completed, double Total) : Response(PropertyNode);
+    public record ChildrenResponse(ValueNode? PropertyNode, bool Include) : Response(PropertyNode);
 }
