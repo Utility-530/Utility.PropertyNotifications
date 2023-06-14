@@ -135,7 +135,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Helpers", "..\Utili
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Helpers.Ex", "..\Utility.Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj", "{32824562-5C67-4D7C-AACB-809D9E516523}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commands", "Utility.Commands\Utility.Commands.csproj", "{DFF61242-98BB-43A4-B900-F9B670151EA9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commands", "..\Utility.Commands\Utility.Commands\Utility.Commands.csproj", "{DFF61242-98BB-43A4-B900-F9B670151EA9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Reactive", "..\Utility.Reactive\Utility.Reactive\Utility.Reactive.csproj", "{BE36909B-6426-468A-8936-CE10F8655F5F}"
 EndProject
