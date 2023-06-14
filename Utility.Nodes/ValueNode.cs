@@ -108,6 +108,10 @@ namespace Utility.Nodes
 
         private void PropertyChanged_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == "Item[]")
+                return;
+            if (e.PropertyName == "Count")
+                return;
             foreach (var child in Children)
             {
                 if (child is ValueNode { Key: Key { Name: var name } } valueNode)
