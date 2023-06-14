@@ -1,0 +1,18 @@
+
+from 
+
+https://opensource.com/article/20/5/git-submodules-subtrees
+
+-- add remote
+
+$ git remote add <remote-name> <URL to Git repo>
+
+example
+git remote add Structs https://github.com/Utility-530/Utility.Structs.git
+
+-- add repo as subtree
+
+$ git subtree add --prefix <folder> <URL to Git repo> <subtree-branchname> --squash?	
+
+example
+git subtree add --prefix Structs https://github.com/Utility-530/Utility.Structs.git master --squash	
