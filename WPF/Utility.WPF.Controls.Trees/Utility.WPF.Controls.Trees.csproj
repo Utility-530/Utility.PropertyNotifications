@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0-windows</TargetFramework>
+		<Nullable>enable</Nullable>
+		<UseWPF>true</UseWPF>
+	</PropertyGroup>
+
+	<ItemGroup>
+
+		<Compile Update="Deprecated\MyTreeView.cs">
+			<DependentUpon>MyTreeView.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="TreeListView.cs">
+			<DependentUpon>TreeListView.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
+		<ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
+	</ItemGroup>
+
+</Project>

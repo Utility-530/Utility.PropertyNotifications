@@ -1,0 +1,24 @@
+﻿<Window x:Class="Utility.WPF.Demo.SandBox.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Utility.WPF.Demo.SandBox"
+        xmlns:view="http://schemas.utility.com"
+        xmlns:un="clr-namespace:UnitsNet.Units;assembly=UnitsNet"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:utl="http://schemas.utility.com/utilitywpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <FrameworkElement.DataContext>
+        <local:ViewModel></local:ViewModel>
+    </FrameworkElement.DataContext>
+    <UniformGrid Rows="1">
+        <!--<local:NumbersControl ItemsSource="{Binding Collection}" DisplayMemberPath="Value" DisplayKeyPath="Header" />-->
+
+        <!--<local:MeasurementsControl
+            DisplayMemberPath="Value" DisplayKeyPath="Header"
+            ItemsSource="{Binding Collection}"
+            Unit="{x:Static un:LengthUnit.AstronomicalUnit}"></local:MeasurementsControl>-->
+    </UniformGrid>
+</Window>

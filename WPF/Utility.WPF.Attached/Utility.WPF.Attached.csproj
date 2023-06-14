@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Utility.WPF.Panels.Helpers\Utility.WPF.Panels.Helpers.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Reactive\Utility.WPF.Reactive.csproj" />
+  </ItemGroup>
+
+</Project>

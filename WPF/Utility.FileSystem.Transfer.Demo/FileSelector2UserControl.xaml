@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="Utility.FileSystem.Transfer.Demo.FileSelector2UserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Utility.FileSystem.Transfer.Demo"
+             xmlns:demo11="clr-namespace:BrowseHistory.Controls;assembly=BrowseHistory.Controls" 
+             xmlns:viewmodels="clr-namespace:BrowserHistoryDemoLib.ViewModels"
+             xmlns:vm="clr-namespace:Suggest.Infrastructure.ViewModel;assembly=Suggest.Infrastructure"
+             xmlns:converters1="clr-namespace:Utility.FileSystem.Transfer.Demo.Infrastructure" 
+             xmlns:suggestBoxLib1="clr-namespace:Suggest.WPF;assembly=Suggest.WPF" 
+             xmlns:pu="http://schemas.popup.com" 
+             xmlns:sb="http://schemas.suggest.com/wpf" 
+             xmlns:viewmodel="clr-namespace:Utility.FileSystem.Transfer.Demo.ViewModel"
+             d:DataContext="{d:DesignInstance viewmodel:FileSelectorViewModel}"
+             mc:Ignorable="d" 
+             Background="WhiteSmoke"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <FrameworkElement.DataContext>
+        <viewmodel:FileSelectorViewModel></viewmodel:FileSelectorViewModel>
+    </FrameworkElement.DataContext>
+    <FrameworkElement.Resources>
+        <ResourceDictionary >
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Geometry.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <pu:InvertBoolConverter x:Key="InvertBoolConverter"></pu:InvertBoolConverter>
+            <converters1:DefaultConverter x:Key="DefaultConverter"></converters1:DefaultConverter>
+        </ResourceDictionary>
+
+    </FrameworkElement.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <demo11:HistoryNavigationControl
+              DataContext="{Binding NavigationViewModel}"
+            Height="{Binding ElementName=Viewbox, Path=ActualHeight}"
+            x:Name="HistoryNavigationControl"
+            BackwardCommand="{Binding BackwardCommand}" 
+            d:DataContext="{d:DesignInstance Type=viewmodels:NavigationViewModel, IsDesignTimeCreatable=True}"
+            ForwardCommand="{Binding ForwardCommand}"
+            UpCommand="{Binding UpCommand}"
+            BackwardPath="{Binding BackwardText}"
+            ForwardPath="{Binding ForwardText}"
+            ForwardCount="{Binding ForwardCount}"
+            BackwardCount="{Binding BackwardCount}"
+            Locations="{Binding Collection}"
+            SelectionChanged="{Binding SelectionCommand}">
+        </demo11:HistoryNavigationControl>
+
+        <suggestBoxLib1:SuggestBox Name="SuggestBox"
+                                      Grid.Column="1" 
+                                      DataContext="{Binding SuggestViewModel}"
+                                      Height="{Binding ElementName=HistoryNavigationControl, Path=ActualHeight}"
+                                      d:DataContext="{d:DesignInstance Type=local:SuggestViewModel, IsDesignTimeCreatable=True}"
+                                      HorizontalAlignment="Stretch"                                     
+                                      SuggestSource="{Binding Suggest}"
+                                      Style="{StaticResource SuggestBoxStyle}"
+                                      ItemContainerStyle="{StaticResource ItemContainerStyle}"
+                                      Text="{Binding Path=Text, UpdateSourceTrigger=PropertyChanged}">
+            <sb:SuggestBox.SelectedValuePath>
+                <pu:NameOf Type='{x:Type vm:BaseItem}' Member='Value' />
+            </sb:SuggestBox.SelectedValuePath>       
+        </suggestBoxLib1:SuggestBox>
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,136 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+                    xmlns:controls="clr-namespace:Utility.WPF.Controls.Objects"
+                    xmlns:converter="http://schemas.utility.com/converters"
+                    xmlns:panel="http://schemas.utility.com/panels">
+
+    <Style TargetType="{x:Type controls:ObjectControl}" BasedOn="{StaticResource {x:Type ContentControl}}">
+        <Style.Resources>
+            <system:Int32 x:Key="Factor">2</system:Int32>
+
+            <!--<Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="FontSize" Value="10"></Setter>
+            </Style>-->
+
+            <DataTemplate x:Key="DefaultDataTemplate">
+                <Grid IsSharedSizeScope="True">
+                    <ItemsControl ItemsSource="{Binding}" VerticalAlignment="Center" VerticalContentAlignment="Center">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                                <!--<panel:AnimatedWrapPanel AnimationTime="0:0:0.5" VerticalAlignment="Center"/>-->
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid VerticalAlignment="Center">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition SharedSizeGroup="ColumnOne" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Text="{Binding Key}"
+                                Margin="2,0,2,0"
+                                TextWrapping="WrapWithOverflow" />
+                                <controls:ObjectControl
+                                    Grid.Column="1" Margin="1"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    AccentBrush="{Binding RelativeSource={RelativeSource Self}, Path=Tag.AccentBrush}"
+                                    IsTitleColoursInverted="{Binding RelativeSource={RelativeSource Self}, Path=Tag.IsTitleColoursInverted}"
+                                    Tag="{Binding RelativeSource={RelativeSource Self}, Converter={x:Static converter:HighestVisualParentConverter.Instance}}"
+                                    Object="{Binding Value}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate x:Key="StringDataTemplate" DataType="system:String">
+                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding}"
+                            VerticalAlignment="Center"
+                            Foreground="{Binding AccentBrush, RelativeSource={RelativeSource AncestorType=controls:ObjectControl, AncestorLevel=2}}"></TextBlock>
+            </DataTemplate>
+
+            <DataTemplate x:Key="EnumerableDataTemplate">
+                <ItemsControl ItemsSource="{Binding}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock TextWrapping="WrapWithOverflow"
+                                        Text="{Binding}"
+                                        VerticalAlignment="Center"
+                                        Foreground="{Binding AccentBrush, RelativeSource={RelativeSource AncestorType=controls:ObjectControl, AncestorLevel=2}}">
+                            </TextBlock>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DataTemplate>
+
+            <DataTemplate x:Key="EnumerableObjectDataTemplate">
+                <ItemsControl ItemsSource="{Binding}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <controls:ObjectControl
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                AccentBrush="{Binding RelativeSource={RelativeSource Self}, Path=Tag.AccentBrush}"
+                                Tag="{Binding RelativeSource={RelativeSource Self}, Converter={x:Static converter:HighestVisualParentConverter.Instance}}"
+                                Object="{Binding}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </DataTemplate>
+
+            <controls:ObjectControlDataTemplateSelector x:Key="ObjectControlDataTemplateSelector"
+                                                OtherTemplate="{StaticResource DefaultDataTemplate}"
+                                                EnumerableTextTemplate="{StaticResource EnumerableDataTemplate}"
+                                                EnumerableObjectTemplate="{StaticResource EnumerableObjectDataTemplate}"
+                                                TextTemplate="{StaticResource StringDataTemplate}">
+            </controls:ObjectControlDataTemplateSelector>
+        </Style.Resources>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type controls:ObjectControl}">
+                    <Grid
+                        VerticalAlignment="Center"
+                        x:Name="Grid1"
+                        Background="White">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <ContentControl>
+                            <Border
+                                x:Name="MainBorder"
+                                VerticalAlignment="Center"
+                                Background="{Binding AccentBrush, RelativeSource={RelativeSource TemplatedParent}}">
+                                <TextBlock  Padding="1"
+                                            Margin="2,0,2,0"
+                                            x:Name="MainTextBlock"
+                                            Height="{Binding Path=FontSize, RelativeSource={RelativeSource TemplatedParent},
+                                            Converter={x:Static converter:LambdaConverter.MultiplyConverter}, ConverterParameter={StaticResource Factor}}"
+                                            Foreground="White"
+                                            FontWeight="Bold">
+                                </TextBlock>
+                            </Border>
+                        </ContentControl>
+                        <ContentPresenter Margin="1" VerticalAlignment="Center" Grid.Column="1" ContentTemplateSelector="{StaticResource ObjectControlDataTemplateSelector}" />
+                        <Border Grid.Column="2"
+                                x:Name="SecondaryBorder" Width="2"
+                                Margin="2,0,4,0"
+                                Opacity="0.1"
+                                VerticalAlignment="Stretch"
+                                Background="{Binding AccentBrush, RelativeSource={RelativeSource TemplatedParent}}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

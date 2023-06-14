@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<LangVersion>Latest</LangVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Themes\**" />
+	  <Compile Remove="TouchManagement\**" />
+	  <EmbeddedResource Remove="Themes\**" />
+	  <EmbeddedResource Remove="TouchManagement\**" />
+	  <None Remove="Themes\**" />
+	  <None Remove="TouchManagement\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Utility.Common\Utility.Common\Utility.Common.csproj" />
+		<ProjectReference Include="..\..\Utility.Models\Utility.Models.Filters\Utility.Models.Filters.csproj" />
+		<ProjectReference Include="..\Utility.Service\Utility.Service.csproj" />
+	</ItemGroup>
+
+</Project>

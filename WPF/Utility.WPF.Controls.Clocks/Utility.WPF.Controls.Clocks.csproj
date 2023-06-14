@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
+    <ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
+  </ItemGroup>
+	<ItemGroup>
+		<Compile Update="BasicTransitionControl.cs">
+			<DependentUpon>BasicTransitionControl.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="Clock.cs">
+			<DependentUpon>Clock.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+  <ItemGroup>
+    <Page Update="BasicTransitionControl.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+    </Page>
+    <Page Update="Clock.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Generic.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
+</Project>

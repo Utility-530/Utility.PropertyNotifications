@@ -1,0 +1,10 @@
+﻿<utl:AutoResourceDictionary  xmlns:utl="http://schemas.utility.com/utilitywpf"
+                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                             xmlns:local="clr-namespace:Utility.WPF.Controls.Objects"
+                             Type="{x:Type local:ObjectControl}">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Utility.WPF.Controls.Objects;component/ObjectControl.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</utl:AutoResourceDictionary>

@@ -1,0 +1,99 @@
+﻿<UserControl x:Class="Utility.FileSystem.Transfer.Demo.FileSelectorUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Utility.FileSystem.Transfer.Demo"
+             xmlns:demo11="clr-namespace:BrowseHistory.Controls;assembly=BrowseHistory.Controls" 
+             xmlns:viewmodels="clr-namespace:BrowserHistoryDemoLib.ViewModels"
+             xmlns:infra="clr-namespace:Suggest.Infrastructure.ViewModel;assembly=Suggest.Infrastructure"
+             xmlns:breadcrumbLib="http://BreadcrumbLib.com"     
+             xmlns:converters1="clr-namespace:Utility.FileSystem.Transfer.Demo.Infrastructure" 
+             xmlns:suggestBoxLib1="clr-namespace:Suggest.WPF;assembly=Suggest.WPF" 
+             xmlns:pu="http://schemas.popup.com" xmlns:sb="http://schemas.suggest.com/wpf" 
+             xmlns:viewmodel="clr-namespace:Utility.FileSystem.Transfer.Demo.ViewModel"
+             d:DataContext="{d:DesignInstance Type=viewmodel:FileSelectorViewModel, IsDesignTimeCreatable=True}"
+             mc:Ignorable="d" 
+             Background="WhiteSmoke"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <FrameworkElement.DataContext>
+        <viewmodel:FileSelectorViewModel></viewmodel:FileSelectorViewModel>
+    </FrameworkElement.DataContext>
+    <FrameworkElement.Resources>
+        <ResourceDictionary >
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Geometry.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <pu:InvertBoolConverter x:Key="InvertBoolConverter"></pu:InvertBoolConverter>
+            <converters1:DefaultConverter x:Key="DefaultConverter"></converters1:DefaultConverter>
+        </ResourceDictionary>
+
+    </FrameworkElement.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="10*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <demo11:HistoryNavigationControl
+
+            Height="{Binding ElementName=Viewbox, Path=ActualHeight}"
+            x:Name="HistoryNavigationControl"
+            DataContext="{Binding NavigationViewModel}"
+            BackwardCommand="{Binding BackwardCommand}" 
+            d:DataContext="{d:DesignInstance Type=viewmodels:NavigationViewModel, IsDesignTimeCreatable=True}"
+            ForwardCommand="{Binding ForwardCommand}"
+            UpCommand="{Binding UpCommand}"
+            BackwardPath="{Binding BackwardText}"
+            ForwardPath="{Binding ForwardText}"
+            ForwardCount="{Binding ForwardCount}"
+            BackwardCount="{Binding BackwardCount}"
+            Locations="{Binding Collection}"
+            SelectionChanged="{Binding SelectionCommand}">          
+        </demo11:HistoryNavigationControl>
+          
+        <suggestBoxLib1:SuggestBox Name="SuggestBox"
+                                      Grid.Column="1" 
+                                      Height="{Binding ElementName=HistoryNavigationControl, Path=ActualHeight}"
+                                      d:DataContext="{d:DesignInstance Type=local:SuggestViewModel, IsDesignTimeCreatable=True}"
+                                      HorizontalAlignment="Stretch"
+                                      DataContext="{Binding SuggestViewModel}"
+                                      SuggestSource="{Binding Suggest}"
+                                      Style="{StaticResource SuggestBoxStyle}"
+                                      ItemContainerStyle="{StaticResource ItemContainerStyle}"
+                                      Text="{Binding Path=Text, UpdateSourceTrigger=PropertyChanged}">
+
+            <sb:SuggestBox.SelectedValuePath>
+                <pu:NameOf Type='{x:Type infra:BaseItem}' Member='Value' />
+            </sb:SuggestBox.SelectedValuePath>
+            <sb:SuggestBox.UnfocusedContent>
+
+                <breadcrumbLib:Breadcrumb x:Name="Breadcrumb" IsHitTestVisible="True" >
+                    
+                    <!--  Root  -->
+                    <breadcrumbLib:BreadcrumbItem ItemsSource="{Binding DataContext.Collection, Mode=OneTime}" >
+                        <breadcrumbLib:BreadcrumbItem.Header>
+                            <Viewbox Margin="6" MaxHeight="24" MaxWidth="24">
+                                <Path Data="{StaticResource Folder}" Fill="Black" ></Path>
+                            </Viewbox>
+                        </breadcrumbLib:BreadcrumbItem.Header>
+                    </breadcrumbLib:BreadcrumbItem>
+                    <!--  End Root  -->
+                    
+                    <breadcrumbLib:Breadcrumb.Buttons>
+                        <Button x:Name="Button" MaxHeight="24" MaxWidth="24">
+                            <Viewbox Margin="2" >
+                                <Path Data="{StaticResource Refresh}" Fill="Black" ></Path>
+                            </Viewbox>
+                        </Button>
+                    </breadcrumbLib:Breadcrumb.Buttons>
+                </breadcrumbLib:Breadcrumb>
+
+            </sb:SuggestBox.UnfocusedContent>
+        </suggestBoxLib1:SuggestBox> 
+      
+    </Grid>
+</UserControl>

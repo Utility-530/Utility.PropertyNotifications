@@ -1,0 +1,15 @@
+﻿<utl:AutoResourceDictionary  xmlns:utl="http://schemas.utility.com/utilitywpf"
+                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                             xmlns:local="clr-namespace:Utility.WPF.Controls"
+                             Type="{x:Type local:CollapseBox}">
+
+    <ResourceDictionary.MergedDictionaries>
+        <!-- The below use AncestorType-RelativeSource bindings, so can't be auto-loaded -->
+        <ResourceDictionary Source="/Utility.WPF.Controls;component/RangeSlider.xaml" />
+        <ResourceDictionary Source="/Utility.WPF.Controls;component/SliderItemsControl.xaml" />
+
+        <!--Styles-->
+        <!--<ResourceDictionary Source="/Utility.WPF.Controls;component/Themes/ToggleButton.xaml" />-->
+    </ResourceDictionary.MergedDictionaries>
+</utl:AutoResourceDictionary>

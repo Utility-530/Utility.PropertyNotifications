@@ -1,0 +1,9 @@
+﻿<wpf:AutoResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                            xmlns:local="clr-namespace:Utility.WPF.Controls.Lists"
+                            xmlns:wpf="http://schemas.utility.com/utilitywpf"
+                            xmlns:view="http://schemas.utility.com/buttons"
+                            Type="{x:Type local:ButtonsControl}">
+
+   
+</wpf:AutoResourceDictionary>

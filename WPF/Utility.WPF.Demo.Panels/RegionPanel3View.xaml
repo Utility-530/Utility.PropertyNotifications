@@ -1,0 +1,133 @@
+﻿<UserControl x:Class="Utility.WPF.Demo.Panels.RegionPanel3View"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:pnl="http://schemas.utility.com/panels"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <FrameworkElement.Resources>
+        <x:Array x:Key="Array" x:Type="Grid">
+            <Grid pnl:RegionPanel.Region="Top">
+                <Ellipse
+                    Width="100"
+                    Height="20"
+                    Fill="Blue" />
+                <TextBlock Text="TopRight" />
+            </Grid>
+            <Grid pnl:RegionPanel.Region="Top">
+                <Ellipse
+                    Width="10"
+                    Height="20"
+                    Fill="Blue" />
+                <TextBlock Text="TopRight" />
+            </Grid>
+            <Grid pnl:RegionPanel.Region="Top">
+                <Ellipse
+                    Width="100"
+                    Height="120"
+                    Fill="LawnGreen" />
+                <TextBlock Text="BottomRight" />
+            </Grid>
+            <Grid pnl:RegionPanel.Region="Top">
+                <Ellipse
+                    Width="100"
+                    Height="120"
+                    Fill="LawnGreen" />
+                <TextBlock Text="BottomRight" />
+            </Grid>
+            <Grid pnl:RegionPanel.Region="Top">
+                <Ellipse
+                    Width="100"
+                    Height="120"
+                    Fill="LawnGreen" />
+                <TextBlock Text="BottomRight" />
+            </Grid>
+            <Grid pnl:RegionPanel.Region="Top">
+                <Ellipse
+                    Width="100"
+                    Height="120"
+                    Fill="LawnGreen" />
+                <TextBlock Text="BottomRight" />
+            </Grid>
+        </x:Array>
+    </FrameworkElement.Resources>
+
+    <DockPanel>
+        <ToolBar Background="White" DockPanel.Dock="Top">
+            <Button
+                x:Name="ButtonLeft"
+                Width="60"
+                Height="30"
+                Click="Left_Click">
+                Left
+            </Button>
+            <Button
+                x:Name="ButtonRight"
+                Width="60"
+                Height="30"
+                Click="Right_Click">
+                Right
+            </Button>
+            <Button
+                x:Name="ButtonTop"
+                Width="60"
+                Height="30"
+                Click="Top_Click">
+                Top
+            </Button>
+            <Button
+                x:Name="ButtonBottom"
+                Width="60"
+                Height="30"
+                Click="Bottom_Click">
+                Bottom
+            </Button>
+            <Button
+                x:Name="MiddleBottom"
+                Width="60"
+                Height="30"
+                Click="Middle_Click">
+                Middle
+            </Button>
+            <ToggleButton
+                x:Name="UseAnimationRadioButton"
+                Width="200"
+                Height="30"
+                IsChecked="False">
+                Use Animation
+            </ToggleButton>
+            <ToggleButton
+                x:Name="UseDesiredSizeRadioButton"
+                Width="200"
+                Height="30"
+                IsChecked="True">
+                Use Desired Size
+            </ToggleButton>
+            0
+        </ToolBar>
+
+        <StackPanel Background="White">
+            <Label Height="30">Margin</Label>
+            <TextBlock Text="{Binding ElementName=CirclePanel1, Path=Margin}" />
+        </StackPanel>
+
+        <ScrollViewer>
+            <!--<controls:RegionPanel UseAnimation="{Binding ElementName=UseAnimationRadioButton , Path=IsChecked}"
+                                  UseDesiredSize="{Binding ElementName=UseDesiredSizeRadioButton , Path=IsChecked}"
+                Background="Lavender" Margin="10" x:Name="CirclePanel1"
+                HeightRatio="{Binding ElementName=HeightBox, Path=Value}"
+                WidthRatio="{Binding ElementName=WidthBox, Path=Value}">
+            </controls:RegionPanel>-->
+
+            <pnl:RegionPanel
+                x:Name="CirclePanel1"
+                Margin="10"
+                Background="Lavender"
+                HeightRatio="{Binding ElementName=HeightBox, Path=Value}"
+                UseAnimation="{Binding ElementName=UseAnimationRadioButton, Path=IsChecked}"
+                UseDesiredSize="{Binding ElementName=UseDesiredSizeRadioButton, Path=IsChecked}"
+                WidthRatio="{Binding ElementName=WidthBox, Path=Value}" />
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>

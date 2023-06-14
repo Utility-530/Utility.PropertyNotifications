@@ -1,0 +1,90 @@
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:UtilityWpf.Controls.Navigation"
+    xmlns:pu="http://schemas.popup.com"    
+    xmlns:breadcrumbLib="http://BreadcrumbLib.com"     
+    xmlns:suggestBoxLib1="clr-namespace:Suggest.WPF;assembly=Suggest.WPF" 
+    xmlns:sb="http://schemas.suggest.com/wpf">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/BreadcrumbLib;component/Themes/Geometry.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    <pu:InvertBoolConverter x:Key="InvertBoolConverter"></pu:InvertBoolConverter>
+
+
+    <!--<Style TargetType="{x:Type local:NavigationControl}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:NavigationControl}"
+                                 xmlns:demo11="clr-namespace:BrowseHistory.Controls;assembly=BrowseHistory.Controls"  >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="4*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"></RowDefinition>
+                            <RowDefinition Height="10*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <demo11:HistoryNavigationControl
+                            Height="{Binding ElementName=Viewbox, Path=ActualHeight}"
+                            x:Name="HistoryNavigationControl"
+                            DataContext="{Binding NavigationViewModel}"
+                            BackwardCommand="{Binding BackwardCommand}"           
+                            ForwardCommand="{Binding ForwardCommand}"
+                            UpCommand="{Binding UpCommand}"
+                            BackwardPath="{Binding BackwardText}"
+                            ForwardPath="{Binding ForwardText}"
+                            ForwardCount="{Binding ForwardCount}"
+                            BackwardCount="{Binding BackwardCount}"
+                            Locations="{Binding Collection}"
+                            SelectionChanged="{Binding SelectionCommand}">
+                        </demo11:HistoryNavigationControl>
+
+                        <suggestBoxLib1:SuggestBox Name="SuggestBox"
+                                      Grid.Column="1" 
+                                        Height="{Binding ElementName=HistoryNavigationControl, Path=ActualHeight}"
+                                      HorizontalAlignment="Stretch"
+                                          DataContext="{Binding SuggestViewModel}"
+                                      SuggestSource="{Binding Suggest}"
+                                      Style="{StaticResource SuggestBoxStyle}"
+                                      ItemContainerStyle="{StaticResource ItemContainerStyle}"
+                                      Text="{Binding Path=Text, UpdateSourceTrigger=PropertyChanged}">
+
+                            <sb:SuggestBox.SelectedValuePath>
+                                <pu:NameOf Type='{x:Type vm:BaseItem}' Member='Value' />
+                            </sb:SuggestBox.SelectedValuePath>
+                            <sb:SuggestBox.UnfocusedContent>
+
+                                <breadcrumbLib:Breadcrumb x:Name="Breadcrumb" IsHitTestVisible="True" >
+
+                                    --><!--  Root  --><!--
+                                    <breadcrumbLib:BreadcrumbItem ItemsSource="{Binding ItemsSource}" >
+                                        <breadcrumbLib:BreadcrumbItem.Header>
+                                            <Viewbox Margin="6" MaxHeight="24" MaxWidth="24">
+                                                <Path Data="{StaticResource Folder}" Fill="Black" ></Path>
+                                            </Viewbox>
+                                        </breadcrumbLib:BreadcrumbItem.Header>
+                                    </breadcrumbLib:BreadcrumbItem>
+                                    --><!--  End Root  --><!--
+
+                                    <breadcrumbLib:Breadcrumb.Buttons>
+                                        <Button x:Name="Button" MaxHeight="24" MaxWidth="24">
+                                            <Viewbox Margin="2" >
+                                                <Path Data="{StaticResource Refresh}" Fill="Black" ></Path>
+                                            </Viewbox>
+                                        </Button>
+                                    </breadcrumbLib:Breadcrumb.Buttons>
+                                </breadcrumbLib:Breadcrumb>
+
+                            </sb:SuggestBox.UnfocusedContent>
+                        </suggestBoxLib1:SuggestBox>
+
+                    </Grid>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
+</ResourceDictionary>

@@ -1,0 +1,104 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:aa="clr-namespace:Utility.WPF.Controls.Date.Helper"
+    xmlns:ctrl="clr-namespace:Utility.WPF.Controls.Date"
+    xmlns:utl="http://schemas.utility.com/utilitywpf"
+    xmlns:conv="http://schemas.utility.com/converters"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Utility.WPF.Controls.Date;component/Themes/Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="ListBox">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Margin" Value="0" />
+        <Setter Property="Padding" Value="0" />
+    </Style>
+
+    <conv:DefaultConverter x:Key="DefaultConverter" />
+
+    <Style x:Key="DayListBoxItem" TargetType="ListBoxItem">
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <!--<Setter Property="Tag" Value="{Binding Path=ValueConverter, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctrl:MonthGridControl}}"></Setter>-->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <ctrl:DayControl
+                            x:Name="DayControl"
+                            HorizontalAlignment="Stretch"
+                            Content="{Binding }"
+                            Day="{Binding }"/>
+                    <!--  Current="{Binding Current, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ctrl:MonthGridControl}, Converter={StaticResource DefaultConverter}}"  -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="DayControl" Property="BorderBrush" Value="{DynamicResource SecondaryHueDarkBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="DayControl" Property="BorderBrush" Value="{DynamicResource SecondaryHueLightBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ctrl:MonthGridControl">
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ctrl:MonthGridControl">
+                  
+                        <Grid x:Name="LayoutRoot" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="40" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <!--<Border
+                                BorderBrush="#D3D3D3"
+                                BorderThickness="0,1,0,0">-->
+                            <UniformGrid VerticalAlignment="Center" Rows="1" >
+                                <Panel.Resources>
+                                    <Style BasedOn="{StaticResource {x:Type TextBlock}}" TargetType="{x:Type TextBlock}">
+                                        <Setter Property="FontSize" Value="26" />
+                                        <Setter Property="TextAlignment" Value="Center" />
+                                    </Style>
+                                </Panel.Resources>
+                                <TextBlock Text="Mon" />
+                                <TextBlock Text="Tues" />
+                                <TextBlock Text="Wed" />
+                                <TextBlock Text="Thurs" />
+                                <TextBlock Text="Fri" />
+                                <TextBlock Text="Sat" />
+                                <TextBlock Text="Sun" />
+                            </UniformGrid>
+                            <!--</Border>-->
+                            <ctrl:DayListBox
+                                x:Name="CalendarDaysListBox"
+                                Grid.Row="1"
+                                Margin="0"
+                                Padding="0"
+                                BorderThickness="0"
+                                ItemContainerStyle="{StaticResource DayListBoxItem}"
+                                ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <!--  ItemTemplate="{StaticResource DayDataTemplate}">  -->
+                                <ListBox.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="7" Rows="6"/>
+                                    </ItemsPanelTemplate>
+                                </ListBox.ItemsPanel>
+                                <b:Interaction.Behaviors>
+                                    <utl:LeftRightMoveFocusBehavior/>
+                                </b:Interaction.Behaviors>
+                            </ctrl:DayListBox>
+                        </Grid>
+                    
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

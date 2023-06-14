@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\SuggestBoxLib\source\Demos\CachedPathSuggest\Suggest.FileSystem.csproj" />
+    <ProjectReference Include="..\Suggest.WPF\Suggest.WPF.csproj" />
+    <ProjectReference Include="..\UtilityWpf.Controls.FileSystem.Ex\UtilityWpf.Controls.Navigation.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="SuggestPathBox.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="SuggestPathBox.cs">
+      <DependentUpon>SuggestPathBox.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+</Project>

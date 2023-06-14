@@ -1,0 +1,29 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:obj="http://schemas.utility.com/objects">
+
+    <DataTemplate x:Key="KeyValuePairTemplate">
+        <Grid MinHeight="50" Margin="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                FontWeight="Bold"
+                Text="{Binding Path=Key}"
+                TextAlignment="Left" />
+            <ContentPresenter
+                Grid.Column="1"
+                Margin="1"
+                HorizontalAlignment="Center"
+                Content="{Binding Path=Value}">
+                <ContentPresenter.ContentTemplate>
+                    <DataTemplate>
+                        <obj:JsonControl Object="{Binding}" />
+                    </DataTemplate>
+                </ContentPresenter.ContentTemplate>
+            </ContentPresenter>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>

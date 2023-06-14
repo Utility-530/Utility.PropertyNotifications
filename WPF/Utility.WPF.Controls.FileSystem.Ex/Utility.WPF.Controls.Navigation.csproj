@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\HistoryControlLib\source\NavigationHistory.Controls\BrowseHistory.Controls.csproj" />
+    <ProjectReference Include="..\..\SuggestBoxLib\source\SuggestBoxLib\Popup.WPF.csproj" />
+    <ProjectReference Include="..\Suggest.WPF\Suggest.WPF.csproj" />
+  </ItemGroup>
+
+</Project>

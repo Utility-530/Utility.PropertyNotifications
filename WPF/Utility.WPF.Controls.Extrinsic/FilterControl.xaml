@@ -1,0 +1,135 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:egl="clr-namespace:ComputerCastleControls"
+    mc:Ignorable="d">
+
+    <!-- Style for the Clear Button -->
+    <Style x:Key="ClearButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="border"
+						CornerRadius="2"
+						Background="{TemplateBinding Background}"
+						BorderThickness="1"
+						BorderBrush="{TemplateBinding BorderBrush}"
+						Width="16" Height="16"
+						SnapsToDevicePixels="True">
+                        <Grid Width="8" Height="8" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Path x:Name="path1" Stroke="#ADADAD" Data="M0,0 L8,8" StrokeThickness="2" />
+                            <Path x:Name="path2" Stroke="#ADADAD" Data="M8,0 L0,8" StrokeThickness="2" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="#ADADAD" />
+                            <Setter Property="Background" Value="WhiteSmoke" />
+                            <Setter Property="Stroke" TargetName="path1" Value="DarkRed" />
+                            <Setter Property="Stroke" TargetName="path2" Value="DarkRed" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                        <GradientStop Color="#FFADADAD" Offset="0" />
+                                        <GradientStop Color="White" Offset="0.5" />
+                                        <GradientStop Color="White" Offset="1" />
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <SolidColorBrush x:Key="ListBorder" Color="#FF7F9DB9" />
+
+    <LinearGradientBrush x:Key="FocusBackground" EndPoint="0.5,0" StartPoint="0.5,1.667">
+        <GradientStop Color="#FF073553" Offset="0" />
+        <GradientStop Color="#FFA7D5F4" Offset="0.796" />
+        <GradientStop Color="#FF5A88A8" Offset="1" />
+    </LinearGradientBrush>
+
+    <Style x:Key="FilterTextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+        <Setter Property="BorderBrush" Value="{StaticResource ListBorder}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+        <Setter Property="Padding" Value="2" />
+        <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+        <Setter Property="AllowDrop" Value="true" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border x:Name="Bd" SnapsToDevicePixels="true" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                        <ScrollViewer x:Name="PART_ContentHost" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+                            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderThickness" Value="0,0,0,0" />
+    </Style>
+
+    <Style TargetType="{x:Type egl:FilterControl}">
+        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+        <Setter Property="FilterOnEnter" Value="False" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type egl:FilterControl}">
+                    <Border x:Name="border" CornerRadius="3,3,3,3"
+                            Background="#ADADAD">
+                        <Grid Margin="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Border Background="{TemplateBinding Background}" Grid.ColumnSpan="3" CornerRadius="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+                            <Viewbox Margin="4">
+                                <Path Fill="Black"  Data="M 93.148438 80.832031 C 109.5 57.742188 104.03125 25.769531 80.941406 9.421875 C 57.851562 -6.925781 25.878906
+          -1.460938 9.53125 21.632812 C -6.816406 44.722656 -1.351562 76.691406 21.742188 93.039062 C 38.222656 104.707031 60.011719 105.605469 77.394531 95.339844 L
+          115.164062 132.882812 C 119.242188 137.175781 126.027344 137.347656 130.320312 133.269531 C 134.613281 129.195312 134.785156 122.410156 130.710938 118.117188 C
+          130.582031 117.980469 130.457031 117.855469 130.320312 117.726562 Z M 51.308594 84.332031 C 33.0625 84.335938 18.269531 69.554688 18.257812 51.308594 C 18.253906 33.0625
+          33.035156 18.269531 51.285156 18.261719 C 69.507812 18.253906 84.292969 33.011719 84.328125 51.234375 C 84.359375 69.484375 69.585938 84.300781 51.332031 84.332031 C 51.324219
+          84.332031 51.320312 84.332031 51.308594 84.332031 Z M 51.308594 84.332031" />
+                            </Viewbox>
+                            <TextBox Style="{StaticResource FilterTextBoxStyle}"
+                                     x:Name="PART_FilterBox"  AutoWordSelection="True"
+                                     Grid.Column="1"
+                                     Margin="0,1,0,1" VerticalAlignment="Center"
+                                     Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type egl:FilterControl}}, Path=FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <TextBlock x:Name="PART_Header" Text="{TemplateBinding Header}"  VerticalAlignment="Center" HorizontalAlignment="Left" Margin="2,0,0,0"
+                                       Grid.Column="1"
+                                       IsHitTestVisible="False" Foreground="#ADADAD" />
+                            <Button x:Name="PART_ClearButton" Grid.Column="2" Margin="0,0,4,0" Style="{StaticResource ClearButtonStyle}"
+                                    Visibility="Collapsed" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True" SourceName="PART_FilterBox">
+                            <Setter Property="Background" Value="{StaticResource FocusBackground}" TargetName="border" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True" SourceName="PART_ClearButton">
+                            <Setter Property="Background" Value="{StaticResource FocusBackground}" TargetName="border" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Background" Value="{StaticResource FocusBackground}" TargetName="border" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

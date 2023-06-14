@@ -1,0 +1,115 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:utl="clr-namespace:Utility.WPF.Controls.Date.Helper"
+                    xmlns:ctrl="clr-namespace:Utility.WPF.Controls.Date"
+                    xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes">
+
+    <utl:MonthNumberToNameConverter x:Key="MonthNumberToNameConverter"></utl:MonthNumberToNameConverter>
+
+    <Style TargetType="ctrl:DatePickerControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ctrl:DatePickerControl">
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <!--  this column will be centre aligned  -->
+                            <ColumnDefinition Width="*" />
+
+                        </Grid.ColumnDefinitions>
+
+                        <Viewbox HorizontalAlignment="Right">
+
+
+                            <Grid Grid.Column="0" 
+                                  VerticalAlignment="Center"
+                                  Height="60"
+                                  >
+
+                                <TextBlock
+                                    Text="{Binding Year,RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                    x:Name="YearTextBlock"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    Background="Transparent"
+                                    FontSize="24"
+                                            FontWeight="DemiBold"
+                                            TextAlignment="Center" />
+                                <UniformGrid VerticalAlignment="Center" Rows="1">
+                                    <Button         Style="{DynamicResource MaterialDesignFlatButton}"
+                                                x:Name="YearUpButton"
+                                     
+                                                BorderThickness="0"
+                                                >
+                                        <Grid>
+                                            <md:PackIcon VerticalAlignment="Stretch"
+                                                         Height="24"    Width="24"
+                                                    Kind="ChevronLeft" />
+                                        </Grid>
+                                    </Button>
+                                    <Grid></Grid>
+                                    <Button          Style="{DynamicResource MaterialDesignFlatButton}"
+                                                x:Name="YearDownButton"
+                                                BorderThickness="0"
+                                                >
+                                        <Grid>
+                                            <md:PackIcon VerticalAlignment="Stretch"
+                                                           Height="24"    Width="24"
+                                                        Kind="ChevronRight" />
+                                        </Grid>
+                                    </Button>
+                                </UniformGrid>
+                            </Grid>
+                        </Viewbox>
+                        <Grid Grid.Column="1" Width="20"></Grid>
+                        <Viewbox Grid.Column="2" HorizontalAlignment="Left">
+                            <Grid HorizontalAlignment="Stretch">
+                                <TextBlock
+                                    Text="{Binding Month, Converter={StaticResource MonthNumberToNameConverter}, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                            x:Name="MonthTextBlock"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Background="Transparent"
+                                            FontSize="14"
+                                            FontWeight="DemiBold"
+                                            TextAlignment="Center" />
+
+                                <UniformGrid VerticalAlignment="Center" Rows="1">
+                                    <Button x:Name="MonthUpButton"
+                                             Style="{DynamicResource MaterialDesignFlatButton}"
+                                            BorderThickness="0"
+                                            VerticalContentAlignment="Stretch"
+                                            >
+                                        <Grid>
+                                            <md:PackIcon
+                                                Height="24"
+                                                Width="24"
+                                                Kind="ChevronLeft" />
+                                        </Grid>
+                                    </Button>
+                                    <Grid></Grid>
+                                    <Button  x:Name="MonthDownButton"
+                                               Style="{DynamicResource MaterialDesignFlatButton}"
+                                                BorderThickness="0"
+                                                VerticalContentAlignment="Stretch"
+                                                >
+
+                                        <md:PackIcon VerticalAlignment="Stretch"
+                                                           Height="24"
+                                                     Width="24"                                                      
+                                                        Kind="ChevronRight" />
+
+                                    </Button>
+                                </UniformGrid>
+                            </Grid>
+                        </Viewbox>
+                    </Grid>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,90 @@
+﻿<UserControl x:Class="Utility.WPF.Demo.Adorners.SettingsUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"     
+             xmlns:ab="http://schemas.utility.com/adorners"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1200">
+    <DockPanel>
+        <WrapPanel DockPanel.Dock="Top">
+            <Label Height="30" Width="100">Colour</Label>
+            <Button Click="Button_Click" Height="30" Width="100">Add/Remove</Button>
+            <Label Height="30" Width="100">Adorner</Label>
+            <Button Click="Button2_Click" Height="30" Width="100">Add/Remove</Button>
+        </WrapPanel>
+
+        <UniformGrid Rows="1">
+            <AdornerDecorator>
+                <Canvas Background="IndianRed" Opacity="0.1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                            Margin="10"
+                            x:Name="MainCanvas"
+                            ab:AdornerEx.IsEnabled="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}">
+                    <ListBox Background="Blue" Height="80" Width="80" Canvas.Left="56" Canvas.Top="234"></ListBox>
+                    <ListBox Background="Red" Height="36" Width="36" Canvas.Left="16" Canvas.Top="134"></ListBox>
+                    <ListBox Background="Black" Height="30" Width="30" Canvas.Left="156" Canvas.Top="34"></ListBox>
+                    <ab:AdornerEx.Adorners>
+                        <Ellipse Width="15"
+                            Height="15"
+                            HorizontalAlignment="Left"
+                            ab:AdornerEx.HorizontalPlacement="Inside"
+                            Stroke="Green" />
+                        <Ellipse Width="15"
+                            Height="15"
+                            HorizontalAlignment="Right"
+                            ab:AdornerEx.HorizontalPlacement="Across"
+                            Stroke="Red" />
+                        <Ellipse Width="15"
+                            Height="15"
+                            VerticalAlignment="Top"
+                            ab:AdornerEx.VerticalPlacement="Across"
+                            Stroke="Brown" />
+                        <TextBlock
+                            Text="Header"
+                            VerticalAlignment="Top"
+                            ab:AdornerEx.VerticalPlacement="Outside"
+                            ab:AdornerEx.OffsetY="-20"
+                            Background="Orange" />
+                    </ab:AdornerEx.Adorners>
+                </Canvas>
+            </AdornerDecorator>
+
+            <Grid 
+                      x:Name="GearGrid"
+                      ab:AdornerEx.IsEnabled="{Binding ElementName=CheckBox, Path=IsChecked}" >
+                <Grid.Background>
+                    <SolidColorBrush Opacity="0.1" Color="CadetBlue"></SolidColorBrush>
+                </Grid.Background>
+                <ab:AdornerEx.Adorners>
+                    <Button 
+                                   Margin="4"
+                                   Background="Transparent"
+                                   BorderBrush="Transparent"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom">
+                        <materialDesign:PackIcon Width="124"
+                                                  
+                             Height="124"
+                             Kind="Gear">
+                        </materialDesign:PackIcon>
+                    </Button>
+                </ab:AdornerEx.Adorners>
+
+                <CheckBox x:Name="CheckBox" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="60" >Show</CheckBox>
+            </Grid>
+
+            <AdornerDecorator>
+                <Canvas x:Name="Square3Grid"  >
+                    <Canvas.Background>
+                        <SolidColorBrush Opacity="0.1" Color="DarkGoldenrod"/>
+                    </Canvas.Background>
+                    <Ellipse Fill="Blue" Height="80" Width="80" Canvas.Left="56" Canvas.Top="234"></Ellipse>
+                    <Ellipse Fill="Red" Height="36" Width="36" Canvas.Left="16" Canvas.Top="134"></Ellipse>
+                    <Ellipse Fill="Black" Height="30" Width="30" Canvas.Left="156" Canvas.Top="34"></Ellipse>
+                </Canvas>
+            </AdornerDecorator>
+        </UniformGrid>
+
+    </DockPanel>
+</UserControl>

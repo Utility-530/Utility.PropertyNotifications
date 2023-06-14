@@ -1,0 +1,99 @@
+﻿<UserControl x:Class="Utility.WPF.Demo.TextUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:ab="http://schemas.utility.com/adorners" 
+    xmlns:utl="http://schemas.utility.com/utilitywpf" 
+    xmlns:factory="clr-namespace:Utility.WPF.Demo.Data.Factory;assembly=Utility.WPF.Demo.Data" 
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <FrameworkElement.Resources>
+            <factory:Characters x:Key="Characters" />
+        </FrameworkElement.Resources>
+        <AdornerDecorator>
+            <DockPanel>
+                <UniformGrid>
+                    <Grid>
+                        <materialDesign:PopupBox HorizontalAlignment="Right" VerticalAlignment="Top"
+                                                     Margin="10"
+                                                     Opacity="0.5"
+                                                     StaysOpen="False"
+                        Style="{DynamicResource MaterialDesignMultiFloatingActionPopupBox}"
+                        PlacementMode="RightAndAlignBottomEdges">
+                            <materialDesign:PopupBox.ToggleCheckedContent>
+                                <materialDesign:PackIcon
+                                Kind="Gear"
+                                Width="24"
+                                Height="24" />
+                            </materialDesign:PopupBox.ToggleCheckedContent>
+                            <materialDesign:PopupBox.ToggleContent>
+                                <materialDesign:PackIcon
+                                Kind="GearOutline"
+                                Width="24"
+                                Height="24" />
+                            </materialDesign:PopupBox.ToggleContent>
+                            <ListBox x:Name="PopupListBox">
+                                <i:Interaction.Behaviors>
+                                    <utl:EnumSelectorBehavior EnumType="{x:Type Dock}" IsNullOptionIncluded="True"/>
+                                </i:Interaction.Behaviors>
+                            </ListBox>
+                        </materialDesign:PopupBox>
+                        <TextBox Height="30" Width="200" 
+                                 ab:Text.Text="{Binding ElementName=PopupListBox, Path=SelectedItem.Value}" 
+                                 ab:Text.Position="{Binding ElementName=PopupListBox, Path=SelectedItem.Value}">
+                        </TextBox>
+                    </Grid>
+                    <TextBox Height="30" Width="200" 
+                                 ab:Header.Text="{Binding Text, RelativeSource={RelativeSource Self}}">
+                        Edit this text
+                    </TextBox>
+                    <Rectangle Fill="LightCyan" Height="200" Width="200"
+                         ab:Header.Text="This is a header"
+                         ab:Text.Text="This is a piece of text"
+                         ab:Footer.Text="This a footer"></Rectangle>
+                    <Rectangle Fill="LightCyan" Height="200" Width="200"
+                         ab:Text.Text="This is a piece of text"
+                        ></Rectangle>
+                    <Rectangle Fill="LightCyan" Height="200" Width="200"
+                         ab:LeftHeader.Text="This is a left header"
+                         ab:Footer.Text="This a footer"></Rectangle>
+                    <TextBox Height="30" Width="200"></TextBox>
+                    <TextBox Height="30" Width="200" ab:Header.Text="This is a header" ab:Footer.Text="This a footer" HorizontalContentAlignment="Right"></TextBox>
+                    <TextBox Height="30" Width="200" ab:Header.Text="HEADER"></TextBox>
+                    <Rectangle Fill="LightCoral" Height="200" Width="200"
+                         ab:Text.Text="This is a left text"
+                         ab:Text.Position="Left"></Rectangle>
+                    <TextBox Height="30" Width="200"
+                           ab:Text.Text="This is a right text"
+                         ab:Text.Position="Right"></TextBox>
+                    <TextBox Height="30" Width="200"
+                         HorizontalContentAlignment="Right"
+                           ab:Text.Text="This is a top right text"
+                         ab:Text.Position="Top"></TextBox>
+                    <TextBox Height="30" Width="200"
+                         HorizontalContentAlignment="Right"
+                           ab:Text.Text="This is a bottom right text"
+                         ab:Text.Position="Bottom"></TextBox>
+                    <TextBox Height="30" Width="200"
+                         ab:Text.Text="This is an error message"
+                         ab:Text.Position="Right"></TextBox>
+                    <TextBox Height="30" Width="200"
+                         ab:Error.Text="This is an Error message!"
+                         ></TextBox>
+                    <!--<TextBox Height="30" Width="200"
+                         ab:Type.Type="{x:Type TextBox}"
+                         ab:Error.Text="This is an Error message!"
+                         ></TextBox>-->
+                    <Rectangle Fill="LightCoral" Height="100" Width="300"
+                           DataContext="{StaticResource Characters}"
+                       ab:Type.ShowDataContext="True"
+                       ab:Type.ShowDimensions="True"
+                         ></Rectangle>
+                </UniformGrid>
+            </DockPanel>
+        </AdornerDecorator>
+    </Grid>
+</UserControl>

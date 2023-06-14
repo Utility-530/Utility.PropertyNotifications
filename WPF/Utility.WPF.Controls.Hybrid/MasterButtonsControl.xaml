@@ -1,0 +1,26 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:utilitywpf="http://schemas.utility.com/utilitywpf">
+
+    <ResourceDictionary.MergedDictionaries>
+        <utilitywpf:SharedResourceDictionary Source="/Utility.WPF.Controls.Master;component/MasterControl.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--<Style TargetType="{x:Type local:MasterButtonsControl}" BasedOn="{StaticResource {x:Type master:MasterDetailControl}}">
+        <Setter Property="ButtonTypes" Value="None"></Setter>
+        <Setter Property="Background">
+            <Setter.Value>
+                <VisualBrush
+                TileMode="Tile" Viewport="0,0,10,10"
+                ViewportUnits="Absolute" Viewbox="0,0,10,10"
+                ViewboxUnits="Absolute">
+                    <VisualBrush.Visual>
+                        <Canvas>
+                            <Rectangle  Width="10" Height="10" />
+                            <Path Stroke="WhiteSmoke" Data="M 0 0 l 10 10" />
+                        </Canvas>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Setter.Value>
+        </Setter>
+    </Style>-->
+</ResourceDictionary>

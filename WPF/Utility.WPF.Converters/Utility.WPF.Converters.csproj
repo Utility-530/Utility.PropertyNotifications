@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Utility.Models\Utility.Packages\Utility.Packages.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
+    <ProjectReference Include="..\..\Utility.Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Panels\Utility.WPF.Panels.csproj" />
+  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="LambdaConverters" Version="4.0.0" />
+	</ItemGroup>
+</Project>

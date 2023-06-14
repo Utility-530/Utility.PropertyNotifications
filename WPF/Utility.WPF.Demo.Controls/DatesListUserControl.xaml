@@ -1,0 +1,29 @@
+﻿<UserControl
+    x:Class="Utility.WPF.Demo.View.DatesListUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:common="http://schemas.utility.com/utilitywpf"
+    xmlns:conv="http://schemas.utility.com/converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:enum="clr-namespace:Utility.Enums;assembly=Utility.Enums"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:view="http://schemas.utility.com"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <Grid>
+        <Grid.Resources>
+            <conv:TenseToDateTimeConverter x:Key="TenseConverter" Days="30" />
+        </Grid.Resources>
+        <UniformGrid Columns="1">
+
+            <view:EnumItemsControl
+                x:Name="TenseEnumItemsControl"
+                Orientation="Horizontal"
+                Enum="{x:Type enum:Tense}">
+            </view:EnumItemsControl>
+
+            <view:DatesList x:Name="DatesList" ItemsSource="{Binding ElementName=TenseEnumItemsControl, Path=Output, Converter={StaticResource TenseConverter}}" />
+        </UniformGrid>
+    </Grid>
+</UserControl>

@@ -1,0 +1,50 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <PathGeometry x:Key="Plus">
+        <PathGeometry.Figures>
+            <PathFigure StartPoint="0,1">
+                <LineSegment Point="0,-1" />
+            </PathFigure>
+            <PathFigure StartPoint="1,0">
+                <LineSegment Point="-1,0" />
+            </PathFigure>
+        </PathGeometry.Figures>
+    </PathGeometry>
+
+    <PathGeometry x:Key="Cross">
+        <PathGeometry.Figures>
+            <PathFigure StartPoint="0,0">
+                <LineSegment Point="1,1" />
+            </PathFigure>
+            <PathFigure StartPoint="0,1">
+                <LineSegment Point="1,0" />
+            </PathFigure>
+        </PathGeometry.Figures>
+    </PathGeometry>
+
+    <Grid
+        x:Key="Cross_"
+        Width="30"
+        Height="30">
+        <Path
+            Data="M0,0 L25,25"
+            Stretch="UniformToFill"
+            Stroke="White"
+            StrokeThickness="6" />
+        <Path
+            Data="M0,25 L25,0"
+            Stretch="UniformToFill"
+            Stroke="White"
+            StrokeThickness="6" />
+    </Grid>
+
+    <Path
+        x:Key="Tick"
+        Width="30"
+        Height="30"
+        Data="M 21.7,52.2 L 74.4,0 L 74.4,18.667 L 22,70.708 L 0.,49 L 0,29.8 L 21.7,52.2 Z"
+        Fill="White"
+        Stretch="UniformToFill" />
+</ResourceDictionary>

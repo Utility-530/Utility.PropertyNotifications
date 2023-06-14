@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyVersion>1.0.20.0</AssemblyVersion>
+    <FileVersion>1.0.20.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Page Remove="Themes\StyleChange\Blue.xaml" />
+    <Page Remove="Themes\StyleChange\Green.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Utility.WPF.Controls.Tabs\Utility.WPF.Controls.Tabs.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Controls.Texts\Utility.WPF.Controls.Texts.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Adorners\Utility.WPF.Demo.Adorners.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Date\Utility.WPF.Demo.Date.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Controls.Meta\Utility.WPF.Controls.Meta.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Animation\Utility.WPF.Demo.Animations.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Buttons\Utility.WPF.Demo.Buttons.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Clocks\Utility.WPF.Demo.Clocks.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Controls\Utility.WPF.Demo.Controls.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Data\Utility.WPF.Demo.Data.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Dialogs\Utility.WPF.Demo.Dialogs.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Dragablz\Utility.WPF.Demo.Dragablz.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Extrinsic\Utility.WPF.Demo.Extrinsic.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.FileSystem\Utility.WPF.Demo.FileSystem.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Forms\Utility.WPF.Demo.Forms.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Hybrid\Utility.WPF.Demo.Hybrid.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Master\Utility.WPF.Demo.Master.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Objects\Utility.WPF.Demo.Objects.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Panels\Utility.WPF.Demo.Panels.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Progress\Utility.WPF.Demo.Progress.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Themes\StyleChange\Blue.xaml" />
+    <Resource Include="Themes\StyleChange\Green.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+  </ItemGroup>
+</Project>

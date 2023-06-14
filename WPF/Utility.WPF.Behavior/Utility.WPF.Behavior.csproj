@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
+	  <PackageReference Include="Evan.Wpf" Version="1.2.0" />
+	  <PackageReference Include="ColorCode.Core" Version="2.0.13" />
+	  <PackageReference Include="FluentWPF" Version="0.10.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Utility.WPF.Abstract\Utility.WPF.Abstract.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Reactive\Utility.WPF.Reactive.csproj" />
+  </ItemGroup>
+
+</Project>
