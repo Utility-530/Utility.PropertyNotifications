@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "Util
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Observables.Demo", "Utility.WPF.Observables.Demo\Utility.WPF.Observables.Demo.csproj", "{3A24ADA3-B2A9-4FDA-8444-64F8F7F240C4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Interfaces", "..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj", "{46E89A63-6E16-431C-95D1-69E4FA3CADB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Interfaces", "..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj", "{46E89A63-6E16-431C-95D1-69E4FA3CADB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
