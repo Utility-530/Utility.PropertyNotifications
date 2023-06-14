@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="LiteDB" Version="5.0.16" />
+    <PackageReference Include="sqlite-net-base" Version="1.8.116" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Utility.Conversions\Utility.Conversions\Utility.Conversions.csproj" />
+    <ProjectReference Include="..\..\Utility.Helpers\Utility.Helpers\Utility.Helpers.csproj" />
+    <ProjectReference Include="..\..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
+    <ProjectReference Include="..\..\Utility.Models\Utility.Models\Utility.Models.csproj" />
+    <ProjectReference Include="..\..\Utility.Trees\Utility.Trees\Utility.Trees.csproj" />
+  </ItemGroup>
+
+</Project>
