@@ -13,12 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Utility.Trees\Utility.Trees\Utility.Trees.csproj" />
+    <ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
     <ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
     <ProjectReference Include="..\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Common\Utility.WPF.Demo.Common.csproj" />
-    <ProjectReference Include="..\..\Utility.Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
+    <ProjectReference Include="..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
   </ItemGroup>
 
 </Project>

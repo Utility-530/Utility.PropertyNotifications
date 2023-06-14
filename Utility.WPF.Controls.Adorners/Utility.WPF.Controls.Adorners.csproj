@@ -9,7 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Utility.WPF.Adorners\Utility.WPF.Adorners.csproj" />
     <ProjectReference Include="..\Utility.WPF.Behavior\Utility.WPF.Behavior.csproj" />
-    <ProjectReference Include="..\..\Utility.Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
+    <ProjectReference Include="..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
   </ItemGroup>
 
   <ItemGroup>
