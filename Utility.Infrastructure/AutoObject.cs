@@ -81,7 +81,7 @@ namespace Utility.PropertyTrees.Infrastructure
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public object? GetProperty(Key key)
+        public object? GetProperty(IEquatable key)
         {
             if (LastUpdate is not DateTime value)
             {
@@ -99,7 +99,7 @@ namespace Utility.PropertyTrees.Infrastructure
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public void SetProperty(Key key, object value)
+        public void SetProperty(IEquatable key, object value)
         {
             disposable?.Dispose();
             disposable = this.Observe<SetPropertyResponse, SetPropertyRequest>(new(key, value))
