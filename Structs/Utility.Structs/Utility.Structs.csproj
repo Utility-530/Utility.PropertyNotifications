@@ -33,8 +33,8 @@
 		<MySourceFiles Include="$(ProjectDir)\bin\debug\$(ProjectName)*nupkg" />
 	</ItemGroup>
 
-	<Target Name="CopyFiles" AfterTargets="Build">
+	<!--<Target Name="CopyFiles" AfterTargets="Build">
 		<Message Text="@(MySourceFiles)" Importance="high" />
 		<Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(DestinationFolder)" />
-	</Target>
+	</Target>-->
 </Project>
