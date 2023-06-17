@@ -11,7 +11,7 @@ namespace Utility.WPF.Converters
         {
             try
             {
-                return value.GetType().Name;
+                return value?.GetType().Name ?? "null";
             }
             catch
             {
