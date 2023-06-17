@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
-    <ProjectReference Include="..\..\Utility.Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>
