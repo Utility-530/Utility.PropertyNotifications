@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilityAttribute", "UtilityAttribute\UtilityAttribute.csproj", "{30002767-6460-4A99-8A91-2349875F16DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Attributes", "Utility.Attributes\Utility.Attributes.csproj", "{30002767-6460-4A99-8A91-2349875F16DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
