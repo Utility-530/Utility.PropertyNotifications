@@ -62,7 +62,8 @@ namespace Utility.Helpers.Ex
             JsonSerializer serializer = new JsonSerializer
             {
                 NullValueHandling = NullValueHandling.Ignore,
-                TypeNameHandling = TypeNameHandling.All,
+                TypeNameHandling = TypeNameHandling.None,
+                //TypeNameHandling = TypeNameHandling.All,
                 Formatting = Formatting.Indented,
             };
 
