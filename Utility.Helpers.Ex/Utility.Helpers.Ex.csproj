@@ -19,8 +19,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Utility.Helpers\Utility.Helpers\Utility.Helpers.csproj" />
-    <ProjectReference Include="..\..\Utility.Model\Utility.Packages\Utility.Packages.csproj" />
+    <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
+    <ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
   </ItemGroup>
 
 </Project>
