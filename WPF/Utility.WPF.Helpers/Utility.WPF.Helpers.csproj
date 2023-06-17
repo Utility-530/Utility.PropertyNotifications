@@ -7,8 +7,8 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Utility.Enums\Utility.Enums\Utility.Enums.csproj" />
-		<ProjectReference Include="..\..\Utility.Helpers\Utility.Helpers\Utility.Helpers.csproj" />
+		<ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
+		<ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <ProjectReference Include="..\..\Utility.Persists\Utility.Persists\Utility.Persists.csproj" />
+	  <ProjectReference Include="..\..\Persists\Utility.Persists\Utility.Persists.csproj" />
     <ProjectReference Include="..\Utility.ViewModels\Utility.ViewModels.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Hybrid\Utility.WPF.Controls.Hybrid.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Objects\Utility.WPF.Controls.Objects.csproj" />
