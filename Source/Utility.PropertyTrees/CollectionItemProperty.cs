@@ -10,8 +10,6 @@ namespace Utility.PropertyTrees
         }
 
         public int Index => (Descriptor as CollectionItemDescriptor)?.Index ?? throw new Exception("vdfsss3 3333");
-
-
     }
     public class CollectionItemReferenceProperty : ReferenceProperty
     {
@@ -19,8 +17,6 @@ namespace Utility.PropertyTrees
         {
         }
 
-        public int Index => (Descriptor as CollectionItemDescriptor)?.Index ?? throw new Exception("vdfsss3 3333");
-
-       
+        public int Index => (Descriptor as CollectionItemDescriptor)?.Index ?? throw new Exception("vdfsss3 3333");       
     }
 }
