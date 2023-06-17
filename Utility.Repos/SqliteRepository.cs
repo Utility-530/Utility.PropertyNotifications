@@ -73,7 +73,7 @@ namespace Utility.Repos
 
         public async Task UpdateValue(IEquatable key, object value)
         {
-            if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
+            if (key is not IGuid { Guid: var guid} _key)
             {
                 throw new Exception("reg 43cs ");
             }
@@ -115,7 +115,7 @@ namespace Utility.Repos
 
         public async Task<IEquatable[]> FindKeys(IEquatable key)
         {
-            if (key is not Key { Guid: var parent } _key)
+            if (key is not IGuid { Guid: var parent } _key)
             {
                 throw new Exception("reg 43cs ");
             }
@@ -201,7 +201,7 @@ namespace Utility.Repos
 
         public async Task<object?> FindValue(IEquatable key)
         {
-            if (key is not Key { Guid: var guid } _key)
+            if (key is not IGuid { Guid: var guid } _key)
             {
                 throw new Exception("reg 43cs ");
             }
