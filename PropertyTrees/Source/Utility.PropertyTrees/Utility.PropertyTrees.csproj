@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="System.Reactive" Version="5.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Utility.Collections\Utility.Collections\Utility.Collections.csproj" />
+		<ProjectReference Include="..\..\..\Utility.Conversions\Utility.Conversions\Utility.Conversions.csproj" />
+		<ProjectReference Include="..\..\..\Utility.Enums\Utility.Enums\Utility.Enums.csproj" />
+		<ProjectReference Include="..\..\..\Utility.Helpers\Utility.Helpers\Utility.Helpers.csproj" />
+		<ProjectReference Include="..\..\..\Utility.Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\..\Utility.Nodes\Utility.Nodes\Utility.Nodes.csproj" />
+		<ProjectReference Include="..\..\..\Utility.Reactive\Utility.Reactive\Utility.Reactive.csproj" />
+		<ProjectReference Include="..\..\..\Utility.Trees\Utility.Trees\Utility.Trees.csproj" />
+		<ProjectReference Include="..\..\..\Utility.WPF\Utility.Commands\Utility.Commands.csproj" />
+		<ProjectReference Include="..\Utility.PropertyTrees.Abstractions\Utility.PropertyTrees.Abstractions.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Using Include="System" />
+		<Using Include="System.Text.Json" />
+		<Using Include="System.Text.Json.Serialization" />
+		<Using Include="System.Collections.Generic" />
+		<Using Include="System.Linq" />		
+		<Using Include="System.ComponentModel" />
+		<Using Include="System.Collections" />	
+		<Using Include="System.Globalization" />	
+	</ItemGroup>
+</Project>

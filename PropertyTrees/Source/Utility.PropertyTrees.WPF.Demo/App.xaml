@@ -1,0 +1,135 @@
+﻿<Application
+    x:Class="Utility.PropertyTrees.WPF.Demo.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:model="clr-namespace:Utility.PropertyTrees.Demo.Model;assembly=Utility.PropertyTrees.Demo.Model"
+    xmlns:ui="http://schemas.modernwpf.com/2019" 
+    xmlns:obs="clr-namespace:Utility.Observables.Generic;assembly=Utility.Observables"
+    xmlns:infra="clr-namespace:Utility.Infrastructure;assembly=Utility.Infrastructure"
+    xmlns:con="http://schemas.utility.com/converters"
+    xmlns:st="http://schemas.spicytaco.io/">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Themes/Templates.xaml" />
+                <ResourceDictionary Source="/Themes/Styles.xaml" />
+                <ResourceDictionary Source="/Themes/SyntaxBoxTemplate.xaml" />
+                <ui:ThemeResources RequestedTheme="Light" />
+                <ui:XamlControlsResources />
+            </ResourceDictionary.MergedDictionaries>
+            <!--<DataTemplate DataType="{x:Type samples1:Customer2}">
+                <local1:MainView
+                        DataContext="{Binding }" />
+            </DataTemplate>-->
+
+            <!--<DataTemplate DataType="{x:Type grid:PropertyBase}">
+                <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={x:Static local:DefaultConverter.Instance}}"
+                         Width="100"
+                         BorderBrush="ForestGreen"
+                         BorderThickness="2"></TextBox>
+            </DataTemplate>-->
+
+            <ItemsPanelTemplate x:Key="StackPanel">
+                <StackPanel></StackPanel>
+            </ItemsPanelTemplate>
+
+            <ItemsPanelTemplate x:Key="WrapPanel">
+                <StackPanel></StackPanel>
+            </ItemsPanelTemplate>
+
+            <ItemsPanelTemplate x:Key="UniformGrid">
+                <UniformGrid></UniformGrid>
+            </ItemsPanelTemplate>
+
+
+            <ItemsPanelTemplate x:Key="CustomGrid">
+                <!--<st:AutoGrid Rows="1*,1*,1*" Columns="1*,1*">                    
+                </st:AutoGrid>-->
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </ItemsPanelTemplate>
+
+
+            <DataTemplate x:Key="Blue">
+                <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Width="100"
+                         BorderBrush="DeepSkyBlue"
+                         BorderThickness="2"></TextBox>
+            </DataTemplate>
+
+            <DataTemplate x:Key="Green">
+                <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Width="100"
+                         BorderBrush="DarkSeaGreen"
+                         BorderThickness="2"></TextBox>
+            </DataTemplate>
+
+            
+
+
+            <DataTemplate DataType="{x:Type obs:Subject}">
+                <st:AutoGrid Rows="3*,7*,3*">
+                    <TextBlock Text="Subject"/>
+                    <UniformGrid Rows="1" >
+                        <TextBlock Text="{Binding InType.Name}"/>
+                        <TextBlock Text="{Binding OutType.Name}"/>
+                    </UniformGrid>
+                    <UniformGrid>
+                        <TextBlock Text="{Binding Observers.Count}"></TextBlock>
+                        <ListBox ItemsSource="{Binding Observers}"></ListBox>
+                    </UniformGrid>
+                </st:AutoGrid>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type infra:SingleParameterMethod}">
+                <Grid Background="Transparent">
+                    <st:AutoGrid Rows="3*,7*,3*" Margin="8" Background="White">
+                        <TextBlock Text="SingleParameterMethod">
+                        </TextBlock>
+                        <UniformGrid Rows="1" >
+                            <TextBlock Text="{Binding InType.Name}"
+                       ></TextBlock>
+                            <TextBlock Text="{Binding OutType.Name}"
+                         ></TextBlock>
+
+                        </UniformGrid>
+                        <UniformGrid>
+                            <TextBlock Text="{Binding Observers.Count}"></TextBlock>
+                            <ListBox ItemsSource="{Binding Observers}"></ListBox>
+                        </UniformGrid>
+                    </st:AutoGrid>
+                </Grid>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type infra:DummyLogger}">
+                <DockPanel>
+                    <Button Command="{Binding Command}" Height="30" Width="100" DockPanel.Dock="Top">next</Button>
+
+                    <ListBox ItemsSource="{Binding Collection}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid  Columns="5"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ListBox>
+                </DockPanel>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type infra:BaseObject}">
+                <ContentControl Content="{Binding Key}"></ContentControl>
+            </DataTemplate>
+
+ 
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,26 @@
+﻿<UserControl x:Class="Utility.PropertyTrees.WPF.Demo.Views.CommandView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Utility.PropertyTrees.WPF.Demo"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             x:Name="UserControl"
+             mc:Ignorable="d">
+    <ui:CommandBar x:Name="CommandBar" DefaultLabelPosition="Bottom"  HorizontalAlignment="Center" >
+
+        <!--<ui:AppBarButton Icon="Library" Label="Clear" Click="show_graph_click"/>
+        <ui:AppBarButton Icon="Forward"  Label="Templates" Click="show_templates_click"/>
+        --><!--<ui:AppBarButton Icon="Emoji2" Label="Initialise" Click="initialise_click"/>--><!--
+        <ui:AppBarButton Icon="Directions" Label="history"  Click="show_history_click" />
+        <ui:AppBarButton Icon="Go" Label="ViewModel"  Click="show_viewModels_click" />-->
+              <!--<ui:AppBarToggleButton Icon="Play" Label="Play" />-->
+        <ui:AppBarButton Icon="Link" Label="Connect" Click="connect_click" />
+        <ui:AppBarSeparator />
+        <ui:AppBarButton Icon="Target" Label="PrizeWheel" Click="prizewheel_click"/>
+        <ui:AppBarButton Icon="ZeroBars" Label="Leaders" Click="leaderboard_click"/>
+        <ui:AppBarButton Icon="FullScreen" Label="Screensaver" Click="screensaver_click"/>
+        <ui:AppBarSeparator />
+        <ui:AppBarButton Icon="Refresh" Label="Refresh"  Click="refresh_click"/>
+    </ui:CommandBar>
+</UserControl>
