@@ -4,7 +4,6 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Observables.Generic
 {
-
     public class Subject<TInputOutput> : Subject<TInputOutput, TInputOutput>
     {
         public Subject() : base(a => a)
