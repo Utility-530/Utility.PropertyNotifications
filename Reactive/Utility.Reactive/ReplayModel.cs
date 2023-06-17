@@ -7,17 +7,17 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 
-namespace Utility.Common.Model
+namespace Utility.Reactive
 {
     public class ReplayModel<T> : ISubject<T>
     {
         private readonly ObservableCollection<T> collection = new();
 
-        private readonly List<(int id, IObserver<T> observer)> observers = new();
-        private readonly IScheduler? scheduler;
+        private readonly List<IObserver<T>> observers = new();
+        private readonly IScheduler scheduler;
         private int count = 0;
 
-        public ReplayModel(IScheduler? scheduler = null)
+        public ReplayModel(IScheduler scheduler = null)
         {
             this.scheduler = scheduler;
         }
@@ -36,9 +36,8 @@ namespace Utility.Common.Model
 
         public void OnNext(T value)
         {
-
             Schedule(value);
-            foreach (var (_, observer) in observers.ToArray())
+            foreach (var observer in observers.ToArray())
             {
                 observer.OnNext(value);
             }
@@ -52,8 +51,8 @@ namespace Utility.Common.Model
                     observer.OnNext(value);
                 }
             var tempCount = ++count;
-            observers.Add((tempCount, observer));
-            return Disposable.Create(() => observers.RemoveAll(a => a.id == tempCount));
+            observers.Add(observer);
+            return Disposable.Create(() => observers.Remove(observer));
         }
 
         private void Schedule(T value)
