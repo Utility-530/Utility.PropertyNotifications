@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
@@ -7,25 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Evan.Wpf" Version="1.2.0" />
-    <PackageReference Include="System.Reactive" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Utility.Conversions\Utility.Conversions\Utility.Conversions.csproj" />
-    <ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
+    <ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Adorners\Utility.WPF.Adorners.csproj" />
     <ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
-    <ProjectReference Include="..\Infrastructure.WPF\Infrastructure.WPF.csproj" />
-    <ProjectReference Include="..\Utility.PropertyTrees.Abstractions\Utility.PropertyTrees.Abstractions.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="Utility.PropertyTrees.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Resources\Styles.xaml">
-      <SubType>Designer</SubType>
-    </Page>
+    <ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Panels\Utility.WPF.Panels.csproj" />
+    <ProjectReference Include="..\Utility.PropertyTrees.Services\Utility.PropertyTrees.Services.csproj" />
   </ItemGroup>
 
 </Project>

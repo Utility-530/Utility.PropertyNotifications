@@ -1,16 +1,34 @@
 ﻿namespace Utility.PropertyTrees.Abstractions
 {
-    public class ViewModel : IViewModel
+    public class ViewModel //: IViewModel
     {
         public ViewModel()
         {
         }
+
+        //public Guid Id { get; set; }
+
+        public MetaData MetaData { get; set; }
 
         public Template Template { get; set; }
 
         public Panel Panel { get; set; }
 
         public CollectionPanel CollectionPanel { get; set; }
+    }
+
+    public class MetaData
+    {
+        public Guid ParentId { get; set; }
+
+        public string Name { get; set; }
+
+        public string Type { get; set; }
+
+        public bool Inherit { get; set; }
+
+        public string Mode { get; set; }
+
     }
 
     public class Template
@@ -25,8 +43,8 @@
 
     public class Panel
     {
-        public Grid Grid { get; set; }
-        public string Type { get; set; } = "WrapPanel";
+        public GridParams GridParams { get; set; }
+        public string PanelType { get; set; } = "WrapPanel";
     }
 
     public class Dock
@@ -34,7 +52,7 @@
         //public Dock Row { get; set; }
     }
 
-    public class Grid
+    public class GridParams
     {
         public int Row { get; set; }
         public int Column { get; set; }

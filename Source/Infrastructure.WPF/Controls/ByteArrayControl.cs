@@ -5,8 +5,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media;
-
-namespace SoftFluent.Windows
+//namespace SoftFluent.Windows
+namespace Infrastructure.WPF.Controls
 {
     public class ByteArrayControl : ScrollViewer, IDisposable
     {
@@ -181,7 +181,7 @@ namespace SoftFluent.Windows
             // display some tooltip
             if (VerticalScrollBar != null)
             {
-                VerticalScrollBar.ToolTip = _stream.Position + " / " + _stream.Length + " (" + (100 * _stream.Position) / _stream.Length + "%)";
+                VerticalScrollBar.ToolTip = _stream.Position + " / " + _stream.Length + " (" + 100 * _stream.Position / _stream.Length + "%)";
             }
         }
 
@@ -220,8 +220,8 @@ namespace SoftFluent.Windows
                 return;
 
             long pos = _stream.Position;
-            long newPos = ScrollableHeight == 0 ? (long)e.VerticalOffset : (long)((e.VerticalOffset * (double)(_stream.Length - ComputeNeededBufferSize() / 2)) / ScrollableHeight);
-            newPos = newPos - (newPos % RowCount);
+            long newPos = ScrollableHeight == 0 ? (long)e.VerticalOffset : (long)(e.VerticalOffset * (_stream.Length - ComputeNeededBufferSize() / 2) / ScrollableHeight);
+            newPos = newPos - newPos % RowCount;
             if (pos != newPos || newPos == 0)
             {
                 _stream.Position = newPos;
@@ -327,7 +327,7 @@ namespace SoftFluent.Windows
                 count = bytes.Length;
             }
 
-            if ((offset + count) > bytes.Length)
+            if (offset + count > bytes.Length)
             {
                 count = bytes.Length - offset;
             }
@@ -354,7 +354,7 @@ namespace SoftFluent.Windows
                 sb.Append(" ");
                 for (int i = 0; i < rowCount; i++)
                 {
-                    sb.AppendFormat("{0:X1}", (i % 16));
+                    sb.AppendFormat("{0:X1}", i % 16);
                 }
                 sb.AppendLine();
 
@@ -364,7 +364,7 @@ namespace SoftFluent.Windows
                     sb.AppendFormat("--------");
                 }
                 sb.Append("  ");
-                for (int i = 0; i < (rowCount * 3) - 1; i++)
+                for (int i = 0; i < rowCount * 3 - 1; i++)
                 {
                     sb.Append('-');
                 }
@@ -381,7 +381,7 @@ namespace SoftFluent.Windows
                 sb.AppendFormat(format, i + offset + address);
 
                 int j;
-                for (j = 0; (j < rowCount) && ((i + j) < count); j++)
+                for (j = 0; j < rowCount && i + j < count; j++)
                 {
                     sb.AppendFormat("{0:X2} ", bytes[i + j + offset]);
                 }
@@ -392,7 +392,7 @@ namespace SoftFluent.Windows
                     sb.Append(new string(' ', 3 * (rowCount - j)));
                 }
 
-                for (j = 0; j < rowCount && (i + j) < count; j++)
+                for (j = 0; j < rowCount && i + j < count; j++)
                 {
                     byte b = bytes[i + j + offset];
                     char c = (char)b;

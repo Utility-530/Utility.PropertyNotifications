@@ -1,10 +1,11 @@
-﻿using System;
+﻿using UniversalConverter;
+using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Windows.Data;
 using Utility.Conversions;
 
-namespace SoftFluent.Windows
+namespace UniversalConverter
 {
     /// <summary>
     /// Provides a converter to convert any object into another object, using a switch/case paradigm.

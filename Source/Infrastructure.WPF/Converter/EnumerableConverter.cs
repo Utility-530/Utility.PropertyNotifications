@@ -5,8 +5,8 @@ using System.Text;
 using System.Windows;
 using System.Windows.Data;
 using Utility.Conversions;
-
-namespace SoftFluent.Windows
+//namespace SoftFluent.Windows
+namespace Infrastructure.WPF.Converter
 {
     public class EnumerableConverter : DependencyObject, IValueConverter
     {

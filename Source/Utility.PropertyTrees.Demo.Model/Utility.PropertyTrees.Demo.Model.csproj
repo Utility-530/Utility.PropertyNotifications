@@ -12,7 +12,6 @@
 	
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
-		<ProjectReference Include="..\Utility.PropertyTrees.Abstractions\Utility.PropertyTrees.Abstractions.csproj" />
 	</ItemGroup>
 
 </Project>

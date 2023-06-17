@@ -2,7 +2,7 @@
 using UniversalConverter;
 using Utility.Conversions;
 
-namespace SoftFluent.Windows
+namespace UniversalConverter
 {
     /// <summary>
     /// Defines input for a comparison test.
@@ -360,7 +360,7 @@ namespace SoftFluent.Windows
             {
                 if (forceConvert || (Options & UniversalConverterOptions.Convert) == UniversalConverterOptions.Convert)
                 {
-                    v = ConversionHelper.ChangeType<string>(ValueToCompare, null, provider);
+                    v = ConversionHelper.ChangeType<string>(ValueToCompare, provider);
                     if (v == null)
                     {
                         v = string.Format(provider, "{0}", ValueToCompare);
@@ -413,7 +413,7 @@ namespace SoftFluent.Windows
             string v = Value as string;
             if (v == null)
             {
-                v = ConversionHelper.ChangeType<string>(Value, null, provider);
+                v = ConversionHelper.ChangeType<string>(Value, provider);
                 if (v == null)
                 {
                     v = string.Format(provider, "{0}", Value);

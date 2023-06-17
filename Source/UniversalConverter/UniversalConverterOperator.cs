@@ -1,4 +1,4 @@
-﻿namespace SoftFluent.Windows
+﻿namespace UniversalConverter
 {
     /// <summary>
     /// Specifies the comparison operators used by the UniversalConverter.

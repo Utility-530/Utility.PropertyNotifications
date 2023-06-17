@@ -1,0 +1,251 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:ui="http://schemas.modernwpf.com/2019"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:trees="clr-namespace:Utility.PropertyTrees.WPF;assembly=Utility.PropertyTrees.WPF"                    
+                    xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"                    
+                    xmlns:local="clr-namespace:Utility.PropertyTrees.WPF.Demo"    
+                    xmlns:m="clr-namespace:Utility.Models;assembly=Utility.Models"
+                    xmlns:infra="clr-namespace:Utility.PropertyTrees.Services;assembly=Utility.PropertyTrees.Services"
+                    xmlns:views="clr-namespace:Utility.PropertyTrees.WPF.Demo.Views"
+                    xmlns:conv="http://schemas.utility.com/converters"
+                    xmlns:btn="http://schemas.utility.com/buttons"
+                    xmlns:st="http://schemas.spicytaco.io/" 
+                    xmlns:uni="UniversalConverter"
+                    xmlns:view="http://schemas.utility.com">
+
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Utility.PropertyTrees.WPF.Demo;component/Themes/Styles.xaml"></ResourceDictionary>
+    </ResourceDictionary.MergedDictionaries>
+
+    <uni:UniversalConverter x:Key="UniversalConverter"></uni:UniversalConverter>
+
+    <!--<DataTemplate DataType="{x:Type sys:Int32}">
+        <ui:NumberBox
+        Value="{Binding Mode=OneTime}"
+                Width="200"
+                HorizontalAlignment="Left" />
+    </DataTemplate>-->
+
+    <DataTemplate DataType="{x:Type sys:Boolean}">
+        <CheckBox                   
+                    IsThreeState="False"
+                    IsChecked="{Binding Mode=OneTime}" />
+    </DataTemplate>
+
+
+    <!--<Style TargetType="HeaderedContentControl">
+        <Setter Property="Margin" Value="0,0,0,28" />
+        <Setter Property="IsTabStop" Value="False" />
+        -->
+    <!--<Setter Property="HeaderTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock
+                            Text="{Binding}"
+                            Style="{DynamicResource BaseTextBlockStyle}"
+                            Margin="0,0,0,16" />
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>-->
+    <!--
+    </Style>-->
+    <DataTemplate x:Key="StringTemplate">
+        <TextBox Text="{Binding Value}" ></TextBox>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ServerTypeTemplate">
+        <TextBlock Text="{Binding Value}" ></TextBlock>
+    </DataTemplate>
+
+    <DataTemplate x:Key="UnknownTemplate">
+        <Viewbox>
+            <TextBlock Text="{Binding Value, Converter={x:Static conv:TypeNameConverter.Instance}, StringFormat='Unknown Type - {0}'}" 
+                   Foreground="Red" 
+                   Opacity="0.5"                   
+                   ></TextBlock>
+        </Viewbox>
+    </DataTemplate>
+
+    <DataTemplate x:Key="BooleanTemplate">
+        <CheckBox IsChecked="{Binding Value}"></CheckBox>
+    </DataTemplate>
+
+    <DataTemplate x:Key="IntegerTemplate">
+        <ui:NumberBox    
+                    Value="{Binding Value, Mode=Twoway, Converter={x:Static conv:IntToDoubleConverter.Instance}}"
+                    SpinButtonPlacementMode="Compact"
+                    SmallChange="1"
+                    LargeChange="10" />
+        <!--<TextBox Text="{Binding Value}"></TextBox>-->
+    </DataTemplate>
+
+    <DataTemplate x:Key="DoubleTemplate">
+        <ui:NumberBox  
+                    Value="{Binding Value}"            
+                    SmallChange="0.1"
+                    SpinButtonPlacementMode="Inline"
+                    LargeChange="1" />
+    </DataTemplate>
+
+
+    <DataTemplate       x:Key="EnumTemplate">
+        <view:EnumItemsControl                     
+                            Orientation="Horizontal"
+                            Value="{Binding Value}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="RootTemplate">
+        <Grid>
+            <Ellipse Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Width="20" Stroke="IndianRed">
+            </Ellipse>
+            <TextBlock Text="{Binding Count, Mode=OneWay}"
+                    FontSize="10"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Foreground="IndianRed"></TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="ReferenceTemplate">
+        <Border x:Name="circularBorder" 
+        CornerRadius="{Binding Path=ActualHeight, ElementName=circularBorder}" 
+        Width="{Binding Path=ActualHeight, ElementName=circularBorder}"
+        Padding="1,2,2,2"
+        Opacity="0.5"
+        BorderBrush="CornflowerBlue"
+        BorderThickness="1">
+            <TextBlock HorizontalAlignment="Center"                       
+                        Foreground="CornflowerBlue"
+                        Text="{Binding Count, Mode=OneWay}"
+                        FontSize="9">
+            </TextBlock>
+        </Border>
+    </DataTemplate>
+
+
+    <DataTemplate       x:Key="CollectionTemplate">
+        <!--<Button Command="{Binding AddCommand}">+</Button>-->
+        <ui:AppBarButton Icon="Add"  Command="{Binding AddCommand}"></ui:AppBarButton>
+    </DataTemplate>
+
+    <trees:ContentTemplateSelector 
+        x:Key="ContentTemplateSelector"
+        StringTemplate="{StaticResource StringTemplate}"
+        BooleanTemplate="{StaticResource BooleanTemplate}"
+        IntegerTemplate="{StaticResource IntegerTemplate}"
+        DoubleTemplate="{StaticResource DoubleTemplate}"
+        UnknownTemplate="{StaticResource UnknownTemplate}"
+        CollectionTemplate="{StaticResource CollectionTemplate}"
+        EnumTemplate="{StaticResource EnumTemplate}"
+        ReferenceTemplate="{StaticResource ReferenceTemplate}"
+        RootTemplate="{StaticResource ReferenceTemplate}"
+        />
+
+    <!--<DataTemplate DataType="{x:Type nodes:ValueNode}">
+        <HeaderedContentControl Header="{Binding Content, Mode=OneWay}" 
+                                Style="{StaticResource Horizontal}"
+                                Content="{Binding }" 
+                                ContentTemplateSelector="{StaticResource ContentTemplateSelector}"/>
+    </DataTemplate>-->
+
+    <DataTemplate DataType="{x:Type m:Key}">
+        <UniformGrid Height="10" Rows="1">
+            <Viewbox>
+                <Border AutomationProperties.IsRowHeader="False">
+                    <ContentControl
+                            ToolTip="{Binding Guid}"
+                            Content="{Binding Guid, Converter={x:Static conv:GravatarConverter.Instance}}"></ContentControl>
+                </Border>
+            </Viewbox>
+            <TextBlock Text="{Binding Name}" FontSize="8" ></TextBlock>
+            <TextBlock Text="{Binding Type.Name}" FontSize="8" ></TextBlock>
+        </UniformGrid>
+    </DataTemplate>
+
+    <!--<DataTemplate DataType="{x:Type infra:Order}">
+        <Viewbox Margin="8,8,8,8">
+            <FrameworkElement.Resources>
+                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+                    <Setter Property="FontSize" Value="8"></Setter>
+                </Style>
+            </FrameworkElement.Resources>
+            <st:AutoGrid Columns="400,50,50,*,*,*"  >
+
+                <ContentControl Content="{Binding Key}"></ContentControl>
+
+                <TextBlock Text="{Binding Access}" FontSize="8"  HorizontalAlignment="Center" />
+
+                <UniformGrid Columns="1">
+                    <ProgressBar  Maximum="100" Value="{Binding Progress}"></ProgressBar>
+                    <TextBlock Text="{Binding Progress}" HorizontalAlignment="Center"  FontSize="8"></TextBlock>
+                </UniformGrid>
+
+                <TextBlock Text="{Binding Value}" FontSize="8" ></TextBlock>
+
+                <TextBlock Text="{Binding Exception.Message}" FontSize="8" ></TextBlock>
+
+            </st:AutoGrid>
+        </Viewbox>
+    </DataTemplate>-->
+
+    <DataTemplate DataType="{x:Type infra:HistoryViewModel}">
+        <st:AutoGrid Rows="50,30,*" Columns="*" x:Name="Top">
+
+            <btn:StepButtons x:Name="StepButtons" Enabled="{Binding Enabled, Mode=OneWay}" Command="{Binding Command, Mode=OneTime}" ></btn:StepButtons>
+
+            <UniformGrid  Grid.Row="1" Rows="1">
+                <UniformGrid.Background>
+                    <SolidColorBrush Opacity="0.2" Color="#FF001B48"></SolidColorBrush>
+                </UniformGrid.Background>
+
+                <TextBlock Text="{Binding ElementName=Past, Path=Items.Count}" HorizontalAlignment="Center"></TextBlock>
+                <Ellipse Height="40" Width="40"></Ellipse>
+                <TextBlock Text="{Binding ElementName=Present, Path=Items.Count}" HorizontalAlignment="Center"></TextBlock>
+                <Ellipse Height="40" Width="40"></Ellipse>
+                <TextBlock Text="{Binding ElementName=Future, Path=Items.Count}" HorizontalAlignment="Center"></TextBlock>
+            </UniformGrid>
+
+            <Grid x:Name="HistoryPanel" Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="6*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="6*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <ScrollViewer>
+                    <ItemsControl x:Name="Past"  ItemsSource="{Binding Past}">
+                        <!--<ItemsControl.Background>
+                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0" Opacity="0.2">
+                                <GradientStop Color="#FF001B48" Offset="0.25" />
+                                <GradientStop Color="White" Offset="0.99" />
+                            </LinearGradientBrush>
+                        </ItemsControl.Background>-->
+                    </ItemsControl>
+                </ScrollViewer>
+                <Border  Grid.Row="1" BorderBrush="Gray" BorderThickness="2">
+                    <Viewbox>
+                        <ItemsControl x:Name="Present" ItemsSource="{Binding Present}">
+                            <!--<ItemsControl.Background>
+                                <SolidColorBrush Color="Transparent"  Opacity="1" />
+                            </ItemsControl.Background>-->
+                        </ItemsControl>
+                    </Viewbox>
+                </Border>
+
+                <ScrollViewer Grid.Row="2">
+                    <ItemsControl x:Name="Future"  ItemsSource="{Binding Future}">
+                        <!--<ItemsControl.Background>
+                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0" Opacity="0.2">
+                                <GradientStop Color="White" Offset="0.01" />
+                                <GradientStop Color="#FF4A0000" Offset="0.75" />
+                            </LinearGradientBrush>
+                        </ItemsControl.Background>-->
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </st:AutoGrid>
+    </DataTemplate>
+
+</ResourceDictionary>

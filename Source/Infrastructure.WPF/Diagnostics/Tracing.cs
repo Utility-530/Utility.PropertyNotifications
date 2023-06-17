@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 
-namespace SoftFluent.Windows.Diagnostics
+//namespace SoftFluent.Windows
+namespace UniversalConverter.Diagnostics
 {
     public static class Tracing
     {

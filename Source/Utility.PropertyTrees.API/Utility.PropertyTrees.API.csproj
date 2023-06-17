@@ -15,7 +15,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Utility.Trees\Utility.Trees.Abstractions\Utility.Trees.Abstractions.csproj" />
     <ProjectReference Include="..\..\..\Utility.Trees\Utility.Trees\Utility.Trees.csproj" />
-    <ProjectReference Include="..\Utility.PropertyTrees.Abstractions\Utility.PropertyTrees.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

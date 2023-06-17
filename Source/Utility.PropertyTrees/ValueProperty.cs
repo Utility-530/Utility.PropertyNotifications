@@ -1,7 +1,5 @@
-using System.ComponentModel;
-using System.Globalization;
-using Utility.Conversions;
 using Utility.Helpers;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyTrees
 {
@@ -11,10 +9,9 @@ namespace Utility.PropertyTrees
         {
         }
 
-        public override string Name => Descriptor.Name;
+        public override string Name => Descriptor?.Name ?? $"{nameof(Descriptor)} not set";
         public string DisplayName => Descriptor.DisplayName;
         public override bool IsReadOnly => Descriptor.IsReadOnly;
-
         public virtual string? Category => string.IsNullOrWhiteSpace(Descriptor.Category) ||
                 Descriptor.Category.EqualsIgnoreCase(CategoryAttribute.Default.Category)
                     ? null
@@ -22,52 +19,38 @@ namespace Utility.PropertyTrees
 
         public virtual TypeConverter Converter => Descriptor.Converter;
 
-        public virtual PropertyDescriptor Descriptor { get; set; }
+        public override bool HasChildren => false;
 
         public override Type PropertyType => Descriptor.PropertyType;
 
-        public override object Content => Name;
-
-        protected override async Task<bool> RefreshAsync()
+        protected override object? GetValue(IEquatable name)
         {
-            if ((PropertyType.IsValueType || PropertyType == typeof(string)) != true)
-                return await base.RefreshAsync();
-
-            return await Task.FromResult(true);
+            return Descriptor?.GetValue(Data);
         }
 
-        public override object? Value
+        protected override void SetValue(IEquatable name, object value)
         {
-            get
-            {
-                return GetProperty(PropertyType, Name) ?? Descriptor.GetValue(Data);
-            }
-            set
-            {
-                if (!TryChangeType(value, PropertyType, CultureInfo.CurrentCulture, out object changedValue))
-                {
-                    throw new ArgumentException("Cannot convert value {" + value + "} to type '" + PropertyType.FullName + "'.");
-                }
+            Descriptor.SetValue(Data, value);
+            OnPropertyChanged(nameof(Value));
+        }
+    }
 
-                if (Descriptor != null)
-                {
-                    try
-                    {
-                        Descriptor.SetValue(Data, changedValue);
-                        //var finalValue = Descriptor.GetValue(Data);
-                        SetProperty(changedValue, PropertyType, Name);
-                    }
-                    catch (Exception e)
-                    {
-                        throw new ArgumentException("Cannot set value {" + value + "} to object.", e);
-                    }
-                }
-            }
+    // TODO needs work
+
+    public class TypeProperty : ValueProperty
+    {
+        public TypeProperty(Guid guid) : base(guid)
+        {
         }
 
-        public override string ToString()
+        public override Type PropertyType => Descriptor.PropertyType;
+
+    }
+
+    public class MethodProperty : ValueProperty
+    {
+        public MethodProperty(Guid guid) : base(guid)
         {
-            return Name;
         }
     }
 }

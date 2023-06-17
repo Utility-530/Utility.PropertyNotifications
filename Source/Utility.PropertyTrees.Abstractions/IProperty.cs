@@ -7,7 +7,6 @@ public interface IProperty
     string Name { get; }
 
     Type PropertyType { get; }
-    bool IsCollectionItemValueType { get; }
     bool IsValueType { get; }
     bool IsReadOnly { get; }
     bool IsError { get; set; }
@@ -19,7 +18,7 @@ public interface IProperty
 
     object Value { get; set; }
 
-    IViewModel ViewModel { get; }
+    //IViewModel ViewModel { get; }
 
     public virtual bool IsCollection => PropertyType != null ? PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(PropertyType) : false;
 
@@ -28,6 +27,3 @@ public interface IProperty
     //  public int SortOrder => Options.SortOrder != 0 ? Options.SortOrder : default;
 }
 
-public interface IViewModel
-{
-}
