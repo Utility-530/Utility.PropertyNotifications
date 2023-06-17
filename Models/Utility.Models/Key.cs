@@ -34,6 +34,8 @@ namespace Utility.Models
         [JsonConverter(typeof(JsonTypeConverter))]
         public Type Type { get; set; }
 
+        public Key Child { get; set; }
+
         public ISerialise FromString(string str)
         {
             var obj = JsonSerializer.Deserialize<Key>(str);
