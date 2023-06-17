@@ -4,19 +4,20 @@ namespace Utility.PropertyTrees.Infrastructure
 {
     public class CollectionItemDescriptor : PropertyDescriptor
     {
-        public CollectionItemDescriptor(object item, int index) : base(item.GetType().Name + $" [{index}]", null)
+        public CollectionItemDescriptor(object item, int index, Type componentType) : base(item.GetType().Name + $" [{index}]", null)
         {
             Item = item;
             Index = index;
+            this.ComponentType = componentType;
         }
 
         public object Item { get; }
 
         public int Index { get; }
 
-        public override System.Type ComponentType => throw new NotImplementedException();
+        public override System.Type ComponentType { get; }
 
-        public override bool IsReadOnly => throw new NotImplementedException();
+        public override bool IsReadOnly => false;
 
         public override System.Type PropertyType => Item.GetType();
 

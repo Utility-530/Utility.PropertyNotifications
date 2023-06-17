@@ -11,9 +11,9 @@ namespace Utility.PropertyTrees.Infrastructure
 
         public object Item { get; }
 
-        public override System.Type ComponentType => throw new NotImplementedException();
+        public override System.Type ComponentType => null;
 
-        public override bool IsReadOnly => throw new NotImplementedException();
+        public override bool IsReadOnly => true;
 
         public override System.Type PropertyType => Item.GetType();
 

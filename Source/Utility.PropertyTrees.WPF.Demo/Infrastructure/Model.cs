@@ -1,6 +1,6 @@
-﻿using Bogus.Bson;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Utility.Models;
+using Utility.PropertyTrees.Abstractions;
 using Utility.PropertyTrees.Demo.Model;
 
 namespace Utility.PropertyTrees.WPF.Demo
@@ -38,7 +38,7 @@ namespace Utility.PropertyTrees.WPF.Demo
     {
     }
 
-    public class Server: INotifyPropertyChanged
+    public class Server : INotifyPropertyChanged
     {
         private bool isConnected;
 
@@ -58,8 +58,37 @@ namespace Utility.PropertyTrees.WPF.Demo
 
     }
 
+    public class AppItems : List<AppItem>
+    {
+    }
+
+    public class AppItem
+    {
+    }
+    public class BooleanAppItem : AppItem
+    {
+        public bool Value { get; set; }
+    }
+
     public class Icon
     {
         public string Label { get; set; }
+    }
+
+
+    public class RootModel2Property : RootProperty
+    {
+        static readonly Guid guid = Guid.Parse("aabe5f0b-6024-4913-8017-74475096fc52");
+
+        public RootModel2Property() : base(guid)
+        {
+            var data = new ViewModels();
+            Data = data;
+        }
+    }
+
+    public class ViewModels
+    {
+        public ObservableCollection<ViewModel> Collection { get; set; } = new ObservableCollection<ViewModel>();
     }
 }

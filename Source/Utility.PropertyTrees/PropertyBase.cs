@@ -22,25 +22,18 @@ namespace Utility.PropertyTrees
                     throw new Exception("sd sss");
             });
         }
-
-        //public abstract string Name { get; }
         public bool IsException => PropertyType == typeof(Exception);
         public bool IsCollection => PropertyType != null && PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(PropertyType);
         public bool IsObservableCollection => PropertyType != null && typeof(INotifyCollectionChanged).IsAssignableFrom(PropertyType);
         public bool IsFlagsEnum => PropertyType.IsFlagsEnum();
         public bool IsValueType => PropertyType.IsValueType;
-        public virtual int CollectionCount => Value is IEnumerable enumerable ? enumerable.Cast<object>().Count() : 0;
-        public virtual System.Type CollectionItemPropertyType => !IsCollection ? null : PropertyType.GetElementType();
-        public virtual bool IsCollectionItemValueType => CollectionItemPropertyType != null && CollectionItemPropertyType.IsValueType;
         public virtual bool IsError { get => this.GetProperty<bool>(); set => this.SetProperty(value); }
         public abstract bool IsReadOnly { get; }
         public override object Content => Name;
-        //public IViewModel ViewModel { get; set; }
 
         public ICommand Command => command;
-        public string? DataTemplateKey { get; set; }
 
-        public virtual Type Type { get; set; }
+        public string? DataTemplateKey { get; set; }
 
         public virtual PropertyDescriptor Descriptor { get; set; }
 

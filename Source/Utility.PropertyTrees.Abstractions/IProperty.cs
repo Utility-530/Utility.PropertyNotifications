@@ -7,7 +7,6 @@ public interface IProperty
     string Name { get; }
 
     Type PropertyType { get; }
-    bool IsCollectionItemValueType { get; }
     bool IsValueType { get; }
     bool IsReadOnly { get; }
     bool IsError { get; set; }

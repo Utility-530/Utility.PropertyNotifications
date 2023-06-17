@@ -76,7 +76,15 @@
                             VerticalAlignment="Stretch">
                         </ContentPresenter>
 
-                        <!--<TextBlock
+                    
+                    </Grid>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--<TextBlock
                             x:Name="HintTextBox"
                             Grid.Column="2"
                             Margin="4,0"
@@ -95,12 +103,6 @@
                                     </MultiBinding>
                                 </TextBlock.IsEnabled>
                             </TextBlock>-->
-                    </Grid>
-
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
     <Style TargetType="{x:Type HeaderedContentControl}" x:Key="Vertical">
         <Setter Property="FontSize" Value="16" />

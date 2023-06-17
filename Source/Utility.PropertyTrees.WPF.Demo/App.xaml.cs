@@ -23,8 +23,8 @@ namespace Utility.PropertyTrees.WPF.Demo
             BaseObject.Resolver = resolver;
             resolver.Initialise();
             resolver.Send(new GuidValue(new StartEvent(container.Resolve<RootModelProperty>())));
-            //container.Resolve<ViewController>().OnNext(new StartEvent(container.Resolve<RootModelProperty>()));
-            //container.Resolve<ModelController>().OnNext(new StartEvent(container.Resolve<RootModelProperty>()));
+            //resolver.Send(new GuidValue(new StartEvent(container.Resolve<RootModel2Property>())));
+
 
             //var window2 = new Window { Content = container.Resolve<ILogger>() };
             //window2.Show();

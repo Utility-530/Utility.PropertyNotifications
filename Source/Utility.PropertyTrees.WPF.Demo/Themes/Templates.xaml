@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:ui="http://schemas.modernwpf.com/2019"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:trees="clr-namespace:Utility.PropertyTrees;assembly=Utility.PropertyTrees"                    
+                    xmlns:trees="clr-namespace:Utility.PropertyTrees.WPF;assembly=Utility.PropertyTrees.WPF"                    
                     xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"                    
                     xmlns:local="clr-namespace:Utility.PropertyTrees.WPF.Demo"    
                     xmlns:m="clr-namespace:Utility.Models;assembly=Utility.Models"
@@ -52,17 +52,21 @@
     <!--
     </Style>-->
     <DataTemplate x:Key="StringTemplate">
-        <TextBox Text="{Binding Value}" MinWidth="100" ></TextBox>
+        <TextBox Text="{Binding Value}" ></TextBox>
     </DataTemplate>
 
-    <DataTemplate x:Key="ServerTypeTemplate">    
+    <DataTemplate x:Key="ServerTypeTemplate">
         <TextBlock Text="{Binding Value}" ></TextBlock>
     </DataTemplate>
 
     <DataTemplate x:Key="UnknownTemplate">
-        <TextBlock Text="Unknown Type" Foreground="Red" Opacity="0.5"></TextBlock>
+        <Viewbox>
+            <TextBlock Text="{Binding Value, Converter={x:Static conv:TypeNameConverter.Instance}, StringFormat='Unknown Type - {0}'}" 
+                   Foreground="Red" 
+                   Opacity="0.5"                   
+                   ></TextBlock>
+        </Viewbox>
     </DataTemplate>
-
 
     <DataTemplate x:Key="BooleanTemplate">
         <CheckBox IsChecked="{Binding Value}"></CheckBox>
@@ -71,7 +75,7 @@
     <DataTemplate x:Key="IntegerTemplate">
         <ui:NumberBox    
                     Value="{Binding Value, Mode=Twoway, Converter={x:Static conv:IntToDoubleConverter.Instance}}"
-                    SpinButtonPlacementMode="Inline"
+                    SpinButtonPlacementMode="Compact"
                     SmallChange="1"
                     LargeChange="10" />
         <!--<TextBox Text="{Binding Value}"></TextBox>-->
@@ -92,30 +96,28 @@
                             Value="{Binding Value}" />
     </DataTemplate>
 
-    <DataTemplate       x:Key="RootTemplate">
-        <Grid  >
+    <DataTemplate x:Key="RootTemplate">
+        <Grid>
             <Ellipse Height="20" HorizontalAlignment="Center" VerticalAlignment="Center"
-                     Width="20" Stroke="IndianRed">
-
+                        Width="20" Stroke="IndianRed">
             </Ellipse>
-            <TextBlock  Text="{Binding Count, Mode=OneWay}"
+            <TextBlock Text="{Binding Count, Mode=OneWay}"
                     FontSize="10"
                     HorizontalAlignment="Center" VerticalAlignment="Center"
                     Foreground="IndianRed"></TextBlock>
         </Grid>
     </DataTemplate>
 
-    <DataTemplate       x:Key="ReferenceTemplate">
+    <DataTemplate x:Key="ReferenceTemplate">
         <Border x:Name="circularBorder" 
-   CornerRadius="{Binding Path=ActualHeight, ElementName=circularBorder}" 
-   Width="{Binding Path=ActualHeight, ElementName=circularBorder}"
+        CornerRadius="{Binding Path=ActualHeight, ElementName=circularBorder}" 
+        Width="{Binding Path=ActualHeight, ElementName=circularBorder}"
         Padding="1,2,2,2"
-                  Opacity="0.5"
+        Opacity="0.5"
         BorderBrush="CornflowerBlue"
         BorderThickness="1">
-            <TextBlock HorizontalAlignment="Center"
-                       
-                       Foreground="CornflowerBlue"
+            <TextBlock HorizontalAlignment="Center"                       
+                        Foreground="CornflowerBlue"
                         Text="{Binding Count, Mode=OneWay}"
                         FontSize="9">
             </TextBlock>
@@ -124,10 +126,11 @@
 
 
     <DataTemplate       x:Key="CollectionTemplate">
-        <Button Command="{Binding AddCommand}">+</Button>
+        <!--<Button Command="{Binding AddCommand}">+</Button>-->
+        <ui:AppBarButton Icon="Add"  Command="{Binding AddCommand}"></ui:AppBarButton>
     </DataTemplate>
 
-    <local:ContentTemplateSelector 
+    <trees:ContentTemplateSelector 
         x:Key="ContentTemplateSelector"
         StringTemplate="{StaticResource StringTemplate}"
         BooleanTemplate="{StaticResource BooleanTemplate}"
@@ -140,12 +143,12 @@
         RootTemplate="{StaticResource ReferenceTemplate}"
         />
 
-    <DataTemplate DataType="{x:Type nodes:ValueNode}">
+    <!--<DataTemplate DataType="{x:Type nodes:ValueNode}">
         <HeaderedContentControl Header="{Binding Content, Mode=OneWay}" 
                                 Style="{StaticResource Horizontal}"
                                 Content="{Binding }" 
                                 ContentTemplateSelector="{StaticResource ContentTemplateSelector}"/>
-    </DataTemplate>
+    </DataTemplate>-->
 
     <DataTemplate DataType="{x:Type m:Key}">
         <UniformGrid Height="10" Rows="1">

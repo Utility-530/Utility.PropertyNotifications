@@ -11,35 +11,42 @@ namespace Utility.PropertyTrees.Services
 {
     public class DescriptorFilterController : BaseObject
     {
-        public override Key Key => new Key<DescriptorFilterController>(Guids.DescriptorFilter);     
+        public override Key Key => new Key<DescriptorFilterController>(Guids.DescriptorFilter);
 
         public IObservable<DescriptorFilterResponse> OnNext(DescriptorFilterRequest filterRequest)
         {
-            return Create<DescriptorFilterResponse>(observer =>
+            return Create((Func<IObserver<DescriptorFilterResponse>, IDisposable>)(observer =>
             {
-                var value = filterRequest.PropertyDescriptor;
-                if (value is CollectionItemDescriptor collectionItemDescriptor)
-                     observer.OnNext(new DescriptorFilterResponse(value, true));
-                if (value is PropertyDescriptor descriptor)
-                {
-                    if (descriptor.IsException())
-                    {
-                        observer.OnNext(new DescriptorFilterResponse(value, false));
-                    }
-                    if (descriptor.ComponentType.IsCollection())
-                    {
-                        observer.OnNext(new DescriptorFilterResponse(value, false));
-                    }
-                    //int level = descriptor.PropertyType.InheritanceLevel();
-                    if(descriptor.IsBrowsable==false)
-                    {
-                        observer.OnNext(new DescriptorFilterResponse(value, false));
-                    }                  
-                }
-
-                observer.OnNext(new DescriptorFilterResponse(value, true));
+                observer.OnNext((new DescriptorFilterResponse(filterRequest.PropertyDescriptor, IsFiltered(filterRequest))));
                 return Disposer.Empty;
-            });
+            }));
+        }
+
+        private static bool IsFiltered(DescriptorFilterRequest filterRequest)
+        {
+            var value = filterRequest.PropertyDescriptor;
+            if (value is CollectionItemDescriptor collectionItemDescriptor)
+            {
+                return true;
+            }
+            if (value is PropertyDescriptor descriptor)
+            {
+                if (descriptor.IsException())
+                {
+                    return false;
+                }
+                if (descriptor.ComponentType.IsCollection())
+                {
+                    return false;
+                }
+                //int level = descriptor.PropertyType.InheritanceLevel();
+                if (descriptor.IsBrowsable == false)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 

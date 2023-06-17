@@ -1,14 +1,13 @@
 ﻿using Swordfish.NET.Collections.Auxiliary;
-
 using Utility.Infrastructure;
 using Utility.Nodes;
 using Utility.PropertyTrees.WPF.Demo.Views;
 using Utility.PropertyTrees.WPF.Meta;
 using Utility.Observables.Generic;
 using static Utility.PropertyTrees.Events;
-using System.Windows.Input;
-using System.Windows.Media;
 using Utility.WPF.Adorners.Infrastructure;
+using Utility.WPF.Reactive;
+using NetFabric.Hyperlinq;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
@@ -17,10 +16,11 @@ namespace Utility.PropertyTrees.WPF.Demo
         private TreeView treeView;
         private RootProperty node;
         private Grid grid;
-        private DataGrid dataGrid = new();
+        private TreeView dataGrid = new();
+        private GetViewModelResponse response;
+        private ValueNode valueNode;
 
         public override Key Key => new(Guids.ViewController, nameof(ViewController), typeof(ViewController));
-
 
         public void OnNext(StartEvent startEvent)
         {
@@ -32,19 +32,15 @@ namespace Utility.PropertyTrees.WPF.Demo
             object CreateContent(ValueNode valueNode)
             {
                 treeView = new();
-                treeView.MouseDoubleClick += new MouseButtonEventHandler(treView_MouseDoubleClick);
-                Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(treeView, valueNode))
-                   .Subscribe(a =>
-                   {
-                       //modelViewModel.IsConnected = true;
-                       //System.Windows.Input.CommandManager.InvalidateRequerySuggested();
-                   });
+                CreateSelected(valueNode);
 
                 grid = new Grid();
-                grid.RowDefinitions.AddRange(new[] {
-                new RowDefinition { Height = new GridLength(30, GridUnitType.Auto) },
-                new RowDefinition { Height = new GridLength(1, GridUnitType.Star) } ,
-                new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) } });
+                grid.RowDefinitions.AddRange(new[]
+                {
+                    new RowDefinition { Height = new GridLength(30, GridUnitType.Auto) },
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) }
+                });
 
                 var subGrid = new Grid() { };
                 var commandView = new CommandView();
@@ -55,10 +51,9 @@ namespace Utility.PropertyTrees.WPF.Demo
                 grid.Children.Add(dataGrid);
                 subGrid.Children.Add(treeView);
 
-
                 var adorner = new Button
                 {
-                    Content = "click",                  
+                    Content = "click",
                     CommandParameter = new TreeClickEvent(node),
                     HorizontalAlignment = HorizontalAlignment.Right,
                     VerticalAlignment = VerticalAlignment.Top
@@ -72,12 +67,73 @@ namespace Utility.PropertyTrees.WPF.Demo
             }
         }
 
+        private void CreateSelected(ValueNode valueNode)
+        {
+            this.valueNode = valueNode;
+            Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(treeView, valueNode))
+                .Subscribe(a =>
+                {
+                    //modelViewModel.IsConnected = true;
+                    //System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+                });
+
+
+            var adorner = new Button
+            {
+                Content = "click",
+                CommandParameter = new TreeClickEvent(node),
+                HorizontalAlignment = HorizontalAlignment.Right,
+                VerticalAlignment = VerticalAlignment.Top
+            };
+
+            treeView
+                .MouseDoubleClickTreeSelections()
+                .Subscribe(a =>
+                {
+                    if (a is { Header: ValueNode valueNode } treeviewItem)
+                    {
+                        this.valueNode = valueNode;
+                        treeviewItem.IsExpanded = !treeviewItem.IsExpanded;
+                        this.Observe<GetViewModelResponse, GetViewModelRequest>(new(valueNode.Key))
+                            .Subscribe(response =>
+                            {
+                                this.response = response;
+                                dataGrid.Visibility = Visibility.Visible;
+                                //dataGrid.ItemsSource = response.ViewModels;
+                                var root = new RootProperty(Guid.NewGuid()) { Data = response };
+                                Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(dataGrid, root))
+                                .Subscribe(a =>
+                                {
+                                    //modelViewModel.IsConnected = true;
+                                    //System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+                                });
+                                //dataGrid.ItemsSource = response.ViewModels;
+                            });
+                    }
+                });
+
+            //    Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(treeView, valueNode))
+            //.Subscribe(a =>
+            //{
+            //    //modelViewModel.IsConnected = true;
+            //    //System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+            //});
+        }
+
+        private void CreateSelected2()
+        {
+            Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(treeView, new RootModel2Property()))
+                .Subscribe(a =>
+                {
+                });
+        }
+
         private void Adorner_Click(object sender, RoutedEventArgs e)
         {
-            this.Observe<SetViewModelResponse, SetViewModelRequest>(new(valueNode.Key, Response.ViewModels.Single()))
-             .Subscribe(response =>
-             {    
-             });
+            this.Observe<SetViewModelResponse, SetViewModelRequest>(new(valueNode.Key, response.ViewModels.Single()))
+                .Subscribe(response =>
+                {
+                });
         }
 
         public void OnNext(RefreshRequest request)
@@ -95,41 +151,5 @@ namespace Utility.PropertyTrees.WPF.Demo
         {
 
         }
-
-        public GetViewModelResponse Response;
-        private ValueNode valueNode;
-
-        /// <summary>
-        /// <a href="https://social.msdn.microsoft.com/Forums/vstudio/en-US/c01df033-0acd-4690-a24d-3b7090694bc0/how-can-handle-treeviewitems-mouseclick-or-mousedoubleclick-event?forum=wpf"></a>
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void treView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (GetSelectedItem((FrameworkElement)e.OriginalSource, treeView) is { Header: ValueNode valueNode } treeviewItem)
-            {
-                this.valueNode = valueNode;
-                treeviewItem.IsExpanded = !treeviewItem.IsExpanded;
-                this.Observe<GetViewModelResponse, GetViewModelRequest>(new(valueNode.Key))
-                    .Subscribe(response =>
-                    {
-                        Response = response;
-                        dataGrid.Visibility = Visibility.Visible;
-                        dataGrid.ItemsSource = response.ViewModels;
-                    });
-            }
-
-            TreeViewItem GetSelectedItem(UIElement sender, UIElement objTreeViewControl)
-            {
-                Point point = sender.TranslatePoint(new Point(0, 0), objTreeViewControl);
-                var isHitTestAvailable = objTreeViewControl.InputHitTest(point) as DependencyObject;
-                while (isHitTestAvailable != null && !(isHitTestAvailable is TreeViewItem))
-                {
-                    isHitTestAvailable = VisualTreeHelper.GetParent(isHitTestAvailable);
-                }
-                return isHitTestAvailable as TreeViewItem;
-            }
-        }
-
     }
 }

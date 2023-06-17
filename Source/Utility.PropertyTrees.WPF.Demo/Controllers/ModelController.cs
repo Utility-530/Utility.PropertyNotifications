@@ -19,7 +19,7 @@ internal class ModelController : BaseObject
 
     public void OnNext(StartEvent startEvent)
     {
-        model = startEvent.Property.Data as RootModel ?? throw new Exception("vd fdfdwsw2222");
+        model = startEvent.Property.Data as RootModel /*?? throw new Exception("vd fdfdwsw2222")*/;
     }
 
     public void OnNext(Utility.Models.Request value)

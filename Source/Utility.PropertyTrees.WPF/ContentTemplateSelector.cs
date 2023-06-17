@@ -1,16 +1,21 @@
-﻿using Utility.Observables.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+using Utility.Observables.Generic;
 
-namespace Utility.PropertyTrees.WPF.Demo
+namespace Utility.PropertyTrees.WPF
 {
-    internal class ContentTemplateSelector : DataTemplateSelector, IObservable<SelectTemplateEvent>
+    public class ContentTemplateSelector : DataTemplateSelector, IObservable<SelectTemplateEvent>
     {
         private List<IObserver<SelectTemplateEvent>> observers = new();
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
+            DataTemplate template = default;
             if (item is PropertyBase { DataTemplateKey: string key })
             {
-                var template = (DataTemplate)Application.Current.TryFindResource(key);
+                template = (DataTemplate)Application.Current.TryFindResource(key);
                 if (template == null)
                 {
                     template = UnknownTemplate;
@@ -21,6 +26,12 @@ namespace Utility.PropertyTrees.WPF.Demo
             }
 
             if (item is PropertyBase { IsObservableCollection: true })
+            {
+
+                this.broadcast(new(item, CollectionTemplate, container));
+                return CollectionTemplate;
+            }
+            if (item is PropertyBase { IsCollection: true })
             {
 
                 this.broadcast(new(item, CollectionTemplate, container));
@@ -40,6 +51,11 @@ namespace Utility.PropertyTrees.WPF.Demo
             {
                 this.broadcast(new(item, UnknownTemplate, container));
                 return UnknownTemplate;
+            }
+            if (propertyType == typeof(Guid))
+            {
+                this.broadcast(new(item, StringTemplate, container));
+                return StringTemplate;
             }
             if (propertyType == typeof(string))
             {
@@ -67,7 +83,11 @@ namespace Utility.PropertyTrees.WPF.Demo
                 return EnumTemplate;
             }
 
-            return base.SelectTemplate(item, container);
+
+            template = UnknownTemplate;
+            this.broadcast(new(item, template, container));
+            return template;
+            //return base.SelectTemplate(item, container);
         }
 
         private void broadcast(SelectTemplateEvent selectTemplateEvent)
