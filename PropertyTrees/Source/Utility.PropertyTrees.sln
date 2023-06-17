@@ -63,7 +63,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "..\.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Strings", "..\..\Strings\Utility.Strings\Utility.Strings.csproj", "{A7DBDB57-9E3B-41C2-8195-5D97480032FE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Packages", "..\..\Models\Utility.Packages\Utility.Packages.csproj", "{0FB6F485-AE55-45D9-BDC7-47F862AAD71D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Packages", "..\..\Packages\Utility.Packages\Utility.Packages.csproj", "{0FB6F485-AE55-45D9-BDC7-47F862AAD71D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Panels", "..\..\WPF\Utility.WPF.Panels\Utility.WPF.Panels.csproj", "{0B6CCD5E-DE33-4849-8196-418EE442494C}"
 EndProject
@@ -75,7 +75,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Abstract", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Behavior", "..\..\WPF\Utility.WPF.Behavior\Utility.WPF.Behavior.csproj", "{CA0ED3DF-F747-476D-B503-4AB6EC0BB036}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Common", "..\..\Models\Utility.Common\Utility.Common.csproj", "{4922E9E9-5780-4F91-AED2-3D96138870B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Common", "..\..\Common\Utility.Common\Utility.Common.csproj", "{4922E9E9-5780-4F91-AED2-3D96138870B7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Structs", "..\..\Structs\Utility.Structs\Utility.Structs.csproj", "{F5AEC28C-B396-4252-904A-D8AD8C834838}"
 EndProject
