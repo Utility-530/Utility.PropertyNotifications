@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "dgSpecHash": "kPe+u7Nz51DuYsZZEn0SXYPpl400vXsLjaicMsGLIy5+3mf/Ki+O8cM2nSH6L0vhBpe1sLIaDjk8frWTz3o5qg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\rytal\\source\\repos\\Utility\\Packages\\Utility.WPF.Packages\\Utility.WPF.Packages.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\rytal\\.nuget\\packages\\adonisui\\1.17.1\\adonisui.1.17.1.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\adonisui.classictheme\\1.17.1\\adonisui.classictheme.1.17.1.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\adonisui.net5\\1.17.1\\adonisui.net5.1.17.1.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\colorcode.core\\2.0.14\\colorcode.core.2.0.14.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\controlzex\\6.0.0-alpha0218\\controlzex.6.0.0-alpha0218.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\evan.wpf\\1.2.0\\evan.wpf.1.2.0.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\fluentwpf\\0.10.2\\fluentwpf.0.10.2.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\handycontrol\\3.4.0\\handycontrol.3.4.0.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\igtampe.dictionaryondisk\\1.0.0\\igtampe.dictionaryondisk.1.0.0.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\lambdaconverters\\4.0.0\\lambdaconverters.4.0.0.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\materialdesigncolors\\2.1.1\\materialdesigncolors.2.1.1.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\materialdesignextensions\\4.0.0-a02\\materialdesignextensions.4.0.0-a02.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\materialdesignthemes\\4.7.1\\materialdesignthemes.4.7.1.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\mathconverter\\2.1.0-alpha0001\\mathconverter.2.1.0-alpha0001.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.39\\microsoft.xaml.behaviors.wpf.1.1.39.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\spicytaco.autogrid\\1.2.29\\spicytaco.autogrid.1.2.29.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\system.drawing.common\\5.0.2\\system.drawing.common.5.0.2.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\system.text.json\\5.0.2\\system.text.json.5.0.2.nupkg.sha512",
+    "C:\\Users\\rytal\\.nuget\\packages\\wpftransitionals\\1.1.0\\wpftransitionals.1.1.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'SpicyTaco.AutoGrid 1.2.29' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net7.0-windows7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "SpicyTaco.AutoGrid",
+      "targetGraphs": [
+        "net7.0-windows7.0"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1038 @@
+{
+  "version": 3,
+  "targets": {
+    "net7.0-windows7.0": {
+      "AdonisUI/1.17.1": {
+        "type": "package",
+        "dependencies": {
+          "System.Drawing.Common": "4.6.0"
+        },
+        "compile": {
+          "lib/net5.0-windows7.0/AdonisUI.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0-windows7.0/AdonisUI.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      },
+      "AdonisUI.ClassicTheme/1.17.1": {
+        "type": "package",
+        "dependencies": {
+          "AdonisUI": "1.17.1"
+        },
+        "compile": {
+          "lib/net5.0-windows7.0/AdonisUI.ClassicTheme.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0-windows7.0/AdonisUI.ClassicTheme.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      },
+      "AdonisUI.NET5/1.17.1": {
+        "type": "package",
+        "dependencies": {
+          "System.Drawing.Common": "5.0.2"
+        },
+        "compile": {
+          "lib/net5.0-windows7.0/AdonisUI.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0-windows7.0/AdonisUI.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      },
+      "ColorCode.Core/2.0.14": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/ColorCode.Core.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/ColorCode.Core.dll": {
+            "related": ".pdb"
+          }
+        }
+      },
+      "ControlzEx/6.0.0-alpha0218": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Xaml.Behaviors.Wpf": "1.1.39",
+          "System.Text.Json": "5.0.2"
+        },
+        "compile": {
+          "lib/net5.0-windows7.0/ControlzEx.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0-windows7.0/ControlzEx.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      },
+      "Evan.Wpf/1.2.0": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp3.1/Evan.Wpf.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/Evan.Wpf.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ],
+        "contentFiles": {
+          "contentFiles/any/netcoreapp3.1/Resources/Logo.png": {
+            "buildAction": "None",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          }
+        }
+      },
+      "FluentWPF/0.10.2": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp3.0/FluentWPF.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/FluentWPF.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      },
+      "HandyControl/3.4.0": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/HandyControl.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/HandyControl.dll": {
+            "related": ".deps.json;.xml"
+          }
+        }
+      },
+      "Igtampe.DictionaryOnDisk/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/DictionaryOnDisk.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/DictionaryOnDisk.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "LambdaConverters/4.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp3.0/LambdaConverters.Wpf.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/LambdaConverters.Wpf.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      },
+      "MaterialDesignColors/2.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/MaterialDesignColors.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/MaterialDesignColors.dll": {
+            "related": ".pdb"
+          }
+        }
+      },
+      "MaterialDesignExtensions/4.0.0-a02": {
+        "type": "package",
+        "dependencies": {
+          "MaterialDesignColors": "2.0.1",
+          "MaterialDesignThemes": "4.1.0"
+        },
+        "compile": {
+          "lib/netcoreapp3.1/MaterialDesignExtensions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/MaterialDesignExtensions.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/netcoreapp3.1/Ru/MaterialDesignExtensions.resources.dll": {
+            "locale": "Ru"
+          },
+          "lib/netcoreapp3.1/ar-DZ/MaterialDesignExtensions.resources.dll": {
+            "locale": "ar-DZ"
+          },
+          "lib/netcoreapp3.1/cs-CZ/MaterialDesignExtensions.resources.dll": {
+            "locale": "cs-CZ"
+          },
+          "lib/netcoreapp3.1/cs/MaterialDesignExtensions.resources.dll": {
+            "locale": "cs"
+          },
+          "lib/netcoreapp3.1/de/MaterialDesignExtensions.resources.dll": {
+            "locale": "de"
+          },
+          "lib/netcoreapp3.1/fr-FR/MaterialDesignExtensions.resources.dll": {
+            "locale": "fr-FR"
+          },
+          "lib/netcoreapp3.1/fr/MaterialDesignExtensions.resources.dll": {
+            "locale": "fr"
+          },
+          "lib/netcoreapp3.1/ja-JP/MaterialDesignExtensions.resources.dll": {
+            "locale": "ja-JP"
+          },
+          "lib/netcoreapp3.1/ja/MaterialDesignExtensions.resources.dll": {
+            "locale": "ja"
+          },
+          "lib/netcoreapp3.1/pt-BR/MaterialDesignExtensions.resources.dll": {
+            "locale": "pt-BR"
+          },
+          "lib/netcoreapp3.1/pt/MaterialDesignExtensions.resources.dll": {
+            "locale": "pt"
+          },
+          "lib/netcoreapp3.1/ru-ru/MaterialDesignExtensions.resources.dll": {
+            "locale": "ru-ru"
+          },
+          "lib/netcoreapp3.1/uz-Latn-UZ/MaterialDesignExtensions.resources.dll": {
+            "locale": "uz-Latn-UZ"
+          }
+        }
+      },
+      "MaterialDesignThemes/4.7.1": {
+        "type": "package",
+        "dependencies": {
+          "MaterialDesignColors": "2.1.1",
+          "Microsoft.Xaml.Behaviors.Wpf": "1.1.39"
+        },
+        "compile": {
+          "lib/net7.0/MaterialDesignThemes.Wpf.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/MaterialDesignThemes.Wpf.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "build": {
+          "build/MaterialDesignThemes.targets": {}
+        }
+      },
+      "MathConverter/2.1.0-alpha0001": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp3.1/MathConverter.dll": {}
+        },
+        "runtime": {
+          "lib/netcoreapp3.1/MathConverter.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      },
+      "Microsoft.NETCore.Platforms/5.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard1.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard1.0/_._": {}
+        }
+      },
+      "Microsoft.Win32.SystemEvents/5.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "5.0.0"
+        },
+        "compile": {
+          "ref/netstandard2.0/_._": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.Win32.SystemEvents.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
+      "Microsoft.Xaml.Behaviors.Wpf/1.1.39": {
+        "type": "package",
+        "compile": {
+          "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
+      },
+      "SpicyTaco.AutoGrid/1.2.29": {
+        "type": "package",
+        "compile": {
+          "lib/net40/SpicyTaco.AutoGrid.dll": {}
+        },
+        "runtime": {
+          "lib/net40/SpicyTaco.AutoGrid.dll": {}
+        }
+      },
+      "System.Drawing.Common/5.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Win32.SystemEvents": "5.0.0"
+        },
+        "compile": {
+          "ref/netcoreapp3.0/System.Drawing.Common.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/System.Drawing.Common.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/unix/lib/netcoreapp3.0/System.Drawing.Common.dll": {
+            "assetType": "runtime",
+            "rid": "unix"
+          },
+          "runtimes/win/lib/netcoreapp3.0/System.Drawing.Common.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
+        }
+      },
+      "System.Text.Json/5.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp3.0/System.Text.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/System.Text.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "WPFTransitionals/1.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp3.0/Transitionals.dll": {
+            "related": ".deps.json;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/Transitionals.dll": {
+            "related": ".deps.json;.xml"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AdonisUI/1.17.1": {
+      "sha512": "A23SWpxbj6aGaKbGjyDBDJYV1xtkN03uu50iXcyF+m4mxr0vw/IbOLKPSTmclzPEE4hxnHCC4Ysl827HzfLhaw==",
+      "type": "package",
+      "path": "adonisui/1.17.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "adonisui.1.17.1.nupkg.sha512",
+        "adonisui.nuspec",
+        "favicon-256x256.png",
+        "lib/net45/AdonisUI.dll",
+        "lib/net45/AdonisUI.xml",
+        "lib/net5.0-windows7.0/AdonisUI.dll",
+        "lib/net5.0-windows7.0/AdonisUI.xml",
+        "lib/netcoreapp3.1/AdonisUI.dll",
+        "lib/netcoreapp3.1/AdonisUI.xml"
+      ]
+    },
+    "AdonisUI.ClassicTheme/1.17.1": {
+      "sha512": "SMTro4yZ22iNczHII3osyrcuBnH69sRmQsUhV5lg7NPdPZWkYaULK0OtyVriDynmNGqqwRwJ+t4Sc0hBK7jT0g==",
+      "type": "package",
+      "path": "adonisui.classictheme/1.17.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "adonisui.classictheme.1.17.1.nupkg.sha512",
+        "adonisui.classictheme.nuspec",
+        "favicon-256x256.png",
+        "lib/net45/AdonisUI.ClassicTheme.dll",
+        "lib/net45/AdonisUI.ClassicTheme.xml",
+        "lib/net5.0-windows7.0/AdonisUI.ClassicTheme.dll",
+        "lib/net5.0-windows7.0/AdonisUI.ClassicTheme.xml",
+        "lib/netcoreapp3.1/AdonisUI.ClassicTheme.dll",
+        "lib/netcoreapp3.1/AdonisUI.ClassicTheme.xml"
+      ]
+    },
+    "AdonisUI.NET5/1.17.1": {
+      "sha512": "m37ieB82f0jOiBBuNnTnfdJZXoCGOSQUu9LPXae/QUC+qlaZ5I5UqAqFcqG728XYAPCrkPfg1KiJhS0/F7yDkg==",
+      "type": "package",
+      "path": "adonisui.net5/1.17.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "adonisui.net5.1.17.1.nupkg.sha512",
+        "adonisui.net5.nuspec",
+        "favicon-256x256.png",
+        "lib/net5.0-windows7.0/AdonisUI.dll",
+        "lib/net5.0-windows7.0/AdonisUI.xml"
+      ]
+    },
+    "ColorCode.Core/2.0.14": {
+      "sha512": "YiQm6KH2dK+dnQMoKbYl9ymR02YMUY4TWsHw2KP7td1kpDsjAerdb+84nx3jnj5/xvRmddhRgpb1CI1IDpDo/w==",
+      "type": "package",
+      "path": "colorcode.core/2.0.14",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "colorcode.core.2.0.14.nupkg.sha512",
+        "colorcode.core.nuspec",
+        "lib/netstandard1.4/ColorCode.Core.dll",
+        "lib/netstandard1.4/ColorCode.Core.pdb",
+        "lib/netstandard2.0/ColorCode.Core.dll",
+        "lib/netstandard2.0/ColorCode.Core.pdb"
+      ]
+    },
+    "ControlzEx/6.0.0-alpha0218": {
+      "sha512": "2iY9S+BkwkBCF8hiNQzqY/opTvPzdl7GQZqDwrLN2foMptXI+wPrCV8gzyVN7RepAD82vW8BqLaKKCuZh8qC7w==",
+      "type": "package",
+      "path": "controlzex/6.0.0-alpha0218",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "controlzex.6.0.0-alpha0218.nupkg.sha512",
+        "controlzex.nuspec",
+        "lib/net462/ControlzEx.dll",
+        "lib/net462/ControlzEx.xml",
+        "lib/net5.0-windows7.0/ControlzEx.dll",
+        "lib/net5.0-windows7.0/ControlzEx.xml",
+        "lib/netcoreapp3.1/ControlzEx.dll",
+        "lib/netcoreapp3.1/ControlzEx.xml",
+        "logo-mini.png"
+      ]
+    },
+    "Evan.Wpf/1.2.0": {
+      "sha512": "e+bysw/+udE40VEryp2dDg23uBhXVQZqOnJJUNVvKVQz9V3b07BnsSfH9QRG6+HNTXjlQpXXcylD9RChpw5G2Q==",
+      "type": "package",
+      "path": "evan.wpf/1.2.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/Resources/Logo.png",
+        "contentFiles/any/net40/Resources/Logo.png",
+        "contentFiles/any/net45/Resources/Logo.png",
+        "contentFiles/any/netcoreapp3.0/Resources/Logo.png",
+        "contentFiles/any/netcoreapp3.1/Resources/Logo.png",
+        "evan.wpf.1.2.0.nupkg.sha512",
+        "evan.wpf.nuspec",
+        "lib/net40/Evan.Wpf.dll",
+        "lib/net45/Evan.Wpf.dll",
+        "lib/netcoreapp3.0/Evan.Wpf.dll",
+        "lib/netcoreapp3.1/Evan.Wpf.dll"
+      ]
+    },
+    "FluentWPF/0.10.2": {
+      "sha512": "6bDzdj08dRW4Ynm4GycC2E2MlKFlnH9FPJKRlrIC+a3h+V6a6W7bRiMraviqIZd21JiN6+YggRb76qu/0Zdd0w==",
+      "type": "package",
+      "path": "fluentwpf/0.10.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "fluentwpf.0.10.2.nupkg.sha512",
+        "fluentwpf.nuspec",
+        "lib/net45/FluentWPF.dll",
+        "lib/netcoreapp3.0/FluentWPF.dll"
+      ]
+    },
+    "HandyControl/3.4.0": {
+      "sha512": "MgD5lxIm23oCv3+mFWH6EARLCOmR/spFaWeb813QtUDIQeUsbGK02xm1xDQEd0UGBcba6aho1FgCtiU4q7hHDw==",
+      "type": "package",
+      "path": "handycontrol/3.4.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "handycontrol.3.4.0.nupkg.sha512",
+        "handycontrol.nuspec",
+        "icon.png",
+        "lib/net40/HandyControl.dll",
+        "lib/net40/HandyControl.xml",
+        "lib/net45/HandyControl.dll",
+        "lib/net45/HandyControl.xml",
+        "lib/net451/HandyControl.dll",
+        "lib/net451/HandyControl.xml",
+        "lib/net452/HandyControl.dll",
+        "lib/net452/HandyControl.xml",
+        "lib/net46/HandyControl.dll",
+        "lib/net46/HandyControl.xml",
+        "lib/net461/HandyControl.dll",
+        "lib/net461/HandyControl.xml",
+        "lib/net462/HandyControl.dll",
+        "lib/net462/HandyControl.xml",
+        "lib/net47/HandyControl.dll",
+        "lib/net47/HandyControl.xml",
+        "lib/net471/HandyControl.dll",
+        "lib/net471/HandyControl.xml",
+        "lib/net472/HandyControl.dll",
+        "lib/net472/HandyControl.xml",
+        "lib/net48/HandyControl.dll",
+        "lib/net48/HandyControl.xml",
+        "lib/net481/HandyControl.dll",
+        "lib/net481/HandyControl.xml",
+        "lib/net5.0/HandyControl.deps.json",
+        "lib/net5.0/HandyControl.dll",
+        "lib/net5.0/HandyControl.xml",
+        "lib/net6.0/HandyControl.deps.json",
+        "lib/net6.0/HandyControl.dll",
+        "lib/net6.0/HandyControl.xml",
+        "lib/net7.0/HandyControl.deps.json",
+        "lib/net7.0/HandyControl.dll",
+        "lib/net7.0/HandyControl.xml",
+        "lib/netcoreapp3.0/HandyControl.deps.json",
+        "lib/netcoreapp3.0/HandyControl.dll",
+        "lib/netcoreapp3.0/HandyControl.xml",
+        "lib/netcoreapp3.1/HandyControl.deps.json",
+        "lib/netcoreapp3.1/HandyControl.dll",
+        "lib/netcoreapp3.1/HandyControl.xml",
+        "tools/VisualStudioToolsManifest.xml"
+      ]
+    },
+    "Igtampe.DictionaryOnDisk/1.0.0": {
+      "sha512": "0XFdPrNMOw1nYSYpNdJR0Zd4wuCXpKzJhkSsss3gBNvLyiIUe3e4YjbY6dKQv91S5ImjZOimsHFTUTVnXSKerw==",
+      "type": "package",
+      "path": "igtampe.dictionaryondisk/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "DOD Icon.png",
+        "LICENSE",
+        "igtampe.dictionaryondisk.1.0.0.nupkg.sha512",
+        "igtampe.dictionaryondisk.nuspec",
+        "lib/netstandard2.0/DictionaryOnDisk.dll",
+        "lib/netstandard2.0/DictionaryOnDisk.xml"
+      ]
+    },
+    "LambdaConverters/4.0.0": {
+      "sha512": "1r1z0RrjF6Al6p9ytRHXQNOpQTJgi8FekatPg6FrOiKYNZXKcPRphmzTdNbyt5hIDoFaBvR0ly452n4OqqUxWg==",
+      "type": "package",
+      "path": "lambdaconverters/4.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE",
+        "lambdaconverters.4.0.0.nupkg.sha512",
+        "lambdaconverters.nuspec",
+        "lib/net45/LambdaConverters.Wpf.dll",
+        "lib/net45/LambdaConverters.Wpf.xml",
+        "lib/net46/LambdaConverters.Wpf.dll",
+        "lib/net46/LambdaConverters.Wpf.xml",
+        "lib/netcoreapp3.0/LambdaConverters.Wpf.dll",
+        "lib/netcoreapp3.0/LambdaConverters.Wpf.xml"
+      ]
+    },
+    "MaterialDesignColors/2.1.1": {
+      "sha512": "eHGBycBIDoe6nh0F0IJ2MEtfBe+F7AjS85WzhJlLGiGuX5AEV/jZZAmXeJ3FV9YA47ZybvmshnS6dABnbmQ1TA==",
+      "type": "package",
+      "path": "materialdesigncolors/2.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "images/MaterialDesignColors.Icon.png",
+        "lib/net462/MaterialDesignColors.dll",
+        "lib/net462/MaterialDesignColors.pdb",
+        "lib/net6.0/MaterialDesignColors.dll",
+        "lib/net6.0/MaterialDesignColors.pdb",
+        "lib/net7.0/MaterialDesignColors.dll",
+        "lib/net7.0/MaterialDesignColors.pdb",
+        "lib/netcoreapp3.1/MaterialDesignColors.dll",
+        "lib/netcoreapp3.1/MaterialDesignColors.pdb",
+        "materialdesigncolors.2.1.1.nupkg.sha512",
+        "materialdesigncolors.nuspec"
+      ]
+    },
+    "MaterialDesignExtensions/4.0.0-a02": {
+      "sha512": "AMJ2/MPDdz/PutzvKvY6autpNFa+yy7cS9BlLZVZXQKWcLQADgGkg32VoGsYrlWYeKKy0UZgSZNeQD+URTgEnQ==",
+      "type": "package",
+      "path": "materialdesignextensions/4.0.0-a02",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "License.txt",
+        "Notice.txt",
+        "Readme.md",
+        "lib/net452/MaterialDesignExtensions.dll",
+        "lib/net452/MaterialDesignExtensions.xml",
+        "lib/net452/Ru/MaterialDesignExtensions.resources.dll",
+        "lib/net452/ar-DZ/MaterialDesignExtensions.resources.dll",
+        "lib/net452/cs-CZ/MaterialDesignExtensions.resources.dll",
+        "lib/net452/cs/MaterialDesignExtensions.resources.dll",
+        "lib/net452/de/MaterialDesignExtensions.resources.dll",
+        "lib/net452/fr-FR/MaterialDesignExtensions.resources.dll",
+        "lib/net452/fr/MaterialDesignExtensions.resources.dll",
+        "lib/net452/ja-JP/MaterialDesignExtensions.resources.dll",
+        "lib/net452/ja/MaterialDesignExtensions.resources.dll",
+        "lib/net452/pt-BR/MaterialDesignExtensions.resources.dll",
+        "lib/net452/pt/MaterialDesignExtensions.resources.dll",
+        "lib/net452/ru-ru/MaterialDesignExtensions.resources.dll",
+        "lib/net452/uz-Latn-UZ/MaterialDesignExtensions.resources.dll",
+        "lib/netcoreapp3.1/MaterialDesignExtensions.dll",
+        "lib/netcoreapp3.1/MaterialDesignExtensions.xml",
+        "lib/netcoreapp3.1/Ru/MaterialDesignExtensions.resources.dll",
+        "lib/netcoreapp3.1/ar-DZ/MaterialDesignExtensions.resources.dll",
+        "lib/netcoreapp3.1/cs-CZ/MaterialDesignExtensions.resources.dll",
+        "lib/netcoreapp3.1/cs/MaterialDesignExtensions.resources.dll",
+        "lib/netcoreapp3.1/de/MaterialDesignExtensions.resources.dll",
+        "lib/netcoreapp3.1/fr-FR/MaterialDesignExtensions.resources.dll",
+        "lib/netcoreapp3.1/fr/MaterialDesignExtensions.resources.dll",
+        "lib/netcoreapp3.1/ja-JP/MaterialDesignExtensions.resources.dll",
+        "lib/netcoreapp3.1/ja/MaterialDesignExtensions.resources.dll",
+        "lib/netcoreapp3.1/pt-BR/MaterialDesignExtensions.resources.dll",
+        "lib/netcoreapp3.1/pt/MaterialDesignExtensions.resources.dll",
+        "lib/netcoreapp3.1/ru-ru/MaterialDesignExtensions.resources.dll",
+        "lib/netcoreapp3.1/uz-Latn-UZ/MaterialDesignExtensions.resources.dll",
+        "materialdesignextensions.4.0.0-a02.nupkg.sha512",
+        "materialdesignextensions.nuspec"
+      ]
+    },
+    "MaterialDesignThemes/4.7.1": {
+      "sha512": "peRUXx9f0LYJm5EDpDEufEW7+nk0uGUpcNRx/sK84gW/yMopTzt4rWyi13o5+9R8Xm7H8JWQGubWE0WxZVBe8Q==",
+      "type": "package",
+      "path": "materialdesignthemes/4.7.1",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/MaterialDesignThemes.targets",
+        "build/Resources/Roboto/Roboto-Black.ttf",
+        "build/Resources/Roboto/Roboto-BlackItalic.ttf",
+        "build/Resources/Roboto/Roboto-Bold.ttf",
+        "build/Resources/Roboto/Roboto-BoldItalic.ttf",
+        "build/Resources/Roboto/Roboto-Italic.ttf",
+        "build/Resources/Roboto/Roboto-Light.ttf",
+        "build/Resources/Roboto/Roboto-LightItalic.ttf",
+        "build/Resources/Roboto/Roboto-Medium.ttf",
+        "build/Resources/Roboto/Roboto-MediumItalic.ttf",
+        "build/Resources/Roboto/Roboto-Regular.ttf",
+        "build/Resources/Roboto/Roboto-Thin.ttf",
+        "build/Resources/Roboto/Roboto-ThinItalic.ttf",
+        "build/Resources/Roboto/RobotoCondensed-Bold.ttf",
+        "build/Resources/Roboto/RobotoCondensed-BoldItalic.ttf",
+        "build/Resources/Roboto/RobotoCondensed-Italic.ttf",
+        "build/Resources/Roboto/RobotoCondensed-Light.ttf",
+        "build/Resources/Roboto/RobotoCondensed-LightItalic.ttf",
+        "build/Resources/Roboto/RobotoCondensed-Regular.ttf",
+        "images/MaterialDesignThemes.Icon.png",
+        "lib/net462/MaterialDesignThemes.Wpf.dll",
+        "lib/net462/MaterialDesignThemes.Wpf.pdb",
+        "lib/net462/MaterialDesignThemes.Wpf.xml",
+        "lib/net6.0/MaterialDesignThemes.Wpf.dll",
+        "lib/net6.0/MaterialDesignThemes.Wpf.pdb",
+        "lib/net6.0/MaterialDesignThemes.Wpf.xml",
+        "lib/net7.0/MaterialDesignThemes.Wpf.dll",
+        "lib/net7.0/MaterialDesignThemes.Wpf.pdb",
+        "lib/net7.0/MaterialDesignThemes.Wpf.xml",
+        "lib/netcoreapp3.1/MaterialDesignThemes.Wpf.dll",
+        "lib/netcoreapp3.1/MaterialDesignThemes.Wpf.pdb",
+        "lib/netcoreapp3.1/MaterialDesignThemes.Wpf.xml",
+        "materialdesignthemes.4.7.1.nupkg.sha512",
+        "materialdesignthemes.nuspec",
+        "tools/VisualStudioToolsManifest.xml"
+      ]
+    },
+    "MathConverter/2.1.0-alpha0001": {
+      "sha512": "1zYGRceyHLKk4GIMUlqKbqCTr0oIZsO+UfUSzrB73rDaGG6Xkl/sw7WJ9KXmgQ1N5MEIMXS8yIp68IowKh8qpQ==",
+      "type": "package",
+      "path": "mathconverter/2.1.0-alpha0001",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/MathConverter.dll",
+        "lib/net40/MathConverter.dll",
+        "lib/net45/MathConverter.dll",
+        "lib/netcoreapp3.0/MathConverter.dll",
+        "lib/netcoreapp3.1/MathConverter.dll",
+        "mathconverter.2.1.0-alpha0001.nupkg.sha512",
+        "mathconverter.nuspec",
+        "smalllogo.png"
+      ]
+    },
+    "Microsoft.NETCore.Platforms/5.0.0": {
+      "sha512": "VyPlqzH2wavqquTcYpkIIAQ6WdenuKoFN0BdYBbCWsclXacSOHNQn66Gt4z5NBqEYW0FAPm5rlvki9ZiCij5xQ==",
+      "type": "package",
+      "path": "microsoft.netcore.platforms/5.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netstandard1.0/_._",
+        "microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+        "microsoft.netcore.platforms.nuspec",
+        "runtime.json",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "Microsoft.Win32.SystemEvents/5.0.0": {
+      "sha512": "Bh6blKG8VAKvXiLe2L+sEsn62nc1Ij34MrNxepD2OCrS5cpCwQa9MeLyhVQPQ/R4Wlzwuy6wMK8hLb11QPDRsQ==",
+      "type": "package",
+      "path": "microsoft.win32.systemevents/5.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/Microsoft.Win32.SystemEvents.dll",
+        "lib/net461/Microsoft.Win32.SystemEvents.xml",
+        "lib/netstandard2.0/Microsoft.Win32.SystemEvents.dll",
+        "lib/netstandard2.0/Microsoft.Win32.SystemEvents.xml",
+        "microsoft.win32.systemevents.5.0.0.nupkg.sha512",
+        "microsoft.win32.systemevents.nuspec",
+        "ref/net461/Microsoft.Win32.SystemEvents.dll",
+        "ref/net461/Microsoft.Win32.SystemEvents.xml",
+        "ref/netstandard2.0/Microsoft.Win32.SystemEvents.dll",
+        "ref/netstandard2.0/Microsoft.Win32.SystemEvents.xml",
+        "runtimes/win/lib/netcoreapp2.0/Microsoft.Win32.SystemEvents.dll",
+        "runtimes/win/lib/netcoreapp2.0/Microsoft.Win32.SystemEvents.xml",
+        "runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.dll",
+        "runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.xml",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "Microsoft.Xaml.Behaviors.Wpf/1.1.39": {
+      "sha512": "8PZKqw9QOcu42xk8puY4P1+EXHL9YGOR9b7qhaYx5cILHul456H073tj99vyPcCt0W0781T9RwHqkx507ZyUpQ==",
+      "type": "package",
+      "path": "microsoft.xaml.behaviors.wpf/1.1.39",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net45/Design/Microsoft.Xaml.Behaviors.Design.dll",
+        "lib/net45/Microsoft.Xaml.Behaviors.dll",
+        "lib/net45/Microsoft.Xaml.Behaviors.pdb",
+        "lib/net45/Microsoft.Xaml.Behaviors.xml",
+        "lib/net5.0-windows7.0/Design/Microsoft.Xaml.Behaviors.DesignTools.dll",
+        "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.dll",
+        "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.pdb",
+        "lib/net5.0-windows7.0/Microsoft.Xaml.Behaviors.xml",
+        "lib/netcoreapp3.1/Design/Microsoft.Xaml.Behaviors.DesignTools.dll",
+        "lib/netcoreapp3.1/Microsoft.Xaml.Behaviors.dll",
+        "lib/netcoreapp3.1/Microsoft.Xaml.Behaviors.pdb",
+        "lib/netcoreapp3.1/Microsoft.Xaml.Behaviors.xml",
+        "microsoft.xaml.behaviors.wpf.1.1.39.nupkg.sha512",
+        "microsoft.xaml.behaviors.wpf.nuspec",
+        "tools/Install.ps1"
+      ]
+    },
+    "SpicyTaco.AutoGrid/1.2.29": {
+      "sha512": "dGGoj9Fc8WJI22efvC3P4oUm4tv+vT19j5aGKal9NOuRYw+BaRjCuZdNcNlfwd8ktRQu8nSEVnNbH3s6deH7sg==",
+      "type": "package",
+      "path": "spicytaco.autogrid/1.2.29",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40/SpicyTaco.AutoGrid.dll",
+        "spicytaco.autogrid.1.2.29.nupkg.sha512",
+        "spicytaco.autogrid.nuspec"
+      ]
+    },
+    "System.Drawing.Common/5.0.2": {
+      "sha512": "rvr/M1WPf24ljpvvrVd74+NdjRUJu1bBkspkZcnzSZnmAUQWSvanlQ0k/hVHk+cHufZbZfu7vOh/vYc0q5Uu/A==",
+      "type": "package",
+      "path": "system.drawing.common/5.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net461/System.Drawing.Common.dll",
+        "lib/netcoreapp3.0/System.Drawing.Common.dll",
+        "lib/netcoreapp3.0/System.Drawing.Common.xml",
+        "lib/netstandard2.0/System.Drawing.Common.dll",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net461/System.Drawing.Common.dll",
+        "ref/netcoreapp3.0/System.Drawing.Common.dll",
+        "ref/netcoreapp3.0/System.Drawing.Common.xml",
+        "ref/netstandard2.0/System.Drawing.Common.dll",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "runtimes/unix/lib/netcoreapp2.0/System.Drawing.Common.dll",
+        "runtimes/unix/lib/netcoreapp3.0/System.Drawing.Common.dll",
+        "runtimes/unix/lib/netcoreapp3.0/System.Drawing.Common.xml",
+        "runtimes/win/lib/netcoreapp2.0/System.Drawing.Common.dll",
+        "runtimes/win/lib/netcoreapp3.0/System.Drawing.Common.dll",
+        "runtimes/win/lib/netcoreapp3.0/System.Drawing.Common.xml",
+        "system.drawing.common.5.0.2.nupkg.sha512",
+        "system.drawing.common.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Text.Json/5.0.2": {
+      "sha512": "I47dVIGiV6SfAyppphxqupertT/5oZkYLDCX6vC3HpOI4ZLjyoKAreUoem2ie6G0RbRuFrlqz/PcTQjfb2DOfQ==",
+      "type": "package",
+      "path": "system.text.json/5.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/System.Text.Json.dll",
+        "lib/net461/System.Text.Json.xml",
+        "lib/netcoreapp3.0/System.Text.Json.dll",
+        "lib/netcoreapp3.0/System.Text.Json.xml",
+        "lib/netstandard2.0/System.Text.Json.dll",
+        "lib/netstandard2.0/System.Text.Json.xml",
+        "system.text.json.5.0.2.nupkg.sha512",
+        "system.text.json.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "WPFTransitionals/1.1.0": {
+      "sha512": "C7sc9QR6dTVKUxX/DjS3WaQq9bALtwSeM8BuDo+4GLlEd0oRLYiq4qvB5LupYFEd/SVbYoteBOD4SEeOzhRY/g==",
+      "type": "package",
+      "path": "wpftransitionals/1.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "lib/net35/Transitionals.dll",
+        "lib/net35/Transitionals.xml",
+        "lib/netcoreapp3.0/Transitionals.deps.json",
+        "lib/netcoreapp3.0/Transitionals.dll",
+        "lib/netcoreapp3.0/Transitionals.xml",
+        "wpftransitionals.1.1.0.nupkg.sha512",
+        "wpftransitionals.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net7.0-windows7.0": [
+      "AdonisUI.ClassicTheme >= 1.17.1",
+      "AdonisUI.NET5 >= 1.17.1",
+      "ColorCode.Core >= 2.0.14",
+      "ControlzEx >= 6.0.0-alpha0218",
+      "Evan.Wpf >= 1.2.0",
+      "FluentWPF >= 0.10.2",
+      "HandyControl >= 3.4.0",
+      "Igtampe.DictionaryOnDisk >= 1.0.0",
+      "LambdaConverters >= 4.0.0",
+      "MaterialDesignExtensions >= 4.0.0-a02",
+      "MaterialDesignThemes >= 4.7.1",
+      "MathConverter >= 2.1.0-alpha0001",
+      "Microsoft.Xaml.Behaviors.Wpf >= 1.1.39",
+      "SpicyTaco.AutoGrid >= 1.2.29",
+      "WPFTransitionals >= 1.1.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\rytal\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\rytal\\source\\repos\\Utility\\Packages\\Utility.WPF.Packages\\Utility.WPF.Packages.csproj",
+      "projectName": "Utility.WPF.Packages",
+      "projectPath": "C:\\Users\\rytal\\source\\repos\\Utility\\Packages\\Utility.WPF.Packages\\Utility.WPF.Packages.csproj",
+      "packagesPath": "C:\\Users\\rytal\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\rytal\\source\\repos\\Utility\\Packages\\Utility.WPF.Packages\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\rytal\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net7.0-windows"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Users\\rytal\\source\\repos\\UtilityStandard\\Packages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net7.0-windows7.0": {
+          "targetAlias": "net7.0-windows",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      }
+    },
+    "frameworks": {
+      "net7.0-windows7.0": {
+        "targetAlias": "net7.0-windows",
+        "dependencies": {
+          "AdonisUI.ClassicTheme": {
+            "target": "Package",
+            "version": "[1.17.1, )"
+          },
+          "AdonisUI.NET5": {
+            "target": "Package",
+            "version": "[1.17.1, )"
+          },
+          "ColorCode.Core": {
+            "target": "Package",
+            "version": "[2.0.14, )"
+          },
+          "ControlzEx": {
+            "target": "Package",
+            "version": "[6.0.0-alpha0218, )"
+          },
+          "Evan.Wpf": {
+            "target": "Package",
+            "version": "[1.2.0, )"
+          },
+          "FluentWPF": {
+            "target": "Package",
+            "version": "[0.10.2, )"
+          },
+          "HandyControl": {
+            "target": "Package",
+            "version": "[3.4.0, )"
+          },
+          "Igtampe.DictionaryOnDisk": {
+            "target": "Package",
+            "version": "[1.0.0, )"
+          },
+          "LambdaConverters": {
+            "target": "Package",
+            "version": "[4.0.0, )"
+          },
+          "MaterialDesignExtensions": {
+            "target": "Package",
+            "version": "[4.0.0-a02, )"
+          },
+          "MaterialDesignThemes": {
+            "target": "Package",
+            "version": "[4.7.1, )"
+          },
+          "MathConverter": {
+            "target": "Package",
+            "version": "[2.1.0-alpha0001, )"
+          },
+          "Microsoft.Xaml.Behaviors.Wpf": {
+            "target": "Package",
+            "version": "[1.1.39, )"
+          },
+          "SpicyTaco.AutoGrid": {
+            "target": "Package",
+            "version": "[1.2.29, )"
+          },
+          "WPFTransitionals": {
+            "target": "Package",
+            "version": "[1.1.0, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          },
+          "Microsoft.WindowsDesktop.App.WPF": {
+            "privateAssets": "none"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.105\\RuntimeIdentifierGraph.json"
+      }
+    }
+  },
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'SpicyTaco.AutoGrid 1.2.29' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net7.0-windows7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "SpicyTaco.AutoGrid",
+      "targetGraphs": [
+        "net7.0-windows7.0"
+      ]
+    }
+  ]
+}
