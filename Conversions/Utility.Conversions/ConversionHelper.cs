@@ -9,7 +9,7 @@
             {
                 foreach (string s in thisString.Split(separators))
                 {
-                    T item = ChangeType<T>(s);
+                    T item = (T)ChangeType<T>(s);
                     list.Add(item);
                 }
             }
@@ -87,24 +87,38 @@
             return defaultValue;
         }
 
-        public static T ChangeType<T>(object input)
+        public static T ChangeType<T>(object input, IFormatProvider? provider = default, T? defaultValue = default)
         {
-            return ChangeType(input, default(T));
-        }
-
-        public static T ChangeType<T>(object input, T defaultValue)
-        {
-            return ChangeType(input, defaultValue, null);
-        }
-
-        public static T ChangeType<T>(object input, T defaultValue, IFormatProvider provider)
-        {
-            if (TryChangeType(input, provider, out T value))
+            //return ChangeType(input, default(T), null);
+            if (provider == null)
+            {
+                if (TryChangeType(input, out T value))
+                {
+                    return value;
+                }
+            }
+            else if (TryChangeType(input, provider, out T value))
             {
                 return value;
             }
 
             return defaultValue;
         }
+
+
+        //public static T ChangeType<T>(object input, T defaultValue)
+        //{
+        //    return ChangeType(input, defaultValue, null);
+        //}
+
+        //public static T ChangeType<T>(object input, T defaultValue, IFormatProvider provider)
+        //{
+        //    if (TryChangeType(input, provider, out T value))
+        //    {
+        //        return value;
+        //    }
+
+        //    return defaultValue;
+        //}
     }
 }
