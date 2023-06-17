@@ -1,17 +1,13 @@
-﻿//using Autofac;
-using DryIoc;
+﻿using DryIoc;
 using Utility.Nodify.Core;
 using Utility.Nodify.Demo.Infrastructure;
-using Utility.Nodify.Operations;
 using System;
 using System.Windows;
-using Utility.Models;
 using Utility.Nodify.Operations.Infrastructure;
 using System.Threading;
 using Utility.Simulation.Infrastructure;
 using Utility.Simulation.Service;
 using Utility.Simulation.ViewModel;
-//using Resolver = Utility.Nodify.Operations.Resolver;
 using Message = Utility.Nodify.Operations.Message;
 using Utility.Collections;
 

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Netly" Version="2.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Utility.Graph.Shapes\Utility.Graph.Shapes\Utility.Graph.Shapes.csproj" />
+    <ProjectReference Include="..\..\Utility.Nodify\Utility.Nodify.Engine\Utility.Nodify.Engine.csproj" />
+  </ItemGroup>
+
+</Project>

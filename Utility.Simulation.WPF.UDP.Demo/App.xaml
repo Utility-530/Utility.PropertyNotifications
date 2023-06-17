@@ -1,0 +1,49 @@
+﻿<Application x:Class="Utility.Simulation.WPF.UDP.Demo.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            xmlns:infra="clr-namespace:Utility.Infrastructure;assembly=Utility.Infrastructure"
+            xmlns:models="clr-namespace:Utility.Models.UDP;assembly=Utility.Models"
+             xmlns:local="clr-namespace:Utility.Simulation.WPF.UDP.Demo">
+    <Application.Resources>
+        <ResourceDictionary>
+
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/Nodify;component/Themes/Nodify.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Nodify;component/Themes/Light.xaml" />
+                <!--<ResourceDictionary Source="pack://application:,,,/Nodify.Shared;component/Themes/Icons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/Nodify.Shared;component/Themes/Light.xaml" />-->
+                <ResourceDictionary Source="/Utility.Nodify.Engine;component/Themes/Templates.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Utility.Nodify.Engine;component/Themes/Brushes.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Utility.Nodify.Engine;component/Themes/EditorView.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Utility.Nodify.Engine;component/Themes/MainView.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/AvalonDock.Themes.VS2013;component/DarkBrushs.xaml" />
+                <ResourceDictionary Source="/AvalonDock.Themes.VS2013;component/LightBrushs.xaml" />
+                <ResourceDictionary Source="/AvalonDock.Themes.VS2013;component/LightBrushs.xaml" />
+
+
+                <ResourceDictionary Source="pack://application:,,,/Utility.Graph.Shapes;component/Themes/Templates.xaml" />
+
+
+                <!--<ResourceDictionary Source="/Utility.Simulation.Wpf;component/Themes/Generic.xaml"></ResourceDictionary>-->
+                <!--<materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="BlueGrey" SecondaryColor="Teal" />-->
+                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />-->
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type local:GraphOperation}">
+                <ContentControl Content="{Binding Model}" ContentTemplate="{StaticResource GraphModel}"></ContentControl>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type infra:InitialisedEvent}">
+                <ContentControl Content="{Binding Value}"></ContentControl>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type models:TypeDto}">
+                <UniformGrid Columns="1">
+                    <TextBlock Text="{Binding InName,Mode=OneTime}"></TextBlock>
+                    <TextBlock Text="{Binding OutName,Mode=OneTime }"></TextBlock>
+                </UniformGrid> 
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
