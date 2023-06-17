@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Collections", "..\U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commands", "..\Utility.WPF\Utility.Commands\Utility.Commands.csproj", "{61DDB0B4-251C-4143-A02B-38C4E856387A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Simulation.WPF.Demo.Two", "Utility.Simulation.WPF.Demo.Two\Utility.Simulation.WPF.Demo.Two.csproj", "{72844633-A232-406A-BEC0-011931DDAE4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Simulation.WPF.Demo.Two", "Utility.Simulation.WPF.Demo.Two\Utility.Simulation.WPF.Demo.Two.csproj", "{72844633-A232-406A-BEC0-011931DDAE4C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Demo", "..\Utility.Nodify\Utility.Nodify.Demo\Utility.Nodify.Demo.csproj", "{289DA215-3AC0-46B9-8748-33859805F505}"
 EndProject
@@ -32,6 +32,16 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "..\Utility.Observables\Utility.Observables\Utility.Observables.csproj", "{19B66E1A-4968-4C0A-B18A-114F650888C1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Interfaces", "..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj", "{6E9D22E0-0E02-4F3A-8031-015027B87525}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Simulation.WPF.UDP.Demo", "Utility.Simulation.WPF.UDP.Demo\Utility.Simulation.WPF.UDP.Demo.csproj", "{490AD261-FD5C-4256-8782-B73C64AB08F5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Graph.Shapes.Demo", "..\Utility.Graph.Shapes\Utility.Graph.Shapes.Demo\Utility.Graph.Shapes.Demo.csproj", "{0173886D-18DE-4D71-BACB-1A363A6AB979}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models", "..\Utility.Models\Utility.Models\Utility.Models.csproj", "{E946BE9D-30EC-4F7C-9B5F-BADFF2D96C5B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Graph.Shapes", "..\Utility.Graph.Shapes\Utility.Graph.Shapes\Utility.Graph.Shapes.csproj", "{DCAFDC84-5889-4486-A3C1-1AB29ED876BE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Infrastructure", "..\Utility.Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj", "{EFB7ECFA-6F3E-4F1F-BC13-6A6E147D05BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +101,26 @@ Global
 		{6E9D22E0-0E02-4F3A-8031-015027B87525}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E9D22E0-0E02-4F3A-8031-015027B87525}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E9D22E0-0E02-4F3A-8031-015027B87525}.Release|Any CPU.Build.0 = Release|Any CPU
+		{490AD261-FD5C-4256-8782-B73C64AB08F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{490AD261-FD5C-4256-8782-B73C64AB08F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{490AD261-FD5C-4256-8782-B73C64AB08F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{490AD261-FD5C-4256-8782-B73C64AB08F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0173886D-18DE-4D71-BACB-1A363A6AB979}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0173886D-18DE-4D71-BACB-1A363A6AB979}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0173886D-18DE-4D71-BACB-1A363A6AB979}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0173886D-18DE-4D71-BACB-1A363A6AB979}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E946BE9D-30EC-4F7C-9B5F-BADFF2D96C5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E946BE9D-30EC-4F7C-9B5F-BADFF2D96C5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E946BE9D-30EC-4F7C-9B5F-BADFF2D96C5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E946BE9D-30EC-4F7C-9B5F-BADFF2D96C5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCAFDC84-5889-4486-A3C1-1AB29ED876BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCAFDC84-5889-4486-A3C1-1AB29ED876BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCAFDC84-5889-4486-A3C1-1AB29ED876BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCAFDC84-5889-4486-A3C1-1AB29ED876BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFB7ECFA-6F3E-4F1F-BC13-6A6E147D05BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFB7ECFA-6F3E-4F1F-BC13-6A6E147D05BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFB7ECFA-6F3E-4F1F-BC13-6A6E147D05BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFB7ECFA-6F3E-4F1F-BC13-6A6E147D05BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -107,6 +137,11 @@ Global
 		{32D71451-559C-444A-A433-C7D5657BDA2F} = {D8A975FF-8018-4945-A518-C5E7325CE367}
 		{19B66E1A-4968-4C0A-B18A-114F650888C1} = {D8A975FF-8018-4945-A518-C5E7325CE367}
 		{6E9D22E0-0E02-4F3A-8031-015027B87525} = {D8A975FF-8018-4945-A518-C5E7325CE367}
+		{490AD261-FD5C-4256-8782-B73C64AB08F5} = {391400C1-7F0E-4147-8CCB-9929DD82D778}
+		{0173886D-18DE-4D71-BACB-1A363A6AB979} = {391400C1-7F0E-4147-8CCB-9929DD82D778}
+		{E946BE9D-30EC-4F7C-9B5F-BADFF2D96C5B} = {D8A975FF-8018-4945-A518-C5E7325CE367}
+		{DCAFDC84-5889-4486-A3C1-1AB29ED876BE} = {D8A975FF-8018-4945-A518-C5E7325CE367}
+		{EFB7ECFA-6F3E-4F1F-BC13-6A6E147D05BC} = {D8A975FF-8018-4945-A518-C5E7325CE367}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {29FD5BB9-72D9-445E-9A17-8156D6D4BE04}
