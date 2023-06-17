@@ -13,6 +13,7 @@ using System.ComponentModel;
 
 namespace Utility.Nodes
 {
+    // property node
     public abstract class ValueNode : AutoObject, INode, INotifyCollectionChanged
     {
         protected Collection _children = new();
@@ -136,13 +137,18 @@ namespace Utility.Nodes
             disposable = Observe<ChildrenResponse, ChildrenRequest>(new ChildrenRequest(Guid, Data))
                 .Subscribe(a =>
                 {
-                    if (a.PropertyNode == null && a.Include)
-                    {
-                        throw new Exception("dsv2s331hj f");
-                    }
                     if (a.Include)
+                    {
+                        if (a.PropertyNode == null)
+                        {
+                            throw new Exception("dsv2s331hj f");
+                        }
                         if (_children.Any(ass => a.PropertyNode.Key.Guid == (ass as ValueNode)?.Key.Guid) == false)
+                        {
+                            a.PropertyNode.Parent = this;
                             _children.Add(a.PropertyNode);
+                        }
+                    }
                 }, () => _children.Complete());
 
             return await Task.FromResult(true);
