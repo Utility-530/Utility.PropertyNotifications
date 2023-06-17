@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WPFTransitionals" Version="1.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Utility.Model\Utility.Common\Utility.Common.csproj" />
+    <ProjectReference Include="..\..\Utility.Persists\Utility.Persists\Utility.Persists.csproj" />
+    <ProjectReference Include="..\..\Utility.WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
+    <ProjectReference Include="..\..\Utility.WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
+    <ProjectReference Include="..\..\Utility.WPF\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
+    <ProjectReference Include="..\Utility.Trees\Utility.Trees.csproj" />
+  </ItemGroup>
+
+</Project>
