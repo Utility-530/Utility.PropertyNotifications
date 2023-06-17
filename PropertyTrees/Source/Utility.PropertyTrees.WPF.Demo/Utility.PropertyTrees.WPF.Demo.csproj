@@ -22,11 +22,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\Utility.Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
-		<ProjectReference Include="..\..\..\Utility.Repos\Utility.Repos\Utility.Repos.csproj" />
-		<ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
-		<ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
-		<ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
+		<ProjectReference Include="..\..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\..\Repos\Utility.Repos\Utility.Repos.csproj" />
+		<ProjectReference Include="..\..\..\WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
+		<ProjectReference Include="..\..\..\WPF\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
+		<ProjectReference Include="..\..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
 		<ProjectReference Include="..\..\External\UI.SyntaxBox\UI.SyntaxBox.csproj" />
 		<ProjectReference Include="..\Infrastructure.WPF\Infrastructure.WPF.csproj" />
 		<ProjectReference Include="..\UniversalConverter\UniversalConverter.csproj" />

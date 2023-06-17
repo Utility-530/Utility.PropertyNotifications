@@ -7,7 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\" />
+    <Compile Remove="Views\**" />
+    <EmbeddedResource Remove="Views\**" />
+    <None Remove="Views\**" />
+    <Page Remove="Views\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,8 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Utility.Collections\Utility.Collections\Utility.Collections.csproj" />
-    <ProjectReference Include="..\..\Utility.WPF\Utility.Commands\Utility.Commands.csproj" />
+    <ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
   </ItemGroup>
 
 </Project>

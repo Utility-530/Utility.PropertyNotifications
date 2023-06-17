@@ -7,8 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Utility.WPF\Utility.Commands\Utility.Commands.csproj" />
-		<ProjectReference Include="..\..\Utility.WPF\Utility.WPF.Controls.Tabs\Utility.WPF.Controls.Tabs.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Tabs\Utility.WPF.Controls.Tabs.csproj" />
 		<ProjectReference Include="..\Utility.Nodify.Operations\Utility.Nodify.Operations.csproj" />
 	</ItemGroup>
 

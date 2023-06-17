@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Adorners\Utility.WPF.Adorners.csproj" />
-    <ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
-    <ProjectReference Include="..\..\..\Utility.WPF\Utility.WPF.Panels\Utility.WPF.Panels.csproj" />
+    <ProjectReference Include="..\..\..\WPF\Utility.WPF.Adorners\Utility.WPF.Adorners.csproj" />
+    <ProjectReference Include="..\..\..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
+    <ProjectReference Include="..\..\..\WPF\Utility.WPF.Panels\Utility.WPF.Panels.csproj" />
     <ProjectReference Include="..\Utility.PropertyTrees.Services\Utility.PropertyTrees.Services.csproj" />
   </ItemGroup>
 

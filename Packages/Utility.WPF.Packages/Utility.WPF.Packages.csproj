@@ -28,13 +28,13 @@
 
 	<ItemGroup>
 	  <Reference Include="Julmar.Core">
-	    <HintPath>..\..\Utility.PropertyTrees\dlls\Julmar.Core.dll</HintPath>
+	    <HintPath>..\..\PropertyTrees\dlls\Julmar.Core.dll</HintPath>
 	  </Reference>
 	  <Reference Include="Julmar.Wpf.Behaviors">
-	    <HintPath>..\..\Utility.PropertyTrees\dlls\Julmar.Wpf.Behaviors.dll</HintPath>
+	    <HintPath>..\..\PropertyTrees\dlls\Julmar.Wpf.Behaviors.dll</HintPath>
 	  </Reference>
 	  <Reference Include="Julmar.Wpf.Helpers">
-	    <HintPath>..\..\Utility.PropertyTrees\dlls\Julmar.Wpf.Helpers.dll</HintPath>
+	    <HintPath>..\..\PropertyTrees\dlls\Julmar.Wpf.Helpers.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 

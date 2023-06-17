@@ -11,15 +11,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\..\Utility.Collections\Utility.Collections\Utility.Collections.csproj" />
-		<ProjectReference Include="..\..\..\Utility.Conversions\Utility.Conversions\Utility.Conversions.csproj" />
-		<ProjectReference Include="..\..\..\Utility.Enums\Utility.Enums\Utility.Enums.csproj" />
-		<ProjectReference Include="..\..\..\Utility.Helpers\Utility.Helpers\Utility.Helpers.csproj" />
-		<ProjectReference Include="..\..\..\Utility.Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
-		<ProjectReference Include="..\..\..\Utility.Nodes\Utility.Nodes\Utility.Nodes.csproj" />
-		<ProjectReference Include="..\..\..\Utility.Reactive\Utility.Reactive\Utility.Reactive.csproj" />
-		<ProjectReference Include="..\..\..\Utility.Trees\Utility.Trees\Utility.Trees.csproj" />
-		<ProjectReference Include="..\..\..\Utility.WPF\Utility.Commands\Utility.Commands.csproj" />
+		<ProjectReference Include="..\..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
+		<ProjectReference Include="..\..\..\Conversions\Utility.Conversions\Utility.Conversions.csproj" />
+		<ProjectReference Include="..\..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
+		<ProjectReference Include="..\..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
+		<ProjectReference Include="..\..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\..\Nodes\Utility.Nodes\Utility.Nodes.csproj" />
+		<ProjectReference Include="..\..\..\Reactive\Utility.Reactive\Utility.Reactive.csproj" />
+		<ProjectReference Include="..\..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
 		<ProjectReference Include="..\Utility.PropertyTrees.Abstractions\Utility.PropertyTrees.Abstractions.csproj" />
 	</ItemGroup>
 	<ItemGroup>

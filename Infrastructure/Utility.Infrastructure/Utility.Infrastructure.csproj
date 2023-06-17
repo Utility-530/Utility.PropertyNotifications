@@ -12,6 +12,7 @@
 		<PackageReference Include="System.Net.Sockets" Version="4.3.0" />
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\UtilityStandard\Commands\Utility.Commands\Utility.Commands.csproj" />
 		<ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
 		<ProjectReference Include="..\..\Conversions\Utility.Conversions\Utility.Conversions.csproj" />
 		<ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
@@ -20,7 +21,6 @@
 		<ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
 		<ProjectReference Include="..\..\Reactive\Utility.Reactive\Utility.Reactive.csproj" />
 		<ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
-		<ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Using Include="System" />
