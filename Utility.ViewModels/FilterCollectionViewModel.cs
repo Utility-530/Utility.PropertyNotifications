@@ -9,7 +9,6 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Input;
-using Utility.Common.Models;
 using Utility.Service;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;

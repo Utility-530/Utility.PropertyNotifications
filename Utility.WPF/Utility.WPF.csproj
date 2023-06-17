@@ -55,9 +55,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Utility.Models\Utility.Common\Utility.Common.csproj" />
+		<ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
-		<ProjectReference Include="..\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
+		<ProjectReference Include="..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Reactive\Utility.WPF.Reactive.csproj" />
 	</ItemGroup>
 

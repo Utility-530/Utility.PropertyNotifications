@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Utility.Models\Utility.Packages\Utility.Packages.csproj" />
+    <ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
     <ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
+    <ProjectReference Include="..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
     <ProjectReference Include="..\Utility.WPF.Panels\Utility.WPF.Panels.csproj" />
   </ItemGroup>
 	<ItemGroup>

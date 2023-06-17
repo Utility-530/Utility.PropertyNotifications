@@ -10,7 +10,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Utility.Common;
-using Utility.Common.Models;
 using Utility.Models;
 using Utility.Service;
 

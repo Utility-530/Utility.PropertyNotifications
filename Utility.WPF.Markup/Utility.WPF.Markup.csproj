@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
@@ -6,8 +6,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\Utility.Models\Utility.Common\Utility.Common.csproj" />
+  <ItemGroup> 
+    <ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
   </ItemGroup>
 
 </Project>
