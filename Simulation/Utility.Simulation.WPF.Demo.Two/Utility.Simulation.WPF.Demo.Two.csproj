@@ -7,11 +7,11 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\Utility.Helpers\Utility.Helpers\Utility.Helpers.csproj" />
-		<ProjectReference Include="..\..\Utility.Nodify\Utility.Nodify.Core\Utility.Nodify.Core.csproj" />
-		<ProjectReference Include="..\..\Utility.Nodify\Utility.Nodify.Operations\Utility.Nodify.Operations.csproj" />
-		<ProjectReference Include="..\..\Utility.Nodify\Utility.Nodify.Engine\Utility.Nodify.Engine.csproj" />
-		<ProjectReference Include="..\..\Utility.Observables\Utility.Observables\Utility.Observables.csproj" />
+		<ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
+		<ProjectReference Include="..\..\Nodify\Utility.Nodify.Core\Utility.Nodify.Core.csproj" />
+		<ProjectReference Include="..\..\Nodify\Utility.Nodify.Operations\Utility.Nodify.Operations.csproj" />
+		<ProjectReference Include="..\..\Nodify\Utility.Nodify.Engine\Utility.Nodify.Engine.csproj" />
+		<ProjectReference Include="..\..\Observables\Utility.Observables\Utility.Observables.csproj" />
 		<ProjectReference Include="..\Utility.Simulation.Wpf\Utility.Simulation.Wpf.csproj" />
 	</ItemGroup>
 

@@ -13,25 +13,37 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{391400C1-7F0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{D8A975FF-8018-4945-A518-C5E7325CE367}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Core", "..\Utility.Nodify\Utility.Nodify.Core\Utility.Nodify.Core.csproj", "{A2FC01A5-FC0E-4D49-AA4A-338A11199237}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Core", "..\Nodify\Utility.Nodify.Core\Utility.Nodify.Core.csproj", "{A2FC01A5-FC0E-4D49-AA4A-338A11199237}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Engine", "..\Utility.Nodify\Utility.Nodify.Engine\Utility.Nodify.Engine.csproj", "{1BD58831-9443-4F5A-B1AA-1934324D707D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Engine", "..\Nodify\Utility.Nodify.Engine\Utility.Nodify.Engine.csproj", "{1BD58831-9443-4F5A-B1AA-1934324D707D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Operations", "..\Utility.Nodify\Utility.Nodify.Operations\Utility.Nodify.Operations.csproj", "{0C920742-1590-4567-9CAF-2586151D36DE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Operations", "..\Nodify\Utility.Nodify.Operations\Utility.Nodify.Operations.csproj", "{0C920742-1590-4567-9CAF-2586151D36DE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Collections", "..\Utility.Collections\Utility.Collections\Utility.Collections.csproj", "{A654F252-E3AC-484E-A376-CC1ECDB1BF6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Collections", "..\Collections\Utility.Collections\Utility.Collections.csproj", "{A654F252-E3AC-484E-A376-CC1ECDB1BF6C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commands", "..\Utility.WPF\Utility.Commands\Utility.Commands.csproj", "{61DDB0B4-251C-4143-A02B-38C4E856387A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commands", "..\WPF\Utility.Commands\Utility.Commands.csproj", "{61DDB0B4-251C-4143-A02B-38C4E856387A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Simulation.WPF.Demo.Two", "Utility.Simulation.WPF.Demo.Two\Utility.Simulation.WPF.Demo.Two.csproj", "{72844633-A232-406A-BEC0-011931DDAE4C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Simulation.WPF.Demo.Two", "Utility.Simulation.WPF.Demo.Two\Utility.Simulation.WPF.Demo.Two.csproj", "{72844633-A232-406A-BEC0-011931DDAE4C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Demo", "..\Utility.Nodify\Utility.Nodify.Demo\Utility.Nodify.Demo.csproj", "{289DA215-3AC0-46B9-8748-33859805F505}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Demo", "..\Nodify\Utility.Nodify.Demo\Utility.Nodify.Demo.csproj", "{289DA215-3AC0-46B9-8748-33859805F505}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Helpers", "..\Utility.Helpers\Utility.Helpers\Utility.Helpers.csproj", "{32D71451-559C-444A-A433-C7D5657BDA2F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Helpers", "..\Helpers\Utility.Helpers\Utility.Helpers.csproj", "{32D71451-559C-444A-A433-C7D5657BDA2F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "..\Utility.Observables\Utility.Observables\Utility.Observables.csproj", "{19B66E1A-4968-4C0A-B18A-114F650888C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "..\Observables\Utility.Observables\Utility.Observables.csproj", "{19B66E1A-4968-4C0A-B18A-114F650888C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Interfaces", "..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj", "{6E9D22E0-0E02-4F3A-8031-015027B87525}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Interfaces", "..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj", "{6E9D22E0-0E02-4F3A-8031-015027B87525}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models", "..\Models\Utility.Models\Utility.Models.csproj", "{23100983-94C1-48A5-BD98-783C66AE4BA9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Tabs", "..\WPF\Utility.WPF.Controls.Tabs\Utility.WPF.Controls.Tabs.csproj", "{0D5832E8-7D92-4CC4-B8E8-F2985105CF01}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Texts", "..\WPF\Utility.WPF.Controls.Texts\Utility.WPF.Controls.Texts.csproj", "{7B2DFE01-A01A-455A-9460-C868F2906127}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Packages", "..\Packages\Utility.Packages\Utility.Packages.csproj", "{73C49DDB-22DB-4975-975A-C72038459FF3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Packages", "..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj", "{03205C55-C26C-4D03-81D0-6F254BAA90CD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls", "..\WPF\Utility.WPF.Controls\Utility.WPF.Controls.csproj", "{73F55DE4-9FE3-4D4A-A564-7CD697427973}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +103,30 @@ Global
 		{6E9D22E0-0E02-4F3A-8031-015027B87525}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E9D22E0-0E02-4F3A-8031-015027B87525}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E9D22E0-0E02-4F3A-8031-015027B87525}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23100983-94C1-48A5-BD98-783C66AE4BA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23100983-94C1-48A5-BD98-783C66AE4BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23100983-94C1-48A5-BD98-783C66AE4BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23100983-94C1-48A5-BD98-783C66AE4BA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D5832E8-7D92-4CC4-B8E8-F2985105CF01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D5832E8-7D92-4CC4-B8E8-F2985105CF01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D5832E8-7D92-4CC4-B8E8-F2985105CF01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D5832E8-7D92-4CC4-B8E8-F2985105CF01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B2DFE01-A01A-455A-9460-C868F2906127}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B2DFE01-A01A-455A-9460-C868F2906127}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B2DFE01-A01A-455A-9460-C868F2906127}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B2DFE01-A01A-455A-9460-C868F2906127}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73C49DDB-22DB-4975-975A-C72038459FF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73C49DDB-22DB-4975-975A-C72038459FF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73C49DDB-22DB-4975-975A-C72038459FF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73C49DDB-22DB-4975-975A-C72038459FF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03205C55-C26C-4D03-81D0-6F254BAA90CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03205C55-C26C-4D03-81D0-6F254BAA90CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03205C55-C26C-4D03-81D0-6F254BAA90CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03205C55-C26C-4D03-81D0-6F254BAA90CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73F55DE4-9FE3-4D4A-A564-7CD697427973}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73F55DE4-9FE3-4D4A-A564-7CD697427973}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73F55DE4-9FE3-4D4A-A564-7CD697427973}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73F55DE4-9FE3-4D4A-A564-7CD697427973}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -107,6 +143,12 @@ Global
 		{32D71451-559C-444A-A433-C7D5657BDA2F} = {D8A975FF-8018-4945-A518-C5E7325CE367}
 		{19B66E1A-4968-4C0A-B18A-114F650888C1} = {D8A975FF-8018-4945-A518-C5E7325CE367}
 		{6E9D22E0-0E02-4F3A-8031-015027B87525} = {D8A975FF-8018-4945-A518-C5E7325CE367}
+		{23100983-94C1-48A5-BD98-783C66AE4BA9} = {D8A975FF-8018-4945-A518-C5E7325CE367}
+		{0D5832E8-7D92-4CC4-B8E8-F2985105CF01} = {D8A975FF-8018-4945-A518-C5E7325CE367}
+		{7B2DFE01-A01A-455A-9460-C868F2906127} = {D8A975FF-8018-4945-A518-C5E7325CE367}
+		{73C49DDB-22DB-4975-975A-C72038459FF3} = {D8A975FF-8018-4945-A518-C5E7325CE367}
+		{03205C55-C26C-4D03-81D0-6F254BAA90CD} = {D8A975FF-8018-4945-A518-C5E7325CE367}
+		{73F55DE4-9FE3-4D4A-A564-7CD697427973} = {D8A975FF-8018-4945-A518-C5E7325CE367}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {29FD5BB9-72D9-445E-9A17-8156D6D4BE04}
