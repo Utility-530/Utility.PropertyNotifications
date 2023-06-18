@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Utility.Structs;
 using Utility.Tasks.Model;
 using UtilityInterface.Generic;
 
