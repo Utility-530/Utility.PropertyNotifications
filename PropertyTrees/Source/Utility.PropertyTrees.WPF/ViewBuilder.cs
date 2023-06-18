@@ -32,7 +32,12 @@ namespace Utility.PropertyTrees.WPF
 
     public class ViewBuilder : BaseObject
     {
-
+        int count;
+        private TreeViewItem columnsTreeViewItem;
+        private Dictionary<object, int> dictionary = new();
+        private Style flatstyle;
+        private Dictionary<int, object> cache = new();
+        private Style horizontalStyle;
         private readonly DataTemplateSelector dataTemplateSelector;
 
         readonly Dictionary<PanelKey, ItemsPanelTemplate> panelsDictionary = new() {
@@ -82,21 +87,21 @@ namespace Utility.PropertyTrees.WPF
                 horizontalStyle.Setters.Add(new Setter(Control.TemplateProperty,
                     new ControlTemplate(typeof(HeaderedContentControl))
                     {
-                        VisualTree = BuildFactory()
+                        VisualTree = BuildHeaderedContentControlFactory()
                     }));
                 return horizontalStyle;
             }
         }
 
-        static FrameworkElementFactory BuildFactory()
+        static FrameworkElementFactory BuildHeaderedContentControlFactory()
         {
-            FrameworkElementFactory gridFactory = new FrameworkElementFactory(typeof(CustomGrid));
+            FrameworkElementFactory gridFactory = new (typeof(CustomGrid));
             gridFactory.Name = "PART_StackPanel";
-            FrameworkElementFactory headerPresenterFactory = new FrameworkElementFactory(typeof(ContentPresenter));
+            FrameworkElementFactory headerPresenterFactory = new (typeof(ContentPresenter));
             headerPresenterFactory.Name = "PART_HeaderPresenter";
             headerPresenterFactory.SetValue(Grid.ColumnProperty, 0);
             headerPresenterFactory.SetValue(ContentPresenter.ContentSourceProperty, "Header");
-            FrameworkElementFactory contentPresenterFactory = new FrameworkElementFactory(typeof(ContentPresenter));
+            FrameworkElementFactory contentPresenterFactory = new (typeof(ContentPresenter));
             contentPresenterFactory.Name = "PART_ContentPresenter";
             contentPresenterFactory.SetValue(Grid.ColumnProperty, 1);
             gridFactory.AppendChild(headerPresenterFactory);
@@ -153,13 +158,7 @@ namespace Utility.PropertyTrees.WPF
             });
         }
 
-        int count;
 
-        TreeViewItem columnsTreeViewItem;
-        Dictionary<object, int> dictionary = new();
-        private Style flatstyle;
-        Dictionary<int, object> cache = new();
-        private Style horizontalStyle;
 
         public IObservable<(int, int)> BuildTree(TreeView treeView, ValueNode property, out IDisposable disposable)
         {
