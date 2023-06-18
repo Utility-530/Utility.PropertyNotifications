@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Utility.Graph.Shapes\Utility.Graph.Shapes\Utility.Graph.Shapes.csproj" />
-    <ProjectReference Include="..\..\Utility.Nodify\Utility.Nodify.Engine\Utility.Nodify.Engine.csproj" />
+    <ProjectReference Include="..\..\Nodify\Utility.Nodify.Engine\Utility.Nodify.Engine.csproj" />
   </ItemGroup>
 
 </Project>
