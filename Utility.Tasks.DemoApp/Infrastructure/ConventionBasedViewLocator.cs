@@ -5,7 +5,6 @@ using System;
 using System.Linq;
 using System.Reflection;
 using Splat;
-using MoreLinq;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Endless.Functional;

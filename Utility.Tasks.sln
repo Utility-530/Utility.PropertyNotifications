@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30804.86
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Tasks", "Utility.Tasks\Utility.Tasks.csproj", "{B360DF8A-823A-4D1F-B1E5-C8CC0B355B21}"
 EndProject
@@ -17,9 +17,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Progress", "Utility
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility", "Utility\Utility.csproj", "{F876F0DA-5E48-46FA-ACE8-1BA5021F663A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.View", "Utility.View\Utility.View.csproj", "{98D67F46-5876-49F5-9338-FF3D090D932D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.View", "Utility.View\Utility.View.csproj", "{98D67F46-5876-49F5-9338-FF3D090D932D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Tasks.DemoApp", "Utility.Tasks.DemoApp\Utility.Tasks.DemoApp.csproj", "{99F8026C-84E1-46C4-8F23-D2658C926CE8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{9143253D-0504-4151-96B6-661E483B76B6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Structs", "..\Structs\Utility.Structs\Utility.Structs.csproj", "{D8EBD533-C1D9-4853-AA66-921AE7557ECF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,12 +63,17 @@ Global
 		{99F8026C-84E1-46C4-8F23-D2658C926CE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99F8026C-84E1-46C4-8F23-D2658C926CE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99F8026C-84E1-46C4-8F23-D2658C926CE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8EBD533-C1D9-4853-AA66-921AE7557ECF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8EBD533-C1D9-4853-AA66-921AE7557ECF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8EBD533-C1D9-4853-AA66-921AE7557ECF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8EBD533-C1D9-4853-AA66-921AE7557ECF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{99F8026C-84E1-46C4-8F23-D2658C926CE8} = {7CF8F38F-AB63-4506-9E90-7E184BE332DA}
+		{D8EBD533-C1D9-4853-AA66-921AE7557ECF} = {9143253D-0504-4151-96B6-661E483B76B6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {609432E4-EFBA-4EC1-93C8-60A619593072}
