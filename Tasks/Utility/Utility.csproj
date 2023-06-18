@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Endless" Version="0.7.0-alpha1" />
+    <PackageReference Include="Kaos.Collections" Version="4.1.0" />
+    <PackageReference Include="morelinq" Version="3.3.2" />
+    <PackageReference Include="Splat.Autofac" Version="9.5.2" />
+    <PackageReference Include="System.Reactive" Version="5.0.0" />
+    <PackageReference Include="UtilityEnum" Version="2.1.3" />
+    <PackageReference Include="UtilityInterface" Version="4.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Structs\Utility.Structs\Utility.Structs.csproj" />
+  </ItemGroup>
+</Project>
