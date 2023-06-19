@@ -42,7 +42,6 @@ namespace Utility.PropertyTrees.Services
         //        .FindKeyByParent(request.Key)
         //        .ToObservable()
         //        .Select(childKey => new FindPropertyResponse(childKey))
-        //        .ObserveOn(Context)
         //        .Subscribe(a =>
         //        {
         //            observer.OnNext(a);
@@ -61,7 +60,6 @@ namespace Utility.PropertyTrees.Services
                 return repository
                 .FindValue(order.Key)
                 .ToObservable()
-                .ObserveOn(Context)
                 .Subscribe(find =>
                 {
                     observer.OnProgress(2, 3);
@@ -90,7 +88,6 @@ namespace Utility.PropertyTrees.Services
                 return repository
                     .FindValue(order.Key)
                     .ToObservable()
-                    .ObserveOn(Context)
                     .Subscribe(find =>
                     {
                         if (find is ViewModel viewModel)
