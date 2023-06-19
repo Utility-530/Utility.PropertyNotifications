@@ -142,7 +142,9 @@ namespace Utility.Repos
                 if (name == null)
                 {
                     var types = await connection.QueryAsync<Type>($"Select * from 'Type' where Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}'");
-                    var singleType = types.Single();
+                    var singleType = types.SingleOrDefault();
+                    if (singleType == default)
+                        return Array.Empty<IEquatable>();
                     var tables = await connection.QueryAsync<Table>($"Select * from 'Table' where Parent = '{parent}' AND Type = '{singleType.Id}'");
                     List<IEquatable> childKeys = new();
                     foreach (var table in tables)
