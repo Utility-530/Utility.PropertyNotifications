@@ -8,6 +8,8 @@ using static Utility.PropertyTrees.Events;
 using Utility.WPF.Adorners.Infrastructure;
 using Utility.WPF.Reactive;
 using NetFabric.Hyperlinq;
+using System.Collections.Specialized;
+using Utility.Helpers;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
@@ -94,6 +96,21 @@ namespace Utility.PropertyTrees.WPF.Demo
                 .MouseDoubleClickTreeSelections()
                 .Subscribe(a =>
                 {
+
+                    if (a is { Header: ReferenceProperty { IsCollection: true } refNode })
+                    {
+                        if (refNode.Data is IList collection)
+                        {
+                            var type = collection.GetType().GenericTypeArguments().SingleOrDefault();
+                            var instance = Activator.CreateInstance(type);
+                            collection.Add(instance);
+                            if (collection is not INotifyCollectionChanged collectionChanged)
+                            {
+                                //refNode.RefreshAsync();
+                            }                            
+                        }
+
+                    }
                     if (a is { Header: ValueNode valueNode } treeviewItem)
                     {
                         this.valueNode = valueNode;
@@ -101,19 +118,22 @@ namespace Utility.PropertyTrees.WPF.Demo
                         this.Observe<GetViewModelResponse, GetViewModelRequest>(new(valueNode.Key))
                             .Subscribe(response =>
                             {
-                                this.response = response;
-                                dataGrid.Visibility = Visibility.Visible;
-                                //dataGrid.ItemsSource = response.ViewModels;
-                                var root = new RootProperty(Guid.NewGuid()) { Data = response };
-                                Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(dataGrid, root))
-                                .Subscribe(a =>
+                                Context.Post((_) =>
                                 {
-                                    //modelViewModel.IsConnected = true;
-                                    //System.Windows.Input.CommandManager.InvalidateRequerySuggested();
-                                });
+                                    this.response = response;
+                                    dataGrid.Visibility = Visibility.Visible;
+                                    //dataGrid.ItemsSource = response.ViewModels;
+                                    var root = new RootProperty(Guid.NewGuid()) { Data =new { ViewModels = response.ViewModels } };
+                                    Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(dataGrid, root))
+                                    .Subscribe(a =>
+                                    {
+                                        //modelViewModel.IsConnected = true;
+                                        //System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+                                    });
+                                }, default);
                                 //dataGrid.ItemsSource = response.ViewModels;
                             });
-                    }
+                    }          
                 });
 
             //    Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(treeView, valueNode))
@@ -126,7 +146,7 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         private void CreateSelected2()
         {
-            Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(treeView, new RootModel2Property()))
+            Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(treeView, new RootViewModelsProperty()))
                 .Subscribe(a =>
                 {
                 });
