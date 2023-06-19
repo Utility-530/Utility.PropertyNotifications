@@ -62,11 +62,11 @@ internal class BootStrapper : BaseObject
         container.RegisterMany<DummyLogger>();
 
 #if DEBUG
-        container.RegisterInstance<SqliteRepository.DatabaseDirectory>(new("Data"));
-        container.RegisterInstance<LiteDBRepository.DatabaseSettings>(new("Data", typeof(ViewModel)));
-#else
         container.RegisterInstance<SqliteRepository.DatabaseDirectory>(new("../../../Data"));
         container.RegisterInstance<LiteDBRepository.DatabaseSettings>(new("../../../Data", typeof(ViewModel)));
+#else
+        container.RegisterInstance<SqliteRepository.DatabaseDirectory>(new("Data"));
+        container.RegisterInstance<LiteDBRepository.DatabaseSettings>(new("Data", typeof(ViewModel)));
 #endif
 
         return container;
