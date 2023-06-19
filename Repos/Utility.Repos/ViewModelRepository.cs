@@ -8,7 +8,7 @@ using Utility.Models;
 
 namespace Utility.Repos
 {
-    public partial class LiteDBRepository : IRepository, IDisposable
+    public partial class ViewModelRepository : IRepository, IDisposable
     {
         public record Type
         {
@@ -48,7 +48,7 @@ namespace Utility.Repos
         //private ILiteCollection<Type> typeCollection => liteDatabase.Value.GetCollection<Type>();
         private ILiteCollection<MetaData> metaDataCollection => liteDatabase.Value.GetCollection<MetaData>();
 
-        public LiteDBRepository(DatabaseSettings settings)
+        public ViewModelRepository(DatabaseSettings settings)
         {
             Directory.CreateDirectory(settings.Path);
             this.settings = settings;

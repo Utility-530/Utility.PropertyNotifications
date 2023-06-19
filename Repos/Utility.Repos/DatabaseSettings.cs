@@ -13,6 +13,6 @@
 
     public partial class ViewModelRepository
     {
-        public record DatabaseSettings(string Path);
+        public record DatabaseSettings(string Path, System.Type Type);
     }
 }
