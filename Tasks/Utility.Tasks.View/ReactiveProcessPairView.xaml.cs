@@ -18,7 +18,7 @@ namespace Utility.Tasks.View
                 KeyTextBlock.Text = ViewModel.Key.ToString();
 
 
-                this.OneWayBind(this.ViewModel, vm => vm.Value, v => v.ValueTextBlock.Text, a => a.Count().ToString())
+                this.OneWayBind(this.ViewModel, vm => vm.Value, v => v.ValueTextBlock.Text, a => Enumerable.ToList(a).Count.ToString())
                         .DisposeWith(disposable);
             });
         }

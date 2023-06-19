@@ -5,22 +5,21 @@ using System.Threading.Tasks;
 
 namespace T
 {
-    // Provides a task scheduler that ensures a maximum concurrency level while
-    // running on top of the thread pool.
-    //  
-    // from Microsoft @ https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.taskscheduler
-    // adapted for my needs
-    // after some research I found that for the access patterns used by the consumer
-    // of this class, the locked LinkedList<T> is faster than other approaches
-    // - honey the codewitch
     /// <summary>
     /// Represents a task scheduler that is bounded to a maximum concurrency
     /// </summary>
-#if TASKSLIB
-    public
-#endif
-    class ConstrainedTaskScheduler : TaskScheduler
+    public class ConstrainedTaskScheduler : TaskScheduler
     {
+        /// Provides a task scheduler that ensures a maximum concurrency level while
+        /// running on top of the thread pool.    /// 
+        /// from Microsoft <a href="https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.taskscheduler"/>
+        /// adapted for my needs
+        /// after some research I found that for the access patterns used by the consumer
+        /// of this class, the locked LinkedList<T> is faster than other approaches
+        /// - honey the codewitch
+        /// <a href="https://www.codeproject.com/Articles/5274136/Customizing-the-TaskScheduler-Queue-Your-Task-Work"/>
+
+
         // Indicates whether the current thread is processing work items.
         [ThreadStatic]
         static bool _currentThreadIsProcessingItems;

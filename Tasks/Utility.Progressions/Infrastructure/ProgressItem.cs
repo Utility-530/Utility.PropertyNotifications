@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Utility.Structs;
-using Utility.Tasks.Model;
-using UtilityInterface.Generic;
 
 namespace Utility
 {
@@ -29,17 +26,6 @@ namespace Utility
         public bool IsComplete { get; }
 
         public Percent Value { get; }
-    }
-
-    public interface ITaskOutput:IKey<string>
-    {
-        object Value { get; }
-        bool IsCancelled { get; }
-    }
-
-    public interface ITaskOutput<T> : IKey<string>
-    {
-        T Value { get; }
     }
 
     //public interface IProgressTask:IObservable<>

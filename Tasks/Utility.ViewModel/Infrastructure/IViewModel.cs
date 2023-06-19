@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Utility.Infrastructure;
+using Utility.Models;
 
 namespace Utility.Tasks.DemoApp.ViewModel
 {

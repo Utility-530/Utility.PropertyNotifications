@@ -3,13 +3,13 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reactive.Concurrency;
 using DynamicData;
-using UtilityEnum;
+using Utility.Enums;
 using ReactiveUI;
-using Utility.Tasks.Model;
 using DynamicData.Binding;
 using Utility.ViewModel;
 using System.Linq;
 using Utility.Infrastructure;
+using Utility.Progressions;
 
 namespace Utility.Tasks.ViewModel
 {

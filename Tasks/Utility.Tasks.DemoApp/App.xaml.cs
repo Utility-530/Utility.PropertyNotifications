@@ -7,14 +7,15 @@ using System.Threading;
 using System.Reactive;
 using System.Reactive.Linq;
 using Splat;
-
 using static Utility.Tasks.DemoApp.ViewModel.DemoFactoryViewModel;
 using Utility.Tasks.DemoApp.ViewModel;
 using Utility.Tasks.Model;
 using Utility.Tasks.DemoApp.Infrastructure;
 using Utility.Tasks.DemoApp.View;
 using Utility;
-using Utility.Infrastructure;
+using Utility.Models;
+using Unit = System.Reactive.Unit;
+using Utility.View;
 
 namespace DemoApp
 {
@@ -29,7 +30,7 @@ namespace DemoApp
             builder.Register((c) => new SynchronizationContextScheduler(SynchronizationContext.Current)).As<IScheduler>().SingleInstance();
 
             // View
-            builder.RegisterType<Utility.Tasks.DemoApp.View.FactoryView>().As<IViewFor<DemoFactoryViewModel>>();
+            builder.RegisterType<FactoryView>().As<IViewFor<DemoFactoryViewModel>>();
             builder.RegisterType<DemoTPLView>().As<IViewFor<DemoTPLViewModel>>();
             builder.RegisterType<DialogCommandView>().As<IViewFor<DialogCommandViewModel>>();
             builder.RegisterType<LoginView>().As<IViewFor<LoginViewModel>>();
@@ -58,13 +59,39 @@ namespace DemoApp
 
 
             Utility.Tasks.View.Meta.BootStrapper.Register(builder);
-            Utility.Progress.Meta.BootStrapper.Register(builder);
+            //Utility.Progressions.Meta.BootStrapper.Register(builder);
+            Utility.Progressions.View.Meta.BootStrapper.Register(builder);
 
 
-            builder.UseAutofacDependencyResolver();
-       
-            //var defaultViewLocator = Locator.Current.GetService<IViewLocator>();
-            //Locator.CurrentMutable.RegisterLazySingleton<IViewLocator>(() => new ConventionBasedViewLocator(defaultViewLocator));
+            // Creates and sets the Autofac resolver as the Locator
+            var autofacResolver = builder.UseAutofacDependencyResolver();
+
+            // Register the resolver in Autofac so it can be later resolved
+            builder.RegisterInstance(autofacResolver);
+
+            // Initialize ReactiveUI components
+            autofacResolver.InitializeReactiveUI();
+
+            var defaultViewLocator = Locator.Current.GetService<ReactiveUI.IViewLocator>();
+            Locator.CurrentMutable.RegisterLazySingleton<IViewLocator>(() => new ConventionBasedViewLocator(defaultViewLocator, new[] { typeof(CollectionView) }, typeof(DefaultView)));
+
+
+            var container = builder.Build();
+
+            //https://github.com/reactiveui/splat/blob/main/src/Splat.Autofac/README.md
+            // If you need to override any service (such as the ViewLocator), register it after InitializeReactiveUI
+            // https://autofaccn.readthedocs.io/en/latest/register/registration.html#default-registrations
+            // builder.RegisterType<MyCustomViewLocator>().As<IViewLocator>().SingleInstance();
+            //Set Autofac Locator's lifetime after the ContainerBuilder has been built
+
+            //var autofacResolver = container.Resolve<AutofacDependencyResolver>();
+
+
+            // Set a lifetime scope (either the root or any of the child ones) to Autofac resolver
+            // This is needed, because the previous steps did not Update the ContainerBuilder since they became immutable in Autofac 5+
+            // https://github.com/autofac/Autofac/issues/811
+            autofacResolver.SetLifetimeScope(container);
+
 
         }
 

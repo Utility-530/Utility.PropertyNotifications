@@ -1,8 +1,8 @@
 ﻿using System;
-using UtilityEnum;
-using UtilityInterface.Generic;
+using Utility.Enums;
+using Utility.Interfaces.Generic;
 
-namespace Utility.Tasks.Model
+namespace Utility.Progressions
 {
     public interface IProgressState : IEquatable<IProgressState>, IGroupKey<ProcessState>, IKey<string>, IComparable, IComparable<IProgressState>
     {
@@ -10,7 +10,7 @@ namespace Utility.Tasks.Model
 
         ProcessState State { get; }
 
-        ITaskOutput? Output {get;}
+        ITaskOutput Output { get; }
     }
 
 
@@ -20,6 +20,6 @@ namespace Utility.Tasks.Model
 
         ProcessState State { get; }
 
-        ITaskOutput<T>? Output { get; }
+        ITaskOutput<T> Output { get; }
     }
 }

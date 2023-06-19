@@ -6,11 +6,11 @@
 //using System.Threading;
 //using System.Threading.Tasks;
 //using System.Threading.Tasks.Dataflow;
-//using UtilityInterface.Generic;
+//using Utility.Interfaces.Generic;
 //using System.Reactive;
 //using System.Reactive.Threading.Tasks;
 //using System.Reactive.Subjects;
-//using UtilityInterface;
+//using Utility.Interfaces;
 //using System.Windows.Threading;
 
 //namespace Utility.Tasks
@@ -19,7 +19,7 @@
 //    public class TPLDataFlowQueue<T> : IAsyncQueue<WorkerItem<T>>
 //    {
 //        public IObservable<KeyValuePair<ChangeReason, WorkerItem<T>>> Resource { get; } = new Subject<KeyValuePair<ChangeReason,WorkerItem<T>>>();
-//        public ISubject<UtilityEnum.ProcessState> commands { get; } = new Subject<UtilityEnum.ProcessState>();
+//        public ISubject<Utility.Enums.ProcessState> commands { get; } = new Subject<Utility.Enums.ProcessState>();
 //        private CancellationTokenSource _tokenSource;
 //        ActionBlock<Action> _block;
 //        //Dispatcher _dispatcher;
@@ -76,20 +76,20 @@
 //        //}
 
 
-//        private void React(IObservable<UtilityEnum.ProcessState> commands)
+//        private void React(IObservable<Utility.Enums.ProcessState> commands)
 //        {
 //            commands
 //            .Subscribe(command =>
 //            {
-//                //if (command == UtilityEnum.ProcessState.Blocked)
+//                //if (command == Utility.Enums.ProcessState.Blocked)
 
-//                //else if (command == UtilityEnum.ProcessState.Ready)
+//                //else if (command == Utility.Enums.ProcessState.Ready)
 //                //{
 //                //    _backgroundWorker.RunWorkerAsync(wa);
 //                //}
-//                //else if (command == UtilityEnum.ProcessState.Running)
+//                //else if (command == Utility.Enums.ProcessState.Running)
 
-//                if (command == UtilityEnum.ProcessState.Terminated)
+//                if (command == Utility.Enums.ProcessState.Terminated)
 //                    Cancel();
 //                else
 //                    throw new ArgumentOutOfRangeException("argument should be nullable bool");

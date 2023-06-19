@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using DynamicData;
 using System.Reactive.Concurrency;
+using UIG = Utility.Interfaces.Generic;
 
 namespace Utility.ViewModel
 {
@@ -27,14 +28,14 @@ namespace Utility.ViewModel
 
         public static IObservable<IChangeSet<KeyCache<T, TGroupKey, TKey>, TGroupKey>>
             SelectGroups<T, TGroupKey, TKey>(IObservable<T> observable, IScheduler scheduler)
-            where T : UtilityInterface.Generic.IKey<TKey>, IGroupKey<TGroupKey>
+            where T : UIG.IKey<TKey>, UIG.IGroupKey<TGroupKey>
         {
             var transforms = observable
                           .ObserveOn(scheduler)
-                    .SubscribeOn(scheduler)
-                        .ToObservableChangeSet(a => a.Key)
-                                .Group(a => a.GroupKey)
-                                .Transform(a => new KeyCache<T, TGroupKey, TKey>(a.Key, a.Cache));
+                          .SubscribeOn(scheduler)
+                          .ToObservableChangeSet(a => a.Key)
+                          .Group(a => a.GroupKey)
+                          .Transform(a => new KeyCache<T, TGroupKey, TKey>(a.Key, a.Cache));
 
             return transforms;
         }
@@ -43,7 +44,7 @@ namespace Utility.ViewModel
 
         public static IObservable<IChangeSet<KeyList<T, TGroupKey>>>
             SelectGroupKeyGroups<T, TGroupKey, TKey>(IObservable<T> observable, IScheduler scheduler)
-            where T : UtilityInterface.Generic.IKey<TKey>, IGroupKey<TGroupKey>
+            where T : UIG.IKey<TKey>, UIG.IGroupKey<TGroupKey>
         {
             var transforms = observable
                           .ObserveOn(scheduler)
@@ -56,7 +57,7 @@ namespace Utility.ViewModel
         }
 
         public static IObservable<IChangeSet<KeyCollection>> SelectKeyGroups<T, TOut>(IObservable<T> states, IScheduler scheduler, Func<T, TOut> transform)
-              where T : UtilityInterface.Generic.IKey<string>
+              where T : UIG.IKey<string>
         {
             var keyGroups = states
                 .ObserveOn(scheduler)
@@ -72,7 +73,7 @@ namespace Utility.ViewModel
             return keyGroups;
         }
 
-        public static IObservable<IChangeSet<KeyList<T, TKey>>> SelectGroups<T, TKey>(IObservable<T> observable, IScheduler scheduler) where T : UtilityInterface.Generic.IKey<TKey>
+        public static IObservable<IChangeSet<KeyList<T, TKey>>> SelectGroups<T, TKey>(IObservable<T> observable, IScheduler scheduler) where T : UIG.IKey<TKey>
         {
             var transforms = observable
                 .ObserveOn(scheduler)
@@ -85,7 +86,7 @@ namespace Utility.ViewModel
         }
         public static IObservable<IChangeSet<KeyCollection, TGroupKey>> SelectGroupKeyGroups<T, TGroupKey, TOut>(
             IObservable<T> states, IScheduler scheduler, Func<T, TOut> func)
-            where T : UtilityInterface.Generic.IKey<string>, IGroupKey<TGroupKey>
+            where T : UIG.IKey<string>, UIG.IGroupKey<TGroupKey>
         {
             var keyGroups = states
                 .ObserveOn(scheduler)
@@ -125,7 +126,7 @@ namespace Utility.ViewModel
 
         //public static IObservable<IChangeSet<KeyCache<T, TGroupKey, TKey>, TGroupKey>>
         //SelectGroups<T, TGroupKey, TKey>(IObservable<T> observable, IScheduler scheduler)
-        //where T : UtilityInterface.Generic.IKey<TKey>, IGroupKey<TGroupKey>
+        //where T : Utility.Interfaces.Generic.IKey<TKey>, IGroupKey<TGroupKey>
         //{
         //    var transforms = observable
         //                  .ObserveOn(scheduler)

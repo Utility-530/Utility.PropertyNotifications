@@ -5,11 +5,10 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Diagnostics;
-using System.ComponentModel.Custom.Generic;
+
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Collections.Generic;
-using UtilityEnum;
 using System.Net;
 
 namespace Utility.Tasks
@@ -18,7 +17,7 @@ namespace Utility.Tasks
     //public class FileDownloaderCommandQueueold<T> : AsyncWorkerQueue<object> /*: INotifyPropertyChanged*/ //where T : new()
     //{
 
-    //    public ISubject<UtilityEnum.ProcessState> commands { get; } = new Subject<UtilityEnum.ProcessState>();
+    //    public ISubject<Utility.Enums.ProcessState> commands { get; } = new Subject<Utility.Enums.ProcessState>();
 
 
     //    static WebClient _client = new WebClient();
@@ -39,20 +38,20 @@ namespace Utility.Tasks
 
 
 
-    //    private void React(IObservable<UtilityEnum.ProcessState> commands)
+    //    private void React(IObservable<Utility.Enums.ProcessState> commands)
     //    {
     //        commands
     //        .Subscribe(command =>
     //        {
-    //            //if (command == UtilityEnum.ProcessState.Blocked)
+    //            //if (command == Utility.Enums.ProcessState.Blocked)
                 
-    //            //else if (command == UtilityEnum.ProcessState.Ready)
+    //            //else if (command == Utility.Enums.ProcessState.Ready)
     //            //{
     //            //    _backgroundWorker.RunWorkerAsync(wa);
     //            //}
-    //            //else if (command == UtilityEnum.ProcessState.Running)
+    //            //else if (command == Utility.Enums.ProcessState.Running)
                     
-    //            if (command == UtilityEnum.ProcessState.Terminated)
+    //            if (command == Utility.Enums.ProcessState.Terminated)
     //                Cancel();
     //            else
     //                throw new ArgumentOutOfRangeException("argument should be nullable bool");

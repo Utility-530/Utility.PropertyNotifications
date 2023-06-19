@@ -1,7 +1,7 @@
 ﻿
 using System;
 
-namespace Utility.Progress
+namespace Utility.Progressions
 {
     public class ProgressViewModel
     { 
@@ -18,6 +18,7 @@ namespace Utility.Progress
         public bool IsIndeterminate { get; }
 
         public double Progress { get; }
+
         public DateTime Started { get; }
     }
 }

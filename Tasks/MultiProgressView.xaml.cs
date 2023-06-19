@@ -5,7 +5,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Controls;
 
-namespace Utility.Progress
+namespace Utility.Progressions.View
 {
     /// <summary>
     /// Interaction logic for ProgressView.xaml

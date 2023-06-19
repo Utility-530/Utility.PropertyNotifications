@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using UtilityEnum;
-using Utility.Tasks.Model;
+using Utility.Enums;
+using Utility.Progressions;
 
 namespace Utility.Tasks.ViewModel
 {

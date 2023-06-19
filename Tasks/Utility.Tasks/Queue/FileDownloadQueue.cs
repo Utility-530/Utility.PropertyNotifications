@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reactive.Linq;
-using UtilityEnum;
+using Utility.Enums;
 using System.Net;
 using Utility.Tasks.Model;
 
@@ -54,13 +54,13 @@ namespace Utility.Tasks
                 commands
                 .Subscribe(command =>
                 {
-                    //if (command == UtilityEnum.ProcessState.Blocked)
+                    //if (command == Utility.Enums.ProcessState.Blocked)
 
-                    //else if (command == UtilityEnum.ProcessState.Ready)
+                    //else if (command == Utility.Enums.ProcessState.Ready)
                     //{
                     //    _backgroundWorker.RunWorkerAsync(wa);
                     //}
-                    //else if (command == UtilityEnum.ProcessState.Running)
+                    //else if (command == Utility.Enums.ProcessState.Running)
 
                     if (command == ProcessState.Terminated)
                         Cancel();
@@ -86,7 +86,7 @@ namespace Utility.Tasks
     //public class FileDownloaderCommandQueue : AsyncWorkerQueue<CompletedState>,IPlayer /*: INotifyPropertyChanged*/ //where T : new()
     //{
 
-    //    public ISubject<UtilityEnum.ProcessState> commands { get; } = new Subject<UtilityEnum.ProcessState>();
+    //    public ISubject<Utility.Enums.ProcessState> commands { get; } = new Subject<Utility.Enums.ProcessState>();
 
 
     //    static IFileDownloader fileDownloader = new FileDownloader.FileDownloader(new FileDownloader.DownloadCacheImplementation());
@@ -110,20 +110,20 @@ namespace Utility.Tasks
 
 
 
-    //    private void React(IObservable<UtilityEnum.ProcessState> commands)
+    //    private void React(IObservable<Utility.Enums.ProcessState> commands)
     //    {
     //        commands
     //        .Subscribe(command =>
     //        {
-    //            if (command == UtilityEnum.ProcessState.Blocked)
+    //            if (command == Utility.Enums.ProcessState.Blocked)
     //                Pause();
-    //            //else if (command == UtilityEnum.ProcessState.Ready)
+    //            //else if (command == Utility.Enums.ProcessState.Ready)
     //            //{
     //            //    _backgroundWorker.RunWorkerAsync(wa);
     //            //}
-    //            else if (command == UtilityEnum.ProcessState.Running)
+    //            else if (command == Utility.Enums.ProcessState.Running)
     //                Resume();
-    //            else if (command == UtilityEnum.ProcessState.Terminated)
+    //            else if (command == Utility.Enums.ProcessState.Terminated)
     //                Cancel();
     //            else
     //                throw new ArgumentOutOfRangeException("argument should be nullable bool");

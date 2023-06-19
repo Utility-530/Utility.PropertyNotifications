@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Tasks.Model
 {
@@ -18,6 +20,16 @@ namespace Utility.Tasks.Model
         public virtual object Value { get; }
 
         public bool IsCancelled { get; }
+
+        public bool Equals(IKey<string> other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(IEquatable other)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public record StringTaskOutput : TaskOutput

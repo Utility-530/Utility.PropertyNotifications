@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using System.Reactive.Subjects;
 using Utility.Tasks.Model;
-using UtilityEnum;
+using Utility.Enums;
 using System.Collections.Generic;
 using Utility.Infrastructure;
+using Utility.Progressions;
 
 namespace Utility.Tasks
 {
@@ -96,13 +97,13 @@ namespace Utility.Tasks
             _ = commands
                 .Subscribe(command =>
                 {
-                    //if (command == UtilityEnum.ProcessState.Blocked)
+                    //if (command == Utility.Enums.ProcessState.Blocked)
 
-                    //else if (command == UtilityEnum.ProcessState.Ready)
+                    //else if (command == Utility.Enums.ProcessState.Ready)
                     //{
                     //    _backgroundWorker.RunWorkerAsync(wa);
                     //}
-                    //else if (command == UtilityEnum.ProcessState.Running)
+                    //else if (command == Utility.Enums.ProcessState.Running)
 
                     if (command == ProcessState.Terminated)
                         Cancel();

@@ -18,7 +18,7 @@ namespace Utility.Tasks.ViewModel
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class LimitCollection<T> : LimitCollection, IBasicObservableCollection<T>, IObserver<Capacity>, IObservable<T>
-        where T : UtilityInterface.Generic.IKey<string>, IEquatable<T>, IComparable<T>
+        where T : Utility.Interfaces.Generic.IKey<string>, IEquatable<T>, IComparable<T>
     {
         readonly ReplaySubject<Capacity> capacitySubject = new();
         readonly ReplaySubject<T> nextSubject = new();

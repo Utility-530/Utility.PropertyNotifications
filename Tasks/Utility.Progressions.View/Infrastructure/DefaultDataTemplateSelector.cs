@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Utility.Progress.Infrastructure
+namespace Utility.Progressions.Infrastructure
 {
     class DefaultDataTemplateSelector : DataTemplateSelector
     {

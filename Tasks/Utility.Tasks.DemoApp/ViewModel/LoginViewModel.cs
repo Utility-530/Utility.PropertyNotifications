@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Input;
 using Utility.Infrastructure;
+using Utility.Models;
 
 namespace Utility.Tasks.DemoApp.ViewModel
 {

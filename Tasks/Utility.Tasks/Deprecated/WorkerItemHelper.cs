@@ -10,24 +10,24 @@ namespace Utility.Tasks
 
     //public static class WorkerItemServiceEx
     //{
-    //    public static async Task<T> GetItem<T>(this UtilityInterface.IService<KeyValuePair<UtilityInterface.Generic.ChangeReason, IWorkerItem<T>>> service, string key) 
+    //    public static async Task<T> GetItem<T>(this Utility.Interfaces.IService<KeyValuePair<Utility.Interfaces.Generic.ChangeReason, IWorkerItem<T>>> service, string key) 
     //    {
     //        //(Tasks as ISubject<T>).OnNext(kvp);
 
     //        return await service.Resource
-    //            .Where(_ => _.Key == UtilityInterface.Generic.ChangeReason.Remove)
+    //            .Where(_ => _.Key == Utility.Interfaces.Generic.ChangeReason.Remove)
     //            .FirstAsync(i => i.Value.Key == key)
     //            .Select(i => i.Value.Output)
     //            .ToTask();
 
     //    }
 
-    //    public static  IObservable<T> GetItem<S,T>(this UtilityInterface.IService<KeyValuePair<UtilityInterface.Generic.ChangeReason, S>> service, string key) where S:IWorkerItem<T>
+    //    public static  IObservable<T> GetItem<S,T>(this Utility.Interfaces.IService<KeyValuePair<Utility.Interfaces.Generic.ChangeReason, S>> service, string key) where S:IWorkerItem<T>
     //    {
     //        //(Tasks as ISubject<T>).OnNext(kvp);
 
     //        return service.Resource
-    //            .Where(_ => _.Key == UtilityInterface.Generic.ChangeReason.Remove)
+    //            .Where(_ => _.Key == Utility.Interfaces.Generic.ChangeReason.Remove)
     //            .FirstAsync(i => i.Value.Key == key)
     //            .Select(i => i.Value.Output);
                

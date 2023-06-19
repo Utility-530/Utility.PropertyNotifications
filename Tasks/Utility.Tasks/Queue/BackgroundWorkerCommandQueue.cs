@@ -2,8 +2,8 @@
 using System.Threading;
 using System.ComponentModel.Custom.Generic;
 using System.Reactive.Linq;
-using UtilityEnum;
-using UtilityInterface.NonGeneric;
+using Utility.Enums;
+using Utility.Interfaces.NonGeneric;
 using Utility.Tasks.Model;
 
 namespace Utility.Tasks
@@ -59,7 +59,7 @@ namespace Utility.Tasks
             {
                 if (command == ProcessState.Blocked)
                     Pause();
-                //else if (command == UtilityEnum.ProcessState.Ready)
+                //else if (command == Utility.Enums.ProcessState.Ready)
                 //{
                 //    _backgroundWorker.RunWorkerAsync(wa);
                 //}

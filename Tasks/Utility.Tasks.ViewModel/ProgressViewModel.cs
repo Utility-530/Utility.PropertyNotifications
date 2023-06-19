@@ -9,8 +9,8 @@ using DynamicData;
 using ReactiveUI;
 
 using Utility.Infrastructure;
-using Utility.Tasks.Model;
-using UtilityEnum;
+using Utility.Enums;
+using Utility.Progressions;
 
 namespace Utility.Tasks.ViewModel
 {

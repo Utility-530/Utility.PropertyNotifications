@@ -49,13 +49,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="ReactiveUI.Events.WPF" Version="13.2.2" />
-    <PackageReference Include="ReactiveUI.WPF" Version="13.2.2" />
+    <PackageReference Include="ReactiveUI.Events.WPF" Version="15.1.1" />
+    <PackageReference Include="ReactiveUI.WPF" Version="19.2.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
+    <ProjectReference Include="..\Utility.Progressions\Utility.Progressions.csproj" />
     <ProjectReference Include="..\Utility.Tasks.ViewModel\Utility.Tasks.ViewModel.csproj" />
   </ItemGroup>
 

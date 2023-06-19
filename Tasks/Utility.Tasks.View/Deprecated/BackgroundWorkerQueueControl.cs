@@ -24,7 +24,7 @@
 //        {
 //        }
 
-//        protected override UtilityInterface.IService<KeyValuePair<DynamicData.ChangeReason,IWorkerItem< object>>> NewItemsInitialise(IObservable<object> newitems)
+//        protected override Utility.Interfaces.IService<KeyValuePair<DynamicData.ChangeReason,IWorkerItem< object>>> NewItemsInitialise(IObservable<object> newitems)
 //        {
 //            return new BackgroundWorkerCommandQueue<object>(newitems.Select(_=>(WorkerArgument<object>)_));
 //        }

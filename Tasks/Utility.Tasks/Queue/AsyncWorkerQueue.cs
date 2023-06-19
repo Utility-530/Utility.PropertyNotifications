@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Reactive.Subjects;
 using System.Reactive.Linq;
-using UtilityEnum;
-using Utility.Tasks.Model;
+using Utility.Enums;
+using Utility.Progressions;
 
 namespace Utility.Tasks
 {

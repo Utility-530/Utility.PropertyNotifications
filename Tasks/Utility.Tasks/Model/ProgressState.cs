@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using UtilityEnum;
+using Utility.Enums;
+using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
+using Utility.Progressions;
 
 namespace Utility.Tasks.Model
 {
@@ -39,7 +42,7 @@ namespace Utility.Tasks.Model
             //if (ReferenceEquals(null, obj)) return false;
             //if (ReferenceEquals(this, obj)) return true;
             //if (obj.GetType() != this.GetType()) return false;
-            return Equals((IProgressState)obj);
+            return Equals(obj as IProgressState);
         }
 
         public bool Equals(IProgressState other)
@@ -90,6 +93,16 @@ namespace Utility.Tasks.Model
         public override string ToString()
         {
             return this.Key + " " + DateTime.Now.ToString("t") + " " + this.State;
+        }
+
+        public bool Equals(IKey<string> other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(IEquatable other)
+        {
+            throw new NotImplementedException();
         }
     }
 }

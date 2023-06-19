@@ -6,7 +6,9 @@ using System.ComponentModel.Custom.Generic;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using UtilityEnum;
+using Utility.Enums;
+using Utility.Interfaces.NonGeneric;
+using Utility.Progressions;
 
 namespace Utility.Tasks.ViewModel
 {
@@ -100,6 +102,16 @@ namespace Utility.Tasks.ViewModel
         }
 
         public void Stop()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(Interfaces.Generic.IKey<string> other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(IEquatable other)
         {
             throw new NotImplementedException();
         }

@@ -19,8 +19,6 @@ namespace DemoApp
  
             InitializeComponent();
 
-            var defaultViewLocator = Locator.Current.GetService<ReactiveUI.IViewLocator>();
-            Locator.CurrentMutable.RegisterLazySingleton<IViewLocator>(() => new ConventionBasedViewLocator(defaultViewLocator, new[] { typeof(CollectionView) }, typeof(DefaultView)));
 
             FactoryViewModelViewHost.ViewModel = Locator.Current.GetService<DemoFactoryViewModel>();
             TPLViewModelViewHost.ViewModel = Locator.Current.GetService<DemoTPLViewModel>();

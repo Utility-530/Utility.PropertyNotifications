@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
-using UtilityInterface.Generic;
+using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.ViewModel
 {
@@ -24,6 +25,16 @@ namespace Utility.ViewModel
         public int CompareTo(KeyCollection other)
         {
             return Key.CompareTo(other.Key);
+        }
+
+        public bool Equals(IKey<string> other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(IEquatable other)
+        {
+            throw new NotImplementedException();
         }
 
         public override string ToString()

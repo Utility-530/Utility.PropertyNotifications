@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
-using UtilityInterface.Generic;
+using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Tasks.ViewModel
 {
@@ -19,6 +20,16 @@ namespace Utility.Tasks.ViewModel
         public int CompareTo(object obj)
         {
             return obj is IKey<string> key ? this.Key.CompareTo(key.Key) : 0;
+        }
+
+        public bool Equals(IKey<string> other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(IEquatable other)
+        {
+            throw new NotImplementedException();
         }
     }
 
@@ -46,6 +57,16 @@ namespace Utility.Tasks.ViewModel
         public int CompareTo(object obj)
         {
             return obj is IKey<string> key ? this.Key.CompareTo(key.Key) : 0;
+        }
+
+        public bool Equals(IKey<string> other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(IEquatable other)
+        {
+            throw new NotImplementedException();
         }
     }
 }

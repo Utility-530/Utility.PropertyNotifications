@@ -40,7 +40,7 @@
 //        {        
 //        }
 
-//        protected override UtilityInterface.IService<KeyValuePair<DynamicData.ChangeReason, IWorkerItem<object>>> NewItemsInitialise(IObservable<object> newitems)
+//        protected override Utility.Interfaces.IService<KeyValuePair<DynamicData.ChangeReason, IWorkerItem<object>>> NewItemsInitialise(IObservable<object> newitems)
 //        {
 //            Check(newitems);
 //            var nis=NewItemSubject.Select(_ =>

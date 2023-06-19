@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utility.Models;
 
 namespace Utility.Infrastructure
 {
-    public record Request(string Key);
-
-    public record TaskChangeRequest(string Key, RunningState State) : Request(Key);
+    public record TaskChangeRequest(string Key, RunningState State) : Request();
 }

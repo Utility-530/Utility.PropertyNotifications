@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Utility.Tasks.Model;
+using Utility.Progressions;
 
 
 namespace Utility.Tasks.ViewModel.Meta

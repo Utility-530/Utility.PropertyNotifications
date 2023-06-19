@@ -7,7 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Utility.Infrastructure;
 using Utility.Tasks.Model;
-using UtilityEnum;
+using Utility.Enums;
+using Utility.Interfaces.NonGeneric;
+using Utility.Progressions;
 
 namespace Utility.Tasks
 {
@@ -136,6 +138,16 @@ namespace Utility.Tasks
                         {
                         });
             });
+        }
+
+        public bool Equals(Interfaces.Generic.IKey<string> other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(IEquatable other)
+        {
+            throw new NotImplementedException();
         }
 
         public void Pause()

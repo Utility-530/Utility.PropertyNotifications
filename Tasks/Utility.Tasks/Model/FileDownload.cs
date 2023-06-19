@@ -1,7 +1,8 @@
-﻿using UtilityInterface.Generic;
+﻿using Utility.Interfaces.Generic;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Tasks.Model
 {
@@ -19,5 +20,15 @@ namespace Utility.Tasks.Model
         public string Path { get; }
 
         public string Key { get; }
+
+        public bool Equals(IKey<string> other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(IEquatable other)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

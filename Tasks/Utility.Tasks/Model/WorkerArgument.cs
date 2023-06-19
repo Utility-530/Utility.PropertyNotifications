@@ -1,7 +1,8 @@
-﻿using UtilityInterface.Generic;
+﻿using Utility.Interfaces.Generic;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Tasks
 {
@@ -16,6 +17,16 @@ namespace Utility.Tasks
         public TimeSpan Timeout { get; set; }
 
         public string Key { get; set; }
+
+        public bool Equals(IKey<string> other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(IEquatable other)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

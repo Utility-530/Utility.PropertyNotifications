@@ -5,13 +5,14 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows.Input;
 using Utility.Infrastructure;
+using Utility.Models;
 
 namespace Utility.Tasks.DemoApp.ViewModel
 {
 
     public record LoginDialogCommandViewModelConfiguration(bool CanOpen) : DialogCommandViewModelConfiguration(CanOpen);
 
-    public record LoginRequest(string Key, string UserName, string Password):Request(Key);
+    public record LoginRequest(string Key, string UserName, string Password):Request();
 
     public class LoginDialogViewModel : DialogCommandViewModel<LoginViewModel>
     {

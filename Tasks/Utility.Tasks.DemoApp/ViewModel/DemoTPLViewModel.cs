@@ -13,8 +13,9 @@ using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Utility.Progress;
+using Utility.Progressions;
 using Utility.Infrastructure;
+using Utility.Progressions;
 
 namespace Utility.Tasks.DemoApp.ViewModel
 {

@@ -42,7 +42,7 @@
 //        }
 
 
-//        protected override UtilityInterface.IService<KeyValuePair<DynamicData.ChangeReason, AsyncWorkerItem<object>>> NewItemsInitialise(IObservable<object> newitems)
+//        protected override Utility.Interfaces.IService<KeyValuePair<DynamicData.ChangeReason, AsyncWorkerItem<object>>> NewItemsInitialise(IObservable<object> newitems)
 //        {
 
 //            Check(newitems);

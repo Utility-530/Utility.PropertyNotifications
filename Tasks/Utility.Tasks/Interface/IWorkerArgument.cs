@@ -1,5 +1,5 @@
 ﻿using System;
-using UtilityInterface.Generic;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Tasks
 {

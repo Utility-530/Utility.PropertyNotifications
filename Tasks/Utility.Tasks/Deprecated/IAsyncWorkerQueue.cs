@@ -1,4 +1,4 @@
-﻿using UtilityInterface.Generic;
+﻿using Utility.Interfaces.Generic;
 using Utility.Tasks.Model;
 using System;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ namespace Utility.Tasks
         //S Dequeue();
    // }
 
-  //  public interface IAsyncQueue<S>:IObservable<ProgressState> //: UtilityInterface.IService<KeyValuePair<UtilityInterface.Generic.ChangeReason, IWorkerItem<S>>>
+  //  public interface IAsyncQueue<S>:IObservable<ProgressState> //: Utility.Interfaces.IService<KeyValuePair<Utility.Interfaces.Generic.ChangeReason, IWorkerItem<S>>>
    // {
 
         //Queue<IAsyncWorkerItem<S>> Queue { get; }

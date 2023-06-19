@@ -8,6 +8,7 @@ using System.Windows;
 using MaterialDesignThemes.Wpf;
 using ReactiveUI;
 using Utility.Infrastructure;
+using Utility.Models;
 
 namespace Utility.Tasks.DemoApp.View
 {

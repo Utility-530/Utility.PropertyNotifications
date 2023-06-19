@@ -1,13 +1,13 @@
-﻿using Utility.Tasks.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Reactive;
 using System.Text;
-using UtilityInterface.Generic;
+using Utility.Interfaces.Generic;
+using Utility.Progressions;
 
 namespace Utility
 {
-    public interface IWorkerItem : IObservable<IProgressState>, IKey<string>
+    public interface IWorkerItem : System.IObservable<IProgressState>, IKey<string>
     {      
         void Start();
 
@@ -16,7 +16,7 @@ namespace Utility
         void Stop();
     }
 
-    public interface IWorkerItem<T> : IObservable<IProgressState<T>>, IKey<string>
+    public interface IWorkerItem<T> : System.IObservable<IProgressState<T>>, IKey<string>
     {
         void Start();
 

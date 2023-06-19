@@ -8,9 +8,9 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Utility.Tasks.Model;
+using Utility.Progressions;
 
-namespace Utility.Progress
+namespace Utility.Progressions
 {
     public class MultiProgressViewModel : ReactiveObject, IObserver<IProgressState>
     {

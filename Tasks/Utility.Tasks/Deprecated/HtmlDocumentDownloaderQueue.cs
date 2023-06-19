@@ -8,7 +8,7 @@ namespace Utility.Tasks
     //public  class HtmlDocumentDownloaderQueue: AsyncWorkerQueue<object> /*: INotifyPropertyChanged*/ //where T : new()
     //{
 
-    //    public ISubject<UtilityEnum.ProcessState> commands { get; } = new Subject<UtilityEnum.ProcessState>();
+    //    public ISubject<Utility.Enums.ProcessState> commands { get; } = new Subject<Utility.Enums.ProcessState>();
 
 
     //    public HtmlDocumentDownloaderQueue(IObservable<Action<Uri>> mainMethod) : base(_client.GetCompletion().Select(_ => _.UserState))
@@ -23,13 +23,13 @@ namespace Utility.Tasks
     //        React(commands);
     //    }
 
-    //    private void React(IObservable<UtilityEnum.ProcessState> commands)
+    //    private void React(IObservable<Utility.Enums.ProcessState> commands)
     //    {
     //        commands
     //        .Subscribe(command =>
     //        {
        
-    //            if (command == UtilityEnum.ProcessState.Terminated)
+    //            if (command == Utility.Enums.ProcessState.Terminated)
     //                Cancel();
     //            else
     //                throw new ArgumentOutOfRangeException("argument should be nullable bool");

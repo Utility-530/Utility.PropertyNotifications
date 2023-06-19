@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Utility.Tasks.Model;
+using Utility.Progressions;
 
-namespace Utility.Progress.ViewModel
+namespace Utility.Progressions.ViewModel
 {
     public class KeyProgressViewModel : ReactiveObject, IObserver<IProgressState>
     {

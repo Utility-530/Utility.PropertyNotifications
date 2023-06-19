@@ -11,14 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fasterflect.Netstandard" Version="1.0.9" />
-    <PackageReference Include="MaterialDesignExtensions" Version="3.3.0-a01" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="ReactiveUI.WPF" Version="13.2.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Utility.Progress\Utility.Progress.csproj" />
+    <ProjectReference Include="..\Utility.Progressions.View\Utility.Progressions.View.csproj" />
     <ProjectReference Include="..\Utility.Tasks.View\Utility.Tasks.View.csproj" />
     <ProjectReference Include="..\Utility.View\Utility.View.csproj" />
   </ItemGroup>

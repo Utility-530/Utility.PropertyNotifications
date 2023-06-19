@@ -1,7 +1,8 @@
-﻿using UtilityInterface.Generic;
+﻿using Utility.Interfaces.Generic;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Tasks.Model
 {
@@ -42,6 +43,16 @@ namespace Utility.Tasks.Model
         public string Key { get; }
 
         public DateTime? ScheduledTime { get; }
+
+        public bool Equals(IKey<string> other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(IEquatable other)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class FactoryOrder : IKey<string>
@@ -64,6 +75,16 @@ namespace Utility.Tasks.Model
         public DateTime? Scheduled { get; }
 
         public FactoryStatus State { get; }
+
+        public bool Equals(IKey<string> other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(IEquatable other)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class FactoryWrapper<TItem>
