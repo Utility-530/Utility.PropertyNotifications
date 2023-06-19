@@ -14,12 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DryIoc.dll" Version="5.4.0" />
-    <PackageReference Include="System.Reactive" Version="6.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Conversions\Utility.Conversions\Utility.Conversions.csproj" />
+    <ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Core\Utility.Nodify.Core.csproj" />
   </ItemGroup>
 
