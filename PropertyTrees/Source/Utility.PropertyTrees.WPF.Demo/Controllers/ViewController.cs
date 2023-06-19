@@ -24,10 +24,14 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         public void OnNext(StartEvent startEvent)
         {
-            var content = CreateContent(node = startEvent.Property);
-            var window = new Window { Content = content };
+            Context.Post((_) =>
+            {
+                var content = CreateContent(node = startEvent.Property);
+                var window = new Window { Content = content };
+                window.Show();
+            }, default);
             //ModernWpf.Controls.Primitives.WindowHelper.SetUseModernWindowStyle(window, true);
-            window.Show();
+        
 
             object CreateContent(ValueNode valueNode)
             {

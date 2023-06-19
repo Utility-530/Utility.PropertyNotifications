@@ -135,10 +135,14 @@ namespace Utility.PropertyTrees.WPF
 
         public Utility.Interfaces.Generic.IObservable<TreeViewResponse> OnNext(TreeViewRequest request)
         {
+       
             return Create<TreeViewResponse>(observer =>
             {
-                CompositeDisposable disposables = new();
-                var dis = BuildTree(request.TreeView, request.PropertyNode, out var disposable)
+                    CompositeDisposable disposables = new();
+                Context.Post(_ =>
+                {
+
+                    var dis = BuildTree(request.TreeView, request.PropertyNode, out var disposable)
                 .Subscribe(a =>
                 {
                     observer.OnProgress(a.Item1, a.Item2);
@@ -153,7 +157,8 @@ namespace Utility.PropertyTrees.WPF
                 {
 
                 }).DisposeWith(disposables);
-                disposables.Add(disposable);
+                    disposables.Add(disposable);
+                },default);
                 return disposables;
             });
         }
