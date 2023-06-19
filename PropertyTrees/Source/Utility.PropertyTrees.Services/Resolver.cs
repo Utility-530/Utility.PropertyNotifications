@@ -1,6 +1,7 @@
 ﻿using DryIoc;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
+using T;
 using Utility.Infrastructure;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
@@ -10,6 +11,7 @@ namespace Utility.PropertyTrees.Services
 {
     public class Resolver : BaseObject, Utility.Infrastructure.IResolver
     {
+        private readonly TaskFactory factory;
         private readonly IContainer container;
         private BaseObject[] nodes;
 
@@ -20,7 +22,7 @@ namespace Utility.PropertyTrees.Services
         BlockingCollection<IObserverIOType> observers = new();
         BlockingCollection<IObserverIOType> completed = new();
         public ILogger Logger => container.Resolve<ILogger>();
-
+        TaskScheduler _taskSched = new ConstrainedTaskScheduler() { MaximumTaskCount = 1 };
         //private readonly History history;
         public override Key Key => new(Guids.Resolver, nameof(Services.Resolver), typeof(Resolver));
 
@@ -28,6 +30,7 @@ namespace Utility.PropertyTrees.Services
 
         public Resolver(IContainer container)
         {
+            factory = new TaskFactory(_taskSched);
             this.container = container;
             //history = container.Resolve<History>();
             //outputs = this.container.Resolve<Outputs[]>();
@@ -65,7 +68,7 @@ namespace Utility.PropertyTrees.Services
             progressSubject
       .Subscribe(obs =>
       {
-    
+
       });
         }
 
@@ -95,7 +98,7 @@ namespace Utility.PropertyTrees.Services
             {
                 if (item.Unlock(guidValue))
                 {
-                    success = true;
+                    success = true;   
                     item.Send(guidValue);
                 }
             }
@@ -160,7 +163,12 @@ namespace Utility.PropertyTrees.Services
             Logger.Add(subject).Wait();
 
             //baseObject.Output = source;
-            Send(source);
+
+            factory.StartNew(() =>
+            {
+                Send(source);
+            });
+
             return replay;
         }
 

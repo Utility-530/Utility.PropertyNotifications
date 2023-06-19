@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
+    <ProjectReference Include="..\..\..\Tasks\Utility.Tasks\Utility.Tasks.csproj" />
     <ProjectReference Include="..\Utility.PropertyTrees\Utility.PropertyTrees.csproj" />
   </ItemGroup>
 
