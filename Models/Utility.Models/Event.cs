@@ -18,3 +18,8 @@ public record Response(object Value) : Effect();
 public record Request() : Cause();
 
 public record Event() : Cause();
+
+
+public record IsCompleteEvent(string Key, bool? Value) : Event();
+
+public record CloseRequest(string Key, bool Value) : Event();

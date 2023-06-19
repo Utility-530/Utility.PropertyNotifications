@@ -10,10 +10,6 @@
 		<ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
 		<ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
 		<ProjectReference Include="..\..\Observables\Utility.Observables\Utility.Observables.csproj" />
-	</ItemGroup>
-
-
-	<ItemGroup>
-		<PackageReference Include="System.Reactive" Version="5.0.0" />
+		<ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
 	</ItemGroup>
 </Project>
