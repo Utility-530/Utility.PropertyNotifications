@@ -7,12 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Kaos.Collections" Version="4.1.0" />
-    <PackageReference Include="System.Reactive" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
+    <ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
   </ItemGroup>
 
 </Project>
