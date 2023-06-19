@@ -76,11 +76,11 @@ namespace Utility.PropertyTrees.WPF.Demo
     }
 
 
-    public class RootModel2Property : RootProperty
+    public class RootViewModelsProperty : RootProperty
     {
         static readonly Guid guid = Guid.Parse("aabe5f0b-6024-4913-8017-74475096fc52");
 
-        public RootModel2Property() : base(guid)
+        public RootViewModelsProperty() : base(guid)
         {
             var data = new ViewModels();
             Data = data;
