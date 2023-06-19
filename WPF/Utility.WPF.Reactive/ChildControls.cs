@@ -17,7 +17,7 @@ public static class ChildControls
     {
         return System.Reactive.Linq.Observable.Create<T>(observer =>
         {
-            var lazy = Lazy.GetValueOrNew(dependencyObject,ControlsOnLoad(dependencyObject).SelectMany());
+            var lazy = Lazy.GetValueOrCreate(dependencyObject, () => ControlsOnLoad(dependencyObject).SelectMany());
             var dis = (name == null ?
              lazy.OfType<T>() :
              lazy.OfType<T>().Where(a => a.Name == name))
