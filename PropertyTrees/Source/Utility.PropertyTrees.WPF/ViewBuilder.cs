@@ -15,29 +15,33 @@ using Utility.PropertyTrees.Services;
 using Utility.Helpers;
 using Utility.Enums;
 using Utility.WPF.Helpers;
-using Swordfish.NET.Collections.Auxiliary;
 using Utility.WPF.Adorners.Infrastructure;
 using System.Windows.Media;
 using Orientation = System.Windows.Controls.Orientation;
+using System.Windows.Data;
+using static Utility.PropertyTrees.Events;
+using System.Windows.Controls.Primitives;
 
 namespace Utility.PropertyTrees.WPF
 {
-    public class HorizontalPanel : StackPanel
+    public class HorizontalPanel : UniformGrid
     {
         public HorizontalPanel()
         {
-            Orientation = Orientation.Horizontal;
+            Rows = 1;
         }
     }
 
     public class ViewBuilder : BaseObject
     {
         int count;
+        const int columnWidth = 140;
         private TreeViewItem columnsTreeViewItem;
-        private Dictionary<object, int> dictionary = new();
-        private Style flatstyle;
+        private Dictionary<Type, Dictionary<object, int>> typeOrderDictionary = new();
+        private Style itemsOnlyStyle, contentOnlyStyle;
         private Dictionary<int, object> cache = new();
-        private Style horizontalStyle;
+        private static Style horizontalStyle;
+        private DataTemplate headeredContentTemplate;
         private readonly DataTemplateSelector dataTemplateSelector;
 
         readonly Dictionary<PanelKey, ItemsPanelTemplate> panelsDictionary = new() {
@@ -50,6 +54,41 @@ namespace Utility.PropertyTrees.WPF
                 return new Control();
             });
 
+        static readonly DataTemplate headerTemplate = TemplateGenerator.CreateDataTemplate(() =>
+        {
+            Binding binding = new(nameof(ValueNode.Name));
+            var textBlock = new TextBlock();
+            textBlock.SetBinding(TextBlock.TextProperty, binding);
+            return textBlock;
+        });
+              
+        DataTemplate HeaderedContentTemplate
+        {
+            get
+            {
+                headeredContentTemplate ??= TemplateGenerator.CreateDataTemplate(() =>
+                {
+
+                    var headeredContentControl = new HeaderedContentControl
+                    {
+                        Style = HorizontalStyle,
+                        ContentTemplateSelector = dataTemplateSelector,
+                        //Content = node,
+                        //Tag = node.Name
+                    };
+
+                    Binding binding = new(nameof(ValueNode.Name));
+                    headeredContentControl.SetBinding(HeaderedContentControl.HeaderProperty, binding);
+
+                    Binding binding2 = new();
+                    headeredContentControl.SetBinding(HeaderedContentControl.ContentProperty, binding2);
+
+                    return headeredContentControl;
+                });
+                return headeredContentTemplate;
+            }
+        }
+
         static readonly ItemsPanelTemplate defaultTemplate = TemplateGenerator.CreateItemsPanelTemplate<StackPanel>(factory =>
         factory.SetValue(Control.BackgroundProperty, new SolidColorBrush(Colors.LightGray) { Opacity = 0.1 }));
         static readonly ItemsPanelTemplate uniformStackTemplate = TemplateGenerator.CreateItemsPanelTemplate<UniformStackPanel>(factory =>
@@ -61,24 +100,43 @@ namespace Utility.PropertyTrees.WPF
         });
 
         // Only shows the item presenter
-        private Style FlatStyle
+        private Style ItemsOnlyStyle
         {
             get
             {
-                if (flatstyle != default)
-                    return flatstyle;
-                flatstyle = new Style { TargetType = typeof(TreeViewItem) };
+                if (itemsOnlyStyle != default)
+                    return itemsOnlyStyle;
+                itemsOnlyStyle = new Style { TargetType = typeof(TreeViewItem) };
                 var template = new ControlTemplate { TargetType = typeof(TreeViewItem), };
                 var factory = new FrameworkElementFactory(typeof(ItemsPresenter));
                 factory.SetValue(Control.NameProperty, "ItemsHost");
                 template.VisualTree = factory;
                 var setter = new Setter { Property = Control.TemplateProperty, Value = template };
-                flatstyle.Setters.Add(setter);
-                return flatstyle;
+                itemsOnlyStyle.Setters.Add(setter);
+                return itemsOnlyStyle;
             }
         }
 
-        private Style HorizontalStyle
+        private Style ContentOnlyStyle
+        {
+            get
+            {
+                if (contentOnlyStyle != default)
+                    return contentOnlyStyle;
+                contentOnlyStyle = new Style { TargetType = typeof(TreeViewItem) };
+                var template = new ControlTemplate { TargetType = typeof(TreeViewItem), };
+                var factory = new FrameworkElementFactory(typeof(ContentPresenter));
+                factory.SetValue(Control.NameProperty, "PART_Header");
+                factory.SetValue(ContentPresenter.ContentSourceProperty, "Header");
+                factory.SetValue(ContentPresenter.HorizontalAlignmentProperty, HorizontalAlignment.Center);
+                template.VisualTree = factory;
+                var setter = new Setter { Property = Control.TemplateProperty, Value = template };
+                contentOnlyStyle.Setters.Add(setter);
+                return contentOnlyStyle;
+            }
+        }
+
+        private static Style HorizontalStyle
         {
             get
             {
@@ -95,13 +153,13 @@ namespace Utility.PropertyTrees.WPF
 
         static FrameworkElementFactory BuildHeaderedContentControlFactory()
         {
-            FrameworkElementFactory gridFactory = new (typeof(CustomGrid));
+            FrameworkElementFactory gridFactory = new(typeof(CustomGrid));
             gridFactory.Name = "PART_StackPanel";
-            FrameworkElementFactory headerPresenterFactory = new (typeof(ContentPresenter));
+            FrameworkElementFactory headerPresenterFactory = new(typeof(ContentPresenter));
             headerPresenterFactory.Name = "PART_HeaderPresenter";
             headerPresenterFactory.SetValue(Grid.ColumnProperty, 0);
             headerPresenterFactory.SetValue(ContentPresenter.ContentSourceProperty, "Header");
-            FrameworkElementFactory contentPresenterFactory = new (typeof(ContentPresenter));
+            FrameworkElementFactory contentPresenterFactory = new(typeof(ContentPresenter));
             contentPresenterFactory.Name = "PART_ContentPresenter";
             contentPresenterFactory.SetValue(Grid.ColumnProperty, 1);
             gridFactory.AppendChild(headerPresenterFactory);
@@ -111,7 +169,7 @@ namespace Utility.PropertyTrees.WPF
 
         private class CustomGrid : Grid
         {
-            readonly ColumnDefinition 
+            readonly ColumnDefinition
                 column1 = new() { Width = new GridLength(160) },
                 column2 = new() { Width = new GridLength(2, GridUnitType.Star) },
                 column3 = new() { Width = new GridLength(1, GridUnitType.Star) };
@@ -135,10 +193,10 @@ namespace Utility.PropertyTrees.WPF
 
         public Utility.Interfaces.Generic.IObservable<TreeViewResponse> OnNext(TreeViewRequest request)
         {
-       
+
             return Create<TreeViewResponse>(observer =>
             {
-                    CompositeDisposable disposables = new();
+                CompositeDisposable disposables = new();
                 Context.Post(_ =>
                 {
 
@@ -158,11 +216,10 @@ namespace Utility.PropertyTrees.WPF
 
                 }).DisposeWith(disposables);
                     disposables.Add(disposable);
-                },default);
+                }, default);
                 return disposables;
             });
         }
-
 
 
         public IObservable<(int, int)> BuildTree(TreeView treeView, ValueNode property, out IDisposable disposable)
@@ -176,33 +233,35 @@ namespace Utility.PropertyTrees.WPF
                     // root
                     if (prop.IsCollection == true)
                     {
-                        dictionary.Clear();
-                        treeViewItem = new TreeViewItem() { IsExpanded = true, Header = prop.Name };
-                        treeViewItem.Items.Add(columnsTreeViewItem = new() { IsExpanded = true, ItemsPanel = horizontalTemplate, Style = FlatStyle, });
+                        treeViewItem = new TreeViewItem()
+                        {
+                            IsExpanded = true,
+                            Header = prop,
+                            HeaderTemplate = headerTemplate,
+                        };
+                        treeViewItem.Items.Add(columnsTreeViewItem = new() { IsExpanded = true, ItemsPanel = horizontalTemplate, Style = ItemsOnlyStyle, });
                         items.Add(treeViewItem);
                         return treeViewItem.Items;
                     }
-                    else if (prop is ValueProperty)
+                    else if (prop is ValueProperty valueProperty)
                     {
-                        if (prop.Name == "Type")
-                        {
-
-                        }
+                        var dictionary = typeOrderDictionary.GetValueOrNew(valueProperty.Descriptor.ComponentType);                        
+           
                         if (dictionary.ContainsKey(prop.Name) == false)
                         {
                             dictionary.Add(prop.Name, dictionary.Count);
-                            columnsTreeViewItem.Items.Add(new TreeViewItem { Header = new Label { Content = prop.Name, Tag = prop.Name }, Width = 200 });
+                            columnsTreeViewItem.Items.Add(new TreeViewItem { Header = new Label { Content = prop.Name, Tag = prop.Name }, Width = columnWidth, Style = ContentOnlyStyle });
                             //columnsTreeViewItem.Items.SortDescriptions.Clear();
                             //columnsTreeViewItem.Items.SortDescriptions.Add(new SortDescription("Tag", ListSortDirection.Ascending));
 
                         }
 
-                        treeViewItem = new TreeViewItem { Header = prop, HeaderTemplateSelector = dataTemplateSelector, Width = 200 };
+                        treeViewItem = new TreeViewItem { Header = prop, HeaderTemplateSelector = dataTemplateSelector, Width = columnWidth, Style = ContentOnlyStyle };
 
                         while (items.Count < dictionary[prop.Name])
-                            items.Add(new TreeViewItem() { Header = "Remove", Width = 200 });                       
+                            items.Add(new TreeViewItem() { Header = "Remove", Width = columnWidth });
 
-                        while (items.Count > dictionary[prop.Name])
+                        if (items.Count > dictionary[prop.Name])
                             items.RemoveAt(dictionary[prop.Name]);
 
                         items.Insert(dictionary[prop.Name], treeViewItem);
@@ -213,8 +272,9 @@ namespace Utility.PropertyTrees.WPF
                     {
                         treeViewItem = new TreeViewItem
                         {
-                            Header = prop.Name,
-                            Style = FlatStyle,
+                            Header = prop,
+                            HeaderTemplate = headerTemplate,
+                            Style = ItemsOnlyStyle,
                             ItemsPanel = horizontalTemplate,
                             IsExpanded = true
                         };
@@ -237,64 +297,66 @@ namespace Utility.PropertyTrees.WPF
                 TreeViewItem treeViewItem;
                 if (node is ValueProperty)
                 {
-                    var header = new HeaderedContentControl
-                    {
-                        Header = node.Name,
-                        Style = HorizontalStyle,
-                        ContentTemplateSelector = dataTemplateSelector,
-                        Content = node,
-                        Tag = node.Name
-                    };
-
                     treeViewItem = new TreeViewItem()
                     {
-                        Header = header, /*HeaderTemplate = emptyTemplate,*/
+                        Header = node, 
+                        HeaderTemplate = HeaderedContentTemplate,
                         IsExpanded = true
                     };
                 }
                 else
                     treeViewItem = new TreeViewItem()
                     {
-                        Header = node.Name, /*HeaderTemplate = emptyTemplate,*/
+                        Header = node,
+                        HeaderTemplate = headerTemplate,
                         IsExpanded = true
                     };
 
 
-                //_ = Observe<GetViewModelResponse, GetViewModelRequest>(new(node.Key))
-                //    .Subscribe(x =>
-                //    {
-                //        foreach (var viewModel in x.ViewModels)
-                //            try
-                //            {
-                //                panelTemplate = GetPanelsTemplate(panelTemplate, viewModel);
-                //                treeViewItem.ItemsPanel = panelTemplate;
-                //                if (viewModel.IsExpanded.HasValue)
-                //                    treeViewItem.IsExpanded = viewModel.IsExpanded.Value;
-                //                if (viewModel.GridRow.HasValue)
-                //                    Grid.SetRow(treeViewItem, viewModel.GridRow.Value);
-                //                if (viewModel.GridColumn.HasValue)
-                //                    Grid.SetColumn(treeViewItem, viewModel.GridColumn.Value);
-                //                if (viewModel.GridRowSpan.HasValue)
-                //                    Grid.SetRowSpan(treeViewItem, viewModel.GridRowSpan.Value);
-                //                if (viewModel.GridColumnSpan.HasValue)
-                //                    Grid.SetColumnSpan(treeViewItem, viewModel.GridColumnSpan.Value);
-                //                if (viewModel.Dock.HasValue)
-                //                    DockPanel.SetDock(treeViewItem, (Dock)viewModel.Dock);
+                _ = Observe<GetViewModelResponse, GetViewModelRequest>(new(node.Key))
+                    .Subscribe(async x =>
+                    {
+                        Context.Post(_ =>
+                        {
+                            foreach (var viewModel in x.ViewModels)
+                                try
+                                {
+                                    treeViewItem.ItemsPanel = GetPanelsTemplate(treeViewItem.ItemsPanel, viewModel);
+                                    //if (viewModel.IsExpanded)
+                                    //treeViewItem.IsExpanded = viewModel.IsExpanded.Value;
+                                    treeViewItem.IsExpanded = viewModel.IsExpanded;
+                                    //if (viewModel.GridRow)
+                                    //Grid.SetRow(treeViewItem, viewModel.GridRow.Value);
+                                    Grid.SetRow(treeViewItem, viewModel.GridRow);
+                                    //if (viewModel.GridColumn.HasValue)
+                                    //Grid.SetColumn(treeViewItem, viewModel.GridColumn.Value);
+                                    Grid.SetColumn(treeViewItem, viewModel.GridColumn);
+                                    //if (viewModel.GridRowSpan.HasValue)
+                                    //Grid.SetRowSpan(treeViewItem, viewModel.GridRowSpan.Value);
+                                    Grid.SetRowSpan(treeViewItem, viewModel.GridRowSpan);
+                                    //if (viewModel.GridColumnSpan.HasValue)
+                                    //Grid.SetColumnSpan(treeViewItem, viewModel.GridColumnSpan.Value);
+                                    Grid.SetColumnSpan(treeViewItem, viewModel.GridColumnSpan);
+                                    //if (viewModel.Dock.HasValue)
+                                    DockPanel.SetDock(treeViewItem, (Dock)viewModel.Dock);
 
-                //                treeViewItem.Margin = new Thickness(viewModel.Left ?? 0, viewModel.Top ?? 0, viewModel.Right ?? 0, viewModel.Bottom ?? 0);
-                //                //treeViewItem.Background = new SolidColorBrush(Colors.LightGray) { Opacity = 0.2 };
-                //                if (string.IsNullOrEmpty(viewModel.DataTemplateKey) == false)
-                //                {
-                //                    node.DataTemplateKey = viewModel.DataTemplateKey;
-                //                    //var headerTemplate = (DataTemplate)Application.Current.TryFindResource(viewModel.DataTemplateKey);
-                //                    //treeViewItem.HeaderTemplate = headerTemplate;
-                //                }
-                //            }
-                //            catch (Exception ex)
-                //            {
+                                    //treeViewItem.Margin = new Thickness(viewModel.Left ?? 0, viewModel.Top ?? 0, viewModel.Right ?? 0, viewModel.Bottom ?? 0);
+                                    treeViewItem.Margin = new Thickness(viewModel.Left, viewModel.Top, viewModel.Right, viewModel.Bottom);
 
-                //            }
-                //    });
+                                    //treeViewItem.Background = new SolidColorBrush(Colors.LightGray) { Opacity = 0.2 };
+                                    if (string.IsNullOrEmpty(viewModel.DataTemplateKey) == false)
+                                    {
+                                        node.DataTemplateKey = viewModel.DataTemplateKey;
+                                        //var headerTemplate = (DataTemplate)Application.Current.TryFindResource(viewModel.DataTemplateKey);
+                                        //treeViewItem.HeaderTemplate = headerTemplate;
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+
+                                }
+                        }, default);
+                    });
 
 
 
