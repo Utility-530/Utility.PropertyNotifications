@@ -62,7 +62,21 @@ namespace Utility.Helpers.Ex
         {
             return notifyCollectionChanged
               .SelectChanges()
-              .SelectMany(x => x.NewItems?.Cast<T>() ?? new T[] { });
+              .SelectMany(x => x.NewItems?.Cast<T>() ?? Array.Empty<T>());
+        }
+
+        public static IObservable<T> SelectNewAndExistingItems<T, TCollection>(this TCollection collection) where TCollection:INotifyCollectionChanged, IEnumerable
+        {
+            return Observable.Create<T>(observer =>
+            {
+                foreach (var item in collection)
+                    observer.OnNext((T)item);
+
+                return collection
+                      .SelectChanges()
+                      .SelectMany(x => x.NewItems?.Cast<T>() ?? Array.Empty<T>())
+                      .Subscribe(observer.OnNext);
+            });
         }
 
         public static IObservable<T> SelectOldItems<T>(this INotifyCollectionChanged notifyCollectionChanged)
