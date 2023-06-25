@@ -1,6 +1,5 @@
 ﻿using Utility.Infrastructure;
 using Utility.Models;
-using static Utility.PropertyTrees.Events;
 using static Utility.Observables.Generic.ObservableExtensions;
 using Utility.Observables.NonGeneric;
 using Utility.Repos;

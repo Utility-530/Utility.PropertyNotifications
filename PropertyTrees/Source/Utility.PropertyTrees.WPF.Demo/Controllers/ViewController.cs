@@ -1,15 +1,14 @@
 ﻿using Swordfish.NET.Collections.Auxiliary;
 using Utility.Infrastructure;
 using Utility.Nodes;
-using Utility.PropertyTrees.WPF.Demo.Views;
 using Utility.PropertyTrees.WPF.Meta;
 using Utility.Observables.Generic;
-using static Utility.PropertyTrees.Events;
 using Utility.WPF.Adorners.Infrastructure;
 using Utility.WPF.Reactive;
 using NetFabric.Hyperlinq;
 using System.Collections.Specialized;
 using Utility.Helpers;
+using Utility.Nodes.Abstractions;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
@@ -33,7 +32,7 @@ namespace Utility.PropertyTrees.WPF.Demo
                 window.Show();
             }, default);
             //ModernWpf.Controls.Primitives.WindowHelper.SetUseModernWindowStyle(window, true);
-        
+
 
             object CreateContent(ValueNode valueNode)
             {
@@ -41,25 +40,43 @@ namespace Utility.PropertyTrees.WPF.Demo
                 CreateSelected(valueNode);
 
                 grid = new Grid();
-                grid.RowDefinitions.AddRange(new[]
-                {
-                    new RowDefinition { Height = new GridLength(30, GridUnitType.Auto) },
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) }
-                });
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                Grid.SetRow(treeView, 0);
+                grid.Children.Add(treeView);
 
-                var subGrid = new Grid() { };
-                var commandView = new CommandView();
-                Grid.SetRow(subGrid, 1);
-                Grid.SetRow(dataGrid, 2);
-                grid.Children.Add(commandView);
-                grid.Children.Add(subGrid);
+#if DEBUG
+                CreateDebugContent();
+#endif
+                return grid;
+            }
+
+
+
+            void CreateDebugContent()
+            {
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
+                var refreshAdorner = new Button
+                {
+                    Content = "refresh",
+                    CommandParameter = new TreeClickEvent(node),
+                    HorizontalAlignment = HorizontalAlignment.Right,
+                    VerticalAlignment = VerticalAlignment.Top
+                };
+
+                AdornerHelper.AddIfMissingAdorner(grid, refreshAdorner);
+                grid.SetValue(AdornerEx.IsEnabledProperty, true);
+
+                refreshAdorner.Click += (s, e) =>
+                {
+                    Send(new RefreshRequest());            
+                };
+
+                Grid.SetRow(dataGrid, 1);
                 grid.Children.Add(dataGrid);
-                subGrid.Children.Add(treeView);
 
                 var adorner = new Button
                 {
-                    Content = "click",
+                    Content = "update",
                     CommandParameter = new TreeClickEvent(node),
                     HorizontalAlignment = HorizontalAlignment.Right,
                     VerticalAlignment = VerticalAlignment.Top
@@ -68,9 +85,8 @@ namespace Utility.PropertyTrees.WPF.Demo
                 AdornerHelper.AddIfMissingAdorner(dataGrid, adorner);
                 dataGrid.SetValue(AdornerEx.IsEnabledProperty, true);
                 adorner.Click += Adorner_Click;
-
-                return grid;
             }
+
         }
 
         private void CreateSelected(ValueNode valueNode)
@@ -83,17 +99,16 @@ namespace Utility.PropertyTrees.WPF.Demo
                     //System.Windows.Input.CommandManager.InvalidateRequerySuggested();
                 });
 
-
-            var adorner = new Button
-            {
-                Content = "click",
-                CommandParameter = new TreeClickEvent(node),
-                HorizontalAlignment = HorizontalAlignment.Right,
-                VerticalAlignment = VerticalAlignment.Top
-            };
+            //var adorner = new Button
+            //{
+            //    Content = "click",
+            //    CommandParameter = new TreeClickEvent(node),
+            //    HorizontalAlignment = HorizontalAlignment.Right,
+            //    VerticalAlignment = VerticalAlignment.Top
+            //};
 
             treeView
-                .MouseDoubleClickTreeSelections()
+                .MouseDoubleClickTreeViewSelections()
                 .Subscribe(a =>
                 {
 
@@ -107,9 +122,8 @@ namespace Utility.PropertyTrees.WPF.Demo
                             if (collection is not INotifyCollectionChanged collectionChanged)
                             {
                                 //refNode.RefreshAsync();
-                            }                            
+                            }
                         }
-
                     }
                     if (a is { Header: ValueNode valueNode } treeviewItem)
                     {
@@ -123,7 +137,7 @@ namespace Utility.PropertyTrees.WPF.Demo
                                     this.response = response;
                                     dataGrid.Visibility = Visibility.Visible;
                                     //dataGrid.ItemsSource = response.ViewModels;
-                                    var root = new RootProperty(Guid.NewGuid()) { Data =new { ViewModels = response.ViewModels } };
+                                    var root = new RootProperty(Guid.NewGuid()) { Data = new { response.ViewModels } };
                                     Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(dataGrid, root))
                                     .Subscribe(a =>
                                     {
@@ -133,23 +147,40 @@ namespace Utility.PropertyTrees.WPF.Demo
                                 }, default);
                                 //dataGrid.ItemsSource = response.ViewModels;
                             });
-                    }          
+                    }
                 });
 
-            //    Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(treeView, valueNode))
-            //.Subscribe(a =>
-            //{
-            //    //modelViewModel.IsConnected = true;
-            //    //System.Windows.Input.CommandManager.InvalidateRequerySuggested();
-            //});
-        }
-
-        private void CreateSelected2()
-        {
-            Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(treeView, new RootViewModelsProperty()))
+            treeView
+                .MouseSingleClickTreeViewSelections()
                 .Subscribe(a =>
                 {
+                    if (a is { Header: INode { } node })
+                    {
+                        Send(new SelectionChange(a, node));
+                    }
                 });
+
+            treeView
+                .MouseMoveTreeViewSelections()
+                .Subscribe(a =>
+                {
+                    if (a.item is { Header: INode { } node })
+                    {
+                        Structs.Point sPoint = new(a.point.X, a.point.Y);
+                        Send(new OnHoverChange(a.item, node, true, sPoint));
+                    }
+                });
+
+            treeView
+                .MouseHoverLeaveTreeViewSelections()
+                .Subscribe(a =>
+                {
+                    if (a is { Header: INode { } node })
+                    {
+                        Send(new OnHoverChange(a, node, false, default));
+                    }
+                });
+
         }
 
         private void Adorner_Click(object sender, RoutedEventArgs e)
@@ -163,6 +194,8 @@ namespace Utility.PropertyTrees.WPF.Demo
         public void OnNext(RefreshRequest request)
         {
             treeView.Items.Clear();
+            Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(treeView, valueNode))
+            .Subscribe();
             //Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(treeView, node))
             //    .Subscribe(a =>
             //    {

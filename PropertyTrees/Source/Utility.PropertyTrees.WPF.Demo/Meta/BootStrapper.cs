@@ -37,7 +37,11 @@ internal class BootStrapper : BaseObject
         container.RegisterMany<PropertyStore>(made: Parameters.Of.Type<IRepository>(serviceKey: nameof(SqliteRepository)));
         container.RegisterMany<ViewModelStore>(made: Parameters.Of.Type<IRepository>(serviceKey: nameof(LiteDBRepository)));
         container.RegisterMany<PropertyActivator>();
+        container.RegisterMany<MethodParameterActivator>();
+        container.RegisterMany<MethodsBuilder>();
+        container.RegisterMany<MethodActivator>();
         container.RegisterMany<ChildPropertyExplorer>();
+        container.RegisterMany<MethodsExplorer>();
         container.RegisterMany<InterfaceController>();
 
         container.RegisterMany<DescriptorFilterController>();
@@ -91,46 +95,8 @@ public class RootModelProperty : RootProperty
 
     public RootModelProperty() : base(guid)
     {
-        Data = new RootModel();
+        Data = new HUD_Simulator();
     }
 }
 
 
-
-
-
-//private Outputs[] Outputs => new[]
-//{
-//        new Outputs(new DynamicConnection(), new Connection[] { new Connection<PropertyStore>() {}, new Connection<ChildPropertyExplorer>() /*new Connection<PropertyController>() { }*/ }),
-//        new Outputs(new Connection<LightBootStrapper>(), new Connection[] { new Connection<PropertyActivator>() }),
-//        //new Outputs(new Connection<HistoryController>(), new IConnection[] { new Connection<HistoryViewModel>(container) { IsPriority = true, SkipContext =false },  new Connection<Playback>(container) { IsPriority = true, SkipContext =false } }),
-//        //new Outputs(new Connection<HistoryViewModel>(), new IConnection[] { new Connection<Playback>(container) { IsPriority = true,  SkipContext =false } }),
-//        //new Outputs(new Connection<Playback>(), new Connection[] { new Connection<History>() {  } }),
-//        new Outputs(new Connection<PropertyActivator>(), new Connection [] {
-//            new Connection<InterfaceController>() {  },
-//            new Connection<LightBootStrapper>() { },
-//            new Connection<ChildPropertyExplorer>(){ },
-//            new Connection<ViewModelEngine>(),
-//            new Connection<PropertyStore>(),
-//            new Connection<ViewBuilder>(),
-//            new Connection<ModelViewModel>(),
-//        }),
-//        new Outputs(new Connection<InterfaceController>(), new Connection[] {  new Connection<PropertyActivator>(){  } }),
-//        new Outputs(new Connection<ChildPropertyExplorer>(), new Connection[] { new DynamicConnection() { }, new Connection<PropertyActivator>() { } }),
-
-//        //new Outputs(new Connection<Utility.Infrastructure.Resolver>(), new IConnection[]{ new Connection<Utility.Graph.Shapes.GraphController>(container){ IsPriority = true, SkipContext = false } }),
-//        new Outputs(new Connection<ViewModelEngine>(), new Connection[]{ new Connection<PropertyActivator>(){ } }),
-//        new Outputs(new Connection<PropertyStore>(), new Connection[]{ new Connection<PropertyActivator>(){  }, new DynamicConnection(){  } }),
-//        new Outputs(new Connection<ModelController>(), new Connection[]{
-//            new Connection<ViewBuilder>(){  },
-//            new Connection<UdpServerController>(){  } ,
-//            new Connection<PropertyActivator>(){  }
-//        }),
-//        new Outputs(new Connection < ViewBuilder > (),
-//            new Connection[]{
-//            new Connection<ModelViewModel>( ){  },
-//            new Connection<PropertyActivator>( ){},
-//        }),
-//        new Outputs(new Connection<UdpServerController>(), new Connection[] { new Connection<ModelViewModel>() {  } }),
-
-//    };

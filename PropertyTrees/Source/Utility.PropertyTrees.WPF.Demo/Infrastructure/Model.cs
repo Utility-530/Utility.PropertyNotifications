@@ -5,26 +5,13 @@ using Utility.PropertyTrees.Demo.Model;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
-    public class RootModel : INotifyPropertyChanged
+    public class HUD_Simulator 
     {
-        private string jSON;
 
-        public GameModel GameModel { get; set; }
+        public GameModel GameModel { get; set; } = new();
 
-        public Server Server { get; set; }
+        public ServerConnection ServerConnection { get; set; } = new();
 
-        public Events Events { get; set; }
-
-        public string JSON
-        {
-            get => jSON; set
-            {
-                jSON = value;
-                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JSON)));
-            }
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
     }
 
     public class Commands : ReadOnlyCollection<Icon>
@@ -38,9 +25,10 @@ namespace Utility.PropertyTrees.WPF.Demo
     {
     }
 
-    public class Server : INotifyPropertyChanged
+    public class ServerConnection : INotifyPropertyChanged
     {
         private bool isConnected;
+        private ServerRequest serverRequest;
 
         public string IP { get; set; }
         public int Port { get; set; }
@@ -54,8 +42,26 @@ namespace Utility.PropertyTrees.WPF.Demo
 
             }
         }
-        public event PropertyChangedEventHandler? PropertyChanged;
 
+        public ServerRequest ServerRequest
+        {
+            get => serverRequest; 
+            private set
+            {
+                serverRequest = value;
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ServerRequest)));
+
+            }
+        }
+
+        public Events Events { get; set; }
+
+        public void Connect()
+        {
+            ServerRequest = new ServerRequest(IP, Port);
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 
     public class AppItems : List<AppItem>
@@ -89,6 +95,49 @@ namespace Utility.PropertyTrees.WPF.Demo
 
     public class ViewModels
     {
-        public ObservableCollection<ViewModel> Collection { get; set; } = new ObservableCollection<ViewModel>();
+        public string Name { get; set; }
+        public ViewModelsCollection Collection { get; set; } = new ();
+    }
+
+    public class ViewModelsCollection: ObservableCollection<ViewModel>
+    {
+        public void MoveUp(ViewModel ViewModel)
+        {
+            var oldIndex = this.IndexOf(ViewModel);
+            Move(oldIndex, oldIndex-1);
+        }
+
+        public void MoveDown(ViewModel ViewModel)
+        {
+            var oldIndex = this.IndexOf(ViewModel);
+            Move(oldIndex, oldIndex + 1);
+        }
+    }
+
+    public class RootMethodsProperty : RootProperty
+    {
+        static readonly Guid guid = Guid.Parse("ffbe5f0b-6024-4913-8017-74475096fc52");
+
+        public RootMethodsProperty() : base(guid)
+        {
+            var data = new Wrapper();
+            Data = data;
+        }
+    }
+
+    public class Wrapper
+    {
+        public Methods Methods { get; set; }
+    }
+
+    public class Methods
+    {
+        public void Foo()
+        {
+        }    
+
+        public void Bar()
+        {
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using Utility.Helpers.Ex;
 
 namespace Utility.PropertyTrees.Demo.Model
 {
@@ -14,9 +16,56 @@ namespace Utility.PropertyTrees.Demo.Model
         //public Game EndGame { get; set; }
 
         //public PrizeWheelUpdate PrizeWheelUpdate { get; set; }
+       
+        public ScreenSaverModel ScreenSaver { get; set; } = new();
+        public PrizeWheelModel PrizeWheel { get; set; } = new(); 
+        public LeaderboardModel Leaderboard { get; set; } = new();
+    }
+
+
+    public class ScreenSaverModel: JsonModel
+    {
         public ScreenSaver ScreenSaver { get; set; }
+
+        public void Send()
+        {
+            JSON = JsonHelper.Serialize(ScreenSaver);
+        }
+    }   
+    
+    public class PrizeWheelModel: JsonModel
+    {
         public PrizeWheel PrizeWheel { get; set; }
+
+        public void Send()
+        {
+            JSON = JsonHelper.Serialize(PrizeWheel);
+        }
+    }  
+    
+    public class LeaderboardModel: JsonModel
+    {
         public Leaderboard Leaderboard { get; set; }
+
+        public void Send()
+        {
+            JSON = JsonHelper.Serialize(Leaderboard);
+        }
+    }
+
+    public class JsonModel: INotifyPropertyChanged
+    {
+        private string jSON;
+        public string JSON
+        {
+            get => jSON; set
+            {
+                jSON = value;
+                this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(JSON)));
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 
     //public class Game

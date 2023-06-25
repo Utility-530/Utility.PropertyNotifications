@@ -1,46 +1,23 @@
-using DynamicData;
 using System.Collections.Specialized;
-using System.Windows.Input;
-using Utility.Commands;
 using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
 using Utility.Infrastructure;
 using Utility.Models;
 using Utility.Nodes;
+using Utility.Nodes.Abstractions;
 using Utility.Observables.Generic;
 using Utility.PropertyTrees.Abstractions;
 using Utility.PropertyTrees.Infrastructure;
 
 namespace Utility.PropertyTrees
 {
-
-
+    using CType = Utility.Models.ChangeType;
 
     public class ReferenceProperty : PropertyBase
     {
         public ReferenceProperty(Guid guid) : base(guid)
         {
-            //AddCommand = new ObservableCommand(async o =>
-            //{
-            //    o.OnNext(false);
-
-            //    if (Data is IList collection)
-            //    {
-            //        var type = Data.GetType().GenericTypeArguments().SingleOrDefault();
-            //        var instance = Activator.CreateInstance(type);
-            //        collection.Add(instance);
-            //        if (Data is not INotifyCollectionChanged collectionChanged)
-            //        {
-            //            RefreshAsync();
-            //        }
-            //        //await RefreshAsync();
-            //    }
-
-            //    o.OnNext(true);
-            //});
         }
-
-        //public ICommand AddCommand { get; }
 
         public override string Name => Descriptor?.Name ?? "Descriptor not set";
 
@@ -59,10 +36,9 @@ namespace Utility.PropertyTrees
 
         // collection
 
-        public virtual System.Type? CollectionItemPropertyType => PropertyType.IsArray ? PropertyType.GetElementType() : IsCollection ? PropertyType.GenericTypeArguments().SingleOrDefault() : null;
+        public virtual Type? CollectionItemPropertyType => PropertyType.IsArray ? PropertyType.GetElementType() : IsCollection ? PropertyType.GenericTypeArguments().SingleOrDefault() : null;
         public virtual int CollectionCount => Value is IEnumerable enumerable ? enumerable.Cast<object>().Count() : 0;
         public virtual bool IsCollectionItemValueType => CollectionItemPropertyType != null && CollectionItemPropertyType.IsValueType;
-
 
         public override object Content => Name;
 
@@ -74,39 +50,45 @@ namespace Utility.PropertyTrees
             }
             set => throw new Exception("aa 4 43321``");
         }
-
         protected override async Task<bool> RefreshAsync()
         {
             if (IsCollection)
             {
-                if (flag == true)
-                {
-                    await Task.Delay(1000);
-                    //disposable?.Dispose();
-                    flag = false;
-                    return await Task.FromResult(true);
-                }
-                flag = true;
-
-                disposable = Observe<ChildrenResponse, ChildrenRequest>(new ChildrenRequest(Guid, Data))
-                            .Subscribe(a =>
+                bool flag = false;
+                disposable = Observe<ChildrenResponse, ChildrenRequest>(new ChildrenRequest(Guid, Data, Descriptor))
+                            .Subscribe(response =>
                             {
-                                if (a.Include)
+                                if (response.NodeChange.Type == CType.Add)
                                 {
-                                    if (a.PropertyNode == null)
+                                    if (response.NodeChange.Value == null)
                                     {
                                         throw new Exception("dsv2s331hj f");
                                     }
 
-                                    if (_children.Any(ass => a.PropertyNode.Key.Guid == (ass as ValueNode)?.Key.Guid) == false)
-                                    {
-                                        a.PropertyNode.Parent = this;
-                                        _children.Add(a.PropertyNode);
-                                    }
-                                }                  
+                                    Add(response);
+                                }
+                                if (response.NodeChange.Type == CType.Remove)
+                                {
+                                    Remove(response);
+                                    return;
+                                }
+                                if (response.NodeChange.Type == CType.Reset)
+                                {
+                                    Reset(response);
+                                    return;
+                                }
+                                else
+                                {
+
+                                }
                                 // if no more children arriving soon start adding from memory 
                                 if (_children.Count == (Data as IEnumerable)?.Count())
                                 {
+
+                                    if (flag == true)
+                                    {
+                                    }
+                                    flag = true;
                                     if (typeof(INotifyCollectionChanged).IsAssignableFrom(PropertyType) == false)
                                     {
                                         _children.Complete();
@@ -121,45 +103,103 @@ namespace Utility.PropertyTrees
                 return true;
             }
             return await base.RefreshAsync();
-        }
 
-        private void RefreshOtherChildren(Type componentType, Type genericType)
-        {
-            this
-            .Observe<FindPropertyResponse, FindPropertyRequest>(new FindPropertyRequest(new Key(this.Guid, default, genericType)))
-            .Subscribe(response =>
+            void Add(ChildrenResponse response)
             {
-                foreach (Key item in response.Value as IEnumerable)
+                if (_children.Cast<INode>().Any(ass => response.NodeChange.Value.Key.Equals(ass.Key)) == false)
                 {
-                    var switchType = Switch(Abstractions.PropertyType.CollectionItem | PropertyDescriptorHelper.GetPropertyType(item.Type));
-                    if (_children.Any(ass => item.Guid == (ass as ValueNode)?.Key.Guid) == false)
-                        Observe<ObjectCreationResponse, ObjectCreationRequest>(new(switchType, new[] { typeof(ValueNode), typeof(BaseObject) }, new object[] { item.Guid }))
-                        .Subscribe(a =>
-                        {
-                            var child = CreateChild(a);
-                            if (Data is IList collection)
-                                collection.Add(child.Data);
-                            child.Parent = this;    
-                            _children.Add(child);
-                        });
-                    else
-                    {
-
-                    }
+                    response.NodeChange.Value.Parent = this;
+                    _children.Add(response.NodeChange.Value);
                 }
-            });
+            }
 
-            PropertyBase CreateChild(ObjectCreationResponse a)
+            void Remove(ChildrenResponse response)
             {
-                var propertyBase = a.Value as PropertyBase;
-                var item = Activator.CreateInstance(genericType, Array.Empty<object>());
-                propertyBase.Data = item;
-                propertyBase.Descriptor = new CollectionItemDescriptor(item, _children.Count, componentType);
-                return propertyBase;
+                List<object> removals = new();
+                foreach (PropertyBase child in _children)
+                {
+                    if (child.Descriptor.Name == response.SourceChange.Value?.Name)
+                        removals.Add(child);
+                }
+                foreach (var remove in removals)
+                {
+                    _children.Remove(remove);
+                    if (remove is not INode { Key: Key key })
+                    {
+                        throw new Exception("sd w33!!£ £");
+                    }
+                    UpdateStorage(key);
+                }
+            }
+
+            void Reset(ChildrenResponse response)
+            {
+                List<object> removals = new();
+                foreach (PropertyBase child in _children)
+                {
+                    removals.Add(child);
+                }
+                foreach (var remove in removals)
+                {
+                    _children.Remove(remove);
+                    if (remove is not INode { Key: Key key })
+                    {
+                        throw new Exception("sd w33!!£ £");
+                    }
+                    UpdateStorage(key);
+                }
+            }
+
+            void RefreshOtherChildren(Type componentType, Type genericType)
+            {
+                this
+                .Observe<FindPropertyResponse, FindPropertyRequest>(new FindPropertyRequest(new Key(this.Guid, default, genericType)))
+                .Subscribe(response =>
+                {
+                    foreach (Key key in response.Value as IEnumerable ?? throw new Exception("FVDDSF Sss"))
+                    {
+                        if (_children.Cast<INode>().Any(c => c.Key.Equals(key)))
+                        {
+                            continue;
+                        }
+                        var switchType = Switch(Abstractions.PropertyType.CollectionItem | PropertyDescriptorHelper.GetPropertyType(key.Type));
+                        if (_children.Any(ass => key.Guid == (ass as ValueNode)?.Key.Guid) == false)
+                            Observe<ObjectCreationResponse, ObjectCreationRequest>(new(switchType, new[] { typeof(ValueNode), typeof(BaseObject) }, new object[] { key.Guid }))
+                            .Subscribe(a =>
+                            {
+                                var child = CreateChild(a, key.Name);
+                                if (Data is IList collection)
+                                    collection.Add(child.Data);
+                                child.Parent = this;
+                                _children.Add(child);
+                            });
+                        else
+                        {
+                        }
+                    }
+                });
+
+                PropertyBase CreateChild(ObjectCreationResponse response, string name)
+                {
+                    var propertyBase = response.Value as PropertyBase;
+                    var item = Activator.CreateInstance(genericType, Array.Empty<object>());
+                    propertyBase.Data = item;
+                    propertyBase.Descriptor = new CollectionItemDescriptor(item, CollectionItemDescriptor.ToIndex(name), componentType);
+                    return propertyBase;
+                }
             }
         }
 
-        public override bool HasChildren => IsCollection || Data.GetType().GetProperties().Any();
+
+        private void UpdateStorage(Key key)
+        {
+            this
+            .Observe<SetPropertyResponse, SetPropertyRequest>(new SetPropertyRequest(key, null))
+            .Subscribe(response =>
+            {
+            });
+        }
+        public override bool HasChildren => IsCollection || Descriptor.GetChildProperties().Count > 0 || PropertyType.GetMethods().Any();
 
         public override string ToString()
         {

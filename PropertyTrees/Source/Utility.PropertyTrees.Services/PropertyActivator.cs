@@ -8,7 +8,6 @@ using Utility.Observables.NonGeneric;
 using Utility.Observables.Generic;
 using System.Reactive.Disposables;
 using System.ComponentModel;
-using static Utility.PropertyTrees.Events;
 using Utility.PropertyTrees.Abstractions;
 
 namespace Utility.PropertyTrees.Services

@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel;
+using System.Reflection;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+using Utility.Nodes.Abstractions;
+using Utility.Structs;
 
 namespace Utility.Infrastructure;
 
@@ -20,10 +23,15 @@ public record HistoryRequest(Guid Key, Key Base, object Value, ICollection<Key> 
 public record DirectionEvent() : Event();
 public record ForwardEvent() : Event();
 public record BackEvent() : Event();
-
-
 public record ObjectCreationRequest(Type Type, Type[] RegistrationTypes, object[] Args) : Request;
 public record ObjectCreationResponse(object Instance) : Response(Instance);
-
 public record TypeRequest(Type Type) : Request;
 public record TypeResponse(Type Type) : Response(Type);
+public record MethodParametersRequest(MethodInfo MethodInfo, object Data) : Request;
+public record MethodParametersResponse(object?[]? Parameters) : Response(Parameters);
+
+public record SelectionChange(object Source, INode Node) : Effect();
+public record OnHoverChange(object Source, INode Node, bool IsMouseOver, Point Point) : Effect();
+public record TreeViewItemChange(object Source, INode Node) : Effect();
+
+public record RefreshRequest() : Request;

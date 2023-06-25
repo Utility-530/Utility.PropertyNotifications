@@ -6,7 +6,6 @@ using static Utility.Observables.Generic.ObservableExtensions;
 using Utility.Observables.NonGeneric;
 using System.Reactive.Disposables;
 using Utility.Infrastructure;
-using static Utility.PropertyTrees.Events;
 using LiteDB;
 using Utility.Enums;
 using System.Collections;

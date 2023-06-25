@@ -34,23 +34,4 @@ namespace Utility.PropertyTrees
             OnPropertyChanged(nameof(Value));
         }
     }
-
-    // TODO needs work
-
-    public class TypeProperty : ValueProperty
-    {
-        public TypeProperty(Guid guid) : base(guid)
-        {
-        }
-
-        public override Type PropertyType => Descriptor.PropertyType;
-
-    }
-
-    public class MethodProperty : ValueProperty
-    {
-        public MethodProperty(Guid guid) : base(guid)
-        {
-        }
-    }
 }

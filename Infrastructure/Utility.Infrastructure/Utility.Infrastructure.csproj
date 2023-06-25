@@ -20,6 +20,7 @@
 		<ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
 		<ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
 		<ProjectReference Include="..\..\Reactive\Utility.Reactive\Utility.Reactive.csproj" />
+		<ProjectReference Include="..\..\Structs\Utility.Structs\Utility.Structs.csproj" />
 		<ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
 	</ItemGroup>
 	<ItemGroup>

@@ -3,6 +3,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Utility.Nodes;
+using Utility.Nodes.Abstractions;
 using Utility.Observables.NonGeneric;
 
 namespace Utility.PropertyTrees.Services
@@ -14,7 +15,7 @@ namespace Utility.PropertyTrees.Services
             Started, Completed
         }
 
-        public static IObservable<(int, int)> ExploreTree<T>(T items, Func<T, PropertyBase, T> func, ValueNode property, out IDisposable disposable)
+        public static IObservable<(int, int)> ExploreTree<T>(T items, Func<T, INode, T> funcAdd, Action<T, INode> funcRemove, INode property, out IDisposable disposable)
         {
             Subject<State> subject = new();
             int totalCount = 1;
@@ -36,23 +37,23 @@ namespace Utility.PropertyTrees.Services
                      }
                  });
 
-            _ = ExploreTree(items, func, property, subject);
+            _ = ExploreTree(items, funcAdd, funcRemove, property, subject);
 
             return progress;
         }
 
-        public static IObservable<(int, int)> ExploreTree(ValueNode propertyNode, out IDisposable disposable)
+        public static IObservable<(int, int)> ExploreTree(INode propertyNode, out IDisposable disposable)
         {
-            return ExploreTree(new List<object>(), (a, b) => a, propertyNode, out disposable);
+            return ExploreTree(new List<object>(), (a, b) => a, (a, b) => { }, propertyNode, out disposable);
 
         }
 
-        public static IDisposable ExploreTree<T>(T items, Func<T, PropertyBase, T> func, ValueNode property, Subject<State> state)
+        public static IDisposable ExploreTree<T>(T items, Func<T, INode, T> funcAdd, Action<T, INode> funcRemove, INode property, Subject<State> state)
         {
             state.OnNext(State.Started);
 
-            if (property is PropertyBase @base)
-                items = func(items, @base);
+            if (property is INode @base)
+                items = funcAdd(items, @base);
 
             var disposable = property
                 .Children
@@ -62,9 +63,14 @@ namespace Utility.PropertyTrees.Services
                         throw new Exception("rev re");
 
                     state.OnNext(State.Started);
-                    foreach (PropertyBase node in SelectNewItems<PropertyBase>(args))
+                    foreach (INode node in SelectNewItems<INode>(args))
                     {
-                        _ = ExploreTree(items, func, node, state);
+                        _ = ExploreTree(items, funcAdd, funcRemove, node, state);
+                    }
+                    foreach (INode node in SelectOldItems<INode>(args))
+                    {
+                        funcRemove(items, node);
+                        //_ = ExploreTree(items, func, node, state);
                     }
                     state.OnNext(State.Completed);
                 },
@@ -80,11 +86,11 @@ namespace Utility.PropertyTrees.Services
             return disposable;
         }
 
-        public static IObservable<ValueNode> FindNode(ValueNode node, Predicate<ValueNode> predicate, out IDisposable disposable)
+        public static IObservable<INode> FindNode(INode node, Predicate<INode> predicate, out IDisposable disposable)
         {
-            ReplaySubject<ValueNode> list = new(1);
+            ReplaySubject<INode> list = new(1);
             CompositeDisposable composite = new();
-            ExploreTree(list, (a, b) => { if (predicate(b)) { a.OnNext(b); composite.Dispose(); a.OnCompleted(); } return a; }, node, out IDisposable _dis)
+            ExploreTree(list, (a, b) => { if (predicate(b)) { a.OnNext(b); composite.Dispose(); a.OnCompleted(); } return a; }, (a,b)=> { }, node, out IDisposable _dis)
                 .Subscribe(a =>
                 {
                 }, list.OnCompleted).DisposeWith(composite);
@@ -93,11 +99,11 @@ namespace Utility.PropertyTrees.Services
             return list;
         }
 
-        public static IObservable<ValueNode> FindNodes(ValueNode node, Predicate<ValueNode> predicate)
+        public static IObservable<INode> FindNodes(INode node, Predicate<INode> predicate)
         {
-            Subject<ValueNode> list = new();
+            Subject<INode> list = new();
 
-            ExploreTree(list, (a, b) => { if (predicate(b)) a.OnNext(b); return a; }, node, out IDisposable disposable).Subscribe(a =>
+            ExploreTree(list, (a, b) => { if (predicate(b)) a.OnNext(b); return a; }, (a, b) => { }, node, out IDisposable disposable).Subscribe(a =>
             {
             }, list.OnCompleted);
             return list;
@@ -106,6 +112,11 @@ namespace Utility.PropertyTrees.Services
         private static IEnumerable<T> SelectNewItems<T>(NotifyCollectionChangedEventArgs args)
         {
             return args.NewItems?.Cast<T>() ?? Array.Empty<T>();
+        }
+
+        private static IEnumerable<T> SelectOldItems<T>(NotifyCollectionChangedEventArgs args)
+        {
+            return args.OldItems?.Cast<T>() ?? Array.Empty<T>();
         }
     }
 }

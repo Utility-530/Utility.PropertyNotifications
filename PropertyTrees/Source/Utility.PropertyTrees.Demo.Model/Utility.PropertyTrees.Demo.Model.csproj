@@ -11,6 +11,7 @@
 	</ItemGroup>
 	
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
 		<ProjectReference Include="..\..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
 	</ItemGroup>
 

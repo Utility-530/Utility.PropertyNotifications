@@ -1,9 +1,10 @@
 ﻿using Netly;
 using Utility.Models;
+using Utility.Nodes.Abstractions;
 using Utility.PropertyTrees;
 
 public record StartEvent(RootProperty Property):Event;
-public record RefreshRequest() : Request;
+
 public record ConnectRequest() : Request;
 public record ScreensaverRequest() : Request;
 public record PrizeWheelRequest() : Request;

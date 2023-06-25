@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Text.RegularExpressions;
 
 namespace Utility.PropertyTrees.Infrastructure
 {
@@ -46,6 +47,8 @@ namespace Utility.PropertyTrees.Infrastructure
         {
             throw new NotImplementedException();
         }
+
+        public static int ToIndex(string name) => int.Parse(Regex.Matches(name, @"\[(\d*)\]").First().Groups[1].Value);
     }
 }
 

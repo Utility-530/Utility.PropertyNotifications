@@ -6,12 +6,25 @@ using System.Collections.Specialized;
 using System.Windows.Input;
 using Utility.Commands;
 using Utility.Interfaces.NonGeneric;
+using Utility.Collections;
+using Utility.Observables.Generic;
+using Utility.Helpers.NonGeneric;
+using Utility.Nodes.Abstractions;
+using Utility.Models;
+using System.Reflection;
+using Utility.Conversions;
 
 namespace Utility.PropertyTrees
 {
+    using CType = ChangeType;
+
     public abstract class PropertyBase : ValueNode, IProperty
     {
-        Command<object> command;
+        private Command<object> command;
+        private Collection _methods = new();
+        protected Dictionary<string, MethodNode> nodes = new();
+        bool isMethodsComplete = false, isRefreshMethodsRunnings = false;
+
         public PropertyBase(Guid guid) : base(guid)
         {
             command = new Command<object>(a =>
@@ -22,6 +35,9 @@ namespace Utility.PropertyTrees
                     throw new Exception("sd sss");
             });
         }
+
+        public override Key Key => new(Guid, Name, PropertyType);
+
         public bool IsException => PropertyType == typeof(Exception);
         public bool IsCollection => PropertyType != null && PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(PropertyType);
         public bool IsObservableCollection => PropertyType != null && typeof(INotifyCollectionChanged).IsAssignableFrom(PropertyType);
@@ -39,14 +55,99 @@ namespace Utility.PropertyTrees
 
         protected override async Task<bool> RefreshAsync()
         {
-            if ((PropertyType.IsValueType || PropertyType == typeof(string)) != true)
-                return await base.RefreshAsync();
+            flag = true;
 
-            _children.Complete();
-            return await Task.FromResult(false);
+            disposable = Observe<ChildrenResponse, ChildrenRequest>(new ChildrenRequest(Guid, Data, Descriptor))
+                .Subscribe(response =>
+                {
+                    if (response.NodeChange.Type == CType.Add)
+                    {
+                        if (response.NodeChange == null)
+                        {
+                            throw new Exception("dsv2s331hj f");
+                        }
+                        if (_children.Any(ass => response.NodeChange.Value.Key.Equals((ass as INode)?.Key)) == false)
+                        {
+                            response.NodeChange.Value.Parent = this;
+                            _children.Add(response.NodeChange.Value);
+                        }
+                    }
+
+                    if (_children.Count == (Data as IEnumerable)?.Count())
+                    {
+                        _children.Complete();
+                    }
+                }, 
+                _children.Complete);
+            //else
+            //    _children.Complete();
+
+            return await Task.FromResult(true);
         }
 
+        public virtual Type PropertyType => Data.GetType();
+
+        protected override object ChangeType(object value)
+        {
+            if (PropertyType == null)
+            {
+                throw new ArgumentNullException("type");
+            }
+
+            if (ConversionHelper.TryChangeType(value, PropertyType, CultureInfo.CurrentCulture, out var changedValue))
+            {
+                return changedValue;
+            }
+
+            throw new ArgumentException("Cannot convert value {" + value + "} to type '" + PropertyType.FullName + "'.");
+        }
+
+
+
         public bool IsString => PropertyType == typeof(string);
+
+
+        public virtual IObservable Methods
+        {
+            get
+            {
+                if (isMethodsComplete == false && isRefreshMethodsRunnings == false)
+                    _ = RefreshMethodsAsync();
+                return _methods;
+            }
+        }
+
+
+        protected virtual async Task<bool> RefreshMethodsAsync()
+        {
+            isRefreshMethodsRunnings = true;
+            if (Descriptor.IsValueOrStringProperty() == false)
+                disposable = Observe<MethodsResponse, MethodsRequest>(new MethodsRequest(Guid, Data, (Parent as PropertyBase)?.Data, Descriptor))
+                    .Subscribe(response =>
+                    {
+                        if (response is { Source: MethodInfo info, Node: var node, ChangeType: CType changeType })
+                        {
+                            AddMethodNode(info, node, changeType);
+                            return;
+                        }
+
+                    }, () => { isRefreshMethodsRunnings = false; isMethodsComplete = true; _children.Complete(); });
+
+            return await Task.FromResult(true);        }
+
+
+        protected void AddMethodNode(MethodInfo info, INode? node, ChangeType changeType)
+        {
+            if (changeType == CType.Add)
+            {
+                if (node is not MethodNode methodNode)
+                {
+                    throw new Exception("VS s333 fsdfds");
+                }
+                else
+                    _methods.Add(methodNode);
+            }
+        }
 
         public override string ToString()
         {

@@ -94,11 +94,21 @@ namespace Utility.PropertyTrees.Services
             //var observers = container.Resolve<IObserverIOType[]>();
 
             bool success = false;
+            List<IObserverIOType> filteredObservers = new();
             foreach (var item in observers)
             {
                 if (item.Unlock(guidValue))
                 {
-                    success = true;   
+                    filteredObservers.Add(item);
+                }
+            }
+
+            if(filteredObservers.Any())
+            {
+                success = true;
+
+                foreach (var item in filteredObservers)
+                {
                     item.Send(guidValue);
                 }
             }
@@ -122,6 +132,13 @@ namespace Utility.PropertyTrees.Services
 
         public Interfaces.Generic.IObservable<TOutput> Register<TInput, TOutput>(Key baseKey, TInput tInput) where TInput : IGuid
         {
+            if(tInput is FindPropertyRequest { Key: { Name:var name } })
+            {
+                if(name?.Contains("ViewModel")==true)
+                {
+
+                }
+            }
             var replay = new Subject<TOutput>();
             var key = new Key(Guid.NewGuid(), nameof(CustomSubject<TInput, TOutput>), typeof(CustomSubject<TInput, TOutput>));
 

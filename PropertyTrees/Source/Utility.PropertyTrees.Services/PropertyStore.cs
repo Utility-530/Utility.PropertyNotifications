@@ -7,7 +7,6 @@ using static Utility.Observables.Generic.ObservableExtensions;
 using Utility.Observables.NonGeneric;
 using System.Reactive.Disposables;
 using Utility.Infrastructure;
-using static Utility.PropertyTrees.Events;
 
 namespace Utility.PropertyTrees.Services
 {
@@ -26,10 +25,6 @@ namespace Utility.PropertyTrees.Services
 
         public Utility.Interfaces.Generic.IObservable<FindPropertyResponse> OnNext(FindPropertyRequest request)
         {
-            if (request.Key.Name == "Size")
-                return Create<FindPropertyResponse>(observer => Disposer.Empty);
-
-
             return Create<FindPropertyResponse>(observer =>
             {
                 CompositeDisposable composite = new();
@@ -53,29 +48,29 @@ namespace Utility.PropertyTrees.Services
             });
         }
 
-        public Utility.Interfaces.Generic.IObservable<SetPropertyResponse> OnNext(SetPropertyRequest order)
+        public Utility.Interfaces.Generic.IObservable<SetPropertyResponse> OnNext(SetPropertyRequest request)
         {
             return Create<SetPropertyResponse>(observer =>
             {
                 CompositeDisposable composite = new();
 
-                return Observe<RepositorySwitchResponse, RepositorySwitchRequest>(new RepositorySwitchRequest(order.Key))
+                return Observe<RepositorySwitchResponse, RepositorySwitchRequest>(new RepositorySwitchRequest(request.Key))
                 .Subscribe(a =>
                 {
                     observer.OnProgress(1, 3);
                     repositories[a.RepositoryKey]
-                    .FindValue(order.Key)
+                    .FindValue(request.Key)
                     .ToObservable()
                     .Subscribe(find =>
                     {
                         observer.OnProgress(2, 3);
 
                         repositories[a.RepositoryKey]
-                        .UpdateValue(order.Key, order.Value)
+                        .UpdateValue(request.Key, request.Value)
                         .ToObservable()
                         .Subscribe(a =>
                         {
-                            observer.OnNext(new SetPropertyResponse(order.Value));
+                            observer.OnNext(new SetPropertyResponse(request.Value));
                             observer.OnProgress(3, 3);
                             observer.OnCompleted();
                         }).DisposeWith(composite);

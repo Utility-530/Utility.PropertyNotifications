@@ -13,6 +13,12 @@ namespace Utility.PropertyTrees.WPF
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             DataTemplate template = default;
+
+            if(item is MethodNode methodNode)
+            {
+                this.broadcast(new(item, MethodTemplate, container));
+                return MethodTemplate;
+            }
             if (item is PropertyBase { DataTemplateKey: string key })
             {
                 template = (DataTemplate)Application.Current.TryFindResource(key);
@@ -114,6 +120,7 @@ namespace Utility.PropertyTrees.WPF
         public DataTemplate EnumTemplate { get; set; }
         public DataTemplate ReferenceTemplate { get; set; }
         public DataTemplate RootTemplate { get; set; }
+        public DataTemplate MethodTemplate { get; set; }
     }
 
     public record SelectTemplateEvent(object Item, DataTemplate Template, DependencyObject Container);

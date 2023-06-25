@@ -130,6 +130,11 @@
         <ui:AppBarButton Icon="Add"  Command="{Binding AddCommand}"></ui:AppBarButton>
     </DataTemplate>
 
+
+    <DataTemplate x:Key="MethodTemplate">
+        <Button Content="{Binding Content}" Command="{Binding Command, Mode=OneTime}" ></Button>
+    </DataTemplate>
+
     <trees:ContentTemplateSelector 
         x:Key="ContentTemplateSelector"
         StringTemplate="{StaticResource StringTemplate}"
@@ -141,6 +146,7 @@
         EnumTemplate="{StaticResource EnumTemplate}"
         ReferenceTemplate="{StaticResource ReferenceTemplate}"
         RootTemplate="{StaticResource ReferenceTemplate}"
+        MethodTemplate="{StaticResource MethodTemplate}"
         />
 
     <!--<DataTemplate DataType="{x:Type nodes:ValueNode}">
