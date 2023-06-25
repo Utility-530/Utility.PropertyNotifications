@@ -43,7 +43,7 @@ namespace Utility.WPF.Controls.Buttons
             map = new() { { Direction.Left, LeftButton }, { Direction.Right, RightButton }, { Direction.Down, DownButton }, { Direction.Up, UpButton } };
 
             this.WhenAnyValue(a => a.Enabled)
-                .Select(a => EnumHelper.SeparateFlag((Direction)a))
+                .Select(a => EnumHelper.SeparateFlags((Direction)a))
                 .Subscribe(a =>
                 {
                     foreach (var x in map)
@@ -53,7 +53,7 @@ namespace Utility.WPF.Controls.Buttons
                 });
 
             this.WhenAnyValue(a => a.Visible)
-             .Select(a => EnumHelper.SeparateFlag((Direction)a))
+             .Select(a => EnumHelper.SeparateFlags((Direction)a))
                 .Subscribe(a =>
                 {
                     foreach (var x in map)
