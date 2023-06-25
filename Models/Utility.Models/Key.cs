@@ -9,11 +9,25 @@ namespace Utility.Models
 
     public class Key<T> : Key
     {
-        public Key(Guid guid):base(guid,  typeof(T).Name,  typeof(T))
-        {   
+        public Key(Guid guid) : base(guid, typeof(T).Name, typeof(T))
+        {
         }
     }
 
+    public class StringKey : IEquatable
+    {
+        public StringKey(string? value)
+        {
+            Value = value;
+        }
+
+        public bool Equals(IEquatable? other)
+        {
+            return (other as StringKey)?.Value.Equals(Value) == true;
+        }
+
+        public string? Value { get; init; }
+    }
 
     public class Key : ISerialise, IGuid, IType, IName, IEquatable, IEquatable<ISerialise>
     {

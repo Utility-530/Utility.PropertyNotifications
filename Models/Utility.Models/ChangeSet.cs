@@ -5,7 +5,7 @@ namespace Utility.Models
 {
     public enum ChangeType
     {
-        Add, Remove, Update
+        None, Add, Remove, Update, Reset
     }
 
     public class ChangeSet<T> : ReadOnlyCollection<Change<T>>
@@ -32,30 +32,22 @@ namespace Utility.Models
         }
     }
 
-    public class Change<T>
-    {
-        public Change(T value, ChangeType type)
-        {
-            Value = value;
-            Type = type;
-        }
-
-        public Change(T value)
-        {
-            Value = value;
-        }
-
-        public T Value { get; }
-
-        public ChangeType Type { get; init; }
-
+    public record Change<T>(T? Value, ChangeType Type)
+    {     
         public ChangeSet<T> ToChangeSet()
         {
             return new ChangeSet<T>(this);
         }
+
+        public static Change<T> None => new(default, ChangeType.None);
+
+        public Change<TR> As<TR>() where TR : class
+        {
+            return new Change<TR>(Value as TR ?? throw new Exception("sd ssss"), Type);
+        }
     }
 
-    public class Change
+    public record Change
     {
         public Change(IEquatable value, ChangeType type, int? count = default)
         {
