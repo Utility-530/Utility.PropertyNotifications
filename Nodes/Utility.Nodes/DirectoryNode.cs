@@ -1,6 +1,7 @@
 ﻿
 using Utility.Collections;
 using Utility.Interfaces.NonGeneric;
+using Utility.Models;
 using Utility.Observables;
 using Utility.Observables.NonGeneric;
 
@@ -35,6 +36,9 @@ namespace Utility.Nodes
             subject.Subscribe(this);
         }
 
+        public override IEquatable Key => new StringKey(lazyContent.Value.FullName);
+
+
         public override DirectoryInfo Content => lazyContent.Value;
 
         public override async Task<bool> HasMoreChildren()
@@ -42,10 +46,7 @@ namespace Utility.Nodes
             return await Task.FromResult(flag == false);
         }
 
-        public override string ToString()
-        {
-            return path.EndsWith("\\") ? path.Replace("/", "\\").Remove(path.Length - 1).Split("\\").Last() : path.Replace("/", "\\").Split("\\").Last();
-        }
+
 
         public override Node ToNode(object value)
         {
@@ -74,7 +75,6 @@ namespace Utility.Nodes
                 return _leaves;
             }
         }
-
 
         protected override async Task<bool> RefreshChildrenAsync()
         {
@@ -168,6 +168,11 @@ namespace Utility.Nodes
         public void OnProgress(int complete, int total)
         {
             throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            return path.EndsWith("\\") ? path.Replace("/", "\\").Remove(path.Length - 1).Split("\\").Last() : path.Replace("/", "\\").Split("\\").Last();
         }
     }
 }

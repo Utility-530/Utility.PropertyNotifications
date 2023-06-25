@@ -1,14 +1,10 @@
 using Utility.PropertyTrees.Infrastructure;
 using System.Collections.Specialized;
-using System.Reactive.Linq;
 using Utility.Collections;
 using Utility.Nodes.Abstractions;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using System.Globalization;
 using System.Collections;
-using Utility.Conversions;
-using Utility.Observables.Generic;
 using System.ComponentModel;
 
 namespace Utility.Nodes
@@ -29,8 +25,7 @@ namespace Utility.Nodes
         {
             _children.CollectionChanged += (s, e) => CollectionChanged?.Invoke(this, e);
         }
-
-        public override Key Key => new(Guid, Name, PropertyType);
+        IEquatable INode.Key => this.Key;      
 
         public abstract string Name { get; }
 
@@ -52,15 +47,13 @@ namespace Utility.Nodes
 
         private IEnumerable GetAncestors()
         {
-            INode parent = this;
+            INode parent = this.Parent;
             while (parent != null)
             {
                 yield return parent;
                 parent = parent.Parent;
             }
         }
-
-        public virtual Type PropertyType => Data.GetType();
 
         public virtual object? Value
         {
@@ -70,26 +63,14 @@ namespace Utility.Nodes
             }
             set
             {
-                if (!TryChangeType(value, PropertyType, CultureInfo.CurrentCulture, out object changedValue))
-                {
-                    throw new ArgumentException("Cannot convert value {" + value + "} to type '" + PropertyType.FullName + "'.");
-                }
-
+                var changedValue = ChangeType(value);
                 SetProperty(Key, changedValue);
             }
         }
 
         public abstract bool HasChildren { get; }
 
-        protected virtual bool TryChangeType(object value, Type type, IFormatProvider provider, out object changedValue)
-        {
-            if (type == null)
-            {
-                throw new ArgumentNullException("type");
-            }
-
-            return ConversionHelper.TryChangeType(value, type, provider, out changedValue);
-        }
+        protected abstract object ChangeType(object value);
 
         public int Count => _children.Count;
 
@@ -107,7 +88,8 @@ namespace Utility.Nodes
             }
         }
 
-        private void PropertyChanged_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+
+        protected virtual void PropertyChanged_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Item[]")
                 return;
@@ -123,36 +105,7 @@ namespace Utility.Nodes
             }
         }
 
-        protected virtual async Task<bool> RefreshAsync()
-        {
-            if (flag == true)
-            {
-                await Task.Delay(1000);
-                disposable?.Dispose();
-                flag = false;
-                return await Task.FromResult(true);
-            }
-            flag = true;
-
-            disposable = Observe<ChildrenResponse, ChildrenRequest>(new ChildrenRequest(Guid, Data))
-                .Subscribe(a =>
-                {
-                    if (a.Include)
-                    {
-                        if (a.PropertyNode == null)
-                        {
-                            throw new Exception("dsv2s331hj f");
-                        }
-                        if (_children.Any(ass => a.PropertyNode.Key.Guid == (ass as ValueNode)?.Key.Guid) == false)
-                        {
-                            a.PropertyNode.Parent = this;
-                            _children.Add(a.PropertyNode);
-                        }
-                    }
-                }, () => _children.Complete());
-
-            return await Task.FromResult(true);
-        }
+        protected abstract Task<bool> RefreshAsync();
 
         public Task<bool> HasMoreChildren()
         {
@@ -165,8 +118,4 @@ namespace Utility.Nodes
         }
     }
 
-
-    public record ChildrenRequest(Guid Guid, object Data) : Request();
-
-    public record ChildrenResponse(ValueNode? PropertyNode, bool Include) : Response(PropertyNode);
 }

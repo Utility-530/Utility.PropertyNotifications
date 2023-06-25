@@ -10,6 +10,7 @@ namespace Utility.Nodes
         private bool _isRefreshing;
         protected Collection _children = new();
 
+        public abstract IEquatable Key { get; }
         public abstract Task<object?> GetChildren();
 
         public abstract Task<bool> HasMoreChildren();
