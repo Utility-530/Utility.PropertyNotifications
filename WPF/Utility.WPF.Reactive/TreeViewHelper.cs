@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -17,11 +12,35 @@ namespace Utility.WPF.Reactive
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public static IObservable<TreeViewItem?> MouseDoubleClickTreeSelections(this TreeView control)
+        public static IObservable<TreeViewItem?> MouseDoubleClickTreeViewSelections(this TreeView control)
         {
             return control
-                    .MouseDoubleClickSelections()
-                    .Cast<TreeViewItem>();
+                    .MouseDoubleClickSelections<TreeViewItem>();
         }
+
+        public static IObservable<TreeViewItem?> MouseSingleClickTreeViewSelections(this TreeView control)
+        {
+            return control
+                    .MouseSingleClickSelections<TreeViewItem>();
+        }
+
+        public static IObservable<TreeViewItem> MouseHoverEnterTreeViewSelections(this TreeView control)
+        {
+            return control
+                    .MouseHoverEnterSelections<TreeViewItem>();
+        }
+
+        public static IObservable<TreeViewItem> MouseHoverLeaveTreeViewSelections(this TreeView control)
+        {
+            return control
+                    .MouseHoverLeaveSelections<TreeViewItem>();
+        }
+
+        public static IObservable<(TreeViewItem item, Point point)> MouseMoveTreeViewSelections(this TreeView control)
+        {
+            return control
+                    .MouseMoveSelections<TreeViewItem>();
+        }
+
     }
 }

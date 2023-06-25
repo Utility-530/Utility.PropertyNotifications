@@ -19,30 +19,81 @@ namespace Utility.WPF.Reactive
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public static IObservable<DependencyObject?> MouseDoubleClickSelections(this Control control)
+        public static IObservable<T?> MouseDoubleClickSelections<T>(this Control control) where T:DependencyObject
         {
             return Observable.FromEventPattern<MouseButtonEventHandler, MouseButtonEventArgs>(
                    s => control.MouseDoubleClick += s,
                    s => control.MouseDoubleClick -= s)
                 .Select(evt =>
                 {
-                    return GetSelectedItem(evt.EventArgs.OriginalSource as UIElement, control);
+                    return GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control);
+                });
+        }
+
+        public static IObservable<T?> MouseSingleClickSelections<T>(this Control control) where T : DependencyObject
+        {
+            return Observable.FromEventPattern<MouseButtonEventHandler, MouseButtonEventArgs>(
+                   s => control.PreviewMouseLeftButtonUp += s,
+                   s => control.PreviewMouseLeftButtonUp -= s)
+                .Select(evt =>
+                {
+                    return GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control);
                 });
 
-            DependencyObject? GetSelectedItem(UIElement? sender, UIElement objTreeViewControl)
-            {
-                Point? point = sender?.TranslatePoint(new Point(0, 0), objTreeViewControl);
-                if (point .HasValue)
+
+        }
+
+
+        public static IObservable<T?> MouseHoverEnterSelections<T>(this Control control) where T : DependencyObject
+        {
+            return Observable.FromEventPattern<MouseEventHandler, MouseEventArgs>(
+                   s => control.MouseEnter += s,
+                   s => control.MouseEnter -= s)
+                .Select(evt =>
                 {
-                    var hit = objTreeViewControl.InputHitTest(point.Value) as DependencyObject;
-                    while (hit is not null and not TreeViewItem)
-                    {
-                        hit = VisualTreeHelper.GetParent(hit);
-                    }
-                    return hit;
+                    return GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control);
+                });
+        }
+
+        public static IObservable<(T? item, Point point)> MouseMoveSelections<T>(this Control control) where T : DependencyObject
+        {
+            return Observable.FromEventPattern<MouseEventHandler, MouseEventArgs>(
+                   s => control.MouseMove += s,
+                   s => control.MouseMove -= s)
+                .Select(evt =>
+                {
+                    var point = evt.EventArgs.GetPosition(evt.EventArgs.OriginalSource as IInputElement);
+                    //Point? point = control?.TranslatePoint(new Point(0, 0), objTreeViewControl);
+                    return (GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control), point);
+                });
+        }
+
+
+        public static IObservable<T?> MouseHoverLeaveSelections<T>(this Control control) where T : DependencyObject
+        {
+            return Observable.FromEventPattern<MouseEventHandler, MouseEventArgs>(
+                   s => control.MouseLeave += s,
+                   s => control.MouseLeave -= s)
+                .Select(evt =>
+                {
+                    return GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control);
+                });
+        }
+
+
+        public static T? GetSelectedItem<T>(UIElement? sender, UIElement objTreeViewControl) where T : DependencyObject
+        {
+            Point? point = sender?.TranslatePoint(new Point(0, 0), objTreeViewControl);
+            if (point.HasValue)
+            {
+                var hit = objTreeViewControl.InputHitTest(point.Value) as DependencyObject;
+                while (hit is not null and not T)
+                {
+                    hit = VisualTreeHelper.GetParent(hit);
                 }
-                return null;
+                return (T?)hit;
             }
+            return null;
         }
     }
 }
