@@ -73,7 +73,7 @@ namespace Utility.Repos
 
         public async Task UpdateValue(IEquatable key, object value)
         {
-            if (key is not IGuid { Guid: var guid} _key)
+            if (key is not IGuid { Guid: var guid } _key)
             {
                 throw new Exception("reg 43cs ");
             }
@@ -84,16 +84,22 @@ namespace Utility.Repos
 
             if (tables.Count == 1)
             {
-                var tableName = "T" + tables.Single().Id;
+                var id = tables.Single().Id;
+                var tableName = "T" + id;
                 var count = await connection.ExecuteScalarAsync<int>($"SELECT RowId FROM sqlite_master WHERE type = 'table' AND name = '{tableName}'");
 
                 await connection.RunInTransactionAsync(c =>
                 {
+                    if (value == null)
+                    {
+                        c.Delete<Table>(id);
+                        c.Execute($"DROP TABLE IF EXISTS '{tableName}'");
+                        return;
+                    }
                     if (count == 0)
                     {
                         c.Execute($"Create Table {tableName} (Guid GUID PRIMARY KEY, Added DateTime, Removed DateTime, Value Text)");
                     }
-
                     var lastWithSameValue = c.ExecuteScalar<int>($"Select RowId from '{tableName}' where RowId = (SELECT MAX(RowId) from '{tableName}') And Value = '{value}'");
                     if (lastWithSameValue == 0)
                     {
