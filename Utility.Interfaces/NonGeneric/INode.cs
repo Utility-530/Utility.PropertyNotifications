@@ -5,6 +5,8 @@ namespace Utility.Nodes.Abstractions
 {
     public interface INode
     {
+
+        IEquatable Key { get; }
         object Content { get; }
 
         INode Parent { get; set; }
