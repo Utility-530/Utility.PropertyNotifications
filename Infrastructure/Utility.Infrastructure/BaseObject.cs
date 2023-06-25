@@ -39,7 +39,7 @@ namespace Utility.Infrastructure
 
     public record SubjectKey(Guid Source, Guid Target, Guid Node);
 
-    public abstract class BaseObject : BaseViewModel, IKey<Key> //, IBase
+    public abstract class BaseObject : BaseViewModel, IKey<Key> 
     {
         public static IResolver Resolver { get; set; }
 
@@ -174,12 +174,9 @@ namespace Utility.Infrastructure
         Type OutType { get; }
     }
 
-    public interface IObserverIOType : /*Utility.Interfaces.Generic.IObserver<GuidValue>,*/ IIOType
+    public interface IObserverIOType : IIOType
     {
         public Key Key { get; }
-        //public Key ParentKey { get; }
-        //ObservableCollection<object> Observers { get; }
-        //ObservableCollection<object> Outputs { get; }
         bool Unlock(GuidValue guidValue);
         void Send(GuidValue guidValue);
     }
@@ -217,6 +214,15 @@ namespace Utility.Infrastructure
             try
             {
                 output = methodInfo._(parameter.Value);
+
+                if(output is IGuid guid)
+                {
+                    var value = new GuidValue(guid, guidValue);
+                    Outputs.Add(value);
+                    resolver.Send(value);
+                    resolver.Send(new GuidValue(GuidBase.OnCompleted(GetGuid()), guidValue));
+                    return;
+                }
 
                 if (methodInfo.OutType == typeof(void))
                     return;
