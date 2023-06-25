@@ -270,6 +270,8 @@ namespace Utility.WPF.Adorners.Infrastructure
 
             if (adorner.Parent == null)
             {
+                if (adorners.IndexOf(adorner) != -1)
+                    return;
                 adorner.ConnectChildren(frameworkElement);
                 adornerLayer.Add(adorner);
             }
