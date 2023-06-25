@@ -249,6 +249,15 @@ namespace Utility.Observables.Generic
         }
 
 
+        public static Interfaces.Generic.IObservable<T> Empty<T>()
+        {
+            var subject = new Subject<T>(); 
+            subject.OnCompleted();
+            return subject;
+        }
+
+
+
         public static Utility.Interfaces.Generic.IObservable<TOut> Select<TIn, TOut>(this Utility.Interfaces.Generic.IObservable<TIn> observable, Func<TIn, TOut> func)
         {
             var subject = new Subject<TIn, TOut>(func);

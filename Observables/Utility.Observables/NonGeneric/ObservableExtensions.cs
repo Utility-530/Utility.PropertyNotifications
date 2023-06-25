@@ -247,5 +247,11 @@ namespace Utility.Observables.NonGeneric
             return subject;
         }
 
+        public static IObservable Empty()
+        {
+            var subject = new Subject();
+            subject.OnCompleted();
+            return subject;
+        }
     }
 }
