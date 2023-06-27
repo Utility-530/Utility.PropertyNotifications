@@ -6,8 +6,6 @@ using Utility.Observables.Generic;
 using Utility.WPF.Adorners.Infrastructure;
 using Utility.WPF.Reactive;
 using NetFabric.Hyperlinq;
-using System.Collections.Specialized;
-using Utility.Helpers;
 using Utility.Nodes.Abstractions;
 
 namespace Utility.PropertyTrees.WPF.Demo
@@ -45,49 +43,46 @@ namespace Utility.PropertyTrees.WPF.Demo
                 grid.Children.Add(treeView);
 
 #if DEBUG
-                CreateDebugContent();
+                //CreateDebugContent();
 #endif
                 return grid;
             }
-
-
-
-            void CreateDebugContent()
-            {
-                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
-                var refreshAdorner = new Button
-                {
-                    Content = "refresh",
-                    CommandParameter = new TreeClickEvent(node),
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    VerticalAlignment = VerticalAlignment.Top
-                };
-
-                AdornerHelper.AddIfMissingAdorner(grid, refreshAdorner);
-                grid.SetValue(AdornerEx.IsEnabledProperty, true);
-
-                refreshAdorner.Click += (s, e) =>
-                {
-                    Send(new RefreshRequest());            
-                };
-
-                Grid.SetRow(dataGrid, 1);
-                grid.Children.Add(dataGrid);
-
-                var adorner = new Button
-                {
-                    Content = "update",
-                    CommandParameter = new TreeClickEvent(node),
-                    HorizontalAlignment = HorizontalAlignment.Right,
-                    VerticalAlignment = VerticalAlignment.Top
-                };
-
-                AdornerHelper.AddIfMissingAdorner(dataGrid, adorner);
-                dataGrid.SetValue(AdornerEx.IsEnabledProperty, true);
-                adorner.Click += Adorner_Click;
-            }
-
         }
+        //    void CreateDebugContent()
+        //    {
+        //        grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
+        //        var refreshAdorner = new Button
+        //        {
+        //            Content = "refresh",
+        //            CommandParameter = new TreeClickEvent(node),
+        //            HorizontalAlignment = HorizontalAlignment.Right,
+        //            VerticalAlignment = VerticalAlignment.Top
+        //        };
+
+        //        AdornerHelper.AddIfMissingAdorner(grid, refreshAdorner);
+        //        grid.SetValue(AdornerEx.IsEnabledProperty, true);
+
+        //        refreshAdorner.Click += (s, e) =>
+        //        {
+        //            Send(new RefreshRequest());            
+        //        };
+
+        //        Grid.SetRow(dataGrid, 1);
+        //        grid.Children.Add(dataGrid);
+
+        //        var adorner = new Button
+        //        {
+        //            Content = "update",
+        //            CommandParameter = new TreeClickEvent(node),
+        //            HorizontalAlignment = HorizontalAlignment.Right,
+        //            VerticalAlignment = VerticalAlignment.Top
+        //        };
+
+        //        AdornerHelper.AddIfMissingAdorner(dataGrid, adorner);
+        //        dataGrid.SetValue(AdornerEx.IsEnabledProperty, true);
+        //        adorner.Click += Adorner_Click;
+        //    }
+        //}
 
         private void CreateSelected(ValueNode valueNode)
         {
@@ -95,36 +90,12 @@ namespace Utility.PropertyTrees.WPF.Demo
             Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(treeView, valueNode))
                 .Subscribe(a =>
                 {
-                    //modelViewModel.IsConnected = true;
-                    //System.Windows.Input.CommandManager.InvalidateRequerySuggested();
                 });
-
-            //var adorner = new Button
-            //{
-            //    Content = "click",
-            //    CommandParameter = new TreeClickEvent(node),
-            //    HorizontalAlignment = HorizontalAlignment.Right,
-            //    VerticalAlignment = VerticalAlignment.Top
-            //};
 
             treeView
                 .MouseDoubleClickTreeViewSelections()
                 .Subscribe(a =>
                 {
-
-                    if (a is { Header: ReferenceProperty { IsCollection: true } refNode })
-                    {
-                        if (refNode.Data is IList collection)
-                        {
-                            var type = collection.GetType().GenericTypeArguments().SingleOrDefault();
-                            var instance = Activator.CreateInstance(type);
-                            collection.Add(instance);
-                            if (collection is not INotifyCollectionChanged collectionChanged)
-                            {
-                                //refNode.RefreshAsync();
-                            }
-                        }
-                    }
                     if (a is { Header: ValueNode valueNode } treeviewItem)
                     {
                         this.valueNode = valueNode;
@@ -180,16 +151,15 @@ namespace Utility.PropertyTrees.WPF.Demo
                         Send(new OnHoverChange(a, node, false, default));
                     }
                 });
-
         }
 
-        private void Adorner_Click(object sender, RoutedEventArgs e)
-        {
-            this.Observe<SetViewModelResponse, SetViewModelRequest>(new(valueNode.Key, response.ViewModels.Single()))
-                .Subscribe(response =>
-                {
-                });
-        }
+        //private void Adorner_Click(object sender, RoutedEventArgs e)
+        //{
+        //    this.Observe<SetViewModelResponse, SetViewModelRequest>(new(valueNode.Key, response.ViewModels.Single()))
+        //        .Subscribe(response =>
+        //        {
+        //        });
+        //}
 
         public void OnNext(RefreshRequest request)
         {

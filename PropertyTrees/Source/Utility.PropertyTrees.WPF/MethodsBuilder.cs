@@ -41,8 +41,6 @@ namespace Utility.PropertyTrees.WPF
         private TreeViewItem? click;
         private TreeViewItem? initialised;
 
-
-
         public Dictionary<string, ElementVisibility> visibilityDictionary = new() {
             { "Add", ElementVisibility.Always },
             { "Remove", ElementVisibility.OnHover| ElementVisibility.OnClick },
@@ -53,11 +51,15 @@ namespace Utility.PropertyTrees.WPF
             { "Connect", ElementVisibility.Always },
             { "Foo", ElementVisibility.OnHover| ElementVisibility.OnClick },
             { "Bar", ElementVisibility.Always },
+            { "AddByType", ElementVisibility.Always },
+            { "AddByName", ElementVisibility.Always },
+            { "AddByKey", ElementVisibility.Always },
+            { "Refresh", ElementVisibility.Always },
+            { "Update", ElementVisibility.Always },
 
         };
 
         public override Key Key => new(Guids.MethodBuilder, nameof(MethodsBuilder), typeof(MethodsBuilder));
-
 
         public void OnNext(RefreshRequest request)
         {
@@ -99,7 +101,7 @@ namespace Utility.PropertyTrees.WPF
 
         }
 
-        public void OnNext(TreeViewItemChange change)
+        public void OnNext(TreeViewItemInitialised change)
         {
 
             if (change is { Source: TreeViewItem treeViewItem })

@@ -36,7 +36,7 @@ namespace Utility.PropertyTrees.WPF
 
     public class ViewBuilder : BaseObject
     {
-        const int columnWidth = 140;
+        const int columnWidth = 90;
         private TreeViewItem columnsTreeViewItem, removeItem;
         private Dictionary<Type, Dictionary<object, int>> typeOrderDictionary = new();
         private Style itemsOnlyStyle, contentOnlyStyle;
@@ -63,8 +63,8 @@ namespace Utility.PropertyTrees.WPF
             };
             var textBlock = new TextBlock();
             textBlock.SetBinding(TextBlock.TextProperty, binding);
-            textBlock.FontWeight = FontWeight.FromOpenTypeWeight(500 - count * 25);
-            textBlock.FontSize = 32 - count * 2;
+            textBlock.FontWeight = FontWeight.FromOpenTypeWeight(500 - count * 10);
+            textBlock.FontSize = 32 - count * 1;
             return textBlock;
         });
 
@@ -243,7 +243,7 @@ namespace Utility.PropertyTrees.WPF
 
                             treeViewItem.Items.Add(columnsTreeViewItem = new() { IsExpanded = true, ItemsPanel = horizontalTemplate, Style = ItemsOnlyStyle, });
                             items.Add(treeViewItem);
-                            Send(new TreeViewItemChange(treeViewItem, propertyBase));
+                            Send(new TreeViewItemInitialised(treeViewItem, propertyBase));
                             return treeViewItem.Items;
                         }
                         else if (propertyBase is ValueProperty valueProperty)
@@ -282,7 +282,7 @@ namespace Utility.PropertyTrees.WPF
                             {
                                 items.Add(orphan);
                             }
-                            Send(new TreeViewItemChange(treeViewItem, propertyBase));
+                            Send(new TreeViewItemInitialised(treeViewItem, propertyBase));
                             return items;
                         }
                         else if (propertyBase.IsChildOfCollection())
@@ -297,7 +297,7 @@ namespace Utility.PropertyTrees.WPF
                             };
 
                             items.Add(treeViewItem);
-                            Send(new TreeViewItemChange(treeViewItem, propertyBase));
+                            Send(new TreeViewItemInitialised(treeViewItem, propertyBase));
                             return treeViewItem.Items;
                         }
 
@@ -305,7 +305,7 @@ namespace Utility.PropertyTrees.WPF
                     else
                     {
                         var treeViewItem = MakeTreeViewItem(propertyBase);
-                        Send(new TreeViewItemChange(treeViewItem, propertyBase));
+                        Send(new TreeViewItemInitialised(treeViewItem, propertyBase));
                         items.Add(treeViewItem);
                         return treeViewItem.Items;
                     }

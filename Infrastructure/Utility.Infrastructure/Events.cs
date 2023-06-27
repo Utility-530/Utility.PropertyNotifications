@@ -30,8 +30,8 @@ public record TypeResponse(Type Type) : Response(Type);
 public record MethodParametersRequest(MethodInfo MethodInfo, object Data) : Request;
 public record MethodParametersResponse(object?[]? Parameters) : Response(Parameters);
 
-public record SelectionChange(object Source, INode Node) : Effect();
-public record OnHoverChange(object Source, INode Node, bool IsMouseOver, Point Point) : Effect();
-public record TreeViewItemChange(object Source, INode Node) : Effect();
+public record SelectionChange(object Source, INode Node) : Event();
+public record OnHoverChange(object Source, INode Node, bool IsMouseOver, Point Point) : Event();
+public record TreeViewItemInitialised(object Source, INode Node) : Event();
 
-public record RefreshRequest() : Request;
+public record RefreshRequest(DateTime DateTime) : Request;

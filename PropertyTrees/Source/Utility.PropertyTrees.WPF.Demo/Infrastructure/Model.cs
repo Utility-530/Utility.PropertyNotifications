@@ -1,11 +1,38 @@
 ﻿using System.Collections.ObjectModel;
+using System.Reactive;
 using Utility.Models;
-using Utility.PropertyTrees.Abstractions;
 using Utility.PropertyTrees.Demo.Model;
-
+using VM = Utility.PropertyTrees.Services.ViewModel;
 namespace Utility.PropertyTrees.WPF.Demo
 {
-    public class HUD_Simulator 
+
+    public class RootModel : BaseViewModel
+    {
+        DateTime lastRefresh;
+
+        public void Refresh()
+        {
+            LastRefresh = DateTime.Now;
+        }
+
+        public DateTime LastRefresh
+        {
+            get => lastRefresh; 
+            set
+            {           
+                Set(ref lastRefresh, value);
+            }
+        }
+
+        public HUD_Simulator HUD_Simulator { get; set; } = new();
+
+        public ViewModels ViewModels { get; set; } = new();
+    }
+
+
+
+
+    public class HUD_Simulator
     {
 
         public GameModel GameModel { get; set; } = new();
@@ -39,13 +66,12 @@ namespace Utility.PropertyTrees.WPF.Demo
             {
                 isConnected = value;
                 this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsConnected)));
-
             }
         }
 
         public ServerRequest ServerRequest
         {
-            get => serverRequest; 
+            get => serverRequest;
             private set
             {
                 serverRequest = value;
@@ -93,21 +119,89 @@ namespace Utility.PropertyTrees.WPF.Demo
         }
     }
 
-    public class ViewModels
+    public class ViewModels : BaseViewModel
     {
-        public string Name { get; set; }
-        public ViewModelsCollection Collection { get; set; } = new ();
-    }
+        //private VM @default = new();
+        private ObservableCollection<VM> collection = new();
+        private Key key;
+        private string name;
+        private Guid guid;
+        private string type;
 
-    public class ViewModelsCollection: ObservableCollection<ViewModel>
-    {
-        public void MoveUp(ViewModel ViewModel)
+        public void AddByName()
         {
-            var oldIndex = this.IndexOf(ViewModel);
-            Move(oldIndex, oldIndex-1);
+            Collection.Add(new VM() { Name = Name });
         }
 
-        public void MoveDown(ViewModel ViewModel)
+        public void AddByKey()
+        {
+            Collection.Add(new VM() { ParentGuid = Guid });
+        }
+
+        public void AddByType()
+        {
+            Collection.Add(new VM() { Type = System.Type.GetType(Type) });
+        }
+
+        public void Update()
+        {
+            Key = new Key(Guid, Name, System.Type.GetType(Type));
+        }
+
+        public ObservableCollection<VM> Collection { get => collection; set => collection = value; }
+
+        public string Name
+        {
+            get => name; set
+            {
+               Set(ref name, value);
+            }
+        }
+
+        public Guid Guid
+        {
+            get => guid; set
+            {
+                Set(ref guid, value);
+            }
+        }
+
+        public string Type
+        {
+            get => type; set
+            {
+                Set(ref type, value);
+            }
+        }
+
+        public Key Key
+        {
+            get => key;
+            private set
+            {
+                this.Set(ref key, value);
+            }
+        }
+
+        //public VM Default
+        //{
+        //    get => @default; set
+        //    {
+        //        @default = value;
+        //    }
+        //}
+    }
+
+
+    public class ViewModelsCollection : ObservableCollection<VM>
+    {
+        public void MoveUp(VM ViewModel)
+        {
+            var oldIndex = this.IndexOf(ViewModel);
+            Move(oldIndex, oldIndex - 1);
+        }
+
+        public void MoveDown(VM ViewModel)
         {
             var oldIndex = this.IndexOf(ViewModel);
             Move(oldIndex, oldIndex + 1);
@@ -134,7 +228,7 @@ namespace Utility.PropertyTrees.WPF.Demo
     {
         public void Foo()
         {
-        }    
+        }
 
         public void Bar()
         {

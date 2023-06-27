@@ -9,6 +9,7 @@ using Utility.Infrastructure;
 using LiteDB;
 using Utility.Enums;
 using System.Collections;
+using Utility.Structs;
 
 namespace Utility.PropertyTrees.Services
 {
@@ -112,8 +113,11 @@ namespace Utility.PropertyTrees.Services
 
     public class ViewModel : IViewModel
     {
+        public Guid Id { get; set; }
+        public Guid ParentGuid { get; set; }
         public string Name { get; set; }
-        public bool IsExpanded { get; set; }
+        public Type Type { get; set; }
+        public bool IsExpanded { get; set; } = true;
         public Position2D Dock { get; set; }
         public int GridRow { get; set; }
         public int GridColumn { get; set; }
@@ -126,7 +130,5 @@ namespace Utility.PropertyTrees.Services
         public double Top { get; set; }
         public double Bottom { get; set; }
         public string Tooltip { get; set; }
-
-
     }
 }

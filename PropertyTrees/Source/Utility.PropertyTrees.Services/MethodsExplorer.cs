@@ -17,7 +17,7 @@ namespace Utility.PropertyTrees.Services
         readonly Dictionary<MethodInfo, bool> methodInfoIncludes = new();
 
         static readonly string[] validParentMethods = new[] { "Remove", "MoveUp", "MoveDown" };
-        static readonly string[] validChildMethods = new[] { "Add", "Clear", "Send", "Connect", "Foo", "Bar" };
+        static readonly string[] validChildMethods = new[] { "Add", "Clear", "Send", "Connect", "Foo", "Bar", "AddByName", "AddByKey", "AddByType", "Refresh", "Update" };
         static readonly string[] inValidMethods = new[] { "ToString", "GetType", "Equals", "GetHashCode" };
 
         public override Key Key => new(Guids.MethodsExplorer, nameof(MethodsExplorer), typeof(MethodsExplorer));
@@ -115,11 +115,9 @@ namespace Utility.PropertyTrees.Services
             }
         }
 
-
         static IEnumerable<MethodInfo> MethodInfos(PropertyDescriptor propertyDescriptor)
         {
-
-            var x =
+            return 
                propertyDescriptor
                .PropertyType
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance/* | BindingFlags.DeclaredOnly*/)
@@ -128,9 +126,6 @@ namespace Utility.PropertyTrees.Services
                 .Where(a => validChildMethods.Contains(a.Name))
                 .Cast<MethodInfo>()
                 .OrderBy(d => d.Name);
-
-
-            return x;
         }
 
         static IEnumerable<MethodInfo> ParentMethodInfos(PropertyDescriptor propertyDescriptor)

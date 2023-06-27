@@ -43,6 +43,7 @@ internal class BootStrapper : BaseObject
         container.RegisterMany<ChildPropertyExplorer>();
         container.RegisterMany<MethodsExplorer>();
         container.RegisterMany<InterfaceController>();
+        container.RegisterMany<VisibilityController>();
 
         container.RegisterMany<DescriptorFilterController>();
         container.RegisterMany<RepositorySwitchController>();
@@ -58,9 +59,9 @@ internal class BootStrapper : BaseObject
         container.RegisterInstance(SynchronizationContext.Current);
 
         //container.RegisterMany<ModelController>(nonPublicServiceTypes: true);
-        container.RegisterMany<ModelController>(Reuse.Singleton);
-        container.RegisterMany<ViewModelController>(Reuse.Singleton);
-        container.RegisterMany<ViewController>(Reuse.Singleton);
+        container.RegisterMany<ModelController>();
+        //container.RegisterMany<ViewModelController>(Reuse.Singleton);
+        container.RegisterMany<ViewController>();
 
         //container.RegisterMany<Logger>();
         container.RegisterMany<DummyLogger>();
@@ -95,7 +96,7 @@ public class RootModelProperty : RootProperty
 
     public RootModelProperty() : base(guid)
     {
-        Data = new HUD_Simulator();
+        Data = new RootModel();
     }
 }
 

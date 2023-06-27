@@ -18,6 +18,12 @@ namespace Utility.Repos
         {
             Directory.CreateDirectory(settings.Path);
             this.settings = settings;
+
+            _mapper.RegisterType<Type>
+                (
+                serialize: (uri) => $"{uri.Namespace}, {uri.Assembly}.{uri.Name}",
+                deserialize: (bson) => Type.GetType(bson.AsString)
+                );
         }
 
 
@@ -28,17 +34,13 @@ namespace Utility.Repos
 
         public Task<object?> FindValue(IEquatable? equatable)
         {
-            if (equatable is not Key key)
-            {
-                throw new Exception("vsd s33322 vd");
-            }
 
-            if (key.Name == null)
+            if (equatable == null)
             {
                 List<object> objects = new();
                 using (GetCollection(out var collection))
                 {
-                    foreach(var item in collection.FindAll())
+                    foreach (var item in collection.FindAll())
                     {
                         var deserialised = _mapper.Deserialize(settings.Type, item);
                         objects.Add(deserialised);
@@ -46,18 +48,36 @@ namespace Utility.Repos
                     return Task.FromResult((object)objects);
                 }
             }
-            using (GetCollection(out var collection))
-            {
-                var find = collection.FindById(new BsonValue(key.Guid));
-                if (find != null)
-                    return Task.FromResult(_mapper.Deserialize(settings.Type, find));
 
-                var activated = Activator.CreateInstance(settings.Type);
-                BsonDocument document = _mapper.ToDocument(settings.Type, activated);
-                document["_id"] = key.Guid;
-                document["Name"] = key.Name;
-                var insert = (object)collection.Insert(document);
-                return Task.FromResult(activated);
+            if (equatable is not Key key)
+            {
+                throw new Exception("vsd s33322 vd");
+            }
+
+            return Task.FromResult((object?)Objects());
+
+            IEnumerable<object> Objects()
+            {
+                using (GetCollection(out var collection))
+                {
+                    var findByParentId = collection.Find(a => a["ParentGuid"].AsGuid == key.Guid);
+                    var findByName = collection.Find(a => a["Name"] == key.Name);
+                    var findByType = collection.Find(a => a["Type"] == _mapper.Serialize(key.Type));
+
+                    if (findByParentId != null)
+                        yield return findByParentId;
+                    if (findByName != null)
+                        yield return findByName;
+                    if (findByType != null)
+                        yield return findByType;
+
+                    //var activated = Activator.CreateInstance(settings.Type);
+                    //BsonDocument document = _mapper.ToDocument(settings.Type, activated);
+                    //document["_id"] = key.Guid;
+                    //document["Name"] = key.Name;
+                    //var insert = (object)collection.Insert(document);
+                    //return Task.FromResult(activated);
+                }
             }
         }
 
@@ -69,8 +89,9 @@ namespace Utility.Repos
             }
 
             BsonDocument document = _mapper.ToDocument(settings.Type, value);
-            document["_id"] = key.Guid;
-            document["Name"] = key.Name;
+            //document["_id"] = key.Guid;
+            //document["Name"] = key.Name;
+            //document["Type"] = key.Type.;
 
             using (GetCollection(out var collection))
             {
