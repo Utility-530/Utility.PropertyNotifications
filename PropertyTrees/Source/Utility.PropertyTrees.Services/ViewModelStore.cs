@@ -9,8 +9,6 @@ using Utility.Infrastructure;
 using LiteDB;
 using Utility.Enums;
 using System.Collections;
-using Utility.Structs;
-
 namespace Utility.PropertyTrees.Services
 {
     //public interface IViewModelRepository
@@ -65,7 +63,7 @@ namespace Utility.PropertyTrees.Services
                     observer.OnProgress(2, 3);
 
                     repository
-                    .UpdateValue(order.Key, order.ViewModel)
+                    .Update(order.Key, order.ViewModel)
                     .ToObservable()
                     .Subscribe(a =>
                     {
