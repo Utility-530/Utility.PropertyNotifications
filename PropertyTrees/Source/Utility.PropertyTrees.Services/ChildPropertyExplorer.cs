@@ -78,17 +78,18 @@ namespace Utility.PropertyTrees.Services
                                 i++;
                                 obs.OnNext(new ChildrenResponse(new Change<INode>(p, ChangeType.Add), descriptor.As<PropertyDescriptor>()));
                                 obs.OnProgress(i, count);
-                                if (count == i && value.Data is not INotifyCollectionChanged)
-                                    obs.OnCompleted();
+                                if (count == i)
+                                {
+                                    obs.OnNext(new ChildrenResponse(new Change<INode>(default, ChangeType.None), default));
+                                    if (value.Data is not INotifyCollectionChanged)
+                                      obs.OnCompleted();
+                                }
                             })
                             .DisposeWith(composite);
                         else if (descriptor.Type == ChangeType.Remove)
-                            FromCollectionDescriptor(descriptor.Value)
-                            .Subscribe(p =>
-                            {
-                                obs.OnNext(new ChildrenResponse(new Change<INode>(p, ChangeType.Remove), descriptor.As<PropertyDescriptor>()));
-                            })
-                            .DisposeWith(composite);
+ 
+                                obs.OnNext(new ChildrenResponse(new Change<INode>(default, ChangeType.Remove), descriptor.As<PropertyDescriptor>()));
+     
                         else if (descriptor.Type == ChangeType.Reset)
                             obs.OnNext(new ChildrenResponse(new Change<INode>(default, ChangeType.Reset), new Change<PropertyDescriptor>(default, ChangeType.Reset)));
                     },
@@ -184,7 +185,10 @@ namespace Utility.PropertyTrees.Services
                                     break;
                                 case NotifyCollectionChangedAction.Remove:
                                     foreach (var item in a.OldItems)
-                                        Next(value, observer, item, data.GetType(), ChangeType.Remove, ref i);
+                                    {
+                                        var descriptor = new CollectionItemDescriptor(item, (data as IList).IndexOf(item), data.GetType());
+                                        observer.OnNext(new(descriptor, ChangeType.Remove));
+                                    }
                                     break;
                                 case NotifyCollectionChangedAction.Reset:
                                     observer.OnNext(new(null, ChangeType.Reset));

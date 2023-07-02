@@ -66,6 +66,7 @@ namespace Utility.PropertyTrees
                                     }
 
                                     Add(response);
+                                    return;
                                 }
                                 if (response.NodeChange.Type == CType.Remove)
                                 {
@@ -85,10 +86,10 @@ namespace Utility.PropertyTrees
                                 if (_children.Count == (Data as IEnumerable)?.Count())
                                 {
 
-                                    if (flag == true)
-                                    {
-                                    }
-                                    flag = true;
+                                    //if (flag == true)
+                                    //{
+                                    //}
+                                    //flag = true;
                                     if (typeof(INotifyCollectionChanged).IsAssignableFrom(PropertyType) == false)
                                     {
                                         _children.Complete();
@@ -102,6 +103,7 @@ namespace Utility.PropertyTrees
                             });
                 return true;
             }
+
             return await base.RefreshAsync();
 
             void Add(ChildrenResponse response)
@@ -115,20 +117,27 @@ namespace Utility.PropertyTrees
 
             void Remove(ChildrenResponse response)
             {
-                List<object> removals = new();
+                List<PropertyBase> removals = new();
                 foreach (PropertyBase child in _children)
                 {
-                    if (child.Descriptor.Name == response.SourceChange.Value?.Name)
+                    if (child.Data == (response.SourceChange.Value as CollectionItemDescriptor).Item)
                         removals.Add(child);
                 }
+                if (removals.Count == 0)
+                    throw new Exception("sd 67ssdsddddd");
                 foreach (var remove in removals)
                 {
                     _children.Remove(remove);
+                    this.Observe<SetPropertyResponse, SetPropertyRequest>(new SetPropertyRequest(remove.Key, null))
+                     .Subscribe(a =>
+                     {
+                         UpdateIndexesForChildren();
+                     });
+
                     if (remove is not INode { Key: Key key })
                     {
                         throw new Exception("sd w33!!£ £");
                     }
-                    UpdateStorage(key);
                 }
             }
 
@@ -141,13 +150,20 @@ namespace Utility.PropertyTrees
                 }
                 foreach (var remove in removals)
                 {
-                    _children.Remove(remove);
+            
                     if (remove is not INode { Key: Key key })
                     {
                         throw new Exception("sd w33!!£ £");
-                    }
-                    UpdateStorage(key);
+                    }     
+                    _children.Remove(remove);
+                    this.Observe<SetPropertyResponse, SetPropertyRequest>(new SetPropertyRequest(key, null))
+                        .Subscribe(a =>
+                        {
+    
+                        });
                 }
+
+
             }
 
             void RefreshOtherChildren(Type componentType, Type genericType)
@@ -156,7 +172,8 @@ namespace Utility.PropertyTrees
                 .Observe<FindPropertyResponse, FindPropertyRequest>(new FindPropertyRequest(new Key(this.Guid, default, genericType)))
                 .Subscribe(response =>
                 {
-                    foreach (Key key in response.Value as IEnumerable ?? throw new Exception("FVDDSF Sss"))
+                    var responseChildren = response.Value as IEnumerable ?? throw new Exception("FVDDSF Sss");
+                    foreach (Key key in responseChildren.Cast<Key>().OrderBy(a => a.Name))
                     {
                         if (_children.Cast<INode>().Any(c => c.Key.Equals(key)))
                         {
@@ -167,9 +184,10 @@ namespace Utility.PropertyTrees
                             Observe<ObjectCreationResponse, ObjectCreationRequest>(new(switchType, new[] { typeof(ValueNode), typeof(BaseObject) }, new object[] { key.Guid }))
                             .Subscribe(a =>
                             {
-                                var child = CreateChild(a, key.Name);
+                                int index = CollectionItemDescriptor.ToIndex(key.Name);
+                                var child = CreateChild(a, key.Name, index);
                                 if (Data is IList collection)
-                                    collection.Add(child.Data);
+                                    collection.Insert(index, child.Data);
                                 child.Parent = this;
                                 _children.Add(child);
                             });
@@ -179,26 +197,33 @@ namespace Utility.PropertyTrees
                     }
                 });
 
-                PropertyBase CreateChild(ObjectCreationResponse response, string name)
+                PropertyBase CreateChild(ObjectCreationResponse response, string name, int index)
                 {
                     var propertyBase = response.Value as PropertyBase;
                     var item = Activator.CreateInstance(genericType, Array.Empty<object>());
                     propertyBase.Data = item;
-                    propertyBase.Descriptor = new CollectionItemDescriptor(item, CollectionItemDescriptor.ToIndex(name), componentType);
+                    propertyBase.Descriptor = new CollectionItemDescriptor(item, index, componentType);
                     return propertyBase;
+                }
+            }
+
+            void UpdateIndexesForChildren()
+            {
+                int i = 0;
+                foreach (PropertyBase child in _children)
+                {
+                    var key = child.Key;
+                    child.Descriptor = new CollectionItemDescriptor(child.Data, i++, PropertyType);
+                    this
+                        .Observe<SetPropertyResponse, SetPropertyRequest>(new SetPropertyRequest(key, child.Key))
+                        .Subscribe(response =>
+                        {
+                        });
                 }
             }
         }
 
 
-        private void UpdateStorage(Key key)
-        {
-            this
-            .Observe<SetPropertyResponse, SetPropertyRequest>(new SetPropertyRequest(key, null))
-            .Subscribe(response =>
-            {
-            });
-        }
         public override bool HasChildren => IsCollection || Descriptor.GetChildProperties().Count > 0 || PropertyType.GetMethods().Any();
 
         public override string ToString()
