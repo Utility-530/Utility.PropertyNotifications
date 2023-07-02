@@ -23,7 +23,7 @@ namespace Utility.Repos
 
         private Tree tree = new();
 
-        public async Task UpdateValue(IEquatable key, object value)
+        public async Task Update(IEquatable key, object value)
         {
             if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
             {

@@ -13,7 +13,7 @@ namespace Utility.Repos
 
     public partial class SqliteRepository : IRepository
     {
-        public class Table
+        public record Table
         {
             [PrimaryKey, AutoIncrement]
             public int Id { get; set; }
@@ -27,7 +27,7 @@ namespace Utility.Repos
             public int Type { get; set; }
         }
 
-        public class Type
+        public record Type
         {
             [PrimaryKey, AutoIncrement]
             public int Id { get; set; }
@@ -36,7 +36,7 @@ namespace Utility.Repos
             public string Name { get; set; }
         }
 
-        public class Property
+        public record Property
         {
             [PrimaryKey]
             public Guid Guid { get; set; }
@@ -71,7 +71,7 @@ namespace Utility.Repos
              });
         }
 
-        public async Task UpdateValue(IEquatable key, object value)
+        public async Task Update(IEquatable key, object value)
         {
             if (key is not IGuid { Guid: var guid } _key)
             {
@@ -84,18 +84,27 @@ namespace Utility.Repos
 
             if (tables.Count == 1)
             {
-                var id = tables.Single().Id;
+                var single = tables.Single();
+                var id = single.Id;
                 var tableName = "T" + id;
-                var count = await connection.ExecuteScalarAsync<int>($"SELECT RowId FROM sqlite_master WHERE type = 'table' AND name = '{tableName}'");
 
                 await connection.RunInTransactionAsync(c =>
                 {
+
+                    if (value is Key { Guid: Guid valueGuid, Name: var name } && valueGuid == guid)
+                    {
+                        if (single.Name != name)
+                            c.Update(single with { Name = name });
+                        return;
+                    }
                     if (value == null)
                     {
                         c.Delete<Table>(id);
                         c.Execute($"DROP TABLE IF EXISTS '{tableName}'");
                         return;
                     }
+                    var count = c.ExecuteScalar<int>($"SELECT RowId FROM sqlite_master WHERE type = 'table' AND name = '{tableName}'");
+
                     if (count == 0)
                     {
                         c.Execute($"Create Table {tableName} (Guid GUID PRIMARY KEY, Added DateTime, Removed DateTime, Value Text)");

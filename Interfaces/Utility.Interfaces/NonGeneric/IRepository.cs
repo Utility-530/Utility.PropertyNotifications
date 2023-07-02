@@ -11,6 +11,6 @@ namespace Utility.Infrastructure.Abstractions
 
         Task<IEquatable[]> FindKeys(IEquatable key);
 
-        Task UpdateValue(IEquatable key, object value);
+        Task Update(IEquatable key, object value);
     }
 }

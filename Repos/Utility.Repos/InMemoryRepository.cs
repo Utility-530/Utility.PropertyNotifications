@@ -36,7 +36,7 @@ namespace Utility.Repos
         public IEquatable Key => new Key<InMemoryRepository>(Guids.InMemory);
 
 
-        public Task UpdateValue(IEquatable key, object value)
+        public Task Update(IEquatable key, object value)
         {
             if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
             {

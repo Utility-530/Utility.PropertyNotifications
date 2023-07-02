@@ -81,7 +81,7 @@ namespace Utility.Repos
             }
         }
 
-        public Task UpdateValue(IEquatable equatable, object value)
+        public Task Update(IEquatable equatable, object value)
         {
             if (equatable is not Key key)
             {
