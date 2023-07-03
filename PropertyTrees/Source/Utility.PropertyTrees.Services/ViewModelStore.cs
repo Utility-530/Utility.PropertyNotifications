@@ -114,7 +114,7 @@ namespace Utility.PropertyTrees.Services
         public Guid Id { get; set; }
         public Guid ParentGuid { get; set; }
         public string Name { get; set; }
-        public Type Type { get; set; }
+        public string Type { get; set; }
         public bool IsExpanded { get; set; } = true;
         public Position2D Dock { get; set; }
         public int GridRow { get; set; }

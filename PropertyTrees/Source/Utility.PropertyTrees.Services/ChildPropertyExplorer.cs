@@ -14,13 +14,15 @@ using System.Collections.Specialized;
 using Utility.Helpers.Ex;
 using Utility.Helpers;
 using Utility.Nodes.Abstractions;
+using NetFabric.Hyperlinq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Utility.PropertyTrees.Services
 {
     public partial class ChildPropertyExplorer : BaseObject
     {
         readonly Dictionary<Type, PropertyDescriptor[]> cachedPropertyDesciptors = new();
-        readonly Dictionary<PropertyDescriptor, bool> includes = new();
+        readonly Dictionary<PropertyDescriptor, bool> includes = new(new PropertyDescriptorComparer());
 
         public override Key Key => new(Guids.PropertyFilter, nameof(ChildPropertyExplorer), typeof(ChildPropertyExplorer));
 
@@ -170,7 +172,7 @@ namespace Utility.PropertyTrees.Services
                     if (data is IEnumerable enumerable && data is not string s)
                         foreach (var item in enumerable)
                         {
-                            Next(value, observer, item, data.GetType(), ChangeType.Add, ref i);
+                            Next(value, observer, item, data.GetType(), ChangeType.Add, i++);
                         }
                     if (data is INotifyCollectionChanged collectionChanged)
                     {
@@ -180,17 +182,21 @@ namespace Utility.PropertyTrees.Services
                             switch (a.Action)
                             {
                                 case NotifyCollectionChangedAction.Add:
-                                    foreach (var item in a.NewItems)
-                                        Next(value, observer, item, data.GetType(), ChangeType.Add, ref i);
-                                    break;
+                                    {
+                                        foreach (var item in a.NewItems)
+                                            Next(value, observer, item, data.GetType(), ChangeType.Add, i++);
+                                        break;
+                                    }
                                 case NotifyCollectionChangedAction.Remove:
                                     foreach (var item in a.OldItems)
                                     {
+                                        --i;
                                         var descriptor = new CollectionItemDescriptor(item, (data as IList).IndexOf(item), data.GetType());
                                         observer.OnNext(new(descriptor, ChangeType.Remove));
                                     }
                                     break;
                                 case NotifyCollectionChangedAction.Reset:
+                                    i = 0;
                                     observer.OnNext(new(null, ChangeType.Reset));
                                     break;
                             }
@@ -202,7 +208,7 @@ namespace Utility.PropertyTrees.Services
                     }
                     return Disposer.Empty;
                 });
-                static void Next(ChildrenRequest value, Interfaces.Generic.IObserver<Change<CollectionItemDescriptor>> observer, object item, Type componentType, ChangeType changeType, ref int i)
+                static void Next(ChildrenRequest value, Interfaces.Generic.IObserver<Change<CollectionItemDescriptor>> observer, object item, Type componentType, ChangeType changeType, int i)
                 {
                     var descriptor = new CollectionItemDescriptor(item, i, componentType);
                     //if (value.Filters?.Any(f => f.Invoke(descriptor) == false) == false)
@@ -210,6 +216,19 @@ namespace Utility.PropertyTrees.Services
                     i++;
                 }
             }
+        }
+    }
+
+    public class PropertyDescriptorComparer : IEqualityComparer<PropertyDescriptor>
+    {
+        public bool Equals(PropertyDescriptor? x, PropertyDescriptor? y)
+        {
+            return x.Name == y.Name && x.ComponentType.Name == y.ComponentType.Name;
+        }
+
+        public int GetHashCode([DisallowNull] PropertyDescriptor obj)
+        {
+            return obj.GetHashCode();
         }
     }
 }

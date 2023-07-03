@@ -55,6 +55,7 @@ internal class BootStrapper : BaseObject
         container.RegisterMany<ViewBuilder>();
         container.RegisterMany<UdpServerController>();
         container.RegisterInstance(App.Current.Resources["ContentTemplateSelector"] as DataTemplateSelector);
+        container.Register<StyleSelector, TreeStyleSelector>();
 
         container.RegisterInstance(SynchronizationContext.Current);
 

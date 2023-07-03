@@ -2,7 +2,7 @@
 
 namespace Utility.Models
 {
-    public interface  IViewModel
+    public interface IViewModel
     {
         string Arrangement { get; set; }
 
@@ -10,7 +10,8 @@ namespace Utility.Models
 
         int GridRow { get; set; }
 
-        int GridColumn { get; set; }     
+        int GridColumn { get; set; }
+
         int GridRowSpan { get; set; }
 
         int GridColumnSpan { get; set; }
@@ -23,10 +24,10 @@ namespace Utility.Models
         double Left { get; set; }
         double Right { get; set; }
         double Top { get; set; }
+        string Type { get; set; }
         double Bottom { get; set; }
+
         // margin
-
-
         string Tooltip { get; set; }
     }
 }
