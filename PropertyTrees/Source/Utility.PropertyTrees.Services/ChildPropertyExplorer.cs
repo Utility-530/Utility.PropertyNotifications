@@ -223,7 +223,7 @@ namespace Utility.PropertyTrees.Services
     {
         public bool Equals(PropertyDescriptor? x, PropertyDescriptor? y)
         {
-            return x.Name == y.Name && x.ComponentType.Name == y.ComponentType.Name;
+            return x?.Name == y?.Name && x?.ComponentType.Name == y?.ComponentType.Name;
         }
 
         public int GetHashCode([DisallowNull] PropertyDescriptor obj)

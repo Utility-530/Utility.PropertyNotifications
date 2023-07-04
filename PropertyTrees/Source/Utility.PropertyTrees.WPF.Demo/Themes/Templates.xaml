@@ -50,7 +50,7 @@
     <!--
     </Style>-->
     <DataTemplate x:Key="StringTemplate">
-        <TextBox Text="{Binding Value}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"></TextBox>
+        <TextBox Text="{Binding Value}"></TextBox>
     </DataTemplate>
 
     <DataTemplate x:Key="ServerTypeTemplate">
@@ -140,13 +140,6 @@
         MethodTemplate="{StaticResource MethodTemplate}"
         />
 
-    <!--<DataTemplate DataType="{x:Type nodes:ValueNode}">
-        <HeaderedContentControl Header="{Binding Content, Mode=OneWay}" 
-                                Style="{StaticResource Horizontal}"
-                                Content="{Binding }" 
-                                ContentTemplateSelector="{StaticResource ContentTemplateSelector}"/>
-    </DataTemplate>-->
-
     <DataTemplate DataType="{x:Type m:Key}">
         <UniformGrid Height="10" Rows="1">
             <Viewbox>
@@ -161,63 +154,13 @@
         </UniformGrid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type infra:ViewModel}">
-        <!--<UniformGrid Height="10" Rows="1">
-            <Viewbox>
-                <Border AutomationProperties.IsRowHeader="False">
-                    <ContentControl
-                            ToolTip="{Binding Guid}"
-                            Content="{Binding Guid, Converter={x:Static conv:GravatarConverter.Instance}}"></ContentControl>
-                </Border>
-            </Viewbox>
-            <TextBlock Text="{Binding Name}" FontSize="8" ></TextBlock>
-            <TextBlock Text="{Binding Type.Name}" FontSize="8" ></TextBlock>
-        </UniformGrid>-->
-    </DataTemplate>
+
 
     <DataTemplate DataType="{x:Type local:ViewModelsCollection}">
-        <DataGrid ItemsSource="{Binding Data, Converter={x:Static conv:DefaultConverter.Instance} }" >            
+        <DataGrid ItemsSource="{Binding Data, Converter={x:Static conv:DefaultConverter.Instance} }" >
         </DataGrid>
-        <!--<UniformGrid Height="10" Rows="1">
-            <Viewbox>
-                <Border AutomationProperties.IsRowHeader="False">
-                    <ContentControl
-                            ToolTip="{Binding Guid}"
-                            Content="{Binding Guid, Converter={x:Static conv:GravatarConverter.Instance}}"></ContentControl>
-                </Border>
-            </Viewbox>
-            <TextBlock Text="{Binding Name}" FontSize="8" ></TextBlock>
-            <TextBlock Text="{Binding Type.Name}" FontSize="8" ></TextBlock>
-        </UniformGrid>-->
     </DataTemplate>
-
-
-    <!--<DataTemplate DataType="{x:Type infra:Order}">
-        <Viewbox Margin="8,8,8,8">
-            <FrameworkElement.Resources>
-                <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
-                    <Setter Property="FontSize" Value="8"></Setter>
-                </Style>
-            </FrameworkElement.Resources>
-            <st:AutoGrid Columns="400,50,50,*,*,*"  >
-
-                <ContentControl Content="{Binding Key}"></ContentControl>
-
-                <TextBlock Text="{Binding Access}" FontSize="8"  HorizontalAlignment="Center" />
-
-                <UniformGrid Columns="1">
-                    <ProgressBar  Maximum="100" Value="{Binding Progress}"></ProgressBar>
-                    <TextBlock Text="{Binding Progress}" HorizontalAlignment="Center"  FontSize="8"></TextBlock>
-                </UniformGrid>
-
-                <TextBlock Text="{Binding Value}" FontSize="8" ></TextBlock>
-
-                <TextBlock Text="{Binding Exception.Message}" FontSize="8" ></TextBlock>
-
-            </st:AutoGrid>
-        </Viewbox>
-    </DataTemplate>-->
-
+    
     <DataTemplate DataType="{x:Type infra:HistoryViewModel}">
         <st:AutoGrid Rows="50,30,*" Columns="*" x:Name="Top">
 

@@ -100,7 +100,7 @@ namespace Utility.PropertyTrees.WPF
                                     if (dictionary.ContainsKey(propertyBase.Name) == false)
                                     {
                                         dictionary.Add(propertyBase.Name, dictionary.Count);
-                                        columnsTreeViewItem.Items.Add(new TreeViewItem { Header =  propertyBase, HeaderTemplate = TreeTemplateSelector.HeaderTemplate(7), Tag = propertyBase.Name, Width = columnWidth, Style = TreeStyleSelector.HeaderOnlyStyle });
+                                        columnsTreeViewItem.Items.Add(new TreeViewItem { Header =  propertyBase, HeaderTemplate = TreeTemplateSelector.HeaderTemplate(9), Tag = propertyBase.Name, Width = columnWidth, Style = TreeStyleSelector.HeaderOnlyStyle });
                                     }
                                     treeViewItem = Make(propertyBase);
 
@@ -212,19 +212,6 @@ namespace Utility.PropertyTrees.WPF
 
                         return treeViewItem;
                     }
-
-
-                    //TreeViewItem MakeCollectionValueTreeViewItem(INode prop)
-                    //{
-                    //    return new TreeViewItem
-                    //    {
-                    //        Name = (prop.Key as Key).Name,
-                    //        Header = prop,
-                    //        HeaderTemplateSelector = dataTemplateSelector,
-                    //        ItemContainerStyleSelector = styleSelector
-                    //        //Style = HeaderOnlyStyle
-                    //    };
-                    //}
 
                     TreeViewItem MakeChildOfCollection(INode prop)
                     {

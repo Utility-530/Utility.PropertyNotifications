@@ -6,6 +6,7 @@ namespace Utility.Models
     {
         string Arrangement { get; set; }
 
+        string Type { get; set; }
         Position2D Dock { get; set; }
 
         int GridRow { get; set; }
@@ -24,7 +25,7 @@ namespace Utility.Models
         double Left { get; set; }
         double Right { get; set; }
         double Top { get; set; }
-        string Type { get; set; }
+
         double Bottom { get; set; }
 
         // margin

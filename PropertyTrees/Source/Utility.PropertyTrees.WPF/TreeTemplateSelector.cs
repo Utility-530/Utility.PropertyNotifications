@@ -53,11 +53,6 @@ namespace Utility.PropertyTrees.WPF
                 this.broadcast(new(item, RootTemplate, container));
                 return RootTemplate;
             }
-            //if (item is ReferenceProperty)
-            //{
-            //    this.broadcast(new(item, ReferenceTemplate, container));
-            //    return ReferenceTemplate;
-            //}
             if (item is not ValueProperty { Descriptor: { PropertyType: var propertyType } } propertyNode)
             {
                 this.broadcast(new(item, UnknownTemplate, container));
@@ -123,14 +118,6 @@ namespace Utility.PropertyTrees.WPF
         public DataTemplate ReferenceTemplate { get; set; }
         public DataTemplate RootTemplate { get; set; }
         public DataTemplate MethodTemplate { get; set; }
-
-
-
-
-
-
-
-
 
 
         public static DataTemplate HeaderTemplate(int count) => TemplateGenerator.CreateDataTemplate(() =>
