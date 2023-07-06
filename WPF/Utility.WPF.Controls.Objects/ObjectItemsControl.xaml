@@ -1,10 +1,7 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:Utility.WPF.Controls.Objects"
-    xmlns:templates="http://schemas.utility.com/templates"
-    xmlns:conv="http://schemas.utility.com/converters">
-
+    xmlns:local="clr-namespace:Utility.WPF.Controls.Objects">
 
 
     <Style TargetType="{x:Type local:ObjectItemsControl}" 

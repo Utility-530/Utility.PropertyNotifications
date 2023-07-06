@@ -20,8 +20,7 @@ using System.Windows.Media;
 
 namespace Utility.WPF.Controls.Objects
 {
-    using global::Utility.WPF.Converters;
-    using Utility;
+    using Utility.WPF.Converters;
     using Utility.Helpers;
 
     public class ObjectControl : ContentControl, IEnableLogger
@@ -301,7 +300,7 @@ namespace Utility.WPF.Controls.Objects
         public static OrderedDictionary Convert(object value, IValueConverter valueConverter, IValueConverter filterConverter, IComparer<string>? comparer = null)
         {
             var arr = SelectMembers(value.GetType(), comparer).Where(m => (bool)filterConverter.Convert(m, null, value, CultureInfo.CurrentCulture)).ToArray();
-            var dict = Utility.Helpers.DictionaryHelper.ToOrderedDictionary(
+            var dict = DictionaryHelper.ToOrderedDictionary(
                 arr,
                 a => a.Name.Humanize(LetterCasing.Title),
                 a => valueConverter.Convert(a, value));
@@ -311,7 +310,7 @@ namespace Utility.WPF.Controls.Objects
 
         public static OrderedDictionary ConvertMany(IEnumerable value, IValueConverter valueConverter, IValueConverter filterConverter, IComparer<string>? comparer = null)
         {
-            var dict = Utility.Helpers.DictionaryHelper.ToOrderedDictionary(
+            var dict = DictionaryHelper.ToOrderedDictionary(
                 value.Cast<object>().SelectMany(obj =>
                 {
                     var arr = SelectMembers(obj.GetType(), comparer).Where(m => (bool)filterConverter.Convert(m, null, value, CultureInfo.CurrentCulture)).ToArray();
@@ -327,7 +326,7 @@ namespace Utility.WPF.Controls.Objects
         {
             foreach (var obj in value.Cast<object>().ToArray())
             {
-                var dict = Utility.Helpers.DictionaryHelper.ToOrderedDictionary(
+                var dict = DictionaryHelper.ToOrderedDictionary(
                     SelectMembers(obj.GetType()).Where(m => (bool)filterConverter.Convert(m, null, obj, CultureInfo.CurrentCulture)),
                     a => a.Name.Humanize(LetterCasing.Title),
                     a => valueConverter.Convert(a, obj)?.ToString() ?? throw new NullReferenceException("object is null"));
