@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Controls;
 
-namespace Utility.WPF.Behavior
+namespace Utility.WPF.Controls.DataGrids
 {
     public class DataGridHideBrowsableFalseBehavior : Behavior<DataGrid>
     {
@@ -11,7 +11,11 @@ namespace Utility.WPF.Behavior
             AssociatedObject.AutoGeneratingColumn += AssociatedObject_AutoGeneratingColumn;
             base.OnAttached();
         }
-
+        protected override void OnDetaching()
+        {
+            AssociatedObject.AutoGeneratingColumn -= AssociatedObject_AutoGeneratingColumn;
+            base.OnDetaching();
+        }
         private void AssociatedObject_AutoGeneratingColumn(object? sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             if (((PropertyDescriptor)e.PropertyDescriptor).IsBrowsable == false)
