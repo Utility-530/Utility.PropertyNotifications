@@ -61,25 +61,32 @@ namespace Utility.WPF.Templates
 
             var interfaces = type.GetInterfaces();
 
-            if (interfaces.Contains(typeof(IConvertible)))
-                return IConvertibleTemplate ??= Templates["IConvertable"] as DataTemplate ?? throw new Exception("Missing DataTemplate for IConvertible");
-            else if (interfaces.Any(a => a.Name == "IDictionary`2") || interfaces.Contains(typeof(IDictionary)))
+            if(Templates.FindResource(new DataTemplateKey(type)) is DataTemplate template)
+            {
+                return template;
+            }
+
+
+
+            if (interfaces.Any(a => a.Name == "IDictionary`2") || interfaces.Contains(typeof(IDictionary)))
                 return DictionaryDataTemplate ??= Templates["Dictionary"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Dictionary");
+            else if (type == typeof(string))
+                return StringDataTemplate ??= Templates["String"] as DataTemplate ?? throw new Exception("Missing DataTemplate for String");
             else if (interfaces.Contains(typeof(IEnumerable)))
                 return EnumerableDataTemplate ??= Templates["Enumerable"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Enumerable");
-            if (type == typeof(Color))
+            else if(type == typeof(Color))
                 return ColorTemplate ??= Templates["Color"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Color");
             //if (type == typeof(Utility.WPF.Abstract.Icon))
             //    return IconDataTemplate;
-            if (type == typeof(bool))
+            else if(type == typeof(bool))
                 return BooleanDataTemplate ??= Templates["Boolean"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Boolean");
-            if (typeof(Enum).IsAssignableFrom(type))
-                return EnumDataTemplate ??= Templates["Enum"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Enum");
-            if (type == typeof(string))
-                return StringDataTemplate ??= Templates["String"] as DataTemplate ?? throw new Exception("Missing DataTemplate for String");
-            if (type == typeof(int) || type == typeof(long) || type == typeof(double) || type == typeof(decimal))
-                return NumberDataTemplate ??= Templates["Number"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Number");
+            else if(typeof(Enum).IsAssignableFrom(type))
+                return EnumDataTemplate ??= (Templates.FindResource(new DataTemplateKey(typeof(Enum))?? Templates["Enum"]) as DataTemplate) ?? throw new Exception("Missing DataTemplate for Enum");
 
+            else if(type == typeof(int) || type == typeof(long) || type == typeof(double) || type == typeof(decimal))
+                return NumberDataTemplate ??= Templates["Number"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Number");
+            else if(interfaces.Contains(typeof(IConvertible)))
+                return IConvertibleTemplate ??= Templates["IConvertable"] as DataTemplate ?? throw new Exception("Missing DataTemplate for IConvertible");
             return DefaultDataTemplate ??= TemplateGenerator.CreateDataTemplate
                 (() => new TextBlock
                 {

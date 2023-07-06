@@ -43,10 +43,10 @@ namespace Utility.WPF.ResourceDictionarys
         {
             if (dictionary.Keys.Count == 0)
                 return;
-            MergedDictionaries.Add(dictionary);
-            if (MergedDictionaries.Distinct(new ResourceDictionaryEqualityComparer()).Count() != MergedDictionaries.Count)
+
+            if (MergedDictionaries.Contains(dictionary) == false)
             {
-                throw new Exception("£444");
+                MergedDictionaries.Add(dictionary);
             }
         }
 

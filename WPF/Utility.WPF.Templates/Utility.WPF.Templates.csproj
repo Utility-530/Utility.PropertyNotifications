@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
     <ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
   </ItemGroup>
 

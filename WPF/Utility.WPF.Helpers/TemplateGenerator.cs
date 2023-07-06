@@ -21,7 +21,8 @@ namespace Utility.WPF.Helpers
             {
                 var control = (TemplateGeneratorControl)instance;
                 var factory = (Func<object>)args.NewValue;
-                control.Content = factory();
+                if (factory != null)
+                    control.Content = factory();
             }
         }
 

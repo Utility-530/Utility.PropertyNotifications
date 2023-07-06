@@ -16,6 +16,13 @@ namespace Utility.WPF.Demo.Objects
             var d = typeof(Utility.WPF.Demo.Common.ViewModels.Tick);
             Resolver.Instance.AutoRegister();
             builder.UseAutofacDependencyResolver();
+
+            new Window
+            {
+                WindowState = WindowState.Maximized,
+                Content = new UserControlsGrid()
+                //Content = new ResourceDictionariesGrid()
+            }.Show();
         }
     }
 }
