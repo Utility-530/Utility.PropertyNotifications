@@ -54,21 +54,22 @@ namespace Utility.Repos
                 throw new Exception("vsd s33322 vd");
             }
 
-            return Task.FromResult((object?)Objects());
+            var array = Objects().Select(item => _mapper.Deserialize(settings.Type, item)).ToArray();
+            return Task.FromResult((object?)array);
 
-            IEnumerable<object> Objects()
+            IEnumerable<BsonDocument> Objects()
             {
                 using (GetCollection(out var collection))
                 {
-                    var findByParentId = collection.Find(a => a["ParentGuid"].AsGuid == key.Guid);
-                    var findByName = collection.Find(a => a["Name"] == key.Name);
-                    var findByType = collection.Find(a => a["Type"] == _mapper.Serialize(key.Type));
-
-                    if (findByParentId != null)
+                    foreach (var findByParentId in collection.Find(a => a["ParentGuid"].AsGuid == key.Guid))
                         yield return findByParentId;
-                    if (findByName != null)
+
+                    foreach (var findByName in collection.Find(a => a["Name"] == key.Name))
                         yield return findByName;
-                    if (findByType != null)
+
+                    var type = _mapper.Serialize(key.Type);
+
+                    foreach (var findByType in collection.Find(a => a["Type"] == type))
                         yield return findByType;
 
                     //var activated = Activator.CreateInstance(settings.Type);

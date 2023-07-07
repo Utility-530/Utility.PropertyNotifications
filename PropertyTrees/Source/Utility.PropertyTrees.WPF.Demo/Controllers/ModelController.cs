@@ -95,7 +95,7 @@ internal class ModelController : BaseObject
     {
         if (selectionChange is { Node: PropertyBase { Key: Key Key } node })
         {
-            if (node.Ancestors.Cast<PropertyBase>().Any(a => a.Name == "ViewModels"))
+            if (node.SelfAndAncestors().Any(a => a.Name == "ViewModels"))
                 return;
 
             model.ViewModels.Guid = Key.Guid;

@@ -5,12 +5,17 @@
                     xmlns:trees="clr-namespace:Utility.PropertyTrees.WPF;assembly=Utility.PropertyTrees.WPF"   
                     xmlns:local="clr-namespace:Utility.PropertyTrees.WPF.Demo"   
                     xmlns:m="clr-namespace:Utility.Models;assembly=Utility.Models"
-                    xmlns:infra="clr-namespace:Utility.PropertyTrees.Services;assembly=Utility.PropertyTrees.Services"
+                 
                     xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:btn="http://schemas.utility.com/buttons"
                     xmlns:st="http://schemas.spicytaco.io/" 
                     xmlns:uni="UniversalConverter"
-                    xmlns:view="http://schemas.utility.com">
+                    xmlns:view="http://schemas.utility.com"
+                    xmlns:dgrids="http://schemas.utility.com/datagrids"
+                    xmlns:temp="http://schemas.utility.com/templates"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:objects="http://schemas.utility.com/objects"
+                    xmlns:local1="clr-namespace:Utility.PropertyTrees.WPF.Demo.Infrastructure">
 
 
     <ResourceDictionary.MergedDictionaries>
@@ -33,22 +38,6 @@
     </DataTemplate>
 
 
-    <!--<Style TargetType="HeaderedContentControl">
-        <Setter Property="Margin" Value="0,0,0,28" />
-        <Setter Property="IsTabStop" Value="False" />
-        -->
-    <!--<Setter Property="HeaderTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <TextBlock
-                            Text="{Binding}"
-                            Style="{DynamicResource BaseTextBlockStyle}"
-                            Margin="0,0,0,16" />
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>-->
-    <!--
-    </Style>-->
     <DataTemplate x:Key="StringTemplate">
         <TextBox Text="{Binding Value}"></TextBox>
     </DataTemplate>
@@ -127,6 +116,18 @@
         <Button Content="{Binding Content}" Command="{Binding Command, Mode=OneTime}" ></Button>
     </DataTemplate>
 
+    <DataTemplate x:Key="TypeTemplate">
+        <objects:ObjectComboBox
+                    x:Name="ebdc"                 
+                    Object="{Binding Mode=OneWay, Converter={x:Static conv:DefaultConverter.Instance }}" >
+            <objects:ObjectComboBox.Filters>
+                <x:Array Type="{x:Type sys:Object}">
+                    <local1:TypeFilter/>
+                </x:Array>
+            </objects:ObjectComboBox.Filters>
+        </objects:ObjectComboBox>
+    </DataTemplate>
+
     <trees:TreeTemplateSelector 
         x:Key="ContentTemplateSelector"
         StringTemplate="{StaticResource StringTemplate}"
@@ -138,6 +139,7 @@
         ReferenceTemplate="{StaticResource ReferenceTemplate}"
         RootTemplate="{StaticResource ReferenceTemplate}"
         MethodTemplate="{StaticResource MethodTemplate}"
+
         />
 
     <DataTemplate DataType="{x:Type m:Key}">
@@ -155,68 +157,16 @@
     </DataTemplate>
 
 
-
+    <objects:ObjectsDataTemplateSelector x:Key="ObjectsDataTemplateSelector"  
+                                         TypeTemplate="{StaticResource TypeTemplate}"/>
     <DataTemplate DataType="{x:Type local:ViewModelsCollection}">
-        <DataGrid ItemsSource="{Binding Data, Converter={x:Static conv:DefaultConverter.Instance} }" >
+        <DataGrid ItemsSource="{Binding Data}" HorizontalAlignment="Stretch"   RowHeaderWidth="0"  HeadersVisibility="Column" EnableRowVirtualization="false" IsReadOnly="true">
+            <i:Interaction.Behaviors>
+                <dgrids:ShareWidthsBehavior Margin="24"/>
+                <dgrids:CustomTemplateBehavior DataTemplateSelector="{StaticResource ObjectsDataTemplateSelector}"/>
+            </i:Interaction.Behaviors>
         </DataGrid>
     </DataTemplate>
     
-    <DataTemplate DataType="{x:Type infra:HistoryViewModel}">
-        <st:AutoGrid Rows="50,30,*" Columns="*" x:Name="Top">
-
-            <btn:StepButtons x:Name="StepButtons" Enabled="{Binding Enabled, Mode=OneWay}" Command="{Binding Command, Mode=OneTime}" ></btn:StepButtons>
-
-            <UniformGrid  Grid.Row="1" Rows="1">
-                <UniformGrid.Background>
-                    <SolidColorBrush Opacity="0.2" Color="#FF001B48"></SolidColorBrush>
-                </UniformGrid.Background>
-
-                <TextBlock Text="{Binding ElementName=Past, Path=Items.Count}" HorizontalAlignment="Center"></TextBlock>
-                <Ellipse Height="40" Width="40"></Ellipse>
-                <TextBlock Text="{Binding ElementName=Present, Path=Items.Count}" HorizontalAlignment="Center"></TextBlock>
-                <Ellipse Height="40" Width="40"></Ellipse>
-                <TextBlock Text="{Binding ElementName=Future, Path=Items.Count}" HorizontalAlignment="Center"></TextBlock>
-            </UniformGrid>
-
-            <Grid x:Name="HistoryPanel" Grid.Row="3">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="6*"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="6*"></RowDefinition>
-                </Grid.RowDefinitions>
-
-                <ScrollViewer>
-                    <ItemsControl x:Name="Past"  ItemsSource="{Binding Past}">
-                        <!--<ItemsControl.Background>
-                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0" Opacity="0.2">
-                                <GradientStop Color="#FF001B48" Offset="0.25" />
-                                <GradientStop Color="White" Offset="0.99" />
-                            </LinearGradientBrush>
-                        </ItemsControl.Background>-->
-                    </ItemsControl>
-                </ScrollViewer>
-                <Border  Grid.Row="1" BorderBrush="Gray" BorderThickness="2">
-                    <Viewbox>
-                        <ItemsControl x:Name="Present" ItemsSource="{Binding Present}">
-                            <!--<ItemsControl.Background>
-                                <SolidColorBrush Color="Transparent"  Opacity="1" />
-                            </ItemsControl.Background>-->
-                        </ItemsControl>
-                    </Viewbox>
-                </Border>
-
-                <ScrollViewer Grid.Row="2">
-                    <ItemsControl x:Name="Future"  ItemsSource="{Binding Future}">
-                        <!--<ItemsControl.Background>
-                            <LinearGradientBrush EndPoint="0,1" StartPoint="0,0" Opacity="0.2">
-                                <GradientStop Color="White" Offset="0.01" />
-                                <GradientStop Color="#FF4A0000" Offset="0.75" />
-                            </LinearGradientBrush>
-                        </ItemsControl.Background>-->
-                    </ItemsControl>
-                </ScrollViewer>
-            </Grid>
-        </st:AutoGrid>
-    </DataTemplate>
-
+  
 </ResourceDictionary>

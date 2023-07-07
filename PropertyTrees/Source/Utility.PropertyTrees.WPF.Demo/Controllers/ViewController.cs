@@ -96,29 +96,29 @@ namespace Utility.PropertyTrees.WPF.Demo
                 .MouseDoubleClickTreeViewSelections()
                 .Subscribe(a =>
                 {
-                    if (a is { Header: ValueNode valueNode } treeviewItem)
-                    {
-                        this.valueNode = valueNode;
-                        treeviewItem.IsExpanded = !treeviewItem.IsExpanded;
-                        this.Observe<GetViewModelResponse, GetViewModelRequest>(new(valueNode.Key))
-                            .Subscribe(response =>
-                            {
-                                Context.Post((_) =>
-                                {
-                                    this.response = response;
-                                    dataGrid.Visibility = Visibility.Visible;
-                                    //dataGrid.ItemsSource = response.ViewModels;
-                                    var root = new RootProperty(Guid.NewGuid()) { Data = new { response.ViewModels } };
-                                    Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(dataGrid, root))
-                                    .Subscribe(a =>
-                                    {
-                                        //modelViewModel.IsConnected = true;
-                                        //System.Windows.Input.CommandManager.InvalidateRequerySuggested();
-                                    });
-                                }, default);
-                                //dataGrid.ItemsSource = response.ViewModels;
-                            });
-                    }
+                    //if (a is { Header: ValueNode valueNode } treeviewItem)
+                    //{
+                    //    this.valueNode = valueNode;
+                    //    treeviewItem.IsExpanded = !treeviewItem.IsExpanded;
+                    //    this.Observe<GetViewModelResponse, GetViewModelRequest>(new(valueNode.Key))
+                    //        .Subscribe(response =>
+                    //        {
+                    //            Context.Post((_) =>
+                    //            {
+                    //                this.response = response;
+                    //                dataGrid.Visibility = Visibility.Visible;
+                    //                //dataGrid.ItemsSource = response.ViewModels;
+                    //                var root = new RootProperty(Guid.NewGuid()) { Data = new { response.ViewModels } };
+                    //                Observe<TreeViewResponse, TreeViewRequest>(new TreeViewRequest(dataGrid, root))
+                    //                .Subscribe(a =>
+                    //                {
+                    //                    //modelViewModel.IsConnected = true;
+                    //                    //System.Windows.Input.CommandManager.InvalidateRequerySuggested();
+                    //                });
+                    //            }, default);
+                    //            //dataGrid.ItemsSource = response.ViewModels;
+                    //        });
+                    //}
                 });
 
             treeView

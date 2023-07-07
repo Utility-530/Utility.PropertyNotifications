@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive;
 using Utility.Collections;
+using Utility.Helpers;
 using Utility.Models;
 using Utility.PropertyTrees.Demo.Model;
 using VM = Utility.PropertyTrees.Services.ViewModel;
@@ -134,17 +135,17 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         public void AddByName()
         {
-            Collection.Add(new VM() { Name = Name });
+            Collection.Add(new VM() { Id=Guid.NewGuid(), Name = Name });
         }
 
         public void AddByKey()
         {
-            Collection.Add(new VM() { ParentGuid = Guid });
+            Collection.Add(new VM() { Id = Guid.NewGuid(), ParentGuid = Guid });
         }
 
         public void AddByType()
         {
-            Collection.Add(new VM() { Type = Type });
+            Collection.Add(new VM() { Id = Guid.NewGuid(), Type = type.FromString() });
         }
 
         public void Update()

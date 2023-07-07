@@ -7,6 +7,7 @@ using System.Windows.Data;
 using Utility.Helpers.NonGeneric;
 using Utility.Nodes;
 using Utility.Observables.Generic;
+using Utility.PropertyTrees.Services;
 using Utility.WPF.Helpers;
 
 namespace Utility.PropertyTrees.WPF
@@ -19,6 +20,10 @@ namespace Utility.PropertyTrees.WPF
         {
             DataTemplate template = default;
 
+            if(item is ViewModel viewmodel)
+            {
+
+            }
 
             if (item is MethodNode methodNode)
             {
@@ -63,6 +68,11 @@ namespace Utility.PropertyTrees.WPF
                 this.broadcast(new(item, StringTemplate, container));
                 return StringTemplate;
             }
+            if (propertyType == typeof(DateTime))
+            {
+                this.broadcast(new(item, StringTemplate, container));
+                return StringTemplate;
+            }
             if (propertyType == typeof(string))
             {
                 this.broadcast(new(item, StringTemplate, container));
@@ -88,6 +98,11 @@ namespace Utility.PropertyTrees.WPF
                 this.broadcast(new(item, EnumTemplate, container));
                 return EnumTemplate;
             }
+            //if (propertyType?.FullName?.Equals("System.RuntimeType") == true)
+            //{
+            //    this.broadcast(new(item, TypeTemplate, container));
+            //    return TypeTemplate;
+            //}
 
 
             template = UnknownTemplate;
@@ -118,6 +133,7 @@ namespace Utility.PropertyTrees.WPF
         public DataTemplate ReferenceTemplate { get; set; }
         public DataTemplate RootTemplate { get; set; }
         public DataTemplate MethodTemplate { get; set; }
+        //public DataTemplate TypeTemplate { get; set; }
 
 
         public static DataTemplate HeaderTemplate(int count) => TemplateGenerator.CreateDataTemplate(() =>

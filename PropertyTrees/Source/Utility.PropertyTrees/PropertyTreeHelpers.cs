@@ -1,4 +1,6 @@
 ﻿
+using System.Linq;
+
 namespace Utility.PropertyTrees
 {
     public static class PropertyTreeHelpers
@@ -23,6 +25,11 @@ namespace Utility.PropertyTrees
                 return true;
             }
             return false;
+        }
+
+        public static IEnumerable<PropertyBase> SelfAndAncestors(this PropertyBase propertyBase)
+        {
+            return new[] { propertyBase }.Concat(propertyBase.Ancestors.Cast<PropertyBase>()); 
         }
     }
 }

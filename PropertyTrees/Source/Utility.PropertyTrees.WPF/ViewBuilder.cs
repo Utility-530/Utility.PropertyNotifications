@@ -100,7 +100,7 @@ namespace Utility.PropertyTrees.WPF
                                     if (dictionary.ContainsKey(propertyBase.Name) == false)
                                     {
                                         dictionary.Add(propertyBase.Name, dictionary.Count);
-                                        columnsTreeViewItem.Items.Add(new TreeViewItem { Header =  propertyBase, HeaderTemplate = TreeTemplateSelector.HeaderTemplate(9), Tag = propertyBase.Name, Width = columnWidth, Style = TreeStyleSelector.HeaderOnlyStyle });
+                                        columnsTreeViewItem.Items.Add(new TreeViewItem { Header =  propertyBase, HeaderTemplate = TreeTemplateSelector.HeaderTemplate(9), Tag = propertyBase.Name, Width = columnWidth, Style = TreeStyleSelector.FixedWidthHeaderOnlyStyle });
                                     }
                                     treeViewItem = Make(propertyBase);
 
@@ -136,7 +136,7 @@ namespace Utility.PropertyTrees.WPF
                             }
                             else
                             {
-                                var labelItem = new TreeViewItem { Header = propertyBase, HeaderTemplateSelector = dataTemplateSelector, Style = TreeStyleSelector.HeaderOnlyStyle };
+                                var labelItem = new TreeViewItem { Header = propertyBase, HeaderTemplateSelector = dataTemplateSelector, Style = TreeStyleSelector.FixedWidthHeaderOnlyStyle };
                                 var treeViewItem = MakeTreeViewItem(propertyBase);
                                 Send(new TreeViewItemInitialised(treeViewItem, propertyBase));
                                 //items.Add(labelItem);

@@ -5,12 +5,18 @@ using Utility.PropertyTrees.Infrastructure;
 using static System.Reactive.Linq.Observable;
 using System.Collections;
 using Utility.Observables.NonGeneric;
+using static Pihrtsoft.Text.RegularExpressions.Linq.Patterns;
+using Pihrtsoft.Text.RegularExpressions.Linq;
+using Utility.Helpers;
+using System.Text.RegularExpressions;
 
 namespace Utility.PropertyTrees.Services
 {
     public class DescriptorFilterController : BaseObject
     {
         public override Key Key => new Key<DescriptorFilterController>(Guids.DescriptorFilter);
+        //static readonly Pattern pattern = Text("ViewModel").Space().LeftSquareBracket().Digit().MaybeCount(10).RightSquareBracket();
+        //static readonly Regex regex = new Regex(pattern.ToString(), RegexOptions.None);
 
         public IObservable<DescriptorFilterResponse> OnNext(DescriptorFilterRequest filterRequest)
         {
@@ -36,8 +42,15 @@ namespace Utility.PropertyTrees.Services
         {
             var value = filterRequest.PropertyDescriptor;
 
-            if (value is { ComponentType: var componentType } xx && componentType.Name == "ViewModel")
-                return false;
+            if (value is { ComponentType: var componentType, PropertyType: var propertyType } xx)
+            {
+                if (componentType.Name.Equals("ViewModelsCollection"))
+                {
+                    return false;
+
+                }
+            }
+
             if (value is CollectionItemDescriptor collectionItemDescriptor)
                 return true;
             if (value is PropertyDescriptor descriptor)
