@@ -6,7 +6,7 @@ namespace Utility.Models
     {
         string Arrangement { get; set; }
 
-        string Type { get; set; }
+        Type Type { get; set; }
         Position2D Dock { get; set; }
 
         int GridRow { get; set; }
