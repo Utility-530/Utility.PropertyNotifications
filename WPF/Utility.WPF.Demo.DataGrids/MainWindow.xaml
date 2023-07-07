@@ -5,8 +5,13 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:demo="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common"
         xmlns:temp="http://schemas.utility.com/templates"
+        xmlns:conv="http://schemas.utility.com/converters"
         xmlns:e="clr-namespace:EventBinder;assembly=EventBinder" 
+        xmlns:local="clr-namespace:Utility.WPF.Demo.DataGrids"
+        xmlns:objects="http://schemas.utility.com/objects"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="MainWindow" Height="800" Width="600">
+    
     <FrameworkElement.DataContext>
         <demo:RegionsViewModel></demo:RegionsViewModel>
     </FrameworkElement.DataContext>
@@ -43,8 +48,27 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
+            <local:MyDataTemplateSelector x:Key="MyDataTemplateSelector">
+                <local:MyDataTemplateSelector.TypeTemplate>
+                    <DataTemplate>
+                        <objects:ObjectComboBox
+                    x:Name="ebdc"                 
+                    Object="{Binding Mode=OneWay, Converter={x:Static conv:DefaultConverter.Instance }}" >
+                            <objects:ObjectComboBox.Filters>
+                                <x:Array Type="{x:Type sys:Object}">
+                                    <local:TypeFilter/>
+                                </x:Array>
+                            </objects:ObjectComboBox.Filters>
+                        </objects:ObjectComboBox>
+                    </DataTemplate>
+                </local:MyDataTemplateSelector.TypeTemplate>
+            </local:MyDataTemplateSelector>
+
         </ResourceDictionary>
     </Window.Resources>
+    <ScrollViewer>
+        
     <Grid Margin="20" Background="GhostWhite">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
@@ -179,9 +203,11 @@
                   Margin="0" 
                   AutoGenerateColumns="True">
             <i:Interaction.Behaviors>
-                <dgrids:CustomTemplateBehavior DataTemplateSelector="{x:Static temp:CustomDataTemplateSelector.Instance}"/>
+                    <dgrids:CustomTemplateBehavior DataTemplateSelector="{StaticResource MyDataTemplateSelector}"/>
             </i:Interaction.Behaviors>
 
         </DataGrid>
     </Grid>
+    </ScrollViewer>
+
 </Window>

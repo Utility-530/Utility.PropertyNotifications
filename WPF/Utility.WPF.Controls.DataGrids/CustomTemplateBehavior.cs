@@ -1,12 +1,10 @@
-﻿using Castle.Components.DictionaryAdapter;
-using Fasterflect;
-using Microsoft.Xaml.Behaviors;
+﻿using Microsoft.Xaml.Behaviors;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.WPF.Helpers;
-using Utility.WPF.Templates;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace Utility.WPF.Controls.DataGrids
 {
@@ -19,7 +17,7 @@ namespace Utility.WPF.Controls.DataGrids
         protected override void OnAttached()
         {
             AssociatedObject.AutoGeneratingColumn +=
-                new EventHandler<DataGridAutoGeneratingColumnEventArgs>(OnAutoGeneratingColumn);
+                new EventHandler<DataGridAutoGeneratingColumnEventArgs>(OnAutoGeneratingColumn)
         }
 
         protected override void OnDetaching()
@@ -45,16 +43,18 @@ namespace Utility.WPF.Controls.DataGrids
 
         DataGridColumn Make(DataGridAutoGeneratingColumnEventArgs e)
         {
-            Binding binding = (e.Column as DataGridBoundColumn)?.Binding as Binding;
+            var binding = (e.Column as DataGridBoundColumn)?.Binding;
 
-            if(binding is null)
+            if (binding is null)
             {
                 return e.Column;
             }
+
             DataGridColumn templateColumn = new CustomDataGridColumn()
             {
                 Header = e.Column.Header,
                 Binding = binding,
+                DataContext = AssociatedObject.ItemsSource,
                 DataTemplateSelector = DataTemplateSelector
             };
 
@@ -72,13 +72,29 @@ namespace Utility.WPF.Controls.DataGrids
             return new DataGridCell();
         }
 
+        public object DataContext { get; set; }
+
         protected override FrameworkElement GenerateElement(DataGridCell cell, object dataItem)
         {
-            var binding = Binding.Clone() as Binding;
-            binding.Source = dataItem;
-            var contentControl = new ContentControl() { ContentTemplateSelector = DataTemplateSelector };
-            contentControl.SetBinding(ContentControl.ContentProperty, binding);
-            return contentControl;
+            if (dataItem == CollectionView.NewItemPlaceholder)
+            {
+                return null; 
+            }
+     
+            //DataRowView dataRow = (dataItem as DataRowView);
+
+            if (Binding is Binding _binding)
+            {
+                var binding = new Binding
+                {
+                    Source = dataItem,
+                    Path = _binding.Path,
+                };
+                var contentControl = new ContentControl() { ContentTemplateSelector = DataTemplateSelector };
+                contentControl.SetBinding(ContentControl.ContentProperty, binding);
+                return contentControl;
+            }
+            return new Ellipse { Fill = Brushes.Red, Width = 30, Height = 30 };
         }
     }
 }

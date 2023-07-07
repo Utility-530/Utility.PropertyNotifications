@@ -28,10 +28,13 @@ namespace Utility.WPF.Controls.Objects
         {
             //this.SetValue(ItemsControlEx.ArrangementProperty, Arrangement.Wrapped);
             var viewModel = new ObjectItemsControlViewModel();
-            DataContext = viewModel;
-            SetBinding(ObjectProperty, new Binding(nameof(ObjectItemsControlViewModel.Object)) { Mode = BindingMode.OneWayToSource });
-            SetBinding(ValueProperty, new Binding(nameof(ObjectItemsControlViewModel.Value)) { Mode = BindingMode.OneWay });
+            this.WhenAnyValue(a => a.Object)
+                .WhereNotNull()
+                .Subscribe(a => viewModel.Object = a);
 
+            viewModel.WhenAnyValue(a => a.Value)
+                .WhereNotNull()
+                .Subscribe(a => this.Value = a);
             var defaultView = CollectionViewSource.GetDefaultView(viewModel.Items);
 
             defaultView.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Descending));
