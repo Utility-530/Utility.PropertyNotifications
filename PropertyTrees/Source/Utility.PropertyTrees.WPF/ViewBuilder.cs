@@ -289,12 +289,12 @@ namespace Utility.PropertyTrees.WPF
 
                         ItemsPanelTemplate GetPanelsTemplate(ItemsPanelTemplate panelTemplate, IViewModel viewModel)
                         {
-                            if (viewModel.Arrangement != null)
-                                if (Enum.TryParse(typeof(Arrangement), viewModel.Arrangement, out var result))
+                            if (viewModel.ItemsPanelTemplateKey != null)
+                                if (Enum.TryParse(typeof(Arrangement), viewModel.ItemsPanelTemplateKey, out var result))
                                 {
                                     panelTemplate = panelsDictionary.GetValueOrCreate(new PanelKey(0, Orientation.Vertical, (Arrangement)result), () => LayOutHelper.ItemsPanelTemplate(0, Orientation.Vertical, (Arrangement)result));
                                 }
-                                else if (Application.Current.TryFindResource(viewModel.Arrangement.ToString()) is ItemsPanelTemplate template)
+                                else if (Application.Current.TryFindResource(viewModel.ItemsPanelTemplateKey.ToString()) is ItemsPanelTemplate template)
                                 {
                                     panelTemplate = template;
                                 }

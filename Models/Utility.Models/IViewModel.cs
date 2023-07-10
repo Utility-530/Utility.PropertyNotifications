@@ -4,7 +4,7 @@ namespace Utility.Models
 {
     public interface IViewModel
     {
-        string Arrangement { get; set; }
+        string ItemsPanelTemplateKey { get; set; }
 
         Type Type { get; set; }
         Position2D Dock { get; set; }
