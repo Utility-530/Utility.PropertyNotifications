@@ -183,6 +183,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.DataGr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Demo.DataGrids", "Utility.WPF.Demo.DataGrids\Utility.WPF.Demo.DataGrids.csproj", "{7DB909C2-28CB-41B0-9614-1A95AE03A209}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Demo.Meta", "Utility.WPF.Demo.Meta\Utility.WPF.Demo.Meta.csproj", "{7CEE0A0B-3A36-4417-88A3-1864C06D1437}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -529,6 +531,10 @@ Global
 		{7DB909C2-28CB-41B0-9614-1A95AE03A209}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DB909C2-28CB-41B0-9614-1A95AE03A209}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DB909C2-28CB-41B0-9614-1A95AE03A209}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CEE0A0B-3A36-4417-88A3-1864C06D1437}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CEE0A0B-3A36-4417-88A3-1864C06D1437}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CEE0A0B-3A36-4417-88A3-1864C06D1437}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CEE0A0B-3A36-4417-88A3-1864C06D1437}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -620,6 +626,7 @@ Global
 		{F9D86EB7-D4D8-4A53-A49F-BCA05620374B} = {CF03926E-9E72-4A61-B447-2EF7E3C17461}
 		{1F31F936-D3B5-48BF-B1BD-B0B368538965} = {2ED92AB3-1BF8-4B9F-85BF-2739EDF1915C}
 		{7DB909C2-28CB-41B0-9614-1A95AE03A209} = {3E8F851B-BECA-4BAA-9275-2104CDEAEC3D}
+		{7CEE0A0B-3A36-4417-88A3-1864C06D1437} = {3E8F851B-BECA-4BAA-9275-2104CDEAEC3D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D60CFCE-498F-4A6D-9B9B-5546561C117E}

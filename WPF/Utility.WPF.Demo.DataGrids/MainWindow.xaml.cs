@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using Utility.WPF.Demo.Common.ViewModels;
 
 namespace Utility.WPF.Demo.DataGrids
@@ -13,6 +15,7 @@ namespace Utility.WPF.Demo.DataGrids
         public MainWindow()
         {
             InitializeComponent(); 
+
         }   
     }
 }

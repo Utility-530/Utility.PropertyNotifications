@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using Tiny.Toolkits;
 using Utility.Interfaces.NonGeneric;
+using Utility.WPF.Controls.DataGrids;
+using Utility.WPF.Demo.Common.ViewModels;
 using Utility.WPF.Templates;
 
 namespace Utility.WPF.Demo.DataGrids
@@ -30,7 +33,6 @@ namespace Utility.WPF.Demo.DataGrids
 
         public static new MyDataTemplateSelector Instance { get; } = new();
 
-
         public DataTemplate TypeTemplate { get; set; }
     }
 
@@ -45,6 +47,24 @@ namespace Utility.WPF.Demo.DataGrids
                 return contains;
             }
             return false;
+        }
+    }
+
+    public class CustomDataGridColumnSelectorBehavior : DataGridColumnSelectorBehavior
+    {
+        public CustomDataGridColumnSelectorBehavior()
+        {
+            DataTemplateSelector = new MyDataTemplateSelector();
+        }
+
+        protected override DataGridColumn SelectColumn(DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if(e.PropertyName.Equals(nameof(Region.Left)))
+            {
+                return new DataGridComboBoxColumn() { ItemsSource = Array.Empty<string>() };
+            }
+
+            return base.SelectColumn(e);
         }
     }
 }

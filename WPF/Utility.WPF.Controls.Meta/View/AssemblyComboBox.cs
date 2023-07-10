@@ -7,12 +7,6 @@ namespace Utility.WPF.Controls.Meta
 {
     internal class AssemblyComboBox : CheckBoxesComboControl
     {
-        //public static readonly DependencyProperty DemoTypeProperty = DependencyHelper.Register();
-
-        //public AssemblyComboBox(/*AssemblyType demoType*/) : this()
-        //{
-        //}
-
         public AssemblyComboBox()
         {
             //SelectedIndex = 0;
@@ -31,11 +25,5 @@ namespace Utility.WPF.Controls.Meta
             var dis = AssemblyComboBoxViewModelMapper.Connect(this, new AssemblyComboBoxViewModel());
             this.Unloaded += (s, e) => dis.Dispose();
         }
-
-        //public AssemblyType DemoType
-        //{
-        //    get => (AssemblyType)GetValue(DemoTypeProperty);
-        //    set => SetValue(DemoTypeProperty, value);
-        //}
     }
 }

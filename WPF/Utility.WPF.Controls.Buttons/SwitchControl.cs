@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using static Utility.WPF.Controls.Buttons.SwitchControl;
-
+using Evan.Wpf;
 namespace Utility.WPF.Controls.Buttons
 {
     public class SwitchControl : Control
@@ -19,21 +19,19 @@ namespace Utility.WPF.Controls.Buttons
         public static readonly DependencyProperty ToolTipTextProperty =
             DependencyProperty.Register("ToolTipText", typeof(string), typeof(SwitchControl), new PropertyMetadata(null));
 
-        public static readonly DependencyProperty MainProperty =
-            DependencyProperty.Register("Main", typeof(object), typeof(SwitchControl), new PropertyMetadata("Yes"));
+        public static readonly DependencyProperty MainProperty = DependencyHelper.Register();
 
-        public static readonly DependencyProperty AlternateProperty =
-            DependencyProperty.Register("Alternate", typeof(object), typeof(SwitchControl), new PropertyMetadata("No"));
+        public static readonly DependencyProperty AlternateProperty = DependencyHelper.Register();
 
-        public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.Register("Value", typeof(bool), typeof(SwitchControl), new PropertyMetadata(true, null));
+        public static readonly DependencyProperty ValueProperty = DependencyHelper.Register(new PropertyMetadata(true));
 
         public static readonly DependencyProperty KeyValueProperty = DependencyProperty.Register("KeyValue", typeof(object), typeof(SwitchControl));
 
-        public static readonly DependencyProperty ButtonWidthProperty =
-            DependencyProperty.Register("ButtonWidth", typeof(double), typeof(SwitchControl), new PropertyMetadata(120d));
+        public static readonly DependencyProperty ButtonWidthProperty = DependencyHelper.Register(new PropertyMetadata(120d));
 
         public static readonly RoutedEvent ButtonToggleEvent = EventManager.RegisterRoutedEvent("ButtonToggle", RoutingStrategy.Bubble, typeof(ToggleEventHandler), typeof(SwitchControl));
+
+        public static readonly DependencyProperty SelectedValueProperty = DependencyHelper.Register();
 
         static SwitchControl()
         {
@@ -53,14 +51,13 @@ namespace Utility.WPF.Controls.Buttons
             setValueCommand.DistinctUntilChanged().Subscribe(a =>
             {
                 Value = Main.Equals(a);
-                RaiseToggleEvent(Value ? Main : Alternate, Value);
+                RaiseToggleEvent(Value ? Main: Alternate, Value);
             });
             base.OnApplyTemplate();
         }
 
         protected virtual void EditButton_OnClick(object sender, RoutedEventArgs e)
         {
-            //if (EditButton is ToggleButton toggle)
             RaiseToggleEvent(ValueToKey(), this.Value);
         }
 
@@ -76,7 +73,19 @@ namespace Utility.WPF.Controls.Buttons
 
         public static bool KeyToValue(object key, object main, object alternative)
         {
-            return key.Equals(main) || (key.Equals(alternative) ? false : throw new Exception("SD£VVvvvv"));
+            return key.Equals(main) ? true : false;
+        }
+
+        protected void Change(bool value)
+        {
+            if (value)
+            {
+                SetValueCommand.Execute(SelectedValue = Main);
+            }
+            if (!value)
+            {
+                SetValueCommand.Execute(SelectedValue = Alternate);
+            }
         }
 
         public event ToggleEventHandler ButtonToggle
@@ -117,11 +126,11 @@ namespace Utility.WPF.Controls.Buttons
             set => SetValue(ValueProperty, value);
         }
 
-        //public object KeyValue
-        //{
-        //    get => (object)GetValue(KeyValueProperty);
-        //    set => SetValue(KeyValueProperty, value);
-        //}
+        public object SelectedValue
+        {
+            get => GetValue(SelectedValueProperty);
+            set => SetValue(SelectedValueProperty, value);
+        }
 
         public double ButtonWidth
         {
