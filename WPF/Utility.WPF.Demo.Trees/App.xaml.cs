@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Utility.Common;
 using Utility.WPF;
+using Utility.WPF.Controls.Meta;
 
 namespace Utility.WPF.Demo.Trees
 {
@@ -27,7 +28,7 @@ namespace Utility.WPF.Demo.Trees
             new Window
             {
                 WindowState = WindowState.Maximized,
-                Content = new UserControlsGrid()
+                Content = new AssemblyViewControl(typeof(ConnectionsUserControl).Assembly)
             }.Show();
         }
     }
