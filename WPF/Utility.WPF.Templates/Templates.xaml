@@ -15,15 +15,15 @@
 
 
     <DataTemplate DataType="{x:Type sys:Int32}">
-        <TextBlock Text="{Binding StringFormat={}{0:N0}}"></TextBlock>
+        <TextBox Text="{Binding Mode=OneWay, StringFormat={}{0:N0}}"></TextBox>
     </DataTemplate>
     <DataTemplate x:Key="Number">
-        <TextBlock Text="{Binding StringFormat={}{0:N0}}"></TextBlock>
+        <TextBox Text="{Binding Mode=OneWay, StringFormat={}{0:N0}}"></TextBox>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type sys:Type}">
+    <!--<DataTemplate DataType="{x:Type sys:Type}">
         <TextBlock Text="{Binding StringFormat={}{0:N0}}"></TextBlock>
-    </DataTemplate>
+    </DataTemplate>-->
     
 
 
@@ -57,7 +57,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:String}">
-        <TextBlock Text="{Binding }" ></TextBlock>
+        <TextBox Text="{Binding Mode=OneWay }" ></TextBox>
     </DataTemplate>
 
 
