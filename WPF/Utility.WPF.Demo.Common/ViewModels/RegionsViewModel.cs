@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using Utility.Models;
 
 namespace Utility.WPF.Demo.Common.ViewModels
@@ -80,6 +81,8 @@ namespace Utility.WPF.Demo.Common.ViewModels
         public string Text { get; set; }
 
         public Type Type => typeof(int);
+
+        public Orientation Orientation { get; set; }
 
         public int Left { get; set; }
 
