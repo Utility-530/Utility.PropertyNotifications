@@ -338,7 +338,10 @@ public class AutoMoqer
             }
 
             //Create new service with mock parameter and provided parameters
-            _serviceInstance = new Lazy<object>(() => Activator.CreateInstance(type, serviceConstructionParameters.ToArray()));
+            _serviceInstance = new Lazy<object>(() =>
+            {
+                Activator.CreateInstance(type, serviceConstructionParameters.ToArray());
+            });
             this.type = type;
         }
 
