@@ -21,7 +21,7 @@ namespace Utility.Repos
 
             _mapper.RegisterType<Type>
                 (
-                serialize: (uri) => $"{uri.Namespace}, {uri.Assembly}.{uri.Name}",
+                serialize: (uri) => $"{uri.Namespace}.{uri.Name}, {uri.Assembly}",
                 deserialize: (bson) => Type.GetType(bson.AsString)
                 );
         }
