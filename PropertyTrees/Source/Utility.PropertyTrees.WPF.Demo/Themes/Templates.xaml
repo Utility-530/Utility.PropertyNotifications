@@ -160,11 +160,11 @@
     <objects:ObjectsDataTemplateSelector x:Key="ObjectsDataTemplateSelector"  
                                          TypeTemplate="{StaticResource TypeTemplate}"/>
     <DataTemplate DataType="{x:Type local:ViewModelsCollection}">
-        <DataGrid ItemsSource="{Binding Data}" HorizontalAlignment="Stretch"   RowHeaderWidth="0"  HeadersVisibility="Column" EnableRowVirtualization="false" IsReadOnly="true">
+        <DataGrid ItemsSource="{Binding Data}" HorizontalAlignment="Stretch"   RowHeaderWidth="0"  HeadersVisibility="Column" EnableRowVirtualization="false">
             <i:Interaction.Behaviors>
                 <dgrids:ShareWidthsBehavior Margin="24"/>
                 <dgrids:CustomTemplateBehavior DataTemplateSelector="{StaticResource ObjectsDataTemplateSelector}"/>
-            </i:Interaction.Behaviors>
+            </i:Interaction.Behaviors>           
         </DataGrid>
     </DataTemplate>
     
