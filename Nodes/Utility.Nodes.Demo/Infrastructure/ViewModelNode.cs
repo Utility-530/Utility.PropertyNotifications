@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using Utility.Nodes.Abstractions;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Nodes.Demo.Infrastructure
 {
@@ -16,6 +15,8 @@ namespace Utility.Nodes.Demo.Infrastructure
         }
 
         public override object Content => Activator.CreateInstance(type);
+
+        public override IEquatable Key => throw new NotImplementedException();
 
         //public override IObservable Leaves => new Collection();
 

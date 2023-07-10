@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Abstractions;
+using Utility.Nodes.Demo.Infrastructure;
 
-namespace Utility.Nodes.Demo.Infrastructure
+namespace Utility.Nodes.Demo
 {
     public enum NodeType
     {
@@ -14,14 +16,16 @@ namespace Utility.Nodes.Demo.Infrastructure
     }
 
 
-    public class TypeNode : Node
+    public class DemoRootNode : Node
     {
         bool flag;
-        public TypeNode()
+        public DemoRootNode()
         {
         }
 
         public override string Content => nameof(NodeType);
+
+        public override IEquatable Key => throw new NotImplementedException();
 
         public override async Task<object?> GetChildren()
         {
