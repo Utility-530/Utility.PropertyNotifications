@@ -137,7 +137,7 @@ namespace Utility.WPF.Controls.DataGrids
 
         public object DataContext { get; set; }
         public IEnumerable Items { get; set; }
-        public string PropertyName { get; internal set; }
+        public string PropertyName { get; set; }
 
         protected override FrameworkElement GenerateElement(DataGridCell cell, object dataItem)
         {
