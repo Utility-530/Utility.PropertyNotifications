@@ -121,7 +121,7 @@ namespace Utility.PropertyTrees.Services
         public int GridColumn { get; set; }
         public int GridRowSpan { get; set; } = 1;
         public int GridColumnSpan { get; set; } = 1;
-        public string Arrangement { get; set; }
+        public string ItemsPanelTemplateKey { get; set; }
         public string DataTemplateKey { get; set; }
         public double Left { get; set; }
         public double Right { get; set; }
