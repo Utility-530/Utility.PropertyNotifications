@@ -5,23 +5,21 @@ VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodes", "Utility.Nodes\Utility.Nodes.csproj", "{8303AFA8-924A-49C0-8015-803F7D209A08}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodes.Abstractions", "Utility.Nodes.Abstractions\Utility.Nodes.Abstractions.csproj", "{6D6BF4E8-C060-4544-BC3C-36535ECBF92D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodes.Demo", "Utility.Nodes.Demo\Utility.Nodes.Demo.csproj", "{EB1AC222-47CC-4D9B-ABC5-4ED8BE47B82A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{28597BEF-6983-4377-A102-82F69FF978DE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "..\Utility.Observables\Utility.Observables\Utility.Observables.csproj", "{8FF18CDD-77D6-4A14-9ACC-3E2C8276BCD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "..\Observables\Utility.Observables\Utility.Observables.csproj", "{8FF18CDD-77D6-4A14-9ACC-3E2C8276BCD1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Collections", "..\Utility.Collections\Utility.Collections\Utility.Collections.csproj", "{FA330227-E0D2-4423-BC72-D08F65FD466A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Collections", "..\Collections\Utility.Collections\Utility.Collections.csproj", "{FA330227-E0D2-4423-BC72-D08F65FD466A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{3E113198-90F6-4584-81A9-8CA2724455B2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees.Abstractions", "..\Utility.Trees\Utility.Trees.Abstractions\Utility.Trees.Abstractions.csproj", "{8A9E9CB0-1EBA-4F67-92BB-5833BA2315FE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees.Abstractions", "..\Trees\Utility.Trees.Abstractions\Utility.Trees.Abstractions.csproj", "{8A9E9CB0-1EBA-4F67-92BB-5833BA2315FE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees", "..\Utility.Trees\Utility.Trees\Utility.Trees.csproj", "{A42C48DE-44F6-4F82-B7F8-1ECA36C57156}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees", "..\Trees\Utility.Trees\Utility.Trees.csproj", "{A42C48DE-44F6-4F82-B7F8-1ECA36C57156}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Converters", "..\Utility.WPF\Utility.WPF.Converters\Utility.WPF.Converters.csproj", "{3E645622-5D94-4110-BB50-2F60D7445DA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Converters", "..\WPF\Utility.WPF.Converters\Utility.WPF.Converters.csproj", "{3E645622-5D94-4110-BB50-2F60D7445DA5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +31,6 @@ Global
 		{8303AFA8-924A-49C0-8015-803F7D209A08}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8303AFA8-924A-49C0-8015-803F7D209A08}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8303AFA8-924A-49C0-8015-803F7D209A08}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D6BF4E8-C060-4544-BC3C-36535ECBF92D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D6BF4E8-C060-4544-BC3C-36535ECBF92D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D6BF4E8-C060-4544-BC3C-36535ECBF92D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D6BF4E8-C060-4544-BC3C-36535ECBF92D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EB1AC222-47CC-4D9B-ABC5-4ED8BE47B82A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB1AC222-47CC-4D9B-ABC5-4ED8BE47B82A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB1AC222-47CC-4D9B-ABC5-4ED8BE47B82A}.Release|Any CPU.ActiveCfg = Release|Any CPU
