@@ -14,10 +14,10 @@ namespace Utility.WPF.Controls.Meta
 {
     public class AssemblyViewControl : ContentControl
     {
-        public AssemblyViewControl(Assembly assembly)
+        public AssemblyViewControl(Assembly? assembly = null)
         {
             var dockPanel = new DockPanel();
-
+            assembly ??= Assembly.GetEntryAssembly();
             foreach (var child in CreateChildren(assembly))
             {
                 dockPanel.Children.Add(child);

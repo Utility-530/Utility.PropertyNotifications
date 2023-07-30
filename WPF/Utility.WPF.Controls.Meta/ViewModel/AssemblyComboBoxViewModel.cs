@@ -50,7 +50,7 @@ namespace Utility.WPF.Controls.Meta.ViewModels
 
             demoTypeViewModel = OutputNode<FilteredCustomCheckBoxesViewModel>.Create(() =>
             {
-                var assemblies = FindAssemblies().Select(a => new AssemblyKeyValue(a.Item1, a.Item2));
+                var assemblies = Helper.FindAssemblies().Select(a => new AssemblyKeyValue(a.Item1, a.Item2));
                 var filters = new Filter[] { new StringMatchFilter(), new AssemblyTypeFilter() };
 
                 return UpdateAndCreate(assemblies, filters);
@@ -156,7 +156,6 @@ namespace Utility.WPF.Controls.Meta.ViewModels
 
         public record AssemblyRecord(string Key, DateTime Inserted);
 
-        private const string DemoAppNameAppendage = "Demo";
 
         //private static IEnumerable<Assembly> FindDemoAppAssemblies()
         //{
@@ -174,16 +173,6 @@ namespace Utility.WPF.Controls.Meta.ViewModels
         //           select a;
         //}
 
-        private static IEnumerable<(Assembly, AssemblyType)> FindAssemblies()
-        {
-            return from a in AssemblySingleton.Instance.Assemblies
-                   let contains = a.GetName().Name?.Contains(DemoAppNameAppendage) ?? false ? AssemblyType.Application : default
-                   let userControls = a.DefinedTypes.Any(a => a.IsAssignableTo(typeof(UserControl))) ? AssemblyType.UserControl : default
-                   let controls = a.DefinedTypes.Any(a => a.IsAssignableTo(typeof(Control))) ? AssemblyType.Control : default
-                   let viewModels = a.DefinedTypes.Any(a => a.IsAssignableTo(typeof(ReactiveObject))) ? AssemblyType.ViewModel : default
-                   let resNames = a.GetManifestResourceNames().Length > 0 ? AssemblyType.ResourceDictionary : default
-                   select (a, Utility.Helpers.EnumHelper.CombineFlags(new[] { contains, userControls, controls, viewModels, resNames }));
-        }
 
         private static async void SelectAndUpdateOtherSelections(ViewModelEntity match)
         {
