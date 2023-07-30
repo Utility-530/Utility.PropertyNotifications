@@ -3,7 +3,6 @@ using Splat.Autofac;
 using System.Windows;
 using Utility.Common;
 using Utility.WPF.Controls.Meta;
-using Utility.WPF.Templates;
 
 namespace Utility.WPF.Demo.Meta
 {
@@ -21,7 +20,7 @@ namespace Utility.WPF.Demo.Meta
             new Window
             {
                 WindowState = WindowState.Maximized,
-                Content = new AssemblyViewControl(typeof(CustomDataTemplateSelector).Assembly)
+                Content = new AssemblyViewControl()
             }.Show();
         }
     }

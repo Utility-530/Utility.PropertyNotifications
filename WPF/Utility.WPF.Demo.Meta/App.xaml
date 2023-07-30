@@ -1,8 +1,35 @@
 ﻿<Application x:Class="Utility.WPF.Demo.Meta.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
              xmlns:local="clr-namespace:Utility.WPF.Demo.Meta">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <DataTemplate DataType="{x:Type nodes:Node}">
+                <TreeView ItemsSource="{Binding Children}">
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel.Style>
+                                    <Style>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, 
+                                                 AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" 
+                                                 Value="True">
+                                                <Setter Property="StackPanel.Background" Value="LightBlue"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+
+                                <ContentControl Content="{Binding Content}"  VerticalAlignment="Center">
+                                </ContentControl>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </DataTemplate>
+        </ResourceDictionary>
+
     </Application.Resources>
 </Application>
