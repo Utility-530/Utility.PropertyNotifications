@@ -129,6 +129,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Templates", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Objects", "..\..\WPF\Utility.WPF.Controls.Objects\Utility.WPF.Controls.Objects.csproj", "{BEE7C45B-D5B4-4AAA-9229-2E3BAD7EF7FA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Factorys", "..\..\Factorys\Utility.Factorys\Utility.Factorys.csproj", "{AB3E369A-EAED-40EA-9CA5-F983997D2715}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -367,6 +369,10 @@ Global
 		{BEE7C45B-D5B4-4AAA-9229-2E3BAD7EF7FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BEE7C45B-D5B4-4AAA-9229-2E3BAD7EF7FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BEE7C45B-D5B4-4AAA-9229-2E3BAD7EF7FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB3E369A-EAED-40EA-9CA5-F983997D2715}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB3E369A-EAED-40EA-9CA5-F983997D2715}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB3E369A-EAED-40EA-9CA5-F983997D2715}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB3E369A-EAED-40EA-9CA5-F983997D2715}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -429,6 +435,7 @@ Global
 		{A7C3660E-6FA2-42EA-9EC1-C7DF64A28DF6} = {299B3356-A14D-4F79-96D4-400DB0656D47}
 		{B740BF36-38EA-483F-BBBE-BBD224AE05F9} = {299B3356-A14D-4F79-96D4-400DB0656D47}
 		{BEE7C45B-D5B4-4AAA-9229-2E3BAD7EF7FA} = {299B3356-A14D-4F79-96D4-400DB0656D47}
+		{AB3E369A-EAED-40EA-9CA5-F983997D2715} = {7267B3D9-EB3C-4DB6-902C-DCCE836042D6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF120994-60DE-4F74-B89D-2710E31F33BC}
