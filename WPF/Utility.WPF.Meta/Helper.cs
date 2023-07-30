@@ -1,8 +1,11 @@
 ﻿using MoreLinq;
+using ReactiveUI;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Controls;
+using Utility.Common;
+using Utility.Enums;
 using Utility.Helpers;
 using Utility.WPF.Helpers;
 
@@ -10,6 +13,9 @@ namespace Utility.WPF.Meta
 {
     public static class Helper
     {
+
+        public const string DemoAppNameAppendage = "Demo";
+
         public static IEnumerable<FrameworkElementKeyValue> ViewTypes(this Assembly assembly) => assembly
             .GetTypes()
             .Where(a => typeof(UserControl).IsAssignableFrom(a))
@@ -27,7 +33,19 @@ namespace Utility.WPF.Meta
         .Select(a => new ResourceDictionaryKeyValue(a.entry.Key.ToString(), a.resourceDictionary));
 
 
-        private static bool Predicate(string key)
+
+        public static IEnumerable<(Assembly, AssemblyType)> FindAssemblies()
+        {
+            return from a in AssemblySingleton.Instance.Assemblies
+                   let contains = a.GetName().Name?.Contains(DemoAppNameAppendage) ?? false ? AssemblyType.Application : default
+                   let userControls = a.DefinedTypes.Any(a => a.IsAssignableTo(typeof(UserControl))) ? AssemblyType.UserControl : default
+                   let controls = a.DefinedTypes.Any(a => a.IsAssignableTo(typeof(Control))) ? AssemblyType.Control : default
+                   let viewModels = a.DefinedTypes.Any(a => a.IsAssignableTo(typeof(ReactiveObject))) ? AssemblyType.ViewModel : default
+                   let resNames = a.GetManifestResourceNames().Length > 0 ? AssemblyType.ResourceDictionary : default
+                   select (a, Utility.Helpers.EnumHelper.CombineFlags(new[] { contains, userControls, controls, viewModels, resNames }));
+        }
+
+        public static bool Predicate(string key)
         {
             var rKey = key.Remove(".baml");
 
