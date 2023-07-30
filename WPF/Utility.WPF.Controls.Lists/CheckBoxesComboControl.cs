@@ -8,20 +8,21 @@ using Utility.WPF.Controls.Base;
 using Utility.WPF.Controls.Lists.Infrastructure;
 using Utility.WPF.Helpers;
 using Utility.WPF.Abstract;
+using Evan.Wpf;
 
 namespace Utility.WPF.Controls.Lists
 {
     public class CheckBoxesComboControl : ComboBox<CheckBox>, IIsCheckedPath, IOutput<CheckedRoutedEventArgs>, IIsSelectedPath
     {
         private DifferenceHelper differenceHelper;
-        private static readonly DependencyPropertyKey OutputPropertyKey = DependencyProperty.RegisterReadOnly(nameof(Output), typeof(object), typeof(CheckBoxesComboControl), new FrameworkPropertyMetadata(null));
-        public static readonly DependencyProperty IsCheckedPathProperty = DependencyProperty.Register("IsCheckedPath", typeof(string), typeof(CheckBoxesComboControl), new PropertyMetadata(null));
+        private static readonly DependencyPropertyKey OutputPropertyKey = DependencyHelper.RegisterReadOnly();
+        public static readonly DependencyProperty IsCheckedPathProperty = DependencyHelper.Register();
         //public static readonly DependencyProperty OutputProperty = DependencyProperty.RegisterReadOnly("Output", typeof(object), typeof(CheckBoxesComboControl));
         public static readonly RoutedEvent OutputChangeEvent = EventManager.RegisterRoutedEvent("OutputChange", RoutingStrategy.Bubble, typeof(OutputChangedEventHandler<CheckedRoutedEventArgs>), typeof(CheckBoxesComboControl));
-        public static readonly DependencyProperty IsSelectedPathProperty = DependencyProperty.Register("IsSelectedPath", typeof(string), typeof(CheckBoxesComboControl));
-        public static readonly DependencyProperty IsDisabledShownProperty = DependencyProperty.Register("IsDisabledShown", typeof(bool), typeof(CheckBoxesComboControl));
+        public static readonly DependencyProperty IsSelectedPathProperty = DependencyHelper.Register();
+        public static readonly DependencyProperty IsDisabledShownProperty = DependencyHelper.Register();
         public static readonly DependencyProperty OutputProperty = OutputPropertyKey.DependencyProperty;
-        public static readonly DependencyProperty FilterCollectionProperty = DependencyProperty.Register("FilterCollection", typeof(IEnumerable), typeof(CheckBoxesComboControl));
+        public static readonly DependencyProperty FilterCollectionProperty = DependencyHelper.Register();
 
         static CheckBoxesComboControl()
         {
@@ -32,6 +33,7 @@ namespace Utility.WPF.Controls.Lists
         {
             Loaded += OnChange;
             AddHandler(System.Windows.Controls.Primitives.ButtonBase.ClickEvent, new RoutedEventHandler(CloseButtonClick), true);
+
         }
 
         private void CloseButtonClick(object sender, RoutedEventArgs e)

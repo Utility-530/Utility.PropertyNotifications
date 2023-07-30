@@ -3,6 +3,7 @@ using Splat.Autofac;
 using System.Windows;
 using Utility.Common;
 using Utility.WPF;
+using Utility.WPF.Meta;
 
 namespace Utility.WPF.Demo.Lists
 {

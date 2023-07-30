@@ -15,7 +15,7 @@ namespace Utility.ViewModels
 
     public class CheckViewModel : ViewModel<Utility.Models.Filters.Filter>
     {
-        private bool isChecked;
+        private bool? isChecked;
 
         public CheckViewModel(string header, bool isChecked) : base(header, default)
         {
@@ -24,9 +24,9 @@ namespace Utility.ViewModels
         }
 
 
-        public bool IsChecked { get => isChecked; set => this.RaiseAndSetIfChanged(ref isChecked, value); }
+        public override bool? IsChecked { get => isChecked; set => this.RaiseAndSetIfChanged(ref isChecked, value); }
 
-        public bool IsSelected { get; set; }
+        public override bool IsSelected { get; set; }
 
         public string Header { get; init; }
 

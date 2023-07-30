@@ -258,6 +258,7 @@
                                                                     SelectedValuePath="Header"
                                                                     ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=FilterCollection}"
                                                                     IsCheckedPath="IsChecked"    
+                                            
                                                                     Orientation="Horizontal">
                                         </local:CheckBoxesListControl>
 

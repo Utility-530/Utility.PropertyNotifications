@@ -183,7 +183,7 @@ namespace Utility.ViewModels
                 });
         }
 
-        public bool IsSelected { get; set; }
+        public virtual bool IsSelected { get; set; }
 
         public string? ParentKey { get; private set; }
 
@@ -193,7 +193,14 @@ namespace Utility.ViewModels
 
         public IEnumerable PropertyCollection { get; }
 
-        public bool? IsChecked => Connect<bool>()?.Generic;
+        public virtual bool? IsChecked
+        {
+            get
+            {
+                return Connect<bool>()?.Generic;
+            }
+            set => throw new NotImplementedException();
+        }
 
         public bool IsChildrenConnected => childConnection != default;
 
