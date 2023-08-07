@@ -12,12 +12,18 @@ namespace Utility.WPF.Reactive
 {
     public static class SelectorHelper
     {
-
-        public static IObservable<object> ToChanges(this Selector selector) =>
+        public static IObservable<object> ToChanges(this Selector selector, bool includeNulls = false) =>
             from change in (from a in Observable.FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>(a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
                             select a.EventArgs.AddedItems.Cast<object>().SingleOrDefault())
             .StartWith(selector.SelectedItem)
-            where change != null
+            where change is not null || includeNulls
+            select change;
+
+        public static IObservable<object> ToChanges(this ISelector selector, bool includeNulls = false) =>
+            from change in (from a in Observable.FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>(a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
+                            select a.EventArgs.AddedItems.Cast<object>().SingleOrDefault())
+            .StartWith(selector.SelectedItem)
+            where change is not null || includeNulls
             select change;
 
         public static IObservable<ListBoxItem[]> SelectMultiSelectionChanges(this Selector selector) =>

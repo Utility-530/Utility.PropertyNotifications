@@ -45,7 +45,7 @@ namespace Utility.WPF.Controls.Master
                 .WhereNotNull()
                 .Select(a => this.Selector)
                 .WhereNotNull()
-                .CombineLatest(dataContextSubject.WhereNotNull())
+                .CombineLatest(dataContextSubject)
                 .Subscribe(c =>
                 {
                     var (first, second) = c;
@@ -64,7 +64,6 @@ namespace Utility.WPF.Controls.Master
 
             _ = TransformObservable
                 .Select(a => a.New)
-                .WhereNotNull()
                 .Subscribe(content =>
                 {
                     SetDetail(Content, content);
@@ -194,7 +193,7 @@ namespace Utility.WPF.Controls.Master
             if (d is not ReadOnlyMasterDetail readOnly)
                 return;
 
-            if (e.NewValue is { } obj)
+            if (e.NewValue is object obj)
                 d.Dispatcher.InvokeAsync(() => readOnly.dataContextSubject.OnNext(obj));
         }
 
@@ -205,8 +204,8 @@ namespace Utility.WPF.Controls.Master
         {
             return control switch
             {
-                ISelector selector => selector.SelectSingleSelectionChanges(),
-                Selector selector => selector.SelectSingleSelectionChanges(),
+                ISelector selector => selector.ToChanges(true),
+                Selector selector => selector.ToChanges(true),
                 _ => throw new ApplicationException($"Unexpected type,{control.GetType().Name} for {nameof(Selector)} "),
             };
         }
@@ -214,7 +213,7 @@ namespace Utility.WPF.Controls.Master
         /// <summary>
         /// Updates the detail-item with changes made to the  master-list
         /// </summary>
-        protected virtual void SetDetail(object content, object masterObject)
+        protected virtual void SetDetail(object content, object? masterObject)
         {
             if (UseDataContext)
             {
@@ -314,8 +313,8 @@ namespace Utility.WPF.Controls.Master
                 {
                     var (selected, converter, converterParameter, dataKey) = b;
 
-                    if (selected == null)
-                        throw new Exception("ds009fsd");
+                    //if (selected == null)
+                    //    throw new Exception("ds009fsd");
                     object? newItem = Convert(selected, converter, converterParameter, dataKey);
 
                     return new TransformProduct(newItem, selected, converter, converterParameter, dataKey);
