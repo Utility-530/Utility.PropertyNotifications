@@ -43,7 +43,6 @@ namespace Utility.PropertyTrees.Services
                         observer.OnProgress(2, 2);
                         observer.OnCompleted();
                     }).DisposeWith(composite);
-
                 });
             });
         }
@@ -66,7 +65,7 @@ namespace Utility.PropertyTrees.Services
                         observer.OnProgress(2, 3);
 
                         repositories[a.RepositoryKey]
-                        .UpdateValue(request.Key, request.Value)
+                        .Update(request.Key, request.Value)
                         .ToObservable()
                         .Subscribe(a =>
                         {

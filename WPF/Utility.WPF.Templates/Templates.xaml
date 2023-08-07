@@ -4,7 +4,8 @@
                xmlns:sys="clr-namespace:System;assembly=System.Runtime"
                xmlns:draw="clr-namespace:System.Drawing;assembly=System.Drawing"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-                    xmlns:panels="http://schemas.utility.com/panels"
+                    xmlns:panels="http://schemas.utility.com/panels" 
+                    xmlns:tiny="https://github.com/xtremlyred/tiny.toolkits"
                     x:Class="Utility.WPF.Templates.Templates">
 
 
@@ -12,41 +13,19 @@
 
     <converter:StringToEnumConverter x:Key="StringToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
 
-    <!--<converter:RegionToRegionConverter x:Key="RegionToRegionConverter"/>-->
 
-    <!--<datatemplateselector:GeneralDataTemplateSelector x:Key="General" >-->
-    <!--<datatemplateselector:GeneralDataTemplateSelector.BooleanDataTemplate>
-            <DataTemplate >
-                <panels:TransitionPanel CurrentValue="{Binding }" >
-                    <materialDesign:PackIcon Kind="CheckboxMarkedOutline" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
-                        <panels:TransitionPanel.Value>
-                            <system:Boolean>True</system:Boolean>
-                        </panels:TransitionPanel.Value>
-                    </materialDesign:PackIcon>
-                    <materialDesign:PackIcon Kind="CheckboxOutLineBlank" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                        <panels:TransitionPanel.Value>
-                            <system:Boolean>False</system:Boolean>
-                        </panels:TransitionPanel.Value>
-                    </materialDesign:PackIcon>
-                </panels:TransitionPanel>
-            </DataTemplate>
-        </datatemplateselector:GeneralDataTemplateSelector.BooleanDataTemplate>-->
-
-    <!--<datatemplateselector:GeneralDataTemplateSelector.NumberDataTemplate>-->
     <DataTemplate DataType="{x:Type sys:Int32}">
-        <TextBlock Text="{Binding StringFormat={}{0:N0}}"></TextBlock>
+        <TextBox Text="{Binding Mode=OneWay, StringFormat={}{0:N0}}"></TextBox>
     </DataTemplate>
-    <!--</datatemplateselector:GeneralDataTemplateSelector.NumberDataTemplate>-->
+    <DataTemplate x:Key="Number">
+        <TextBox Text="{Binding Mode=OneWay, StringFormat={}{0:N0}}"></TextBox>
+    </DataTemplate>
 
-    <!--<datatemplateselector:GeneralDataTemplateSelector.ColorTemplate>
-            <DataTemplate DataType="{x:Type drawing:Color}">
-                <Ellipse Height="30" Width="30">
-                    <Ellipse.Fill>
-                        <SolidColorBrush Color="{Binding Converter={x:Static converter:ColorConverter.Instance}}" />
-                    </Ellipse.Fill>
-                </Ellipse>
-            </DataTemplate>
-        </datatemplateselector:GeneralDataTemplateSelector.ColorTemplate>-->
+    <!--<DataTemplate DataType="{x:Type sys:Type}">
+        <TextBlock Text="{Binding StringFormat={}{0:N0}}"></TextBlock>
+    </DataTemplate>-->
+    
+
 
 
     <DataTemplate DataType="{x:Type draw:Color}">
@@ -59,24 +38,8 @@
 
 
 
-
-
-    <!--<datatemplateselector:GeneralDataTemplateSelector.StringDataTemplate>
-            <DataTemplate DataType="{x:Type system:String}">
-                <TextBlock Text="{Binding }" ></TextBlock>
-            </DataTemplate>
-        </datatemplateselector:GeneralDataTemplateSelector.StringDataTemplate>-->
-
-    <!--<datatemplateselector:GeneralDataTemplateSelector.IconDataTemplate>
-            <DataTemplate DataType="{x:Type infrastructure:Icon}">
-
-                <materialDesign:PackIcon Kind="{Binding   Name,                 Converter={StaticResource StringToEnumConverter}}"></materialDesign:PackIcon>
-            </DataTemplate>
-        </datatemplateselector:GeneralDataTemplateSelector.IconDataTemplate>-->
-    <!--</datatemplateselector:GeneralDataTemplateSelector>-->
-
     <DataTemplate DataType="{x:Type sys:Boolean}">
-        <panels:TransitionPanel CurrentValue="{Binding }" >
+        <!--<panels:TransitionPanel CurrentValue="{Binding }" >
             <materialDesign:PackIcon Kind="CheckBold"
                                      MinHeight="30"
                                      MinWidth="30"
@@ -90,158 +53,21 @@
                                      MinWidth="30"
                                      VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             </materialDesign:PackIcon>
-        </panels:TransitionPanel>
+        </panels:TransitionPanel>-->
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:String}">
-        <TextBlock Text="{Binding }" ></TextBlock>
+        <TextBox Text="{Binding Mode=OneWay }" ></TextBox>
     </DataTemplate>
 
-    <!--<DataTemplate DataType="{x:Type utilAbstract:Request}" >
-        <controls:ObjectControl Object="{Binding }"/>
-    </DataTemplate>-->
 
-    <!--<DataTemplate DataType="{x:Type utilAbstract:Event}" >
-        <controls:ObjectControl Object="{Binding }"/>
+    <DataTemplate DataType="{x:Type sys:Enum}">
+        <tiny:EnumSelector EnumValue="{Binding Mode=OneWay }" ></tiny:EnumSelector>
     </DataTemplate>
-
-    <DataTemplate DataType="{x:Type utilAbstract:UIEvent}" >
-        <controls:ObjectControl Object="{Binding }"/>
+    
+    <DataTemplate DataType="{x:Type sys:Guid}">
+        <ContentControl
+                            ToolTip="{Binding }"
+                            Content="{Binding Converter={x:Static converter:GravatarConverter.Instance}}"></ContentControl>
     </DataTemplate>
-
-    <DataTemplate DataType="{x:Type model:ObserverDetailsModel}" >
-
-        -->
-    <!--<Ellipse Fill="RosyBrown" Height="3" Width="3"></Ellipse>-->
-    <!--
-        <Viewbox>
-            <controls:ObjectControl Object="{Binding }"/>
-        </Viewbox>
-    </DataTemplate>-->
-
-    <!--<DataTemplate DataType="{x:Type abstract:PackIconKind}">
-        <Grid>
-            <materialDesign:PackIcon Kind="{Binding .,
-            Converter={x:Static converter:EnumConverter.Instance},
-            ConverterParameter={x:Type materialDesign:PackIconKind},
-            FallbackValue={x:Static materialDesign:PackIconKind.Abc}}"
-                                 VerticalAlignment="Stretch"
-                                 HorizontalAlignment="Stretch"
-                                 HorizontalContentAlignment="Stretch"
-                                 VerticalContentAlignment="Stretch"
-                             Background="Transparent"
-                                MinWidth="10" MinHeight="10"
-                                 Foreground="Black"></materialDesign:PackIcon>
-        </Grid>
-    </DataTemplate>-->
-
-    <!--<DataTemplate DataType="{x:Type utilAbstract:Icon}">
-        <materialDesign:PackIcon
-            Background="Transparent"
-            VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-            VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"
-            Kind="{Binding  
-            Path=Kind,
-            Converter={x:Static converter:EnumConverter.Instance},
-            ConverterParameter={x:Type materialDesign:PackIconKind},
-            FallbackValue={x:Static materialDesign:PackIconKind.Abc}}"
-                                 >
-            <materialDesign:PackIcon.Foreground>
-                <SolidColorBrush Color="{Binding Color, Converter={x:Static converter:ColorConverter.Instance}}"></SolidColorBrush>
-            </materialDesign:PackIcon.Foreground>
-        </materialDesign:PackIcon>
-
-    </DataTemplate>-->
-    <!--MinWidth="{Binding Width}" 
-            MinHeight="{Binding Height}"-->
-    <!--<DataTemplate DataType="{x:Type model:UIIcon}">
-        <materialDesign:PackIcon
-            Background="Transparent"
-            Width="{Binding RelativeSource={RelativeSource AncestorLevel=1, AncestorType=ContentControl}, Path=Width}"
-            Height="{Binding RelativeSource={RelativeSource AncestorLevel=1, AncestorType=ContentControl}, Path=Height}"
-            VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-            VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch"             
-            Kind="{Binding  
-            Path=Kind,
-            Converter={x:Static converter:EnumConverter.Instance},
-            ConverterParameter={x:Type materialDesign:PackIconKind},
-            FallbackValue={x:Static materialDesign:PackIconKind.Abc}}">
-            <materialDesign:PackIcon.Foreground>
-                <SolidColorBrush Color="{Binding Color, 
-                    Converter={x:Static converter:ColorConverter.Instance}, ConverterParameter={x:Static Colors.Black}}"></SolidColorBrush>
-            </materialDesign:PackIcon.Foreground>
-        </materialDesign:PackIcon>
-    </DataTemplate>-->
-
-
-    <!--<DataTemplate DataType="{x:Type utilAbstract:Text}" >
-        <Grid >
-            -->
-    <!--<i:Interaction.Behaviors>
-                <infra1:SizeChangedBehavior />
-            </i:Interaction.Behaviors>-->
-
-
-    <!--Width="{Binding RelativeSource={RelativeSource AncestorType=Grid}, Path=ActualWidth, Converter={x:Static converter:DefaultConverter.Instance}}"-->
-    <!--
-            <Viewbox Stretch="Uniform">
-
-                <TextBlock  
-            x:Name="TextBlock1" FontSize="{Binding Size}" Text="{Binding Value}"  FontWeight="DemiBold" TextWrapping="Wrap">
-                    <TextBlock.Foreground>
-                        <SolidColorBrush x:Name="MySolidColorBrush"
-                                 Color="{Binding Color, Converter={x:Static converter:ColorConverter.Instance}}" />
-                    </TextBlock.Foreground>
-                    <TextBlock.Triggers>
-                        -->
-    <!--<EventTrigger RoutedEvent="TextBlock.Loaded">
-                    <BeginStoryboard>
-                        <Storyboard>
-                            <DoubleAnimation
-            Storyboard.TargetName="TextBlock1" 
-            Storyboard.TargetProperty="(TextBlock.Width)"
-            To="250" Duration="0:0:10" 
-            AutoReverse="False"  />
-                        </Storyboard>
-                    </BeginStoryboard>
-                </EventTrigger>-->
-    <!--
-
-                        <EventTrigger RoutedEvent="TextBlock.GotFocus">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <ColorAnimation 
-            Storyboard.TargetName="MySolidColorBrush"
-            Storyboard.TargetProperty="Color"
-            To="Pink" Duration="0:0:0.5"
-            AutoReverse="True"  />
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-
-                    </TextBlock.Triggers>
-                </TextBlock>
-            </Viewbox>
-        </Grid>
-    </DataTemplate>-->
-
-    <!--<DataTemplate DataType="{x:Type drawing:Color}">
-        <Ellipse Height="30" Width="30">
-            <Ellipse.Fill>
-                <SolidColorBrush Color="{Binding Converter={x:Static converter:ColorConverter.Instance}}" />
-            </Ellipse.Fill>
-        </Ellipse>
-    </DataTemplate>-->
-
-    <!--<DataTemplate DataType="{x:Type utilAbstract:Progress}">
-        <ProgressBar      
-            Value="{Binding Double, Mode=OneWay}"
-                Width="400"
-                MinHeight="20"
-                Maximum="100"
-                Minimum="0"
-                Style="{DynamicResource ProgressBarPrimaryStripe}" />
-
-    </DataTemplate>-->
-
 </ResourceDictionary>

@@ -7,6 +7,9 @@ using System.Windows.Controls.Primitives;
 using Utility.WPF.Controls.Lists.Infrastructure;
 using Utility.WPF.Helpers;
 using Utility.WPF.Abstract;
+using Utility.Helpers.NonGeneric;
+using System.Windows.Data;
+using System.Xml.Linq;
 
 namespace Utility.WPF.Controls.Lists.Infrastructure
 {
@@ -18,6 +21,12 @@ namespace Utility.WPF.Controls.Lists.Infrastructure
                 sender is not Selector selector)
             {
                 throw new Exception("sdf4 fdgdgp;p;p");
+            }
+
+    
+            if (BindingOperations.GetBinding(element, ToggleButton.IsCheckedProperty) != null)
+            {
+                return;
             }
 
             BindingFactory factory = new(item);
@@ -48,6 +57,12 @@ namespace Utility.WPF.Controls.Lists.Infrastructure
 
         public static Dictionary<object, bool?> ToDictionary(this Selector selector)
         {
+            if (selector is not IIsCheckedPath checkedPath)
+            {
+                throw new Exception("77 sdf4 fdgdgp;p;p");
+            }
+
+
             //if (sender is not System.Windows.Controls.Primitives.Selector selector)
             //{
             //    throw new System.Exception("sdf4 fdgdgp;p;p");
@@ -56,8 +71,32 @@ namespace Utility.WPF.Controls.Lists.Infrastructure
             //if (string.IsNullOrEmpty(selector.SelectedValuePath) == false ||
             //    string.IsNullOrEmpty(selector.DisplayMemberPath) == false)
             //{
-            var items = selector.ItemsOfType<CheckBox>().ToArray();
-            var output = items.Where(a => a is { Tag: { } tag }).ToDictionary(a => a.Tag, a => a.IsChecked);
+            //var items = selector.ItemsOfType<CheckBox>().ToArray();
+
+            Dictionary<object, bool?> output = new();
+            int i = 0;
+            foreach(var item in selector.Items)
+            {
+                if (item is CheckBox checkBox)
+                {
+                    var dataContext = selector.ItemsSource.ElementAt(i++);
+                    //item.DataContext = dataContext;
+                    //Bind(item, dataContext, selector);
+
+                    output.Add(checkBox.Tag, checkBox.IsChecked);
+                }
+                else
+                {
+                    var type = item.GetType();
+                    if (string.IsNullOrEmpty(selector.DisplayMemberPath) == false)
+                    {
+                        var key = type.GetProperty(selector.DisplayMemberPath).GetValue(item);
+                        var value = (bool?)type.GetProperty(checkedPath.IsCheckedPath).GetValue(item);
+                        output.Add(key, value);
+                    }            
+                }
+            }
+            //var output = items.Where(a => a is { Tag: { } tag }).ToDictionary(a => a.Tag, a => a.IsChecked);
             return output;
             //}
         }

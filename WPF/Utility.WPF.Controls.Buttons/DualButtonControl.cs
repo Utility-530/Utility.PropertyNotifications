@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ReactiveUI;
+using System;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -10,6 +12,16 @@ namespace Utility.WPF.Controls.Buttons
         static DualButtonControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DualButtonControl), new FrameworkPropertyMetadata(typeof(DualButtonControl)));
+        }
+
+        public DualButtonControl()
+        {
+            this.WhenAnyValue(a => a.Value, a => a.Main, a => a.Alternate)
+                .Where(a => a.Item2 != null && a.Item3 != null)
+                .Subscribe(b =>
+                {
+                    Change(b.Item1);
+                });
         }
 
         public override void OnApplyTemplate()
@@ -24,14 +36,14 @@ namespace Utility.WPF.Controls.Buttons
 
         protected override void EditButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (Value)
-                SetValueCommand.Execute(Alternate);
+            if (Value != false)
+                Change(Value = false);
         }
 
         protected void Edit_Button_OnClick(object sender, RoutedEventArgs e)
         {
-            if (!Value)
-                SetValueCommand.Execute(Main);
+            if (Value != true)
+                Change(Value = true);
         }
 
         public static readonly DependencyProperty OrientationProperty = WrapPanel.OrientationProperty.AddOwner(typeof(DualButtonControl));

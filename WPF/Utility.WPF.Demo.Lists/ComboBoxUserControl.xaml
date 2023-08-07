@@ -8,6 +8,7 @@
              xmlns:utl="http://schemas.utility.com/utilitywpf"
              xmlns:local="clr-namespace:Utility.WPF.Demo.Lists.Infrastructure"
              xmlns:viewModel="clr-namespace:Utility.ViewModels;assembly=Utility.ViewModels"
+             xmlns:temp="http://schemas.utility.com/templates"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.Resources>
@@ -20,7 +21,7 @@
                 <TextBlock Text="{Binding Header}" />
                 <ContentControl Content="{Binding Content}" 
                                         Grid.Column="1"
-                                        ContentTemplateSelector="{x:Static utl:CustomDataTemplateSelector.Instance}">
+                                        ContentTemplateSelector="{x:Static temp:CustomDataTemplateSelector.Instance}">
                 </ContentControl>
             </Grid>
         </DataTemplate>

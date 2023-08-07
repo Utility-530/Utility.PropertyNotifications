@@ -11,7 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
     <ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
+    <ProjectReference Include="..\..\Factorys\Utility.Factorys\Utility.Factorys.csproj" />
+    <ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
+    <ProjectReference Include="..\..\Nodes\Utility.Nodes\Utility.Nodes.csproj" />
     <ProjectReference Include="..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
     <ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
   </ItemGroup>

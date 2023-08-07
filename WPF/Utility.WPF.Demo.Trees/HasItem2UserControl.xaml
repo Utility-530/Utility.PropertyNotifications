@@ -16,28 +16,35 @@
             <Button Click="Button_Click_Drop">drop</Button>
         </StackPanel>
         <UniformGrid Columns="1">
-            <tree:MyTreeView x:Name="MyTreeView"  Background="Azure" ItemContainerStyle="{StaticResource AlignedTreeViewitemStyle}">
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Items}">
-                        <StackPanel Orientation="Horizontal">
-                            <ContentControl Content="{Binding Data}"/>
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-            </tree:MyTreeView>
-
-
-            <TreeView x:Name="TreeView" Background="FloralWhite">
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Items}">
-                        <StackPanel Orientation="Horizontal">
-                            <ContentControl 
-                                    Content="{Binding Data}"  VerticalAlignment="Center">
-                            </ContentControl>
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
+            <TreeView x:Name="MyTreeView"  Background="Azure">             
             </TreeView>
+
+            <DockPanel Height="300"  Background="GhostWhite">
+                <Grid DockPanel.Dock="Top">
+                    <Popup x:Name="singlePopup" AllowsTransparency="True" IsOpen="True" >
+                        <TreeView x:Name="TreeView" Background="Transparent" BorderThickness="0">
+                            <TreeView.ItemContainerStyle>
+                                <Style TargetType="{x:Type TreeViewItem}">
+                                    <Setter Property="Background" Value="IndianRed"/>
+                                    <Setter Property="Margin" Value="10"/>
+                                    <Setter Property="Padding" Value="10"/>
+                                </Style>
+                            </TreeView.ItemContainerStyle>
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <ContentControl 
+                                    Content="{Binding Data}"  VerticalAlignment="Center">
+                                        </ContentControl>
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                    </Popup>
+                </Grid>
+                <TextBlock Text="Shows how to overlay treeview using a Popup" DockPanel.Dock="Bottom" FontSize="32"></TextBlock>
+
+            </DockPanel>
         </UniformGrid>
     </DockPanel>
 </UserControl>

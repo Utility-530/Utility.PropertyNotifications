@@ -13,6 +13,7 @@
     xmlns:ad="http://schemas.utility.com/adorners"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:infra="clr-namespace:Utility.WPF.Demo.Lists.Infrastructure" 
+    xmlns:temp="http://schemas.utility.com/templates"
     xmlns:btns="http://schemas.utility.com/buttons" 
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -88,7 +89,7 @@
                         <TextBlock Text="{Binding Header}" />
                         <ContentControl Content="{Binding Content}" 
                                         Grid.Column="1"
-                                        ContentTemplateSelector="{x:Static utl1:CustomDataTemplateSelector.Instance}">                            
+                                        ContentTemplateSelector="{x:Static temp:CustomDataTemplateSelector.Instance}">                            
                         </ContentControl>
                     </Grid>
                 </DataTemplate>

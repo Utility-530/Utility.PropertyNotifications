@@ -6,7 +6,7 @@ using Utility.Models;
 using static Utility.Observables.Generic.ObservableExtensions;
 using Utility.Observables.Generic;
 using System.ComponentModel;
-using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Utility.PropertyTrees.Services
 {
@@ -18,7 +18,13 @@ namespace Utility.PropertyTrees.Services
 
         static readonly string[] validParentMethods = new[] { "Remove", "MoveUp", "MoveDown" };
         static readonly string[] validChildMethods = new[] { "Add", "Clear", "Send", "Connect", "Foo", "Bar", "AddByName", "AddByKey", "AddByType", "Refresh", "Update" };
-        static readonly string[] inValidMethods = new[] { "ToString", "GetType", "Equals", "GetHashCode" };
+        static readonly Dictionary<Type, string[]> inValidMethods = new(new ObjectAncestryComparer()) {
+            {typeof(object), new[] { "ToString", "GetType", "Equals", "GetHashCode" } },
+                 };
+
+        static readonly Dictionary<string, string[]> inValidMethodsByName = new() {
+            {"ViewModelsCollection", new[] { "Add", "Clear" } },
+                 };
 
         public override Key Key => new(Guids.MethodsExplorer, nameof(MethodsExplorer), typeof(MethodsExplorer));
 
@@ -117,15 +123,22 @@ namespace Utility.PropertyTrees.Services
 
         static IEnumerable<MethodInfo> MethodInfos(PropertyDescriptor propertyDescriptor)
         {
-            return 
+            return
                propertyDescriptor
                .PropertyType
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance/* | BindingFlags.DeclaredOnly*/)
                 .Where(m => !m.IsSpecialName)
-                .Where(a => inValidMethods.Contains(a.Name) == false)
+                .Where(a => Filter(propertyDescriptor, a))
                 .Where(a => validChildMethods.Contains(a.Name))
                 .Cast<MethodInfo>()
                 .OrderBy(d => d.Name);
+        }
+
+        private static bool Filter(PropertyDescriptor propertyDescriptor, MethodInfo methodInfo)
+        {
+            var b1 = (inValidMethods.TryGetValue(propertyDescriptor.PropertyType, out var o) && o.Contains(methodInfo.Name));
+            var b2 = (inValidMethodsByName.TryGetValue(propertyDescriptor.PropertyType.Name, out var o2) && o2.Contains(methodInfo.Name));
+            return b1 == false && b2 == false;
         }
 
         static IEnumerable<MethodInfo> ParentMethodInfos(PropertyDescriptor propertyDescriptor)
@@ -144,6 +157,19 @@ namespace Utility.PropertyTrees.Services
                     .OrderBy(d => d.Name);
             }
             return Array.Empty<MethodInfo>();
+        }
+
+        public class ObjectAncestryComparer : IEqualityComparer<Type>
+        {
+            public bool Equals(Type? x, Type? y)
+            {
+                return x.IsAssignableTo(y) || y.IsAssignableTo(x);
+            }
+
+            public int GetHashCode([DisallowNull] Type obj)
+            {
+                return 0;
+            }
         }
     }
 }

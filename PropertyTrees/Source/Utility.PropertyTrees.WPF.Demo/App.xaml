@@ -15,20 +15,11 @@
                 <ResourceDictionary Source="/Themes/Templates.xaml" />
                 <ResourceDictionary Source="/Themes/Styles.xaml" />
                 <ResourceDictionary Source="/Themes/SyntaxBoxTemplate.xaml" />
+                <!--<ui:ThemeResources RequestedTheme="Dark" />-->
                 <ui:ThemeResources RequestedTheme="Light" />
                 <ui:XamlControlsResources />
             </ResourceDictionary.MergedDictionaries>
-            <!--<DataTemplate DataType="{x:Type samples1:Customer2}">
-                <local1:MainView
-                        DataContext="{Binding }" />
-            </DataTemplate>-->
 
-            <!--<DataTemplate DataType="{x:Type grid:PropertyBase}">
-                <TextBox Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={x:Static local:DefaultConverter.Instance}}"
-                         Width="100"
-                         BorderBrush="ForestGreen"
-                         BorderThickness="2"></TextBox>
-            </DataTemplate>-->
 
             <ItemsPanelTemplate x:Key="StackPanel">
                 <StackPanel></StackPanel>

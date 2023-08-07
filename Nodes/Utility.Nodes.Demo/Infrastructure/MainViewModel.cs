@@ -9,7 +9,7 @@ namespace Utility.Nodes.Demo.Infrastructure
 {
     public class MainViewModel
     {
-        public INode Value { get; } = new TypeNode();
+        public INode Value { get; } = new DemoRootNode();
 
     }
 }

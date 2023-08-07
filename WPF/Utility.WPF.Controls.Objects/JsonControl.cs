@@ -272,11 +272,11 @@ namespace Utility.WPF.Controls.Objects
                     {
                         (JProperty property, FrameworkElement frameworkElement) => property.Value.Type switch
                         {
-                            JTokenType.Object => resource.GetValueOrNew("ObjectPropertyTemplate", frameworkElement.FindResource("ObjectPropertyTemplate")),
-                            JTokenType.Array => resource.GetValueOrNew("ArrayPropertyTemplate", frameworkElement.FindResource("ArrayPropertyTemplate")),
-                            _ => resource.GetValueOrNew("PrimitivePropertyTemplate", frameworkElement.FindResource("PrimitivePropertyTemplate")),
+                            JTokenType.Object => resource.GetValueOrCreate("ObjectPropertyTemplate", () => frameworkElement.FindResource("ObjectPropertyTemplate")),
+                            JTokenType.Array => resource.GetValueOrCreate("ArrayPropertyTemplate", () => frameworkElement.FindResource("ArrayPropertyTemplate")),
+                            _ => resource.GetValueOrCreate("PrimitivePropertyTemplate", () => frameworkElement.FindResource("PrimitivePropertyTemplate")),
                         },
-                        (JObject jObject, FrameworkElement frameworkElement) => resource.GetValueOrNew("ObjectPropertyTemplate", frameworkElement.FindResource("ObjectPropertyTemplate")),
+                        (JObject jObject, FrameworkElement frameworkElement) => resource.GetValueOrCreate("ObjectPropertyTemplate", ()=>frameworkElement.FindResource("ObjectPropertyTemplate")),
                         (_, FrameworkElement frameworkElement) =>
                         frameworkElement.FindResource(new DataTemplateKey(e.Item.GetType())),
                         _ => null

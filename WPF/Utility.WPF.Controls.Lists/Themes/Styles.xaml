@@ -11,7 +11,7 @@
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Vertical" />
+                        <WrapPanel Orientation="Vertical" VirtualizingPanel.IsVirtualizing="false" />
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>

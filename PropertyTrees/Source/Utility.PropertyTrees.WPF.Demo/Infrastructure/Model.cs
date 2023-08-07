@@ -1,11 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive;
+using Utility.Collections;
+using Utility.Helpers;
 using Utility.Models;
 using Utility.PropertyTrees.Demo.Model;
 using VM = Utility.PropertyTrees.Services.ViewModel;
+
 namespace Utility.PropertyTrees.WPF.Demo
 {
-
     public class RootModel : BaseViewModel
     {
         DateTime lastRefresh;
@@ -25,6 +27,9 @@ namespace Utility.PropertyTrees.WPF.Demo
         }
 
         public HUD_Simulator HUD_Simulator { get; set; } = new();
+
+        [Browsable(false)]
+        public Methods Methods { get; set; }
 
         public ViewModels ViewModels { get; set; } = new();
     }
@@ -108,21 +113,21 @@ namespace Utility.PropertyTrees.WPF.Demo
     }
 
 
-    public class RootViewModelsProperty : RootProperty
-    {
-        static readonly Guid guid = Guid.Parse("aabe5f0b-6024-4913-8017-74475096fc52");
+    //public class RootViewModelsProperty : RootProperty
+    //{
+    //    static readonly Guid guid = Guid.Parse("aabe5f0b-6024-4913-8017-74475096fc52");
 
-        public RootViewModelsProperty() : base(guid)
-        {
-            var data = new ViewModels();
-            Data = data;
-        }
-    }
+    //    public RootViewModelsProperty() : base(guid)
+    //    {
+    //        var data = new ViewModels();
+    //        Data = data;
+    //    }
+    //}
 
     public class ViewModels : BaseViewModel
     {
         //private VM @default = new();
-        private ObservableCollection<VM> collection = new();
+        private ViewModelsCollection collection = new();
         private Key key;
         private string name;
         private Guid guid;
@@ -130,17 +135,17 @@ namespace Utility.PropertyTrees.WPF.Demo
 
         public void AddByName()
         {
-            Collection.Add(new VM() { Name = Name });
+            Collection.Add(new VM() { Id=Guid.NewGuid(), Name = Name });
         }
 
         public void AddByKey()
         {
-            Collection.Add(new VM() { ParentGuid = Guid });
+            Collection.Add(new VM() { Id = Guid.NewGuid(), ParentGuid = Guid });
         }
 
         public void AddByType()
         {
-            Collection.Add(new VM() { Type = System.Type.GetType(Type) });
+            Collection.Add(new VM() { Id = Guid.NewGuid(), Type = type.FromString() });
         }
 
         public void Update()
@@ -148,7 +153,7 @@ namespace Utility.PropertyTrees.WPF.Demo
             Key = new Key(Guid, Name, System.Type.GetType(Type));
         }
 
-        public ObservableCollection<VM> Collection { get => collection; set => collection = value; }
+        public ViewModelsCollection Collection { get => collection; set => collection = value; }
 
         public string Name
         {
@@ -193,8 +198,13 @@ namespace Utility.PropertyTrees.WPF.Demo
     }
 
 
-    public class ViewModelsCollection : ObservableCollection<VM>
+    public class ViewModelsCollection : ThreadSafeObservableCollection<VM>
     {
+        public ViewModelsCollection()
+        {
+            Context = SynchronizationContext.Current;
+        }
+
         public void MoveUp(VM ViewModel)
         {
             var oldIndex = this.IndexOf(ViewModel);
@@ -208,16 +218,16 @@ namespace Utility.PropertyTrees.WPF.Demo
         }
     }
 
-    public class RootMethodsProperty : RootProperty
-    {
-        static readonly Guid guid = Guid.Parse("ffbe5f0b-6024-4913-8017-74475096fc52");
+    //public class RootMethodsProperty : RootProperty
+    //{
+    //    static readonly Guid guid = Guid.Parse("ffbe5f0b-6024-4913-8017-74475096fc52");
 
-        public RootMethodsProperty() : base(guid)
-        {
-            var data = new Wrapper();
-            Data = data;
-        }
-    }
+    //    public RootMethodsProperty() : base(guid)
+    //    {
+    //        var data = new Wrapper();
+    //        Data = data;
+    //    }
+    //}
 
     public class Wrapper
     {

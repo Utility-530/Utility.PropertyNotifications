@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Utility.Trees\Utility.Trees\Utility.Trees.csproj" />
-    <ProjectReference Include="..\..\Utility.WPF\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
+    <ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
     <ProjectReference Include="..\Utility.Nodes\Utility.Nodes.csproj" />
   </ItemGroup>
 

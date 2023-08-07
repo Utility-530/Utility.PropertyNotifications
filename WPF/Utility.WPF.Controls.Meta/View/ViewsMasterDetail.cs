@@ -12,7 +12,7 @@ using Utility.Common;
 using Utility.WPF.Controls.Base;
 using Utility.WPF.Meta;
 using Utility.WPF.Controls.Master;
-using Utility.WPF.Model;
+using Utility.Enums;
 
 namespace Utility.WPF.Controls.Meta
 {
@@ -27,42 +27,32 @@ namespace Utility.WPF.Controls.Meta
     public class ViewsMasterDetail : MasterDetail
     {
         public static readonly DependencyProperty AssemblyProperty = DependencyHelper.Register(new PropertyMetadata(Assembly.GetEntryAssembly()));
-        //public static readonly DependencyProperty DemoTypeProperty = DependencyHelper.Register();
+        public static readonly DependencyProperty AssemblyTypeProperty = DependencyHelper.Register();
 
         public ViewsMasterDetail()
         {
-            Orientation = Orientation.Horizontal;
+            Orientation = System.Windows.Controls.Orientation.Horizontal;
             var listBox = new ViewTypeItemListBox();
-
-            //listBox.GroupStyle.Add(new GroupStyle());
-            //var resource = new ResourceDictionary
-            //{
-            //    Source = new Uri("/Utility.WPF.Controls.Meta;component/Themes/Generic.xaml",
-            //         UriKind.RelativeOrAbsolute)
-            //};
-            //var dataTemplateKey = new DataTemplateKey(typeof(KeyValue));
-            //listBox.ItemTemplate = (DataTemplate)resource[dataTemplateKey];
 
             Content = listBox;
             UseDataContext = true;
             _ = this.WhenAnyValue(a => a.Assembly)
-                .WhereNotNull()
-                .Select(a=> FrameworkElementKeyValue.Types(a))
-                //.CombineLatest(this.WhenAnyValue(a => a.DemoType).Where(a => a != AssemblyType.Default))
-                //.Select(a =>
-                //{
-                //    return a.Second switch
-                //    {
-                //        AssemblyType.UserControl => FrameworkElementKeyValue.ViewTypes(a.First),
-                //        AssemblyType.ResourceDictionary => (IEnumerable<KeyValue>)ResourceDictionaryKeyValue.ResourceViewTypes(a.First),
-                //        _ => throw new Exception("FDGS££Fff"),
-                //    };
-                //})
-                .Subscribe(pairs =>
-                {
-                    listBox.ItemsSource = pairs.ToArray();
-                    listBox.SelectedIndex = 0;
-                });
+                    .WhereNotNull()
+                    .CombineLatest(this.WhenAnyValue(a => a.AssemblyType).Where(a => a != AssemblyType.Default))
+                    .Select(a =>
+                    {
+                        return a.Second switch
+                        {
+                            AssemblyType.UserControl => a.First.ViewTypes(),
+                            AssemblyType.ResourceDictionary => a.First.ResourceViewTypes().Cast<KeyValue>(),
+                            _ => throw new Exception("FDGS££Fff"),
+                        };
+                    })
+                    .Subscribe(pairs =>
+                    {
+                        listBox.ItemsSource = pairs.ToArray();
+                        listBox.SelectedIndex = 0;
+                    });
 
             Header = CreateDetail();
 
@@ -83,7 +73,7 @@ namespace Utility.WPF.Controls.Meta
                         FontSize = 20,
                         Text = "n o   k e y"
                     };
-       
+
                     Binding binding = new()
                     {
                         Path = new PropertyPath(nameof(KeyValue.Key)),
@@ -115,6 +105,12 @@ namespace Utility.WPF.Controls.Meta
         {
             get => (Assembly)GetValue(AssemblyProperty);
             set => SetValue(AssemblyProperty, value);
+        }
+
+        public AssemblyType AssemblyType
+        {
+            get => (AssemblyType)GetValue(AssemblyTypeProperty);
+            set => SetValue(AssemblyTypeProperty, value);
         }
     }
 }

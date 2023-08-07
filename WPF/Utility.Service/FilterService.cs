@@ -24,12 +24,12 @@ public class FilterService<T> : IObserver<Func<T, bool>>, IFilterService<T>, IRe
 
     public void OnCompleted()
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnError(Exception error)
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 
     public void OnNext(Func<T, bool> value)

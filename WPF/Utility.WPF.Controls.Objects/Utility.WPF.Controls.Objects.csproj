@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
@@ -7,9 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
+    <ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Controls.Base\Utility.WPF.Controls.Base.csproj" />
     <ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
     <ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Panels\Utility.WPF.Demo.Panels.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
     <ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
   </ItemGroup>
 
@@ -22,6 +26,15 @@
     </Compile>
     <Compile Update="ObjectFlowControl.cs">
       <DependentUpon>ObjectFlowControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ObjectItemsControl.cs">
+      <DependentUpon>ObjectItemsControl.xaml</DependentUpon>
+    </Compile>  
+	  <Compile Update="ObjectSelector.cs">
+      <DependentUpon>ObjectSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="ObjectComboBox.cs">
+      <DependentUpon>ObjectComboBox.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 

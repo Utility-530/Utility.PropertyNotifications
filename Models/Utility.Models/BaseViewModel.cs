@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Jellyfish;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace Utility.Models
@@ -46,4 +47,10 @@ namespace Utility.Models
             return false;
         }
     }
+
+    public class ReadOnlyViewModel : BaseViewModel
+    {
+        public bool IsReadOnly { get; init; }
+    }
+
 }

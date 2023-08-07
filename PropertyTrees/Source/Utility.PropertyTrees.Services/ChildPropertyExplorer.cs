@@ -14,13 +14,15 @@ using System.Collections.Specialized;
 using Utility.Helpers.Ex;
 using Utility.Helpers;
 using Utility.Nodes.Abstractions;
+using NetFabric.Hyperlinq;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Utility.PropertyTrees.Services
 {
     public partial class ChildPropertyExplorer : BaseObject
     {
         readonly Dictionary<Type, PropertyDescriptor[]> cachedPropertyDesciptors = new();
-        readonly Dictionary<PropertyDescriptor, bool> includes = new();
+        readonly Dictionary<PropertyDescriptor, bool> includes = new(new PropertyDescriptorComparer());
 
         public override Key Key => new(Guids.PropertyFilter, nameof(ChildPropertyExplorer), typeof(ChildPropertyExplorer));
 
@@ -65,44 +67,7 @@ namespace Utility.PropertyTrees.Services
                 return composite;
             });
 
-            void SubscribeToCollectionItemDescriptors(Interfaces.Generic.IObserver<ChildrenResponse> obs)
-            {
-                var collectionDescriptors =
-                    CollectionItemDescriptors(value.Data)
-                    .Subscribe(descriptor =>
-                    {
-                        if (descriptor.Type == ChangeType.Add)
-                            FromCollectionDescriptor(descriptor.Value)
-                            .Subscribe(p =>
-                            {
-                                i++;
-                                obs.OnNext(new ChildrenResponse(new Change<INode>(p, ChangeType.Add), descriptor.As<PropertyDescriptor>()));
-                                obs.OnProgress(i, count);
-                                if (count == i && value.Data is not INotifyCollectionChanged)
-                                    obs.OnCompleted();
-                            })
-                            .DisposeWith(composite);
-                        else if (descriptor.Type == ChangeType.Remove)
-                            FromCollectionDescriptor(descriptor.Value)
-                            .Subscribe(p =>
-                            {
-                                obs.OnNext(new ChildrenResponse(new Change<INode>(p, ChangeType.Remove), descriptor.As<PropertyDescriptor>()));
-                            })
-                            .DisposeWith(composite);
-                        else if (descriptor.Type == ChangeType.Reset)
-                            obs.OnNext(new ChildrenResponse(new Change<INode>(default, ChangeType.Reset), new Change<PropertyDescriptor>(default, ChangeType.Reset)));
-                    },
-                    () =>
-                    {
-                        //observer.OnCompleted();
-                    });
 
-                Interfaces.Generic.IObservable<ValueNode> FromCollectionDescriptor(CollectionItemDescriptor descriptor)
-                {
-                    return Observe<ActivationResponse, ActivationRequest>(new(value.Guid, descriptor, descriptor.Item, descriptor.GetPropertyType()))
-                           .Select(a => a.PropertyNode);
-                }
-            }
 
             void SubscribeToPropertyDescriptor(PropertyDescriptor descriptor, bool include, Interfaces.Generic.IObserver<ChildrenResponse> obs)
             {
@@ -111,10 +76,7 @@ namespace Utility.PropertyTrees.Services
                     i++;
                     obs.OnNext(new ChildrenResponse(Change<INode>.None, new Change<PropertyDescriptor>(descriptor, ChangeType.Add)));
                     obs.OnProgress(i, count);
-                    if (descriptors.Length == i)
-                    {
-                        SubscribeToCollectionItemDescriptors(obs);
-                    }
+                    CheckSubscribeToCollectionDescriptors();
                     return;
                 }
 
@@ -124,11 +86,105 @@ namespace Utility.PropertyTrees.Services
                         i++;
                         obs.OnNext(new ChildrenResponse(new(p, ChangeType.Add), new(descriptor, ChangeType.Add)));
                         obs.OnProgress(i, count);
-                        if (descriptors.Length == i)
-                        {
-                            SubscribeToCollectionItemDescriptors(obs);
-                        }
+                        CheckSubscribeToCollectionDescriptors();
                     }).DisposeWith(composite);
+
+                void CheckSubscribeToCollectionDescriptors()
+                {
+                    if (descriptors.Length == i)
+                    {
+                        if (includes.TryGetValue(value.Descriptor, out bool _include) == false)
+                            Observe<DescriptorFilterResponse, DescriptorFilterRequest>(new DescriptorFilterRequest(descriptor))
+                            .Subscribe(response =>
+                            {
+                                if (response.Include)
+                                    SubscribeToCollectionItemDescriptors(obs);
+                            })
+                            .DisposeWith(composite);
+                        else if (_include)
+                            SubscribeToCollectionItemDescriptors(obs);
+                    }
+                }
+
+                void SubscribeToCollectionItemDescriptors(Interfaces.Generic.IObserver<ChildrenResponse> obs)
+                {
+                    if(value.Data.GetType().Name.Contains("ViewModel"))
+                    {
+
+                    }
+
+                    var collectionDescriptors =
+                        CollectionItemDescriptors(value.Data)
+                        .Subscribe(descriptor =>
+                        {
+                            if (descriptor.Value == null)
+                            {
+                                OnChange(descriptor, default);
+                                return;
+                            }
+                            if (includes.TryGetValue(descriptor.Value, out bool include) == false)
+                                Observe<DescriptorFilterResponse, DescriptorFilterRequest>(new DescriptorFilterRequest(descriptor.Value))
+                                .Subscribe(a =>
+                                {
+                                    OnChange(descriptor, a.Include);
+                                })
+                                .DisposeWith(composite);
+                            else if (include)
+                                OnChange(descriptor, true);
+                        },
+                        () =>
+                        {
+                            //observer.OnCompleted();
+                        });
+
+                    void OnChange(Change<CollectionItemDescriptor> descriptor, bool include)
+                    {
+
+                        if (descriptor.Type == ChangeType.Add)
+                        {
+                            if (include)
+                                FromCollectionDescriptor(descriptor.Value)
+                                .Subscribe(p =>
+                                {
+                                    i++;
+                            
+                                        obs.OnNext(new ChildrenResponse(new Change<INode>(p, ChangeType.Add), descriptor.As<PropertyDescriptor>()));
+                                    obs.OnProgress(i, count);
+                                    if (count == i)
+                                    {
+                                        obs.OnNext(new ChildrenResponse(new Change<INode>(default, ChangeType.None), default));
+                                        if (value.Data is not INotifyCollectionChanged)
+                                            obs.OnCompleted();
+                                    }
+                                })
+                                .DisposeWith(composite);
+                            else
+                            {
+                                i++;
+
+                                obs.OnNext(new ChildrenResponse(Change<INode>.None, descriptor.As<PropertyDescriptor>()));
+                                obs.OnProgress(i, count);
+                                if (count == i)
+                                {
+                                    if (value.Data is not INotifyCollectionChanged)
+                                        obs.OnCompleted();
+                                }
+                            }
+                        }
+                        else if (descriptor.Type == ChangeType.Remove)
+
+                            obs.OnNext(new ChildrenResponse(new Change<INode>(default, ChangeType.Remove), descriptor.As<PropertyDescriptor>()));
+
+                        else if (descriptor.Type == ChangeType.Reset)
+                            obs.OnNext(new ChildrenResponse(new Change<INode>(default, ChangeType.Reset), new Change<PropertyDescriptor>(default, ChangeType.Reset)));
+                    }
+
+                    Interfaces.Generic.IObservable<ValueNode> FromCollectionDescriptor(CollectionItemDescriptor descriptor)
+                    {
+                        return Observe<ActivationResponse, ActivationRequest>(new(value.Guid, descriptor, descriptor.Item, descriptor.GetPropertyType()))
+                               .Select(a => a.PropertyNode);
+                    }
+                }
             }
 
             int Count(object data)
@@ -169,7 +225,7 @@ namespace Utility.PropertyTrees.Services
                     if (data is IEnumerable enumerable && data is not string s)
                         foreach (var item in enumerable)
                         {
-                            Next(value, observer, item, data.GetType(), ChangeType.Add, ref i);
+                            Next(value, observer, item, data.GetType(), ChangeType.Add, i++);
                         }
                     if (data is INotifyCollectionChanged collectionChanged)
                     {
@@ -179,14 +235,21 @@ namespace Utility.PropertyTrees.Services
                             switch (a.Action)
                             {
                                 case NotifyCollectionChangedAction.Add:
-                                    foreach (var item in a.NewItems)
-                                        Next(value, observer, item, data.GetType(), ChangeType.Add, ref i);
-                                    break;
+                                    {
+                                        foreach (var item in a.NewItems)
+                                            Next(value, observer, item, data.GetType(), ChangeType.Add, i++);
+                                        break;
+                                    }
                                 case NotifyCollectionChangedAction.Remove:
                                     foreach (var item in a.OldItems)
-                                        Next(value, observer, item, data.GetType(), ChangeType.Remove, ref i);
+                                    {
+                                        --i;
+                                        var descriptor = new CollectionItemDescriptor(item, (data as IList).IndexOf(item), data.GetType());
+                                        observer.OnNext(new(descriptor, ChangeType.Remove));
+                                    }
                                     break;
                                 case NotifyCollectionChangedAction.Reset:
+                                    i = 0;
                                     observer.OnNext(new(null, ChangeType.Reset));
                                     break;
                             }
@@ -198,7 +261,7 @@ namespace Utility.PropertyTrees.Services
                     }
                     return Disposer.Empty;
                 });
-                static void Next(ChildrenRequest value, Interfaces.Generic.IObserver<Change<CollectionItemDescriptor>> observer, object item, Type componentType, ChangeType changeType, ref int i)
+                static void Next(ChildrenRequest value, Interfaces.Generic.IObserver<Change<CollectionItemDescriptor>> observer, object item, Type componentType, ChangeType changeType, int i)
                 {
                     var descriptor = new CollectionItemDescriptor(item, i, componentType);
                     //if (value.Filters?.Any(f => f.Invoke(descriptor) == false) == false)
@@ -206,6 +269,19 @@ namespace Utility.PropertyTrees.Services
                     i++;
                 }
             }
+        }
+    }
+
+    public class PropertyDescriptorComparer : IEqualityComparer<PropertyDescriptor>
+    {
+        public bool Equals(PropertyDescriptor? x, PropertyDescriptor? y)
+        {
+            return x?.Name == y?.Name && x?.ComponentType.Name == y?.ComponentType.Name;
+        }
+
+        public int GetHashCode([DisallowNull] PropertyDescriptor obj)
+        {
+            return obj.GetHashCode();
         }
     }
 }

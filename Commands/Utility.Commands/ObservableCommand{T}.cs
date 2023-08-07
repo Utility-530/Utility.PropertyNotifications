@@ -46,10 +46,9 @@ namespace Utility.Commands
 
         public void Execute(object? parameter)
         {
-            T? output = id ?? (T)parameter;
-            methodToExecute.Invoke(this);
+            T? output = id ?? (T?)parameter;
+            methodToExecute?.Invoke(this);
             Outputs.Add(output);
-
             foreach (var observer in Observers)
             {
                 observer.OnNext(output);
