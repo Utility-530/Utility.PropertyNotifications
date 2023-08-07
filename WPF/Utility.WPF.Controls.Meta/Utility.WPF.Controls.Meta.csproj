@@ -30,9 +30,5 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-	
-  <ItemGroup>
-    <Folder Include="Infrastructure\" />
-  </ItemGroup>
 
 </Project>
