@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+	  <Version>1.0.1</Version>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Factorys\Utility.Factorys\Utility.Factorys.csproj"/>
+    <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj"/>
+  </ItemGroup>
+
+</Project>

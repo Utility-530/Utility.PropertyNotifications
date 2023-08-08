@@ -3,7 +3,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Controls;
 using System.Windows;
 using static Utility.WPF.Helpers.TemplateGenerator;
-using Arrangement = Utility.Enums.Arrangement;
+
 
 namespace Utility.WPF.Helpers
 {
@@ -50,6 +50,11 @@ namespace Utility.WPF.Helpers
             {
                 factory.SetValue(WrapPanel.OrientationProperty, orientation);
             }
+        }
+
+        public enum Arrangement
+        {
+            Stacked, Wrapped, Uniform
         }
     }
 }
