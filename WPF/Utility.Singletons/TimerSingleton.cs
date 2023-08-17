@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
-namespace Utility.Common.Models
+namespace Utility.Singletons
 {
     public class TimerSingleton
     {
