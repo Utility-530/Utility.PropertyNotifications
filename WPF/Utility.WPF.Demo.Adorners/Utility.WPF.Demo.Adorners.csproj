@@ -8,7 +8,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Utility.WPF.Controls.Adorners\Utility.WPF.Controls.Adorners.csproj" />
-		<ProjectReference Include="..\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
+		<ProjectReference Include="..\..\Meta\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Demo.Data\Utility.WPF.Demo.Data.csproj" />
 		<ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
 	</ItemGroup>

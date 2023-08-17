@@ -1,11 +1,11 @@
-﻿using Moq;
+﻿//using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace Utility.Common;
+namespace Utility.Factorys;
 
 /// <summary>
 /// AutoMoqer mocks all constructor dependencies for a service
@@ -191,19 +191,19 @@ public class AutoMoqer
                 {
                     object? parameterInstance;
                     object? parameterMockInstance;
-                    if (parameter.ParameterType.IsValueType == false)
-                    {
-                        //Create and add Moq-instance for parameter
-                        var genericType = typeof(Mock<>);
-                        var genericGenericType = genericType.MakeGenericType(parameter.ParameterType);
-                        parameterInstance = Activator.CreateInstance(genericGenericType);
-                        parameterMockInstance = parameterInstance.GetType().GetProperty("Object", BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance).GetValue(parameterInstance, null);
-                    }
-                    else
-                    {
+                    //if (parameter.ParameterType.IsValueType == false)
+                    //{
+                    //    //Create and add Moq-instance for parameter
+                    //    var genericType = typeof(Mock<>);
+                    //    var genericGenericType = genericType.MakeGenericType(parameter.ParameterType);
+                    //    parameterInstance = Activator.CreateInstance(genericGenericType);
+                    //    parameterMockInstance = parameterInstance.GetType().GetProperty("Object", BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance).GetValue(parameterInstance, null);
+                    //}
+                    //else
+                    //{
                         parameterInstance = Activator.CreateInstance(parameter.ParameterType);
                         parameterMockInstance = parameterInstance;
-                    }
+                    //}
                     //  _moqInstancesParameters.Add(parameterInstance);
                     serviceConstructionParameters.Add(parameterMockInstance);
                 }
@@ -320,17 +320,17 @@ public class AutoMoqer
                     //{
                     //    parameterMockInstance = null;
                     //}
-                    else if (parameter.ParameterType.IsSealed)
-                    {
+                    //else if (parameter.ParameterType.IsSealed)
+                    //{
                         parameterMockInstance = Activator.CreateInstance(parameter.ParameterType);
-                    }
-                    else
-                    {
-                        var genericType = typeof(Mock<>);
-                        var genericGenericType = genericType.MakeGenericType(parameter.ParameterType);
-                        var parameterInstance = Activator.CreateInstance(genericGenericType);
-                        parameterMockInstance = parameterInstance.GetType().GetProperty("Object", BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance).GetValue(parameterInstance, null);
-                    }
+                    //}
+                    //else
+                    //{
+                    //    var genericType = typeof(Mock<>);
+                    //    var genericGenericType = genericType.MakeGenericType(parameter.ParameterType);
+                    //    var parameterInstance = Activator.CreateInstance(genericGenericType);
+                    //    parameterMockInstance = parameterInstance.GetType().GetProperty("Object", BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.Instance).GetValue(parameterInstance, null);
+                    //}
 
                     //  _moqInstancesParameters.Add(parameterMockInstance);
                     serviceConstructionParameters.Add(parameterMockInstance);
@@ -404,7 +404,7 @@ public class AutoMoqer
         }
 
         /// <summary>
-        /// Will run <see cref="Moq.Mock.VerifyAll"/> on all Moq-parameters.
+        /// Will run <see cref="Mock.VerifyAll"/> on all Moq-parameters.
         /// </summary>
         //public void VerifyAll()
         //{
@@ -429,7 +429,7 @@ public class AutoMoqer
         }
 
         /// <summary>
-        /// Will run <see cref="Moq.Mock.VerifyAll"/> on all Moq-parameters.
+        /// Will run <see cref="Mock.VerifyAll"/> on all Moq-parameters.
         /// </summary>
         //public void VerifyAll()
         //{

@@ -1,5 +1,5 @@
 ﻿using ReactiveUI;
-using Utility.Helpers.NonGeneric;
+using Utility.Models.Filters;
 
 namespace Utility.ViewModels
 {
@@ -13,7 +13,7 @@ namespace Utility.ViewModels
     //    public override ReactiveProperty<bool> Model { get; }
     //}
 
-    public class CheckViewModel : ViewModel<Utility.Models.Filters.Filter>
+    public class CheckViewModel : ViewModel<Filter>
     {
         private bool? isChecked;
 

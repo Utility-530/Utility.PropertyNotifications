@@ -9,7 +9,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
-using Utility.Common;
 
 namespace Utility.WPF.Markup
 {
@@ -178,42 +177,42 @@ namespace Utility.WPF.Markup
 
             switch (cmd)
             {
-                case ICommand when cmd.GetType().BaseType?.Name == typeof(ReactiveCommandBase<,>).Name:
-                    if (Converter != null)
-                    {
-                        return Converter?.Convert(args, null, ConverterParameter, CultureInfo.CurrentCulture);
-                    }
-                    else if (cmd.GetType().GetGenericArguments().FirstOrDefault() is Type type)
-                    {
-                        if (type != typeof(object) && AutoMapperSingleton.Instance.ConfigurationProvider.BuildExecutionPlan(args.GetType(), type) is { } map)
-                        {
-                            return AutoMapperSingleton.Instance.Map(args, args.GetType(), type);
-                        }
-                        else
-                        {
-                            return args;
-                        }
+                //case ICommand when cmd.GetType().BaseType?.Name == typeof(ReactiveCommandBase<,>).Name:
+                //    if (Converter != null)
+                //    {
+                //        return Converter?.Convert(args, null, ConverterParameter, CultureInfo.CurrentCulture);
+                //    }
+                //    else if (cmd.GetType().GetGenericArguments().FirstOrDefault() is Type type)
+                //    {
+                //        //if (type != typeof(object) && AutoMapperSingleton.Instance.ConfigurationProvider.BuildExecutionPlan(args.GetType(), type) is { } map)
+                //        //{
+                //        //    return AutoMapperSingleton.Instance.Map(args, args.GetType(), type);
+                //        //}
+                //        //else
+                //        //{
+                //        //    return args;
+                //        //}
 
-                        //throw new Exception($"The generic-argument, object, of the type of ReactiveCommand used, is too broad to map.");
-                    }
-                    else if (cmd.GetType().GenericTypeArguments.First() is { } aType &&
-                        aType.GetConstructors().Any(c => c.GetParameters().Length == 0))
-                    {
-                        return Activator.CreateInstance(aType);
-                    }
-                    else
-                    {
-                        throw new Exception("d33fgssdfgfeee");
-                    }
+                //        //throw new Exception($"The generic-argument, object, of the type of ReactiveCommand used, is too broad to map.");
+                //    }
+                //    else if (cmd.GetType().GenericTypeArguments.First() is { } aType &&
+                //        aType.GetConstructors().Any(c => c.GetParameters().Length == 0))
+                //    {
+                //        return Activator.CreateInstance(aType);
+                //    }
+                //    else
+                //    {
+                //        throw new Exception("d33fgssdfgfeee");
+                //    }
                 case ICommand:
                     if (Converter != null)
                     {
                         return Converter?.Convert(args, null, ConverterParameter, CultureInfo.CurrentCulture);
                     }
-                    else if (ConverterType != null)
-                    {
-                        return AutoMapperSingleton.Instance.Map(args, args.GetType(), ConverterType);
-                    }
+                    //else if (ConverterType != null)
+                    //{
+                    //    return AutoMapperSingleton.Instance.Map(args, args.GetType(), ConverterType);
+                    //}
                     else
                         return args;
 

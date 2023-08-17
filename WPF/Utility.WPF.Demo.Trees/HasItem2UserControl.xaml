@@ -16,7 +16,16 @@
             <Button Click="Button_Click_Drop">drop</Button>
         </StackPanel>
         <UniformGrid Columns="1">
-            <TreeView x:Name="MyTreeView"  Background="Azure">             
+            <TreeView x:Name="MyTreeView"  Background="Azure">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentControl 
+                                    Content="{Binding Data}"  VerticalAlignment="Center">
+                            </ContentControl>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
             </TreeView>
 
             <DockPanel Height="300"  Background="GhostWhite">
@@ -42,7 +51,11 @@
                         </TreeView>
                     </Popup>
                 </Grid>
-                <TextBlock Text="Shows how to overlay treeview using a Popup" DockPanel.Dock="Bottom" FontSize="32"></TextBlock>
+                <TextBlock Text="Shows how to overlay treeview using a Popup" DockPanel.Dock="Bottom" 
+                           VerticalAlignment="Center"
+                           Foreground="DarkGreen"
+                           HorizontalAlignment="Center"
+                           FontSize="18"></TextBlock>
 
             </DockPanel>
         </UniformGrid>

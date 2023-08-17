@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Utility.Enums;
 using Utility.WPF.Abstract;
 using Utility.WPF.Helpers;
+using static Utility.WPF.Helpers.LayOutHelper;
 using Orientation = System.Windows.Controls.Orientation;
 
 namespace Utility.WPF.Controls.Base

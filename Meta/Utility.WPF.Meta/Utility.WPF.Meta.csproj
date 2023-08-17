@@ -12,7 +12,7 @@
     <ProjectReference Include="..\..\Factorys\Utility.Factorys\Utility.Factorys.csproj" />
     <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
-    <ProjectReference Include="..\Utility.Meta\Utility.Meta.csproj" />
+    <ProjectReference Include="..\..\Meta\Utility.Meta\Utility.Meta.csproj" />
   </ItemGroup>
 
 </Project>

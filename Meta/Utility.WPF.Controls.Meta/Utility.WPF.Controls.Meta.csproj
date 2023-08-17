@@ -13,7 +13,7 @@
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Base\Utility.WPF.Controls.Base.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Lists\Utility.WPF.Controls.Lists.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
+    <ProjectReference Include="..\..\Meta\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Master\Utility.WPF.Controls.Master.csproj" />
   </ItemGroup>
 	

@@ -81,7 +81,7 @@ namespace Utility.WPF.Templates
             else if(type == typeof(bool))
                 return BooleanDataTemplate ??= Templates["Boolean"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Boolean");
             else if(typeof(Enum).IsAssignableFrom(type))
-                return EnumDataTemplate ??= (Templates.FindResource(new DataTemplateKey(typeof(Enum))?? Templates["Enum"]) as DataTemplate) ?? throw new Exception("Missing DataTemplate for Enum");
+                return EnumDataTemplate ??= (DataTemplate)(Templates.FindResource(new DataTemplateKey(typeof(Enum))) ?? Templates["Enum"]) ?? throw new Exception("Missing DataTemplate for Enum");
 
             else if(type == typeof(int) || type == typeof(long) || type == typeof(double) || type == typeof(decimal))
                 return NumberDataTemplate ??= Templates["Number"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Number");

@@ -7,6 +7,7 @@ using Utility.Service;
 using Utility.Interfaces.NonGeneric.Data;
 using Utility.WPF.Demo.Common.ViewModels;
 using Utility.WPF.Helpers;
+using Utility.WPF.Meta;
 
 namespace Utility.WPF.Demo.Hybrid.ViewModels
 {
@@ -20,7 +21,7 @@ namespace Utility.WPF.Demo.Hybrid.ViewModels
                 .Assembly
                 .SelectResourceDictionaries(a => a.Key.ToString().EndsWith("themes.baml", System.StringComparison.CurrentCultureIgnoreCase))
                 .Single()
-                .resourceDictionary
+                .ResourceDictionary
                 .MergedDictionaries;
 
             var themes = ThemesViewModelFactory

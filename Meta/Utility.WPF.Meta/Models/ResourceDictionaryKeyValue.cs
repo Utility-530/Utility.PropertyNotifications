@@ -8,17 +8,10 @@ using Utility.Helpers;
 
 namespace Utility.WPF.Meta
 {
-    public class ResourceDictionaryKeyValue : KeyValue
+    public record ResourceDictionaryKeyValue(DictionaryEntry Entry, ResourceDictionary ResourceDictionary) : KeyValue(ToKey(Entry))
     {
-        private readonly Lazy<MasterDetailGrid> lazy;
+        private readonly Lazy<MasterDetailGrid> lazy = new(() => new MasterDetailGrid(ResourceDictionary.Cast<DictionaryEntry>().Select(a => new DataTemplateKeyValue(a)).ToArray()));
 
-        public ResourceDictionaryKeyValue(DictionaryEntry key, ResourceDictionary resourceDictionary) : base(ToKey(key))
-        {
-            ResourceDictionary = resourceDictionary;
-            lazy = new(() => new MasterDetailGrid(resourceDictionary.Cast<DictionaryEntry>().Select(a => new DataTemplateKeyValue(a)).ToArray()));
-        }
-
-        public ResourceDictionary ResourceDictionary { get; }
 
         public override FrameworkElement Value => lazy.Value;
 

@@ -15,7 +15,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
+		<ProjectReference Include="..\..\Meta\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Animation\Utility.WPF.Animations.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
 	</ItemGroup>

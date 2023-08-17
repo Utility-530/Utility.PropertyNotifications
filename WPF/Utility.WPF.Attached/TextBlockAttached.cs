@@ -2,8 +2,7 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using Utility.Common.Models;
-using Utility.WPF.Service;
+using Utility.Singletons;
 
 namespace Utility.WPF.Attached
 {

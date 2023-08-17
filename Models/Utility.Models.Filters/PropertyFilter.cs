@@ -10,7 +10,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
-using Utility.Common.Models;
 using Utility.Reactive;
 
 namespace Utility.Models.Filters
@@ -67,10 +66,10 @@ namespace Utility.Models.Filters
         public override IDisposable Subscribe(IObserver<Unit> observer)
         {
             CompositeDisposable disposable = new();
-            selections.Connect().DisposeWith(disposable);
-            return selections
+            selections?.Connect().DisposeWith(disposable);
+            return selections?
                 .Subscribe(observer)
-                .DisposeWith(disposable);
+                .DisposeWith(disposable)?? Disposable.Empty;
         }
 
         //public static PT Create<PT, TR>(Expression<Func<T, TR>> expression) where PT:PropertyFilter<TR>, new()

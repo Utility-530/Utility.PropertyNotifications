@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using Utility.WPF.Helpers;
+using Utility.WPF.Meta;
 
 namespace Utility.WPF.ResourceDictionarys
 {

@@ -6,34 +6,24 @@ using Utility.WPF.Factorys;
 
 namespace Utility.WPF.Meta
 {
-    public class DataTemplateKeyValue : KeyValue
+    public record DataTemplateKeyValue(DictionaryEntry Entry) : KeyValue(Entry.Key.ToString() + " " + "(" + Entry.Value?.GetType().Name.ToString() + ")")
     {
-        private readonly Lazy<FrameworkElement> lazy;
-
-        public DataTemplateKeyValue(DictionaryEntry entry) : base(entry.Key.ToString() + " " + "(" + entry.Value?.GetType().Name.ToString() + ")")
+        private readonly Lazy<FrameworkElement> lazy = new(() => Lazy(Entry));
+        static FrameworkElement Lazy(DictionaryEntry entry)
         {
-            Entry = entry;
-            lazy = new(() => Lazy(entry));
-
-            static FrameworkElement Lazy(DictionaryEntry entry)
+            try
             {
-                try
-                {
-                    return Factorys.FrameworkElementFactory.GetFrameworkElement(entry.Value);
-                }
-                catch (Exception ex)
-                {
-                    return new TextBlock { Text = ex.Message };
-                }
-                //else
-                //    throw new Exception("sdg33333__d");
+                return Factorys.FrameworkElementFactory.GetFrameworkElement(entry.Value);
             }
+            catch (Exception ex)
+            {
+                return new TextBlock { Text = ex.Message };
+            }
+            //else
+            //    throw new Exception("sdg33333__d");
         }
 
-
         public override FrameworkElement Value => lazy.Value;
-
-        public DictionaryEntry Entry { get; }
     }
 
 }

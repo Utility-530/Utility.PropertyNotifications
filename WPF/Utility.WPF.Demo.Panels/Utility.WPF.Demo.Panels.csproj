@@ -17,7 +17,7 @@
   <ItemGroup>
 	  <ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
     <ProjectReference Include="..\Utility.WPF.Markup\Utility.WPF.Markup.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
+	  <ProjectReference Include="..\..\Meta\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
     <ProjectReference Include="..\Utility.WPF.Panels\Utility.WPF.Panels.csproj" />
     <ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
   </ItemGroup>

@@ -8,10 +8,10 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.Enums;
 using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
-using Utility.WPF.Panels.Helpers;
+using Utility.WPF.Helpers;
+using static Utility.WPF.Helpers.LayOutHelper;
 using Orientation = System.Windows.Controls.Orientation;
 
 namespace Utility.WPF.Attached
