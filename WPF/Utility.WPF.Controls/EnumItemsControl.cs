@@ -45,7 +45,7 @@ namespace Utility.WPF.Controls
 
         public EnumItemsControl()
         {
-            this.SetValue(ItemsControlEx.ArrangementProperty, Arrangement.Wrapped);
+            this.SetValue(ItemsControlEx.ArrangementProperty, Utility.WPF.Helpers.LayOutHelper.Arrangement.Wrapped);
             CompositeDisposable? disposable = null;
 
             ClearCommand = new RelayCommand(a =>
