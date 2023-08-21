@@ -8,9 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj"/>
+    <ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
     <ProjectReference Include="..\..\Factorys\Utility.Factorys\Utility.Factorys.csproj" />
     <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.Meta\Utility.Meta.csproj" />
   </ItemGroup>

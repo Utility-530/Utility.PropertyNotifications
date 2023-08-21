@@ -17,7 +17,6 @@ using Utility.Persists;
 using Utility.Interfaces.NonGeneric;
 using Utility.WPF.Meta;
 using Utility.Models.Filters;
-using Utility.WPF.Meta.Models;
 
 namespace Utility.WPF.Controls.Meta.ViewModels
 {

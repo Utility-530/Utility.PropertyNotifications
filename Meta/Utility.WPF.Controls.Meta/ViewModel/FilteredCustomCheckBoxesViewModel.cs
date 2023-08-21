@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Utility.Service;
 using Utility.Models.Filters;
 using static Utility.WPF.Controls.Meta.ViewModels.AssemblyComboBoxViewModel;
-using Utility.WPF.Meta.Models;
+using Utility.WPF.Meta;
 
 namespace Utility.WPF.Controls.Meta.ViewModels
 {

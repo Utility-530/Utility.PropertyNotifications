@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Utility.WPF.Converters;
 using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Meta;
@@ -23,54 +24,56 @@ public class MasterDetailGrid : Grid
     }
 }
 
+public class CustomElementsGrid : MasterDetailGrid
+{
+    public CustomElementsGrid(ICollection<KeyValue> enumerable) : base(enumerable)
+    {
+        Resources.Add(new DataTemplateKey(
+            typeof(KeyValue)),
+            TemplateGenerator.CreateDataTemplate(() =>
+            {
+                var textBlock = new TextBlock
+                {
+                    MinHeight = 20,
+                    FontSize = 14,
+                    MinWidth = 100
+                };
+                Binding binding = new()
+                {
+                    Path = new PropertyPath(nameof(KeyValue.Key)),
+                    Converter = DefaultConverter.Instance,
+                    Mode = BindingMode.OneTime
+                };
+                textBlock.SetBinding(TextBlock.TextProperty, binding);
+                return textBlock;
+            }));
+    }
+}
+
+
 /// <summary>
 /// Master-Detail control for <see cref="UserControlsGrid"/> in <seet cref="UserControlsGrid.Assembly"></set>
 /// </summary>
-public class UserControlsGrid : MasterDetailGrid
+public class UserControlsGrid : CustomElementsGrid
 {
 
     public UserControlsGrid(Assembly? assembly = null) :
         base((assembly ?? Assembly.GetEntryAssembly()).ViewTypes().ToArray())
     {
 
-        Resources.Add(new DataTemplateKey(
-        typeof(ResourceDictionaryKeyValue)),
-        TemplateGenerator.CreateDataTemplate(() =>
-        {
-            var textBlock = new TextBlock
-            {
-                MinHeight = 20,
-                FontSize = 14,
-                MinWidth = 100
-            };
-            Binding binding = new()
-            {
-                Path = new PropertyPath(nameof(KeyValue.Key)),
-            };
-            textBlock.SetBinding(TextBlock.TextProperty, binding);
-            return textBlock;
-        }));
+
 
 
     }
 }
 
-public class ResourceDictionariesGrid : MasterDetailGrid
+public class ResourceDictionariesGrid : CustomElementsGrid
 {
-    public static readonly DependencyProperty AssemblyProperty =
-        DependencyProperty.Register("Assembly", typeof(Assembly), typeof(ResourceDictionariesGrid), new PropertyMetadata(Assembly.GetEntryAssembly()));
-
-
     public ResourceDictionariesGrid(Assembly? assembly = null) :
         base(ResourceDictionaryKeyValue.ResourceViewTypes(assembly ?? Assembly.GetEntryAssembly()).ToArray())
     {
     }
 
-    public Assembly Assembly
-    {
-        get { return (Assembly)GetValue(AssemblyProperty); }
-        set { SetValue(AssemblyProperty, value); }
-    }
 }
 
 internal class ViewListBox : ListBox
@@ -84,7 +87,7 @@ internal class ViewListBox : ListBox
         {
             item.SetBinding(ContentControl.ContentProperty, new Binding
             {
-                Path = new PropertyPath(nameof(FrameworkElementKeyValue.Key)),
+                Mode = BindingMode.OneTime
             });
         }
     }
