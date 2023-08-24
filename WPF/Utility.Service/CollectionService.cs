@@ -89,7 +89,7 @@ namespace Utility.Service
                 return repositoryMessages
                         .Select(a => a.Service)
                         .WhereNotDefault()
-                        .Select(a => a.FindAll<object>())
+                        .Select(a => a.All<object>())
                         .Subscribe(objects =>
                         {
                             var cachedObjects = objects.ToArray();
