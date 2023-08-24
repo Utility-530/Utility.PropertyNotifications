@@ -41,7 +41,7 @@ namespace Utility.Persists
 
         public ConnectionSettings Settings { get; }
 
-        public object? Find(object item)
+        public object Find(object item)
         {
             using (GetCollection(out var collection))
             {
@@ -167,7 +167,18 @@ namespace Utility.Persists
 
         public IEnumerable RemoveManyBy(IQuery query)
         {
-            throw new NotImplementedException();
+            using (GetCollection(out var collection))
+            {
+                switch (query)
+                {
+                    case AllQuery:   
+                        var ids = collection.FindAll().Select(a => a["_id"].RawValue).ToArray(); 
+                        collection.DeleteAll();
+                        return ids;
+                    default:
+                        throw new ArgumentOutOfRangeException("777fssd");
+                }
+            }
         }
 
         public IEnumerable FindManyBy(IQuery query)
