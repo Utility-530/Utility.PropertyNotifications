@@ -8,15 +8,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Julmar.Wpf.Behaviors" Version="1.0.1" />
     <PackageReference Include="WPFTransitionals" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Utility.Model\Utility.Common\Utility.Common.csproj" />
-    <ProjectReference Include="..\..\Utility.Persists\Utility.Persists\Utility.Persists.csproj" />
-    <ProjectReference Include="..\..\Utility.WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
-    <ProjectReference Include="..\..\Utility.WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
-    <ProjectReference Include="..\..\Utility.WPF\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
+    <ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
+    <ProjectReference Include="..\..\Persists\Utility.Persists\Utility.Persists.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
+    <ProjectReference Include="..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
     <ProjectReference Include="..\Utility.Trees\Utility.Trees.csproj" />
   </ItemGroup>
 
