@@ -161,10 +161,13 @@ namespace Utility.Trees
                 m_items.Add(tree);
                 return;
             }
-            if (data is IEnumerable<ITree> treeCollection)
+            if (data is IEnumerable treeCollection)
             {
                 foreach (var item in treeCollection)
-                    m_items.Add(item);
+                    if (item is ITree)
+                        m_items.Add(item);
+                    else
+                        m_items.Add(new Tree(item));
                 return;
             }
             if (data is not null)
