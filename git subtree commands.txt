@@ -15,4 +15,4 @@ git remote add Structs https://github.com/Utility-530/Utility.Structs.git
 $ git subtree add --prefix <folder> <URL to Git repo> <subtree-branchname> --squash?	
 
 example
-git subtree add --prefix Structs https://github.com/Utility-530/Utility.Structs.git master --squash	
+git subtree add --prefix Structs https://github.com/Utility-530/Utility.Structs.git master	
