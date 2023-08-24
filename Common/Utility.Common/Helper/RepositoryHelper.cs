@@ -20,12 +20,16 @@ namespace Utility.Common.Helper
 
     public static class RepositoryHelper
     {
-        public static IEnumerable FindAll(this IRepository repository)
+        public static IEnumerable All(this IRepository repository)
         {
             return repository.FindManyBy(new AllQuery());
         }
+        public static IEnumerable Clear(this IRepository repository)
+        {
+            return repository.RemoveManyBy(new AllQuery());
+        }
 
-        public static IEnumerable<T> FindAll<T>(this IRepository repository)
+        public static IEnumerable<T> All<T>(this IRepository repository)
         {
             return repository.FindManyBy(new AllQuery()).Cast<T>();
         }
