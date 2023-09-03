@@ -1,5 +1,4 @@
-﻿using Jellyfish;
-using LiteDB;
+﻿using LiteDB;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -366,7 +365,7 @@ namespace Utility.WPF.Demo.Trees
         public bool IsPersisted { get; set; }
     }
 
-    public class LineViewModel : ViewModel
+    public class LineViewModel : Utility.Models.BaseViewModel
     {
         private Point _startPoint;
 
