@@ -2,5 +2,16 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
+             xmlns:vm="clr-namespace:Utility.ViewModels;assembly=Utility.ViewModels"
              xmlns:local="clr-namespace:Utility.WPF.Demo.Meta">
+
+    <Application.Resources>
+        <DataTemplate DataType="{x:Type vm:ViewModel}">
+            <TextBlock Text="sdffd"></TextBlock>
+        </DataTemplate>
+
+        <local:ViewModelItemTemplateSelector x:Key="ItemTemplateSelector"/>
+
+    </Application.Resources>
+
 </Application>
