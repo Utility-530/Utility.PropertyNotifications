@@ -41,7 +41,7 @@ namespace Utility.WPF.Controls
 
         public override void OnApplyTemplate()
         {
-            this.Control<ComboBox>().SelectMany(a => a.SelectSelectionAddChanges().Select(a => a.Cast<TimeInterval>().First())).StartWith((TimeInterval)this.GetValue(TimeIntervalProperty))
+            this.Control<ComboBox>().Select(a => a.Changes<TimeInterval>().StartWith((TimeInterval)this.GetValue(TimeIntervalProperty))
                       .CombineLatest(this.Control<SpinnerControl>().SelectMany(a => a.ValueChanges()).StartWith((decimal)this.GetValue(ValueProperty)), (a, b) => (b, a))
                       .DistinctUntilChanged()
                 .Subscribe(a =>
@@ -49,7 +49,7 @@ namespace Utility.WPF.Controls
                     this.SetValue(TimeIntervalProperty, a.a);
                     this.SetValue(ValueProperty, a.b);
                     RaiseEvent(new RoutedEventArgs<(decimal value, TimeInterval timeInterval)>(a, ValueChangedEvent));
-                });
+                }));
 
             this.Control<SpinnerControl>()
                 .CombineLatest(this.Observable(ValueProperty.Name).Cast<decimal>().StartWith(1M).DistinctUntilChanged(), (a, b) => (a, b))

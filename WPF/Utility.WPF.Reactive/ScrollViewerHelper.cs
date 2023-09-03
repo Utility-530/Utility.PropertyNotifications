@@ -7,7 +7,7 @@ namespace Utility.WPF.Reactive
 {
     public static class ScrollViewerHelper
     {
-        public static IObservable<ScrollChangedEventArgs> ScrollChanges(this ScrollViewer combo) =>
+        public static IObservable<ScrollChangedEventArgs> Changes(this ScrollViewer combo) =>
          Observable
             .FromEventPattern<ScrollChangedEventHandler, ScrollChangedEventArgs>
             (a => combo.ScrollChanged += a, a => combo.ScrollChanged -= a)

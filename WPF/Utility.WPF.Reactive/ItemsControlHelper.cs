@@ -10,7 +10,7 @@ namespace Utility.WPF.Reactive
 {
     public static class ItemsControlHelper
     {
-        public static IObservable<int> CountChanges(this ItemsControl headeredItemsControl)
+        public static IObservable<int> Counts(this ItemsControl headeredItemsControl)
         {
             return Utility.Reactive.ObservableHelper.Pace(headeredItemsControl.WhenAnyValue(a => a.ItemsSource)
                 .WhereNotNull()

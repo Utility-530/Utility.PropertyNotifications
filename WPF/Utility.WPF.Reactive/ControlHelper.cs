@@ -11,7 +11,7 @@ using System.Windows.Media;
 
 namespace Utility.WPF.Reactive
 {
-    public static class ControlHelper
+    public static partial class ControlHelper
     {
         /// <summary>
         /// <a href="https://social.msdn.microsoft.com/Forums/vstudio/en-US/c01df033-0acd-4690-a24d-3b7090694bc0/how-can-handle-treeviewitems-mouseclick-or-mousedoubleclick-event?forum=wpf"></a>

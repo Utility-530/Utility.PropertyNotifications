@@ -204,8 +204,8 @@ namespace Utility.WPF.Controls.Master
         {
             return control switch
             {
-                ISelector selector => selector.ToChanges(true),
-                Selector selector => selector.ToChanges(true),
+                ISelector selector => selector.Changes(true),
+                Selector selector => selector.Changes(true),
                 _ => throw new ApplicationException($"Unexpected type,{control.GetType().Name} for {nameof(Selector)} "),
             };
         }

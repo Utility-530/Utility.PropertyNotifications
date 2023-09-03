@@ -18,7 +18,7 @@ namespace Utility.WPF.Controls
         {
             return showCountInHeader
                 .CombineLatest(
-                headeredItemsControl.WhenAnyValue(a => a.Header).WhereNotNull().DistinctUntilChanged(), headeredItemsControl.CountChanges())
+                headeredItemsControl.WhenAnyValue(a => a.Header).WhereNotNull().DistinctUntilChanged(), headeredItemsControl.Counts())
                 .Select(abc =>
                 {
                     if (abc.First == false)

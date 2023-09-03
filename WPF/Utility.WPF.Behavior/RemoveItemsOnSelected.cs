@@ -23,7 +23,7 @@ namespace Utility.WPF.Behavior
             //var collection = new ObservableCollection<object>(selector.ItemsSource.Cast<object>());
             Stack<(int, object)> removedObjects = new ();
             IEnumerable itemsSource = null;
-            selector.SelectSelectionAddChanges().Select(adds => adds.Cast<object>().SingleOrDefault()).Where(a => a != null).Subscribe(a =>
+            selector.Changes().Subscribe(a =>
             {
                 itemsSource = selector.ItemsSource;
                 var itemsSourceCollection = selector.ItemsSource.Cast<object>().ToList();
@@ -39,7 +39,7 @@ namespace Utility.WPF.Behavior
                 selector.ItemsSource = itemsSourceCollection;
             });
 
-            selector.SelectSelectionRemoveChanges().Where(rem => rem.Cast<object>().Any()).Subscribe(a =>
+            selector.Removals().Where(rem => rem.Cast<object>().Any()).Subscribe(a =>
             {
                 selector.ItemsSource = itemsSource;
             });

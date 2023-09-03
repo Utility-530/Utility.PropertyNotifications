@@ -36,16 +36,15 @@ namespace Utility.WPF.Demo.Controls
             Combobox1.ItemsSource = groupUserControlViewModel.Types;
 
             _ = Combobox1
-                .SelectSelectionAddChanges()
-                .Select(a => a.First().ToString())
+                .Changes()
+                .Select(a => a.ToString())
                 .Subscribe(a =>
                 {
                     groupUserControlViewModel.OnNext(a);
                 });
 
             _ = ComboBox
-                 .SelectSelectionAddChanges()
-                 .Select(a => a.Cast<ClassProperty>().First())
+                 .ItemChanges<ClassProperty>()
                  .Subscribe(a =>
                  {
                      subject.OnNext(a);
@@ -154,7 +153,7 @@ namespace Utility.WPF.Demo.Controls
                                     {
                                         Stock _ => ((FrameworkElement)e.Container)?.FindResource(new DataTemplateKey(typeof(Stock))),
                                         //CustomGroupViewModel _ => ((FrameworkElement)e.Container)?.FindResource("Group2Template"),
-                                        //GroupViewModel<Stock, string, string> _ => ((FrameworkElement)e.Container)?.FindResource("GroupTemplate"),
+                                        GroupViewModel<Stock, string, string> _ => ((FrameworkElement)e.Container)?.FindResource("GroupTemplate"),
                                         _ => throw new NotImplementedException(),
                                     } as DataTemplate;
                                 });

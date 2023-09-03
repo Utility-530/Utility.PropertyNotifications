@@ -155,6 +155,10 @@
 		<Compile Update="ValidationForm.cs">
 			<DependentUpon>ValidationForm.xaml</DependentUpon>
 		</Compile>
+		
+		<Compile Update="GuidBox.cs">
+			<DependentUpon>GuidBox.xaml</DependentUpon>
+		</Compile>
 
 	</ItemGroup>
 

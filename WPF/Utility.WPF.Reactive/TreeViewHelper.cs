@@ -12,31 +12,31 @@ namespace Utility.WPF.Reactive
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public static IObservable<TreeViewItem?> MouseDoubleClickTreeViewSelections(this TreeView control)
+        public static IObservable<TreeViewItem?> MouseDoubleClicks(this TreeView control)
         {
             return control
                     .MouseDoubleClickSelections<TreeViewItem>();
         }
 
-        public static IObservable<TreeViewItem?> MouseSingleClickTreeViewSelections(this TreeView control)
+        public static IObservable<TreeViewItem?> MouseSingleClicks(this TreeView control)
         {
             return control
                     .MouseSingleClickSelections<TreeViewItem>();
         }
 
-        public static IObservable<TreeViewItem> MouseHoverEnterTreeViewSelections(this TreeView control)
+        public static IObservable<TreeViewItem> MouseHoverEnters(this TreeView control)
         {
             return control
                     .MouseHoverEnterSelections<TreeViewItem>();
         }
 
-        public static IObservable<TreeViewItem> MouseHoverLeaveTreeViewSelections(this TreeView control)
+        public static IObservable<TreeViewItem> MouseHoverLeaves(this TreeView control)
         {
             return control
                     .MouseHoverLeaveSelections<TreeViewItem>();
         }
 
-        public static IObservable<(TreeViewItem item, Point point)> MouseMoveTreeViewSelections(this TreeView control)
+        public static IObservable<(TreeViewItem item, Point point)> MouseMoves(this TreeView control)
         {
             return control
                     .MouseMoveSelections<TreeViewItem>();

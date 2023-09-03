@@ -13,7 +13,7 @@ namespace Utility.WPF.Controls.FileSystem
         {
             textBoxContentChanges
             .OfType<TextBox>()
-            .SelectMany(TextBoxHelper.ToThrottledObservable)
+            .SelectMany(TextBoxHelper.Changes)
             .Subscribe(textChanges.OnNext);
         }
 

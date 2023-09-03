@@ -7,13 +7,13 @@ namespace Utility.WPF.Reactive
 {
     public static class TextBoxHelper
     {
-        public static IObservable<string> ToThrottledObservable(this TextBox textBox)
+        public static IObservable<string> Changes(this TextBox textBox, int milliseconds = 500)
         {
             return Observable.FromEventPattern<TextChangedEventHandler, TextChangedEventArgs>(
                    s => textBox.TextChanged += s,
                    s => textBox.TextChanged -= s)
                 .Select(evt => textBox.Text) // better to select on the UI thread
-                .Throttle(TimeSpan.FromMilliseconds(500))
+                .Throttle(TimeSpan.FromMilliseconds(milliseconds))
                 .DistinctUntilChanged();
         }
     }

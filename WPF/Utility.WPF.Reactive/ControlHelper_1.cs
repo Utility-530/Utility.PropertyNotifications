@@ -8,33 +8,33 @@ using System.Windows.Media.Animation;
 
 namespace Utility.WPF.Reactive
 {
-    public static class ButtonHelper
+    public static partial class ControlHelper
     {
-        public static IObservable<RoutedEventArgs> ToClicks(this Button selector) => from x in Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(a => selector.Click += a, a => selector.Click -= a)
+        public static IObservable<RoutedEventArgs> Clicks(this Button selector) => from x in Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(a => selector.Click += a, a => selector.Click -= a)
                                                                                      select x.EventArgs;
 
-        public static IObservable<bool?> ToChanges(this ToggleButton toggleButton)
+        public static IObservable<bool?> Changes(this ToggleButton toggleButton)
         {
-            return (from a in (from a in SelectChecked()
-                               select a).Merge(from a in SelectUnchecked()
+            return (from a in (from a in Checks()
+                               select a).Merge(from a in Unchecks()
                                                select a)
                     select a.IsChecked)
                     .StartWith(toggleButton.IsChecked)
                     .DistinctUntilChanged();
 
-            IObservable<ToggleButton> SelectChecked() => from es in Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(a => toggleButton.Checked += a, a => toggleButton.Checked -= a)
+            IObservable<ToggleButton> Checks() => from es in Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(a => toggleButton.Checked += a, a => toggleButton.Checked -= a)
                                                          select es.Sender as ToggleButton;
 
-            IObservable<ToggleButton> SelectUnchecked() => from es in Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(a => toggleButton.Unchecked += a, a => toggleButton.Unchecked -= a)
+            IObservable<ToggleButton> Unchecks() => from es in Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(a => toggleButton.Unchecked += a, a => toggleButton.Unchecked -= a)
                                                            select es.Sender as ToggleButton;
         }
 
-        public static IObservable<(double h, double v)> ToDeltas(this Thumb thumb) => from es in Observable.FromEventPattern<DragDeltaEventHandler, DragDeltaEventArgs>(a => thumb.DragDelta += a, a => thumb.DragDelta -= a)
+        public static IObservable<(double h, double v)> Deltas(this Thumb thumb) => from es in Observable.FromEventPattern<DragDeltaEventHandler, DragDeltaEventArgs>(a => thumb.DragDelta += a, a => thumb.DragDelta -= a)
                                                                                       select (es.EventArgs.HorizontalChange, es.EventArgs.VerticalChange);
 
 
 
-        public static IObservable<bool> SelectToggleChanges(this ToggleButton toggleButton, bool defaultValue = false)
+        public static IObservable<bool> Toggles(this ToggleButton toggleButton, bool defaultValue = false)
         {
             return toggleButton.Events()
                 .Checked.Select(a => true).Merge(toggleButton.Events()
@@ -51,7 +51,7 @@ namespace Utility.WPF.Reactive
         //        .Select(a => a.EventArgs);
         //}
 
-        public static IObservable<bool> ToThrottledObservable(this ToggleButton toggleButton)
+        public static IObservable<bool> ThrottleToggles(this ToggleButton toggleButton, int milliSeconds = 500)
         {
             return Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>(
                     s => toggleButton.Checked += s,
@@ -62,7 +62,7 @@ namespace Utility.WPF.Reactive
                         s => toggleButton.Unchecked -= s)
                     .Select(evt => false))
                 // better to select on the UI thread
-                .Throttle(TimeSpan.FromMilliseconds(500))
+                .Throttle(TimeSpan.FromMilliseconds(milliSeconds))
                 .StartWith(toggleButton.IsChecked ?? false)
                 .DistinctUntilChanged();
         }

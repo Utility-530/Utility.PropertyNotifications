@@ -13,7 +13,7 @@ namespace Utility.WPF.Reactive
     /// </summary>
     public static class TimelineHelper
     {
-        public static IObservable<EventArgs> SelectCompletions(this Timeline storyboard) =>
+        public static IObservable<EventArgs> Completions(this Timeline storyboard) =>
 
             Observable
             .FromEventPattern<EventHandler, EventArgs>
@@ -22,7 +22,7 @@ namespace Utility.WPF.Reactive
 
         public static Task<EventArgs> ToTask(this Timeline animation)
         {
-            return SelectCompletions(animation).Take(1).ToTask();
+            return Completions(animation).Take(1).ToTask();
         }
 
     }

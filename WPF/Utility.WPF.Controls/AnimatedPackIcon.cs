@@ -54,7 +54,7 @@ namespace Utility.WPF.Controls
                 });
 
             storyboardOld
-                .SelectCompletions()
+                .Completions()
                 .Select(a => Unit.Default)
                 .Subscribe(completions.OnNext);
         }

@@ -70,7 +70,7 @@ namespace Utility.WPF.Behavior
                 if (MouseFactor > 1)
                     scrollViewer.ScrollChanged += AssociatedObject_ScrollChanged;
                 scrollViewer
-                    .ScrollChanges()
+                    .Changes()
                          .Select(a => ScrollViewerOnScrollChanged(scrollViewer, AssociatedObject, a))
                     .Where(a => a.HasValue)
                     .Select(a => a!.Value)

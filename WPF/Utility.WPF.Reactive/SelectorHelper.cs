@@ -12,21 +12,24 @@ namespace Utility.WPF.Reactive
 {
     public static class SelectorHelper
     {
-        public static IObservable<object> ToChanges(this Selector selector, bool includeNulls = false) =>
+        public static IObservable<object> Changes(this Selector selector, bool includeNulls = false) =>
             from change in (from a in Observable.FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>(a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
                             select a.EventArgs.AddedItems.Cast<object>().SingleOrDefault())
             .StartWith(selector.SelectedItem)
             where change is not null || includeNulls
             select change;
 
-        public static IObservable<object> ToChanges(this ISelector selector, bool includeNulls = false) =>
+        public static IObservable<object> Changes(this ISelector selector, bool includeNulls = false) =>
             from change in (from a in Observable.FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>(a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
                             select a.EventArgs.AddedItems.Cast<object>().SingleOrDefault())
             .StartWith(selector.SelectedItem)
             where change is not null || includeNulls
             select change;
 
-        public static IObservable<ListBoxItem[]> SelectMultiSelectionChanges(this Selector selector) =>
+        public static IObservable<T> Changes<T>(this Selector selector, bool includeNulls = false) => selector.Changes(includeNulls).Cast<T>();
+        public static IObservable<T> Changes<T>(this ISelector selector, bool includeNulls = false) => selector.Changes(includeNulls).Cast<T>();
+
+        public static IObservable<ListBoxItem[]> MultiAdditions(this Selector selector) =>
             Observable
             .FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>
             (a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
@@ -34,7 +37,16 @@ namespace Utility.WPF.Reactive
                                                             .Cast<ListBoxItem>()
                                                             .Where(a => a.IsSelected)
                                                             .ToArray());
-        public static IObservable<IList> SelectSelectionAddChanges(this Selector selector) =>
+        public static IObservable<IList> Additions(this Selector selector) =>
+
+            Observable
+            .FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>
+            (a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
+            .Select(a => a.EventArgs.AddedItems)
+            .StartWith(selector.SelectedItem != null ? new[] { selector.SelectedItem } : Array.Empty<object>() as IList)
+            .Where(a => a.Count > 0);     
+        
+        public static IObservable<IList> Additions(this ISelector selector) =>
 
             Observable
             .FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>
@@ -50,14 +62,14 @@ namespace Utility.WPF.Reactive
         //.Select(a => a.EventArgs.AddedItems)
         //.Select(a => a.Cast<object>().Single());
 
-        public static IObservable<IList> SelectSelectionRemoveChanges(this Selector selector) =>
+        public static IObservable<IList> Removals(this Selector selector) =>
             Observable
             .FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>
             (a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
             .Select(a => a.EventArgs.RemovedItems)
             .Where(a => a.Count > 0);
 
-        public static IObservable<object> SelectSingleSelectionChanges(this Selector selector) =>
+        public static IObservable<object> DistinctAdditions(this Selector selector) =>
             Observable
             .FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>
             (a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
@@ -67,7 +79,7 @@ namespace Utility.WPF.Reactive
             .DistinctUntilChanged()
             .Select(a => a.Cast<object>().Single());
 
-        public static IObservable<object> SelectSingleSelectionChanges(this ISelector selector) =>
+        public static IObservable<object> DistinctAdditions(this ISelector selector) =>
             Observable
             .FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>
             (a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
@@ -76,7 +88,7 @@ namespace Utility.WPF.Reactive
             .Where(a => a.Count == 1)
             .Select(a => a.Cast<object>().Single());
 
-        public static IObservable<object> ToSelectedValueChanges(this Selector selector) =>
+        public static IObservable<object> ValueChanges(this Selector selector) =>
 
             Observable
                 .FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>
@@ -84,10 +96,10 @@ namespace Utility.WPF.Reactive
                 .Select(a => selector.SelectedValue).StartWith(selector.SelectedValue)
                 .WhereNotNull();
         public static IObservable<T> ToSelectedValueChanges<T>(this Selector selector) =>
-            selector.ToSelectedValueChanges().Cast<T>();
+            selector.ValueChanges().Cast<T>();
 
 
-        public static IObservable<T?> SelectItemChanges<T>(this Selector selector)
+        public static IObservable<T?> ItemChanges<T>(this Selector selector)
         {
             var selectionChanged = selector.Events().SelectionChanged;
             var conversionProvider = new TypeConversionProvider();

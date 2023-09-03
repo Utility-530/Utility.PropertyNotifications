@@ -93,7 +93,7 @@ namespace Utility.PropertyTrees.WPF.Demo
                 });
 
             treeView
-                .MouseDoubleClickTreeViewSelections()
+                .MouseDoubleClicks()
                 .Subscribe(a =>
                 {
                     //if (a is { Header: ValueNode valueNode } treeviewItem)
@@ -122,7 +122,7 @@ namespace Utility.PropertyTrees.WPF.Demo
                 });
 
             treeView
-                .MouseSingleClickTreeViewSelections()
+                .MouseSingleClicks()
                 .Subscribe(a =>
                 {
                     if (a is { Header: INode { } node })
@@ -132,7 +132,7 @@ namespace Utility.PropertyTrees.WPF.Demo
                 });
 
             treeView
-                .MouseMoveTreeViewSelections()
+                .MouseMoves()
                 .Subscribe(a =>
                 {
                     if (a.item is { Header: INode { } node })
@@ -143,7 +143,7 @@ namespace Utility.PropertyTrees.WPF.Demo
                 });
 
             treeView
-                .MouseHoverLeaveTreeViewSelections()
+                .MouseHoverLeaves()
                 .Subscribe(a =>
                 {
                     if (a is { Header: INode { } node })
