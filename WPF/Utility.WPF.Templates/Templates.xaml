@@ -5,7 +5,9 @@
                xmlns:draw="clr-namespace:System.Drawing;assembly=System.Drawing"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
                     xmlns:panels="http://schemas.utility.com/panels" 
-                    xmlns:tiny="https://github.com/xtremlyred/tiny.toolkits"
+                    xmlns:conv="http://schemas.utility.com/converters"
+                    xmlns:tiny="https://github.com/xtremlyred/tiny.toolkits" xmlns:controls="http://schemas.utility.com"
+                    xmlns:utl="http://schemas.utility.com/utilitywpf"
                     x:Class="Utility.WPF.Templates.Templates">
 
 
@@ -29,45 +31,64 @@
 
 
     <DataTemplate DataType="{x:Type draw:Color}">
-        <materialDesign:PackIcon Kind="{Binding  Converter={StaticResource IntToEnumConverter}}" 
+        <!--<materialDesign:PackIcon Kind="{Binding  Converter={StaticResource IntToEnumConverter}}" 
                                          Width="30"
                                          Height="30">
-        </materialDesign:PackIcon>
-        <!--<Ellipse Fill="Black" Height="20" Width="20"></Ellipse>-->
+        </materialDesign:PackIcon>-->
+        <Rectangle Fill="{Binding Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"></Rectangle>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type Color}">
+        <!--<materialDesign:PackIcon Kind="{Binding  Converter={StaticResource IntToEnumConverter}}" 
+                                         Width="30"
+                                         Height="30">
+        </materialDesign:PackIcon>-->
+        <Rectangle Fill="{Binding Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"></Rectangle>
     </DataTemplate>
 
 
-
     <DataTemplate DataType="{x:Type sys:Boolean}">
-        <!--<panels:TransitionPanel CurrentValue="{Binding }" >
-            <materialDesign:PackIcon Kind="CheckBold"
+        <Grid         MinHeight="30"
+                                     MinWidth="30">
+
+
+            <panels:TransitionPanel CurrentValue="{Binding }">
+                <materialDesign:PackIcon Kind="CheckBold"
                                      MinHeight="30"
                                      MinWidth="30"
-                                     panels:TransitionPanel.Value="True"
+                                     panels:TransitionPanel.Value="{utl:True}"
                                      VerticalAlignment="Stretch"
                                      HorizontalAlignment="Stretch" >
             </materialDesign:PackIcon>
             <materialDesign:PackIcon Kind="CloseBold" 
                                      MinHeight="30"
-                                     panels:TransitionPanel.Value="False"
+                                     panels:TransitionPanel.Value="{utl:False}"
                                      MinWidth="30"
                                      VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             </materialDesign:PackIcon>
-        </panels:TransitionPanel>-->
+        </panels:TransitionPanel>
+        </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:String}">
-        <TextBox Text="{Binding Mode=OneWay }" ></TextBox>
+        <TextBox Text="{Binding Mode=OneWay }" VerticalContentAlignment="Center" ></TextBox>
+    </DataTemplate>
+
+
+
+    <DataTemplate DataType="{x:Type sys:Guid}">
+        <controls:GuidBox Guid="{Binding Converter={x:Static conv:DefaultConverter.Instance}}" IsReadOnly="true"></controls:GuidBox>
     </DataTemplate>
 
 
     <DataTemplate DataType="{x:Type sys:Enum}">
-        <tiny:EnumSelector EnumValue="{Binding Mode=OneWay }" ></tiny:EnumSelector>
+        <controls:EnumItemsControl Value="{Binding Mode=OneWay,Converter={x:Static conv:DefaultConverter.Instance} }" ></controls:EnumItemsControl>
     </DataTemplate>
     
-    <DataTemplate DataType="{x:Type sys:Guid}">
+    <!--<DataTemplate DataType="{x:Type sys:Guid}">
         <ContentControl
                             ToolTip="{Binding }"
                             Content="{Binding Converter={x:Static converter:GravatarConverter.Instance}}"></ContentControl>
-    </DataTemplate>
+    </DataTemplate>-->
+    
 </ResourceDictionary>

@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models.Filters;
@@ -35,7 +37,14 @@ class TypeFilter : IPredicate
 
 public class MyObject
 {
-    public string Name => nameof(MyObject);
+    public string String => nameof(MyObject);
+    public bool Bool { get; set; }
+    public Guid Guid => Guid.NewGuid();
+    public double Double => 0.01;
+    public int Integer { get; set; } = -101;
+    public System.Drawing.Color DrawingColor => System.Drawing.Color.FromName("IndianRed");
+    public Color Color => Colors.AliceBlue;
+    public Orientation Orientation => Orientation.Horizontal;
 
     public MyObject Child { get; }
 }

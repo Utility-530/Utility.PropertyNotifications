@@ -13,6 +13,8 @@ namespace Utility.WPF.Converters
         {
             var val = value is System.Drawing.Color color ?
                 color.ToUIColor() :
+                value is System.Windows.Media.Color?
+                 (System.Windows.Media.Color)value:
                  parameter is System.Windows.Media.Color defaultColour ?
                  defaultColour :
                  DependencyProperty.UnsetValue;

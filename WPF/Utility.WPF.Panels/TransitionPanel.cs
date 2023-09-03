@@ -56,12 +56,16 @@ namespace Utility.WPF.Panels
 
         protected override Size MeasureOverride(Size availableSize)
         {
-            Size childSize = new Size(availableSize.Width, availableSize.Height / InternalChildren.Count);
+            if (double.IsFinite(availableSize.Width) && double.IsFinite(availableSize.Height))
+            {
+                Size childSize = new Size(availableSize.Width, availableSize.Height / InternalChildren.Count);
 
-            foreach (UIElement elem in InternalChildren)
-                elem.Measure(childSize);
+                foreach (UIElement elem in InternalChildren)
+                    elem.Measure(childSize);
 
-            return childSize;
+                return childSize;
+            }
+            return new Size(this.MinWidth + 10, this.MinHeight + 10);
         }
 
         /// <summary>
@@ -87,14 +91,31 @@ namespace Utility.WPF.Panels
                 if (child == null)
                     continue;
 
+                object value = GetValue(child);
+
+                if (value is bool __b)
+                {
+                    value = __b;
+                }
+                else if (bool.TryParse(value.ToString(), out bool b))
+                {
+                    value = b;
+                }
+                else if (value is int __int)
+                {
+                    value = __int;
+                }
+                else if (int.TryParse(value.ToString(), out int _int))
+                {
+                    value = _int;
+                }
+                if (PropertyName != null)
+                {
+                    value = child.GetPropertyRefValue<object>(PropertyName);
+                }
                 // Uses the index of element if GetValue is null and Current is integer
                 // or use the Property of the child whose name matches PropertyName
-                if ((GetValue(child) ??
-                    (CurrentValue is int ?
-                    i :
-                    PropertyName is not null ?
-                    child.GetPropertyRefValue<object>(PropertyName) :
-                    null))?.Equals(CurrentValue) == true)
+                if (value?.Equals(CurrentValue) == true)
                 {
                     equlsRect = new Rect(0, -arrangeSize.Height, arrangeSize.Width, arrangeSize.Height);
                     child.Arrange(equlsRect);
