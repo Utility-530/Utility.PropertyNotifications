@@ -10,7 +10,7 @@ public class CountViewModel : ViewModel, IObserver<IChangeSet>
     {
     }
 
-    public override Property<int> Model => new Property<int>();
+    public override Property<int> Model => new Property<int>(0);
 
     public void OnNext(IChangeSet value)
     {

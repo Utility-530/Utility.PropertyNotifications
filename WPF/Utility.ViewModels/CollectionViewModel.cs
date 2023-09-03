@@ -11,7 +11,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Utility.Common;
 using Utility.Models;
-using Utility.Service;
+using Utility.Services;
 
 namespace Utility.ViewModels;
 

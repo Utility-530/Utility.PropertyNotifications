@@ -5,19 +5,11 @@
 		<LangVersion>Latest</LangVersion>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <Compile Remove="Themes\**" />
-	  <Compile Remove="TouchManagement\**" />
-	  <EmbeddedResource Remove="Themes\**" />
-	  <EmbeddedResource Remove="TouchManagement\**" />
-	  <None Remove="Themes\**" />
-	  <None Remove="TouchManagement\**" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
 		<ProjectReference Include="..\..\Models\Utility.Models.Filters\Utility.Models.Filters.csproj" />
-		<ProjectReference Include="..\Utility.Service\Utility.Service.csproj" />
+		<ProjectReference Include="..\Utility.Service\Utility.Services.csproj" />
 	</ItemGroup>
 
 </Project>
