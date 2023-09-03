@@ -19,10 +19,7 @@ namespace Utility.WPF.Meta
             }
         });
 
-        public Type Type { get; }
-
         public override FrameworkElement? Value => lazy.Value;
 
     }
-
 }

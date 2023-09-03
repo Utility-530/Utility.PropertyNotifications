@@ -132,7 +132,7 @@ internal static class ControlFactory
                 };
                 _ = textBlock.SetBinding(TextBlock.TextProperty, new Binding()
                 {
-                    Path = new PropertyPath(nameof(FrameworkElementKeyValue.Key)),
+                    Path = new PropertyPath(nameof(KeyValue.Key)),
                 });
                 _ = textBlock.SetBinding(FrameworkElement.DataContextProperty, selectedItemBinding);
                 return textBlock;
