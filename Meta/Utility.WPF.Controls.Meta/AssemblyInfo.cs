@@ -11,4 +11,3 @@ using System.Windows.Markup;
 )]
 [assembly: XmlnsPrefix("http://schemas.utility.com/meta", "meta")]
 [assembly: XmlnsDefinition("http://schemas.utility.com/meta", "Utility.WPF.Controls.Meta")] 
-[assembly: XmlnsDefinition("http://schemas.utility.com/meta", "Utility.WPF.Controls.Meta")] 

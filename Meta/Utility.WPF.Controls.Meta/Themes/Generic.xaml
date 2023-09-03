@@ -5,7 +5,8 @@
                              Type="{x:Type local:ViewsMasterDetail}">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Utility.WPF.Controls.Meta;component/Themes/ViewTypeDataTemplate.xaml" />
+        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Meta;component/Themes/ViewTypeDataTemplate.xaml" />
+        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Meta;component/Themes/FilterTemplate.xaml" />
         <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Meta;component/Themes/ViewAssemblyDataTemplate.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </utl:AutoResourceDictionary>

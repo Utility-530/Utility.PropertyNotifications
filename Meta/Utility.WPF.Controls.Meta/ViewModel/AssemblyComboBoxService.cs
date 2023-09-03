@@ -9,14 +9,17 @@ using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Reflection;
 using System.Windows;
-using System.Windows.Controls;
-using Utility.Common;
 using Utility.Common.Model;
 using Utility.Enums;
 using Utility.Persists;
 using Utility.Interfaces.NonGeneric;
 using Utility.WPF.Meta;
 using Utility.Models.Filters;
+using Utility.Helpers;
+using System.Reactive.Subjects;
+using System.Reactive;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace Utility.WPF.Controls.Meta.ViewModels
 {
@@ -36,15 +39,12 @@ namespace Utility.WPF.Controls.Meta.ViewModels
         }
     }
 
-    internal class AssemblyComboBoxViewModel
-    {
-        public static readonly DependencyProperty DemoTypeProperty = DependencyHelper.Register();
 
-        public OutputNode<FilteredCustomCheckBoxesViewModel> demoTypeViewModel;
-        public FunctionNode<object, object> selectedItemViewModel;
+    public class AssemblyComboBoxService : ComboBoxServcice
+    {
         //public FunctionNode<(CheckedRoutedEventArgs, AssemblyType), Unit> checkedViewModel;
 
-        public AssemblyComboBoxViewModel()
+        public AssemblyComboBoxService()
         {
             FreeSqlFactory.InitialiseSQLite();
 
@@ -53,24 +53,46 @@ namespace Utility.WPF.Controls.Meta.ViewModels
                 var assemblies = Helper.FindAssemblies().Select(a => new AssemblyKeyValue(a.Item1, a.Item2));
                 var filters = new Filter[] { new StringMatchFilter(), new AssemblyTypeFilter() };
 
-                return UpdateAndCreate(assemblies, filters);
+                return UpdateAndCreate(assemblies, filters, deselectSubject);
 
-                static IObservable<FilteredCustomCheckBoxesViewModel> UpdateAndCreate(IEnumerable<AssemblyKeyValue> assemblies, Filter[] filters)
-                {
-                    return Update(assemblies.ToArray())
-                    .ToObservable()
-                    .Select(a =>
-                    {
-                        var viewModel = new FilteredCustomCheckBoxesViewModel(
-                            a.ToObservable().ToObservableChangeSet(),
-                            filters.ToObservable().ToObservableChangeSet());
-                        return viewModel;
-                        //var view = CollectionViewSource.GetDefaultView(array);
-                        //view.GroupDescriptions.Clear();
-                        //view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Model.KeyValue.GroupKey)));
-                    });
-                }
+
             });
+        }
+    }
+
+    public class TypeComboBoxService : ComboBoxServcice
+    {
+        public TypeComboBoxService()
+        {
+            FreeSqlFactory.InitialiseSQLite();
+
+            demoTypeViewModel = OutputNode<FilteredCustomCheckBoxesViewModel>.Create(() =>
+            {
+                var assemblies = Helper.Types(Assembly.GetEntryAssembly());
+                var filters = new Filter[] { };
+                return UpdateAndCreate(assemblies, filters, deselectSubject);
+            });
+
+
+        }
+    }
+
+
+
+    public class ComboBoxServcice
+    {
+        protected Subject<Unit> deselectSubject = new();
+        public static readonly DependencyProperty DemoTypeProperty = DependencyHelper.Register();
+
+        public FunctionNode<object, object> selectedItemViewModel;
+
+        public OutputNode<FilteredCustomCheckBoxesViewModel> demoTypeViewModel;
+
+        public ComboBoxServcice()
+        {
+            FreeSqlFactory.InitialiseSQLite();
+
+
             //.Select(demoType =>
             //{
             //    return demoType switch
@@ -84,11 +106,11 @@ namespace Utility.WPF.Controls.Meta.ViewModels
             selectedItemViewModel = FunctionNode<object, object>.Create(@in =>
             {
                 return @in
-                    .OfType<AssemblyKeyValue>()
+                    .OfType<WPF.Meta.KeyValue>()
                     .Select(a => UpdateSelected(a))
                     .SelectMany(a => a.ToObservable());
 
-                static async System.Threading.Tasks.Task<AssemblyKeyValue> UpdateSelected(AssemblyKeyValue item)
+                static async System.Threading.Tasks.Task<WPF.Meta.KeyValue> UpdateSelected(WPF.Meta.KeyValue item)
                 {
                     if (item.Key != null)
                     {
@@ -110,12 +132,38 @@ namespace Utility.WPF.Controls.Meta.ViewModels
             });
         }
 
-        private static async System.Threading.Tasks.Task<ViewModelEntity[]> Update(AssemblyKeyValue[] collection)
+        public void Deselect()
         {
-            ViewModelEntity[] array = collection.Select(a => new ViewModelEntity { Key = a.Key }).OrderByDescending(a => BaseEntityOrderer<ViewModelEntity>.Order(a.Key)).ToArray();
+            deselectSubject.OnNext(new Unit());
+        }
+
+
+        protected static IObservable<FilteredCustomCheckBoxesViewModel> UpdateAndCreate(IEnumerable<WPF.Meta.KeyValue> assemblies, Filter[] filters, IObservable<Unit> observable)
+        {
+            return Update(assemblies.ToArray())
+            .ToObservable()
+            .Select(entities =>
+            {
+                var viewModel = new FilteredCustomCheckBoxesViewModel(
+                    entities.ToObservable().ToObservableChangeSet(),
+                    filters.ToObservable().ToObservableChangeSet(),
+                    observable);
+                return viewModel;
+                //var view = CollectionViewSource.GetDefaultView(array);
+                //view.GroupDescriptions.Clear();
+                //view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(Model.KeyValue.GroupKey)));
+            });
+        }
+
+        private static async System.Threading.Tasks.Task<ViewModelEntity[]> Update(WPF.Meta.KeyValue[] collection)
+        {
+            ViewModelEntity[] array = collection
+                .Select(a => new ViewModelEntity { Key = a.Key, Value = (a.Value as Type)?.AsString() ?? "No Value" , IsChecked = true})
+                .OrderByDescending(a => BaseEntityOrderer<ViewModelEntity>.Order(a.Key))
+                .ToArray();
             var items = (await ViewModelEntity.Select.ToListAsync()).OrderBy(a => a.UpdateTime == default ? a.CreateTime : a.UpdateTime);
 
-            List<AssemblyKeyValue> list = new();
+            List<WPF.Meta.KeyValue> list = new();
             foreach (var item in items)
                 for (int i = 0; i < collection.Length; i++)
                 {
@@ -154,26 +202,6 @@ namespace Utility.WPF.Controls.Meta.ViewModels
             }
         }
 
-        public record AssemblyRecord(string Key, DateTime Inserted);
-
-
-        //private static IEnumerable<Assembly> FindDemoAppAssemblies()
-        //{
-        //    return from a in AssemblySingleton.Instance.Assemblies
-        //           where a.GetName().Name.Contains(DemoAppNameAppendage)
-        //           where a.DefinedTypes.Any(a => a.IsAssignableTo(typeof(UserControl)))
-        //           select a;
-        //}
-
-        //private static IEnumerable<Assembly> FindResourceDictionaryAssemblies(Predicate<string>? predicate = null)
-        //{
-        //    return from a in AssemblySingleton.Instance.Assemblies
-        //           let resNames = a.GetManifestResourceNames()
-        //           where resNames.Length > 0
-        //           select a;
-        //}
-
-
         private static async void SelectAndUpdateOtherSelections(ViewModelEntity match)
         {
             var matches = await ViewModelEntity.Where(a => a.IsSelected).ToListAsync();
@@ -194,22 +222,57 @@ namespace Utility.WPF.Controls.Meta.ViewModels
                 throw new Exception("Expected count to be 1 since only item can be selected in any given moment");
             }
         }
+    }
 
-        public class ViewModelEntity : BaseEntity<ViewModelEntity, Guid>, IEquatable, IKey
+    public class ViewModelEntity : BaseEntity<ViewModelEntity, Guid>, IEquatable, IKey, INotifyPropertyChanged
+    {
+        private bool isSelected;
+        private bool isChecked;
+
+        public string Key { get; init; }
+
+        public string Value { get; set; }
+
+        public bool IsSelected { get => isSelected; set => Set(ref isSelected, value); }
+        public bool IsChecked { get => isChecked; set => Set(ref isChecked, value); }
+
+        public bool Equals(IEquatable? other)
         {
-            public string Key { get; init; }
+            return (other as IKey).Equals(this);
+        }
 
-            //public string Group { get; init; }
-            //public AssemblyType Category { get; init; }
-            public string Value { get; set; }
+        /// <inheritdoc />
+        /// <summary>
+        ///     The event on property changed
+        /// </summary>
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-            public bool IsSelected { get; set; }
-            public bool IsChecked { get; set; }
+        /// <summary>
+        ///     Raise the <see cref="PropertyChanged" /> event
+        /// </summary>
+        /// <param name="propertyName">The caller member name of the property (auto-set)</param>
+        //[NotifyPropertyChangedInvocator]
+        public virtual void OnPropertyChanged([CallerMemberName] string? propertyName = default)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
 
-            public bool Equals(IEquatable? other)
+        /// <summary>
+        ///     Set a property and raise the <see cref="PropertyChanged" /> event
+        /// </summary>
+        /// <typeparam name="T">The type of the Property</typeparam>
+        /// <param name="field">A reference to the backing field from the property</param>
+        /// <param name="value">The new value being set</param>
+        /// <param name="callerName">The caller member name of the property (auto-set)</param>
+        protected bool Set<T>(ref T field, T value, [CallerMemberName] string? callerName = default)
+        {
+            if (field?.Equals(value) != true)
             {
-                return (other as IKey).Equals(this);
+                field = value;
+                OnPropertyChanged(callerName);
+                return true;
             }
+            return false;
         }
     }
 }

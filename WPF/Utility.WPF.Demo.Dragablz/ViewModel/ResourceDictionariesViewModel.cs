@@ -2,6 +2,7 @@
 using System.Linq;
 using Utility.WPF.Helpers;
 using Utility.WPF.Demo.Common.ViewModels;
+using Utility.WPF.Meta;
 
 namespace Utility.WPF.Demo.Dragablz.ViewModels
 {
@@ -15,7 +16,7 @@ namespace Utility.WPF.Demo.Dragablz.ViewModels
                  .Assembly
                  .SelectResourceDictionaries(a => a.Key.ToString().EndsWith("themes.baml", System.StringComparison.CurrentCultureIgnoreCase))
                  .Single()
-                 .resourceDictionary
+                 .ResourceDictionary
                  .MergedDictionaries;
 
             collection = ThemesViewModelFactory

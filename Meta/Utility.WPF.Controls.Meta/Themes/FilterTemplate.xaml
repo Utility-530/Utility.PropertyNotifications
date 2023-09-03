@@ -4,7 +4,7 @@
                     xmlns:temp="http://schemas.utility.com/templates"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <!--<DataTemplate DataType="{x:Type local:StringMatchFilter}">
+    <DataTemplate DataType="{x:Type local:StringMatchFilter}">
         <TextBox MinWidth="200" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
     </DataTemplate>
 
@@ -14,9 +14,9 @@
                 <ColumnDefinition Width="100"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            -->
-    <!--<TextBlock Text="{Binding Header}" />-->
-    <!--
+            
+    <TextBlock Text="{Binding Header}" />
+    
             <ContentControl Content="{Binding Content}"
                                         Grid.Column="1"
                                         ContentTemplateSelector="{x:Static temp:CustomDataTemplateSelector.Instance}">
@@ -26,5 +26,5 @@
 
     <DataTemplate DataType="{x:Type local:AssemblyTypeFilter}">
         <ComboBox Width="100" ItemsSource="{Binding Values}" SelectedItem="{Binding Path=SelectedValue}" />
-    </DataTemplate>-->
+    </DataTemplate>
 </ResourceDictionary>

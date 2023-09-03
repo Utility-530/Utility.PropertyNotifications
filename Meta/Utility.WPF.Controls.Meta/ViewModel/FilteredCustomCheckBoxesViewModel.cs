@@ -1,67 +1,83 @@
 ﻿using DynamicData;
 using System;
 using System.Collections.Generic;
-using Utility.Service;
+using Utility.Services;
 using Utility.Models.Filters;
-using static Utility.WPF.Controls.Meta.ViewModels.AssemblyComboBoxViewModel;
-using Utility.WPF.Meta;
+using Utility.ViewModels;
+using System.Reactive.Disposables;
+using Utility.Reactive;
+using System.Reactive;
 
 namespace Utility.WPF.Controls.Meta.ViewModels
 {
-    internal class FilteredCustomCheckBoxesViewModel : IDisposable
+    public class FilteredCustomCheckBoxesViewModel : IDisposable
     {
-        private readonly FilterService<AssemblyKeyValue> filterService = new();
+        private readonly FilterService<ViewModelEntity> filterService = new();
         private readonly Dictionary<Filter, IDisposable> dictionary = new();
 
         public FilteredCustomCheckBoxesViewModel(
             IObservable<IChangeSet<ViewModelEntity>> profiles,
-            IObservable<IChangeSet<Filter>> filters)
+            IObservable<IChangeSet<Filter>> filters, 
+            IObservable<Unit> deselections)
         {
-            //filters
-            //    .OnItemAdded(async filter =>
-            //    {
-            //        CompositeDisposable composite = new();
-            //        if (filter is ObserverFilter<AssemblyKeyValue> oFilter)
-            //            composite.Add(profiles.Subscribe(oFilter));
-            //        if (filter is IRefreshObservable refresh)
-            //        {
-            //            composite.Add(refresh.Subscribe(filterService));
-            //            composite.Add(refresh.Subscribe(a =>
-            //            {
-            //            }));
-            //        }
-            //        //var first = await FilterEntity.Select.Where(a => a.Key == filter.Key).FirstAsync();
-            //        //if (first != null)
-            //        //{
-            //        //    filter.Value = first.Value;
-            //        //}
-            //        dictionary[filter] = composite;
-            //    })
-            //    .OnItemRemoved(filter =>
-            //    {
-            //        //if (dictionary.ContainsKey(filter))
-            //        //{
-            //        //    dictionary[filter].Dispose();
-            //        //    dictionary.Remove(filter);
-            //        //}
-            //    })
-            //    .Subscribe();
+            filters
+                .OnItemAdded(async filter =>
+                {
+                    CompositeDisposable composite = new();
+                    if (filter is ObserverFilter<ViewModelEntity> oFilter)
+                        composite.Add(profiles.Subscribe(oFilter));
+                    if (filter is IRefreshObservable refresh)
+                    {
+                        composite.Add(refresh.Subscribe(filterService));
+                        composite.Add(refresh.Subscribe(a =>
+                        {
+                        }));
+                    }
+                    //var first = await FilterEntity.Select.Where(a => a.Key == filter.Key).FirstAsync();
+                    //if (first != null)
+                    //{
+                    //    filter.Value = first.Value;
+                    //}
+                    dictionary[filter] = composite;
+                })
+                .OnItemRemoved(filter =>
+                {
+                    //if (dictionary.ContainsKey(filter))
+                    //{
+                    //    dictionary[filter].Dispose();
+                    //    dictionary.Remove(filter);
+                    //}
+                })
+                .Subscribe();
 
-            //var checkFilters = filters.Transform(a => new ViewModel(a, a.Header, false));
-            //var checkProfiles = profiles.Transform(a => new ViewModel(a, a.Key, false));
-            //FilterCollectionViewModel = new(checkFilters, filterService, new(false));
+            var checkFilters = filters.Transform(e => new ViewModel<Filter>(e.Header, e));
+            //var checkProfiles = profiles.Transform(e => new ViewModel<ViewModelEntity>(e.Key, e));
+            FilterCollectionViewModel = new(checkFilters, filterService, new(false));
 
-            //var subjects = profiles.Filter(filterService).ToReplaySubject(1000);
+            //var subjects = profiles/*.Filter(filterService)*/.ToReplaySubject(1000);
 
-            //CollectionViewModel = new(subjects);
-            //CountViewModel = new(profiles);
-            //FilteredCountViewModel = new(subjects);
+            CollectionViewModel = new();
+            profiles.Subscribe(CollectionViewModel);
+            CountViewModel = new();
+            profiles.Subscribe(CountViewModel);
+            FilteredCountViewModel = new();
+            profiles.Subscribe(FilteredCountViewModel);
+
+            deselections.Subscribe(a => DeselectAll());
         }
 
-        //public CheckedCollectionCommandViewModel<ViewModelEntity, Filter> FilterCollectionViewModel { get; }
-        //public CollectionViewModel<ViewModelEntity> CollectionViewModel { get; }
-        //public CountViewModel CountViewModel { get; }
-        //public CountViewModel FilteredCountViewModel { get; }
+        public void DeselectAll()
+        {
+            foreach (var item in CollectionViewModel.Children)
+            {
+                item.IsSelected = false;
+            }
+        }
+
+        public CheckedCollectionCommandViewModel<ViewModelEntity, Filter> FilterCollectionViewModel { get; }
+        public CollectionViewModel<ViewModelEntity> CollectionViewModel { get; }
+        public CountViewModel CountViewModel { get; }
+        public CountViewModel FilteredCountViewModel { get; }
 
         public void Dispose()
         {

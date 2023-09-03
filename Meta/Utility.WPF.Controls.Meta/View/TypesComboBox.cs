@@ -1,13 +1,16 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Utility.WPF.Controls.Lists;
 using Utility.WPF.Controls.Meta.ViewModels;
 using Utility.WPF.Meta;
 
 namespace Utility.WPF.Controls.Meta
 {
-    public class AssemblyComboBox : CheckBoxesComboControl
+    public class TypesComboBox : CheckBoxesComboControl
     {
-        public AssemblyComboBox()
+        private TypeComboBoxService viewModel;
+
+        public TypesComboBox()
         {
             //SelectedIndex = 0;
             FontWeight = FontWeights.DemiBold;
@@ -22,8 +25,14 @@ namespace Utility.WPF.Controls.Meta
             IsSelectedPath = nameof(ViewModelEntity.IsSelected);
             SelectedValuePath = nameof(ViewModelEntity.Value);
 
-            var dis = ComboBoxViewModelMapper.Connect(this, new AssemblyComboBoxService());
+            viewModel = new TypeComboBoxService();
+            var dis = ComboBoxViewModelMapper.Connect(this, viewModel);
             this.Unloaded += (s, e) => dis.Dispose();
+        }
+
+        public void Deselect()
+        {
+            viewModel.Deselect();
         }
     }
 }
