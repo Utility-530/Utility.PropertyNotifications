@@ -1,6 +1,6 @@
 ﻿using Utility.Interfaces.NonGeneric;
 
-namespace Utility.Service;
+namespace Utility.Services;
 
 public class FilterPredicateService<T> : IObserver<IPredicate>, IFilterService<T>
 {

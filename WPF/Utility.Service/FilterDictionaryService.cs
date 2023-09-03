@@ -1,6 +1,6 @@
 ﻿using System.Reactive;
 
-namespace Utility.Service;
+namespace Utility.Services;
 
 public interface IFilterService<T> : IObservable<Func<T, bool>>
 {

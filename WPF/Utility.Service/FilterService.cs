@@ -2,7 +2,7 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
-namespace Utility.Service;
+namespace Utility.Services;
 
 public class FilterService<T> : IObserver<Func<T, bool>>, IFilterService<T>, IRefreshObserver
 {

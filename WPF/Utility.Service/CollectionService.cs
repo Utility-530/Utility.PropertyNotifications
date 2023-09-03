@@ -12,7 +12,7 @@ using Utility.Helpers.Ex;
 using Utility.Common.Collection;
 using Utility.Common.Collections;
 
-namespace Utility.Service
+namespace Utility.Services
 {
     public class CollectionService : ICollectionService, IDisposable
     {
