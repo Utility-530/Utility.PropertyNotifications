@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 
-namespace Utility.WPF.Controls.Lists.Infrastructure
+namespace Utility.WPF.Models
 {
     public class CheckedRoutedEventArgs : RoutedEventArgs
     {
@@ -16,5 +16,5 @@ namespace Utility.WPF.Controls.Lists.Infrastructure
         public ICollection<ChangedItem> Dictionary { get; }
 
         public record struct ChangedItem(object Key, bool? Old, bool? New);
-    }
+    }  
 }
