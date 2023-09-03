@@ -25,6 +25,21 @@ namespace Utility.WPF.Meta
             .ToDictionaryOnIndex()
             .Select(a => new FrameworkElementKeyValue(a.Key, a.Value));
 
+
+        public static IEnumerable<TypeKeyValue> Types(this Assembly assembly) => assembly
+            .GetTypes()
+            .Where(a => a.ContainsGenericParameters == false)
+            .Where(a => a.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly).Any())
+            .Select(a => new TypeKeyValue(a.Name, a));
+
+
+        public static IEnumerable<TypeKeyValue> TypesOf<T>(this Assembly assembly) => assembly
+            .GetTypes()
+            .Where(t => t.IsAssignableTo(typeof(T)))
+            .Where(a => a.ContainsGenericParameters == false)
+            .Where(a => a.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly).Any())
+            .Select(a => new TypeKeyValue(a.Name, a));
+
         public static IEnumerable<(Assembly, AssemblyType)> FindAssemblies()
         {
             return from a in AssemblySingleton.Instance.Assemblies
