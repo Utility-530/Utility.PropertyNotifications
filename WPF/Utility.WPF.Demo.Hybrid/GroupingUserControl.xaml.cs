@@ -9,7 +9,7 @@ using Utility.Enums;
 using Utility.ViewModels;
 using Utility.WPF.Demo.Data.Factory;
 using Utility.WPF.Demo.Data.Model;
-using sim = Utility.Service.FilterDictionaryService<Utility.WPF.Demo.Data.Model.Stock>;
+using sim = Utility.Services.FilterDictionaryService<Utility.WPF.Demo.Data.Model.Stock>;
 
 namespace Utility.WPF.Demo.Hybrid
 {

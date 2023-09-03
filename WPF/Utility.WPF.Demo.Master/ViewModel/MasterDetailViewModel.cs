@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Utility.Service;
+using Utility.Services;
 using Utility.WPF.Demo.Common.ViewModels;
 using Utility.WPF.Demo.Data.Factory;
 using Utility.WPF.Demo.Master.Infrastructure;

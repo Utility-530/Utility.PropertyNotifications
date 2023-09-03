@@ -3,7 +3,7 @@ using System.Collections;
 using System.Linq;
 using System.Reactive.Linq;
 using Utility.Persists;
-using Utility.Service;
+using Utility.Services;
 using Utility.Interfaces.NonGeneric.Data;
 using Utility.WPF.Demo.Common.ViewModels;
 using Utility.WPF.Helpers;

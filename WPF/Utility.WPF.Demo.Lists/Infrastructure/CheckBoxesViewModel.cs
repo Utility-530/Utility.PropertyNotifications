@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Utility.Service;
+using Utility.Services;
 using Utility.ViewModels;
 using Utility.WPF.Demo.Data.Factory;
 using Utility.WPF.Demo.Data.Model;
