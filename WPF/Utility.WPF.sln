@@ -83,7 +83,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Chart"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{CEA05C1B-CDCB-4555-9370-0425F31A8C7C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Service", "Utility.Service\Utility.Service.csproj", "{143618EB-D8C2-47C0-B4AF-7F8779E149D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Services", "Utility.Service\Utility.Services.csproj", "{143618EB-D8C2-47C0-B4AF-7F8779E149D5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Forms", "Utility.WPF.Demo.Forms\Utility.WPF.Demo.Forms.csproj", "{458341AD-70C0-4F08-91E8-2E32554E2077}"
 EndProject
@@ -193,7 +193,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Meta",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Factorys", "Utility.WPF.Factorys\Utility.WPF.Factorys.csproj", "{EC3E8A8D-35FB-48E3-AA4C-4ACD7BDFEA07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Singletons", "Utility.Singletons\Utility.Singletons.csproj", "{C8413CE4-5D31-4315-834C-488FCE379998}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Singletons", "Utility.Singletons\Utility.Singletons.csproj", "{C8413CE4-5D31-4315-834C-488FCE379998}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
