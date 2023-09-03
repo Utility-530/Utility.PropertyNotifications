@@ -71,7 +71,7 @@
                             <Setter TargetName="PathRight" Property="Visibility" Value="Visible" />
                             <Setter TargetName="OutBox" Property="Opacity" Value="0.2" />
                         </Trigger>
-                        <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType=local:RangeSlider}}" Value="Vertical">
+                        <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType={x:Type local:RangeSlider}}}" Value="Vertical">
                             <Setter TargetName="OutBox" Property="Width" Value="Auto" />
                             <Setter TargetName="OutBox" Property="Height" Value="16" />
                             <Setter TargetName="OutBox" Property="Margin" Value="0,-8" />
@@ -101,7 +101,7 @@
                             <Setter TargetName="OutBox" Property="Background" Value="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" />
                             <Setter TargetName="OutBox" Property="BorderBrush" Value="{DynamicResource {x:Static SystemColors.HotTrackBrushKey}}" />
                         </Trigger>
-                        <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType=local:RangeSlider}}" Value="Vertical">
+                        <DataTrigger Binding="{Binding Orientation, RelativeSource={RelativeSource AncestorType={x:Type local:RangeSlider}}}" Value="Vertical">
                             <Setter TargetName="OutBox" Property="Width" Value="Auto" />
                             <Setter TargetName="OutBox" Property="Height" Value="16" />
                             <Setter TargetName="OutBox" Property="Margin" Value="0,-8" />
@@ -142,23 +142,23 @@
                         <ItemsControl.ItemContainerStyle>
                             <Style>
                                 <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType=local:RangeSlider}}" Value="Horizontal">
+                                    <DataTrigger Binding="{Binding Path=Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RangeSlider}}}" Value="Horizontal">
                                         <Setter Property="FrameworkElement.HorizontalAlignment" Value="Left" />
                                         <Setter Property="FrameworkElement.VerticalAlignment" Value="Top" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding Path=Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType=local:RangeSlider}}" Value="Vertical">
+                                    <DataTrigger Binding="{Binding Path=Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RangeSlider}}}" Value="Vertical">
                                         <Setter Property="FrameworkElement.VerticalAlignment" Value="Center" />
                                     </DataTrigger>
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding Path=Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType=local:RangeSlider}}" Value="Vertical" />
+                                            <Condition Binding="{Binding Path=Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RangeSlider}}}" Value="Vertical" />
                                             <Condition Binding="{Binding Path=Name, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentPresenter}}" Value="TopTickLabel" />
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="FrameworkElement.HorizontalAlignment" Value="Right" />
                                     </MultiDataTrigger>
                                     <MultiDataTrigger>
                                         <MultiDataTrigger.Conditions>
-                                            <Condition Binding="{Binding Path=Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType=local:RangeSlider}}" Value="Vertical" />
+                                            <Condition Binding="{Binding Path=Orientation, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RangeSlider}}}" Value="Vertical" />
                                             <Condition Binding="{Binding Path=Name, RelativeSource={RelativeSource FindAncestor, AncestorType=ContentPresenter}}" Value="BottomTickLabel" />
                                         </MultiDataTrigger.Conditions>
                                         <Setter Property="FrameworkElement.HorizontalAlignment" Value="Left" />
@@ -168,8 +168,8 @@
                         </ItemsControl.ItemContainerStyle>
                         <ItemsControl.Style>
                             <Style TargetType="ItemsControl">
-                                <Setter Property="ItemsSource" Value="{Binding Path=GeneratedTicks, RelativeSource={RelativeSource FindAncestor, AncestorType=local:RangeSlider}}" />
-                                <Setter Property="ItemTemplate" Value="{Binding Path=TickLabelTemplate, RelativeSource={RelativeSource FindAncestor, AncestorType=local:RangeSlider}}" />
+                                <Setter Property="ItemsSource" Value="{Binding Path=GeneratedTicks, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RangeSlider}}}" />
+                                <Setter Property="ItemTemplate" Value="{Binding Path=TickLabelTemplate, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:RangeSlider}}}" />
                             </Style>
                         </ItemsControl.Style>
                     </ItemsControl>

@@ -53,13 +53,13 @@
 
     <ControlTemplate x:Key="PersistenceTemplate"  TargetType="{x:Type local:PersistenceButtons}">
         <UniformGrid Rows="1">
-            <Button x:Name="Load" Margin="{TemplateBinding Margins}">
+            <Button x:Name="Load" Margin="{TemplateBinding Margins}" ToolTip="Load">
                 <Viewbox>
                     <materialDesign:PackIcon
                                 Kind="ContentSaveOutline" />
                 </Viewbox>
             </Button>
-            <Button x:Name="Save" Margin="{TemplateBinding Margins}">
+            <Button x:Name="Save" Margin="{TemplateBinding Margins}" ToolTip="Save">
                 <Viewbox>
                     <materialDesign:PackIcon
                                 Kind="ContentSave" />
