@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Controls.Primitives;
+using Utility.WPF.Models;
 
 namespace Utility.WPF.Controls.Lists.Infrastructure
 {

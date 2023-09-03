@@ -99,7 +99,7 @@
             </Trigger>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
-                    <Condition Binding="{Binding Path=(base:AccessibilitySwitches.UseNetFx47CompatibleAccessibilityFeatures)}" Value="false" />
+                    <!--<Condition Binding="{Binding Path=(base:AccessibilitySwitches.UseNetFx47CompatibleAccessibilityFeatures)}" Value="false" />-->
                     <Condition Binding="{Binding Path=(SystemParameters.HighContrast)}" Value="true" />
                 </MultiDataTrigger.Conditions>
                 <Setter Property="FocusVisualStyle" Value="{StaticResource ListBoxItemHighContrastFocusVisual}" />

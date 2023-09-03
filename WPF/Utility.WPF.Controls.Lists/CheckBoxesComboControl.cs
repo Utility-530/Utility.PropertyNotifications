@@ -9,6 +9,7 @@ using Utility.WPF.Controls.Lists.Infrastructure;
 using Utility.WPF.Helpers;
 using Utility.WPF.Abstract;
 using Evan.Wpf;
+using Utility.WPF.Models;
 
 namespace Utility.WPF.Controls.Lists
 {
@@ -20,6 +21,7 @@ namespace Utility.WPF.Controls.Lists
         //public static readonly DependencyProperty OutputProperty = DependencyProperty.RegisterReadOnly("Output", typeof(object), typeof(CheckBoxesComboControl));
         public static readonly RoutedEvent OutputChangeEvent = EventManager.RegisterRoutedEvent("OutputChange", RoutingStrategy.Bubble, typeof(OutputChangedEventHandler<CheckedRoutedEventArgs>), typeof(CheckBoxesComboControl));
         public static readonly DependencyProperty IsSelectedPathProperty = DependencyHelper.Register();
+        public static readonly DependencyProperty KeyPathProperty = DependencyHelper.Register();
         public static readonly DependencyProperty IsDisabledShownProperty = DependencyHelper.Register();
         public static readonly DependencyProperty OutputProperty = OutputPropertyKey.DependencyProperty;
         public static readonly DependencyProperty FilterCollectionProperty = DependencyHelper.Register();
@@ -60,6 +62,12 @@ namespace Utility.WPF.Controls.Lists
             get => (string)GetValue(IsCheckedPathProperty);
             set => SetValue(IsCheckedPathProperty, value);
         }
+              
+        public string KeyPath
+        {
+            get => (string)GetValue(KeyPathProperty);
+            set => SetValue(KeyPathProperty, value);
+        }
 
         public object Output
         {
@@ -83,7 +91,7 @@ namespace Utility.WPF.Controls.Lists
 
         protected override void PrepareContainerForItemOverride(CheckBox element, object item)
         {
-            CheckBoxesHelper.Bind(element, item, this);
+            CheckBoxesHelper.Bind(element, item, this, KeyPathProperty);
             element.Checked += OnChange;
             element.Unchecked += OnChange;
         }

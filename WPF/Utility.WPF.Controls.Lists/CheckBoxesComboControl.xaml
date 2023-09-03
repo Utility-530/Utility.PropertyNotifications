@@ -194,7 +194,7 @@
                                     ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                     IsCheckedPath="{Binding IsCheckedPath, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                     SelectedValuePath="{Binding SelectedValuePath, RelativeSource={RelativeSource Mode=TemplatedParent}}"
-                                    DisplayMemberPath="{Binding DisplayMemberPath, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                                    DisplayMemberPath="{Binding KeyPath, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                                 </local:CheckBoxesFilteredControl>
                             </Border>
                         </Grid>
@@ -236,6 +236,7 @@
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
 
@@ -250,12 +251,14 @@
                                                     TargetControl="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}" />
 
                                         <local:CheckBoxesListControl
+                                            Grid.Row="1"
                                                                     Visibility="{Binding 
                                                                     RelativeSource={RelativeSource Mode=TemplatedParent},
                                                                     Path=FilterCollection,
                                                                     Converter={x:Static conv:NullToInverseVisibilityConverter.Instance}}"
                                                                     DockPanel.Dock="Top"
                                                                     SelectedValuePath="Header"
+                                                                    ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                                                     ItemsSource="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=FilterCollection}"
                                                                     IsCheckedPath="IsChecked"    
                                             
@@ -263,7 +266,7 @@
                                         </local:CheckBoxesListControl>
 
                                     </Grid>
-                                    <ScrollViewer Grid.Row="1"  Margin="4,6,4,6" SnapsToDevicePixels="True" VerticalScrollBarVisibility="Auto">
+                                    <ScrollViewer Grid.Row="2"  Margin="4,6,4,6" SnapsToDevicePixels="True" VerticalScrollBarVisibility="Auto">
                                         <StackPanel x:Name="ItemsHostStackPanel" IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
                                     </ScrollViewer>
                                     <!--<DataGrid 

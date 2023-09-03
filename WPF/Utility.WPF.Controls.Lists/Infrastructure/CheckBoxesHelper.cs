@@ -15,7 +15,7 @@ namespace Utility.WPF.Controls.Lists.Infrastructure
 {
     public static class CheckBoxesHelper
     {
-        public static void Bind(FrameworkElement element, object item, object sender)
+        public static void Bind(FrameworkElement element, object item, object sender, DependencyProperty? dependencyProperty = null)
         {
             if (sender is not IIsCheckedPath checkedPath ||
                 sender is not Selector selector)
@@ -23,7 +23,8 @@ namespace Utility.WPF.Controls.Lists.Infrastructure
                 throw new Exception("sdf4 fdgdgp;p;p");
             }
 
-    
+            dependencyProperty ??= ListBox.DisplayMemberPathProperty;
+
             if (BindingOperations.GetBinding(element, ToggleButton.IsCheckedProperty) != null)
             {
                 return;
@@ -38,20 +39,20 @@ namespace Utility.WPF.Controls.Lists.Infrastructure
             //{
             //    element.SetBinding(FrameworkElement.TagProperty, factory.OneWay(selector.SelectedValuePath));
             //}
-            if (string.IsNullOrEmpty(selector.DisplayMemberPath) == false)
+            if (selector.GetValue(dependencyProperty) is string str)
             {
-                element.SetBinding(FrameworkElement.TagProperty, factory.OneWay(selector.DisplayMemberPath));
+                element.SetBinding(FrameworkElement.TagProperty, factory.OneWay(str));
             }
-            else if(element is ContentControl contentControl && contentControl.ContentTemplateSelector is not null
+            else if (element is ContentControl contentControl && contentControl.ContentTemplateSelector is not null
                 && string.IsNullOrEmpty(selector.SelectedValuePath) == false)
             {
                 element.SetBinding(FrameworkElement.TagProperty, factory.OneWay(selector.SelectedValuePath));
             }
             else
             {
-               throw new Exception($"Expected " +
-                    $"{nameof(Selector.DisplayMemberPath)} " +
-                    $"not to be null.");
+                throw new Exception($"Expected " +
+                     $"{nameof(Selector.DisplayMemberPath)} " +
+                     $"not to be null.");
             }
         }
 
@@ -75,7 +76,7 @@ namespace Utility.WPF.Controls.Lists.Infrastructure
 
             Dictionary<object, bool?> output = new();
             int i = 0;
-            foreach(var item in selector.Items)
+            foreach (var item in selector.Items)
             {
                 if (item is CheckBox checkBox)
                 {
@@ -91,9 +92,17 @@ namespace Utility.WPF.Controls.Lists.Infrastructure
                     if (string.IsNullOrEmpty(selector.DisplayMemberPath) == false)
                     {
                         var key = type.GetProperty(selector.DisplayMemberPath).GetValue(item);
-                        var value = (bool?)type.GetProperty(checkedPath.IsCheckedPath).GetValue(item);
-                        output.Add(key, value);
-                    }            
+                        var value = checkedPath.IsCheckedPath != null ? (bool?)type.GetProperty(checkedPath.IsCheckedPath).GetValue(item) : false;
+
+                        try
+                        {
+                            output.Add(key, value);
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+                    }
                 }
             }
             //var output = items.Where(a => a is { Tag: { } tag }).ToDictionary(a => a.Tag, a => a.IsChecked);

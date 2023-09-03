@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls.Primitives;
 using Utility.Helpers;
+using Utility.WPF.Models;
 
 namespace Utility.WPF.Controls.Lists.Infrastructure
 {
