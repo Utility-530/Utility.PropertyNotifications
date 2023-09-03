@@ -32,3 +32,10 @@ class TypeFilter : IPredicate
         return false;
     }
 }
+
+public class MyObject
+{
+    public string Name => nameof(MyObject);
+
+    public MyObject Child { get; }
+}

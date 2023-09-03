@@ -11,17 +11,19 @@ using System.Reflection;
 using Utility.Models;
 using System.Collections;
 using Utility.Interfaces.NonGeneric;
+using Utility.Commands;
+using static Utility.WPF.Controls.Objects.Infrastructure.ObjectItemsControlViewModel;
 
 namespace Utility.WPF.Controls.Objects.Infrastructure
 {
-    public class ObjectItemsControlViewModel : BaseViewModel
+    public class ObjectSelectionViewModel : BaseViewModel
     {
         private ObservableCollection<Item<Utility.Commands.ObservableCommand<PropertyInfo>>> items = new();
         private bool isReadOnly;
         private object @object;
         private object value;
 
-        public ObjectItemsControlViewModel()
+        public ObjectSelectionViewModel()
         {
 
             CompositeDisposable? disposable = null;
@@ -32,23 +34,23 @@ namespace Utility.WPF.Controls.Objects.Infrastructure
                 .WhereNotNull()
                 .CombineLatest(this.WhenAnyValue(a => a.IsReadOnly))
                 .Select(a => Build(a.First, a.Second))
-                .Subscribe(enums =>
+                .Subscribe(items =>
                 {
-                    items.Clear();
-                    items.AddRange(enums);
+                    this.items.Clear();
+                    this.items.AddRange(items);
                     disposable?.Dispose();
                     disposable = new();
 
-                    foreach (var item in enums)
+                    foreach (var item in items)
                     {
                         item.Subscribe(e =>
                         {
-                            var value = e.GetValue(Object);
-                            Value = value;
-                            foreach (var x in enums)
-                            {
-                                x.IsChecked = x.Property == e;
-                            }
+                            //var value = e.GetValue(Object);
+                            //Value = value;
+                            //foreach (var x in enums)
+                            //{
+                            //    x.IsChecked = x.Property == e;
+                            //}
 
                         }).DisposeWith(disposable);
                     }
@@ -94,52 +96,55 @@ namespace Utility.WPF.Controls.Objects.Infrastructure
 
         #endregion properties
 
-        public class Item<T> : ValueViewModel, IObservable<PropertyInfo>, IPropertyInfo where T : IObservable<PropertyInfo>, ICommand
-        {
-            private bool isChecked;
-            private readonly PropertyInfo info;
-            private readonly object @object;
-            private T command;
-            private object? value;
+        //public class Item<T> : ReadOnlyViewModel, IObservable<PropertyInfo>, IPropertyInfo where T : IObservable<PropertyInfo>, ICommand
+        //{
+        //    private bool isChecked;
+        //    private readonly PropertyInfo info;
+        //    private readonly object @object;
+        //    private T command;
 
-            public Item(PropertyInfo info, object @object, T command, bool isReadOnly)
-            {
-                this.info = info;
-                this.@object = @object;
-                this.command = command;
-                IsReadOnly = isReadOnly;
+        //    public Item(PropertyInfo info, object @object, T command, bool isReadOnly)
+        //    {
+        //        this.info = info;
+        //        this.@object = @object;
+        //        this.command = command;
+        //        IsReadOnly = isReadOnly;
 
-                try
-                {
-                    value = info.GetValue(@object) ?? (info.PropertyType.GetConstructor(Type.EmptyTypes) != null ? Activator.CreateInstance(info.PropertyType) : null);
+        //    }
 
-                }
-                catch (Exception ex)
-                {
-                    value = ex.Message;
-                }
-            }
+        //    public PropertyInfo Property => info;
 
-            public PropertyInfo Property => info;
+        //    public ICommand Command { get; }
 
-            public string Name => info.Name;
-            public override object? Value => value;
+        //    public string Name => info.Name;
+        //    public object Value
+        //    {
+        //        get
+        //        {
+        //            try
+        //            {
+        //                return info.GetValue(@object);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                return ex.Message;
+        //            }
+        //        }
+        //    }
 
-            public ICommand Command => command;
+        //    public bool IsChecked
+        //    {
+        //        get => isChecked; set
+        //        {
+        //            isChecked = value;
+        //            OnPropertyChanged();
+        //        }
+        //    }
 
-            public bool IsChecked
-            {
-                get => isChecked; set
-                {
-                    isChecked = value;
-                    OnPropertyChanged();
-                }
-            }
-
-            public IDisposable Subscribe(IObserver<PropertyInfo> observer)
-            {
-                return command.Subscribe(observer);
-            }
-        }
+        //    public IDisposable Subscribe(IObserver<PropertyInfo> observer)
+        //    {
+        //        return command.Subscribe(observer);
+        //    }
+        //}
     }
 }

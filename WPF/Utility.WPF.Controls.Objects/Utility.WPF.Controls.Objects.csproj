@@ -35,6 +35,9 @@
     </Compile>
     <Compile Update="ObjectComboBox.cs">
       <DependentUpon>ObjectComboBox.xaml</DependentUpon>
+    </Compile>  
+		<Compile Update="ObjectListBox.cs">
+      <DependentUpon>ObjectListBox.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 

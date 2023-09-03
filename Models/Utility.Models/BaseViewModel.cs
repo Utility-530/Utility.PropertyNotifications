@@ -53,4 +53,9 @@ namespace Utility.Models
         public bool IsReadOnly { get; init; }
     }
 
+
+    public abstract class ValueViewModel : ReadOnlyViewModel
+    {
+        public virtual object? Value { get;  }
+    }
 }

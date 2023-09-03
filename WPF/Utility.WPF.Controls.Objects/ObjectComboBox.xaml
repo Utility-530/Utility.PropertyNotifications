@@ -77,23 +77,22 @@
                             IsHitTestVisible="false" 
                             Grid.Column="0" 
                             Text="{Binding SelectionBoxItem.Property.Name, RelativeSource={RelativeSource TemplatedParent}}"/>
-                        <ContentPresenter x:Name="contentPresenter" 
+                        <ContentControl x:Name="contentPresenter" 
                                         Grid.Column="1"
                                         ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
-                                        ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
-                                        Content="{TemplateBinding SelectionBoxItem}"
+                                        ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"  
+                                        Content="{Binding SelectionBoxItem.Value, RelativeSource={RelativeSource TemplatedParent}}"
                                         ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}" 
-                                        HorizontalAlignment="Left"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                         IsHitTestVisible="false" 
                                         Margin="{TemplateBinding Padding}"
-                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
-                                        VerticalAlignment="Center"/>
-
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                         <Popup x:Name="PART_Popup" 
-                                     Width="{Binding ActualWidth, ElementName=MainGrid}" 
-                                   AllowsTransparency="true" Grid.ColumnSpan="3" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                   Margin="1" 
-                                   Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
+                                    Width="{Binding ActualWidth, ElementName=MainGrid}" 
+                                    AllowsTransparency="true" Grid.ColumnSpan="3" IsOpen="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Margin="1" 
+                                    Placement="Bottom" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}">
                             <Border x:Name="dropDownBorder" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" BorderBrush="{DynamicResource {x:Static SystemColors.WindowFrameBrushKey}}" BorderThickness="1">
                                 <ScrollViewer x:Name="DropDownScrollViewer">
                                     <Grid x:Name="grid" RenderOptions.ClearTypeHint="Enabled">
@@ -138,23 +137,19 @@
         <local:ObjectComboBox Object="{Binding Mode=OneWay}"></local:ObjectComboBox>
     </DataTemplate>
 
-    <local:ObjectsDataTemplateSelector x:Key="ObjectsDataTemplateSelector"></local:ObjectsDataTemplateSelector>
+    <local:ValueObjectsDataTemplateSelector x:Key="ObjectsDataTemplateSelector"
+                                            ObjectComboBoxTemplate="{StaticResource ObjectComboBoxTemplate}"
+                                            />
+
 
     <Style  TargetType="{x:Type local:ObjectComboBox}" BasedOn="{StaticResource CustomComboBox}">
         <Setter Property="SelectedIndex" Value="0"/>
-        <Setter Property="ItemTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <ContentControl Content="{Binding Path=Value, Mode=OneWay}" 
-                                        ContentTemplateSelector="{StaticResource ObjectsDataTemplateSelector}"
-                                        Margin="2" 
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"  
-                                        />
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
-
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="Padding" Value="2"/>        
+        <Setter Property="ItemTemplateSelector" Value="{StaticResource ObjectsDataTemplateSelector}"/>  
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
                 <Style TargetType="{x:Type ComboBoxItem}">
@@ -169,11 +164,14 @@
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition/>
-                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
                                                 <TextBlock Margin="5" Grid.Column="0" Text="{Binding Property.Name}"/>
-                                                <ContentPresenter Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Left"></ContentPresenter>
+                                                <ContentControl Grid.Column="1" Content="{Binding Value, Mode=Oneway}"    
+                                                                 ContentTemplateSelector="{StaticResource ObjectsDataTemplateSelector}"
+                                                                  VerticalAlignment="Stretch"
+                                                                HorizontalAlignment="Stretch"></ContentControl>
                                             </Grid>
                                         </ContentPresenter.Content>
                                     </ContentPresenter>

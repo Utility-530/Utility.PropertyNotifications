@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Windows;
 using Tiny.Toolkits;
+using Utility.Models;
 
 namespace Utility.WPF.Controls.Objects
 {
-    public class ObjectsDataTemplateSelector : Templates.CustomDataTemplateSelector
+    public class ValueObjectsDataTemplateSelector : Templates.CustomDataTemplateSelector
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -13,18 +14,42 @@ namespace Utility.WPF.Controls.Objects
             {
                 return TypeTemplate;
             }
-            if (item?.GetType().IsValueType == false && item is not string s)
+            if (type?.IsValueType == false && item is not string s)
             {
-                var resource = container.GetResource<DataTemplate>("ObjectComboBoxTemplate");
-                return resource;
+                return ObjectComboBoxTemplate;
             }
 
             return base.SelectTemplate(item, container);
         }
 
-        public static new ObjectsDataTemplateSelector Instance { get; } = new();
-
-
         public DataTemplate TypeTemplate { get; set; }
+        public DataTemplate ObjectComboBoxTemplate { get; set; }
     }
+
+    //public class ValueObjectsDataTemplateSelector : Templates.CustomDataTemplateSelector
+    //{
+    //    public override DataTemplate SelectTemplate(object item, DependencyObject container)
+    //    {
+    //        if (item is ValueViewModel { Value: var _value } valueViewModel)
+    //        {
+    //            var type = _value?.GetType();             
+    //            if (type?.FullName?.Equals("System.RuntimeType") == true)
+    //            {
+    //                return TypeTemplate;
+    //            }
+    //            if (type?.IsValueType == false && _value is not string s)
+    //            {
+    //                var resource = container.GetResource<DataTemplate>("ObjectComboBoxTemplate");
+    //                return resource;
+    //            }
+    //            return base.SelectTemplate(_value, container);
+
+    //        }
+
+    //        return ErrorTemplate;
+    //    }
+
+    //    public DataTemplate TypeTemplate { get; set; }
+    //    public DataTemplate ErrorTemplate { get; set; }
+    //}
 }

@@ -19,6 +19,7 @@
         <ResourceDictionary>
             <test:Fields x:Key="Fields"></test:Fields>
             <test:Region x:Key="Region"></test:Region>
+            <local:MyObject x:Key="MyObject"></local:MyObject>
             <x:Type x:Key="String"  Type="{x:Type sys:String}"></x:Type>
             <conv:BooleanToOrientationConverter x:Key="BooleanToOrientationConverter" />
         </ResourceDictionary>
@@ -26,17 +27,23 @@
 
 
     <UniformGrid Rows="1" DockPanel.Dock="Bottom">
-        <StackPanel>
-            <view:ObjectComboBox
+        <UniformGrid Columns="1">
+            <StackPanel>
+                <view:ObjectComboBox
                     x:Name="ebdc"                 
                     Object="{StaticResource String}" >
-                <view:ObjectComboBox.Filters>
-                    <x:Array Type="{x:Type sys:Object}">
-                        <local:TypeFilter/>
-                    </x:Array>    
-                </view:ObjectComboBox.Filters>
-            </view:ObjectComboBox>
-        </StackPanel>
+                    <view:ObjectComboBox.Filters>
+                        <x:Array Type="{x:Type sys:Object}">
+                            <local:TypeFilter/>
+                        </x:Array>
+                    </view:ObjectComboBox.Filters>
+                </view:ObjectComboBox>
+            </StackPanel>
+            <view:ObjectListBox
+                x:Name="ebdc2"   
+                Object="{StaticResource MyObject}" >
+            </view:ObjectListBox>
+        </UniformGrid>
 
         <StackPanel>
             <ToggleButton x:Name="ToggleButton1" Height="30" Content="{x:Static Orientation.Horizontal}">
@@ -45,9 +52,6 @@
                 </i:Interaction.Behaviors>
             </ToggleButton>
 
-            <!--<Button Command="{Binding ElementName=ebdcs, Path=ClearCommand}">
-                clear
-            </Button>-->
             <view:ObjectSelector
                                             
                             Orientation="Vertical"

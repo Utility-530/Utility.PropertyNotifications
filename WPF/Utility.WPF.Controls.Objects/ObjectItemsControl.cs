@@ -23,7 +23,7 @@ namespace Utility.WPF.Controls.Objects
 
         public ObjectItemsControl()
         {
-            SetValue(ItemsControlEx.ArrangementProperty, Arrangement.Wrapped);
+            SetValue(ItemsControlEx.ArrangementProperty, Utility.WPF.Helpers.LayOutHelper.Arrangement.Wrapped);
             DataContext = new ObjectItemsControlViewModel();
             SetBinding(ObjectProperty, new Binding(nameof(ObjectItemsControlViewModel.Object)) { Mode = BindingMode.OneWayToSource });
             SetBinding(ValueProperty, new Binding(nameof(ObjectItemsControlViewModel.Value)) { Mode = BindingMode.OneWay });
