@@ -124,12 +124,12 @@ namespace Utility.WPF.Nodes
             throw new Exception("r 3 33");
         }
 
-        public override async Task<object?> GetChildren()
+        public override Task<object?> GetChildren()
         {
-            var x = ResourceDictionaryKeyValue.ResourceViewTypes(await lazyContent)               
+            var types = ResourceDictionaryKeyValue.ResourceViewTypes(lazyContent.Value)               
                 .ToDictionary(a => a.Key, a => a.Value);
             flag = true;
-            return x;
+            return Task.FromResult((object?)types);
         }
 
         public void OnNext(object value)
