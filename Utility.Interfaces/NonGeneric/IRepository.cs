@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Utility.Interfaces.NonGeneric;
 
-namespace Utility.Infrastructure.Abstractions
+namespace Utility.Interfaces.NonGeneric
 {
     public interface IRepository
     {
