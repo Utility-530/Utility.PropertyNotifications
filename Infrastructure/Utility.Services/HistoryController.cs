@@ -1,18 +1,14 @@
 ﻿
-using System.Collections;
 using System.Reactive.Linq;
-using System.Windows.Input;
 using Utility.Collections;
-using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using h = Utility.Enums.History;
 using Response = Utility.Models.Response;
-using Utility.Observables.NonGeneric;
 using System.Reactive.Disposables;
 using static System.Reactive.Linq.Observable;
 using Utility.Infrastructure;
 
-namespace Utility.PropertyTrees.Services
+namespace Utility.Services
 {
     public class History : BaseObject
     {
