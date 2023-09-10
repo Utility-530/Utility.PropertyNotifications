@@ -1,4 +1,3 @@
-using Utility.PropertyTrees.Infrastructure;
 using System.Collections.Specialized;
 using Utility.Collections;
 using Utility.Nodes.Abstractions;
@@ -6,6 +5,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using System.Collections;
 using System.ComponentModel;
+using Utility.Infrastructure;
 
 namespace Utility.Nodes
 {
