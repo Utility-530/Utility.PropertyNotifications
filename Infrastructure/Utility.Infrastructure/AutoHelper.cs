@@ -5,7 +5,7 @@ using Utility.Conversions;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 
-namespace Utility.PropertyTrees.Infrastructure
+namespace Utility.Infrastructure
 {
     public static class AutoHelper
     {
@@ -59,7 +59,7 @@ namespace Utility.PropertyTrees.Infrastructure
         {
             return autoObject.GetProperty(autoObject.Key);
         }
-        
+
         /// <summary>
         /// Sets a property value.
         /// </summary>
@@ -70,7 +70,7 @@ namespace Utility.PropertyTrees.Infrastructure
         public static bool SetProperty<T, TValue>(this T autoObject, TValue value, [CallerMemberName] string? name = null)
             where T : AutoObject, IType
         {
-            autoObject.SetProperty((new Key(autoObject.Guid, name, typeof(T))), value);
+            autoObject.SetProperty(new Key(autoObject.Guid, name, typeof(T)), value);
             return true;
         }
 

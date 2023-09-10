@@ -3,10 +3,9 @@ using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using Utility.Infrastructure;
 using Utility.Observables.Generic;
 
-namespace Utility.PropertyTrees.Infrastructure
+namespace Utility.Infrastructure
 {
 
     public class Store
@@ -25,7 +24,7 @@ namespace Utility.PropertyTrees.Infrastructure
             }
             set
             {
-                store[key] = value; 
+                store[key] = value;
             }
         }
 
@@ -86,12 +85,12 @@ namespace Utility.PropertyTrees.Infrastructure
             if (LastUpdate is not DateTime value)
             {
                 //TODO: show progress
-                this.Observe<GetPropertyResponse, GetPropertyRequest>(new(key))
+                Observe<GetPropertyResponse, GetPropertyRequest>(new(key))
                     .Select(a => a.Value)
                     .Subscribe(a =>
                     {
                         LastUpdate = DateTime.Now;
-                        SetValue(key, a);                     
+                        SetValue(key, a);
                     });
             }
 
@@ -102,11 +101,11 @@ namespace Utility.PropertyTrees.Infrastructure
         public void SetProperty(IEquatable key, object value)
         {
             disposable?.Dispose();
-            disposable = this.Observe<SetPropertyResponse, SetPropertyRequest>(new(key, value))
+            disposable = Observe<SetPropertyResponse, SetPropertyRequest>(new(key, value))
                 .Subscribe(a =>
                 {
                     LastUpdate = DateTime.Now;
-                    SetValue(key, a.Value);                   
+                    SetValue(key, a.Value);
                     // Validation response
                 });
         }
