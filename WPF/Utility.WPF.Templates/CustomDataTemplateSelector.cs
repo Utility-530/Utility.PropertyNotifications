@@ -51,6 +51,7 @@ namespace Utility.WPF.Templates
 
         public DataTemplate Select_Template(object item, DependencyObject container)
         {
+
             if (item == null)
                 return NullDataTemplate ??= NullTemplate();
 
@@ -71,15 +72,15 @@ namespace Utility.WPF.Templates
             if (interfaces.Any(a => a.Name == "IDictionary`2") || interfaces.Contains(typeof(IDictionary)))
                 return DictionaryDataTemplate ??= Templates["Dictionary"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Dictionary");
             else if (type == typeof(string))
-                return StringDataTemplate ??= Templates[new DataTemplateKey(typeof(String))] as DataTemplate ?? throw new Exception("Missing DataTemplate for String");
+                return StringDataTemplate ?? throw new Exception("Missing DataTemplate for String");
             else if (interfaces.Contains(typeof(IEnumerable)))
-                return EnumerableDataTemplate ??= Templates["Enumerable"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Enumerable");
+                return EnumerableDataTemplate ??  throw new Exception("Missing DataTemplate for Enumerable");
             else if(type == typeof(Color))
-                return ColorDataTemplate ??= Templates[new DataTemplateKey(typeof(Color))] as DataTemplate ?? throw new Exception("Missing DataTemplate for Color");     
+                return ColorDataTemplate ?? throw new Exception("Missing DataTemplate for Color");     
             else if(type == typeof(Guid))
-                return GuidDataTemplate ??= Templates[new DataTemplateKey(typeof(Guid))] as DataTemplate ?? throw new Exception("Missing DataTemplate for Guid");     
+                return GuidDataTemplate ?? throw new Exception("Missing DataTemplate for Guid");     
             else if(type == typeof(Enum))
-                return EnumDataTemplate ??= Templates[new DataTemplateKey(typeof(Enum))] as DataTemplate ?? throw new Exception("Missing DataTemplate for Enum");
+                return EnumDataTemplate ?? throw new Exception("Missing DataTemplate for Enum");
             //if (type == typeof(Utility.WPF.Abstract.Icon))
             //    return IconDataTemplate;
             else if(type == typeof(bool))
