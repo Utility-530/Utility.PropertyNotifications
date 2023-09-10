@@ -17,3 +17,4 @@ using System.Windows.Markup;
 [assembly: XmlnsDefinition("http://schemas.utility.com/extrinsic", "Link.WPF.Toolkit")]
 [assembly: XmlnsDefinition("http://schemas.utility.com/extrinsic", "DrWPF.Windows.Controls")]
 [assembly: XmlnsDefinition("http://schemas.utility.com/extrinsic", "Viamo")] 
+[assembly: XmlnsDefinition("http://schemas.utility.com/extrinsic", "UITextBlockControl")] 
