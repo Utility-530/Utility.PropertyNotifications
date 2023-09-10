@@ -1,13 +1,5 @@
 ﻿
-internal class Guids
-{
-    public static readonly Guid UdpServer = Guid.Parse("2978ac5e-368f-42b3-891e-d85c21c14499");
-    public static readonly Guid Property = Guid.Parse("e15c2e55-bf33-480c-a4e7-b4b7804d1735");
-    public static readonly Guid Interface = Guid.Parse("8eeb7df3-9ae7-49d6-aabc-a492c6254718");
-    public static readonly Guid Bootstrapper = Guid.Parse("111b7df3-9ae7-49d6-aabc-a492c6254718");
-    public static readonly Guid ViewModelEngine = Guid.Parse("78f35bd1-fc3c-44ca-8d86-f3a8a9d69d33");
-    public static readonly Guid ModelController = Guid.Parse("e123dab9-9022-4649-9dc4-754d492dd5a6");
-    public static readonly Guid ViewModelController = Guid.Parse("605d53f3-c195-461f-bada-0e41ef2f658c");
-    public static readonly Guid ViewController = Guid.Parse("ab289f2b-2fab-4c87-9b85-0946bad7b1fd");
-    public static readonly Guid RepositorySwitch = Guid.Parse("fca6811e-8d33-4863-a2cd-c200ac10189d");
-}
+//internal class Guids
+//{
+
+//}

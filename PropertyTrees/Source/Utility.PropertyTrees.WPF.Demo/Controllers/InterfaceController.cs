@@ -1,4 +1,5 @@
-﻿using Utility.Infrastructure;
+﻿using Utility;
+using Utility.Infrastructure;
 
 internal sealed class InterfaceController : BaseObject
 {

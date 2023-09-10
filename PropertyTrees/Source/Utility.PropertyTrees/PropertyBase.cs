@@ -1,6 +1,5 @@
 using Utility.PropertyTrees.Abstractions;
 using Utility.Helpers;
-using Utility.PropertyTrees.Infrastructure;
 using Utility.Nodes;
 using System.Collections.Specialized;
 using System.Windows.Input;
@@ -13,6 +12,7 @@ using Utility.Nodes.Abstractions;
 using Utility.Models;
 using System.Reflection;
 using Utility.Conversions;
+using Utility.Infrastructure;
 
 namespace Utility.PropertyTrees
 {

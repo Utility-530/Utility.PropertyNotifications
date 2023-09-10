@@ -67,8 +67,6 @@ namespace Utility.PropertyTrees.Services
                 return composite;
             });
 
-
-
             void SubscribeToPropertyDescriptor(PropertyDescriptor descriptor, bool include, Interfaces.Generic.IObserver<ChildrenResponse> obs)
             {
                 if (include == false)

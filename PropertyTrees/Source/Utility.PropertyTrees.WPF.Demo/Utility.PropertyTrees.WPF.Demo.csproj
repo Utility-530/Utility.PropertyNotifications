@@ -22,6 +22,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\..\Infrastructure\Utility.Services\Utility.Services.csproj" />
 		<ProjectReference Include="..\..\..\Repos\Utility.Repos\Utility.Repos.csproj" />
 		<ProjectReference Include="..\..\..\WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
 		<ProjectReference Include="..\..\..\WPF\Utility.WPF.Controls.DataGrids\Utility.WPF.Controls.DataGrids.csproj" />

@@ -19,12 +19,12 @@ namespace Utility.PropertyTrees.Services
                 {
                     if (typeof(Event).IsAssignableFrom(type))
                     {
-                        observer.OnNext(new RepositorySwitchResponse(new Key<InMemoryRepository>(Utility.Repos.Guids.InMemory)));
+                        observer.OnNext(new RepositorySwitchResponse(new Key<InMemoryRepository>(Utility.Guids.InMemory)));
                         return Disposer.Empty;
                     }
                 }
 
-                observer.OnNext(new RepositorySwitchResponse(new Key<SqliteRepository>(Utility.Repos.Guids.SQLite)));
+                observer.OnNext(new RepositorySwitchResponse(new Key<SqliteRepository>(Utility.Guids.SQLite)));
                 return Disposer.Empty;
             });
         }

@@ -9,13 +9,6 @@ public record ConnectRequest() : Request;
 public record ScreensaverRequest() : Request;
 public record PrizeWheelRequest() : Request;
 public record LeaderboardRequest() : Request;
-
-
-
-
-
-
-
 public record ServerRequest(string IP, int Port) : Request;
 public record ServerResponse(bool IsInitialised) : Response(IsInitialised);
 

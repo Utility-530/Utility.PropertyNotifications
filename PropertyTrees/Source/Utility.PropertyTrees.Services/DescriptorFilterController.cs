@@ -5,10 +5,7 @@ using Utility.PropertyTrees.Infrastructure;
 using static System.Reactive.Linq.Observable;
 using System.Collections;
 using Utility.Observables.NonGeneric;
-using static Pihrtsoft.Text.RegularExpressions.Linq.Patterns;
-using Pihrtsoft.Text.RegularExpressions.Linq;
 using Utility.Helpers;
-using System.Text.RegularExpressions;
 
 namespace Utility.PropertyTrees.Services
 {

@@ -4,19 +4,14 @@
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:trees="clr-namespace:Utility.PropertyTrees.WPF;assembly=Utility.PropertyTrees.WPF"   
                     xmlns:local="clr-namespace:Utility.PropertyTrees.WPF.Demo"   
-                    xmlns:m="clr-namespace:Utility.Models;assembly=Utility.Models"
-                 
+                    xmlns:m="clr-namespace:Utility.Models;assembly=Utility.Models"                 
                     xmlns:conv="http://schemas.utility.com/converters"
-                    xmlns:btn="http://schemas.utility.com/buttons"
-                    xmlns:st="http://schemas.spicytaco.io/" 
                     xmlns:uni="UniversalConverter"
                     xmlns:view="http://schemas.utility.com"
                     xmlns:dgrids="http://schemas.utility.com/datagrids"
-                    xmlns:temp="http://schemas.utility.com/templates"
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:objects="http://schemas.utility.com/objects"
                     xmlns:local1="clr-namespace:Utility.PropertyTrees.WPF.Demo.Infrastructure">
-
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Utility.PropertyTrees.WPF.Demo;component/Themes/Styles.xaml"></ResourceDictionary>
@@ -138,9 +133,7 @@
         EnumTemplate="{StaticResource EnumTemplate}"
         ReferenceTemplate="{StaticResource ReferenceTemplate}"
         RootTemplate="{StaticResource ReferenceTemplate}"
-        MethodTemplate="{StaticResource MethodTemplate}"
-
-        />
+        MethodTemplate="{StaticResource MethodTemplate}"/>
 
     <DataTemplate DataType="{x:Type m:Key}">
         <UniformGrid Height="10" Rows="1">
@@ -157,13 +150,13 @@
     </DataTemplate>
 
 
-    <objects:ObjectsDataTemplateSelector x:Key="ObjectsDataTemplateSelector"  
+    <objects:ValueObjectsDataTemplateSelector x:Key="ObjectsDataTemplateSelector"  
                                          TypeTemplate="{StaticResource TypeTemplate}"/>
     <DataTemplate DataType="{x:Type local:ViewModelsCollection}">
         <DataGrid ItemsSource="{Binding Data}" HorizontalAlignment="Stretch"   RowHeaderWidth="0"  HeadersVisibility="Column" EnableRowVirtualization="false">
             <i:Interaction.Behaviors>
                 <dgrids:ShareWidthsBehavior Margin="24"/>
-                <dgrids:CustomTemplateBehavior DataTemplateSelector="{StaticResource ObjectsDataTemplateSelector}"/>
+                <dgrids:DataGridColumnSelectorBehavior DataTemplateSelector="{StaticResource ObjectsDataTemplateSelector}"/>
             </i:Interaction.Behaviors>           
         </DataGrid>
     </DataTemplate>

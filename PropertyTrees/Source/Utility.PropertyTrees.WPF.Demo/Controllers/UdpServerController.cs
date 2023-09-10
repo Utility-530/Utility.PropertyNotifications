@@ -7,7 +7,7 @@ internal sealed class UdpServerController : BaseObject
 {
     private UdpServer? server = new();
 
-    public override Key Key => new(Guids.UdpServer, nameof(UdpServerController), typeof(UdpServerController));
+    public override Key Key => new(Utility.Guids.UdpServer, nameof(UdpServerController), typeof(UdpServerController));
 
     public IObservable<ServerResponse> OnNext(ServerRequest serverRequest)
     {

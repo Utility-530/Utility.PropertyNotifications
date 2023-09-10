@@ -1,6 +1,5 @@
 ﻿using SQLite;
 using Utility.Trees;
-using Utility.Infrastructure.Abstractions;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 
@@ -18,7 +17,7 @@ namespace Utility.Repos
             connection = new SQLiteAsyncConnection(Path.Combine(dbDirectory, "data" + "." + "sqlite"));
             //Initialise();
         }
-        public IEquatable Key => new Key<Repository2>(Guids.Tree);
+        public IEquatable Key => new Key<Repository2>(Utility.Guids.Tree);
 
 
         private Tree tree = new();

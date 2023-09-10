@@ -1,5 +1,4 @@
-﻿using Utility.Infrastructure.Abstractions;
-using Utility.Models;
+﻿using Utility.Models;
 using System.Reactive.Threading.Tasks;
 using System.Reactive.Linq;
 using static Utility.Observables.Generic.ObservableExtensions;
@@ -9,6 +8,8 @@ using Utility.Infrastructure;
 using LiteDB;
 using Utility.Enums;
 using System.Collections;
+using Utility.Interfaces.NonGeneric;
+
 namespace Utility.PropertyTrees.Services
 {
     //public interface IViewModelRepository
