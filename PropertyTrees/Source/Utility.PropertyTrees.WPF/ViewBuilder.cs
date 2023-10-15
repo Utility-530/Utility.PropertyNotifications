@@ -13,7 +13,6 @@ using System.Reactive.Disposables;
 using Utility.PropertyTrees.Services;
 using Utility.Helpers;
 using Utility.Enums;
-using Utility.WPF.Helpers;
 using Orientation = System.Windows.Controls.Orientation;
 using NetFabric.Hyperlinq;
 using System.Linq;
@@ -100,7 +99,7 @@ namespace Utility.PropertyTrees.WPF
                                     if (dictionary.ContainsKey(propertyBase.Name) == false)
                                     {
                                         dictionary.Add(propertyBase.Name, dictionary.Count);
-                                        columnsTreeViewItem.Items.Add(new TreeViewItem { Header =  propertyBase, HeaderTemplate = TreeTemplateSelector.HeaderTemplate(9), Tag = propertyBase.Name, Width = columnWidth, Style = TreeStyleSelector.FixedWidthHeaderOnlyStyle });
+                                        columnsTreeViewItem.Items.Add(new TreeViewItem { Header =  propertyBase, HeaderTemplate = PropertyTemplateSelector.HeaderTemplate(9), Tag = propertyBase.Name, Width = columnWidth, Style = TreeStyleSelector.FixedWidthHeaderOnlyStyle });
                                     }
                                     treeViewItem = Make(propertyBase);
 

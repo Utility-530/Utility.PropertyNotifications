@@ -12,22 +12,28 @@ using Utility.WPF.Helpers;
 
 namespace Utility.PropertyTrees.WPF
 {
-    public class TreeTemplateSelector : DataTemplateSelector, IObservable<SelectTemplateEvent>
+    public class PropertyTemplateSelector : DataTemplateSelector, IObservable<SelectTemplateEvent>
     {
         private List<IObserver<SelectTemplateEvent>> observers = new();
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
+            var template = FindTemplate(item, container);
+            this.broadcast(new(item, template, container));
+            return template;
+        }
+
+        public DataTemplate FindTemplate(object item, DependencyObject container)
+        {
             DataTemplate template = default;
 
-            if(item is ViewModel viewmodel)
+            if (item is ViewModel viewmodel)
             {
 
             }
 
             if (item is MethodNode methodNode)
             {
-                this.broadcast(new(item, MethodTemplate, container));
                 return MethodTemplate;
             }
             if (item is PropertyBase { DataTemplateKey: string key })
@@ -37,65 +43,59 @@ namespace Utility.PropertyTrees.WPF
                 {
                     template = UnknownTemplate;
                 }
-                this.broadcast(new(item, template, container));
                 return template;
             }
 
-
+            //if (propertyType?.FullName?.Equals("System.RuntimeType") == true)
+            //{
+            //    this.broadcast(new(item, TypeTemplate, container));
+            //    return TypeTemplate;
+            //}
             if (item is ReferenceProperty { } propertyBase)
             {
-                if((container as FrameworkElement).TryFindResource(new DataTemplateKey(propertyBase.PropertyType)) is DataTemplate dataTemplate)
+                if ((container as FrameworkElement).TryFindResource(new DataTemplateKey(propertyBase.PropertyType)) is DataTemplate dataTemplate)
                 {
                     return dataTemplate;
                 }
                 var collectionTemplate = HeaderTemplate(propertyBase.Ancestors.Count());
-                this.broadcast(new(item, collectionTemplate, container));
                 return collectionTemplate;
             }
 
             if (item is RootProperty)
             {
-                this.broadcast(new(item, RootTemplate, container));
                 return RootTemplate;
             }
             if (item is not ValueProperty { Descriptor: { PropertyType: var propertyType } } propertyNode)
             {
-                this.broadcast(new(item, UnknownTemplate, container));
                 return UnknownTemplate;
             }
             if (propertyType == typeof(Guid))
             {
-                this.broadcast(new(item, StringTemplate, container));
                 return StringTemplate;
             }
             if (propertyType == typeof(DateTime))
             {
-                this.broadcast(new(item, StringTemplate, container));
                 return StringTemplate;
             }
             if (propertyType == typeof(string))
             {
-                this.broadcast(new(item, StringTemplate, container));
                 return StringTemplate;
             }
             if (propertyType == typeof(bool))
             {
-                this.broadcast(new(item, BooleanTemplate, container));
                 return BooleanTemplate;
             }
             if (propertyType == typeof(double))
             {
-                this.broadcast(new(item, DoubleTemplate, container));
                 return DoubleTemplate;
             }
             if (propertyType == typeof(int))
             {
-                this.broadcast(new(item, IntegerTemplate, container));
                 return IntegerTemplate;
             }
             if (propertyType.IsEnum)
             {
-                this.broadcast(new(item, EnumTemplate, container));
+
                 return EnumTemplate;
             }
             //if (propertyType?.FullName?.Equals("System.RuntimeType") == true)
@@ -105,11 +105,10 @@ namespace Utility.PropertyTrees.WPF
             //}
 
 
-            template = UnknownTemplate;
-            this.broadcast(new(item, template, container));
-            return template;
+            return UnknownTemplate;
             //return base.SelectTemplate(item, container);
         }
+
 
         private void broadcast(SelectTemplateEvent selectTemplateEvent)
         {

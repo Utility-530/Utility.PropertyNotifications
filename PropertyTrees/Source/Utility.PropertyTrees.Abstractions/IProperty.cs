@@ -20,7 +20,7 @@ public interface IProperty
 
     //IViewModel ViewModel { get; }
 
-    public virtual bool IsCollection => PropertyType != null ? PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(PropertyType) : false;
+    public virtual bool IsCollection => PropertyType != null && PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(PropertyType);
 
     bool IsString { get; }
 

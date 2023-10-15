@@ -3,7 +3,7 @@ using Utility.Models;
 using Utility.Nodes.Abstractions;
 using Utility.PropertyTrees;
 
-public record StartEvent(RootProperty Property):Event;
+public record StartEvent(RootProperty Property) : Event;
 
 public record ConnectRequest() : Request;
 public record ScreensaverRequest() : Request;
@@ -13,21 +13,21 @@ public record ServerRequest(string IP, int Port) : Request;
 public record ServerResponse(bool IsInitialised) : Response(IsInitialised);
 
 public record ClientMessageRequest(string Name, string Message) : Request;
-public record ClientMessageResponse(DateTime DateTime ) : Response(DateTime);
+public record ClientMessageResponse(DateTime DateTime) : Response(DateTime);
 
 
 public enum ServerEventType
 {
-    Open,Close, Error, Exit, Message,
+    Open, Close, Error, Exit, Message,
     Enter,
     Data
 }
 
 public record ServerEvent(ServerEventType Type) : Event
 {
-        public Exception? Exception { get; init; }
-        public UdpClient? Client { get; init; }
-        public ClientData? Data { get; init; }
+    public Exception? Exception { get; init; }
+    public UdpClient? Client { get; init; }
+    public ClientData? Data { get; init; }
 }
 
 //public record ServerEvent(ServerEventType Type) : Event;
@@ -42,15 +42,15 @@ internal static class ServerEventsFactory
     public static ServerEvent ErrorEvent(Exception exception)
     {
         return new ServerEvent(ServerEventType.Error) { Exception = exception };
-    }   
-    
+    }
+
     public static ServerEvent OpenEvent()
     {
         return new ServerEvent(ServerEventType.Open) { };
     }
     public static ServerEvent CloseEvent()
     {
-        return new ServerEvent(ServerEventType.Close) {  };
+        return new ServerEvent(ServerEventType.Close) { };
     }
     public static ServerEvent EnterEvent(UdpClient Client)
     {
@@ -58,7 +58,7 @@ internal static class ServerEventsFactory
     }
     public static ServerEvent ExitEvent(UdpClient Client)
     {
-        return new ServerEvent(ServerEventType.Exit) {  Client = Client };
+        return new ServerEvent(ServerEventType.Exit) { Client = Client };
     }
     public static ServerEvent MessageEvent(UdpClient Client, ClientData ClientData)
     {
