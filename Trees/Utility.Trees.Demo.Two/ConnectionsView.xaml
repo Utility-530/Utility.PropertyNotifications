@@ -1,0 +1,138 @@
+﻿<UserControl x:Class="Utility.Trees.Demo.Two.ConnectionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Utility.Trees.Demo.Two"
+             xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
+             d:Background="White"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance local:ConnectionsViewModel}"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Aligned.xaml"/>   
+                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/TreeListView.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <Style TargetType="TreeViewItem" BasedOn="{StaticResource AlignedTreeViewitemStyle}">
+                <Setter Property="IsExpanded" Value="True" />
+                <Setter Property="Background" Value="GhostWhite" />
+            </Style>
+
+            <Style TargetType="Button">
+                <Setter Property="Width" Value="100"  />
+                <Setter Property="Margin" Value="2"  />
+            </Style>
+
+
+            <DataTemplate DataType="{x:Type local:ViewModel}">
+                <TextBlock Text="{Binding Name}"></TextBlock>
+            </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type local:Service}">
+                <TextBlock Text="{Binding Name}"></TextBlock>
+            </DataTemplate>
+
+
+            <HierarchicalDataTemplate DataType="{x:Type tree:Tree}" ItemsSource="{Binding }">
+                <ContentControl Content="{Binding Data, Mode=OneTime}">
+                </ContentControl>
+            </HierarchicalDataTemplate>
+        </ResourceDictionary>
+
+
+    </FrameworkElement.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="Grid" >
+            <ItemsControl  x:Name="ItemsControl" ItemsSource="{Binding Lines}" >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas IsItemsHost="True"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Line 
+                            X1="{Binding StartPoint.X}"
+                            Y1="{Binding StartPoint.Y}"
+                            X2="{Binding EndPoint.X}"
+                            Y2="{Binding EndPoint.Y}"
+                            Stroke="Black"                           
+                            StrokeThickness="2"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Grid  Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="500"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <ContentControl x:Name="TreeContent">
+                
+                </ContentControl>
+
+                <Grid Grid.Column="1" Background="Transparent"/>
+
+                <ListBox Grid.Column="2" Background="Transparent"
+                     ItemsSource="{Binding ServiceModel}"
+                     x:Name="TreeView2"   
+                         PreviewMouseUp="TreeView2_PreviewMouseUp"
+                  SelectionChanged="TreeView2_SelectedItemChanged">
+                </ListBox>
+            </Grid>
+        </Grid>
+
+
+
+        <ItemsControl Grid.Row="1">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <Button Content="Clear" Click="Clear_Click">
+
+            </Button>
+        </ItemsControl>
+        <ListView ItemsSource="{Binding Lines}" Grid.Row="2">
+
+            <ListView.View>
+
+                <GridView AllowsColumnReorder="true" >
+
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Id}" Header="Id" Width="100"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=StartPoint.X}" Header="X1" Width="100"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path= StartPoint.Y}"  Header="Y1"  Width="100"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=EndPoint.X}" Header="X2" Width="100"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path= EndPoint.Y}"  Header="Y2"  Width="100"/>
+
+                </GridView>
+
+            </ListView.View>
+        </ListView>
+
+        <ListView ItemsSource="{Binding Connections}" Grid.Row="3">
+            <ListView.View>
+                <GridView AllowsColumnReorder="true" >
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Id}" Header="Id" Width="100"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=ViewModelName}" Header="ViewModel" Width="100"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path= ServiceName}"  Header="Service"  Width="100"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</UserControl>
+
