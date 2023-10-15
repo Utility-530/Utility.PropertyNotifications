@@ -1,11 +1,22 @@
 ﻿using Jellyfish;
+using NetFabric.Hyperlinq;
+using ReactiveUI;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Linq;
+using System.Reactive.Disposables;
+
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using Utility.Enums;
 using Utility.Helpers;
 using Utility.Trees.Abstractions;
-using static Evan.Wpf.DependencyHelper;
+using Utility.Trees.Demo.Infrastructure;
+using Utility.Trees.Demo.Two;
+using Svc = Utility.Trees.Demo.Infrastructure.Service;
 
 namespace Utility.Trees.Demo
 {
@@ -14,88 +25,78 @@ namespace Utility.Trees.Demo
     /// </summary>
     public partial class DynamicTreeView : UserControl
     {
-        readonly static DependencyProperty
-            TreeProperty = Register(new PropertyMetadata(TreeChanged)),
-            DataProperty = Register(new PropertyMetadata(DataChanged));
-
-        private static void DataChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is DynamicTreeView dynamicTreeView && e.NewValue is not null)
-            {
-                dynamicTreeView.Tree.Data = e.NewValue;
-            }
-        }
-
-        private static void TreeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is DynamicTreeView dynamicTreeView && e.NewValue is IDynamicTree tree)
-            {
-                //dynamicTreeView.ItemsControl.ItemsSource = tree.Items;
-                dynamicTreeView.TreeView3.ItemsSource = tree.Items;
-
-                dynamicTreeView.DirectionButtons.Enabled = Direction.None;
-                dynamicTreeView.EditCollectionButtons.Enabled = AddRemove.None;
-
-                tree
-                    .Subscribe(a =>
-                    {
-                        dynamicTreeView.Change(tree.State);
-                    });
-            }
-        }
-
+        DynamicTree tree = new(new Tree(new Persist() { Guid = Guid.NewGuid(), Name = "root" }));
 
         public DynamicTreeView()
         {
             InitializeComponent();
 
-            DirectionButtons.Command = new RelayCommand<Direction>((a) =>
+            DirectionButtons.Command = new RelayCommand<Direction>((direction) =>
             {
-                switch (a)
+                switch (direction)
                 {
                     case Direction.Left:
-                        Tree.State = State.Back;
+                        tree.State = State.Back;
                         break;
                     case Direction.Right:
-                        Tree.State = State.Forward;
+                        tree.State = State.Forward;
+                        tree.State = State.Forward;
                         break;
                     case Direction.Up:
-                        Tree.State = State.Up;
+                        tree.State = State.Up;
                         break;
                     case Direction.Down:
-                        Tree.State = State.Down;
+                        tree.State = State.Down;
                         break;
                 }
-
             });
 
-            EditCollectionButtons.Command = new RelayCommand<AddRemove>((a) =>
+            EditCollectionButtons.Command = new RelayCommand<AddRemove>((addRemove) =>
             {
-                switch (a)
+                switch (addRemove)
                 {
                     case AddRemove.Add:
-                        Tree.State = State.Add;
+                        tree.State = State.Add;
                         break;
                     case AddRemove.Remove:
-                        Tree.State = State.Remove;
+                        tree.State = State.Remove;
                         break;
                 }
             });
 
-
-            PersistenceButtons.Command = new RelayCommand<Persistence>((a) =>
+            PersistenceButtons.Command = new RelayCommand<Persistence>((loadSave) =>
             {
-                switch (a)
+                switch (loadSave)
                 {
                     case Persistence.Load:
                         var load = TreePersist.Instance.Load<Persist>();
-                        Tree.Tree = load;                
+                        if (load.Data != null)
+                            tree.Tree = (load);
                         break;
                     case Persistence.Save:
-                        TreePersist.Instance.Save(Tree.Tree as Tree<Persist>);
+                        TreePersist.Instance.Save(tree.Tree);
                         break;
                 }
             });
+
+            //NewButton.Command = new RelayCommand((a) =>
+            //{
+            //    tree.Tree = new PersistTree(new Persist() { Name = "root" });
+            //});
+
+            var bootStrapper = new Bootstrapper();
+
+            ConnectionsView.TreeContent.DataContext = tree;
+            DirectionButtons.Enabled = Direction.None;
+            EditCollectionButtons.Enabled = AddRemove.None;
+            ConnectionsView.ViewModel = new ConnectionsViewModel()
+            {
+                ServiceModel = bootStrapper.ResolveMany<Svc>().ToList(),
+                ViewModel = tree.Tree
+            };
+
+            _ = tree.WhenAnyValue(a => a.State)
+                .Subscribe(Change);
         }
 
 
@@ -103,7 +104,8 @@ namespace Utility.Trees.Demo
         {
             Direction direction = Direction.None;
             AddRemove addRemove = AddRemove.None;
-            foreach (var flag in EnumHelper.SeparateFlag(state))
+
+            foreach (var flag in EnumHelper.SeparateFlags(state))
             {
                 if (flag == State.Add)
                 {
@@ -134,22 +136,59 @@ namespace Utility.Trees.Demo
 
                 }
             }
-
+            PropertyGroupDescription groupDescription = new PropertyGroupDescription("Sex");
             DirectionButtons.Enabled = direction;
             EditCollectionButtons.Enabled = addRemove;
         }
 
-        public IDynamicTree Tree
+        private void Generate_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            get { return (IDynamicTree)GetValue(TreeProperty); }
-            set { SetValue(TreeProperty, value); }
+            TreeView.Children.Clear();
+
+            var _tree = tree.Tree;
+            var _treeView = new TreeView();
+            Utility.Trees.Demo.Two.TreeHelper.ExploreTree(
+                _treeView.Items,
+                (a, b) => { a.Add(new TreeViewItem() { Header = (b.Data), HeaderTemplateSelector = HeaderTemplateSelector }); return a; },
+                (a, b) => { },
+                _tree,
+                (a) =>
+                {
+                    return System.Reactive.Linq.Observable.Create<NotifyCollectionChangedEventArgs>(observer =>
+                    {
+                        observer.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, (IList)a.Items));
+                        return Disposable.Empty;
+                    });
+                },
+                SelectNewItems<ITree>,
+                SelectOldItems<ITree>);
+
+            TreeView.Children.Add(_treeView);
+
+            static IEnumerable<T> SelectNewItems<T>(NotifyCollectionChangedEventArgs args)
+            {
+                return args.NewItems?.Cast<T>() ?? Array.Empty<T>();
+            }
+
+            static IEnumerable<T> SelectOldItems<T>(NotifyCollectionChangedEventArgs args)
+            {
+                return args.OldItems?.Cast<T>() ?? Array.Empty<T>();
+            }
         }
 
-        public object Data
-        {
-            get { return (object)GetValue(DataProperty); }
-            set { SetValue(DataProperty, value); }
+        HeaderTemplateSelector HeaderTemplateSelector { get; } = new();
+    }
 
+    public class HeaderTemplateSelector : DataTemplateSelector
+    {
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        {
+            var buttonTemplate = Application.Current.Resources["Button"] as DataTemplate;
+            if (buttonTemplate != null)
+            {
+                return buttonTemplate;
+            }
+            return base.SelectTemplate(item, container);
         }
     }
 }

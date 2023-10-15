@@ -8,11 +8,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
 using Utility.Persists;
-using Utility.Persists.Infrastructure;
-using Utility.Trees;
+using Utility.Trees.Abstractions;
 
-namespace Utility.Trees.Demo
+namespace Utility.Trees.Demo.Infrastructure
 {
 
     public interface IOrm
@@ -20,29 +21,41 @@ namespace Utility.Trees.Demo
         IFreeSql Orm { get; set; }
     }
 
-    public class Persist : IOrm, IPersist
+    public class Persist : IOrm, IPersist, IClone, IGuid, IName
     {
+
+        public Persist()
+        {
+        }
+
         public IFreeSql Orm { get; set; }
 
         [Column(IsIdentity = true, IsPrimary = true)]
-        public Guid Key { get; set; }
+        public Guid Guid { get; set; }
         public string Name { get; set; }
 
-        public async void Load(Guid key)
+        public object Clone()
         {
-            Key = key;
-            var x = await Orm.Select<Persist>().Where(a => a.Key == key).ToListAsync();
-            Name = x.Single().Name;
+            return new Persist { Guid = Guid.NewGuid(), Name = this.Name + " 1" };
         }
 
-        public void Save(Guid key)
+        public async virtual void Load(Guid key)
         {
-            this.Key = key;
+            Guid = key;
+            var x = await Orm.Select<Persist>().Where(a => a.Guid == key).ToListAsync();
+            var single = x.SingleOrDefault();
+            Name = single?.Name;
+        }
+
+        public virtual void Save(Guid key)
+        {
+            this.Guid = key;
             Orm.Insert(this).ExecuteAffrows();
         }
+
         public override string ToString()
         {
-            return Name;
+            return this.GetType().Name + " Name: " + Name;
         }
     }
 
@@ -53,7 +66,7 @@ namespace Utility.Trees.Demo
             FreeSqlFactory.InitialiseSQLite();
         }
 
-        public void Save<T>(ITree<T> tree) where T : IOrm, IPersist
+        public void Save(ITree tree)
         {
             using (var uow = BaseEntity.Orm.CreateUnitOfWork())
             {
@@ -61,18 +74,30 @@ namespace Utility.Trees.Demo
                 List<ChildParentPair> pairs = new();
                 tree.Visit(t =>
                 {
-                    var key = t.Parent?.Key;
-                    if (key is Guid k)
+                    //if (t.IsRoot())
+                    //    return;
+                    if (t.Data is not IPersist persist)
                     {
-                        t.Data.Orm = uow.Orm;
-                        t.Data.Save(t.Key);
-                        var x = new ChildParentPair { Parent = k, Child = t.Key };
-                        pairs.Add(x);
+                        throw new Exception("dsf");
                     }
-                    else
+                    if (t.Data is not IGuid key)
                     {
-                        t.Data.Orm = uow.Orm;
-                        t.Data.Save(t.Key);        
+                        throw new Exception("ds2 w");
+                    }
+                    if (t.Parent is not null && t.Parent.Data is not IGuid)
+                    {
+                        throw new Exception("ds2 w");
+                    }
+                    var keyParent = t.Parent as IGuid;
+                    //var key = t.Parent?.Key;
+
+                        if (t.Data is IOrm orm)
+                            orm.Orm = uow.Orm;
+                        persist.Save(key.Guid);
+                    if (t.IsRoot() == false)
+                    {
+                        var x = new ChildParentPair { Parent = keyParent?.Guid ?? Guid.Empty, Child = key.Guid };
+                        pairs.Add(x);
                     }
                 });
 
@@ -87,23 +112,12 @@ namespace Utility.Trees.Demo
             using (var uow = BaseEntity.Orm.CreateUnitOfWork())
             {
 
-                //tree.Visit(t =>
-                //{
-                //    var key = t.Parent?.Key;
-                //    if (key is Guid k)
-                //    {
-                //        t.Data.Save(t.Key);
-                //        var x = new ChildParentPair { Parent = k, Child = t.Key };
-                //        pairs.Add(x);
-                //    }
-                //});
-
                 var pairs = uow.Orm.Select<ChildParentPair>().ToList();
                 var keys = pairs.Select(a => a.Parent).ToList();
-                
+
                 Tree<T> tree = null;
                 var persist = pairs.GetEnumerator();
-                while(keys.Count > 0) 
+                while (keys.Count > 0)
                 {
                     if (persist.MoveNext() == false)
                     {
@@ -117,9 +131,9 @@ namespace Utility.Trees.Demo
                     {
                         var t2 = new T() { Orm = uow.Orm };
                         t2.Load(pair.Parent);
-                        tree = new Tree<T>(t2) { Key = pair.Parent};
-                    }                
-                    if(tree.Match(pair.Parent) is ITree<Persist> branch)
+                        tree = new Tree<T>(t2) { Key = pair.Parent };
+                    }
+                    if (tree.Match(pair.Parent) is ITree<Persist> branch)
                     {
                         var t = new T() { Orm = uow.Orm };
                         t.Load(pair.Child);

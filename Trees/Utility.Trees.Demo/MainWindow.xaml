@@ -3,8 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Utility.Trees.Demo"
-        xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
+        xmlns:local="clr-namespace:Utility.Trees.Demo.Infrastructure"
+        xmlns:demo="clr-namespace:Utility.Trees.Demo"
+        xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees" 
+        xmlns:two="clr-namespace:Utility.Trees.Demo.Two" 
+        xmlns:view="http://schemas.utility.com" 
+        xmlns:shared="https://github.com/wim07101993/AnyObjectEditor"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>
@@ -15,7 +19,38 @@
             <TextBlock Text="{Binding Name}"></TextBlock>
         </DataTemplate>
 
-        <Style TargetType="HeaderedContentControl">
+        <DataTemplate DataType="{x:Type local:Property}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <!--<RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>-->
+                </Grid.RowDefinitions>
+
+                <ToolBar>
+                    <TextBlock>Type</TextBlock>
+                    <view:EnumItemsControl
+                            x:Name="ebdc"
+                            Orientation="Horizontal"
+                            Enum="{x:Type shared:ENativeType}" />
+                </ToolBar>
+                <WrapPanel  Grid.Row="1">
+                    <TextBlock>Value</TextBlock>
+                    <shared:NativeTypeEditor
+                x:Name="NativeTypeEditor"
+            Width="200"
+            Height="30"
+            Type="{Binding ElementName=ebdc, Path=Value}"
+                
+           />
+                </WrapPanel>
+
+
+            </Grid>
+        </DataTemplate>
+
+        <!--<Style TargetType="HeaderedContentControl">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type HeaderedContentControl}">
@@ -50,27 +85,38 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-        </Style>
+        </Style>-->
     </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
 
-    
-    <UniformGrid Rows="1">
-        <ContentControl x:Name="ContentControl1" >
-            <ContentControl.ContentTemplate>
-                <DataTemplate>
-                    <local:DynamicTreeView Tree="{Binding }"></local:DynamicTreeView>
-                </DataTemplate>
-            </ContentControl.ContentTemplate>
-        </ContentControl>
-        
-        <ContentControl x:Name="ContentControl2" >
-            <ContentControl.ContentTemplate>
-                <DataTemplate>
-                    <local:DynamicTreeView Tree="{Binding }"></local:DynamicTreeView>
-                </DataTemplate>
-            </ContentControl.ContentTemplate>
-        </ContentControl>
-    </UniformGrid>
+        <!--<ToolBar>
+            <ComboBox x:Name="DataItems" Grid.Row="0" Width="120" SelectedIndex="0"/>
+        </ToolBar>-->
 
- 
+        <UniformGrid Rows="1"  Grid.Row="1">
+            <ContentControl x:Name="ContentControl1" >
+                <ContentControl.ContentTemplate>
+                    <DataTemplate>
+                        <demo:DynamicTreeView ></demo:DynamicTreeView>
+                    </DataTemplate>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+
+            <!--<two:ConnectionsView></two:ConnectionsView>-->
+            <!--<ContentControl x:Name="ContentControl2" >
+                <ContentControl.ContentTemplate>
+                    <DataTemplate>
+                        <demo:DynamicTreeView Tree="{Binding }"></demo:DynamicTreeView>
+                    </DataTemplate>
+                </ContentControl.ContentTemplate>
+            </ContentControl>-->
+        </UniformGrid>
+
+
+    </Grid>
+
 </Window>

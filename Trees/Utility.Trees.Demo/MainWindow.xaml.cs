@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
 using Utility.Trees.Abstractions;
+using Utility.Trees.Demo.Infrastructure;
+using Utility.WPF.Reactive;
 
 namespace Utility.Trees.Demo
 {
@@ -9,45 +11,69 @@ namespace Utility.Trees.Demo
     /// </summary>
     public partial class MainWindow : Window
     {
-        DynamicTree Trees;
-        readonly DynamicTree history;
 
         public MainWindow()
         {
             InitializeComponent();
-            Trees = new(new Tree<Persist>(new Persist() { Name = "root" }) { });
-            history = new();
-            Trees
-                .Subscribe(tree =>
-                {
-                    int index = 0;
+           
+            //var bootStrapper = new Bootstrapper();
 
-                    if (history.Items.Count == 0)
-                    {
-                        history.Current = new Tree(tree);
-                    }
-                    else if(tree != history.Current.Data)
-                    {
-                        history.Data = tree as ITree<Persist>;
-                        history.State = State.Down;
-                    }
-                });
+            //history = new();
+            //tree
+            //    .Subscribe(tree =>
+            //    {
+            //        //int index = 0;
 
-            history
-                .Subscribe(tree =>
-                {
-                    if (tree.State != State.Add)
-                    {
-                        Trees.Current = tree.Data as ITree<Persist>;
-                    }
-                });
+            //        //if (history.Items.Count == 0)
+            //        //{
+            //        //    history.Current = new Tree(tree);
+            //        //}
+            //        //else if (tree != history.Current.Data)
+            //        //{
+            //        //    history.Data = tree as ITree<Persist>;
+            //        //    history.State = State.Down;
+            //        //}
+            //    });
 
-            ContentControl1.Content = Trees;
-            ContentControl2.Content = history;
+            //history
+            //    .Subscribe(tree =>
+            //    {
+            //        if (tree.State != State.Add)
+            //        {
+            //            this.tree.Current = tree.Data as ITree<Persist>;
+            //        }
+            //    });
+
+            //ContentControl1.Content = tree;
+            //ContentControl2.Content = history;
+
+            //DataItems.ItemsSource = bootStrapper.ResolveMany<Persist>();
+
+            //DataItems.SelectItemChanges<Persist>()
+            //    .Subscribe(a =>
+            //    {
+            //        tree.Current.Add( a);
+            //    });
 
         }
 
 
+    }
+
+    public class PersistTree : Tree<Persist>
+    {
+        public PersistTree(Persist data, params object[] items) : base(data, items)
+        {
+        }
+
+        protected override object Clone(object data)
+        {
+            if (data is Persist persist)
+            {
+                return new Persist { Guid = Guid.NewGuid() };
+            }
+            throw new Exception("FDSGF fddfgfd");
+        }
     }
 
 }

@@ -10,6 +10,10 @@
                 <ResourceDictionary Source="/Utility.Trees.Demo;component/Themes/Style.TreeView.xaml"/>-->
                 <!--<ResourceDictionary Source="/Utility.Trees.Demo;component/Themes/TreeViewItemStyle.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate x:Key="Button">
+                <Button Background="IndianRed" Height="30" Width="30"></Button>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
