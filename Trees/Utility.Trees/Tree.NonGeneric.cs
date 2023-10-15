@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using AnyClone;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -24,7 +25,7 @@ namespace Utility.Trees
             return new Tree(data, items);
         }
 
-        public static void Visit(ITree tree, Action<ITree> action)
+        public static void Visit(this ITree tree, Action<ITree> action)
         {
             action(tree);
             if (tree.HasItems)
@@ -32,7 +33,7 @@ namespace Utility.Trees
                     Visit(item, action);
         }
 
-        public static ITree? Match(ITree tree, Predicate<ITree> action)
+        public static ITree? Match(this ITree tree, Predicate<ITree> action)
         {
             if (action(tree))
             {
@@ -49,6 +50,11 @@ namespace Utility.Trees
 
             return null;
         }
+
+        public static bool IsRoot(this ITree tree)
+        {
+            return tree.Index.Collection.Any() == false;
+        }
     }
 
 
@@ -60,9 +66,8 @@ namespace Utility.Trees
     public class Tree : ITree, IEnumerable<ITree>, INotifyPropertyChanged
     {
         private IList items;
-        private object data;
-
-        protected ITree parent;
+        private object? data;
+        protected ITree? parent;
         private bool flag;
         private State state;
 
@@ -83,8 +88,8 @@ namespace Utility.Trees
         {
             if (data != null)
                 this.data = data;
-            else
-                this.data = "root";
+            //else
+            //    this.data = "root";
             if (items.Any())
                 Add(items);
         }
@@ -150,6 +155,8 @@ namespace Utility.Trees
                     m_items[index] = value as ITree;
             }
         }
+
+
 
         public virtual void Add(object data)
         {
@@ -242,27 +249,68 @@ namespace Utility.Trees
             throw new InvalidOperationException("Cannot add unknown content type.");
         }
 
-        public ITree CloneTree()
+        protected virtual object Clone(object data)
         {
-            var result = CloneNode(this);
-            if (this.HasItems)
-                result.Add(this.Items);
-            return result;
+            if(data is IClone clone)
+            {
+                return clone.Clone();
+            }
+            return data.Clone();
         }
 
-        protected virtual ITree CloneNode(ITree item)
+        public virtual ITree Add()
         {
-            return new Tree(item.Data);
+            var data = Clone(this.Data);
+            var tree = new Tree(data);
+            this.items.Add(tree);
+            tree.Parent = this;
+            return tree;
         }
 
-        public object Data { get => data; private set => data = value; }
+        public virtual ITree Remove()
+        {
+            this.Parent = null;
+            this.Parent?.Remove(this);
+            return this.Parent;
+        }
+
+
+        //public ITree Clone()
+        //{
+        //    var result = CloneNode(this);
+        //    if (this.HasItems)
+        //        result.Add(this.Items);
+        //    return result;
+        //}
+
+        //protected virtual ITree CloneNode(ITree item)
+        //{
+        //    return new Tree(item.Data);
+        //}
+
+        //public ITree Delete()
+        //{
+        //    var result = CloneNode(this);
+        //    if (this.HasItems)
+        //        result.Add(this.Items);
+        //    return result;
+        //}
+
+        //protected virtual ITree CloneNode(ITree item)
+        //{
+        //    return new Tree(item.Data);
+        //}
+
+
+
+        public object Data { get => data; set => data = value; }
 
         public virtual bool HasItems
         {
             get { return m_items != null && m_items.Count > 0; }
         }
 
-        public ITree Parent { get => parent; set => parent = value; }
+        public ITree? Parent { get => parent; set => parent = value; }
 
         public IReadOnlyList<ITree> Items
         {
@@ -293,7 +341,7 @@ namespace Utility.Trees
                 return new Index { Collection = indices.Reverse().ToArray() };
                 IEnumerable<int> Indices()
                 {
-                    ITree parent = this.Parent;
+                    ITree? parent = this.Parent;
                     ITree child = this;
                     while (parent != null)
                     {
@@ -310,10 +358,10 @@ namespace Utility.Trees
         private void ResetOnCollectionChangedEvent()
         {
             if (m_items != null)
-                (m_items as ObservableCollection<ITree>).CollectionChanged -= ItemsOnCollectionChanged;
+                ((ObservableCollection<ITree>)m_items).CollectionChanged -= ItemsOnCollectionChanged;
         }
 
-        private void ItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
             if (args.Action == NotifyCollectionChangedAction.Add && args.NewItems != null)
             {

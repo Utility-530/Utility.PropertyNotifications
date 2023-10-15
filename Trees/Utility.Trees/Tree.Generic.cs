@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using AnyClone;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Trees
 {
@@ -19,6 +21,13 @@ namespace Utility.Trees
             if (items.Any())
                 Add(items);
         }
+
+        public Tree(params object[] items) : base(items)
+        {
+            if (items.Any())
+                Add(items);
+        }
+
 
         public ITree<T>? this[T item]
         {
@@ -132,6 +141,24 @@ namespace Utility.Trees
             throw new InvalidOperationException("Cannot add unknown content type.");
         }
 
+        public override ITree<T> Add()
+        {
+            var data = this.Data.Clone();
+            var tree = new Tree<T>(data);
+            this.m_items.Add(tree);
+            tree.Parent = this;
+            return tree;
+        }
+
+        public override ITree<T> Remove()
+        {
+            var parent = this.Parent;
+            this.Parent.Remove(this);
+            this.Parent = null;
+            return parent;
+        }
+
+
         public void Remove(T data)
         {
             var single = m_items.OfType<ITree<T>>().Single(a => a.Data.Equals(data));
@@ -139,20 +166,20 @@ namespace Utility.Trees
             return;
         }
 
-        public ITree<T> CloneTree(ITree<T> item)
-        {
-            var result = CloneNode(item);
-            if (item.HasItems)
-                result.Add(item.Items);
-            return result;
-        }
+        //public ITree<T> CloneTree(ITree<T> item)
+        //{
+        //    var result = CloneNode(item);
+        //    if (item.HasItems)
+        //        result.Add(item.Items);
+        //    return result;
+        //}
 
-        protected virtual ITree<T> CloneNode(ITree<T> item)
-        {
-            return new Tree<T>(item.Data);
-        }
+        //protected virtual ITree<T> CloneNode(ITree<T> item)
+        //{
+        //    return new Tree<T>(item.Data);
+        //}
 
-        public new T Data { get => data; private set => data = value; }
+        public new T Data { get => data; set => data = value; }
 
         public new ITree<T> Parent { get => (ITree<T>)parent; set => parent = value; }
 
@@ -242,6 +269,17 @@ namespace Utility.Trees
 
     public static class TreeHelper
     {
+        public static void Add<T>(this ITree<T> tree, T data)
+        {
+
+        }
+
+        public static void Remove<T>(this ITree<T> tree, T data)
+        {
+
+
+
+        }
         public static ITree<T> Create<T>(T data)
         {
             return new Tree<T>(data);

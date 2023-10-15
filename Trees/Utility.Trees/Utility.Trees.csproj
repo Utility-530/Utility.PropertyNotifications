@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AnyClone" Version="1.1.6" />
+  </ItemGroup>
+
+  <ItemGroup>
 		<ProjectReference Include="..\..\Observables\Utility.Observables\Utility.Observables.csproj" />
 		<ProjectReference Include="..\..\Trees\Utility.Trees.Abstractions\Utility.Trees.Abstractions.csproj" />
   </ItemGroup>
