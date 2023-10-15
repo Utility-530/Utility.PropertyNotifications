@@ -6,7 +6,6 @@ using System.Windows.Media;
 
 namespace Utility.WPF.Converters
 {
-    [ValueConversion(typeof(System.Drawing.Color), typeof(Color))]
     public class ColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
