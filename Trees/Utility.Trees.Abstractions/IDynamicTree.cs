@@ -8,7 +8,7 @@ namespace Utility.Trees
 
         State State { get; set; }
 
-        object Data { get; set; }
         ITree Tree { get; set; }
+        ITree Current { get; set; }
     }
 }

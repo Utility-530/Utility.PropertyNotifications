@@ -1,6 +1,4 @@
-﻿using Utility.Trees.Abstractions;
-
-namespace Utility.Trees
+﻿namespace Utility.Trees.Abstractions
 {
     /// <summary>
     /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
@@ -15,9 +13,13 @@ namespace Utility.Trees
 
         void Remove(object data);
 
+        ITree Add();
+
+        ITree Remove();
+
         Index Index { get; }
 
-        ITree Parent { get; }
+        ITree Parent { get; set; }
 
         IReadOnlyList<ITree> Items { get; }
 
@@ -34,7 +36,7 @@ namespace Utility.Trees
 
         int IndexOf(ITree tree);
 
-        State State { get; set; }
+        //State State { get; set; }
     }
 
     /// <summary>
@@ -43,7 +45,7 @@ namespace Utility.Trees
     /// <typeparam name="T"></typeparam>
     public interface ITree<T> : ITree, IEnumerable<ITree<T>>
     {
-        new ITree<T> Parent { get; }
+        new ITree<T>? Parent { get; set; }
 
         ITree<T> this[T item] { get; set; }
         new IReadOnlyList<ITree<T>> Items { get; }
@@ -55,6 +57,10 @@ namespace Utility.Trees
         void Add(T data);
 
         void Remove(T data);
+
+        new ITree<T> Add();
+
+        new ITree<T> Remove();
 
         int IndexOf(ITree<T> tree);
     }

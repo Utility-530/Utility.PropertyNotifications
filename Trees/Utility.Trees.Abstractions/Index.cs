@@ -4,8 +4,13 @@
 
 namespace Utility.Trees
 {
-    public class Index
+    public record Index
     {
+        public Index(params int[] indexes)
+        {
+            Collection = indexes;
+        }
+
         public IReadOnlyCollection<int> Collection { get; init; }
 
         public override string ToString()
