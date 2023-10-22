@@ -4,6 +4,6 @@ namespace Utility.Interfaces.NonGeneric
 {
     public interface IPropertyInfo
     {
-        PropertyInfo Property { get; }
-    }
+        PropertyInfo PropertyInfo { get; }
+    }   
 }
