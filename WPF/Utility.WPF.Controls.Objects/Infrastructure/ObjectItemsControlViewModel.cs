@@ -47,7 +47,7 @@ namespace Utility.WPF.Controls.Objects.Infrastructure
                             Value = value;
                             foreach (var x in enums)
                             {
-                                x.IsChecked = x.Property == e;
+                                x.IsChecked = x.PropertyInfo == e;
                             }
 
                         }).DisposeWith(disposable);
@@ -120,9 +120,9 @@ namespace Utility.WPF.Controls.Objects.Infrastructure
                 }
             }
 
-            public PropertyInfo Property => info;
+            public PropertyInfo PropertyInfo => info;
 
-            public string Name => info.Name;
+            //public string Name => info.Name;
             public override object? Value => value;
 
             public ICommand Command => command;

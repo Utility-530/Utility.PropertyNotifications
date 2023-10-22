@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using Tiny.Toolkits;
+using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 
 namespace Utility.WPF.Controls.Objects
@@ -9,12 +10,18 @@ namespace Utility.WPF.Controls.Objects
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            var type = item?.GetType();
+            object value = item;
+            if (item is IValue { Value: var _value })
+            {
+                value = _value;
+            }
+
+            var type = value?.GetType();
             if (type?.FullName?.Equals("System.RuntimeType") == true)
             {
                 return TypeTemplate;
             }
-            if (type?.IsValueType == false && item is not string s)
+            if (type?.IsValueType == false && value is not string s)
             {
                 return ObjectComboBoxTemplate;
             }

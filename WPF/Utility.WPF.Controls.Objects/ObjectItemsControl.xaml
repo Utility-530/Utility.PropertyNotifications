@@ -13,7 +13,7 @@
                                 Margin="3"
                                 IsChecked="{Binding IsChecked}"
                                 Command="{Binding Command, Mode=OneWay}"
-                                Content="{Binding Property.Name, Mode=OneWay}" />
+                                Content="{Binding PropertyInfo.Name, Mode=OneWay}" />
                 </DataTemplate>
             </Setter.Value>
         </Setter>

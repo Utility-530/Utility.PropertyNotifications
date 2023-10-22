@@ -76,7 +76,7 @@
                               SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
                             IsHitTestVisible="false" 
                             Grid.Column="0" 
-                            Text="{Binding SelectionBoxItem.Property.Name, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            Text="{Binding SelectionBoxItem.PropertyInfo.Name, RelativeSource={RelativeSource TemplatedParent}}"/>
                         <ContentControl x:Name="contentPresenter" 
                                         Grid.Column="1"
                                         ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
@@ -134,7 +134,7 @@
     </Style>
 
     <DataTemplate x:Key="ObjectComboBoxTemplate">
-        <local:ObjectComboBox Object="{Binding Mode=OneWay}"></local:ObjectComboBox>
+        <local:ObjectComboBox Object="{Binding Path=Value, Mode=OneWay}"></local:ObjectComboBox>
     </DataTemplate>
 
     <local:ValueObjectsDataTemplateSelector x:Key="ObjectsDataTemplateSelector"
@@ -167,7 +167,7 @@
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition/>
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock Margin="5" Grid.Column="0" Text="{Binding Property.Name}"/>
+                                                <TextBlock Margin="5" Grid.Column="0" Text="{Binding PropertyInfo.Name}"/>
                                                 <ContentControl Grid.Column="1" Content="{Binding Value, Mode=Oneway}"    
                                                                  ContentTemplateSelector="{StaticResource ObjectsDataTemplateSelector}"
                                                                   VerticalAlignment="Stretch"

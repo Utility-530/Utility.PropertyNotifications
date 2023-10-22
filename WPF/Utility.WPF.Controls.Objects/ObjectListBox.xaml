@@ -5,7 +5,7 @@
     xmlns:conv="http://schemas.utility.com/converters">
 
     <DataTemplate x:Key="ObjectComboBoxTemplate">
-        <local:ObjectComboBox Object="{Binding Mode=OneWay}"></local:ObjectComboBox>
+        <local:ObjectComboBox Object="{Binding Path=Value, Mode=OneWay}"></local:ObjectComboBox>
     </DataTemplate>
 
 
@@ -44,12 +44,12 @@
                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
                                        IsHitTestVisible="false" 
                                        Grid.Column="0" 
-                                       Text="{Binding Property.Name}"/>
+                                       Text="{Binding PropertyInfo.Name}"/>
                             
                             <ContentControl    
                                 ContentTemplateSelector="{StaticResource ObjectsDataTemplateSelector}"
                                 Grid.Column="1" 
-                                Content="{Binding Value}"
+                                Content="{Binding }"
                                 VerticalAlignment="Center"
                                 HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"

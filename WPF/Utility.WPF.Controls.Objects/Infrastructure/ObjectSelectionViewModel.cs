@@ -13,27 +13,31 @@ using System.Collections;
 using Utility.Interfaces.NonGeneric;
 using Utility.Commands;
 using static Utility.WPF.Controls.Objects.Infrastructure.ObjectItemsControlViewModel;
+using UnitsNet;
+using System.ComponentModel;
+using Utility.Helpers.Types;
+using System.Collections.Generic;
 
 namespace Utility.WPF.Controls.Objects.Infrastructure
 {
     public class ObjectSelectionViewModel : BaseViewModel
     {
-        private ObservableCollection<Item<Utility.Commands.ObservableCommand<PropertyInfo>>> items = new();
+        private ObservableCollection<Item<ObservableCommand<PropertyInfo>>> items = new();
         private bool isReadOnly;
         private object @object;
         private object value;
+        private int level;
 
         public ObjectSelectionViewModel()
         {
 
             CompositeDisposable? disposable = null;
 
-
             this
                 .WhenAnyValue(a => a.Object)
                 .WhereNotNull()
-                .CombineLatest(this.WhenAnyValue(a => a.IsReadOnly))
-                .Select(a => Build(a.First, a.Second))
+                .CombineLatest(this.WhenAnyValue(a => a.IsReadOnly, a => a.Level))
+                .Select(a => Build(a.First, a.Second.Item1, a.Second.Item2))
                 .Subscribe(items =>
                 {
                     this.items.Clear();
@@ -56,19 +60,38 @@ namespace Utility.WPF.Controls.Objects.Infrastructure
                     }
                 });
 
-            static Item<Utility.Commands.ObservableCommand<PropertyInfo>>[] Build(object? value, bool isReadOnly)
-            {
-                var properties = value.GetType()
-                    .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
-                    .Where(a => a.IsSpecialName == false)
-                    .ToArray();
 
-                return properties
+
+            static Item<Utility.Commands.ObservableCommand<PropertyInfo>>[] Build(object? value, bool isReadOnly, int level)
+            {
+                return Filter()
                     .Select(e => new Item<Utility.Commands.ObservableCommand<PropertyInfo>>(e, value, new Utility.Commands.ObservableCommand<PropertyInfo>(e), isReadOnly)
                     {
                         //IsChecked = Value?.Equals(e) == true
                     })
                     .ToArray();
+
+                IEnumerable<PropertyInfo> Filter()
+                {
+                    var properties = value.GetType()
+                        //.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
+                        .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                        .Where(a => a.IsSpecialName == false)
+                        .ToDictionary(a => a.Name, a => a);
+                    
+                    var highestType = value.GetType();
+
+                    foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(value).Cast<PropertyDescriptor>().OrderBy(d => d.Name))
+                    {
+                        int _level = descriptor.ComponentType.CompareLevel(highestType);
+
+                        if (_level <= level && descriptor.IsBrowsable)
+                        {
+                            yield return properties[descriptor.Name];
+                        }
+                    }
+
+                }
             }
         }
 
@@ -88,63 +111,20 @@ namespace Utility.WPF.Controls.Objects.Infrastructure
             set => Set(ref @object, value);
         }
 
+        public int Level
+        {
+            get => level;
+            set => Set(ref level, value);
+        }
+
         public object Value
         {
             get => value;
             private set => Set(ref this.value, value);
         }
 
+
+
         #endregion properties
-
-        //public class Item<T> : ReadOnlyViewModel, IObservable<PropertyInfo>, IPropertyInfo where T : IObservable<PropertyInfo>, ICommand
-        //{
-        //    private bool isChecked;
-        //    private readonly PropertyInfo info;
-        //    private readonly object @object;
-        //    private T command;
-
-        //    public Item(PropertyInfo info, object @object, T command, bool isReadOnly)
-        //    {
-        //        this.info = info;
-        //        this.@object = @object;
-        //        this.command = command;
-        //        IsReadOnly = isReadOnly;
-
-        //    }
-
-        //    public PropertyInfo Property => info;
-
-        //    public ICommand Command { get; }
-
-        //    public string Name => info.Name;
-        //    public object Value
-        //    {
-        //        get
-        //        {
-        //            try
-        //            {
-        //                return info.GetValue(@object);
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                return ex.Message;
-        //            }
-        //        }
-        //    }
-
-        //    public bool IsChecked
-        //    {
-        //        get => isChecked; set
-        //        {
-        //            isChecked = value;
-        //            OnPropertyChanged();
-        //        }
-        //    }
-
-        //    public IDisposable Subscribe(IObserver<PropertyInfo> observer)
-        //    {
-        //        return command.Subscribe(observer);
-        //    }
-        //}
     }
 }
