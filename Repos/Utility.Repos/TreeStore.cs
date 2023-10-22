@@ -2,6 +2,7 @@
 using Utility.Trees;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Repos
 {
