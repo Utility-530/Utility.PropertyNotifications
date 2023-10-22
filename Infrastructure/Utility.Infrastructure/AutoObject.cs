@@ -61,8 +61,6 @@ namespace Utility.Infrastructure
         [Browsable(false)]
         public virtual bool HasChanged { get; set; }
 
-        [Browsable(false)]
-        public virtual bool IsValid => Validate(null) == null;
 
         string IDataErrorInfo.this[string columnName] => Validate(columnName);
 
