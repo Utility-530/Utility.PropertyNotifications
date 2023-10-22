@@ -9,6 +9,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Utility.WPF.Demo.Common.ViewModels;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Demo.Trees
 {
@@ -32,7 +33,7 @@ namespace Utility.WPF.Demo.Trees
         void Initialise()
         {
             List<TreeViewItem> list = new();
-            TreeEnumerator.GetTreeViewItems(MyTreeView).ToArray();
+            var items = TreeViewHelper.TreeViewItems(MyTreeView).ToArray();
             var foo = new Uri("/Utility.WPF.Controls.Trees;component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute);
             var resourceDictionary = new ResourceDictionary() { Source = foo };
             var collection = new ObservableCollection<ButtonViewModel>();

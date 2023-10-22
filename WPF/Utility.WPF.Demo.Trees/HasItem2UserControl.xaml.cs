@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Windows.Controls;
 using Utility.Trees;
+using Utility.Trees.Abstractions;
 
 namespace Utility.WPF.Demo.Trees
 {
