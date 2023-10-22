@@ -1,0 +1,93 @@
+﻿using System;
+using System.Collections;
+using System.Drawing;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using Utility.Interfaces.NonGeneric;
+using Utility.WPF.Helpers;
+
+namespace Utility.WPF.Templates
+{
+
+
+
+    public abstract class GenericDataTemplateSelector : DataTemplateSelector
+    {
+
+        public DataTemplate? DefaultDataTemplate { get; set; }
+        public DataTemplate? BooleanDataTemplate { get; set; }
+        public DataTemplate? StringDataTemplate { get; set; }
+        public DataTemplate? EnumDataTemplate { get; set; }
+        public DataTemplate? NumberDataTemplate { get; set; }
+        public DataTemplate? IconDataTemplate { get; set; }
+        public DataTemplate? ColorDataTemplate { get; set; }
+        public DataTemplate? IConvertibleTemplate { get; set; }
+        public DataTemplate? DictionaryDataTemplate { get; set; }
+        public DataTemplate? EnumerableDataTemplate { get; set; }
+        public DataTemplate? NullDataTemplate { get; set; }
+        public DataTemplate? GuidDataTemplate { get; set; }
+
+
+        public virtual ResourceDictionary Templates { get; }
+
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        {        
+            if (item == null)
+                return NullDataTemplate ??= NullTemplate();
+
+            var type = item.GetType();
+           
+            var interfaces = type.GetInterfaces();
+
+            if (Templates[new DataTemplateKey(type)] is DataTemplate template)
+            {
+                return template;
+            }
+
+
+            if (interfaces.Any(a => a.Name == "IDictionary`2") || interfaces.Contains(typeof(IDictionary)))
+                return DictionaryDataTemplate ??= Templates["Dictionary"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Dictionary");
+            else if (type == typeof(string))
+                return StringDataTemplate ?? throw new Exception("Missing DataTemplate for String");
+            else if (interfaces.Contains(typeof(IEnumerable)))
+                return EnumerableDataTemplate ?? throw new Exception("Missing DataTemplate for Enumerable");
+            else if (type == typeof(Color))
+                return ColorDataTemplate ?? throw new Exception("Missing DataTemplate for Color");
+            else if (type == typeof(Guid))
+                return GuidDataTemplate ?? throw new Exception("Missing DataTemplate for Guid");
+            else if (type == typeof(Enum))
+                return EnumDataTemplate ?? throw new Exception("Missing DataTemplate for Enum");
+            //if (type == typeof(Utility.WPF.Abstract.Icon))
+            //    return IconDataTemplate;
+            else if (type == typeof(bool))
+                return BooleanDataTemplate ??= Templates[new DataTemplateKey(typeof(bool))] as DataTemplate ?? throw new Exception("Missing DataTemplate for Boolean");
+            else if (typeof(Enum).IsAssignableFrom(type))
+                return EnumDataTemplate ??= (DataTemplate)Templates[new DataTemplateKey(typeof(Enum))] ?? throw new Exception("Missing DataTemplate for Enum");
+
+            else if (type == typeof(int) || type == typeof(long) || type == typeof(double) || type == typeof(decimal))
+                return NumberDataTemplate ??= Templates["Number"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Number");
+            else if (interfaces.Contains(typeof(IConvertible)))
+                return IConvertibleTemplate ??= Templates["IConvertable"] as DataTemplate ?? throw new Exception("Missing DataTemplate for IConvertible");
+            return DefaultDataTemplate ??= TemplateGenerator.CreateDataTemplate
+                (() => new TextBlock
+                {
+                    Text = $"{item.GetType().Name} Missing DataTemplate",
+                    Margin = new Thickness(1),
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    Opacity = 0.5
+                });
+        }
+
+        protected static DataTemplate NullTemplate() =>
+           TemplateGenerator.CreateDataTemplate(() => new TextBlock
+           {
+               FontSize = 14,
+               HorizontalAlignment = HorizontalAlignment.Stretch,
+               VerticalAlignment = VerticalAlignment.Stretch,
+               Text = $"item is null"
+           });
+
+    }
+}
