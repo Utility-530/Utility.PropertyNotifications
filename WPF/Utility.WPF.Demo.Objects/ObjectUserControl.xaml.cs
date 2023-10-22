@@ -28,7 +28,7 @@ class TypeFilter : IPredicate
     {
         if (value is IPropertyInfo propertyInfo)
         {
-            var contains = names.Contains(propertyInfo.Property.Name);
+            var contains = names.Contains(propertyInfo.PropertyInfo.Name);
             return contains;
         }
         return false;
@@ -47,4 +47,11 @@ public class MyObject
     public Orientation Orientation => Orientation.Horizontal;
 
     public MyObject Child { get; }
+}
+
+public class MyObject2 : MyObject
+{
+    public long Long { get; }
+
+    public double Double { get; set; }
 }

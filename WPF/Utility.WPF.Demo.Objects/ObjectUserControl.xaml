@@ -18,7 +18,7 @@
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <test:Fields x:Key="Fields"></test:Fields>
-            <test:Region x:Key="Region"></test:Region>
+            <!--<test:Region x:Key="Region"></test:Region>-->
             <local:MyObject x:Key="MyObject"></local:MyObject>
             <x:Type x:Key="String"  Type="{x:Type sys:String}"></x:Type>
             <conv:BooleanToOrientationConverter x:Key="BooleanToOrientationConverter" />
@@ -55,7 +55,7 @@
             <view:ObjectSelector
                                             
                             Orientation="Vertical"
-                              Object="{StaticResource Region}" />
+                              Object="{StaticResource MyObject}" />
             <GridSplitter Height="50"></GridSplitter>
 
             <Border>
@@ -68,7 +68,7 @@
                 <view:ObjectItemsControl      
                          x:Name="ebdcs"  
                     Orientation="{Binding ElementName=ToggleButton1, Path=Content, Mode=OneWay}"
-                    Object="{StaticResource Region}" />
+                    Object="{StaticResource MyObject}" />
                     
                 <TextBlock Text="{Binding ElementName=ebdcs, Path=Value,Mode=OneWay}" 
                            Grid.Row="1"
