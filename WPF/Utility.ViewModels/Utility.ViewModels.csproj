@@ -8,8 +8,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
+		<ProjectReference Include="..\..\Infrastructure\Utility.Services\Utility.Services.csproj" />
 		<ProjectReference Include="..\..\Models\Utility.Models.Filters\Utility.Models.Filters.csproj" />
-		<ProjectReference Include="..\Utility.Service\Utility.Services.csproj" />
 	</ItemGroup>
 
 </Project>
