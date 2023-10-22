@@ -38,12 +38,10 @@ namespace Utility.PropertyTrees
 
         public override Key Key => new(Guid, Name, PropertyType);
 
-        public bool IsException => PropertyType == typeof(Exception);
         public bool IsCollection => PropertyType != null && PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(PropertyType);
         public bool IsObservableCollection => PropertyType != null && typeof(INotifyCollectionChanged).IsAssignableFrom(PropertyType);
         public bool IsFlagsEnum => PropertyType.IsFlagsEnum();
         public bool IsValueType => PropertyType.IsValueType;
-        public virtual bool IsError { get => this.GetProperty<bool>(); set => this.SetProperty(value); }
         public abstract bool IsReadOnly { get; }
         public override object Content => Name;
 
@@ -104,7 +102,7 @@ namespace Utility.PropertyTrees
 
 
 
-        public bool IsString => PropertyType == typeof(string);
+        //public bool IsString => PropertyType == typeof(string);
 
 
         public virtual IObservable Methods
