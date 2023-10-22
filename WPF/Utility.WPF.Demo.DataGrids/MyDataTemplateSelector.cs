@@ -43,7 +43,7 @@ namespace Utility.WPF.Demo.DataGrids
         {
             if (value is IPropertyInfo propertyInfo)
             {
-                var contains = names.Contains(propertyInfo.Property.Name);
+                var contains = names.Contains(propertyInfo.PropertyInfo.Name);
                 return contains;
             }
             return false;

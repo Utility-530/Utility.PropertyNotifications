@@ -8,20 +8,10 @@
     <FileVersion>1.0.1.0</FileVersion>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Data\**" />
-    <Compile Remove="Themes\**" />
-    <EmbeddedResource Remove="Data\**" />
-    <EmbeddedResource Remove="Themes\**" />
-    <None Remove="Data\**" />
-    <None Remove="Themes\**" />
-    <Page Remove="Data\**" />
-    <Page Remove="Themes\**" />
-  </ItemGroup>
+
 
   <ItemGroup>
 	  <ProjectReference Include="..\..\Persists\Utility.Persists\Utility.Persists.csproj" />
-    <ProjectReference Include="..\Utility.Service\Utility.Services.csproj" />
     <ProjectReference Include="..\Utility.ViewModels\Utility.ViewModels.csproj" />
     <ProjectReference Include="..\Utility.WPF.Markup\Utility.WPF.Markup.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Dragablz\Utility.WPF.Controls.Dragablz.csproj" />
