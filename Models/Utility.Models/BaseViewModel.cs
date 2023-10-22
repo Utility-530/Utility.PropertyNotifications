@@ -1,6 +1,7 @@
 ﻿using Jellyfish;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Models
 {
@@ -54,7 +55,7 @@ namespace Utility.Models
     }
 
 
-    public abstract class ValueViewModel : ReadOnlyViewModel
+    public abstract class ValueViewModel : ReadOnlyViewModel, IValue
     {
         public virtual object? Value { get;  }
     }
