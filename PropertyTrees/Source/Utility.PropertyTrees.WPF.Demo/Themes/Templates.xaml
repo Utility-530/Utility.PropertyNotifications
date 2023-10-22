@@ -123,7 +123,7 @@
         </objects:ObjectComboBox>
     </DataTemplate>
 
-    <trees:TreeTemplateSelector 
+    <trees:PropertyTemplateSelector 
         x:Key="ContentTemplateSelector"
         StringTemplate="{StaticResource StringTemplate}"
         BooleanTemplate="{StaticResource BooleanTemplate}"

@@ -9,7 +9,8 @@ namespace Utility.PropertyTrees.WPF.Demo.Basic
 
         public RootModelProperty() : base(guid)
         {
-            Data = new Leader();
+            //Data = new Leader();
+            Data = new GameModel();
         }
     }
 }
