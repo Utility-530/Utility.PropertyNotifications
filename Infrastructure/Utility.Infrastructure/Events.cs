@@ -2,8 +2,8 @@
 using System.Reflection;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using Utility.Nodes.Abstractions;
 using Utility.Structs;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Infrastructure;
 
@@ -30,8 +30,8 @@ public record TypeResponse(Type Type) : Response(Type);
 public record MethodParametersRequest(MethodInfo MethodInfo, object Data) : Request;
 public record MethodParametersResponse(object?[]? Parameters) : Response(Parameters);
 
-public record SelectionChange(object Source, INode Node) : Event();
-public record OnHoverChange(object Source, INode Node, bool IsMouseOver, Point Point) : Event();
-public record TreeViewItemInitialised(object Source, INode Node) : Event();
+public record SelectionChange(object Source, IReadOnlyTree Node) : Event();
+public record OnHoverChange(object Source, IReadOnlyTree Node, bool IsMouseOver, Point Point) : Event();
+public record TreeViewItemInitialised(object Source, IReadOnlyTree Node) : Event();
 
 public record RefreshRequest(DateTime DateTime) : Request;
