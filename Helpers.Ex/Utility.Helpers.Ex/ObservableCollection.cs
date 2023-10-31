@@ -12,50 +12,34 @@ namespace Utility.Helpers.Ex
 {
     public static class ObservableCollectionHelper
     {
-
-
-
-
+        const NotifyCollectionChangedAction all = NotifyCollectionChangedAction.Add | NotifyCollectionChangedAction.Remove | NotifyCollectionChangedAction.Replace | NotifyCollectionChangedAction.Move | NotifyCollectionChangedAction.Reset;
         public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> enumerable)
         {
             return enumerable is ObservableCollection<T> collection ? collection : new ObservableCollection<T>(enumerable);
         }
 
-        public static IObservable<NotifyCollectionChangedEventArgs> SelectChanges(this INotifyCollectionChanged oc)
+        public static IObservable<NotifyCollectionChangedEventArgs> SelectChanges(this INotifyCollectionChanged collection, NotifyCollectionChangedAction action = all)
         {
             return Observable
                 .FromEventPattern<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
-                h => oc.CollectionChanged += h,
-                h => oc.CollectionChanged -= h)
-                .Select(a => a.EventArgs);
+                h => collection.CollectionChanged += h,
+                h => collection.CollectionChanged -= h)
+                .Select(a => a.EventArgs)
+                .Where(a => action.HasFlag(a.Action));
         }
 
-        public static IObservable<T> MakeObservable<T>(this IEnumerable oc)
+
+        public static IObservable<NotifyCollectionChangedEventArgs> SelectExistingItemsAndChanges(this IEnumerable collection, NotifyCollectionChangedAction action = all)
         {
-            try
+            return Observable.Create<NotifyCollectionChangedEventArgs>(observer =>
             {
-                return oc is INotifyCollectionChanged notifyCollectionChanged ?
-                        oc.Cast<T>().ToObservable()
-                            .Concat(notifyCollectionChanged.SelectNewItems<T>()) :
-                        oc.Cast<T>().ToObservable();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
+                foreach (var item in collection)
+                    observer.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
 
-        public static IObservable<T> MakeObservable<T>(this IEnumerable<T> oc)
-        {
-            return oc is INotifyCollectionChanged notifyCollectionChanged ?
-                        oc.ToObservable()
-                            .Concat(notifyCollectionChanged.SelectNewItems<T>()) :
-                        oc.ToObservable();
-        }
-
-        public static IObservable<object> MakeObservable(this IEnumerable oc)
-        {
-            return oc.MakeObservable<object>();
+                if (collection is INotifyCollectionChanged collectionChanged)
+                    return SelectChanges(collectionChanged, action).Subscribe(observer.OnNext);
+                return Disposable.Empty;
+            });
         }
 
         public static IObservable<T> SelectNewItems<T>(this INotifyCollectionChanged notifyCollectionChanged)
@@ -65,17 +49,18 @@ namespace Utility.Helpers.Ex
               .SelectMany(x => x.NewItems?.Cast<T>() ?? Array.Empty<T>());
         }
 
-        public static IObservable<T> SelectNewAndExistingItems<T, TCollection>(this TCollection collection) where TCollection:INotifyCollectionChanged, IEnumerable
+        public static IObservable<T> SelectNewAndExistingItems<T>(this ObservableCollection<T> collection) => SelectNewAndExistingItems<T, ObservableCollection<T>>(collection);
+
+        public static IObservable<T> SelectNewAndExistingItems<T, TCollection>(this TCollection collection) where TCollection : IEnumerable
         {
             return Observable.Create<T>(observer =>
             {
                 foreach (var item in collection)
                     observer.OnNext((T)item);
 
-                return collection
-                      .SelectChanges()
-                      .SelectMany(x => x.NewItems?.Cast<T>() ?? Array.Empty<T>())
-                      .Subscribe(observer.OnNext);
+                if (collection is INotifyCollectionChanged collectionChanged)
+                    return SelectNewItems<T>(collectionChanged).Subscribe(observer.OnNext);
+                return Disposable.Empty;
             });
         }
 
@@ -83,7 +68,7 @@ namespace Utility.Helpers.Ex
         {
             return notifyCollectionChanged
               .SelectChanges()
-              .SelectMany(x => x.OldItems?.Cast<T>() ?? new T[] { });
+              .SelectMany(x => x.OldItems?.Cast<T>() ?? Array.Empty<T>());
         }
 
         public static IObservable<NotifyCollectionChangedAction> SelectActions(this INotifyCollectionChanged notifyCollectionChanged)
@@ -92,8 +77,6 @@ namespace Utility.Helpers.Ex
               .SelectChanges()
               .Select(x => x.Action);
         }
-
-
 
         /// <summary>
         /// In order to be notified of all added items the case where a collection is reset needs to be considered.
