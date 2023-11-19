@@ -2,7 +2,7 @@
 using Utility.Infrastructure;
 using Utility.Models;
 using Utility.Helpers;
-using Utility.Nodes.Abstractions;
+using Utility.Trees.Abstractions;
 using Utility.Nodes;
 
 namespace Utility.PropertyTrees.Services
@@ -10,9 +10,9 @@ namespace Utility.PropertyTrees.Services
     public class MethodParameterActivator : BaseObject
     {
 
-        List<INode> selectedNodes = new();
+        List<IReadOnlyTree> selectedNodes = new();
 
-        INode? hoveredNode;
+        IReadOnlyTree? hoveredNode;
 
         public override Key Key => new(Guids.MethodParameterActivator, nameof(MethodParameterActivator), typeof(MethodParameterActivator));
 

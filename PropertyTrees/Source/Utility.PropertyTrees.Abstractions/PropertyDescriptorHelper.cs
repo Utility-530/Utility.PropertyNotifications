@@ -1,13 +1,12 @@
-﻿using Utility.PropertyTrees.Abstractions;
-using Utility.PropertyTrees.Infrastructure;
+﻿using System.ComponentModel;
 
-namespace Utility.PropertyTrees
+namespace Utility.Properties
 {
     public static class PropertyDescriptorHelper
     {
         public static bool IsValueOrStringProperty(this PropertyDescriptor descriptor)
         {
-            return IsValueOrStringProperty(descriptor.PropertyType);
+            return descriptor.PropertyType.IsValueOrStringProperty();
         }
         public static bool IsValueOrStringProperty(this Type type)
         {
@@ -17,9 +16,9 @@ namespace Utility.PropertyTrees
         public static PropertyType GetPropertyType(this PropertyDescriptor descriptor)
         {
             if (descriptor is CollectionItemDescriptor itemDescriptor)
-                return PropertyType.CollectionItem | GetPropertyType(descriptor.PropertyType);
+                return PropertyType.CollectionItem | descriptor.PropertyType.GetPropertyType();
             else
-                return GetPropertyType(descriptor.PropertyType);
+                return descriptor.PropertyType.GetPropertyType();
         }
 
         public static PropertyType GetPropertyType(this Type type)

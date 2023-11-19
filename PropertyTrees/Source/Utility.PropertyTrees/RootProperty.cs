@@ -1,4 +1,4 @@
-﻿using Utility.PropertyTrees.Infrastructure;
+﻿using Utility.Properties;
 
 namespace Utility.PropertyTrees
 {

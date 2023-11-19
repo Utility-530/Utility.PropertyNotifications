@@ -23,7 +23,7 @@ using System.Windows.Controls.Primitives;
 using Utility.Helpers.NonGeneric;
 using NetFabric.Hyperlinq;
 using System.Linq;
-using Utility.Nodes.Abstractions;
+using Utility.Trees.Abstractions;
 using Castle.Core.Resource;
 
 namespace Utility.PropertyTrees.WPF;

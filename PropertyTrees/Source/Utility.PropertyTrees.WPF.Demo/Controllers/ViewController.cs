@@ -1,12 +1,9 @@
-﻿using Swordfish.NET.Collections.Auxiliary;
-using Utility.Infrastructure;
+﻿using Utility.Infrastructure;
 using Utility.Nodes;
 using Utility.PropertyTrees.WPF.Meta;
 using Utility.Observables.Generic;
-using Utility.WPF.Adorners.Infrastructure;
 using Utility.WPF.Reactive;
-using NetFabric.Hyperlinq;
-using Utility.Nodes.Abstractions;
+using Utility.Trees.Abstractions;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
@@ -125,7 +122,7 @@ namespace Utility.PropertyTrees.WPF.Demo
                 .MouseSingleClicks()
                 .Subscribe(a =>
                 {
-                    if (a is { Header: INode { } node })
+                    if (a is { Header: ITree { } node })
                     {
                         Send(new SelectionChange(a, node));
                     }
@@ -135,7 +132,7 @@ namespace Utility.PropertyTrees.WPF.Demo
                 .MouseMoves()
                 .Subscribe(a =>
                 {
-                    if (a.item is { Header: INode { } node })
+                    if (a.item is { Header: ITree { } node })
                     {
                         Structs.Point sPoint = new(a.point.X, a.point.Y);
                         Send(new OnHoverChange(a.item, node, true, sPoint));
@@ -146,7 +143,7 @@ namespace Utility.PropertyTrees.WPF.Demo
                 .MouseHoverLeaves()
                 .Subscribe(a =>
                 {
-                    if (a is { Header: INode { } node })
+                    if (a is { Header: ITree { } node })
                     {
                         Send(new OnHoverChange(a, node, false, default));
                     }

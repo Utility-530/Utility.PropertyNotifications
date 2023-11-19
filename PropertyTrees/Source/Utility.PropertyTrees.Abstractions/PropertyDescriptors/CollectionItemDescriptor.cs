@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Text.RegularExpressions;
 
-namespace Utility.PropertyTrees.Infrastructure
+namespace Utility.Properties
 {
     public class CollectionItemDescriptor : PropertyDescriptor
     {
@@ -9,18 +9,18 @@ namespace Utility.PropertyTrees.Infrastructure
         {
             Item = item;
             Index = index;
-            this.ComponentType = componentType;
+            ComponentType = componentType;
         }
 
         public object Item { get; }
 
         public int Index { get; }
 
-        public override System.Type ComponentType { get; }
+        public override Type ComponentType { get; }
 
         public override bool IsReadOnly => false;
 
-        public override System.Type PropertyType => Item.GetType();
+        public override Type PropertyType => Item.GetType();
 
 
         public override bool CanResetValue(object component)

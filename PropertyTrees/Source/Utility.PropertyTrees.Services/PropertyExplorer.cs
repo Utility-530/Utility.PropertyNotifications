@@ -3,8 +3,10 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Utility.Nodes;
-using Utility.Nodes.Abstractions;
+using Utility.Trees.Abstractions;
 using Utility.Observables.NonGeneric;
+using Utility.Helpers.Ex;
+using System.Collections;
 
 namespace Utility.PropertyTrees.Services
 {
@@ -15,7 +17,7 @@ namespace Utility.PropertyTrees.Services
             Started, Completed
         }
 
-        public static IObservable<(int, int)> ExploreTree<T>(T items, Func<T, INode, T> funcAdd, Action<T, INode> funcRemove, INode property, out IDisposable disposable)
+        public static IObservable<(int, int)> ExploreTree<T>(T items, Func<T, IReadOnlyTree, T> funcAdd, Action<T, IReadOnlyTree> funcRemove, IReadOnlyTree property, out IDisposable disposable)
         {
             Subject<State> subject = new();
             int totalCount = 1;
@@ -42,32 +44,30 @@ namespace Utility.PropertyTrees.Services
             return progress;
         }
 
-        public static IObservable<(int, int)> ExploreTree(INode propertyNode, out IDisposable disposable)
+        public static IObservable<(int, int)> ExploreTree(IReadOnlyTree propertyNode, out IDisposable disposable)
         {
             return ExploreTree(new List<object>(), (a, b) => a, (a, b) => { }, propertyNode, out disposable);
 
         }
 
-        public static IDisposable ExploreTree<T>(T items, Func<T, INode, T> funcAdd, Action<T, INode> funcRemove, INode property, Subject<State> state)
+        public static IDisposable ExploreTree<T>(T items, Func<T, IReadOnlyTree, T> funcAdd, Action<T, IReadOnlyTree> funcRemove, IReadOnlyTree property, Subject<State> state)
         {
             state.OnNext(State.Started);
 
-            if (property is INode @base)
+            if (property is IReadOnlyTree @base)
                 items = funcAdd(items, @base);
 
             var disposable = property
-                .Children
-                .Subscribe(async item =>
+                .Items
+                .SelectExistingItemsAndChanges()
+                .Subscribe(async args =>
                 {
-                    if (item is not NotifyCollectionChangedEventArgs args)
-                        throw new Exception("rev re");
-
                     state.OnNext(State.Started);
-                    foreach (INode node in SelectNewItems<INode>(args))
+                    foreach (IReadOnlyTree node in SelectNewItems<IReadOnlyTree>(args))
                     {
                         _ = ExploreTree(items, funcAdd, funcRemove, node, state);
                     }
-                    foreach (INode node in SelectOldItems<INode>(args))
+                    foreach (IReadOnlyTree node in SelectOldItems<IReadOnlyTree>(args))
                     {
                         funcRemove(items, node);
                         //_ = ExploreTree(items, func, node, state);
@@ -86,9 +86,9 @@ namespace Utility.PropertyTrees.Services
             return disposable;
         }
 
-        public static IObservable<INode> FindNode(INode node, Predicate<INode> predicate, out IDisposable disposable)
+        public static IObservable<IReadOnlyTree> FindNode(IReadOnlyTree node, Predicate<IReadOnlyTree> predicate, out IDisposable disposable)
         {
-            ReplaySubject<INode> list = new(1);
+            ReplaySubject<IReadOnlyTree> list = new(1);
             CompositeDisposable composite = new();
             ExploreTree(list, (a, b) => { if (predicate(b)) { a.OnNext(b); composite.Dispose(); a.OnCompleted(); } return a; }, (a,b)=> { }, node, out IDisposable _dis)
                 .Subscribe(a =>
@@ -99,9 +99,9 @@ namespace Utility.PropertyTrees.Services
             return list;
         }
 
-        public static IObservable<INode> FindNodes(INode node, Predicate<INode> predicate)
+        public static IObservable<IReadOnlyTree> FindNodes(IReadOnlyTree node, Predicate<IReadOnlyTree> predicate)
         {
-            Subject<INode> list = new();
+            Subject<IReadOnlyTree> list = new();
 
             ExploreTree(list, (a, b) => { if (predicate(b)) a.OnNext(b); return a; }, (a, b) => { }, node, out IDisposable disposable).Subscribe(a =>
             {

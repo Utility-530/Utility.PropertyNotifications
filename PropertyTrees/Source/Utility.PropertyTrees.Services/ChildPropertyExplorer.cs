@@ -9,13 +9,12 @@ using Utility.Nodes;
 using Utility.Observables.NonGeneric;
 using static Utility.Observables.Generic.ObservableExtensions;
 using Utility.Observables.Generic;
-using Utility.PropertyTrees.Infrastructure;
 using System.Collections.Specialized;
 using Utility.Helpers.Ex;
 using Utility.Helpers;
-using Utility.Nodes.Abstractions;
+using Utility.Trees.Abstractions;
 using NetFabric.Hyperlinq;
-using System.Diagnostics.CodeAnalysis;
+using Utility.Properties;
 
 namespace Utility.PropertyTrees.Services
 {
@@ -40,7 +39,7 @@ namespace Utility.PropertyTrees.Services
                 {
                     if (count == 0)
                     {
-                        observer.OnNext(new ChildrenResponse(Change<INode>.None, Change<PropertyDescriptor>.None));
+                        observer.OnNext(new ChildrenResponse(Change<IReadOnlyTree>.None, Change<PropertyDescriptor>.None));
                     }
                     foreach (var descriptor in descriptors)
                     {
@@ -72,7 +71,7 @@ namespace Utility.PropertyTrees.Services
                 if (include == false)
                 {
                     i++;
-                    obs.OnNext(new ChildrenResponse(Change<INode>.None, new Change<PropertyDescriptor>(descriptor, ChangeType.Add)));
+                    obs.OnNext(new ChildrenResponse(Change<IReadOnlyTree>.None, new Change<PropertyDescriptor>(descriptor, ChangeType.Add)));
                     obs.OnProgress(i, count);
                     CheckSubscribeToCollectionDescriptors();
                     return;
@@ -146,11 +145,11 @@ namespace Utility.PropertyTrees.Services
                                 {
                                     i++;
                             
-                                        obs.OnNext(new ChildrenResponse(new Change<INode>(p, ChangeType.Add), descriptor.As<PropertyDescriptor>()));
+                                        obs.OnNext(new ChildrenResponse(new Change<IReadOnlyTree>(p, ChangeType.Add), descriptor.As<PropertyDescriptor>()));
                                     obs.OnProgress(i, count);
                                     if (count == i)
                                     {
-                                        obs.OnNext(new ChildrenResponse(new Change<INode>(default, ChangeType.None), default));
+                                        obs.OnNext(new ChildrenResponse(new Change<IReadOnlyTree>(default, ChangeType.None), default));
                                         if (value.Data is not INotifyCollectionChanged)
                                             obs.OnCompleted();
                                     }
@@ -160,7 +159,7 @@ namespace Utility.PropertyTrees.Services
                             {
                                 i++;
 
-                                obs.OnNext(new ChildrenResponse(Change<INode>.None, descriptor.As<PropertyDescriptor>()));
+                                obs.OnNext(new ChildrenResponse(Change<IReadOnlyTree>.None, descriptor.As<PropertyDescriptor>()));
                                 obs.OnProgress(i, count);
                                 if (count == i)
                                 {
@@ -171,10 +170,10 @@ namespace Utility.PropertyTrees.Services
                         }
                         else if (descriptor.Type == ChangeType.Remove)
 
-                            obs.OnNext(new ChildrenResponse(new Change<INode>(default, ChangeType.Remove), descriptor.As<PropertyDescriptor>()));
+                            obs.OnNext(new ChildrenResponse(new Change<IReadOnlyTree>(default, ChangeType.Remove), descriptor.As<PropertyDescriptor>()));
 
                         else if (descriptor.Type == ChangeType.Reset)
-                            obs.OnNext(new ChildrenResponse(new Change<INode>(default, ChangeType.Reset), new Change<PropertyDescriptor>(default, ChangeType.Reset)));
+                            obs.OnNext(new ChildrenResponse(new Change<IReadOnlyTree>(default, ChangeType.Reset), new Change<PropertyDescriptor>(default, ChangeType.Reset)));
                     }
 
                     Interfaces.Generic.IObservable<ValueNode> FromCollectionDescriptor(CollectionItemDescriptor descriptor)
@@ -267,19 +266,6 @@ namespace Utility.PropertyTrees.Services
                     i++;
                 }
             }
-        }
-    }
-
-    public class PropertyDescriptorComparer : IEqualityComparer<PropertyDescriptor>
-    {
-        public bool Equals(PropertyDescriptor? x, PropertyDescriptor? y)
-        {
-            return x?.Name == y?.Name && x?.ComponentType.Name == y?.ComponentType.Name;
-        }
-
-        public int GetHashCode([DisallowNull] PropertyDescriptor obj)
-        {
-            return obj.GetHashCode();
         }
     }
 }

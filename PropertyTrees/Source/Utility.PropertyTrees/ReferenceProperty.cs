@@ -4,10 +4,9 @@ using Utility.Helpers.NonGeneric;
 using Utility.Infrastructure;
 using Utility.Models;
 using Utility.Nodes;
-using Utility.Nodes.Abstractions;
+using Utility.Trees.Abstractions;
 using Utility.Observables.Generic;
-using Utility.PropertyTrees.Abstractions;
-using Utility.PropertyTrees.Infrastructure;
+using Utility.Properties;
 
 namespace Utility.PropertyTrees
 {
@@ -30,7 +29,7 @@ namespace Utility.PropertyTrees
                     ? null
                     : Descriptor.Category;
 
-        public virtual TypeConverter Converter => Descriptor.Converter;
+        //public virtual TypeConverter Converter => Descriptor.Converter;
 
         public override Type PropertyType => Descriptor.PropertyType;
 
@@ -108,9 +107,9 @@ namespace Utility.PropertyTrees
 
             void Add(ChildrenResponse response)
             {
-                if (_children.Cast<INode>().Any(ass => response.NodeChange.Value.Key.Equals(ass.Key)) == false)
+                if (_children.Cast<IReadOnlyTree>().Any(ass => response.NodeChange.Value.Key.Equals(ass.Key)) == false)
                 {
-                    response.NodeChange.Value.Parent = this;
+                    (response.NodeChange.Value as IReadOnlyTree).Parent = this;
                     _children.Add(response.NodeChange.Value);
                 }
             }
@@ -134,7 +133,7 @@ namespace Utility.PropertyTrees
                          UpdateIndexesForChildren();
                      });
 
-                    if (remove is not INode { Key: Key key })
+                    if (remove is not IReadOnlyTree { Key: Key key })
                     {
                         throw new Exception("sd w33!!£ £");
                     }
@@ -151,7 +150,7 @@ namespace Utility.PropertyTrees
                 foreach (var remove in removals)
                 {
             
-                    if (remove is not INode { Key: Key key })
+                    if (remove is not IReadOnlyTree { Key: Key key })
                     {
                         throw new Exception("sd w33!!£ £");
                     }     
@@ -175,11 +174,11 @@ namespace Utility.PropertyTrees
                     var responseChildren = response.Value as IEnumerable ?? throw new Exception("FVDDSF Sss");
                     foreach (Key key in responseChildren.Cast<Key>().OrderBy(a => a.Name))
                     {
-                        if (_children.Cast<INode>().Any(c => c.Key.Equals(key)))
+                        if (_children.Cast<IReadOnlyTree>().Any(c => c.Key.Equals(key)))
                         {
                             continue;
                         }
-                        var switchType = Switch(Abstractions.PropertyType.CollectionItem | PropertyDescriptorHelper.GetPropertyType(key.Type));
+                        var switchType = Switch(Properties.PropertyType.CollectionItem | PropertyDescriptorHelper.GetPropertyType(key.Type));
                         if (_children.Any(ass => key.Guid == (ass as ValueNode)?.Key.Guid) == false)
                             Observe<ObjectCreationResponse, ObjectCreationRequest>(new(switchType, new[] { typeof(ValueNode), typeof(BaseObject) }, new object[] { key.Guid }))
                             .Subscribe(a =>
@@ -235,13 +234,15 @@ namespace Utility.PropertyTrees
         {
             return propertyType switch
             {
-                Abstractions.PropertyType.Reference => typeof(ReferenceProperty),
-                Abstractions.PropertyType.Value => typeof(ValueProperty),
-                Abstractions.PropertyType.CollectionItem | Abstractions.PropertyType.Reference => typeof(CollectionItemReferenceProperty),
-                Abstractions.PropertyType.CollectionItem | Abstractions.PropertyType.Value => typeof(CollectionItemValueProperty),
-                Abstractions.PropertyType.Root => typeof(ReferenceProperty),
+                Properties.PropertyType.Reference => typeof(ReferenceProperty),
+                Properties.PropertyType.Value => typeof(ValueProperty),
+                Properties.PropertyType.CollectionItem | Properties.PropertyType.Reference => typeof(CollectionItemReferenceProperty),
+                Properties.PropertyType.CollectionItem | Properties.PropertyType.Value => typeof(CollectionItemValueProperty),
+                Properties.PropertyType.Root => typeof(ReferenceProperty),
                 _ => throw new Exception("f 33 dsf"),
             };
         }
+
+       
     }
 }

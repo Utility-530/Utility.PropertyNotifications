@@ -8,7 +8,7 @@ using Utility.Observables.NonGeneric;
 using Utility.Observables.Generic;
 using System.Reactive.Disposables;
 using System.ComponentModel;
-using Utility.PropertyTrees.Abstractions;
+using Utility.Properties;
 
 namespace Utility.PropertyTrees.Services
 {
@@ -89,8 +89,7 @@ namespace Utility.PropertyTrees.Services
                             CreateInstance(parent, descriptor.Name, descriptor.PropertyType, typeof(ReferenceProperty))
                             .Subscribe(property =>
                             {
-
-                                (property as ReferenceProperty).Descriptor = descriptor;
+                                property.Descriptor = descriptor;
                                 property.Data = item;
                                 observer2.OnNext(property);
                             }, () => observer2.OnCompleted());

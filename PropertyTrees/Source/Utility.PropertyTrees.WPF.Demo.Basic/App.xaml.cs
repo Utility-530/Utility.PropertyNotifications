@@ -24,7 +24,7 @@ namespace Utility.PropertyTrees.WPF.Demo.Basic
             var property = Initialise();
             ListBox listBox = new()
             {
-                ItemsSource = property.Children
+                ItemsSource = property.Items
             };
 
             //property
@@ -34,7 +34,7 @@ namespace Utility.PropertyTrees.WPF.Demo.Basic
             //        if (item is not NotifyCollectionChangedEventArgs args)
             //            throw new Exception("rev re");
 
-            //        foreach(INode node in SelectNewItems<INode>(args))
+            //        foreach(ITree node in SelectNewItems<ITree>(args))
             //        {
 
             //        }

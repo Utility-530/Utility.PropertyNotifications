@@ -1,4 +1,3 @@
-using Utility.PropertyTrees.Abstractions;
 using Utility.Helpers;
 using Utility.Nodes;
 using System.Collections.Specialized;
@@ -8,11 +7,11 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Collections;
 using Utility.Observables.Generic;
 using Utility.Helpers.NonGeneric;
-using Utility.Nodes.Abstractions;
+using Utility.Trees.Abstractions;
 using Utility.Models;
 using System.Reflection;
 using Utility.Conversions;
-using Utility.Infrastructure;
+using Utility.Properties;
 
 namespace Utility.PropertyTrees
 {
@@ -37,7 +36,6 @@ namespace Utility.PropertyTrees
         }
 
         public override Key Key => new(Guid, Name, PropertyType);
-
         public bool IsCollection => PropertyType != null && PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(PropertyType);
         public bool IsObservableCollection => PropertyType != null && typeof(INotifyCollectionChanged).IsAssignableFrom(PropertyType);
         public bool IsFlagsEnum => PropertyType.IsFlagsEnum();
@@ -64,9 +62,9 @@ namespace Utility.PropertyTrees
                         {
                             throw new Exception("dsv2s331hj f");
                         }
-                        if (_children.Any(ass => response.NodeChange.Value.Key.Equals((ass as INode)?.Key)) == false)
+                        if (_children.Any(ass => response.NodeChange.Value.Key.Equals((ass as ITree)?.Key)) == false)
                         {
-                            response.NodeChange.Value.Parent = this;
+                            (response.NodeChange.Value as IReadOnlyTree).Parent = this;
                             _children.Add(response.NodeChange.Value);
                         }
                     }
@@ -134,7 +132,7 @@ namespace Utility.PropertyTrees
             return await Task.FromResult(true);        }
 
 
-        protected void AddMethodNode(MethodInfo info, INode? node, ChangeType changeType)
+        protected void AddMethodNode(MethodInfo info, IReadOnlyTree? node, ChangeType changeType)
         {
             if (changeType == CType.Add)
             {
@@ -145,6 +143,12 @@ namespace Utility.PropertyTrees
                 else
                     _methods.Add(methodNode);
             }
+        }
+
+
+        public override IEnumerator<ITree> GetEnumerator()
+        {
+            throw new NotImplementedException();
         }
 
         public override string ToString()

@@ -16,7 +16,8 @@ using Utility.Enums;
 using Orientation = System.Windows.Controls.Orientation;
 using NetFabric.Hyperlinq;
 using System.Linq;
-using Utility.Nodes.Abstractions;
+using Utility.Trees.Abstractions;
+using Utility.Trees;
 
 namespace Utility.PropertyTrees.WPF
 {
@@ -93,7 +94,8 @@ namespace Utility.PropertyTrees.WPF
                                 }
                                 else if (propertyBase is ValueProperty valueProperty)
                                 {
-                                    var type = (valueProperty.FindAncestor(new Predicate<INode>(a => a is ICollectionItemProperty)) as ICollectionItemProperty).Type;
+                                    var property = valueProperty.FindAncestors(new Predicate<IReadOnlyTree>(a => a is ICollectionItemProperty)).First();
+                                    var type = (property as ICollectionItemProperty).Type;
                                     var dictionary = typeOrderDictionary.GetValueOrNew(type);
 
                                     if (dictionary.ContainsKey(propertyBase.Name) == false)
@@ -135,7 +137,7 @@ namespace Utility.PropertyTrees.WPF
                             }
                             else
                             {
-                                var labelItem = new TreeViewItem { Header = propertyBase, HeaderTemplateSelector = dataTemplateSelector, Style = TreeStyleSelector.FixedWidthHeaderOnlyStyle };
+                                //var labelItem = new TreeViewItem { Header = propertyBase, HeaderTemplateSelector = dataTemplateSelector, Style = TreeStyleSelector.FixedWidthHeaderOnlyStyle };
                                 var treeViewItem = MakeTreeViewItem(propertyBase);
                                 Send(new TreeViewItemInitialised(treeViewItem, propertyBase));
                                 //items.Add(labelItem);
@@ -212,7 +214,7 @@ namespace Utility.PropertyTrees.WPF
                         return treeViewItem;
                     }
 
-                    TreeViewItem MakeChildOfCollection(INode prop)
+                    TreeViewItem MakeChildOfCollection(IReadOnlyTree prop)
                     {
                         TreeViewItem treeViewItem;
 
@@ -228,7 +230,7 @@ namespace Utility.PropertyTrees.WPF
                         return treeViewItem;
                     }
 
-                    TreeViewItem Make(INode prop)
+                    TreeViewItem Make(IReadOnlyTree prop)
                     {
                         return new TreeViewItem()
                         {

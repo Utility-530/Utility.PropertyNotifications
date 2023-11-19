@@ -6,13 +6,13 @@ using Utility.Commands;
 using Utility.Infrastructure;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using Utility.Nodes.Abstractions;
+using Utility.Trees.Abstractions;
 using static Utility.Observables.NonGeneric.ObservableExtensions;
 using static Utility.Observables.Generic.ObservableExtensions;
 
 namespace Utility.PropertyTrees
 {
-    public class MethodNode : BaseObject, INode
+    public class MethodNode : BaseObject, IReadOnlyTree
     {
         private readonly ICommand command;
         private readonly Guid guid;
@@ -34,7 +34,7 @@ namespace Utility.PropertyTrees
 
         public override Key Key => new(guid, MethodInfo.Name, MethodInfo.ReturnType);
 
-        IEquatable INode.Key => this.Key;
+        IEquatable IReadOnlyTree.Key => this.Key;
 
         public Guid Guid => guid;
 
@@ -55,9 +55,10 @@ namespace Utility.PropertyTrees
         }
 
         public virtual MethodInfo MethodInfo { get; set; }
-        public INode Parent { get; set; }
 
-        public IObservable Children
+        public IReadOnlyTree Parent { get; set; }
+
+        public IEnumerable Items
         {
             get
             {
@@ -66,6 +67,17 @@ namespace Utility.PropertyTrees
         }
 
         public IEnumerable Ancestors => throw new NotImplementedException();
+
+
+        public bool Equals(IReadOnlyTree? other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerator<IReadOnlyTree> GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
 
     }
 }

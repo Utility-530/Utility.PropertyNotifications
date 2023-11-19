@@ -2,8 +2,9 @@
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Nodes;
-using Utility.Nodes.Abstractions;
-using Utility.PropertyTrees.Abstractions;
+using Utility.Trees.Abstractions;
+using Utility.Properties;
+
 
 namespace Utility.PropertyTrees
 {
@@ -36,11 +37,11 @@ namespace Utility.PropertyTrees
 
     public record MethodsRequest(Guid Guid, object Data, object? ParentData, PropertyDescriptor Descriptor) : Request();
 
-    public record MethodsResponse(INode? Node, MethodInfo Source, ChangeType ChangeType = ChangeType.Add) : Response(Node);
+    public record MethodsResponse(IReadOnlyTree? Node, MethodInfo Source, ChangeType ChangeType = ChangeType.Add) : Response(Node);
 
     public record ChildrenRequest(Guid Guid, object Data, PropertyDescriptor Descriptor) : Request();
 
-    public record ChildrenResponse(Change<INode> NodeChange, Change<PropertyDescriptor> SourceChange) : Response(NodeChange);
+    public record ChildrenResponse(Change<IReadOnlyTree> NodeChange, Change<PropertyDescriptor> SourceChange) : Response(NodeChange);
 
 
 }

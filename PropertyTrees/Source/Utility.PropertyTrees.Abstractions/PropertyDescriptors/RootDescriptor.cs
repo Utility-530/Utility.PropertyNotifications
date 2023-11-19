@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Utility.PropertyTrees.Infrastructure
+namespace Utility.Properties
 {
     public class RootDescriptor : PropertyDescriptor
     {
@@ -11,11 +11,11 @@ namespace Utility.PropertyTrees.Infrastructure
 
         public object Item { get; }
 
-        public override System.Type ComponentType => null;
+        public override Type ComponentType => null;
 
         public override bool IsReadOnly => true;
 
-        public override System.Type PropertyType => Item.GetType();
+        public override Type PropertyType => Item.GetType();
 
 
         public override bool CanResetValue(object component)
@@ -25,7 +25,7 @@ namespace Utility.PropertyTrees.Infrastructure
 
         public override object? GetValue(object? component)
         {
-            throw new NotImplementedException();
+            return Item;
         }
 
         public override void ResetValue(object component)

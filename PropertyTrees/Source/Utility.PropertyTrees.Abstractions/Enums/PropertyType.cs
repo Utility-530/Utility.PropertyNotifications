@@ -1,4 +1,4 @@
-﻿namespace Utility.PropertyTrees.Abstractions
+﻿namespace Utility.Properties
 {
     [Flags]
     public enum PropertyType

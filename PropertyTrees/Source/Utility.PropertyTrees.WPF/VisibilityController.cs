@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Controls;
 using Utility.Infrastructure;
 using Utility.Models;
+using Utility.Trees;
 
 namespace Utility.PropertyTrees.Services
 {
@@ -66,7 +67,7 @@ namespace Utility.PropertyTrees.Services
             {
                 if (@event is SelectionChange { Node: PropertyBase node } change)
                 {
-                    return node.Ancestors.Cast<PropertyBase>().Any(a => a.Name == "ViewModels") == false;
+                    return node.Ancestors().Cast<PropertyBase>().Any(a => a.Name == "ViewModels") == false;
                 }
                 return false;
             }

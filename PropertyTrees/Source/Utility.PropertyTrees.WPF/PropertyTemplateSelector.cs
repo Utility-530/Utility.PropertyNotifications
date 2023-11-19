@@ -8,6 +8,7 @@ using Utility.Helpers.NonGeneric;
 using Utility.Nodes;
 using Utility.Observables.Generic;
 using Utility.PropertyTrees.Services;
+using Utility.Trees;
 using Utility.WPF.Helpers;
 
 namespace Utility.PropertyTrees.WPF
@@ -57,7 +58,7 @@ namespace Utility.PropertyTrees.WPF
                 {
                     return dataTemplate;
                 }
-                var collectionTemplate = HeaderTemplate(propertyBase.Ancestors.Count());
+                var collectionTemplate = HeaderTemplate(propertyBase.Ancestors().Count());
                 return collectionTemplate;
             }
 

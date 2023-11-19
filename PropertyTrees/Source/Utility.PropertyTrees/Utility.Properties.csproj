@@ -15,7 +15,7 @@
 		<ProjectReference Include="..\..\..\Nodes\Utility.Nodes\Utility.Nodes.csproj" />
 		<ProjectReference Include="..\..\..\Reactive\Utility.Reactive\Utility.Reactive.csproj" />
 		<ProjectReference Include="..\..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
-		<ProjectReference Include="..\Utility.PropertyTrees.Abstractions\Utility.PropertyTrees.Abstractions.csproj" />
+		<ProjectReference Include="..\Utility.PropertyTrees.Abstractions\Utility.PropertyDescriptors.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Using Include="System" />

@@ -1,5 +1,6 @@
 ﻿
 using System.Linq;
+using Utility.Trees;
 
 namespace Utility.PropertyTrees
 {
@@ -29,7 +30,7 @@ namespace Utility.PropertyTrees
 
         public static IEnumerable<PropertyBase> SelfAndAncestors(this PropertyBase propertyBase)
         {
-            return new[] { propertyBase }.Concat(propertyBase.Ancestors.Cast<PropertyBase>()); 
+            return new[] { propertyBase }.Concat(propertyBase.Ancestors().Cast<PropertyBase>());
         }
     }
 }

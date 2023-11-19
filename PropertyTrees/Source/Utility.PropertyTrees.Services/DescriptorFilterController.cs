@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 using Utility.Infrastructure;
 using Utility.Models;
-using Utility.PropertyTrees.Infrastructure;
 using static System.Reactive.Linq.Observable;
 using System.Collections;
 using Utility.Observables.NonGeneric;
 using Utility.Helpers;
+using Utility.Properties;
 
 namespace Utility.PropertyTrees.Services
 {
