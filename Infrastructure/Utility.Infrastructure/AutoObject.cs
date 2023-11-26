@@ -27,9 +27,6 @@ namespace Utility.Infrastructure
                 store[key] = value;
             }
         }
-
-        //public void Set(IEquatable key, object value) => store[key] = value;
-
         public static Store Instance { get; } = new Store();
     }
 
@@ -37,7 +34,7 @@ namespace Utility.Infrastructure
     /// Defines a utility class to implement objects with typed properties without private fields.
     /// This class supports automatically property change notifications and error validations.
     /// </summary>
-    public abstract class AutoObject : BaseObject, IDataErrorInfo, INotifyPropertyChanged, IGuid
+    public abstract class AutoObject : BaseObject, IDataErrorInfo, IGuid
     {
         private readonly Guid guid;
         private IDisposable? disposable;
