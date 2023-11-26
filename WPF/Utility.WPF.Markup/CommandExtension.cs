@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
+using Utility.WPF.Abstract;
 
 namespace Utility.WPF.Markup
 {
@@ -174,7 +175,8 @@ namespace Utility.WPF.Markup
                         return output;
                     }
                 }
-
+            if (args is CollectionItemChangedEventArgs { Item: var item, EventType: var eventType, Index: var index, RoutedEvent: var @event } collectionArgs)
+                return new Utility.Common.EventArgs.CollectionItemEventArgs(eventType, item, index);
             switch (cmd)
             {
                 //case ICommand when cmd.GetType().BaseType?.Name == typeof(ReactiveCommandBase<,>).Name:
