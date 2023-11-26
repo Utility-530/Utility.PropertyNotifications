@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
+using Utility.Models;
 using Utility.Persists;
 using Utility.Trees.Abstractions;
 
@@ -131,13 +132,13 @@ namespace Utility.Trees.Demo.Infrastructure
                     {
                         var t2 = new T() { Orm = uow.Orm };
                         t2.Load(pair.Parent);
-                        tree = new Tree<T>(t2) { Key = pair.Parent };
+                        tree = new Tree<T>(t2) { Key = new Key<Tree<T>>(pair.Parent) };
                     }
                     if (tree.Match(pair.Parent) is ITree<Persist> branch)
                     {
                         var t = new T() { Orm = uow.Orm };
                         t.Load(pair.Child);
-                        branch.Add(new Tree<T>(t) { Key = pair.Child });
+                        branch.Add(new Tree<T>(t) { Key = new Key<Tree<T>>(pair.Child) });
                         keys.Remove(pair.Parent);
                     }
                     else

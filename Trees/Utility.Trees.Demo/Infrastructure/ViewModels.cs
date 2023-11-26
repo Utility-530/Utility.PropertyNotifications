@@ -1,5 +1,4 @@
-﻿using Shared.Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -82,7 +81,7 @@ namespace Utility.Trees.Demo.Infrastructure
     public class Property
     {
         public string Name { get; set; }
-        public ENativeType Type { get; set; }
+        //public ENativeType Type { get; set; }
         public object Value { get; set; }
     }
 

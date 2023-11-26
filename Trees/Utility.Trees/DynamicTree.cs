@@ -34,7 +34,7 @@ namespace Utility.Trees
 
     public class DynamicTree : IDynamicTree, System.IObservable<ITree>, System.IObserver<ITree>, INotifyPropertyChanged
     {
-        private IReadOnlyList<ITree> children => Current.Parent?.Items;
+        private IReadOnlyList<ITree> children => Current.Parent?.Items.Cast<ITree>().ToList();
         private ITree tree;
         private List<System.IObserver<ITree>> observers = new();
         private ITree current;

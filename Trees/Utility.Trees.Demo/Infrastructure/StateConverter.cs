@@ -61,7 +61,7 @@ namespace Utility.Trees.Demo.Infrastructure
 
         int index(ITree tree)
         {
-            return tree.Parent?.Items.IndexOf(tree) ?? -1;
+            return (tree.Parent?.Items.Cast<ITree>())?.IndexOf(tree) ?? -1;
         }
     }
 

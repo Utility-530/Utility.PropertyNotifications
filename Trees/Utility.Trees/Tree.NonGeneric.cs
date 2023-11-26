@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Trees
@@ -33,14 +34,14 @@ namespace Utility.Trees
                     Visit(item, action);
         }
 
-        public static ITree? Match(this ITree tree, Predicate<ITree> action)
+        public static IReadOnlyTree? Match(this IReadOnlyTree tree, Predicate<IReadOnlyTree> action)
         {
             if (action(tree))
             {
                 return tree;
             }
 
-            foreach (var item in tree)
+            foreach (IReadOnlyTree item in tree.Items)
             {
                 if (Match(item, action) is ITree sth)
                 {
@@ -54,6 +55,26 @@ namespace Utility.Trees
         public static bool IsRoot(this ITree tree)
         {
             return tree.Index.Collection.Any() == false;
+        }
+
+        public static IEnumerable<IReadOnlyTree> Ancestors(this IReadOnlyTree tree)
+        {
+            IReadOnlyTree parent = tree.Parent;
+            while (parent != null)
+            {
+                yield return parent;
+                parent = parent.Parent;
+            }
+        }
+        public static IEnumerable<IReadOnlyTree> FindAncestors(this IReadOnlyTree tree, Predicate<IReadOnlyTree> predicate)
+        {
+            IReadOnlyTree parent = tree.Parent;
+            while (parent != null)
+            {
+                if (predicate(parent))
+                    yield return parent;
+                parent = parent.Parent;
+            }
         }
     }
 
@@ -94,20 +115,20 @@ namespace Utility.Trees
                 Add(items);
         }
 
-        public Guid Key { get; set; }
+        public virtual IEquatable Key { get; set; }
 
         public ITree? this[object item]
         {
             get
             {
                 var x = TreeHelper2.Match(this, a => a.Data?.Equals(item) == true);
-                if (x == null)
+                if (x is not ITree match)
                 {
                     throw new Exception("4sd ss");
                     //x = new Tree(item);
                     //this.Add(x);
                 }
-                return x;
+                return match;
             }
             set
             {
@@ -115,29 +136,35 @@ namespace Utility.Trees
             }
         }
 
-        public ITree? this[Guid key]
+        public ITree? this[IEquatable key]
         {
             get
             {
                 var x = TreeHelper2.Match(this, a => a.Key.Equals(key) == true);
+                if (x is not ITree match)
+                {
+                    throw new Exception("4sd ss");
+                    //x = new Tree(item);
+                    //this.Add(x);
+                }
                 //if (x == null)
                 //{
                 //    throw new Exception("4sd ss");
                 //    //x = new Tree(item);
                 //    //this.Add(x);
                 //}
-                return x;
+                return match;
             }
             set
             {
                 var x = TreeHelper2.Match(this, a => a.Key.Equals(key) == true);
-                if (x == null)
+                if (x is not ITree match)
                 {
                     throw new Exception("4sd ss");
                     //x = new Tree(item);
                     //this.Add(x);
                 }
-                x.Parent[x.Key] = value;
+                match.Parent[x.Key] = value;
             }
         }
 
@@ -208,9 +235,9 @@ namespace Utility.Trees
             if (data == null)
                 return;
 
-            if (data is Guid key)
+            if (data is IEquatable key)
             {
-                var single = m_items.OfType<ITree>().Single(t => t.Key == key);
+                var single = m_items.OfType<ITree>().Single(t => t.Key.Equals(key));
                 m_items.Remove(single);
                 return;
             }
@@ -251,7 +278,7 @@ namespace Utility.Trees
 
         protected virtual object Clone(object data)
         {
-            if(data is IClone clone)
+            if (data is IClone clone)
             {
                 return clone.Clone();
             }
@@ -302,8 +329,7 @@ namespace Utility.Trees
         //}
 
 
-
-        public object Data { get => data; set => data = value; }
+        public virtual object Data { get => data; set => data = value; }
 
         public virtual bool HasItems
         {
@@ -312,7 +338,7 @@ namespace Utility.Trees
 
         public ITree? Parent { get => parent; set => parent = value; }
 
-        public IReadOnlyList<ITree> Items
+        public virtual IEnumerable Items
         {
             get
             {
@@ -354,6 +380,8 @@ namespace Utility.Trees
                 }
             }
         }
+
+        IReadOnlyTree IReadOnlyTree.Parent { get => Parent; set => Parent = value as ITree; }
 
         private void ResetOnCollectionChangedEvent()
         {
@@ -415,12 +443,12 @@ namespace Utility.Trees
 
         public bool Equals(ITree? other)
         {
-            return other?.Key.Equals(this.Key) == true;
+            return other?.Key?.Equals(this.Key) == true;
         }
 
         public void Remove(Guid index)
         {
-            var single = m_items.OfType<ITree>().Single(t => t.Key == index);
+            var single = m_items.OfType<ITree>().Single(t => t.Key.Equals(index));
             m_items.Remove(single);
         }
 
@@ -457,6 +485,11 @@ namespace Utility.Trees
         protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        bool IEquatable<IReadOnlyTree>.Equals(IReadOnlyTree? other)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion propertyChanged

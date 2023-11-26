@@ -28,6 +28,7 @@ namespace Utility.Trees
                 Add(items);
         }
 
+        public int Id { get; private set; }
 
         public ITree<T>? this[T item]
         {
@@ -192,7 +193,6 @@ namespace Utility.Trees
             }
         }
 
-        public int Id { get; private set; }
 
         protected override IList CreateChildren()
         {
@@ -249,7 +249,7 @@ namespace Utility.Trees
                     yield return child as ITree<T>;
         }
 
-        public override IEnumerator<ITree<T>> GetEnumerator()
+        public override IEnumerator<ITree> GetEnumerator()
         {
             return m_items == null ? Enumerable.Empty<ITree<T>>().GetEnumerator() : Items.GetEnumerator();
         }
@@ -264,6 +264,11 @@ namespace Utility.Trees
                 i++;
             }
             return -1;
+        }
+
+        IEnumerator<ITree<T>> IEnumerable<ITree<T>>.GetEnumerator()
+        {
+            return m_items == null ? Enumerable.Empty<ITree<T>>().GetEnumerator() : Items.GetEnumerator();
         }
     }
 
@@ -330,7 +335,7 @@ namespace Utility.Trees
 
         public static ITree<T>? Match<T>(this ITree<T> tree, Guid guid)
         {
-            return Match(tree, a => a.Key == guid);
+            return Match(tree, a => a.Key.Equals(guid));
         }
     }
 }

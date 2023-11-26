@@ -33,17 +33,17 @@
                     <view:EnumItemsControl
                             x:Name="ebdc"
                             Orientation="Horizontal"
-                            Enum="{x:Type shared:ENativeType}" />
+                             />
                 </ToolBar>
                 <WrapPanel  Grid.Row="1">
                     <TextBlock>Value</TextBlock>
-                    <shared:NativeTypeEditor
+                    <TextBlock Text="{Binding ElementName=ebdc, Path=Value }"></TextBlock>
+                    <!--<shared:NativeTypeEditor
                 x:Name="NativeTypeEditor"
             Width="200"
             Height="30"
             Type="{Binding ElementName=ebdc, Path=Value}"
-                
-           />
+           />-->
                 </WrapPanel>
 
 
