@@ -12,9 +12,7 @@ using System.Runtime.CompilerServices;
 using Utility.Common.Collection;
 using Utility.Common.Contract;
 using Utility.Common.Model;
-using Utility.Common.Models;
 using Utility.Helpers;
-using Utility.Helpers.Ex;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 
@@ -30,7 +28,6 @@ namespace Utility.ViewModels
     public record ChildMessage(string From, IEnumerable<IChangeSet<ViewModel, string>> Children) : Message(From, Children);
 
     public record PropertyChangeMessage(string From, IEnumerable<PropertyChange> Changes) : Message(From, Changes);
-
     public record PropertyChange<TValue>(string Name, TValue Generic) : PropertyChange(Name, Generic);
     public record PropertyChangeBoolean(string Name, bool Bool) : PropertyChange<bool>(Name, Bool);
     public record PropertyChange(string Name, object Value);
