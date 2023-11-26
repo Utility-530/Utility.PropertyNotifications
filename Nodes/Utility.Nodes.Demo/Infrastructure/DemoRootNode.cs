@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Utility.Interfaces.NonGeneric;
-using Utility.Nodes.Abstractions;
 using Utility.Nodes.Demo.Infrastructure;
+using Utility.Properties;
+using Utility.Trees.Abstractions;
+using Utility.WPF.Templates;
 
 namespace Utility.Nodes.Demo
 {
-    public enum NodeType
-    {
-        ViewModel,
-        Directory,
-        //Property
-    }
 
 
     public class DemoRootNode : Node
@@ -23,7 +20,7 @@ namespace Utility.Nodes.Demo
         {
         }
 
-        public override string Content => nameof(NodeType);
+        public override string Data => nameof(NodeType);
 
         public override IEquatable Key => throw new NotImplementedException();
 
@@ -40,16 +37,19 @@ namespace Utility.Nodes.Demo
 
         public override string ToString()
         {
-            return Content;
+            return Data;
         }
 
-        public override INode ToNode(object value)
+        public override ITree ToNode(object value)
         {
+            var x = new X();
             if (value is NodeType nodeType)
                 return nodeType switch
                 {
                     NodeType.ViewModel => new ViewModelNode(typeof(TopViewModel)),
                     NodeType.Directory => new DirectoryNode(@"C:\"),
+                    NodeType.Model => new PropertyNode(new PropertyData(x, new RootDescriptor(x))),
+                    NodeType.Assembly => new AssemblyNode(typeof(GenericDataTemplateSelector).Assembly),
                     //NodeType.Property => new RootProperty(Guid.NewGuid()) { Data = new Customer2() },
                     _ => throw new Exception("r 4333"),
                 };
@@ -61,4 +61,11 @@ namespace Utility.Nodes.Demo
             return Task.FromResult(flag == false);
         }
     }
+    public class X
+    {
+        public int Value { get; } = 1;
+
+        public List<string> List { get; } = new List<string> { "a", "b" };
+    }
 }
+

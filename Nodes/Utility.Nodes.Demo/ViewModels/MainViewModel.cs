@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Utility.Nodes.Abstractions;
+using Utility.Trees.Abstractions;
 
-namespace Utility.Nodes.Demo.Infrastructure
+namespace Utility.Nodes.Demo.ViewModels
 {
     public class MainViewModel
     {
-        public INode Value { get; } = new DemoRootNode();
+        public ITree Value { get; } = new DemoRootNode();
 
     }
 }

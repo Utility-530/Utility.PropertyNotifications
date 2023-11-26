@@ -1,6 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using System;
 using Utility.Interfaces.NonGeneric;
+using Utility.Models;
+using Utility.Helpers;
 
 namespace Utility.Nodes.Demo.Infrastructure
 {
@@ -14,9 +16,9 @@ namespace Utility.Nodes.Demo.Infrastructure
             this.type = type;
         }
 
-        public override object Content => Activator.CreateInstance(type);
+        public override object Data => Activator.CreateInstance(type);
 
-        public override IEquatable Key => throw new NotImplementedException();
+        public override IEquatable Key => new StringKey(type.AsString());
 
         //public override IObservable Leaves => new Collection();
 
@@ -43,3 +45,4 @@ namespace Utility.Nodes.Demo.Infrastructure
         }
     }
 }
+

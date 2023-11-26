@@ -4,7 +4,6 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Observables;
 using Utility.Observables.NonGeneric;
-
 namespace Utility.Nodes
 {
     public class DirectoryNode : Node, IObserver
@@ -39,14 +38,12 @@ namespace Utility.Nodes
         public override IEquatable Key => new StringKey(lazyContent.Value.FullName);
 
 
-        public override DirectoryInfo Content => lazyContent.Value;
+        public override DirectoryInfo Data => lazyContent.Value;
 
         public override async Task<bool> HasMoreChildren()
         {
             return await Task.FromResult(flag == false);
         }
-
-
 
         public override Node ToNode(object value)
         {
@@ -92,7 +89,7 @@ namespace Utility.Nodes
             {
                 try
                 {
-                    foreach (var directoryInfo in Directory.EnumerateDirectories(Content.FullName).Select(item => new DirectoryInfo(item)))
+                    foreach (var directoryInfo in Directory.EnumerateDirectories(Data.FullName).Select(item => new DirectoryInfo(item)))
                     {
                         subject.OnNext(directoryInfo);
                     }
@@ -119,7 +116,7 @@ namespace Utility.Nodes
             {
                 try
                 {
-                    foreach (var fileInfo in Directory.EnumerateFiles(Content.FullName).Select(item => new FileInfo(item)))
+                    foreach (var fileInfo in Directory.EnumerateFiles(Data.FullName).Select(item => new FileInfo(item)))
                     {
                         subject.OnNext(fileInfo);
                     }
@@ -147,7 +144,7 @@ namespace Utility.Nodes
             else if (value is FileInfo fileInfo)
                 _leaves.Add(fileInfo);
 
-            _children.Add(ToNode(value));
+            items.Add(ToNode(value));
         }
 
         public void OnCompleted()

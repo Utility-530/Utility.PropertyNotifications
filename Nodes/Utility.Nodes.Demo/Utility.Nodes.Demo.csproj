@@ -8,8 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ModernWpfUI" Version="0.9.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
     <ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
     <ProjectReference Include="..\Utility.Nodes\Utility.Nodes.csproj" />
   </ItemGroup>
 

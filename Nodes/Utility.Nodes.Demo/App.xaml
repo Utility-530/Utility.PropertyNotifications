@@ -6,9 +6,18 @@
              xmlns:conv="http://schemas.utility.com/converters"
              xmlns:infra="clr-namespace:Utility.Nodes.Demo.Infrastructure" 
              xmlns:io="clr-namespace:System.IO;assembly=mscorlib"        
-             xmlns:local="clr-namespace:Utility.Nodes.Demo">
+             xmlns:local="clr-namespace:Utility.Nodes.Demo"
+             xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
+             xmlns:com="clr-namespace:System.ComponentModel;assembly=System" 
+             xmlns:templates="http://schemas.utility.com/templates"
+             xmlns:ui="http://schemas.modernwpf.com/2019">
     <Application.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ui:ThemeResources RequestedTheme="Light"  AccentColor="Blue"/>
+                <ui:XamlControlsResources />
+            </ResourceDictionary.MergedDictionaries>
+            
             <conv:FilenameToIconConverter x:Key="iconConverter" />
             <DataTemplate DataType="{x:Type infra:ViewModel}">
                 <st:AutoGrid Columns="*,*" Rows="*" Height="24">
@@ -56,16 +65,14 @@
                                        Text="{Binding Attributes}" />
                         <TextBlock Grid.Column="6"
                                        Text="{Binding LastWriteTime}" />
-
-
                     </Grid>
                 </Border>
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type local:DemoRootNode}">
-                <TreeView ItemsSource="{Binding Children}">
+                <TreeView ItemsSource="{Binding Items}">
                     <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                        <HierarchicalDataTemplate ItemsSource="{Binding Items}">
                             <StackPanel Orientation="Horizontal">
                                 <StackPanel.Style>
                                     <Style>
@@ -79,13 +86,42 @@
                                     </Style>
                                 </StackPanel.Style>
 
-                                <ContentControl Content="{Binding Content}"  VerticalAlignment="Center">
+                                <ContentControl Content="{Binding Data}"  VerticalAlignment="Center">
                                 </ContentControl>
                             </StackPanel>
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
             </DataTemplate>
+            
+            
+            
+            
+
+            <DataTemplate DataType="{x:Type nodes:PropertyData}">
+                <UniformGrid Rows="1">
+                    <ContentControl Content="{Binding Descriptor}"/>
+                    <ContentControl Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
+                </UniformGrid>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type com:MemberDescriptor}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding DisplayName}" Grid.ColumnSpan="2"></TextBlock>
+                    <TextBlock Text="IsReadOnly" FontSize="8"  Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"></TextBlock>
+                    <CheckBox IsChecked="{Binding IsReadOnly, Mode=OneTime}" IsEnabled="False"  Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right"></CheckBox>
+                </Grid>
+            </DataTemplate>
+
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

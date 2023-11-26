@@ -1,44 +1,28 @@
 ﻿using System.Collections;
 using Utility.Collections;
 using Utility.Interfaces.NonGeneric;
-using Utility.Nodes.Abstractions;
+using Utility.Trees;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
-    public abstract class Node : INode
+    public abstract class Node : Tree
     {
         private bool _isRefreshing;
-        protected Collection _children = new();
+        protected Collection items = new();
 
-        public abstract IEquatable Key { get; }
         public abstract Task<object?> GetChildren();
 
         public abstract Task<bool> HasMoreChildren();
 
-        public abstract INode ToNode(object value);
+        public abstract IReadOnlyTree ToNode(object value);
 
-        public abstract object Content { get; }
-
-        public INode Parent { get; set; }
-
-        public virtual IEnumerable Ancestors => GetAncestors();
-
-        public virtual IObservable Children
+        public override IEnumerable Items
         {
             get
             {
                 _ = RefreshChildrenAsync();
-                return _children;
-            }
-        }
-
-        private IEnumerable GetAncestors()
-        {
-            INode parent = this;
-            while (parent != null)
-            {
-                yield return parent;
-                parent = parent.Parent;
+                return items;
             }
         }
 
@@ -77,14 +61,14 @@ namespace Utility.Nodes
             }
         }
 
-        protected virtual void SetChildrenCache(List<INode> childrenCache)
+        protected virtual void SetChildrenCache(List<IReadOnlyTree> childrenCache)
         {
-            _children.Clear();
-            _children.AddRange(childrenCache);
-            _children.Complete();
+            items.Clear();
+            items.AddRange(childrenCache);
+            items.Complete();
         }
 
-        protected virtual IEnumerable<INode> ToNodes(IEnumerable collection)
+        protected virtual IEnumerable<IReadOnlyTree> ToNodes(IEnumerable collection)
         {
             foreach (var item in collection)
             {

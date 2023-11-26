@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Utility.Trees;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Demo.Infrastructure
 {
@@ -33,7 +34,7 @@ namespace Utility.Nodes.Demo.Infrastructure
         public IEnumerable Children(Type type)
         {
             if (tree.Match(type) is var branch)
-                return branch.Items.Select(a => a.Data).ToArray();
+                return branch.Items.Cast<IReadOnlyTree>().Select(a => a.Data).ToArray();
             return Array.Empty<Type>();
         }
 

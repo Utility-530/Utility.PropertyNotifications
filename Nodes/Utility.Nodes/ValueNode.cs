@@ -1,16 +1,16 @@
 using System.Collections.Specialized;
 using Utility.Collections;
-using Utility.Nodes.Abstractions;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using System.Collections;
 using System.ComponentModel;
 using Utility.Infrastructure;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
     // property node
-    public abstract class ValueNode : AutoObject, INode, INotifyCollectionChanged
+    public abstract class ValueNode : AutoObject, IReadOnlyTree, INotifyCollectionChanged
     {
         protected Collection _children = new();
         protected Collection _branches = new();
@@ -25,15 +25,14 @@ namespace Utility.Nodes
         {
             _children.CollectionChanged += (s, e) => CollectionChanged?.Invoke(this, e);
         }
-        IEquatable INode.Key => this.Key;      
+
+        IEquatable IReadOnlyTree.Key => this.Key;
+
+        public IReadOnlyTree Parent { get; set; }
 
         public abstract string Name { get; }
 
-        public INode Parent { get; set; }
-
-        public virtual IEnumerable Ancestors => GetAncestors();
-
-        public virtual IObservable Children
+        public virtual IEnumerable Items
         {
             get
             {
@@ -42,16 +41,6 @@ namespace Utility.Nodes
                 else
                     _children.Complete();
                 return _children;
-            }
-        }
-
-        private IEnumerable GetAncestors()
-        {
-            INode parent = this.Parent;
-            while (parent != null)
-            {
-                yield return parent;
-                parent = parent.Parent;
             }
         }
 
@@ -95,7 +84,7 @@ namespace Utility.Nodes
                 return;
             if (e.PropertyName == "Count")
                 return;
-            foreach (var child in Children)
+            foreach (var child in Items)
             {
                 if (child is ValueNode { Key: Key { Name: var name } } valueNode)
                     if (e.PropertyName == name)
@@ -115,6 +104,13 @@ namespace Utility.Nodes
         public override string ToString()
         {
             return Data.GetType().Name;
+        }
+
+        public abstract IEnumerator<ITree> GetEnumerator();
+
+        public bool Equals(IReadOnlyTree? other)
+        {
+            return Key.Equals(other?.Key);
         }
     }
 
