@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
 
-//using System.Windows.Data;
-
 namespace Utility.WPF.Converters
 {
     public abstract class BaseConverter<T, R> : IValueConverter
