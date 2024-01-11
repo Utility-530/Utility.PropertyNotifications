@@ -18,6 +18,7 @@ using System.Reactive.Subjects;
 using MintPlayer.ObservableCollection;
 using Utility.WPF.Helpers;
 using Utility.Models;
+using Utility.Infrastructure;
 
 namespace Utility.WPF.Controls
 {
