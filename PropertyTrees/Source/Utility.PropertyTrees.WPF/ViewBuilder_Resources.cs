@@ -1,30 +1,14 @@
 ﻿using System.Windows.Controls;
 using System.Windows;
 using Utility.WPF.Panels;
-using System;
 using System.Collections.Generic;
-using Utility.Infrastructure;
-using Utility.Models;
-using System.Reactive.Linq;
-using Utility.PropertyTrees.WPF.Meta;
 using Utility.Nodes;
-using static Utility.Observables.Generic.ObservableExtensions;
-using Utility.Observables.Generic;
-using System.Reactive.Disposables;
-using Utility.PropertyTrees.Services;
-using Utility.Helpers;
 using Utility.Enums;
-using Utility.WPF.Helpers;
-using Utility.WPF.Adorners.Infrastructure;
 using System.Windows.Media;
 using Orientation = System.Windows.Controls.Orientation;
 using System.Windows.Data;
 using System.Windows.Controls.Primitives;
-using Utility.Helpers.NonGeneric;
-using NetFabric.Hyperlinq;
-using System.Linq;
-using Utility.Trees.Abstractions;
-using Castle.Core.Resource;
+using Utility.WPF.Factorys;
 
 namespace Utility.PropertyTrees.WPF;
 

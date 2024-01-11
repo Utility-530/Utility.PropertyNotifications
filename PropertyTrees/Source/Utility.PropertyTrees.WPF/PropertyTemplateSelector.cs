@@ -9,6 +9,7 @@ using Utility.Nodes;
 using Utility.Observables.Generic;
 using Utility.PropertyTrees.Services;
 using Utility.Trees;
+using Utility.WPF.Factorys;
 using Utility.WPF.Helpers;
 
 namespace Utility.PropertyTrees.WPF
