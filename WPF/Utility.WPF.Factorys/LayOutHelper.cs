@@ -2,8 +2,8 @@
 using System.Windows.Controls.Primitives;
 using System.Windows.Controls;
 using System.Windows;
-using static Utility.WPF.Helpers.TemplateGenerator;
-
+using static Utility.WPF.Factorys.TemplateGenerator;
+using Utility.WPF.Factorys;
 
 namespace Utility.WPF.Helpers
 {

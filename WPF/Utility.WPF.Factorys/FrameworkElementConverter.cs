@@ -10,7 +10,7 @@ using Utility.Helpers;
 
 namespace Utility.WPF.Factorys
 {
-    public static class FrameworkElementFactory
+    public static class FrameworkElementConverter
     {
         public static FrameworkElement GetFrameworkElement(object value)
         {
@@ -69,7 +69,7 @@ namespace Utility.WPF.Factorys
                         return new TextBlock { Text = mb.AsString() };
                     }
                 default:
-                    throw new Exception($"Unexpected type {value.GetType().Name} in {nameof(FrameworkElementFactory)}");
+                    throw new Exception($"Unexpected type {value.GetType().Name} in {nameof(FrameworkElementConverter)}");
             }
         }
     }

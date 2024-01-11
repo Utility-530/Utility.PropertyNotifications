@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows;
 
-namespace Utility.WPF.Helpers
+namespace Utility.WPF.Factorys
 {
     /// <summary>
     /// Class that helps the creation of control and data templates by using delegates.
