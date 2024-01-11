@@ -5,7 +5,6 @@ using Utility.Observables.Generic;
 using Utility.Observables.NonGeneric;
 using System.Runtime.CompilerServices;
 using Utility.Objects;
-using Utility.Models;
 
 namespace Utility.Nodes
 {
@@ -24,9 +23,9 @@ namespace Utility.Nodes
             this.data = propertyData;
         }
 
-        public override object Data => data;// Activator.CreateInstance(data);
+        public override object Data => data;
 
-        public override IEquatable Key => null;// new CombinationKey(new[] { Parent.Key, new StringKey(data.Descriptor.Name) });
+        public override IEquatable Key => null;
 
         public override async Task<object?> GetChildren()
         {
