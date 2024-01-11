@@ -24,7 +24,6 @@ namespace Utility.Nodes
             this.data = propertyData;
         }
 
-
         public override object Data => data;// Activator.CreateInstance(data);
 
         public override IEquatable Key => null;// new CombinationKey(new[] { Parent.Key, new StringKey(data.Descriptor.Name) });
@@ -32,13 +31,7 @@ namespace Utility.Nodes
         public override async Task<object?> GetChildren()
         {
             flag = true;
-
-            //List<object> children = new();
             var children = await ChildPropertyExplorer.Convert(data.Instance, data.Descriptor);
-            //if(data.Descriptor.GetValue(data.Instance)== data.Instance)
-            //{
-
-            //}
             return children.Select(a => new PropertyData(a.Descriptor.GetValue(data.Instance), a.Descriptor)).ToArray();
         }
 

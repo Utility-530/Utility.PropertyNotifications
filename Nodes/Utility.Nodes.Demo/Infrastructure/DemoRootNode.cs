@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Demo.Infrastructure;
+using Utility.Nodes.WPF;
 using Utility.Properties;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Templates;
