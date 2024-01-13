@@ -6,9 +6,9 @@ using System.Windows;
 using Utility.WPF.Controls.Buttons;
 using Utility.Enums;
 using System.Reflection;
-using Utility.WPF.Helpers;
 using ReactiveUI;
 using Utility.WPF.Meta;
+using Utility.WPF.Factorys;
 
 namespace Utility.WPF.Controls.Meta
 {

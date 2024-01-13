@@ -13,7 +13,7 @@ namespace Utility.WPF.Meta
         {
             try
             {
-                return Factorys.FrameworkElementFactory.GetFrameworkElement(entry.Value);
+                return Factorys.FrameworkElementConverter.GetFrameworkElement(entry.Value);
             }
             catch (Exception ex)
             {
