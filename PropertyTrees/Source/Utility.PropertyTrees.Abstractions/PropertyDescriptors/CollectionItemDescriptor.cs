@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 
 namespace Utility.Properties
@@ -12,7 +13,7 @@ namespace Utility.Properties
             ComponentType = componentType;
         }
 
-        public object Item { get; }
+        public object Item { get; set; }
 
         public int Index { get; }
 
@@ -40,6 +41,12 @@ namespace Utility.Properties
 
         public override void SetValue(object? component, object? value)
         {
+            if (component is IList collection)
+            {
+                collection[Index] = value;
+                Item = value;
+                return;
+            }
             throw new NotImplementedException();
         }
 
