@@ -98,13 +98,24 @@
             
             
 
-            <DataTemplate DataType="{x:Type nodes:PropertyData}">
+            <!--<DataTemplate DataType="{x:Type nodes:PropertyData}">
                 <UniformGrid Rows="1">
                     <ContentControl Content="{Binding Descriptor}"/>
                     <ContentControl Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
                 </UniformGrid>
+            </DataTemplate>-->
+
+
+            <DataTemplate DataType="{x:Type nodes:BaseObject}">
+                <UniformGrid Rows="1">
+                    <!--<ContentControl Content="{Binding Descriptor}"/>-->
+                    <TextBlock Text="{Binding Name}"></TextBlock>
+                    <ContentControl Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
+                </UniformGrid>
             </DataTemplate>
 
+            
+            
             <DataTemplate DataType="{x:Type com:MemberDescriptor}">
                 <Grid>
                     <Grid.RowDefinitions>
