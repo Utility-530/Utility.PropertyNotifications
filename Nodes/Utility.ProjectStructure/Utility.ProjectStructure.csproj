@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Trees\Utility.Trees.Abstractions\Utility.Trees.Abstractions.csproj" />
     <ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
   </ItemGroup>
 
 </Project>

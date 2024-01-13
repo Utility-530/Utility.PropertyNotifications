@@ -1,8 +1,17 @@
 ﻿using System;
 using System.Collections;
+
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using System.Windows.Threading;
+using Utility.Factorys;
+using Utility.Helpers;
 using Utility.ProjectStructure;
 using Utility.Trees.Abstractions;
 
@@ -12,6 +21,31 @@ namespace Utility.Nodes.WPF
     {
         Lazy<IList> lazy = new();
         object data;
+
+
+        public AssemblyNode()
+        {
+            lazy = new Lazy<IList>(() =>
+            {
+                var x = Assembly.GetEntryAssembly();
+                var files = System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*" + "Utility" + "*.dll").Where(a=>a.Equals(x.Location)==false).ToArray();
+                return files;
+            });
+            data = AppDomain.CurrentDomain.BaseDirectory;
+        }
+
+        public AssemblyNode(string assemblyFileName)
+        {
+            if (assemblyFileName.Contains("dll") == false)
+                throw new Exception("fsd3lp[pf");
+            var assembly = Assembly.Load(AssemblyName.GetAssemblyName(assemblyFileName));
+            lazy = new Lazy<IList>(() =>
+            {
+                return assembly.SelectResourceDictionaries().ToList();
+            });
+            data = assembly.FullName;
+        }
+
 
         public AssemblyNode(Assembly assembly)
         {
@@ -24,10 +58,10 @@ namespace Utility.Nodes.WPF
 
         public AssemblyNode(ResourceDictionaryKeyValue resourceDictionaryKeyValue)
         {
-
             lazy = new Lazy<IList>(() =>
             {
-                var values = resourceDictionaryKeyValue.ResourceDictionary.Cast<DictionaryEntry>().Select(a => new DictionaryEntryKeyValue(a)).ToList();
+                IList values = null;
+                values = resourceDictionaryKeyValue.ResourceDictionary.Cast<DictionaryEntry>().Select(a => new DictionaryEntryKeyValue(a)).ToList();
                 return values;
             });
             data = resourceDictionaryKeyValue.Key;
@@ -37,15 +71,15 @@ namespace Utility.Nodes.WPF
         {
 
             lazy = new Lazy<IList>(Array.Empty<object>);
-
-            data = entryKeyValue.Key;
+            data = entryKeyValue.Value;
         }
 
         public override object Data => data;
 
         public override Task<object?> GetChildren()
         {
-            return Task.Run(() => (object)lazy.Value);
+            //return Task.Run(() => (object)lazy.Value);
+            return Task.FromResult((object)lazy.Value);
         }
 
         public override Task<bool> HasMoreChildren()
@@ -58,6 +92,10 @@ namespace Utility.Nodes.WPF
             if (value is Assembly assembly)
             {
                 return new AssemblyNode(assembly);
+            }
+            if (value is string sAssembly)
+            {
+                return new AssemblyNode(sAssembly);
             }
             else if (value is ResourceDictionaryKeyValue resourceDictionaryKeyValue)
             {

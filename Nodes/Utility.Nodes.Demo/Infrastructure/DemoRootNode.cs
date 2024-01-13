@@ -50,7 +50,7 @@ namespace Utility.Nodes.Demo
                     NodeType.ViewModel => new ViewModelNode(typeof(TopViewModel)),
                     NodeType.Directory => new DirectoryNode(@"C:\"),
                     NodeType.Model => new PropertyNode(new PropertyData(x, new RootDescriptor(x))),
-                    NodeType.Assembly => new AssemblyNode(typeof(GenericDataTemplateSelector).Assembly),
+                    NodeType.Assembly => new AssemblyNode(),
                     //NodeType.Property => new RootProperty(Guid.NewGuid()) { Data = new Customer2() },
                     _ => throw new Exception("r 4333"),
                 };

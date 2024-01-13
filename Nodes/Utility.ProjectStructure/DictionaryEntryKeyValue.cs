@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Utility.WPF.Factorys;
 
 namespace Utility.ProjectStructure
 {
@@ -21,7 +22,7 @@ namespace Utility.ProjectStructure
         //}
         public override string GroupKey => Entry.Value?.GetType().Name.ToString();
 
-        public override object Value => Entry.Value;
+        public override object Value => FrameworkElementConverter.GetFrameworkElement(Entry.Value);
     }
 }
 
