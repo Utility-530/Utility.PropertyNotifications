@@ -9,7 +9,7 @@
                     xmlns:tiny="https://github.com/xtremlyred/tiny.toolkits" 
                     xmlns:controls="http://schemas.utility.com"
                     xmlns:utl="http://schemas.utility.com/utilitywpf"
-                    x:Class="Utility.WPF.Templates.ValueTemplates">
+                    x:Class="Utility.WPF.Templates.ReadOnlyValueTemplates">
 
 
     <converter:IntToEnumConverter x:Key="IntToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
@@ -19,10 +19,10 @@
 
 
     <DataTemplate DataType="{x:Type sys:Int32}">
-        <TextBox Text="{Binding Path=Value, Mode=TwoWay, StringFormat={}{0:N0}}"></TextBox>
+        <TextBox Text="{Binding Path=Value, Mode=OneWay, StringFormat={}{0:N0}}"></TextBox>
     </DataTemplate>
     <DataTemplate x:Key="Number">
-        <TextBox Text="{Binding Path=Value, Mode=TwoWay, StringFormat={}{0:N0}}"></TextBox>
+        <TextBox Text="{Binding Path=Value, Mode=OneWay, StringFormat={}{0:N0}}"></TextBox>
     </DataTemplate>
 
     <!--<DataTemplate DataType="{x:Type sys:Type}">
@@ -70,7 +70,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:String}">
-        <TextBox Text="{Binding Path=Value, Mode=TwoWay }" VerticalContentAlignment="Center" ></TextBox>
+        <TextBox Text="{Binding Path=Value, Mode=OneWay }" VerticalContentAlignment="Center" ></TextBox>
     </DataTemplate>
 
     <DataTemplate x:Key="Enumerable">
@@ -79,12 +79,12 @@
 
 
     <DataTemplate DataType="{x:Type sys:Guid}">
-        <controls:GuidBox Guid="{Binding Path=Value}" ></controls:GuidBox>
+        <controls:GuidBox Guid="{Binding Path=Value}" IsReadOnly="true"></controls:GuidBox>
     </DataTemplate>
 
 
     <DataTemplate DataType="{x:Type sys:Enum}">
-        <controls:EnumItemsControl Value="{Binding Path=Value, Mode=TwoWay }" ></controls:EnumItemsControl>
+        <controls:EnumItemsControl Value="{Binding Path=Value, Mode=OneWay }" ></controls:EnumItemsControl>
     </DataTemplate>
 
 

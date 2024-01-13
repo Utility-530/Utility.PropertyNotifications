@@ -9,16 +9,16 @@ using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Templates
 {
-    public partial class ValueTemplates : ResourceDictionary
+    public partial class ReadOnlyValueTemplates : ResourceDictionary
     {
-        public ValueTemplates()
+        public ReadOnlyValueTemplates()
         {
             //InitializeComponent();
         }
     }
 
 
-    public class ValueDataTemplateSelector : GenericDataTemplateSelector
+    public class ReadOnlyValueDataTemplateSelector : GenericDataTemplateSelector
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -37,9 +37,9 @@ namespace Utility.WPF.Templates
             if (value == null)
                 return NullDataTemplate ??= NullTemplate();
 
-            //var type = value.GetType();
-            //var _descriptor = item is IPropertyDescriptor descriptor ? descriptor : null;
-            //var _info = item is IPropertyInfo propertyInfo ? propertyInfo : null;
+            var type = value.GetType();
+            var _descriptor = item is IPropertyDescriptor descriptor ? descriptor : null;
+            var _info = item is IPropertyInfo propertyInfo ? propertyInfo : null;
 
 
             return base.SelectTemplate(value, container);

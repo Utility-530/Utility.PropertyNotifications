@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.WPF.Templates
@@ -14,7 +15,7 @@ namespace Utility.WPF.Templates
 
     public class CustomDataTemplateSelector : GenericDataTemplateSelector
     {
-        private ValueDataTemplateSelector? valueDataTemplateSelector;
+        private DataTemplateSelector? valueDataTemplateSelector, readOnlyValueDataTemplateSelector;
 
         public override ResourceDictionary Templates
         {
@@ -42,11 +43,19 @@ namespace Utility.WPF.Templates
             if (item == null)
                 return NullDataTemplate ??= NullTemplate();
 
-      
-            if (item is IValue {  } ivalue)
+
+            if (item is IValue { } ivalue)
             {
-                return (valueDataTemplateSelector ??= new ValueDataTemplateSelector()).SelectTemplate(item, container);
+
+                if (item is IIsReadOnly { IsReadOnly: false })
+                {
+                    return (valueDataTemplateSelector ??= new ValueDataTemplateSelector()).SelectTemplate(item, container);
+                }
+
+                return (readOnlyValueDataTemplateSelector ??= new ReadOnlyValueDataTemplateSelector()).SelectTemplate(item, container);
             }
+
+
 
             var type = item.GetType();
 
