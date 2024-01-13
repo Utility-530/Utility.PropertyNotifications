@@ -1,15 +1,16 @@
-﻿using Utility.Helpers;
+﻿using NetFabric.Hyperlinq;
+using System.Globalization;
+using Utility.Conversions;
+using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+
 namespace Utility.Repos
 {
-
     public class InMemoryRepository : IRepository
     {
-        public class Table
+        public record Table
         {
-            public int Id { get; set; }
-
             public Guid Guid { get; set; }
 
             public Guid? Parent { get; set; }
@@ -17,38 +18,96 @@ namespace Utility.Repos
             public string Name { get; set; }
 
             public Type Type { get; set; }
+
+            public List<Property> Propertys { get; set; }
         }
 
-        public class Property
+        public record Type
         {
-            public Guid Guid { get; set; }
+            public string? Assembly { get; set; }
+            public string? Namespace { get; set; }
+            public string Name { get; set; }
+
+            public System.Type ToSystemType()
+            {
+                string assemblyQualifiedName = System.Reflection.Assembly.CreateQualifiedName(Assembly, $"{Namespace}.{Name}");
+                var _type = System.Type.GetType(assemblyQualifiedName);
+                return _type;
+            }
+        }
+
+        public record Property
+        {
             public DateTime Added { get; set; }
             public DateTime? Removed { get; set; }
             public object Value { get; set; }
         }
 
+        public List<Table> Tables { get; set; } = new();
+        public List<Type> Types { get; set; } = new();
 
-        List<Table> Tables = new();
-        Dictionary<int, List<Property>> Properties = new();
+
+        private Task initialisationTask;
+
+        public InMemoryRepository()
+        {
+            Initialise();
+        }
+
 
 
         public IEquatable Key => new Key<InMemoryRepository>(Guids.InMemory);
 
 
-        public Task Update(IEquatable key, object value)
+        private void Initialise()
         {
-            if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
+            initialisationTask = Task.WhenAll(
+
+            );
+        }
+
+        public async Task Update(IEquatable key, object value)
+        {
+            if (key is not IGuid { Guid: var guid } _key)
             {
                 throw new Exception("reg 43cs ");
             }
 
+            await initialisationTask;
+
             var tables = Tables.Where(v => v.Guid.Equals(guid)).ToList();
 
-            if (Tables.Count == 1)
+            if (tables.Count == 1)
             {
-                if (Properties.ContainsKey(tables.Single().Id) == false)
+                var single = tables.Single();
+
+                try
                 {
-                    Properties[tables.Single().Id] = new();
+
+                    if (value is Key { Guid: Guid valueGuid, Name: var name } && valueGuid == guid)
+                    {
+                        if (single.Name != name)
+                            single = (single with { Name = name });
+                        return;
+                    }
+                    if (value == null)
+                    {
+                        tables.Remove(single);
+                        return;
+                    }
+
+
+                    if (single.Propertys == null)
+                        single.Propertys = new();
+                    if (single.Propertys.Last().Value != value)
+                    {
+                        single.Propertys.Add(new Property { Added = DateTime.Now, Value = value });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                    //undo
                 }
             }
             else if (tables.Count == 0)
@@ -59,74 +118,135 @@ namespace Utility.Repos
             {
                 throw new Exception("676 ere 4323");
             }
-            return Task.CompletedTask;
         }
 
 
-        public Task<IEquatable[]> FindKeys(IEquatable key)
+        public async Task<IEquatable[]> FindKeys(IEquatable key)
         {
-            if (key is not Key { Guid: var parent } _key)
+            if (key is not IGuid { Guid: var parent } _key)
             {
                 throw new Exception("reg 43cs ");
             }
 
-            if (key is not Key { Name: string name, Type: Type type })
+            await initialisationTask;
+
+            if (key is Key { Name: null, Type: null })
             {
-                var tables = Tables.Where(t => t.Parent == parent);
+                var tables = Tables.Where(a => a.Parent == parent);
                 List<IEquatable> childKeys = new();
                 foreach (var table in tables)
                 {
-                    var childKey = new Key(table.Guid, table.Name, table.Type);
+                    var clrType = TypeHelper.ToType(table.Type.Assembly, table.Type.Namespace, table.Type.Name);
+                    var childKey = new Key(table.Guid, table.Name, clrType);
                     childKeys.Add(childKey);
                 }
-                return Task.FromResult(childKeys.ToArray());
+                return childKeys.ToArray();
             }
-            else
+
+            if (key is Key { Name: var name, Type: System.Type type })
             {
-                var tables = Tables.Where(t => t.Parent == parent && t.Name == name).ToArray();
-                if (tables.Length == 0)
+                if (name == null)
                 {
-                    var guid = Guid.NewGuid();
-                    Tables.Add(new Table { Guid = guid, Name = name, Parent = parent, Type = type });
-                    return Task.FromResult(new IEquatable[] { new Key(guid, name, type) });
-                }
-                if (tables.Length == 1)
-                {
-                    var table = tables.Single();
-                    return Task.FromResult(new IEquatable[] { new Key(table.Guid, name, type) });
+                    var types = Types.Where(t => t.Assembly == type.Assembly.FullName && t.Namespace == type.Namespace && t.Name == type.Name);
+                    var singleType = types.SingleOrDefault();
+                    if (singleType == default)
+                        return Array.Empty<IEquatable>();
+                    var tables = Tables.Where(a => a.Parent == parent && a.Type == singleType);
+                    List<IEquatable> childKeys = new();
+                    foreach (var table in tables)
+                    {
+                        var clrType = TypeHelper.ToType(singleType.Assembly, singleType.Namespace, singleType.Name);
+                        var childKey = new Key(table.Guid, table.Name, clrType);
+                        childKeys.Add(childKey);
+                    }
+                    return childKeys.ToArray();
                 }
                 else
                 {
-                    throw new Exception("3e909re 4323");
+                    var tables = Tables.Where(a => a.Parent == parent && a.Name == name).ToList();
+                    if (tables.Count == 0)
+                    {
+                        var guid = Guid.NewGuid();
+
+                        try
+                        { 
+                            var newType = TryGetType();
+                            if (newType == null)
+                                throw new Exception("d s3322 88");
+                            Tables.Add(new Table { Guid = guid, Name = name, Parent = parent, Type = newType });
+                        }
+                        catch (Exception ex)
+                        {
+                            throw;
+                        }
+                        return new[] { new Key(guid, name, type) };
+                    }
+                    if (tables.Count == 1)
+                    {
+                        var table = tables.Single();
+                        return new[] { new Key(table.Guid, name, type) };
+                    }
+                    else
+                    {
+                        throw new Exception("3e909re 4323");
+                    }
                 }
+            }
+            throw new Exception(";d;d 3e9d 3209re 4323");
+
+            Type TryGetType()
+            {
+                var tables = Tables.Where(a => a.Parent == parent && a.Name == name).ToList();
+                if (tables.Count != 0)
+                    return null;
+                var types = Types.Where(t => t.Assembly == type.Assembly.FullName && t.Namespace == type.Namespace && t.Name == type.Name).ToList();
+        
+                if (types.Count == 0)
+                {               
+                    var newType = new Type { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name };
+                    Types.Add(newType);
+                    return newType;
+                }
+                else if (types.Count == 1)
+                {
+                    return types.Single();
+                }
+                else
+                    throw new Exception("f 434 4");
             }
         }
 
-        public Task<object?> FindValue(IEquatable key)
+        public async Task<object?> FindValue(IEquatable key)
         {
-            if (key is not Key { Guid: var guid } _key)
+            if (key is not IGuid { Guid: var guid } _key)
             {
                 throw new Exception("reg 43cs ");
             }
 
-            var tables = Tables.Where(v => v.Guid.Equals(guid)).ToArray();
-
-            if (tables.Length == 0)
+            await initialisationTask;
+            var tables = Tables.Where(a => a.Guid.Equals(guid)).ToList();
+            if (tables.Count == 0)
             {
-                throw new Exception("!43 ere 4323");
+                throw new Exception($"!43 ere 4323 {key}");
             }
-            else if (tables.Length == 1)
+            else if (tables.Count == 1)
             {
-                var tableId = tables.Single().Id;
-
-                var properties = Properties[tableId];
+                var table = tables.Single();
+                if (table.Propertys == null || table.Propertys?.Count == 0)
+                {
+                    return null;
+                }
+                var properties = table.Propertys;
                 {
                     List<object> list = new();
                     foreach (var property in properties)
                     {
-                            list.Add(property.Value);
+                        if (ConversionHelper.TryChangeType(property.Value, table.Type.ToSystemType(), CultureInfo.CurrentCulture, out var value))
+                            list.Add(value);
+                        else
+                            throw new Exception("332 b64ere 4323");
                     }
-                    return Task.FromResult(list.LastOrDefault() ?? null);
+                    return list.LastOrDefault() ?? null;
                 }
             }
             else
