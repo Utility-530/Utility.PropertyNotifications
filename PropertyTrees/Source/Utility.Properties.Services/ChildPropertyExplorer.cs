@@ -15,7 +15,6 @@ namespace Utility.Objects
 
     public record ChildrenResponse(PropertyDescriptor Descriptor, ChangeType ChangeType);
 
-    public record ChildrenRequest(object Instance, PropertyDescriptor Descriptor);
 
     public partial class ChildPropertyExplorer
     {
