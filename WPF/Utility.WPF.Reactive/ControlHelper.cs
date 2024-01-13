@@ -39,8 +39,6 @@ namespace Utility.WPF.Reactive
                 {
                     return GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control);
                 });
-
-
         }
 
 
