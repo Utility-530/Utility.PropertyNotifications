@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Meta\Utility.WPF.Controls.Meta\Utility.WPF.Controls.Meta.csproj" />
-    <ProjectReference Include="..\..\WPF\Utility.WPF.Nodes\Utility.WPF.Nodes.csproj" />
   </ItemGroup>
 
 </Project>
