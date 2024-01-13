@@ -1,8 +1,8 @@
 ﻿namespace Utility.Interfaces.Generic
 {
-    public interface IValue<T>
+    public interface IValue<T> : Utility.Interfaces.NonGeneric.IValue
     {
-        T Value { get; }
+        new T Value { get; }
     }
 
 }
