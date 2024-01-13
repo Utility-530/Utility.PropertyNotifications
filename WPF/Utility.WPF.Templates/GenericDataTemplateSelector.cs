@@ -4,8 +4,9 @@ using System.Drawing;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using Utility.Interfaces.NonGeneric;
-using Utility.WPF.Helpers;
+using Utility.WPF.Factorys;
 
 namespace Utility.WPF.Templates
 {
@@ -24,7 +25,7 @@ namespace Utility.WPF.Templates
         public DataTemplate? ColorDataTemplate { get; set; }
         public DataTemplate? IConvertibleTemplate { get; set; }
         public DataTemplate? DictionaryDataTemplate { get; set; }
-        public DataTemplate? EnumerableDataTemplate { get; set; }
+        public DataTemplate? EnumerableDataTemplate { get; set; } 
         public DataTemplate? NullDataTemplate { get; set; }
         public DataTemplate? GuidDataTemplate { get; set; }
 
@@ -51,7 +52,7 @@ namespace Utility.WPF.Templates
             else if (type == typeof(string))
                 return StringDataTemplate ?? throw new Exception("Missing DataTemplate for String");
             else if (interfaces.Contains(typeof(IEnumerable)))
-                return EnumerableDataTemplate ?? throw new Exception("Missing DataTemplate for Enumerable");
+                return EnumerableDataTemplate ?? Templates["Enumerable"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Enumerable");
             else if (type == typeof(Color))
                 return ColorDataTemplate ?? throw new Exception("Missing DataTemplate for Color");
             else if (type == typeof(Guid))
@@ -61,7 +62,7 @@ namespace Utility.WPF.Templates
             //if (type == typeof(Utility.WPF.Abstract.Icon))
             //    return IconDataTemplate;
             else if (type == typeof(bool))
-                return BooleanDataTemplate ??= Templates[new DataTemplateKey(typeof(bool))] as DataTemplate ?? throw new Exception("Missing DataTemplate for Boolean");
+                return BooleanDataTemplate ?? throw new Exception("Missing DataTemplate for Boolean");
             else if (typeof(Enum).IsAssignableFrom(type))
                 return EnumDataTemplate ??= (DataTemplate)Templates[new DataTemplateKey(typeof(Enum))] ?? throw new Exception("Missing DataTemplate for Enum");
 

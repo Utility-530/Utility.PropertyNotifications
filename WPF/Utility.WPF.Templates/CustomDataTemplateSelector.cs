@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Drawing;
-using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using Utility.Interfaces.NonGeneric;
-using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Templates
 {
@@ -13,7 +8,6 @@ namespace Utility.WPF.Templates
     {
         public Templates()
         {
-            //InitializeComponent();
         }
     }
 
