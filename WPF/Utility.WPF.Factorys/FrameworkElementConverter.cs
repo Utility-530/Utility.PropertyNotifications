@@ -59,7 +59,7 @@ namespace Utility.WPF.Factorys
                     };
                 case Style { TargetType: var type } style:
                     {
-                        var instance = Activator.CreateInstance(type) as Control;
+                        var instance = Activator.CreateInstance(type) as FrameworkElement;
                         instance.Style = style;
                         return instance;
                     }
