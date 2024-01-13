@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
+using Utility.Helpers;
 
 namespace Utility.WPF.Demo.Trees
 {
@@ -31,7 +32,7 @@ namespace Utility.WPF.Demo.Trees
 
         private void Button_Click_Drop(object sender, System.Windows.RoutedEventArgs e)
         {
-            tree = tree.Items.LastOrDefault() ?? tree;
+            tree = tree.Items.Cast<ITree>().LastOrDefault() ?? tree;
         }
     }
 
