@@ -1,0 +1,111 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Utility.Nodes
+{
+    using Infrastructure;
+    using System.Reactive.Disposables;
+    using System.Reactive.Linq;
+    using Utility.Helpers.Ex;
+    using Utility.Helpers.NonGeneric;
+    using Utility.Interfaces.NonGeneric;
+    using Utility.Models;
+    using Utility.Trees;
+    using Utility.Trees.Abstractions;
+    using UtilityReactive;
+
+
+    public static partial class TreeExtensions
+    {
+        ///// <summary> Converts given collection to tree. </summary>
+        ///// <typeparam name="T">Custom data type to associate with tree node.</typeparam>
+        ///// <param name="items">The collection items.</param>
+        ///// <param name="parentSelector">Expression to select parent.</param>
+        //public static ITree<T> ToTree<T>(this IList<T> items, Func<T, T, bool> parentSelector)
+        //{
+        //    if (items == null) throw new ArgumentNullException(nameof(items));
+
+        //    var lookup = items.ToLookup(item => items.FirstOrDefault(parent => parentSelector(parent, item)), child => child);
+
+        //    return Tree<T>.FromLookup(lookup);
+        //}
+
+
+        public static IObservable<ITree<T>> ToTree<T, K>(this IObservable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, K root_id = default(K))
+        {
+            return Observable.Create<ITree<T>>(observer =>
+            {
+                CompositeDisposable disposables = new();
+                var dis = collection
+                            .Where(c => EqualityComparer<K>.Default.Equals(parent_id_selector(c), root_id))
+                            .Subscribe(a =>
+                            {
+                                var tree = new Tree<T>(a);
+                                observer.OnNext(tree);
+                                var _dis = ToTree(collection, id_selector, parent_id_selector, id_selector(a))
+                                     .Subscribe(a =>
+                                     {
+                                         tree.Add(a);
+                                     });
+                                disposables.Add(_dis);
+                            });
+                disposables.Add(dis);
+                return disposables;
+            });
+        }
+
+        public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, TR property) where TR : IReadOnlyTree, IEquatable
+        {
+            return ExploreTree(items, funcAdd, funcRemove, property, a => a.Items.Changes<TR>());
+        }
+
+
+        public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, TR property, Func<TR, IObservable<ChangeSet<TR>>> func) where TR : IEquatable
+        {
+            items = funcAdd(items, property);
+
+            var disposable = func(property)
+                .Subscribe(args =>
+                {
+                    foreach (var item in args)
+                    {
+                        if (item is Change { Type: ChangeType.Add, Value: TR value })
+                            _ = ExploreTree(items, funcAdd, funcRemove, value, func);
+                        else if (item is Change { Type: ChangeType.Add, Value: TR _value })
+                            funcRemove(items, _value);
+                    }
+                },
+                e =>
+                {
+                },
+                () =>
+                {
+                }
+              );
+            return disposable;
+        }
+
+        public static void Visit<T>(this ITree<T> tree, Action<ITree<T>> action)
+        {
+            action(tree);
+            foreach (var item in (tree as IEnumerable<ITree<T>>))
+                Visit(item, action);
+        }
+
+        public static void Visit<T>(this T tree, Func<T, IEnumerable<T>> children, Action<T> action)
+        {
+            action(tree);
+            foreach (var item in children(tree))
+                Visit(item, children, action);
+        }
+
+        public static bool IsRoot<T>(this ITree<T> tree) => tree.Parent == null;
+
+        public static bool IsLeaf<T>(this ITree<T> tree) => tree.Count() == 0;
+
+        public static int Level<T>(this ITree<T> tree) => tree.IsRoot() ? 0 : tree.Parent.Level() + 1;
+    }
+}

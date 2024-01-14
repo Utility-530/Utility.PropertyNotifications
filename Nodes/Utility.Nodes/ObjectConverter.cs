@@ -26,6 +26,7 @@ namespace Utility.Nodes
                 Enum _value => new EnumValue(a, value),
                 bool _value => new BooleanValue(a, value),
                 int _value => new IntegerValue(a, value),
+                long _value => new LongValue(a, value),
                 double _value => new DoubleValue(a, value),
                 Guid guid => new GuidValue(a, value),
                 DateTime dateTime => new DateTimeValue(a, value),
@@ -44,7 +45,7 @@ namespace Utility.Nodes
     }
 
 
-    public class DefaultValue : BaseObject, IValue
+    public class DefaultValue : BasePropertyObject, IValue
     {
         public DefaultValue(PropertyDescriptor propertyDescriptor, object Instance) : base(propertyDescriptor, Instance)
         {
@@ -57,7 +58,7 @@ namespace Utility.Nodes
     }
 
 
-    public class StringValue : BaseObject, IValue<string>
+    public class StringValue : BasePropertyObject, IValue<string>
     {
 
         public StringValue(PropertyDescriptor propertyDescriptor, object Instance) : base(propertyDescriptor, Instance)
@@ -69,7 +70,7 @@ namespace Utility.Nodes
         object IValue.Value => Value;
     }
 
-    public class IntegerValue : BaseObject, IValue<int>
+    public class IntegerValue : BasePropertyObject, IValue<int>
     {
         public IntegerValue(PropertyDescriptor propertyDescriptor, object Instance) : base(propertyDescriptor, Instance)
         {
@@ -86,7 +87,24 @@ namespace Utility.Nodes
         object IValue.Value => Value;
     }
 
-    public class EnumValue : BaseObject, IValue<Enum>
+    public class LongValue : BasePropertyObject, IValue<long>
+    {
+        public LongValue(PropertyDescriptor propertyDescriptor, object Instance) : base(propertyDescriptor, Instance)
+        {
+
+        }
+        public long Value
+        {
+            get => (long)Descriptor.GetValue(Instance); set
+            {
+                Descriptor.SetValue(Instance, value);
+            }
+        }
+
+        object IValue.Value => Value;
+    }
+
+    public class EnumValue : BasePropertyObject, IValue<Enum>
     {
 
 
@@ -104,7 +122,7 @@ namespace Utility.Nodes
         object IValue.Value => Value;
     }
 
-    public class BooleanValue : BaseObject, IValue<bool>
+    public class BooleanValue : BasePropertyObject, IValue<bool>
     {
 
         public BooleanValue(PropertyDescriptor propertyDescriptor, object Instance) : base(propertyDescriptor, Instance)
@@ -121,7 +139,7 @@ namespace Utility.Nodes
         object IValue.Value => Value;
     }
 
-    public class DoubleValue : BaseObject, IValue<double>
+    public class DoubleValue : BasePropertyObject, IValue<double>
     {
 
         public DoubleValue(PropertyDescriptor propertyDescriptor, object Instance) : base(propertyDescriptor, Instance)
@@ -139,7 +157,7 @@ namespace Utility.Nodes
         object IValue.Value => Value;
     }
 
-    public class GuidValue : BaseObject, IValue<Guid>
+    public class GuidValue : BasePropertyObject, IValue<Guid>
     {
 
 
@@ -157,7 +175,7 @@ namespace Utility.Nodes
         object IValue.Value => Value;
     }
 
-    public class DateTimeValue : BaseObject, IValue<DateTime>
+    public class DateTimeValue : BasePropertyObject, IValue<DateTime>
     {
 
 

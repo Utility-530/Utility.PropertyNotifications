@@ -11,18 +11,18 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Nodes
 {
-    public class BaseObject: NotifyPropertyChangedBase, IIsReadOnly
+    public class BasePropertyObject : NotifyPropertyChangedBase, IIsReadOnly
     {
 
 
-        public BaseObject(PropertyDescriptor Descriptor, object Instance)
+        public BasePropertyObject(PropertyDescriptor Descriptor, object Instance)
         {
             this.Descriptor = Descriptor;
             this.Instance = Instance;
         }
-        public PropertyDescriptor Descriptor { get;  }
+        public PropertyDescriptor Descriptor { get; }
 
-        public object Instance { get;  }
+        public object Instance { get; }
 
         public string Name => Descriptor?.Name ?? "Descriptor not set";
         public string DisplayName => Descriptor.DisplayName;
