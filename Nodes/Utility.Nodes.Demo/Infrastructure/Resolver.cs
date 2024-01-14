@@ -12,7 +12,7 @@ namespace Utility.Nodes.Demo.Infrastructure
 {
     public class Resolver
     {
-        public Tree<Type> tree = new Tree<Type>(typeof(TopViewModel));
+        public Tree<Type> tree = new(typeof(TopViewModel));
 
         public Resolver()
         {
@@ -25,6 +25,8 @@ namespace Utility.Nodes.Demo.Infrastructure
         //{
         //    return Activator.CreateInstance(type);
         //}
+
+        public Type Root => tree.Data;
 
         public IEnumerable Children<T>()
         {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -43,15 +42,13 @@ namespace Utility.Nodes.Demo
 
         public override ITree ToNode(object value)
         {
-            var x = new X();
             if (value is NodeType nodeType)
                 return nodeType switch
                 {
-                    NodeType.ViewModel => new ViewModelNode(typeof(TopViewModel)),
+                    NodeType.ViewModel => new RootViewModelNode(),
                     NodeType.Directory => new DirectoryNode(@"C:\"),
-                    NodeType.Model => new PropertyNode(new PropertyData(x, new RootDescriptor(x))),
+                    NodeType.Model => new RootPropertyNode(),
                     NodeType.Assembly => new AssemblyNode(),
-                    //NodeType.Property => new RootProperty(Guid.NewGuid()) { Data = new Customer2() },
                     _ => throw new Exception("r 4333"),
                 };
             throw new Exception("2r 11 4333");
@@ -61,12 +58,6 @@ namespace Utility.Nodes.Demo
         {
             return Task.FromResult(flag == false);
         }
-    }
-    public class X
-    {
-        public int Value { get; } = 1;
-
-        public List<string> List { get; } = new List<string> { "a", "b" };
     }
 }
 

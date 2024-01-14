@@ -3,8 +3,9 @@ using System;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Helpers;
+using Utility.Nodes.Demo.Infrastructure;
 
-namespace Utility.Nodes.Demo.Infrastructure
+namespace Utility.Nodes.Demo
 {
     public class ViewModelNode : Node
     {
@@ -19,8 +20,6 @@ namespace Utility.Nodes.Demo.Infrastructure
         public override object Data => Activator.CreateInstance(type);
 
         public override IEquatable Key => new StringKey(type.AsString());
-
-        //public override IObservable Leaves => new Collection();
 
         public override async Task<object?> GetChildren()
         {

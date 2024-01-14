@@ -106,7 +106,7 @@
             </DataTemplate>-->
 
 
-            <DataTemplate DataType="{x:Type nodes:BaseObject}">
+            <DataTemplate DataType="{x:Type nodes:BasePropertyObject}">
                 <UniformGrid Rows="1">
                     <!--<ContentControl Content="{Binding Descriptor}"/>-->
                     <TextBlock Text="{Binding Name}"></TextBlock>
