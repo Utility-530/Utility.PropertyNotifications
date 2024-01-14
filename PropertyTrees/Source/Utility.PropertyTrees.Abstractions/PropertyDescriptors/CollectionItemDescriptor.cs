@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Properties
 {
-    public class CollectionItemDescriptor : PropertyDescriptor
+    public class CollectionItemDescriptor : PropertyDescriptor, IEquatable
     {
         public CollectionItemDescriptor(object item, int index, Type componentType) : base(item.GetType().Name + $" [{index}]", null)
         {
@@ -56,6 +57,13 @@ namespace Utility.Properties
         }
 
         public static int ToIndex(string name) => int.Parse(Regex.Matches(name, @"\[(\d*)\]").First().Groups[1].Value);
+
+        public bool Equals(IEquatable? other)
+        {
+            if (other is CollectionItemDescriptor collectionItemDescriptor)
+                return Item.Equals(collectionItemDescriptor.Item) && Index.Equals(collectionItemDescriptor.Index);
+            return false;
+        }
     }
 }
 
