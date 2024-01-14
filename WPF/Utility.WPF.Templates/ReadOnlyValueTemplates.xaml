@@ -51,7 +51,7 @@
 
     <DataTemplate DataType="{x:Type sys:Boolean}">
         <Grid         MinHeight="30"                                     MinWidth="30">
-            <panels:TransitionPanel CurrentValue="{Binding Path=Value}">
+            <panels:TransitionPanel CurrentValue="{Binding Path=Value,Mode=OneWay}">
                 <materialDesign:PackIcon Kind="CheckBold"
                                      MinHeight="30"
                                      MinWidth="30"
