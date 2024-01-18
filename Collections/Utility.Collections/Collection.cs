@@ -47,7 +47,7 @@ namespace Utility.Collections
             }
 
             foreach (var handler in GetHandlers())
-                if (IsRange(e) && handler.Target.HasRefresh())
+                if (IsRange(e) && handler.Target?.HasRefresh() == true)
                     handler.Target.Refresh();
                 else
                     handler(this, e);
