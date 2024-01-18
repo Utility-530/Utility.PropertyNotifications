@@ -84,7 +84,7 @@ namespace Utility.Trees
     /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
     /// </summary>
     /// <typeparam name="object"></typeparam>
-    public class Tree : ITree, IEnumerable<ITree>, INotifyPropertyChanged
+    public class Tree : ITree, IEnumerable<ITree>, INotifyPropertyChanged, IEquatable
     {
         private IList items;
         private object? data;
@@ -490,6 +490,11 @@ namespace Utility.Trees
         bool IEquatable<IReadOnlyTree>.Equals(IReadOnlyTree? other)
         {
             throw new NotImplementedException();
+        }
+
+        public bool Equals(IEquatable? other)
+        {
+            return this.Equals(other as ITree);
         }
 
         #endregion propertyChanged
