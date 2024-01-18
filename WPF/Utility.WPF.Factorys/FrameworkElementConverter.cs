@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Utility.Factorys;
 using Utility.Helpers;
@@ -68,6 +69,33 @@ namespace Utility.WPF.Factorys
                         var mb = converter.GetType().GetMethods().First();
                         return new TextBlock { Text = mb.AsString() };
                     }
+
+                case DataTemplateSelector selector:
+                    {
+                        var mb = selector.GetType().Name;
+                        return new TextBlock { Text = mb };
+                    }        
+                case ControlTemplate ct:
+                    {
+                        var control = Activator.CreateInstance(ct.TargetType) as Control;
+                        control.Template = ct;
+                        return control;
+                    }
+                case Storyboard {  Name:var name} storyboard:
+                    {
+                        //storyboard.DependencyObjectType;
+                        return new TextBlock { Text = name };
+                    }
+                        
+                case IMultiValueConverter converter:
+                    {
+                        //storyboard.DependencyObjectType;
+                        return new TextBlock { Text = converter.GetType().Name };
+                    }
+                      
+                    
+                case double d:
+                    return new TextBlock { Text = d.ToString() };
                 default:
                     throw new Exception($"Unexpected type {value.GetType().Name} in {nameof(FrameworkElementConverter)}");
             }
