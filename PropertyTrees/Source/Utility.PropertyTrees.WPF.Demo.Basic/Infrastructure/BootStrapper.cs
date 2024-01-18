@@ -11,6 +11,7 @@ using System;
 using System.Reactive.Linq;
 using Utility.PropertyTrees.WPF.Demo.Basic;
 using Utility.Models;
+using System.Windows.Controls;
 
 internal class BootStrapper : BaseObject
 {
@@ -36,7 +37,11 @@ internal class BootStrapper : BaseObject
         container.RegisterMany<RepositorySwitchController>();
         container.RegisterMany<BootStrapper>();
         container.RegisterMany<RootModelProperty>();
+        container.RegisterMany<ViewController>();
         container.RegisterMany<DummyLogger>();
+        container.RegisterMany<ViewBuilder>();
+        container.RegisterInstance(App.Current.Resources["ContentTemplateSelector"] as DataTemplateSelector);
+
         RegisterServices();
 
         return container;
@@ -44,7 +49,7 @@ internal class BootStrapper : BaseObject
         void RegisterServices()
         {
             container.RegisterMany<PropertyStore>();
-            container.RegisterMany<ViewModelStore>();
+            //container.RegisterMany<ViewModelStore>();
             container.RegisterMany<PropertyActivator>();
             container.RegisterMany<MethodParameterActivator>();
             container.RegisterMany<MethodActivator>();
