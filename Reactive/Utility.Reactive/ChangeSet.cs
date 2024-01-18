@@ -10,7 +10,7 @@ namespace Utility.Models
         None, Add, Remove, Update, Reset
     }
 
-    public class ChangeSet<T> : ReadOnlyCollection<Change<T>> where T : IEquatable
+    public class ChangeSet<T> : ReadOnlyCollection<Change<T>>
     {
         public ChangeSet(IList<Change<T>> list) : base(list)
         {
@@ -34,7 +34,7 @@ namespace Utility.Models
         }
     }
 
-    public record Change<T> : Change where T : IEquatable
+    public record Change<T> : Change
     {
         public Change(T? tValue, ChangeType type) : base(tValue, type)
         {
@@ -50,7 +50,7 @@ namespace Utility.Models
 
         public static Change<T> None => new(default, ChangeType.None);
 
-        public Change<TR> As<TR>() where TR : class, IEquatable
+        public Change<TR> As<TR>() where TR : class
         {
             return new Change<TR>(Value as TR ?? throw new Exception("sd ssss"), Type);
         }
@@ -58,14 +58,14 @@ namespace Utility.Models
 
     public record Change
     {
-        public Change(IEquatable value, ChangeType type, int? count = default)
+        public Change(object value, ChangeType type, int? count = default)
         {
             Value = value;
             Type = type;
             Count = count;
         }
 
-        public IEquatable Value { get; }
+        public object Value { get; }
 
         public ChangeType Type { get; init; }
         public int? Count { get; }
