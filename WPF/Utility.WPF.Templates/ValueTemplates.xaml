@@ -16,6 +16,10 @@
         <TextBox Text="{Binding Path=Value, Mode=TwoWay, StringFormat={}{0:N0}}"></TextBox>
     </DataTemplate>
     
+    <DataTemplate DataType="{x:Type sys:Byte}">
+        <TextBox Text="{Binding Path=Value, Mode=TwoWay, StringFormat={}{0:N0}}"></TextBox>
+    </DataTemplate>
+    
     <DataTemplate x:Key="Number">
         <TextBox Text="{Binding Path=Value, Mode=TwoWay, StringFormat={}{0:N0}}"></TextBox>
     </DataTemplate>

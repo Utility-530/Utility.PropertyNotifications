@@ -25,6 +25,9 @@
         <TextBox Text="{Binding Path=Value, Mode=OneWay, StringFormat={}{0:N0}}"></TextBox>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type sys:Byte}">
+        <TextBox Text="{Binding Path=Value, Mode=OneWay, StringFormat={}{0:N0}}"></TextBox>
+    </DataTemplate>
     <!--<DataTemplate DataType="{x:Type sys:Type}">
         <TextBlock Text="{Binding StringFormat={}{0:N0}}"></TextBlock>
     </DataTemplate>-->
