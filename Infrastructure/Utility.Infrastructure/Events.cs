@@ -35,3 +35,4 @@ public record OnHoverChange(object Source, IReadOnlyTree Node, bool IsMouseOver,
 public record TreeViewItemInitialised(object Source, IReadOnlyTree Node) : Event();
 
 public record RefreshRequest(DateTime DateTime) : Request;
+public record SaveRequest(DateTime DateTime) : Request;
