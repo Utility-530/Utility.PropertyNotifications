@@ -99,7 +99,7 @@ namespace Utility.Repos
 
                     if (single.Propertys == null)
                         single.Propertys = new();
-                    if (single.Propertys.Last().Value != value)
+                    if (single.Propertys.LastOrDefault()?.Value != value)
                     {
                         single.Propertys.Add(new Property { Added = DateTime.Now, Value = value });
                     }
