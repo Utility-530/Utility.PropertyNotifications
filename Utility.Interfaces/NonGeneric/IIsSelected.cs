@@ -1,4 +1,4 @@
-﻿namespace Utility.Common.Contract
+﻿namespace Utility.Interfaces.NonGeneric
 {
     public interface IIsSelected
     {
