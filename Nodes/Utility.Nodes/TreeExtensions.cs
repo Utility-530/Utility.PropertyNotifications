@@ -1,22 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Utility.Nodes
-{
-    using Infrastructure;
+﻿namespace Utility.Nodes
+{ 
     using System.Reactive.Disposables;
     using System.Reactive.Linq;
-    using Utility.Helpers.Ex;
     using Utility.Helpers.NonGeneric;
     using Utility.Interfaces.NonGeneric;
     using Utility.Models;
     using Utility.Trees;
     using Utility.Trees.Abstractions;
     using UtilityReactive;
-
 
     public static partial class TreeExtensions
     {
@@ -27,12 +18,9 @@ namespace Utility.Nodes
         //public static ITree<T> ToTree<T>(this IList<T> items, Func<T, T, bool> parentSelector)
         //{
         //    if (items == null) throw new ArgumentNullException(nameof(items));
-
         //    var lookup = items.ToLookup(item => items.FirstOrDefault(parent => parentSelector(parent, item)), child => child);
-
         //    return Tree<T>.FromLookup(lookup);
         //}
-
 
         public static IObservable<ITree<T>> ToTree<T, K>(this IObservable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, K root_id = default(K))
         {
@@ -59,12 +47,19 @@ namespace Utility.Nodes
 
         public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, TR property) where TR : IReadOnlyTree, IEquatable
         {
-            return ExploreTree(items, funcAdd, funcRemove, property, a => a.Items.Changes<TR>());
+            return ExploreTree(items, funcAdd, funcRemove, property, (TR a) => true);
         }
 
-
-        public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, TR property, Func<TR, IObservable<ChangeSet<TR>>> func) where TR : IEquatable
+        public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, TR property, Predicate<TR> predicate) where TR : IReadOnlyTree, IEquatable
         {
+            return ExploreTree(items, funcAdd, funcRemove, property, a => a.Items.Changes<TR>(), predicate);
+        }
+
+        public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, TR property, Func<TR, IObservable<ChangeSet<TR>>> func, Predicate<TR> predicate) where TR : IEquatable
+        {
+            if (predicate(property) == false)
+                return Disposable.Empty;
+
             items = funcAdd(items, property);
 
             var disposable = func(property)
@@ -73,7 +68,7 @@ namespace Utility.Nodes
                     foreach (var item in args)
                     {
                         if (item is Change { Type: ChangeType.Add, Value: TR value })
-                            _ = ExploreTree(items, funcAdd, funcRemove, value, func);
+                            _ = ExploreTree(items, funcAdd, funcRemove, value, func, predicate);
                         else if (item is Change { Type: ChangeType.Add, Value: TR _value })
                             funcRemove(items, _value);
                     }

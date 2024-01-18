@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using DynamicData;
+using System.Collections;
 using Utility.Collections;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees;
@@ -37,12 +38,17 @@ namespace Utility.Nodes
 
             _isRefreshing = true;
 
+            List<IReadOnlyTree> nodes = new();
             try
             {
                 {
                     var output = await GetChildren();
                     if (output is IEnumerable enumerable)
-                        SetChildrenCache(ToNodes(enumerable).ToList());
+                    {
+                        foreach (var node in ToNodes(enumerable))
+                            nodes.Add(node);
+                   
+                    }
                 }
                 //{
                 //    var output = await GetProperties();
@@ -53,14 +59,19 @@ namespace Utility.Nodes
             }
             catch (Exception ex)
             {
+                Error = ex;
                 return false;
             }
             finally
             {
+                SetChildrenCache(nodes);
                 _isRefreshing = false;
             }
+     
         }
 
+
+        public Exception Error { get; set; }
         protected virtual void SetChildrenCache(List<IReadOnlyTree> childrenCache)
         {
             items.Clear();

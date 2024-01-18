@@ -13,6 +13,7 @@
     <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
     <ProjectReference Include="..\..\PropertyTrees\Source\Utility.Properties.Services\Utility.Objects.csproj" />
     <ProjectReference Include="..\..\Reactive\Utility.Reactive\Utility.Reactive.csproj" />
+    <ProjectReference Include="..\Utility.Nodes.ViewModels\Utility.Nodes.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

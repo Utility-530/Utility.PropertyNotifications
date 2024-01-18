@@ -15,6 +15,6 @@ namespace Utility.Nodes.Demo
 
         }
 
-        static Model Model { get; } = new Model();
+        static LedModel Model { get; } = new LedModel();
     }
 }
