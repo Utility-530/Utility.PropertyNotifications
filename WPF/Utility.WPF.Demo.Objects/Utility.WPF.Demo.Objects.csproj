@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
+    <ProjectReference Include="..\..\Nodes\Utility.Nodes\Utility.Nodes.csproj" />
     <ProjectReference Include="..\Utility.WPF.Behavior\Utility.WPF.Behavior.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.WPF.Controls.Meta\Utility.WPF.Controls.Meta.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Extrinsic\Utility.WPF.Controls.Extrinsic.csproj" />
@@ -21,9 +22,6 @@
     <Compile Update="JsonObjectUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="ObjectUserControl.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -34,9 +32,6 @@
     <Page Update="JsonObjectUserControl.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Update="ObjectUserControl.xaml">
-      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
     </Page>
   </ItemGroup>
 

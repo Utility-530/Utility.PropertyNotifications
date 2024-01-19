@@ -7,7 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.1" />
+    <PackageReference Include="JsonSchema.Net" Version="5.3.1" />
+    <PackageReference Include="JsonSchema.Net.Generation" Version="3.5.0" />
+    <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.15" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
     <ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Base\Utility.WPF.Controls.Base.csproj" />
@@ -27,12 +35,6 @@
     </Compile>
     <Compile Update="ObjectFlowControl.cs">
       <DependentUpon>ObjectFlowControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Update="ObjectItemsControl.cs">
-      <DependentUpon>ObjectItemsControl.xaml</DependentUpon>
-    </Compile>  
-	  <Compile Update="ObjectSelector.cs">
-      <DependentUpon>ObjectSelector.xaml</DependentUpon>
     </Compile>
     <Compile Update="ObjectComboBox.cs">
       <DependentUpon>ObjectComboBox.xaml</DependentUpon>
