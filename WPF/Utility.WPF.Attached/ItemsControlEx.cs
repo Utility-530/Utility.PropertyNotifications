@@ -10,10 +10,9 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
-using Utility.WPF.Helpers;
-using static Utility.WPF.Helpers.LayOutHelper;
 using Orientation = System.Windows.Controls.Orientation;
 using Arrangement = Utility.Enums.Arrangement;
+using Utility.WPF.Factorys;
 
 namespace Utility.WPF.Attached
 {
@@ -203,7 +202,7 @@ namespace Utility.WPF.Attached
                 if (e.NewValue is Orientation orientation)
                 {
                     var arrangement = (Arrangement)d.GetValue(ItemsControlEx.ArrangementProperty);
-                    LayOutHelper.Changed(itemsControl, orientation, arrangement);
+                    itemsControl.ItemsPanel = ItemsPanelFactory.Template(null, null, orientation, arrangement);
                 }
         }
 
@@ -213,7 +212,7 @@ namespace Utility.WPF.Attached
                 if (e.NewValue is Arrangement arrangement)
                 {
                     var orientation = (Orientation)d.GetValue(ItemsControlEx.OrientationProperty);
-                    LayOutHelper.Changed(itemsControl, orientation, arrangement);
+                    itemsControl.ItemsPanel = ItemsPanelFactory.Template(null, null, orientation, arrangement);
                 }
         }
     }
