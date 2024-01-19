@@ -13,6 +13,7 @@ using Utility.Common;
 using Utility.Common.Contract;
 using Utility.Common.Models;
 using Utility.Helpers.Ex;
+using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 
 namespace Utility.ViewModels;

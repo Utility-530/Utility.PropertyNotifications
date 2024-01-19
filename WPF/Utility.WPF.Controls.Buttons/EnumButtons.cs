@@ -12,6 +12,7 @@ using Utility.Enums;
 using Utility.Helpers;
 using Utility.WPF.Helpers;
 using static Evan.Wpf.DependencyHelper;
+using Visibility = System.Windows.Visibility;
 
 namespace Utility.WPF.Controls.Buttons
 {

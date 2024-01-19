@@ -19,6 +19,7 @@ using MintPlayer.ObservableCollection;
 using Utility.WPF.Helpers;
 using Utility.Models;
 using Utility.Infrastructure;
+using Arrangement = Utility.Enums.Arrangement;
 
 namespace Utility.WPF.Controls
 {
@@ -46,7 +47,7 @@ namespace Utility.WPF.Controls
 
         public EnumItemsControl()
         {
-            this.SetValue(ItemsControlEx.ArrangementProperty, Utility.WPF.Helpers.LayOutHelper.Arrangement.Wrapped);
+            this.SetValue(ItemsControlEx.ArrangementProperty, Arrangement.Wrapped);
             CompositeDisposable? disposable = null;
 
             ClearCommand = new RelayCommand(a =>

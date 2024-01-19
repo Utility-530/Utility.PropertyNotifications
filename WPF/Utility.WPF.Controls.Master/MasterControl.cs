@@ -12,6 +12,7 @@ using System.Windows.Media.Animation;
 using Utility.WPF.Abstract;
 using Utility.WPF.Controls.Base;
 using Utility.Enums;
+using Visibility = System.Windows.Visibility;
 
 namespace Utility.WPF.Controls.Master
 {

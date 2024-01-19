@@ -4,6 +4,7 @@ using Utility.WPF.Abstract;
 using Utility.WPF.Helpers;
 using static Utility.WPF.Helpers.LayOutHelper;
 using Orientation = System.Windows.Controls.Orientation;
+using Arrangement = Utility.Enums.Arrangement;
 
 namespace Utility.WPF.Controls.Base
 {
