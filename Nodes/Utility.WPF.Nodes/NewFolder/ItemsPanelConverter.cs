@@ -1,21 +1,14 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-//using ViewModels;
-//using Controls.Infrastructure;
 using System.Windows.Data;
 using System.Globalization;
-//using Controls;
 using Utility.Enums;
 using Utility.WPF.Factorys;
 using Utility.WPF.Nodes.NewFolder;
-using Utility.Nodes.Values;
 using Utility.Trees.Abstractions;
 using Utility.Nodes;
-using Utility.Properties;
-using Jellyfish;
-using LanguageExt.TypeClasses;
-using deniszykov.TypeConversion;
+using Utility.PropertyDescriptors;
 
 namespace VisualJsonEditor.Test.Infrastructure
 {

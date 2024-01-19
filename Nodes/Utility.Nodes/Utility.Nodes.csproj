@@ -14,6 +14,8 @@
     <ProjectReference Include="..\..\PropertyTrees\Source\Utility.Properties.Services\Utility.Objects.csproj" />
     <ProjectReference Include="..\..\Reactive\Utility.Reactive\Utility.Reactive.csproj" />
     <ProjectReference Include="..\Utility.Nodes.ViewModels\Utility.Nodes.ViewModels.csproj" />
+    <ProjectReference Include="..\Utility.Objects\Utility.Objects.csproj" />
+    <ProjectReference Include="..\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace Utility.Properties
+namespace Utility.PropertyDescriptors
 {
     public class RootDescriptor : PropertyDescriptor
     {

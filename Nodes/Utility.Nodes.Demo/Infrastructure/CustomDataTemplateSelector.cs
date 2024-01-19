@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.Properties;
+using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
 using Utility.WPF.Helpers;

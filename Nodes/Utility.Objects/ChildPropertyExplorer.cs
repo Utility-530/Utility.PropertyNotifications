@@ -8,7 +8,7 @@ using Utility.Helpers.Ex;
 using Utility.Helpers.NonGeneric;
 using Utility.Models;
 using Utility.Observables.NonGeneric;
-using Utility.Properties;
+using Utility.PropertyDescriptors;
 
 namespace Utility.Objects
 {

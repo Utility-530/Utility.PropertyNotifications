@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Utility.Nodes.Demo.Infrastructure;
-using Utility.Properties;
+﻿using Utility.Nodes.Demo.Infrastructure;
+using Utility.PropertyDescriptors;
 
 namespace Utility.Nodes.Demo
 {

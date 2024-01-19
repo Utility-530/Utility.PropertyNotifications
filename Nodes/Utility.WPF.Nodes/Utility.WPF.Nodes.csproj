@@ -11,6 +11,7 @@
     <ProjectReference Include="..\..\WPF\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
     <ProjectReference Include="..\AdornerBehavior\AdornerBehavior.csproj" />
     <ProjectReference Include="..\Utility.Nodes\Utility.Nodes.csproj" />
+    <ProjectReference Include="..\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
   </ItemGroup>
 
 </Project>

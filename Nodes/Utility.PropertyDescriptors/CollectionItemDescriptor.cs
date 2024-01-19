@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using Utility.Interfaces.NonGeneric;
 
-namespace Utility.Properties
+namespace Utility.PropertyDescriptors
 {
     public class CollectionItemDescriptor : PropertyDescriptor, IEquatable
     {

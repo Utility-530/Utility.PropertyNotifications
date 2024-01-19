@@ -47,15 +47,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Reactive", "..\Reac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Interfaces", "..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj", "{459D7307-B0A1-4A59-B1B4-C2728CDA9916}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Nodes", "Utility.WPF.Nodes\Utility.WPF.Nodes.csproj", "{2B55B644-37DE-48AB-B06C-A2674B2879CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Nodes", "Utility.WPF.Nodes\Utility.WPF.Nodes.csproj", "{2B55B644-37DE-48AB-B06C-A2674B2879CD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdornerBehavior", "AdornerBehavior\AdornerBehavior.csproj", "{64618B10-1FB7-4608-9CD4-B78070C8F050}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Enums", "..\Enums\Utility.Enums\Utility.Enums.csproj", "{F684B524-36D7-42ED-A044-8568EB15EE9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodes.ViewModels", "Utility.Nodes.ViewModels\Utility.Nodes.ViewModels.csproj", "{DF7CB969-4182-457D-BE0E-40DE922BB3F8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodes.ViewModels", "Utility.Nodes.ViewModels\Utility.Nodes.ViewModels.csproj", "{DF7CB969-4182-457D-BE0E-40DE922BB3F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Helpers", "..\Helpers\Utility.Helpers\Utility.Helpers.csproj", "{6E089C08-6C87-4225-9975-2907F7884777}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.PropertyDescriptors", "Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj", "{760BB4A6-246B-4059-A117-6147A91B7928}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Objects", "Utility.Objects\Utility.Objects.csproj", "{7EDD7208-58C2-4CE8-AA57-683D87DD752D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -163,6 +167,14 @@ Global
 		{6E089C08-6C87-4225-9975-2907F7884777}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E089C08-6C87-4225-9975-2907F7884777}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E089C08-6C87-4225-9975-2907F7884777}.Release|Any CPU.Build.0 = Release|Any CPU
+		{760BB4A6-246B-4059-A117-6147A91B7928}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{760BB4A6-246B-4059-A117-6147A91B7928}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{760BB4A6-246B-4059-A117-6147A91B7928}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{760BB4A6-246B-4059-A117-6147A91B7928}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EDD7208-58C2-4CE8-AA57-683D87DD752D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EDD7208-58C2-4CE8-AA57-683D87DD752D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EDD7208-58C2-4CE8-AA57-683D87DD752D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EDD7208-58C2-4CE8-AA57-683D87DD752D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

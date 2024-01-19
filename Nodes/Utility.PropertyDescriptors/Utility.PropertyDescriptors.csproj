@@ -6,14 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Events\**" />
-    <EmbeddedResource Remove="Events\**" />
-    <None Remove="Events\**" />
-  </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
+    <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
   </ItemGroup>
+
+
 
 </Project>
