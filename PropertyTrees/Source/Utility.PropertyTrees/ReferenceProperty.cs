@@ -7,7 +7,7 @@ using Utility.Nodes;
 using Utility.Trees.Abstractions;
 using Utility.Observables.Generic;
 using Utility.PropertyDescriptors;
-using Utility.PropertyDescriptors;
+
 
 namespace Utility.PropertyTrees
 {
