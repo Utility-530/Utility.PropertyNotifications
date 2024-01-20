@@ -3,7 +3,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Nodes;
 using Utility.Trees.Abstractions;
-using Utility.Properties;
+using Utility.PropertyDescriptors;
 
 
 namespace Utility.PropertyTrees

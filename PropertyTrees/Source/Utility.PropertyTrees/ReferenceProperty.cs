@@ -6,7 +6,8 @@ using Utility.Models;
 using Utility.Nodes;
 using Utility.Trees.Abstractions;
 using Utility.Observables.Generic;
-using Utility.Properties;
+using Utility.PropertyDescriptors;
+using Utility.PropertyDescriptors;
 
 namespace Utility.PropertyTrees
 {
@@ -178,7 +179,7 @@ namespace Utility.PropertyTrees
                         {
                             continue;
                         }
-                        var switchType = Switch(Properties.PropertyType.CollectionItem | PropertyDescriptorHelper.GetPropertyType(key.Type));
+                        var switchType = Switch(PropertyDescriptors.PropertyType.CollectionItem | PropertyDescriptorHelper.GetPropertyType(key.Type));
                         if (_children.Any(ass => key.Guid == (ass as ValueNode)?.Key.Guid) == false)
                             Observe<ObjectCreationResponse, ObjectCreationRequest>(new(switchType, new[] { typeof(ValueNode), typeof(BaseObject) }, new object[] { key.Guid }))
                             .Subscribe(a =>
@@ -234,11 +235,11 @@ namespace Utility.PropertyTrees
         {
             return propertyType switch
             {
-                Properties.PropertyType.Reference => typeof(ReferenceProperty),
-                Properties.PropertyType.Value => typeof(ValueProperty),
-                Properties.PropertyType.CollectionItem | Properties.PropertyType.Reference => typeof(CollectionItemReferenceProperty),
-                Properties.PropertyType.CollectionItem | Properties.PropertyType.Value => typeof(CollectionItemValueProperty),
-                Properties.PropertyType.Root => typeof(ReferenceProperty),
+                PropertyDescriptors.PropertyType.Reference => typeof(ReferenceProperty),
+                PropertyDescriptors.PropertyType.Value => typeof(ValueProperty),
+                PropertyDescriptors.PropertyType.CollectionItem | PropertyDescriptors.PropertyType.Reference => typeof(CollectionItemReferenceProperty),
+                PropertyDescriptors.PropertyType.CollectionItem | PropertyDescriptors.PropertyType.Value => typeof(CollectionItemValueProperty),
+                PropertyDescriptors.PropertyType.Root => typeof(ReferenceProperty),
                 _ => throw new Exception("f 33 dsf"),
             };
         }

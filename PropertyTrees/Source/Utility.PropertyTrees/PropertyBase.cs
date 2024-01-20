@@ -11,7 +11,7 @@ using Utility.Trees.Abstractions;
 using Utility.Models;
 using System.Reflection;
 using Utility.Conversions;
-using Utility.Properties;
+using Utility.PropertyDescriptors;
 
 namespace Utility.PropertyTrees
 {

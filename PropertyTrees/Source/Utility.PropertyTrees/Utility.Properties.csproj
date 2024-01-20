@@ -12,6 +12,7 @@
 		<ProjectReference Include="..\..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
 		<ProjectReference Include="..\..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
 		<ProjectReference Include="..\..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
+		<ProjectReference Include="..\..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
 		<ProjectReference Include="..\..\..\Nodes\Utility.Nodes\Utility.Nodes.csproj" />
 		<ProjectReference Include="..\..\..\Reactive\Utility.Reactive\Utility.Reactive.csproj" />
 		<ProjectReference Include="..\..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
