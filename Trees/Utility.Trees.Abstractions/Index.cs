@@ -6,19 +6,29 @@ namespace Utility.Trees
 {
     public record Index
     {
+        private IList<int>  collection;
         public Index(params int[] indexes)
         {
-            Collection = indexes;
+            collection = indexes;
         }
 
-        public IReadOnlyCollection<int> Collection { get; init; }
+        public int this[int key]
+        {
+             get{ return collection[key];  }
+            set { collection[key] = value; }
+
+        }
+
+        public bool IsEmpty => collection.Any() == false;
+
+        //public IReadOnlyCollection<int> Collection { get; init; }
 
         public override string ToString()
         {
             StringBuilder stringBuilder = new();
-            if (Collection.Count == 0)
+            if (collection.Count == 0)
                 return string.Empty;
-            foreach (var item in Collection)
+            foreach (var item in collection)
             {
                 stringBuilder.Append(item);
                 stringBuilder.Append('.');

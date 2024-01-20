@@ -20,11 +20,13 @@ namespace Utility.Trees.Abstractions
 
         Index Index { get; }
 
+        int Depth { get; }
+
         new ITree Parent { get; set; }
 
 
         ITree? this[int index] { get; set; }
-        ITree? this[IEquatable index] { get; set; }
+        ITree? this[object equatable] { get; set; }
 
         IEnumerable<ITree> GetParents(bool includingThis);
 
