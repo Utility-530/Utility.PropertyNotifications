@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Utility.Interfaces.NonGeneric;
+using Utility.Nodes.Solutions;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Demo
@@ -38,10 +39,9 @@ namespace Utility.Nodes.Demo
             if (value is NodeType nodeType)
                 return nodeType switch
                 {
-                    //NodeType.ViewModel => new RootViewModelNode(),
-                    //NodeType.Directory => new DirectoryNode(@"C:\"),
-                    NodeType.Model => new RootPropertyNode(),
-                    //NodeType.Assembly => new AssemblyNode(),
+                    NodeType.ViewModel => new RootViewModelNode(),
+                    NodeType.Directory => new DirectoryNode(@"C:\"),             
+                    NodeType.Assembly => new AssemblyNode(),
                     _ => new ExceptionNode(new Exception("Out of range"))
                     //_ => throw new Exception("r 4333"),
                 };

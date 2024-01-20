@@ -1,8 +1,10 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Utility.Objects;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
+using Utility.ViewModels;
 using Utility.WPF.Factorys;
 using Utility.WPF.Helpers;
 
@@ -13,12 +15,12 @@ namespace Utility.Nodes.Demo
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             // collection item
-            if (item is IReadOnlyTree { Data: BasePropertyObject { Descriptor: CollectionItemDescriptor { } } })
+            if (item is IReadOnlyTree { Data: PropertyData { Descriptor: CollectionItemDescriptor { } } })
             {
                 return MakeTemplate(item, "None");
             }
             // parameter
-            if (item is ParameterNode { Data: BasePropertyObject { Descriptor: { } } })
+            if (item is ParameterNode { Data: PropertyData { Descriptor: { } } })
             {
                 return MakeTemplate(item);
             }
@@ -28,22 +30,22 @@ namespace Utility.Nodes.Demo
                 return MakeTemplate(item, "None");
             }
             // method
-            if (item is MethodNode { Data: BasePropertyObject { Descriptor: { } } })
+            if (item is MethodNode { Data: PropertyData { Descriptor: { } } })
             {
                 return MakeTemplate(item);
             }
             // root
-            if (item is IReadOnlyTree { Data: BasePropertyObject { Descriptor: RootDescriptor { } } })
+            if (item is IReadOnlyTree { Data: PropertyData { Descriptor: RootDescriptor { } } })
             {
                 return MakeTemplate(item, "OnlyHeader");
             }
             // default
-            if (item is IReadOnlyTree { Data: DefaultValue { Descriptor: { } } })
+            if (item is IReadOnlyTree { Data: ObjectValue { Descriptor: { } } })
             {
                 return MakeTemplate(item, "OnlyHeader");
             }
             // inner collection item descriptor
-            if (item is IReadOnlyTree { Parent.Data: BasePropertyObject { Descriptor: CollectionItemDescriptor { Index: { } index, ComponentType: { } componentType, DisplayName: { } displayName } descriptor } baseObject })
+            if (item is IReadOnlyTree { Parent.Data: PropertyData { Descriptor: CollectionItemDescriptor { Index: { } index, ComponentType: { } componentType, DisplayName: { } displayName } descriptor } baseObject })
             {
                 if (index == 0)
                     return MakeTemplate(item, "TopHeader");

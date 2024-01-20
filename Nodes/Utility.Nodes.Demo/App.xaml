@@ -7,7 +7,7 @@
              xmlns:infra="clr-namespace:Utility.Nodes.Demo.Infrastructure" 
              xmlns:io="clr-namespace:System.IO;assembly=mscorlib"        
              xmlns:local="clr-namespace:Utility.Nodes.Demo"
-             xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes.ViewModels"
+             xmlns:vm="clr-namespace:Utility.ViewModels;assembly=Utility.ViewModels"
              xmlns:com="clr-namespace:System.ComponentModel;assembly=System" 
              xmlns:templates="http://schemas.utility.com/templates"
              xmlns:ui="http://schemas.modernwpf.com/2019">
@@ -19,6 +19,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <conv:FilenameToIconConverter x:Key="iconConverter" />
+            
             <DataTemplate DataType="{x:Type infra:ViewModel}">
                 <st:AutoGrid Columns="*,*" Rows="*" Height="24">
                     <materialDesign:PackIcon Kind="{Binding Icon}"/>
@@ -94,70 +95,6 @@
                 </TreeView>
             </DataTemplate>
 
-
-
-
-
-            <!--<DataTemplate DataType="{x:Type nodes:PropertyData}">
-                <UniformGrid Rows="1">
-                    <ContentControl Content="{Binding Descriptor}"/>
-                    <ContentControl Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
-                </UniformGrid>
-            </DataTemplate>-->
-
-
-            <DataTemplate DataType="{x:Type nodes:BasePropertyObject}">
-                <UniformGrid Rows="1">
-                    <!--<ContentControl Content="{Binding Descriptor}"/>-->
-                    <TextBlock Text="{Binding Name}"></TextBlock>
-                    <ContentControl Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
-                </UniformGrid>
-            </DataTemplate>
-            
-            <DataTemplate x:Key="TopHeader"  DataType="{x:Type nodes:BasePropertyObject}">
-                <UniformGrid Columns="1">
-                    <!--<ContentControl Content="{Binding Descriptor}"/>-->
-                    <TextBlock Text="{Binding Name}"></TextBlock>
-                    <ContentControl Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
-                </UniformGrid>
-            </DataTemplate>
-            <DataTemplate x:Key="NoHeader"  DataType="{x:Type nodes:BasePropertyObject}">
-
-                <ContentControl Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
-
-            </DataTemplate>
-            <DataTemplate x:Key="OnlyHeader"  DataType="{x:Type nodes:BasePropertyObject}">
-
-                <TextBlock Text="{Binding Name}"></TextBlock>
-            </DataTemplate>
-
-            <DataTemplate x:Key="None"  DataType="{x:Type nodes:BasePropertyObject}">
-
-            </DataTemplate>
-
-
-            <DataTemplate   DataType="{x:Type nodes:CommandValue}">
-                <Button Content="{Binding MethodInfo.Name, Mode=OneTime }" Command="{Binding Value, Mode=OneTime}"></Button>
-            </DataTemplate>
-
-
-            <!--<DataTemplate DataType="{x:Type com:MemberDescriptor}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition></RowDefinition>
-                        <RowDefinition></RowDefinition>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"></ColumnDefinition>
-                        <ColumnDefinition></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="{Binding DisplayName}" Grid.ColumnSpan="2"></TextBlock>
-                    <TextBlock Text="IsReadOnly" FontSize="8"  Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"></TextBlock>
-                    <CheckBox IsChecked="{Binding IsReadOnly, Mode=OneTime}" IsEnabled="False"  Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right"></CheckBox>
-                </Grid>
-            </DataTemplate>-->
-
-
-        </ResourceDictionary>
+       </ResourceDictionary>
     </Application.Resources>
 </Application>
