@@ -123,7 +123,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Packages", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Templates", "Utility.WPF.Controls.Templates\Utility.WPF.Controls.Templates.csproj", "{F7DA0BC3-66DD-48D6-994B-3C29FDE622F4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.ViewModels", "Utility.ViewModels\Utility.ViewModels.csproj", "{CCAD6F48-FAF8-44C1-A2AB-4A48B8A6F0DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.ViewModels.Customs", "Utility.ViewModels.Customs\Utility.ViewModels.Customs.csproj", "{CCAD6F48-FAF8-44C1-A2AB-4A48B8A6F0DC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Helpers", "..\Helpers\Utility.Helpers\Utility.Helpers.csproj", "{7CD8F8B5-3709-4C64-B7A3-BD42718C89FD}"
 EndProject
