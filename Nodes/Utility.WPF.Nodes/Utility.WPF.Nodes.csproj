@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
     <ProjectReference Include="..\AdornerBehavior\AdornerBehavior.csproj" />
