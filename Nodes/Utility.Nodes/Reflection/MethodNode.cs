@@ -1,6 +1,6 @@
 ﻿using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
-using Utility.Properties;
+using Utility.PropertyDescriptors;
 
 namespace Utility.Nodes
 {

@@ -5,7 +5,7 @@ using Utility.Objects;
 using Utility.Reactive.Helpers;
 using System.Reflection;
 using Utility.Helpers;
-using Utility.Properties;
+using Utility.PropertyDescriptors;
 using System.Collections.Generic;
 using Utility.PropertyDescriptors;
 
