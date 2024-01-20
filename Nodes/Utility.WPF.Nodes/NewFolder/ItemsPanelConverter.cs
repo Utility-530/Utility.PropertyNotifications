@@ -9,6 +9,7 @@ using Utility.WPF.Nodes.NewFolder;
 using Utility.Trees.Abstractions;
 using Utility.Nodes;
 using Utility.PropertyDescriptors;
+using Utility.Objects;
 
 namespace VisualJsonEditor.Test.Infrastructure
 {
@@ -28,6 +29,8 @@ namespace VisualJsonEditor.Test.Infrastructure
 
     public class ItemsPanelConverter : IValueConverter
     {
+        //SQLIteRepos
+
         public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             //if (value is IReadOnlyTree{ Data: ViewModel { } viewmodel })
@@ -36,27 +39,32 @@ namespace VisualJsonEditor.Test.Infrastructure
             //    return convert(itemsPanel);
             //}
 
-            if (value is IReadOnlyTree { Data: BasePropertyObject { Descriptor: { ComponentType: { } componentType, DisplayName: { } displayName } descriptor } baseObject })
+            if (value is IReadOnlyTree { Key: var key, Data: PropertyData { Descriptor: { ComponentType: { } componentType, DisplayName: { } displayName } descriptor } baseObject })
             {
-                if(baseObject.Descriptor is CollectionItemDescriptor { Index:{ } index } collectionItemDescriptor)
+                if (baseObject.Descriptor is CollectionItemDescriptor { Index: { } index } collectionItemDescriptor)
                 {
                     return convert(new ItemsPanel
                     {
                         Type = Arrangement.Stacked,
-                        Orientation = System.Windows.Controls.Orientation.Horizontal,                     
+                        Orientation = System.Windows.Controls.Orientation.Horizontal,
                     });
                 }
-                var itemsPanel = baseObject.ToItemsPanel();
-                return convert(itemsPanel);
+                //var itemsPanel = baseObject.ToItemsPanel();
+                //return convert(itemsPanel);
+                return convert(new ItemsPanel
+                {
+                    Type = Arrangement.Stacked,
+                    Orientation = System.Windows.Controls.Orientation.Vertical,
+                });
             }
 
             if (value is MethodsNode { })
-            {              
-                    return convert(new ItemsPanel
-                    {
-                        Type = Arrangement.Stacked,
-                        Orientation = System.Windows.Controls.Orientation.Horizontal,
-                    });     
+            {
+                return convert(new ItemsPanel
+                {
+                    Type = Arrangement.Stacked,
+                    Orientation = System.Windows.Controls.Orientation.Horizontal,
+                });
             }
 
             return DependencyProperty.UnsetValue;

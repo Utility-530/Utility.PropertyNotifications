@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
-using Utility.Nodes.Values;
+using Utility.ViewModels;
 using VisualJsonEditor.Test.Infrastructure;
 
 namespace Utility.WPF.Nodes.NewFolder

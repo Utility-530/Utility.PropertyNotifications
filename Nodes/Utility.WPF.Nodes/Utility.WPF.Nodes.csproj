@@ -7,10 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Utility.ViewModels\Utility.ViewModels.csproj" />
+    <ProjectReference Include="..\..\Meta\Utility.Objects\Utility.Objects.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
     <ProjectReference Include="..\AdornerBehavior\AdornerBehavior.csproj" />
+    <ProjectReference Include="..\Utility.Nodes.Reflections\Utility.Nodes.Reflections.csproj" />
     <ProjectReference Include="..\Utility.Nodes\Utility.Nodes.csproj" />
   </ItemGroup>
 

@@ -1,18 +1,12 @@
-﻿
-//using PixelLab.Wpf;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Linq;
 using System.Reactive.Linq;
-//using MyToolkit.UI;
 using System.Reactive.Subjects;
-//using Controls.Infrastructure;
-//using Converters;
-//using ViewModel = ViewModels.ViewModel;
 using Utility.WPF.Helpers;
-using Utility.Nodes.Values;
+using Utility.ViewModels;
 
 namespace VisualJsonEditor.Test
 {
