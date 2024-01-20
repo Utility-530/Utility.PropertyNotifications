@@ -1,7 +1,6 @@
 ﻿<Application x:Class="Utility.WPF.Demo.Meta.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
              xmlns:vm="clr-namespace:Utility.ViewModels;assembly=Utility.ViewModels"
              xmlns:local="clr-namespace:Utility.WPF.Demo.Meta">
 
