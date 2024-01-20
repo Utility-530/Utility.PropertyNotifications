@@ -10,12 +10,8 @@
     <ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
     <ProjectReference Include="..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
-    <ProjectReference Include="..\..\Meta\Utility.Objects\Utility.Objects.csproj" />
-    <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
-    <ProjectReference Include="..\..\PropertyTrees\Source\Utility.Properties.Services\Utility.Objects.csproj" />
+    <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" /> 
     <ProjectReference Include="..\..\Reactive\Utility.Reactive\Utility.Reactive.csproj" />
-    <ProjectReference Include="..\Utility.Nodes.ViewModels\Utility.Nodes.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

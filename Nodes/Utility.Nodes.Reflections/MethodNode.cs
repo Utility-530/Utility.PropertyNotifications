@@ -1,6 +1,7 @@
 ﻿using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
-using Utility.PropertyDescriptors;
+using Utility.Objects;
+using Utility.ViewModels;
 
 namespace Utility.Nodes
 {
@@ -40,7 +41,7 @@ namespace Utility.Nodes
         public override async Task<object?> GetChildren()
         {
             flag = true;
-            return await Task.FromResult(data.Info.ParameterDescriptors().Select(a => new ParameterData(dictionary, a)));
+            return await Task.FromResult(data.Info.ParameterDescriptors().Select(a => new ParameterData(a, dictionary)));
         }
 
         public override string ToString()

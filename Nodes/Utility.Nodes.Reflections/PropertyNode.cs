@@ -1,12 +1,8 @@
-﻿using System.ComponentModel;
-using Utility.Interfaces.NonGeneric;
+﻿using Utility.Interfaces.NonGeneric;
 using Utility.Observables.Generic;
 using Utility.Objects;
 using Utility.Reactive.Helpers;
-using System.Reflection;
 using Utility.Helpers;
-using Utility.PropertyDescriptors;
-using System.Collections.Generic;
 using Utility.PropertyDescriptors;
 
 namespace Utility.Nodes
@@ -14,19 +10,17 @@ namespace Utility.Nodes
     public class PropertyNode : Node
     {
         private PropertyData data;
-        private Lazy<object> _data;
         bool flag;
 
         public PropertyNode(PropertyData propertyData)
         {
-            if (propertyData == null)
+            if (propertyData.Descriptor == null)
             {
             }
             this.data = propertyData;
-            this._data = new Lazy<object>(() => ObjectConverter.ToValue(propertyData.Instance, propertyData.Descriptor));
         }
 
-        public override object Data => _data.Value;
+        public override object Data => data;
 
         public override IEquatable Key => null;
 
@@ -41,8 +35,8 @@ namespace Utility.Nodes
             var children = await ChildPropertyExplorer.Convert(inst, data.Descriptor);
         
             if (data.Descriptor.IsValueOrStringProperty() ==false && MethodExplorer.MethodInfos(data.Descriptor).Any())
-                return children.Select(a => new PropertyData(inst, a.Descriptor) as MemberData).Append(new MethodsData(inst, data.Descriptor)).ToArray();
-            return children.Select(a => new PropertyData(inst, a.Descriptor)).ToArray();
+                return children.Select(a => ObjectConverter.ToValue(inst, a.Descriptor) as MemberData).Append(new MethodsData(data.Descriptor, inst)).ToArray();
+            return children.Select(a => ObjectConverter.ToValue(inst, a.Descriptor)).ToArray();
         }
 
         public override string ToString()
@@ -66,30 +60,6 @@ namespace Utility.Nodes
         {
             return Task.FromResult(flag == false);
         }
-    }
-
-
-    public record MemberData(object Instance, PropertyDescriptor Descriptor) : IValue
-    {
-        public object? Value => Instance;
-    }
-
-    public record PropertyData(object Instance, PropertyDescriptor Descriptor) : MemberData(Instance, Descriptor)
-    {
-    }
-
-    public record MethodsData(object Instance, PropertyDescriptor Descriptor) : MemberData(Instance, Descriptor)
-    {
-    }
-
-    public record MethodData(object Instance, MethodInfo Info) : IValue
-    {
-        public object? Value => Instance;
-    }
-
-    public record ParameterData(object Instance, ParameterDescriptor Descriptor) : IValue
-    {
-        public object? Value => Instance;
     }
 }
 

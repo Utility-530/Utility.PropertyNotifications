@@ -1,5 +1,6 @@
 ﻿
 using Utility.Collections;
+using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Observables;

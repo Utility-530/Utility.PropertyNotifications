@@ -27,7 +27,7 @@ namespace Utility.Nodes
         {
             flag = true;         
             var children = MethodExplorer.MethodInfos(data.Descriptor);
-            return children.Select(a => new MethodData(data.Instance, a)).ToArray();
+            return children.Select(methodInfo => new MethodData(methodInfo, data.Instance)).ToArray();
         }
 
         public override string ToString()

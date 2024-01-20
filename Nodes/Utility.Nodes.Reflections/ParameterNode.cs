@@ -9,16 +9,15 @@ namespace Utility.Nodes
     public class ParameterNode : Node
     {
         private ParameterData data;
-        private readonly Lazy<object> _data;
         private bool flag;
 
         public ParameterNode(ParameterData propertyData)
         {
             this.data = propertyData;
-            this._data = new Lazy<object>(() => ObjectConverter.ToValue(data.Instance, data.Descriptor));
+
         }
 
-        public override object Data => _data.Value;
+        public override object Data => data;
 
         public override IEquatable Key => null;
 
@@ -29,7 +28,7 @@ namespace Utility.Nodes
             var children = await ChildPropertyExplorer.Convert(inst, data.Descriptor);
             //if (inst.GetMethods().Any())
             //    return children.Select(a => new PropertyData(inst, a.Descriptor) as MemberData).Append(new MethodsData(inst, data.Descriptor)).ToArray();
-            return children.Select(a => new PropertyData(inst, a.Descriptor)).ToArray();
+            return children.Select(a => ObjectConverter.ToValue(inst, a.Descriptor)).ToArray();
         }
 
         public override string ToString()
