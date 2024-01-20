@@ -5,7 +5,7 @@ using static System.Reactive.Linq.Observable;
 using System.Collections;
 using Utility.Observables.NonGeneric;
 using Utility.Helpers;
-using Utility.Properties;
+using Utility.PropertyDescriptors;
 
 namespace Utility.PropertyTrees.Services
 {

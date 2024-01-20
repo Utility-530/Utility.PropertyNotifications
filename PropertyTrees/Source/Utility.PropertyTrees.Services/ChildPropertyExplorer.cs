@@ -14,7 +14,7 @@ using Utility.Helpers.Ex;
 using Utility.Helpers;
 using Utility.Trees.Abstractions;
 using NetFabric.Hyperlinq;
-using Utility.Properties;
+using Utility.PropertyDescriptors;
 
 namespace Utility.PropertyTrees.Services
 {

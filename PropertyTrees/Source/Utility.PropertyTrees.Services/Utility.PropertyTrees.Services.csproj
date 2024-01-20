@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
     <ProjectReference Include="..\..\..\Infrastructure\Utility.Guids\Utility.Guids.csproj" />
+    <ProjectReference Include="..\..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
     <ProjectReference Include="..\..\..\Tasks\Utility.Tasks\Utility.Tasks.csproj" />
     <ProjectReference Include="..\Utility.PropertyTrees\Utility.Properties.csproj" />
   </ItemGroup>
