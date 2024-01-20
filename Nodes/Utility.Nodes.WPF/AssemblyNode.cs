@@ -8,7 +8,7 @@ using Utility.Helpers;
 using Utility.ProjectStructure;
 using Utility.Trees.Abstractions;
 
-namespace Utility.Nodes.WPF
+namespace Utility.Nodes.Solutions
 {
     public class AssemblyNode : Node
     {
@@ -21,7 +21,7 @@ namespace Utility.Nodes.WPF
             lazy = new Lazy<IList>(() =>
             {
                 var x = Assembly.GetEntryAssembly();
-                var files = System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*" + "Utility" + "*.dll").Where(a=>a.Equals(x.Location)==false).ToArray();
+                var files = System.IO.Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*" + "Utility" + "*.dll").Where(a => a.Equals(x.Location) == false).ToArray();
                 return files;
             });
             data = AppDomain.CurrentDomain.BaseDirectory;

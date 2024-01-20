@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Factorys\Utility.Factorys\Utility.Factorys.csproj" />
-    <ProjectReference Include="..\..\Meta\Utility.ProjectStructure\Utility.ProjectStructure.csproj" />
+    <ProjectReference Include="..\..\Meta\Utility.ProjectStructure\Utility.Solutions.csproj" />
     <ProjectReference Include="..\Utility.Nodes\Utility.Nodes.csproj" />
   </ItemGroup>
 
