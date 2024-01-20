@@ -1,6 +1,6 @@
 ﻿using Utility.Enums;
 
-namespace Utility.Nodes.Values
+namespace Utility.ViewModels
 {
     public class ViewModel : NotifyPropertyChangedBase
     {

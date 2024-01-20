@@ -1,4 +1,4 @@
-﻿namespace Utility.Nodes.Values
+﻿namespace Utility.ViewModels
 {
     public enum DataPresentationType
     {

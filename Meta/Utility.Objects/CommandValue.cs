@@ -4,7 +4,7 @@ using Utility.Commands;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 
-namespace Utility.Nodes
+namespace Utility.Objects
 {
     public class CommandValue : IValue<ICommand>
     {
@@ -15,7 +15,7 @@ namespace Utility.Nodes
             MethodInfo = methodInfo;
             Instance = instance;
             Dictionary = dictionary;
-            this.Dictionary = dictionary;
+            Dictionary = dictionary;
             command = new ObservableCommand(a =>
             {
                 methodInfo.Invoke(instance, dictionary.OrderBy(a => a.Key).Select(a => a.Value).ToArray());
