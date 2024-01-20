@@ -1,4 +1,4 @@
-﻿namespace Utility.Properties
+﻿namespace Utility.PropertyDescriptors
 {
     [Flags]
     public enum PropertyType

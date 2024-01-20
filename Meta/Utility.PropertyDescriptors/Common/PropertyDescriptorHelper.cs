@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
-using Utility.PropertyDescriptors;
 
-namespace Utility.Properties
+namespace Utility.PropertyDescriptors
 {
     public static class PropertyDescriptorHelper
     {

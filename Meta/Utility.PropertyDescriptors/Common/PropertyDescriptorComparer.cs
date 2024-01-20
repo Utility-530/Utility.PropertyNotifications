@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Utility.Properties
+namespace Utility.PropertyDescriptors
 {
     public class PropertyDescriptorComparer : IEqualityComparer<PropertyDescriptor>
     {
