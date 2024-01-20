@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Structs", "..\Struc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Reactive", "..\Reactive\Utility.Reactive\Utility.Reactive.csproj", "{3F782A4E-EBAE-4EC1-B5DD-E6F657BF75C6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.ViewModels", "Utility.ViewModels\Utility.ViewModels.csproj", "{DF0465FC-FFE4-454A-A5EB-1F450A811C41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,10 @@ Global
 		{3F782A4E-EBAE-4EC1-B5DD-E6F657BF75C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F782A4E-EBAE-4EC1-B5DD-E6F657BF75C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F782A4E-EBAE-4EC1-B5DD-E6F657BF75C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF0465FC-FFE4-454A-A5EB-1F450A811C41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF0465FC-FFE4-454A-A5EB-1F450A811C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF0465FC-FFE4-454A-A5EB-1F450A811C41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF0465FC-FFE4-454A-A5EB-1F450A811C41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
