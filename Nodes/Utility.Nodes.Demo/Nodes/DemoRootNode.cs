@@ -29,10 +29,6 @@ namespace Utility.Nodes.Demo
         }
 
 
-        public override string ToString()
-        {
-            return Data;
-        }
 
         public override ITree ToNode(object value)
         {
@@ -52,6 +48,12 @@ namespace Utility.Nodes.Demo
         {
             return Task.FromResult(flag == false);
         }
+
+        public override string ToString()
+        {
+            return Data;
+        }
+
     }
 
     public class ExceptionNode : Node

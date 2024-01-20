@@ -39,33 +39,7 @@ namespace VisualJsonEditor.Test.Infrastructure
             //    return convert(itemsPanel);
             //}
 
-            if (value is IReadOnlyTree { Key: var key, Data: PropertyData { Descriptor: { ComponentType: { } componentType, DisplayName: { } displayName } descriptor } baseObject })
-            {
-                if (baseObject.Descriptor is CollectionItemDescriptor { Index: { } index } collectionItemDescriptor)
-                {
-                    return convert(new ItemsPanel
-                    {
-                        Type = Arrangement.Stacked,
-                        Orientation = System.Windows.Controls.Orientation.Horizontal,
-                    });
-                }
-                //var itemsPanel = baseObject.ToItemsPanel();
-                //return convert(itemsPanel);
-                return convert(new ItemsPanel
-                {
-                    Type = Arrangement.Stacked,
-                    Orientation = System.Windows.Controls.Orientation.Vertical,
-                });
-            }
 
-            if (value is MethodsNode { })
-            {
-                return convert(new ItemsPanel
-                {
-                    Type = Arrangement.Stacked,
-                    Orientation = System.Windows.Controls.Orientation.Horizontal,
-                });
-            }
 
             return DependencyProperty.UnsetValue;
 
