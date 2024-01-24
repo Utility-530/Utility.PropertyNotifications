@@ -10,7 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
     <ProjectReference Include="..\..\Nodes\Utility.Nodes\Utility.Nodes.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Behavior\Utility.WPF.Behavior.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Behavior\Utility.WPF.Behaviors.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.WPF.Controls.Meta\Utility.WPF.Controls.Meta.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Extrinsic\Utility.WPF.Controls.Extrinsic.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Objects\Utility.WPF.Controls.Objects.csproj" />

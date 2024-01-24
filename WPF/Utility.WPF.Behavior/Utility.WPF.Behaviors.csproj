@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
     <ProjectReference Include="..\Utility.WPF.Abstract\Utility.WPF.Abstract.csproj" />
     <ProjectReference Include="..\Utility.WPF.Reactive\Utility.WPF.Reactive.csproj" />

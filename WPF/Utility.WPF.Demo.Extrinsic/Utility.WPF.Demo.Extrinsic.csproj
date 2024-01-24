@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Utility.WPF.Behavior\Utility.WPF.Behavior.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Behavior\Utility.WPF.Behaviors.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Extrinsic\Utility.WPF.Controls.Extrinsic.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Data\Utility.WPF.Demo.Data.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Panels\Utility.WPF.Demo.Panels.csproj" />
