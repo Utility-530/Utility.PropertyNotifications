@@ -97,7 +97,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Helpers", "Util
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Demo.Adorners", "Utility.WPF.Demo.Adorners\Utility.WPF.Demo.Adorners.csproj", "{3587E9C2-7255-415C-9FE0-80B11AC3939A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Behavior", "Utility.WPF.Behavior\Utility.WPF.Behavior.csproj", "{8C605304-DA17-4E73-A6AF-BC43C0E751A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Behaviors", "Utility.WPF.Behavior\Utility.WPF.Behaviors.csproj", "{8C605304-DA17-4E73-A6AF-BC43C0E751A2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Reactive", "Utility.WPF.Reactive\Utility.WPF.Reactive.csproj", "{5B4277F6-5551-4A9D-A20D-69C2682B4CB9}"
 EndProject
