@@ -6,11 +6,12 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 
-namespace Utility.WPF.Adorners.Infrastructure
+namespace Utility.WPF.Adorners
 {
     public class AdornerBehavior : Behavior<UIElement>
     {
         private EllipseAdorner? adorner;
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register("Command", typeof(ICommand), typeof(AdornerBehavior), new PropertyMetadata(null));
 
         public ICommand Command
         {
@@ -18,9 +19,6 @@ namespace Utility.WPF.Adorners.Infrastructure
             set => SetValue(CommandProperty, value);
         }
 
-        // Using a DependencyProperty as the backing store for Command.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty CommandProperty =
-            DependencyProperty.Register("Command", typeof(ICommand), typeof(AdornerBehavior), new PropertyMetadata(null));
 
         protected override void OnAttached()
         {
