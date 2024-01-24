@@ -1,20 +1,16 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
-using Utility.Interfaces.NonGeneric;
+using Utility.Objects;
 using Utility.PropertyDescriptors;
 
 namespace Utility.Nodes
 {
-    public record MemberData(PropertyDescriptor Descriptor, object Instance) 
-    {
-
-    }
 
     //public record PropertyData(object Instance, PropertyDescriptor Descriptor) : MemberData(Instance, Descriptor)
     //{
     //}
 
-    public record MethodsData(PropertyDescriptor Descriptor, object Instance) : MemberData(Descriptor, Instance)
+    public record MethodsData(PropertyDescriptor Descriptor, object Instance) : PropertyData(Descriptor, Instance)
     {
     }
 
@@ -22,7 +18,7 @@ namespace Utility.Nodes
     {
     }
 
-    public record ParameterData(ParameterDescriptor Descriptor, object Instance) 
+    public record ParameterData(ParameterDescriptor ParameterDescriptor, object Instance) : PropertyData(ParameterDescriptor, Instance)
     {
     }
 }

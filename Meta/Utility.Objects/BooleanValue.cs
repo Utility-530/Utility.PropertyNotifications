@@ -8,6 +8,11 @@ namespace Utility.Nodes
     }   
     
 
+        public record NullableBooleanValue(PropertyDescriptor propertyDescriptor, object Instance) : NullablePropertyData<bool>(propertyDescriptor, Instance)
+    {   
+    }   
+    
+
 
 
 

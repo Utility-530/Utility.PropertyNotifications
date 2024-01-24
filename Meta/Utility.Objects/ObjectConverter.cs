@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
+using Utility.Helpers;
 using Utility.Interfaces.Generic;
 using Utility.Nodes;
 
@@ -13,19 +14,33 @@ namespace Utility.Objects
         public static object ToValue(object value, PropertyDescriptor descriptor)
         {
 
-            return descriptor.GetValue(value) switch
+            return descriptor.PropertyType switch
             {
-                string _value => new StringValue(descriptor, value),
-                Enum _value => new EnumValue(descriptor, value),
-                bool _value => new BooleanValue(descriptor, value),
-                int _value => new IntegerValue(descriptor, value),
-                long _value => new LongValue(descriptor, value),
-                double _value => new DoubleValue(descriptor, value),
-                Guid guid => new GuidValue(descriptor, value),
-                DateTime dateTime => new DateTimeValue(descriptor, value),
-                IDictionary dictionary => new DictionaryValue(descriptor, value),
-                object _value => new ObjectValue(descriptor, value),
-                null => new NullValue(descriptor, value),
+                Type t when  t==typeof(string) => new StringValue(descriptor, value),
+                Type t when t.BaseType == typeof(Enum)  => new EnumValue(descriptor, value),
+                Type t when t == typeof(bool)  => new BooleanValue(descriptor, value),
+                Type t when t == typeof(int)   => new IntegerValue(descriptor, value),
+                Type t when t == typeof(short)   => new IntegerValue(descriptor, value),
+                Type t when t == typeof(long)   => new LongValue(descriptor, value),
+                Type t when t == typeof(double)  => new DoubleValue(descriptor, value),
+                Type t when t == typeof(byte)   => new ByteValue(descriptor, value),
+                Type t when t == typeof(Guid)   => new GuidValue(descriptor, value),
+                Type t when t == typeof(DateTime)  => new DateTimeValue(descriptor, value),
+
+                Type t when t.IsNullableEnum() => new NullableEnumValue(descriptor, value),
+                Type t when t == typeof(bool?) => new NullableBooleanValue(descriptor, value),
+                Type t when t == typeof(int?) => new NullableIntegerValue(descriptor, value),
+                Type t when t == typeof(short?) => new NullableIntegerValue(descriptor, value),
+                Type t when t == typeof(long?) => new NullableLongValue(descriptor, value),
+                Type t when t == typeof(double?) => new NullableDoubleValue(descriptor, value),
+                Type t when t == typeof(byte?) => new NullableByteValue(descriptor, value),
+                Type t when t == typeof(Guid?) => new NullableGuidValue(descriptor, value),
+                Type t when t == typeof(DateTime?) => new NullableDateTimeValue(descriptor, value),
+
+                Type t when t == typeof(IDictionary)   => new DictionaryValue(descriptor, value),
+                Type t when t.IsDerivedFrom<object>()   => new ObjectValue(descriptor, value),
+
+                _ => new NullValue(descriptor, value),
 
             }; ; ;
         }
@@ -34,8 +49,6 @@ namespace Utility.Objects
         {
             throw new NotImplementedException();
         }
-
-        //public DataTemplate UnknownTemplate { get; set; }
     }
 
     public record DictionaryValue(PropertyDescriptor propertyDescriptor, object Instance) : PropertyData(propertyDescriptor, Instance), IValue<IDictionary>

@@ -18,7 +18,17 @@ namespace Utility.Objects
         object IValue.Value => Value;
     }
 
-    public record PropertyData(PropertyDescriptor Descriptor, object Instance) : MemberData(Descriptor, Instance), IIsReadOnly
+    public record NullablePropertyData<T>(PropertyDescriptor Descriptor, object Instance) : PropertyData(Descriptor, Instance), IValue<T?>
+    {
+        public T? Value
+        {
+            get => Descriptor.GetValue(Instance) is T t ? t : default; set { Descriptor.SetValue(Instance, value); }
+        }
+        object IValue.Value => Value;
+    }
+
+
+    public record PropertyData(PropertyDescriptor Descriptor, object Instance) : IIsReadOnly, IType
     {
         public string Name => Descriptor?.Name ?? "Descriptor not set";
 
@@ -33,10 +43,10 @@ namespace Utility.Objects
 
         //public virtual TypeConverter Converter => Descriptor.Converter;
 
-        public Type PropertyType => Descriptor.PropertyType;
+        public Type Type => Descriptor.PropertyType;
 
         // collection
-        public virtual Type? CollectionItemPropertyType => PropertyType.IsArray ? PropertyType.GetElementType() : IsCollection ? PropertyType.GenericTypeArguments().SingleOrDefault() : null;
+        public virtual Type? CollectionItemPropertyType => Type.IsArray ? Type.GetElementType() : IsCollection ? Type.GenericTypeArguments().SingleOrDefault() : null;
 
         public virtual int CollectionCount => Instance is IEnumerable enumerable ? enumerable.Cast<object>().Count() : 0;
 
@@ -44,14 +54,13 @@ namespace Utility.Objects
 
         public virtual TypeConverter Converter => Descriptor.Converter;
 
-        public bool IsCollection => PropertyType != null && PropertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(PropertyType);
+        public bool IsCollection => Type != null && Type != typeof(string) && typeof(IEnumerable).IsAssignableFrom(Type);
 
-        public bool IsObservableCollection => PropertyType != null && typeof(INotifyCollectionChanged).IsAssignableFrom(PropertyType);
+        public bool IsObservableCollection => Type != null && typeof(INotifyCollectionChanged).IsAssignableFrom(Type);
 
-        public bool IsFlagsEnum => PropertyType.IsFlagsEnum();
+        public bool IsFlagsEnum => Type.IsFlagsEnum();
 
-        public bool IsValueType => PropertyType.IsValueType;
-
+        public bool IsValueType => Type.IsValueType;
 
     }
 }
