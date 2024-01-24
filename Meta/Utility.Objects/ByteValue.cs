@@ -10,5 +10,4 @@ namespace Utility.Nodes
     public record NullableByteValue(PropertyDescriptor propertyDescriptor, object Instance) : NullablePropertyData<byte>(propertyDescriptor, Instance)
     {
     }
-
 }

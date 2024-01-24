@@ -6,10 +6,6 @@ using Utility.PropertyDescriptors;
 namespace Utility.Nodes
 {
 
-    //public record PropertyData(object Instance, PropertyDescriptor Descriptor) : MemberData(Instance, Descriptor)
-    //{
-    //}
-
     public record MethodsData(PropertyDescriptor Descriptor, object Instance) : PropertyData(Descriptor, Instance)
     {
     }
