@@ -5,6 +5,8 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Observables;
 using Utility.Observables.NonGeneric;
+using Utility.Trees.Abstractions;
+
 namespace Utility.Nodes
 {
     public class DirectoryNode : Node, IObserver
@@ -46,12 +48,12 @@ namespace Utility.Nodes
             return await Task.FromResult(flag == false);
         }
 
-        public override Node ToNode(object value)
+        public override Task<IReadOnlyTree> ToNode(object value)
         {
             if (value is string str)
-                return new DirectoryNode(str) { Parent = this };
+                return Task.FromResult<IReadOnlyTree>(new DirectoryNode(str) { Parent = this });
             else if (value is DirectoryInfo info)
-                return new DirectoryNode(info) { Parent = this };
+                return Task.FromResult<IReadOnlyTree>(new DirectoryNode(info) { Parent = this });
             throw new Exception("r 3 33");
         }
 
@@ -160,7 +162,7 @@ namespace Utility.Nodes
 
         public bool Equals(IEquatable? other)
         {
-            return (other as DirectoryNode)?.path == path;  
+            return (other as DirectoryNode)?.path == path;
         }
 
         public void OnProgress(int complete, int total)
