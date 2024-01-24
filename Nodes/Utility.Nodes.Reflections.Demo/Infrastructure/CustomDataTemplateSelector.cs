@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.Interfaces.NonGeneric;
 using Utility.Objects;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
@@ -89,9 +87,21 @@ namespace Utility.Nodes.Demo
             }
             else if (index[1] == 2)
             {
+                return MakeTemplate(item, "ViewModel");
+
+            }
+
+            else if (index[1] == 3)
+            {
+                return MakeRefreshTemplate(item);
+
+            }
+            else if (index[1] > 3)
+            {
                 return MakeTemplate(item);
 
             }
+
 
             throw new System.Exception("743£");
 
@@ -115,13 +125,27 @@ namespace Utility.Nodes.Demo
         {
             return TemplateGenerator.CreateDataTemplate(() =>
             {
-                var binding = new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(Node.Data)), Source = item };
+                var binding = new Binding { Mode = BindingMode.OneWay, /*Path = new PropertyPath(nameof(Node.Data)),*/ Source = item };
                 var contentControl = new Button
                 {
-                    ContentTemplate = this.FindResource<DataTemplate>("OnlyHeader")
+                    ContentTemplate = this.FindResource<DataTemplate>("Key")
                 };
                 contentControl.Click += ContentControl_Click;
                 contentControl.SetBinding(ContentControl.ContentProperty, binding);
+                return contentControl;
+            });
+        }
+
+        private DataTemplate MakeRefreshTemplate(object item)
+        {
+            return TemplateGenerator.CreateDataTemplate(() =>
+            {
+        
+                var contentControl = new Button
+                {
+                    Content = "Refresh"
+                };
+                contentControl.Click += (s,e) => replay.OnNext("refresh");
                 return contentControl;
             });
         }

@@ -2,6 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:Utility.Objects;assembly=Utility.Objects"
+             xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
+             xmlns:local="clr-namespace:Utility.Nodes.Reflections.Demo"
              xmlns:templates="http://schemas.utility.com/templates"
              xmlns:ui="http://schemas.modernwpf.com/2019">    
     <Application.Resources>
@@ -11,40 +13,57 @@
                 <ui:XamlControlsResources />
             </ResourceDictionary.MergedDictionaries>
 
-               
+            <local:ViewModelConverter x:Key="ViewModelConverter"/>
+
+
+            <Style x:Key="TextBlockStyle"  TargetType="{x:Type TextBlock}" BasedOn="{StaticResource {x:Type TextBlock}}">
+                <Setter Property="Height" Value="30"></Setter>
+                <Setter Property="Width" Value="160"></Setter>
+            </Style>
+
+            <Style x:Key="ContentControlStyle"  TargetType="{x:Type ContentControl}" BasedOn="{StaticResource {x:Type ContentControl}}">
+                <Setter Property="Height" Value="30"></Setter>
+                <Setter Property="Width" Value="160"></Setter>
+            </Style>
+            
             <DataTemplate DataType="{x:Type vm:PropertyData}">
-                <UniformGrid Rows="1">
-                    <!--<ContentControl Content="{Binding Descriptor}"/>-->
-                    <TextBlock Text="{Binding Name}"></TextBlock>
-                    <ContentControl Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
+                <UniformGrid Rows="1" >
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
+                    <ContentControl Style="{StaticResource ContentControlStyle}"  Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
                 </UniformGrid>
             </DataTemplate>
 
             <DataTemplate x:Key="TopHeader"  DataType="{x:Type vm:PropertyData}">
-                <UniformGrid Columns="1">
-                    <!--<ContentControl Content="{Binding Descriptor}"/>-->
-                    <TextBlock Text="{Binding Name}"></TextBlock>
-                    <ContentControl Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
+                <UniformGrid Columns="1" >
+                    <TextBlock Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
+                    <ContentControl Style="{StaticResource ContentControlStyle}" Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
                 </UniformGrid>
             </DataTemplate>
             
             <DataTemplate x:Key="NoHeader"  DataType="{x:Type vm:PropertyData}">
-                <ContentControl Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
+                <ContentControl Style="{StaticResource ContentControlStyle}" Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
             </DataTemplate>
             
             <DataTemplate x:Key="OnlyHeader"  DataType="{x:Type vm:PropertyData}">
-                <TextBlock Text="{Binding Name}"></TextBlock>
+                <TextBlock Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
             </DataTemplate>
 
+            <DataTemplate x:Key="Key"  DataType="{x:Type nodes:Node}">
+                <TextBlock Text="{Binding Key.Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
+            </DataTemplate>
+
+            <!--<DataTemplate x:Key="ViewModel"  DataType="{x:Type nodes:Node}">
+                <ContentControl Content="{Binding Converter={StaticResource ViewModelConverter}}"></ContentControl>
+            </DataTemplate>-->
+            
             <DataTemplate x:Key="None"  DataType="{x:Type vm:PropertyData}">
 
             </DataTemplate>
-
+            
 
             <DataTemplate   DataType="{x:Type vm:CommandValue}">
                 <Button Content="{Binding MethodInfo.Name, Mode=OneTime }" Command="{Binding Value, Mode=OneTime}"></Button>
             </DataTemplate>
-
         </ResourceDictionary>
     </Application.Resources>
 </Application>

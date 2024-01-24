@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.Globalization;
+using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
 using Utility.Collections;
-using Utility.Enums;
-using Utility.Nodes.Demo.Infrastructure;
 using Utility.Objects;
-using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
 using Views.Trees;
 using VisualJsonEditor.Test.Infrastructure;
@@ -22,19 +19,34 @@ namespace Utility.Nodes.Demo
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
+            SQLitePCL.Batteries.Init();
             Collection.Context = SynchronizationContext.Current;
-            var treeViewer = new TreeViewer
+            TreeViewer treeViewer = TreeViewer();
+
+            var window = new Window { Content = treeViewer };
+            window.Show();
+
+
+            CustomDataTemplateSelector.Instance
+                .OfType<string>()
+                .Subscribe(a =>
+            {
+                TreeViewer treeViewer = TreeViewer();
+                window.Content = treeViewer ;
+            });
+        }
+
+        private static TreeViewer TreeViewer()
+        {
+            return new TreeViewer
             {
                 ViewModel = new RootNode(),
                 TreeViewItemFactory = CustomTreeViewItemFactory.Instance,
                 TreeViewBuilder = TreeViewBuilder.Instance,
-                PanelsConverter = new CustomItemsPanelConverter(),
+                PanelsConverter = CustomItemsPanelConverter.Instance,
                 DataTemplateSelector = CustomDataTemplateSelector.Instance,
-                TreeViewFilter = new CustomFilter()
+                TreeViewFilter = CustomFilter.Instance
             };
-
-            var window = new Window { Content = treeViewer };
-            window.Show();
         }
     }
 
@@ -75,60 +87,7 @@ namespace Utility.Nodes.Demo
 
             return true;
         }
-    }
 
-    public class CustomItemsPanelConverter : ItemsPanelConverter
-    {
-        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-
-            if (value is RootNode { })
-            {
-                return convert(new ItemsPanel
-                {
-                    Type = Arrangement.Stacked,
-                    Orientation = System.Windows.Controls.Orientation.Horizontal,
-                });
-            }
-            if (value is IReadOnlyTree { Data: PropertyData { Descriptor: { PropertyType: { } propertyType, ComponentType: { } componentType, DisplayName: { } displayName } descriptor } baseObject })
-            {
-                if (propertyType == typeof(LEDMessage))
-                {
-                    return convert(new ItemsPanel
-                    {
-                        Type = Arrangement.Stacked,
-                        Orientation = System.Windows.Controls.Orientation.Horizontal,
-                    });
-                }
-            }
-            if (value is IReadOnlyTree { Key: var key, Data: PropertyData { Descriptor: { ComponentType: { } _, DisplayName: { } _ } _ } _baseObject })
-            {
-                if (_baseObject.Descriptor is CollectionItemDescriptor { Index: { } index } collectionItemDescriptor)
-                {
-                    return convert(new ItemsPanel
-                    {
-                        Type = Arrangement.Stacked,
-                        Orientation = System.Windows.Controls.Orientation.Horizontal,
-                    });
-                }
-                //var itemsPanel = baseObject.ToItemsPanel();
-                //return convert(itemsPanel);
-                return convert(new ItemsPanel
-                {
-                    Type = Arrangement.Stacked,
-                    Orientation = System.Windows.Controls.Orientation.Vertical,
-                });
-            }
-
-            if (value is MethodsNode { })
-            {
-                return convert(new ItemsPanel
-                {
-                    Type = Arrangement.Stacked,
-                    Orientation = System.Windows.Controls.Orientation.Horizontal,
-                });
-            }
-            return base.Convert(value, targetType, parameter, culture);
-        }
+        public static CustomFilter Instance { get; } = new();
     }
 }

@@ -1,43 +1,59 @@
-﻿using Fasterflect;
-using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+﻿using System;
 using System.Threading.Tasks;
-using System.Windows.Input;
+using System.Windows.Controls;
 using Utility.Interfaces.NonGeneric;
+using Utility.Models;
 using Utility.Nodes.Demo.Infrastructure;
+using Utility.Nodes.Reflections.Demo.Infrastructure;
 using Utility.Objects;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
+using Utility.ViewModels;
 
 namespace Utility.Nodes.Demo
 {
-    public class RootPropertyNode : PropertyNode
+    public class ModelRootPropertyNode : RootPropertyNode
     {
-        private readonly int _index;
-
-        public RootPropertyNode(int index) : base(new PropertyData(new RootDescriptor(Model), Model))
+        Guid guid = Guid.Parse("2b581d2f-506d-439a-9822-229d831f73b0");
+        public ModelRootPropertyNode() : base(Model)
         {
-            _index = index;
         }
+
+        public override IEquatable Key => new Key(guid, "root", typeof(Model));
 
         static LedModel Model { get; } = new LedModel();
     }
 
 
-    public class SelectionNode : EmptyNode
+    public class SelectionNode : PropertyNode
     {
-        object data;
+        Guid guid = Guid.Parse("46f59dbd-680e-4c7d-ab35-28c1ba8cdcd3");
 
-        public SelectionNode()
+        public SelectionNode() : base()
         {
-            CustomDataTemplateSelector.Instance.Subscribe(a =>
+            CustomDataTemplateSelector.Instance.Subscribe(async data =>
             {
-                this.Data = a;                
+                if (data is IReadOnlyTree { Key: Key { Guid: { } guid } })
+                {
+                    var viewModel = ViewModelStore.Instance.Get(guid);
+                    var propertyData = new PropertyData(new RootDescriptor(viewModel), viewModel) {  };
+                    this.Data = propertyData;
+                    await RefreshChildrenAsync();
+                }
             });
         }
 
-        public override object Data { get => data; set { data = value; this.OnPropertyChanged(); } }
+        public override IEquatable Key => new Key(guid, "root", typeof(ViewModel));
+    }
+
+
+    public class RefreshNode : EmptyNode
+    {
+
+        public RefreshNode()
+        {
+
+        }
     }
 
 
@@ -55,16 +71,18 @@ namespace Utility.Nodes.Demo
             flag = true;
             return await Task.Run<object?>(() =>
             {
-                return new int[] { 0, 1, 2 };
+                return new int[] { 0, 1, 2, 3 };
             });
         }
 
-        public override ITree ToNode(object value)
+        public override Task<IReadOnlyTree> ToNode(object value)
         {
             if (value is 0 or 1)
-                return new RootPropertyNode((int)value);
+                return Task.FromResult<IReadOnlyTree>(new ModelRootPropertyNode());
             else if (value is 2)
-                return new SelectionNode();
+                return Task.FromResult<IReadOnlyTree>(new SelectionNode());
+            else if (value is 3)
+                return Task.FromResult<IReadOnlyTree>(new RefreshNode());
 
             throw new Exception("2r 11 4333");
         }

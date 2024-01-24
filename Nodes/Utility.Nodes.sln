@@ -67,6 +67,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Enums", "..\Enums\U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdornerBehavior", "AdornerBehavior\AdornerBehavior.csproj", "{8C9798CF-23A5-44C6-AAF5-1660FDC7F531}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Attributes", "..\Infrastructure\Utility.Attributes\Utility.Attributes.csproj", "{BE3B2C05-886C-4747-98FE-81B85170CC94}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls", "..\WPF\Utility.WPF.Controls\Utility.WPF.Controls.csproj", "{C099CF92-56EB-4857-967D-A472D6CB05EC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -189,6 +193,14 @@ Global
 		{8C9798CF-23A5-44C6-AAF5-1660FDC7F531}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C9798CF-23A5-44C6-AAF5-1660FDC7F531}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C9798CF-23A5-44C6-AAF5-1660FDC7F531}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE3B2C05-886C-4747-98FE-81B85170CC94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE3B2C05-886C-4747-98FE-81B85170CC94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE3B2C05-886C-4747-98FE-81B85170CC94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE3B2C05-886C-4747-98FE-81B85170CC94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C099CF92-56EB-4857-967D-A472D6CB05EC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C099CF92-56EB-4857-967D-A472D6CB05EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C099CF92-56EB-4857-967D-A472D6CB05EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C099CF92-56EB-4857-967D-A472D6CB05EC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -218,6 +230,8 @@ Global
 		{A35EE7B1-8232-437F-9F8A-5624BC30B8BC} = {28597BEF-6983-4377-A102-82F69FF978DE}
 		{734F1ABD-69AF-4C1A-BC67-B9A4BE44CE8C} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{8C9798CF-23A5-44C6-AAF5-1660FDC7F531} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{BE3B2C05-886C-4747-98FE-81B85170CC94} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{C099CF92-56EB-4857-967D-A472D6CB05EC} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1F5991F-9180-4F40-A959-E24A6DDA6C5C}
