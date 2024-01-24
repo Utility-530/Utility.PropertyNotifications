@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using Utility.Enums;
 
 namespace Utility.WPF.Demo.View
 {
@@ -16,5 +17,10 @@ namespace Utility.WPF.Demo.View
         {
 
         }
+    }
+
+    public class EnumViewModel
+    {
+        public Emotion Emotion { get; set; } = Emotion.Confusion; 
     }
 }

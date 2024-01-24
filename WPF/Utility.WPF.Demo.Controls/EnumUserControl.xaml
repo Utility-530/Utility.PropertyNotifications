@@ -9,6 +9,7 @@
     xmlns:utl="http://schemas.utility.com/utilitywpf"
     xmlns:conv="http://schemas.utility.com/converters"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:local="clr-namespace:Utility.WPF.Demo.View"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -43,29 +44,52 @@
                 <TextBlock Text="{Binding ElementName=ebdcs, Path=Value, Converter={x:Static conv:LambdaConverter.StringConverter}}" Margin="5" Background="NavajoWhite" Height="30"/>
             </StackPanel>
             <view:EnumItemsControl Enum="{x:Type test:Emotion}" IsReadOnly="True" />
+
+            <view:EnumComboBox SelectedItem="{Binding Emotion}"  >
+                <FrameworkElement.DataContext>
+                    <local:EnumViewModel/>
+                </FrameworkElement.DataContext>
+            </view:EnumComboBox>
+
+
+
+
         </UniformGrid>
         <UniformGrid Rows="1" >
-                <ComboBox x:Name="ComboBox">
-                    <i:Interaction.Behaviors>
-                        <utl:EnumSelectorBehavior EnumType="{x:Type Visibility}"></utl:EnumSelectorBehavior>
-                    </i:Interaction.Behaviors>
-                </ComboBox>
 
-                <StackPanel>
-                    <ToggleButton x:Name="ToggleButton2" Height="30" Content="{x:Static Orientation.Horizontal}">
-                        <i:Interaction.Behaviors>
-                            <utl:ToggleButtonContentBehavior UnCheckedContent="{x:Static Orientation.Vertical}"></utl:ToggleButtonContentBehavior>
-                        </i:Interaction.Behaviors>
-                    </ToggleButton>
-                    <utl:LayOutListBox 
+
+            <ComboBox x:Name="Emotion_2_ComboBox" Height="30">
+                <FrameworkElement.DataContext>
+                    <local:EnumViewModel/>
+                </FrameworkElement.DataContext>
+                <i:Interaction.Behaviors>
+                    <utl:EnumComboBehavior Value="{Binding Emotion}"></utl:EnumComboBehavior>
+                </i:Interaction.Behaviors>
+            </ComboBox>
+
+
+            <ComboBox x:Name="ComboBox">
+                <i:Interaction.Behaviors>
+                    <utl:EnumSelectorBehavior EnumType="{x:Type Visibility}"></utl:EnumSelectorBehavior>
+                </i:Interaction.Behaviors>
+            </ComboBox>
+
+            <StackPanel>
+                <ToggleButton x:Name="ToggleButton2" Height="30" Content="{x:Static Orientation.Horizontal}">
+                    <i:Interaction.Behaviors>
+                        <utl:ToggleButtonContentBehavior UnCheckedContent="{x:Static Orientation.Vertical}"></utl:ToggleButtonContentBehavior>
+                    </i:Interaction.Behaviors>
+                </ToggleButton>
+                <TextBlock Text="{Binding ElementName=Emotion_2_ComboBox,Path=SelectedValue}"></TextBlock>
+                <utl:LayOutListBox 
                         Orientation="{Binding ElementName=ToggleButton2, Path=Content}"
                         Visibility="{Binding ElementName=ComboBox, Path=SelectedValue}" Background="HotPink">
-                        <i:Interaction.Behaviors>
-                            <utl:EnumSelectorBehavior EnumType="{x:Type HorizontalAlignment}"></utl:EnumSelectorBehavior>
-                        </i:Interaction.Behaviors>
-                    </utl:LayOutListBox>
-                </StackPanel>
-            </UniformGrid>
+                    <i:Interaction.Behaviors>
+                        <utl:EnumSelectorBehavior EnumType="{x:Type HorizontalAlignment}"></utl:EnumSelectorBehavior>
+                    </i:Interaction.Behaviors>
+                </utl:LayOutListBox>
+            </StackPanel>
         </UniformGrid>
+    </UniformGrid>
 
 </UserControl>

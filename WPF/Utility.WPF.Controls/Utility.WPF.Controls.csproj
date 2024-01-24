@@ -52,7 +52,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
-		<ProjectReference Include="..\Utility.WPF.Behavior\Utility.WPF.Behavior.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Behavior\Utility.WPF.Behaviors.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Controls.Base\Utility.WPF.Controls.Base.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Themes\Utility.WPF.Themes.csproj" />
@@ -62,6 +62,9 @@
 	<ItemGroup>		
 		<Compile Update="CollapseBox.cs">
 			<DependentUpon>CollapseBox.xaml</DependentUpon>
+		</Compile>		
+		<Compile Update="EnumItemsControl - Copy.cs">
+		  <DependentUpon>EnumItemsControl.xaml</DependentUpon>
 		</Compile>		
 		<Compile Update="MasterControl.cs">
 		  <DependentUpon>MasterControl.xaml</DependentUpon>
@@ -92,6 +95,9 @@
 		</Compile>
 		<Compile Update="EnumItemsControl.cs">
 			<DependentUpon>EnumItemsControl.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="EnumCombobox.cs">
+			<DependentUpon>EnumCombobox.xaml</DependentUpon>
 		</Compile>
 		<Compile Update="HeaderedListBox.cs">
 			<DependentUpon>HeaderedListBox.xaml</DependentUpon>
