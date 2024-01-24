@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:local="clr-namespace:Utility.WPF.Controls.Meta.ViewModels"
-                    xmlns:uvm="clr-namespace:Utility.ViewModels;assembly=Utility.ViewModels"
+                    xmlns:uvm="clr-namespace:Utility.ViewModels;assembly=Utility.ViewModels.Customs"
                     xmlns:temp="http://schemas.utility.com/templates"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
