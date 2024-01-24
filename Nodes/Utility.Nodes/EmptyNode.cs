@@ -14,7 +14,7 @@ namespace Utility.Nodes
             return await Task.FromResult(false);
         }
 
-        public override IReadOnlyTree ToNode(object value)
+        public override Task<IReadOnlyTree> ToNode(object value)
         {
             throw new NotImplementedException();
         }

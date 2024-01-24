@@ -1,7 +1,9 @@
 ﻿using DynamicData;
 using System.Collections;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using Utility.Collections;
-using Utility.Interfaces.NonGeneric;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
 
@@ -16,7 +18,7 @@ namespace Utility.Nodes
 
         public abstract Task<bool> HasMoreChildren();
 
-        public abstract IReadOnlyTree ToNode(object value);
+        public abstract Task<IReadOnlyTree> ToNode(object value);
 
         public override IEnumerable Items
         {
@@ -38,23 +40,26 @@ namespace Utility.Nodes
 
             _isRefreshing = true;
 
-            List<IReadOnlyTree> nodes = new();
             try
             {
+
+                var output = await GetChildren();
+                if (output is IEnumerable enumerable)
                 {
-                    var output = await GetChildren();
-                    if (output is IEnumerable enumerable)
-                    {
-                        foreach (var node in ToNodes(enumerable))
-                            nodes.Add(node);
-                   
-                    }
+                    items.Clear();
+                    ToNodes(enumerable)
+                        .Subscribe(node => items.Add(node),
+                        e =>
+                        {
+
+                        },
+                        () =>
+                        {
+                            _isRefreshing = false;
+                            items.Complete();
+                        });
                 }
-                //{
-                //    var output = await GetProperties();
-                //    if (output is IEnumerable enumerable)
-                //        SetPropertiesCache(ToNodes(enumerable).ToList());
-                //}
+
                 return true;
             }
             catch (Exception ex)
@@ -64,29 +69,31 @@ namespace Utility.Nodes
             }
             finally
             {
-                SetChildrenCache(nodes);
                 _isRefreshing = false;
             }
-     
+
         }
 
 
         public Exception Error { get; set; }
-        protected virtual void SetChildrenCache(List<IReadOnlyTree> childrenCache)
-        {
-            items.Clear();
-            items.AddRange(childrenCache);
-            items.Complete();
-        }
 
-        protected virtual IEnumerable<IReadOnlyTree> ToNodes(IEnumerable collection)
+        protected virtual IObservable<IReadOnlyTree> ToNodes(IEnumerable collection)
         {
-            foreach (var item in collection)
+            return Observable.Create<IReadOnlyTree>(observer =>
             {
-                var node = ToNode(item);
-                node.Parent = this;
-                yield return node;
-            }
+                CompositeDisposable disposable = new();
+                foreach (var item in collection)
+                {
+                    ToNode(item)
+                    .ToObservable()
+                    .Subscribe(node =>
+                    {
+                        node.Parent = this;
+                        observer.OnNext(node);
+                    }).DisposeWith(disposable);
+                }
+                return disposable;
+            });
         }
     }
 }
