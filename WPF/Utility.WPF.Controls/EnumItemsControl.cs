@@ -1,12 +1,10 @@
 ﻿using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using Utility.WPF.Attached;
 using Utility.Enums;
 using Utility.WPF.Controls.Base;
@@ -14,25 +12,27 @@ using Evan.Wpf;
 using Jellyfish;
 using Utility.Helpers;
 using System.Windows.Input;
-using System.Reactive.Subjects;
 using MintPlayer.ObservableCollection;
 using Utility.WPF.Helpers;
-using Utility.Models;
 using Utility.Infrastructure;
-using Visibility = System.Windows.Visibility;
-using Arrangement = Utility.Enums.Arrangement;
+using System.Windows.Controls;
 
 namespace Utility.WPF.Controls
 {
     public class EnumItemsControl : LayOutItemsControl
-    {
+    {        record EnumType(Type Type, Enum? Value);
+
+
         public static readonly DependencyProperty ValueProperty = DependencyHelper.Register<Enum>(new FrameworkPropertyMetadata(default, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
         public static readonly DependencyProperty EnumProperty = DependencyHelper.Register<Type>(new FrameworkPropertyMetadata());
         public static readonly DependencyProperty IsReadOnlyProperty = DependencyHelper.Register<bool>();
         public static readonly DependencyProperty IsMultiSelectProperty = DependencyHelper.Register<bool>();
         public static readonly DependencyProperty ClearCommandProperty = DependencyHelper.Register<ICommand>();
-        private Subject<Type> subject = new();
+        //private Subject<Type> subject = new();
+      
         private ObservableCollection<EnumItem> items = new();
+        private Enum internalValue;
+
 
         static EnumItemsControl()
         {
@@ -43,8 +43,7 @@ namespace Utility.WPF.Controls
                 EnumProperty.OverrideMetadata(typeof(EnumItemsControl), new FrameworkPropertyMetadata(typeof(Switch)));
             }
         }
-        Enum internalValue;
-        record EnumType(Type Type, Enum? Value);
+
 
         public EnumItemsControl()
         {
@@ -55,6 +54,7 @@ namespace Utility.WPF.Controls
             {
                 Value = (Enum)System.Enum.ToObject(Value?.GetType() ?? Enum, 0);
             });
+
             ItemsSource = items;
 
             this.WhenAnyValue(a => a.Enum)
@@ -65,7 +65,6 @@ namespace Utility.WPF.Controls
                 });
 
             this.WhenAnyValue(a => a.Enum)
-                .Merge(subject)
                 .WhereNotNull()
                 .Select(a => new EnumType(a, null))
                 .Merge(this.WhenAnyValue(a => a.Value).WhereNotNull().Where(a => a != internalValue).Select(a => new EnumType(a.GetType(), a)))
