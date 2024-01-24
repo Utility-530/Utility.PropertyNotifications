@@ -1,7 +1,10 @@
-﻿using Utility.Helpers;
+﻿using System;
+using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
+using Utility.Models;
+using Utility.Nodes.Reflections;
 using Utility.Objects;
-using Utility.ViewModels;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
@@ -9,9 +12,9 @@ namespace Utility.Nodes
     public class MethodNode : Node
     {
         private bool flag;
-
         private MethodData data;
         private Dictionary<int, object?> dictionary;
+
         public MethodNode(MethodData propertyData)
         {
             this.data = propertyData;
@@ -22,13 +25,11 @@ namespace Utility.Nodes
 
         private static object? GetValue(System.Reflection.ParameterInfo a)
         {
-            var x =a.HasDefaultValue? a.DefaultValue : AlternateValue(a);
+            var x = a.HasDefaultValue ? a.DefaultValue : AlternateValue(a);
             return x;
             static object? AlternateValue(System.Reflection.ParameterInfo a)
             {
-                if (a.ParameterType.IsValueType)
-                    return Activator.CreateInstance(a.ParameterType);
-                if (a.ParameterType.GetConstructor(Type.EmptyTypes) != null)
+                if (a.ParameterType.IsValueType || a.ParameterType.GetConstructor(Type.EmptyTypes) != null)
                     return Activator.CreateInstance(a.ParameterType);
                 return null;
             }
@@ -36,28 +37,37 @@ namespace Utility.Nodes
 
         public override object Data => new CommandValue(data.Info, data.Instance, dictionary);
 
-        public override IEquatable Key => null;
-
         public override async Task<object?> GetChildren()
         {
             flag = true;
             return await Task.FromResult(data.Info.ParameterDescriptors().Select(a => new ParameterData(a, dictionary)));
         }
 
-        public override string ToString()
+        public override async Task<IReadOnlyTree> ToNode(object value)
         {
-            return data.Info.Name;
-        }
-
-        public override Node ToNode(object value)
-        {
-            return new ParameterNode(value as ParameterData);
+  
+            if (value is ParameterData { Descriptor.Name: { } name } propertyData)
+            {
+                if (this.Key is Key { Guid: { } guid })
+                {
+                    var _guid = await GuidRepository.Instance.Find(guid, name);
+                    return new ParameterNode(propertyData) { Key = new Key(_guid, name, propertyData.Type) };
+                }
+                else
+                    throw new Exception("f 32443opppp");
+            }
+            throw new Exception("67676f 32443opppp");
         }
 
         public override Task<bool> HasMoreChildren()
         {
             return Task.FromResult(flag == false);
         }
+        public override string ToString()
+        {
+            return data.Info.Name;
+        }
+
     }
 
 }
