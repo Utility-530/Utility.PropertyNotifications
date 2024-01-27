@@ -4,15 +4,11 @@ using Jellyfish;
 using Microsoft.Xaml.Behaviors;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -58,6 +54,7 @@ namespace Utility.WPF.Behaviors
 
             this.WhenAnyValue(a => a.Enum)
                 .WhereNotNull()
+                .Select(a => Nullable.GetUnderlyingType(a) is Type type ? type : a)
                 .Select(a => new EnumType(a, null))
                 .Merge(this.WhenAnyValue(a => a.Value).WhereNotNull().Where(a => a != internalValue).Select(a => new EnumType(a.GetType(), a)))
                 .CombineLatest(this.WhenAnyValue(a => a.IsReadOnly))
@@ -129,7 +126,7 @@ namespace Utility.WPF.Behaviors
         }
 
         public EnumComboBehavior()
-        {         
+        {
         }
 
         #region properties

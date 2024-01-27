@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:ab="http://schemas.utility.com/adorners" 
-    xmlns:utl="http://schemas.utility.com/utilitywpf" 
+    xmlns:utl="http://schemas.utility.com/behaviors" 
     xmlns:factory="clr-namespace:Utility.WPF.Demo.Data.Factory;assembly=Utility.WPF.Demo.Data" 
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
