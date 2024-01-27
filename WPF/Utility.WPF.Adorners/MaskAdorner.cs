@@ -31,8 +31,9 @@ public class MaskAdorner : Adorner
         {
             var width = control.ActualWidth / 16d;
             Pen renderPen = new Pen(new SolidColorBrush(Colors.BlueViolet), width / 6d);
-            Rect adornedElementRect = new Rect(this.AdornedElement.DesiredSize);
+            Rect adornedElementRect = new Rect(new Size(control.ActualWidth, control.ActualHeight));
             drawingContext.DrawRectangle(renderBrush, renderPen, adornedElementRect);
+            control.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
 
         }
     }

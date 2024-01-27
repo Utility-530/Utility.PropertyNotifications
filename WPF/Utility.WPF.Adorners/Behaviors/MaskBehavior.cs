@@ -1,22 +1,15 @@
 ﻿using Jellyfish;
 using Microsoft.Xaml.Behaviors;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using Utility.Commands;
-using Utility.WPF.Adorners;
 using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Adorners
 {
-
-
     public class MaskBehavior : Behavior<FrameworkElement>
     {
         public static readonly DependencyProperty CancelCommandProperty = DependencyProperty.Register("CancelCommand", typeof(ICommand), typeof(MaskBehavior), new PropertyMetadata());
@@ -28,6 +21,17 @@ namespace Utility.WPF.Adorners
             get { return (string)GetValue(TextProperty); }
             set { SetValue(TextProperty, value); }
         }
+
+
+        public bool? ShowCancel
+        {
+            get { return (bool?)GetValue(ShowCancelProperty); }
+            set { SetValue(ShowCancelProperty, value); }
+        }
+
+
+        public static readonly DependencyProperty ShowCancelProperty =
+            DependencyProperty.Register("ShowCancel", typeof(bool?), typeof(MaskBehavior), new PropertyMetadata(false));
 
 
         public ICommand CancelCommand
@@ -49,18 +53,20 @@ namespace Utility.WPF.Adorners
             base.OnAttached();
             if (AssociatedObject.IsLoaded)
             {
-                ShowMask();
+                Refresh();
             }
             else
             {
-                AssociatedObject.Loaded += AssociatedObject_Loaded;
+                AssociatedObject.Loaded += (s, e) => Refresh();
             }
-
         }
 
-        private void AssociatedObject_Loaded(object sender, RoutedEventArgs e)
+        void Refresh()
         {
-            ShowMask();
+            if (this.ShowCancel == false)
+                Show_Mask();
+            else if (this.ShowCancel == true)
+                Show_Cancel();
         }
 
         protected override void OnDetaching()
@@ -69,7 +75,7 @@ namespace Utility.WPF.Adorners
             base.OnDetaching();
         }
 
-        public void ShowMask()
+        public void Show_Mask()
         {
             if (AdornerLayer.GetAdornerLayer(AssociatedObject) is { } adornerLayer)
             {
@@ -78,25 +84,26 @@ namespace Utility.WPF.Adorners
                 Command relayCommand = new Command(() =>
                 {
                     MaskCommand?.Execute(null);
-                    ShowCancel();
+                    ShowCancel=true;
+                    Refresh();
                 });
 
                 var adorner = new MaskAdorner(AssociatedObject, relayCommand) { Opacity = 0.0 };
                 adLayer.Add(adorner);
 
-                var watermarkadorner = new WatermarkAdorner(AssociatedObject, Text) {  Opacity = 0 };
+                var watermarkadorner = new WatermarkAdorner(AssociatedObject, Text) { Opacity = 0 };
                 adLayer.Add(watermarkadorner);
 
-        
 
-                DoubleAnimation doubleAnimation = new (1, new Duration(TimeSpan.FromSeconds(1)));
+
+                DoubleAnimation doubleAnimation = new(1, new Duration(TimeSpan.FromSeconds(1)));
                 //doubleAnimation.Completed += fadeOutAnimation_Completed;
                 doubleAnimation.Freeze();
                 watermarkadorner.BeginAnimation(UIElement.OpacityProperty, doubleAnimation);
             }
         }
 
-        public void ShowCancel()
+        public void Show_Cancel()
         {
             if (AdornerLayer.GetAdornerLayer(AssociatedObject) is { } adornerLayer)
             {
@@ -105,12 +112,13 @@ namespace Utility.WPF.Adorners
                 RelayCommand relayCommand = new((e) =>
                 {
                     CancelCommand?.Execute(null);
-                    ShowMask();
+                    ShowCancel = false;
+                    Refresh();
                 });
                 var adorner = new CancelAdorner(AssociatedObject, relayCommand) { Opacity = 0.0 };
                 adLayer.Add(adorner);
 
-                DoubleAnimation doubleAnimation = new (1, new Duration(TimeSpan.FromSeconds(1)));
+                DoubleAnimation doubleAnimation = new(1, new Duration(TimeSpan.FromSeconds(1)));
                 //doubleAnimation.Completed += fadeOutAnimation_Completed;
                 doubleAnimation.Freeze();
                 adorner.BeginAnimation(UIElement.OpacityProperty, doubleAnimation);
