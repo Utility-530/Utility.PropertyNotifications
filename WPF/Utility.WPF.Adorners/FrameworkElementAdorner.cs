@@ -58,13 +58,6 @@ namespace Utility.WPF.Adorners
             DependencyProperty.Register("Adorners", typeof(AdornerCollection), typeof(FrameworkElementAdorner));
 
         /// <summary>
-        /// The adorned element.
-        /// </summary>
-        //public static readonly DependencyProperty AdornedElementProperty =
-        //    DependencyProperty.RegisterAttached("AdornedElement", typeof(FrameworkElement), typeof(FrameworkElementAdorner), new PropertyMetadata(Changed));
-
-
-        /// <summary>
         /// Position X of adorners.
         /// </summary>
         public static readonly DependencyProperty PositionXProperty =
@@ -76,14 +69,6 @@ namespace Utility.WPF.Adorners
         public static readonly DependencyProperty PositionYProperty =
             DependencyProperty.RegisterAttached("PositionY", typeof(double), typeof(FrameworkElementAdorner), new PropertyMetadata(double.NaN));
 
-        //public FrameworkElementAdorner(AdornerCollection adorners, FrameworkElement adornedElement) : base(adornedElement)
-        //{
-        //    Adorners = adorners;
-
-        //    // AdornerBehavior is responsible for the connection and disconnection of adorners.
-        //    // this.ConnectChildren(adornedElement);
-
-        //}
 
         public FrameworkElementAdorner(FrameworkElement adornedElement) : base(adornedElement)
         {
@@ -99,15 +84,9 @@ namespace Utility.WPF.Adorners
             set => SetValue(AdornersProperty, value);
         }
 
-        //public static FrameworkElement GetAdornedElement(DependencyObject d)
-        //{
-        //    return (FrameworkElement)d.GetValue(AdornedElementProperty);
-        //}
-
         public virtual void SetAdornedElement(DependencyObject adorner, FrameworkElement? adornedElement)
         {
 
-            //d.SetValue(AdornedElementProperty, value);
         }
 
         public static double GetPositionX(DependencyObject d)
@@ -137,19 +116,16 @@ namespace Utility.WPF.Adorners
         /// <summary>
         /// Event raised when the adorned control's size has changed.
         /// </summary>
-        private void AdornedElement_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            InvalidateMeasure();
-        }
+        //private void AdornedElement_SizeChanged(object sender, SizeChangedEventArgs e)
+        //{
+        //    InvalidateMeasure();
+        //}
 
         #endregion EventHandlers
 
         #region Methods
 
-        private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
+
 
 
         /// <summary>
@@ -271,25 +247,25 @@ namespace Utility.WPF.Adorners
         /// <summary>
         /// Determine the width of the adorner.
         /// </summary>
-        private double DetermineWidth(FrameworkElement adorner)
+        private double DetermineWidth(FrameworkElement frameworkElement)
         {
-            var positionX = GetPositionX(adorner);
+            var positionX = GetPositionX(frameworkElement);
             if (!double.IsNaN(positionX))
-                return adorner.DesiredSize.Width;
+                return frameworkElement.DesiredSize.Width;
 
-            switch (adorner.HorizontalAlignment)
+            switch (frameworkElement.HorizontalAlignment)
             {
                 case HorizontalAlignment.Left:
                     {
-                        return adorner.DesiredSize.Width;
+                        return frameworkElement.DesiredSize.Width;
                     }
                 case HorizontalAlignment.Right:
                     {
-                        return adorner.DesiredSize.Width;
+                        return frameworkElement.DesiredSize.Width;
                     }
                 case HorizontalAlignment.Center:
                     {
-                        return adorner.DesiredSize.Width;
+                        return frameworkElement.DesiredSize.Width;
                     }
                 case HorizontalAlignment.Stretch:
                     {
@@ -303,25 +279,25 @@ namespace Utility.WPF.Adorners
         /// <summary>
         /// Determine the height of the adorner.
         /// </summary>
-        private double DetermineHeight(FrameworkElement adorner)
+        private double DetermineHeight(FrameworkElement frameworkElement)
         {
-            var positionY = GetPositionY(adorner);
+            var positionY = GetPositionY(frameworkElement);
             if (!double.IsNaN(positionY))
-                return adorner.DesiredSize.Height;
+                return frameworkElement.DesiredSize.Height;
 
-            switch (adorner.VerticalAlignment)
+            switch (frameworkElement.VerticalAlignment)
             {
                 case VerticalAlignment.Top:
                     {
-                        return adorner.DesiredSize.Height;
+                        return frameworkElement.DesiredSize.Height;
                     }
                 case VerticalAlignment.Bottom:
                     {
-                        return adorner.DesiredSize.Height;
+                        return frameworkElement.DesiredSize.Height;
                     }
                 case VerticalAlignment.Center:
                     {
-                        return adorner.DesiredSize.Height;
+                        return frameworkElement.DesiredSize.Height;
                     }
                 case VerticalAlignment.Stretch:
                     {

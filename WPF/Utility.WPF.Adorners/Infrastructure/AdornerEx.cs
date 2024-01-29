@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
@@ -20,7 +19,7 @@ namespace Utility.WPF.Adorners.Infrastructure
         /// </summary>
         public static readonly DependencyProperty IsEnabledProperty =
             DependencyProperty.RegisterAttached("IsEnabled", typeof(bool), typeof(AdornerEx),
-                new FrameworkPropertyMetadata(OnPropertyChanged));
+                new FrameworkPropertyMetadata(true, OnPropertyChanged));
 
         /// <summary>
         /// The internal encapsulating adorner
@@ -180,8 +179,7 @@ namespace Utility.WPF.Adorners.Infrastructure
         /// </summary>
         private static void AdornedFrameworkElement_DataContextChanged(object sender, DependencyPropertyChangedEventArgs args)
         {
-            var fe = sender as FrameworkElement;
-            if (fe == null)
+            if (sender is not FrameworkElement fe)
                 return;
 
             var adorners = GetAdorners(fe);
@@ -259,11 +257,11 @@ namespace Utility.WPF.Adorners.Infrastructure
             if (adornerLayer == null)
                 return;
 
-            // create new adorner if it doesnt exist
+            // create new adorner if it doesn't exist
             if (frameworkElement.GetValue(AdornerProperty) is not FrameworkElementAdorner adorner)
             {
                 adorner = new FrameworkElementAdorner(frameworkElement) { Adorners = adorners };
-                frameworkElement.SetValue(AdornerProperty, adorner);
+                //frameworkElement.SetValue(AdornerProperty, adorner);
             }
 
             BindAdorner(frameworkElement, adorner);
@@ -273,8 +271,11 @@ namespace Utility.WPF.Adorners.Infrastructure
                 if (adorners.IndexOf(adorner) != -1)
                     return;
                 adorner.ConnectChildren(frameworkElement);
-                adornerLayer.Add(adorner);
+                adornerLayer.Add(adorner);           
             }
+
+            frameworkElement.SetValue(AdornerProperty, adorner);
+
         }
 
         /// <summary>
