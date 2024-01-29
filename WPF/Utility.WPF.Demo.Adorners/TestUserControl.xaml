@@ -20,5 +20,37 @@
                 <ad:NullBehavior DefaultValue="hello"/>                
             </i:Interaction.Behaviors>
         </TextBox>
+
+        <TextBox x:Name="TextBox2" Height="30" Width="100" Text="This is text" Background="AntiqueWhite">
+            <i:Interaction.Behaviors>
+                <ad:HoverBehavior />
+            </i:Interaction.Behaviors>
+
+            <ad:AdornerEx.Adorners>
+                <Button 
+                                   Margin="4" Content="3544"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Bottom">
+
+                </Button>
+                <Button 
+                                   Margin="4" Content="3544"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Bottom">
+
+                </Button>
+            </ad:AdornerEx.Adorners>
+        </TextBox>
+        <TextBox Height="30" Width="100" Text="This is text" Background="AntiqueWhite">
+            <i:Interaction.Behaviors>
+                <ad:HoverBehavior />
+                <ad:ContextBehavior />
+            </i:Interaction.Behaviors>
+            <TextBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="A"></MenuItem>
+                </ContextMenu>
+            </TextBox.ContextMenu>
+        </TextBox>
     </UniformGrid>
 </UserControl>
