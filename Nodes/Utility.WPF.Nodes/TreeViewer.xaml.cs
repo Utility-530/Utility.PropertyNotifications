@@ -7,6 +7,7 @@ using Utility.Nodes;
 using Utility.Interfaces.NonGeneric;
 using Utility.WPF.Helpers;
 using System.Collections.Generic;
+using Utility.WPF.Nodes;
 
 namespace Views.Trees
 {
@@ -17,21 +18,8 @@ namespace Views.Trees
         public static readonly DependencyProperty PanelsConverterProperty = DependencyProperty.Register("PanelsConverter", typeof(IValueConverter), typeof(TreeViewer), new PropertyMetadata(Changed));
         public static readonly DependencyProperty DataTemplateSelectorProperty = DependencyProperty.Register("DataTemplateSelector", typeof(DataTemplateSelector), typeof(TreeViewer), new PropertyMetadata(Changed));
         public static readonly DependencyProperty TreeViewBuilderProperty = DependencyProperty.Register("TreeViewBuilder", typeof(ITreeViewBuilder), typeof(TreeViewer), new PropertyMetadata());
-        public static readonly DependencyProperty TreeViewFilterProperty =
-     DependencyProperty.Register("TreeViewFilter", typeof(ITreeViewFilter), typeof(TreeViewer), new PropertyMetadata());
-
-
-
-        // Using a DependencyProperty as the backing store for TreeViewFilter.  This enables animation, styling, binding, etc...
-
-
-        public ITreeViewFilter TreeViewFilter
-        {
-            get { return (ITreeViewFilter)GetValue(TreeViewFilterProperty); }
-            set { SetValue(TreeViewFilterProperty, value); }
-        }
-
-
+        public static readonly DependencyProperty TreeViewFilterProperty =     DependencyProperty.Register("TreeViewFilter", typeof(ITreeViewFilter), typeof(TreeViewer), new PropertyMetadata());
+        public static readonly DependencyProperty StyleSelectorProperty =            DependencyProperty.Register("StyleSelector", typeof(StyleSelector), typeof(TreeViewer), new PropertyMetadata());
 
         private IDisposable disposable;
         private TreeView treeView;
@@ -50,7 +38,7 @@ namespace Views.Trees
                     if (ViewModel is ILoad load)
                         load.Load();
                     disposable?.Dispose();
-                    disposable = TreeViewBuilder.Build(treeView, ViewModel, TreeViewItemFactory, PanelsConverter, DataTemplateSelector, TreeViewFilter);
+                    disposable = TreeViewBuilder.Build(treeView, ViewModel, TreeViewItemFactory, PanelsConverter, StyleSelector, DataTemplateSelector, TreeViewFilter);
                 }
             }
         }
@@ -95,6 +83,18 @@ namespace Views.Trees
             set { SetValue(TreeViewBuilderProperty, value); }
         }
 
+        public StyleSelector StyleSelector
+        {
+            get { return (StyleSelector)GetValue(StyleSelectorProperty); }
+            set { SetValue(StyleSelectorProperty, value); }
+        }
+
+        public ITreeViewFilter TreeViewFilter
+        {
+            get { return (ITreeViewFilter)GetValue(TreeViewFilterProperty); }
+            set { SetValue(TreeViewFilterProperty, value); }
+        }
+
         #endregion
 
 
@@ -117,7 +117,7 @@ namespace Views.Trees
             treeView.Items.Clear();
             //root.Load(); 
             disposable.Dispose();
-            disposable = TreeViewBuilder.Build(treeView, ViewModel, TreeViewItemFactory, PanelsConverter, DataTemplateSelector, TreeViewFilter);
+            disposable = TreeViewBuilder.Build(treeView, ViewModel, TreeViewItemFactory, PanelsConverter, StyleSelector, DataTemplateSelector, TreeViewFilter);
         }
 
         public object Add()

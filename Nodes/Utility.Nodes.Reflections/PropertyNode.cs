@@ -21,8 +21,8 @@ namespace Utility.Nodes
 
     public class PropertyNode : Node
     {
-        private PropertyData data;
-        bool flag;
+        protected PropertyData data;
+        protected bool flag;
 
         public PropertyNode(PropertyData propertyData)
         {

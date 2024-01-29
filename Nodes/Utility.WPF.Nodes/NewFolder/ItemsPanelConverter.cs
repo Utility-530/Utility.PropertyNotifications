@@ -5,31 +5,25 @@ using System.Windows.Data;
 using System.Globalization;
 using Utility.Enums;
 using Utility.WPF.Factorys;
-using Utility.WPF.Nodes.NewFolder;
-using Utility.Trees.Abstractions;
-using Utility.Nodes;
-using Utility.PropertyDescriptors;
-using Utility.Objects;
+using System.Windows.Media;
 
 namespace VisualJsonEditor.Test.Infrastructure
 {
     public class ItemsPanel
     {
         public Arrangement Type { get; set; }
-
         public System.Windows.Controls.Orientation? Orientation { get; set; }
-
         public int? Rows { get; set; }
-
         public int? Columns { get; set; }
-
         public string? TemplateKey { get; set; }
     }
 
-
     public class ItemsPanelConverter : IValueConverter
     {
-        //SQLIteRepos
+        static void SetBackground(FrameworkElementFactory factory)
+        {
+            factory.SetValue(Panel.BackgroundProperty, new SolidColorBrush(Colors.LightGray) { Opacity = 0.08 });
+        }
 
         public virtual object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -38,12 +32,7 @@ namespace VisualJsonEditor.Test.Infrastructure
             //    var itemsPanel = viewmodel.ToItemsPanel();
             //    return convert(itemsPanel);
             //}
-
-
-
             return DependencyProperty.UnsetValue;
-
-
         }
 
         protected static ItemsPanelTemplate convert(ItemsPanel itemsPanel)
@@ -54,7 +43,7 @@ namespace VisualJsonEditor.Test.Infrastructure
             {
                 return Application.Current.TryFindResource(t) as ItemsPanelTemplate;
             }
-            return ItemsPanelFactory.Template(itemsPanel.Rows, itemsPanel.Columns, itemsPanel.Orientation, itemsPanel.Type);
+            return ItemsPanelFactory.Template(itemsPanel.Rows, itemsPanel.Columns, itemsPanel.Orientation, itemsPanel.Type, SetBackground);
 
         }
 

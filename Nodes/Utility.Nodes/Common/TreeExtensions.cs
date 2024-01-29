@@ -1,5 +1,5 @@
 ﻿namespace Utility.Nodes
-{ 
+{
     using System.Reactive.Disposables;
     using System.Reactive.Linq;
     using Utility.Helpers.NonGeneric;
@@ -45,17 +45,17 @@
             });
         }
 
-        public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, TR property) where TR : IReadOnlyTree, IEquatable
+        public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, Action<T> funcClear, TR property) where TR : IReadOnlyTree, IEquatable
         {
-            return ExploreTree(items, funcAdd, funcRemove, property, (TR a) => true);
+            return ExploreTree(items, funcAdd, funcRemove, funcClear, property, (TR a) => true);
         }
 
-        public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, TR property, Predicate<TR> predicate) where TR : IReadOnlyTree, IEquatable
+        public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, Action<T> funcClear, TR property, Predicate<TR> predicate) where TR : IReadOnlyTree, IEquatable
         {
-            return ExploreTree(items, funcAdd, funcRemove, property, a => a.Items.Changes<TR>(), predicate);
+            return ExploreTree(items, funcAdd, funcRemove, funcClear, property, a => a.Items.Changes<TR>(), predicate);
         }
 
-        public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, TR property, Func<TR, IObservable<ChangeSet<TR>>> func, Predicate<TR> predicate) where TR : IEquatable
+        public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, Action<T> funcClear, TR property, Func<TR, IObservable<ChangeSet<TR>>> func, Predicate<TR> predicate) where TR : IEquatable
         {
             if (predicate(property) == false)
                 return Disposable.Empty;
@@ -68,9 +68,11 @@
                     foreach (var item in args)
                     {
                         if (item is Change { Type: ChangeType.Add, Value: TR value })
-                            _ = ExploreTree(items, funcAdd, funcRemove, value, func, predicate);
+                            _ = ExploreTree(items, funcAdd, funcRemove, funcClear, value, func, predicate);
                         else if (item is Change { Type: ChangeType.Add, Value: TR _value })
                             funcRemove(items, _value);
+                        else if (item is Change { Type: ChangeType.Reset })
+                            funcClear(items);
                     }
                 },
                 e =>

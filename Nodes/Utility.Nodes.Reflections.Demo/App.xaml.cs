@@ -6,7 +6,9 @@ using System.Windows;
 using Utility.Collections;
 using Utility.Objects;
 using Utility.Trees.Abstractions;
+using Utility.WPF.Nodes.NewFolder;
 using Views.Trees;
+using VisualJsonEditor.Test;
 using VisualJsonEditor.Test.Infrastructure;
 
 namespace Utility.Nodes.Demo
@@ -29,11 +31,12 @@ namespace Utility.Nodes.Demo
 
             CustomDataTemplateSelector.Instance
                 .OfType<string>()
+                .Where(a => a.Equals("refresh", StringComparison.InvariantCultureIgnoreCase))
                 .Subscribe(a =>
-            {
-                TreeViewer treeViewer = TreeViewer();
-                window.Content = treeViewer ;
-            });
+                {
+                    TreeViewer treeViewer = TreeViewer();
+                    window.Content = treeViewer;
+                });
         }
 
         private static TreeViewer TreeViewer()
@@ -45,7 +48,8 @@ namespace Utility.Nodes.Demo
                 TreeViewBuilder = TreeViewBuilder.Instance,
                 PanelsConverter = CustomItemsPanelConverter.Instance,
                 DataTemplateSelector = CustomDataTemplateSelector.Instance,
-                TreeViewFilter = CustomFilter.Instance
+                TreeViewFilter = CustomFilter.Instance,
+                StyleSelector = TreeViewItemStyleSelector.Instance
             };
         }
     }

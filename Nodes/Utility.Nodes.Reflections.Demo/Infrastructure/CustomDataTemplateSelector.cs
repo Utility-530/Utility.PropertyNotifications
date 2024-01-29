@@ -3,6 +3,7 @@ using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 using Utility.Objects;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
@@ -55,14 +56,14 @@ namespace Utility.Nodes.Demo
                     return MakeTemplate(item);
                 }
                 // root
-                if (item is IReadOnlyTree { Data: PropertyData { Descriptor: RootDescriptor { } } })
+                if (item is IReadOnlyTree { Data: PropertyData { Descriptor: RootDescriptor { }, } })
                 {
-                    return MakeTemplate(item, "OnlyHeader");
+                    return MakeHeaderTemplate(item, depth);
                 }
                 // default
                 if (item is IReadOnlyTree { Data: ObjectValue { Descriptor: { } } })
                 {
-                    return MakeTemplate(item, "OnlyHeader");
+                    return MakeHeaderTemplate(item, depth);
                 }
                 // inner collection item descriptor
                 if (item is IReadOnlyTree { Parent.Data: PropertyData { Descriptor: CollectionItemDescriptor { Index: { } _index, ComponentType: { } componentType, DisplayName: { } displayName } descriptor } baseObject })
@@ -93,18 +94,24 @@ namespace Utility.Nodes.Demo
 
             else if (index[1] == 3)
             {
-                return MakeRefreshTemplate(item);
-
+                if (depth == 2)
+                {
+                    if (index[2] == 0)
+                        return MakeButtonTemplate(item, "Refresh");
+                    if (index[2] == 1)
+                        return MakeButtonTemplate(item, "Save");
+                }
+                else
+                {
+                    return MakeTemplate(item, "None");
+                }
             }
             else if (index[1] > 3)
             {
                 return MakeTemplate(item);
-
             }
 
-
             throw new System.Exception("743£");
-
         }
 
         private DataTemplate MakeTemplate(object item, string? name = null)
@@ -116,10 +123,35 @@ namespace Utility.Nodes.Demo
                 if (name is string _name)
                     contentControl.ContentTemplate = this.FindResource<DataTemplate>(_name);
                 contentControl.SetBinding(ContentControl.ContentProperty, binding);
+
                 return contentControl;
             });
         }
+        private DataTemplate MakeHeaderTemplate(object item, int count)
+        {
+            return TemplateGenerator.CreateDataTemplate(() =>
+            {
 
+                var textBlock = new TextBlock
+                {
+                    FontWeight = FontWeight.FromOpenTypeWeight(600 - count * 10),
+                    FontSize = 18 - count * 0.5
+                };
+                textBlock.SetBinding(TextBlock.TextProperty, Binding(item));
+              
+                return textBlock;
+            });
+
+            static Binding Binding(object item)
+            {
+                return new(nameof(PropertyData.Name))
+                {
+                    Converter = Utility.WPF.Converters.LambdaConverter.HumanizerConverter,
+                    Path = new PropertyPath($"{nameof(Node.Data)}.{nameof(PropertyData.Name)}"),
+                    Source = item
+                };
+            }
+        }
 
         private DataTemplate MakeButtonTemplate(object item)
         {
@@ -136,16 +168,15 @@ namespace Utility.Nodes.Demo
             });
         }
 
-        private DataTemplate MakeRefreshTemplate(object item)
+        private DataTemplate MakeButtonTemplate(object item, string name)
         {
             return TemplateGenerator.CreateDataTemplate(() =>
             {
-        
                 var contentControl = new Button
                 {
-                    Content = "Refresh"
+                    Content = name
                 };
-                contentControl.Click += (s,e) => replay.OnNext("refresh");
+                contentControl.Click += (s, e) => replay.OnNext(name);
                 return contentControl;
             });
         }

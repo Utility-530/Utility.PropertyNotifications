@@ -12,7 +12,7 @@ namespace Utility.WPF.Nodes.NewFolder
             return new ItemsPanel
             {
                 Type = viewModel.ItemsPanelType,
-                Orientation = Convert(viewModel.Orientation?? Enums.Orientation.Vertical),
+                Orientation = Convert(viewModel.ItemsPanelOrientation),
                 Rows = viewModel.Rows,
                 Columns = viewModel.Columns,
                 TemplateKey = viewModel.ItemsPanelTemplate,
@@ -33,6 +33,7 @@ namespace Utility.WPF.Nodes.NewFolder
         {
             return orientation switch
             {
+                Utility.Enums.Orientation.None => Orientation.Vertical,
                 Utility.Enums.Orientation.Horizontal=> Orientation.Horizontal,
                 Utility.Enums.Orientation.Vertical=> Orientation.Vertical,
                 _=> throw new Exception("!$^fgds 3432322")

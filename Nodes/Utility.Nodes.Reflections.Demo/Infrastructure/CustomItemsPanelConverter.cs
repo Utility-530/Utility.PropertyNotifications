@@ -2,7 +2,6 @@
 using System.Globalization;
 using Utility.Enums;
 using Utility.Models;
-using Utility.Nodes.Demo.Infrastructure;
 using Utility.Nodes.Reflections.Demo.Infrastructure;
 using Utility.Objects;
 using Utility.PropertyDescriptors;
@@ -41,8 +40,8 @@ namespace Utility.Nodes.Demo
             {
                 if (_baseObject.Descriptor is CollectionItemDescriptor { Index: { } index } collectionItemDescriptor)
                 {
-                    return convert(new ItemsPanel
-                    {
+                    return convert(new ItemsPanel                    {
+                       
                         Type = Arrangement.Stacked,
                         Orientation = System.Windows.Controls.Orientation.Horizontal,
                     });

@@ -1,23 +1,26 @@
 using System;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
 using Utility.Nodes;
 using Utility.Trees.Abstractions;
+using Utility.WPF.Nodes;
 using UtilityReactive;
 
 namespace Views.Trees
 {
     public class TreeViewBuilder : ITreeViewBuilder
     {
-        public IDisposable Build(TreeView treeView, object rootViewModel, ITreeViewItemFactory factory, IValueConverter ItemsPanelConverter, DataTemplateSelector dataTemplateSelector, ITreeViewFilter filter)
+        public IDisposable Build(TreeView treeView, object rootViewModel, ITreeViewItemFactory factory, IValueConverter ItemsPanelConverter, StyleSelector styleSelector, DataTemplateSelector dataTemplateSelector, ITreeViewFilter filter)
         {
             return TreeExtensions.ExploreTree(treeView.Items, (itemcollection, viewModel) =>
             {
 
                 var treeViewItem = factory.Make();
+
                 treeViewItem.Header = viewModel;
                 treeViewItem.DataContext = viewModel;
-
+                treeViewItem.ItemContainerStyleSelector = styleSelector;
                 var binding = new Binding()
                 {
                     //Source = new PropertyPath()
@@ -30,11 +33,10 @@ namespace Views.Trees
 
                 itemcollection.Add(treeViewItem);
                 return treeViewItem.Items;
-
-                return itemcollection;
             },
             (a, b) => a.Remove(new TreeViewItem { Header = b }),
-            rootViewModel as Node, 
+            a => a.Clear(),
+            rootViewModel as Node,
             filter.Filter);
         }
 

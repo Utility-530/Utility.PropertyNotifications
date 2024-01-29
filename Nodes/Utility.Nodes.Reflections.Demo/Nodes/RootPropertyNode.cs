@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Fasterflect;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using TreeCollections;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Nodes.Demo.Infrastructure;
@@ -36,8 +38,12 @@ namespace Utility.Nodes.Demo
                 if (data is IReadOnlyTree { Key: Key { Guid: { } guid } })
                 {
                     var viewModel = ViewModelStore.Instance.Get(guid);
+                    ViewModelStore.Instance.Save(viewModel);
+                    if (string.IsNullOrEmpty(viewModel.Name))
+                        viewModel.Name = ((data as IReadOnlyTree)?.Data as PropertyData)?.Name;
                     var propertyData = new PropertyData(new RootDescriptor(viewModel), viewModel) {  };
                     this.Data = propertyData;
+                    flag = false;
                     await RefreshChildrenAsync();
                 }
             });
@@ -51,6 +57,15 @@ namespace Utility.Nodes.Demo
     {
 
         public RefreshNode()
+        {
+
+        }
+    }
+    
+    public class SaveNode : EmptyNode
+    {
+
+        public SaveNode()
         {
 
         }
@@ -82,7 +97,7 @@ namespace Utility.Nodes.Demo
             else if (value is 2)
                 return Task.FromResult<IReadOnlyTree>(new SelectionNode());
             else if (value is 3)
-                return Task.FromResult<IReadOnlyTree>(new RefreshNode());
+                return Task.FromResult<IReadOnlyTree>(new MethodsNode());
 
             throw new Exception("2r 11 4333");
         }
@@ -91,9 +106,35 @@ namespace Utility.Nodes.Demo
         {
             return Task.FromResult(flag == false);
         }
+    }
+
+    public class MethodsNode:Node
+    {
+        bool flag;
+        public override async Task<object?> GetChildren()
+        {
+            flag = true;
+            return await Task.Run<object?>(() =>
+            {
+                return new int[] { 0, 1 };
+            });
+        }
+
+        public override Task<IReadOnlyTree> ToNode(object value)
+        {
+            if (value is 0 )
+                return Task.FromResult<IReadOnlyTree>(new RefreshNode());
+            else if (value is 1)
+                return Task.FromResult<IReadOnlyTree>(new SaveNode());
 
 
-        //public override IEquatable Key => new Key(guid, "Root1", typeof(Model));
+            throw new Exception("2r 11 4333");
+        }
+
+        public override Task<bool> HasMoreChildren()
+        {
+            return Task.FromResult(flag == false);
+        }
     }
 }
 

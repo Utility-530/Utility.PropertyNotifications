@@ -19,10 +19,10 @@ namespace Utility.Nodes.Reflections.Demo.Infrastructure
         {
             CustomDataTemplateSelector.Instance
                .OfType<string>()
+               .Where(a => a.Equals("save", StringComparison.InvariantCultureIgnoreCase))
                .Subscribe(a =>
                {
-
-                   while(viewModels.Any())
+                   while (viewModels.Any())
                    {
                        var dequeue = viewModels.Dequeue();
                        var original = miniStore.Get<ViewModel>(dequeue.Guid.ToString());
@@ -35,18 +35,25 @@ namespace Utility.Nodes.Reflections.Demo.Infrastructure
 
                });
         }
+
+        public void Save(ViewModel viewModel)
+        {
+            viewModels.Enqueue(viewModel);
+        }
+
         public ViewModel Get(Guid guid)
         {
-            if(miniStore.Get<ViewModel>(guid.ToString()) is ViewModel viewModel)
-            {
-                viewModels.Enqueue(viewModel);
+            if (miniStore.Get<ViewModel>(guid.ToString()) is ViewModel viewModel)
+            {          
                 return viewModel;
             }
-        
-            viewModel = new ViewModel() { Guid = guid  };
+
+            viewModel = new ViewModel() { Guid = guid };
             viewModels.Enqueue(viewModel);
             return viewModel;
         }
+
+
 
 
         public static ViewModelStore Instance { get; } = new ViewModelStore();
