@@ -33,7 +33,7 @@ namespace Utility.WPF.Controls
 
                 foreach (var ch in Text)
                 {
-                    drawingContext.DrawText(new FormattedText(ch.ToString(), CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, new Typeface("Segoe UI"), 12, Foreground), new Point(currentPosition, 0));
+                    drawingContext.DrawText(new FormattedText(ch.ToString(), CultureInfo.CurrentUICulture, FlowDirection.LeftToRight, new Typeface("Segoe UI"), 8, Foreground), new Point(currentPosition, 0));
                     currentPosition += widthPerChar;
                 }
             }

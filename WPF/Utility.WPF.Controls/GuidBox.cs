@@ -19,17 +19,12 @@ namespace Utility.WPF.Controls
             DependencyProperty.Register("Guid", typeof(Guid), typeof(GuidBox), new PropertyMetadata(Changed)),
             GuidAsStringProperty = DependencyProperty.Register("GuidAsString", typeof(string), typeof(GuidBox), new PropertyMetadata(Changed)),
             IsLowerCaseProperty = DependencyProperty.Register("IsLowerCase", typeof(bool), typeof(GuidBox), new PropertyMetadata(true, Changed)),
-            IsReadOnlyProperty = DependencyProperty.Register("IsReadOnly", typeof(bool), typeof(GuidBox), new PropertyMetadata(IsReadOnlyChanged));
+            IsReadOnlyProperty = DependencyProperty.Register("IsReadOnly", typeof(bool), typeof(GuidBox), new PropertyMetadata(true, IsReadOnlyChanged));
 
         private static void IsReadOnlyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (!(d is GuidBox guidBox))
                 return;
-            if (e.NewValue is bool b)
-            {
-                if (guidBox.SpacedBox != null)
-                    guidBox.SpacedBox.IsEnabled = !b;
-            }
         }
 
         static GuidBox()
@@ -95,17 +90,19 @@ namespace Utility.WPF.Controls
         }
 
 
-
+        MenuItem lower, upper;
+        private Grid? guidBox;
 
         public override void OnApplyTemplate()
         {
-            (GetTemplateChild("Copy") as Button).Click += GuidBox_Click;
-            (GetTemplateChild("Generate") as Button).Click += (s, e) => GenerateGuid();
+            guidBox = GetTemplateChild("GuidGrid") as Grid;
+            var items = guidBox.ContextMenu.Items;
+            MenuItems(items);
+
             EditBox = GetTemplateChild("EditBox") as TextBox;
             SpacedBox = GetTemplateChild("SpacedBox") as Control;
             EditBox.LostFocus += GuidBox_LostFocus;
             EditBox.GotFocus += GuidBox_GotFocus;
-            SpacedBox.IsEnabled = !IsReadOnly;
             GuidAsString = IsLowerCase ? Guid.ToString() : Guid.ToString().ToUpper();
             base.OnApplyTemplate();
 
@@ -121,14 +118,50 @@ namespace Utility.WPF.Controls
 
             void GuidBox_GotFocus(object sender, RoutedEventArgs e)
             {
-                EditBox.IsReadOnly = IsReadOnly;
+                IsReadOnly = false;
             }
 
             void GuidBox_LostFocus(object sender, RoutedEventArgs e)
             {
-                EditBox.IsReadOnly = true;
+                IsReadOnly = true;
             }
 
+            void MenuItems(ItemCollection items)
+            {
+                foreach (var item in items)
+                {
+                    if (item is MenuItem menuItem)
+                    {
+                        if (menuItem.Header.Equals("_Copy"))
+                            menuItem.Click += GuidBox_Click;
+                        else if (menuItem.Header.Equals("_Generate"))
+                            menuItem.Click += (s, e) => GenerateGuid();
+                        else if (menuItem.Header.Equals("_Lower"))
+                        {
+                            lower = menuItem;
+                            if (IsLowerCase)
+                            {
+                                lower.IsChecked = true;
+                            }
+                            lower.Click += (s, e) => { upper.IsChecked = false; this.IsLowerCase = true; };
+                        }
+                        else if (menuItem.Header.Equals("_Upper"))
+                        {
+                            upper = menuItem;
+                            if (IsLowerCase == false)
+                            {
+                                upper.IsChecked = true;
+                            }
+                            upper.Click += (s, e) => { lower.IsChecked = false; this.IsLowerCase = false; };
+                        }
+                        else if (menuItem.Header == null)
+                        {
+                            MenuItems(menuItem.Items);
+                        }
+
+                    }
+                }
+            }
         }
     }
 
