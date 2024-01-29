@@ -4,14 +4,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:utl="http://schemas.utility.com/utilitywpf"
+             xmlns:beh="http://schemas.utility.com/behaviors"
              xmlns:fluentWPF="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UniformGrid Rows="1">
         <RichTextBox x:Name="jrtb">
             <i:Interaction.Behaviors>
-                <utl:JsonSyntaxHighlightBehavior x:Name="JsonSyntaxHighlightTextBox"></utl:JsonSyntaxHighlightBehavior>
+                <beh:JsonSyntaxHighlightBehavior x:Name="JsonSyntaxHighlightTextBox"></beh:JsonSyntaxHighlightBehavior>
             </i:Interaction.Behaviors>
         </RichTextBox>
         <DockPanel>
@@ -20,7 +20,7 @@
                 </ComboBox>
                 <ComboBox x:Name="Themes">
                     <i:Interaction.Behaviors>
-                        <utl:EnumSelectorBehavior x:Name="EnumSelectorBehavior" EnumType="{x:Type fluentWPF:ElementTheme}"></utl:EnumSelectorBehavior>
+                        <beh:EnumSelectorBehavior x:Name="EnumSelectorBehavior" EnumType="{x:Type fluentWPF:ElementTheme}"></beh:EnumSelectorBehavior>
                     </i:Interaction.Behaviors>
                 </ComboBox>
             </ToolBar>
@@ -31,7 +31,7 @@
 
                 <RichTextBox x:Name="srtb">
                     <i:Interaction.Behaviors>
-                        <utl:SyntaxHighlightBehavior x:Name="SyntaxHighlightTextBox"
+                        <beh:SyntaxHighlightBehavior x:Name="SyntaxHighlightTextBox"
                                              Text="{Binding ElementName=TextBox, Path=Text}"
                                              Language="{Binding ElementName=Languages, Path=SelectedItem}"
                                              ElementTheme="{Binding ElementName=EnumSelectorBehavior, Path=SelectedEnum}" />

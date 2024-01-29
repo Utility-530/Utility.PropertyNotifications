@@ -2,7 +2,7 @@
     x:Class="Utility.WPF.Demo.Controls.TreeViewUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:behavior="http://schemas.utility.com/utilitywpf"
+    xmlns:beh="http://schemas.utility.com/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -16,7 +16,7 @@
             DockPanel.Dock="Left"
             ItemsSource="{Binding Sectors, Mode=OneWay}">
             <i:Interaction.Behaviors>
-                <behavior:BindableSelectedItemBehavior SelectedItem="{Binding Stock, Mode=TwoWay}" />
+                <beh:BindableSelectedItemBehavior SelectedItem="{Binding Stock, Mode=TwoWay}" />
             </i:Interaction.Behaviors>
             <view:TreeViewFirst.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Path=Stocks, Mode=OneTime}">

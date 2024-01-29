@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Utility.WPF.Demo.Controls"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:beh="http://schemas.utility.com/behaviors"
              xmlns:utl="http://schemas.utility.com/utilitywpf"
              xmlns:att="http://schemas.utility.com/attached"
              mc:Ignorable="d" 
@@ -14,7 +15,7 @@
         <WrapPanel DockPanel.Dock="Top">
             <ToggleButton x:Name="ToggleButton1" Height="30" Content="{x:Static Orientation.Horizontal}">
                 <b:Interaction.Behaviors>
-                    <utl:ToggleButtonContentBehavior UnCheckedContent="{x:Static Orientation.Vertical}"/>
+                    <beh:ToggleButtonContentBehavior UnCheckedContent="{x:Static Orientation.Vertical}"/>
                 </b:Interaction.Behaviors>
             </ToggleButton>
         </WrapPanel>
