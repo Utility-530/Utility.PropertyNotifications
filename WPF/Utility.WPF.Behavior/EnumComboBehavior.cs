@@ -116,6 +116,12 @@ namespace Utility.WPF.Behaviors
                     .ToArray();
             }
 
+            AssociatedObject.WhenAnyValue(a => a.SelectedItem)
+                .Subscribe(a =>
+                {
+                    if (a is EnumItem enumItem)
+                        this.Value = enumItem.Value;
+                });
 
             base.OnAttached();
         }
