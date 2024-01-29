@@ -10,70 +10,51 @@ using Utility.WPF.Factorys;
 
 namespace Utility.WPF.Templates
 {
-
-
-
     public abstract class GenericDataTemplateSelector : DataTemplateSelector
     {
 
-        public DataTemplate? DefaultDataTemplate { get; set; }
-        public DataTemplate? BooleanDataTemplate { get; set; }
-        public DataTemplate? StringDataTemplate { get; set; }
-        public DataTemplate? EnumDataTemplate { get; set; }
-        public DataTemplate? NumberDataTemplate { get; set; }
-        public DataTemplate? IconDataTemplate { get; set; }
-        public DataTemplate? ColorDataTemplate { get; set; }
-        public DataTemplate? IConvertibleTemplate { get; set; }
-        public DataTemplate? DictionaryDataTemplate { get; set; }
-        public DataTemplate? EnumerableDataTemplate { get; set; } 
-        public DataTemplate? NullDataTemplate { get; set; }
-        public DataTemplate? GuidDataTemplate { get; set; }
-
-
         public virtual ResourceDictionary Templates { get; }
 
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
-        {        
-            if (item == null)
-                return NullDataTemplate ??= NullTemplate();
+        public DataTemplate NullTemplate { get; set; }
+    }
 
-            var type = item.GetType();
-           
+
+    public abstract class TemplateSelector
+    {
+
+ 
+
+        public static DataTemplate SelectTemplate(Type type)
+        {
+
             var interfaces = type.GetInterfaces();
 
-            if (Templates[new DataTemplateKey(type)] is DataTemplate template)
-            {
-                return template;
-            }
-
-
             if (interfaces.Any(a => a.Name == "IDictionary`2") || interfaces.Contains(typeof(IDictionary)))
-                return DictionaryDataTemplate ??= Templates["Dictionary"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Dictionary");
+                throw new Exception("Missing DataTemplate for Dictionary");
             else if (type == typeof(string))
-                return StringDataTemplate ?? throw new Exception("Missing DataTemplate for String");
+                throw new Exception("Missing DataTemplate for String");
             else if (interfaces.Contains(typeof(IEnumerable)))
-                return EnumerableDataTemplate ?? Templates["Enumerable"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Enumerable");
+                throw new Exception("Missing DataTemplate for Enumerable");
             else if (type == typeof(Color))
-                return ColorDataTemplate ?? throw new Exception("Missing DataTemplate for Color");
+                throw new Exception("Missing DataTemplate for Color");
             else if (type == typeof(Guid))
-                return GuidDataTemplate ?? throw new Exception("Missing DataTemplate for Guid");
+                throw new Exception("Missing DataTemplate for Guid");
             else if (type == typeof(Enum))
-                return EnumDataTemplate ?? throw new Exception("Missing DataTemplate for Enum");
+                throw new Exception("Missing DataTemplate for Enum");
             //if (type == typeof(Utility.WPF.Abstract.Icon))
             //    return IconDataTemplate;
             else if (type == typeof(bool))
-                return BooleanDataTemplate ?? throw new Exception("Missing DataTemplate for Boolean");
+                throw new Exception("Missing DataTemplate for Boolean");
             else if (typeof(Enum).IsAssignableFrom(type))
-                return EnumDataTemplate ??= (DataTemplate)Templates[new DataTemplateKey(typeof(Enum))] ?? throw new Exception("Missing DataTemplate for Enum");
-
+                throw new Exception("Missing DataTemplate for Enum");
             else if (type == typeof(int) || type == typeof(long) || type == typeof(double) || type == typeof(decimal))
-                return NumberDataTemplate ??= Templates["Number"] as DataTemplate ?? throw new Exception("Missing DataTemplate for Number");
+                throw new Exception("Missing DataTemplate for Number");
             else if (interfaces.Contains(typeof(IConvertible)))
-                return IConvertibleTemplate ??= Templates["IConvertable"] as DataTemplate ?? throw new Exception("Missing DataTemplate for IConvertible");
-            return DefaultDataTemplate ??= TemplateGenerator.CreateDataTemplate
+                throw new Exception("Missing DataTemplate for IConvertible");
+            return TemplateGenerator.CreateDataTemplate
                 (() => new TextBlock
                 {
-                    Text = $"{item.GetType().Name} Missing DataTemplate",
+                    Text = $"{type.Name} Missing DataTemplate",
                     Margin = new Thickness(1),
                     HorizontalAlignment = HorizontalAlignment.Stretch,
                     VerticalAlignment = VerticalAlignment.Stretch,
@@ -81,7 +62,7 @@ namespace Utility.WPF.Templates
                 });
         }
 
-        protected static DataTemplate NullTemplate() =>
+        public static DataTemplate CreateNullTemplate() =>
            TemplateGenerator.CreateDataTemplate(() => new TextBlock
            {
                FontSize = 14,

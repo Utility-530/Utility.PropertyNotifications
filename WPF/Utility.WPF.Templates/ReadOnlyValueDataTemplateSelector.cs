@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Drawing;
-using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using Utility.Interfaces.NonGeneric;
-using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Templates
 {
@@ -22,12 +17,10 @@ namespace Utility.WPF.Templates
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            var template = Select_Template(item, container);
-            return template;
-        }
-
-        public DataTemplate Select_Template(object item, DependencyObject container)
-        {
+            if (item is IType { Type: { } type })
+            {
+                return Templates[new DataTemplateKey(type)] as DataTemplate;
+            }
 
             if (item is not IValue { Value: var value })
             {
@@ -35,7 +28,7 @@ namespace Utility.WPF.Templates
             }
 
             if (value == null)
-                return NullDataTemplate ??= NullTemplate();
+                return TemplateSelector.CreateNullTemplate();
 
             //var type = value.GetType();
             //var _descriptor = item is IPropertyDescriptor descriptor ? descriptor : null;

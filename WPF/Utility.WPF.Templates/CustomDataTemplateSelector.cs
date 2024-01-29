@@ -13,11 +13,11 @@ namespace Utility.WPF.Templates
     }
 
 
-    public class CustomDataTemplateSelector : GenericDataTemplateSelector
+    public class CustomDataTemplateSelector : DataTemplateSelector
     {
         private DataTemplateSelector? valueDataTemplateSelector, readOnlyValueDataTemplateSelector;
 
-        public override ResourceDictionary Templates
+        public ResourceDictionary Templates
         {
             get
             {
@@ -32,16 +32,10 @@ namespace Utility.WPF.Templates
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            var template = Select_Template(item, container);
-            return template;
-        }
 
 
-        public DataTemplate Select_Template(object item, DependencyObject container)
-        {
-
-            if (item == null)
-                return NullDataTemplate ??= NullTemplate();
+            //if (item == null)
+            //    return NullDataTemplate ??= NullTemplate();
 
 
             if (item is IValue { } ivalue)

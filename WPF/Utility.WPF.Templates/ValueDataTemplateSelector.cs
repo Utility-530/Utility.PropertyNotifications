@@ -22,20 +22,35 @@ namespace Utility.WPF.Templates
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            var template = Select_Template(item, container);
-            return template;
-        }
-
-        public DataTemplate Select_Template(object item, DependencyObject container)
-        {
 
             if (item is not IValue { Value: var value })
             {
                 throw new Exception($"Unexpected type for item {item.GetType().Name}");
             }
 
+            if (item is IType { Type: { } type })
+            {
+                if (Nullable.GetUnderlyingType(type) != null)
+                {
+                    var underlyingType = Nullable.GetUnderlyingType(type);
+                    var underlyingTypeName = underlyingType.BaseType == typeof(Enum) ? underlyingType.BaseType.Name : underlyingType.Name;
+                    if (Templates[$"{type.Name}[{underlyingTypeName}]"] is DataTemplate dt)
+                        return dt;
+                }
+                if (type.BaseType == typeof(Enum))
+                {
+                    if (Templates[new DataTemplateKey(type.BaseType)] is DataTemplate __dt)
+                        return __dt;
+                }
+
+                if (Templates[new DataTemplateKey(type)] is DataTemplate _dt)
+                    return _dt;
+            }
+
+
+
             if (value == null)
-                return NullDataTemplate ??= NullTemplate();
+                return NullTemplate ??= TemplateSelector.CreateNullTemplate();
 
             //var type = value.GetType();
             //var _descriptor = item is IPropertyDescriptor descriptor ? descriptor : null;
@@ -57,6 +72,7 @@ namespace Utility.WPF.Templates
                 return resourceDictionary;
             }
         }
+
 
         public static ValueDataTemplateSelector Instance => new();
     }
