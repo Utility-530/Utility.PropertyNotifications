@@ -11,7 +11,7 @@ namespace Utility.WPF.Factorys
 
     public static class ItemsPanelFactory
     {
-        public static ItemsPanelTemplate Template(int? rows, int? columns, Orientation? orientation, Arrangement? arrangement)
+        public static ItemsPanelTemplate Template(int? rows, int? columns, Orientation? orientation, Arrangement? arrangement, Action<FrameworkElementFactory>? postAction =null)
         {
 
             return (arrangement, orientation) switch
@@ -52,6 +52,7 @@ namespace Utility.WPF.Factorys
                 {
                     factory.SetValue(UniformGrid.ColumnsProperty, columns ?? 1);
                     factory.SetValue(UniformGrid.RowsProperty, rows ?? 2);
+                    postAction?.Invoke(factory);
                 }),
 
                 (_, Orientation.Horizontal) =>
@@ -59,12 +60,15 @@ namespace Utility.WPF.Factorys
                 {
                     factory.SetValue(UniformGrid.ColumnsProperty, columns ?? 2);
                     factory.SetValue(UniformGrid.RowsProperty, rows ?? 1);
+                    postAction?.Invoke(factory);
                 }),
                 (Arrangement.Uniform, _) =>
                 CreateItemsPanelTemplate<UniformGrid>(factory =>
                 {
                     factory.SetValue(UniformGrid.RowsProperty, rows ?? 2);
                     factory.SetValue(UniformGrid.ColumnsProperty, columns ?? 2);
+                    postAction?.Invoke(factory);
+
                 }),
 
                 //(Arrangement.TreeMap, _) => CreateItemsPanelTemplate<TreeMapPanel>(),
@@ -77,11 +81,14 @@ namespace Utility.WPF.Factorys
             {
                 orientation ??= (Orientation)WrapPanel.OrientationProperty.DefaultMetadata.DefaultValue;
                 factory.SetValue(StackPanel.OrientationProperty, orientation.Value);
+                postAction?.Invoke(factory);
             }
             void SetWrapPanelOrientation(FrameworkElementFactory factory)
             {
                 orientation ??= (Orientation)WrapPanel.OrientationProperty.DefaultMetadata.DefaultValue;
                 factory.SetValue(WrapPanel.OrientationProperty, orientation.Value);
+                postAction?.Invoke(factory);
+
             }
             //void SetTreeMapOrientation(FrameworkElementFactory factory)
             //{
