@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetFabric.Hyperlinq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,6 +9,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Text;
 using Utility.Helpers;
+using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 
@@ -48,7 +50,7 @@ namespace UtilityReactive
                         handler => collection.CollectionChanged -= handler);
         }
 
-        public static IObservable<ChangeSet<T>> Changes<T>(this INotifyCollectionChanged collection) where T: IEquatable
+        public static IObservable<ChangeSet<T>> Changes<T>(this INotifyCollectionChanged collection) where T : IEquatable
         {
             return Observable
                 .FromEvent<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
@@ -75,7 +77,8 @@ namespace UtilityReactive
         {
             return Observable.Create<ChangeSet<T>>(observer =>
             {
-                observer.OnNext(new ChangeSet<T>(collection.Cast<T>().Select(c => new Change<T>(c, ChangeType.Add)).ToArray()));
+                if (collection.Any())
+                    observer.OnNext(new ChangeSet<T>(collection.Cast<T>().Select(c => new Change<T>(c, ChangeType.Add)).ToArray()));
 
                 if (collection is INotifyCollectionChanged notifyCollection)
                     return Changes<T>(notifyCollection).Subscribe(observer);
