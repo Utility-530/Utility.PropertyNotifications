@@ -4,6 +4,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Nodes.Reflections;
 using Utility.Objects;
+using Utility.PropertyNotifications;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
@@ -40,18 +41,21 @@ namespace Utility.Nodes
         public override async Task<object?> GetChildren()
         {
             flag = true;
-            return await Task.FromResult(data.Info.ParameterDescriptors().Select(a => new ParameterData(a, dictionary)));
+            return await Task.FromResult(data.Info.ParameterDescriptors().Select(a => ObjectConverter.ToValue(dictionary, a)));
         }
 
         public override async Task<IReadOnlyTree> ToNode(object value)
         {
   
-            if (value is ParameterData { Descriptor.Name: { } name } propertyData)
+            if (value is PropertyData { Descriptor.Name: { } name } propertyData)
             {
                 if (this.Key is Key { Guid: { } guid })
                 {
                     var _guid = await GuidRepository.Instance.Find(guid, name);
-                    return new ParameterNode(propertyData) { Key = new Key(_guid, name, propertyData.Type) };
+                    var x = new ParameterNode(propertyData) { Key = new Key(_guid, name, propertyData.Type) };
+                    ValueRepository.Instance.Register(_guid, propertyData as INotifyPropertyCalled);
+                    ValueRepository.Instance.Register(_guid, propertyData as INotifyPropertyReceived);
+                    return x;
                 }
                 else
                     throw new Exception("f 32443opppp");

@@ -24,7 +24,7 @@ namespace Utility.Nodes
         public override async Task<object?> GetChildren()
         {
             flag = true;
-            var children = MethodExplorer.MethodInfos(data.Descriptor);
+            var children = MethodExplorer.MethodInfos(data.Descriptor.PropertyType).ToArray();
             return children.Select(methodInfo => new MethodData(methodInfo, data.Instance)).ToArray();
         }
 

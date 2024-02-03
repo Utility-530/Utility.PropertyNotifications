@@ -8,6 +8,13 @@ using System;
 using Utility.Models;
 using System.ComponentModel;
 using Utility.Nodes.Reflections;
+using Utility.PropertyNotifications;
+using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
+using Utility.Interfaces.NonGeneric;
+using LanguageExt.ClassInstances;
+using Microsoft.VisualBasic;
+using Utility.Collections;
 
 namespace Utility.Nodes
 {
@@ -23,6 +30,7 @@ namespace Utility.Nodes
     {
         protected PropertyData data;
         protected bool flag;
+        private bool _isRefreshing;
 
         public PropertyNode(PropertyData propertyData)
         {
@@ -31,12 +39,9 @@ namespace Utility.Nodes
             }
             this.data = propertyData;
         }
-        
-        
-        
+
         public PropertyNode()
         {
-
         }
 
         public override object Data
@@ -48,31 +53,156 @@ namespace Utility.Nodes
             set => data = value as PropertyData;
         }
 
-        public override async Task<object?> GetChildren()
+
+
+        public IObservable<Change<IReadOnlyTree>> Children()
         {
             flag = true;
             var inst = data.Descriptor.GetValue(data.Instance);
             if (inst == null)
             {
-                return Array.Empty<object>();
-            }
-            var children = (await ChildPropertyExplorer.Convert(inst, data.Descriptor));
-            List<PropertyDescriptor> descriptors = new List<PropertyDescriptor>();
-            foreach(var child in children)
-            {
-                if (child.Descriptor.PropertyType == data.Type)
-                { 
-                    
-                }
-                else
-                {
-                    descriptors.Add(child.Descriptor);
-                }
+                return Observable.Empty<Change<IReadOnlyTree>>();
             }
 
-            if (data.Descriptor.IsValueOrStringProperty() == false && MethodExplorer.MethodInfos(data.Descriptor).Any())
-                return descriptors.Select(a => ObjectConverter.ToValue(inst, a)).Append(new MethodsData(data.Descriptor, inst)).ToArray();
-            return descriptors.Select(a => ObjectConverter.ToValue(inst, a)).ToArray();
+            return Observable.Create<Change<IReadOnlyTree>>(observer =>
+            {
+                var disposable = ChildPropertyExplorer
+                                    .Convert(inst, data.Descriptor)
+                                    .Subscribe(async a =>
+                                    {
+                                        switch (a.ChangeType)
+                                        {
+                                            case ChangeType.Add:
+                                                {
+                                                    if (a.Descriptor?.PropertyType == data.Type)
+                                                    {
+                                                    }
+                                                    else
+                                                    {
+                                                        var conversion = ObjectConverter.ToValue(inst, a.Descriptor);
+                                                        var node = await ToNode(conversion);
+                                                        observer.OnNext(new Change<IReadOnlyTree>(node, ChangeType.Add));
+                                                    }
+                                                    break;
+                                                }
+                                            case ChangeType.Remove:
+                                                {
+                                                    if (this.Key is Key { Guid: { } guid })
+                                                    {
+                                                        var _guid = await GuidRepository.Instance.Find(guid, a.Descriptor.Name);
+                                                        observer.OnNext(new Change<IReadOnlyTree>(new EmptyNode { Key = new Key(_guid, a.Descriptor.Name, a.Descriptor.PropertyType), }, ChangeType.Remove));
+                                                    }
+                                                    break;
+                                                }
+                                            case ChangeType.Reset:
+                                                {
+                                                    observer.OnNext(new Change<IReadOnlyTree>(null, ChangeType.Reset));
+                                                    break;
+                                                }
+                                        }
+                                    });
+
+                var x = MethodExplorer.MethodInfos(data.Descriptor.PropertyType).ToArray();
+
+                if (data.Descriptor.IsValueOrStringProperty() == false && x.Any())
+                {
+                    ToNode(new MethodsData(data.Descriptor, inst)).
+                    ToObservable()
+                    .Subscribe(node =>
+                    {
+                        observer.OnNext(new Change<IReadOnlyTree>(node, ChangeType.Add));
+                    });
+                }
+                return disposable;
+            });
+        }
+
+        protected override async Task<bool> RefreshChildrenAsync()
+        {
+            if (_isRefreshing)
+                return false;
+
+            if (await HasMoreChildren() == false)
+                return false;
+
+            _isRefreshing = true;
+
+            try
+            {
+                items.Clear();
+                Children()
+                        .Subscribe(item =>
+                        {
+                            switch (item.Type)
+                            {
+                                case ChangeType.Add:
+                                    items.Add(item.Value);
+                                    break;
+                                case ChangeType.Remove:
+                                    items.RemoveOne(a => (a as IReadOnlyTree)?.Key.Equals(item.Value.Key) == true);
+                                    break;
+                                case ChangeType.Reset:
+                                    items.Clear();
+                                    break;
+                            }
+                        },
+                        e =>
+                        {
+
+                        },
+                        () =>
+                        {
+                            _isRefreshing = false;
+                            items.Complete();
+                        });
+
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Error = ex;
+                return false;
+            }
+            finally
+            {
+                _isRefreshing = false;
+            }
+
+        }
+
+
+        public override async Task<IReadOnlyTree> ToNode(object value)
+        {
+            if (value is MethodsData { } methodsData)
+            {
+                if (this.Key is Key { Guid: { } guid })
+                {
+                    var _guid = await GuidRepository.Instance.Find(guid, "methods");
+                    return new MethodsNode(methodsData) { Key = new Key(_guid, "methods", null), Parent = this };
+                }
+                else
+                    throw new Exception("f 32676 443opppp");
+            }
+            else if (value is PropertyData { Descriptor.Name: { } name } propertyData)
+            {
+                if (this.Key is Key { Guid: { } guid })
+                {
+                    var _guid = await GuidRepository.Instance.Find(guid, name);
+                    ValueRepository.Instance.Register(_guid, propertyData as INotifyPropertyCalled);
+                    ValueRepository.Instance.Register(_guid, propertyData as INotifyPropertyReceived);
+                    return new PropertyNode(propertyData) { Key = new Key(_guid, name, propertyData.Type), Parent = this };
+                }
+                else
+                    throw new Exception("f 32443opppp");
+            }
+            else
+                throw new Exception("34422 2!pod");
+        }
+
+        public override Task<bool> HasMoreChildren()
+        {
+            return Task.FromResult(data != null && flag == false);
         }
 
         public override string ToString()
@@ -80,38 +210,9 @@ namespace Utility.Nodes
             return data?.Descriptor.Name;
         }
 
-        public override async Task<IReadOnlyTree> ToNode(object value)
+        public override Task<object?> GetChildren()
         {
-
-            if (value is MethodsData { } methodsData)
-            {
-                if (this.Key is Key { Guid: { } guid })
-                {
-                    var _guid = await GuidRepository.Instance.Find(guid, "methods");
-                    return new MethodsNode(methodsData) { Key = new Key(_guid, "methods", null) };
-                }
-                else
-                    throw new Exception("f 32676 443opppp");
-            }
-            else if (value is PropertyData { Descriptor.Name: { } name } propertyData)
-            {
-
-                if (this.Key is Key { Guid: { } guid })
-                {
-                    var _guid = await GuidRepository.Instance.Find(guid, name);
-                    return new PropertyNode(propertyData) { Key = new Key(_guid, name, propertyData.Type) };
-                }
-                else
-                    throw new Exception("f 32443opppp");
-            }
-
-            else
-                throw new Exception("34422 2!pod");
-        }
-
-        public override Task<bool> HasMoreChildren()
-        {
-            return Task.FromResult(data !=null && flag == false);
+            throw new NotImplementedException();
         }
     }
 }

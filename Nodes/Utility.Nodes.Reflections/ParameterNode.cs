@@ -3,6 +3,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Nodes.Reflections;
 using Utility.Objects;
+using Utility.PropertyNotifications;
 using Utility.Reactive.Helpers;
 using Utility.Trees.Abstractions;
 
@@ -10,10 +11,10 @@ namespace Utility.Nodes
 {
     public class ParameterNode : Node
     {
-        private readonly ParameterData data;
+        private readonly PropertyData data;
         private bool flag;
 
-        public ParameterNode(ParameterData propertyData)
+        public ParameterNode(PropertyData propertyData)
         {
             this.data = propertyData;
         }
@@ -35,7 +36,10 @@ namespace Utility.Nodes
                 if (this.Key is Key { Guid: { } guid })
                 {
                     var _guid = await GuidRepository.Instance.Find(guid, name);
-                    return new PropertyNode(propertyData) { Key = new Key(_guid, name, propertyData.Type) };
+                    var x =  new PropertyNode(propertyData) { Key = new Key(_guid, name, propertyData.Type) };
+                    ValueRepository.Instance.Register(_guid, propertyData as INotifyPropertyCalled);
+                    ValueRepository.Instance.Register(_guid, propertyData as INotifyPropertyReceived);
+                    return x;
                 }
                 else
                     throw new Exception("f 32443opppp");
