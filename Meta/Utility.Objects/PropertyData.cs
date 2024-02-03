@@ -1,34 +1,65 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Utility.Helpers;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
-using Utility.Nodes;
+using Utility.PropertyNotifications;
 
 namespace Utility.Objects
 {
-    public record PropertyData<T>(PropertyDescriptor Descriptor, object Instance) : PropertyData(Descriptor, Instance), IValue<T>
+    public record PropertyData<T>(PropertyDescriptor Descriptor, object Instance) : PropertyData(Descriptor, Instance), IValue<T>, IRaisePropertyChanged
     {
         public T Value
         {
-            get => (T)Descriptor.GetValue(Instance); set { Descriptor.SetValue(Instance, value); }
+            get
+            {
+                var value = (T)Descriptor.GetValue(Instance); 
+                this.RaisePropertyCalled(value);
+                return value;
+            }
+
+            set 
+            {
+                if (Descriptor.IsReadOnly == true)
+                    return;
+                Descriptor.SetValue(Instance, value);
+                this.RaisePropertyReceived(value);
+            }
         }
         object IValue.Value => Value;
+
+        public void RaisePropertyChanged(object value, string? propertyName = null)
+        {
+            if (Descriptor.IsReadOnly == true)
+                return;
+            Descriptor.SetValue(Instance, value);
+            base.RaisePropertyChanged(nameof(Value));
+        }
     }
 
     public record NullablePropertyData<T>(PropertyDescriptor Descriptor, object Instance) : PropertyData(Descriptor, Instance), IValue<T?>
     {
         public T? Value
         {
-            get => Descriptor.GetValue(Instance) is T t ? t : default; set { Descriptor.SetValue(Instance, value); }
+            get
+            {
+                var value = Descriptor.GetValue(Instance) is T t ? t : default; ;
+                this.RaisePropertyCalled(value);
+                return value;
+            }
+
+            set 
+            { 
+                Descriptor.SetValue(Instance, value);
+                this.RaisePropertyReceived(value);
+            }
         }
         object IValue.Value => Value;
     }
 
 
-    public record PropertyData(PropertyDescriptor Descriptor, object Instance) : IIsReadOnly, IType
+    public record PropertyData(PropertyDescriptor Descriptor, object Instance) : NotifyProperty, IIsReadOnly, IType
     {
         public string Name => Descriptor?.Name ?? "Descriptor not set";
 
@@ -61,6 +92,5 @@ namespace Utility.Objects
         public bool IsFlagsEnum => Type.IsFlagsEnum();
 
         public bool IsValueType => Type.IsValueType;
-
     }
 }

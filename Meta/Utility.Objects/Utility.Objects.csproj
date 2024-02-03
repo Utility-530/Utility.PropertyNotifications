@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
     <ProjectReference Include="..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
     <ProjectReference Include="..\..\Observables\Utility.Observables\Utility.Observables.csproj" />
     <ProjectReference Include="..\..\Reactive\Utility.Reactive\Utility.Reactive.csproj" />
     <ProjectReference Include="..\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />

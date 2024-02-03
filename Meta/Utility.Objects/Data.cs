@@ -13,8 +13,4 @@ namespace Utility.Nodes
     public record MethodData(MethodInfo Info, object Instance) 
     {
     }
-
-    public record ParameterData(ParameterDescriptor ParameterDescriptor, object Instance) : PropertyData(ParameterDescriptor, Instance)
-    {
-    }
 }

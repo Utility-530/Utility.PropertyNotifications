@@ -27,43 +27,24 @@ namespace Utility.Objects
             CompositeDisposable composite = new();
 
             return Observable.Create<ChildrenResponse>(observer =>
+              {
+                  if (count == 0)
+                  {
+                      return composite;
+                      //observer.OnNext(new ChildrenResponse());
+                  }
+                  foreach (var descriptor in descriptors)
+                  {
+                      observer.OnNext(new ChildrenResponse(descriptor, ChangeType.Add));
+                  }
+                  SubscribeToCollectionItemDescriptors(observer)
+                  .DisposeWith(composite);
+                  return composite;
+              });
+
+            IDisposable SubscribeToCollectionItemDescriptors(IObserver<ChildrenResponse> obs)
             {
-                Observable.Create<ChildrenResponse>(obs =>
-                {
-                    if (count == 0)
-                    {
-                        return composite;
-                        //observer.OnNext(new ChildrenResponse());
-                    }
-                    foreach (var descriptor in descriptors)
-                    {
-                        SubscribeToPropertyDescriptor(descriptor, obs);
-                    }
-                    SubscribeToCollectionItemDescriptors(obs);
-                    return composite;
-                })
-                .Subscribe(a => observer.OnNext(a),
-                    e => observer.OnError(e),
-                    () =>
-                    {
-                        //observer.OnCompleted();
-                    }
-                    );
-
-                return composite;
-            });
-
-            void SubscribeToPropertyDescriptor(PropertyDescriptor descriptor, IObserver<ChildrenResponse> obs)
-            {
-                i++;
-                //var _data = descriptor.GetValue(Instance);
-                obs.OnNext(new ChildrenResponse(descriptor, ChangeType.Add));
-            }
-
-
-            void SubscribeToCollectionItemDescriptors(IObserver<ChildrenResponse> obs)
-            {
-                var collectionDescriptors =
+                return 
                     CollectionItemDescriptors(Instance)
                     .Subscribe(descriptor =>
                     {

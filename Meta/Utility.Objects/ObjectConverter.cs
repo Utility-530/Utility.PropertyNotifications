@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Globalization;
 using Utility.Helpers;
 using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
 using Utility.Nodes;
 
 namespace Utility.Objects
@@ -11,7 +12,7 @@ namespace Utility.Objects
     {
 
 
-        public static object ToValue(object value, PropertyDescriptor descriptor)
+        public static PropertyData ToValue(object value, PropertyDescriptor descriptor)
         {
 
             return descriptor.PropertyType switch
