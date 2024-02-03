@@ -80,7 +80,13 @@ namespace Utility.Nodes.Solutions
             return Task.FromResult(true);
         }
 
-        public override IReadOnlyTree ToNode(object value)
+        public override Task<IReadOnlyTree> ToNode(object value)
+        {
+            return Task.FromResult(NewMethod(value));
+
+        }
+
+        private static IReadOnlyTree NewMethod(object value)
         {
             if (value is Assembly assembly)
             {
@@ -100,7 +106,6 @@ namespace Utility.Nodes.Solutions
             }
             else
                 throw new Exception("df 343325");
-
         }
     }
 }
