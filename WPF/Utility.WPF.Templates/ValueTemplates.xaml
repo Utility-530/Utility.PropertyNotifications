@@ -14,8 +14,7 @@
     <conv:IntToEnumConverter x:Key="IntToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
 
     <conv:StringToEnumConverter x:Key="StringToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
-    <local:BooleanToNullConverter x:Key="BooleanToNullConverter" />
-    <local:EnumToNullConverter x:Key="EnumToNullConverter" />
+
     <local:VisibilityConverter x:Key="VisibilityConverter" />
 
     <DataTemplate DataType="{x:Type sys:Int32}">
@@ -113,6 +112,12 @@
                 <ad:NullBehavior ShowCancel="{Binding Value.HasValue, Mode=OneWay}" DefaultValue="0.0"></ad:NullBehavior>
             </i:Interaction.Behaviors>
         </TextBox>
+    </DataTemplate>
+
+
+
+    <DataTemplate x:Key="Missing">
+        <TextBlock Text="Missing Template"></TextBlock>
     </DataTemplate>
     
 </ResourceDictionary>

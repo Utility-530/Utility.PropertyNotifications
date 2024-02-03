@@ -51,15 +51,15 @@ namespace Utility.WPF.Templates
 
 
 
-            var type = item.GetType();
+            var type = item?.GetType();
 
-            if (new DataTemplateKey(type) is var key &&
-                (container as FrameworkElement)?.TryFindResource(key) is DataTemplate dataTemplate)
-                return dataTemplate;
+            //if (type is Type && new DataTemplateKey(type) is var key &&
+            //    (container as FrameworkElement)?.TryFindResource(key) is DataTemplate dataTemplate)
+            //    return dataTemplate;
 
-            var interfaces = type.GetInterfaces();
+            //var interfaces = type.GetInterfaces();
 
-            return base.SelectTemplate(item, container);
+            return( Templates["Missing"] as DataTemplate) ?? throw new Exception("dfs 33091111111");
         }
 
 

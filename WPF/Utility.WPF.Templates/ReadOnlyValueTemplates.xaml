@@ -91,4 +91,9 @@
     </DataTemplate>
 
 
+
+    <DataTemplate x:Key="Missing">
+        <TextBlock Text="Missing Template"></TextBlock>
+    </DataTemplate>
+
 </ResourceDictionary>

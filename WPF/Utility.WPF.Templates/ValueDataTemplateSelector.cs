@@ -57,7 +57,8 @@ namespace Utility.WPF.Templates
             //var _info = item is IPropertyInfo propertyInfo ? propertyInfo : null;
 
 
-            return base.SelectTemplate(value, container);
+            return (Templates["Missing"] as DataTemplate) ?? throw new Exception("dfs 33091111111");
+
         }
 
 

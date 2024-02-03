@@ -74,4 +74,9 @@
         <controls:EnumItemsControl Value="{Binding Mode=OneWay,Converter={x:Static conv:DefaultConverter.Instance} }" ></controls:EnumItemsControl>
     </DataTemplate>
 
+
+    <DataTemplate x:Key="Missing">
+        <TextBlock Text="Missing Template"></TextBlock>
+    </DataTemplate>
+    
 </ResourceDictionary>
