@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:Utility.Objects;assembly=Utility.Objects"
              xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
-             xmlns:local="clr-namespace:Utility.Nodes.Reflections.Demo"
              xmlns:templates="http://schemas.utility.com/templates"
              xmlns:ui="http://schemas.modernwpf.com/2019">
     <Application.Resources>
@@ -23,28 +22,28 @@
             <Style x:Key="ContentControlStyle"  TargetType="{x:Type ContentControl}" BasedOn="{StaticResource {x:Type ContentControl}}">
                 <!--<Setter Property="Height" Value="25"></Setter>-->
                 <Setter Property="HorizontalAlignment" Value="Left"></Setter>
-                <Setter Property="Width" Value="160"></Setter>
+                <Setter Property="Width" Value="120"></Setter>
             </Style>
 
             <DataTemplate DataType="{x:Type vm:PropertyData}">
-                <Grid  Height="30">
+                <Grid >
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition  Width="160"></ColumnDefinition>
-                        <ColumnDefinition Width="160"></ColumnDefinition>
+                        <ColumnDefinition  Width="140"></ColumnDefinition>
+                        <ColumnDefinition Width="140"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Grid Margin="2" >
                         <TextBlock Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
                     </Grid>
                     <Grid Margin="2" Grid.Column="1">
-                        <Viewbox>
-                            <ContentControl Style="{StaticResource ContentControlStyle}"  Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
-                        </Viewbox>
+                        <!--<Viewbox>-->
+                            <ContentControl Style="{StaticResource ContentControlStyle}" Width="120"  Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
+                        <!--</Viewbox>-->
                     </Grid>
                 </Grid>
             </DataTemplate>
 
             <DataTemplate x:Key="TopHeader"  DataType="{x:Type vm:PropertyData}">
-                <UniformGrid Columns="1"  Width="160">
+                <UniformGrid Columns="1"  Width="120">
                     <TextBlock Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
                     <ContentControl Style="{StaticResource ContentControlStyle}" Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
                 </UniformGrid>

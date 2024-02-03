@@ -86,6 +86,12 @@ namespace Utility.Nodes.Demo
                     if (displayName == "SyncRoot")
                         return false;
                 }
+                if (componentType.Name == "String")
+                {
+
+                    if (displayName == "Length")
+                        return false;
+                }
                 return true;
             }
 

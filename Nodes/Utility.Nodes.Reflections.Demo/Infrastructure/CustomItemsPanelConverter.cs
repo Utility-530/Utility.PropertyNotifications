@@ -63,7 +63,7 @@ namespace Utility.Nodes.Demo
                 });
             }
 
-            if (value is MethodsNode { })
+            if (value is CustomMethodsNode { })
             {
                 return convert(new ItemsPanel
                 {

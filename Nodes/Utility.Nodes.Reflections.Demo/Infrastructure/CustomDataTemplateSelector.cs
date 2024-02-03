@@ -3,7 +3,6 @@ using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media;
 using Utility.Objects;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
@@ -35,6 +34,10 @@ namespace Utility.Nodes.Demo
             if (index[1] == 0)
             {
 
+                if (item is ITree { Data: ObjectValue { } })
+                {
+                    return MakeTemplate(item, "None");
+                }
                 // collection item
                 if (item is ITree { Data: PropertyData { Descriptor: CollectionItemDescriptor { } } })
                 {
@@ -50,10 +53,15 @@ namespace Utility.Nodes.Demo
                 {
                     return MakeTemplate(item, "None");
                 }
+                if (item is CustomMethodsNode { Data: { } })
+                {
+                    return MakeTemplate(item, "None");
+                }
                 // method
                 if (item is MethodNode { Data: PropertyData { Descriptor: { } } })
                 {
                     return MakeTemplate(item);
+                    
                 }
                 // root
                 if (item is IReadOnlyTree { Data: PropertyData { Descriptor: RootDescriptor { }, } })
@@ -84,6 +92,10 @@ namespace Utility.Nodes.Demo
                 if (item is Node { Data: var data })
                 {
                     return MakeButtonTemplate(item);
+                }
+                else
+                {
+
                 }
             }
             else if (index[1] == 2)

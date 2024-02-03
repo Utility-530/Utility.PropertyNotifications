@@ -14,18 +14,30 @@ using Utility.ViewModels;
 
 namespace Utility.Nodes.Demo
 {
-    public class ModelRootPropertyNode : RootPropertyNode
+    public class LedModelRootPropertyNode : RootPropertyNode
     {
         Guid guid = Guid.Parse("2b581d2f-506d-439a-9822-229d831f73b0");
+        public LedModelRootPropertyNode() : base(Model)
+        {
+        }
+
+        public override IEquatable Key => new Key(guid, "root", typeof(LedModel));
+
+        static LedModel Model { get; } = new();
+    }
+
+
+    public class ModelRootPropertyNode : RootPropertyNode
+    {
+        Guid guid = Guid.Parse("c25b9ff5-54d2-4a73-9509-471d7c307fb0");
         public ModelRootPropertyNode() : base(Model)
         {
         }
 
         public override IEquatable Key => new Key(guid, "root", typeof(Model));
 
-        static LedModel Model { get; } = new LedModel();
+        static Model Model { get; } = new();
     }
-
 
     public class SelectionNode : PropertyNode
     {
@@ -41,7 +53,7 @@ namespace Utility.Nodes.Demo
                     ViewModelStore.Instance.Save(viewModel);
                     if (string.IsNullOrEmpty(viewModel.Name))
                         viewModel.Name = ((data as IReadOnlyTree)?.Data as PropertyData)?.Name;
-                    var propertyData = new PropertyData(new RootDescriptor(viewModel), viewModel) {  };
+                    var propertyData = new PropertyData(new RootDescriptor(viewModel), viewModel) { };
                     this.Data = propertyData;
                     flag = false;
                     await RefreshChildrenAsync();
@@ -61,7 +73,7 @@ namespace Utility.Nodes.Demo
 
         }
     }
-    
+
     public class SaveNode : EmptyNode
     {
 
@@ -97,7 +109,7 @@ namespace Utility.Nodes.Demo
             else if (value is 2)
                 return Task.FromResult<IReadOnlyTree>(new SelectionNode());
             else if (value is 3)
-                return Task.FromResult<IReadOnlyTree>(new MethodsNode());
+                return Task.FromResult<IReadOnlyTree>(new CustomMethodsNode());
 
             throw new Exception("2r 11 4333");
         }
@@ -108,7 +120,7 @@ namespace Utility.Nodes.Demo
         }
     }
 
-    public class MethodsNode:Node
+    public class CustomMethodsNode : Node
     {
         bool flag;
         public override async Task<object?> GetChildren()
@@ -122,7 +134,7 @@ namespace Utility.Nodes.Demo
 
         public override Task<IReadOnlyTree> ToNode(object value)
         {
-            if (value is 0 )
+            if (value is 0)
                 return Task.FromResult<IReadOnlyTree>(new RefreshNode());
             else if (value is 1)
                 return Task.FromResult<IReadOnlyTree>(new SaveNode());
