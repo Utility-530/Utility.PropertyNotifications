@@ -75,6 +75,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Adorners", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Behaviors", "..\WPF\Utility.WPF.Behavior\Utility.WPF.Behaviors.csproj", "{14A0B790-015C-465B-859F-C72D2B4E3D8F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.PropertyNotifications", "..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj", "{73F10567-EA25-416F-8BD1-E3260A24CAFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -213,6 +215,10 @@ Global
 		{14A0B790-015C-465B-859F-C72D2B4E3D8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14A0B790-015C-465B-859F-C72D2B4E3D8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14A0B790-015C-465B-859F-C72D2B4E3D8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73F10567-EA25-416F-8BD1-E3260A24CAFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73F10567-EA25-416F-8BD1-E3260A24CAFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73F10567-EA25-416F-8BD1-E3260A24CAFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73F10567-EA25-416F-8BD1-E3260A24CAFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -246,6 +252,7 @@ Global
 		{C099CF92-56EB-4857-967D-A472D6CB05EC} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{A903CEC6-816A-4870-882A-C77BD3BDC6E2} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{14A0B790-015C-465B-859F-C72D2B4E3D8F} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{73F10567-EA25-416F-8BD1-E3260A24CAFC} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1F5991F-9180-4F40-A959-E24A6DDA6C5C}
