@@ -65,5 +65,19 @@
             }
             return collection;
         }
+
+        public static ICollection<T> RemoveBy<T>(this ICollection<T> collection, Func<T, bool> search)
+        {
+            List<T> list = new List<T>();   
+            foreach(var x in collection.Where(search))
+            {
+                list.Add(x);
+            }
+
+            foreach(var x in list)
+                collection.Remove(x);
+
+            return collection;
+        }
     }
 }
