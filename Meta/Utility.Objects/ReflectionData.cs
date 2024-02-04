@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Reflection;
 using Utility.Helpers;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
@@ -8,18 +9,27 @@ using Utility.PropertyNotifications;
 
 namespace Utility.Objects
 {
+
+    public record MethodsData(PropertyDescriptor Descriptor, object Instance) : PropertyData(Descriptor, Instance)
+    {
+    }
+
+    public record MethodData(MethodInfo Info, object Instance)
+    {
+    }
+
     public record PropertyData<T>(PropertyDescriptor Descriptor, object Instance) : PropertyData(Descriptor, Instance), IValue<T>, IRaisePropertyChanged
     {
         public T Value
         {
             get
             {
-                var value = (T)Descriptor.GetValue(Instance); 
+                var value = (T)Descriptor.GetValue(Instance);
                 this.RaisePropertyCalled(value);
                 return value;
             }
 
-            set 
+            set
             {
                 if (Descriptor.IsReadOnly == true)
                     return;
@@ -49,8 +59,8 @@ namespace Utility.Objects
                 return value;
             }
 
-            set 
-            { 
+            set
+            {
                 Descriptor.SetValue(Instance, value);
                 this.RaisePropertyReceived(value);
             }
@@ -58,6 +68,9 @@ namespace Utility.Objects
         object IValue.Value => Value;
     }
 
+    public record PropertiesData(PropertyDescriptor Descriptor, object Instance) : PropertyData(Descriptor, Instance)
+    {
+    }
 
     public record PropertyData(PropertyDescriptor Descriptor, object Instance) : NotifyProperty, IIsReadOnly, IType
     {

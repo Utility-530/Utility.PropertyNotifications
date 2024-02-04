@@ -18,7 +18,7 @@ namespace Utility.Objects
 
     public partial class ChildPropertyExplorer
     {
-        public static IObservable<ChildrenResponse> Convert(object Instance, PropertyDescriptor descriptor)
+        public static IObservable<ChildrenResponse> Explore(object Instance, PropertyDescriptor descriptor)
         {
 
             var descriptors = ChildDescriptors(descriptor).ToArray();
@@ -118,7 +118,7 @@ namespace Utility.Objects
                                         foreach (var item in a.OldItems)
                                         {
                                             --i;
-                                            var descriptor = new CollectionItemDescriptor(item, (data as IList).IndexOf(item), data.GetType());
+                                            var descriptor = new CollectionItemDescriptor(item, a.OldStartingIndex, data.GetType());
                                             observer.OnNext(new(descriptor, ChangeType.Remove));
                                         }
                                         break;
@@ -154,13 +154,11 @@ namespace Utility.Objects
                 }
                 return 0;
             }
-
-
-            IEnumerable<PropertyDescriptor> ChildDescriptors(PropertyDescriptor data) =>
+        }
+        public static IEnumerable<PropertyDescriptor> ChildDescriptors(PropertyDescriptor data) =>
                 data
                 .GetChildProperties()
                 .Cast<PropertyDescriptor>()
                 .OrderBy(d => d.Name);
-        }
     }
 }
