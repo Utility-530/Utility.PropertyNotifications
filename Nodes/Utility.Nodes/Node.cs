@@ -11,12 +11,11 @@ namespace Utility.Nodes
 {
     public abstract class Node : Tree
     {
-        private bool _isRefreshing;
+        private bool isRefreshing;
+        bool flag;
         protected Collection items = new();
 
         public abstract Task<object?> GetChildren();
-
-        public abstract Task<bool> HasMoreChildren();
 
         public abstract Task<IReadOnlyTree> ToNode(object value);
 
@@ -24,7 +23,29 @@ namespace Utility.Nodes
         {
             get
             {
-                _ = RefreshChildrenAsync();
+                try
+                {
+                    if (!isRefreshing)
+                    {
+                        isRefreshing = true;
+                        _ = RefreshChildrenAsync()
+                            .ToObservable()
+                            .Subscribe(a =>
+                            {
+                                flag = a;
+                                isRefreshing = false;
+                            });
+                        flag = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    isRefreshing = false;
+                    Error = ex;
+                }
+                finally
+                {
+                }
                 return items;
             }
         }
@@ -32,46 +53,28 @@ namespace Utility.Nodes
 
         protected virtual async Task<bool> RefreshChildrenAsync()
         {
-            if (_isRefreshing)
-                return false;
 
             if (await HasMoreChildren() == false)
                 return false;
 
-            _isRefreshing = true;
-
-            try
+            var output = await GetChildren();
+            if (output is IEnumerable enumerable)
             {
+                items.Clear();
+                ToNodes(enumerable)
+                    .Subscribe(node => items.Add(node),
+                    e =>
+                    {
 
-                var output = await GetChildren();
-                if (output is IEnumerable enumerable)
-                {
-                    items.Clear();
-                    ToNodes(enumerable)
-                        .Subscribe(node => items.Add(node),
-                        e =>
-                        {
-
-                        },
-                        () =>
-                        {
-                            _isRefreshing = false;
-                            items.Complete();
-                        });
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Error = ex;
-                return false;
-            }
-            finally
-            {
-                _isRefreshing = false;
+                    },
+                    () =>
+                    {
+                        //_isRefreshing = false;
+                        items.Complete();
+                    });
             }
 
+            return true;
         }
 
 
@@ -94,6 +97,11 @@ namespace Utility.Nodes
                 }
                 return disposable;
             });
+        }
+
+        public virtual Task<bool> HasMoreChildren()
+        {
+            return Task.FromResult(Data != null && flag == false);
         }
     }
 }
