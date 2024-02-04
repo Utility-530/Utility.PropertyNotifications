@@ -13,8 +13,6 @@ namespace Repository
             internal readonly List<string> PreCommands = new List<string>();
 
             internal string InternalConnectionString { get; set; } = "";
-
-
             public Options ConnectionString(string connectionString)
             {
                 InternalConnectionString = connectionString;
@@ -55,8 +53,7 @@ namespace Repository
             DoPreCommands();
         }
 
-        public MiniStore(string path)
-            : this(new Options().FromPath(path))
+        public MiniStore(string path) : this(new Options().FromPath(path))
         {
         }
 

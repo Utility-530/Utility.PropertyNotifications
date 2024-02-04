@@ -1,5 +1,6 @@
 ﻿using Fasterflect;
 using System;
+using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using TreeCollections;
@@ -42,7 +43,7 @@ namespace Utility.Nodes.Demo
     public class SelectionNode : PropertyNode
     {
         Guid guid = Guid.Parse("46f59dbd-680e-4c7d-ab35-28c1ba8cdcd3");
-
+        bool flag;
         public SelectionNode() : base()
         {
             CustomDataTemplateSelector.Instance.Subscribe(async data =>
@@ -54,14 +55,22 @@ namespace Utility.Nodes.Demo
                     if (string.IsNullOrEmpty(viewModel.Name))
                         viewModel.Name = ((data as IReadOnlyTree)?.Data as PropertyData)?.Name;
                     var propertyData = new PropertyData(new RootDescriptor(viewModel), viewModel) { };
+          
                     this.Data = propertyData;
                     flag = false;
-                    await RefreshChildrenAsync();
+                    RefreshChildrenAsync();
+                    flag = true;
                 }
             });
         }
 
         public override IEquatable Key => new Key(guid, "root", typeof(ViewModel));
+
+        public override async Task<bool> HasMoreChildren()
+        {
+            return Data != null && flag==false;
+        }
+
     }
 
 

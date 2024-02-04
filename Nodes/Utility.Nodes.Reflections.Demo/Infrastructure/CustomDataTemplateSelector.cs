@@ -34,34 +34,10 @@ namespace Utility.Nodes.Demo
             if (index[1] == 0)
             {
 
+
                 if (item is ITree { Data: ObjectValue { } })
                 {
                     return MakeTemplate(item, "None");
-                }
-                // collection item
-                if (item is ITree { Data: PropertyData { Descriptor: CollectionItemDescriptor { } } })
-                {
-                    return MakeTemplate(item, "None");
-                }
-                // parameter
-                if (item is ParameterNode { Data: PropertyData { Descriptor: { } } })
-                {
-                    return MakeTemplate(item);
-                }
-                // methods
-                if (item is MethodsNode { Data: { } })
-                {
-                    return MakeTemplate(item, "None");
-                }
-                if (item is CustomMethodsNode { Data: { } })
-                {
-                    return MakeTemplate(item, "None");
-                }
-                // method
-                if (item is MethodNode { Data: PropertyData { Descriptor: { } } })
-                {
-                    return MakeTemplate(item);
-                    
                 }
                 // root
                 if (item is IReadOnlyTree { Data: PropertyData { Descriptor: RootDescriptor { }, } })
@@ -73,6 +49,11 @@ namespace Utility.Nodes.Demo
                 {
                     return MakeHeaderTemplate(item, depth);
                 }
+                // collection item
+                if (item is ITree { Data: PropertyData { Descriptor: CollectionItemDescriptor { } } })
+                {
+                    return MakeTemplate(item, "None");
+                }
                 // inner collection item descriptor
                 if (item is IReadOnlyTree { Parent.Data: PropertyData { Descriptor: CollectionItemDescriptor { Index: { } _index, ComponentType: { } componentType, DisplayName: { } displayName } descriptor } baseObject })
                 {
@@ -81,6 +62,37 @@ namespace Utility.Nodes.Demo
                     else if (_index > 0)
                         return MakeTemplate(item, "NoHeader");
                 }
+
+                // parameter
+                //if (item is ParameterNode { Data: PropertyData { Descriptor: { } } })
+                //{
+                //    return MakeTemplate(item);
+                //}
+                // methods
+                if (item is MethodsNode { Data: { } })
+                {
+                    return MakeTemplate(item, "None");
+                }     
+                if (item is PropertiesNode { Data: { } })
+                {
+                    return MakeTemplate(item, "None");
+                }
+                if (item is PropertyNode { Data: { } })
+                {
+                    return MakeTemplate(item);
+                }
+                if (item is CustomMethodsNode { Data: { } })
+                {
+                    return MakeTemplate(item, "None");
+                }
+                // method
+                if (item is MethodNode { })
+                {
+                    return MakeTemplate(item);
+                    
+                }
+   
+      
                 // other
                 if (item is Node { Data: var data })
                 {
@@ -100,7 +112,7 @@ namespace Utility.Nodes.Demo
             }
             else if (index[1] == 2)
             {
-                return MakeTemplate(item, "ViewModel");
+                return MakeTemplate(item);
 
             }
 
