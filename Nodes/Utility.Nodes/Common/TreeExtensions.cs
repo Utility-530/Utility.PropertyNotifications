@@ -1,5 +1,6 @@
 ﻿namespace Utility.Nodes
 {
+    using MoreLinq;
     using System.Reactive.Disposables;
     using System.Reactive.Linq;
     using Utility.Helpers.NonGeneric;
@@ -45,6 +46,18 @@
             });
         }
 
+        public static IEnumerable<ITree<T>> ToTree<T, K>(this IEnumerable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, K root_id = default(K))
+        {
+
+            foreach (var item in collection.Where(c => EqualityComparer<K>.Default.Equals(parent_id_selector(c), root_id)))
+            {
+                var tree = new Tree<T>(item);
+                yield return (tree);
+                ToTree(collection, id_selector, parent_id_selector, id_selector(item)).ForEach(tree.Add);
+            }
+
+        }
+
         public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, Action<T> funcClear, TR property) where TR : IReadOnlyTree, IEquatable
         {
             return ExploreTree(items, funcAdd, funcRemove, funcClear, property, (TR a) => true);
@@ -69,7 +82,7 @@
                     {
                         if (item is Change { Type: ChangeType.Add, Value: TR value })
                             _ = ExploreTree(items, funcAdd, funcRemove, funcClear, value, func, predicate);
-                        else if (item is Change { Type: ChangeType.Add, Value: TR _value })
+                        else if (item is Change { Type: ChangeType.Remove, Value: TR _value })
                             funcRemove(items, _value);
                         else if (item is Change { Type: ChangeType.Reset })
                             funcClear(items);
