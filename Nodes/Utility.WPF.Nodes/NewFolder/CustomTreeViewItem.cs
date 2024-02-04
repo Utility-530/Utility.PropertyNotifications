@@ -25,12 +25,12 @@ namespace VisualJsonEditor.Test
 
         public CustomTreeViewItem()
         {
-            var textBlock = new ToolTip { Name = "FDgdfg" };
-            var binding = new Binding { RelativeSource = new RelativeSource { Mode = RelativeSourceMode.Self }, Path = new PropertyPath(nameof(System.Windows.Controls.ToolTip.PlacementTarget) + "." + nameof(Header) + "." + nameof(ViewModel.Guid)), Mode = BindingMode.OneWay };
-            textBlock.SetBinding(ContentControl.ContentProperty, binding);
-            ToolTipService.SetInitialShowDelay(textBlock, 100);
-            ToolTipService.SetShowDuration(textBlock, 10000);
-            ToolTip = textBlock;
+            //var textBlock = new ToolTip { Name = "FDgdfg" };
+            //var binding = new Binding { RelativeSource = new RelativeSource { Mode = RelativeSourceMode.Self }, Path = new PropertyPath(nameof(System.Windows.Controls.ToolTip.PlacementTarget) + "." + nameof(Header) + "." + nameof(ViewModel.Guid)), Mode = BindingMode.OneWay };
+            //textBlock.SetBinding(ContentControl.ContentProperty, binding);
+            //ToolTipService.SetInitialShowDelay(textBlock, 100);
+            //ToolTipService.SetShowDuration(textBlock, 10000);
+            //ToolTip = textBlock;
 
 
             var contextMenu = new ContextMenu { };
@@ -66,7 +66,7 @@ namespace VisualJsonEditor.Test
             headerBorder.SetBinding(TreeViewItem.VisibilityProperty, new Binding { Source = Header, Path = new PropertyPath(nameof(ViewModel.Visibility)) });
             //this.SetBinding(TreeViewItem.IsExpandedProperty, new Binding { Source = Header, Path = new PropertyPath(nameof(ViewModel.IsExpanded)), Mode = BindingMode.TwoWay });
 
-            var x = headerBorder.FindVisualChildren<ContentPresenter>().Single();
+            //var x = headerBorder.FindVisualChildren<ContentPresenter>().Single();
             //adornerController = new ButtonAdornerController(x);
             //adornerController.Subscribe(_playSubject);
         }

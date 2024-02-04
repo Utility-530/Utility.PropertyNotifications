@@ -14,7 +14,7 @@ namespace Utility.WPF.Nodes.NewFolder
         {
             var style = Templates["CustomTreeViewItemStyle"] as Style;
             return style;
-            return base.SelectStyle(item, container);
+            //return base.SelectStyle(item, container);
         }
 
 

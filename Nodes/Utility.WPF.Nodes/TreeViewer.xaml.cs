@@ -5,8 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Nodes;
 using Utility.Interfaces.NonGeneric;
-using Utility.WPF.Helpers;
-using System.Collections.Generic;
 using Utility.WPF.Nodes;
 
 namespace Views.Trees
@@ -18,8 +16,8 @@ namespace Views.Trees
         public static readonly DependencyProperty PanelsConverterProperty = DependencyProperty.Register("PanelsConverter", typeof(IValueConverter), typeof(TreeViewer), new PropertyMetadata(Changed));
         public static readonly DependencyProperty DataTemplateSelectorProperty = DependencyProperty.Register("DataTemplateSelector", typeof(DataTemplateSelector), typeof(TreeViewer), new PropertyMetadata(Changed));
         public static readonly DependencyProperty TreeViewBuilderProperty = DependencyProperty.Register("TreeViewBuilder", typeof(ITreeViewBuilder), typeof(TreeViewer), new PropertyMetadata());
-        public static readonly DependencyProperty TreeViewFilterProperty =     DependencyProperty.Register("TreeViewFilter", typeof(ITreeViewFilter), typeof(TreeViewer), new PropertyMetadata());
-        public static readonly DependencyProperty StyleSelectorProperty =            DependencyProperty.Register("StyleSelector", typeof(StyleSelector), typeof(TreeViewer), new PropertyMetadata());
+        public static readonly DependencyProperty TreeViewFilterProperty = DependencyProperty.Register("TreeViewFilter", typeof(ITreeViewFilter), typeof(TreeViewer), new PropertyMetadata());
+        public static readonly DependencyProperty StyleSelectorProperty = DependencyProperty.Register("StyleSelector", typeof(StyleSelector), typeof(TreeViewer), new PropertyMetadata());
 
         private IDisposable disposable;
         private TreeView treeView;
@@ -97,9 +95,9 @@ namespace Views.Trees
 
         #endregion
 
-
         public void Reload()
         {
+            //TreeView.Clear();
             TreeExtensions.Visit(treeView as ItemsControl, a =>
             {
                 var items = a.Items.Cast<TreeViewItem>();

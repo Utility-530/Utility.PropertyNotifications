@@ -8,24 +8,30 @@
 
     <!--<Grid>
         <Grid.RowDefinitions>
-            --><!--<RowDefinition></RowDefinition>
-            <RowDefinition Height="10*"></RowDefinition>--><!--
+            -->
+    <!--<RowDefinition></RowDefinition>
+            <RowDefinition Height="10*"></RowDefinition>-->
+    <!--
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition ></ColumnDefinition>
         </Grid.ColumnDefinitions>-->
 
-   
-            <FrameworkElement.Resources>
-                <ResourceDictionary>
-                    <ResourceDictionary.MergedDictionaries>
-                        <!--<ResourceDictionary Source="pack://application:,,,/Wpf.Ui;component/Styles/Theme/Light.xaml" />
+
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--<ResourceDictionary Source="pack://application:,,,/Wpf.Ui;component/Styles/Theme/Light.xaml" />
                         <ResourceDictionary Source="pack://application:,,,/Wpf.Ui;component/Styles/Wpf.Ui.xaml" />-->
-                        <!--<ResourceDictionary Source="pack://application:,,,/WpfLibrary1;component/Dictionary2.xaml" />-->
-                    </ResourceDictionary.MergedDictionaries>
-                </ResourceDictionary>
-            </FrameworkElement.Resources>
-            <!--<TreeView  Grid.Row="1"></TreeView>-->
-    
+                <!--<ResourceDictionary Source="pack://application:,,,/WpfLibrary1;component/Dictionary2.xaml" />-->
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <!--<TreeView >
+        <TreeView.Style>
+        
+        </TreeView.Style>
+    </TreeView>-->
+
     <!--</Grid>-->
 </UserControl>

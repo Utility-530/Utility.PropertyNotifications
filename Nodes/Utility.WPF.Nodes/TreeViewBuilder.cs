@@ -1,11 +1,10 @@
+using NetFabric.Hyperlinq;
 using System;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Media;
+using Utility.Helpers.NonGeneric;
 using Utility.Nodes;
-using Utility.Trees.Abstractions;
 using Utility.WPF.Nodes;
-using UtilityReactive;
 
 namespace Views.Trees
 {
@@ -17,7 +16,6 @@ namespace Views.Trees
             {
 
                 var treeViewItem = factory.Make();
-
                 treeViewItem.Header = viewModel;
                 treeViewItem.DataContext = viewModel;
                 treeViewItem.ItemContainerStyleSelector = styleSelector;
@@ -34,7 +32,7 @@ namespace Views.Trees
                 itemcollection.Add(treeViewItem);
                 return treeViewItem.Items;
             },
-            (a, b) => a.Remove(new TreeViewItem { Header = b }),
+            (itemCollection, node) => itemCollection.RemoveAt(itemCollection.IndexOf(a=> (a as TreeViewItem)?.Header, node)),
             a => a.Clear(),
             rootViewModel as Node,
             filter.Filter);
