@@ -2,8 +2,8 @@
 
 namespace Utility.Interfaces.NonGeneric
 {
-    public interface IPropertyDescriptor
-    {
-        PropertyDescriptor PropertyDescriptor { get; }
-    }
+    //public interface IPropertyDescriptor
+    //{
+    //    PropertyDescriptor PropertyDescriptor { get; }
+    //}
 }
