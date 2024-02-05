@@ -79,7 +79,7 @@ public class Playback : BaseObject
     }
 
 
-    public void OnNext(ChangeSet changeSet)
+    public void OnNext(Changes.Set changeSet)
     {
         if (changeSet.Any() == false)
             pause();
