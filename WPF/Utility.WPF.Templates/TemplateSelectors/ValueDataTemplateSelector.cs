@@ -9,13 +9,6 @@ using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Templates
 {
-    public partial class ValueTemplates : ResourceDictionary
-    {
-        public ValueTemplates()
-        {
-            //InitializeComponent();
-        }
-    }
 
 
     public class ValueDataTemplateSelector : GenericDataTemplateSelector

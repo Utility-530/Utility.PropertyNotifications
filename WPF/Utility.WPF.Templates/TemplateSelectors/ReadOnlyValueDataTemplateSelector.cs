@@ -4,13 +4,6 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.WPF.Templates
 {
-    public partial class ReadOnlyValueTemplates : ResourceDictionary
-    {
-        public ReadOnlyValueTemplates()
-        {
-            //InitializeComponent();
-        }
-    }
 
 
     public class ReadOnlyValueDataTemplateSelector : GenericDataTemplateSelector
@@ -45,7 +38,7 @@ namespace Utility.WPF.Templates
             {
                 var resourceDictionary = new ResourceDictionary
                 {
-                    Source = new Uri($"/{typeof(ValueTemplates).Namespace};component/{nameof(ValueTemplates)}.xaml", UriKind.RelativeOrAbsolute)
+                    Source = new Uri($"/{typeof(ReadOnlyValueTemplates).Namespace};component/{nameof(ReadOnlyValueTemplates)}.xaml", UriKind.RelativeOrAbsolute)
                 };
                 return resourceDictionary;
             }

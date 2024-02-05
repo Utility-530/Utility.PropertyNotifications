@@ -1,93 +1,115 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    x:Class="Utility.WPF.Templates.ReadOnlyValueTemplates"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-                    xmlns:converter="http://schemas.utility.com/converters" 
                     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
                     xmlns:draw="clr-namespace:System.Drawing;assembly=System.Drawing"
-                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-                    xmlns:panels="http://schemas.utility.com/panels" 
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
                     xmlns:conv="http://schemas.utility.com/converters"
-                    xmlns:tiny="https://github.com/xtremlyred/tiny.toolkits" 
-                    xmlns:controls="http://schemas.utility.com"
-                    xmlns:utl="http://schemas.utility.com/utilitywpf"
-                    x:Class="Utility.WPF.Templates.ReadOnlyValueTemplates">
+                    xmlns:local="clr-namespace:Utility.WPF.Templates"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:ad="http://schemas.utility.com/adorners"
+                    xmlns:bhvrs="http://schemas.utility.com/behaviors" 
+                    xmlns:controls="http://schemas.utility.com">
 
+    <conv:IntToEnumConverter x:Key="IntToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
 
-    <converter:IntToEnumConverter x:Key="IntToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
+    <conv:StringToEnumConverter x:Key="StringToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
 
-    <converter:StringToEnumConverter x:Key="StringToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
-
-
+    <local:VisibilityConverter x:Key="VisibilityConverter" />
 
     <DataTemplate DataType="{x:Type sys:Int32}">
-        <TextBox Text="{Binding Path=Value, Mode=OneWay, StringFormat={}{0:N0}}"></TextBox>
-    </DataTemplate>
-    <DataTemplate x:Key="Number">
-        <TextBox Text="{Binding Path=Value, Mode=OneWay, StringFormat={}{0:N0}}"></TextBox>
+        <TextBlock Text="{Binding Path=Value, Mode=OneWay, StringFormat={}{0:N0}}"></TextBlock>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:Byte}">
-        <TextBox Text="{Binding Path=Value, Mode=OneWay, StringFormat={}{0:N0}}"></TextBox>
+        <TextBlock Text="{Binding Path=Value, Mode=OneWay, StringFormat={}{0:N0}}"></TextBlock>
     </DataTemplate>
-    <!--<DataTemplate DataType="{x:Type sys:Type}">
-        <TextBlock Text="{Binding StringFormat={}{0:N0}}"></TextBlock>
-    </DataTemplate>-->
 
+    <DataTemplate DataType="{x:Type sys:DateTime}">
+        <TextBlock Text="{Binding Path=Value, Mode=OneWay}"></TextBlock>
+    </DataTemplate>
 
-
+    <DataTemplate x:Key="Number">
+        <TextBlock Text="{Binding Path=Value, Mode=OneWay, StringFormat={}{0:N0}}"></TextBlock>
+    </DataTemplate>
 
     <DataTemplate DataType="{x:Type draw:Color}">
-        <!--<materialDesign:PackIcon Kind="{Binding  Converter={StaticResource IntToEnumConverter}}" 
-                                         Width="30"
-                                         Height="30">
-        </materialDesign:PackIcon>-->
-        <Rectangle Fill="{Binding Path=Value, Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"></Rectangle>
+        <Rectangle Fill="{Binding Path=Value, Mode=OneWay, Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"></Rectangle>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type Color}">
-        <!--<materialDesign:PackIcon Kind="{Binding  Converter={StaticResource IntToEnumConverter}}" 
-                                         Width="30"
-                                         Height="30">
-        </materialDesign:PackIcon>-->
-        <Rectangle Fill="{Binding Path=Value, Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"></Rectangle>
+        <Rectangle Fill="{Binding Path=Value,  Mode=OneWay,Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"></Rectangle>
     </DataTemplate>
-
 
     <DataTemplate DataType="{x:Type sys:Boolean}">
         <Grid         MinHeight="30"                                     MinWidth="30">
-            <panels:TransitionPanel CurrentValue="{Binding Path=Value,Mode=OneWay}">
-                <materialDesign:PackIcon Kind="CheckBold"
-                                     MinHeight="30"
-                                     MinWidth="30"
-                                     panels:TransitionPanel.Value="{utl:True}"
-                                     VerticalAlignment="Stretch"
-                                     HorizontalAlignment="Stretch" >
-                </materialDesign:PackIcon>
-                <materialDesign:PackIcon Kind="CloseBold" 
-                                     MinHeight="30"
-                                     panels:TransitionPanel.Value="{utl:False}"
-                                     MinWidth="30"
-                                     VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                </materialDesign:PackIcon>
-            </panels:TransitionPanel>
+            <CheckBox IsChecked="{Binding Path=Value, Mode=OneWay}" IsEnabled="false"/>
         </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:String}">
-        <TextBox Text="{Binding Path=Value, Mode=OneWay }" VerticalContentAlignment="Center" ></TextBox>
+        <TextBlock Text="{Binding Path=Value, Mode=OneWay }" ></TextBlock>
     </DataTemplate>
 
     <DataTemplate x:Key="Enumerable">
-        <ItemsControl ItemsSource="{Binding Value, Mode=OneWay}"></ItemsControl>
+        <!--<ItemsControl ItemsSource="{Binding Value, Mode=OneWay}"></ItemsControl>-->
     </DataTemplate>
-
 
     <DataTemplate DataType="{x:Type sys:Guid}">
-        <controls:GuidBox Guid="{Binding Path=Value}" IsReadOnly="true"></controls:GuidBox>
+        <controls:GuidBox Guid="{Binding Path=Value, Mode=OneWay}" IsEnabled="false" />
+    </DataTemplate>
+
+    <!--<DataTemplate DataType="{x:Type sys:Guid}">
+        <TextBox Text="{Binding Path=Value, Mode=TwoWay, StringFormat={}{0:N0}}"></TextBox>
+    </DataTemplate>-->
+
+    <DataTemplate DataType="{x:Type sys:Double}">
+        <TextBlock Text="{Binding Path=Value, Mode=OneWay, StringFormat={}{0:N0}}"></TextBlock>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type sys:Enum}">
+        <ComboBox IsEnabled="false">
+            <i:Interaction.Behaviors>
+                <bhvrs:EnumComboBehavior  Value="{Binding Value, Mode=OneWay}"/>
+            </i:Interaction.Behaviors>
+        </ComboBox>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Nullable`1[Int32]">
+        <StackPanel>
+            <TextBlock Text="{Binding Path=Value.Value, Mode=OneWay, StringFormat={}{0:N0}}">
+                <i:Interaction.Behaviors>
+                    <ad:NullBehavior ShowCancel="{Binding Value.HasValue, Mode=OneWay}" DefaultValue="0.0"></ad:NullBehavior>
+                </i:Interaction.Behaviors>
+            </TextBlock>
+        </StackPanel>
+    </DataTemplate>
+
+    <DataTemplate x:Key="Nullable`1[Enum]">
+        <ComboBox IsEnabled="false">
+            <i:Interaction.Behaviors>
+                <bhvrs:EnumComboBehavior Enum="{Binding Type, Mode=OneWay}" Value="{Binding Value.Value, Mode=OneWay}"/>
+                <ad:NullBehavior ShowCancel="{Binding Value.HasValue, Mode=OneWay}"></ad:NullBehavior>
+            </i:Interaction.Behaviors>
+        </ComboBox>
     </DataTemplate>
 
 
-    <DataTemplate DataType="{x:Type sys:Enum}">
-        <controls:EnumItemsControl Value="{Binding Path=Value, Mode=OneWay }" ></controls:EnumItemsControl>
+    <DataTemplate x:Key="Nullable`1[Boolean]">
+
+        <Grid         MinHeight="30"                                     MinWidth="30">
+            <CheckBox IsChecked="{Binding Path=Value, Mode=OneWay}" IsThreeState="True" IsEnabled="false"/>
+        </Grid>
+
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="Nullable`1[Double]">
+        <TextBlock Text="{Binding Path=Value.Value, Mode=OneWay, StringFormat={}{0:N0}}">
+            <i:Interaction.Behaviors>
+                <ad:NullBehavior ShowCancel="{Binding Value.HasValue, Mode=OneWay}" DefaultValue="0.0"></ad:NullBehavior>
+            </i:Interaction.Behaviors>
+        </TextBlock>
     </DataTemplate>
 
 

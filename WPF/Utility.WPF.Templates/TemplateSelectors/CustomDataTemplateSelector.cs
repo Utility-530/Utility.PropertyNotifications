@@ -5,12 +5,6 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.WPF.Templates
 {
-    public partial class Templates : ResourceDictionary
-    {
-        public Templates()
-        {
-        }
-    }
 
 
     public class CustomDataTemplateSelector : DataTemplateSelector
@@ -48,7 +42,6 @@ namespace Utility.WPF.Templates
 
                 return (readOnlyValueDataTemplateSelector ??= new ReadOnlyValueDataTemplateSelector()).SelectTemplate(item, container);
             }
-
 
 
             var type = item?.GetType();
