@@ -96,13 +96,12 @@ namespace Utility.Nodes.Reflections
         private readonly SQLiteConnection connection;
         private readonly Task initialisationTask;
 
-        public GuidRepository(string? dbDirectory = default)
+        private GuidRepository(string? dbDirectory = default)
         {
             if (dbDirectory != default)
                 Directory.CreateDirectory(dbDirectory);
             connection = new SQLiteConnection(Path.Combine(dbDirectory ?? string.Empty, "data" + "." + "sqlite"));
             connection.CreateTable<Table>();
-
         }
 
         public Task<IReadOnlyCollection<Guid>> Find(Guid parentGuid)
@@ -117,7 +116,7 @@ namespace Utility.Nodes.Reflections
             return Task.FromResult((IReadOnlyCollection<Guid>)childKeys);
         }
 
-        public Task<Guid> Find(Guid parentGuid, string? localName)
+        public Task<Guid> Find(Guid parentGuid, string localName)
         {
 
             var tables = connection.Query<Table>($"Select * from 'Table' where Parent = '{parentGuid}' AND Name = '{localName}'");
@@ -145,6 +144,6 @@ namespace Utility.Nodes.Reflections
             }
         }
 
-        public static GuidRepository Instance { get; } = new();
+        public static GuidRepository Instance { get; } = new("../../../Data");
     }
 }

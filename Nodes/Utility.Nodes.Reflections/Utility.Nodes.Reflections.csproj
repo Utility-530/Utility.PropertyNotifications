@@ -9,7 +9,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Infrastructure\Utility.ViewModels\Utility.ViewModels.csproj" />
-		<ProjectReference Include="..\..\Meta\Utility.Objects\Utility.Objects.csproj" />
 		<ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
 		<ProjectReference Include="..\Utility.Nodes\Utility.Nodes.csproj" />
 	</ItemGroup>

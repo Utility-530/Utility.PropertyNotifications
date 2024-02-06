@@ -31,7 +31,7 @@ namespace Utility.Nodes.Reflections
         private readonly SQLiteConnection connection;
         private readonly Task initialisationTask;
 
-        public ValueRepository(string? dbDirectory = default)
+        private ValueRepository(string? dbDirectory = default)
         {
             if (dbDirectory != default)
                 Directory.CreateDirectory(dbDirectory);
@@ -188,6 +188,6 @@ namespace Utility.Nodes.Reflections
         }
 
 
-        public static ValueRepository Instance { get; } = new();
+        public static ValueRepository Instance { get; } = new("../../../Data");
     }
 }
