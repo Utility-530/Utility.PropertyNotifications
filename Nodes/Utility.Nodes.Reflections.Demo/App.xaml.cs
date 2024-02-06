@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
 using Utility.Collections;
-using Utility.Objects;
+using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Nodes.NewFolder;
 using Views.Trees;
@@ -58,16 +58,16 @@ namespace Utility.Nodes.Demo
     {
         public bool Filter(object item)
         {
-            if (item is MethodNode { Data: CommandValue { Instance: { } instance, MethodInfo.Name: { } name } })
+            if (item is IReadOnlyTree { Data: IMethodDescriptor { Type:{ } type } })
             {
-                if (instance.GetType().IsArray)
+                if (type.IsArray)
                 {
                     return false;
                 }
             }
 
 
-            if (item is IReadOnlyTree { Data: PropertyData { Descriptor: { ComponentType: { } componentType, DisplayName: { } displayName } descriptor } propertyNode })
+            if (item is IReadOnlyTree { Data: PropertyDescriptor { ComponentType: { } componentType, Name: { } displayName } propertyNode })
             {
                 if (componentType.Name == "Array")
                 {

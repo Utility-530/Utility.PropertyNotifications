@@ -1,8 +1,10 @@
 ﻿using Repository;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using Utility.Enums;
 using Utility.Nodes.Demo;
 using Utility.ViewModels;
 
@@ -10,13 +12,14 @@ namespace Utility.Nodes.Reflections.Demo.Infrastructure
 {
     public class ViewModelStore
     {
-        MiniStore miniStore = new MiniStore("viewmodels.sqlite");
+        MiniStore miniStore = new MiniStore("../../../Data/viewmodels.sqlite");
 
         Queue<ViewModel> viewModels = new();
         ObjectsComparer.Comparer<ViewModel> comparer = new();
 
         private ViewModelStore()
         {
+            Directory.CreateDirectory("../../../Data");
             CustomDataTemplateSelector.Instance
                .OfType<string>()
                .Where(a => a.Equals("save", StringComparison.InvariantCultureIgnoreCase))

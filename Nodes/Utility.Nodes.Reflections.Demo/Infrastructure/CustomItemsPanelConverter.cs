@@ -3,7 +3,6 @@ using System.Globalization;
 using Utility.Enums;
 using Utility.Models;
 using Utility.Nodes.Reflections.Demo.Infrastructure;
-using Utility.Objects;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
 using VisualJsonEditor.Test.Infrastructure;
@@ -36,12 +35,13 @@ namespace Utility.Nodes.Demo
             //        });
             //    }
             //}
-            if (value is IReadOnlyTree { Key: Key { Guid: { } guid } key, Data: PropertyData { Descriptor: { ComponentType: { } _, DisplayName: { } _ } _ } _baseObject })
+            if (value is IReadOnlyTree { Key: Key { Guid: { } guid } key, Parent.Data: { } descriptor })
             {
-                if (_baseObject.Descriptor is CollectionItemDescriptor { Index: { } index } collectionItemDescriptor)
+                if (descriptor is CollectionItemDescriptor { Index: { } index } collectionItemDescriptor)
                 {
-                    return convert(new ItemsPanel                    {
-                       
+                    return convert(new ItemsPanel
+                    {
+
                         Type = Arrangement.Stacked,
                         Orientation = System.Windows.Controls.Orientation.Horizontal,
                     });

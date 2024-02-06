@@ -7,12 +7,6 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="bin\Debug\net7.0-windows\data.sqlite" />
-    <None Include="bin\Debug\net7.0-windows\value_data.sqlite" />
-    <None Include="bin\Debug\net7.0-windows\viewmodels.sqlite" />
-  </ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Data.Sqlite" Version="8.0.1" />
 		<PackageReference Include="ModernWpfUI" Version="0.9.6" />
@@ -21,7 +15,6 @@
 		<ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
 		<ProjectReference Include="..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.ViewModels\Utility.ViewModels.csproj" />
-		<ProjectReference Include="..\..\Meta\Utility.Objects\Utility.Objects.csproj" />
 		<ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
 		<ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
 		<ProjectReference Include="..\..\Trees\Utility.Trees.Abstractions\Utility.Trees.Abstractions.csproj" />
@@ -31,6 +24,9 @@
 		<ProjectReference Include="..\Utility.Nodes.Reflections\Utility.Nodes.Reflections.csproj" />
 		<ProjectReference Include="..\Utility.Nodes\Utility.Nodes.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Nodes\Utility.WPF.Nodes.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="bin\Debug\" />
 	</ItemGroup>
 	
 	

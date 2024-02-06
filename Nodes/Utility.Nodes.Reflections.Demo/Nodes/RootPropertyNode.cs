@@ -1,24 +1,22 @@
-﻿using Fasterflect;
-using System;
-using System.Reactive.Threading.Tasks;
+﻿using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
-using System.Windows.Controls;
-using TreeCollections;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Nodes.Demo.Infrastructure;
+using Utility.Nodes.Reflections;
 using Utility.Nodes.Reflections.Demo.Infrastructure;
-using Utility.Objects;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
 using Utility.ViewModels;
 
 namespace Utility.Nodes.Demo
 {
-    public class LedModelRootPropertyNode : RootPropertyNode
+    public class LedModelRootPropertyNode : ReflectionNode
     {
         Guid guid = Guid.Parse("2b581d2f-506d-439a-9822-229d831f73b0");
-        public LedModelRootPropertyNode() : base(Model)
+        public LedModelRootPropertyNode() : base(new RootDescriptor(Model))
         {
         }
 
@@ -28,10 +26,10 @@ namespace Utility.Nodes.Demo
     }
 
 
-    public class ModelRootPropertyNode : RootPropertyNode
+    public class ModelRootPropertyNode : ReflectionNode
     {
         Guid guid = Guid.Parse("c25b9ff5-54d2-4a73-9509-471d7c307fb0");
-        public ModelRootPropertyNode() : base(Model)
+        public ModelRootPropertyNode() : base(new RootDescriptor(Model))
         {
         }
 
@@ -40,7 +38,7 @@ namespace Utility.Nodes.Demo
         static Model Model { get; } = new();
     }
 
-    public class SelectionNode : PropertyNode
+    public class SelectionNode : ReflectionNode
     {
         Guid guid = Guid.Parse("46f59dbd-680e-4c7d-ab35-28c1ba8cdcd3");
         bool flag;
@@ -53,8 +51,8 @@ namespace Utility.Nodes.Demo
                     var viewModel = ViewModelStore.Instance.Get(guid);
                     ViewModelStore.Instance.Save(viewModel);
                     if (string.IsNullOrEmpty(viewModel.Name))
-                        viewModel.Name = ((data as IReadOnlyTree)?.Data as PropertyData)?.Name;
-                    var propertyData = new PropertyData(new RootDescriptor(viewModel), viewModel) { };
+                        viewModel.Name = ((data as IReadOnlyTree)?.Data as IMemberDescriptor)?.Name;
+                    var propertyData = new RootDescriptor(viewModel) { };
           
                     this.Data = propertyData;
                     flag = false;
@@ -102,23 +100,25 @@ namespace Utility.Nodes.Demo
         {
         }
 
-        public override async Task<object?> GetChildren()
+        public override IObservable<object?> GetChildren()
         {
             flag = true;
-            return await Task.Run<object?>(() =>
+            return Observable.Create<object>(observer=>
             {
-                return new int[] { 0, 1, 2, 3 };
+                foreach (var x in new int[] { 0, 1, 2, 3 })
+                    observer.OnNext(x);
+                return Disposable.Empty;
             });
         }
 
         public override Task<IReadOnlyTree> ToNode(object value)
         {
             if (value is 0 or 1)
-                return Task.FromResult<IReadOnlyTree>(new ModelRootPropertyNode());
+                return Task.FromResult<IReadOnlyTree>(new ModelRootPropertyNode() { Parent = this });
             else if (value is 2)
-                return Task.FromResult<IReadOnlyTree>(new SelectionNode());
+                return Task.FromResult<IReadOnlyTree>(new SelectionNode() { Parent = this });
             else if (value is 3)
-                return Task.FromResult<IReadOnlyTree>(new CustomMethodsNode());
+                return Task.FromResult<IReadOnlyTree>(new CustomMethodsNode() { Parent = this });
 
             throw new Exception("2r 11 4333");
         }
@@ -132,21 +132,23 @@ namespace Utility.Nodes.Demo
     public class CustomMethodsNode : Node
     {
         bool flag;
-        public override async Task<object?> GetChildren()
+        public override IObservable<object?> GetChildren()
         {
             flag = true;
-            return await Task.Run<object?>(() =>
+            return Observable.Create<object>(observer =>
             {
-                return new int[] { 0, 1 };
+                foreach (var x in new int[] { 0, 1 })
+                    observer.OnNext(x);
+                return Disposable.Empty;
             });
         }
 
         public override Task<IReadOnlyTree> ToNode(object value)
         {
             if (value is 0)
-                return Task.FromResult<IReadOnlyTree>(new RefreshNode());
+                return Task.FromResult<IReadOnlyTree>(new RefreshNode() { Parent = this });
             else if (value is 1)
-                return Task.FromResult<IReadOnlyTree>(new SaveNode());
+                return Task.FromResult<IReadOnlyTree>(new SaveNode() { Parent = this });
 
 
             throw new Exception("2r 11 4333");

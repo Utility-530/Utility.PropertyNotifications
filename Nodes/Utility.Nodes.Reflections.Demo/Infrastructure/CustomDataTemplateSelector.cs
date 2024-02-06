@@ -3,7 +3,6 @@ using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.Objects;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
@@ -24,7 +23,7 @@ namespace Utility.Nodes.Demo
             if (item is not ITree { Depth: { } depth, Index: { } index } tree)
                 throw new System.Exception("f 2233");
 
-            if (depth == 0)
+            if (depth < 1)
             {
                 if (item is Node { Data: var data })
                 {
@@ -33,29 +32,17 @@ namespace Utility.Nodes.Demo
             }
             if (index[1] == 0)
             {
-
-
-                if (item is ITree { Data: ObjectValue { } })
+                if (item is CustomMethodsNode { Data: { } })
                 {
                     return MakeTemplate(item, "None");
                 }
-                // root
-                if (item is IReadOnlyTree { Data: PropertyData { Descriptor: RootDescriptor { }, } })
-                {
-                    return MakeHeaderTemplate(item, depth);
-                }
-                // default
-                if (item is IReadOnlyTree { Data: ObjectValue { Descriptor: { } } })
-                {
-                    return MakeHeaderTemplate(item, depth);
-                }
-                // collection item
-                if (item is ITree { Data: PropertyData { Descriptor: CollectionItemDescriptor { } } })
+
+                if (item is IReadOnlyTree { Parent.Data: CollectionItemDescriptor { } _ })
                 {
                     return MakeTemplate(item, "None");
                 }
-                // inner collection item descriptor
-                if (item is IReadOnlyTree { Parent.Data: PropertyData { Descriptor: CollectionItemDescriptor { Index: { } _index, ComponentType: { } componentType, DisplayName: { } displayName } descriptor } baseObject })
+
+                if (item is IReadOnlyTree { Parent.Parent.Data: CollectionItemDescriptor { Index: { } _index } _ })
                 {
                     if (_index == 0)
                         return MakeTemplate(item, "TopHeader");
@@ -63,38 +50,58 @@ namespace Utility.Nodes.Demo
                         return MakeTemplate(item, "NoHeader");
                 }
 
+
+                if (item is ITree { Data: ObjectValue { } })
+                {
+                    return MakeTemplate(item, "None");
+                }
+                // root
+                if (item is IReadOnlyTree { Data: RootDescriptor { } })
+                {
+                    //return MakeHeaderTemplate(item, depth);
+                    return MakeTemplate(item, "None");
+                }
+                // default
+                if (item is IReadOnlyTree { Data: ObjectValue { Descriptor: { } } })
+                {
+                    return MakeHeaderTemplate(item, depth);
+                }
+                // collection item
+                if (item is ITree { Data: ICollectionItemDescriptor { } })
+                {
+                    return MakeTemplate(item, "None");
+                }
+                // inner collection item descriptor
+        
                 // parameter
                 //if (item is ParameterNode { Data: PropertyData { Descriptor: { } } })
                 //{
                 //    return MakeTemplate(item);
                 //}
                 // methods
-                if (item is MethodsNode { Data: { } })
-                {
-                    return MakeTemplate(item, "None");
-                }     
-                if (item is PropertiesNode { Data: { } })
+                if (item is IReadOnlyTree { Data: IMethodsDescriptor { } })
                 {
                     return MakeTemplate(item, "None");
                 }
-                if (item is PropertyNode { Data: { } })
+                if (item is IReadOnlyTree { Data: IPropertiesDescriptor { } })
                 {
-                    return MakeTemplate(item);
-                }
-                if (item is CustomMethodsNode { Data: { } })
-                {
-                    return MakeTemplate(item, "None");
+                    return MakeHeaderTemplate(item, depth);
                 }
                 // method
-                if (item is MethodNode { })
+                if (item is IReadOnlyTree { Data: IMethodDescriptor { } })
                 {
-                    return MakeTemplate(item);
-                    
+                    return MakeTemplate(item, "Method");
                 }
-   
-      
+
+                if (item is IReadOnlyTree { Data: IMemberDescriptor { IsValueOrStringProperty: { } isValueOrString } })
+                {
+                    if (isValueOrString)
+                        return MakeTemplate(item);
+                    else
+                        return MakeTemplate(item, "OnlyHeader");
+                }
                 // other
-                if (item is Node { Data: var data })
+                if (item is IReadOnlyTree { Data: var data })
                 {
                     return MakeTemplate(item);
                 }
@@ -130,7 +137,7 @@ namespace Utility.Nodes.Demo
                     return MakeTemplate(item, "None");
                 }
             }
-            else if (index[1] > 3)
+            else if (index[2] > 3)
             {
                 return MakeTemplate(item);
             }
@@ -162,16 +169,16 @@ namespace Utility.Nodes.Demo
                     FontSize = 18 - count * 0.5
                 };
                 textBlock.SetBinding(TextBlock.TextProperty, Binding(item));
-              
+
                 return textBlock;
             });
 
             static Binding Binding(object item)
             {
-                return new(nameof(PropertyData.Name))
+                return new(nameof(IMemberDescriptor.Name))
                 {
                     Converter = Utility.WPF.Converters.LambdaConverter.HumanizerConverter,
-                    Path = new PropertyPath($"{nameof(Node.Data)}.{nameof(PropertyData.Name)}"),
+                    Path = new PropertyPath($"{nameof(Node.Data)}.{nameof(IMemberDescriptor.Name)}"),
                     Source = item
                 };
             }
