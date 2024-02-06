@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using Utility.Changes;
 using Utility.Helpers;
 using Utility.Interfaces.Generic;
+using Utility.Nodes.Reflections;
 using Utility.PropertyNotifications;
 
 
@@ -60,7 +61,7 @@ namespace Utility.PropertyDescriptors
         object Interfaces.NonGeneric.IValue.Value => Value;
     }
 
-    public abstract record PropertyDescriptor(System.ComponentModel.PropertyDescriptor Descriptor, object Instance) : BaseDescriptor(Descriptor.PropertyType)
+    public abstract record PropertyDescriptor(System.ComponentModel.PropertyDescriptor Descriptor, object Instance) : MemberDescriptor(Descriptor.PropertyType)
     {
 
         public override System.IObservable<Change<IMemberDescriptor>> GetChildren()
@@ -68,10 +69,19 @@ namespace Utility.PropertyDescriptors
             if (Descriptor.GetValue(Instance) is not { } inst)
                 return Observable.Empty<Change<IMemberDescriptor>>();
 
-            return Observable.Create<Change<IMemberDescriptor>>(observer =>
+            return Observable.Create<Change<IMemberDescriptor>>(async observer =>
             {
-                observer.OnNext(new(new PropertiesDescriptor(Descriptor, inst), Changes.Type.Add));
-                observer.OnNext(new(new MethodsDescriptor(Descriptor, inst), Changes.Type.Add));
+                var propertiesDescriptor = new PropertiesDescriptor(Descriptor, inst);
+                var pguid = await GuidRepository.Instance.Find(this.Guid, propertiesDescriptor.Name);
+                observer.OnNext(new(propertiesDescriptor with { Guid = pguid }, Changes.Type.Add));
+
+                var collectionDescriptor = new CollectionDescriptor(Descriptor, inst);
+                var cguid = await GuidRepository.Instance.Find(this.Guid, collectionDescriptor.Name);
+                observer.OnNext(new(collectionDescriptor with { Guid = cguid }, Changes.Type.Add));
+
+                var methodsDescriptor = new MethodsDescriptor(Descriptor, inst);
+                var mguid = await GuidRepository.Instance.Find(this.Guid, methodsDescriptor.Name);
+                observer.OnNext(new(methodsDescriptor with { Guid = mguid }, Changes.Type.Add));
                 return Disposable.Empty;
             });
         }
@@ -89,7 +99,6 @@ namespace Utility.PropertyDescriptors
                     ? null
                     : Descriptor.Category;
 
-
         public override object? GetValue()
         {
             return Descriptor.GetValue(Instance);
@@ -100,26 +109,17 @@ namespace Utility.PropertyDescriptors
             Descriptor.SetValue(value, Instance);
         }
 
-
-
-
         // collection
-
-
         public virtual int CollectionCount => Instance is IEnumerable enumerable ? enumerable.Cast<object>().Count() : 0;
-
-
-
-        //public virtual TypeConverter Converter => Descriptor.Converter;
-
-
 
 
     }
 
 
-    public abstract record BaseDescriptor(System.Type Type) : NotifyProperty, IMemberDescriptor
+    public abstract record MemberDescriptor(System.Type Type) : NotifyProperty, IMemberDescriptor
     {
+        public Guid Guid { get; set; }
+
         public abstract string? Name { get; }
 
         public abstract bool IsReadOnly { get; }
@@ -147,11 +147,9 @@ namespace Utility.PropertyDescriptors
             });
         }
 
-
         public abstract object GetValue();
 
         public abstract void SetValue(object value);
-
 
         public bool IsCollection => Type != null && Type != typeof(string) && typeof(IEnumerable).IsAssignableFrom(Type);
 
@@ -164,6 +162,16 @@ namespace Utility.PropertyDescriptors
         public bool IsValueType => Type?.IsValueType == true;
 
         public virtual bool IsCollectionItemValueType => CollectionItemPropertyType != null && CollectionItemPropertyType.IsValueType;
+
+        public virtual bool Equals(MemberDescriptor? other)
+        {
+            return this.Guid.Equals(other?.Guid);
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Guid.GetHashCode();
+        }
     }
 }
 

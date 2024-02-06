@@ -4,31 +4,30 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyDescriptors
 {
-    public record CollectionItemDescriptor : PropertyDescriptor, ICollectionItemDescriptor, IEquatable
+    public partial record CollectionItemDescriptor : PropertyDescriptor, ICollectionItemDescriptor, IEquatable
     {
-        private readonly System.Type propertyType;
-        private readonly System.Type componentType;
+        private readonly Type propertyType;
+        private readonly Type componentType;
 
-        public CollectionItemDescriptor(object item, int index, System.Type componentType) : base(new RootDescriptor(item))
+        public CollectionItemDescriptor(object item, int index, Type componentType) : base(new RootDescriptor(item))
         {
             Item = item;
-            this.propertyType = item.GetType();
-            this.Index = index;
+            propertyType = item.GetType();
+            Index = index;
             this.componentType = componentType;
-        } 
+        }
 
         public object Item { get; set; }
 
         public int Index { get; }
 
-
         public override bool IsReadOnly => false;
 
-        public override string? Name => propertyType.Name + $" [{Index}]";
+        public override string? Name => propertyType.Name;
 
         public override string Category => throw new NotImplementedException();
 
-        public override System.Type ComponentType => componentType;
+        public override Type ComponentType => componentType;
 
         public override bool IsValueOrStringProperty => propertyType.IsValueOrStringProperty();
 
@@ -49,7 +48,8 @@ namespace Utility.PropertyDescriptors
         }
 
 
-        public static int ToIndex(string name) => int.Parse(Regex.Matches(name, @"\[(\d*)\]").First().Groups[1].Value);
+        public static int ToIndex(string name) => int.Parse(MyRegex().Matches(name).First().Groups[1].Value);
+        public static string FromIndex(string name, int index) => name + $" [{index}]";
 
         public bool Equals(IEquatable? other)
         {
@@ -58,6 +58,8 @@ namespace Utility.PropertyDescriptors
             return false;
         }
 
+        [GeneratedRegex("\\[(\\d*)\\]")]
+        private static partial Regex MyRegex();
     }
 }
 

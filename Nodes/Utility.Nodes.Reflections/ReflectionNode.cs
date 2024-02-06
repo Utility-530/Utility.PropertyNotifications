@@ -2,7 +2,6 @@
 using Utility.Collections;
 using Utility.Models;
 using Utility.PropertyDescriptors;
-using Utility.PropertyNotifications;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Reflections
@@ -23,10 +22,7 @@ namespace Utility.Nodes.Reflections
 
         public override object Data
         {
-            get
-            {
-                return data;
-            }
+            get => data;
             set => data = value as IMemberDescriptor;
         }
 
@@ -38,59 +34,51 @@ namespace Utility.Nodes.Reflections
             //    return true;
 
             items.Clear();
-            if (this.Key is Key { Guid: { } guid })
-            {
-                data
-                   .GetChildren()
-                   .Subscribe(async a =>
+            data
+               .GetChildren()
+               .Subscribe(async a =>
+               {
+                   switch (a.Type)
                    {
-                       switch (a.Type)
-                       {
-                           case Changes.Type.Add:
+                       case Changes.Type.Add:
+                           {
+                               if (a.Value is not { } desc)
                                {
-                                   if (a.Value is not { } desc)
-                                   {
-                                       throw new Exception(" wrwe334 33");
-                                   }
-                                   else if (desc.Type == data.Type)
-                                   { 
-                                       var node = await ToNode(desc);
-                                       items.Add(node);
-                                   }
-                                   else
-                                   {
-                                       //var conversion = ObjectConverter.ToValue(inst, desc);
-                                       var node = await ToNode(desc);
-                                       items.Add(node);
-                                   }
-                                   break;
+                                   throw new Exception(" wrwe334 33");
                                }
-                           case Changes.Type.Remove:
+                               else if (desc.Type == data.Type)
                                {
+                                   var node = await ToNode(desc);
+                                   items.Add(node);
+                               }
+                               else
+                               {
+                                   //var conversion = ObjectConverter.ToValue(inst, desc);
+                                   var node = await ToNode(desc);
+                                   items.Add(node);
+                               }
+                               break;
+                           }
+                       case Changes.Type.Remove:
+                           {
+                               items.RemoveOne(e => (e as IReadOnlyTree)?.Data.Equals(a.Value) == true);
+                               break;
+                           }
+                       case Changes.Type.Reset:
+                           {
+                               items.Clear();
+                               break;
+                           }
+                   }
+               },
+            e =>
+            {
+            },
+            () =>
+            {
+                items.Complete();
+            });
 
-                                   var _guid = await GuidRepository.Instance.Find(guid, a.Value.Name);
-                                   var key = new Key(_guid, a.Value.Name, a.Value.Type);
-                                   items.RemoveOne(a => (a as IReadOnlyTree)?.Key.Equals(key) == true);
-                                   break;
-                               }
-                           case Changes.Type.Reset:
-                               {
-                                   items.Clear();
-                                   break;
-                               }
-                       }
-                   },
-                e =>
-                {
-                },
-                () =>
-                {
-                    items.Complete();
-                });
-
-            }
-            else
-                throw new Exception("DFs 33312");
             return true;
         }
 
@@ -114,52 +102,15 @@ namespace Utility.Nodes.Reflections
 
         public override async Task<IReadOnlyTree> ToNode(object value)
         {
-            if (value is IMemberDescriptor { Name: string name } && this.Key is Key { Guid: { } guid })
+            if (value is IMemberDescriptor { Name: string name } descriptor)
             {
 
-                var _guid = await GuidRepository.Instance.Find(guid, name);
-                var key = new Key(_guid, name, null);
-                if (value is MethodsDescriptor { } methodsData)
-                {
-                    return new ReflectionNode(methodsData) { Key = key, Parent = this };
-                }
-                else if (value is MethodDescriptor methodData)
-                {
-                    return new ReflectionNode(methodData) { Key = key, Parent = this };
-                }
-                else if (value is PropertiesDescriptor { } _propertyData)
-                {
-                    var node = new ReflectionNode(_propertyData) { Key = key, Parent = this };
-                    return node;
-                }
-                else if (value is ParameterDescriptor { } parameterDescriptor)
-                {
-                    var node = new ReflectionNode(parameterDescriptor) { Key = key, Parent = this };
-                    return node;
-                }
-                else if (value is CollectionItemDescriptor { } ciDescriptor)
-                {
-                    var node = new ReflectionNode(ciDescriptor) { Key = key, Parent = this };
-                    return node;
-                }
-                else if (value is PropertyDescriptor { } propertyData)
-                {
-                    var node = new ReflectionNode(propertyData) { Key = key, Parent = this };
-                    ValueRepository.Instance.Register(_guid, propertyData as INotifyPropertyCalled);
-                    ValueRepository.Instance.Register(_guid, propertyData as INotifyPropertyReceived);
-                    return node;
-                }
-                else
-                {
-                    throw new Exception("34422 2!pod");
-                }
+                return new ReflectionNode(descriptor) { Parent = this };
             }
             else
             {
                 throw new Exception("32 2!pod");
             }
         }
-
-
     }
 }

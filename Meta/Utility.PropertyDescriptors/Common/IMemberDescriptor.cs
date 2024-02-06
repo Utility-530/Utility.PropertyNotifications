@@ -18,6 +18,7 @@ namespace Utility.PropertyDescriptors
 
     public interface IMemberDescriptor: IIsReadOnly, IType
     {
+        Guid Guid { get;  }
         string? Name { get; }
         bool IsReadOnly { get; }
         string Category { get; }

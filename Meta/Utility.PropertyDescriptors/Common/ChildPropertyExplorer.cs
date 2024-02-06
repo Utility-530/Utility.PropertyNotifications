@@ -1,15 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Utility.Changes;
-using Utility.Helpers;
 using Utility.Helpers.Ex;
-using Utility.Helpers.NonGeneric;
-using Utility.Models;
+using Utility.Nodes.Reflections;
 using Utility.Observables.NonGeneric;
+using Utility.PropertyNotifications;
 using Descriptor = System.ComponentModel.PropertyDescriptor;
+using Utility.Helpers;
 
 namespace Utility.PropertyDescriptors
 {
@@ -19,144 +20,122 @@ namespace Utility.PropertyDescriptors
 
     public partial class ChildPropertyExplorer
     {
-        public static IObservable<Change<IMemberDescriptor>> Explore(object Instance, IMemberDescriptor descriptor)
+        public static IObservable<Change<IMemberDescriptor>> Explore(object Instance, IMemberDescriptor memberDescriptor)
         {
 
             var descriptors = TypeDescriptor.GetProperties(Instance);//  descriptor.GetChildProperties().Cast<Descriptor>().ToArray();
-            int count = descriptors.Count + Count(Instance);
-            int i = 0;
+            int count = descriptors.Count;
+
             CompositeDisposable composite = new();
 
-            return Observable.Create<Change<IMemberDescriptor>>(observer =>
+            return Observable.Create<Change<IMemberDescriptor>>(async observer =>
               {
-                  if (count == 0)
+                  if (count != 0)
                   {
-                      return composite;
-                      //observer.OnNext(new ChildrenResponse());
+                      foreach (Descriptor descriptor in descriptors)
+                      {
+                          var _guid = await GuidRepository.Instance.Find(memberDescriptor.Guid, descriptor.Name);
+                          var value = ObjectConverter.ToValue(Instance, descriptor);
+                          value.Guid = _guid;
+                          ValueRepository.Instance.Register(_guid, value as INotifyPropertyCalled);
+                          ValueRepository.Instance.Register(_guid, value as INotifyPropertyReceived);
+                          observer.OnNext(new Change<IMemberDescriptor>(value, Changes.Type.Add));
+                      }
                   }
-                  foreach (Descriptor descriptor in descriptors)
-                  {
-                      observer.OnNext(new Change<IMemberDescriptor>(ObjectConverter.ToValue(Instance, descriptor), Changes.Type.Add));
-                  }
-                  SubscribeToCollectionItemDescriptors(observer)
-                  .DisposeWith(composite);
                   return composite;
               });
+        }
 
-            IDisposable SubscribeToCollectionItemDescriptors(IObserver<Change<IMemberDescriptor>> obs)
+        public static IObservable<Change<IMemberDescriptor>> CollectionItemDescriptors(object data, IMemberDescriptor memberDescriptor)
+        {
+            List<CollectionItemDescriptor> descriptors = new();
+            return Observable.Create<Change<IMemberDescriptor>>(async observer =>
             {
-                return
-                    CollectionItemDescriptors(Instance)
-                    .Subscribe(descriptor =>
-                    {
-                        if (descriptor.Value == null)
-                        {
-                            OnChange(descriptor, default);
-                            return;
-                        }
-                        OnChange(descriptor, true);
-                    },
-                    () =>
-                    {
-                        //observer.OnCompleted();
-                    });
-
-                void OnChange(Change<CollectionItemDescriptor> change, bool include)
+                int i = 0;
+                if (data is not IEnumerable enumerable || data is string s || data.GetType() is not System.Type _type || _type.GetCollectionElementType() is not System.Type elementType)
                 {
+                    return Disposer.Empty; ;
+                }             
 
-                    if (change.Type == Changes.Type.Add)
+                var tables = await GuidRepository.Instance.Select(memberDescriptor.Guid, elementType.Name);
+
+                foreach (var item in enumerable)
+                {
+                    var _guid = await GuidRepository.Instance.Find(memberDescriptor.Guid, item.GetType().Name, i);
+
+                    if (tables.SingleOrDefault(a => a.Guid == _guid) is { Removed: { } removed } table)
                     {
-                        FromCollectionDescriptor(change.Value)
-                        .Subscribe(p =>
-                        {
-                            i++;
-                            obs.OnNext(p);
-                            if (count == i)
-                            {
-                                if (Instance is not INotifyCollectionChanged)
-                                    obs.OnCompleted();
-                            }
-                        })
-                        .DisposeWith(composite);
 
                     }
-                    else if (change.Type == Changes.Type.Remove)
-                        obs.OnNext(new Change<IMemberDescriptor>(change.Value, Changes.Type.Remove));
-
-                    else if (change.Type == Changes.Type.Reset)
-                        obs.OnNext(new Change<IMemberDescriptor>(default, Changes.Type.Reset));
-                }
-
-                IObservable<Change<IMemberDescriptor>> FromCollectionDescriptor(CollectionItemDescriptor descriptor)
-                {
-                    return Observable.Return(new Change<IMemberDescriptor>(descriptor, Changes.Type.Add));
-                }
-
-                IObservable<Change<CollectionItemDescriptor>> CollectionItemDescriptors(object data)
-                {
-                    return Observable.Create<Change<CollectionItemDescriptor>>(observer =>
+                    else
                     {
-                        int i = 0;
-                        if (data is IEnumerable enumerable && data is not string s)
-                            foreach (var item in enumerable)
-                            {
-                                Next(observer, item, data.GetType(), Changes.Type.Add, i++);
-                            }
+                        Next(observer, item, elementType, Changes.Type.Add, i++);
+                    }
+                }
 
-
-                        if (data is INotifyCollectionChanged collectionChanged)
+                foreach (var table in tables)
+                {
+                    if (table.Removed is not { } removed && descriptors.SingleOrDefault(a => a.Index == table._Index) is not { } x)
+                    {
+                        if (elementType.IsValueType || elementType.GetConstructor(System.Type.EmptyTypes) != null)
                         {
-                            collectionChanged.SelectChanges()
-                            .Subscribe(a =>
-                            {
-                                switch (a.Action)
-                                {
-                                    case NotifyCollectionChangedAction.Add:
-                                        {
-                                            foreach (var item in a.NewItems)
-                                                Next(observer, item, data.GetType(), Changes.Type.Add, i++);
-                                            break;
-                                        }
-                                    case NotifyCollectionChangedAction.Remove:
-                                        foreach (var item in a.OldItems)
-                                        {
-                                            --i;
-                                            var descriptor = new CollectionItemDescriptor(item, a.OldStartingIndex, data.GetType());
-                                            observer.OnNext(new(descriptor, Changes.Type.Remove));
-                                        }
-                                        break;
-                                    case NotifyCollectionChangedAction.Reset:
-                                        i = 0;
-                                        observer.OnNext(new(null, Changes.Type.Reset));
-                                        break;
-                                }
-                            });
+                            var item = Activator.CreateInstance(elementType);
+                            Next(observer, item, elementType, Changes.Type.Add, table._Index.Value);
                         }
                         else
                         {
-                            //observer.OnCompleted();
+                            throw new Exception("s;)dfsd979797");
                         }
-                        return Disposer.Empty;
-                    });
-                    static void Next(IObserver<Change<CollectionItemDescriptor>> observer, object item, System.Type componentType, Changes.Type changeType, int i)
-                    {
-                        var descriptor = new CollectionItemDescriptor(item, i, componentType);
-                        //if (value.Filters?.Any(f => f.Invoke(descriptor) == false) == false)
-                        observer.OnNext(new(descriptor, changeType));
-                        i++;
                     }
                 }
-            }
 
-
-            int Count(object data)
-            {
-                if (data is IEnumerable enumerable)
+                var lastIndex = GuidRepository.Instance.MaxIndex(memberDescriptor.Guid) + 1 ?? i;
+     
+                if (data is INotifyCollectionChanged collectionChanged)
                 {
-                    return enumerable.Count();
+                    return collectionChanged
+                    .SelectChanges()
+                    .Subscribe(a =>
+                    {
+                        switch (a.Action)
+                        {
+                            case NotifyCollectionChangedAction.Add:
+                                {
+                                    foreach (var item in a.NewItems)
+                                        Next(observer, item, item.GetType(), Changes.Type.Add, lastIndex++);
+                                    break;
+                                }
+                            case NotifyCollectionChangedAction.Remove:
+                                foreach (var item in a.OldItems)
+                                {
+                                    var find = descriptors.Single(a => a.Item == item);
+                                    GuidRepository.Instance.Remove(find.Guid);
+                                    descriptors.Remove(find);
+                                    observer.OnNext(new(find, Changes.Type.Remove));
+                                }
+                                break;
+                            case NotifyCollectionChangedAction.Reset:
+                                observer.OnNext(new(null, Changes.Type.Reset));
+                                break;
+                        }
+                    });
                 }
-                return 0;
+                else
+                {
+                    return Disposer.Empty;
+                }
+            });
+
+            async void Next(IObserver<Change<IMemberDescriptor>> observer, object item, System.Type componentType, Changes.Type changeType, int i)
+            {
+
+                var descriptor = new CollectionItemDescriptor(item, i, componentType);
+                descriptors.Add(descriptor);
+                var _guid = await GuidRepository.Instance.Find(memberDescriptor.Guid, componentType.Name, i);
+                descriptor.Guid = _guid;
+                observer.OnNext(new(descriptor, changeType));          
             }
         }
     }
+
 }

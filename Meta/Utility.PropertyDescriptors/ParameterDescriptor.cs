@@ -5,7 +5,7 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyDescriptors
 {
-    public record ParameterDescriptor(ParameterInfo ParameterInfo, Dictionary<int, object?> Component) : BaseDescriptor(ParameterInfo.ParameterType), IIsReadOnly, IType, IValue
+    public record ParameterDescriptor(ParameterInfo ParameterInfo, Dictionary<int, object?> Component) : MemberDescriptor(ParameterInfo.ParameterType), IIsReadOnly, IType, IValue
     {
         public override Type ComponentType => typeof(Dictionary<string, object?>);
 
@@ -20,10 +20,6 @@ namespace Utility.PropertyDescriptors
 
         public object Value { get => GetValue(); set => SetValue(value); }
 
-        //public override IObservable<Changes.Change<IMemberDescriptor>> GetChildren()
-        //{
-        //    return Observable.Empty<Changes.Change<IMemberDescriptor>>();
-        //}
 
         public override object? GetValue()
         {

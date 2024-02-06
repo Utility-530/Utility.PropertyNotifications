@@ -91,6 +91,9 @@ namespace Utility.Nodes.Reflections
             public Guid? Parent { get; set; }
 
             public string Name { get; set; }
+            public int? _Index { get; set; }
+            public DateTime Added { get; set; }
+            public DateTime? Removed { get; set; }
         }
 
         private readonly SQLiteConnection connection;
@@ -104,32 +107,33 @@ namespace Utility.Nodes.Reflections
             connection.CreateTable<Table>();
         }
 
-        public Task<IReadOnlyCollection<Guid>> Find(Guid parentGuid)
+        public Task<IReadOnlyCollection<Table>> Select(Guid parentGuid, string? name = null)
         {
 
-            var tables = connection.Query<Table>($"Select * from 'Table' where Parent = '{parentGuid}'");
-            List<Guid> childKeys = new();
+            var tables = name==null? connection.Query<Table>($"Select * from 'Table' where Parent = '{parentGuid}'"): connection.Query<Table>($"Select * from 'Table' where Parent = '{parentGuid}' And Name = '{name}'");
+            List<Table> childKeys = new();
             foreach (var table in tables)
             {
-                childKeys.Add(table.Guid);
+                childKeys.Add(table);
             }
-            return Task.FromResult((IReadOnlyCollection<Guid>)childKeys);
+            return Task.FromResult((IReadOnlyCollection<Table>)childKeys);
         }
 
-        public Task<Guid> Find(Guid parentGuid, string localName)
+        public Task<Guid> Find(Guid parentGuid, string localName, int? index = null)
         {
 
-            var tables = connection.Query<Table>($"Select * from 'Table' where Parent = '{parentGuid}' AND Name = '{localName}'");
+            var _index = index.HasValue ? $" = '{index.Value}'" : "is null";
+            var tables = connection.Query<Table>($"Select * from 'Table' where Parent = '{parentGuid}' AND Name = '{localName}' And _Index {_index}");
             if (tables.Count == 0)
             {
                 var guid = Guid.NewGuid();
                 connection.RunInTransaction(() =>
                 {
-                    var tables = connection.Query<Table>($"Select * from 'Table' where Parent = '{parentGuid}' AND Name = '{localName}'");
+                    var tables = connection.Query<Table>($"Select * from 'Table' where Parent = '{parentGuid}' AND Name = '{localName}' And _Index {_index}");
                     if (tables.Count != 0)
                         return;
 
-                    var i = connection.Insert(new Table { Guid = guid, Name = localName, Parent = parentGuid });
+                    var i = connection.Insert(new Table { Guid = guid, Name = localName, _Index = index, Parent = parentGuid, Added = DateTime.Now });
                 });
                 return Task.FromResult(guid);
             }
@@ -142,6 +146,24 @@ namespace Utility.Nodes.Reflections
             {
                 throw new Exception("3e909re 4323");
             }
+        }
+
+
+        public int? MaxIndex(Guid parentGuid, string? name =default)
+        {
+            var tables = name != default ?
+                connection.ExecuteScalar<int?>($"SELECT MAX(_Index) from 'Table' where Parent = '{parentGuid}' AND Name = '{name}'") :
+                  connection.ExecuteScalar<int?>($"SELECT MAX(_Index) from 'Table' where Parent = '{parentGuid}'");
+            return tables;
+
+        }
+
+        public void Remove(Guid guid)
+        {
+            var find = connection.FindWithQuery<Table>($"Select * from 'Table' where Guid = '{guid}'");
+            find.Removed = DateTime.Now;
+            connection.Update(find);
+
         }
 
         public static GuidRepository Instance { get; } = new("../../../Data");

@@ -7,10 +7,11 @@ using System.Windows.Input;
 using Utility.Changes;
 using Utility.Commands;
 using Utility.Nodes;
+using Utility.Nodes.Reflections;
 
 namespace Utility.PropertyDescriptors
 {
-    public record MethodDescriptor : BaseDescriptor, IMethodDescriptor
+    public record MethodDescriptor : MemberDescriptor, IMethodDescriptor
     {
         Dictionary<int, object?> dictionary = new();
 
@@ -39,18 +40,18 @@ namespace Utility.PropertyDescriptors
 
         public override IObservable<Change<IMemberDescriptor>> GetChildren()
         {
-            return Observable.Create<Change<IMemberDescriptor>>(observer =>
+            return Observable.Create<Change<IMemberDescriptor>>(async observer =>
             {
-                var x = MethodExplorer.ParameterDescriptors(methodInfo, dictionary);
-                foreach (var paramDescriptor in x)
+                var descriptors = MethodExplorer.ParameterDescriptors(methodInfo, dictionary);
+                foreach (var paramDescriptor in descriptors)
                 {
+                    var guid = await GuidRepository.Instance.Find(this.Guid, paramDescriptor.Name);
+                    paramDescriptor.Guid = guid;
                     dictionary[paramDescriptor.ParameterInfo.Position] = GetValue(paramDescriptor.ParameterInfo);
                     observer.OnNext(new Change<IMemberDescriptor>(paramDescriptor, Changes.Type.Add));
                 }
                 return Disposable.Empty;
             });
-            
-       
             
             static object? GetValue(System.Reflection.ParameterInfo a)
             {
