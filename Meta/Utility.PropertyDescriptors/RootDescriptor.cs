@@ -1,10 +1,18 @@
-﻿using System.ComponentModel;
-
+﻿
 namespace Utility.PropertyDescriptors
 {
-    public class RootDescriptor : PropertyDescriptor
+    public record RootDescriptor : PropertyDescriptor
     {
-        public RootDescriptor(object item) : base("root", null)
+        public RootDescriptor(object item) : base(new RootPropertyDescriptor(item), item)
+        {
+        }
+        public override bool IsValueOrStringProperty => false;
+    }
+
+
+    public class RootPropertyDescriptor : System.ComponentModel.PropertyDescriptor
+    {
+        public RootPropertyDescriptor(object item) : base(item?.GetType().Name ?? "root" , null)
         {
             Item = item;
         }
@@ -43,6 +51,7 @@ namespace Utility.PropertyDescriptors
             throw new NotImplementedException();
         }
     }
+
 }
 
 

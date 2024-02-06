@@ -4,18 +4,19 @@ namespace Utility.PropertyDescriptors
 {
     public static class PropertyDescriptorHelper
     {
-        public static bool IsValueOrStringProperty(this PropertyDescriptor descriptor)
+        public static bool IsValueOrStringProperty(this System.ComponentModel.PropertyDescriptor descriptor)
         {
-            return descriptor.PropertyType.IsValueOrStringProperty();
-        }
-        public static bool IsValueOrStringProperty(this Type type)
-        {
-            return type.IsValueType || type == typeof(string);
+            return descriptor.PropertyType?.IsValueOrStringProperty()==true;
         }
 
-        public static PropertyType GetPropertyType(this PropertyDescriptor descriptor)
+        public static bool IsValueOrStringProperty(this Type type)
         {
-            if (descriptor is CollectionItemDescriptor itemDescriptor)
+            return type?.IsValueType == true || type == typeof(string);
+        }
+
+        public static PropertyType GetPropertyType(this System.ComponentModel.PropertyDescriptor descriptor)
+        {
+            if (descriptor is ICollectionItemDescriptor itemDescriptor)
                 return PropertyType.CollectionItem | descriptor.PropertyType.GetPropertyType();
             else
                 return descriptor.PropertyType.GetPropertyType();

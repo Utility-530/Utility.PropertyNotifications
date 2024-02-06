@@ -1,51 +1,43 @@
 ﻿using System.ComponentModel;
+using System.Reactive.Linq;
 using System.Reflection;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyDescriptors
 {
-    public class ParameterDescriptor : PropertyDescriptor
+    public record ParameterDescriptor(ParameterInfo ParameterInfo, Dictionary<int, object?> Component) : BaseDescriptor(ParameterInfo.ParameterType), IIsReadOnly, IType, IValue
     {
-        public ParameterDescriptor(ParameterInfo parameterInfo) : base(parameterInfo.Name ?? "p" + parameterInfo.Position.ToString(), null)
-        {
-            ParameterInfo = parameterInfo;
-
-        }
-
-        public ParameterInfo ParameterInfo { get; }
-
         public override Type ComponentType => typeof(Dictionary<string, object?>);
 
         public override bool IsReadOnly => false;
 
-        public override Type PropertyType => ParameterInfo.ParameterType;
 
-        public override bool CanResetValue(object component)
-        {
-            throw new NotImplementedException();
-        }
+        public override string? Name => ParameterInfo.Name ?? ParameterInfo.Position.ToString();
 
-        public override object? GetValue(object? component)
+        public override string Category => throw new NotImplementedException();
+
+        public override bool IsValueOrStringProperty => Type.IsValueOrStringProperty();
+
+        public object Value { get => GetValue(); set => SetValue(value); }
+
+        //public override IObservable<Changes.Change<IMemberDescriptor>> GetChildren()
+        //{
+        //    return Observable.Empty<Changes.Change<IMemberDescriptor>>();
+        //}
+
+        public override object? GetValue()
         {
-            if (component is Dictionary<int, object?> dictionary && ParameterInfo.Position is int name)
+            if (Component is Dictionary<int, object?> dictionary && ParameterInfo.Position is int name)
                 return dictionary[name] ?? ParameterInfo.DefaultValue;
             return ParameterInfo.DefaultValue;
         }
 
-        public override void ResetValue(object component)
+        public override void SetValue(object? value)
         {
-            throw new NotImplementedException();
-        }
-
-        public override void SetValue(object? component, object? value)
-        {
-            if (component is Dictionary<int, object?> dictionary && ParameterInfo.Position is int name)
+            if (Component is Dictionary<int, object?> dictionary && ParameterInfo.Position is int name)
                 dictionary[name] = value;
         }
 
-        public override bool ShouldSerializeValue(object component)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
 
