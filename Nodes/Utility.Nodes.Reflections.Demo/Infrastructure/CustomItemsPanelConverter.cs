@@ -24,18 +24,7 @@ namespace Utility.Nodes.Demo
                     Orientation = System.Windows.Controls.Orientation.Horizontal,
                 });
             }
-            //if (value is IReadOnlyTree { Data: PropertyData { Descriptor: { PropertyType: { } propertyType, ComponentType: { } componentType, DisplayName: { } displayName } descriptor } baseObject })
-            //{
-            //    if (propertyType == typeof(LEDMessage))
-            //    {
-            //        return convert(new ItemsPanel
-            //        {
-            //            Type = Arrangement.Stacked,
-            //            Orientation = System.Windows.Controls.Orientation.Horizontal,
-            //        });
-            //    }
-            //}
-            if (value is IReadOnlyTree { Key: Key { Guid: { } guid } key, Parent.Data: { } descriptor })
+            if (value is IReadOnlyTree { Data: IMemberDescriptor { Guid: { } guid }, Parent.Data: { } descriptor })
             {
                 if (descriptor is CollectionItemDescriptor { Index: { } index } collectionItemDescriptor)
                 {

@@ -26,7 +26,7 @@
                 <Setter Property="Width" Value="120"></Setter>
             </Style>
 
-            <DataTemplate DataType="{x:Type vm:BaseDescriptor}">
+            <DataTemplate DataType="{x:Type vm:MemberDescriptor}">
                 <Grid >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition  Width="140"></ColumnDefinition>
@@ -43,18 +43,18 @@
                 </Grid>
             </DataTemplate>
 
-            <DataTemplate x:Key="TopHeader"  DataType="{x:Type vm:BaseDescriptor}">
+            <DataTemplate x:Key="TopHeader"  DataType="{x:Type vm:MemberDescriptor}">
                 <UniformGrid Columns="1"  Width="120">
                     <TextBlock Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
                     <ContentControl Style="{StaticResource ContentControlStyle}" Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
                 </UniformGrid>
             </DataTemplate>
 
-            <DataTemplate x:Key="NoHeader"  DataType="{x:Type vm:BaseDescriptor}">
+            <DataTemplate x:Key="NoHeader"  DataType="{x:Type vm:MemberDescriptor}">
                 <ContentControl Style="{StaticResource ContentControlStyle}" Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
             </DataTemplate>
 
-            <DataTemplate x:Key="OnlyHeader"  DataType="{x:Type vm:BaseDescriptor}">
+            <DataTemplate x:Key="OnlyHeader"  DataType="{x:Type vm:MemberDescriptor}">
                 <TextBlock Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
             </DataTemplate>
 
@@ -66,7 +66,7 @@
                 <ContentControl Content="{Binding Converter={StaticResource ViewModelConverter}}"></ContentControl>
             </DataTemplate>-->
 
-            <DataTemplate x:Key="None"  DataType="{x:Type vm:BaseDescriptor}">
+            <DataTemplate x:Key="None"  DataType="{x:Type vm:MemberDescriptor}">
                 <Ellipse Fill="Blue" Height="4" Width="4"></Ellipse>
             </DataTemplate>
 

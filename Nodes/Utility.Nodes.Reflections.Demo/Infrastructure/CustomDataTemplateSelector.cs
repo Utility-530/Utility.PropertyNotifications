@@ -83,6 +83,10 @@ namespace Utility.Nodes.Demo
                 {
                     return MakeTemplate(item, "None");
                 }
+                if (item is IReadOnlyTree { Data: CollectionDescriptor { } })
+                {
+                    return MakeTemplate(item, "None");
+                }
                 if (item is IReadOnlyTree { Data: IPropertiesDescriptor { } })
                 {
                     return MakeHeaderTemplate(item, depth);
@@ -188,10 +192,10 @@ namespace Utility.Nodes.Demo
         {
             return TemplateGenerator.CreateDataTemplate(() =>
             {
-                var binding = new Binding { Mode = BindingMode.OneWay, /*Path = new PropertyPath(nameof(Node.Data)),*/ Source = item };
+                var binding = new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(Node.Data)), Source = item };
                 var contentControl = new Button
                 {
-                    ContentTemplate = this.FindResource<DataTemplate>("Key")
+                    ContentTemplate = this.FindResource<DataTemplate>("OnlyHeader")
                 };
                 contentControl.Click += ContentControl_Click;
                 contentControl.SetBinding(ContentControl.ContentProperty, binding);

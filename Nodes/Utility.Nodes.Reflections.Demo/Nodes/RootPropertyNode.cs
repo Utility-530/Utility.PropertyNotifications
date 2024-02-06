@@ -15,45 +15,39 @@ namespace Utility.Nodes.Demo
 {
     public class LedModelRootPropertyNode : ReflectionNode
     {
-        Guid guid = Guid.Parse("2b581d2f-506d-439a-9822-229d831f73b0");
-        public LedModelRootPropertyNode() : base(new RootDescriptor(Model))
+        static readonly Guid guid = Guid.Parse("2b581d2f-506d-439a-9822-229d831f73b0");
+        public LedModelRootPropertyNode() : base(new RootDescriptor(Model) { Guid = guid})
         {
         }
-
-        public override IEquatable Key => new Key(guid, "root", typeof(LedModel));
-
         static LedModel Model { get; } = new();
     }
 
 
     public class ModelRootPropertyNode : ReflectionNode
     {
-        Guid guid = Guid.Parse("c25b9ff5-54d2-4a73-9509-471d7c307fb0");
-        public ModelRootPropertyNode() : base(new RootDescriptor(Model))
+        static readonly Guid guid = Guid.Parse("c25b9ff5-54d2-4a73-9509-471d7c307fb0");
+
+        public ModelRootPropertyNode() : base(new RootDescriptor(Model) { Guid = guid })
         {
         }
-
-        public override IEquatable Key => new Key(guid, "root", typeof(Model));
 
         static Model Model { get; } = new();
     }
 
     public class SelectionNode : ReflectionNode
     {
-        Guid guid = Guid.Parse("46f59dbd-680e-4c7d-ab35-28c1ba8cdcd3");
         bool flag;
         public SelectionNode() : base()
         {
             CustomDataTemplateSelector.Instance.Subscribe(async data =>
             {
-                if (data is IReadOnlyTree { Key: Key { Guid: { } guid } })
+                if (data is IMemberDescriptor {  Guid: { } guid } )
                 {
                     var viewModel = ViewModelStore.Instance.Get(guid);
                     ViewModelStore.Instance.Save(viewModel);
                     if (string.IsNullOrEmpty(viewModel.Name))
-                        viewModel.Name = ((data as IReadOnlyTree)?.Data as IMemberDescriptor)?.Name;
-                    var propertyData = new RootDescriptor(viewModel) { };
-          
+                        viewModel.Name = (data as IMemberDescriptor)?.Name;
+                    var propertyData = new RootDescriptor(viewModel) { Guid = guid };
                     this.Data = propertyData;
                     flag = false;
                     RefreshChildrenAsync();
@@ -61,8 +55,6 @@ namespace Utility.Nodes.Demo
                 }
             });
         }
-
-        public override IEquatable Key => new Key(guid, "root", typeof(ViewModel));
 
         public override async Task<bool> HasMoreChildren()
         {
