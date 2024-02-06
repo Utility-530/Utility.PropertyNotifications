@@ -2,6 +2,8 @@
 using System.Collections;
 
 using System.Linq;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Utility.Helpers;
@@ -69,12 +71,20 @@ namespace Utility.Nodes.Solutions
 
         public override object Data => data;
 
-        public override Task<object?> GetChildren()
+        //public override Task<object?> GetChildren()
+        //{
+        //    //return Task.Run(() => (object)lazy.Value);
+        //    return Task.FromResult((object)lazy.Value);
+        //}
+        public override IObservable<object?> GetChildren()
         {
-            //return Task.Run(() => (object)lazy.Value);
-            return Task.FromResult((object)lazy.Value);
+            return Observable.Create<object?>(observer =>
+            {
+                foreach (var item in lazy.Value)
+                    observer.OnNext(item);
+                return Disposable.Empty;
+            });
         }
-
         public override Task<bool> HasMoreChildren()
         {
             return Task.FromResult(true);
@@ -107,5 +117,7 @@ namespace Utility.Nodes.Solutions
             else
                 throw new Exception("df 343325");
         }
+
+
     }
 }
