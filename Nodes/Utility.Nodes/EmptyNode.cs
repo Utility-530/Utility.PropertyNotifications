@@ -1,12 +1,13 @@
-﻿using Utility.Trees.Abstractions;
+﻿using System.Reactive.Linq;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
     public class EmptyNode : Node
     {
-        public override async Task<object?> GetChildren()
+        public override IObservable<object?> GetChildren()
         {
-            return await Task.FromResult(Array.Empty<object>());
+            return Observable.Empty<object>();
         }
 
         public override async Task<bool> HasMoreChildren()

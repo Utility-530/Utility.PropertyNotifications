@@ -3,6 +3,7 @@
     using MoreLinq;
     using System.Reactive.Disposables;
     using System.Reactive.Linq;
+    using Utility.Changes;
     using Utility.Helpers.NonGeneric;
     using Utility.Interfaces.NonGeneric;
     using Utility.Models;
@@ -68,7 +69,7 @@
             return ExploreTree(items, funcAdd, funcRemove, funcClear, property, a => a.Items.Changes<TR>(), predicate);
         }
 
-        public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, Action<T> funcClear, TR property, Func<TR, IObservable<ChangeSet<TR>>> func, Predicate<TR> predicate) where TR : IEquatable
+        public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, Action<T> funcClear, TR property, Func<TR, IObservable<Set<TR>>> func, Predicate<TR> predicate) where TR : IEquatable
         {
             if (predicate(property) == false)
                 return Disposable.Empty;
@@ -80,11 +81,11 @@
                 {
                     foreach (var item in args)
                     {
-                        if (item is Change { Type: ChangeType.Add, Value: TR value })
+                        if (item is Change { Type: Type.Add, Value: TR value })
                             _ = ExploreTree(items, funcAdd, funcRemove, funcClear, value, func, predicate);
-                        else if (item is Change { Type: ChangeType.Remove, Value: TR _value })
+                        else if (item is Change { Type: Type.Remove, Value: TR _value })
                             funcRemove(items, _value);
-                        else if (item is Change { Type: ChangeType.Reset })
+                        else if (item is Change { Type: Type.Reset })
                             funcClear(items);
                     }
                 },

@@ -1,6 +1,4 @@
-﻿using DynamicData;
-using System.Collections;
-using System.Reactive.Disposables;
+﻿using System.Collections;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using Utility.Collections;
@@ -15,7 +13,7 @@ namespace Utility.Nodes
         bool flag;
         protected Collection items = new();
 
-        public abstract Task<object?> GetChildren();
+        public abstract IObservable<object?> GetChildren();
 
         public abstract Task<IReadOnlyTree> ToNode(object value);
 
@@ -57,47 +55,26 @@ namespace Utility.Nodes
             if (await HasMoreChildren() == false)
                 return false;
 
-            var output = await GetChildren();
-            if (output is IEnumerable enumerable)
-            {
-                items.Clear();
-                ToNodes(enumerable)
-                    .Subscribe(node => items.Add(node),
-                    e =>
-                    {
-
-                    },
-                    () =>
-                    {
-                        //_isRefreshing = false;
-                        items.Complete();
-                    });
-            }
-
+            items.Clear();
+            GetChildren()
+                .Subscribe(async a =>
+                {
+                    var node =await ToNode(a);
+                    items.Add(node);
+                },
+                e =>
+                {
+                },
+                () =>
+                {
+                    //_isRefreshing = false;
+                    items.Complete();
+                });
             return true;
         }
 
 
         public Exception Error { get; set; }
-
-        protected virtual IObservable<IReadOnlyTree> ToNodes(IEnumerable collection)
-        {
-            return Observable.Create<IReadOnlyTree>(observer =>
-            {
-                CompositeDisposable disposable = new();
-                foreach (var item in collection)
-                {
-                    ToNode(item)
-                    .ToObservable()
-                    .Subscribe(node =>
-                    {
-                        node.Parent = this;
-                        observer.OnNext(node);
-                    }).DisposeWith(disposable);
-                }
-                return disposable;
-            });
-        }
 
         public virtual Task<bool> HasMoreChildren()
         {
