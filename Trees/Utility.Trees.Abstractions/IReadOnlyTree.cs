@@ -5,7 +5,8 @@ namespace Utility.Trees.Abstractions
 {
     public interface IReadOnlyTree : IEquatable<IReadOnlyTree>
     {
-        public IEquatable Key { get; }
+        [Obsolete]
+        IEquatable Key { get; }
 
         IReadOnlyTree Parent { get; set; }
 
