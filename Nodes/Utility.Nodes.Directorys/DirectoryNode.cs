@@ -135,11 +135,7 @@ namespace Utility.Nodes
             return Task.FromResult(true);
         }
 
-        public override Task<object?> GetChildren()
-        {
-            throw new NotImplementedException();
-        }
-
+  
         public void OnNext(object value)
         {
             if (value is DirectoryInfo directoryInfo)
@@ -173,6 +169,11 @@ namespace Utility.Nodes
         public override string ToString()
         {
             return path.EndsWith("\\") ? path.Replace("/", "\\").Remove(path.Length - 1).Split("\\").Last() : path.Replace("/", "\\").Split("\\").Last();
+        }
+
+        public override System.IObservable<object?> GetChildren()
+        {
+            throw new NotImplementedException();
         }
     }
 }
