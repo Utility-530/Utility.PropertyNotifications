@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:drag="http://dragablz.net/winfx/xaml/dragablz"
              xmlns:util="http://schemas.utility.com/utilitywpf"
-             xmlns:local11="clr-namespace:Utility.WPF.Demo.Master.Infrastructure"
+             xmlns:b="http://schemas.utility.com/behaviors"
              xmlns:cmn="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common"
              xmlns:view1="http://schemas.utility.com/dragablz"
              xmlns:view2="http://schemas.utility.com/master"
@@ -42,7 +42,7 @@
         <ToolBar DockPanel.Dock="Top">
             <ToggleButton x:Name="OrientationToggleButton" Content="{x:Static Orientation.Vertical}">
                 <i:Interaction.Behaviors>
-                    <util:ToggleButtonContentBehavior UnCheckedContent="{x:Static Orientation.Horizontal}" />
+                    <b:ToggleButtonContentBehavior UnCheckedContent="{x:Static Orientation.Horizontal}" />
                 </i:Interaction.Behaviors>
             </ToggleButton>
         </ToolBar>

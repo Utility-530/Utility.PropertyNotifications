@@ -8,7 +8,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Utility.ViewModels\Utility.ViewModels.csproj" />
+		<ProjectReference Include="..\Utility.ViewModels.Customs\Utility.ViewModels.Customs.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Controls.Lists\Utility.WPF.Controls.Lists.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Markup\Utility.WPF.Markup.csproj" />

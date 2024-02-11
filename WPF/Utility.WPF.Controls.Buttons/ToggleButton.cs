@@ -1,6 +1,6 @@
 ﻿using ReactiveUI;
 using System.Windows;
-using Utility.WPF.Behavior;
+using Utility.WPF.Behaviors;
 
 namespace Utility.WPF.Controls.Buttons
 {

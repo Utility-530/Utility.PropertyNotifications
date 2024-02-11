@@ -3,8 +3,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:aa="clr-namespace:Utility.WPF.Controls.Date.Helper"
     xmlns:ctrl="clr-namespace:Utility.WPF.Controls.Date"
-    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:utl="http://schemas.utility.com/utilitywpf"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:b="http://schemas.utility.com/behaviors"
     xmlns:conv="http://schemas.utility.com/converters"
     xmlns:infrastructure="clr-namespace:Utility.WPF.Controls.Date.Infrastructure">
 
@@ -86,9 +86,9 @@
                                                ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                                ScrollViewer.VerticalScrollBarVisibility="Disabled"
                                                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                                    <b:Interaction.Behaviors>
-                                        <utl:SmoothAutoScrollBehavior ScrollablePosition="Middle"/>
-                                    </b:Interaction.Behaviors>
+                                    <i:Interaction.Behaviors>
+                                        <b:SmoothAutoScrollBehavior ScrollablePosition="Middle"/>
+                                    </i:Interaction.Behaviors>
                                 </ctrl:DayListBox>
                                 <!--<b:Interaction.Behaviors>
                                     <utl:ScrollAnimationBehavior/>

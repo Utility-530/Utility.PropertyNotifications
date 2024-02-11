@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                    xmlns:util="http://schemas.utility.com/utilitywpf"
+                    xmlns:b="http://schemas.utility.com/behaviors"
                     xmlns:drag="clr-namespace:Utility.WPF.Controls.Dragablz">
 
     <ControlTemplate x:Key="ControlTemplate" TargetType="{x:Type drag:GeometryThumb}">
@@ -12,7 +12,7 @@
                                   x:Name="InnerBorder"
                                   Margin="1">
                 <i:Interaction.Behaviors>
-                    <util:MouseBehavior x:Name="MouseBehavior" />
+                    <b:MouseBehavior x:Name="MouseBehavior" />
                 </i:Interaction.Behaviors>
                 <Border.InputBindings>
                     <MouseBinding MouseAction="LeftClick" Command="{Binding Command, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
@@ -43,7 +43,7 @@
                         Stroke="{TemplateBinding Foreground}"
                         StrokeThickness="1">
                 <i:Interaction.Behaviors>
-                    <util:MouseBehavior x:Name="MouseBehavior2"  />
+                    <b:MouseBehavior x:Name="MouseBehavior2"  />
                 </i:Interaction.Behaviors>
 
                 <Path.InputBindings>

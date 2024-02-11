@@ -6,7 +6,7 @@
         xmlns:obj="http://schemas.utility.com/objects"
         xmlns:viewmodel1="clr-namespace:Utility.WPF.Demo.Forms"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:utl="http://schemas.utility.com/utilitywpf"
+        xmlns:b="http://schemas.utility.com/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         d:DataContext="{d:DesignInstance viewmodel1:MainViewModel}">
@@ -21,7 +21,7 @@
         <UniformGrid Columns="1">
             <RichTextBox x:Name="jrtb">
                 <i:Interaction.Behaviors>
-                    <utl:JsonSyntaxHighlightBehavior x:Name="JsonSyntaxHighlightTextBox" Json="{Binding String}" />
+                    <b:JsonSyntaxHighlightBehavior x:Name="JsonSyntaxHighlightTextBox" Json="{Binding String}" />
                 </i:Interaction.Behaviors>
             </RichTextBox>
             <obj:JsonControl x:Name="JsonControl" Json="{Binding String}" />

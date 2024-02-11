@@ -5,7 +5,7 @@ using System.Reactive.Subjects;
 using DynamicData;
 using Utility.Common;
 using Utility.Helpers.Ex;
-using Utility.Reactive;
+using Utility.Reactives;
 using Utility.WPF.Demo.Data.Model;
 
 namespace Utility.WPF.Demo.Data.Factory

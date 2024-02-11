@@ -7,7 +7,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Utility.Common.Models;
-using Utility.Reactive;
+using Utility.Reactives;
 //using Utility.Helpers.Ex;
 
 namespace Utility.Models.Filters

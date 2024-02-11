@@ -5,7 +5,7 @@ using Utility.Services;
 using Utility.Models.Filters;
 using Utility.ViewModels;
 using System.Reactive.Disposables;
-using Utility.Reactive;
+using Utility.Reactives;
 using System.Reactive;
 
 namespace Utility.WPF.Controls.Meta.ViewModels

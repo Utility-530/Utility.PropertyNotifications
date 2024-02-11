@@ -10,7 +10,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reflection;
-using Utility.Reactive;
+using Utility.Reactives;
 
 namespace Utility.Models.Filters
 {

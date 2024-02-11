@@ -1,11 +1,10 @@
 ﻿<ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:aa="clr-namespace:Utility.WPF.Controls.Date.Helper"
     xmlns:ctrl="clr-namespace:Utility.WPF.Controls.Date"
-    xmlns:utl="http://schemas.utility.com/utilitywpf"
+    xmlns:b="http://schemas.utility.com/behaviors"
     xmlns:conv="http://schemas.utility.com/converters"
-    xmlns:b="http://schemas.microsoft.com/xaml/behaviors">
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Utility.WPF.Controls.Date;component/Themes/Colors.xaml" />
@@ -91,9 +90,9 @@
                                         <UniformGrid Columns="7" Rows="6"/>
                                     </ItemsPanelTemplate>
                                 </ListBox.ItemsPanel>
-                                <b:Interaction.Behaviors>
-                                    <utl:LeftRightMoveFocusBehavior/>
-                                </b:Interaction.Behaviors>
+                                <i:Interaction.Behaviors>
+                                    <b:LeftRightMoveFocusBehavior/>
+                                </i:Interaction.Behaviors>
                             </ctrl:DayListBox>
                         </Grid>
                     

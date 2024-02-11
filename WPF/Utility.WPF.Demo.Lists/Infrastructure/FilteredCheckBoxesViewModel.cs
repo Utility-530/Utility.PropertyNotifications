@@ -10,7 +10,7 @@ using Utility.Helpers.Ex;
 using Utility.WPF.Demo.Data.Factory;
 using Utility.WPF.Demo.Data.Model;
 using Utility.Models.Filters;
-using Utility.Reactive;
+using Utility.Reactives;
 
 namespace Utility.WPF.Demo.Lists.Infrastructure
 {

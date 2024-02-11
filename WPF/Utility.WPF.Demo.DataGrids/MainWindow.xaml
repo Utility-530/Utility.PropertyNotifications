@@ -66,7 +66,7 @@
 
 
             <local:MyDataTemplateSelector x:Key="MyDataTemplateSelector">
-                <local:MyDataTemplateSelector.TypeTemplate>
+                <!--<local:MyDataTemplateSelector.TypeTemplate>
                     <DataTemplate>
                         <objects:ObjectComboBox
                     x:Name="ebdc"                 
@@ -78,7 +78,7 @@
                             </objects:ObjectComboBox.Filters>
                         </objects:ObjectComboBox>
                     </DataTemplate>
-                </local:MyDataTemplateSelector.TypeTemplate>
+                </local:MyDataTemplateSelector.TypeTemplate>-->
             </local:MyDataTemplateSelector>
 
         </ResourceDictionary>

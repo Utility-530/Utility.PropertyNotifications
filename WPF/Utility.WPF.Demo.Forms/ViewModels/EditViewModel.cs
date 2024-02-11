@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Utility.Common.Collection;
 using Utility.Models;
-using _ViewModel = Utility.ViewModels.ViewModel;
+using Utility.ViewModels;
 
 namespace Utility.WPF.Demo.Forms.ViewModels
 {
@@ -17,7 +17,7 @@ namespace Utility.WPF.Demo.Forms.ViewModels
         IReadOnlyCollection<T> Collection { get; set; }
     }
 
-    public class EditViewModel : _ViewModel, ICollection<INotifyPropertyChanged>, IEquatable<EditViewModel>
+    public class EditViewModel : ViewModel, ICollection<INotifyPropertyChanged>, IEquatable<EditViewModel>
     {
         private Guid id;
 

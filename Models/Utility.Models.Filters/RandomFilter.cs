@@ -1,7 +1,7 @@
 ﻿using ReactiveUI;
 using System;
 using Utility.Common.Models;
-using Utility.Reactive;
+using Utility.Reactives;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Models.Filters

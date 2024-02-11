@@ -5,9 +5,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
-    <ProjectReference Include="..\..\Reactive\Utility.Reactive\Utility.Reactive.csproj" />
+    <ProjectReference Include="..\..\Reactives\Utility.Reactives\Utility.Reactives.csproj" />
     <ProjectReference Include="..\Utility.Models\Utility.Models.csproj" />
   </ItemGroup>
 

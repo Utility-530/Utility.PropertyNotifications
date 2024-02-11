@@ -4,11 +4,10 @@ using Utility.Services;
 using Utility.WPF.Demo.Common.ViewModels;
 using Utility.WPF.Demo.Data.Factory;
 using Utility.WPF.Demo.Master.Infrastructure;
-using mdvm = Utility.ViewModels.MasterDetailViewModel;
 
 namespace Utility.WPF.Demo.Master.ViewModels
 {
-    public class MasterDetailViewModel : mdvm
+    public class MasterDetailViewModel : Utility.ViewModels.MasterDetailViewModel
     {
         private IEnumerator<Fields> build;
 

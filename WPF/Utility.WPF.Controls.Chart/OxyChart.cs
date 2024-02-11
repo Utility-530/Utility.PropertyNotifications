@@ -62,7 +62,7 @@ namespace Utility.WPF.Controls.Chart
                 .WhereNotNull()
                 .Select(cc =>
                 {
-                    return cc.MakeObservable().Select(a => cc);
+                    return cc;
                 }),
                    this.WhenAnyValue(a => a.DataKey),
                    this.WhenAnyValue(a => a.DataConverter),
@@ -73,24 +73,18 @@ namespace Utility.WPF.Controls.Chart
                     Combine(combination.First, combination.Second, combination.Third, combination.Fourth, combination.Fifth);
                 });
 
-            static void Combine(MultiTimeModel model, IObservable<IEnumerable> items, string dataKey, IValueConverter converter, string idKey)
+            static void Combine(MultiTimeModel model, IEnumerable items, string dataKey, IValueConverter converter, string idKey)
             {
                 if (items == default(IObservable<string>))
                     model.Filter(null);
                 else
-                    items
-                        .ObserveOnDispatcher()
-                        .Subscribe(collection =>
+          
                         {
-                            HashSet<string> ids = GetIds(model, dataKey, converter, idKey, collection);
+                            HashSet<string> ids = GetIds(model, dataKey, converter, idKey, items);
 
                             model.Filter(ids);
                             var colors = model.SelectColors();
-                        }, e =>
-                        {
-                        },
-                    () =>
-                    { });
+                        }
 
                 static HashSet<string> GetIds(MultiTimeModel model, string key, IValueConverter converter, string idKey, IEnumerable collection)
                 {
@@ -131,7 +125,7 @@ namespace Utility.WPF.Controls.Chart
                         }
 
                         data
-                            .MakeObservable()
+                            .ToObservable()
                             .Select(a => new KeyValuePair<string, (DateTime dt, double d)>(id, (a.DateTime, a.Value))).Buffer(TimeSpan.FromSeconds(0.5))
                             .Where(a => a.Count > 0)
                             .Subscribe(data =>

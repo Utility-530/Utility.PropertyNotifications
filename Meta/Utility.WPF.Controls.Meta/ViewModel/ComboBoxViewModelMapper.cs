@@ -4,7 +4,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows.Controls;
 using Utility.WPF.Controls.Lists;
-using Utility.WPF.Reactive;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.Meta.ViewModels
 {

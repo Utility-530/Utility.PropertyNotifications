@@ -8,12 +8,6 @@
     <ApplicationIcon>Images\calendar.ico</ApplicationIcon>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="bin\**" />
-    <EmbeddedResource Remove="bin\**" />
-    <None Remove="bin\**" />
-    <Page Remove="bin\**" />
-  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Images\calendar.ico" />
@@ -21,13 +15,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Persists\Utility.Persists\Utility.Persists.csproj" />
-    <ProjectReference Include="..\Utility.ViewModels\Utility.ViewModels.csproj" />
+    <ProjectReference Include="..\Utility.ViewModels.Customs\Utility.ViewModels.Customs.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Date\Utility.WPF.Controls.Date.csproj" />
     <ProjectReference Include="..\Utility.WPF.Animation\Utility.WPF.Animations.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<Folder Include="Data\" />
+	</ItemGroup>
 </Project>

@@ -7,13 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\**" />
-    <EmbeddedResource Remove="Data\**" />
-    <None Remove="Data\**" />
-    <Page Remove="Data\**" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\Utility.ViewModels.Customs\Utility.ViewModels.Customs.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Hybrid\Utility.WPF.Controls.Hybrid.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Common\Utility.WPF.Demo.Common.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Master\Utility.WPF.Demo.Master.csproj" />

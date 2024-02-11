@@ -14,11 +14,11 @@ namespace Utility.WPF.Controls.Master
     using ReactiveUI;
     using System.Reactive.Subjects;
     using System.Windows.Controls.Primitives;
-    using Utility.Reactive;
+    using Utility.Reactives;
     using Utility.WPF.Abstract;
     using Utility.WPF.Controls.Base;
     using Utility.WPF.Helpers;
-    using Utility.WPF.Reactive;
+    using Utility.WPF.Reactives;
 
     /// <summary>
     /// Only transforms master-list items to the detail-item; and not vice-versa

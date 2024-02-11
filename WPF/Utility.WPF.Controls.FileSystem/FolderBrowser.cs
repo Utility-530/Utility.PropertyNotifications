@@ -3,7 +3,7 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Utility.WPF.Helpers;
-using Utility.WPF.Reactive;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.FileSystem
 {

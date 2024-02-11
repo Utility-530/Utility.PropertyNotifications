@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Utility.WPF.Reactive;
+using Utility.WPF.Reactives;
 using Utility.WPF.Abstract;
 using Utility.WPF.Controls.Master;
 using Utility.WPF.Helpers;
