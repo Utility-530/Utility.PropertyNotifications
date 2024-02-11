@@ -17,7 +17,6 @@ namespace Utility.Nodes.Solutions
         Lazy<IList> lazy = new();
         object data;
 
-
         public AssemblyNode()
         {
             lazy = new Lazy<IList>(() =>
