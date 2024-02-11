@@ -11,7 +11,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace Utility.WPF.Behavior
+namespace Utility.WPF.Behaviors
 {
     using Helper;
 

@@ -5,11 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Controls.Primitives;
+using Utility.WPF.Reactives;
 
-namespace Utility.WPF.Behavior
+namespace Utility.WPF.Behaviors
 {
-    using Reactive;
-
     public class RemoveItemsOnSelected : Behavior<Selector>
     {
         protected override void OnAttached()

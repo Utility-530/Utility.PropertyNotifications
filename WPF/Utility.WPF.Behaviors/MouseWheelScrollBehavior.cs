@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Microsoft.Xaml.Behaviors;
 
-namespace Utility.WPF.Behavior
+namespace Utility.WPF.Behaviors
 {
     public class MouseWheelScrollBehavior : Behavior<UIElement>
     {

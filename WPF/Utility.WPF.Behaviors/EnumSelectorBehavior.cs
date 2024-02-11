@@ -17,9 +17,9 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using Endless;
-using static Utility.WPF.Behavior.EnumSelectorBehavior;
+using static Utility.WPF.Behaviors.EnumSelectorBehavior;
 
-namespace Utility.WPF.Behavior
+namespace Utility.WPF.Behaviors
 {
     public class EnumSelectorBehavior : Behavior<Selector>
     {

@@ -6,9 +6,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Utility.WPF.Helpers;
-using Utility.WPF.Reactive;
+using Utility.WPF.Reactives;
 
-namespace Utility.WPF.Behavior
+namespace Utility.WPF.Behaviors
 {
     /// <summary>
     /// Returns the indices of rows in the DataGrid that are visible to the user

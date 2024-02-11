@@ -9,10 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using Utility.WPF.Reactive;
 using System.Windows.Controls.Primitives;
+using Utility.WPF.Reactives;
 
-namespace Utility.WPF.Behavior
+namespace Utility.WPF.Behaviors
 {
     /// <summary>
     /// <a href="https://stackoverflow.com/questions/3652688/mutually-exclusive-checkable-menu-items/11497189#11497189"></a>

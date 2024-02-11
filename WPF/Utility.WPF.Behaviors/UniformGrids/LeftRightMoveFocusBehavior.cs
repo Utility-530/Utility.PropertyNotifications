@@ -10,7 +10,7 @@ using Microsoft.Xaml.Behaviors;
 using System.Windows.Controls.Primitives;
 using Utility.WPF.Helpers;
 
-namespace Utility.WPF.Behavior.UniformGrids
+namespace Utility.WPF.Behaviors.UniformGrids
 {
     public class LeftRightMoveFocusBehavior : Behavior<ListBox>
     {

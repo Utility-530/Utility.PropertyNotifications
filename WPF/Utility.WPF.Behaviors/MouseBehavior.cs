@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 //using Utility.WPF.Attached;
 
-namespace Utility.WPF.Behavior
+namespace Utility.WPF.Behaviors
 {
     /// <summary>
     /// <a href="https://stackoverflow.com/questions/45608326/c-sharp-wpf-border-style-animations"></a>

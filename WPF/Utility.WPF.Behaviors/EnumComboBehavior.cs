@@ -86,7 +86,7 @@ namespace Utility.WPF.Behaviors
                             else
                             {
                                 internalValue = e.HasFlag(e) ?
-                                EnumHelper.CombineFlags(enums.Where(a => a.IsChecked).Select(e => e.Value), Enum) :
+                                Utility.Helpers.EnumHelper.CombineFlags(enums.Where(a => a.IsChecked).Select(e => e.Value), Enum) :
                                 e;
 
                             }

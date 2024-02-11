@@ -7,9 +7,9 @@ using SourceChord.FluentWPF;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Documents;
-using Utility.WPF.Behavior.Helper;
+using Utility.WPF.Behaviors.Helper;
 
-namespace Utility.WPF.Behavior
+namespace Utility.WPF.Behaviors
 {
     /// <summary>
     /// Creates a <see cref="RichTextBlockFormatter"/>, for rendering Syntax Highlighted code to a RichTextBlock.

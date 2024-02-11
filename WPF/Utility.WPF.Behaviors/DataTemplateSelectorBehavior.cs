@@ -15,7 +15,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using Utility.WPF.Helpers;
 
-namespace Utility.WPF.Behavior
+namespace Utility.WPF.Behaviors
 {
     /// <summary>
     /// Assigns available <see cref="DataTemplate"/>s as the <see cref="ItemsControl.ItemsSource"/>

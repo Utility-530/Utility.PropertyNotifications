@@ -17,9 +17,9 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using Endless;
-using Utility.WPF.Behavior;
+using Utility.WPF.Behaviors;
 
-namespace Utility.WPF.Behavior
+namespace Utility.WPF.Behaviors
 {
     public class EnumItemsControlBehavior : Behavior<ItemsControl>
     {

@@ -8,7 +8,7 @@
 //using System.Windows.Controls.Primitives;
 //using Microsoft.Xaml.Behaviors;
 
-//namespace Utility.WPF.Behavior
+//namespace Utility.WPF.Behaviors
 //{
 //    public class ScrollToSelectedBehavior : Behavior<ListBox>
 //    {

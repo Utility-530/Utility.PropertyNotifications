@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 
-namespace Utility.WPF.Behavior
+namespace Utility.WPF.Behaviors
 {
     /// <summary>
     /// <a href="https://social.technet.microsoft.com/wiki/contents/articles/46543.wpf-handling-both-click-and-doubleclick-events.aspx"></a>

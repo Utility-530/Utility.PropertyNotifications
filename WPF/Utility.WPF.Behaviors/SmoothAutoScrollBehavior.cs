@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Threading.Tasks;
 
-namespace Utility.WPF.Behavior
+namespace Utility.WPF.Behaviors
 {
     using Microsoft.Xaml.Behaviors;
     using System;

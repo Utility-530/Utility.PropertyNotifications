@@ -6,7 +6,7 @@ using System.Windows.Media.Animation;
 using System.Windows;
 using System.Windows.Input;
 
-namespace Utility.WPF.Behavior
+namespace Utility.WPF.Behaviors
 {
     public class ScrollAnimationBehavior : Behavior<ScrollViewer>
     {

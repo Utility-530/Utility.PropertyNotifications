@@ -4,7 +4,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls.Primitives;
 
-namespace Utility.WPF.Behavior
+namespace Utility.WPF.Behaviors
 {
     public class ToggleButtonContentBehavior : Behavior<ToggleButton>
     {

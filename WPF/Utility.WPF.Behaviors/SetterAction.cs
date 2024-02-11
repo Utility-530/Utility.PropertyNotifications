@@ -1,4 +1,4 @@
-﻿namespace Utility.WPF.Behavior
+﻿namespace Utility.WPF.Behaviors
 {
     //https://stackoverflow.com/questions/942548/setting-a-property-with-an-eventtrigger
     // Neutrino

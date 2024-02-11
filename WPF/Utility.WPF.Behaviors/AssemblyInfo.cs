@@ -10,6 +10,6 @@ using System.Windows.Markup;
                                               // app, or any theme specific resource dictionaries)
 )]
 [assembly: XmlnsPrefix("http://schemas.utility.com/behaviors", "bhvrs")]
-[assembly: XmlnsDefinition("http://schemas.utility.com/behaviors", "Utility.WPF.Behavior.UniformGrids")]
-[assembly: XmlnsDefinition("http://schemas.utility.com/behaviors", "Utility.WPF.Behavior")]
+[assembly: XmlnsDefinition("http://schemas.utility.com/behaviors", "Utility.WPF.Behaviors.UniformGrids")]
+[assembly: XmlnsDefinition("http://schemas.utility.com/behaviors", "Utility.WPF.Behaviors")]
 [assembly: XmlnsDefinition("http://schemas.utility.com/behaviors", "Utility.WPF.Behaviors")]
