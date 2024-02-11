@@ -9,8 +9,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ui:ThemeResources RequestedTheme="Light"  AccentColor="Blue"/>
-                <ui:XamlControlsResources />
+                <!--<ui:ThemeResources RequestedTheme="Light"  AccentColor="Blue"/>
+                <ui:XamlControlsResources />-->
             </ResourceDictionary.MergedDictionaries>
 
 

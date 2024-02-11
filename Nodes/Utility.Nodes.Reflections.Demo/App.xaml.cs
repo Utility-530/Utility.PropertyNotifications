@@ -4,11 +4,9 @@ using System.Reactive.Linq;
 using System.Threading;
 using System.Windows;
 using Utility.Collections;
-using Utility.PropertyDescriptors;
-using Utility.Trees.Abstractions;
+using Utility.Nodes.Reflections.Demo.Infrastructure;
 using Utility.WPF.Nodes.NewFolder;
 using Views.Trees;
-using VisualJsonEditor.Test;
 using VisualJsonEditor.Test.Infrastructure;
 
 namespace Utility.Nodes.Demo
@@ -49,55 +47,9 @@ namespace Utility.Nodes.Demo
                 PanelsConverter = CustomItemsPanelConverter.Instance,
                 DataTemplateSelector = CustomDataTemplateSelector.Instance,
                 TreeViewFilter = CustomFilter.Instance,
-                StyleSelector = TreeViewItemStyleSelector.Instance
+                StyleSelector = CustomStyleSelector.Instance,
+                EventListener = EventListener.Instance
             };
         }
-    }
-
-    internal class CustomFilter : ITreeViewFilter
-    {
-        public bool Filter(object item)
-        {
-            if (item is IReadOnlyTree { Data: IMethodDescriptor { Type:{ } type } })
-            {
-                if (type.IsArray)
-                {
-                    return false;
-                }
-            }
-
-
-            if (item is IReadOnlyTree { Data: PropertyDescriptor { ComponentType: { } componentType, Name: { } displayName } propertyNode })
-            {
-                if (componentType.Name == "Array")
-                {
-                    if (displayName == "IsFixedSize")
-                        return false;
-                    if (displayName == "IsReadOnly")
-                        return false;
-                    if (displayName == "IsSynchronized")
-                        return false;
-                    if (displayName == "LongLength")
-                        return false;
-                    if (displayName == "Length")
-                        return false;
-                    if (displayName == "Rank")
-                        return false;
-                    if (displayName == "SyncRoot")
-                        return false;
-                }
-                if (componentType.Name == "String")
-                {
-
-                    if (displayName == "Length")
-                        return false;
-                }
-                return true;
-            }
-
-            return true;
-        }
-
-        public static CustomFilter Instance { get; } = new();
     }
 }

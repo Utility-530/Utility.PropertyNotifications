@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.PropertyDescriptors;
+using Utility.Trees;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
 using Utility.WPF.Helpers;
@@ -21,113 +22,32 @@ namespace Utility.Nodes.Demo
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             if (item is not ITree { Depth: { } depth, Index: { } index } tree)
-                throw new System.Exception("f 2233");
+                throw new Exception("f 2233");
 
-            if (depth < 1)
+            if (tree.MatchAncestor(a => a is MasterSlaveNode { Value: 0 }) is { } _x)
+                if (sd(item, depth) is DataTemplate dataTemplate)
+                {
+                    return dataTemplate;
+                }
+
+            if (tree.MatchAncestor(a => a is MasterSlaveNode { Value: 1 }) is { } x)
+                return MakeButtonTemplate(item);
+
+
+            if (tree.MatchAncestor(a => a is SelectionNode) is { })
             {
-                if (item is Node { Data: var data })
+                if (sd(item, depth) is DataTemplate dataTemplate)
                 {
-                    return MakeTemplate(item, "None");
+                    return dataTemplate;
                 }
-            }
-            if (index[1] == 0)
-            {
-                if (item is CustomMethodsNode { Data: { } })
-                {
-                    return MakeTemplate(item, "None");
-                }
-
-                if (item is IReadOnlyTree { Parent.Data: CollectionItemDescriptor { } _ })
-                {
-                    return MakeTemplate(item, "None");
-                }
-
-                if (item is IReadOnlyTree { Parent.Parent.Data: CollectionItemDescriptor { Index: { } _index } _ })
-                {
-                    if (_index == 0)
-                        return MakeTemplate(item, "TopHeader");
-                    else if (_index > 0)
-                        return MakeTemplate(item, "NoHeader");
-                }
-
-
-                if (item is ITree { Data: ObjectValue { } })
-                {
-                    return MakeTemplate(item, "None");
-                }
-                // root
-                if (item is IReadOnlyTree { Data: RootDescriptor { } })
-                {
-                    //return MakeHeaderTemplate(item, depth);
-                    return MakeTemplate(item, "None");
-                }
-                // default
-                if (item is IReadOnlyTree { Data: ObjectValue { Descriptor: { } } })
-                {
-                    return MakeHeaderTemplate(item, depth);
-                }
-                // collection item
-                if (item is ITree { Data: ICollectionItemDescriptor { } })
-                {
-                    return MakeTemplate(item, "None");
-                }
-                // inner collection item descriptor
-        
-                // parameter
-                //if (item is ParameterNode { Data: PropertyData { Descriptor: { } } })
-                //{
-                //    return MakeTemplate(item);
-                //}
-                // methods
-                if (item is IReadOnlyTree { Data: IMethodsDescriptor { } })
-                {
-                    return MakeTemplate(item, "None");
-                }
-                if (item is IReadOnlyTree { Data: CollectionDescriptor { } })
-                {
-                    return MakeTemplate(item, "None");
-                }
-                if (item is IReadOnlyTree { Data: IPropertiesDescriptor { } })
-                {
-                    return MakeHeaderTemplate(item, depth);
-                }
-                // method
-                if (item is IReadOnlyTree { Data: IMethodDescriptor { } })
-                {
-                    return MakeTemplate(item, "Method");
-                }
-
-                if (item is IReadOnlyTree { Data: IMemberDescriptor { IsValueOrStringProperty: { } isValueOrString } })
-                {
-                    if (isValueOrString)
-                        return MakeTemplate(item);
-                    else
-                        return MakeTemplate(item, "OnlyHeader");
-                }
-                // other
-                if (item is IReadOnlyTree { Data: var data })
-                {
-                    return MakeTemplate(item);
-                }
-            }
-            else if (index[1] == 1)
-            {
-                if (item is Node { Data: var data })
-                {
-                    return MakeButtonTemplate(item);
-                }
-                else
-                {
-
-                }
-            }
-            else if (index[1] == 2)
-            {
-                return MakeTemplate(item);
 
             }
+            //else if (index[1] == 2)
+            //{
+            //    return MakeTemplate(item);
+            //}
 
-            else if (index[1] == 3)
+            if (tree.MatchAncestor(a => a is CustomMethodsNode) is { })
             {
                 if (depth == 2)
                 {
@@ -141,12 +61,99 @@ namespace Utility.Nodes.Demo
                     return MakeTemplate(item, "None");
                 }
             }
-            else if (index[2] > 3)
+            //else if (index[2] > 3)
+            //{
+            //    return MakeTemplate(item);
+            //}
+
+            if (item is IReadOnlyTree { Data: IMemberDescriptor { IsValueOrStringProperty: { } isValueOrString } })
             {
-                return MakeTemplate(item);
+                if (isValueOrString)
+                    return MakeTemplate(item);
+                else
+                    return MakeTemplate(item, "OnlyHeader");
+            }
+            // other
+            //if (item is IReadOnlyTree { Data: var data })
+            //{
+            return MakeTemplate(item);
+            //}
+        }
+
+        public DataTemplate sd(object item, int depth)
+        {
+            if (item is SlaveNode { })
+            {
+                return MakeHeaderTemplate2(item, depth);
+            }
+            if (item is IReadOnlyTree { Data: IPropertiesDescriptor { } })
+            {
+                return MakeTemplate(item, "None");
+            }
+            if (item is CustomMethodsNode { Data: { } })
+            {
+                return MakeTemplate(item, "None");
             }
 
-            throw new System.Exception("743£");
+            if (item is IReadOnlyTree { Parent.Data: CollectionItemDescriptor { } _ })
+            {
+                return MakeTemplate(item, "None");
+            }
+
+            if (item is IReadOnlyTree { Parent.Parent.Data: CollectionItemDescriptor { Index: { } _index } _ })
+            {
+                if (_index == 0)
+                    return MakeTemplate(item, "TopHeader");
+                else if (_index > 0)
+                    return MakeTemplate(item, "NoHeader");
+            }
+            // root
+            if (item is RootNode { })
+            {
+                return MakeTemplate(item, "None");
+            }
+            // root
+            if (item is IReadOnlyTree { Data: RootDescriptor { } })
+            {
+                //return MakeHeaderTemplate(item, depth);
+                return MakeTemplate(item, "None");
+            }
+            // default
+            if (item is IReadOnlyTree { Data: ObjectValue { Descriptor: { } } })
+            {
+                return MakeHeaderTemplate(item, depth);
+            }
+            // collection item
+            if (item is ITree { Data: ICollectionItemDescriptor { } })
+            {
+                return MakeTemplate(item, "None");
+            }
+            // inner collection item descriptor
+
+            // parameter
+            //if (item is ParameterNode { Data: PropertyData { Descriptor: { } } })
+            //{
+            //    return MakeTemplate(item);
+            //}
+            // methods
+            if (item is IReadOnlyTree { Data: IMethodsDescriptor { } })
+            {
+                return MakeTemplate(item, "None");
+            }
+            if (item is IReadOnlyTree { Data: CollectionDescriptor { } })
+            {
+                return MakeTemplate(item, "None");
+            }
+            if (item is IReadOnlyTree { Data: IPropertiesDescriptor { } })
+            {
+                return MakeHeaderTemplate(item, depth);
+            }
+            // method
+            if (item is IReadOnlyTree { Data: IMethodDescriptor { } })
+            {
+                return MakeTemplate(item, "Method");
+            }
+            return null;
         }
 
         private DataTemplate MakeTemplate(object item, string? name = null)
@@ -161,6 +168,20 @@ namespace Utility.Nodes.Demo
 
                 return contentControl;
             });
+        }
+
+        private DataTemplate MakeHeaderTemplate2(object item, int count)
+        {
+            return TemplateGenerator.CreateDataTemplate(() =>
+            {
+                return new TextBlock
+                {
+                    FontWeight = FontWeight.FromOpenTypeWeight(600 - count * 10),
+                    FontSize = 18 - count * 0.5,
+                    Text = item.ToString()
+                };
+            });
+
         }
         private DataTemplate MakeHeaderTemplate(object item, int count)
         {

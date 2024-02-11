@@ -36,15 +36,12 @@ namespace Utility.Nodes.Demo
                     });
                 }
 
-
                 if (ViewModelStore.Instance.Get(guid) is ViewModel viewModel)
                 {
                     var itemsPanel = viewModel.ToItemsPanel();
                     return convert(itemsPanel);
                 }
 
-                //var itemsPanel = baseObject.ToItemsPanel();
-                //return convert(itemsPanel);
                 return convert(new ItemsPanel
                 {
                     Type = Arrangement.Stacked,
