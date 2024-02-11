@@ -81,32 +81,32 @@ namespace Utility.WPF.Adorners.Infrastructure
 
         #region Dependency Properties Get And Set
 
-        public static AdornerCollection GetAdorners(this DependencyObject d)
-        {
-            if (d.GetValue(AdornersProperty) is not AdornerCollection collection)
-            {
-                var fe = d as FrameworkElement ?? throw new Exception("sdf2 vv");
-                collection = new AdornerCollection(fe);
-                collection.CollectionChanged += Adorners_CollectionChanged;
+        //public static AdornerCollection GetAdorners(this DependencyObject d)
+        //{
+        //    if (d.GetValue(AdornersProperty) is not AdornerCollection collection)
+        //    {
+        //        var fe = d as FrameworkElement ?? throw new Exception("sdf2 vv");
+        //        collection = new AdornerCollection(fe);
+        //        collection.CollectionChanged += Adorners_CollectionChanged;
 
-                d.SetValue(AdornersProperty, collection);
+        //        d.SetValue(AdornersProperty, collection);
 
-                fe.DataContextChanged += AdornedFrameworkElement_DataContextChanged;
-                fe.Loaded += AdornedFrameworkElement_Loaded;
-                fe.Unloaded += AdornedFrameworkElement_Unloaded;
-            }
-            return collection;
+        //        fe.DataContextChanged += AdornedFrameworkElement_DataContextChanged;
+        //        fe.Loaded += AdornedFrameworkElement_Loaded;
+        //        fe.Unloaded += AdornedFrameworkElement_Unloaded;
+        //    }
+        //    return collection;
 
-            void AdornedFrameworkElement_Loaded(object sender, RoutedEventArgs args)
-            {
-                UpdateAdorner((FrameworkElement)sender);
-            }
+        //    void AdornedFrameworkElement_Loaded(object sender, RoutedEventArgs args)
+        //    {
+        //        UpdateAdorner((FrameworkElement)sender);
+        //    }
 
-            void AdornedFrameworkElement_Unloaded(object sender, RoutedEventArgs args)
-            {
-                HideAdorner((FrameworkElement)sender);
-            }
-        }
+        //    void AdornedFrameworkElement_Unloaded(object sender, RoutedEventArgs args)
+        //    {
+        //        HideAdorner((FrameworkElement)sender);
+        //    }
+        //}
 
         public static void SetAdorners(DependencyObject d, AdornerCollection value)
         {
@@ -185,7 +185,7 @@ namespace Utility.WPF.Adorners.Infrastructure
             if (fe == null)
                 return;
 
-            var adorners = GetAdorners(fe);
+            var adorners = (fe.GetAdorners());
 
             foreach (var adorner in adorners)
                 adorner.DataContext = fe.DataContext;
@@ -252,7 +252,7 @@ namespace Utility.WPF.Adorners.Infrastructure
             if (frameworkElement == null)
                 return;
 
-            var adorners = GetAdorners(frameworkElement);
+            var adorners = frameworkElement.GetAdorners();
             if (adorners == null)
                 return;
 
@@ -268,7 +268,7 @@ namespace Utility.WPF.Adorners.Infrastructure
             // create new adorner if it doesnt exist
             if (frameworkElement.GetValue(AdornerProperty) is not FrameworkElementAdorner adorner)
             {
-                adorner = new FrameworkElementAdorner(adorners, frameworkElement);
+                adorner = new FrameworkElementAdorner(frameworkElement);
                 frameworkElement.SetValue(AdornerProperty, adorner);
             }
 

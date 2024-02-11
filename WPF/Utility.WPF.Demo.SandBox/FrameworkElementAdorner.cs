@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Media;
+using Utility.WPF.Adorners;
 using Utility.WPF.Adorners.Infrastructure;
 
 // The code is based on:
@@ -12,12 +13,12 @@ using Utility.WPF.Adorners.Infrastructure;
 
 namespace AdornerBehavior
 {
-    public enum AdornerPlacement
-    {
-        Across,
-        Inside,
-        Outside
-    }
+    //public enum AdornerPlacement
+    //{
+    //    Across,
+    //    Inside,
+    //    Outside
+    //}
 
 
     /// <summary>
