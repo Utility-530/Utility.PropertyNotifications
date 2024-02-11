@@ -5,7 +5,8 @@
         ViewModel,
         Directory,
         Model,
-        Assembly
+        Assembly,
+        Type
         //Property
     }
 }

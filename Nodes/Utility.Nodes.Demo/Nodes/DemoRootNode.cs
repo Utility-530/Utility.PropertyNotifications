@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Solutions;
+using Utility.Nodes.Types;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Demo
 {
-
-
     public class DemoRootNode : Node
     {
         bool flag;
@@ -19,18 +20,18 @@ namespace Utility.Nodes.Demo
 
         public override IEquatable Key => throw new NotImplementedException();
 
-        public override async Task<object?> GetChildren()
+        public override IObservable<object> GetChildren()
         {
             flag = true;
-            return await Task.Run<object?>(() =>
-            { 
-                return Enum.GetValues(typeof(NodeType));
+             return Observable.Create<object>(observer =>
+            {
+                foreach (var x in Enum.GetValues(typeof(NodeType)))
+                    observer.OnNext(x);
+                return Disposable.Empty;
             });
         }
 
-
-
-        public override ITree ToNode(object value)
+        public override async Task<IReadOnlyTree> ToNode(object value)
         {
             if (value is NodeType nodeType)
                 return nodeType switch
@@ -38,6 +39,7 @@ namespace Utility.Nodes.Demo
                     NodeType.ViewModel => new RootViewModelNode(),
                     NodeType.Directory => new DirectoryNode(@"C:\"),             
                     NodeType.Assembly => new AssemblyNode(),
+                    NodeType.Type => new TypeNode(),
                     _ => new ExceptionNode(new Exception("Out of range"))
                     //_ => throw new Exception("r 4333"),
                 };
@@ -53,7 +55,6 @@ namespace Utility.Nodes.Demo
         {
             return Data;
         }
-
     }
 
     public class ExceptionNode : Node
@@ -68,9 +69,9 @@ namespace Utility.Nodes.Demo
 
         public override object Data { get => exception; set => this.exception = (Exception)value; }
 
-        public override Task<object?> GetChildren()
+        public override System.IObservable<object?> GetChildren()
         {
-            return Task.FromResult(new object());
+            return Observable.Return<object>(new object());
         }
 
         public override Task<bool> HasMoreChildren()
@@ -78,7 +79,7 @@ namespace Utility.Nodes.Demo
             return Task.FromResult(false);
         }
 
-        public override IReadOnlyTree ToNode(object value)
+        public override Task<IReadOnlyTree> ToNode(object value)
         {
             throw new NotImplementedException();
         }

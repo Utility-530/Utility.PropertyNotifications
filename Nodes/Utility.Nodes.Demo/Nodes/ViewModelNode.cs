@@ -4,6 +4,9 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Helpers;
 using Utility.Nodes.Demo.Infrastructure;
+using System.Reactive.Linq;
+using System.Reactive.Disposables;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Demo
 {
@@ -21,11 +24,16 @@ namespace Utility.Nodes.Demo
 
         public override IEquatable Key => new StringKey(type.AsString());
 
-        public override async Task<object?> GetChildren()
+        public override System.IObservable<object?> GetChildren()
         {
             flag = true;
-            object? xx = await Task.Run(() => Resolver.Instance.Children(type));
-            return xx;
+            return Observable.Create<object>(observer =>
+            {
+                foreach (var child in Resolver.Instance.Children(type))
+                    observer.OnNext(child);
+                return Disposable.Empty;
+            });
+      
         }
 
         public override string ToString()
@@ -33,9 +41,9 @@ namespace Utility.Nodes.Demo
             return type.Name;
         }
 
-        public override Node ToNode(object value)
+        public override Task<IReadOnlyTree> ToNode(object value)
         {
-            return new ViewModelNode(value as Type);
+            return Task.FromResult<IReadOnlyTree>(new ViewModelNode(value as Type));
         }
 
         public override Task<bool> HasMoreChildren()
