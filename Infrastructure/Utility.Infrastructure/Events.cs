@@ -30,7 +30,8 @@ public record TypeResponse(Type Type) : Response(Type);
 public record MethodParametersRequest(MethodInfo MethodInfo, object Data) : Request;
 public record MethodParametersResponse(object?[]? Parameters) : Response(Parameters);
 
-public record SelectionChange(object Source, IReadOnlyTree Node) : Event();
+public record ClickChange(object Source, IReadOnlyTree Node) : Event();
+public record DoubleClickChange(object Source, IReadOnlyTree Node) : Event();
 public record OnHoverChange(object Source, IReadOnlyTree Node, bool IsMouseOver, Point Point) : Event();
 public record TreeViewItemInitialised(object Source, IReadOnlyTree Node) : Event();
 
