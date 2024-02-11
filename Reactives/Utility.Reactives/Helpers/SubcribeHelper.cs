@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Utility.Reactive.Helpers
+namespace Utility.Reactives.Helpers
 {
     public static class SubcribeHelper
     {

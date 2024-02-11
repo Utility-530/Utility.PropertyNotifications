@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Utility.Reactive.Helpers
+namespace Utility.Reactives.Helpers
 {
     public static class OnNextAwaiterHelper
     {

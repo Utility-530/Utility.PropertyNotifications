@@ -7,7 +7,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UtilityReactive
+namespace Utility.Reactives
 {
 
     public static class ObservableFactory

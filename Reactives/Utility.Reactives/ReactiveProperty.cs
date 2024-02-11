@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 
-namespace Utility.Reactive
+namespace Utility.Reactives
 {
     public class ReactiveProperty<T> : IObservable<T>
     {

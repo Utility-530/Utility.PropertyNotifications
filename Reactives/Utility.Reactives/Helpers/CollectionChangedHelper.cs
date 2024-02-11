@@ -14,7 +14,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Changes;
 using Type = Utility.Changes.Type;
 
-namespace UtilityReactive
+namespace Utility.Reactives
 {
     public static class CollectionChangedHelper
     {

@@ -7,7 +7,7 @@ using System.Reactive.Subjects;
 using System.Runtime.Serialization;
 
 
-namespace Utility.Reactive
+namespace Utility.Reactives
 {
     //https://github.com/neuecc/UniRx/blob/master/Assets/Plugins/UniRx/Scripts/UnityEngineBridge/ReactiveDictionary.cs
     //    Yoshifumi Kawai neuecc

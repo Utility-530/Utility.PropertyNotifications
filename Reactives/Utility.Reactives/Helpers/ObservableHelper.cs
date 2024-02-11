@@ -11,7 +11,7 @@ using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 
-namespace Utility.Reactive;
+namespace Utility.Reactives;
 
 /// <summary>
 /// ObservableCollection  helper
@@ -96,24 +96,6 @@ public static partial class ObservableHelper
     //        .SelectMany(x => x.NewItems?.Cast<T>() ?? new T[] { })
     //        .WhereNotDefault();
     //}
-
-    /// <summary>
-    /// Outputs events at a maximum rate specified by <see cref="rate"></see>, but otherwise as soon as possible.
-    /// <a href="http://www.zerobugbuild.com/?p=323">By James World</a>
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="source"></param>
-    /// <param name="rate"></param>
-    /// <returns></returns>
-    public static IObservable<T> Pace<T>(this IObservable<T> source, TimeSpan rate)
-    {
-        var paced = source.Select(i => Observable.Empty<T>()
-
-            .Delay(rate)
-            .StartWith(i)).Concat();
-
-        return paced;
-    }
 
     public static IObservable<(T, bool predicate)> ScanChanges<T, TR>(this IObservable<T> source, Func<T?, TR> property) where T : struct where TR : IEquatable<TR>
     {

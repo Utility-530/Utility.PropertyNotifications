@@ -8,7 +8,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 
 
-namespace UtilityReactive
+namespace Utility.Reactives
 {
     public static class TimeHelper
     {

@@ -7,9 +7,9 @@ using System.Reactive;
 using System.Reactive.Subjects;
 using System.Reactive.Concurrency;
 using System.Collections.Immutable;
-using Utility.Reactive;
+using Utility.Reactives;
 
-namespace Utility.Reactive
+namespace Utility.Reactives
 {
 
     public static partial class ObservableHelper

@@ -7,7 +7,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
 
-namespace Utility.Reactive
+namespace Utility.Reactives
 {
     public class ReplayModel<T> : ISubject<T>
     {
