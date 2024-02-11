@@ -23,7 +23,7 @@ namespace Utility.WPF.Demo.Objects
             new Window
             {
                 WindowState = WindowState.Maximized,
-                Content = new AssemblyViewControl(typeof(JsonControl).Assembly)
+                Content = new AssemblyViewControl(typeof(JsonObjectUserControl).Assembly)
                 //Content = new ResourceDictionariesGrid()
             }.Show();
         }
