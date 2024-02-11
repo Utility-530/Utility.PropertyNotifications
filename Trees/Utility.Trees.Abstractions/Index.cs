@@ -6,22 +6,20 @@ namespace Utility.Trees
 {
     public record Index
     {
-        private IList<int>  collection;
+        private IList<int> collection;
         public Index(params int[] indexes)
         {
             collection = indexes;
         }
 
-        public int this[int key]
+        public int? this[int key]
         {
-             get{ return collection[key];  }
-            set { collection[key] = value; }
+            get { return collection.Count > key ? collection[key] : null; }
+            //set { collection[key] = value?? throw new Exception("sd sddsddsss"); }
 
         }
 
         public bool IsEmpty => collection.Any() == false;
-
-        //public IReadOnlyCollection<int> Collection { get; init; }
 
         public override string ToString()
         {

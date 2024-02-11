@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Utility.Helpers.NonGeneric;
+using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 
@@ -42,25 +43,8 @@ namespace Utility.Trees
                 parent.VisitAncestors(action);
         }
 
-        public static IReadOnlyTree? Match(this IReadOnlyTree tree, Predicate<IReadOnlyTree> action)
-        {
-            if (action(tree))
-            {
-                return tree;
-            }
 
-            foreach (IReadOnlyTree item in tree.Items)
-            {
-                if (Match(item, action) is ITree sth)
-                {
-                    return sth;
-                }
-            }
-
-            return null;
-        }
-
-        public static IReadOnlyTree? MatchAncestors(this IReadOnlyTree tree, Predicate<IReadOnlyTree> action)
+        public static IReadOnlyTree? MatchAncestor(this IReadOnlyTree tree, Predicate<IReadOnlyTree> action)
         {
             if (action(tree))
             {
@@ -69,8 +53,34 @@ namespace Utility.Trees
 
             if (tree.Parent is IReadOnlyTree parent)
             {
-                return parent.MatchAncestors(action);
+                return parent.MatchAncestor(action);
             }
+
+
+            return null;
+        }
+
+
+        public static IReadOnlyTree? MatchDescendant(this IReadOnlyTree tree, Predicate<IReadOnlyTree> action)
+        {
+            if (action(tree))
+            {
+                return tree;
+            }
+
+            foreach (var child in tree.Items)
+                if (child is IReadOnlyTree tChild)
+                {
+                    if (action(tChild))
+                    {
+                        return tChild;
+                    }
+                    else if(tChild.MatchDescendant(action) is { } match)
+                        return match;
+                }
+                else
+                    throw new Exception("c 333211");
+                
 
 
             return null;
@@ -90,8 +100,13 @@ namespace Utility.Trees
                 parent = parent.Parent;
             }
         }
-        public static IEnumerable<IReadOnlyTree> FindAncestors(this IReadOnlyTree tree, Predicate<IReadOnlyTree> predicate)
+
+        public static IEnumerable<IReadOnlyTree> MatchAncestors(this IReadOnlyTree tree, Predicate<IReadOnlyTree> predicate)
         {
+            if (predicate(tree))
+            {
+                yield return tree;
+            }
             IReadOnlyTree parent = tree.Parent;
             while (parent != null)
             {
@@ -111,7 +126,6 @@ namespace Utility.Trees
     public class Tree : ITree, IEnumerable<ITree>, INotifyPropertyChanged, IEquatable
     {
         private IList items;
-        private object? data;
         protected ITree? parent;
         private bool flag;
         private State state;
@@ -132,7 +146,7 @@ namespace Utility.Trees
         public Tree(object? data = null, params object[] items)
         {
             if (data != null)
-                this.data = data;
+                this.Data = data;
             //else
             //    this.data = "root";
             if (items.Any())
@@ -147,14 +161,14 @@ namespace Utility.Trees
         {
             get
             {
-                var match = TreeHelper2.Match(this, a => key.Equals(a) == true) as ITree;
+                var match = TreeHelper2.MatchDescendant(this, a => key.Equals(a) == true) as ITree;
                 if (match is null)
-                    return TreeHelper2.MatchAncestors(this, a => key.Equals(a) == true) as ITree;
+                    return TreeHelper2.MatchAncestor(this, a => key.Equals(a) == true) as ITree;
                 return match;
             }
             set
             {
-                var x = TreeHelper2.Match(this, a => key.Equals(a) == true);
+                var x = TreeHelper2.MatchDescendant(this, a => key.Equals(a) == true);
                 if (x is not ITree match)
                 {
                     throw new Exception("4sd ss");
@@ -298,7 +312,7 @@ namespace Utility.Trees
             return this.Parent;
         }
 
-        public virtual object Data { get => data; set => data = value; }
+        public virtual object Data { get; set; }
 
         public virtual bool HasItems => Items != null && Items.Count() > 0;
 
@@ -457,14 +471,14 @@ namespace Utility.Trees
         {
             if (Data?.GetType().IsValueType == true)
                 return Data?.ToString();
-            return Data == default ? string.Empty : Data.ToString();
+            return Data == default ? this.GetType().Name : Data.ToString();
         }
 
         #region propertyChanged
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        public virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
