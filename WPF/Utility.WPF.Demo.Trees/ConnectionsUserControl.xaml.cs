@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Utility.Common.Helper;
+using Utility.Infrastructure;
 using Utility.Persists;
 using Utility.Trees;
 
@@ -215,7 +216,7 @@ namespace Utility.WPF.Demo.Trees
             {
 
                 Point pointA, pointB;
-                Tree viewmodel = TreeHelper2.Match(dataContext.ViewModel, new((a) => (a.Data as IName).Name == connectionViewModel.ViewModelName)) as Tree;
+                Tree viewmodel = TreeHelper2.MatchDescendant(dataContext.ViewModel, new((a) => (a.Data as IName).Name == connectionViewModel.ViewModelName)) as Tree;
 
                 var treeViewItem = TreeHelper.FindRecursive<TreeViewItem>(userControl.MyTreeView, viewmodel);
                 {
@@ -365,7 +366,7 @@ namespace Utility.WPF.Demo.Trees
         public bool IsPersisted { get; set; }
     }
 
-    public class LineViewModel : Utility.Models.BaseViewModel
+    public class LineViewModel : BaseViewModel
     {
         private Point _startPoint;
 

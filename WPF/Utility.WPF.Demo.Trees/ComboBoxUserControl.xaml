@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="Utility.WPF.Demo.Trees.ComboBoxUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controls="http://schemas.utility.com/trees"
+             xmlns:local="clr-namespace:Utility.WPF.Demo.Trees" xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <FrameworkElement.Resources>
+        <HierarchicalDataTemplate x:Key="treeViewDataTemplate" ItemsSource="{Binding Items}">
+            <Border BorderThickness="1" BorderBrush="Gray">
+                <ContentControl Content="{Binding Data}"/>
+            </Border>
+        </HierarchicalDataTemplate>
+        
+        <DataTemplate DataType="{x:Type sys:Type}">
+            <TextBlock Text="{Binding Name}" ToolTip="{Binding }"></TextBlock>
+        </DataTemplate>
+        
+    </FrameworkElement.Resources>
+
+    <StackPanel>
+        <controls:ComboBoxTreeView 
+                ItemsSource="{Binding Converter={x:Static local:AssemblyTreeConverter.Instance}, ConverterParameter='DataTemplate'}"
+                ParentPath="Parent"           
+                SelectedNode="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  
+                ItemTemplate="{StaticResource treeViewDataTemplate}">
+        </controls:ComboBoxTreeView>
+        
+        <controls:TypeSelector x:Name="TypeSelector"/>
+
+        <ContentControl x:Name="Contentx" Content="{Binding ElementName=TypeSelector, Path=Type}"></ContentControl>
+    </StackPanel>
+</UserControl>
