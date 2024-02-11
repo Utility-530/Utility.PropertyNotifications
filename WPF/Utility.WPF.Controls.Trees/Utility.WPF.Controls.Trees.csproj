@@ -14,10 +14,19 @@
 		<Compile Update="TreeListView.cs">
 			<DependentUpon>TreeListView.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="ComboBoxTreeView.cs">
+			<DependentUpon>ComboBoxTreeView.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\..\Trees\Utility.Trees.Abstractions\Utility.Trees.Abstractions.csproj" />
+		<ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
 		<ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Infrastructure\" />
 	</ItemGroup>
 
 </Project>

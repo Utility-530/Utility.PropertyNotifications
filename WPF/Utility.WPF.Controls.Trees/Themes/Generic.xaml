@@ -10,6 +10,9 @@
         <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ButtonsFlank.xaml"></utl:SharedResourceDictionary>
         <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Dictionary1.xaml"></utl:SharedResourceDictionary>
         <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/LinesStyle.xaml"></utl:SharedResourceDictionary>
+        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Colors.xaml"></utl:SharedResourceDictionary>
+        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboBoxToggleButton.xaml"></utl:SharedResourceDictionary>
+        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/ComboBoxTreeView.xaml"></utl:SharedResourceDictionary>
 
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
