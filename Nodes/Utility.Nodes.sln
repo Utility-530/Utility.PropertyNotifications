@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodes.Solutions", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Factorys", "..\Factorys\Utility.Factorys\Utility.Factorys.csproj", "{EF58D9D9-1FF2-4D53-93E6-60BED58D16B8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Reactives", "..\Reactive\Utility.Reactive\Utility.Reactives.csproj", "{BE04A0D0-38E4-4C6C-A10F-F5A7F19B0369}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Reactives", "..\Reactives\Utility.Reactives\Utility.Reactives.csproj", "{BE04A0D0-38E4-4C6C-A10F-F5A7F19B0369}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Interfaces", "..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj", "{459D7307-B0A1-4A59-B1B4-C2728CDA9916}"
 EndProject
@@ -46,10 +46,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.ViewModels", "..\Infrastructure\Utility.ViewModels\Utility.ViewModels.csproj", "{DF7CB969-4182-457D-BE0E-40DE922BB3F8}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Helpers", "..\Helpers\Utility.Helpers\Utility.Helpers.csproj", "{6E089C08-6C87-4225-9975-2907F7884777}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Objects", "..\Meta\Utility.Objects\Utility.Objects.csproj", "{2D27D712-700A-4B0D-8459-C03313123CDB}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.PropertyDescriptors", "..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj", "{427AD264-45C8-418C-B875-FD0FC1A7E54A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Solutions", "..\Meta\Utility.ProjectStructure\Utility.Solutions.csproj", "{39FFB63A-E5FC-41E4-A0E4-DBECC4645C16}"
 EndProject
@@ -73,11 +69,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Adorners", "..\WPF\Utility.WPF.Adorners\Utility.WPF.Adorners.csproj", "{A903CEC6-816A-4870-882A-C77BD3BDC6E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Behaviors", "..\WPF\Utility.WPF.Behavior\Utility.WPF.Behaviors.csproj", "{14A0B790-015C-465B-859F-C72D2B4E3D8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Behaviors", "..\WPF\Utility.WPF.Behaviors\Utility.WPF.Behaviors.csproj", "{14A0B790-015C-465B-859F-C72D2B4E3D8F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.PropertyNotifications", "..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj", "{73F10567-EA25-416F-8BD1-E3260A24CAFC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Changes", "..\Infrastructure\Utility.Changes\Utility.Changes.csproj", "{E3DC7A41-CA24-4BF2-89D4-7E7E33BBB8AC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodes.Abstractions", "Utility.Nodes.Abstractions\Utility.Nodes.Abstractions.csproj", "{8E2BF4A9-FC55-4571-AD5B-BCA7458865C8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodes.Types", "Utility.Nodes.Types\Utility.Nodes.Types.csproj", "{AEF6DD36-1D87-4473-9513-D5E41F3C1E45}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.ViewModels.Base", "..\WPF\Utility.ViewModels.Base\Utility.ViewModels.Base.csproj", "{633179FD-3A39-4878-A30B-9892CA6E581F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.PropertyDescriptors", "..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj", "{A8F12A11-618D-4E12-8CA8-6F23298C7054}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Trees", "..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj", "{85D8F1C3-9B74-4834-8782-0DDDD755EF2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -165,14 +171,6 @@ Global
 		{6E089C08-6C87-4225-9975-2907F7884777}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E089C08-6C87-4225-9975-2907F7884777}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E089C08-6C87-4225-9975-2907F7884777}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2D27D712-700A-4B0D-8459-C03313123CDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2D27D712-700A-4B0D-8459-C03313123CDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2D27D712-700A-4B0D-8459-C03313123CDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2D27D712-700A-4B0D-8459-C03313123CDB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{427AD264-45C8-418C-B875-FD0FC1A7E54A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{427AD264-45C8-418C-B875-FD0FC1A7E54A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{427AD264-45C8-418C-B875-FD0FC1A7E54A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{427AD264-45C8-418C-B875-FD0FC1A7E54A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{39FFB63A-E5FC-41E4-A0E4-DBECC4645C16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{39FFB63A-E5FC-41E4-A0E4-DBECC4645C16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39FFB63A-E5FC-41E4-A0E4-DBECC4645C16}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -225,6 +223,26 @@ Global
 		{E3DC7A41-CA24-4BF2-89D4-7E7E33BBB8AC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3DC7A41-CA24-4BF2-89D4-7E7E33BBB8AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3DC7A41-CA24-4BF2-89D4-7E7E33BBB8AC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E2BF4A9-FC55-4571-AD5B-BCA7458865C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E2BF4A9-FC55-4571-AD5B-BCA7458865C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E2BF4A9-FC55-4571-AD5B-BCA7458865C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E2BF4A9-FC55-4571-AD5B-BCA7458865C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEF6DD36-1D87-4473-9513-D5E41F3C1E45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEF6DD36-1D87-4473-9513-D5E41F3C1E45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEF6DD36-1D87-4473-9513-D5E41F3C1E45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEF6DD36-1D87-4473-9513-D5E41F3C1E45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{633179FD-3A39-4878-A30B-9892CA6E581F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{633179FD-3A39-4878-A30B-9892CA6E581F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{633179FD-3A39-4878-A30B-9892CA6E581F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{633179FD-3A39-4878-A30B-9892CA6E581F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8F12A11-618D-4E12-8CA8-6F23298C7054}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8F12A11-618D-4E12-8CA8-6F23298C7054}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8F12A11-618D-4E12-8CA8-6F23298C7054}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8F12A11-618D-4E12-8CA8-6F23298C7054}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85D8F1C3-9B74-4834-8782-0DDDD755EF2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85D8F1C3-9B74-4834-8782-0DDDD755EF2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85D8F1C3-9B74-4834-8782-0DDDD755EF2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85D8F1C3-9B74-4834-8782-0DDDD755EF2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -247,8 +265,6 @@ Global
 		{459D7307-B0A1-4A59-B1B4-C2728CDA9916} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{DF7CB969-4182-457D-BE0E-40DE922BB3F8} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{6E089C08-6C87-4225-9975-2907F7884777} = {3E113198-90F6-4584-81A9-8CA2724455B2}
-		{2D27D712-700A-4B0D-8459-C03313123CDB} = {C0A380CA-EF00-4F4C-946B-31BBB8FFD58E}
-		{427AD264-45C8-418C-B875-FD0FC1A7E54A} = {C0A380CA-EF00-4F4C-946B-31BBB8FFD58E}
 		{39FFB63A-E5FC-41E4-A0E4-DBECC4645C16} = {C0A380CA-EF00-4F4C-946B-31BBB8FFD58E}
 		{8B38C6EF-FFF0-43A6-8064-21F4D5ECDEBA} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{A35EE7B1-8232-437F-9F8A-5624BC30B8BC} = {28597BEF-6983-4377-A102-82F69FF978DE}
@@ -260,6 +276,9 @@ Global
 		{14A0B790-015C-465B-859F-C72D2B4E3D8F} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{73F10567-EA25-416F-8BD1-E3260A24CAFC} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{E3DC7A41-CA24-4BF2-89D4-7E7E33BBB8AC} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{633179FD-3A39-4878-A30B-9892CA6E581F} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{A8F12A11-618D-4E12-8CA8-6F23298C7054} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{85D8F1C3-9B74-4834-8782-0DDDD755EF2E} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1F5991F-9180-4F40-A959-E24A6DDA6C5C}
