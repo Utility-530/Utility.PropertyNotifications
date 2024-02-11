@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Data;
 
 namespace Utility.WPF.Factorys
 {
@@ -38,6 +39,21 @@ namespace Utility.WPF.Factorys
             frameworkElementFactory.SetValue(TemplateGeneratorControl.FactoryProperty, factory);
 
             DataTemplate dataTemplate = new(typeof(DependencyObject))
+            {
+                VisualTree = frameworkElementFactory
+            };
+            return dataTemplate;
+        }
+
+        public static HierarchicalDataTemplate CreateHierarcialDataTemplate(Func<object> factory)
+        {
+            if (factory == null)
+                throw new ArgumentNullException(nameof(factory));
+
+            var frameworkElementFactory = new FrameworkElementFactory(typeof(TemplateGeneratorControl));
+            frameworkElementFactory.SetValue(TemplateGeneratorControl.FactoryProperty, factory);
+
+            HierarchicalDataTemplate dataTemplate = new(typeof(DependencyObject))
             {
                 VisualTree = frameworkElementFactory
             };
