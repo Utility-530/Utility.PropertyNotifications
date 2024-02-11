@@ -11,7 +11,7 @@
     <ProjectReference Include="..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" /> 
-    <ProjectReference Include="..\..\Reactive\Utility.Reactive\Utility.Reactives.csproj" />
+    <ProjectReference Include="..\..\Reactives\Utility.Reactives\Utility.Reactives.csproj" />
   </ItemGroup>
 
 </Project>

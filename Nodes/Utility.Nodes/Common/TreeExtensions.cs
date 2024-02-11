@@ -9,7 +9,7 @@
     using Utility.Models;
     using Utility.Trees;
     using Utility.Trees.Abstractions;
-    using UtilityReactive;
+    using Utility.Reactives;
 
     public static partial class TreeExtensions
     {
