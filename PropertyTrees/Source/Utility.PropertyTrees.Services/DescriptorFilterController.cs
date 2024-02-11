@@ -48,9 +48,9 @@ namespace Utility.PropertyTrees.Services
                 }
             }
 
-            if (value is CollectionItemDescriptor collectionItemDescriptor)
-                return true;
-            if (value is PropertyDescriptor descriptor)
+            //if (value is CollectionItemDescriptor collectionItemDescriptor)
+            //    return true;
+            if (value is System.ComponentModel.PropertyDescriptor descriptor)
             {
                 if (descriptor.IsBrowsable == false)
                     return false;
@@ -95,7 +95,7 @@ namespace Utility.PropertyTrees.Services
     public static class PropertyTypeHelper
     {
         public static bool IsCollection(this Type propertyType) => propertyType != null && propertyType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(propertyType);
-        public static bool IsException(this PropertyDescriptor descriptor) => typeof(Exception).IsAssignableFrom(descriptor.PropertyType);
+        public static bool IsException(this System.ComponentModel.PropertyDescriptor descriptor) => typeof(Exception).IsAssignableFrom(descriptor.PropertyType);
     }
 
 }

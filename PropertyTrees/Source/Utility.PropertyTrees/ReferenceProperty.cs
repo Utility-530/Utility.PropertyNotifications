@@ -11,7 +11,7 @@ using Utility.PropertyDescriptors;
 
 namespace Utility.PropertyTrees
 {
-    using CType = ChangeType;
+    using CType = Changes.Type;
 
     public class ReferenceProperty : PropertyBase
     {

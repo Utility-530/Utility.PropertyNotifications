@@ -26,7 +26,7 @@ namespace Utility.PropertyTrees.Services
             _OnNext(change);
         }
 
-        public void OnNext(SelectionChange change)
+        public void OnNext(ClickChange change)
         {
             _OnNext(change);
         }
@@ -65,7 +65,7 @@ namespace Utility.PropertyTrees.Services
 
             public override bool EventPredicate(Event @event)
             {
-                if (@event is SelectionChange { Node: PropertyBase node } change)
+                if (@event is ClickChange { Node: PropertyBase node } change)
                 {
                     return node.Ancestors().Cast<PropertyBase>().Any(a => a.Name == "ViewModels") == false;
                 }

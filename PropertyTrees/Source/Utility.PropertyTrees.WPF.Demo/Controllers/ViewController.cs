@@ -2,8 +2,8 @@
 using Utility.Nodes;
 using Utility.PropertyTrees.WPF.Meta;
 using Utility.Observables.Generic;
-using Utility.WPF.Reactive;
 using Utility.Trees.Abstractions;
+using Utility.WPF.Reactives;
 
 namespace Utility.PropertyTrees.WPF.Demo
 {
@@ -124,7 +124,7 @@ namespace Utility.PropertyTrees.WPF.Demo
                 {
                     if (a is { Header: ITree { } node })
                     {
-                        Send(new SelectionChange(a, node));
+                        Send(new ClickChange(a, node));
                     }
                 });
 

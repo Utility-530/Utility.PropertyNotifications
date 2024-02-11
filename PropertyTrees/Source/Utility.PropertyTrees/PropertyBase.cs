@@ -15,7 +15,8 @@ using Utility.PropertyDescriptors;
 
 namespace Utility.PropertyTrees
 {
-    using CType = ChangeType;
+    using CType = Changes.Type;
+    using PropertyDescriptor = System.ComponentModel.PropertyDescriptor;
 
     public abstract class PropertyBase : ValueNode, IProperty
     {
@@ -132,7 +133,7 @@ namespace Utility.PropertyTrees
             return await Task.FromResult(true);        }
 
 
-        protected void AddMethodNode(MethodInfo info, IReadOnlyTree? node, ChangeType changeType)
+        protected void AddMethodNode(MethodInfo info, IReadOnlyTree? node, Changes.Type changeType)
         {
             if (changeType == CType.Add)
             {

@@ -15,12 +15,15 @@ using Utility.Helpers;
 using Utility.Trees.Abstractions;
 using NetFabric.Hyperlinq;
 using Utility.PropertyDescriptors;
+using PropertyDescriptor = System.ComponentModel.PropertyDescriptor;
+using Utility.Changes;
+using ChangeType = Utility.Changes.Type;
 
 namespace Utility.PropertyTrees.Services
 {
     public partial class ChildPropertyExplorer : BaseObject
     {
-        readonly Dictionary<Type, PropertyDescriptor[]> cachedPropertyDesciptors = new();
+        readonly Dictionary<System.Type, PropertyDescriptor[]> cachedPropertyDesciptors = new();
         readonly Dictionary<PropertyDescriptor, bool> includes = new(new PropertyDescriptorComparer());
 
         public override Key Key => new(Guids.PropertyFilter, nameof(ChildPropertyExplorer), typeof(ChildPropertyExplorer));
@@ -195,7 +198,7 @@ namespace Utility.PropertyTrees.Services
 
             IObservable<ValueNode?> NodeFromPropertyDescriptor(PropertyDescriptor descriptor)
             {
-                if (descriptor.PropertyType == typeof(Type))
+                if (descriptor.PropertyType == typeof(System.Type))
                     return Observable.Empty<ValueNode?>();
 
                 return Observable.Create<ValueNode>(observer =>
@@ -258,7 +261,7 @@ namespace Utility.PropertyTrees.Services
                     }
                     return Disposer.Empty;
                 });
-                static void Next(ChildrenRequest value, Interfaces.Generic.IObserver<Change<CollectionItemDescriptor>> observer, object item, Type componentType, ChangeType changeType, int i)
+                static void Next(ChildrenRequest value, Interfaces.Generic.IObserver<Change<CollectionItemDescriptor>> observer, object item, System.Type componentType, ChangeType changeType, int i)
                 {
                     var descriptor = new CollectionItemDescriptor(item, i, componentType);
                     //if (value.Filters?.Any(f => f.Invoke(descriptor) == false) == false)

@@ -47,7 +47,7 @@ namespace Utility.PropertyTrees.Services
             return new MethodParametersResponse(objects.ToArray());
         }
 
-        public void OnNext(SelectionChange change)
+        public void OnNext(ClickChange change)
         {
             selectedNodes.Add(change.Node);
         }

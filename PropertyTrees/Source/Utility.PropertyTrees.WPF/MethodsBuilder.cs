@@ -86,7 +86,7 @@ namespace Utility.PropertyTrees.WPF
             }
         }
 
-        public void OnNext(SelectionChange change)
+        public void OnNext(ClickChange change)
         {
             if (change is { Source: TreeViewItem treeViewItem })
             {

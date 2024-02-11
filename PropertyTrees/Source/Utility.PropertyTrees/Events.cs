@@ -4,7 +4,8 @@ using Utility.Models;
 using Utility.Nodes;
 using Utility.Trees.Abstractions;
 using Utility.PropertyDescriptors;
-
+using PropertyDescriptor = System.ComponentModel.PropertyDescriptor;
+using Utility.Changes;
 
 namespace Utility.PropertyTrees
 {
@@ -37,7 +38,7 @@ namespace Utility.PropertyTrees
 
     public record MethodsRequest(Guid Guid, object Data, object? ParentData, PropertyDescriptor Descriptor) : Request();
 
-    public record MethodsResponse(IReadOnlyTree? Node, MethodInfo Source, ChangeType ChangeType = ChangeType.Add) : Response(Node);
+    public record MethodsResponse(IReadOnlyTree? Node, MethodInfo Source, Changes.Type ChangeType = Changes.Type.Add) : Response(Node);
 
     public record ChildrenRequest(Guid Guid, object Data, PropertyDescriptor Descriptor) : Request();
 

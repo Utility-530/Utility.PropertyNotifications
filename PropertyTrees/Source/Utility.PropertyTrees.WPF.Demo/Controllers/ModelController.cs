@@ -91,7 +91,7 @@ internal class ModelController : BaseObject
     }
 
 
-    public void OnNext(SelectionChange selectionChange)
+    public void OnNext(ClickChange selectionChange)
     {
         if (selectionChange is { Node: PropertyBase { Key: Key Key } node })
         {

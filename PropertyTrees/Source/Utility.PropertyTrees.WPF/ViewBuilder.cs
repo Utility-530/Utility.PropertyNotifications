@@ -94,7 +94,7 @@ namespace Utility.PropertyTrees.WPF
                                 }
                                 else if (propertyBase is ValueProperty valueProperty)
                                 {
-                                    var property = valueProperty.FindAncestors(new Predicate<IReadOnlyTree>(a => a is ICollectionItemProperty)).First();
+                                    var property = valueProperty.MatchAncestor(new Predicate<IReadOnlyTree>(a => a is ICollectionItemProperty));
                                     var type = (property as ICollectionItemProperty).Type;
                                     var dictionary = typeOrderDictionary.GetValueOrNew(type);
 

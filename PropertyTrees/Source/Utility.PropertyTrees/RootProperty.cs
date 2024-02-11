@@ -20,6 +20,6 @@ namespace Utility.PropertyTrees
         public override bool HasChildren => true;
 
 
-        public override PropertyDescriptor Descriptor { get => rootDescriptor ??= new RootDescriptor(Data); set => throw new Exception(" sd333 32111"); }
+        public override System.ComponentModel.PropertyDescriptor Descriptor { get => rootDescriptor ??= new RootDescriptor(Data); set => throw new Exception(" sd333 32111"); }
     }
 }

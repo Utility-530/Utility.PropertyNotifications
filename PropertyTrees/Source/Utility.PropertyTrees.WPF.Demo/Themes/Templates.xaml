@@ -112,7 +112,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="TypeTemplate">
-        <objects:ObjectComboBox
+        <!--<objects:ObjectComboBox
                     x:Name="ebdc"                 
                     Object="{Binding Mode=OneWay, Converter={x:Static conv:DefaultConverter.Instance }}" >
             <objects:ObjectComboBox.Filters>
@@ -120,7 +120,7 @@
                     <local1:TypeFilter/>
                 </x:Array>
             </objects:ObjectComboBox.Filters>
-        </objects:ObjectComboBox>
+        </objects:ObjectComboBox>-->
     </DataTemplate>
 
     <trees:PropertyTemplateSelector 
@@ -150,8 +150,8 @@
     </DataTemplate>
 
 
-    <objects:ValueObjectsDataTemplateSelector x:Key="ObjectsDataTemplateSelector"  
-                                         TypeTemplate="{StaticResource TypeTemplate}"/>
+    <!--<objects:ValueObjectsDataTemplateSelector x:Key="ObjectsDataTemplateSelector"  
+                                         TypeTemplate="{StaticResource TypeTemplate}"/>-->
     <DataTemplate DataType="{x:Type local:ViewModelsCollection}">
         <DataGrid ItemsSource="{Binding Data}" HorizontalAlignment="Stretch"   RowHeaderWidth="0"  HeadersVisibility="Column" EnableRowVirtualization="false">
             <i:Interaction.Behaviors>
