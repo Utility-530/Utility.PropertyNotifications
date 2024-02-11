@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using Utility.Enums;
 using Utility.WPF.Controls.Base;
 using Utility.WPF.Controls.Infrastructure;
-using Utility.WPF.Reactive;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls
 {

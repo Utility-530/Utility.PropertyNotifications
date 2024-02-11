@@ -25,7 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Utility.ViewModels\Utility.ViewModels.csproj" />
     <ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Behavior\Utility.WPF.Behaviors.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Behaviors\Utility.WPF.Behaviors.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.WPF.Controls.Meta\Utility.WPF.Controls.Meta.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
 	<ProjectReference Include="..\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />

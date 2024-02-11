@@ -6,7 +6,7 @@ using Utility.WPF.Controls.Base;
 
 namespace Utility.WPF.Controls
 {
-    using Utility.WPF.Reactive;
+    using Utility.WPF.Reactives;
 
     using static DependencyPropertyFactory<SizeControl>;
 

@@ -8,7 +8,7 @@ using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
 using Utility.Common.Helper;
-using Utility.Reactive;
+using Utility.Reactives;
 using Utility.WPF.Abstract;
 
 namespace Utility.WPF.Controls.Base

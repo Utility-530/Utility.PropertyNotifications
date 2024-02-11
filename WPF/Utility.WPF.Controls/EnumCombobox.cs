@@ -22,7 +22,7 @@ using Utility.Infrastructure;
 using Visibility = System.Windows.Visibility;
 using Arrangement = Utility.Enums.Arrangement;
 using System.Windows.Data;
-using Utility.WPF.Behavior;
+using Utility.WPF.Behaviors;
 using Microsoft.Xaml.Behaviors;
 using Utility.WPF.Behaviors;
 

@@ -10,11 +10,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
-using Utility.WPF.Reactive;
+using Utility.WPF.Reactives;
 using Utility.Helpers;
 using Utility.WPF.Properties;
 using Utility.WPF.Helpers;
-using Utility.Reactive;
+using Utility.Reactives;
 
 namespace Utility.WPF.Controls.Base
 {

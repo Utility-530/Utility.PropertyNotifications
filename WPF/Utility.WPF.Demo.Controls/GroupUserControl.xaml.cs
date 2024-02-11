@@ -10,13 +10,12 @@ using System.Windows;
 using System.Windows.Controls;
 using Utility.Common;
 using Utility.Common.Helper;
-using Utility.WPF.Reactive;
+using Utility.WPF.Reactives;
 using Utility.Helpers.NonGeneric;
 using Utility.Helpers.Ex;
 using Utility.WPF.Demo.Data.Factory;
 using Utility.WPF.Demo.Data.Model;
 using Utility.ViewModels;
-using Utility.Reactive.Helpers;
 
 namespace Utility.WPF.Demo.Controls
 {

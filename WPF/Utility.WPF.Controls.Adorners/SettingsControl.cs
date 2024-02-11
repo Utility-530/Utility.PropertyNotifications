@@ -2,7 +2,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using Utility.WPF.Behavior;
+using Utility.WPF.Behaviors;
 
 namespace Utility.WPF.Controls.Adorners
 {

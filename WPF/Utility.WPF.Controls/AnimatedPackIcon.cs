@@ -6,7 +6,7 @@ using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
-using Utility.WPF.Reactive;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls
 {
