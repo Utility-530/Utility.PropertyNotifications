@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Input;
 using Utility.Collections;
 using Utility.Commands;
-using Utility.Models;
+using Utility.Infrastructure;
 
 namespace Utility.Nodify.Core
 {

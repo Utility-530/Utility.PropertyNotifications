@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using Utility.Models;
+﻿using System.Windows;
+using Utility.Infrastructure;
 
 namespace Utility.Nodify.Core
 {

@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
-    <ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.Commands\Utility.Commands.csproj" />
   </ItemGroup>
 

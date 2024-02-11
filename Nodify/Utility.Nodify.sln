@@ -13,23 +13,25 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Operations",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{0A03D064-3582-4B1C-AC57-F16299199866}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Conversions", "..\Utility.Conversions\Utility.Conversions\Utility.Conversions.csproj", "{40EEFB24-81E2-4CAB-8D30-9971EF1AA91C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Conversions", "..\Conversions\Utility.Conversions\Utility.Conversions.csproj", "{40EEFB24-81E2-4CAB-8D30-9971EF1AA91C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commands", "..\Utility.WPF\Utility.Commands\Utility.Commands.csproj", "{1BDCC8D2-050F-4FB9-82DD-A75C3906E32E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commands", "..\Commands\Utility.Commands\Utility.Commands.csproj", "{1BDCC8D2-050F-4FB9-82DD-A75C3906E32E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models", "..\Utility.Models\Utility.Models\Utility.Models.csproj", "{8837212E-AF82-4742-9CE8-F7043B8C52EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models", "..\Models\Utility.Models\Utility.Models.csproj", "{8837212E-AF82-4742-9CE8-F7043B8C52EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Collections", "..\Utility.Collections\Utility.Collections\Utility.Collections.csproj", "{717EDE58-CAA3-485F-AFA0-82336A3B959A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Collections", "..\Collections\Utility.Collections\Utility.Collections.csproj", "{717EDE58-CAA3-485F-AFA0-82336A3B959A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{A2CA3C39-4192-4501-9F41-7D1F911F9950}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Texts", "..\Utility.WPF\Utility.WPF.Controls.Texts\Utility.WPF.Controls.Texts.csproj", "{C3D8C170-96C0-4626-AEE2-2F8A3BD606AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Texts", "..\WPF\Utility.WPF.Controls.Texts\Utility.WPF.Controls.Texts.csproj", "{C3D8C170-96C0-4626-AEE2-2F8A3BD606AE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Buttons", "..\Utility.WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj", "{018929E0-6B68-4BB3-8383-ABD8A7BA4221}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Buttons", "..\WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj", "{018929E0-6B68-4BB3-8383-ABD8A7BA4221}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Tabs", "..\Utility.WPF\Utility.WPF.Controls.Tabs\Utility.WPF.Controls.Tabs.csproj", "{7013B252-040F-41EB-AE7A-57EDE5946D92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Controls.Tabs", "..\WPF\Utility.WPF.Controls.Tabs\Utility.WPF.Controls.Tabs.csproj", "{7013B252-040F-41EB-AE7A-57EDE5946D92}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.ResourceDictionarys", "..\Utility.WPF\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj", "{4027B56C-C3B8-41E6-AF7F-9A654D42E165}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.ResourceDictionarys", "..\WPF\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj", "{4027B56C-C3B8-41E6-AF7F-9A654D42E165}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Infrastructure", "..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj", "{32647704-9DF4-405C-B112-B615CEFC03D4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,6 +87,10 @@ Global
 		{4027B56C-C3B8-41E6-AF7F-9A654D42E165}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4027B56C-C3B8-41E6-AF7F-9A654D42E165}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4027B56C-C3B8-41E6-AF7F-9A654D42E165}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32647704-9DF4-405C-B112-B615CEFC03D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32647704-9DF4-405C-B112-B615CEFC03D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32647704-9DF4-405C-B112-B615CEFC03D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32647704-9DF4-405C-B112-B615CEFC03D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -99,6 +105,7 @@ Global
 		{018929E0-6B68-4BB3-8383-ABD8A7BA4221} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{7013B252-040F-41EB-AE7A-57EDE5946D92} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{4027B56C-C3B8-41E6-AF7F-9A654D42E165} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
+		{32647704-9DF4-405C-B112-B615CEFC03D4} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C218ADB7-210D-4A37-BC47-800268D4894F}

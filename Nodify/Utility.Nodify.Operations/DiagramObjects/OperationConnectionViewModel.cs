@@ -1,7 +1,7 @@
 ﻿using Nodify;
 using Utility.Nodify.Core;
 using System;
-using Utility.Models;
+using Utility.Infrastructure;
 
 namespace Utility.Nodify.Operations
 {

@@ -16,6 +16,7 @@ using Utility.Models;
 using System.Collections.ObjectModel;
 using Message = Utility.Nodify.Operations.Message;
 using Utility.Nodify.Engine.ViewModels;
+using Utility.Infrastructure;
 
 namespace Utility.Nodify.Demo.Infrastructure
 {

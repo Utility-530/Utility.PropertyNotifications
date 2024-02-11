@@ -1,12 +1,10 @@
-﻿using Utility.Nodify.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using ICommand = System.Windows.Input.ICommand;
 using DryIoc;
-using Utility.Nodify.Operations;
 using System.Collections.ObjectModel;
-using Utility.Models;
 using Message = Utility.Nodify.Operations.Message;
+using Utility.Infrastructure;
 
 namespace Utility.Nodify.Demo
 {

@@ -8,6 +8,7 @@ using System.Windows;
 using Utility.Models;
 using Utility.Nodify.Operations.Infrastructure;
 using Utility.Nodify.Engine.ViewModels;
+using Utility.Infrastructure;
 
 namespace Utility.Nodify.Demo
 {
