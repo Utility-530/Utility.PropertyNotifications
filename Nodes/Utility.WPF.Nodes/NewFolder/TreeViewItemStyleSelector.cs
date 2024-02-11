@@ -24,7 +24,7 @@ namespace Utility.WPF.Nodes.NewFolder
             {
                 var resourceDictionary = new ResourceDictionary
                 {
-                    Source = new Uri($"/{typeof(ITreeViewBuilder).Namespace};component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute)
+                    Source = new Uri($"/{typeof(ITreeViewBuilder).Assembly.GetName().Name};component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute)
                 };
                 return resourceDictionary;
             }

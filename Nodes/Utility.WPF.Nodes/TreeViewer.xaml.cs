@@ -6,6 +6,8 @@ using System.Windows.Data;
 using Utility.Nodes;
 using Utility.Interfaces.NonGeneric;
 using Utility.WPF.Nodes;
+using Utility.Infrastructure;
+using Utility.Trees.Abstractions;
 
 namespace Views.Trees
 {
@@ -18,6 +20,7 @@ namespace Views.Trees
         public static readonly DependencyProperty TreeViewBuilderProperty = DependencyProperty.Register("TreeViewBuilder", typeof(ITreeViewBuilder), typeof(TreeViewer), new PropertyMetadata());
         public static readonly DependencyProperty TreeViewFilterProperty = DependencyProperty.Register("TreeViewFilter", typeof(ITreeViewFilter), typeof(TreeViewer), new PropertyMetadata());
         public static readonly DependencyProperty StyleSelectorProperty = DependencyProperty.Register("StyleSelector", typeof(StyleSelector), typeof(TreeViewer), new PropertyMetadata());
+        public static readonly DependencyProperty EventListenerProperty =            DependencyProperty.Register("EventListener", typeof(IEventListener), typeof(TreeViewer), new PropertyMetadata());
 
         private IDisposable disposable;
         private TreeView treeView;
@@ -26,7 +29,9 @@ namespace Views.Trees
         {
             InitializeComponent();
             this.Content = new TreeView();
+          
             treeView = this.Content as TreeView;
+            dsfd(treeView);
             this.Loaded += Viewer_Loaded;
 
             void Viewer_Loaded(object sender, RoutedEventArgs e)
@@ -41,6 +46,50 @@ namespace Views.Trees
             }
         }
 
+        void dsfd(TreeView treeView)
+        {
+            treeView
+                .MouseDoubleClicks()
+                .Subscribe(a =>
+                {
+                    if (a is { Header: ITree { } node })
+                    {
+                        EventListener?.Send(new DoubleClickChange(a, node));
+                    }                  
+                });
+
+            treeView
+                .MouseSingleClicks()
+                .Subscribe(a =>
+                {
+                    if (a is { Header: ITree { } node })
+                    {
+                        EventListener?.Send(new ClickChange(a, node));
+                    }
+                });
+
+            treeView
+                .MouseMoves()
+                .Subscribe(a =>
+                {
+                    if (a.item is { Header: ITree { } node })
+                    {
+                        Utility.Structs.Point sPoint = new(a.point.X, a.point.Y);
+                        EventListener?.Send(new OnHoverChange(a.item, node, true, sPoint));
+                    }
+                });
+
+            treeView
+                .MouseHoverLeaves()
+                .Subscribe(a =>
+                {
+                    if (a is { Header: ITree { } node })
+                    {
+                        EventListener?.Send(new OnHoverChange(a, node, false, default));
+                    }
+                });
+        }
+
         private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (e.NewValue is ILoad viewModel)
@@ -50,6 +99,12 @@ namespace Views.Trees
         }
 
         #region properties
+
+        public IEventListener EventListener
+        {
+            get { return (IEventListener)GetValue(EventListenerProperty); }
+            set { SetValue(EventListenerProperty, value); }
+        }
 
         public object ViewModel
         {

@@ -7,8 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Utility.Changes\Utility.Changes.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.ViewModels\Utility.ViewModels.csproj" />
-    <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
+    <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
     <ProjectReference Include="..\AdornerBehavior\AdornerBehavior.csproj" />
