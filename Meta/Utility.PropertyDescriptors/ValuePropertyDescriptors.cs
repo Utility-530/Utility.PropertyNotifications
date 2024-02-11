@@ -29,10 +29,14 @@ namespace Utility.PropertyDescriptors
     public record DateTimeValue(Descriptor Descriptor, object Instance) : PropertyDescriptor<DateTime>(Descriptor, Instance)
     {
     }
+
+    public record TypeValue(Descriptor Descriptor, object Instance) : PropertyDescriptor<System.Type>(Descriptor, Instance)
+    {
+    }
+    
     public record NullableDateTimeValue(Descriptor Descriptor, object Instance) : NullablePropertyDescriptor<DateTime>(Descriptor, Instance)
     {
     }
-
 
     public record DoubleValue(Descriptor Descriptor, object Instance) : PropertyDescriptor<double>(Descriptor, Instance)
     {
@@ -61,12 +65,11 @@ namespace Utility.PropertyDescriptors
     public record IntegerValue(Descriptor Descriptor, object Instance) : PropertyDescriptor<int>(Descriptor, Instance)
     {
     }
+
     public record NullableIntegerValue(Descriptor Descriptor, object Instance) : NullablePropertyDescriptor<int>(Descriptor, Instance)
     {
     }
 
-
- 
     public record LongValue(Descriptor Descriptor, object Instance) : PropertyDescriptor<long>(Descriptor, Instance)
     {
     }

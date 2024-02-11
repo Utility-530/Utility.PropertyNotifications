@@ -21,6 +21,7 @@ namespace Utility.PropertyDescriptors
                 Type t when t == typeof(byte) => new ByteValue(descriptor, value),
                 Type t when t == typeof(Guid) => new GuidValue(descriptor, value),
                 Type t when t == typeof(DateTime) => new DateTimeValue(descriptor, value),
+                Type t when t == typeof(Type) => new TypeValue(descriptor, value),
 
                 Type t when t.IsNullableEnum() => new NullableEnumValue(descriptor, value),
                 Type t when t == typeof(bool?) => new NullableBooleanValue(descriptor, value),

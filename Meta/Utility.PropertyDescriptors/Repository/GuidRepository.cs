@@ -122,7 +122,7 @@ namespace Utility.Nodes.Reflections
         public Task<Guid> Find(Guid parentGuid, string localName, int? index = null)
         {
 
-            var _index = index.HasValue ? $" = '{index.Value}'" : "is null";
+            var _index = index.HasValue ? $"= '{index.Value}'" : "is null";
             var tables = connection.Query<Table>($"Select * from 'Table' where Parent = '{parentGuid}' AND Name = '{localName}' And _Index {_index}");
             if (tables.Count == 0)
             {

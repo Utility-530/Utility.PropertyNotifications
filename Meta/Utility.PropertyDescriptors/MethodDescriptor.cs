@@ -78,7 +78,7 @@ namespace Utility.PropertyDescriptors
 
         public ICommand Command => command.Value;
 
-        public override string Category => throw new NotImplementedException();
+        public override string Category => "dfs";
 
         public override void SetValue(object value)
         {

@@ -3,7 +3,7 @@ using Utility.Changes;
 
 namespace Utility.PropertyDescriptors
 {
-    public record CollectionDescriptor(Descriptor PropertyDescriptor, object Instance) : PropertyDescriptor(PropertyDescriptor, Instance), IPropertiesDescriptor
+    public record CollectionDescriptor(Descriptor PropertyDescriptor, object Instance) : PropertyDescriptor(PropertyDescriptor, Instance)
     {
         public static string _Name => "Collection";
 

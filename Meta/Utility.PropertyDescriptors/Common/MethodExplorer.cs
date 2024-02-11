@@ -22,7 +22,8 @@ namespace Utility.Nodes
             if (type != typeof(object))
             {
                 yield return type;
-                foreach (var t in Types(type.BaseType))
+                if(type.BaseType is Type baseType)
+                foreach (var t in Types(baseType))
                     yield return t;
             }
             else

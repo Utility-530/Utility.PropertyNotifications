@@ -14,7 +14,7 @@ namespace Utility.PropertyDescriptors
 
         public override string? Name => ParameterInfo.Name ?? ParameterInfo.Position.ToString();
 
-        public override string Category => throw new NotImplementedException();
+        public override string Category => "s22dfsd";//throw new NotImplementedException();
 
         public override bool IsValueOrStringProperty => Type.IsValueOrStringProperty();
 
