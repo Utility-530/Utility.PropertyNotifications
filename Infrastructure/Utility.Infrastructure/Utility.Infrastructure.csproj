@@ -19,9 +19,10 @@
 		<ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
 		<ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
 		<ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
-		<ProjectReference Include="..\..\Reactive\Utility.Reactive\Utility.Reactives.csproj" />
+		<ProjectReference Include="..\..\Reactives\Utility.Reactives\Utility.Reactives.csproj" />
 		<ProjectReference Include="..\..\Structs\Utility.Structs\Utility.Structs.csproj" />
 		<ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.ViewModels.Base\Utility.ViewModels.Base.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Using Include="System" />
