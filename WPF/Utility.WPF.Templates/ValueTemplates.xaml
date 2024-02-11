@@ -6,7 +6,9 @@
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
                     xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:local="clr-namespace:Utility.WPF.Templates"
+                    xmlns:infra="clr-namespace:Utility.WPF.Templates.Infrastructure"
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:t="http://schemas.utility.com/trees"
                     xmlns:ad="http://schemas.utility.com/adorners"
                     xmlns:bhvrs="http://schemas.utility.com/behaviors" 
                     xmlns:controls="http://schemas.utility.com">
@@ -55,12 +57,23 @@
         <!--<ItemsControl ItemsSource="{Binding Value, Mode=OneWay}"></ItemsControl>-->
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type sys:Guid}">
-        
-            <controls:GuidBox Guid="{Binding Path=Value}" />
-        
+    <DataTemplate DataType="{x:Type sys:Guid}">  
+        <controls:GuidBox Guid="{Binding Path=Value}" />        
     </DataTemplate>
 
+    <DataTemplate x:Key="Object">
+        <!--<ContentControl Content="{Binding }"></ContentControl>-->
+    </DataTemplate>
+
+
+    <DataTemplate DataType="{x:Type sys:Type}">
+        <!--<ContentControl Content="{Binding }"></ContentControl>-->
+        <t:TypeSelector x:Name="TypeSelector" Type="{Binding Value, Mode=TwoWay}">
+            <i:Interaction.Behaviors>
+                <infra:EntryAssemblyBehavior/>
+            </i:Interaction.Behaviors>
+        </t:TypeSelector>
+    </DataTemplate>
     <!--<DataTemplate DataType="{x:Type sys:Guid}">
         <TextBox Text="{Binding Path=Value, Mode=TwoWay, StringFormat={}{0:N0}}"></TextBox>
     </DataTemplate>-->
@@ -113,8 +126,6 @@
             </i:Interaction.Behaviors>
         </TextBox>
     </DataTemplate>
-
-
 
     <DataTemplate x:Key="Missing">
         <TextBlock Text="Missing Template"></TextBlock>

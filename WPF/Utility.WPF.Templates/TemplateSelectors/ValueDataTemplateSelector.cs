@@ -35,7 +35,11 @@ namespace Utility.WPF.Templates
                     if (Templates[new DataTemplateKey(type.BaseType)] is DataTemplate __dt)
                         return __dt;
                 }
-
+                // DataTemplate.DataType cannot be type Object.
+                if (type == typeof(object))
+                {
+                    return Templates["Object"] as DataTemplate;
+                }
                 if (Templates[new DataTemplateKey(type)] is DataTemplate _dt)
                     return _dt;
             }
