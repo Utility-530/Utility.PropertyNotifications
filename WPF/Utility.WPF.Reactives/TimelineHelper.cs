@@ -6,7 +6,7 @@ using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
 using System.Windows.Media.Animation;
 
-namespace Utility.WPF.Reactive
+namespace Utility.WPF.Reactives
 {
     /// <summary>
     /// 

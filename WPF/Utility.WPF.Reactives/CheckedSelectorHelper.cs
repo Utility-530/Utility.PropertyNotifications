@@ -5,7 +5,7 @@ using System.Reactive.Linq;
 using Utility.WPF.Abstract;
 using Utility.WPF.Events;
 
-namespace Utility.WPF.Reactive
+namespace Utility.WPF.Reactives
 {
     public static class CheckedSelectorHelper
     {

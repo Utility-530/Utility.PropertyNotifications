@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Utility.WPF.Reactive
+namespace Utility.WPF.Reactives
 {
     public static class TreeViewHelper
     {

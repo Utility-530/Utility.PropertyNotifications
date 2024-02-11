@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Media.Animation;
 
-namespace Utility.WPF.Reactive
+namespace Utility.WPF.Reactives
 {
     public static partial class ControlHelper
     {

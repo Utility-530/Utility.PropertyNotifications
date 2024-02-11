@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace Utility.WPF.Reactive
+namespace Utility.WPF.Reactives
 {
     public static class ItemContainerGeneratorHelper
     {

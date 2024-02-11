@@ -4,7 +4,7 @@ using System.Reactive;
 using System.Reactive.Linq;
 using System.Windows;
 
-namespace Utility.WPF.Reactive
+namespace Utility.WPF.Reactives
 {
     public static class FrameworkElementHelper
     {

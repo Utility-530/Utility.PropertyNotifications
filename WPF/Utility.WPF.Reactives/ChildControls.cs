@@ -5,9 +5,9 @@ using System.Reactive.Linq;
 using System.Windows;
 using Utility.WPF.Helpers;
 using Utility.Helpers;
-using Utility.Reactive;
+using Utility.Reactives;
 
-namespace Utility.WPF.Reactive;
+namespace Utility.WPF.Reactives;
 
 public static class ChildControls
 {

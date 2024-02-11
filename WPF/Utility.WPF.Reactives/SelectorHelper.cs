@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Utility.WPF.Abstract;
 
-namespace Utility.WPF.Reactive
+namespace Utility.WPF.Reactives
 {
     public static class SelectorHelper
     {

@@ -4,7 +4,7 @@ using System.Reactive.Linq;
 using System.Windows;
 using Utility.WPF.Abstract;
 
-namespace Utility.WPF.Reactive
+namespace Utility.WPF.Reactives
 {
     public static class OutputHelper
     {

@@ -4,15 +4,15 @@ using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Controls;
-using Utility.Reactive;
+using Utility.Reactives;
 
-namespace Utility.WPF.Reactive
+namespace Utility.WPF.Reactives
 {
     public static class ItemsControlHelper
     {
         public static IObservable<int> Counts(this ItemsControl headeredItemsControl)
         {
-            return Utility.Reactive.ObservableHelper.Pace(headeredItemsControl.WhenAnyValue(a => a.ItemsSource)
+            return TimeHelper.Pace(headeredItemsControl.WhenAnyValue(a => a.ItemsSource)
                 .WhereNotNull()
                 .Select(a =>Utility.Helpers.Ex.EnumerableHelper.ToGenericObservable(a).ToObservableChangeSet()
                 .ToCollection()

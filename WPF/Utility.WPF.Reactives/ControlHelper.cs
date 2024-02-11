@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace Utility.WPF.Reactive
+namespace Utility.WPF.Reactives
 {
     public static partial class ControlHelper
     {
