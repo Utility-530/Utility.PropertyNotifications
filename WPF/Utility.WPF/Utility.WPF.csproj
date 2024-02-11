@@ -35,30 +35,13 @@
 		<InheritWinAppVersionFrom>None</InheritWinAppVersionFrom>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <Compile Remove="Deprecated\Base\**" />
-	  <Compile Remove="Deprecated\Converter\**" />
-	  <Compile Remove="Deprecated\Events\**" />
-	  <Compile Remove="Deprecated\Markup\**" />
-	  <EmbeddedResource Remove="Deprecated\Base\**" />
-	  <EmbeddedResource Remove="Deprecated\Converter\**" />
-	  <EmbeddedResource Remove="Deprecated\Events\**" />
-	  <EmbeddedResource Remove="Deprecated\Markup\**" />
-	  <None Remove="Deprecated\Base\**" />
-	  <None Remove="Deprecated\Converter\**" />
-	  <None Remove="Deprecated\Events\**" />
-	  <None Remove="Deprecated\Markup\**" />
-	  <Page Remove="Deprecated\Base\**" />
-	  <Page Remove="Deprecated\Converter\**" />
-	  <Page Remove="Deprecated\Events\**" />
-	  <Page Remove="Deprecated\Markup\**" />
-	</ItemGroup>
+
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
 		<ProjectReference Include="..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
-		<ProjectReference Include="..\Utility.WPF.Reactive\Utility.WPF.Reactive.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Reactives\Utility.WPF.Reactives.csproj" />
 	</ItemGroup>
 
 	<!-- Only packs project if Configuration set to Release-->
