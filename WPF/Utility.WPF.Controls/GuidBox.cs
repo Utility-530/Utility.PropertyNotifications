@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
+using static System.Windows.DependencyProperty;
 
 namespace Utility.WPF.Controls
 {
@@ -14,12 +16,14 @@ namespace Utility.WPF.Controls
     {
         private TextBox EditBox;
         private Control SpacedBox;
+        private Grid? Grid;
+        public static readonly DependencyProperty GuidProperty = Register("Guid", typeof(Guid), typeof(GuidBox), new PropertyMetadata(Changed)),
+            GuidAsStringProperty = Register("GuidAsString", typeof(string), typeof(GuidBox), new PropertyMetadata(Changed)),
+            IsLowerCaseProperty = Register("IsLowerCase", typeof(bool), typeof(GuidBox), new PropertyMetadata(true, Changed)),
+            IsReadOnlyProperty = Register("IsReadOnly", typeof(bool), typeof(GuidBox), new PropertyMetadata(true, IsReadOnlyChanged));
 
-        public static readonly DependencyProperty GuidProperty =
-            DependencyProperty.Register("Guid", typeof(Guid), typeof(GuidBox), new PropertyMetadata(Changed)),
-            GuidAsStringProperty = DependencyProperty.Register("GuidAsString", typeof(string), typeof(GuidBox), new PropertyMetadata(Changed)),
-            IsLowerCaseProperty = DependencyProperty.Register("IsLowerCase", typeof(bool), typeof(GuidBox), new PropertyMetadata(true, Changed)),
-            IsReadOnlyProperty = DependencyProperty.Register("IsReadOnly", typeof(bool), typeof(GuidBox), new PropertyMetadata(true, IsReadOnlyChanged));
+
+
 
         private static void IsReadOnlyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -34,7 +38,7 @@ namespace Utility.WPF.Controls
 
         public GuidBox()
         {
-
+            FontSize = 8;
         }
 
         private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -95,12 +99,15 @@ namespace Utility.WPF.Controls
 
         public override void OnApplyTemplate()
         {
+
             guidBox = GetTemplateChild("GuidGrid") as Grid;
             var items = guidBox.ContextMenu.Items;
             MenuItems(items);
 
             EditBox = GetTemplateChild("EditBox") as TextBox;
             SpacedBox = GetTemplateChild("SpacedBox") as Control;
+            Grid = GetTemplateChild("Grid") as Grid;
+            this.Grid.MouseDown += Grid_MouseDown;
             EditBox.LostFocus += GuidBox_LostFocus;
             EditBox.GotFocus += GuidBox_GotFocus;
             GuidAsString = IsLowerCase ? Guid.ToString() : Guid.ToString().ToUpper();
@@ -162,6 +169,24 @@ namespace Utility.WPF.Controls
                     }
                 }
             }
+        }
+
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            guidBox.ContextMenu.PlacementTarget = Grid;
+            guidBox.ContextMenu.IsOpen = true;
+        }
+
+        protected override void OnMouseEnter(MouseEventArgs e)
+        {
+            Grid.Visibility = Visibility.Visible;
+            base.OnMouseEnter(e);
+        }
+
+        protected override void OnMouseLeave(MouseEventArgs e)
+        {
+            Grid.Visibility = Visibility.Collapsed;
+            base.OnMouseLeave(e);
         }
     }
 
