@@ -1,9 +1,7 @@
 ﻿using ReactiveUI;
 using Splat;
 using System.Windows.Controls;
-
-//using ArxOne.MrAdvice.Advice;
-using Utility.WPF.Command;
+using Utility.Commands;
 
 namespace Utility.WPF.Demo.Controls
 {
@@ -25,7 +23,7 @@ namespace Utility.WPF.Demo.Controls
 
         public LogViewModel()
         {
-            this.LogCommand = new Command.RelayCommand(() =>
+            this.LogCommand = new Command(() =>
             {
                 if (string.IsNullOrEmpty(this.Species))
                 {
@@ -38,12 +36,12 @@ namespace Utility.WPF.Demo.Controls
                     .Info("Species {0} was discovered at {1}.", this.Species, "Home");
             });
 
-            this.RunAspectMethodCommand = new RelayCommand(() => AddLengths(species, location));
+            this.RunAspectMethodCommand = new Command(() => AddLengths(species, location));
         }
 
-        public Command.RelayCommand LogCommand { get; }
+        public Command LogCommand { get; }
 
-        public RelayCommand RunAspectMethodCommand { get; }
+        public Command RunAspectMethodCommand { get; }
 
         public string Species
         {

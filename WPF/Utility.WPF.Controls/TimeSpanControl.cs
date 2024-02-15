@@ -33,6 +33,13 @@ namespace Utility.WPF.Controls
             });
         }
 
+        
+        public decimal Value
+        {
+            get =>(decimal) this.GetValue(ValueProperty);
+                set => this.SetValue(ValueProperty, value);
+        }
+
         public event RoutedEventHandler<(decimal value, TimeInterval timeInterval)> ValueChanged
         {
             add { AddHandler(ValueChangedEvent, value); }

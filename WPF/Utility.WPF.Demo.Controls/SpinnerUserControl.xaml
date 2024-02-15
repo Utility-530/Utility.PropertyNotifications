@@ -2,7 +2,6 @@
     x:Class="Utility.WPF.Demo.View.SpinnerUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:command="clr-namespace:Utility.WPF.Command;assembly=Utility.WPF"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -31,12 +30,12 @@
                 Height="50">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="ValueChanged">
-                        <i:InvokeCommandAction Command="{Binding ElementName=oc, Mode=OneWay}" />
+                        <i:ChangePropertyAction TargetObject="{Binding ElementName=oc}" Value="{Binding ElementName=TimeSpanControl1, Path=Value}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </view:TimeSpanControl>
 
-            <command:OutputControl
+            <ContentControl
                 x:Name="oc"
                 Margin="20"
                 VerticalAlignment="Center" />
