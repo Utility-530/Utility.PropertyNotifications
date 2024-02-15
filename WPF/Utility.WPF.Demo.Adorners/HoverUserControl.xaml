@@ -11,8 +11,8 @@
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    <TabControl>
-        <TabItem Header="Hover">
+
+
             <Grid x:Name="Grid1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -63,49 +63,5 @@
                     </Canvas>
                 </Border>
             </Grid>
-        </TabItem>
 
-        <TabItem Header="PopupBox">
-            <materialDesign:PopupBox
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
-                Style="{DynamicResource MaterialDesignMultiFloatingActionAccentPopupBox}"
-                PlacementMode="BottomAndAlignCentres">
-                <materialDesign:PopupBox.ToggleCheckedContent>
-                    <materialDesign:PackIcon
-      Kind="Butterfly"
-      Width="24"
-      Height="24" />
-                </materialDesign:PopupBox.ToggleCheckedContent>
-                <materialDesign:PopupBox.ToggleContent>
-                    <materialDesign:PackIcon
-      Kind="Loaf"
-      Width="24"
-      Height="24" />
-                </materialDesign:PopupBox.ToggleContent>
-                <StackPanel>
-                    <Button      ToolTip="One">
-                        <UniformGrid Background="Peru" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                            <TextBlock VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                              Background="Red"         >1</TextBlock>
-                        </UniformGrid>
-
-                    </Button>
-                    <Button ToolTip="Two"      IsEnabled="False">
-                        <Grid>
-                            <TextBlock VerticalAlignment="Stretch" 
-                                       HorizontalAlignment="Stretch">2</TextBlock>
-                        </Grid>
-
-                    </Button>
-                    <Button      ToolTip="Three">
-                        <Grid>
-                            <TextBlock VerticalAlignment="Stretch" 
-                                       HorizontalAlignment="Stretch">3</TextBlock>
-                        </Grid>
-                    </Button>
-                </StackPanel>
-            </materialDesign:PopupBox>
-        </TabItem>
-    </TabControl>
 </UserControl>

@@ -32,6 +32,12 @@
             Grid.Column="0"
             Margin="8"
             VerticalAlignment="Center">
+            <FrameworkElement.Resources>
+                <Style TargetType="{x:Type ListBoxItem}">
+                    <Setter Property="Width" Value="100"></Setter>
+                    <Setter Property="Height" Value="100"></Setter>
+                </Style>
+            </FrameworkElement.Resources>
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <ListBox>
                     <ListBoxItem></ListBoxItem>

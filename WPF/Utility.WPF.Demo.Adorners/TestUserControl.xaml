@@ -28,15 +28,25 @@
 
             <ad:AdornerEx.Adorners>
                 <Button 
-                                   Margin="4" Content="3544"
+                                   Margin="-32,0" Content="3544"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Bottom">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <i:ChangePropertyAction PropertyName="Foreground" Value="Blue"></i:ChangePropertyAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
 
                 </Button>
                 <Button 
                                    Margin="4" Content="3544"
                                    HorizontalAlignment="Right"
                                    VerticalAlignment="Bottom">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <i:ChangePropertyAction PropertyName="Foreground" Value="Red"></i:ChangePropertyAction>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
 
                 </Button>
             </ad:AdornerEx.Adorners>

@@ -12,25 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WpfHighlighter;
 
 namespace Utility.WPF.Demo.Adorners
 {
     /// <summary>
-    /// Interaction logic for HighlightUserControl.xaml
+    /// Interaction logic for PopupUserControl.xaml
     /// </summary>
-    public partial class HighlightUserControl : UserControl
+    public partial class PopupUserControl : UserControl
     {
-        public HighlightUserControl()
+        public PopupUserControl()
         {
             InitializeComponent();
-            this.MouseDoubleClick += HighlightUserControl_MouseDoubleClick;
-        }
-
-        private void HighlightUserControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            HighlightCommand.Instance.Execute(this);
         }
     }
 }
-

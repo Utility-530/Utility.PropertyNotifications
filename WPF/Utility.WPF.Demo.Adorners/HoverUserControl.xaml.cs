@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-
+using Utility.Commands;
 
 namespace Utility.WPF.Demo.Adorners
 {
@@ -15,7 +15,7 @@ namespace Utility.WPF.Demo.Adorners
         public HoverUserControl()
         {
             InitializeComponent();
-            TextCommand = new Utility.WPF.Command.RelayCommand(() => TextBlock1.Text += " New Text");
+            TextCommand = new Command(() => TextBlock1.Text += " New Text");
             Grid1.DataContext = this;
 
             //adornerController = new(Square3Grid);
@@ -36,5 +36,10 @@ namespace Utility.WPF.Demo.Adorners
                 TextBlock1.Text = TextBlock1.Text.Remove(TextBlock1.Text.Length - 9);
             }
         }
+
+
+    
+
+
     }
 }
