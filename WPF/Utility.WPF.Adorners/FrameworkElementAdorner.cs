@@ -55,7 +55,28 @@ namespace Utility.WPF.Adorners
         /// Collection of adorners.
         /// </summary>
         public static readonly DependencyProperty AdornersProperty =
-            DependencyProperty.Register("Adorners", typeof(AdornerCollection), typeof(FrameworkElementAdorner));
+            DependencyProperty.Register("Adorners", typeof(AdornerCollection), typeof(FrameworkElementAdorner), new PropertyMetadata(Changed));
+
+        private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+          if(d is FrameworkElementAdorner adorner && e.NewValue is AdornerCollection collection)
+            {
+                adorner.Subscribe(collection);
+            }
+        }
+
+        private void Subscribe(AdornerCollection collection)
+        {
+            collection.CollectionChanged += Collection_CollectionChanged;
+        }
+
+        private void Collection_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        {
+            this.InvalidateArrange();
+            this.InvalidateMeasure();
+            this.InvalidateVisual();
+
+        }
 
         /// <summary>
         /// Position X of adorners.

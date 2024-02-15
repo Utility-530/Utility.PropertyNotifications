@@ -746,11 +746,30 @@ namespace Utility.WPF.Adorners
                         if (adorner.GetValue(IsEnabledProperty) is true)
                             this.adornerColllection.Add(adorner);
                         else if (adorner is FrameworkElementAdorner)
-                            this.adornerColllection.Add(adorner);
+                        {
+                            this.adornerColllection.Add(adorner);               
+                        }
+                        adorner.MouseEnter += Adorner_MouseEnter;
+                        adorner.MouseLeave += Adorner_MouseLeave;
                     }
                     adornerColllection.Opacity = 0;
+              
                 } 
             }
+        }
+
+
+        bool mouseEnter = false;
+
+        private void Adorner_MouseLeave(object sender, MouseEventArgs e)
+        {
+            mouseEnter = false;
+       
+        }
+
+        private void Adorner_MouseEnter(object sender, MouseEventArgs e)
+        {
+            mouseEnter = true;
         }
 
         /// <summary>
@@ -787,9 +806,12 @@ namespace Utility.WPF.Adorners
         /// </summary>
         private void closeAdornerTimer_Tick(object sender, EventArgs e)
         {
-            closeAdornerTimer.Stop();
+            if (mouseEnter == false)
+            {
+                closeAdornerTimer.Stop();
 
-            FadeOutAdorner();
+                FadeOutAdorner();
+            }
         }
 
         /// <summary>
