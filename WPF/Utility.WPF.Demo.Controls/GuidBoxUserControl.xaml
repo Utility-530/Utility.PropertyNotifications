@@ -7,9 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UniformGrid>
-        <controls:GuidBox IsReadOnly="false" x:Name="One"></controls:GuidBox>
+        <controls:GuidBox IsReadOnly="false" x:Name="One" Height="16"></controls:GuidBox>
         <controls:GuidBox IsReadOnly="true"  GuidAsString="6aae7c41-e0d9-467f-ac10-22bbb1077c5d"></controls:GuidBox>
         <controls:GuidBox IsReadOnly="true"  x:Name="Two" IsLowerCase="false"></controls:GuidBox>
-        <controls:GuidBox IsReadOnly="false" GuidAsString="6aae7c41-e0d9-467f-ac10-22bbb1077c5d"></controls:GuidBox>
+        <controls:GuidBox IsReadOnly="false" Width="200" GuidAsString="6aae7c41-e0d9-467f-ac10-22bbb1077c5d"></controls:GuidBox>
     </UniformGrid>
 </UserControl>
