@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Utility.WPF.Reactives
 {
@@ -30,7 +31,7 @@ namespace Utility.WPF.Reactives
                     .MouseHoverEnterSelections<TreeViewItem>();
         }
 
-        public static IObservable<TreeViewItem> MouseHoverLeaves(this TreeView control)
+        public static IObservable<(TreeViewItem item, MouseEventArgs eventArgs)> MouseHoverLeaves(this TreeView control)
         {
             return control
                     .MouseHoverLeaveSelections<TreeViewItem>();

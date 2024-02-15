@@ -30,7 +30,7 @@ namespace Utility.WPF.Reactives
                 });
         }
 
-        public static IObservable<T?> MouseSingleClickSelections<T>(this Control control) where T : DependencyObject
+        public static IObservable<T?> MouseSingleClickSelections<T>(this UIElement control) where T : DependencyObject
         {
             return Observable.FromEventPattern<MouseButtonEventHandler, MouseButtonEventArgs>(
                    s => control.PreviewMouseLeftButtonUp += s,
@@ -42,7 +42,7 @@ namespace Utility.WPF.Reactives
         }
 
 
-        public static IObservable<T?> MouseHoverEnterSelections<T>(this Control control) where T : DependencyObject
+        public static IObservable<T?> MouseHoverEnterSelections<T>(this UIElement control) where T : DependencyObject
         {
             return Observable.FromEventPattern<MouseEventHandler, MouseEventArgs>(
                    s => control.MouseEnter += s,
@@ -53,7 +53,7 @@ namespace Utility.WPF.Reactives
                 });
         }
 
-        public static IObservable<(T? item, Point point)> MouseMoveSelections<T>(this Control control) where T : DependencyObject
+        public static IObservable<(T? item, Point point)> MouseMoveSelections<T>(this UIElement control) where T : DependencyObject
         {
             return Observable.FromEventPattern<MouseEventHandler, MouseEventArgs>(
                    s => control.MouseMove += s,
@@ -67,14 +67,14 @@ namespace Utility.WPF.Reactives
         }
 
 
-        public static IObservable<T?> MouseHoverLeaveSelections<T>(this Control control) where T : DependencyObject
+        public static IObservable<(T? item, MouseEventArgs args)> MouseHoverLeaveSelections<T>(this UIElement control) where T : DependencyObject
         {
             return Observable.FromEventPattern<MouseEventHandler, MouseEventArgs>(
                    s => control.MouseLeave += s,
                    s => control.MouseLeave -= s)
                 .Select(evt =>
-                {
-                    return GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control);
+                { 
+                    return (GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control), evt.EventArgs);
                 });
         }
 
@@ -88,6 +88,11 @@ namespace Utility.WPF.Reactives
                 while (hit is not null and not T)
                 {
                     hit = VisualTreeHelper.GetParent(hit);
+                    if(objTreeViewControl==hit)
+                    {
+                        hit = null;
+                        break;
+                    }
                 }
                 return (T?)hit;
             }
