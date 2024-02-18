@@ -67,7 +67,7 @@ namespace Utility.Trees
             {
                 return tree;
             }
-
+            List<IReadOnlyTree> trees = new();
             foreach (var child in tree.Items)
                 if (child is IReadOnlyTree tChild)
                 {
@@ -75,14 +75,18 @@ namespace Utility.Trees
                     {
                         return tChild;
                     }
-                    else if(tChild.MatchDescendant(action) is { } match)
-                        return match;
+                    else
+                        trees.Add(tChild);
                 }
                 else
                     throw new Exception("c 333211");
                 
 
-
+            foreach(var c in trees)
+            {
+                 if (c.MatchDescendant(action) is { } match)
+                    return match;
+            }
             return null;
         }
 
@@ -115,6 +119,33 @@ namespace Utility.Trees
                 parent = parent.Parent;
             }
         }
+
+
+        //public static IEnumerable<IReadOnlyTree> MatchDescendants(this IReadOnlyTree tree, Predicate<IReadOnlyTree> action)
+        //{
+        //    if (action(tree))
+        //    {
+        //        return tree;
+        //    }
+
+        //    foreach (var child in tree.Items)
+        //        if (child is IReadOnlyTree tChild)
+        //        {
+        //            if (action(tChild))
+        //            {
+        //                return tChild;
+        //            }
+        //            else if (tChild.MatchDescendant(action) is { } match)
+        //                return match;
+        //        }
+        //        else
+        //            throw new Exception("c 333211");
+
+
+
+        //    return null;
+        //}
+
     }
 
 
