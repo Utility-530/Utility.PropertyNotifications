@@ -11,6 +11,7 @@
     <ProjectReference Include="..\..\Reactives\Utility.Reactives\Utility.Reactives.csproj" />
     <ProjectReference Include="..\Utility.ViewModels.Base\Utility.ViewModels.Base.csproj" />
     <ProjectReference Include="..\Utility.WPF.Abstract\Utility.WPF.Abstract.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Animation\Utility.WPF.Animations.csproj" />
     <ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
     <ProjectReference Include="..\Utility.WPF.Reactives\Utility.WPF.Reactives.csproj" />
   </ItemGroup>
