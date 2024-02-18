@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace Utility.WPF.Animation
+namespace Utility.WPF.Animations.Helpers
 {
     public static class Helper
     {

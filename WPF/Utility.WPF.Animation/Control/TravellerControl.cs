@@ -8,6 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Utility.WPF.Animation.Infrastructure;
+using Utility.WPF.Animations.Helpers;
 
 namespace Utility.WPF.Animation
 {
