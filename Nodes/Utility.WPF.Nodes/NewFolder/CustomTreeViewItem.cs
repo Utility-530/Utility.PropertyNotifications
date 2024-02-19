@@ -16,6 +16,20 @@ namespace VisualJsonEditor.Test
         private ButtonAdornerController adornerController;
         public static readonly DependencyProperty MousePositionProperty = DependencyProperty.Register("MousePosition", typeof(Point), typeof(CustomTreeViewItem), new PropertyMetadata());
 
+        // Register a custom routed event using the Bubble routing strategy.
+        public static readonly RoutedEvent ConditionalClickEvent = EventManager.RegisterRoutedEvent(
+            name: "ConditionalClick",
+            routingStrategy: RoutingStrategy.Bubble,
+            handlerType: typeof(RoutedEventHandler),
+            ownerType: typeof(CustomTreeViewItem));
+
+        // Provide CLR accessors for assigning an event handler.
+        public event RoutedEventHandler ConditionalClick
+        {
+            add { AddHandler(ConditionalClickEvent, value); }
+            remove { RemoveHandler(ConditionalClickEvent, value); }
+        }
+
 
         public Point MousePosition
         {
@@ -41,7 +55,13 @@ namespace VisualJsonEditor.Test
             //ToolTipService.SetInitialShowDelay(textBlock, 100);
             //ToolTipService.SetShowDuration(textBlock, 10000);
             ContextMenu = contextMenu;
+            this.Loaded += CustomTreeViewItem_Loaded;
 
+        }
+
+        private void CustomTreeViewItem_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.RaiseEvent(new RoutedEventArgs(ConditionalClickEvent));
         }
 
         private void Show_Click(object sender, RoutedEventArgs e)

@@ -8,6 +8,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.WPF.Nodes;
 using Utility.Infrastructure;
 using Utility.Trees.Abstractions;
+using VisualJsonEditor.Test;
 
 namespace Views.Trees
 {
@@ -58,6 +59,8 @@ namespace Views.Trees
                     }                  
                 });
 
+            this.AddHandler(CustomTreeViewItem.ConditionalClickEvent, new RoutedEventHandler(ItemLoaded));
+
             treeView
                 .MouseSingleClicks()
                 .Subscribe(a =>
@@ -88,6 +91,14 @@ namespace Views.Trees
                         EventListener?.Send(new OnHoverChange(a, node, false, default));
                     }
                 });
+        }
+
+        private void ItemLoaded(object sender, RoutedEventArgs e)
+        {
+            if(e.OriginalSource is TreeViewItem { Header:IReadOnlyTree tree})
+            {
+                EventListener?.Send(new OnLoadedChange(e.OriginalSource, tree));
+            }
         }
 
         private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
