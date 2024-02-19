@@ -25,7 +25,7 @@ namespace Utility.Nodes.Demo
                 throw new Exception("f 2233");
 
             if (tree.MatchAncestor(a => a is MasterSlaveNode { Value: 0 }) is { } _x)
-                if (sd(item, depth) is DataTemplate dataTemplate)
+                if (Select(item, depth) is DataTemplate dataTemplate)
                 {
                     return dataTemplate;
                 }
@@ -33,19 +33,13 @@ namespace Utility.Nodes.Demo
             if (tree.MatchAncestor(a => a is MasterSlaveNode { Value: 1 }) is { } x)
                 return MakeButtonTemplate(item);
 
-
             if (tree.MatchAncestor(a => a is SelectionNode) is { })
             {
-                if (sd(item, depth) is DataTemplate dataTemplate)
+                if (Select(item, depth) is DataTemplate dataTemplate)
                 {
                     return dataTemplate;
                 }
-
             }
-            //else if (index[1] == 2)
-            //{
-            //    return MakeTemplate(item);
-            //}
 
             if (tree.MatchAncestor(a => a is CustomMethodsNode) is { })
             {
@@ -61,26 +55,19 @@ namespace Utility.Nodes.Demo
                     return MakeTemplate(item, "None");
                 }
             }
-            //else if (index[2] > 3)
-            //{
-            //    return MakeTemplate(item);
-            //}
 
             if (item is IReadOnlyTree { Data: IMemberDescriptor { IsValueOrStringProperty: { } isValueOrString } })
             {
                 if (isValueOrString)
                     return MakeTemplate(item);
                 else
-                    return MakeTemplate(item, "OnlyHeader");
+                    return MakeTemplate(item, "Name");
             }
-            // other
-            //if (item is IReadOnlyTree { Data: var data })
-            //{
+
             return MakeTemplate(item);
-            //}
         }
 
-        public DataTemplate sd(object item, int depth)
+        public DataTemplate Select(object item, int depth)
         {
             if (item is SlaveNode { })
             {
@@ -94,18 +81,21 @@ namespace Utility.Nodes.Demo
             {
                 return MakeTemplate(item, "None");
             }
-
+            if (item is IReadOnlyTree { Data: HeaderDescriptor { } })
+            {
+                return MakeTemplate(item, "Header");
+            }
+            if (item is IReadOnlyTree { Data: CollectionDescriptor { } })
+            {
+                return MakeTemplate(item, "None");
+            }
             if (item is IReadOnlyTree { Parent.Data: CollectionItemDescriptor { } _ })
             {
                 return MakeTemplate(item, "None");
             }
-
             if (item is IReadOnlyTree { Parent.Parent.Data: CollectionItemDescriptor { Index: { } _index } _ })
             {
-                if (_index == 0)
-                    return MakeTemplate(item, "TopHeader");
-                else if (_index > 0)
-                    return MakeTemplate(item, "NoHeader");
+                return MakeTemplate(item, "Body");
             }
             // root
             if (item is RootNode { })
@@ -139,11 +129,7 @@ namespace Utility.Nodes.Demo
             if (item is IReadOnlyTree { Data: IMethodsDescriptor { } })
             {
                 return MakeTemplate(item, "None");
-            }
-            if (item is IReadOnlyTree { Data: CollectionDescriptor { } })
-            {
-                return MakeTemplate(item, "None");
-            }
+            }   
             if (item is IReadOnlyTree { Data: IPropertiesDescriptor { } })
             {
                 return MakeHeaderTemplate(item, depth);
@@ -216,7 +202,7 @@ namespace Utility.Nodes.Demo
                 var binding = new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(Node.Data)), Source = item };
                 var contentControl = new Button
                 {
-                    ContentTemplate = this.FindResource<DataTemplate>("OnlyHeader")
+                    ContentTemplate = this.FindResource<DataTemplate>("Name")
                 };
                 contentControl.Click += ContentControl_Click;
                 contentControl.SetBinding(ContentControl.ContentProperty, binding);

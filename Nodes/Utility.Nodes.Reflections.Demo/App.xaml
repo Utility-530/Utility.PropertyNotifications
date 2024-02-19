@@ -43,19 +43,19 @@
                 </Grid>
             </DataTemplate>
 
-            <DataTemplate x:Key="TopHeader"  DataType="{x:Type vm:MemberDescriptor}">
-                <UniformGrid Columns="1"  Width="120">
-                    <TextBlock Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
-                    <ContentControl Style="{StaticResource ContentControlStyle}" Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
-                </UniformGrid>
+            <DataTemplate x:Key="Header"  DataType="{x:Type vm:MemberDescriptor}">
+        
+                    <TextBlock Width="120" Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
+                    <!--<ContentControl Style="{StaticResource ContentControlStyle}" Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>-->
+              
             </DataTemplate>
 
-            <DataTemplate x:Key="NoHeader"  DataType="{x:Type vm:MemberDescriptor}">
-                <ContentControl Style="{StaticResource ContentControlStyle}" Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
+            <DataTemplate x:Key="Body"  DataType="{x:Type vm:MemberDescriptor}">
+                <ContentControl Width="120" Style="{StaticResource ContentControlStyle}" Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
             </DataTemplate>
 
-            <DataTemplate x:Key="OnlyHeader"  DataType="{x:Type vm:MemberDescriptor}">
-                <TextBlock Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
+            <DataTemplate x:Key="Name"  DataType="{x:Type vm:MemberDescriptor}">
+                <TextBlock  Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
             </DataTemplate>
 
             <DataTemplate x:Key="Key"  DataType="{x:Type nodes:Node}">
@@ -67,7 +67,7 @@
             </DataTemplate>-->
 
             <DataTemplate x:Key="None"  DataType="{x:Type vm:MemberDescriptor}">
-                <Ellipse Fill="Blue" Height="4" Width="4"></Ellipse>
+                <Ellipse Fill="Blue" Height="8" Width="8" ToolTip="{Binding Name}"></Ellipse>
             </DataTemplate>
 
             <DataTemplate x:Key="Method"   DataType="{x:Type vm:MethodDescriptor}">

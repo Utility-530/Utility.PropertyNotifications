@@ -1,23 +1,46 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive.Subjects;
+using System.Windows.Controls;
 using Utility.Infrastructure;
 using Utility.Interfaces.NonGeneric;
+using Utility.Nodes.Reflections.Demo.Infrastructure;
+using Utility.PropertyDescriptors;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Demo
 {
     public class EventListener : IEventListener, IObservable<object>
     {
         ReplaySubject<object> replay = new();
-
+        Stack<TreeViewItem> stack = new();
         private EventListener()
         {
         }
 
         public void Send(IEvent @event)
         {
+            if (@event is OnHoverChange { Source: TreeViewItem treeViewItem } hoverChange)
+            {
+                AdornerController.Instance.OnNext(hoverChange);
+                return;
+            }
             if (@event is DoubleClickChange clickChange)
             {
-                replay.OnNext(clickChange.Node.Data);
+                return;
+
+            }
+            if (@event is ClickChange { Node: IReadOnlyTree{ Data: CollectionItemDescriptor { } descriptor } node }  _clickChange)
+            {
+                replay.OnNext(descriptor);
+                return;
+
+            }
+
+            if (@event is OnLoadedChange { Source: TreeViewItem _treeViewItem } loadedChange)
+            {
+                AdornerController.Instance.OnNext(loadedChange);
+                return;
             }
         }
 
@@ -27,5 +50,7 @@ namespace Utility.Nodes.Demo
         }
 
         public static EventListener Instance { get; } = new();
+
+
     }
 }

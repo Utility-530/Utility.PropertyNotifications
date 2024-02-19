@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
-using Utility.WPF.Nodes;
 using Utility.WPF.Nodes.NewFolder;
 
 namespace Utility.Nodes.Reflections.Demo.Infrastructure
@@ -16,30 +11,18 @@ namespace Utility.Nodes.Reflections.Demo.Infrastructure
     {
         public override Style SelectStyle(object item, DependencyObject container)
         {
-
-            //var style = NewTemplates["CustomTreeViewItemStyle"] as Style;
-            //return style;
-            if (item is TreeViewItem{ Header: IReadOnlyTree { Data: ICollectionItemDescriptor { } } })
+            if (item is TreeViewItem { Header: IReadOnlyTree { Data: ICollectionItemDescriptor { } } })
             {
                 var style = NewTemplates["CustomTreeViewItemStyle"] as Style;
                 return style;
             }
-
             return TreeViewItemStyleSelector.Instance.SelectStyle(item, container);
         }
 
-
-        public ResourceDictionary NewTemplates
+        public ResourceDictionary NewTemplates => new() 
         {
-            get
-            {
-                var resourceDictionary = new ResourceDictionary
-                {
-                    Source = new Uri($"/{typeof(CustomStyleSelector).Assembly.GetName().Name};component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute)
-                };
-                return resourceDictionary;
-            }
-        }
+            Source = new Uri($"/{typeof(CustomStyleSelector).Assembly.GetName().Name};component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute)
+        };
 
         public static CustomStyleSelector Instance { get; } = new();
 

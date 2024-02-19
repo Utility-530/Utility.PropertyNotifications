@@ -62,8 +62,8 @@ namespace Utility.Nodes.Demo
         {
             EventListener.Instance.Subscribe(async data =>
             {
-                if (data is CollectionItemDescriptor { Guid: { } guid, Instance: Master { Type: { } type } })
-                { 
+                if (data is PropertyDescriptor { Instance: Master { Type: { } type, Guid: { } guid } })
+                {
                     var _guid = await GuidRepository.Instance.Find(guid, type.Name);
                     var instance = Activator.CreateInstance(type);
                     var propertyData = new RootDescriptor(instance) { Guid = _guid };
@@ -98,18 +98,11 @@ namespace Utility.Nodes.Demo
         public string Name { get; set; }
 
         public Type Type { get; set; }
+
+        public Guid Guid { get; set; }
     }
 
 
-
-    //public class LedModelRootPropertyNode : ReflectionNode
-    //{
-    //    static readonly Guid guid = Guid.Parse("2b581d2f-506d-439a-9822-229d831f73b0");
-    //    public LedModelRootPropertyNode() : base(new RootDescriptor(Model) { Guid = guid })
-    //    {
-    //    }
-    //    static LedModel Model { get; } = new();
-    //}
 
 
     public class ModelRootPropertyNode : ReflectionNode
@@ -119,7 +112,6 @@ namespace Utility.Nodes.Demo
         public ModelRootPropertyNode() : base(new RootDescriptor(Model) { Guid = guid })
         {
         }
-
 
         static Model Model { get; } = new();
     }
@@ -150,7 +142,6 @@ namespace Utility.Nodes.Demo
         {
             return Data != null && flag == false;
         }
-
     }
 
 
