@@ -29,6 +29,11 @@ namespace Utility.PropertyDescriptors
             this.instance = instance;
         }
 
+        public object? this[int key]
+        {
+            get { return dictionary[key]; }
+            set { dictionary[key] = value; }
+        }
 
         public override string? Name => methodInfo.Name;
 
@@ -53,11 +58,11 @@ namespace Utility.PropertyDescriptors
                 return Disposable.Empty;
             });
             
-            static object? GetValue(System.Reflection.ParameterInfo a)
+            static object? GetValue(ParameterInfo a)
             {
-                var x = a.HasDefaultValue ? a.DefaultValue : AlternateValue(a);
-                return x;
-                static object? AlternateValue(System.Reflection.ParameterInfo a)
+                return a.HasDefaultValue ? a.DefaultValue : AlternateValue(a);
+
+                static object? AlternateValue(ParameterInfo a)
                 {
                     if (a.ParameterType.IsValueType || a.ParameterType.GetConstructor(System.Type.EmptyTypes) != null)
                         return Activator.CreateInstance(a.ParameterType);
