@@ -5,7 +5,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Utility.Helpers.NonGeneric;
-using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 
@@ -44,6 +43,18 @@ namespace Utility.Trees
         }
 
 
+        public static void VisitDescendants(this IReadOnlyTree tree, Action<IReadOnlyTree> action)
+        {
+            action(tree);
+
+            foreach (var item in tree.Items)
+            {
+                if (item is IReadOnlyTree t)
+                    t.VisitDescendants(action);
+            }
+        }
+
+
         public static IReadOnlyTree? MatchAncestor(this IReadOnlyTree tree, Predicate<IReadOnlyTree> action)
         {
             if (action(tree))
@@ -68,6 +79,11 @@ namespace Utility.Trees
                 return tree;
             }
             List<IReadOnlyTree> trees = new();
+            var items = tree.Items;
+            while (tree is ITree { HasMoreChildren: true })
+            {
+
+            }
             foreach (var child in tree.Items)
                 if (child is IReadOnlyTree tChild)
                 {
@@ -80,11 +96,11 @@ namespace Utility.Trees
                 }
                 else
                     throw new Exception("c 333211");
-                
 
-            foreach(var c in trees)
+
+            foreach (var c in trees)
             {
-                 if (c.MatchDescendant(action) is { } match)
+                if (c.MatchDescendant(action) is { } match)
                     return match;
             }
             return null;
@@ -409,6 +425,8 @@ namespace Utility.Trees
         }
 
         IReadOnlyTree IReadOnlyTree.Parent { get => Parent; set => Parent = value as ITree; }
+
+        public bool HasMoreChildren => false;
 
         private void ResetOnCollectionChangedEvent()
         {

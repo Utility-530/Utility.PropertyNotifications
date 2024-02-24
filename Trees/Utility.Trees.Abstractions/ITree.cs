@@ -36,8 +36,7 @@ namespace Utility.Trees.Abstractions
 
         int IndexOf(ITree tree);
 
-        //new IReadOnlyList<ITree> Items { get; }
-        //State State { get; set; }
+        bool HasMoreChildren { get; }
     }
 
 
