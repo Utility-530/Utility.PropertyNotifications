@@ -17,6 +17,7 @@ namespace VisualJsonEditor.Test.Infrastructure
         {
             var item = new CustomTreeViewItem();
             item.IsExpanded = true;
+            item.BorderThickness = new Thickness(2);
             item.Cast<ViewModel>().Subscribe(_replaySubject);
             return item;
         }
