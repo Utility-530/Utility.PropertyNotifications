@@ -1,6 +1,8 @@
-﻿namespace Utility.Changes
+﻿using Utility.Interfaces.NonGeneric;
+
+namespace Utility.Changes
 {
-    public record Change
+    public record Change : IValue
     {
         public Change(object value, Type type, int? count = default)
         {
