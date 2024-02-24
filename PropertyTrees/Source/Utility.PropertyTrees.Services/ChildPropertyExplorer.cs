@@ -14,7 +14,7 @@ using Utility.Helpers.Ex;
 using Utility.Helpers;
 using Utility.Trees.Abstractions;
 using NetFabric.Hyperlinq;
-using Utility.PropertyDescriptors;
+using Utility.Descriptors;
 using PropertyDescriptor = System.ComponentModel.PropertyDescriptor;
 using Utility.Changes;
 using ChangeType = Utility.Changes.Type;

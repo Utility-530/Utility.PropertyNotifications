@@ -3,7 +3,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Nodes;
 using Utility.Trees.Abstractions;
-using Utility.PropertyDescriptors;
+using Utility.Descriptors;
 using PropertyDescriptor = System.ComponentModel.PropertyDescriptor;
 using Utility.Changes;
 

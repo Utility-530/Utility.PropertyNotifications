@@ -8,7 +8,7 @@ using Utility.Observables.NonGeneric;
 using Utility.Observables.Generic;
 using System.Reactive.Disposables;
 using System.ComponentModel;
-using Utility.PropertyDescriptors;
+using Utility.Descriptors;
 
 namespace Utility.PropertyTrees.Services
 {

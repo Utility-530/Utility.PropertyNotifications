@@ -137,7 +137,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.PropertyTrees.WPF.D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.PropertyTrees.Demo.ViewModels", "Utility.PropertyTrees.Demo.ViewModels\Utility.PropertyTrees.Demo.ViewModels.csproj", "{0D469CFF-E083-4C73-9DDD-EC6343CCE3E0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.PropertyDescriptors", "..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj", "{F050971C-FFE1-4B46-B25D-EB9FB06D33E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.PropertyDescriptors", "..\..\Meta\Utility.PropertyDescriptors\Utility.Descriptors.csproj", "{F050971C-FFE1-4B46-B25D-EB9FB06D33E9}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Meta", "Meta", "{5EBA3592-A6FA-4ACE-B816-91E87310FED0}"
 EndProject

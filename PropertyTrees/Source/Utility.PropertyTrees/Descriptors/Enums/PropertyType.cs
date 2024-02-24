@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Utility.PropertyDescriptors
+namespace Utility.Descriptors
 {
     [Flags]
     public enum PropertyType

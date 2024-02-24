@@ -143,7 +143,7 @@ namespace Utility.PropertyTrees.WPF.Demo
                 .MouseHoverLeaves()
                 .Subscribe(a =>
                 {
-                    if (a is { Header: ITree { } node })
+                    if (a.item is { Header: ITree { } node })
                     {
                         Send(new OnHoverChange(a, node, false, default));
                     }

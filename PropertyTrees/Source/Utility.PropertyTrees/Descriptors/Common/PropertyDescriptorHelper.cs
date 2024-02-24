@@ -1,4 +1,4 @@
-﻿namespace Utility.PropertyDescriptors
+﻿namespace Utility.Descriptors
 {
     public static class PropertyDescriptorHelper
     {
