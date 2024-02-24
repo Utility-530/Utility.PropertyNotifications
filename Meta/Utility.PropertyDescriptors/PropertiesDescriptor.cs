@@ -1,8 +1,5 @@
-﻿using Descriptor = System.ComponentModel.PropertyDescriptor;
-using Utility.Changes;
-using System.Reactive.Linq;
-
-namespace Utility.PropertyDescriptors
+﻿
+namespace Utility.Descriptors
 {
     public record PropertiesDescriptor(Descriptor PropertyDescriptor, object Instance) : PropertyDescriptor(PropertyDescriptor, Instance), IPropertiesDescriptor
     {

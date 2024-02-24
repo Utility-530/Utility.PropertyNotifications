@@ -1,22 +1,11 @@
-﻿using System.ComponentModel;
-using System.Reactive.Linq;
-using System.Reflection;
-using Utility.Interfaces.NonGeneric;
-
-namespace Utility.PropertyDescriptors
+﻿
+namespace Utility.Descriptors
 {
-    public record ParameterDescriptor(ParameterInfo ParameterInfo, Dictionary<int, object?> Component) : MemberDescriptor(ParameterInfo.ParameterType), IIsReadOnly, IType, IValue
+    public record ParameterDescriptor(ParameterInfo ParameterInfo, Dictionary<int, object?> Component) : MemberDescriptor(ParameterInfo.ParameterType)
     {
-        public override Type ComponentType => typeof(Dictionary<string, object?>);
-
-        public override bool IsReadOnly => false;
-
+        public override Type ParentType => typeof(Dictionary<string, object?>);
 
         public override string? Name => ParameterInfo.Name ?? ParameterInfo.Position.ToString();
-
-        public override string Category => "s22dfsd";//throw new NotImplementedException();
-
-        public override bool IsValueOrStringProperty => Type.IsValueOrStringProperty();
 
         public object Value { get => GetValue(); set => SetValue(value); }
 

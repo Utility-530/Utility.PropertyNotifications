@@ -1,12 +1,10 @@
-﻿using System.Globalization;
-using Utility.Helpers;
-using Descriptor = System.ComponentModel.PropertyDescriptor;
+﻿
 
-namespace Utility.PropertyDescriptors
+namespace Utility.Descriptors
 {
     public class ObjectConverter //: IValueConverter
     {
-        public static MemberDescriptor ToValue(object value, Descriptor descriptor)
+        public static PropertyDescriptor ToValue(object value, Descriptor descriptor)
         {
 
             return descriptor.PropertyType switch

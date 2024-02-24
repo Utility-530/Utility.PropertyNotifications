@@ -1,29 +1,35 @@
 ﻿
-namespace Utility.PropertyDescriptors
+namespace Utility.Descriptors
 {
     public record RootDescriptor : PropertyDescriptor
     {
         public RootDescriptor(object item) : base(new RootPropertyDescriptor(item), item)
         {
         }
-        public override bool IsValueOrStringProperty => false;
     }
 
 
-    public class RootPropertyDescriptor : System.ComponentModel.PropertyDescriptor
+    public class RootPropertyDescriptor : Descriptor
     {
-        public RootPropertyDescriptor(object item) : base(item?.GetType().Name ?? "root" , null)
+        public RootPropertyDescriptor(object item) : this(item is Type type ? type : item.GetType())
         {
-            Item = item;
+            if (item is not Type)
+                Item = item;
         }
 
-        public object Item { get; }
+        public RootPropertyDescriptor(Type type) : base(type.Name ?? "root", null)
+        {
+            PropertyType = type;
+        }
+
+
+        public object Item { get; private set; }
 
         public override Type ComponentType => null;
 
         public override bool IsReadOnly => true;
 
-        public override Type PropertyType => Item.GetType();
+        public override Type PropertyType { get; }
 
 
         public override bool CanResetValue(object component)
@@ -33,7 +39,7 @@ namespace Utility.PropertyDescriptors
 
         public override object? GetValue(object? component)
         {
-            return Item;
+            return Item ??= Activator.CreateInstance(PropertyType);
         }
 
         public override void ResetValue(object component)

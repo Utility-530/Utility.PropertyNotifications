@@ -1,9 +1,10 @@
-﻿using Descriptor = System.ComponentModel.PropertyDescriptor;
-using Utility.Changes;
+﻿
 
-namespace Utility.PropertyDescriptors
+using Utility.Helpers.NonGeneric;
+
+namespace Utility.Descriptors
 {
-    public record CollectionDescriptor(Descriptor PropertyDescriptor, object Instance) : PropertyDescriptor(PropertyDescriptor, Instance)
+    public record CollectionDescriptor(Descriptor PropertyDescriptor, object Instance) : PropertyDescriptor(PropertyDescriptor, Instance), ICount
     {
         public static string _Name => "Collection";
 
@@ -14,6 +15,9 @@ namespace Utility.PropertyDescriptors
         {
             return ChildPropertyExplorer.CollectionItemDescriptors(Instance, this);
         }
+
+        // collection
+        public virtual int Count => Instance is IEnumerable enumerable ? enumerable.Count() : 0;
     }
 }
 

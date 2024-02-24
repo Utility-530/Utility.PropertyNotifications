@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using Utility.Changes;
+﻿using System.Collections.Specialized;
 using Utility.Helpers.Ex;
-using Utility.Nodes.Reflections;
 using Utility.Observables.NonGeneric;
-using Utility.PropertyNotifications;
-using Descriptor = System.ComponentModel.PropertyDescriptor;
-using Utility.Helpers;
 
-namespace Utility.PropertyDescriptors
+namespace Utility.Descriptors
 {
 
     public record ChildrenResponse(IMemberDescriptor Descriptor);
@@ -23,27 +13,45 @@ namespace Utility.PropertyDescriptors
         public static IObservable<Change<IMemberDescriptor>> Explore(object Instance, IMemberDescriptor memberDescriptor)
         {
 
-            var descriptors = TypeDescriptor.GetProperties(Instance);//  descriptor.GetChildProperties().Cast<Descriptor>().ToArray();
+            var descriptors = TypeDescriptor.GetProperties(Instance);
             int count = descriptors.Count;
 
             CompositeDisposable composite = new();
 
             return Observable.Create<Change<IMemberDescriptor>>(async observer =>
-              {
-                  if (count != 0)
-                  {
-                      foreach (Descriptor descriptor in descriptors)
-                      {
-                          var _guid = await GuidRepository.Instance.Find(memberDescriptor.Guid, descriptor.Name);
-                          var value = ObjectConverter.ToValue(Instance, descriptor);
-                          value.Guid = _guid;
-                          ValueRepository.Instance.Register(_guid, value as INotifyPropertyCalled);
-                          ValueRepository.Instance.Register(_guid, value as INotifyPropertyReceived);
-                          observer.OnNext(new Change<IMemberDescriptor>(value, Changes.Type.Add));
-                      }
-                  }
-                  return composite;
-              });
+            {
+                if (count != 0)
+                {
+                    foreach (Descriptor descriptor in descriptors)
+                    {
+                        var _guid = await GuidRepository.Instance.Find(memberDescriptor.Guid, descriptor.Name, descriptor.PropertyType);
+                        var propertyDescriptor = ObjectConverter.ToValue(Instance, descriptor);
+                        propertyDescriptor.Guid = _guid;
+
+                        try
+                        {
+                            if (propertyDescriptor is not ObjectValue objectValue && propertyDescriptor is not TypeValue)
+                            {
+                                if (GuidRepository.Instance.Get(_guid) is { } value)
+                                {
+                                    propertyDescriptor.SetValue(value);
+                                }
+                                else if (propertyDescriptor.GetValue() is { } _value)
+                                    GuidRepository.Instance.Set(_guid, _value);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+
+                        }
+
+                        GuidRepository.Instance.Register(_guid, propertyDescriptor as INotifyPropertyCalled);
+                        GuidRepository.Instance.Register(_guid, propertyDescriptor as INotifyPropertyReceived);
+                        observer.OnNext(new Change<IMemberDescriptor>(propertyDescriptor, Changes.Type.Add));
+                    }
+                }
+                return composite;
+            });
         }
 
         public static IObservable<Change<IMemberDescriptor>> CollectionItemDescriptors(object data, IMemberDescriptor memberDescriptor)
@@ -52,7 +60,7 @@ namespace Utility.PropertyDescriptors
             return Observable.Create<Change<IMemberDescriptor>>(async observer =>
             {
                 int i = 1;
-                if (data is not IEnumerable enumerable || data is string s || data.GetType() is not System.Type _type || _type.GetCollectionElementType() is not System.Type elementType)
+                if (data is not IEnumerable enumerable || data is string s || data.GetType() is not Type _type || _type.GetCollectionElementType() is not Type elementType)
                 {
                     return Disposer.Empty; ;
                 }
@@ -61,44 +69,39 @@ namespace Utility.PropertyDescriptors
 
                 AddHeaderDescriptor(observer, elementType, _type);
 
-                AddFromInstance(observer, enumerable, i, tables, elementType);
+                AddFromInstance(observer, enumerable, i, tables);
 
                 AddFromDataSource(observer, tables, elementType);
 
-                var lastIndex = GuidRepository.Instance.MaxIndex(memberDescriptor.Guid) + 1 ?? i;      
+                var lastIndex = GuidRepository.Instance.MaxIndex(memberDescriptor.Guid) + 1 ?? i;
 
                 return AddFromChanges(observer, lastIndex);
             });
 
 
-            async void AddFromInstance(IObserver<Change<IMemberDescriptor>> observer, IEnumerable enumerable, int i, IEnumerable<GuidRepository.Table> tables, System.Type elementType)
+            async void AddFromInstance(IObserver<Change<IMemberDescriptor>> observer, IEnumerable enumerable, int i, IEnumerable<(Guid guid, Type type, int? index)> tables)
             {
                 foreach (var item in enumerable)
                 {
-                    var _guid = await GuidRepository.Instance.Find(memberDescriptor.Guid, item.GetType().Name, i);
-
-                    if (tables.SingleOrDefault(a => a.Guid == _guid) is { Removed: { } removed } table)
-                    {
-
-                    }
-                    else
-                    {
-                        Next(observer, item, elementType, Changes.Type.Add, i++);
-                    }
+                    var type = item.GetType();
+                    var _guid = await GuidRepository.Instance.Find(memberDescriptor.Guid, type.Name, type, i);
+                    Next(observer, item, item.GetType(), Changes.Type.Add, i++);
                 }
             }
 
-            void AddHeaderDescriptor(IObserver<Change<IMemberDescriptor>> observer, System.Type elementType, System.Type componentType)
+            async void AddHeaderDescriptor(IObserver<Change<IMemberDescriptor>> observer, Type elementType, Type componentType)
             {
                 var descriptor = new CollectionHeaderDescriptor(elementType, componentType);
+                var _guid = await GuidRepository.Instance.Find(memberDescriptor.Guid, elementType.Name, elementType, 0);
+                descriptor.Guid = _guid;
                 observer.OnNext(new(descriptor, Changes.Type.Add));
             }
 
-            void AddFromDataSource(IObserver<Change<IMemberDescriptor>> observer, IEnumerable<GuidRepository.Table> tables, System.Type elementType)
+            void AddFromDataSource(IObserver<Change<IMemberDescriptor>> observer, IEnumerable<(Guid guid, Type type, int? index)> tables, Type elementType)
             {
                 foreach (var table in tables)
                 {
-                    if (table.Removed is not { } removed && descriptors.SingleOrDefault(a => a.Index == table._Index) is not { } x)
+                    if (table.index is not 0 && descriptors.SingleOrDefault(a => a.Index == table.index) is not { } x)
                     {
                         if (elementType.IsValueType || elementType.GetConstructor(System.Type.EmptyTypes) != null)
                         {
@@ -107,7 +110,7 @@ namespace Utility.PropertyDescriptors
                             {
                                 collection.Add(item);
                             }
-                            Next(observer, item, elementType, Changes.Type.Add, table._Index.Value);
+                            Next(observer, item, elementType, Changes.Type.Add, table.index.Value);
                         }
                         else
                         {
@@ -117,12 +120,12 @@ namespace Utility.PropertyDescriptors
                 }
             }
 
-            async void Next(IObserver<Change<IMemberDescriptor>> observer, object item, System.Type componentType, Changes.Type changeType, int i)
+            async void Next(IObserver<Change<IMemberDescriptor>> observer, object item, Type type, Changes.Type changeType, int i)
             {
 
-                var descriptor = new CollectionItemDescriptor(item, i, componentType);
+                var descriptor = new CollectionItemDescriptor(item, i, type);
                 descriptors.Add(descriptor);
-                var _guid = await GuidRepository.Instance.Find(memberDescriptor.Guid, componentType.Name, i);
+                var _guid = await GuidRepository.Instance.Find(memberDescriptor.Guid, type.Name, type, i);
                 descriptor.Guid = _guid;
                 observer.OnNext(new(descriptor, changeType));
             }
@@ -133,7 +136,7 @@ namespace Utility.PropertyDescriptors
                 {
                     return Disposer.Empty;
                 }
-                
+
                 return collectionChanged
                     .SelectChanges()
                     .Subscribe(a =>

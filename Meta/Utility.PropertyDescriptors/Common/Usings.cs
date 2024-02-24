@@ -1,0 +1,25 @@
+﻿global using System.ComponentModel;
+global using System.Reactive.Disposables;
+global using System.Reactive.Linq;
+global using Utility.Changes;
+global using Utility.Helpers;
+global using Utility.Interfaces.NonGeneric;
+global using Type = System.Type;
+global using System.Collections;
+global using System.Text.RegularExpressions;
+global using System.Reflection;
+//global using Utility.Nodes;
+global using Descriptor = System.ComponentModel.PropertyDescriptor;
+global using Newtonsoft.Json;
+global using SQLite;
+global using System.Diagnostics.CodeAnalysis;
+global using System.Globalization;
+global using System.Windows.Input;
+global using Utility.Commands;
+global using Utility.Descriptors.Common;
+global using Utility.Descriptors.Repositorys;
+global using System.Collections.Specialized;
+//global using Utility.Interfaces.Generic;
+global using Utility.PropertyNotifications;
+
+//global using Utility.Nodes.Reflections;
