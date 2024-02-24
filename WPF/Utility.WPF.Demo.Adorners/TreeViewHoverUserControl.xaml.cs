@@ -4,7 +4,9 @@ using System;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Controls;
+using System.Windows.Data;
 using Utility.WPF.Adorners.Behaviors;
+using Utility.WPF.Behaviors;
 using Utility.WPF.Controls;
 using Utility.WPF.Reactives;
 
@@ -25,19 +27,21 @@ namespace Utility.WPF.Demo.Adorners
                 .Where(a => a.item != null)
                 .Subscribe(treeViewItem =>
                 {
-                    var x = Interaction.GetBehaviors(treeViewItem.item);
-                    if (x.OfType<DropDownBehavior>().Any() == false)
+                    var behaviors = Interaction.GetBehaviors(treeViewItem.item);
+                    if (behaviors.OfType<DropDownBehavior>().Any() == false)
                     {
-                        x.Add(new DropDownBehavior()
+                        var dropDown = new DropDownBehavior()
                         {
                             IsShown = true,
                             ItemsSource = new[] { "A", "B", "C" }
-                        });
+                        };
+                        behaviors.Add(dropDown);
+  
                     }
                     else
                     {
-                        var single = x.OfType<DropDownBehavior>().Single();
-                        single.IsShown = true;
+                        var single = behaviors.OfType<DropDownBehavior>().Single();
+                        single.IsShown = true;       
                     }
                 });
         }

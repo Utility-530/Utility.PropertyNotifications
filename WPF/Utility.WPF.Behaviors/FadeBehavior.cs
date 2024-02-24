@@ -9,24 +9,17 @@ namespace Utility.WPF.Behaviors
     public class FadeBehavior : Behavior<FrameworkElement>
     {
 
-        public static readonly DependencyProperty FadeInTimeProperty = DependencyProperty.Register("FadeInTime", typeof(double), typeof(FadeBehavior),
-        new FrameworkPropertyMetadata(0.25));
+        public static readonly DependencyProperty FadeInTimeProperty = 
+            DependencyProperty.Register("FadeInTime", typeof(double), typeof(FadeBehavior), new FrameworkPropertyMetadata(0.25));
 
         public static readonly DependencyProperty FadeOutTimeProperty =
             DependencyProperty.Register("FadeOutTime", typeof(double), typeof(FadeBehavior), new FrameworkPropertyMetadata(1.0));
 
-
         public static readonly DependencyProperty IsVisibleProperty =
             DependencyProperty.Register("IsVisible", typeof(bool), typeof(FadeBehavior), new PropertyMetadata(true, FadeChanged));
 
-        public bool IsVisible
-        {
-            get { return (bool)GetValue(IsVisibleProperty); }
-            set { SetValue(IsVisibleProperty, value); }
-        }
 
-
-
+        
         private static void FadeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is FadeBehavior fadeBehavior && e.NewValue is bool b)
@@ -38,6 +31,11 @@ namespace Utility.WPF.Behaviors
             }
         }
 
+        public bool IsVisible
+        {
+            get { return (bool)GetValue(IsVisibleProperty); }
+            set { SetValue(IsVisibleProperty, value); }
+        }
 
         /// <summary>
         /// Specifies the time (in seconds) it takes to fade in the adorner.

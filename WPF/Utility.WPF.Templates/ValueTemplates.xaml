@@ -128,7 +128,7 @@
     </DataTemplate>
 
     <DataTemplate x:Key="Missing">
-        <TextBlock Text="Missing Template"></TextBlock>
+        <TextBlock Text="Missing Template" Background="Transparent"  HorizontalAlignment="Center" ></TextBlock>
     </DataTemplate>
     
 </ResourceDictionary>

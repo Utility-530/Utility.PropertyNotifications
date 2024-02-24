@@ -34,7 +34,7 @@ namespace Utility.WPF.Helpers
         //
         // Type parameters:
         //   Target:
-        public static TTarget? FindResource<TTarget>(this object _, string key)
+        public static TTarget? FindResource<TTarget>(string key)
         {
             if (!string.IsNullOrEmpty(key) && Application.Current != null)
             {
@@ -50,7 +50,7 @@ namespace Utility.WPF.Helpers
             return default;
         }
 
-        public static DataTemplate? FindResource(this object _, DataTemplateKey key)
+        public static DataTemplate? FindResource(DataTemplateKey key)
         {
             if (Application.Current != null)
             {
