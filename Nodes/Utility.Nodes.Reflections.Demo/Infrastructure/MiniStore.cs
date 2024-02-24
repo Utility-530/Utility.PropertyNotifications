@@ -1,10 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
-using Microsoft.Data.Sqlite;
-
-namespace Repository
+﻿namespace Repository
 {
     public class MiniStore 
     {

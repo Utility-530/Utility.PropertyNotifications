@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using Utility.PropertyDescriptors;
-using Utility.Trees.Abstractions;
+﻿using System.Collections.ObjectModel;
 using Views.Trees;
 
 namespace Utility.Nodes.Demo
@@ -18,7 +16,7 @@ namespace Utility.Nodes.Demo
             }
 
 
-            if (item is IReadOnlyTree { Data: IMemberDescriptor { ComponentType: { } componentType, Name: { } displayName } propertyNode })
+            if (item is IReadOnlyTree { Data: IMemberDescriptor { ParentType: { } componentType, Name: { } displayName } propertyNode })
             {
                 if (componentType.Name == "Array")
                 {
@@ -56,14 +54,14 @@ namespace Utility.Nodes.Demo
                         return false;
                     if (displayName == nameof(IList.Contains))
                         return false;
-                    //if (displayName == nameof(IList.Remove))
-                    //    return false;
-                    //if (displayName == nameof(IList.Remove))
-                    //    return false;
-                    //if (displayName == nameof(IList.Remove))
-                    //    return false;
-                    //if (displayName == nameof(IList.Remove))
-                    //return false;
+                    if (displayName == nameof(IList.Add))
+                        return false;
+                    if (displayName == nameof(IList.RemoveAt))
+                        return false;
+                    if (displayName == nameof(ObservableCollection<object>.Move))
+                        return false;
+                    if (displayName == nameof(IList.Remove))
+                        return false;
                 }
                 return true;
             }

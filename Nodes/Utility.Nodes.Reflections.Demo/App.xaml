@@ -1,7 +1,7 @@
 ﻿<Application x:Class="Utility.Nodes.Demo.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:Utility.PropertyDescriptors;assembly=Utility.PropertyDescriptors"
+             xmlns:vm="clr-namespace:Utility.Descriptors;assembly=Utility.Descriptors"
              xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
              xmlns:templates="http://schemas.utility.com/templates"
           
@@ -29,15 +29,15 @@
             <DataTemplate DataType="{x:Type vm:MemberDescriptor}">
                 <Grid >
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition  Width="140"></ColumnDefinition>
-                        <ColumnDefinition Width="140"></ColumnDefinition>
+                        <ColumnDefinition  Width="120"></ColumnDefinition>
+                        <ColumnDefinition Width="120"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Grid Margin="2" >
                         <TextBlock Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
                     </Grid>
                     <Grid Margin="2" Grid.Column="1">
                         <!--<Viewbox>-->
-                        <ContentControl Style="{StaticResource ContentControlStyle}" Width="120"  Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
+                        <ContentControl Style="{StaticResource ContentControlStyle}" Width="112"  Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
                         <!--</Viewbox>-->
                     </Grid>
                 </Grid>

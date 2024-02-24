@@ -1,21 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using Utility.Helpers;
-using Utility.Infrastructure;
-using Utility.Interfaces.NonGeneric;
-using Utility.PropertyDescriptors;
-using Utility.Trees;
-using Utility.Trees.Abstractions;
+﻿using Utility.Infrastructure;
 using Utility.WPF.Adorners.Infrastructure;
 using Utility.WPF.Animations.Helpers;
-using Utility.WPF.Factorys;
-using Utility.WPF.Helpers;
 using static Utility.Observables.NonGeneric.ObservableExtensions;
 
 namespace Utility.Nodes.Reflections.Demo.Infrastructure
@@ -66,9 +51,12 @@ namespace Utility.Nodes.Reflections.Demo.Infrastructure
                 _tree.MatchAncestor(c=> c== tree) is not null;
 
             })},
-            { Add, new(ElementVisibility.Always, (a,b)=> {
+            { Add, new(ElementVisibility.OnHover | ElementVisibility.OnClick, (a,b)=> {
 
-                return a==b;
+                        return
+                a is { Header: IReadOnlyTree { } tree } &&
+                b is { Header: IReadOnlyTree { } _tree } &&
+                _tree.MatchAncestor(c=> c== tree) is not null;
             }) },
             //{ "MoveDown", ElementVisibility.OnHover| ElementVisibility.OnClick },
             //{ "MoveUp", ElementVisibility.OnHover| ElementVisibility.OnClick },
@@ -88,12 +76,12 @@ namespace Utility.Nodes.Reflections.Demo.Infrastructure
         {
             if (tree is { Data: CollectionItemDescriptor _ })
             {
-                yield return new MethodNode { Name = Duplicate, Content = Duplicate, Command = new Commands.Command(() => ActionController.Instance.Add(tree)) };
+                yield return new MethodNode { Name = Duplicate, Content = Duplicate, Command = new Commands.Command(() => ActionController.Instance.Duplicate(tree)) };
                 yield return new MethodNode { Name = Remove, Content = Remove, Command = new Commands.Command(() => ActionController.Instance.Remove(tree)) };
             }
             if (tree is { Data: CollectionDescriptor _ })
             {
-                yield return new MethodNode { Name = Add, Content = Add, Command = new Commands.Command(() => ActionController.Instance.Duplicate(tree)) };
+                yield return new MethodNode { Name = Add, Content = Add, Command = new Commands.Command(() => ActionController.Instance.Add(tree)) };
             }
         }
 
@@ -203,7 +191,6 @@ namespace Utility.Nodes.Reflections.Demo.Infrastructure
 
         }
 
-
         void Refresh()
         {
             foreach (var item in dictionary)
@@ -214,9 +201,15 @@ namespace Utility.Nodes.Reflections.Demo.Infrastructure
                     //item.Value.Parent.SetValue(AdornerEx.IsEnabledProperty, isMatch);
 
                     if (isMatch)
+                    {
+                        item.Value.Child.IsHitTestVisible = true;
                         item.Value.Child.FadeIn();
+                    }
                     else
+                    {
+                        item.Value.Child.IsHitTestVisible = false;
                         item.Value.Child.FadeOut();
+                    }
                     //item.Value.Child.SetValue(UIElement.VisibilityProperty,
                     //    isMatch ?
                     //    Visibility.Visible :

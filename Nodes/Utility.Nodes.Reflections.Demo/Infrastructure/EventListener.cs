@@ -1,14 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reactive.Subjects;
-using System.Windows.Controls;
-using Utility.Infrastructure;
-using Utility.Interfaces.NonGeneric;
-using Utility.Nodes.Reflections.Demo.Infrastructure;
-using Utility.PropertyDescriptors;
-using Utility.Trees.Abstractions;
-
-namespace Utility.Nodes.Demo
+﻿namespace Utility.Nodes.Demo
 {
     public class EventListener : IEventListener, IObservable<object>
     {

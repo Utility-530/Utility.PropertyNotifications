@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Threading.Tasks;
+﻿using System.Reactive.Disposables;
+using System.Reactive.Threading.Tasks;
 using Utility.Nodes.Demo.Infrastructure;
 using Utility.Nodes.Reflections;
-using Utility.Nodes.Reflections.Demo.Infrastructure;
-using Utility.PropertyDescriptors;
-using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Demo
 {
@@ -44,15 +38,52 @@ namespace Utility.Nodes.Demo
         }
     }
 
-    public class MasterNode : ReflectionNode
+    public class MasterNode : Node
     {
-        static readonly Guid guid = Guid.Parse("c25b9ff5-54d2-4a73-9509-471d7c307fb0");
+        private bool hasMoreChildren = true;
 
-        public MasterNode() : base(new RootDescriptor(Model) { Guid = guid })
+        //static readonly Guid guid = Guid.Parse("c25b9ff5-54d2-4a73-9509-471d7c307fb0");
+
+        public MasterNode() : base()
         {
+            //GuidRepository.Instance.Insert(guid, "master", typeof(MasterModel));
         }
 
-        static MasterModel Model { get; } = new();
+        public override IObservable<object?> GetChildren()
+        {
+            hasMoreChildren = false;
+            return Observable.Create<object>(observable =>
+            {
+                return GuidRepository.Instance
+                    .Select(null)
+                    .ToObservable()
+                    .Subscribe(relationships =>
+                    {
+                        foreach (var (guid, type, index) in relationships)
+                        {
+                            observable.OnNext(new RootDescriptor(type) { Guid = guid });
+                        }
+                    });   
+            });        
+        }
+
+        public override Task<IReadOnlyTree> ToNode(object value)
+        {
+            if (value is IMemberDescriptor refl)
+            {
+                ReflectionNode node = new(refl)
+                {
+                    Parent = this
+                };
+                return Task.FromResult((IReadOnlyTree)node);
+            }
+            throw new Exception("j00 888 ggjh7669");
+        }
+
+        public override Task<bool> HasMoreChildren()
+        {
+            return Task.FromResult(hasMoreChildren);
+        }
     }
 
     public class SlaveNode : ReflectionNode
@@ -62,9 +93,9 @@ namespace Utility.Nodes.Demo
         {
             EventListener.Instance.Subscribe(async data =>
             {
-                if (data is PropertyDescriptor { Instance: Master { Type: { } type, Guid: { } guid } })
+                if (data is PropertyDescriptor { Instance: Master { Type: { } type }, Guid: { } guid })
                 {
-                    var _guid = await GuidRepository.Instance.Find(guid, type.Name);
+                    var _guid = await GuidRepository.Instance.Find(guid, type.Name, type);
                     var instance = Activator.CreateInstance(type);
                     var propertyData = new RootDescriptor(instance) { Guid = _guid };
                     this.Data = propertyData;
@@ -86,29 +117,10 @@ namespace Utility.Nodes.Demo
         }
     }
 
-
-    public class MasterModel
-    {
-        public ObservableCollection<Master> Collection { get; set; } = new();
-    }
-
-
-    public class Master
-    {
-        public string Name { get; set; }
-
-        public Type Type { get; set; }
-
-        public Guid Guid { get; set; }
-    }
-
-
-
-
     public class ModelRootPropertyNode : ReflectionNode
     {
         static readonly Guid guid = Guid.Parse("c25b9ff5-54d2-4a73-9509-471d7c307fb0");
-        //static readonly Guid guid = Guid.Parse("fa7f34e4-b5f4-4f93-8c48-15553dc25846");
+
         public ModelRootPropertyNode() : base(new RootDescriptor(Model) { Guid = guid })
         {
         }

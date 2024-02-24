@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Reactive.Linq;
-using System.Threading;
-using System.Windows;
+﻿using System.Threading;
 using Utility.Collections;
-using Utility.Nodes.Reflections.Demo.Infrastructure;
-using Utility.WPF.Nodes.NewFolder;
 using Views.Trees;
-using VisualJsonEditor.Test.Infrastructure;
 
 namespace Utility.Nodes.Demo
 {

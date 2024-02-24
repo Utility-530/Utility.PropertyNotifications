@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows.Controls;
-using Utility.Models;
+﻿using System.Collections.ObjectModel;
 
 namespace Utility.Nodes.Demo.Infrastructure
 {

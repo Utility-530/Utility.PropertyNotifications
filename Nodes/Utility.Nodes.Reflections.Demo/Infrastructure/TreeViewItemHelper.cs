@@ -1,8 +1,4 @@
-﻿using System.Windows.Controls;
-using System.Windows;
-using System.Windows.Input;
-
-namespace Utility.Nodes.Reflections.Demo.Infrastructure
+﻿namespace Utility.Nodes.Reflections.Demo.Infrastructure
 {
     /// <summary>
     /// <a href="https://stackoverflow.com/questions/5047576/wpf-treeview-how-to-style-selected-items-with-rounded-corners-like-in-explorer"></a>

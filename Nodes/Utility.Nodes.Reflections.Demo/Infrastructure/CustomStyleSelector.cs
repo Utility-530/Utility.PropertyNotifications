@@ -1,10 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using Utility.PropertyDescriptors;
-using Utility.Trees.Abstractions;
-using Utility.WPF.Nodes.NewFolder;
-
+﻿
 namespace Utility.Nodes.Reflections.Demo.Infrastructure
 {
     public class CustomStyleSelector : StyleSelector

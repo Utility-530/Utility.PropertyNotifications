@@ -1,13 +1,4 @@
-﻿using System;
-using System.Reactive.Subjects;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using Utility.PropertyDescriptors;
-using Utility.Trees;
-using Utility.Trees.Abstractions;
-using Utility.WPF.Factorys;
-using Utility.WPF.Helpers;
+﻿using ResourceHelper = Utility.WPF.Helpers.ResourceHelper;
 
 namespace Utility.Nodes.Demo
 {
@@ -56,9 +47,9 @@ namespace Utility.Nodes.Demo
                 }
             }
 
-            if (item is IReadOnlyTree { Data: IMemberDescriptor { IsValueOrStringProperty: { } isValueOrString } })
+            if (item is IReadOnlyTree { Data: IMemberDescriptor { Type: { } type } })
             {
-                if (isValueOrString)
+                if (type.IsValueOrString())
                     return MakeTemplate(item);
                 else
                     return MakeTemplate(item, "Name");
@@ -149,7 +140,7 @@ namespace Utility.Nodes.Demo
                 var binding = new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(Node.Data)), Source = item };
                 var contentControl = new ContentControl { };
                 if (name is string _name)
-                    contentControl.ContentTemplate = this.FindResource<DataTemplate>(_name);
+                    contentControl.ContentTemplate = ResourceHelper.FindResource<DataTemplate>(_name);
                 contentControl.SetBinding(ContentControl.ContentProperty, binding);
 
                 return contentControl;
@@ -202,7 +193,7 @@ namespace Utility.Nodes.Demo
                 var binding = new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(Node.Data)), Source = item };
                 var contentControl = new Button
                 {
-                    ContentTemplate = this.FindResource<DataTemplate>("Name")
+                    ContentTemplate = ResourceHelper.FindResource<DataTemplate>("Name")
                 };
                 contentControl.Click += ContentControl_Click;
                 contentControl.SetBinding(ContentControl.ContentProperty, binding);
