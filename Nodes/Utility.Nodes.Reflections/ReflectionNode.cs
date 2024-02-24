@@ -1,7 +1,8 @@
 ﻿using System.Reactive.Linq;
+using Utility.Changes;
 using Utility.Collections;
-using Utility.Models;
-using Utility.PropertyDescriptors;
+using Utility.Helpers;
+using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Reflections
@@ -30,47 +31,46 @@ namespace Utility.Nodes.Reflections
         {
             if (await HasMoreChildren() == false)
                 return true;
-            //if (data.GetValue() is not { } inst)
-            //    return true;
 
             items.Clear();
-            data
-               .GetChildren()
-               .Subscribe(async a =>
-               {
-                   switch (a.Type)
-                   {
-                       case Changes.Type.Add:
-                           {
-                               if (a.Value is not { } desc)
-                               {
-                                   throw new Exception(" wrwe334 33");
-                               }
-                               else if (desc.Type == data.Type)
-                               {
-                                   var node = await ToNode(desc);
-                                   items.Add(node);
-                               }
-                               else
-                               {
-                                   //var conversion = ObjectConverter.ToValue(inst, desc);
-                                   var node = await ToNode(desc);
-                                   items.Add(node);
-                               }
-                               break;
-                           }
-                       case Changes.Type.Remove:
-                           {
-                               items.RemoveOne(e => (e as IReadOnlyTree)?.Data.Equals(a.Value) == true);
-                               break;
-                           }
-                       case Changes.Type.Reset:
-                           {
-                               items.Clear();
-                               break;
-                           }
-                   }
-               },
+
+            _ = GetChildren()
+                .Cast<Change<IMemberDescriptor>>()
+                .Subscribe(async a =>
+                {
+                    switch (a.Type)
+                    {
+                        case Changes.Type.Add:
+                            {
+                                if (a.Value is not { } desc)
+                                {
+                                    throw new Exception(" wrwe334 33");
+                                }
+                                else if (desc.Type == data.Type)
+                                {
+                                    var node = await ToNode(desc);
+                                    items.Add(node);
+                                }
+                                else
+                                {
+                                    //var conversion = ObjectConverter.ToValue(inst, desc);
+                                    var node = await ToNode(desc);
+                                    items.Add(node);
+                                }
+                                break;
+                            }
+                        case Changes.Type.Remove:
+                            {
+                                items.RemoveOne(e => (e as IReadOnlyTree)?.Data.Equals(a.Value) == true);
+                                break;
+                            }
+                        case Changes.Type.Reset:
+                            {
+                                items.Clear();
+                                break;
+                            }
+                    }
+                },
             e =>
             {
             },
@@ -85,13 +85,13 @@ namespace Utility.Nodes.Reflections
 
         public override IObservable<object?> GetChildren()
         {
-            return data.GetChildren().Cast<object?>();
+            return data.Children;
         }
 
 
         public override async Task<bool> HasMoreChildren()
         {
-            return data.IsValueOrStringProperty == false && await base.HasMoreChildren();
+            return data.Type.IsValueOrString() == false && await base.HasMoreChildren();
         }
 
         public override string ToString()
