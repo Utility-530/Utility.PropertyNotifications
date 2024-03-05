@@ -32,6 +32,7 @@ namespace Utility.Descriptors
                 Type t when t == typeof(DateTime?) => new NullableDateTimeValue(descriptor, value),
 
                 //Type t when t == typeof(IDictionary) => new DictionaryValue(descriptor, value),
+                Type t when t.IsValueType => new StructValue(descriptor, value),
                 Type t when t.IsDerivedFrom<object>() => new ObjectValue(descriptor, value),
 
                 _ => new NullValue(descriptor, value),

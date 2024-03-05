@@ -1,17 +1,19 @@
 ﻿
+using Splat;
+
 namespace Utility.Descriptors;
 
 public record MethodDescriptor : MemberDescriptor, IMethodDescriptor
 {
     Dictionary<int, object?> dictionary = new();
 
-    private Lazy<ObservableCommand> command;
+    private Lazy<Command> command;
     private readonly MethodInfo methodInfo;
     private readonly object instance;
 
     public MethodDescriptor(MethodInfo methodInfo, object instance): base((System.Type)null)
     {
-        command = new Lazy<ObservableCommand>(() => new ObservableCommand(a =>
+        command = new Lazy<Command>(() => new Command(() =>
         {
             methodInfo.Invoke(instance, dictionary.OrderBy(a => a.Key).Select(a => a.Value).ToArray());
         }));
@@ -36,7 +38,7 @@ public record MethodDescriptor : MemberDescriptor, IMethodDescriptor
             var descriptors = MethodExplorer.ParameterDescriptors(methodInfo, dictionary);
             foreach (var paramDescriptor in descriptors)
             {
-                var guid = await GuidRepository.Instance.Find(this.Guid, paramDescriptor.Name, paramDescriptor.Type);
+                var guid = await Locator.Current.GetService<ITreeRepository>().Find(this.Guid, paramDescriptor.Name, paramDescriptor.Type);
                 paramDescriptor.Guid = guid;
                 dictionary[paramDescriptor.ParameterInfo.Position] = GetValue(paramDescriptor.ParameterInfo);
                 observer.OnNext(new Change<IMemberDescriptor>(paramDescriptor, Changes.Type.Add));

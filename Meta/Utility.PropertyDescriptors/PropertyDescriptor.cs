@@ -1,4 +1,5 @@
 ﻿
+using Splat;
 using Utility.Interfaces.Generic;
 
 namespace Utility.Descriptors;
@@ -21,6 +22,7 @@ public abstract record PropertyDescriptor<T>(Descriptor Descriptor, object Insta
             this.RaisePropertyReceived(value);
         }
     }
+
     object IValue.Value => Value;
 
     public void RaisePropertyChanged(object value, string? propertyName = null)
@@ -57,24 +59,37 @@ public abstract record PropertyDescriptor(Descriptor Descriptor, object Instance
     public override System.IObservable<Change<IMemberDescriptor>> GetChildren()
     {
         if (Descriptor.GetValue(Instance) is { } inst)
+        {
+            if(inst is null)
+            {
+
+            }
+            if (inst is Type type)
+            {
+                return Observable.Empty<Change<IMemberDescriptor>>();
+            }
             return Observable.Create<Change<IMemberDescriptor>>(async observer =>
             {
+
+                var repo = Locator.Current.GetService<ITreeRepository>();
                 var propertiesDescriptor = new PropertiesDescriptor(Descriptor, inst);
-                var pguid = await GuidRepository.Instance.Find(this.Guid, propertiesDescriptor.Name);
+                var pguid = await repo.Find(this.Guid, propertiesDescriptor.Name);
                 observer.OnNext(new(propertiesDescriptor with { Guid = pguid }, Changes.Type.Add));
 
                 var collectionDescriptor = new CollectionDescriptor(Descriptor, inst);
-                var cguid = await GuidRepository.Instance.Find(this.Guid, collectionDescriptor.Name);
+                var cguid = await repo.Find(this.Guid, collectionDescriptor.Name);
                 observer.OnNext(new(collectionDescriptor with { Guid = cguid }, Changes.Type.Add));
 
-                var methodsDescriptor = new MethodsDescriptor(Descriptor, inst);
-                var mguid = await GuidRepository.Instance.Find(this.Guid, methodsDescriptor.Name);
-                observer.OnNext(new(methodsDescriptor with { Guid = mguid }, Changes.Type.Add));
+                //var methodsDescriptor = new MethodsDescriptor(Descriptor, inst);
+                //var mguid = await repo.Find(this.Guid, methodsDescriptor.Name);
+                //observer.OnNext(new(methodsDescriptor with { Guid = mguid }, Changes.Type.Add));
                 return Disposable.Empty;
             });
-        else
-            return Observable.Empty<Change<IMemberDescriptor>>();
+        }
+        return Observable.Empty<Change<IMemberDescriptor>>();
     }
+
+    //public DateValue LastPersistence { get; set; }
 
     public override Type ParentType => Descriptor.ComponentType;
 
@@ -92,61 +107,6 @@ public abstract record PropertyDescriptor(Descriptor Descriptor, object Instance
         Descriptor.SetValue(Instance, value);
     }
 
-}
-
-
-public abstract record MemberDescriptor(Type Type) : NotifyProperty, IMemberDescriptor
-{
-    public Guid Guid { get; set; }
-
-    public abstract string? Name { get; }
-
-    public abstract System.Type ParentType { get; }
-
-    //public abstract System.IObservable<Change<IMemberDescriptor>> GetChildren();
-
-    public virtual System.IObservable<Change<IMemberDescriptor>> GetChildren()
-    {
-        if (Type.GetConstructor(System.Type.EmptyTypes) == null || Type.IsValueOrString())
-            return Observable.Empty<Change<IMemberDescriptor>>();
-
-        var instance = Activator.CreateInstance(Type);
-        var descriptor = new RootDescriptor(instance);
-        return Observable.Create<Change<IMemberDescriptor>>(observer =>
-        {
-            observer.OnNext(new(descriptor, Changes.Type.Add));
-            //observer.OnNext(new(new MethodsDescriptor(descriptor, instance), Changes.Type.Add));
-            return Disposable.Empty;
-        });
-    }
-
-    public abstract object GetValue();
-
-    public abstract void SetValue(object value);
-
-    public bool IsCollection => Type != null && Type != typeof(string) && typeof(IEnumerable).IsAssignableFrom(Type);
-
-    public virtual System.Type? CollectionItemPropertyType => Type?.IsArray == true ? Type.GetElementType() : IsCollection ? Type.GenericTypeArguments().SingleOrDefault() : null;
-
-    public bool IsObservableCollection => Type != null && typeof(INotifyCollectionChanged).IsAssignableFrom(Type);
-
-    public bool IsFlagsEnum => Type?.IsFlagsEnum() == true;
-
-    public bool IsValueType => Type?.IsValueType == true;
-
-    public virtual bool IsCollectionItemValueType => CollectionItemPropertyType != null && CollectionItemPropertyType.IsValueType;
-
-    System.IObservable<object> IMemberDescriptor.Children => GetChildren();
-
-    public virtual bool Equals(MemberDescriptor? other)
-    {
-        return this.Guid.Equals(other?.Guid);
-    }
-
-    public override int GetHashCode()
-    {
-        return this.Guid.GetHashCode();
-    }
 }
 
 

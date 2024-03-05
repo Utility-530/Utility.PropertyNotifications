@@ -48,7 +48,7 @@ public record CollectionHeaderDescriptor : MemberDescriptor, ICollectionItemDesc
 
 public record HeaderDescriptor : MemberDescriptor
 {
-    public HeaderDescriptor(System.ComponentModel.PropertyDescriptor propertyDescriptor) : base(propertyDescriptor.PropertyType)
+    public HeaderDescriptor(Descriptor propertyDescriptor) : base(propertyDescriptor.PropertyType)
     {
         ParentType = propertyDescriptor.ComponentType;
         Name = propertyDescriptor.Name;

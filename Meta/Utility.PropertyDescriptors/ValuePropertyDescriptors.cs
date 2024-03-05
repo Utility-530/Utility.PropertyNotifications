@@ -61,13 +61,10 @@ public record NullableIntegerValue(Descriptor Descriptor, object Instance) : Nul
 {
 }
 
-public record LongValue(Descriptor Descriptor, object Instance) : PropertyDescriptor<long>(Descriptor, Instance)
-{
-}
+public record LongValue(Descriptor Descriptor, object Instance) : PropertyDescriptor<long>(Descriptor, Instance);
 
-public record NullableLongValue(Descriptor Descriptor, object Instance) : NullablePropertyDescriptor<long>(Descriptor, Instance)
-{
-}
+
+public record NullableLongValue(Descriptor Descriptor, object Instance) : NullablePropertyDescriptor<long>(Descriptor, Instance);
 
 public record NullValue(Descriptor Descriptor, object Instance) : PropertyDescriptor(Descriptor, Instance), IValue
 {
@@ -80,7 +77,9 @@ public record NullValue(Descriptor Descriptor, object Instance) : PropertyDescri
 }
 
 
-public record ObjectValue(Descriptor Descriptor, object Instance) : PropertyDescriptor<object>(Descriptor, Instance)
+public record ObjectValue(Descriptor Descriptor, object Instance) : PropertyDescriptor<object>(Descriptor, Instance);
+
+public record StructValue(Descriptor Descriptor, object Instance) : PropertyDescriptor<object>(Descriptor, Instance)
 {
 }
 

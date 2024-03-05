@@ -3,7 +3,7 @@ namespace Utility.Descriptors
 {
     public record RootDescriptor : PropertyDescriptor
     {
-        public RootDescriptor(object item) : base(new RootPropertyDescriptor(item), item)
+        public RootDescriptor(object item, string? name = default) : base(new RootPropertyDescriptor(item, name), item)
         {
         }
     }
@@ -11,18 +11,20 @@ namespace Utility.Descriptors
 
     public class RootPropertyDescriptor : Descriptor
     {
-        public RootPropertyDescriptor(object item) : this(item is Type type ? type : item.GetType())
+        public RootPropertyDescriptor(object item, string? name = null) : this(item is Type type ? type : item.GetType(), name)
         {
             if (item is not Type)
                 Item = item;
+            Name = name;
         }
 
-        public RootPropertyDescriptor(Type type) : base(type.Name ?? "root", null)
+        public RootPropertyDescriptor(Type type, string? name = null) : base(type.Name ?? "root", null)
         {
             PropertyType = type;
+            Name = name;
         }
 
-
+        public override string Name { get;  } 
         public object Item { get; private set; }
 
         public override Type ComponentType => null;

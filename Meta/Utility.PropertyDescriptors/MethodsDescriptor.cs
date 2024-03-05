@@ -1,4 +1,6 @@
-﻿namespace Utility.Descriptors;
+﻿using Splat;
+
+namespace Utility.Descriptors;
 
 public record MethodsDescriptor(Descriptor Descriptor, object Instance) : PropertyDescriptor(Descriptor, Instance), IMethodsDescriptor
 {
@@ -14,7 +16,7 @@ public record MethodsDescriptor(Descriptor Descriptor, object Instance) : Proper
             var descriptors = children.Select(methodInfo => new MethodDescriptor(methodInfo, Instance));
             foreach (var descriptor in descriptors)
             {
-                var guid = await GuidRepository.Instance.Find(this.Guid, descriptor.Name);
+                var guid = await Locator.Current.GetService<ITreeRepository>().Find(this.Guid, descriptor.Name);
                 descriptor.Guid = guid;
                 observer.OnNext(new(descriptor, Changes.Type.Add));
             }

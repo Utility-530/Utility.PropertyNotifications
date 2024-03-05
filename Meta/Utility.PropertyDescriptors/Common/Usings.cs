@@ -21,5 +21,5 @@ global using Utility.Descriptors.Repositorys;
 global using System.Collections.Specialized;
 //global using Utility.Interfaces.Generic;
 global using Utility.PropertyNotifications;
-
+global using Utility.Helpers.Ex;
 //global using Utility.Nodes.Reflections;
