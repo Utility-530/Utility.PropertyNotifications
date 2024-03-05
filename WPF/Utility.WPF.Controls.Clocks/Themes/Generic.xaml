@@ -1,7 +1,7 @@
-﻿<utl:AutoResourceDictionary  xmlns:utl="http://schemas.utility.com/utilitywpf"
+﻿<res:AutoResourceDictionary  xmlns:res="http://schemas.utility.com/resourcedictionary"
                              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                              xmlns:local="clr-namespace:Utility.WPF.Controls.Clocks"
                              xmlns:converter="clr-namespace:Utility.WPF.Converters;assembly=Utility.WPF"
                              Type="{x:Type local:Clock}">
-</utl:AutoResourceDictionary>
+</res:AutoResourceDictionary>

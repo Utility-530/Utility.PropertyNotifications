@@ -4,12 +4,12 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:utl="http://schemas.utility.com/utilitywpf"
+    xmlns:res="http://schemas.utility.com/resourcedictionary"
     xmlns:dragablz1="clr-namespace:Utility.WPF.Controls.Dragablz"
     xmlns:conv="http://schemas.utility.com/converters">
 
     <ResourceDictionary.MergedDictionaries>
-        <utl:SharedResourceDictionary  Source="/Utility.WPF.Controls.Dragablz;component/GeometryResources.xaml" />
+        <res:SharedResourceDictionary  Source="/Utility.WPF.Controls.Dragablz;component/GeometryResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <SineEase x:Key="Ease" EasingMode="EaseInOut" />

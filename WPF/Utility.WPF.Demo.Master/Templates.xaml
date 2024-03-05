@@ -4,13 +4,13 @@
                     xmlns:conv="clr-namespace:Utility.WPF.Converters"
                     xmlns:view="http://schemas.utility.com/dragablz"
                     xmlns:view111="http://schemas.utility.com/master"
-                    xmlns:mk="http://schemas.utility.com/utilitywpf"
+                    xmlns:res="http://schemas.utility.com/resourcedictionary"
                     xmlns:common="clr-namespace:Utility.Common.EventArgs;assembly=Utility.Common"
                     xmlns:vm="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common">
 
     <ResourceDictionary.MergedDictionaries>
-        <mk:SharedResourceDictionary Source="/Utility.WPF.Demo.Common;component/View/Templates.xaml" />
-        <mk:SharedResourceDictionary Source="/Utility.WPF.Controls.Dragablz;component/DragablzItemStyle.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Demo.Common;component/View/Templates.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Dragablz;component/DragablzItemStyle.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <DataTemplate DataType="{x:Type vm:RowBaseViewModel}">

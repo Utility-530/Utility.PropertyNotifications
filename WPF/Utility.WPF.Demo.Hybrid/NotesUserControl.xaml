@@ -10,14 +10,14 @@
     xmlns:view1="http://schemas.utility.com/dragablz"
     xmlns:view2="http://schemas.utility.com/hybrid"
     xmlns:vm21="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common"
-    xmlns:utilitywpf="http://schemas.utility.com/utilitywpf"
+    xmlns:res="http://schemas.utility.com/resourcedictionary"
     d:DesignHeight="450"
     d:Background="White"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <FrameworkElement.Resources>
 
-            <utilitywpf:SharedResourceDictionary Source="/Utility.WPF.Demo.Common;component/View/DragablzNoteStyle.xaml" />
+            <res:SharedResourceDictionary Source="/Utility.WPF.Demo.Common;component/View/DragablzNoteStyle.xaml" />
     </FrameworkElement.Resources>
 
     <UniformGrid Columns="1">

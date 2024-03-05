@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:btl="clr-namespace:Utility.WPF.Controls"
-    xmlns:res="http://schemas.utility.com/utilitywpf"
+    xmlns:res="http://schemas.utility.com/resourcedictionary"
     xmlns:btl1="clr-namespace:Utility.WPF.Controls"
     mc:Ignorable="d">
 

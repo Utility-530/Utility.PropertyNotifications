@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:utl="http://schemas.utility.com/utilitywpf"
+    xmlns:res="http://schemas.utility.com/resourcedictionary"
     xmlns:view="clr-namespace:Utility.WPF.Demo.Master.View"
     xmlns:view2="http://schemas.utility.com/master"
     Title="MainWindow"
@@ -13,7 +13,7 @@
     mc:Ignorable="d">
 
     <FrameworkElement.Resources>
-        <utl:SharedResourceDictionary Source="/Utility.WPF.Demo.Data;component/DataTemplate/Character.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Demo.Data;component/DataTemplate/Character.xaml" />
     </FrameworkElement.Resources>
 
     <TabControl>

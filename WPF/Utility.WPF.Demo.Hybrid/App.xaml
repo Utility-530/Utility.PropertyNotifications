@@ -1,16 +1,16 @@
 ﻿<Application x:Class="Utility.WPF.Demo.Hybrid.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:utilitywpf="http://schemas.utility.com/utilitywpf"
+             xmlns:res="http://schemas.utility.com/resourcedictionary"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
 
         <ResourceDictionary Source="View/Templates.xaml">
             <ResourceDictionary.MergedDictionaries>
-                <utilitywpf:SharedResourceDictionary Source="/Utility.WPF.Demo.Common;component/View/Templates.xaml" />
-                <utilitywpf:SharedResourceDictionary Source="/Utility.WPF.Demo.Master;component/Templates.xaml" />
-                <utilitywpf:SharedResourceDictionary Source="/Utility.WPF.Controls.Dragablz;component/Themes/Generic.xaml" />
-                <utilitywpf:SharedResourceDictionary Source="/Utility.WPF.Demo.Data;component/Themes/Generic.xaml" />
+                <res:SharedResourceDictionary Source="/Utility.WPF.Demo.Common;component/View/Templates.xaml" />
+                <res:SharedResourceDictionary Source="/Utility.WPF.Demo.Master;component/Templates.xaml" />
+                <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Dragablz;component/Themes/Generic.xaml" />
+                <res:SharedResourceDictionary Source="/Utility.WPF.Demo.Data;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

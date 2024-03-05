@@ -7,14 +7,14 @@
     xmlns:reactiveUi="http://reactiveui.net"
     xmlns:controls1="http://schemas.utility.com/buttons"
     xmlns:views="clr-namespace:Utility.WPF.Demo.Buttons"
-    xmlns:utilitywpf="http://schemas.utility.com/utilitywpf"
+    xmlns:res="http://schemas.utility.com/resourcedictionary"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <utilitywpf:SharedResourceDictionary Source="/Utility.WPF.Controls.Buttons;component/DualButtonControl.xaml" />
+                <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Buttons;component/DualButtonControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type views:ViewModelItem}">

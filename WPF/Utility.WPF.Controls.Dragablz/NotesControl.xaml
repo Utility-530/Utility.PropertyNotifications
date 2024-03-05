@@ -1,13 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:att="http://schemas.utility.com/utilitywpf"
+                    xmlns:res="http://schemas.utility.com/resourcedictionary"
                     xmlns:local="clr-namespace:Utility.WPF.Controls.Dragablz"
                     xmlns:dragablz1="clr-namespace:Utility.WPF.Controls.Dragablz"
                     xmlns:conv="http://schemas.utility.com/converters">
 
     <ResourceDictionary.MergedDictionaries>
-        <att:SharedResourceDictionary Source="/Utility.WPF.Controls.Dragablz;component/GeometryResources.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Dragablz;component/GeometryResources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="DragablzNotes2Style" TargetType="dragablz:DragablzItem">

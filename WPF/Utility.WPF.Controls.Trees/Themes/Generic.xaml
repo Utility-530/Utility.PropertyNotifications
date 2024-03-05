@@ -1,18 +1,17 @@
-﻿<ResourceDictionary  xmlns:utl="http://schemas.utility.com/utilitywpf"
+﻿<ResourceDictionary  xmlns:res="http://schemas.utility.com/resourcedictionary"
                              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                              xmlns:local="clr-namespace:Utility.WPF.Controls.Trees"
                              >
     <!-- use standard resourcedictionary to avoid issue with TreeListView.xaml -->
     <ResourceDictionary.MergedDictionaries>
-        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/TreeListView.xaml"></utl:SharedResourceDictionary>
-        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Aligned.xaml"></utl:SharedResourceDictionary>
-        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ButtonsFlank.xaml"></utl:SharedResourceDictionary>
-        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Dictionary1.xaml"></utl:SharedResourceDictionary>
-        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/LinesStyle.xaml"></utl:SharedResourceDictionary>
-        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Colors.xaml"></utl:SharedResourceDictionary>
-        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboBoxToggleButton.xaml"></utl:SharedResourceDictionary>
-        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/ComboBoxTreeView.xaml"></utl:SharedResourceDictionary>
-
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/TreeListView.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Aligned.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ButtonsFlank.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Dictionary1.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/LinesStyle.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Colors.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboBoxToggleButton.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/ComboBoxTreeView.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

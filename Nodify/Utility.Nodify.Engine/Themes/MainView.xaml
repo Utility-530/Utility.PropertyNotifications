@@ -4,14 +4,14 @@
                     xmlns:engine="clr-namespace:Utility.Nodify.Engine.ViewModels"
                     xmlns:core="clr-namespace:Utility.Nodify.Core;assembly=Utility.Nodify.Core"               
                     xmlns:op="clr-namespace:Utility.Nodify.Operations;assembly=Utility.Nodify.Operations"
-                    xmlns:utl="http://schemas.utility.com/utilitywpf"
-                    xmlns:st="http://schemas.spicytaco.io/"    >
+                    xmlns:res="http://schemas.utility.com/resourcedictionary"
+                    xmlns:st="http://schemas.spicytaco.io/"
+                    xmlns:nodify="https://miroiu.github.io/nodify">
 
 
     <ResourceDictionary.MergedDictionaries>
-        <utl:SharedResourceDictionary Source="/Utility.WPF.Controls.Buttons;component/Themes/Generic.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Buttons;component/Themes/Generic.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
     <Style TargetType="{x:Type HeaderedItemsControl}">
         <Setter Property="Template">
             <Setter.Value>

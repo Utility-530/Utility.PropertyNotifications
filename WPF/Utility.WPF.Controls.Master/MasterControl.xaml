@@ -8,7 +8,7 @@
     xmlns:wpf1="clr-namespace:PropertyTools.Wpf;assembly=Utility.WPF.Controls.Base">
 
     <!--<ResourceDictionary.MergedDictionaries>
-        <utilitywpf:SharedResourceDictionary Source="/Utility.WPF.Controls.Master;component/DoubleContentControl.xaml"></utilitywpf:SharedResourceDictionary>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Master;component/DoubleContentControl.xaml"></utilitywpf:SharedResourceDictionary>
     </ResourceDictionary.MergedDictionaries>-->
 
     <conv:CountToBooleanConverter x:Key="CountToBoolean" />
