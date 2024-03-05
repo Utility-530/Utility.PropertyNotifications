@@ -4,7 +4,7 @@ using ICommand = System.Windows.Input.ICommand;
 using DryIoc;
 using System.Collections.ObjectModel;
 using Message = Utility.Nodify.Operations.Message;
-using Utility.Infrastructure;
+using Utility.ViewModels.Base;
 
 namespace Utility.Nodify.Demo
 {

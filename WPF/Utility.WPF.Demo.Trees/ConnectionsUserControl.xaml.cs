@@ -11,6 +11,7 @@ using Utility.Common.Helper;
 using Utility.Infrastructure;
 using Utility.Persists;
 using Utility.Trees;
+using Utility.ViewModels.Base;
 
 namespace Utility.WPF.Demo.Trees
 {

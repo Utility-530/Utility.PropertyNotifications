@@ -9,6 +9,7 @@ using LanguageExt;
 using Utility.Helpers;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
+using Utility.ViewModels.Base;
 
 namespace Utility.Infrastructure
 {

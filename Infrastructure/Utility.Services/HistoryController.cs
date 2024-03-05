@@ -7,6 +7,7 @@ using Response = Utility.Models.Response;
 using System.Reactive.Disposables;
 using static System.Reactive.Linq.Observable;
 using Utility.Infrastructure;
+using Utility.ViewModels.Base;
 
 namespace Utility.Services
 {

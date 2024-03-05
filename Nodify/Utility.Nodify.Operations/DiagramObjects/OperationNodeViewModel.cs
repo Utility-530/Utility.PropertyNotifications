@@ -1,7 +1,7 @@
 ﻿using Utility.Nodify.Core;
 using System;
-using Utility.Models;
-using Utility.Infrastructure;
+using System.Windows.Input;
+using Utility.ViewModels.Base;
 
 namespace Utility.Nodify.Operations
 {

@@ -2,7 +2,7 @@
 using System;
 using Utility.Collections;
 using Utility.Models;
-using Utility.Infrastructure;
+using Utility.ViewModels.Base;
 
 namespace Utility.Nodify.Core
 {

@@ -1,7 +1,6 @@
 ﻿using System;
-using Utility.Infrastructure;
 using Utility.Models;
-//using Autofac;
+using Utility.ViewModels.Base;
 
 namespace Utility.Nodify.Demo
 {

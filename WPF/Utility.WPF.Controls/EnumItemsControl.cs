@@ -16,6 +16,7 @@ using MintPlayer.ObservableCollection;
 using Utility.WPF.Helpers;
 using Utility.Infrastructure;
 using System.Windows.Controls;
+using Utility.ViewModels.Base;
 
 namespace Utility.WPF.Controls
 {

@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using Utility.Infrastructure;
+using Utility.ViewModels.Base;
 
 namespace Utility.Nodify.Core
 {

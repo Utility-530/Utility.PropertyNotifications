@@ -4,9 +4,8 @@ using Utility.Nodify.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections.ObjectModel;
-using Utility.Models;
 using IContainer = DryIoc.IContainer;
-using Utility.Infrastructure;
+using Utility.ViewModels.Base;
 
 namespace Utility.Nodify.Demo
 {

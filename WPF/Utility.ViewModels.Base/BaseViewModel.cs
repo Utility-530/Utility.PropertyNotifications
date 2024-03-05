@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using Utility.Interfaces.NonGeneric;
 
-namespace Utility.Infrastructure
+namespace Utility.ViewModels.Base
 {
     /// <inheritdoc />
     /// <summary>

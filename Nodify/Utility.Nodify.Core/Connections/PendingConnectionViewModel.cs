@@ -1,6 +1,6 @@
 ﻿using System.Windows;
-using Utility.Infrastructure;
 using Utility.Models;
+using Utility.ViewModels.Base;
 
 namespace Utility.Nodify.Core
 {

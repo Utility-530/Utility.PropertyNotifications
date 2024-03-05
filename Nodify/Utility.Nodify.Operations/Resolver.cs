@@ -5,10 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using DryIoc;
-using Utility.Models;
 using Key = Utility.Nodify.Core.Key;
 using System.Collections.ObjectModel;
-using Utility.Infrastructure;
+using Utility.ViewModels.Base;
 
 namespace Utility.Nodify.Operations
 {

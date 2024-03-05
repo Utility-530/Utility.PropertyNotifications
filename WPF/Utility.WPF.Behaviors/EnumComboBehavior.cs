@@ -13,9 +13,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Utility.Helpers;
-using Utility.Infrastructure;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
+using Utility.ViewModels.Base;
 
 namespace Utility.WPF.Behaviors
 {

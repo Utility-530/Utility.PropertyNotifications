@@ -5,6 +5,7 @@ using Utility.Enums;
 using Utility.Infrastructure;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+using Utility.ViewModels.Base;
 
 namespace Utility.Services;
 
