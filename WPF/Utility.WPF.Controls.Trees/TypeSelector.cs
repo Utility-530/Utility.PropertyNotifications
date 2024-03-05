@@ -23,21 +23,26 @@ namespace Utility.WPF.Controls.Trees
         {
             if (d is TypeSelector typeSelector && e.NewValue is Type type)
             {
-                typeSelector.sdf();
+                typeSelector.ChangeType();
             }
         }
 
-        void sdf()
+        void ChangeType()
         {
             if (Type != null && _treeView != null && this.ItemsSource is Tree tree)
             {
                 if (tree.MatchDescendant(a => a.Data is Type type && type == Type) is ViewModelTree { } innerTree)
                 {
+                    IsError = false;
                     innerTree.IsSelected = true;
                     innerTree.OnPropertyChanged(nameof(ViewModelTree.IsSelected));
                     //behavior.SelectedItem = innerTree;
                     UpdateSelectedItem(innerTree);
 
+                }
+                else
+                {
+                    IsError = true;
                 }
             }
         }
@@ -68,7 +73,7 @@ namespace Utility.WPF.Controls.Trees
                 .WhereNotNull()
                 .Subscribe(a =>
                 {
-                    sdf();
+                    ChangeType();
                 });
 
 
@@ -93,7 +98,7 @@ namespace Utility.WPF.Controls.Trees
         {
             base.OnApplyTemplate();
             //Interaction.GetBehaviors(_treeView).Add(behavior);
-            sdf();
+            ChangeType();
         }
 
         public Type Type

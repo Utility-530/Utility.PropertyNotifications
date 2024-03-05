@@ -364,15 +364,21 @@
                                 <VisualState x:Name="Uneditable" />
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Border x:Name="ErrorBorder" Padding="3 2">
+                            <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
+                                <!-- The actual content of the ComboBox Control Template -->
                         <ToggleButton x:Name="ToggleButton"
-                        Template="{StaticResource ComboBoxToggleButton}"
-                    
+                                      Template="{StaticResource ComboBoxToggleButton}"                    
                         Focusable="false"
                         ClickMode="Press"
                         IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, 
               RelativeSource={RelativeSource TemplatedParent}}"/>
-                        <Grid            IsHitTestVisible="False">
-                            <ItemsControl x:Name="ContentSite"        
+                                <Grid            IsHitTestVisible="False">
+                                    <ItemsControl x:Name="ContentSite"        
                                       VerticalAlignment="Center" VerticalContentAlignment="Center"
                                       HorizontalContentAlignment="Center"
                                       HorizontalAlignment="Left"
@@ -380,15 +386,15 @@
                             ItemTemplate="{TemplateBinding SelectedItemTemplate}"
                             ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                             Margin="3,3,23,3">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal"></WrapPanel>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel Orientation="Horizontal"></WrapPanel>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
 
-                            </ItemsControl>
-                        </Grid>
-                        <TextBox x:Name="PART_EditableTextBox"
+                                    </ItemsControl>
+                                </Grid>
+                                <TextBox x:Name="PART_EditableTextBox"
                    Style="{x:Null}"
                    Template="{StaticResource ComboBoxTextBox}"
                    HorizontalAlignment="Left"
@@ -398,37 +404,48 @@
                    Background="Transparent"
                    Visibility="Hidden"
                    IsReadOnly="{TemplateBinding IsReadOnly}" />
-                        <Popup x:Name="Popup"
+                                <Popup x:Name="Popup"
                  Placement="Bottom"
                  IsOpen="{TemplateBinding IsDropDownOpen}"
                  AllowsTransparency="True"
                  Focusable="False"
                  PopupAnimation="Slide">
-                            <Grid x:Name="DropDown"
+                                    <Grid x:Name="DropDown"
                   SnapsToDevicePixels="True"
                   MinWidth="{TemplateBinding ActualWidth}"
                   MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                <Border x:Name="DropDownBorder"
+                                        <Border x:Name="DropDownBorder"
                       BorderThickness="1">
-                                    <!--<Border.BorderBrush>
+                                            <!--<Border.BorderBrush>
                                         <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
                                     </Border.BorderBrush>
                                     <Border.Background>
                                         <SolidColorBrush Color="{DynamicResource ControlLightColor}" />
                                     </Border.Background>-->
-                                </Border>
-                                <ScrollViewer Margin="4,6,4,6"
+                                        </Border>
+                                        <ScrollViewer Margin="4,6,4,6"
                             SnapsToDevicePixels="True">
-                                    <local:ExtendedTreeView x:Name="treeView" 
+                                            <local:ExtendedTreeView x:Name="treeView" 
                                                             IsCheckedPath="{TemplateBinding IsCheckedPath}"
                                                             IsExpandedPath="{TemplateBinding IsExpandedPath}"
                                                             IsSelectedPath="{TemplateBinding IsSelectedPath}"
                                                             ItemsSource="{TemplateBinding ItemsSource}" ItemTemplate="{TemplateBinding ItemTemplate}" />
-                                </ScrollViewer>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Popup>
                             </Grid>
-                        </Popup>
+
+                        </Border>
+                        <TextBlock Grid.Row="1" x:Name="ErrorTextBlock" 
+                                   Text="Type not found" 
+                                   Margin="3 12 3 0" Visibility="Collapsed" 
+                                   Foreground="Red" />
                     </Grid>
                     <ControlTemplate.Triggers>
+                        <Trigger Property="IsError" Value="True">
+                            <Setter Property="Background" Value="Red" TargetName="ErrorBorder" />
+                            <Setter Property="Visibility" Value="Visible" TargetName="ErrorTextBlock" />
+                        </Trigger>
                         <Trigger Property="HasItems"
                    Value="false">
                             <Setter TargetName="DropDownBorder"

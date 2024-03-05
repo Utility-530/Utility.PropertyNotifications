@@ -19,6 +19,18 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty IsSelectedPathProperty = DependencyProperty.Register("IsSelectedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata("IsSelected"));
         public static readonly DependencyProperty SelectedItemTemplateProperty = DependencyProperty.Register("SelectedItemTemplate", typeof(DataTemplate), typeof(ComboBoxTreeView), new PropertyMetadata());
 
+
+        public bool IsError
+        {
+            get { return (bool)GetValue(IsErrorProperty); }
+            set { SetValue(IsErrorProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsError.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsErrorProperty =
+            DependencyProperty.Register("IsError", typeof(bool), typeof(ComboBoxTreeView), new PropertyMetadata(false));
+
+
         protected ExtendedTreeView _treeView;
         private ObservableCollection<object> list = new();
 
