@@ -67,7 +67,7 @@
             </DataTemplate>-->
 
             <DataTemplate x:Key="None"  DataType="{x:Type vm:MemberDescriptor}">
-                <Ellipse Fill="Blue" Height="8" Width="8" ToolTip="{Binding Name}"></Ellipse>
+                <!--<Ellipse Fill="Blue" Height="8" Width="8" ToolTip="{Binding Name}"></Ellipse>-->
             </DataTemplate>
 
             <DataTemplate x:Key="Method"   DataType="{x:Type vm:MethodDescriptor}">

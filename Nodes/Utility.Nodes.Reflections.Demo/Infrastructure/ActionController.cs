@@ -1,4 +1,6 @@
-﻿namespace Utility.Nodes.Reflections.Demo.Infrastructure
+﻿using Splat;
+
+namespace Utility.Nodes.Reflections.Demo.Infrastructure
 {
     public class ActionController
     {
@@ -22,9 +24,10 @@
         {
             if (tree.Data is IMemberDescriptor memberDescriptor)
             {
-                foreach (var (a, b) in GuidRepository.Instance.Duplicate(memberDescriptor.Guid))
+                var repo = Locator.Current.GetService<ITreeRepository>();
+                foreach (var (a, b) in repo.Duplicate(memberDescriptor.Guid))
                 {
-                    GuidRepository.Instance.Copy(a, b);
+                    repo.Copy(a, b);
                 }
             }
             var collectionDescriptor = tree.MatchAncestor(a => a.Data is CollectionDescriptor).Parent;

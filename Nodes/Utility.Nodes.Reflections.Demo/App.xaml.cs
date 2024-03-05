@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using Splat;
+using System.Threading;
 using Utility.Collections;
 using Views.Trees;
 
@@ -13,12 +14,11 @@ namespace Utility.Nodes.Demo
         {
             base.OnStartup(e);
             SQLitePCL.Batteries.Init();
+            Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
             Collection.Context = SynchronizationContext.Current;
             TreeViewer treeViewer = TreeViewer();
-
             var window = new Window { Content = treeViewer };
             window.Show();
-
 
             CustomDataTemplateSelector.Instance
                 .OfType<string>()

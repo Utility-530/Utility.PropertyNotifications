@@ -46,7 +46,7 @@ namespace Utility.Nodes.Reflections
                                 {
                                     throw new Exception(" wrwe334 33");
                                 }
-                                else if (desc.Type == data.Type)
+                                else if (desc.Type == data?.Type)
                                 {
                                     var node = await ToNode(desc);
                                     items.Add(node);
@@ -102,7 +102,7 @@ namespace Utility.Nodes.Reflections
 
         public override async Task<IReadOnlyTree> ToNode(object value)
         {
-            if (value is IMemberDescriptor { Name: string name } descriptor)
+            if (value is IMemberDescriptor { } descriptor)
             {
 
                 return new ReflectionNode(descriptor) { Parent = this };

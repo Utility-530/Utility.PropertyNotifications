@@ -80,6 +80,11 @@ namespace Utility.Nodes.Demo
             {
                 return MakeTemplate(item, "None");
             }
+            // method
+            if (item is IReadOnlyTree { Data: IMethodDescriptor { } })
+            {
+                return MakeTemplate(item, "Method");
+            }
             if (item is IReadOnlyTree { Parent.Data: CollectionItemDescriptor { } _ })
             {
                 return MakeTemplate(item, "None");

@@ -62,6 +62,8 @@ namespace Utility.Nodes.Demo
                         return false;
                     if (displayName == nameof(IList.Remove))
                         return false;
+                    if (displayName == nameof(IList.Insert))
+                        return false;
                 }
                 return true;
             }
