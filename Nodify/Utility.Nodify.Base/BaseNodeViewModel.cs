@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Windows;
-using Utility.Infrastructure;
+using Utility.ViewModels.Base;
 
-
-namespace Utility.Nodify.Core
+namespace Utility.Nodify.Base
 {
     public class BaseNodeViewModel : BaseViewModel
     {
         public event Action? Closed;
 
-        private bool _isVisible; 
+        private bool _isVisible;
         private Point _location;
-        private Size _size; 
+        private Size _size;
         private string? _title;
         private bool _isActive;
         private bool _isSelected;

@@ -24,7 +24,7 @@ namespace Utility.Nodify.Operations
         private IList<Message> future => container.Resolve<RangeObservableCollection<Message>>(Keys.Future);
         private IDictionary<Key, NodeViewModel> nodes => container.Resolve<IDictionary<Key, NodeViewModel>>(Keys.Nodes);
         private IDictionary<Key, ConnectionViewModel> connections => container.Resolve<IDictionary<Key, ConnectionViewModel>>(Keys.Connections);
-        private IDictionary<string, OperationInfo> operations => container.Resolve<IDictionary<string, OperationInfo>>(Keys.Operations);
+        //private IDictionary<string, OperationInfo> operations => container.Resolve<IDictionary<string, OperationInfo>>(Keys.Operations);
         private IDictionary<string, FilterInfo> filters => container.Resolve<IDictionary<string, FilterInfo>>(Keys.Filters);
 
         public Resolver(IContainer container)
@@ -36,17 +36,23 @@ namespace Utility.Nodify.Operations
                     var next = future[0];
                     future.RemoveAt(0);
                     current.Add(next);
-                    if (current.Last() is NodeMessage nodeMessage)
+                    if (current.Last() is NodeMessage { action: { } _action } nodeMessage)
                     {
                         var node = nodes[next.Key];
                         if (node.Output.Any())
                         {
                             Exception? ex = null;
                             IOValue[]? output = null;
-                            
+
                             try
                             {
-                                output = operations[next.Key.Name].Operation.Execute(nodeMessage.Inputs);
+                                if (nodeMessage.action is IOperation operation)
+                                {
+                                    output = operation.Execute(nodeMessage.Inputs);
+                                }
+                                else
+                                    throw new Exception("dfsd");
+                                    //output = operations[next.Key.Name].Operation.Execute(nodeMessage.Inputs);
                             }
                             catch (Exception e)
                             {
@@ -56,7 +62,7 @@ namespace Utility.Nodify.Operations
                             context.Post((a) =>
                             {
                                 past.Add(next);
-                                if(current.Remove(next)==false)
+                                if (current.Remove(next) == false)
                                 {
                                     throw new Exception("v222d sdww");
                                 }
@@ -104,11 +110,11 @@ namespace Utility.Nodify.Operations
                                 if (filters.ContainsKey(next.Key.Name))
                                 {
                                     if (filters[next.Key.Name].Filter.Execute(connectorMessage.Output))
-                                        connection.Input.Value = connectorMessage.Output;
+                                        connection.Output.Value = connectorMessage.Output;
                                 }
                                 else
                                 {
-                                    connection.Input.Value = connectorMessage.Output;
+                                    connection.Output.Value = connectorMessage.Output;
                                 }
                             }
                             catch
@@ -143,24 +149,26 @@ namespace Utility.Nodify.Operations
 
         public void OnNext(BaseViewModel @object)
         {
-            if (@object is NodeViewModel node)
+            if (@object is OperationNodeViewModel node)
             {
                 var values = node.Input.Select(a => new IOValue(a.Title, a.Value)).ToArray();
                 nodes[node.Key] = node;
-                future.Add(new NodeMessage(node.Key, values));
+                future.Add(new NodeMessage(node.Key, values, node.Core));
             }
             else if (@object is OperationConnectionViewModel connection)
             {
                 connections[connection.Key] = connection;
-                future.Add(new ConnectionMessage(connection.Key, connection.Output.Value));
+                future.Add(new ConnectionMessage(connection.Key, connection.Input.Value));
             }
         }
     }
 
     public record Message(Key Key, Exception Exception);
 
-    public record NodeMessage(Key Key, IOValue[] Inputs, Exception Exception = default) : Message(Key, default);
+    public record NodeMessage(Key Key, IOValue[] Inputs, ICore action, Exception Exception = default) : Message(Key, default)
+    {
 
+    }
 
     public record ConnectionMessage(Key Key, object Output) : Message(Key, default);
 

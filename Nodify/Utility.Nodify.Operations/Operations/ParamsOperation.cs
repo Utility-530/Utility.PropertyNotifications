@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Utility.Interfaces.NonGeneric;
 using static Utility.Conversions.ConversionHelper;
 
 namespace Utility.Nodify.Operations
@@ -12,5 +13,10 @@ namespace Utility.Nodify.Operations
 
         public IOValue[] Execute(params IOValue[] operands)
             => new[] { new IOValue(default, _func.Invoke(operands.Select(a => ChangeType<double>(a.Value)).ToArray())) };
+
+        public ISerialise FromString(string str)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

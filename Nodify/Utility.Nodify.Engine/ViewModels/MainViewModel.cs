@@ -1,10 +1,10 @@
 ﻿using DryIoc;
 using Utility.Nodify.Core;
-using Utility.Nodify.Demo.ViewModels;
 using System.Linq;
 using System.Collections.ObjectModel;
 using IContainer = DryIoc.IContainer;
 using Utility.Nodify.Demo;
+using Utility.Nodify.Demo.Infrastructure;
 
 namespace Utility.Nodify.Engine.ViewModels;
 
@@ -22,7 +22,10 @@ public class MainViewModel
         selected.CollectionChanged += MainViewModel_CollectionChanged;
         if (selected.FirstOrDefault() is Diagram item)
         {
-            TabsViewModel.AddEditorCommand.Execute(container.Resolve<OperationsEditorViewModel>());
+            //var diagramViewModel = container.Resolve<DiagramViewModel>();
+            var diagramViewModel = container.Resolve<Converter>().Convert(item);
+            container.RegisterInstance(diagramViewModel);
+            TabsViewModel.AddEditorCommand.Execute(diagramViewModel);
         }
     }
 
@@ -30,7 +33,7 @@ public class MainViewModel
     {
         //foreach (Diagram item in e.NewItems)
         //{
-        TabsViewModel.AddEditorCommand.Execute(container.Resolve<OperationsEditorViewModel>());
+        TabsViewModel.AddEditorCommand.Execute(container.Resolve<DiagramViewModel>());
         // }
     }
 

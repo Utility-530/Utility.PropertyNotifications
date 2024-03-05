@@ -1,22 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows;
 using System.Windows.Input;
 using Utility.Collections;
 using Utility.Commands;
-using Utility.Infrastructure;
+using Utility.ViewModels.Base;
 
 namespace Utility.Nodify.Core
 {
-    public class EditorViewModel : BaseViewModel
+    public class DiagramViewModel : BaseViewModel
     {
         private RangeObservableCollection<NodeViewModel> _operations = new(), _messages = new();
         private RangeObservableCollection<NodeViewModel> _selectedOperations = new();
-        private MenuViewModel menu;
 
-        public EditorViewModel(Diagram diagram)
+        public DiagramViewModel()
         {   
 
             CreateConnectionCommand = new Command<ConnectorViewModel>(
@@ -80,36 +76,7 @@ namespace Utility.Nodify.Core
                     }
                 }
             });  
-     
-
-            foreach (var node in diagram.Nodes)
-                Nodes.Add(node);
-
-            foreach (var connection in diagram.Connections)
-                Connections.Add(connection);
         }
-
-
-        protected virtual IEnumerable<MenuItemViewModel> MenuItems
-        {
-            get
-            {
-                yield break;
-            }
-        }
-
-
-        protected virtual void OperationsMenu_Selected(Point location, MenuItemViewModel menuItem)
-        {
-
-        }
-
- 
-        //private void Op_InputChanged(NodeViewModel obj)
-        //{
-        //    Messages.Add(obj);
-        //}
-
 
         public RangeObservableCollection<NodeViewModel> Nodes
         {
@@ -125,20 +92,7 @@ namespace Utility.Nodify.Core
 
         public RangeObservableCollection<ConnectionViewModel> Connections { get; } = new RangeObservableCollection<ConnectionViewModel>();
         public PendingConnectionViewModel PendingConnection { get; set; } = new PendingConnectionViewModel();
-        public MenuViewModel Menu
-        {
-            get
-            {
-                if (menu == null)
-                {
-                    menu = new MenuViewModel();
-                    menu.Selected += OperationsMenu_Selected;
-                    menu.Items.AddRange(MenuItems);
 
-                }
-                return menu;
-            }
-        }
 
         public ICommand StartConnectionCommand { get; }
         public ICommand CreateConnectionCommand { get; }
@@ -160,8 +114,8 @@ namespace Utility.Nodify.Core
             if (target == null)
             {
                 PendingConnection.IsVisible = true;
-                Menu.OpenAt(PendingConnection.TargetLocation);
-                Menu.Closed += OnOperationsMenuClosed;
+                //Menu.OpenAt(PendingConnection.TargetLocation);
+                //Menu.Closed += OnOperationsMenuClosed;
                 return;
             }
 
@@ -177,12 +131,6 @@ namespace Utility.Nodify.Core
                 Input = input,
                 Output = output
             });
-        }
-
-        protected void OnOperationsMenuClosed()
-        {
-            PendingConnection.IsVisible = false;
-            Menu.Closed -= OnOperationsMenuClosed;
         }
 
         protected void DeleteSelection()

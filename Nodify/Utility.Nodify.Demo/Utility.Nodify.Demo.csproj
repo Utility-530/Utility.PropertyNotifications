@@ -8,8 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
+    <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.Descriptors.csproj" />
+    <ProjectReference Include="..\..\Nodes\Utility.Nodes\Utility.Nodes.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Core\Utility.Nodify.Core.csproj" />
-    <ProjectReference Include="..\Utility.Nodify.Operations\Utility.Nodify.Operations.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Engine\Utility.Nodify.Engine.csproj" />
   </ItemGroup>
 

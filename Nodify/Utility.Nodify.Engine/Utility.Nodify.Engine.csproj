@@ -8,6 +8,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Tabs\Utility.WPF.Controls.Tabs.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
+		<ProjectReference Include="..\Utility.Nodify.Infrastructure\Utility.Nodify.Infrastructure.csproj" />
 		<ProjectReference Include="..\Utility.Nodify.Operations\Utility.Nodify.Operations.csproj" />
 	</ItemGroup>
 

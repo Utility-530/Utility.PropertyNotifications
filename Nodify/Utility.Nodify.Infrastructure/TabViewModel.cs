@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Input;
 using Utility.Commands;
-using Utility.Infrastructure;
-using Utility.Models;
+using Utility.ViewModels.Base;
 
 namespace Utility.Nodify.Core
 {

@@ -27,7 +27,11 @@ namespace Utility.Nodify.Core
         public ConnectorViewModel Input
         {
             get => _input;
-            set => Set(ref _input, value);
+            set => Set(ref _input, value)
+                .Then(() =>
+                {
+                    this.Input.PropertyChanged += Input_PropertyChanged;
+                });
         }
 
         public ConnectorViewModel Output
@@ -43,6 +47,10 @@ namespace Utility.Nodify.Core
         protected virtual void Output_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
 
+        }
+        protected virtual void Input_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            
         }
     }
 }

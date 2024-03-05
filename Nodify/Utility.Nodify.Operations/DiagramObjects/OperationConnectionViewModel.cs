@@ -11,7 +11,15 @@ namespace Utility.Nodify.Operations
         public static IObserver<BaseViewModel> Observer;
 
 
-        protected override void Output_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        //protected override void Output_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        //{
+        //    if (e.PropertyName == nameof(ConnectorViewModel.Value))
+        //    {
+        //        Observer.OnNext(this);
+        //    }
+        //}
+
+        protected override void Input_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(ConnectorViewModel.Value))
             {

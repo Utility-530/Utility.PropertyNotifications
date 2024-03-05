@@ -1,16 +1,19 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows;
+using Utility.Nodify.Base;
 
 namespace Utility.Nodify.Core
 {
     public class MenuViewModel : BaseNodeViewModel
     {
+        private RangeObservableCollection<MenuItemViewModel> items = new RangeObservableCollection<MenuItemViewModel>();
+
         public event Action<Point, MenuItemViewModel> Selected;
 
         public MenuViewModel()
         {
-            (Items = new RangeObservableCollection<MenuItemViewModel>())
+            (Items)
                 .WhenAdded(a =>
             {
                 a.Selected += selected;
@@ -23,8 +26,24 @@ namespace Utility.Nodify.Core
             Close();
         }
 
-        public RangeObservableCollection<MenuItemViewModel> Items { get; }
-
+        public RangeObservableCollection<MenuItemViewModel> Items
+        {
+            get
+            {
+                return items;
+            }
+            set
+            {
+                foreach (var item in value)
+                    item.Selected += selected;
+                value
+                    .WhenAdded(a =>
+                    {
+                        a.Selected += selected;
+                    });
+                this.items = value;
+            }
+        }
 
         public void OpenAt(Point targetLocation)
         {

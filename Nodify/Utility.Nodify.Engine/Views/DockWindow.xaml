@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:avalondock="https://github.com/Dirkster99/AvalonDock"
         mc:Ignorable="d"
-        xmlns:local="clr-namespace:Utility.Nodify.Demo"
+        xmlns:local="clr-namespace:Utility.Nodify.Engine.ViewModels"
         d:DataContext="{d:DesignInstance local:MainViewModel}"
         Title="DockWindow" Height="450" Width="800">
 

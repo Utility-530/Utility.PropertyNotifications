@@ -6,25 +6,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Collections.ObjectModel;
+using Utility.Nodify.Operations.Infrastructure;
+using Utility.Nodify.Demo.Infrastructure;
 
 namespace Utility.Nodify.Demo.ViewModels
 {
-    public class OperationsEditorViewModel : EditorViewModel
+    public class DiagramViewModel : Core.DiagramViewModel
     {
         private readonly IContainer container;
+        private MenuViewModel menu;
 
-        private IDictionary<string, OperationInfo> operations => container.Resolve<IDictionary<string, OperationInfo>>(Keys.Operations);
+       // private IDictionary<string, OperationInfo> operations => container.Resolve<IDictionary<string, OperationInfo>>(Keys.Operations);
+       private INodeSource operations => container.Resolve<INodeSource>(Keys.Operations);
 
-        public OperationsEditorViewModel(IContainer container) : base(container.Resolve<RangeObservableCollection<Diagram>>(Keys.SelectedDiagram).FirstOrDefault())
+        public DiagramViewModel(IContainer container) : base()
         {
             this.container = container;
         }
 
-        protected override IEnumerable<MenuItemViewModel> MenuItems => container.Resolve<IEnumerable<MenuItemViewModel>>();
-
-        protected override void OperationsMenu_Selected(Point location, MenuItemViewModel menuItem)
+        public MenuViewModel Menu
         {
-            NodeViewModel op = OperationFactory.CreateNode(operations[menuItem.Content]);
+            get
+            {
+                if (menu == null)
+                {
+                    menu = new MenuViewModel() { Items = new RangeObservableCollection<MenuItemViewModel>(MenuItems) };
+                    menu.Selected += OperationsMenu_Selected;
+                }
+                return menu;
+            }
+        }
+
+        protected IEnumerable<MenuItemViewModel> MenuItems => container.Resolve<IEnumerable<MenuItemViewModel>>();
+
+        protected void OperationsMenu_Selected(Point location, MenuItemViewModel menuItem)
+        {
+
+            NodeViewModel op = container.Resolve<Converter>().Convert(operations.Find(menuItem.Content));
             op.Location = location;
 
             Nodes.Add(op);
@@ -40,7 +58,6 @@ namespace Utility.Nodify.Demo.ViewModels
             }
         }
 
-
         protected override void CreateConnection(ConnectorViewModel source, ConnectorViewModel? target)
         {
             if (target == null)
@@ -55,7 +72,6 @@ namespace Utility.Nodify.Demo.ViewModels
             var output = target.IsInput ? source : target;
 
             PendingConnection.IsVisible = false;
-
             DisconnectConnector(input);
 
             Connections.Add(new OperationConnectionViewModel
@@ -64,5 +80,12 @@ namespace Utility.Nodify.Demo.ViewModels
                 Output = output
             });
         }
+
+        protected void OnOperationsMenuClosed()
+        {
+            PendingConnection.IsVisible = false;
+            Menu.Closed -= OnOperationsMenuClosed;
+        }
+
     }
 }

@@ -7,9 +7,9 @@ using Nodify;
 
 namespace Utility.Nodify.Demo
 {
-    public partial class EditorView : ResourceDictionary
+    public partial class DiagramView : ResourceDictionary
     {
-        public EditorView()
+        public DiagramView()
         {
             EventManager.RegisterClassHandler(typeof(NodifyEditor), UIElement.MouseLeftButtonDownEvent, new MouseButtonEventHandler(CloseOperationsMenu));
             EventManager.RegisterClassHandler(typeof(ItemContainer), ItemContainer.DragStartedEvent, new RoutedEventHandler(CloseOperationsMenu));
@@ -18,7 +18,7 @@ namespace Utility.Nodify.Demo
 
         private void OpenOperationsMenu(object sender, MouseButtonEventArgs e)
         {
-            if (!e.Handled && e.OriginalSource is NodifyEditor editor && !editor.IsPanning && editor.DataContext is EditorViewModel calculator)
+            if (!e.Handled && e.OriginalSource is NodifyEditor editor && !editor.IsPanning && editor.DataContext is Utility.Nodify.Demo.ViewModels.DiagramViewModel calculator)
             {
                 e.Handled = true;
                 calculator.Menu.OpenAt(editor.MouseLocation);
@@ -30,7 +30,7 @@ namespace Utility.Nodify.Demo
             ItemContainer? itemContainer = sender as ItemContainer;
             NodifyEditor? editor = sender as NodifyEditor ?? itemContainer?.Editor;
 
-            if (!e.Handled && editor?.DataContext is EditorViewModel calculator)
+            if (!e.Handled && editor?.DataContext is Utility.Nodify.Demo.ViewModels.DiagramViewModel calculator)
             {
                 calculator.Menu.Close();
             }

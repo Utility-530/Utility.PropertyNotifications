@@ -13,9 +13,9 @@
                 <ResourceDictionary Source="pack://application:,,,/Nodify;component/Themes/Light.xaml" />
                 <!--<ResourceDictionary Source="pack://application:,,,/Nodify.Shared;component/Themes/Icons.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/Nodify.Shared;component/Themes/Light.xaml" />-->
-                <ResourceDictionary Source="/Utility.Nodify.Engine;component/Themes/Templates.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Utility.Nodify.Infrastructure;component/Themes/Templates.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="/Utility.Nodify.Engine;component/Themes/Brushes.xaml"></ResourceDictionary>
-                <ResourceDictionary Source="/Utility.Nodify.Engine;component/Themes/EditorView.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Utility.Nodify.Engine;component/Themes/DiagramView.xaml"></ResourceDictionary>
                 <ResourceDictionary Source="/Utility.Nodify.Engine;component/Themes/MainView.xaml"></ResourceDictionary>
   
                 <ResourceDictionary Source="/AvalonDock.Themes.VS2013;component/DarkBrushs.xaml" />

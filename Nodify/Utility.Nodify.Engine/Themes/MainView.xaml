@@ -12,6 +12,15 @@
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Buttons;component/Themes/Generic.xaml"/>
     </ResourceDictionary.MergedDictionaries>
+
+
+    <!--<DataTemplate DataType="{x:Type op:OperationNodeViewModel}">
+        <Ellipse Fill="Red" Height="20" Width="20"></Ellipse>
+        --><!--<nodify:Node Input="{Binding Input}"
+                                 Output="{Binding Output}"
+                                 Header="{Binding Title}" />--><!--
+    </DataTemplate>-->
+
     <Style TargetType="{x:Type HeaderedItemsControl}">
         <Setter Property="Template">
             <Setter.Value>
@@ -92,12 +101,30 @@
         <Border BorderBrush="{DynamicResource  Node.BorderBrush}" BorderThickness="6"/>
     </DataTemplate>-->
 
-
-    <DataTemplate DataType="{x:Type core:Diagram}">
-        <Border BorderBrush="{DynamicResource  Node.BorderBrush}" BorderThickness="2">
-            <TextBlock Text="{Binding Name}"></TextBlock>
-        </Border>
+    <!--<DataTemplate x:Key="ConnectionTemplate"
+                      DataType="{x:Type core:ConnectionViewModel}">
+        <nodify:CircuitConnection Source="{Binding Output.Anchor}"
+                                      Target="{Binding Input.Anchor}"
+                                      SourceOffset="10 0"
+                                      TargetOffset="20 0"
+                                      SourceOffsetMode="Circle" />
     </DataTemplate>
+
+    <DataTemplate x:Key="PendingConnectionTemplate"
+                      DataType="{x:Type core:PendingConnectionViewModel}">
+        <nodify:PendingConnection IsVisible="{Binding IsVisible}"
+                                      Source="{Binding Source, Mode=OneWayToSource}"
+                                      Target="{Binding Target, Mode=OneWayToSource}"
+                                      TargetAnchor="{Binding TargetLocation, Mode=OneWayToSource}"
+                                      StartedCommand="{Binding DataContext.StartConnectionCommand, RelativeSource={RelativeSource AncestorType={x:Type nodify:NodifyEditor}}}"
+                                      CompletedCommand="{Binding DataContext.CreateConnectionCommand, RelativeSource={RelativeSource AncestorType={x:Type nodify:NodifyEditor}}}" />
+    </DataTemplate>-->
+
+    <!--<DataTemplate DataType="{x:Type core:DiagramViewModel}">
+        <Border BorderBrush="{DynamicResource  Node.BorderBrush}" BorderThickness="2">
+            <TextBlock Text="{Binding Title}"></TextBlock>
+        </Border>
+    </DataTemplate>-->
 
     <DataTemplate DataType="{x:Type local:DiagramsViewModel}" >
         <StackPanel>

@@ -6,8 +6,7 @@ using System.Linq;
 using System.Windows.Input;
 using Utility.Collections;
 using Utility.Commands;
-using Utility.Infrastructure;
-using Utility.Models;
+using Utility.ViewModels.Base;
 
 namespace Utility.Nodify.Core
 {
@@ -56,7 +55,7 @@ namespace Utility.Nodify.Core
             Tabs.Add(tab);
         }
 
-        protected virtual object Content { get => new EditorViewModel(Diagram.Empty); }
+        protected virtual object Content { get; }
 
         private void Tab_Close(TabViewModel obj)
         {

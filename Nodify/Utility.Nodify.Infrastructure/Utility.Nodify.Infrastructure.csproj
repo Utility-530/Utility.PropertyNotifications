@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
@@ -7,13 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nodify" Version="5.0.2" />
+    <PackageReference Include="Nodify" Version="5.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\WPF\Utility.Commands\Utility.Commands.csproj" />
+    <ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.ViewModels.Base\Utility.ViewModels.Base.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Tabs\Utility.WPF.Controls.Tabs.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Base\Utility.Nodify.Base.csproj" />
   </ItemGroup>
 
