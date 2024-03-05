@@ -8,6 +8,8 @@ namespace Utility.WPF.Templates
 
     public class ReadOnlyValueDataTemplateSelector : GenericDataTemplateSelector
     {
+        private ReadOnlyValueTemplates valueTemplates;
+
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             if (item is IType { Type: { } type })
@@ -21,7 +23,7 @@ namespace Utility.WPF.Templates
             }
 
             if (value == null)
-                return TemplateSelector.CreateNullTemplate();
+                return TemplateFactory.CreateNullTemplate();
 
             //var type = value.GetType();
             //var _descriptor = item is IPropertyDescriptor descriptor ? descriptor : null;
@@ -36,11 +38,18 @@ namespace Utility.WPF.Templates
         {
             get
             {
-                var resourceDictionary = new ResourceDictionary
+                //var resourceDictionary = new ResourceDictionary
+                //{
+                //    Source = new Uri($"/{typeof(ReadOnlyValueTemplates).Namespace};component/{nameof(ReadOnlyValueTemplates)}.xaml", UriKind.RelativeOrAbsolute)
+                //};
+                //return resourceDictionary;
+                if (valueTemplates == null)
                 {
-                    Source = new Uri($"/{typeof(ReadOnlyValueTemplates).Namespace};component/{nameof(ReadOnlyValueTemplates)}.xaml", UriKind.RelativeOrAbsolute)
-                };
-                return resourceDictionary;
+                    valueTemplates = new ReadOnlyValueTemplates();
+                    valueTemplates.InitializeComponent();
+                }
+                return valueTemplates;
+
             }
         }
 

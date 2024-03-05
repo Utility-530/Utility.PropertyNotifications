@@ -5,8 +5,6 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.WPF.Templates
 {
-
-
     public class CustomDataTemplateSelector : DataTemplateSelector
     {
         private DataTemplateSelector? valueDataTemplateSelector, readOnlyValueDataTemplateSelector;

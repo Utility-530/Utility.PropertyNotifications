@@ -18,6 +18,7 @@
     <conv:StringToEnumConverter x:Key="StringToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
 
     <local:VisibilityConverter x:Key="VisibilityConverter" />
+    <conv:TypeNameConverter x:Key="TypeNameConverter" />
 
     <DataTemplate DataType="{x:Type sys:Int32}">
         <TextBox Text="{Binding Path=Value, Mode=TwoWay, StringFormat={}{0:N0}}"></TextBox>
@@ -68,7 +69,7 @@
 
     <DataTemplate DataType="{x:Type sys:Type}">
         <!--<ContentControl Content="{Binding }"></ContentControl>-->
-        <t:TypeSelector x:Name="TypeSelector" Type="{Binding Value, Mode=TwoWay}">
+        <t:TypeSelector x:Name="TypeSelector" Type="{Binding Value, Mode=TwoWay, Converter={x:Static conv:DefaultConverter.Instance}}">
             <i:Interaction.Behaviors>
                 <infra:EntryAssemblyBehavior/>
             </i:Interaction.Behaviors>
@@ -128,7 +129,10 @@
     </DataTemplate>
 
     <DataTemplate x:Key="Missing">
-        <TextBlock Text="Missing Template" Background="Transparent"  HorizontalAlignment="Center" ></TextBlock>
+        <TextBlock Text="Missing Value Template" Background="Transparent"  HorizontalAlignment="Center" >
+            <Run>Missing Template</Run>
+            <Run  Text="{Binding  Mode=OneTime, Converter={StaticResource TypeNameConverter}}"></Run>
+        </TextBlock>
     </DataTemplate>
     
 </ResourceDictionary>

@@ -13,6 +13,8 @@ namespace Utility.WPF.Templates
 
     public class ValueDataTemplateSelector : GenericDataTemplateSelector
     {
+        private ValueTemplates valueTemplates;
+
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
 
@@ -47,7 +49,7 @@ namespace Utility.WPF.Templates
 
 
             if (value == null)
-                return NullTemplate ??= TemplateSelector.CreateNullTemplate();
+                return NullTemplate ??= TemplateFactory.CreateNullTemplate();
 
             //var type = value.GetType();
             //var _descriptor = item is IPropertyDescriptor descriptor ? descriptor : null;
@@ -63,11 +65,12 @@ namespace Utility.WPF.Templates
         {
             get
             {
-                var resourceDictionary = new ResourceDictionary
+                if (valueTemplates == null)
                 {
-                    Source = new Uri($"/{typeof(ValueTemplates).Namespace};component/{nameof(ValueTemplates)}.xaml", UriKind.RelativeOrAbsolute)
-                };
-                return resourceDictionary;
+                    valueTemplates = new ValueTemplates();
+                    valueTemplates.InitializeComponent();
+                }
+                return valueTemplates;
             }
         }
 

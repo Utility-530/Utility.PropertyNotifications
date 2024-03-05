@@ -16,7 +16,8 @@
     <conv:StringToEnumConverter x:Key="StringToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
 
     <local:VisibilityConverter x:Key="VisibilityConverter" />
-
+    <conv:TypeNameConverter x:Key="TypeNameConverter" />
+    
     <DataTemplate DataType="{x:Type sys:Int32}">
         <TextBlock Text="{Binding Path=Value, Mode=OneWay, StringFormat={}{0:N0}}"></TextBlock>
     </DataTemplate>
@@ -115,7 +116,10 @@
 
 
     <DataTemplate x:Key="Missing">
-        <TextBlock Text="Missing Template"></TextBlock>
+        <TextBlock >
+                        <Run>Missing ReadOnly Template</Run>
+            <Run Text="{Binding  Mode=OneTime, Converter={StaticResource TypeNameConverter}}"></Run>
+        </TextBlock>
     </DataTemplate>
 
 </ResourceDictionary>

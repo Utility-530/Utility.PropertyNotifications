@@ -10,10 +10,12 @@
                     xmlns:utl="http://schemas.utility.com/utilitywpf"
                     x:Class="Utility.WPF.Templates.Templates">
 
-
-    <converter:IntToEnumConverter x:Key="IntToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
+    <converter:TypeNameConverter x:Key="TypeNameConverter" />
+    
+    <!--<converter:IntToEnumConverter x:Key="IntToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
 
     <converter:StringToEnumConverter x:Key="StringToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
+
 
 
     <DataTemplate DataType="{x:Type sys:Int32}">
@@ -72,11 +74,14 @@
 
     <DataTemplate DataType="{x:Type sys:Enum}">
         <controls:EnumItemsControl Value="{Binding Mode=OneWay,Converter={x:Static conv:DefaultConverter.Instance} }" ></controls:EnumItemsControl>
-    </DataTemplate>
+    </DataTemplate>-->
 
 
     <DataTemplate x:Key="Missing">
-        <TextBlock Text="Missing Template"></TextBlock>
+        <TextBlock>
+            <Run>Missing Custom Template</Run>
+            <Run Text="{Binding  Mode=OneTime,Converter={StaticResource TypeNameConverter}}"></Run>
+        </TextBlock>
     </DataTemplate>
     
 </ResourceDictionary>
