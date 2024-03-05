@@ -1,25 +1,30 @@
 ﻿using System.Collections;
 using System.Windows.Input;
-using Utility.Interfaces.NonGeneric;
-using System.Reactive;
-using Utility.Observables.NonGeneric;
 using System.Collections.ObjectModel;
 
 namespace Utility.Commands
 {
-    public class ObservableCommand : ICommand, IObservable, IObservable<object>, IObserver<bool>
+    public class ObservableCommand : ICommand, IObservable<object>, IObserver<bool>
     {
         private bool canExecute;
-         List<IObserver> observers  = new();
-         List<IObserver<object>> observers2  = new();
+        private Func<IObserver<bool>, object> methodToExecute_;
+        //List<IObserver> observers  = new();
+        List<IObserver<object>> observers = new();
         private object? id;
         private readonly Action<IObserver<bool>> methodToExecute;
 
-        public ObservableCommand(Action<IObserver<bool>> methodToExecute, bool canExecute =true)
+        public ObservableCommand(Action<IObserver<bool>> methodToExecute, bool canExecute = true)
         {
             this.canExecute = canExecute;
             this.methodToExecute = methodToExecute;
         }
+
+        public ObservableCommand(Func<IObserver<bool>, object> methodToExecute, bool canExecute = true)
+        {
+            this.canExecute = canExecute;
+            this.methodToExecute_ = methodToExecute;
+        }
+
 
         public ObservableCommand(object? id = null)
         {
@@ -33,33 +38,48 @@ namespace Utility.Commands
         }
 
 
-        public IEnumerable<IObserver> Observers => observers;
-        public IEnumerable<IObserver<object>> Observers2 => observers2;
+        //public IEnumerable<IObserver> Observers => observers;
+        public IEnumerable<IObserver<object>> Observers => observers;
 
         public List<object?> Outputs { get; } = new();
 
         public bool CanExecute(object? parameter) => canExecute;
 
         public void Execute(object? parameter)
-        {
-            var output = id ?? parameter;
+        {      
 
-            methodToExecute.Invoke(this);
-
-            Outputs.Add(output);
-
-            foreach (var observer in Observers)
+            if (methodToExecute != null)
             {
-                observer.OnNext(id ?? parameter);
+                methodToExecute.Invoke(this);
+
+                var output = id ?? parameter;
+
+                Outputs.Add(output);
+
+                foreach (var observer in observers)
+                {
+                    observer.OnNext(output);
+                }
+            }
+            else if(methodToExecute_!=null)
+            {
+                var output = methodToExecute_.Invoke(this);
+
+                Outputs.Add(output);
+
+                foreach (var observer in observers)
+                {
+                    observer.OnNext(output);
+                }
             }
         }
 
-        public IDisposable Subscribe(IObserver observer)
-        {
-            foreach (var output in Outputs)
-                observer.OnNext(output);
-            return new Disposer(observers, observer);
-        }
+        //public IDisposable Subscribe(IObserver observer)
+        //{
+        //    foreach (var output in Outputs)
+        //        observer.OnNext(output);
+        //    return new Disposer(observers, observer);
+        //}
 
         public void OnCompleted()
         {
@@ -86,7 +106,7 @@ namespace Utility.Commands
         {
             foreach (var output in Outputs)
                 observer.OnNext(output);
-            return new Disposer<object>(observers2, observer);
+            return new Disposer<object>(observers, observer);
         }
 
         public class Disposer<TObserver, T> : IDisposable where TObserver : IObserver<T>

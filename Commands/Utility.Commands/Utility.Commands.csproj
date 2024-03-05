@@ -7,15 +7,6 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <Compile Remove="Themes\**" />
-	  <EmbeddedResource Remove="Themes\**" />
-	  <None Remove="Themes\**" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
-	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Include="PresentationCore">
