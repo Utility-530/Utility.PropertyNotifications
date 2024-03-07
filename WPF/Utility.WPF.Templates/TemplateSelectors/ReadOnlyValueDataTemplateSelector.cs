@@ -12,23 +12,16 @@ namespace Utility.WPF.Templates
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item is IType { Type: { } type })
-            {
-                return Templates[new DataTemplateKey(type)] as DataTemplate;
-            }
-
             if (item is not IValue { Value: var value })
             {
                 throw new Exception($"Unexpected type for item {item.GetType().Name}");
             }
-
+            if (item is IType { Type: { } type })
+            {
+                return Templates[new DataTemplateKey(type)] as DataTemplate;
+            }
             if (value == null)
                 return TemplateFactory.CreateNullTemplate();
-
-            //var type = value.GetType();
-            //var _descriptor = item is IPropertyDescriptor descriptor ? descriptor : null;
-            //var _info = item is IPropertyInfo propertyInfo ? propertyInfo : null;
-
 
             return (Templates["Missing"] as DataTemplate) ?? throw new Exception("dfs 33091111111");
         }

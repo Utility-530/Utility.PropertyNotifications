@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Drawing;
-using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using Utility.Interfaces.NonGeneric;
-using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Templates
 {
@@ -17,12 +12,10 @@ namespace Utility.WPF.Templates
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-
             if (item is not IValue { Value: var value })
             {
                 throw new Exception($"Unexpected type for item {item.GetType().Name}");
             }
-
             if (item is IType { Type: { } type })
             {
                 if (Nullable.GetUnderlyingType(type) != null)
@@ -57,7 +50,6 @@ namespace Utility.WPF.Templates
 
 
             return (Templates["Missing"] as DataTemplate) ?? throw new Exception("dfs 33091111111");
-
         }
 
 

@@ -15,9 +15,6 @@ namespace Utility.WPF.Templates
 
     public abstract class TemplateFactory
     {
-
- 
-
         //public static DataTemplate SelectTemplate(Type type)
         //{
 
