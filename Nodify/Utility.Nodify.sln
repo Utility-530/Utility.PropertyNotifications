@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Demo", "Util
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Engine", "Utility.Nodify.Engine\Utility.Nodify.Engine.csproj", "{8C3983C5-835B-4898-A06E-CC3A4946E6C8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Core", "Utility.Nodify.Core\Utility.Nodify.Core.csproj", "{A131D4EA-397B-475C-B549-22CEB06F1988}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.ViewModels", "Utility.Nodify.Core\Utility.Nodify.ViewModels.csproj", "{A131D4EA-397B-475C-B549-22CEB06F1988}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{0A03D064-3582-4B1C-AC57-F16299199866}"
 EndProject
@@ -50,6 +50,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Operations", "Utility.Nodify.Operations\Utility.Nodify.Operations.csproj", "{8B8E33E0-2625-464F-B187-42D931FF0EBF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Templates", "..\WPF\Utility.WPF.Templates\Utility.WPF.Templates.csproj", "{05F4319F-40CD-423F-A62F-55E1E577DCAC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Converters", "Utility.Nodify.Converters\Utility.Nodify.Converters.csproj", "{0CF5E4E2-5A7B-4842-9DEA-CF80066D5E32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -145,6 +147,10 @@ Global
 		{05F4319F-40CD-423F-A62F-55E1E577DCAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05F4319F-40CD-423F-A62F-55E1E577DCAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05F4319F-40CD-423F-A62F-55E1E577DCAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CF5E4E2-5A7B-4842-9DEA-CF80066D5E32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CF5E4E2-5A7B-4842-9DEA-CF80066D5E32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CF5E4E2-5A7B-4842-9DEA-CF80066D5E32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CF5E4E2-5A7B-4842-9DEA-CF80066D5E32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
