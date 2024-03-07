@@ -4,7 +4,8 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using IContainer = DryIoc.IContainer;
 using Utility.Nodify.Demo;
-using Utility.Nodify.Demo.Infrastructure;
+using Utility.Nodify.Engine.Infrastructure;
+using System;
 
 namespace Utility.Nodify.Engine.ViewModels;
 
@@ -23,9 +24,16 @@ public class MainViewModel
         if (selected.FirstOrDefault() is Diagram item)
         {
             //var diagramViewModel = container.Resolve<DiagramViewModel>();
-            var diagramViewModel = container.Resolve<Converter>().Convert(item);
-            container.RegisterInstance(diagramViewModel);
-            TabsViewModel.AddEditorCommand.Execute(diagramViewModel);
+            try
+            {
+                var diagramViewModel = container.Resolve<IConverter>().Convert(item);
+                container.RegisterInstance(diagramViewModel);
+                TabsViewModel.AddEditorCommand.Execute(diagramViewModel);
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
     }
 

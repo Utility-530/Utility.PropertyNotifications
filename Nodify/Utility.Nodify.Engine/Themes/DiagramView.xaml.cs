@@ -18,10 +18,10 @@ namespace Utility.Nodify.Demo
 
         private void OpenOperationsMenu(object sender, MouseButtonEventArgs e)
         {
-            if (!e.Handled && e.OriginalSource is NodifyEditor editor && !editor.IsPanning && editor.DataContext is Utility.Nodify.Demo.ViewModels.DiagramViewModel calculator)
+            if (!e.Handled && e.OriginalSource is NodifyEditor editor && !editor.IsPanning && editor.DataContext is Engine.ViewModels.DiagramViewModel diagram)
             {
                 e.Handled = true;
-                calculator.Menu.OpenAt(editor.MouseLocation);
+                diagram.OpenAt(editor.MouseLocation);
             }
         }
 
@@ -30,7 +30,7 @@ namespace Utility.Nodify.Demo
             ItemContainer? itemContainer = sender as ItemContainer;
             NodifyEditor? editor = sender as NodifyEditor ?? itemContainer?.Editor;
 
-            if (!e.Handled && editor?.DataContext is Utility.Nodify.Demo.ViewModels.DiagramViewModel calculator)
+            if (!e.Handled && editor?.DataContext is Engine.ViewModels.DiagramViewModel calculator)
             {
                 calculator.Menu.Close();
             }

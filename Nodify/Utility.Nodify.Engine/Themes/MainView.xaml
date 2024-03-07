@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Utility.Nodify.Demo"
                     xmlns:engine="clr-namespace:Utility.Nodify.Engine.ViewModels"
-                    xmlns:core="clr-namespace:Utility.Nodify.Core;assembly=Utility.Nodify.Core"               
+                    xmlns:core="clr-namespace:Utility.Nodify.Core;assembly=Utility.Nodify.ViewModels"               
                     xmlns:op="clr-namespace:Utility.Nodify.Operations;assembly=Utility.Nodify.Operations"
                     xmlns:res="http://schemas.utility.com/resourcedictionary"
                     xmlns:st="http://schemas.spicytaco.io/"
@@ -51,12 +51,12 @@
         </Setter>
     </Style>
 
-    <DataTemplate DataType="{x:Type core:Key}">
+    <!--<DataTemplate DataType="{x:Type core:Key}">
         <UniformGrid  Columns="1" >
             <TextBlock Text="{Binding Guid}" />
             <TextBlock Text="{Binding Name}" MinHeight="25" MinWidth="40" />
         </UniformGrid>
-    </DataTemplate>
+    </DataTemplate>-->
 
     <DataTemplate DataType="{x:Type op:Message}">
         <st:AutoGrid Rows="*,*,*" Columns="*,*"  MinWidth="160" Margin="4" Background="{DynamicResource BackgroundBrush}">
@@ -70,7 +70,7 @@
     </DataTemplate>
 
 
-    <DataTemplate DataType="{x:Type op:PropertyChange}">
+    <!--<DataTemplate DataType="{x:Type op:PropertyChange}">
         <st:AutoGrid Rows="*,*,*" Columns="*,*"  MinWidth="160" Margin="2" Background="{DynamicResource BackgroundBrush}">
             <TextBlock Margin="1">Source</TextBlock>
             <ContentControl Content="{Binding Source, Converter={x:Static local:TypeConverter.Instance}}" MinHeight="25" MinWidth="40" Margin="1"/>
@@ -81,7 +81,7 @@
                 <ContentControl Content="{Binding Value}" />
             </Viewbox>        
         </st:AutoGrid>
-    </DataTemplate>
+    </DataTemplate>-->
 
     <DataTemplate DataType="{x:Type local:MessagesViewModel}">
         <DockPanel>
