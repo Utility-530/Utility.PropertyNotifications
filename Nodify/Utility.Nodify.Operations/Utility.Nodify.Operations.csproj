@@ -17,7 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Conversions\Utility.Conversions\Utility.Conversions.csproj" />
     <ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
-    <ProjectReference Include="..\Utility.Nodify.Core\Utility.Nodify.Core.csproj" />
+    <ProjectReference Include="..\Utility.Nodify.Core\Utility.Nodify.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>
