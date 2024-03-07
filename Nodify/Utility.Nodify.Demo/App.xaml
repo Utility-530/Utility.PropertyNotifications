@@ -32,7 +32,7 @@
 
 
 
-            <DataTemplate DataType="{x:Type local:BooleanViewModel}">
+            <!--<DataTemplate DataType="{x:Type local:BooleanViewModel}">
                 <CheckBox MinWidth="100" MinHeight="40" IsChecked="{Binding Value}" Content="Check"/>
             </DataTemplate>
 
@@ -45,7 +45,7 @@
                 <Border BorderBrush="{DynamicResource  Node.BorderBrush}" BorderThickness="2" MinWidth="400" MinHeight="300">
                     <ItemsControl MinWidth="100" ItemsSource="{Binding ViewModels}"/>
                 </Border>
-            </DataTemplate>
+            </DataTemplate>-->
 
         </ResourceDictionary>
     </Application.Resources>
