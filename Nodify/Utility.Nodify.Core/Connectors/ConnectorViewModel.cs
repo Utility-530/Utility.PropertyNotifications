@@ -1,17 +1,19 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Utility.ViewModels.Base;
 
 namespace Utility.Nodify.Core
 {
-    public class ConnectorViewModel : BaseViewModel
+    public class ConnectorViewModel : BaseViewModel, IConnectorViewModel
     {
-        private NodeViewModel _node = default!;
+        private INodeViewModel _node = default!;
 
         private string? _title;
         private object _value;
         private bool _isConnected;
         private bool _isInput;
         private Point _anchor;
+        private Type type;
 
 
         public string? Title
@@ -32,6 +34,12 @@ namespace Utility.Nodify.Core
             set => Set(ref _isConnected, value);
         }
 
+        public Type Type
+        {
+            get => type;
+            set => Set(ref type, value);
+        }
+
         public bool IsInput
         {
             get => _isInput;
@@ -45,7 +53,7 @@ namespace Utility.Nodify.Core
         }
 
 
-        public NodeViewModel Node
+        public INodeViewModel Node
         {
             get => _node;
             set => Set(ref _node, value);

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0-windows</TargetFramework>
@@ -12,8 +12,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
+    <ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\WPF\Utility.Commands\Utility.Commands.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Base\Utility.Nodify.Base.csproj" />
   </ItemGroup>
 

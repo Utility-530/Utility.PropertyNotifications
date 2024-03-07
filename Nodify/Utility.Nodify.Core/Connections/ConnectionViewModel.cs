@@ -6,9 +6,9 @@ using Utility.ViewModels.Base;
 
 namespace Utility.Nodify.Core
 {
-    public class ConnectionViewModel : BaseViewModel
+    public class ConnectionViewModel : BaseViewModel, IConnectionViewModel
     {
-        private ConnectorViewModel _output = default!, _input = default!;
+        private IConnectorViewModel _output = default!, _input = default!;
         private string _title = string.Empty;
 
 
@@ -24,7 +24,7 @@ namespace Utility.Nodify.Core
             set => Set(ref _title, value);
         }
 
-        public ConnectorViewModel Input
+        public IConnectorViewModel Input
         {
             get => _input;
             set => Set(ref _input, value)
@@ -33,8 +33,9 @@ namespace Utility.Nodify.Core
                     this.Input.PropertyChanged += Input_PropertyChanged;
                 });
         }
+        public NodeState State { get; set; } = NodeState.None;
 
-        public ConnectorViewModel Output
+        public IConnectorViewModel Output
         {
             get => _output;
             set => Set(ref _output, value)
@@ -46,11 +47,14 @@ namespace Utility.Nodify.Core
 
         protected virtual void Output_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-
+            if (e.PropertyName == nameof(ConnectorViewModel.Value))
+                State = NodeState.OutputValueChanged;
         }
         protected virtual void Input_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            
+            if (e.PropertyName == nameof(ConnectorViewModel.Value))
+                State = NodeState.InputValueChanged;
+
         }
     }
 }

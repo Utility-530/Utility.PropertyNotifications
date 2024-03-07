@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
 using Utility.Collections;
@@ -7,13 +8,13 @@ using Utility.ViewModels.Base;
 
 namespace Utility.Nodify.Core
 {
-    public class DiagramViewModel : BaseViewModel
+    public class DiagramViewModel : BaseViewModel, IDiagramViewModel
     {
-        private RangeObservableCollection<NodeViewModel> _operations = new(), _messages = new();
-        private RangeObservableCollection<NodeViewModel> _selectedOperations = new();
+        private ICollection<INodeViewModel> _operations = new RangeObservableCollection<INodeViewModel>();
+        private ICollection<INodeViewModel> _selectedOperations = new RangeObservableCollection<INodeViewModel>();
 
         public DiagramViewModel()
-        {   
+        {
 
             CreateConnectionCommand = new Command<ConnectorViewModel>(
                 _ => CreateConnection(PendingConnection.Source, PendingConnection.Target),
@@ -23,7 +24,8 @@ namespace Utility.Nodify.Core
             DeleteSelectionCommand = new Command(DeleteSelection);
             GroupSelectionCommand = new Command(GroupSelectedOperations, () => SelectedNodes.Count > 0);
 
-            Connections.WhenAdded(c =>
+            if (Connections is ThreadSafeObservableCollection<IConnectionViewModel> threadSafe)
+                threadSafe.WhenAdded(c =>
             {
                 c.Input.IsConnected = true;
                 c.Output.IsConnected = true;
@@ -46,16 +48,18 @@ namespace Utility.Nodify.Core
                 //c.Output.ValueObservers.Remove(c.Input);
             });
 
-            Nodes.WhenAdded(x =>
+            if(_operations is ThreadSafeObservableCollection<INodeViewModel> _threadSafe)
+                _threadSafe.WhenAdded(x =>
             {
-                x.Input.WhenRemoved(RemoveConnection);
+                if(x.Input is ThreadSafeObservableCollection<IConnectorViewModel> _tt_)
+                    _tt_.WhenRemoved(RemoveConnection);
 
-                if (x is InputNodeViewModel ci)
-                {
-                    ci.Output.WhenRemoved(RemoveConnection);
-                }
+                //if (x is InputNodeViewModel ci)
+                //{
+                //    ci.Output.WhenRemoved(RemoveConnection);
+                //}
 
-                void RemoveConnection(ConnectorViewModel i)
+                void RemoveConnection(IConnectorViewModel i)
                 {
                     var c = Connections.Where(con => con.Input == i || con.Output == i).ToArray();
                     c.ForEach(con => Connections.Remove(con));
@@ -75,22 +79,22 @@ namespace Utility.Nodify.Core
                         DisconnectConnector(output);
                     }
                 }
-            });  
+            });
         }
 
-        public RangeObservableCollection<NodeViewModel> Nodes
+        public ICollection<INodeViewModel> Nodes
         {
             get => _operations;
             set => Set(ref _operations, value);
         }
 
-        public RangeObservableCollection<NodeViewModel> SelectedNodes
+        public ICollection<INodeViewModel> SelectedNodes
         {
             get => _selectedOperations;
             set => Set(ref _selectedOperations, value);
         }
 
-        public RangeObservableCollection<ConnectionViewModel> Connections { get; } = new RangeObservableCollection<ConnectionViewModel>();
+        public ICollection<IConnectionViewModel> Connections { get; } = new RangeObservableCollection<IConnectionViewModel>();
         public PendingConnectionViewModel PendingConnection { get; set; } = new PendingConnectionViewModel();
 
 
@@ -100,22 +104,20 @@ namespace Utility.Nodify.Core
         public ICommand DeleteSelectionCommand { get; }
         public ICommand GroupSelectionCommand { get; }
 
-        protected void DisconnectConnector(ConnectorViewModel connector)
+        protected void DisconnectConnector(IConnectorViewModel connector)
         {
             var connections = Connections.Where(c => c.Input == connector || c.Output == connector).ToList();
             connections.ForEach(c => Connections.Remove(c));
         }
 
-        protected bool CanCreateConnection(ConnectorViewModel source, ConnectorViewModel? target)
+        protected bool CanCreateConnection(IConnectorViewModel source, IConnectorViewModel? target)
             => target == null || (source != target && source.Node != target.Node && source.IsInput != target.IsInput);
 
-        protected virtual void CreateConnection(ConnectorViewModel source, ConnectorViewModel? target)
+        protected virtual void CreateConnection(IConnectorViewModel source, IConnectorViewModel? target)
         {
             if (target == null)
             {
                 PendingConnection.IsVisible = true;
-                //Menu.OpenAt(PendingConnection.TargetLocation);
-                //Menu.Closed += OnOperationsMenuClosed;
                 return;
             }
 

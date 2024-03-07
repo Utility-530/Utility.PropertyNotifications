@@ -1,49 +1,43 @@
-﻿using Utility.Nodify.Core;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using Utility.Nodify.Base;
-using YetAnotherStringMatcher;
+using System.Collections.Generic;
 
 namespace Utility.Nodify.Core
 {
-    public interface ICore
-    {
 
-    }
-
-    public class NodeViewModel : BaseNodeViewModel
+    public class NodeViewModel : BaseNodeViewModel, INodeViewModel
     {
-        private RangeObservableCollection<ConnectorViewModel> input = new();
-        private RangeObservableCollection<ConnectorViewModel> output = new();
+        private ICollection<IConnectorViewModel> input = new RangeObservableCollection<IConnectorViewModel>();
+        private ICollection<IConnectorViewModel> output = new RangeObservableCollection<IConnectorViewModel>();
 
         public event Action<NodeViewModel> InputChanged;
-
-        //private RangeObservableCollection<ConnectorViewModel> input = new(), output = new();
-
 
         public NodeViewModel()
         {
             NewMethod();
         }
 
+        public Guid Id { get; } = Guid.NewGuid();
+        public Key Key => new(Id, Title);
 
         public virtual ICore Core { get; set; }
 
         private void NewMethod()
         {
-            _ = Input.WhenAdded(x =>
-            {
-                sd(x);
-            })
-            .WhenRemoved(x =>
-            {
-                x.PropertyChanged -= OnInputValueChanged;
-            });
+            if (input is RangeObservableCollection<IConnectorViewModel> range)
+                _ = range.WhenAdded(x =>
+                {
+                    Add(x);
+                })
+                .WhenRemoved(x =>
+                {
+                    x.PropertyChanged -= OnInputValueChanged;
+                });
         }
 
-        void sd(ConnectorViewModel x)
+        void Add(IConnectorViewModel x)
         {
             x.Node = this;
             x.IsInput = true;
@@ -60,12 +54,10 @@ namespace Utility.Nodify.Core
             }
         }
 
-        public Guid Id { get; } = Guid.NewGuid();
-        public Key Key => new(Id, Title);
+        public NodeState State { get; set; } = NodeState.None;
 
 
-
-        public RangeObservableCollection<ConnectorViewModel> Input
+        public ICollection<IConnectorViewModel> Input
         {
             get =>
                 input;
@@ -74,12 +66,12 @@ namespace Utility.Nodify.Core
                 input = value;
                 foreach (var inp in value)
                 {
-                    sd(inp);
+                    Add(inp);
                 }
                 NewMethod();
             }
         }
-        public RangeObservableCollection<ConnectorViewModel> Output
+        public ICollection<IConnectorViewModel> Output
         {
             get => output;
             set
@@ -87,10 +79,9 @@ namespace Utility.Nodify.Core
                 output = value;
             }
         }
-        public virtual void OnInputValueChanged(ConnectorViewModel connectorViewModel)
+        public virtual void OnInputValueChanged(IConnectorViewModel connectorViewModel)
         {
+            State = NodeState.InputValueChanged;
         }
-
-
     }
 }
