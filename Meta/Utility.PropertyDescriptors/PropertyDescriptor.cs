@@ -54,15 +54,15 @@ public abstract record NullablePropertyDescriptor<T>(Descriptor Descriptor, obje
     object IValue.Value => Value;
 }
 
-public abstract record PropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor.PropertyType), IIsReadOnly
+public record PropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor.PropertyType), IIsReadOnly
 {
     public override System.IObservable<Change<IMemberDescriptor>> GetChildren()
     {
-        if (Descriptor.GetValue(Instance) is { } inst)
+        if (Descriptor.GetValue(Instance) is var inst)
         {
             if(inst is null)
             {
-
+                return Observable.Empty<Change<IMemberDescriptor>>();
             }
             if (inst is Type type)
             {

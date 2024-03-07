@@ -1,8 +1,8 @@
 ﻿namespace Utility.Descriptors;
 
-public record CollectionHeaderDescriptor : MemberDescriptor, ICollectionItemDescriptor, IEquatable
+public record CollectionHeadersDescriptor : MemberDescriptor, ICollectionItemDescriptor, IEquatable
 {
-    public CollectionHeaderDescriptor(Type propertyType, Type componentType) : base(propertyType)
+    public CollectionHeadersDescriptor(Type propertyType, Type componentType) : base(propertyType)
     {
         this.ParentType = componentType;
     }
@@ -15,7 +15,7 @@ public record CollectionHeaderDescriptor : MemberDescriptor, ICollectionItemDesc
 
     public bool Equals(IEquatable? other)
     {
-        if (other is CollectionHeaderDescriptor collectionHeaderDescriptor)
+        if (other is CollectionHeadersDescriptor collectionHeaderDescriptor)
             return this.Type.Equals(collectionHeaderDescriptor.Type);
         return false;
     }
@@ -32,14 +32,14 @@ public record CollectionHeaderDescriptor : MemberDescriptor, ICollectionItemDesc
 
     public override IObservable<Change<IMemberDescriptor>> GetChildren()
     {
-        if (Type.GetConstructor(System.Type.EmptyTypes) == null || Type.IsValueOrString())
+        if (Type.GetConstructor(Type.EmptyTypes) == null || Type.IsValueOrString())
             return Observable.Empty<Change<IMemberDescriptor>>();
       
         return Observable.Create<Change<IMemberDescriptor>>(observer =>
         {
-            foreach(System.ComponentModel.PropertyDescriptor x in TypeDescriptor.GetProperties(Type))
+            foreach(Descriptor descriptor in TypeDescriptor.GetProperties(Type))
             {
-                observer.OnNext(new(new HeaderDescriptor(x),Changes.Type.Add));
+                observer.OnNext(new(new HeaderDescriptor(descriptor.PropertyType, descriptor.ComponentType, descriptor.Name), Changes.Type.Add));
             }
             return Disposable.Empty;
         });
@@ -48,15 +48,20 @@ public record CollectionHeaderDescriptor : MemberDescriptor, ICollectionItemDesc
 
 public record HeaderDescriptor : MemberDescriptor
 {
-    public HeaderDescriptor(Descriptor propertyDescriptor) : base(propertyDescriptor.PropertyType)
+    public HeaderDescriptor(Type type, Type parentType, string name) : base(type)
     {
-        ParentType = propertyDescriptor.ComponentType;
-        Name = propertyDescriptor.Name;
+        ParentType = parentType;
+        Name = name;
     }
 
     public override string? Name { get; }
 
     public override Type ParentType { get; }
+
+    public override IObservable<Change<IMemberDescriptor>> GetChildren()
+    {
+        return Observable.Empty<Change<IMemberDescriptor>>();
+    }
 
     public override object GetValue()
     {
@@ -73,7 +78,7 @@ public partial record CollectionItemDescriptor : PropertyDescriptor, ICollection
 {
     private readonly Type componentType;
 
-    public CollectionItemDescriptor(object item, int index, Type componentType) : base(new RootDescriptor(item))
+    public CollectionItemDescriptor(object item, int index, Type componentType) : base(new PropertyDescriptor(new RootPropertyDescriptor(item.GetType()) { Item = item}, item))
     {
         Item = item;
         
@@ -81,7 +86,6 @@ public partial record CollectionItemDescriptor : PropertyDescriptor, ICollection
         {
             throw new Exception("Index 0 reserved for header!");
         }
-
         Index = index;
         this.componentType = componentType;
     }

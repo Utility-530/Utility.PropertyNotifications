@@ -7,8 +7,13 @@ namespace Utility.Descriptors.Repositorys
     public readonly record struct Duplication(Guid old, Guid @new);
     public readonly record struct DateValue(DateTime DateTime, object Value);
     public readonly record struct Selection(Guid Guid, Type Type, int? Index);
-    public record Proto(Guid Guid, Type Type, string Name);
-
+    public record Proto(Guid Guid, Type Type, string Name)
+    {
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
+    }
 
     public class TreeRepository : ITreeRepository
     {
@@ -56,14 +61,6 @@ namespace Utility.Descriptors.Repositorys
         public record String
         {
             public string Name { get; set; }
-        }
-
-        public record Table
-        {
-            [PrimaryKey]
-            public Guid Guid { get; set; }
-            public string Name { get; set; }
-            public int TypeId { get; set; }
         }
 
         private readonly SQLiteConnection connection;
@@ -205,22 +202,7 @@ namespace Utility.Descriptors.Repositorys
 
         public Task<Proto> CreateProto(Guid guid, string name, System.Type type)
         {
-            var typeId = TypeId(type);
-            var tables = connection.Query<Table>($"SELECT * FROM '{nameof(Relationships)}' WHERE Name = '{name}' AND Guid = '{guid}' AND TypeId = '{typeId}'");
 
-            var all = connection.Query<Relationships>($"SELECT * FROM '{name}'");
-            foreach (var item in all)
-            {
-                tablelookup[item.Guid] = name;
-            }
-            //this.name = name;
-            if (tables.Count > 1)
-                throw new Exception("dsf 33p[p[");
-            if (tables.Count == 1)
-            {
-                tablelookup[guid] = name;
-                return Task.FromResult(new Proto(guid, type, name));
-            }
             // create table if not exists
             if (connection.Query<String>($"SELECT sql as Name FROM sqlite_schema WHERE type ='table' AND name LIKE '{name}'").Any() == false)
             {
@@ -228,8 +210,25 @@ namespace Utility.Descriptors.Repositorys
                 var newStatement = statement.Name.Replace($"{nameof(Relationships)}", name);
                 connection.Execute(newStatement);
             }
-            connection.Insert(new Table { Guid = guid, Name = name, TypeId = typeId });
+
+            var typeId = TypeId(type);
+            var tables = connection.Query<Relationships>($"SELECT * FROM '{nameof(Relationships)}' WHERE Name = '{name}' AND Guid = '{guid}' AND TypeId = '{typeId}'");
+
+            //this.name = name;
+            if (tables.Count > 1)
+                throw new Exception("dsf 33p[p[");
+            else if (tables.Count == 0) 
+            {
+                connection.Insert(new Relationships { Guid = guid, Name = name, TypeId = typeId });
+            }
+   
             tablelookup[guid] = name;
+            var all = connection.Query<Relationships>($"SELECT * FROM '{name}'");
+            foreach (var item in all)
+            {
+                tablelookup[item.Guid] = name;
+            }
+
             return Task.FromResult(new Proto(guid, type, name));
         }
 

@@ -6,24 +6,12 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IMemberDesc
 
     public abstract string? Name { get; }
 
-    public abstract System.Type ParentType { get; }
+    public abstract Type ParentType { get; }
 
     //public abstract System.IObservable<Change<IMemberDescriptor>> GetChildren();
 
-    public virtual System.IObservable<Change<IMemberDescriptor>> GetChildren()
-    {
-        if (Type.GetConstructor(System.Type.EmptyTypes) == null || Type.IsValueOrString())
-            return Observable.Empty<Change<IMemberDescriptor>>();
+    public abstract IObservable<Change<IMemberDescriptor>> GetChildren();
 
-        var instance = Activator.CreateInstance(Type);
-        var descriptor = new RootDescriptor(instance);
-        return Observable.Create<Change<IMemberDescriptor>>(observer =>
-        {
-            observer.OnNext(new(descriptor, Changes.Type.Add));
-            //observer.OnNext(new(new MethodsDescriptor(descriptor, instance), Changes.Type.Add));
-            return Disposable.Empty;
-        });
-    }
 
     public abstract object GetValue();
 

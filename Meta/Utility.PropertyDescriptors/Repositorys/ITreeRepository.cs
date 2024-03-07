@@ -3,6 +3,7 @@
     public interface ITreeRepository
     {
         void Copy(Guid guid, Guid newGuid);
+        Task<Proto> CreateProto(Guid guid, string name, Type type);
         IEnumerable<Duplication> Duplicate(Guid oldGuid, Guid? newParentGuid = null);
         Task<Guid> Find(Guid parentGuid, string name, Type? type = null, int? index = null);
         DateValue? Get(Guid guid);

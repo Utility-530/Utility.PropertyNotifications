@@ -2,9 +2,7 @@
 
 namespace Utility.Descriptors;
 
-
 public record ChildrenResponse(IMemberDescriptor Descriptor);
-
 
 public partial class ChildPropertyExplorer
 {
@@ -57,7 +55,7 @@ public partial class ChildPropertyExplorer
                                 }
                             }
 
-                            if (propertyDescriptor.GetValue() is { } _value && _value.Equals(_descriptorsCache.GetValueOrDefault(_guid).Value ?? Activator.CreateInstance(propertyDescriptor.Type)) == false)
+                            if (propertyDescriptor.GetValue() is { } _value && IsMatch(_value, _guid, propertyDescriptor.Type) == false)
                             {
                                 _descriptorsCache[_guid] = new(DateTime.Now, _value);
                                 repo.Set(_guid, _value, _descriptorsCache[_guid].DateTime);
@@ -75,6 +73,15 @@ public partial class ChildPropertyExplorer
             }
             return composite;
         });
+    }
+
+    private static bool IsMatch(object value, Guid guid, Type type)
+    {
+        if (type == typeof(string))
+        {
+            return value.Equals(_descriptorsCache.GetValueOrDefault(guid).Value);
+        }
+        return value.Equals(_descriptorsCache.GetValueOrDefault(guid).Value ?? Activator.CreateInstance(type));
     }
 
     static void Register(Guid guid, PropertyDescriptor propertyDescriptor)
@@ -134,13 +141,13 @@ public partial class ChildPropertyExplorer
             {
                 var type = item.GetType();
                 var _guid = await repo.Find(memberDescriptor.Guid, type.Name, type, i);
-                Next(observer, item, item.GetType(), Changes.Type.Add, i++);
+                Next(observer, item, item.GetType(), memberDescriptor.Type, Changes.Type.Add, i++);
             }
         }
 
         async void AddHeaderDescriptor(IObserver<Change<IMemberDescriptor>> observer, Type elementType, Type componentType)
         {
-            var descriptor = new CollectionHeaderDescriptor(elementType, componentType);
+            var descriptor = new CollectionHeadersDescriptor(elementType, componentType);
             var _guid = await repo.Find(memberDescriptor.Guid, elementType.Name, elementType, 0);
             descriptor.Guid = _guid;
             observer.OnNext(new(descriptor, Changes.Type.Add));
@@ -159,7 +166,7 @@ public partial class ChildPropertyExplorer
                         {
                             collection.Add(item);
                         }
-                        Next(observer, item, elementType, Changes.Type.Add, table.Index.Value);
+                        Next(observer, item, elementType, memberDescriptor.Type, Changes.Type.Add, table.Index.Value);
                     }
                     else
                     {
@@ -169,11 +176,11 @@ public partial class ChildPropertyExplorer
             }
         }
 
-        async void Next(IObserver<Change<IMemberDescriptor>> observer, object item, Type type, Changes.Type changeType, int i)
+        async void Next(IObserver<Change<IMemberDescriptor>> observer, object item, Type type, Type parentType, Changes.Type changeType, int i)
         {
-            var descriptor = new CollectionItemDescriptor(item, i, type);
+            var descriptor = new CollectionItemDescriptor(item, i, parentType);
             descriptors.Add(descriptor);
-            var _guid = await repo.Find(memberDescriptor.Guid, type.Name, type, i);
+            var _guid = await repo.Find(memberDescriptor.Guid, type.Name, parentType, i);
             descriptor.Guid = _guid;
             observer.OnNext(new(descriptor, changeType));
         }
@@ -194,7 +201,7 @@ public partial class ChildPropertyExplorer
                         case NotifyCollectionChangedAction.Add:
                             {
                                 foreach (var item in a.NewItems)
-                                    Next(observer, item, item.GetType(), Changes.Type.Add, lastIndex++);
+                                    Next(observer, item, item.GetType(), memberDescriptor.Type, Changes.Type.Add, lastIndex++);
                                 break;
                             }
                         case NotifyCollectionChangedAction.Remove:

@@ -9,6 +9,10 @@ namespace Utility.Descriptors
 
         public object Value { get => GetValue(); set => SetValue(value); }
 
+        public override IObservable<Change<IMemberDescriptor>> GetChildren()
+        {
+            return Observable.Empty<Change<IMemberDescriptor>>();   
+        }
 
         public override object? GetValue()
         {
