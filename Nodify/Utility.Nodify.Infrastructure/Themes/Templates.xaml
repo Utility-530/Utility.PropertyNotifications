@@ -11,6 +11,45 @@
     <shared:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     <!--<local:ItemToListConverter x:Key="ItemToListConverter" />-->
 
+
+    <DataTemplate DataType="{x:Type core:MenuItemViewModel}">
+        <Button Content="{Binding Content}"
+                                Command="{Binding Command}"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                Foreground="{DynamicResource ForegroundBrush}"
+                                Padding="3"
+                                Cursor="Hand"
+                                HorizontalContentAlignment="Left">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type Button}">
+                                <Border Name="Border"
+                                                        Background="{TemplateBinding Background}"
+                                                        Padding="{TemplateBinding Padding}">
+                                    <ContentPresenter />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver"
+                                                             Value="True">
+                                        <Setter Property="Background"
+                                                                TargetName="Border"
+                                                                Value="{DynamicResource NodeInput.BorderBrush}" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+        </Button>
+    </DataTemplate>
+    
+    
+    
+    
     <DataTemplate DataType="{x:Type core:MenuViewModel}">
         <Border Padding="7"
             CornerRadius="3"
@@ -19,42 +58,7 @@
             BorderThickness="2"
             Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ItemsControl Grid.Row="1" ItemsSource="{Binding Items}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type core:MenuItemViewModel}">
-                        <Button Content="{Binding Content}"
-                                Command="{Binding Command}"
-                                Background="Transparent"
-                                BorderBrush="Transparent"
-                                Foreground="{DynamicResource ForegroundBrush}"
-                                Padding="3"
-                                Cursor="Hand"
-                                HorizontalContentAlignment="Left">
-                            <Button.Style>
-                                <Style TargetType="{x:Type Button}">
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type Button}">
-                                                <Border Name="Border"
-                                                        Background="{TemplateBinding Background}"
-                                                        Padding="{TemplateBinding Padding}">
-                                                    <ContentPresenter />
-                                                </Border>
-                                                <ControlTemplate.Triggers>
-                                                    <Trigger Property="IsMouseOver"
-                                                             Value="True">
-                                                        <Setter Property="Background"
-                                                                TargetName="Border"
-                                                                Value="{DynamicResource NodeInput.BorderBrush}" />
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </Button.Style>
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
+
             </ItemsControl>
         </Border>
     </DataTemplate>

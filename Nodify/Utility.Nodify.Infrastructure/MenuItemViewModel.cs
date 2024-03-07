@@ -18,6 +18,8 @@ namespace Utility.Nodify.Core
             });
         }
 
+        public Guid Guid { get; set; }
+
         public string? Content { get; set; }
 
         public ICommand Command { get; set; }

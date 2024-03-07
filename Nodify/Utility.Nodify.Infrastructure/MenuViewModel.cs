@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Reactive.Subjects;
 using System.Windows;
 using Utility.Nodify.Base;
 
 namespace Utility.Nodify.Core
 {
-    public class MenuViewModel : BaseNodeViewModel
+    public class MenuViewModel : BaseNodeViewModel, IObservable<(Point, MenuItemViewModel)>
     {
         private RangeObservableCollection<MenuItemViewModel> items = new RangeObservableCollection<MenuItemViewModel>();
-
-        public event Action<Point, MenuItemViewModel> Selected;
+        readonly ReplaySubject<(Point, MenuItemViewModel)> replaySubject = new();
 
         public MenuViewModel()
         {
@@ -22,7 +22,7 @@ namespace Utility.Nodify.Core
 
         private void selected(MenuItemViewModel obj)
         {
-            Selected?.Invoke(Location, obj);
+            replaySubject.OnNext((Location, obj));
             Close();
         }
 
@@ -55,6 +55,11 @@ namespace Utility.Nodify.Core
         public void Close()
         {
             IsVisible = false;
+        }
+
+        public IDisposable Subscribe(IObserver<(Point, MenuItemViewModel)> observer)
+        {
+            return replaySubject.Subscribe(observer);
         }
     }
 }
