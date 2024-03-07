@@ -5,16 +5,6 @@ using System.Windows;
 
 namespace Utility.Nodify.Core
 {
-    //public class Diagram
-    //{
-    //    public Diagram() { }
-    //    public string Name { get; set; }
-    //    public virtual ICollection<ConnectionViewModel> Connections { get; set; } 
-    //    public virtual ICollection<NodeViewModel> Nodes { get; set; } 
-
-    //    //public static Diagram Empty => new ();
-    //}
-
     public class Diagram
     {
         public ICollection<Node> Nodes { get; set; } = new Collection<Node>();
@@ -24,6 +14,8 @@ namespace Utility.Nodify.Core
     public class Node
     {
         public string Name { get; set; }
+
+        public Guid Guid { get; set; }
         public Point Location { get; set; } = new Point();
         public string Content { get; set; }
         public ICollection<Connector> Inputs { get; set; } = new Collection<Connector>(); 
@@ -32,7 +24,8 @@ namespace Utility.Nodify.Core
 
     public class Connector
     {
-        public string Key { get; set; }
+        public string Key { get; set; }        
+        public string Content { get; set; }
         public bool IsInput { get; set; }
     }
 
