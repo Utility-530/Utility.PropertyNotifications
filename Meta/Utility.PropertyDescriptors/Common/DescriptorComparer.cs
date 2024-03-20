@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Utility.Descriptors
 {
-    public class PropertyDescriptorComparer : IEqualityComparer<PropertyDescriptor>
+    public class DescriptorComparer : IEqualityComparer<PropertyDescriptor>
     {
         public bool Equals(PropertyDescriptor? x, PropertyDescriptor? y)
         {

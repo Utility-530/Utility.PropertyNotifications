@@ -7,24 +7,26 @@ namespace Utility.Descriptors
 
         public override string? Name => ParameterInfo.Name ?? ParameterInfo.Position.ToString();
 
-        public object Value { get => GetValue(); set => SetValue(value); }
+        public object Value { get => Get(); set => Set(value); }
 
-        public override IObservable<Change<IMemberDescriptor>> GetChildren()
-        {
-            return Observable.Empty<Change<IMemberDescriptor>>();   
-        }
+        public override bool IsReadOnly => false;
 
-        public override object? GetValue()
+
+        public override object? Get()
         {
             if (Component is Dictionary<int, object?> dictionary && ParameterInfo.Position is int name)
                 return dictionary[name] ?? ParameterInfo.DefaultValue;
             return ParameterInfo.DefaultValue;
         }
 
-        public override void SetValue(object? value)
+        public override void Set(object? value)
         {
             if (Component is Dictionary<int, object?> dictionary && ParameterInfo.Position is int name)
+            {
                 dictionary[name] = value;
+                //return true;
+            }
+            //return false;
         }
 
     }

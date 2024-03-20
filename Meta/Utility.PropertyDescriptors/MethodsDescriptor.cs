@@ -2,27 +2,60 @@
 
 namespace Utility.Descriptors;
 
-public record MethodsDescriptor(Descriptor Descriptor, object Instance) : PropertyDescriptor(Descriptor, Instance), IMethodsDescriptor
+public record MethodsDescriptor(Descriptor Descriptor, object Instance) : ReferenceDescriptor(Descriptor, Instance), IMethodsDescriptor
 {
     public static readonly string? _Name = "Methods";
 
     public override string? Name => _Name;
 
-    public override IObservable<Change<IMemberDescriptor>> GetChildren()
+
+    public override IObservable<object> Children
     {
-        var children = MethodExplorer.MethodInfos(Descriptor.PropertyType).ToArray();
-        return Observable.Create<Change<IMemberDescriptor>>(async observer =>
+        get
         {
-            var descriptors = children.Select(methodInfo => new MethodDescriptor(methodInfo, Instance));
-            foreach (var descriptor in descriptors)
+            var children = MethodExplorer.MethodInfos(Descriptor.PropertyType).ToArray();
+            return Observable.Create<Change<IDescriptor>>(async observer =>
             {
-                var guid = await Locator.Current.GetService<ITreeRepository>().Find(this.Guid, descriptor.Name);
-                descriptor.Guid = guid;
-                observer.OnNext(new(descriptor, Changes.Type.Add));
-            }
-            return Disposable.Empty;
-        });
+                var descriptors = children.Select(methodInfo => DescriptorFactory.CreateMethodItem(Instance, methodInfo, Type, Guid)/* new MethodDescriptor(methodInfo, Instance)*/);
+                foreach (var descriptor in descriptors)
+                {
+
+                    observer.OnNext(new(await descriptor, Changes.Type.Add));
+                }
+                return Disposable.Empty;
+            });
+        }
+
     }
+}
+
+public static class MethodExplorer
+{
+    public static IEnumerable<MethodInfo> MethodInfos(Type type)
+    {
+        return Types(type)
+        .SelectMany(t => t
+        .GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+        .Where(m => !m.IsSpecialName)
+        .Where(m => true)
+        .Cast<MethodInfo>()
+        .OrderBy(d => d.Name));
+    }
+
+    private static IEnumerable<Type> Types(Type type)
+    {
+        if (type != typeof(object))
+        {
+            yield return type;
+            if (type.BaseType is Type baseType)
+                foreach (var t in Types(baseType))
+                    yield return t;
+        }
+        else
+            yield break;
+    }
+
+
 }
 
 

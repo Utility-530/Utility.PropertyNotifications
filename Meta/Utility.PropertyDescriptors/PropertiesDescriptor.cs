@@ -1,15 +1,31 @@
 ﻿
+
 namespace Utility.Descriptors
 {
-    public record PropertiesDescriptor(Descriptor PropertyDescriptor, object Instance) : PropertyDescriptor(PropertyDescriptor, Instance), IPropertiesDescriptor
+    public record PropertiesDescriptor(Descriptor PropertyDescriptor, object Instance) : ReferenceDescriptor(PropertyDescriptor, Instance), IPropertiesDescriptor
     {
+
         public static string _Name => "Properties";
         public override string? Name => _Name;
-        public override IObservable<Change<IMemberDescriptor>> GetChildren()
+
+        public override IObservable<object> Children
         {
-            return ChildPropertyExplorer.Explore(Instance, this);
+            get
+            {
+                return Observable.Create<Change<IDescriptor>>(async observer =>
+                {
+                    var descriptors = TypeDescriptor.GetProperties(Instance);
+                    foreach (Descriptor descriptor in descriptors)
+                    {
+                        var propertyDescriptor = await DescriptorFactory.ToValue(Instance, descriptor, Guid);
+                        observer.OnNext(new(propertyDescriptor, Changes.Type.Add));
+                    }
+                    return Disposable.Empty;
+                });
+            }
         }
     }
 }
+
 
 

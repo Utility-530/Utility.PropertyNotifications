@@ -3,7 +3,7 @@ using Splat;
 
 namespace Utility.Descriptors;
 
-public record MethodDescriptor : MemberDescriptor, IMethodDescriptor
+public record MethodDescriptor : MemberDescriptor, IMethodDescriptor, IChildren
 {
     Dictionary<int, object?> dictionary = new();
 
@@ -11,7 +11,7 @@ public record MethodDescriptor : MemberDescriptor, IMethodDescriptor
     private readonly MethodInfo methodInfo;
     private readonly object instance;
 
-    public MethodDescriptor(MethodInfo methodInfo, object instance): base((System.Type)null)
+    public MethodDescriptor(MethodInfo methodInfo, object instance) : base((System.Type)null)
     {
         command = new Lazy<Command>(() => new Command(() =>
         {
@@ -31,35 +31,11 @@ public record MethodDescriptor : MemberDescriptor, IMethodDescriptor
 
     public override Type ParentType => methodInfo.DeclaringType;
 
-    public override IObservable<Change<IMemberDescriptor>> GetChildren()
+    public override object Get()
     {
-        return Observable.Create<Change<IMemberDescriptor>>(async observer =>
-        {
-            var descriptors = MethodExplorer.ParameterDescriptors(methodInfo, dictionary);
-            foreach (var paramDescriptor in descriptors)
-            {
-                var guid = await Locator.Current.GetService<ITreeRepository>().Find(this.Guid, paramDescriptor.Name, paramDescriptor.Type);
-                paramDescriptor.Guid = guid;
-                dictionary[paramDescriptor.ParameterInfo.Position] = GetValue(paramDescriptor.ParameterInfo);
-                observer.OnNext(new Change<IMemberDescriptor>(paramDescriptor, Changes.Type.Add));
-            }
-            return Disposable.Empty;
-        });
-        
-        static object? GetValue(ParameterInfo a)
-        {
-            return a.HasDefaultValue ? a.DefaultValue : AlternateValue(a);
-
-            static object? AlternateValue(ParameterInfo a)
-            {
-                if (a.ParameterType.IsValueType || a.ParameterType.GetConstructor(System.Type.EmptyTypes) != null)
-                    return Activator.CreateInstance(a.ParameterType);
-                return null;
-            }
-        }
+        throw new NotImplementedException();
     }
-
-    public override object GetValue()
+    public override void Set(object value)
     {
         throw new NotImplementedException();
     }
@@ -71,9 +47,40 @@ public record MethodDescriptor : MemberDescriptor, IMethodDescriptor
 
     public ICommand Command => command.Value;
 
-    public override void SetValue(object value)
+    public override bool IsReadOnly => true;
+
+    public IObservable<object> Children
     {
-        throw new NotImplementedException();
+        get
+        {
+            return Observable.Create<Change<IDescriptor>>(async observer =>
+            {
+                var descriptors = methodInfo
+                .GetParameters()
+                .Select(a => new ParameterDescriptor(a, dictionary)).ToArray();
+
+
+                foreach (var paramDescriptor in descriptors)
+                {
+                    var guid = await Locator.Current.GetService<ITreeRepository>().Find(this.Guid, paramDescriptor.Name, paramDescriptor.Type);
+                    paramDescriptor.Guid = guid;
+                    dictionary[paramDescriptor.ParameterInfo.Position] = GetValue(paramDescriptor.ParameterInfo);
+                    observer.OnNext(new Change<IDescriptor>(paramDescriptor, Changes.Type.Add));
+                }
+                return Disposable.Empty;
+            });
+
+            static object? GetValue(ParameterInfo a)
+            {
+                return a.HasDefaultValue ? a.DefaultValue : AlternateValue(a);
+
+                static object? AlternateValue(ParameterInfo a)
+                {
+                    if (a.ParameterType.IsValueType || a.ParameterType.GetConstructor(System.Type.EmptyTypes) != null)
+                        return Activator.CreateInstance(a.ParameterType);
+                    return null;
+                }
+            }
+        }
     }
 }
-

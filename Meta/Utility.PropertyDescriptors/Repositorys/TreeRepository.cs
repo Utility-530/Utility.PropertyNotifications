@@ -4,16 +4,16 @@ using Guid = System.Guid;
 
 namespace Utility.Descriptors.Repositorys
 {
-    public readonly record struct Duplication(Guid old, Guid @new);
+    public readonly record struct Duplication(Guid Old, Guid New);
     public readonly record struct DateValue(DateTime DateTime, object Value);
-    public readonly record struct Selection(Guid Guid, Type Type, int? Index);
-    public record Proto(Guid Guid, Type Type, string Name)
+    public readonly record struct Key(Guid Guid, Guid ParentGuid, Type Type, string Name, int? Index)
     {
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this);
         }
     }
+
 
     public class TreeRepository : ITreeRepository
     {
@@ -75,39 +75,70 @@ namespace Utility.Descriptors.Repositorys
             connection.CreateTable<Relationships>();
             connection.CreateTable<Values>();
             connection.CreateTable<Type>();
+            initialisationTask = Initialise();
         }
 
-        public Task<IReadOnlyCollection<Proto>> Protos()
+        Task Initialise()
         {
-            var tables = connection.Table<Relationships>();
-            List<Proto> childKeys = new();
+            return Task.Run(() =>
+            {
+                foreach(var relationship in connection.Table<Relationships>().ToList())
+                {
+                    tablelookup[relationship.Guid] = relationship.Name;
+                }
+            });
+        }
+
+        //public Task<IReadOnlyCollection<Key>> Keys(string? name = default)
+        //{
+        //    var tables = connection.Table<Relationships>();
+        //    List<Key> childKeys = new();
+        //    foreach (var table in tables)
+        //    {
+        //        var type = ToType(table.TypeId ?? throw new Exception("DF 32cd"));
+        //        if (type == null)
+        //            throw new Exception("3 333 ff");
+        //        tablelookup[table.Guid] = table.Name;
+        //        childKeys.Add(new(table.Guid, type, table.Name));
+        //    }
+        //    return Task.FromResult((IReadOnlyCollection<Key>)childKeys);
+        //}
+
+        public Task<IReadOnlyCollection<Key>> SelectKeys(Guid? parentGuid = null, string? name = null, string? table_name = default)
+        {
+            List<Relationships> tables;
+
+            if (table_name != default)
+            {
+                string query = $"SELECT * FROM '{table_name}'";
+                tables = connection.Query<Relationships>(query);
+            }
+            else if (parentGuid.HasValue)
+            {
+                table_name = tablelookup[parentGuid.Value];
+                string query = $"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}'" + (name == null ? string.Empty : $" AND Name = '{name}' ORDER BY {nameof(Relationships._Index)}");
+                tables = connection.Query<Relationships>(query);
+            }
+            else
+            {
+                tables = connection.Table<Relationships>().ToList();
+            }
+            List<Key> selections = new();
             foreach (var table in tables)
             {
-                var type = ToType(table.TypeId?? throw new Exception("DF 32cd"));
-                if (type == null)
-                    throw new Exception("3 333 ff");
+                //if (table.TypeId.HasValue == false)
+                //    throw new Exception("ds 332344");
+                //var type = ToType(table.TypeId.Value);
+
+                System.Type type = null;
+                if (table.TypeId.HasValue)
+                    type = ToType(table.TypeId.Value);
+                //if (type == null)
+                //    throw new Exception("3 333 ff");
                 tablelookup[table.Guid] = table.Name;
-                childKeys.Add(new(table.Guid, type, table.Name));
+                selections.Add(new(table.Guid, table.Parent, type, table.Name, table._Index));
             }
-            return Task.FromResult((IReadOnlyCollection<Proto>)childKeys);
-        }
-
-        public Task<IReadOnlyCollection<Selection>> Select(Guid parentGuid, string? name = null)
-        {
-            var table_name = tablelookup[parentGuid];
-            string query = $"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}'" + (name == null ? string.Empty : $" AND Name = '{name}'");
-            var tables = connection.Query<Relationships>(query);
-            List<Selection> childKeys = new();
-            foreach (var table in tables)
-            {
-                if (table.TypeId.HasValue == false)
-                    throw new Exception("ds 332344");
-                var type = ToType(table.TypeId.Value);
-                if (type == null)
-                    throw new Exception("3 333 ff");
-                childKeys.Add(new(table.Guid, type, table._Index));
-            }
-            return Task.FromResult((IReadOnlyCollection<Selection>)childKeys);
+            return Task.FromResult((IReadOnlyCollection<Key>)selections);
         }
 
         public IEnumerable<Duplication> Duplicate(Guid oldGuid, Guid? newParentGuid = default)
@@ -146,8 +177,10 @@ namespace Utility.Descriptors.Repositorys
             }
         }
 
-        public Task<Guid> Find(Guid parentGuid, string name, System.Type? type = null, int? index = null)
+        public async Task<Guid> Find(Guid parentGuid, string name, System.Type? type = null, int? index = null)
         {
+            await initialisationTask;
+
             var table_name = tablelookup[parentGuid];
 
             if (parentGuid == Guid.Empty)
@@ -155,11 +188,11 @@ namespace Utility.Descriptors.Repositorys
 
             }
             var typeId = type != null ? (int?)TypeId(type) : null;
-            var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' AND Name = '{name}' AND _Index {ToComparison(index)} AND TypeId {ToComparison(typeId)}");
+            var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' AND Name = '{name}' AND _Index {ToComparisonAndValue(index)} AND TypeId {ToComparisonAndValue(typeId)}");
             if (tables.Count == 0)
             {
                 if (InsertParent(parentGuid, name, table_name, typeId, index) is Guid guid)
-                    return Task.FromResult(guid);
+                    return guid;
                 else
                     throw new Exception("* 44 fd3323");
             }
@@ -167,7 +200,7 @@ namespace Utility.Descriptors.Repositorys
             {
                 var table = tables.Single();
                 tablelookup[table.Guid] = table_name;
-                return Task.FromResult(table.Guid);
+                return table.Guid;
             }
             else
             {
@@ -178,13 +211,13 @@ namespace Utility.Descriptors.Repositorys
 
         public Guid? InsertParent(Guid parentGuid, string name, string table_name, int? typeId = null, int? index = null)
         {
-            var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' AND Name = '{name}' AND _Index {ToComparison(index)} AND TypeId {ToComparison(typeId)}");
+            var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' AND Name = '{name}' AND _Index {ToComparisonAndValue(index)} AND TypeId {ToComparisonAndValue(typeId)}");
             if (tables.Count != 0)
                 return null;
             var guid = Guid.NewGuid();
             tablelookup[guid] = table_name;
             //var i = connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
-            var query = $"INSERT INTO {table_name} (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {ToComparison2(index)}, '{parentGuid}', '{DateTime.Now}', {ToComparison2(typeId)});";
+            var query = $"INSERT INTO {table_name} (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {ToValue(index)}, '{parentGuid}', '{DateTime.Now}', {ToValue(typeId)});";
             var i = connection.Execute(query);
             return guid;
         }
@@ -193,14 +226,14 @@ namespace Utility.Descriptors.Repositorys
         {
             var table_name = tablelookup[parentGuid];
             var typeId = (int)TypeId(type);
-            var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Name = '{name}' AND Guid = '{guid}' AND TypeId = '{typeId}' AND Parent {ToComparison(parentGuid)} AND _Index {ToComparison(index)}");
+            var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Name = '{name}' AND Guid = '{guid}' AND TypeId = '{typeId}' AND Parent {ToComparisonAndValue(parentGuid)} AND _Index {ToComparisonAndValue(index)}");
             if (tables.Count != 0)
                 return 0;
             return connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
         }
 
 
-        public Task<Proto> CreateProto(Guid guid, string name, System.Type type)
+        public Task<Key> CreateRootKey(Guid guid, string name, System.Type type)
         {
 
             // create table if not exists
@@ -217,11 +250,11 @@ namespace Utility.Descriptors.Repositorys
             //this.name = name;
             if (tables.Count > 1)
                 throw new Exception("dsf 33p[p[");
-            else if (tables.Count == 0) 
+            else if (tables.Count == 0)
             {
                 connection.Insert(new Relationships { Guid = guid, Name = name, TypeId = typeId });
             }
-   
+
             tablelookup[guid] = name;
             var all = connection.Query<Relationships>($"SELECT * FROM '{name}'");
             foreach (var item in all)
@@ -229,7 +262,7 @@ namespace Utility.Descriptors.Repositorys
                 tablelookup[item.Guid] = name;
             }
 
-            return Task.FromResult(new Proto(guid, type, name));
+            return Task.FromResult(new Key(guid, default, type, name, 0));
         }
 
 
@@ -253,22 +286,29 @@ namespace Utility.Descriptors.Repositorys
 
         }
 
-        private static string ToComparison(object? value)
+        private static string ToComparisonAndValue(object? value)
         {
-            return value == null ? "is null" : $"= '{value}'";
+            return ToComparison(value) + " " + ToValue(value);
         }
 
-        private static string ToComparison2(object? value)
+        private static string ToComparison(object? value)
+        {
+            return value == null ? "is" : $"=";
+        }
+
+        private static string ToValue(object? value)
         {
             return value == null ? "null" : $"'{value}'";
         }
 
         public void Set(Guid guid, object value, DateTime dateTime)
         {
-            var typeId = TypeId(value.GetType());
             var text = JsonConvert.SerializeObject(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
             if (connection.Query<Values>($"SELECT * FROM '{nameof(Values)}' WHERE Guid = '{guid}' AND Value = '{text}'").Any() == false)
+            {
+                var typeId = TypeId(value.GetType());
                 connection.InsertOrReplace(new Values { Guid = guid, Value = text, Added = dateTime, TypeId = typeId });
+            }
         }
 
         public DateValue? Get(Guid guid)
@@ -299,7 +339,7 @@ namespace Utility.Descriptors.Repositorys
                 connection.InsertOrReplace(new Values { Guid = newGuid, Value = text, TypeId = typeId });
             }
         }
-        
+
         System.Type? ToType(int typeId)
         {
             if (types.ContainsKey(typeId))
@@ -307,14 +347,14 @@ namespace Utility.Descriptors.Repositorys
 
             var type = connection.Table<Type>().Where(v => v.Id.Equals(typeId)).First();
             var assemblyQualifiedName = Assembly.CreateQualifiedName(type.Assembly, $"{type.Namespace}.{type.Name}");
-            var systemType= System.Type.GetType(assemblyQualifiedName);
+            var systemType = System.Type.GetType(assemblyQualifiedName);
             types[typeId] = systemType;
             return systemType;
         }
 
         int TypeId(System.Type type)
         {
-            if (this.types.FirstOrDefault(x => x.Value == type) is {Key:{ } key, Value: { } value })
+            if (this.types.FirstOrDefault(x => x.Value == type) is { Key: { } key, Value: { } value })
                 return key;
 
             var types = connection.Query<Type>($"SELECT * FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}'");

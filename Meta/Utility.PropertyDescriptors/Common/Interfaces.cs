@@ -1,35 +1,25 @@
 ﻿namespace Utility.Descriptors
 {
-    //public enum DescriptorType
-    //{
-    //    CollectionItem,
-    //    Property,
-    //}
-
-
-
-    public interface ICollectionItemDescriptor: IMemberDescriptor
+    public interface ICollectionItemDescriptor: IDescriptor
     {
         int Index { get; }
     }
 
 
 
-    public interface IMethodDescriptor : IMemberDescriptor
+    public interface IMethodDescriptor : IDescriptor
     {
         void Invoke();
     }    
 
-    public interface IMethodsDescriptor : IMemberDescriptor
+    public interface IMethodsDescriptor : IDescriptor
     {
 
     }
 
 
-    public interface IPropertiesDescriptor : IMemberDescriptor
+    public interface IPropertiesDescriptor : IDescriptor
     {
 
     }
-
-
 }
