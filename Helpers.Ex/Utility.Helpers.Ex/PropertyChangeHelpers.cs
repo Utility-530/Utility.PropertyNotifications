@@ -9,7 +9,7 @@ namespace Utility.Common.Collection
 {
     public record PropertyChange(object Source, string? PropertyName, object? NewValue);
 
-    public static class NotificationExtensions
+    public static class PropertyChangeHelpers
     {
         /// <summary>
         /// Returns an observable sequence of the source any time the <c>PropertyChanged</c> event is raised.
