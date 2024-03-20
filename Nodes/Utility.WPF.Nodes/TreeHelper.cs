@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Media3D;
 
 namespace Utility.WPF.Nodes
 {
@@ -89,7 +90,10 @@ namespace Utility.WPF.Nodes
                 var hit = objTreeViewControl.InputHitTest(point.Value) as DependencyObject;
                 while (hit is not null and not T)
                 {
-                    hit = VisualTreeHelper.GetParent(hit);
+                    if (hit is Visual or Visual3D)
+                        hit = VisualTreeHelper.GetParent(hit);
+                    else
+                        break;
                 }
                 return (T?)hit;
             }

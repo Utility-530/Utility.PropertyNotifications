@@ -2,6 +2,7 @@ using NetFabric.Hyperlinq;
 using System;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Utility.Extensions;
 using Utility.Helpers.NonGeneric;
 using Utility.Nodes;
 using Utility.WPF.Nodes;

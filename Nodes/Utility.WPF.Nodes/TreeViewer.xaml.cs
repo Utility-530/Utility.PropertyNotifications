@@ -9,6 +9,7 @@ using Utility.WPF.Nodes;
 using Utility.Infrastructure;
 using Utility.Trees.Abstractions;
 using VisualJsonEditor.Test;
+using Utility.Extensions;
 
 namespace Views.Trees
 {
@@ -21,7 +22,7 @@ namespace Views.Trees
         public static readonly DependencyProperty TreeViewBuilderProperty = DependencyProperty.Register("TreeViewBuilder", typeof(ITreeViewBuilder), typeof(TreeViewer), new PropertyMetadata());
         public static readonly DependencyProperty TreeViewFilterProperty = DependencyProperty.Register("TreeViewFilter", typeof(ITreeViewFilter), typeof(TreeViewer), new PropertyMetadata());
         public static readonly DependencyProperty StyleSelectorProperty = DependencyProperty.Register("StyleSelector", typeof(StyleSelector), typeof(TreeViewer), new PropertyMetadata());
-        public static readonly DependencyProperty EventListenerProperty =            DependencyProperty.Register("EventListener", typeof(IEventListener), typeof(TreeViewer), new PropertyMetadata());
+        public static readonly DependencyProperty EventListenerProperty = DependencyProperty.Register("EventListener", typeof(IEventListener), typeof(TreeViewer), new PropertyMetadata());
 
         private IDisposable disposable;
         private TreeView treeView;
@@ -29,10 +30,9 @@ namespace Views.Trees
         public TreeViewer()
         {
             InitializeComponent();
-            this.Content = new TreeView();
-          
-            treeView = this.Content as TreeView;
-            dsfd(treeView);
+            treeView = new TreeView();          
+            this.Content = treeView;
+            Initialise(treeView);
             this.Loaded += Viewer_Loaded;
 
             void Viewer_Loaded(object sender, RoutedEventArgs e)
@@ -47,7 +47,7 @@ namespace Views.Trees
             }
         }
 
-        void dsfd(TreeView treeView)
+        void Initialise(TreeView treeView)
         {
             treeView
                 .MouseDoubleClicks()
@@ -163,12 +163,13 @@ namespace Views.Trees
 
         public void Reload()
         {
-            //TreeView.Clear();
-            TreeExtensions.Visit(treeView as ItemsControl, a =>
+            TreeExtensions.Visit(treeView as ItemsControl, 
+            a =>
             {
                 var items = a.Items.Cast<TreeViewItem>();
                 return items;
-            }, a =>
+            }, 
+            a =>
             {
                 if (a is TreeView { DataContext: var datacontext })
                 { }
@@ -197,7 +198,6 @@ namespace Views.Trees
             {
 
                 if (a is TreeViewItem { Header: IIsSelected { IsSelected: true } viewModel })
-                    //guid = viewModel.Guid;
                     obj = viewModel;
                 else
                 {
@@ -207,7 +207,6 @@ namespace Views.Trees
                 //    throw new Exception("sdf 3l8hjhg");
             });
             return obj;
-            //new ViewModel { StringValue = "New", Guid = Guid.NewGuid(), ParentGuid = guid }.Save();
         }
 
         public void Remove()
@@ -229,8 +228,6 @@ namespace Views.Trees
                 {
 
                 }
-                //else
-                //    throw new Exception("sdf 3l8hjhg");
             });
         }
     }
