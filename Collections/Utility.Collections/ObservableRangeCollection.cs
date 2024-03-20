@@ -1,8 +1,5 @@
-﻿using Fasterflect;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
 
 namespace Utility.Common.Collections
 {
@@ -31,7 +28,7 @@ namespace Utility.Common.Collections
 
             foreach (NotifyCollectionChangedEventHandler handler in handlers.GetInvocationList())
             {
-                var collectionViewMethod = handler.Target?.GetType().Methods("Refresh").SingleOrDefault();
+                var collectionViewMethod = handler.Target?.GetType().GetMethods().SingleOrDefault(a=>a.Name == "Refresh");
                 if (collectionViewMethod != null)
                 {
                     collectionViewMethod.Invoke(handler.Target, null);
