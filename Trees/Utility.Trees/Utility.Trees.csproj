@@ -13,7 +13,6 @@
   <ItemGroup>
 		<ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
 		<ProjectReference Include="..\..\Observables\Utility.Observables\Utility.Observables.csproj" />
-		<ProjectReference Include="..\..\Trees\Utility.Trees.Abstractions\Utility.Trees.Abstractions.csproj" />
   </ItemGroup>
 
 </Project>

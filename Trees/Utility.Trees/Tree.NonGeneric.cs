@@ -386,7 +386,7 @@ namespace Utility.Trees
             set { state = value; OnPropertyChanged(); }
         }
 
-        public Index Index
+        public IIndex Index
         {
             get
             {

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Utility.Interfaces.Generic;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Trees
@@ -101,6 +102,13 @@ namespace Utility.Trees
             return;
         }
 
+        void IAdd<ITree<T>>.Add(ITree<T> tree)
+        {
+            m_items.Add(tree);
+            return;
+        }
+
+
         public override void Add(object data)
         {
             if (data == null)
@@ -141,6 +149,7 @@ namespace Utility.Trees
 
             throw new InvalidOperationException("Cannot add unknown content type.");
         }
+
 
         public override ITree<T> Add()
         {
@@ -270,6 +279,8 @@ namespace Utility.Trees
         {
             return m_items == null ? Enumerable.Empty<ITree<T>>().GetEnumerator() : Items.GetEnumerator();
         }
+
+
     }
 
     public static class TreeHelper

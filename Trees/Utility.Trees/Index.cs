@@ -4,7 +4,7 @@
 
 namespace Utility.Trees
 {
-    public record Index
+    public record Index : IIndex
     {
         private IList<int> collection;
         public Index(params int[] indexes)
