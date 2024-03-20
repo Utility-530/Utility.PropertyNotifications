@@ -76,7 +76,7 @@ namespace Utility.Nodes
             }
         }
 
-        protected override async Task<bool> RefreshChildrenAsync()
+        public override async Task<bool> RefreshChildrenAsync()
         {
             await RefreshBranchesAsync();
             return await RefreshLeavesAsync();

@@ -9,9 +9,9 @@ namespace Utility.Nodes.Reflections
 {
     public class ReflectionNode : Node
     {
-        IMemberDescriptor data;
+        IDescriptor data;
 
-        public ReflectionNode(IMemberDescriptor propertyData)
+        public ReflectionNode(IDescriptor propertyData)
         {
 
             this.data = propertyData;
@@ -24,10 +24,10 @@ namespace Utility.Nodes.Reflections
         public override object Data
         {
             get => data;
-            set => data = value as IMemberDescriptor;
+            set => data = value as IDescriptor;
         }
 
-        protected override async Task<bool> RefreshChildrenAsync()
+        public override async Task<bool> RefreshChildrenAsync()
         {
             if (await HasMoreChildren() == false)
                 return true;
@@ -35,7 +35,7 @@ namespace Utility.Nodes.Reflections
             items.Clear();
 
             _ = GetChildren()
-                .Cast<Change<IMemberDescriptor>>()
+                .Cast<Change<IDescriptor>>()
                 .Subscribe(async a =>
                 {
                     switch (a.Type)
@@ -54,7 +54,8 @@ namespace Utility.Nodes.Reflections
                                 else
                                 {
                                     //var conversion = ObjectConverter.ToValue(inst, desc);
-                                    var node = await ToNode(desc);
+                                    ReflectionNode node = (ReflectionNode)await ToNode(desc);
+                                    //await node.RefreshChildrenAsync();
                                     items.Add(node);
                                 }
                                 break;
@@ -91,7 +92,7 @@ namespace Utility.Nodes.Reflections
 
         public override async Task<bool> HasMoreChildren()
         {
-            return data.Type.IsValueOrString() == false && await base.HasMoreChildren();
+            return data?.Type.IsValueOrString() == false && await base.HasMoreChildren();
         }
 
         public override string ToString()
@@ -102,7 +103,7 @@ namespace Utility.Nodes.Reflections
 
         public override async Task<IReadOnlyTree> ToNode(object value)
         {
-            if (value is IMemberDescriptor { } descriptor)
+            if (value is IDescriptor { } descriptor)
             {
 
                 return new ReflectionNode(descriptor) { Parent = this };

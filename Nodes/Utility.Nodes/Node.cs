@@ -49,7 +49,7 @@ namespace Utility.Nodes
         }
 
 
-        protected virtual async Task<bool> RefreshChildrenAsync()
+        public virtual async Task<bool> RefreshChildrenAsync()
         {
 
             if (await HasMoreChildren() == false)
