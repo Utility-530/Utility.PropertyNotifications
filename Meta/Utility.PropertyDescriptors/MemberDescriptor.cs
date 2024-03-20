@@ -36,8 +36,6 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
 
     public virtual bool IsCollectionItemValueType => CollectionItemPropertyType != null && CollectionItemPropertyType.IsValueType;
 
-    //IObservable<object> IChildren.Children => GetChildren();
-
     public abstract bool IsReadOnly { get; }
 
     public virtual bool Equals(MemberDescriptor? other) => this.Guid.Equals(other?.Guid);
