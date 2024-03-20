@@ -1,15 +1,16 @@
-﻿namespace Utility.Nodes
+﻿namespace Utility.Extensions
 {
     using MoreLinq;
+    using System;
     using System.Reactive.Disposables;
     using System.Reactive.Linq;
     using Utility.Changes;
     using Utility.Helpers.NonGeneric;
     using Utility.Interfaces.NonGeneric;
-    using Utility.Models;
     using Utility.Trees;
     using Utility.Trees.Abstractions;
     using Utility.Reactives;
+    using Type = Changes.Type;
 
     public static partial class TreeExtensions
     {
@@ -17,14 +18,7 @@
         ///// <typeparam name="T">Custom data type to associate with tree node.</typeparam>
         ///// <param name="items">The collection items.</param>
         ///// <param name="parentSelector">Expression to select parent.</param>
-        //public static ITree<T> ToTree<T>(this IList<T> items, Func<T, T, bool> parentSelector)
-        //{
-        //    if (items == null) throw new ArgumentNullException(nameof(items));
-        //    var lookup = items.ToLookup(item => items.FirstOrDefault(parent => parentSelector(parent, item)), child => child);
-        //    return Tree<T>.FromLookup(lookup);
-        //}
-
-        public static IObservable<ITree<T>> ToTree<T, K>(this IObservable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, K root_id = default(K))
+        public static IObservable<ITree<T>> ToTree<T, K>(this IObservable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, K? root_id = default)
         {
             return Observable.Create<ITree<T>>(observer =>
             {
@@ -46,17 +40,21 @@
                 return disposables;
             });
         }
+        public static IEnumerable<ITree<T>> ToTree<T, K>(this IEnumerable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, K? root_id = default)
+        {
+            return ToTree(collection, id_selector, parent_id_selector, a => (ITree<T>)new Tree<T>(a), root_id);
 
-        public static IEnumerable<ITree<T>> ToTree<T, K>(this IEnumerable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, K root_id = default(K))
+        }
+        
+        public static IEnumerable<TTree> ToTree<T, K, TTree>(this IEnumerable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, Func<T, TTree> conversion, K? root_id = default) where TTree : Utility.Interfaces.Generic.IAdd<TTree>
         {
 
             foreach (var item in collection.Where(c => EqualityComparer<K>.Default.Equals(parent_id_selector(c), root_id)))
             {
-                var tree = new Tree<T>(item);
-                yield return (tree);
-                ToTree(collection, id_selector, parent_id_selector, id_selector(item)).ForEach(tree.Add);
+                var tree = conversion(item);
+                yield return tree;
+                ToTree(collection, id_selector, parent_id_selector, conversion, id_selector(item)).ForEach(tree.Add);
             }
-
         }
 
         public static IDisposable ExploreTree<T, TR>(T items, Func<T, TR, T> funcAdd, Action<T, TR> funcRemove, Action<T> funcClear, TR property) where TR : IReadOnlyTree, IEquatable
