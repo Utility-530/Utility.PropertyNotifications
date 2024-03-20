@@ -221,7 +221,7 @@ namespace Utility.PropertyNotifications
             //if (PropertyChangedName != propertyName)
             //{
 
-            PropertyCalled(this, PropertyCalledArgs(propertyName, value));
+            PropertyCalled?.Invoke(this, PropertyCalledArgs(propertyName, value));
 
             //}
             //else
