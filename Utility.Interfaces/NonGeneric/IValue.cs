@@ -45,5 +45,10 @@ namespace Utility.Interfaces.NonGeneric
     public interface IValue
     {
         object Value { get; }
+    }    
+
+    public interface ISetValue
+    {
+        object Value { set; }
     }
 }
