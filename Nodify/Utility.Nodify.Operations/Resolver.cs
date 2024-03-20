@@ -162,22 +162,6 @@ namespace Utility.Nodify.Operations
         {
         }
 
-        //public void OnNext(BaseViewModel @object)
-        //{
-        //    if (@object is OperationNodeViewModel node)
-        //    {
-        //        var values = node.Input.Select(a => new IOValue(a.Title, a.Value)).ToArray();
-        //        nodes[node.Key] = node;
-        //        future.Add(new NodeMessage(node.Key, values, node.Core));
-        //    }
-        //    else if (@object is OperationConnectionViewModel connection)
-        //    {
-        //        connections[connection.Key] = connection;
-        //        future.Add(new ConnectionMessage(connection.Key, connection.Input.Value));
-        //    }
-        //}
-
-
         public void Cycle()
         {
             foreach (var _node in nodes)
@@ -205,21 +189,7 @@ namespace Utility.Nodify.Operations
                 }
 
             }
-
-            //if (@object is OperationNodeViewModel node)
-            //{
-            //    var values = node.Input.Select(a => new IOValue(a.Title, a.Value)).ToArray();
-            //    nodes[node.Key] = node;
-            //    future.Add(new NodeMessage(node.Key, values, node.Core));
-            //}
-            //else if (@object is OperationConnectionViewModel connection)
-            //{
-            //    connections[connection.Key] = connection;
-            //    future.Add(new ConnectionMessage(connection.Key, connection.Input.Value));
-            //}
         }
-
-
     }
 
     public record Message(Key Key, Exception Exception);

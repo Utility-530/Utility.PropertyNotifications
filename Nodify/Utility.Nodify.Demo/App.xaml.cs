@@ -7,10 +7,9 @@ using Utility.Nodify.Engine.ViewModels;
 using Utility.Descriptors.Repositorys;
 using Splat;
 using Utility.Nodify.Engine.Infrastructure;
-using DiagramViewModel = Utility.Nodify.Core.DiagramViewModel;
-using Utility.Descriptors.Common;
 using IConverter = Utility.Nodify.Engine.Infrastructure.IConverter;
 using Utility.Descriptors;
+using Utility.Descriptors.Common;
 
 namespace Utility.Nodify.Demo
 {
@@ -18,19 +17,20 @@ namespace Utility.Nodify.Demo
     public partial class App : Application
     {
         IContainer container;
-        RootDescriptor rootDescriptor;
+        PropertyDescriptor rootDescriptor;
 
         Guid guid = Guid.Parse("25ee5731-11cf-4fc1-a925-50272fb99bba");
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override async void OnStartup(StartupEventArgs e)
         {
             SQLitePCL.Batteries.Init();
 
             Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
 
-            rootDescriptor = RootDescriptor.Create(typeof(Diagram), "diagram_test", guid);
-            var diagram = (Diagram)rootDescriptor.GetValue();
-
+            var rootPropertyDescriptor = new RootDescriptor(typeof(Diagram), name: "diagram_test");
+            rootDescriptor = await DescriptorFactory.CreateRoot(rootPropertyDescriptor, guid);
+            var diagram = rootDescriptor.Get<Diagram>();
+            rootDescriptor.Initialise();
             base.OnStartup(e);
 
             container = new Container(DiConfiguration.SetRules);
@@ -67,8 +67,8 @@ namespace Utility.Nodify.Demo
         {
             var diagramViewModel = container.Resolve<IDiagramViewModel>();
             var diagram = container.Resolve<IConverter>().ConvertBack(diagramViewModel);
-            rootDescriptor.SetValue(diagram);
-
+            rootDescriptor.Set(diagram);
+            rootDescriptor.Finalise();
             base.OnExit(e);
         }
     }

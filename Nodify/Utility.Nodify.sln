@@ -53,6 +53,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Templates", "..
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Converters", "Utility.Nodify.Converters\Utility.Nodify.Converters.csproj", "{0CF5E4E2-5A7B-4842-9DEA-CF80066D5E32}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Interfaces", "..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj", "{96920FE9-1C99-49DB-8D75-F684711A3CBE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -151,6 +153,10 @@ Global
 		{0CF5E4E2-5A7B-4842-9DEA-CF80066D5E32}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CF5E4E2-5A7B-4842-9DEA-CF80066D5E32}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CF5E4E2-5A7B-4842-9DEA-CF80066D5E32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96920FE9-1C99-49DB-8D75-F684711A3CBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96920FE9-1C99-49DB-8D75-F684711A3CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96920FE9-1C99-49DB-8D75-F684711A3CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96920FE9-1C99-49DB-8D75-F684711A3CBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -173,6 +179,7 @@ Global
 		{12C125DF-DE95-4F30-88AE-42750C150710} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{A53D3769-A23B-4FEB-85DF-5B79A3010648} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{05F4319F-40CD-423F-A62F-55E1E577DCAC} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
+		{96920FE9-1C99-49DB-8D75-F684711A3CBE} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C218ADB7-210D-4A37-BC47-800268D4894F}
