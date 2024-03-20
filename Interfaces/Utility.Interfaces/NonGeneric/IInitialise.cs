@@ -2,6 +2,6 @@
 {
     public interface IInitialise
     {
-        void Initialise(object o);
+        void Initialise(object? item = null);
     }
 }
