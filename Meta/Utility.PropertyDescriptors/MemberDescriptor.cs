@@ -45,6 +45,8 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
     public abstract object Get();
 
     public abstract void Set(object? value);
+    public abstract void Initialise(object? item = null);
+    public abstract void Finalise(object? item = null);
 }
 
 

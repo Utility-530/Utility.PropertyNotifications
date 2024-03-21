@@ -1,5 +1,7 @@
-﻿namespace Utility.Descriptors;
-public abstract record PropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor.PropertyType), IInitialise, IFinalise, IIsReadOnly, IRaisePropertyChanged
+﻿using Utility.Interfaces;
+
+namespace Utility.Descriptors;
+internal abstract record PropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor.PropertyType), IRaisePropertyChanged, IInstance, IPropertyDescriptor
 {
 
     public override string? Name => Descriptor.Name;
@@ -19,16 +21,6 @@ public abstract record PropertyDescriptor(Descriptor Descriptor, object Instance
     public override void Set(object? value)
     {
         Descriptor.SetValue(Instance, value);
-    }
-
-    public virtual void Initialise(object? item = null)
-    {
-
-    }
-
-    public virtual void Finalise(object? item = null)
-    {
-
     }
 
     public void RaisePropertyChanged(object value, string? propertyName = null)

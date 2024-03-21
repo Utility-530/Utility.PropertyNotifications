@@ -3,7 +3,7 @@ using Splat;
 
 namespace Utility.Descriptors;
 
-public record MethodDescriptor : MemberDescriptor, IMethodDescriptor, IChildren
+internal record MethodDescriptor : MemberDescriptor, IMethodDescriptor, IChildren
 {
     Dictionary<int, object?> dictionary = new();
 
@@ -11,7 +11,7 @@ public record MethodDescriptor : MemberDescriptor, IMethodDescriptor, IChildren
     private readonly MethodInfo methodInfo;
     private readonly object instance;
 
-    public MethodDescriptor(MethodInfo methodInfo, object instance) : base((System.Type)null)
+    internal MethodDescriptor(MethodInfo methodInfo, object instance) : base((System.Type)null)
     {
         command = new Lazy<Command>(() => new Command(() =>
         {
@@ -40,9 +40,20 @@ public record MethodDescriptor : MemberDescriptor, IMethodDescriptor, IChildren
         throw new NotImplementedException();
     }
 
+
     public void Invoke()
     {
         methodInfo.Invoke(instance, dictionary.OrderBy(a => a.Key).Select(a => a.Value).ToArray());
+    }
+
+    public override void Initialise(object? item = null)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void Finalise(object? item = null)
+    {
+        throw new NotImplementedException();
     }
 
     public ICommand Command => command.Value;

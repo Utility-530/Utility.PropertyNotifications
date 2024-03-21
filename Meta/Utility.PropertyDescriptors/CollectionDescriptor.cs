@@ -6,7 +6,7 @@ using Utility.Helpers.NonGeneric;
 
 namespace Utility.Descriptors
 {
-    public record CollectionDescriptor(Descriptor PropertyDescriptor, Type ElementType, IEnumerable Collection) : ReferenceDescriptor(PropertyDescriptor, Collection), ICount
+    internal record CollectionDescriptor(Descriptor PropertyDescriptor, Type ElementType, IEnumerable Collection) : ReferenceDescriptor(PropertyDescriptor, Collection), ICollectionDescriptor
     {
         private static ITreeRepository repo => Locator.Current.GetService<ITreeRepository>();
 

@@ -1,7 +1,7 @@
 ﻿
 namespace Utility.Descriptors
 {
-    public record PropertiesDescriptor(Descriptor PropertyDescriptor, object Instance) : ReferenceDescriptor(PropertyDescriptor, Instance), IPropertiesDescriptor
+    internal record PropertiesDescriptor(Descriptor PropertyDescriptor, object Instance) : ReferenceDescriptor(PropertyDescriptor, Instance), IPropertiesDescriptor
     {
         public static string _Name => "Properties";
         public override string? Name => _Name;

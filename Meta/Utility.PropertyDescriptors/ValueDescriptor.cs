@@ -5,7 +5,7 @@ using Utility.Interfaces.Generic;
 namespace Utility.Descriptors;
 
 
-public abstract record ValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IValue<T>
+internal abstract record ValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IValue<T>
 {
     public new T Value
     {
@@ -24,7 +24,7 @@ public abstract record ValueDescriptor<T>(Descriptor Descriptor, object Instance
     }
 }
 
-public abstract record NullableValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IValue<T?>
+internal abstract record NullableValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IValue<T?>
 {
     public new T? Value
     {
@@ -43,7 +43,7 @@ public abstract record NullableValueDescriptor<T>(Descriptor Descriptor, object 
     }
 }
 
-public record ValueDescriptor(Descriptor Descriptor, object Instance) : PropertyDescriptor(Descriptor, Instance)
+internal record ValueDescriptor(Descriptor Descriptor, object Instance) : PropertyDescriptor(Descriptor, Instance)
 {
     private object? value;
     private readonly ITreeRepository repo = Locator.Current.GetService<ITreeRepository>();

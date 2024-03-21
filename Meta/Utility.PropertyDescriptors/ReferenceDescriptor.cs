@@ -3,7 +3,7 @@ using Splat;
 
 namespace Utility.Descriptors;
 
-public record ReferenceDescriptor(Descriptor Descriptor, object Instance) : PropertyDescriptor(Descriptor, Instance), IChildren
+internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : PropertyDescriptor(Descriptor, Instance), IReferenceDescriptor
 {
     private readonly ITreeRepository repo = Locator.Current.GetService<ITreeRepository>();
 

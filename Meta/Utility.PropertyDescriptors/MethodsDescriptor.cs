@@ -2,7 +2,7 @@
 
 namespace Utility.Descriptors;
 
-public record MethodsDescriptor(Descriptor Descriptor, object Instance) : ReferenceDescriptor(Descriptor, Instance), IMethodsDescriptor
+internal record MethodsDescriptor(Descriptor Descriptor, object Instance) : ReferenceDescriptor(Descriptor, Instance), IMethodsDescriptor
 {
     public static readonly string? _Name = "Methods";
 

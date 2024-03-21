@@ -1,9 +1,4 @@
-﻿
-
-using Bogus.DataSets;
-using Splat;
-using System.Reflection;
-using Utility.Interfaces.NonGeneric;
+﻿using Splat;
 
 namespace Utility.Descriptors
 {
@@ -11,27 +6,54 @@ namespace Utility.Descriptors
     {
         private static ITreeRepository repo => Locator.Current.GetService<ITreeRepository>();
 
-
-        public static async Task<PropertyDescriptor> ToValue(object? value, Descriptor descriptor, Guid parentGuid)
+        public static async Task<IDescriptor> ToValue(object? value, Descriptor descriptor, Guid parentGuid)
         {
             var guid = await repo.Find(parentGuid, descriptor.Name, descriptor.PropertyType);
 
-            PropertyDescriptor _descriptor = ToDescriptor(value, descriptor);
+            PropertyDescriptor _descriptor = DescriptorConverter.ToDescriptor(value, descriptor);
             _descriptor.Guid = guid;
             _descriptor.ParentGuid = parentGuid;
             return _descriptor;
         }
 
-
-        public static async Task<PropertyDescriptor> CreateRoot(Descriptor descriptor, Guid guid)
+        public static async Task<IDescriptor> CreateRoot(Descriptor descriptor, Guid guid)
         {
-            await repo.CreateRootKey(guid, descriptor.Name, descriptor.PropertyType);      
-            var _descriptor = ToDescriptor(default, descriptor);
+            await repo.CreateRootKey(guid, descriptor.Name, descriptor.PropertyType);
+            var _descriptor = DescriptorConverter.ToDescriptor(default, descriptor);
             _descriptor.Guid = guid;
             return _descriptor;
         }
 
-        private static PropertyDescriptor ToDescriptor(object? value, Descriptor descriptor)
+        public static async Task<IDescriptor> CreateItem(object item, int index, Type type, Type parentType, Guid parentGuid)
+        {
+            PropertyDescriptor descriptor;
+            if (type.IsValueOrString())
+            {
+                descriptor = new CollectionItemDescriptor(item, index, parentType);
+            }
+            else
+            {
+                descriptor = new CollectionItemReferenceDescriptor(item, index, parentType);
+            }
+            var _guid = await repo.Find(parentGuid, type.Name, type, index);
+            descriptor.Guid = _guid;
+            descriptor.ParentGuid = parentGuid;
+            return descriptor;
+        }
+
+        public static async Task<IDescriptor> CreateMethodItem(object item, MethodInfo methodInfo, Type type, Guid parentGuid)
+        {
+            var descriptor = new MethodDescriptor(methodInfo, item);
+            var _guid = await repo.Find(parentGuid, type.Name);
+            descriptor.Guid = _guid;
+            descriptor.ParentGuid = parentGuid;
+            return descriptor;
+        }
+    }
+
+    class DescriptorConverter
+    {
+        public static PropertyDescriptor ToDescriptor(object? value, Descriptor descriptor)
         {
             PropertyDescriptor _descriptor = descriptor.PropertyType switch
             {
@@ -68,36 +90,5 @@ namespace Utility.Descriptors
             };
             return _descriptor;
         }
-
-
-
-        public static async Task<PropertyDescriptor> CreateItem(object item, int index, Type type, Type parentType, Guid parentGuid)
-        {
-            PropertyDescriptor descriptor;
-            if (type.IsValueOrString())
-            {
-                descriptor = new CollectionItemDescriptor(item, index, parentType);
-            }
-            else
-            {
-                descriptor = new CollectionItemReferenceDescriptor(item, index, parentType);
-            }
-            var _guid = await repo.Find(parentGuid, type.Name, type, index);
-            descriptor.Guid = _guid;
-            descriptor.ParentGuid = parentGuid;
-            return descriptor;
-        }
-
-
-        public static async Task<MemberDescriptor> CreateMethodItem(object item, MethodInfo methodInfo, Type type, Guid parentGuid)
-        {
-            var descriptor = new MethodDescriptor(methodInfo, item);
-            var _guid = await repo.Find(parentGuid, type.Name);
-            descriptor.Guid = _guid;
-            descriptor.ParentGuid = parentGuid;
-            return descriptor;
-        }
     }
-
-
 }

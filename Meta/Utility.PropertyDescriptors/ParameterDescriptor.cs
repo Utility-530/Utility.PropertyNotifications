@@ -1,7 +1,7 @@
 ﻿
 namespace Utility.Descriptors
 {
-    public record ParameterDescriptor(ParameterInfo ParameterInfo, Dictionary<int, object?> Component) : MemberDescriptor(ParameterInfo.ParameterType)
+    internal record ParameterDescriptor(ParameterInfo ParameterInfo, Dictionary<int, object?> Component) : MemberDescriptor(ParameterInfo.ParameterType)
     {
         public override Type ParentType => typeof(Dictionary<string, object?>);
 
@@ -11,6 +11,14 @@ namespace Utility.Descriptors
 
         public override bool IsReadOnly => false;
 
+        public override void Finalise(object? item = null)
+        {
+         
+        }
+        public override void Initialise(object? item = null)
+        {
+   
+        }
 
         public override object? Get()
         {

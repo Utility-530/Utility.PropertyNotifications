@@ -1,8 +1,8 @@
 ﻿namespace Utility.Descriptors;
 
-public record CollectionHeadersDescriptor : MemberDescriptor, ICollectionItemDescriptor, IEquatable, IChildren
+internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeadersDescriptor, IEquatable, IChildren
 {
-    public CollectionHeadersDescriptor(Type propertyType, Type componentType) : base(propertyType)
+    internal CollectionHeadersDescriptor(Type propertyType, Type componentType) : base(propertyType)
     {
         this.ParentType = componentType;
     }
@@ -46,6 +46,15 @@ public record CollectionHeadersDescriptor : MemberDescriptor, ICollectionItemDes
 
 
 
+    public override void Initialise(object? item = null)
+    {
+    }
+
+    public override void Finalise(object? item = null)
+    {
+    }
+
+
     public override object? Get()
     {
         return null;
@@ -57,7 +66,7 @@ public record CollectionHeadersDescriptor : MemberDescriptor, ICollectionItemDes
     }
 }
 
-public record HeaderDescriptor : MemberDescriptor
+internal record HeaderDescriptor : MemberDescriptor, IHeaderDescriptor
 {
     public HeaderDescriptor(Type type, Type parentType, string name) : base(type)
     {
@@ -83,12 +92,22 @@ public record HeaderDescriptor : MemberDescriptor
     {
         throw new NotImplementedException();
     }
+
+    public override void Initialise(object? item = null)
+    {
+    }
+
+    public override void Finalise(object? item = null)
+    {
+    }
+
+
 }
 
-public partial record CollectionItemDescriptor : ValueDescriptor, ICollectionItemDescriptor, IEquatable
+internal partial record CollectionItemDescriptor : ValueDescriptor, ICollectionItemDescriptor, IEquatable
 {
 
-    public CollectionItemDescriptor(object item, int index, Type componentType) : base(new RootDescriptor(item.GetType(), componentType) { }, item)
+    internal CollectionItemDescriptor(object item, int index, Type componentType) : base(new RootDescriptor(item.GetType(), componentType) { }, item)
     {
         Item = item;
 
@@ -121,7 +140,6 @@ public partial record CollectionItemDescriptor : ValueDescriptor, ICollectionIte
         throw new NotImplementedException();
     }
 
-
     public static int ToIndex(string name) => int.Parse(MyRegex().Matches(name).First().Groups[1].Value);
     public static string FromIndex(string name, int index) => name + $" [{index}]";
 
@@ -137,7 +155,7 @@ public partial record CollectionItemDescriptor : ValueDescriptor, ICollectionIte
 }
 
 
-public partial record CollectionItemReferenceDescriptor :  ReferenceDescriptor, ICollectionItemDescriptor, IEquatable
+internal partial record CollectionItemReferenceDescriptor :  ReferenceDescriptor, ICollectionItemDescriptor, IEquatable
 {
     public CollectionItemReferenceDescriptor(object item, int index, Type componentType) : base(new RootDescriptor(item.GetType(), componentType) { }, item)
     {
