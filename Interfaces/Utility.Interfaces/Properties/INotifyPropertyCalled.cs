@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace Utility.PropertyNotifications
+namespace Utility.Interfaces
 {
     public interface INotifyPropertyCalled
     {
@@ -19,5 +19,5 @@ namespace Utility.PropertyNotifications
 
         public object Value { get; }
     }
- 
+
 }

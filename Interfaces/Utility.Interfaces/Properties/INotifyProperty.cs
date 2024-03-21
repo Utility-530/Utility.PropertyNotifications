@@ -1,7 +1,6 @@
-﻿using Utility.PropertyNotifications;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
-namespace Utility.PropertyNotifications
+namespace Utility.Interfaces
 {
     public interface INotifyProperty : INotifyPropertyChanged, INotifyPropertyCalled, INotifyPropertyReceived
     {

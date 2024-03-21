@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows;
-
+using Utility.Interfaces;
 
 namespace Utility.PropertyNotifications
 {

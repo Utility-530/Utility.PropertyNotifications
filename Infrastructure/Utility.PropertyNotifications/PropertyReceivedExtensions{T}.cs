@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
+using Utility.Interfaces;
 
 namespace Utility.PropertyNotifications
 {

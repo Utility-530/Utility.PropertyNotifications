@@ -1,7 +1,7 @@
-﻿using Utility.PropertyNotifications;
-using System;
+﻿using System;
 using System.Linq.Expressions;
 using System.Reflection;
+using Utility.Interfaces;
 
 namespace Utility.PropertyNotifications
 {

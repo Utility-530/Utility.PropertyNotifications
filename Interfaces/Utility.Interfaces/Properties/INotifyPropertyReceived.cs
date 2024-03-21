@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace Utility.PropertyNotifications
+namespace Utility.Interfaces
 {
     public interface INotifyPropertyReceived
     {
