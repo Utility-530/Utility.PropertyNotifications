@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 
-namespace Utility.Interfaces.NonGeneric
+namespace Utility.Interfaces
 {
-    //public interface IPropertyDescriptor
-    //{
-    //    PropertyDescriptor PropertyDescriptor { get; }
-    //}
+    public interface IPropertyDescriptor
+    {
+        PropertyDescriptor Descriptor { get; }
+    }
 }
