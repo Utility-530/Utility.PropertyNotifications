@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
@@ -8,18 +9,18 @@ using Utility.Trees.Abstractions;
 namespace Utility.Infrastructure;
 
 public record InitialisedEvent(object Value) : Event();
-public record ConnectionsEvent(Outputs[] Outputs, object Source) : Event();
+//public record ConnectionsEvent(Outputs[] Outputs, object Source) : Event();
 public record BroadcastEvent(object Source, object Target) : Event();
 public record BroadcastSuccessEvent(object Source, object Target) : BroadcastEvent(Source, Target);
 public record BroadcastFailureEvent(object Source, object Target) : BroadcastEvent(Source, Target);
-public record FindPropertyRequest(Key Key) : Request;
+//public record FindPropertyRequest(Key Key) : Request;
 public record FindPropertyResponse(IEquatable[] Keys) : Response(Keys);
 public record GetPropertyResponse(object Value) : Response(Value);
 public record SetPropertyResponse(object Value) : Response(Value);
 public record PropertyRequest(IEquatable Key) : Request;
 public record SetPropertyRequest(IEquatable Key, object Value) : PropertyRequest(Key);
 public record GetPropertyRequest(IEquatable Key) : PropertyRequest(Key);
-public record HistoryRequest(Guid Key, Key Base, object Value, ICollection<Key> Keys) : Models.Request;
+public record HistoryRequest(Guid Key, IKey Base, object Value, ICollection<IKey> Keys) : Request;
 public record DirectionEvent() : Event();
 public record ForwardEvent() : Event();
 public record BackEvent() : Event();
