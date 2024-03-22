@@ -26,13 +26,7 @@ namespace Utility.Trees.Abstractions
 
         new ITree Parent { get; set; }
 
-
         ITree? this[int index] { get; set; }
-        ITree? this[object equatable] { get; set; }
-
-        IEnumerable<ITree> GetParents(bool includingThis);
-
-        IEnumerable<ITree> GetChildren(bool includingThis);
 
         void Remove(Guid index);
 
