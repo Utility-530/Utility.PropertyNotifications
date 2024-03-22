@@ -16,9 +16,4 @@
 		<ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
 	</ItemGroup>
 
-
-	<ItemGroup>
-	  <Folder Include="Collections\" />
-	</ItemGroup>
-
 </Project>
