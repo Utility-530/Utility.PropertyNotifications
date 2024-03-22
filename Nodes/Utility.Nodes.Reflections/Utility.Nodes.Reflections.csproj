@@ -8,6 +8,7 @@
 
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Infrastructure\Utility.Changes\Utility.Changes.csproj" />
 		<ProjectReference Include="..\Utility.Nodes\Utility.Nodes.csproj" />
 	</ItemGroup>
 

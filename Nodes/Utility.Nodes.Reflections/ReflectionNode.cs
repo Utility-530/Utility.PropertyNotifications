@@ -86,7 +86,9 @@ namespace Utility.Nodes.Reflections
 
         public override IObservable<object?> GetChildren()
         {
-            return data.Children;
+            if(data is IChildren children)
+            return children.Children;
+            return Observable.Empty<object?>();
         }
 
 
