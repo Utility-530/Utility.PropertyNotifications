@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Utility.Interfaces.Generic;
 
 namespace Utility.Trees.Abstractions
@@ -16,14 +13,9 @@ namespace Utility.Trees.Abstractions
     {
         new ITree<T>? Parent { get; set; }
 
-        ITree<T> this[T item] { get; set; }
-        //new IReadOnlyList<ITree<T>> Items { get; }
         new T Data { get; }
 
         new ITree<T> this[int index] { get; set; }
-        new ITree<T> this[Guid index] { get; set; }
-
-        //void Add(T data);
 
         void Remove(T data);
 
