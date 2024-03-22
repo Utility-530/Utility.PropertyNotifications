@@ -8,10 +8,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
-    <ProjectReference Include="..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" /> 
-    <ProjectReference Include="..\..\Reactives\Utility.Reactives\Utility.Reactives.csproj" />
+    <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
+    <ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" /> 
+    <ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
   </ItemGroup>
 
   <ItemGroup>
