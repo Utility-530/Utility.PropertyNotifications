@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
 using Utility.Observables.Generic;
 using Utility.Trees.Abstractions;
 

@@ -1,6 +1,4 @@
-﻿//
-
-namespace Utility.Trees.Abstractions
+﻿namespace Utility.Trees
 {
     [Flags]
     public enum State

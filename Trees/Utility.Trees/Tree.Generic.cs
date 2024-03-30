@@ -13,7 +13,6 @@ namespace Utility.Trees
     /// <typeparam name="T"></typeparam>
     public class Tree<T> : Tree, ITree<T> /*where T : class*/
     {
-        //private ObservableCollection<ITree<T>> m_items;
         private T data;
 
         public Tree(T data, params object[] items) : base(data, items)
@@ -31,50 +30,50 @@ namespace Utility.Trees
 
         public int Id { get; private set; }
 
-        public ITree<T>? this[T item]
-        {
-            get
-            {
-                var x = TreeHelper.Match(this, a => a.Data?.Equals(item) == true);
-                if (x == null)
-                {
-                    throw new Exception("4sd ss");
-                    //x = new Tree<T>(item);
-                    //this.Add(x);
-                }
-                return x;
-            }
-            set
-            {
-                throw new NotImplementedException("rfgf 3422");
-            }
-        }
+        //public ITree<T>? this[T item]
+        //{
+        //    get
+        //    {
+        //        var x = TreeHelper.Match(this, a => a.Data?.Equals(item) == true);
+        //        if (x == null)
+        //        {
+        //            throw new Exception("4sd ss");
+        //            //x = new Tree<T>(item);
+        //            //this.Add(x);
+        //        }
+        //        return x;
+        //    }
+        //    set
+        //    {
+        //        throw new NotImplementedException("rfgf 3422");
+        //    }
+        //}
 
-        public new ITree<T>? this[Guid key]
-        {
-            get
-            {
-                var x = TreeHelper.Match(this, a => a.Key.Equals(key) == true);
-                if (x == null)
-                {
-                    throw new Exception("4sd ss");
-                    //x = new Tree<T>(item);
-                    //this.Add(x);
-                }
-                return x;
-            }
-            set
-            {
-                var x = TreeHelper.Match(this, a => a.Key.Equals(key) == true);
-                if (x == null)
-                {
-                    throw new Exception("4sd ss");
-                    //x = new Tree<T>(item);
-                    //this.Add(x);
-                }
-                x.Parent[x.Key] = value;
-            }
-        }
+        //public new ITree<T>? this[Guid key]
+        //{
+        //    get
+        //    {
+        //        var x = TreeHelper.Match(this, a => a.Key.Equals(key) == true);
+        //        if (x == null)
+        //        {
+        //            throw new Exception("4sd ss");
+        //            //x = new Tree<T>(item);
+        //            //this.Add(x);
+        //        }
+        //        return x;
+        //    }
+        //    set
+        //    {
+        //        var x = TreeHelper.Match(this, a => a.Key.Equals(key) == true);
+        //        if (x == null)
+        //        {
+        //            throw new Exception("4sd ss");
+        //            //x = new Tree<T>(item);
+        //            //this.Add(x);
+        //        }
+        //        x.Parent[x.Key] = value;
+        //    }
+        //}
 
         public new ITree<T> this[int index]
         {
@@ -120,33 +119,12 @@ namespace Utility.Trees
                 return;
             }
 
-            //if (data is ITree)
-            //{
-            //    throw new Exception("t 44 redsdssd");
-            //}
 
             if (data is T t)
             {
                 m_items.Add((new Tree(t)));
                 return;
             }
-
-            //var o = data as object[];
-            //if (o != null)
-            //{
-            //    foreach (var obj in o)
-            //        Add(obj);
-            //    return;
-            //}
-
-            //var e = data as IEnumerable;
-            //if (e != null && !(data is ITree))
-            //{
-            //    foreach (var obj in e)
-            //        Add(obj);
-            //    return;
-            //}
-
             throw new InvalidOperationException("Cannot add unknown content type.");
         }
 
@@ -160,15 +138,6 @@ namespace Utility.Trees
             return tree;
         }
 
-        public override ITree<T> Remove()
-        {
-            var parent = this.Parent;
-            this.Parent.Remove(this);
-            this.Parent = null;
-            return parent;
-        }
-
-
         public void Remove(T data)
         {
             var single = m_items.OfType<ITree<T>>().Single(a => a.Data.Equals(data));
@@ -176,22 +145,9 @@ namespace Utility.Trees
             return;
         }
 
-        //public ITree<T> CloneTree(ITree<T> item)
-        //{
-        //    var result = CloneNode(item);
-        //    if (item.HasItems)
-        //        result.Add(item.Items);
-        //    return result;
-        //}
+        public override object Data { get => data; set => data = (T)value; }
 
-        //protected virtual ITree<T> CloneNode(ITree<T> item)
-        //{
-        //    return new Tree<T>(item.Data);
-        //}
-
-        public new T Data { get => data; set => data = value; }
-
-        public new ITree<T> Parent { get => (ITree<T>)parent; set => parent = value; }
+        //public override ITree<T> Parent { get => (ITree<T>)parent; set => parent = value; }
 
         public new IReadOnlyList<ITree<T>> Items
         {
@@ -235,29 +191,6 @@ namespace Utility.Trees
             }
         }
 
-        public new IEnumerable<ITree<T>> GetParents(bool includingThis)
-        {
-            if (includingThis)
-                yield return this;
-
-            var parent = Parent;
-            while (parent != null)
-            {
-                yield return parent;
-                parent = parent.Parent;
-            }
-        }
-
-        public new IEnumerable<ITree<T>> GetChildren(bool includingThis)
-        {
-            if (includingThis)
-                yield return this;
-
-            if (m_items != null)
-                foreach (var child in m_items.OfType<ITree>().SelectMany(item => item.GetChildren(true)))
-                    yield return child as ITree<T>;
-        }
-
         public override IEnumerator<ITree> GetEnumerator()
         {
             return m_items == null ? Enumerable.Empty<ITree<T>>().GetEnumerator() : Items.GetEnumerator();
@@ -281,72 +214,5 @@ namespace Utility.Trees
         }
 
 
-    }
-
-    public static class TreeHelper
-    {
-        public static void Add<T>(this ITree<T> tree, T data)
-        {
-
-        }
-
-        public static void Remove<T>(this ITree<T> tree, T data)
-        {
-
-
-
-        }
-        public static ITree<T> Create<T>(T data)
-        {
-            return new Tree<T>(data);
-        }
-
-        public static ITree<T> Create<T>(T data, params ITree<T>[] items)
-        {
-            return new Tree<T>(data, items);
-        }
-
-        public static ITree<T> Create<T>(T data, params object[] items)
-        {
-            return new Tree<T>(data, items);
-        }
-
-        public static void Visit<T>(this ITree<T> tree, Action<ITree<T>> action)
-        {
-            action(tree);
-            if (tree.HasItems)
-                foreach (var item in tree as IEnumerable<ITree<T>>)
-                    Visit(item, action);
-        }
-
-        public static ITree<T>? Match<T>(this ITree<T> tree, Predicate<ITree<T>> action)
-        {
-            if (action(tree))
-            {
-                return tree;
-            }
-            else if (tree.HasItems)
-            {
-                foreach (var item in tree as IEnumerable<ITree<T>>)
-                {
-                    if (Match(item, action) is ITree<T> sth)
-                    {
-                        return sth;
-                    }
-                }
-            }
-
-            return null;
-        }
-
-        public static ITree<T>? Match<T>(this ITree<T> tree, T data)
-        {
-            return Match(tree, a => a.Data?.Equals(data) == true);
-        }
-
-        public static ITree<T>? Match<T>(this ITree<T> tree, Guid guid)
-        {
-            return Match(tree, a => a.Key.Equals(guid));
-        }
     }
 }

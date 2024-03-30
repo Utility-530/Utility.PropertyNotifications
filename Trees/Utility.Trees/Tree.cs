@@ -1,0 +1,352 @@
+﻿using AnyClone;
+using System.Collections;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Utility.Helpers.NonGeneric;
+using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
+using Utility.Trees.Abstractions;
+
+namespace Utility.Trees
+{
+    /// <summary>
+    /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
+    /// </summary>
+    /// <typeparam name="object"></typeparam>
+    public class Tree : ITree, IEnumerable<ITree>, INotifyPropertyChanged, IEquatable, IParent<ITree>
+    {
+        private IList items;
+        protected ITree? parent;
+        private bool flag;
+
+        protected IList m_items
+        {
+            get
+            {
+                if (flag == false)
+                {
+                    items = CreateChildren();
+                    flag = true;
+                }
+                return items;
+            }
+        }
+
+        public Tree(object? data = null, params object[] items)
+        {
+            if (data != null)
+                this.Data = data;
+            //else
+            //    this.data = "root";
+            if (items.Any())
+                Add(items);
+        }
+
+        public virtual IEquatable Key { get; set; }
+
+
+
+        //public ITree? this[object key]
+        //{
+        //    get
+        //    {
+        //        if (TreeHelper2.MatchDescendant(this, a => key.Equals(a) == true) is not ITree match)
+        //            return TreeHelper2.MatchAncestor(this, a => key.Equals(a) == true) as ITree;
+        //        return match;
+        //    }
+        //    set
+        //    {
+        //        var x = TreeHelper2.MatchDescendant(this, a => key.Equals(a) == true);
+        //        if (x is not ITree match)
+        //        {
+        //            throw new Exception("4sd ss");
+        //            //x = new Tree(item);
+        //            //this.Add(x);
+        //        }
+        //        match.Parent[x.Key] = value;
+        //    }
+        //}
+
+        public virtual ITree? this[int index]
+        {
+            get
+            {
+                return m_items.Count == 0 ? null : m_items[index] as ITree;
+            }
+            set
+            {
+                if (m_items.Count == 0)
+                    throw new Exception(" rere4");
+                else
+                    m_items[index] = value as ITree;
+            }
+        }
+
+
+
+        public virtual void Add(object data)
+        {
+            if (data == null)
+                return;
+
+            if (data is ITree tree)
+            {
+                m_items.Add(tree);
+                return;
+            }
+            if (data is IEnumerable treeCollection)
+            {
+                foreach (var item in treeCollection)
+                    if (item is ITree)
+                        m_items.Add(item);
+                    else
+                        m_items.Add(new Tree(item));
+                return;
+            }
+            if (data is not null)
+            {
+                m_items.Add(new Tree((object)data));
+                return;
+            }
+
+            throw new InvalidOperationException("Cannot add unknown content type.");
+        }
+
+        public virtual void Remove(object data)
+        {
+            if (data == null)
+                return;
+
+            if (data is IEquatable key)
+            {
+                var single = m_items.OfType<ITree>().Single(t =>  t.Equals(key));
+                m_items.Remove(single);
+                return;
+            }
+
+            if (data is ITree tree)
+            {
+                var single = m_items.OfType<ITree>().Single(t => t == tree);
+                m_items.Remove(single);
+                return;
+            }
+
+            if (data is not null)
+            {
+                var single = m_items.OfType<ITree>().Single(t => t.Data == data);
+                m_items.Remove(single);
+                return;
+            }
+
+            throw new InvalidOperationException("Cannot add unknown content type.");
+        }
+
+        public virtual Tree Clone()
+        {
+            object clone = Data;
+            IEquatable kclone = Key;
+            if (Data is IClone cln)
+            {
+                clone = cln.Clone();
+            }
+
+            if (Key is IClone kcln)
+            {
+                kclone =(IEquatable) kcln.Clone();
+            }
+
+            return new Tree(clone) { Key = kclone };
+        }
+
+        public virtual ITree Add()
+        {
+            object clone = Data;
+            if (Data is IClone cln)
+            {
+                clone = cln.Clone();
+            }
+
+            var tree = new Tree(clone);
+            this.items.Add(tree);
+            tree.Parent = this;
+            return tree;
+        }
+
+        public virtual ITree Remove()
+        {
+            this.Parent = null;
+            this.Parent?.Remove(this);
+            return this.Parent;
+        }
+
+        public void Remove(Guid index)
+        {
+            var single = m_items.OfType<ITree>().Single(t => t.Key.Equals(index));
+            m_items.Remove(single);
+        }
+
+        public virtual object Data { get; set; }
+
+        public virtual bool HasItems => Items != null && Items.Count() > 0;
+
+        public virtual ITree? Parent { get => parent; set => parent = value; }
+
+        public virtual IEnumerable Items
+        {
+            get
+            {
+                if (m_items is IReadOnlyList<ITree> list)
+                {
+                    return list;
+                }
+                else
+                {
+                    return m_items.Cast<ITree>().ToArray();
+                }
+            }
+        }
+
+
+        public IIndex Index
+        {
+            get
+            {
+                var indices = Indices();
+                return new Index(indices.Reverse().ToArray());
+                IEnumerable<int> Indices()
+                {
+                    ITree? parent = this.Parent;
+                    ITree child = this;
+                    while (parent != null)
+                    {
+                        yield return parent.IndexOf(child);
+                        child = parent;
+                        if (parent.Parent == parent)
+                            throw new Exception("r sdfsd3232 bf");
+                        parent = parent.Parent;
+                    }
+                    yield return 0;
+                }
+            }
+        }
+
+        public int Depth
+        {
+            get
+            {
+                ITree parent = this;
+                int depth = 0;
+                while (parent.Parent != null)
+                {
+                    depth++;
+                    parent = parent.Parent;
+                }
+                return depth;
+            }
+        }
+
+   
+        public bool HasMoreChildren => false;
+
+        IReadOnlyTree IParent<IReadOnlyTree>.Parent { get => Parent; set => Parent= value as ITree; }
+
+        private void ResetOnCollectionChangedEvent()
+        {
+            if (m_items != null)
+                ((ObservableCollection<ITree>)m_items).CollectionChanged -= ItemsOnCollectionChanged;
+        }
+
+        private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
+        {
+            if (args.Action == NotifyCollectionChangedAction.Add && args.NewItems != null)
+            {
+                foreach (var item in args.NewItems.Cast<Tree>())
+                {
+                    item.Parent = this;
+                }
+            }
+            else if (args.Action != NotifyCollectionChangedAction.Move && args.OldItems != null)
+            {
+                foreach (var item in args.OldItems.Cast<Tree>())
+                {
+                    item.Parent = null;
+                    item.ResetOnCollectionChangedEvent();
+                }
+            }
+        }
+
+
+        public virtual IEnumerator<ITree> GetEnumerator()
+        {
+            return m_items == null ? Enumerable.Empty<ITree>().GetEnumerator() : m_items.OfType<ITree>().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+
+        protected virtual IList CreateChildren()
+        {
+            var collection = new ObservableCollection<ITree>();
+            collection.CollectionChanged += ItemsOnCollectionChanged;
+            return collection;
+        }
+
+        public int IndexOf(ITree tree)
+        {
+            int i = 0;
+            foreach (var item in Items)
+            {
+                if (item.Equals(tree))
+                    return i;
+                i++;
+            }
+            return -1;
+        }
+
+        public override string ToString()
+        {
+            if (Data?.GetType().IsValueType == true)
+                return Data?.ToString();
+            return Data == default ? this.GetType().Name : Data.ToString();
+        }
+
+        #region propertyChanged
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
+
+        #endregion propertyChanged
+
+        public bool Equals(ITree? other)
+        {
+            return other?.Key?.Equals(this.Key) == true;
+        }
+
+
+        bool IEquatable<IReadOnlyTree>.Equals(IReadOnlyTree? other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(IEquatable? other)
+        {
+            return other?.Equals(this.Key) == true;
+        }
+
+        public bool Equals(IKey<IEquatable>? other)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
