@@ -11,17 +11,17 @@ namespace Utility.Trees.Abstractions
     /// <typeparam name="T"></typeparam>
     public interface ITree<T> : ITree, IEnumerable<ITree<T>>, IAdd<ITree<T>>
     {
-        new ITree<T>? Parent { get; set; }
+        //new ITree<T>? Parent { get; set; }
 
-        new T Data { get; }
+        //new T Data { get; }
 
         new ITree<T> this[int index] { get; set; }
 
         void Remove(T data);
 
-        new ITree<T> Add();
+        //new ITree<T> Add();
 
-        new ITree<T> Remove();
+        //new ITree<T> Remove();
 
         int IndexOf(ITree<T> tree);
     }
