@@ -1,4 +1,5 @@
-﻿using System.Formats.Asn1;
+﻿using System.Collections;
+using System.Formats.Asn1;
 using System.Globalization;
 using System.Linq;
 using System.Text.Json;
@@ -24,10 +25,60 @@ namespace Utility.Models
 
         public bool Equals(IEquatable? other)
         {
-            return (other as StringKey)?.Value.Equals(Value) == true;
+            return (other as StringKey)?.Value?.Equals(Value) == true;
         }
 
         public string? Value { get; init; }
+    }
+
+    public class ValueKey<T> : IEquatable
+    {
+        public ValueKey(T? value)
+        {
+            Value = value;
+        }
+
+        public bool Equals(IEquatable? other)
+        {
+            return (other as ValueKey<T>)?.Value?.Equals(Value) == true;
+        }
+
+        public T? Value { get; init; }
+    }
+
+    public class IntKey : ValueKey<int>
+    {
+        public IntKey(int value) : base(value)
+        {
+        }
+    }
+
+    public class GuidKey : ValueKey<Guid>
+    {
+        public GuidKey(Guid? value = default) : base(value?? Guid.NewGuid())
+        {
+        }
+    }
+
+
+    public class ComboKey : StringKey, IEnumerable<int>
+    {
+        private readonly int[] value;
+
+        public ComboKey(params int[] value) : base(string.Join( ",", value))
+        {
+            this.value = value;
+        }
+
+        public IEnumerator<int> GetEnumerator()
+        {
+            return (IEnumerator<int>)value.ToList().GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return value.GetEnumerator();
+        }
     }
 
     public class CombinationKey : IEquatable
