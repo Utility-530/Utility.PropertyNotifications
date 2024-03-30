@@ -18,8 +18,6 @@ namespace Utility.Reactives
 {
     public static class CollectionChangedHelper
     {
-
-
         public static IObservable<T> ToNewItemsObservable<T>(this INotifyCollectionChanged notifyCollectionChanged)
         {
             return notifyCollectionChanged
@@ -51,7 +49,7 @@ namespace Utility.Reactives
                         handler => collection.CollectionChanged -= handler);
         }
 
-        public static IObservable<Set<T>> Changes<T>(this INotifyCollectionChanged collection) where T : IEquatable
+        public static IObservable<Set<T>> Changes<T>(this INotifyCollectionChanged collection) 
         {
             return Observable
                 .FromEvent<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
@@ -74,7 +72,7 @@ namespace Utility.Reactives
                 });
         }
 
-        public static IObservable<Set<T>> Changes<T>(this IEnumerable collection) where T : IEquatable
+        public static IObservable<Set<T>> Changes<T>(this IEnumerable collection)
         {
             return Observable.Create<Set<T>>(observer =>
             {
