@@ -7,30 +7,27 @@ using System.Reflection;
 using System.Resources;
 using System.Windows;
 using System.Windows.Baml2006;
-using Utility.ProjectStructure;
-using Utility.Trees;
-using Utility.Trees.Abstractions;
 
 namespace Utility.ProjectStructure
 {
 
     public static class ResourceDictionaryExtensions
     {
-        public static ITree<KeyValue> ToTree(Assembly assembly)
-        {
-            Tree<KeyValue> tree = new(new AssemblyKeyValue(assembly));
+        //public static ITree<KeyValue> ToTree(Assembly assembly)
+        //{
+        //    Tree<KeyValue> tree = new(new AssemblyKeyValue(assembly));
 
-            foreach (var x in assembly.SelectResourceDictionaries())
-            {
-                var _tree = new Tree<KeyValue>(x);
-                tree.Add(_tree);
-                foreach (var xs in x.ResourceDictionary.Cast<DictionaryEntry>().Select(a => new DictionaryEntryKeyValue(a)).ToArray())
-                {
-                    _tree.Add(new Tree<KeyValue>(xs));
-                }
-            }
-            return tree;
-        }
+        //    foreach (var x in assembly.SelectResourceDictionaries())
+        //    {
+        //        var _tree = new Tree<KeyValue>(x);
+        //        tree.Add(_tree);
+        //        foreach (var xs in x.ResourceDictionary.Cast<DictionaryEntry>().Select(a => new DictionaryEntryKeyValue(a)).ToArray())
+        //        {
+        //            _tree.Add(new Tree<KeyValue>(xs));
+        //        }
+        //    }
+        //    return tree;
+        //}
 
 
         public static IEnumerable<ResourceDictionaryKeyValue>

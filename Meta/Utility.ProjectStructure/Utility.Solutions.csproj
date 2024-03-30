@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
   </ItemGroup>
 
