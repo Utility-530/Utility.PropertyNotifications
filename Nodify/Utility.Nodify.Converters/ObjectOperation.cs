@@ -8,7 +8,7 @@ namespace Utility.Nodify.Operations.Operations
     public class ObjectOperation : IOperation, ISerialise, IIsReadOnly, IValue, IType
     {
         private readonly ObjectInfo objectInfo;
-        private RootDescriptor rootDescriptor;
+        private PropertyDescriptor rootDescriptor;
 
         public ObjectOperation(ObjectInfo objectInfo)
         {
@@ -27,22 +27,34 @@ namespace Utility.Nodify.Operations.Operations
             {
                 //var instance = DescriptorHelpers.Load(objectInfo.Type, objectInfo.Name, objectInfo.Guid);
 
-                rootDescriptor ??= RootDescriptor.Create(objectInfo.Type, objectInfo.Name, objectInfo.Guid);
-                var instance = rootDescriptor.GetValue();
-                var @return = new IOValue(objectInfo.Name, instance);
+                //rootDescriptor ??= RootDescriptor.Create(objectInfo.Type, objectInfo.Name, objectInfo.Guid);
+
+                rootDescriptor ??= Create();
+                var value = rootDescriptor.Get();    
+                var @return = new IOValue(objectInfo.Name, value);
                 return new[] { @return };
             }
             else if(operands.SingleOrDefault() is { Value:{ } value } operand)
             {
                 //DescriptorHelpers.Save(value, objectInfo.Name, objectInfo.Guid);
-                rootDescriptor ??= RootDescriptor.Create(objectInfo.Type, objectInfo.Name, objectInfo.Guid);
-                rootDescriptor.SetValue(value);
+
+                 rootDescriptor ??= Create();
+
+                rootDescriptor.Set(value);
                 return Array.Empty<IOValue>();
             }
             else
             {
                 throw new Exception(" 445 44");
             }
+        }
+
+        private PropertyDescriptor Create()
+        {
+            var instance = Activator.CreateInstance(objectInfo.Type);
+            var rootDescriptor = new RootDescriptor(objectInfo.Type);
+            var data = DescriptorFactory.ToValue(instance, rootDescriptor, objectInfo.Guid).GetAwaiter().GetResult();
+            return data;
         }
 
         public ISerialise FromString(string str)

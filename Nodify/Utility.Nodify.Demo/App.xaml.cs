@@ -10,6 +10,7 @@ using Utility.Nodify.Engine.Infrastructure;
 using IConverter = Utility.Nodify.Engine.Infrastructure.IConverter;
 using Utility.Descriptors;
 using Utility.Descriptors.Common;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Nodify.Demo
 {
@@ -17,7 +18,7 @@ namespace Utility.Nodify.Demo
     public partial class App : Application
     {
         IContainer container;
-        PropertyDescriptor rootDescriptor;
+        IDescriptor rootDescriptor;
 
         Guid guid = Guid.Parse("25ee5731-11cf-4fc1-a925-50272fb99bba");
 
