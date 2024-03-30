@@ -21,10 +21,10 @@ public class AutoMoqer
     public AutoMoqer(Type type)
     {
         var constructors = type.GetConstructors(BindingFlags.Public | BindingFlags.Instance);
-        if (constructors.Length > 1)
-            throw new ArgumentException("Multiple public constructors found");
+        //if (constructors.Length > 1)
+        //    throw new ArgumentException("Multiple public constructors found");
 
-        var primaryConstructor = constructors.FirstOrDefault();
+        var primaryConstructor = constructors.MinBy(a=>a.GetParameters());
         if (primaryConstructor == null)
             throw new ArgumentException("Could not find a public constructor");
 
