@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
+    <ProjectReference Include="..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
+  </ItemGroup>
+
+</Project>
