@@ -50,7 +50,19 @@ namespace Utility.WPF.Helpers
             return default;
         }
 
-        public static DataTemplate? FindResource(DataTemplateKey key)
+        public static TTarget? FindResource<TTarget>(this DependencyObject dependencyObject, string key)
+        {
+            if (!string.IsNullOrEmpty(key))
+            {
+                if (dependencyObject is FrameworkElement element)
+                    return element.TryFindResource(key) is TTarget target ? target : default;
+                return FindResource<TTarget>(key);
+            }
+
+            return default;
+        }
+
+        public static DataTemplate? FindTemplate(DataTemplateKey key)
         {
             if (Application.Current != null)
             {
@@ -65,5 +77,13 @@ namespace Utility.WPF.Helpers
 
             return default;
         }
+
+        public static DataTemplate? FindTemplate(this DependencyObject dependencyObject, DataTemplateKey key)
+        {
+            if (dependencyObject is FrameworkElement element)
+                return element.TryFindResource(key) is DataTemplate target ? target : default;
+            return FindTemplate(key);
+        }
+
     }
 }
