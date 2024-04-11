@@ -5,7 +5,8 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Trees.Abstractions
 {
-    public interface IReadOnlyTree : IEquatable<IReadOnlyTree>, IItems, IData, IParent<IReadOnlyTree>, IKey<IEquatable>
+    public interface IReadOnlyTree : IEquatable<IReadOnlyTree>, IItems, IData, IParent<IReadOnlyTree>, IKey
     {
+
     }
 }
