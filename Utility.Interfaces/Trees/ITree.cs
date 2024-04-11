@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Trees.Abstractions
@@ -8,13 +9,9 @@ namespace Utility.Trees.Abstractions
     /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ITree : IReadOnlyTree, IEquatable<ITree>, IEnumerable<ITree>
+    public interface ITree : IReadOnlyTree, IEquatable<ITree>, IEnumerable<ITree>, IRemove, IAdd //, IRemove<Guid>
     {
         bool HasItems { get; }
-
-        void Add(object data);
-
-        void Remove(object data);
 
         ITree Add();
 
@@ -24,13 +21,11 @@ namespace Utility.Trees.Abstractions
 
         int Depth { get; }
 
-        new ITree Parent { get; set; }
-
         ITree? this[int index] { get; set; }
 
         void Remove(Guid index);
 
-        int IndexOf(ITree tree);
+      
 
         bool HasMoreChildren { get; }
     }

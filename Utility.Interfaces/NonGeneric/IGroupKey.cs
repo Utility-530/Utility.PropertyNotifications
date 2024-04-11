@@ -1,7 +1,7 @@
 ﻿namespace Utility.Interfaces.NonGeneric
 {
-    public interface IKey
+    public interface IGroupKey
     {
         string Key { get; }
-    }   
+    }
 }
