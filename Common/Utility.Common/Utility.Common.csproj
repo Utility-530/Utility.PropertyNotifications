@@ -5,6 +5,12 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <Compile Remove="Infrastructure\**" />
+	  <EmbeddedResource Remove="Infrastructure\**" />
+	  <None Remove="Infrastructure\**" />
+	</ItemGroup>
+
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
