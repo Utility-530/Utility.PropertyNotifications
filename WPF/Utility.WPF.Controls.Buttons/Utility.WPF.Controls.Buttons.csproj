@@ -70,6 +70,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Behaviors\Utility.WPF.Behaviors.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Themes\Utility.WPF.Themes.csproj" />
