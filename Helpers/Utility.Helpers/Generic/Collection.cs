@@ -1,9 +1,15 @@
-﻿namespace Utility.Collections
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Utility.Helpers;
+using Utility.Helpers.Generic;
+using Utility.Helpers.NonGeneric;
+
+namespace Utility.Helpers.Generic
 {
-    public static class Helpers
+    public static class CollectionExtension
     {
-        public static void Then<T>(this T caller, Action<T> action)
-      => action?.Invoke(caller);
+        public static void Then<T>(this T caller, Action<T> action) => action?.Invoke(caller);
 
         public static bool Then(this bool condition, Action action)
         {
@@ -25,24 +31,12 @@
             return condition;
         }
 
-        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> collection, Action<T> action)
+        public static T SingleOrAdd<T>(this ICollection<T> query, T x) where T : new()
         {
-            if (collection is IList<T> list)
-            {
-                for (int i = 0; i < list.Count; i++)
-                {
-                    action(list[i]);
-                }
-            }
-            else
-            {
-                foreach (var item in collection)
-                {
-                    action(item);
-                }
-            }
+            var xd = query.SingleOrDefault(null);
+            if (xd == null) query.Add(x);
 
-            return collection;
+            return xd;
         }
 
         public static ICollection<T> AddRange<T>(this ICollection<T> collection, IEnumerable<T> values)
@@ -68,16 +62,25 @@
 
         public static ICollection<T> RemoveBy<T>(this ICollection<T> collection, Func<T, bool> search)
         {
-            List<T> list = new List<T>();   
-            foreach(var x in collection.Where(search))
+            List<T> list = new();
+            foreach (var x in collection.Where(search))
             {
                 list.Add(x);
             }
 
-            foreach(var x in list)
+            foreach (var x in list)
                 collection.Remove(x);
 
             return collection;
+        }
+
+        public static SortedList<DateTime, double> MovingAverage(this SortedList<DateTime, double> series, int period)
+        {
+            return new SortedList<DateTime, double>(series.Skip(period - 1).Scan(new SortedList<DateTime, double>(),
+
+                 (list, item) => { list.Add(item.Key, item.Value); return list; })
+                .Select(a => new KeyValuePair<DateTime, double>(a.Last().Key, a.Select(a => a.Value).Average()))
+                .ToDictionary(a => a.Key, a => a.Value));
         }
     }
 }
