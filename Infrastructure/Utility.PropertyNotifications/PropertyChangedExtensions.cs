@@ -10,10 +10,9 @@ namespace Utility.PropertyNotifications
         private class PropertyObservable<T> : IObservable<T>
         {
             private readonly INotifyPropertyChanged _target;
-            private readonly PropertyInfo _info;
+            private readonly PropertyInfo? _info;
             private readonly bool _includeNulls;
-
-            public PropertyObservable(INotifyPropertyChanged target, PropertyInfo info, bool includeNulls)
+            public PropertyObservable(INotifyPropertyChanged target, PropertyInfo? info = null, bool includeNulls = false)
             {
                 _target = target;
                 _info = info;
@@ -26,6 +25,7 @@ namespace Utility.PropertyNotifications
                 private readonly PropertyInfo _info;
                 private readonly IObserver<T> _observer;
                 private readonly bool _includeNulls;
+                private Dictionary<string, PropertyInfo> dictionary = new();
 
                 public Subscription(INotifyPropertyChanged target, PropertyInfo info, IObserver<T> observer, bool includeNulls)
                 {
@@ -37,9 +37,18 @@ namespace Utility.PropertyNotifications
                     raiseChange();
                 }
 
-                private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+                private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
                 {
-                    if (e.PropertyName == _info.Name)
+                    if (_info == null && e.PropertyName is string pName)
+                    {
+                        if (dictionary.ContainsKey(pName) == false)
+                        {
+                            dictionary[pName] = _target.GetType().GetProperty(pName);
+                        }
+                        var value = (T?)dictionary[pName].GetValue(_target);
+                        _observer.OnNext(value);
+                    }
+                    else if (e.PropertyName == _info.Name)
                         raiseChange();
                 }
 
@@ -51,7 +60,7 @@ namespace Utility.PropertyNotifications
 
                 private void raiseChange()
                 {
-                    var value = (T)_info.GetValue(_target);
+                    var value = (T?)_info?.GetValue(_target);
                     if (value != null || _includeNulls)
                         _observer.OnNext(value);
                 }
@@ -70,6 +79,18 @@ namespace Utility.PropertyNotifications
             var ma = (MemberExpression)l.Body;
             var prop = (PropertyInfo)ma.Member;
             return new PropertyObservable<TRes>(model, prop, includeNulls);
+        }
+
+        public static IObservable<object> WithChanges<TModel>(this TModel model, bool includeNulls = false) where TModel : INotifyPropertyChanged
+        {
+            return new PropertyObservable<object>(model, null, includeNulls);
+        }
+
+
+        public static IObservable<TRes> WithChanges<TModel, TRes>(this TModel model, bool includeNulls = false) where TModel : INotifyPropertyChanged
+        {
+
+            return new PropertyObservable<TRes>(model, null, includeNulls);
         }
 
         //public static IObservable<TRes> WhenAnyValue<TModel, T1, T2, TRes>(this TModel model,
