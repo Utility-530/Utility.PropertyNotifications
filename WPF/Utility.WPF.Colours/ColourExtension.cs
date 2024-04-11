@@ -12,7 +12,7 @@ namespace Utility.WPF.Colours
 {
     public class RedExtension : ColourExtension
     {
-        public RedExtension() : this(ColourIntensity.FiveHundred, null)
+        public RedExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -24,11 +24,10 @@ namespace Utility.WPF.Colours
         {
         }
     }
-    //Pink,Pink, Purple, DeepPurple, Indigo, Blue, LightBlue, Cyan, Teal, Green, LightGreen, Lime, Yellow, Amber, Orange, DeepOrange, Brown, Grey, BlueGrey
 
     public class PinkExtension : ColourExtension
     {
-        public PinkExtension() : this(ColourIntensity.FiveHundred, null)
+        public PinkExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -42,7 +41,7 @@ namespace Utility.WPF.Colours
     }
     public class PurpleExtension : ColourExtension
     {
-        public PurpleExtension() : this(ColourIntensity.FiveHundred, null)
+        public PurpleExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -50,13 +49,13 @@ namespace Utility.WPF.Colours
         {
         }
 
-        public PurpleExtension(ColourIntensity value, Type? type) : base(Colour.Purple, value , type)
+        public PurpleExtension(ColourIntensity value, Type? type) : base(Colour.Purple, value, type)
         {
         }
     }
     public class DeepPurpleExtension : ColourExtension
     {
-        public DeepPurpleExtension() : this(ColourIntensity.FiveHundred, null)
+        public DeepPurpleExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -64,13 +63,13 @@ namespace Utility.WPF.Colours
         {
         }
 
-        public DeepPurpleExtension(ColourIntensity value, Type? type) : base(Colour.DeepPurple, value , type)
+        public DeepPurpleExtension(ColourIntensity value, Type? type) : base(Colour.DeepPurple, value, type)
         {
         }
     }
     public class IndigoExtension : ColourExtension
     {
-        public IndigoExtension() : this(ColourIntensity.FiveHundred, null)
+        public IndigoExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -78,13 +77,13 @@ namespace Utility.WPF.Colours
         {
         }
 
-        public IndigoExtension(ColourIntensity value, Type? type) : base(Colour.Indigo, value , type)
+        public IndigoExtension(ColourIntensity value, Type? type) : base(Colour.Indigo, value, type)
         {
         }
     }
     public class BlueExtension : ColourExtension
     {
-        public BlueExtension() : this(ColourIntensity.FiveHundred, null)
+        public BlueExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -92,13 +91,13 @@ namespace Utility.WPF.Colours
         {
         }
 
-        public BlueExtension(ColourIntensity value, Type? type) : base(Colour.Blue, value , type)
+        public BlueExtension(ColourIntensity value, Type? type) : base(Colour.Blue, value, type)
         {
         }
     }
     public class TealExtension : ColourExtension
     {
-        public TealExtension() : this(ColourIntensity.FiveHundred, null)
+        public TealExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -106,13 +105,13 @@ namespace Utility.WPF.Colours
         {
         }
 
-        public TealExtension(ColourIntensity value, Type? type) : base(Colour.Teal, value , type)
+        public TealExtension(ColourIntensity value, Type? type) : base(Colour.Teal, value, type)
         {
         }
     }
     public class CyanExtension : ColourExtension
     {
-        public CyanExtension() : this(ColourIntensity.FiveHundred, null)
+        public CyanExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -126,7 +125,7 @@ namespace Utility.WPF.Colours
     }
     public class GreenExtension : ColourExtension
     {
-        public GreenExtension() : this(ColourIntensity.FiveHundred, null)
+        public GreenExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -134,13 +133,13 @@ namespace Utility.WPF.Colours
         {
         }
 
-        public GreenExtension(ColourIntensity value, Type? type) : base(Colour.Green, value , type)
+        public GreenExtension(ColourIntensity value, Type? type) : base(Colour.Green, value, type)
         {
         }
     }
     public class LightGreenExtension : ColourExtension
     {
-        public LightGreenExtension() : this(ColourIntensity.FiveHundred, null)
+        public LightGreenExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -152,11 +151,9 @@ namespace Utility.WPF.Colours
         {
         }
     }
-    //Pink,Pink, Purple, DeepPurple, Indigo, Blue, LightBlue, Cyan, Teal, Green, LightGreen, Lime, Yellow, Amber, Orange, DeepOrange, Brown, Grey, BlueGrey
-
     public class LimeExtension : ColourExtension
     {
-        public LimeExtension() : this(ColourIntensity.FiveHundred, null)
+        public LimeExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -164,14 +161,14 @@ namespace Utility.WPF.Colours
         {
         }
 
-        public LimeExtension(ColourIntensity value, Type? type) : base(Colour.Lime, value , type)
+        public LimeExtension(ColourIntensity value, Type? type) : base(Colour.Lime, value, type)
         {
         }
     }
 
     public class YellowExtension : ColourExtension
     {
-        public YellowExtension() : this(ColourIntensity.FiveHundred, null)
+        public YellowExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -186,7 +183,7 @@ namespace Utility.WPF.Colours
 
     public class AmberExtension : ColourExtension
     {
-        public AmberExtension() : this(ColourIntensity.FiveHundred, null)
+        public AmberExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -201,7 +198,7 @@ namespace Utility.WPF.Colours
 
     public class OrangeExtension : ColourExtension
     {
-        public OrangeExtension() : this(ColourIntensity.FiveHundred, null)
+        public OrangeExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -209,14 +206,14 @@ namespace Utility.WPF.Colours
         {
         }
 
-        public OrangeExtension(ColourIntensity value, Type? type) : base(Colour.Orange, value , type)
+        public OrangeExtension(ColourIntensity value, Type? type) : base(Colour.Orange, value, type)
         {
         }
     }
 
     public class DeepOrangeExtension : ColourExtension
     {
-        public DeepOrangeExtension() : this(ColourIntensity.FiveHundred, null)
+        public DeepOrangeExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -224,7 +221,7 @@ namespace Utility.WPF.Colours
         {
         }
 
-        public DeepOrangeExtension(ColourIntensity value, Type? type) : base(Colour.DeepOrange, value , type)
+        public DeepOrangeExtension(ColourIntensity value, Type? type) : base(Colour.DeepOrange, value, type)
         {
         }
     }
@@ -232,7 +229,7 @@ namespace Utility.WPF.Colours
 
     public class BrownExtension : ColourExtension
     {
-        public BrownExtension() : this(ColourIntensity.FiveHundred, null)
+        public BrownExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -248,7 +245,7 @@ namespace Utility.WPF.Colours
 
     public class GreyExtension : ColourExtension
     {
-        public GreyExtension() : this(ColourIntensity.FiveHundred, null)
+        public GreyExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -256,7 +253,7 @@ namespace Utility.WPF.Colours
         {
         }
 
-        public GreyExtension(ColourIntensity value, Type? type) : base(Colour.Grey,value, type)
+        public GreyExtension(ColourIntensity value, Type? type) : base(Colour.Grey, value, type)
         {
         }
     }
@@ -264,7 +261,7 @@ namespace Utility.WPF.Colours
 
     public class BlueGreyExtension : ColourExtension
     {
-        public BlueGreyExtension() : this(ColourIntensity.FiveHundred, null)
+        public BlueGreyExtension() : this(ColourIntensity.Default, null)
         {
         }
 
@@ -280,9 +277,11 @@ namespace Utility.WPF.Colours
 
     public class ColourExtension : MarkupExtension
     {
+
+
         public enum ColourIntensity
         {
-            Fifty, OneHundred, TwoHundred, ThreeHundred, FourHundred, FiveHundred, SixHundred, SevenHundred, EightHundred, NineHundred, AlphaOneHundred, AlphaTwoHundred, AlphaFourHundred, AlphaSevenHundred
+            Fifty, OneHundred, TwoHundred, ThreeHundred, FourHundred, FiveHundred, SixHundred, SevenHundred, EightHundred, NineHundred, AlphaOneHundred, AlphaTwoHundred, AlphaFourHundred, AlphaSevenHundred, Default = TwoHundred
         }
 
 
