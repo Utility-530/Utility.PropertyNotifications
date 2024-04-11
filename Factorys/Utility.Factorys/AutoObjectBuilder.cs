@@ -24,7 +24,7 @@ public class AutoMoqer
         //if (constructors.Length > 1)
         //    throw new ArgumentException("Multiple public constructors found");
 
-        var primaryConstructor = constructors.MinBy(a=>a.GetParameters());
+        var primaryConstructor = constructors.MinBy(a=>a.GetParameters().Count());
         if (primaryConstructor == null)
             throw new ArgumentException("Could not find a public constructor");
 
