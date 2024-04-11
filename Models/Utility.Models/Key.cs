@@ -1,9 +1,10 @@
-﻿using System.Collections;
-using System.Formats.Asn1;
-using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Models
@@ -15,97 +16,6 @@ namespace Utility.Models
         {
         }
     }
-
-    public class StringKey : IEquatable
-    {
-        public StringKey(string? value)
-        {
-            Value = value;
-        }
-
-        public bool Equals(IEquatable? other)
-        {
-            return (other as StringKey)?.Value?.Equals(Value) == true;
-        }
-
-        public string? Value { get; init; }
-    }
-
-    public class ValueKey<T> : IEquatable
-    {
-        public ValueKey(T? value)
-        {
-            Value = value;
-        }
-
-        public bool Equals(IEquatable? other)
-        {
-            return (other as ValueKey<T>)?.Value?.Equals(Value) == true;
-        }
-
-        public T? Value { get; init; }
-    }
-
-    public class IntKey : ValueKey<int>
-    {
-        public IntKey(int value) : base(value)
-        {
-        }
-    }
-
-    public class GuidKey : ValueKey<Guid>
-    {
-        public GuidKey(Guid? value = default) : base(value?? Guid.NewGuid())
-        {
-        }
-    }
-
-
-    public class ComboKey : StringKey, IEnumerable<int>
-    {
-        private readonly int[] value;
-
-        public ComboKey(params int[] value) : base(string.Join( ",", value))
-        {
-            this.value = value;
-        }
-
-        public IEnumerator<int> GetEnumerator()
-        {
-            return (IEnumerator<int>)value.ToList().GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return value.GetEnumerator();
-        }
-    }
-
-    public class CombinationKey : IEquatable
-    {
-        public CombinationKey(IEquatable[] equatables)
-        {
-            Equatables = equatables;
-        }
-
-        public IEquatable[] Equatables { get; }
-
-        public bool Equals(IEquatable? other)
-        {
-            return Equals(other as CombinationKey);
-        }
-
-        public bool Equals(CombinationKey? other)
-        {
-            return this.Equatables.Join(other?.Equatables ?? Array.Empty<IEquatable>(), a => a, a => a, (a, b) => a.Equals(b)).All(a => a);
-        }
-
-        public override bool Equals(object? obj)
-        {
-            return Equals(obj as CombinationKey);
-        }
-    }
-
     public class Key : ISerialise, IGuid, IType, IName, IEquatable, IEquatable<ISerialise>
     {
         public Key(Guid guid, string name, Type type)
