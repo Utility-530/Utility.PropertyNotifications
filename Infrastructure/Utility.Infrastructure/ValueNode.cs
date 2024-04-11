@@ -6,6 +6,7 @@ using System.Collections;
 using System.ComponentModel;
 using Utility.Infrastructure;
 using Utility.Trees.Abstractions;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Nodes
 {
@@ -26,7 +27,7 @@ namespace Utility.Nodes
             _children.CollectionChanged += (s, e) => CollectionChanged?.Invoke(this, e);
         }
 
-        IEquatable IReadOnlyTree.Key => this.Key;
+        string IKey.Key => this.Key.ToString();
 
         public IReadOnlyTree Parent { get; set; }
 
@@ -77,7 +78,6 @@ namespace Utility.Nodes
             }
         }
 
-
         protected virtual void PropertyChanged_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Item[]")
@@ -109,6 +109,11 @@ namespace Utility.Nodes
         public abstract IEnumerator<ITree> GetEnumerator();
 
         public bool Equals(IReadOnlyTree? other)
+        {
+            return Key.Equals(other?.Key);
+        }
+
+        public bool Equals(IKey<IEquatable>? other)
         {
             return Key.Equals(other?.Key);
         }
