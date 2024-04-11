@@ -8,7 +8,7 @@ using Utility.Observables.NonGeneric;
 
 namespace Utility.Collections
 {
-    public class Collection : SortableObservableCollection<object>, IObservable
+    public class Collection : SortableObservableCollection<object>, IObservable, IComplete
     {
         private DeferredEventsCollection _deferredEvents;
         List<IObserver> observers = new List<IObserver>();
