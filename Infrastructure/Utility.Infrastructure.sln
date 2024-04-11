@@ -43,7 +43,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Attributes", "Utili
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Changes", "Utility.Changes\Utility.Changes.csproj", "{9AA33B14-036D-48E7-A7DF-50F61F9EB55E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Entities", "Utility.Entities\Utility.Entities.csproj", "{5AB0E457-A3C7-4FAF-9FB0-C5DDB0A03C03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Entities", "Utility.Entities\Utility.Entities.csproj", "{5AB0E457-A3C7-4FAF-9FB0-C5DDB0A03C03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Keys", "Utility.Keys\Utility.Keys.csproj", "{5DF334F5-C68C-4C92-ACAB-F15F4DBBD395}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -131,6 +133,10 @@ Global
 		{5AB0E457-A3C7-4FAF-9FB0-C5DDB0A03C03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AB0E457-A3C7-4FAF-9FB0-C5DDB0A03C03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AB0E457-A3C7-4FAF-9FB0-C5DDB0A03C03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DF334F5-C68C-4C92-ACAB-F15F4DBBD395}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DF334F5-C68C-4C92-ACAB-F15F4DBBD395}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DF334F5-C68C-4C92-ACAB-F15F4DBBD395}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DF334F5-C68C-4C92-ACAB-F15F4DBBD395}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
