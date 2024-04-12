@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.ProjectStructure;
 using Utility.WPF.Converters;
 using Utility.WPF.Factorys;
 using Utility.WPF.ResourceDictionarys;
