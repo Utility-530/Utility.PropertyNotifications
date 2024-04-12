@@ -20,24 +20,25 @@ using System.Reactive.Subjects;
 using System.Reactive;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Utility.ProjectStructure;
 
 namespace Utility.WPF.Controls.Meta.ViewModels
 {
-    public class StringMatchFilter : StringMatchFilter<AssemblyKeyValue>
-    {
-    }
+    //public class StringMatchFilter : StringMatchFilter<AssemblyKeyValue>
+    //{
+    //}
 
-    public class AssemblyTypeFilter : PropertyFilter<AssemblyKeyValue>
-    {
-        public AssemblyTypeFilter() : base(nameof(AssemblyKeyValue.CategoryKey))
-        {
-        }
+    //public class AssemblyTypeFilter : PropertyFilter<AssemblyKeyValue>
+    //{
+    //    public AssemblyTypeFilter() : base(nameof(AssemblyKeyValue.CategoryKey))
+    //    {
+    //    }
 
-        protected override object Set(string value)
-        {
-            return Enum.Parse(typeof(AssemblyType), value);
-        }
-    }
+    //    protected override object Set(string value)
+    //    {
+    //        return Enum.Parse(typeof(AssemblyType), value);
+    //    }
+    //}
 
 
     public class AssemblyComboBoxService : ComboBoxServcice
@@ -48,15 +49,15 @@ namespace Utility.WPF.Controls.Meta.ViewModels
         {
             FreeSqlFactory.InitialiseSQLite();
 
-            demoTypeViewModel = OutputNode<FilteredCustomCheckBoxesViewModel>.Create(() =>
-            {
-                var assemblies = Helper.FindAssemblies().Select(a => new AssemblyKeyValue(a.Item1, a.Item2));
-                var filters = new Filter[] { new StringMatchFilter(), new AssemblyTypeFilter() };
+            //demoTypeViewModel = OutputNode<FilteredCustomCheckBoxesViewModel>.Create(() =>
+            //{
+            //    //var assemblies = Helper.FindAssemblies().Select(a => new AssemblyKeyValue(a.Item1));
+            //    //var filters = new Filter[] { new StringMatchFilter(), /*new AssemblyTypeFilter()*/ };
 
-                return UpdateAndCreate(assemblies, filters, deselectSubject);
+            //    return UpdateAndCreate(assemblies, filters, deselectSubject);
 
 
-            });
+            //});
         }
     }
 
@@ -106,11 +107,11 @@ namespace Utility.WPF.Controls.Meta.ViewModels
             selectedItemViewModel = FunctionNode<object, object>.Create(@in =>
             {
                 return @in
-                    .OfType<WPF.Meta.KeyValue>()
+                    .OfType<KeyValue>()
                     .Select(a => UpdateSelected(a))
                     .SelectMany(a => a.ToObservable());
 
-                static async System.Threading.Tasks.Task<WPF.Meta.KeyValue> UpdateSelected(WPF.Meta.KeyValue item)
+                static async System.Threading.Tasks.Task<KeyValue> UpdateSelected(KeyValue item)
                 {
                     if (item.Key != null)
                     {
@@ -138,7 +139,7 @@ namespace Utility.WPF.Controls.Meta.ViewModels
         }
 
 
-        protected static IObservable<FilteredCustomCheckBoxesViewModel> UpdateAndCreate(IEnumerable<WPF.Meta.KeyValue> assemblies, Filter[] filters, IObservable<Unit> observable)
+        protected static IObservable<FilteredCustomCheckBoxesViewModel> UpdateAndCreate(IEnumerable<KeyValue> assemblies, Filter[] filters, IObservable<Unit> observable)
         {
             return Update(assemblies.ToArray())
             .ToObservable()
@@ -155,7 +156,7 @@ namespace Utility.WPF.Controls.Meta.ViewModels
             });
         }
 
-        private static async System.Threading.Tasks.Task<ViewModelEntity[]> Update(WPF.Meta.KeyValue[] collection)
+        private static async System.Threading.Tasks.Task<ViewModelEntity[]> Update(KeyValue[] collection)
         {
             ViewModelEntity[] array = collection
                 .Select(a => new ViewModelEntity { Key = a.Key, Value = (a.Value as Type)?.AsString() ?? "No Value" , IsChecked = true})
@@ -163,7 +164,7 @@ namespace Utility.WPF.Controls.Meta.ViewModels
                 .ToArray();
             var items = (await ViewModelEntity.Select.ToListAsync()).OrderBy(a => a.UpdateTime == default ? a.CreateTime : a.UpdateTime);
 
-            List<WPF.Meta.KeyValue> list = new();
+            List<KeyValue> list = new();
             foreach (var item in items)
                 for (int i = 0; i < collection.Length; i++)
                 {

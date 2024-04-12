@@ -7,8 +7,9 @@ using Utility.WPF.Controls.Buttons;
 using Utility.Enums;
 using System.Reflection;
 using ReactiveUI;
-using Utility.WPF.Meta;
 using Utility.WPF.Factorys;
+using Utility.Interfaces.NonGeneric;
+using Utility.WPF.Meta;
 
 namespace Utility.WPF.Controls.Meta
 {
@@ -38,7 +39,7 @@ namespace Utility.WPF.Controls.Meta
                     };
                     Binding binding = new()
                     {
-                        Path = new PropertyPath(nameof(KeyValue.Key)),
+                        Path = new PropertyPath(nameof(IKey.Key)),
                     };
                     textBlock.SetBinding(TextBlock.TextProperty, binding);
                     return textBlock;

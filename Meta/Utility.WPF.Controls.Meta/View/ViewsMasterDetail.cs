@@ -13,7 +13,9 @@ using Utility.WPF.Controls.Base;
 using Utility.WPF.Meta;
 using Utility.WPF.Controls.Master;
 using Utility.Enums;
-using KeyValue = Utility.WPF.Meta.KeyValue;
+using System.Collections;
+using System.Collections.Generic;
+using Utility.WPF.ResourceDictionarys;
 
 namespace Utility.WPF.Controls.Meta
 {
@@ -45,7 +47,7 @@ namespace Utility.WPF.Controls.Meta
                         return a.Second switch
                         {
                             AssemblyType.UserControl => a.First.ViewTypes(),
-                            AssemblyType.ResourceDictionary => ResourceDictionaryKeyValue.ResourceViewTypes(a.First).Cast<KeyValue>(),
+                            AssemblyType.ResourceDictionary => ResourceDictionaryKeyValue.ResourceViewTypes(a.First).Cast<WPF.Meta.KeyValue>(),
                             _ => throw new Exception("FDGS££Fff"),
                         };
                     })
@@ -77,7 +79,7 @@ namespace Utility.WPF.Controls.Meta
 
                     Binding binding = new()
                     {
-                        Path = new PropertyPath(nameof(KeyValue.Key)),
+                        Path = new PropertyPath(nameof(Utility.WPF.Meta.KeyValue.Key)),
                     };
                     textBlock.SetBinding(TextBlock.TextProperty, binding);
                     return textBlock;
@@ -94,7 +96,7 @@ namespace Utility.WPF.Controls.Meta
                     Grid.SetRow(contentControl, 1);
                     var binding = new Binding
                     {
-                        Path = new PropertyPath(nameof(KeyValue.Value)),
+                        Path = new PropertyPath(nameof(Utility.WPF.Meta.KeyValue.Value)),
                     };
                     contentControl.SetBinding(ContentProperty, binding);
                     return contentControl;

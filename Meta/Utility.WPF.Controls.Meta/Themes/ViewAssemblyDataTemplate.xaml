@@ -4,11 +4,11 @@
 
     <!-- Used by ViewHostControl-->
 
-    <DataTemplate DataType="{x:Type meta:AssemblyKeyValue}">
+    <!--<DataTemplate DataType="{x:Type meta:AssemblyKeyValue}">
 
         <TextBlock MinHeight="20" MinWidth="100"
                             Margin="32,0,32,0"
                             FontSize="14"
                             Text="{Binding Key}" />
-    </DataTemplate>
+    </DataTemplate>-->
 </ResourceDictionary>

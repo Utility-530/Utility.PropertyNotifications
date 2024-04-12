@@ -4,9 +4,9 @@
                     xmlns:temp="http://schemas.utility.com/templates"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <DataTemplate DataType="{x:Type local:StringMatchFilter}">
-        <TextBox MinWidth="200" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-    </DataTemplate>
+    <!--<DataTemplate DataType="{x:Type local:StringMatchFilter}">
+        --><!--<TextBox MinWidth="200" Text="{Binding Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></TextBox>--><!--
+    </DataTemplate>-->
 
     <DataTemplate DataType="{x:Type uvm:CheckViewModel}">
         <Grid Width="300">
@@ -24,7 +24,7 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type local:AssemblyTypeFilter}">
+    <!--<DataTemplate DataType="{x:Type local:AssemblyTypeFilter}">
         <ComboBox Width="100" ItemsSource="{Binding Values}" SelectedItem="{Binding Path=SelectedValue}" />
-    </DataTemplate>
+    </DataTemplate>-->
 </ResourceDictionary>
