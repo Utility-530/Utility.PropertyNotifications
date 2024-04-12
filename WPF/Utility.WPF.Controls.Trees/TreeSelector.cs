@@ -7,14 +7,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Trees.Abstractions;
-using Utility.WPF.Demo.Trees;
 using Utility.WPF.Factorys;
 
 namespace Utility.WPF.Controls.Trees
 {
-
-
-
     public class TreeSelector : ComboBoxTreeView
     {
         private HierarchicalDataTemplate hierarchicalDataTemplate;
@@ -40,7 +36,7 @@ namespace Utility.WPF.Controls.Trees
             });
             ItemTemplate = hierarchicalDataTemplate;
             hierarchicalDataTemplate.ItemsSource = new Binding(nameof(ITree.Items));
-            ParentPath = nameof(ITree.Parent);
+            ParentPath = nameof(IReadOnlyTree.Parent);
         }
 
 

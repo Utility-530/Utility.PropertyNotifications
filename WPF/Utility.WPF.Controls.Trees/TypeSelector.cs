@@ -1,13 +1,16 @@
-﻿using ReactiveUI;
+﻿using MoreLinq;
+using ReactiveUI;
 using System;
 using System.Collections;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Utility.Extensions;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
@@ -16,90 +19,90 @@ namespace Utility.WPF.Controls.Trees
 {
     public class TypeSelector : TreeSelector
     {
-        public static readonly DependencyProperty AssembliesProperty = DependencyProperty.Register("Assemblies", typeof(IEnumerable), typeof(TypeSelector), new PropertyMetadata(Changed));
+        public static readonly DependencyProperty AssembliesProperty = DependencyProperty.Register("Assemblies", typeof(IEnumerable), typeof(TypeSelector), new PropertyMetadata(AssembliesChanged));
         public static readonly DependencyProperty TypeProperty = DependencyProperty.Register("Type", typeof(Type), typeof(TypeSelector), new PropertyMetadata(TypeChanged));
 
         private static void TypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is TypeSelector typeSelector && e.NewValue is Type type)
+            if (d is TypeSelector { ItemsSource: IReadOnlyTree tree } typeSelector && e.NewValue is Type type)
             {
-                typeSelector.ChangeType();
+                typeSelector.ChangeType(tree, type);
             }
         }
 
-        void ChangeType()
-        {
-            if (Type != null && _treeView != null && this.ItemsSource is Tree tree)
-            {
-                if (tree.MatchDescendant(a => a.Data is Type type && type == Type) is ViewModelTree { } innerTree)
-                {
-                    IsError = false;
-                    innerTree.IsSelected = true;
-                    innerTree.OnPropertyChanged(nameof(ViewModelTree.IsSelected));
-                    //behavior.SelectedItem = innerTree;
-                    UpdateSelectedItem(innerTree);
-
-                }
-                else
-                {
-                    IsError = true;
-                }
-            }
-        }
-
-        private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void AssembliesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is TypeSelector typeSelector && e.NewValue is IEnumerable enumerable)
             {
-                typeSelector.ItemsSource = Ex.ToTree(enumerable.Cast<Assembly>().ToArray());
+                Set(typeSelector, enumerable);
+                if (enumerable is IReadOnlyTree tree && typeSelector.Type is Type type)
+                    typeSelector.ChangeType(tree, type);
             }
         }
 
+
         public TypeSelector()
         {
-            if (Assemblies != null)
-                this.ItemsSource = Ex.ToTree(Assemblies.Cast<Assembly>().ToArray());
-            this.ItemTemplateSelector = CustomItemTemplateSelector.Instance;
-            this.WhenAnyValue(a => a.SelectedItems)
+            this.SelectedItemTemplateSelector = CustomItemTemplateSelector.Instance;
+
+            this.WhenAnyValue(a => a.SelectedNode)
+                .OfType<IReadOnlyTree>()
+                .Select(a => a.Data)
+                .OfType<Type>()
                 .Subscribe(a =>
                 {
-                    if (a is IEnumerable enumerable)
-                        foreach (var x in enumerable)
-                            if (x is IReadOnlyTree { Data: Type type })
-                                Type = type;
+                    Type = a;
                 });
 
-            this.WhenAnyValue(a => a.ItemsSource)
-                .WhereNotNull()
-                .Subscribe(a =>
-                {
-                    ChangeType();
-                });
-
-
-
-            //behavior = new TreeViewSelectionBehavior();
-            //behavior.HierarchyPredicate = Pred;
-            //behavior.WhenAnyValue(a => a.SelectedItem)
+            //this.WhenAnyValue(a => a.ItemsSource)
+            //    .WhereNotNull()
             //    .Subscribe(a =>
             //    {
-
+            //        if (a is IReadOnlyTree tree && Type is Type type)
+            //            ChangeType(tree, type);
             //    });
-
 
         }
 
-        //private bool Pred(object a, object b)
-        //{
-        //    return true;
-        //}
+        void ChangeType(IReadOnlyTree tree, Type _type)
+        {
+            if (tree.MatchDescendant(a => a.Data is Type type && type == _type) is IReadOnlyTree { } innerTree)
+            {
+                IsError = false;
+                UpdateSelectedItems(innerTree);
+                if (_treeView?.ItemContainerGenerator.ContainerFromItem(_treeView.SelectedItem) is TreeViewItem item)
+                    item.IsSelected = true;
+                SelectedNode = innerTree;
+            }
+            else
+            {
+                IsError = true;
+            }
+        }
+
+
+ 
+        static void Set(TypeSelector typeSelector, IEnumerable enumerable)
+        {
+
+            var assemblyTree = Ex.ToTree(enumerable.Cast<Assembly>().ToArray());
+
+            typeSelector.ItemsSource = assemblyTree; 
+        }
+
 
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            //Interaction.GetBehaviors(_treeView).Add(behavior);
-            ChangeType();
+            if (Assemblies != null)
+                Set(this, Assemblies);
+
+            if (Type is Type type && _treeView != null && this.ItemsSource is IReadOnlyTree tree)
+            {
+                ChangeType(tree, type);
+            }
         }
+
 
         public Type Type
         {
@@ -118,21 +121,23 @@ namespace Utility.WPF.Controls.Trees
         {
             public override DataTemplate SelectTemplate(object item, DependencyObject container)
             {
-                if (item is IReadOnlyTree { Data: System.Type type })
+                if (item is IReadOnlyTree { Data: var data } tree)
                 {
-                    return TemplateGenerator.CreateDataTemplate(() =>
-                    {
+                    if (data is Type type)
+                        return TemplateGenerator.CreateDataTemplate(() =>
+                        {
 
-                        var textBlock = new TextBlock { };
-                        Binding binding = new() { Path = new PropertyPath(nameof(System.Type.Name)) };
-                        Binding binding2 = new() { Path = new PropertyPath(nameof(IReadOnlyTree.Data)) };
-                        textBlock.SetBinding(TextBlock.TextProperty, binding);
-                        textBlock.SetBinding(TextBlock.DataContextProperty, binding2);
-                        return textBlock;
-                    });
+                            var textBlock = new TextBlock { };
+                            Binding binding = new() { Path = new PropertyPath(nameof(System.Type.Name)) };
+                            Binding binding2 = new() { Path = new PropertyPath(nameof(IReadOnlyTree.Data)) };
+                            textBlock.SetBinding(TextBlock.TextProperty, binding);
+                            textBlock.SetBinding(TextBlock.DataContextProperty, binding2);
+                            return textBlock;
+                        });
+                    return TemplateGenerator.CreateDataTemplate(() => new Ellipse { Fill = Brushes.Black, Height = 2, Width = 2, VerticalAlignment = VerticalAlignment.Bottom, ToolTip = new ContentControl { Content = data }, Margin = new Thickness(4, 0, 4, 0) });
+
                 }
-                return TemplateGenerator.CreateDataTemplate(() => new Ellipse { Fill = Brushes.Black, Height = 2, Width = 2, VerticalAlignment = VerticalAlignment.Bottom, Margin = new Thickness(2, 0, 2, 0) });
-
+                throw new Exception("d ss!$sd");
             }
 
             public static CustomItemTemplateSelector Instance { get; } = new();

@@ -378,21 +378,43 @@
                         IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, 
               RelativeSource={RelativeSource TemplatedParent}}"/>
                                 <Grid            IsHitTestVisible="False">
-                                    <ItemsControl x:Name="ContentSite"        
+                                    <local:CustomItemsControl x:Name="ContentSite"        
                                       VerticalAlignment="Center" VerticalContentAlignment="Center"
                                       HorizontalContentAlignment="Center"
                                       HorizontalAlignment="Left"
                             ItemsSource="{Binding SelectedItems, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                             ItemTemplate="{TemplateBinding SelectedItemTemplate}"
-                            ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                            ItemTemplateSelector="{TemplateBinding  SelectedItemTemplateSelector}"
                             Margin="3,3,23,3">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <WrapPanel Orientation="Horizontal"></WrapPanel>
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
-
-                                    </ItemsControl>
+                                        <ItemsControl.ItemContainerStyle>
+                                            <Style>
+                                                <Setter Property="Control.Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="ContentControl">
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <Path 
+                  x:Name="Arrow"
+                  Grid.Column="1"     
+                  Fill="Black"
+                         Margin="4,0,4,0" 
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Data="M0,0 L2,0 L6,4 L2,8 L0,8 L4,4 z"
+                />
+                                                                <ContentPresenter />
+                                                           
+                                                            </StackPanel>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </ItemsControl.ItemContainerStyle>
+                                    </local:CustomItemsControl>
                                 </Grid>
                                 <TextBox x:Name="PART_EditableTextBox"
                    Style="{x:Null}"
@@ -424,12 +446,14 @@
                                     </Border.Background>-->
                                         </Border>
                                         <ScrollViewer Margin="4,6,4,6"
-                            SnapsToDevicePixels="True">
+                                                      SnapsToDevicePixels="True">
                                             <local:ExtendedTreeView x:Name="treeView" 
-                                                            IsCheckedPath="{TemplateBinding IsCheckedPath}"
-                                                            IsExpandedPath="{TemplateBinding IsExpandedPath}"
-                                                            IsSelectedPath="{TemplateBinding IsSelectedPath}"
-                                                            ItemsSource="{TemplateBinding ItemsSource}" ItemTemplate="{TemplateBinding ItemTemplate}" />
+                                                                    IsCheckedPath="{TemplateBinding IsCheckedPath}"
+                                                                    IsExpandedPath="{TemplateBinding IsExpandedPath}"
+                                                                    IsSelectedPath="{TemplateBinding IsSelectedPath}"
+                                                                    ItemsSource="{TemplateBinding ItemsSource}" 
+                                                                    ItemTemplate="{TemplateBinding ItemTemplate}"
+                                                                    ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"/>
                                         </ScrollViewer>
                                     </Grid>
                                 </Popup>

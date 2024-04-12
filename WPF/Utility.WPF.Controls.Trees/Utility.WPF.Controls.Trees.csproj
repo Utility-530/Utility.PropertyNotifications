@@ -16,16 +16,18 @@
 		</Compile>
 		<Compile Update="ComboBoxTreeView.cs">
 			<DependentUpon>ComboBoxTreeView.xaml</DependentUpon>
+		</Compile>	
+			<Compile Update="AssemblyTreeSelector.cs">
+			<DependentUpon>AssemblyTreeSelector.xaml</DependentUpon>
 		</Compile>
 	</ItemGroup>
 	<ItemGroup>
+		<ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
+		<ProjectReference Include="..\..\Infrastructure\Utility.Keys.WPF\Utility.Keys.WPF.csproj" />
 		<ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
 		<ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Infrastructure\" />
 	</ItemGroup>
 
 </Project>

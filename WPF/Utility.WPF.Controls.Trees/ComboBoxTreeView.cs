@@ -9,27 +9,64 @@ using System.Windows.Input;
 
 namespace Utility.WPF.Controls.Trees
 {
+
+    public class CustomItemsControl : ItemsControl
+    {
+        protected override DependencyObject GetContainerForItemOverride()
+        {
+            return new ContentControl();
+        }
+
+        protected override bool IsItemItsOwnContainerOverride(object item)
+        {
+            // Even wrap other ContentControls
+            return false;
+        }
+    }
+
+
     public class ComboBoxTreeView : ComboBox
     {
-        public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register("SelectedItems", typeof(IEnumerable), typeof(ComboBoxTreeView), new PropertyMetadata(null));
+        public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register("SelectedItems", typeof(IEnumerable), typeof(ComboBoxTreeView), new PropertyMetadata(null, Changed2));
         public static readonly DependencyProperty ParentPathProperty = DependencyProperty.Register("ParentPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata());
-        public static readonly DependencyProperty SelectedNodeProperty = DependencyProperty.Register("SelectedNode", typeof(object), typeof(ComboBoxTreeView), new FrameworkPropertyMetadata(default));
+        public static readonly DependencyProperty SelectedNodeProperty = DependencyProperty.Register("SelectedNode", typeof(object), typeof(ComboBoxTreeView), new FrameworkPropertyMetadata(default, Changed));
+
+
         public static readonly DependencyProperty IsCheckedPathProperty = DependencyProperty.Register("IsCheckedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty IsExpandedPathProperty = DependencyProperty.Register("IsExpandedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata("IsExpanded"));
         public static readonly DependencyProperty IsSelectedPathProperty = DependencyProperty.Register("IsSelectedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata("IsSelected"));
         public static readonly DependencyProperty SelectedItemTemplateProperty = DependencyProperty.Register("SelectedItemTemplate", typeof(DataTemplate), typeof(ComboBoxTreeView), new PropertyMetadata());
+        public static readonly DependencyProperty SelectedItemTemplateSelectorProperty = DependencyProperty.Register("SelectedItemTemplateSelector", typeof(DataTemplateSelector), typeof(ComboBoxTreeView), new PropertyMetadata());
+        public static readonly DependencyProperty IsErrorProperty = DependencyProperty.Register("IsError", typeof(bool), typeof(ComboBoxTreeView), new PropertyMetadata(false));
 
 
-        public bool IsError
+        private static void Changed2(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            get { return (bool)GetValue(IsErrorProperty); }
-            set { SetValue(IsErrorProperty, value); }
+            if(d is ComboBoxTreeView treeView && e.NewValue is { } value)
+            {
+                treeView.SelectedNodesChanged(value);
+
+            }
+        }
+        
+        private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if(d is ComboBoxTreeView treeView && e.NewValue is { } value)
+            {
+                treeView.SelectedNodeChanged(value);
+
+            }
         }
 
-        // Using a DependencyProperty as the backing store for IsError.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IsErrorProperty =
-            DependencyProperty.Register("IsError", typeof(bool), typeof(ComboBoxTreeView), new PropertyMetadata(false));
+        protected virtual void SelectedNodeChanged(object value)
+        {
 
+        }
+             
+        protected virtual void SelectedNodesChanged(object value)
+        {
+
+        }
 
         protected ExtendedTreeView _treeView;
         private ObservableCollection<object> list = new();
@@ -50,7 +87,7 @@ namespace Utility.WPF.Controls.Trees
             _treeView.OnHierarchyMouseUp += new MouseEventHandler(OnTreeViewHierarchyMouseUp);
             _treeView.OnChecked += _treeView_OnChecked;
             if (_treeView.SelectedItem != null)
-                UpdateSelectedItem(_treeView.SelectedItem);
+                UpdateSelectedItems(_treeView.SelectedItem);
             base.OnApplyTemplate();
         }
 
@@ -74,14 +111,14 @@ namespace Utility.WPF.Controls.Trees
         {
             base.OnDropDownClosed(e);
             if (_treeView.SelectedItem != null)
-                UpdateSelectedItem(_treeView.SelectedItem);
+                UpdateSelectedItems(_treeView.SelectedItem);
         }
 
         protected override void OnDropDownOpened(EventArgs e)
         {
             base.OnDropDownOpened(e);
             if (_treeView.SelectedItem != null)
-                UpdateSelectedItem(_treeView.SelectedItem);
+                UpdateSelectedItems(_treeView.SelectedItem);
         }
 
         /// <summary>
@@ -92,11 +129,11 @@ namespace Utility.WPF.Controls.Trees
             if (_treeView.SelectedItem != null)
             {
                 var hierarchy = SelectItems(_treeView.SelectedItem);
-                SelectedItem = hierarchy.First();
-                SelectedItems = hierarchy;
-                UpdateSelectedItem(_treeView.SelectedItem);
+         
+                //SelectedItems = hierarchy;
+                UpdateSelectedItems(_treeView.SelectedItem);
+
                 IsDropDownOpen = false;
-                SelectedNode = _treeView.SelectedItem;
             }
         }
 
@@ -144,15 +181,27 @@ namespace Utility.WPF.Controls.Trees
             set { SetValue(SelectedItemsProperty, value); }
         }
 
+
+        public DataTemplateSelector SelectedItemTemplateSelector
+        {
+            get { return (DataTemplateSelector)GetValue(SelectedItemTemplateSelectorProperty); }
+            set { SetValue(SelectedItemTemplateSelectorProperty, value); }
+        }
+        public bool IsError
+        {
+            get { return (bool)GetValue(IsErrorProperty); }
+            set { SetValue(IsErrorProperty, value); }
+        }
+
+
         #endregion properties
 
-        protected void UpdateSelectedItem(object selectedItem)
+        protected void UpdateSelectedItems(object selectedItem)
         {
 
             var hierarchy = SelectItems(selectedItem);
             SelectedItems = hierarchy;
-            SelectedNode = hierarchy.Last();
-
+            SelectedNode = selectedItem;
         }
 
         private object[] SelectItems(object selectedItem)
