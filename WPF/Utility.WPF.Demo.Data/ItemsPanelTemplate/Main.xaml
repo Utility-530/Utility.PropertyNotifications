@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ItemsPanelTemplate x:Key="StackPanel">
+        <StackPanel/>
+    </ItemsPanelTemplate>
+
+
+    <ItemsPanelTemplate x:Key="WrapPanel">
+        <WrapPanel/>
+    </ItemsPanelTemplate>
+
+
+    <ItemsPanelTemplate x:Key="UniformGrid">
+        <UniformGrid/>
+    </ItemsPanelTemplate>
+    
+    <ItemsPanelTemplate x:Key="Grid">
+        <Grid/>
+    </ItemsPanelTemplate>
+    
+</ResourceDictionary>
