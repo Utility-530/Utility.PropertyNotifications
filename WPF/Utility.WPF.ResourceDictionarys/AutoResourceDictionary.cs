@@ -1,5 +1,4 @@
 ﻿using System;
-using Utility.WPF.Meta;
 
 namespace Utility.WPF.ResourceDictionarys
 {

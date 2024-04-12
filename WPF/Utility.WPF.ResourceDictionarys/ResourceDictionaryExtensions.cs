@@ -7,9 +7,62 @@ using System.Reflection;
 using System.Resources;
 using System.Windows;
 using System.Windows.Baml2006;
+using Utility.Helpers;
+using Utility.Interfaces.NonGeneric;
+using Utility.ProjectStructure;
 
-namespace Utility.ProjectStructure
+namespace Utility.WPF.ResourceDictionarys
 {
+
+
+    public record ResourceDictionaryKeyValue(DictionaryEntry Entry, ResourceDictionary ResourceDictionary) : IEquatable, IKey, IName
+    {
+        public string Key => ResourceDictionary.Source?.ToString()?? Name;
+
+        public string Name => Entry.Key.ToString();
+
+        //   private readonly Lazy<MasterDetailGrid> lazy = new(() => new MasterDetailGrid(ResourceDictionary.Cast<DictionaryEntry>().Select(a => new DataTemplateKeyValue(a)).ToArray()));
+
+
+        //public override FrameworkElement Value => lazy.Value;
+
+
+
+        public static IEnumerable<ResourceDictionaryKeyValue> ResourceViewTypes(Assembly assembly) =>
+            assembly
+            .SelectResourceDictionaries(predicate: entry => Predicate(entry.Key.ToString()), ignoreXamlReaderExceptions: true)
+        //.GroupBy(type =>
+        //(type.Name.Contains("UserControl") ? type.Name?.ReplaceLast("UserControl", string.Empty) :
+        //type.Name.Contains("View") ? type.Name?.ReplaceLast("View", string.Empty) :
+        //type.Name)!)
+        .OrderBy(a => ToKey(a.Entry));
+        //.ToDictionaryOnIndex()
+
+
+        private static string ToKey(DictionaryEntry entry)
+        {
+            return entry.Key.ToString().Split("/").Last().Remove(".baml");
+        }
+
+        private static bool Predicate(string key)
+        {
+            var rKey = key.Remove(".baml");
+
+            foreach (var ignore in new[] { "view", "usercontrol", "app" })
+            {
+                if (rKey.EndsWith(ignore))
+                    return false;
+            }
+            return true;
+        }
+
+        public bool Equals(IEquatable? other)
+        {
+            return other is ResourceDictionaryKeyValue { Entry: { } entry } ? entry.Equals(Entry) : false;
+        }
+
+        //public override string GroupKey => nameof(ResourceDictionary);
+    }
 
     public static class ResourceDictionaryExtensions
     {
