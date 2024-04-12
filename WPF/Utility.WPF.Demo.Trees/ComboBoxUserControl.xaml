@@ -8,28 +8,93 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.Resources>
-        <HierarchicalDataTemplate x:Key="treeViewDataTemplate" ItemsSource="{Binding Items}">
-            <Border BorderThickness="1" BorderBrush="Gray">
-                <ContentControl Content="{Binding Data}"/>
-            </Border>
-        </HierarchicalDataTemplate>
-        
-        <DataTemplate DataType="{x:Type sys:Type}">
-            <TextBlock Text="{Binding Name}" ToolTip="{Binding }"></TextBlock>
-        </DataTemplate>
+
+
+        <ResourceDictionary>
+            <!--<ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Generic.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>-->
+
+            <HierarchicalDataTemplate x:Key="treeViewDataTemplate" ItemsSource="{Binding Items}">
+                <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
+                    <ContentControl Content="{Binding Data}"/>
+                </Border>
+            </HierarchicalDataTemplate>
+
+            <!--<DataTemplate DataType="{x:Type sys:Type}">
+                <TextBlock Text="{Binding Name}" ToolTip="{Binding FullName}"></TextBlock>
+            </DataTemplate>-->
+        </ResourceDictionary>
         
     </FrameworkElement.Resources>
 
     <StackPanel>
         <controls:ComboBoxTreeView 
+                x:Name="DataTemplateSelector"
                 ItemsSource="{Binding Converter={x:Static local:AssemblyTreeConverter.Instance}, ConverterParameter='DataTemplate'}"
-                ParentPath="Parent"           
-                SelectedNode="{Binding Value, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"  
+                ParentPath="Parent"       
                 ItemTemplate="{StaticResource treeViewDataTemplate}">
+            <controls:ComboBoxTreeView.SelectedItemTemplate>
+                <DataTemplate >
+                    <Border BorderThickness="1" BorderBrush="Gray" Margin="1">
+                        <TextBlock Text="{Binding Data, Converter={x:Static controls:KeyValueConverter.Instance}}"/>
+                    </Border>
+                </DataTemplate>
+            </controls:ComboBoxTreeView.SelectedItemTemplate>
+ 
         </controls:ComboBoxTreeView>
-        
-        <controls:TypeSelector x:Name="TypeSelector"/>
 
-        <ContentControl x:Name="Contentx" Content="{Binding ElementName=TypeSelector, Path=Type}"></ContentControl>
+        <ContentControl x:Name="Contentx_" Content="{Binding ElementName=DataTemplateSelector, Path=SelectedNode.Data.Key}"/>
+
+        <controls:ComboBoxTreeView 
+            x:Name="ItemsPanelTemplateSelector"
+                ItemsSource="{Binding Converter={x:Static local:AssemblyTreeConverter.Instance}, ConverterParameter='ItemsPanelTemplate'}"
+                ParentPath="Parent"    
+                ItemTemplate="{StaticResource treeViewDataTemplate}">
+            <controls:ComboBoxTreeView.SelectedItemTemplate>
+                <DataTemplate >
+                    <Border BorderThickness="1" BorderBrush="Gray" Margin="1">
+                        <TextBlock Text="{Binding Data, Converter={x:Static controls:KeyValueConverter.Instance}}"/>
+                    </Border>
+                </DataTemplate>
+            </controls:ComboBoxTreeView.SelectedItemTemplate>
+        </controls:ComboBoxTreeView>
+
+        <ContentControl x:Name="Contentx" Content="{Binding ElementName=ItemsPanelSelector, Path=SelectedNode.Data.Key}"/>
+
+        <controls:ComboBoxTreeView 
+            x:Name="StyleSelector"
+                ItemsSource="{Binding Converter={x:Static local:AssemblyTreeConverter.Instance}, ConverterParameter='Style'}"
+                ParentPath="Parent"    
+                ItemTemplate="{StaticResource treeViewDataTemplate}">
+            <controls:ComboBoxTreeView.SelectedItemTemplate>
+                <DataTemplate >
+                    <TextBlock Text="{Binding Data, Converter={x:Static controls:KeyValueConverter.Instance}}"/>                 
+                </DataTemplate>
+            </controls:ComboBoxTreeView.SelectedItemTemplate>
+        </controls:ComboBoxTreeView>
+
+        <ContentControl x:Name="ContentStyle" Content="{Binding ElementName=StyleSelector, Path=SelectedNode.Data.Key}"/>
+
+
+        <controls:StyleTreeSelector x:Name="Style2Selector"  Assemblies="{x:Static local:ComboBoxUserControl.Assemblies}" />
+        <ContentControl Content="{Binding ElementName=Style2Selector, Path=SelectedStyle}"/>
+        <ContentControl Content="{Binding ElementName=Style2Selector, Path=FullKey}"/>
+
+        <controls:DataTemplateTreeSelector x:Name="DataTemplate2Selector" Assemblies="{x:Static local:ComboBoxUserControl.Assemblies}"  />
+        <ContentControl Content="{Binding ElementName=DataTemplate2Selector, Path=DataTemplate}"/>
+        <ContentControl Content="{Binding ElementName=DataTemplate2Selector, Path=FullKey}"/>
+
+
+        <controls:ItemsPanelTemplateTreeSelector x:Name="ItemsPanelTemplate2Selector"  Assemblies="{x:Static local:ComboBoxUserControl.Assemblies}" />
+        <ContentControl Content="{Binding ElementName=ItemsPanelTemplate2Selector, Path=ItemsPanelTemplate}"/>
+        <ContentControl Content="{Binding ElementName=DataTemplate2Selector, Path=FullKey}"/>
+
+
+
+        <controls:TypeSelector x:Name="TypeSelector"/>
+        <controls:TypeSelector x:Name="Type2Selector"/>
+
+        <ContentControl x:Name="Content2x" Content="{Binding ElementName=TypeSelector, Path=Type}"></ContentControl>
     </StackPanel>
 </UserControl>

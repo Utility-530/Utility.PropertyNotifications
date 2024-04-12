@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
     <ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.WPF.Controls.Meta\Utility.WPF.Controls.Meta.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
@@ -20,6 +21,7 @@
 	  <ProjectReference Include="..\..\Meta\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Common\Utility.WPF.Demo.Common.csproj" />
     <ProjectReference Include="..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Data\Utility.WPF.Demo.Data.csproj" />
   </ItemGroup>
 
   <ItemGroup>

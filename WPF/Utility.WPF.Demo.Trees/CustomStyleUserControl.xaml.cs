@@ -6,10 +6,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
+using Utility.Extensions;
+using Utility.Helpers.Ex;
 using Utility.WPF.Demo.Common.ViewModels;
-using Utility.WPF.Helpers;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Demo.Trees
 {
@@ -18,6 +21,27 @@ namespace Utility.WPF.Demo.Trees
     /// </summary>
     public partial class CustomStyleUserControl : UserControl
     {
+
+        private static void TreeViewItem_Collapsed(object sender, RoutedEventArgs e)
+        {
+            if (sender is TreeViewItem treeViewItem)
+            {
+                subject.OnNext(new(NotifyCollectionChangedAction.Remove, treeViewItem));
+            }
+        }
+
+        private static void TreeViewItem_Expanded(object sender, RoutedEventArgs e)
+        {
+            if (sender is TreeViewItem treeViewItem)
+            {
+                subject.OnNext(new(NotifyCollectionChangedAction.Add, treeViewItem));
+            }
+        }
+        static ReplaySubject<NotifyCollectionChangedEventArgs> subject = new ReplaySubject<NotifyCollectionChangedEventArgs>();
+
+        public static IObservable<NotifyCollectionChangedEventArgs> Observable => subject;
+
+
         public CustomStyleUserControl()
         {
             InitializeComponent();
@@ -32,8 +56,7 @@ namespace Utility.WPF.Demo.Trees
 
         void Initialise()
         {
-            List<TreeViewItem> list = new();
-            var items = TreeViewHelper.TreeViewItems(MyTreeView).ToArray();
+            var _collection = TreeViewHelper.VisibleItems(MyTreeView).ToCollection(out _);      
             var foo = new Uri("/Utility.WPF.Controls.Trees;component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute);
             var resourceDictionary = new ResourceDictionary() { Source = foo };
             var collection = new ObservableCollection<ButtonViewModel>();
@@ -51,7 +74,7 @@ namespace Utility.WPF.Demo.Trees
                         TreeItemContainerStyleSelector.Instance.Current = style.Value;
                         MyTreeView.ItemContainerStyleSelector = TreeItemContainerStyleSelector.Instance;
 
-                        foreach (var item in list)
+                        foreach (var item in _collection)
                         {
                             item.ItemContainerStyleSelector = null;
                             item.ItemContainerStyleSelector = TreeItemContainerStyleSelector.Instance;
@@ -61,17 +84,7 @@ namespace Utility.WPF.Demo.Trees
 
             }
 
-            TreeEnumerator.Observable.Subscribe(a =>
-            {
-                if (a.Action == NotifyCollectionChangedAction.Add)
-                {
-                    list.Add(a.NewItems.Cast<TreeViewItem>().Single());
-                }
-                if (a.Action == NotifyCollectionChangedAction.Remove)
-                {
-                    list.Remove(a.OldItems.Cast<TreeViewItem>().Single());
-                }
-            });
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
