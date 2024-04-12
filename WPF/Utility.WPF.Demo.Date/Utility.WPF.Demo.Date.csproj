@@ -8,7 +8,6 @@
     <ApplicationIcon>Images\calendar.ico</ApplicationIcon>
   </PropertyGroup>
 
-
   <ItemGroup>
     <Content Include="Images\calendar.ico" />
   </ItemGroup>
@@ -19,8 +18,4 @@
     <ProjectReference Include="..\Utility.WPF.Controls.Date\Utility.WPF.Controls.Date.csproj" />
     <ProjectReference Include="..\Utility.WPF.Animation\Utility.WPF.Animations.csproj" />
   </ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Data\" />
-	</ItemGroup>
 </Project>
