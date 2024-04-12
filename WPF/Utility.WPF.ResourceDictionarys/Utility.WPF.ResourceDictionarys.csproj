@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Meta\Utility.ProjectStructure\Utility.Solutions.csproj" />
     <ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
   </ItemGroup>
 
