@@ -39,7 +39,7 @@ namespace Utility.WPF.Demo.Meta
             if (item is ViewModel viewModel)
             {
                 var x = new DataTemplateKey(typeof(ViewModel));
-                var xx = container.FindResource(x);
+                var xx = container.FindTemplate(x);
                 return xx;
             }
             var bas = base.SelectTemplate(item, container);
