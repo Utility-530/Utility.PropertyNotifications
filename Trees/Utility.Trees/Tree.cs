@@ -44,7 +44,7 @@ namespace Utility.Trees
                 Add(items);
         }
 
-        public virtual IEquatable Key { get; set; }
+        public virtual string Key { get; set; }
 
 
 
@@ -145,19 +145,13 @@ namespace Utility.Trees
 
         public virtual Tree Clone()
         {
-            object clone = Data;
-            IEquatable kclone = Key;
+            object clone = Data;     
             if (Data is IClone cln)
             {
                 clone = cln.Clone();
             }
-
-            if (Key is IClone kcln)
-            {
-                kclone =(IEquatable) kcln.Clone();
-            }
-
-            return new Tree(clone) { Key = kclone };
+        
+            return new Tree(clone) { Key = this.Key };
         }
 
         public virtual ITree Add()
@@ -217,12 +211,12 @@ namespace Utility.Trees
                 return new Index(indices.Reverse().ToArray());
                 IEnumerable<int> Indices()
                 {
-                    ITree? parent = this.Parent;
+                    IReadOnlyTree? parent = this.Parent;
                     ITree child = this;
-                    while (parent != null)
+                    while (parent is ITree _parent)
                     {
-                        yield return parent.IndexOf(child);
-                        child = parent;
+                        yield return _parent.IndexOf(child);
+                        child = _parent;
                         if (parent.Parent == parent)
                             throw new Exception("r sdfsd3232 bf");
                         parent = parent.Parent;
@@ -230,13 +224,14 @@ namespace Utility.Trees
                     yield return 0;
                 }
             }
+
         }
 
         public int Depth
         {
             get
             {
-                ITree parent = this;
+                IReadOnlyTree parent = this;
                 int depth = 0;
                 while (parent.Parent != null)
                 {
@@ -296,17 +291,6 @@ namespace Utility.Trees
             return collection;
         }
 
-        public int IndexOf(ITree tree)
-        {
-            int i = 0;
-            foreach (var item in Items)
-            {
-                if (item.Equals(tree))
-                    return i;
-                i++;
-            }
-            return -1;
-        }
 
         public override string ToString()
         {
@@ -348,5 +332,21 @@ namespace Utility.Trees
         {
             throw new NotImplementedException();
         }
+    }
+
+    internal static class TreeHelper
+    {
+        public static int IndexOf(this IReadOnlyTree tree, IReadOnlyTree _item)
+        {
+            int i = 0;
+            foreach (var item in tree.Items)
+            {
+                if (item.Equals(_item))
+                    return i;
+                i++;
+            }
+            return -1;
+        }
+
     }
 }
