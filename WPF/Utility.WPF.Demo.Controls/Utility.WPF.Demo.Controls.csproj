@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Utility.ViewModels\Utility.ViewModels.csproj" />
     <ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
     <ProjectReference Include="..\Utility.WPF.Behaviors\Utility.WPF.Behaviors.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.WPF.Controls.Meta\Utility.WPF.Controls.Meta.csproj" />
