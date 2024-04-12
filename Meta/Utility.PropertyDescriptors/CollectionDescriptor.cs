@@ -147,6 +147,12 @@ namespace Utility.Descriptors
             var descriptor = await DescriptorFactory.CreateItem(item, i, type, parentType, Guid);
             observer.OnNext(new(descriptor, changeType));
         }
+
+        public override object? Get()
+        {
+            return null;
+        }
+
     }
 }
 

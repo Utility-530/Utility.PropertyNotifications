@@ -78,15 +78,22 @@ namespace Utility.Descriptors.Repositorys
             initialisationTask = Initialise();
         }
 
-        Task Initialise()
+        public bool IsInitialised { get; set; }
+
+        public Task Initialise()
         {
-            return Task.Run(() =>
+            if (IsInitialised == false)
             {
-                foreach(var relationship in connection.Table<Relationships>().ToList())
+                return Task.Run(() =>
                 {
-                    tablelookup[relationship.Guid] = relationship.Name;
-                }
-            });
+                    foreach (var relationship in connection.Table<Relationships>().ToList())
+                    {
+                        tablelookup[relationship.Guid] = relationship.Name;
+                    }
+                    IsInitialised = true;
+                });
+            }
+            return Task.CompletedTask;
         }
 
         //public Task<IReadOnlyCollection<Key>> Keys(string? name = default)
@@ -191,7 +198,7 @@ namespace Utility.Descriptors.Repositorys
             var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' AND Name = '{name}' AND _Index {ToComparisonAndValue(index)} AND TypeId {ToComparisonAndValue(typeId)}");
             if (tables.Count == 0)
             {
-                if (InsertParent(parentGuid, name, table_name, typeId, index) is Guid guid)
+                if (await InsertByParent(parentGuid, name, table_name, typeId, index) is Guid guid)
                     return guid;
                 else
                     throw new Exception("* 44 fd3323");
@@ -209,11 +216,10 @@ namespace Utility.Descriptors.Repositorys
             throw new Exception("09re 4323");
         }
 
-        public Guid? InsertParent(Guid parentGuid, string name, string table_name, int? typeId = null, int? index = null)
+        public async Task<Guid> InsertByParent(Guid parentGuid, string name, string? table_name = null, int? typeId = null, int? index = null)
         {
-            var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' AND Name = '{name}' AND _Index {ToComparisonAndValue(index)} AND TypeId {ToComparisonAndValue(typeId)}");
-            if (tables.Count != 0)
-                return null;
+            await initialisationTask;
+            table_name ??= tablelookup[parentGuid];
             var guid = Guid.NewGuid();
             tablelookup[guid] = table_name;
             //var i = connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
@@ -222,18 +228,32 @@ namespace Utility.Descriptors.Repositorys
             return guid;
         }
 
-        public int Insert(Guid guid, string name, System.Type type, Guid parentGuid, int? index = null)
-        {
-            var table_name = tablelookup[parentGuid];
-            var typeId = (int)TypeId(type);
-            var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Name = '{name}' AND Guid = '{guid}' AND TypeId = '{typeId}' AND Parent {ToComparisonAndValue(parentGuid)} AND _Index {ToComparisonAndValue(index)}");
-            if (tables.Count != 0)
-                return 0;
-            return connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
-        }
+
+        //public Guid? InsertByParent(Guid parentGuid, string name, string table_name, int? typeId = null, int? index = null)
+        //{
+        //    var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' AND Name = '{name}' AND _Index {ToComparisonAndValue(index)} AND TypeId {ToComparisonAndValue(typeId)}");
+        //    if (tables.Count != 0)
+        //        return null;
+        //    var guid = Guid.NewGuid();
+        //    tablelookup[guid] = table_name;
+        //    //var i = connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
+        //    var query = $"INSERT INTO {table_name} (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {ToValue(index)}, '{parentGuid}', '{DateTime.Now}', {ToValue(typeId)});";
+        //    var i = connection.Execute(query);
+        //    return guid;
+        //}
+
+        //public int Insert(Guid guid, string name, System.Type type, Guid parentGuid, int? index = null)
+        //{
+        //    var table_name = tablelookup[parentGuid];
+        //    var typeId = (int)TypeId(type);
+        //    var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Name = '{name}' AND Guid = '{guid}' AND TypeId = '{typeId}' AND Parent {ToComparisonAndValue(parentGuid)} AND _Index {ToComparisonAndValue(index)}");
+        //    if (tables.Count != 0)
+        //        return 0;
+        //    return connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
+        //}
 
 
-        public Task<Key> CreateRootKey(Guid guid, string name, System.Type type)
+        public Task<Key> InsertRoot(Guid guid, string name, System.Type type)
         {
 
             // create table if not exists
@@ -311,6 +331,23 @@ namespace Utility.Descriptors.Repositorys
             }
         }
 
+        public System.Type GetType(Guid guid)
+        {
+            if (values.ContainsKey(guid))
+                return values[guid].Value.GetType();
+
+            var table = connection.Find<Values>(guid);
+            if (table is Values { Value: { } text, Added: { } added, TypeId: { } typeId })
+            {
+                System.Type? type = ToType(typeId);
+                if (type == null)
+                    throw new Exception("sd s389989898");
+                return type;
+            }
+            return null;
+        }
+
+
         public DateValue? Get(Guid guid)
         {
             if (values.ContainsKey(guid))
@@ -340,7 +377,7 @@ namespace Utility.Descriptors.Repositorys
             }
         }
 
-        System.Type? ToType(int typeId)
+        public System.Type? ToType(int typeId)
         {
             if (types.ContainsKey(typeId))
                 return types[typeId];
@@ -352,7 +389,7 @@ namespace Utility.Descriptors.Repositorys
             return systemType;
         }
 
-        int TypeId(System.Type type)
+        public int TypeId(System.Type type)
         {
             if (this.types.FirstOrDefault(x => x.Value == type) is { Key: { } key, Value: { } value })
                 return key;

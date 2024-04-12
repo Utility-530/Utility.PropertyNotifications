@@ -7,16 +7,13 @@ namespace Utility.Descriptors
     {
         private object component;
 
-        public RootDescriptor(Type type, Type? parentType = null, string? name = null) : base(type.Name ?? "root", null)
+        public RootDescriptor(Type type, Type? parentType = null, string? name = null) : base(name ?? type.Name ?? "root", null)
         {
             PropertyType = type;
             ComponentType = parentType;
-            Name = name;
         }
 
         public object Item => this.component;
-
-        public override string Name { get; }
 
         public override Type ComponentType { get; }
 

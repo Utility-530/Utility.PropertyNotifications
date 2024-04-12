@@ -14,11 +14,11 @@ namespace Utility.Descriptors
             _descriptor.Guid = guid;
             _descriptor.ParentGuid = parentGuid;
             return _descriptor;
-        }
+        }   
 
         public static async Task<IDescriptor> CreateRoot(Descriptor descriptor, Guid guid)
         {
-            await repo.CreateRootKey(guid, descriptor.Name, descriptor.PropertyType);
+            await repo.InsertRoot(guid, descriptor.Name, descriptor.PropertyType);
             var _descriptor = DescriptorConverter.ToDescriptor(default, descriptor);
             _descriptor.Guid = guid;
             return _descriptor;
