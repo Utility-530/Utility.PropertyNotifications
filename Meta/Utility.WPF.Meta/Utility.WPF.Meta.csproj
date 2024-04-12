@@ -14,6 +14,7 @@
     <ProjectReference Include="..\..\WPF\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.Meta\Utility.Meta.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
   </ItemGroup>
 
 </Project>

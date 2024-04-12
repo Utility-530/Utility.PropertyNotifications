@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Utility.ProjectStructure;
 using Utility.WPF.Converters;
 using Utility.WPF.Factorys;
+using Utility.WPF.ResourceDictionarys;
 
 namespace Utility.WPF.Meta;
 
@@ -14,7 +17,7 @@ namespace Utility.WPF.Meta;
 /// </summary>
 public class MasterDetailGrid : Grid
 {
-    public MasterDetailGrid(ICollection<KeyValue> enumerable)
+    public MasterDetailGrid(IEnumerable enumerable)
     {
         var viewListBox = new ViewListBox() { ItemsSource = enumerable };
         ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1.0, GridUnitType.Auto) });
@@ -26,7 +29,7 @@ public class MasterDetailGrid : Grid
 
 public class CustomElementsGrid : MasterDetailGrid
 {
-    public CustomElementsGrid(ICollection<KeyValue> enumerable) : base(enumerable)
+    public CustomElementsGrid(IEnumerable enumerable) : base(enumerable)
     {
         Resources.Add(new DataTemplateKey(
             typeof(KeyValue)),
