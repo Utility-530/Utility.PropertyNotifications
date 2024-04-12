@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Utility.WPF.Colours\Utility.WPF.Colours.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
     <ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
   </ItemGroup>
