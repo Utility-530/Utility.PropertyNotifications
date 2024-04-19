@@ -8,15 +8,15 @@ namespace Utility.WPF.Demo.Data.Model
     {
         public static IValueConverter ToCompanyBrush =
             LambdaConverters.ValueConverter.Create<Profile, Brush>(
-                e => e.Value.IsFreelancer ? Brushes.Green : Brushes.Blue);
+                e => e.Value?.IsFreelancer ==true? Brushes.Green : Brushes.Blue);
 
         public static IValueConverter ToCompanyText =
             LambdaConverters.ValueConverter.Create<Profile, string>(
-                e => e.Value.IsFreelancer ? "Freelancer" : e.Value.CompanyName);
+                e => e.Value?.IsFreelancer == true ? "Freelancer" : e.Value?.CompanyName);
 
         public static IValueConverter ToCompanyIcon =
             LambdaConverters.ValueConverter.Create<Profile, MaterialDesignThemes.Wpf.PackIconKind>(
-                e => e.Value.IsFreelancer ? MaterialDesignThemes.Wpf.PackIconKind.AccountAddOutline : MaterialDesignThemes.Wpf.PackIconKind.City);
+                e => e.Value?.IsFreelancer == true ? MaterialDesignThemes.Wpf.PackIconKind.AccountAddOutline : MaterialDesignThemes.Wpf.PackIconKind.City);
 
         public static IValueConverter PrefixedHiddenAbilitiesCount =
             LambdaConverters.ValueConverter.Create<int, string>(
