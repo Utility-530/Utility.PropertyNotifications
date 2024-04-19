@@ -12,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Extensions;
 using Utility.ProjectStructure;
+using Utility.Trees;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
 using Utility.WPF.Reactives;
@@ -234,6 +235,21 @@ namespace Utility.WPF.Controls.Trees
             if (d is AssemblyTreeSelector { FrameworkElementKind: string kind, Assemblies: IEnumerable enumerable } typeSelector)
             {
                 SetItemsSource(typeSelector, enumerable, kind);
+                if (typeSelector.ItemsSource is IReadOnlyTree tree)
+                {
+                    if (typeSelector.FullKey is { } fullKey)
+                    {
+                        typeSelector.ChangeFullKey(tree, fullKey);
+                    }
+                    if (typeSelector.Key is { } key)
+                    {
+                        typeSelector.Change(tree, key);
+                    }
+                    if (typeSelector.Type is { } type)
+                    {
+                        typeSelector.ChangeType(tree, type);
+                    }
+                }
             }
         }
 
