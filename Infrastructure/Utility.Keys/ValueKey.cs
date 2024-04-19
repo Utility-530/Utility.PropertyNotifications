@@ -2,7 +2,7 @@
 
 namespace Utility.Keys
 {
-    public class ValueKey<T> : IEquatable
+    public record ValueKey<T> : Key, IEquatable
     {
         public ValueKey(T? value)
         {
@@ -15,5 +15,10 @@ namespace Utility.Keys
         }
 
         public T? Value { get; init; }
+
+        public override string ToString()
+        {
+            return Value?.ToString();
+        }
     }
 }
