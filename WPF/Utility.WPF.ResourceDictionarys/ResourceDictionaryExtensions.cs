@@ -9,7 +9,6 @@ using System.Windows;
 using System.Windows.Baml2006;
 using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
-using Utility.ProjectStructure;
 
 namespace Utility.WPF.ResourceDictionarys
 {
