@@ -1,9 +1,13 @@
-﻿namespace System.Collections.ObjectModel
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+
+namespace Utility.Collections
 {
-    using System.Collections.Generic;
-    using System.Collections.Specialized;
-    using System.ComponentModel;
-    using System.Linq;
+
 
     /// <summary>
     /// <a href="https://gist.github.com/weitzhandler/"></a>
@@ -11,6 +15,8 @@
     /// <typeparam name="T"></typeparam>
     public class SortableObservableCollection<T> : RangeObservableCollection<T>
     {
+        Dictionary<int, VisibleItem> filteredItems = new();
+
         public SortableObservableCollection()
         {
         }
@@ -21,9 +27,9 @@
             IsDescending = descending;
         }
 
-        public SortableObservableCollection(IEnumerable<T> collection, IComparer<T>? comparer = null, bool descending = false) : base(collection)
+        public SortableObservableCollection(IEnumerable<T> collection, IComparer<T>? comparer, bool descending = false) : base(collection)
         {
-            //Comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
+            Comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
             IsDescending = descending;
 
             Sort();
@@ -39,6 +45,66 @@
                 _Comparer = value;
                 Sort();
                 OnPropertyChanged(new PropertyChangedEventArgs(nameof(Comparer)));
+            }
+        }
+
+        private Predicate<T> _filter;
+        public Predicate<T> Filter
+        {
+            get { return _filter; }
+            set
+            {
+                _filter = value;
+                Refresh();
+            }
+        }
+
+        public void Refresh()
+        {
+            int index = 0;
+            for (int i = 0; i < Items.Count; i++)
+            {
+                bool visible = (Filter != null) ? Filter(Items[i]) : true;
+
+                if (visible)
+                {
+                    filteredItems[i].VisibleIndex = index;
+
+                    if (!filteredItems[i].Visible)
+                    {
+                        OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add,
+                            filteredItems[i].Item, index));
+                    }
+
+                    index++;
+                }
+                else
+                {
+                    filteredItems[i].VisibleIndex = -1;
+
+                    if (filteredItems[i].Visible)
+                    {
+                        OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
+                        filteredItems[i].Item, index));
+                    }
+                }
+
+                filteredItems[i].Visible = visible;
+            }
+        }
+
+        [DebuggerDisplay("Index: {VisibleIndex} ; Item: {Item} ; Visible: {Visible}")]
+        private class VisibleItem
+        {
+            public int VisibleIndex;
+            public bool Visible;
+            public T Item;
+
+            public VisibleItem(int index, T item, bool visible = true)
+            {
+                VisibleIndex = index;
+                Item = item;
+                Visible = visible;
             }
         }
 
@@ -78,24 +144,25 @@
 
         private bool _Reordering;
 
-        public void Sort() // TODO, concern change index so no need to walk the whole list
+        public void Sort() 
         {
-            var query = this
-              .Select((item, index) => (Item: item, Index: index));
-            query = IsDescending
-              ? query.OrderByDescending(tuple => tuple.Item, Comparer)
-              : query.OrderBy(tuple => tuple.Item, Comparer);
+            _Reordering = true;
+            Sort<T>(this, Comparer);
+            _Reordering = false;
 
-            var map = query.Select((tuple, index) => (OldIndex: tuple.Index, NewIndex: index))
-             .Where(o => o.OldIndex != o.NewIndex);
+        }
 
-            using (var enumerator = map.GetEnumerator())
-                if (enumerator.MoveNext())
-                {
-                    _Reordering = true;
-                    Move(enumerator.Current.OldIndex, enumerator.Current.NewIndex);
-                    _Reordering = false;
-                }
+        public static void Sort<T>(ObservableCollection<T> collection, IComparer<T> comparison)
+        {
+
+            var sortableList = new List<T>(collection);
+            sortableList.Sort(comparison);
+
+            for (int i = 0; i < sortableList.Count; i++)
+            {
+                if (collection.IndexOf(sortableList[i]) != i)
+                    collection.Move(collection.IndexOf(sortableList[i]), i);
+            }
         }
     }
 }
