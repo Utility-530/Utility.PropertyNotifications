@@ -2,16 +2,17 @@
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using Utility.Collections;
+using Utility.Interfaces.NonGeneric;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
-    public abstract class Node : Tree
+    public abstract class Node : ObservableTree
     {
         private bool isRefreshing;
         bool flag;
-        protected Collection items = new();
+        //protected Collection items = new();
 
         public abstract IObservable<object?> GetChildren();
 
@@ -44,7 +45,7 @@ namespace Utility.Nodes
                 finally
                 {
                 }
-                return items;
+                return m_items;
             }
         }
 
@@ -55,12 +56,12 @@ namespace Utility.Nodes
             if (await HasMoreChildren() == false)
                 return false;
 
-            items.Clear();
+            m_items.Clear();
             GetChildren()
                 .Subscribe(async a =>
                 {
                     var node =await ToNode(a);
-                    items.Add(node);
+                    m_items.Add(node);
                 },
                 e =>
                 {
@@ -68,7 +69,8 @@ namespace Utility.Nodes
                 () =>
                 {
                     //_isRefreshing = false;
-                    items.Complete();
+                    if(m_items is IComplete complete)
+                        complete.Complete();
                 });
             return true;
         }
