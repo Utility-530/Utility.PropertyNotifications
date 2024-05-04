@@ -122,7 +122,7 @@ namespace Utility.Trees
 
             if (data is T t)
             {
-                m_items.Add((new Tree(t)));
+                m_items.Add(new Tree<T>(t));
                 return;
             }
             throw new InvalidOperationException("Cannot add unknown content type.");
