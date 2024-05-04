@@ -78,7 +78,7 @@ namespace Utility.Nodes
 
         public Exception Error { get; set; }
 
-        public virtual Task<bool> HasMoreChildren()
+        public override Task<bool> HasMoreChildren()
         {
             return Task.FromResult(Data != null && flag == false);
         }
