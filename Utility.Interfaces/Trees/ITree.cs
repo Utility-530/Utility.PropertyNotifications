@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 
@@ -25,9 +26,7 @@ namespace Utility.Trees.Abstractions
 
         void Remove(Guid index);
 
-      
-
-        bool HasMoreChildren { get; }
+        Task<bool> HasMoreChildren();
     }
 
 
