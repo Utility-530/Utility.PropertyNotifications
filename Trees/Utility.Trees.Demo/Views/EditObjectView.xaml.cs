@@ -9,14 +9,28 @@ using Utility.Enums;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models.Filters;
 using Utility.Persists;
+using Utility.ProjectStructure;
 using Utility.Trees.Demo.Infrastructure;
 using Utility.WPF.Controls.Meta;
 using Utility.WPF.Controls.Meta.ViewModels;
 using Utility.WPF.Meta;
-using Utility.WPF.Reactive;
+using Utility.WPF.Reactives;
 
 namespace Utility.Trees.Demo
 {
+    //public class ObjectListBox:Control
+    //{
+    //    public static readonly DependencyProperty ObjectProperty =
+    //        DependencyProperty.Register("Object", typeof(object), typeof(ObjectListBox), new PropertyMetadata());
+
+
+    //    public object Object
+    //    {
+    //        get { return (object)GetValue(ObjectProperty); }
+    //        set { SetValue(ObjectProperty, value); }
+    //    }
+    //}
+
     public partial class EditObjectView : UserControl
     {
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(object), typeof(EditObjectView), new PropertyMetadata());
@@ -120,21 +134,21 @@ namespace Utility.Trees.Demo
             demoTypeViewModel = OutputNode<FilteredCustomCheckBoxesViewModel>.Create(() =>
             {
                 var types = Helper.TypesOf<PersistViewModel>(Assembly.GetEntryAssembly());
-                var filters = new Filter[] { new ViewModelTypeFilter() };
+                var filters = new Filter[] { /*new ViewModelTypeFilter()*/ };
                 return UpdateAndCreate(types, filters, deselectSubject);
             });
         }
     }
 
-    public class ViewModelTypeFilter : PropertyFilter<AssemblyKeyValue>
-    {
-        public ViewModelTypeFilter() : base(nameof(AssemblyKeyValue.CategoryKey))
-        {
-        }
+    //public class ViewModelTypeFilter : PropertyFilter<AssemblyKeyValue>
+    //{
+    //    public ViewModelTypeFilter() : base(nameof(AssemblyKeyValue.CategoryKey))
+    //    {
+    //    }
 
-        protected override object Set(string value)
-        {
-            return Enum.Parse(typeof(AssemblyType), value);
-        }
-    }
+    //    protected override object Set(string value)
+    //    {
+    //        return Enum.Parse(typeof(AssemblyType), value);
+    //    }
+    //}
 }

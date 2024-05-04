@@ -2,7 +2,7 @@
 using System.Windows;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Demo.Infrastructure;
-using Utility.WPF.Reactive;
+
 
 namespace Utility.Trees.Demo
 {
@@ -66,11 +66,11 @@ namespace Utility.Trees.Demo
         {
         }
 
-        protected override object Clone(object data)
+        public override Tree Clone()
         {
-            if (data is Persist persist)
+            if (Data is Persist persist)
             {
-                return new Persist { Guid = Guid.NewGuid() };
+                return new Tree(new Persist { Guid = Guid.NewGuid() });
             }
             throw new Exception("FDSGF fddfgfd");
         }

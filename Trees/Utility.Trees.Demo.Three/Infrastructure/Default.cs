@@ -1,0 +1,100 @@
+﻿using System;
+using System.Globalization;
+using System.Windows.Controls;
+using System.Windows;
+using Utility.Commands;
+using Utility.Interfaces.NonGeneric;
+using Utility.Trees.WPF;
+using Utility.WPF.Factorys;
+using Views.Trees;
+using System.Windows.Shapes;
+using System.Windows.Media;
+using Utility.Trees.Abstractions;
+using Utility.Interfaces.Generic;
+using Utility.Keys;
+
+namespace Utility.Trees.Demo.MVVM.Infrastructure
+{
+    public class Default
+    {
+        public class TreeViewItemFactory : ITreeViewItemFactory
+        {
+            Random random = new();
+            public TreeViewItem Make(object instance)
+            {
+                var item = new CustomTreeViewItem
+                {
+                    IsExpanded = true,
+                    BorderThickness = new Thickness(2),
+                    AddCommand = new Command(() => { if (instance is ITree { } item) item.Add(new ModelTree(Helpers.Names.Random(random), Guid.NewGuid(), ((GuidKey)item.Key).Value)); }),
+                    RemoveCommand = new Command(() => { if (instance is IParent<ITree> { Parent: { } parent }) parent.Remove(instance); }),
+                    Header = instance,
+                    DataContext = instance
+                };
+                return item;
+
+
+                //static int[] index(ModelTree tree)
+                //{
+                //    return (tree.Key as IEnumerable<int>).Append(tree.Items.Count()).ToArray();
+                //}
+            }
+
+            public static TreeViewItemFactory Instance { get; } = new();
+        }
+
+        public class ItemsPanelConverter : System.Windows.Data.IValueConverter
+        {
+            public static ItemsPanelConverter Instance { get; } = new();
+
+            public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                return ItemsPanelFactory.Template(default, default, Orientation.Vertical, Enums.Arrangement.Stacked);
+            }
+
+            public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public class DataTemplateSelector : System.Windows.Controls.DataTemplateSelector
+        {
+            public static DataTemplateSelector Instance { get; } = new();
+
+            public override DataTemplate SelectTemplate(object item, DependencyObject container)
+            {
+                //if (item?.GetType() is Type type && new DataTemplateKey(type) is var key &&  App.Current?.TryFindResource(key) is DataTemplate dataTemplate)
+                //    return dataTemplate;        
+
+                if (App.Current?.TryFindResource("Tree") is DataTemplate dataTemplate)
+                    return dataTemplate;
+
+
+                return TemplateGenerator.CreateDataTemplate(() => new Ellipse { Fill = Brushes.Red, Height = 20, Width = 20 });
+            }
+        }
+
+        public class Filter : ITreeViewFilter
+        {
+            public static Filter Instance { get; } = new();
+
+            public bool Convert(object item)
+            {
+                return true;
+            }
+        }
+
+
+
+        public class EventListener : IEventListener
+        {
+            public static EventListener Instance { get; } = new();
+
+            public void Send(IEvent @event)
+            {
+
+            }
+        }
+    }
+}

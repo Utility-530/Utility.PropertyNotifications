@@ -18,8 +18,8 @@
         <demo:ViewModelTypesComboBox x:Name="TypesComboBox"/>
 
 
-        <obj:ObjectListBox x:Name="ObjectListBox"/>
-
+        <!--<demo:ObjectListBox x:Name="ObjectListBox"/>-->
+        <obj:JsonControl x:Name="ObjectListBox"></obj:JsonControl>
 
     </StackPanel>
 </UserControl>

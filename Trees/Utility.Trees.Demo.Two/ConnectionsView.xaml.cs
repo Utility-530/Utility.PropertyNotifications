@@ -243,7 +243,7 @@ namespace Utility.Trees.Demo.Two
             {
 
                 Point pointA, pointB;
-                Tree viewmodel = TreeHelper2.Match(dataContext.ViewModel, new((a) => (a.Data as IName).Name == connectionViewModel.ViewModelName)) as Tree;
+                Tree viewmodel = Utility.Extensions.TreeExtensions.MatchDescendant(dataContext.ViewModel, new((a) => (a.Data as IName).Name == connectionViewModel.ViewModelName)) as Tree;
 
                 var treeViewItem = TreeHelper.FindRecursive<TreeViewItem>(userControl.TreeView, viewmodel);
                 {

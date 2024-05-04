@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Utility.Extensions;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Demo.Infrastructure;
 using Svc = Utility.Trees.Demo.Infrastructure.Service;
@@ -25,7 +26,7 @@ namespace Utility.Trees.Demo.Two
         {
             dataContext = userControl.DataContext as ConnectionsViewModel;
             Point pointA, pointB;
-            Tree viewmodel = TreeHelper2.Match(dataContext.ViewModel, new((a) => (a.Data as IGuid).Guid == connectionViewModel.Guid)) as Tree;
+            Tree viewmodel = TreeExtensions.MatchDescendant(dataContext.ViewModel, new((a) => (a.Data as IGuid).Guid == connectionViewModel.Guid)) as Tree;
 
             var treeViewItem = TreeHelper.FindRecursive<TreeViewItem>(userControl.TreeView, viewmodel);
             {
