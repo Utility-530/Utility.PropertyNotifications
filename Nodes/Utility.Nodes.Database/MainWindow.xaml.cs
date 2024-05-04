@@ -9,6 +9,7 @@ using Utility.Extensions;
 using System.Reactive.Linq;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
+using Utility.Helpers.Ex;
 
 namespace Utility.Nodes.Database
 {
@@ -37,7 +38,7 @@ namespace Utility.Nodes.Database
                     var keys = TreeRepository.Instance.SelectKeys(table_name: name).GetAwaiter().GetResult();
 
 
-                    var tree = TreeExtensions.ToTree(keys, a => a.Guid, a => a.ParentGuid, a =>
+                    var tree = TreeExtensions.ToTree(keys.ToObservable(), a => a.Guid, a => a.ParentGuid, a.Guid, func: a =>
                     {
                         var tree = (ITree<Key>)new Tree<Key>(a);
                         var get = TreeRepository.Instance.Get(a.Guid);
@@ -45,8 +46,8 @@ namespace Utility.Nodes.Database
                             tree.Add(new Tree<Key>(new Key(default, default, default, get.Value.ToString(), default)));
                         return tree;
                     }
-                    , a.Guid).ToArray();
-                    TreeView.ItemsSource = tree;
+                    ).ToArray();
+                    TreeView.ItemsSource = tree.ToObservableCollection();
                 });
 
         }
