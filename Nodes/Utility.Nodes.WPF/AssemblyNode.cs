@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Utility.Helpers;
 using Utility.ProjectStructure;
 using Utility.Trees.Abstractions;
+using Utility.WPF.ResourceDictionarys;
 
 namespace Utility.Nodes.Solutions
 {
@@ -55,13 +56,13 @@ namespace Utility.Nodes.Solutions
             lazy = new Lazy<IList>(() =>
             {
                 IList values = null;
-                values = resourceDictionaryKeyValue.ResourceDictionary.Cast<DictionaryEntry>().Select(a => new DictionaryEntryKeyValue(a)).ToList();
+                values = resourceDictionaryKeyValue.ResourceDictionary.Cast<DictionaryEntry>().ToList();
                 return values;
             });
             data = resourceDictionaryKeyValue.Key;
         }
 
-        public AssemblyNode(DictionaryEntryKeyValue entryKeyValue)
+        public AssemblyNode(DictionaryEntry entryKeyValue)
         {
 
             lazy = new Lazy<IList>(Array.Empty<object>);
@@ -109,7 +110,7 @@ namespace Utility.Nodes.Solutions
             {
                 return new AssemblyNode(resourceDictionaryKeyValue);
             }
-            else if (value is DictionaryEntryKeyValue entryKeyValue)
+            else if (value is DictionaryEntry entryKeyValue)
             {
                 return new AssemblyNode(entryKeyValue);
             }
