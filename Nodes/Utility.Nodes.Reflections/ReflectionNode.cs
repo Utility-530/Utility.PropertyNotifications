@@ -2,7 +2,10 @@
 using Utility.Changes;
 using Utility.Collections;
 using Utility.Helpers;
+using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.NonGeneric;
+using Utility.Keys;
+using Utility.Models;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Reflections
@@ -13,8 +16,8 @@ namespace Utility.Nodes.Reflections
 
         public ReflectionNode(IDescriptor propertyData)
         {
-
             this.data = propertyData;
+            Key = new GuidKey(data.Guid);
         }
 
         public ReflectionNode()
@@ -24,7 +27,11 @@ namespace Utility.Nodes.Reflections
         public override object Data
         {
             get => data;
-            set => data = value as IDescriptor;
+            set
+            {
+                data = value as IDescriptor;
+                Key = new GuidKey(data.Guid);
+            }
         }
 
         public override async Task<bool> RefreshChildrenAsync()
@@ -32,7 +39,7 @@ namespace Utility.Nodes.Reflections
             if (await HasMoreChildren() == false)
                 return true;
 
-            items.Clear();
+            m_items.Clear();
 
             _ = GetChildren()
                 .Cast<Change<IDescriptor>>()
@@ -49,25 +56,25 @@ namespace Utility.Nodes.Reflections
                                 else if (desc.Type == data?.Type)
                                 {
                                     var node = await ToNode(desc);
-                                    items.Add(node);
+                                    m_items.Add(node);
                                 }
                                 else
                                 {
                                     //var conversion = ObjectConverter.ToValue(inst, desc);
                                     ReflectionNode node = (ReflectionNode)await ToNode(desc);
                                     //await node.RefreshChildrenAsync();
-                                    items.Add(node);
+                                    m_items.Add(node);
                                 }
                                 break;
                             }
                         case Changes.Type.Remove:
                             {
-                                items.RemoveOne(e => (e as IReadOnlyTree)?.Data.Equals(a.Value) == true);
+                                m_items.RemoveOne(e => (e as IReadOnlyTree)?.Data.Equals(a.Value) == true);
                                 break;
                             }
                         case Changes.Type.Reset:
                             {
-                                items.Clear();
+                                m_items.Clear();
                                 break;
                             }
                     }
@@ -77,7 +84,7 @@ namespace Utility.Nodes.Reflections
             },
             () =>
             {
-                items.Complete();
+                //items.Complete();
             });
 
             return true;

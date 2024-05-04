@@ -8,7 +8,10 @@
 
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Changes\Utility.Changes.csproj" />
+		<ProjectReference Include="..\..\Infrastructure\Utility.Keys\Utility.Keys.csproj" />
+		<ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
 		<ProjectReference Include="..\Utility.Nodes\Utility.Nodes.csproj" />
 	</ItemGroup>
 
