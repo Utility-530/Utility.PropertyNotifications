@@ -112,12 +112,19 @@ namespace Utility.Helpers.Ex
             return observableCollection.SelectNewAndResetItems<T, ObservableCollection<T>>();
         }
 
-        public static ObservableCollection<T> ToObservableCollection<T>(this IObservable<T> observable, IScheduler scheduler)
+        public static ObservableCollection<T> ToObservableCollection<T>(this IObservable<T> observable, IScheduler? scheduler = null)
         {
             var obs = new ObservableCollection<T>();
 
             observable
-                .Subscribe(a => scheduler.Schedule(() => obs.Add(a)));
+                .Subscribe(a =>
+                {
+                    if (scheduler == null)
+                        obs.Add(a);
+                    else
+                        scheduler.Schedule(() => obs.Add(a));
+
+                });
 
             return obs;
         }
