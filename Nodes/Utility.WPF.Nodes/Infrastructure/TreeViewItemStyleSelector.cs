@@ -8,7 +8,7 @@ using System.Windows.Controls;
 
 namespace Utility.WPF.Nodes.NewFolder
 {
-    public class TreeViewItemStyleSelector:StyleSelector
+    public class TreeViewItemStyleSelector : StyleSelector
     {
         public override Style SelectStyle(object item, DependencyObject container)
         {

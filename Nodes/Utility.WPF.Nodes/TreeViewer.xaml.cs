@@ -6,10 +6,10 @@ using System.Windows.Data;
 using Utility.Nodes;
 using Utility.Interfaces.NonGeneric;
 using Utility.WPF.Nodes;
-using Utility.Infrastructure;
 using Utility.Trees.Abstractions;
 using VisualJsonEditor.Test;
 using Utility.Extensions;
+using Utility.Infrastructure;
 
 namespace Views.Trees
 {
@@ -166,8 +166,7 @@ namespace Views.Trees
             TreeExtensions.Visit(treeView as ItemsControl, 
             a =>
             {
-                var items = a.Items.Cast<TreeViewItem>();
-                return items;
+                return a.Items.Cast<TreeViewItem>();
             }, 
             a =>
             {

@@ -19,15 +19,15 @@ namespace Views.Trees
                 var treeViewItem = factory.Make();
                 treeViewItem.Header = viewModel;
                 treeViewItem.DataContext = viewModel;
-                treeViewItem.ItemContainerStyleSelector = styleSelector;
-                var binding = new Binding()
-                {
-                    //Source = new PropertyPath()
-                    Converter = ItemsPanelConverter,
-                    Mode = BindingMode.OneTime
-                };
+                //treeViewItem.ItemContainerStyleSelector = styleSelector;
+                //var binding = new Binding()
+                //{
+                //    //Source = new PropertyPath()
+                //    Converter = ItemsPanelConverter,
+                //    Mode = BindingMode.OneTime
+                //};
 
-                treeViewItem.SetBinding(ItemsControl.ItemsPanelProperty, binding);
+                //treeViewItem.SetBinding(ItemsControl.ItemsPanelProperty, binding);
                 treeViewItem.HeaderTemplateSelector = dataTemplateSelector;
 
                 itemcollection.Add(treeViewItem);
