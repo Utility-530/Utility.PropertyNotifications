@@ -243,7 +243,7 @@ namespace Utility.Trees
         }
 
    
-        public bool HasMoreChildren => false;
+        public virtual Task<bool> HasMoreChildren() => Task.FromResult(false);
 
         IReadOnlyTree IParent<IReadOnlyTree>.Parent { get => Parent; set => Parent= value as ITree; }
 
@@ -312,7 +312,7 @@ namespace Utility.Trees
 
         #endregion propertyChanged
 
-        public bool Equals(ITree? other)
+        public virtual bool Equals(ITree? other)
         {
             return other?.Key?.Equals(this.Key) == true;
         }
