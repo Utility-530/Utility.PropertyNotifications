@@ -2,6 +2,7 @@
 using Utility.Collections;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
+using Utility.Keys;
 using Utility.Models;
 using Utility.Observables;
 using Utility.Observables.NonGeneric;
@@ -11,7 +12,7 @@ namespace Utility.Nodes
 {
     public class DirectoryNode : Node, IObserver
     {
-        private readonly Lazy<DirectoryInfo> lazyContent;
+        private readonly Lazy<FileSystemInfo> lazyContent;
         private readonly string path;
         private readonly Collection _leaves = new();
         private readonly Collection _branches = new();
@@ -19,15 +20,21 @@ namespace Utility.Nodes
         private bool childrenflag;
         private bool flag;
 
-        public DirectoryNode(string path) : this()
-        {
-            lazyContent = new Lazy<DirectoryInfo>(() => new(path));
-            this.path = path;
-        }
+        //public DirectoryNode(string path) : this()
+        //{
+        //    lazyContent = new Lazy<FileSystemInfo>(() => new(path));
+        //    this.path = path;
+        //}
 
         public DirectoryNode(DirectoryInfo info) : this()
         {
-            lazyContent = new Lazy<DirectoryInfo>(() => info);
+            lazyContent = new Lazy<FileSystemInfo>(() => info);
+            path = info.Name;
+        }
+            
+        public DirectoryNode(FileInfo info) : this()
+        {
+            lazyContent = new Lazy<FileSystemInfo>(() => info);
             path = info.Name;
         }
 
@@ -38,10 +45,10 @@ namespace Utility.Nodes
             subject.Subscribe(this);
         }
 
-        public override IEquatable Key => new StringKey(lazyContent.Value.FullName);
+        public override string Key => lazyContent.Value.FullName;
 
 
-        public override DirectoryInfo Data => lazyContent.Value;
+        public override FileSystemInfo Data => lazyContent.Value;
 
         public override async Task<bool> HasMoreChildren()
         {
@@ -50,10 +57,12 @@ namespace Utility.Nodes
 
         public override Task<IReadOnlyTree> ToNode(object value)
         {
-            if (value is string str)
-                return Task.FromResult<IReadOnlyTree>(new DirectoryNode(str) { Parent = this });
-            else if (value is DirectoryInfo info)
+            //if (value is string str)
+            //    return Task.FromResult<IReadOnlyTree>(new DirectoryNode(new str) { Parent = this });
+            if (value is DirectoryInfo info)
                 return Task.FromResult<IReadOnlyTree>(new DirectoryNode(info) { Parent = this });
+            else if (value is FileInfo _info)
+                return Task.FromResult<IReadOnlyTree>(new DirectoryNode(_info) { Parent = this });
             throw new Exception("r 3 33");
         }
 
@@ -136,14 +145,14 @@ namespace Utility.Nodes
         }
 
   
-        public void OnNext(object value)
+        public async void OnNext(object value)
         {
             if (value is DirectoryInfo directoryInfo)
                 _branches.Add(directoryInfo);
             else if (value is FileInfo fileInfo)
                 _leaves.Add(fileInfo);
 
-            items.Add(ToNode(value));
+            m_items.Add(await ToNode(value));
         }
 
         public void OnCompleted()
