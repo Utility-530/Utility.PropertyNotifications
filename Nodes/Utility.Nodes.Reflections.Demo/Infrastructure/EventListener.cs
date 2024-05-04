@@ -18,15 +18,12 @@
             if (@event is DoubleClickChange clickChange)
             {
                 return;
-
             }
-            if (@event is ClickChange { Node: IReadOnlyTree{ Data: CollectionItemDescriptor { } descriptor } node }  _clickChange)
+            if (@event is ClickChange { Node: IReadOnlyTree{ Data: ICollectionItemDescriptor { } descriptor } node }  _clickChange)
             {
                 replay.OnNext(descriptor);
                 return;
-
             }
-
             if (@event is OnLoadedChange { Source: TreeViewItem _treeViewItem } loadedChange)
             {
                 AdornerController.Instance.OnNext(loadedChange);

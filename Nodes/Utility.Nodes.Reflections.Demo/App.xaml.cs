@@ -1,4 +1,4 @@
-﻿using Splat;
+﻿ using Splat;
 using System.Threading;
 using Utility.Collections;
 using Views.Trees;

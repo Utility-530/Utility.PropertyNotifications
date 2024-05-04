@@ -16,7 +16,7 @@ namespace Utility.Nodes.Demo
             }
 
 
-            if (item is IReadOnlyTree { Data: IMemberDescriptor { ParentType: { } componentType, Name: { } displayName } propertyNode })
+            if (item is IReadOnlyTree { Data: IDescriptor { ParentType: { } componentType, Name: { } displayName } propertyNode })
             {
                 if (componentType.Name == "Array")
                 {

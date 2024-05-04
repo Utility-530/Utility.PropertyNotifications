@@ -13,7 +13,7 @@
                     Orientation = Orientation.Horizontal,
                 });
             }
-            else if (value is IReadOnlyTree { Data: CollectionHeaderDescriptor { } _descriptor })
+            else if (value is IReadOnlyTree { Data: ICollectionHeadersDescriptor { } _descriptor })
             {
                 return convert(new ItemsPanel
                 {
@@ -22,9 +22,9 @@
                 });
 
             }
-            else if (value is IReadOnlyTree { Data: IMemberDescriptor { Guid: { } guid }, Parent.Data: { } descriptor })
+            else if (value is IReadOnlyTree { Data: IDescriptor { Guid: { } guid }, Parent.Data: { } descriptor })
             {
-                if (descriptor is CollectionItemDescriptor { Index: { } index })
+                if (descriptor is ICollectionItemDescriptor { Index: { } index })
                 {
                     return convert(new ItemsPanel
                     {

@@ -2,6 +2,7 @@
 using System.Reactive.Disposables;
 using System.Reactive.Threading.Tasks;
 using Utility.Changes;
+using Utility.Interfaces;
 using Utility.Nodes.Reflections;
 
 namespace Utility.Nodes.Demo
@@ -42,74 +43,40 @@ namespace Utility.Nodes.Demo
     public class MasterNode : ReflectionNode
     {
         private bool hasMoreChildren = true;
-        //static readonly Guid guid = Guid.Parse("c25b9ff5-54d2-4a73-9509-471d7c307fb0");
 
         public MasterNode() : base()
         {
-            //GuidRepository.Instance.Insert(guid, "master", typeof(MasterModel));
         }
 
         public override IObservable<object?> GetChildren()
         {
             hasMoreChildren = false;
-            return Observable.Create<Change<IMemberDescriptor>>(observable =>
+            return Observable.Create<Change<IDescriptor>>(observable =>
             {
                 return Locator.Current.GetService<ITreeRepository>()
-                    .Protos()
+                    .SelectKeys()
                     .ToObservable()
-                    .Subscribe(protos =>
+                    .Subscribe(async keys =>
                     {
                         int i = 0;
-                        foreach (var proto in protos)
+                        foreach (var key in keys)
                         {
-                            observable.OnNext(new(new CollectionItemDescriptor(proto, ++i, null) { Guid = proto.Guid }, Changes.Type.Add));
+                            if (key.Type != null)
+                            {
+                                var collectionItemDescriptor = await DescriptorFactory.CreateItem(key, ++i, key.Type, null, key.Guid);
+                                collectionItemDescriptor.Initialise();
+                                observable.OnNext(new(collectionItemDescriptor, Changes.Type.Add));
+                            }
                         }
                     });
             });
         }
-
-        //public override Task<IReadOnlyTree> ToNode(object value)
-        //{
-        //    if (value is IMemberDescriptor refl)
-        //    {
-        //        ReflectionNode node = new(refl)
-        //        {
-        //            Parent = this
-        //        };
-        //        return Task.FromResult((IReadOnlyTree)node);
-        //    }
-        //    throw new Exception("j00 888 ggjh7669");
-        //}
 
         public override Task<bool> HasMoreChildren()
         {
             return Task.FromResult(hasMoreChildren);
         }
     }
-
-    //public class ProtoNode : Node
-    //{
-    //    public ProtoNode(Proto data)
-    //    {
-    //        Data = data;
-    //    }
-
-    //    public override IObservable<object?> GetChildren()
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-
-    //    public override Task<bool> HasMoreChildren()
-    //    {
-    //        return Task.FromResult(false);
-    //    }
-
-    //    public override Task<IReadOnlyTree> ToNode(object value)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
-
 
     public class SlaveNode : ReflectionNode
     {
@@ -118,11 +85,14 @@ namespace Utility.Nodes.Demo
         {
             EventListener.Instance.Subscribe(async data =>
             {
-                if (data is PropertyDescriptor { Instance: Proto { Type: { } type, Name:{ } name,  Guid: { } guid } })
-                {  
-                    this.Data = new RootDescriptor(type, name) { Guid = guid }; ;
+                if (data is IInstance { Instance: Descriptors.Repositorys.Key { Type: { } type, Name: { } name, Guid: { } guid } })
+                {
+                    var instance = Activator.CreateInstance(type);
+                    var rootDescriptor = new RootDescriptor(type);
+                    this.Data = await DescriptorFactory.ToValue(instance, rootDescriptor, guid);
+                    this.OnPropertyChanged(nameof(Data));
                     flag = false;
-                    RefreshChildrenAsync();
+                    base.RefreshChildrenAsync();
                     flag = true;
                 }
             });
@@ -130,7 +100,7 @@ namespace Utility.Nodes.Demo
 
         public override async Task<bool> HasMoreChildren()
         {
-            return Data != null && flag == false;
+            return (Data as IDescriptor)?.Type.IsValueOrString() == false && flag == false;
         }
 
         public override string ToString()
@@ -139,17 +109,6 @@ namespace Utility.Nodes.Demo
         }
     }
 
-    //public class ModelRootPropertyNode : ReflectionNode
-    //{
-    //    static readonly Guid guid = Guid.Parse("c25b9ff5-54d2-4a73-9509-471d7c307fb0");
-
-    //    public ModelRootPropertyNode() : base(new RootDescriptor(Model) { Guid = guid })
-    //    {
-    //    }
-
-    //    static Model Model { get; } = new();
-    //}
-
     public class SelectionNode : ReflectionNode
     {
         bool flag;
@@ -157,13 +116,15 @@ namespace Utility.Nodes.Demo
         {
             CustomDataTemplateSelector.Instance.Subscribe(async data =>
             {
-                if (data is IMemberDescriptor { Guid: { } guid })
+                if (data is IDescriptor { Guid: { } guid })
                 {
                     var viewModel = ViewModelStore.Instance.Get(guid);
                     ViewModelStore.Instance.Save(viewModel);
                     if (string.IsNullOrEmpty(viewModel.Name))
-                        viewModel.Name = (data as IMemberDescriptor)?.Name;
-                    var propertyData = new RootDescriptor(viewModel) { Guid = guid };
+                        viewModel.Name = (data as IDescriptor)?.Name;
+                    var rootDescriptor = new RootDescriptor(typeof(ViewModel)) {  };
+                    var propertyData = await DescriptorFactory.ToValue(viewModel, rootDescriptor, guid);
+                    propertyData.Set(viewModel);
                     this.Data = propertyData;
                     flag = false;
                     RefreshChildrenAsync();
@@ -204,6 +165,8 @@ namespace Utility.Nodes.Demo
         public RootNode() : base()
         {
         }
+
+        public override object Data { get => "root"; set { } }
 
         public override IObservable<object?> GetChildren()
         {

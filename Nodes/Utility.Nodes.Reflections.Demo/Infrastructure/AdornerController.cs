@@ -1,4 +1,4 @@
-﻿using Utility.Infrastructure;
+﻿using Utility.Extensions;
 using Utility.WPF.Adorners.Infrastructure;
 using Utility.WPF.Animations.Helpers;
 using static Utility.Observables.NonGeneric.ObservableExtensions;
@@ -74,12 +74,12 @@ namespace Utility.Nodes.Reflections.Demo.Infrastructure
 
         private static IEnumerable<MethodNode> Methods(IReadOnlyTree tree)
         {
-            if (tree is { Data: CollectionItemDescriptor _ })
+            if (tree is { Data: ICollectionItemDescriptor _ })
             {
                 yield return new MethodNode { Name = Duplicate, Content = Duplicate, Command = new Commands.Command(() => ActionController.Instance.Duplicate(tree)) };
                 yield return new MethodNode { Name = Remove, Content = Remove, Command = new Commands.Command(() => ActionController.Instance.Remove(tree)) };
             }
-            if (tree is { Data: CollectionDescriptor _ })
+            if (tree is { Data: ICollectionDescriptor _ })
             {
                 yield return new MethodNode { Name = Add, Content = Add, Command = new Commands.Command(() => ActionController.Instance.Add(tree)) };
             }
@@ -159,7 +159,7 @@ namespace Utility.Nodes.Reflections.Demo.Infrastructure
 
             if (treeViewItem.AddIfMissingAdorner(itemsControl))
             {
-                //treeViewItem.SetValue(AdornerEx.IsEnabledProperty, true);
+                //treeViewItem.Set(AdornerEx.IsEnabledProperty, true);
                 Methods(node)
                 .ToObservable()
                 .Subscribe(methodNode =>
@@ -198,7 +198,7 @@ namespace Utility.Nodes.Reflections.Demo.Infrastructure
                 if (visibilityDictionary.TryGetValue(item.Key.Name, out var condition))
                 {
                     bool isMatch = IsMatch(item.Value.Parent, condition.ElementVisibility, condition.Predicate);
-                    //item.Value.Parent.SetValue(AdornerEx.IsEnabledProperty, isMatch);
+                    //item.Value.Parent.Set(AdornerEx.IsEnabledProperty, isMatch);
 
                     if (isMatch)
                     {
@@ -210,7 +210,7 @@ namespace Utility.Nodes.Reflections.Demo.Infrastructure
                         item.Value.Child.IsHitTestVisible = false;
                         item.Value.Child.FadeOut();
                     }
-                    //item.Value.Child.SetValue(UIElement.VisibilityProperty,
+                    //item.Value.Child.Set(UIElement.VisibilityProperty,
                     //    isMatch ?
                     //    Visibility.Visible :
                     //    Visibility.Collapsed);

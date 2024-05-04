@@ -1,4 +1,6 @@
-﻿using ResourceHelper = Utility.WPF.Helpers.ResourceHelper;
+﻿using Utility.Extensions;
+using Utility.Interfaces;
+using ResourceHelper = Utility.WPF.Helpers.ResourceHelper;
 
 namespace Utility.Nodes.Demo
 {
@@ -47,7 +49,7 @@ namespace Utility.Nodes.Demo
                 }
             }
 
-            if (item is IReadOnlyTree { Data: IMemberDescriptor { Type: { } type } })
+            if (item is IReadOnlyTree { Data: IDescriptor { Type: { } type } })
             {
                 if (type.IsValueOrString())
                     return MakeTemplate(item);
@@ -62,7 +64,8 @@ namespace Utility.Nodes.Demo
         {
             if (item is SlaveNode { })
             {
-                return MakeHeaderTemplate2(item, depth);
+                //return MakeHeaderTemplate2(item, depth);
+                return null;
             }
             if (item is IReadOnlyTree { Data: IPropertiesDescriptor { } })
             {
@@ -72,11 +75,11 @@ namespace Utility.Nodes.Demo
             {
                 return MakeTemplate(item, "None");
             }
-            if (item is IReadOnlyTree { Data: HeaderDescriptor { } })
+            if (item is IReadOnlyTree { Data: IHeaderDescriptor { } })
             {
                 return MakeTemplate(item, "Header");
             }
-            if (item is IReadOnlyTree { Data: CollectionDescriptor { } })
+            if (item is IReadOnlyTree { Data: ICollectionDescriptor { } })
             {
                 return MakeTemplate(item, "None");
             }
@@ -85,11 +88,11 @@ namespace Utility.Nodes.Demo
             {
                 return MakeTemplate(item, "Method");
             }
-            if (item is IReadOnlyTree { Parent.Data: CollectionItemDescriptor { } _ })
+            if (item is IReadOnlyTree { Parent.Data: ICollectionItemDescriptor { } _ })
             {
                 return MakeTemplate(item, "None");
             }
-            if (item is IReadOnlyTree { Parent.Parent.Data: CollectionItemDescriptor { Index: { } _index } _ })
+            if (item is IReadOnlyTree { Parent.Parent.Data: ICollectionItemDescriptor { Index: { } _index } _ })
             {
                 return MakeTemplate(item, "Body");
             }
@@ -99,13 +102,13 @@ namespace Utility.Nodes.Demo
                 return MakeTemplate(item, "None");
             }
             // root
-            if (item is IReadOnlyTree { Data: RootDescriptor { } })
+            if (item is IReadOnlyTree { Data: IPropertyDescriptor { Descriptor : RootDescriptor { } } })
             {
                 //return MakeHeaderTemplate(item, depth);
                 return MakeTemplate(item, "None");
             }
             // default
-            if (item is IReadOnlyTree { Data: ObjectValue { Descriptor: { } } })
+            if (item is IReadOnlyTree { Data: IPropertyDescriptor { Descriptor: { } } })
             {
                 return MakeHeaderTemplate(item, depth);
             }
@@ -182,10 +185,10 @@ namespace Utility.Nodes.Demo
 
             static Binding Binding(object item)
             {
-                return new(nameof(IMemberDescriptor.Name))
+                return new(nameof(IDescriptor.Name))
                 {
                     Converter = Utility.WPF.Converters.LambdaConverter.HumanizerConverter,
-                    Path = new PropertyPath($"{nameof(Node.Data)}.{nameof(IMemberDescriptor.Name)}"),
+                    Path = new PropertyPath($"{nameof(Node.Data)}.{nameof(IDescriptor.Name)}"),
                     Source = item
                 };
             }

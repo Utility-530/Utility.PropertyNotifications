@@ -26,7 +26,7 @@
                 <Setter Property="Width" Value="120"></Setter>
             </Style>
 
-            <DataTemplate DataType="{x:Type vm:MemberDescriptor}">
+            <DataTemplate x:Key="Basic">
                 <Grid >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition  Width="120"></ColumnDefinition>
@@ -43,18 +43,18 @@
                 </Grid>
             </DataTemplate>
 
-            <DataTemplate x:Key="Header"  DataType="{x:Type vm:MemberDescriptor}">
+            <DataTemplate x:Key="Header"  >
         
                     <TextBlock Width="120" Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
                     <!--<ContentControl Style="{StaticResource ContentControlStyle}" Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>-->
               
             </DataTemplate>
 
-            <DataTemplate x:Key="Body"  DataType="{x:Type vm:MemberDescriptor}">
+            <DataTemplate x:Key="Body"  >
                 <ContentControl Width="120" Style="{StaticResource ContentControlStyle}" Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
             </DataTemplate>
 
-            <DataTemplate x:Key="Name"  DataType="{x:Type vm:MemberDescriptor}">
+            <DataTemplate x:Key="Name"  >
                 <TextBlock  Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
             </DataTemplate>
 
@@ -66,11 +66,12 @@
                 <ContentControl Content="{Binding Converter={StaticResource ViewModelConverter}}"></ContentControl>
             </DataTemplate>-->
 
-            <DataTemplate x:Key="None"  DataType="{x:Type vm:MemberDescriptor}">
+            <DataTemplate x:Key="None"  >
                 <!--<Ellipse Fill="Blue" Height="8" Width="8" ToolTip="{Binding Name}"></Ellipse>-->
             </DataTemplate>
 
-            <DataTemplate x:Key="Method"   DataType="{x:Type vm:MethodDescriptor}">
+            <!--DataType="{x:Type vm:MethodDescriptor}"-->
+            <DataTemplate x:Key="Method"   >
                 <Button Content="{Binding Name, Mode=OneTime }" Command="{Binding Command, Mode=OneTime}"></Button>
             </DataTemplate>
         </ResourceDictionary>
