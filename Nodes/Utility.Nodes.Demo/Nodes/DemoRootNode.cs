@@ -18,7 +18,7 @@ namespace Utility.Nodes.Demo
 
         public override string Data => nameof(NodeType);
 
-        public override IEquatable Key => throw new NotImplementedException();
+        public override string Key => throw new NotImplementedException();
 
         public override IObservable<object> GetChildren()
         {
@@ -37,7 +37,7 @@ namespace Utility.Nodes.Demo
                 return nodeType switch
                 {
                     NodeType.ViewModel => new RootViewModelNode(),
-                    NodeType.Directory => new DirectoryNode(@"C:\"),             
+                    NodeType.Directory => new DirectoryNode(new System.IO.DirectoryInfo(@"C:\")),             
                     NodeType.Assembly => new AssemblyNode(),
                     NodeType.Type => new TypeNode(),
                     _ => new ExceptionNode(new Exception("Out of range"))

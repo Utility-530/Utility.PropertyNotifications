@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Utility.Extensions;
+using Utility.Interfaces.Generic;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
 
@@ -26,7 +28,7 @@ namespace Utility.Nodes.Demo.Infrastructure
         //    return Activator.CreateInstance(type);
         //}
 
-        public Type Root => tree.Data;
+        public Type Root => (Type)tree.Data;
 
         public IEnumerable Children<T>()
         {
@@ -35,19 +37,21 @@ namespace Utility.Nodes.Demo.Infrastructure
 
         public IEnumerable Children(Type type)
         {
-            if (tree.Match(type) is var branch)
+            if (tree.MatchDescendant(a=> (Type)a.Data==type) is { } branch)
                 return branch.Items.Cast<IReadOnlyTree>().Select(a => a.Data).ToArray();
             return Array.Empty<Type>();
         }
 
         public void Register<TParent, TChild>()
         {
-            tree[typeof(TParent)].Add(typeof(TChild));
+            if (tree.MatchDescendant(a => (Type)a.Data == typeof(TParent)) is Tree branch)
+                branch.Add(typeof(TChild));
         }
 
         public void Register(Type parent, Type child)
         {
-            tree[parent].Add(child);
+            if (tree.MatchDescendant(a => (Type)a.Data == parent) is Tree branch)
+                branch.Add(child);
         }
 
         public static Resolver Instance { get; } = new Resolver();

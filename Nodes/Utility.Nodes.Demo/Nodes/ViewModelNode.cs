@@ -7,6 +7,7 @@ using Utility.Nodes.Demo.Infrastructure;
 using System.Reactive.Linq;
 using System.Reactive.Disposables;
 using Utility.Trees.Abstractions;
+using Utility.Keys;
 
 namespace Utility.Nodes.Demo
 {
@@ -22,7 +23,7 @@ namespace Utility.Nodes.Demo
 
         public override object Data => Activator.CreateInstance(type);
 
-        public override IEquatable Key => new StringKey(type.AsString());
+        public override string Key => new StringKey(type.AsString());
 
         public override System.IObservable<object?> GetChildren()
         {
