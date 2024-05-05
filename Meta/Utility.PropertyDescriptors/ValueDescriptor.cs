@@ -7,40 +7,14 @@ namespace Utility.Descriptors;
 
 internal abstract record ValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IValue<T>
 {
-    public new T Value
-    {
-        get
-        {
-            var value = Get() is T t ? t : default; ;
-            this.RaisePropertyCalled(value);
-            return value;
-        }
 
-        set
-        {
-            Set(value);
-            this.RaisePropertyReceived(value);
-        }
-    }
+    T IValue<T>.Value => Get() is T t ? t : default; 
 }
 
 internal abstract record NullableValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IValue<T?>
 {
-    public new T? Value
-    {
-        get
-        {
-            var value = Get() is T t ? t : default; ;
-            this.RaisePropertyCalled(value);
-            return value;
-        }
 
-        set
-        {
-            Set(value);
-            this.RaisePropertyReceived(value);
-        }
-    }
+    T? IValue<T?>.Value => Get() is T t ? t : default; 
 }
 
 internal record ValueDescriptor(Descriptor Descriptor, object Instance) : PropertyDescriptor(Descriptor, Instance)

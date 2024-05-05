@@ -20,7 +20,7 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
         }
         set {
             Set(value); 
-                RaisePropertyReceived(value); 
+            RaisePropertyReceived(value); 
         }
     }
 
