@@ -22,6 +22,8 @@
         object? this[int key] { get; set; }
 
         void Invoke();
+
+        ICommand Command { get; }
     }
 
     public interface IMethodsDescriptor : IDescriptor
