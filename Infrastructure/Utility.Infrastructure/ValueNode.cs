@@ -78,6 +78,8 @@ namespace Utility.Nodes
             }
         }
 
+        Type IType.Type => this.Data.GetType();
+
         protected virtual void PropertyChanged_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Item[]")
