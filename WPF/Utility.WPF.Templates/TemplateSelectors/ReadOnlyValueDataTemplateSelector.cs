@@ -16,8 +16,27 @@ namespace Utility.WPF.Templates
             {
                 throw new Exception($"Unexpected type for item {item.GetType().Name}");
             }
+
             if (item is IType { Type: { } type })
             {
+                if (Nullable.GetUnderlyingType(type) != null)
+                {
+                    var underlyingType = Nullable.GetUnderlyingType(type);
+                    var underlyingTypeName = underlyingType.BaseType == typeof(Enum) ? underlyingType.BaseType.Name : underlyingType.Name;
+                    if (Templates[$"{type.Name}[{underlyingTypeName}]"] is DataTemplate dt)
+                        return dt;
+                }
+                if (type.BaseType == typeof(Enum))
+                {
+                    if (Templates[new DataTemplateKey(type.BaseType)] is DataTemplate __dt)
+                        return __dt;
+                }
+
+                if (type == typeof(object))
+                {
+                    return Templates["Object"] as DataTemplate;
+                }
+
                 return Templates[new DataTemplateKey(type)] as DataTemplate;
             }
             if (value == null)

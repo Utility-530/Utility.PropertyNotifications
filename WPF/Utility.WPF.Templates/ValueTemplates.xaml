@@ -11,6 +11,7 @@
                     xmlns:t="http://schemas.utility.com/trees"
                     xmlns:ad="http://schemas.utility.com/adorners"
                     xmlns:bhvrs="http://schemas.utility.com/behaviors" 
+                    xmlns:num="clr-namespace:NumericUpDownLib;assembly=NumericUpDownLib"
                     xmlns:controls="http://schemas.utility.com">
 
     <conv:IntToEnumConverter x:Key="IntToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
@@ -21,12 +22,31 @@
     <conv:TypeNameConverter x:Key="TypeNameConverter" />
 
     <DataTemplate DataType="{x:Type sys:Int32}">
-        <TextBox Text="{Binding Path=Value, Mode=TwoWay, StringFormat={}{0:N0}}"></TextBox>
+        <num:NumericUpDown Value="{Binding Path=Value, Mode=TwoWay}"></num:NumericUpDown>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:Byte}">
-        <TextBox Text="{Binding Path=Value, Mode=TwoWay, StringFormat={}{0:N0}}"></TextBox>
+        <num:ByteUpDown Value="{Binding Path=Value, Mode=TwoWay}"></num:ByteUpDown>
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type sys:Int16}">
+        <num:ShortUpDown Value="{Binding Path=Value, Mode=TwoWay}"></num:ShortUpDown>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type sys:Int64}">
+        <num:LongUpDown Value="{Binding Path=Value, Mode=TwoWay}"></num:LongUpDown>
+    </DataTemplate>
+
+
+    <DataTemplate DataType="{x:Type sys:Double}">
+        <num:DoubleUpDown Value="{Binding Path=Value, Mode=TwoWay}"></num:DoubleUpDown>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type sys:Decimal}">
+        <num:DecimalUpDown Value="{Binding Path=Value, Mode=TwoWay}"></num:DecimalUpDown>
+    </DataTemplate>
+
+    
 
     <DataTemplate DataType="{x:Type sys:DateTime}">
         <TextBox Text="{Binding Path=Value, Mode=TwoWay}"></TextBox>
@@ -64,6 +84,7 @@
 
     <DataTemplate x:Key="Object">
         <!--<ContentControl Content="{Binding }"></ContentControl>-->
+        <TextBlock Text="Object"></TextBlock>
     </DataTemplate>
 
 
@@ -79,9 +100,6 @@
         <TextBox Text="{Binding Path=Value, Mode=TwoWay, StringFormat={}{0:N0}}"></TextBox>
     </DataTemplate>-->
 
-    <DataTemplate DataType="{x:Type sys:Double}">
-        <TextBox Text="{Binding Path=Value, Mode=TwoWay, StringFormat={}{0:N0}}"></TextBox>
-    </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:Enum}">
         <ComboBox >

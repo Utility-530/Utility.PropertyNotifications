@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using Utility.Interfaces.NonGeneric;
 
@@ -9,6 +10,7 @@ namespace Utility.WPF.Templates
     public class ValueDataTemplateSelector : GenericDataTemplateSelector
     {
         private ValueTemplates valueTemplates;
+        private Type[] types;
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -52,6 +54,21 @@ namespace Utility.WPF.Templates
             return (Templates["Missing"] as DataTemplate) ?? throw new Exception("dfs 33091111111");
         }
 
+
+        public Type[] Types
+        {
+            get
+            {
+                types ??= NewMethod();
+                return types;
+            }
+        }
+
+        private Type[] NewMethod()
+        {
+            var keys = this.Templates.Keys.OfType<DataTemplateKey>().ToArray();
+            return keys.Select(a => a.DataType).OfType<Type>().ToArray(); 
+        }
 
         public override ResourceDictionary Templates
         {

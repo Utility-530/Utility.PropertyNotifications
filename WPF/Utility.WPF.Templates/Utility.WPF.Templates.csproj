@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\..\Projects\Wpf TextBox\NumericUpDownLib\source\NumericUpDownLib\NumericUpDownLib.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Adorners\Utility.WPF.Adorners.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Behaviors\Utility.WPF.Behaviors.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />

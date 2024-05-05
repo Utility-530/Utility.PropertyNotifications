@@ -8,6 +8,7 @@
                     xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:controls="http://schemas.utility.com"
                     xmlns:utl="http://schemas.utility.com/utilitywpf"
+                    xmlns:local="clr-namespace:Utility.WPF.Templates"
                     x:Class="Utility.WPF.Templates.Templates">
 
     <converter:TypeNameConverter x:Key="TypeNameConverter" />
@@ -76,6 +77,10 @@
         <controls:EnumItemsControl Value="{Binding Mode=OneWay,Converter={x:Static conv:DefaultConverter.Instance} }" ></controls:EnumItemsControl>
     </DataTemplate>-->
 
+
+    <DataTemplate x:Key="Value">
+        <ContentPresenter Content="{Binding Value}" ContentTemplateSelector="{x:Static local:CustomDataTemplateSelector.Instance}"/>
+    </DataTemplate>
 
     <DataTemplate x:Key="Missing">
         <TextBlock>

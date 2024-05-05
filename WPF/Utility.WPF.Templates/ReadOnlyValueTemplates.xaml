@@ -76,6 +76,10 @@
         </ComboBox>
     </DataTemplate>
 
+    <DataTemplate x:Key="Object">
+        <TextBlock Text="Object"></TextBlock>
+    </DataTemplate>
+
     <DataTemplate x:Key="Nullable`1[Int32]">
         <StackPanel>
             <TextBlock Text="{Binding Path=Value.Value, Mode=OneWay, StringFormat={}{0:N0}}">
