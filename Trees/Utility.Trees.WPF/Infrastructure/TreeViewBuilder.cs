@@ -1,5 +1,6 @@
 using NetFabric.Hyperlinq;
 using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Extensions;
@@ -20,7 +21,8 @@ namespace Views.Trees
                 treeViewItem.ItemContainerStyleSelector = styleSelector;
                 var binding = new Binding()
                 {
-                    //Source = new PropertyPath()
+                    //Source = new PropertyPath(),
+                    Source = treeViewItem.Header,
                     Converter = ItemsPanelConverter,
                     Mode = BindingMode.OneTime
                 };
