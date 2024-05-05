@@ -324,10 +324,12 @@ namespace Utility.Descriptors.Repositorys
         public void Set(Guid guid, object value, DateTime dateTime)
         {
             var text = JsonConvert.SerializeObject(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-            if (connection.Query<Values>($"SELECT * FROM '{nameof(Values)}' WHERE Guid = '{guid}' AND Value = '{text}'").Any() == false)
+            var query = $"SELECT * FROM '{nameof(Values)}' WHERE Guid = '{guid}' AND Value = '{text}'";
+            if (connection.Query<Values>(query).Any() == false)
             {
                 var typeId = TypeId(value.GetType());
                 connection.InsertOrReplace(new Values { Guid = guid, Value = text, Added = dateTime, TypeId = typeId });
+                values[guid] = new(dateTime, text);
             }
         }
 
@@ -344,9 +346,23 @@ namespace Utility.Descriptors.Repositorys
                     throw new Exception("sd s389989898");
                 return type;
             }
+
             return null;
         }
 
+        public System.Type? GetType(Guid guid, string tableName)
+        {
+
+            var tables = connection.Query<Relationships>($"SELECT * FROM '{tableName}' WHERE Guid = '{guid}'");
+
+            var single = tables.SingleOrDefault()?.TypeId;
+
+            if (single.HasValue)
+            {
+                return ToType(single.Value);
+            }
+            return null;
+        }
 
         public DateValue? Get(Guid guid)
         {
