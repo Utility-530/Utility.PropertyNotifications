@@ -27,11 +27,18 @@ namespace Utility.Trees.Demo.MVVM
             {
                 if (value is Tree { Key: string str } && (GuidKey)str is { Value: { } guid } && guid != default)
                 {
-                    var _guid = TreeRepository.Instance.Find(guid, nameof(ViewModel.ItemsPanelTemplateKey)).GetAwaiter().GetResult();
-                    var itemsPanelKey = TreeRepository.Instance.Get(_guid);
-                    if (itemsPanelKey != null)
-                        if (App.Current?.TryFindResource(itemsPanelKey) is ItemsPanelTemplate template)
-                            return template;
+                    var _guid = TreeRepository.Instance.Find(guid, nameof(ViewModel.ItemsPanelTemplateKey));
+                    if (_guid.Wait(500))
+                    {
+                        var itemsPanelKey = TreeRepository.Instance.Get(_guid.Result);
+                        if (itemsPanelKey != null)
+                            if (App.Current?.TryFindResource(itemsPanelKey) is ItemsPanelTemplate template)
+                                return template;
+                    }
+                    else
+                    {
+                        throw new TimeoutException(" dssdfds");
+                    }
                 }
                 return ItemsPanelFactory.Template(default, default, Orientation.Vertical, Enums.Arrangement.Stacked);
             }
@@ -57,11 +64,14 @@ namespace Utility.Trees.Demo.MVVM
             {
                 //if (item?.GetType() is Type type && new DataTemplateKey(type) is var key &&  App.Current?.TryFindResource(key) is DataTemplate dataTemplate)
                 //    return dataTemplate;        
-
+                TreeRepository.Instance.Initialise().Wait(500);
                 if (item is Tree { Key: string str } && (GuidKey)str is { Value: { } guid } && guid != default)
                 {
-                    var _guid = TreeRepository.Instance.Find(guid, nameof(ViewModel.DataTemplateKey)).GetAwaiter().GetResult();
-                    var dataTemplateKey = TreeRepository.Instance.Get(_guid);
+                    var _guid = TreeRepository.Instance.Find(guid, nameof(ViewModel.DataTemplateKey));
+                    if(_guid.Wait(500)==false)
+                        throw new TimeoutException(" d222 ssdfds");
+
+                    var dataTemplateKey = TreeRepository.Instance.Get(_guid.Result);
 
                     if (dataTemplateKey != null)
                     {
@@ -82,6 +92,7 @@ namespace Utility.Trees.Demo.MVVM
         {
             public override Style SelectStyle(object item, DependencyObject container)
             {
+                TreeRepository.Instance.Initialise().Wait(500);
 
                 if (item is Tree { Key: string str } && (GuidKey)str is { Value: { } guid } && guid != default)
                 {

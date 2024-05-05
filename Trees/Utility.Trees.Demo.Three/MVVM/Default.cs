@@ -12,8 +12,9 @@ using System.Windows.Media;
 using Utility.Trees.Abstractions;
 using Utility.Interfaces.Generic;
 using Utility.Keys;
+using Utility.Trees.Demo.MVVM.Infrastructure;
 
-namespace Utility.Trees.Demo.MVVM.Infrastructure
+namespace Utility.Trees.Demo.MVVM.MVVM
 {
     public class Default
     {
@@ -67,7 +68,7 @@ namespace Utility.Trees.Demo.MVVM.Infrastructure
                 //if (item?.GetType() is Type type && new DataTemplateKey(type) is var key &&  App.Current?.TryFindResource(key) is DataTemplate dataTemplate)
                 //    return dataTemplate;        
 
-                if (App.Current?.TryFindResource("Tree") is DataTemplate dataTemplate)
+                if (Application.Current?.TryFindResource("Tree") is DataTemplate dataTemplate)
                     return dataTemplate;
 
 

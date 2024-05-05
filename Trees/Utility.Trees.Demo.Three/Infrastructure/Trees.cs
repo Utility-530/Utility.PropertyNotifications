@@ -1,24 +1,14 @@
-﻿using Fasterflect;
-using System;
-using System.Collections;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
+﻿using System;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
-using Utility.Changes;
 using Utility.Descriptors;
 using Utility.Descriptors.Repositorys;
 using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
-using Utility.Meta;
-using Utility.Models;
 using Utility.Nodes.Reflections;
 using Utility.PropertyNotifications;
-using Utility.Trees.Abstractions;
 
 namespace Utility.Trees.Demo.MVVM.Infrastructure
 {
@@ -102,13 +92,11 @@ namespace Utility.Trees.Demo.MVVM.Infrastructure
         public RootNode() : base()
         {
             Key = new GuidKey(guid);
-
-
         }
 
-        public async Task Initialise()
+        public async Task Initialise(Type type)
         {
-            var type = typeof(Utility.Trees.Demo.Models.Model);
+            //var type = typeof(Utility.Trees.Demo.Models.Model);
             var instance = Activator.CreateInstance(type);
             var rootDescriptor = new RootDescriptor(type);
             rootDescriptor.SetValue(null, instance);
@@ -133,7 +121,6 @@ namespace Utility.Trees.Demo.MVVM.Infrastructure
 
     public class ViewModelTree : Tree
     {
-
         public ViewModelTree()
         {
             var viewModel = new ViewModel();
@@ -141,7 +128,6 @@ namespace Utility.Trees.Demo.MVVM.Infrastructure
 
 
             viewModel.WhenReceived()
-
                       .Subscribe(a =>
                       {
                           var model = a.Value;
