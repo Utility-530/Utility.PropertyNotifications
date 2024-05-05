@@ -247,6 +247,10 @@ namespace Utility.Trees
 
         IReadOnlyTree IParent<IReadOnlyTree>.Parent { get => Parent; set => Parent= value as ITree; }
 
+        object IValue.Value => Data;
+
+        Type IType.Type => Data?.GetType();
+
         private void ResetOnCollectionChangedEvent()
         {
             if (m_items != null)
@@ -328,10 +332,6 @@ namespace Utility.Trees
             return other?.Equals(this.Key) == true;
         }
 
-        public bool Equals(IKey<IEquatable>? other)
-        {
-            throw new NotImplementedException();
-        }
     }
 
     internal static class TreeHelper
