@@ -13,8 +13,6 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
 
     public int Index => 0;
 
-    public override object Value { get => null; set => throw new NotImplementedException(); }
-
     public override bool IsReadOnly => true;
 
     public IObservable<object> Children
@@ -54,16 +52,6 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
     {
     }
 
-
-    public override object? Get()
-    {
-        return null;
-    }
-
-    public override void Set(object? value)
-    {
-        throw new NotImplementedException();
-    }
 }
 
 internal record HeaderDescriptor : MemberDescriptor, IHeaderDescriptor
@@ -82,16 +70,6 @@ internal record HeaderDescriptor : MemberDescriptor, IHeaderDescriptor
 
     //public override object Value { get => null; set => throw new NotImplementedException(); }
 
-
-    public override object? Get()
-    {
-        return null;
-    }
-
-    public override void Set(object? value)
-    {
-        throw new NotImplementedException();
-    }
 
     public override void Initialise(object? item = null)
     {
@@ -174,18 +152,18 @@ internal partial record CollectionItemReferenceDescriptor :  ReferenceDescriptor
 
     public override string? Name => Type.Name;
 
-    public override object Get() => Item;
+    //public override object Get() => Item;
 
-    public override void Set(object? value)
-    {
-        if (Item is IList collection)
-        {
-            collection[Index] = value;
-            Item = value;
+    //public override void Set(object? value)
+    //{
+    //    if (Item is IList collection)
+    //    {
+    //        collection[Index] = value;
+    //        Item = value;
 
-        }
-        throw new NotImplementedException();
-    }
+    //    }
+    //    throw new NotImplementedException();
+    //}
 
 
     public static int ToIndex(string name) => int.Parse(MyRegex().Matches(name).First().Groups[1].Value);

@@ -7,7 +7,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Pr
 {
     private readonly ITreeRepository repo = Locator.Current.GetService<ITreeRepository>();
 
-    public virtual IObservable<object> Children
+    public override IObservable<object> Children
     {
         get
         {
@@ -47,7 +47,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Pr
     {
         this.VisitChildren(a =>
         {
-            if (a is PropertyDescriptor descriptor)
+            if (a is PropertyValueDescriptor descriptor)
             {
                 descriptor.Initialise();
             }

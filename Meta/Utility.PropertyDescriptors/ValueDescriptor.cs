@@ -17,7 +17,7 @@ internal abstract record NullableValueDescriptor<T>(Descriptor Descriptor, objec
     T? IValue<T?>.Value => Get() is T t ? t : default; 
 }
 
-internal record ValueDescriptor(Descriptor Descriptor, object Instance) : PropertyDescriptor(Descriptor, Instance)
+internal record ValueDescriptor(Descriptor Descriptor, object Instance) : PropertyValueDescriptor(Descriptor, Instance)
 {
     private object? value;
     private readonly ITreeRepository repo = Locator.Current.GetService<ITreeRepository>();

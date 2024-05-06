@@ -10,7 +10,7 @@ namespace Utility.Descriptors
         {
             var guid = await repo.Find(parentGuid, descriptor.Name, descriptor.PropertyType);
 
-            PropertyDescriptor _descriptor = DescriptorConverter.ToDescriptor(value, descriptor);
+            MemberDescriptor _descriptor = DescriptorConverter.ToDescriptor(value, descriptor);
             _descriptor.Guid = guid;
             _descriptor.ParentGuid = parentGuid;
             return _descriptor;
@@ -26,7 +26,7 @@ namespace Utility.Descriptors
 
         public static async Task<IDescriptor> CreateItem(object item, int index, Type type, Type parentType, Guid parentGuid)
         {
-            PropertyDescriptor descriptor;
+            MemberDescriptor descriptor;
             if (type.IsValueOrString())
             {
                 descriptor = new CollectionItemDescriptor(item, index, parentType);
@@ -53,9 +53,9 @@ namespace Utility.Descriptors
 
     class DescriptorConverter
     {
-        public static PropertyDescriptor ToDescriptor(object? value, Descriptor descriptor)
+        public static MemberDescriptor ToDescriptor(object? value, Descriptor descriptor)
         {
-            PropertyDescriptor _descriptor = descriptor.PropertyType switch
+            MemberDescriptor _descriptor = descriptor.PropertyType switch
             {
                 Type t when t == typeof(string) => new StringValue(descriptor, value),
                 Type t when t.BaseType == typeof(Enum) => new EnumValue(descriptor, value),

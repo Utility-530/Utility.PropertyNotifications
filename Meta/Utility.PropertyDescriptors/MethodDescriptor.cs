@@ -31,16 +31,6 @@ internal record MethodDescriptor : MemberDescriptor, IMethodDescriptor, IChildre
 
     public override Type ParentType => methodInfo.DeclaringType;
 
-    public override object Get()
-    {
-        throw new NotImplementedException();
-    }
-    public override void Set(object value)
-    {
-        throw new NotImplementedException();
-    }
-
-
     public void Invoke()
     {
         methodInfo.Invoke(instance, dictionary.OrderBy(a => a.Key).Select(a => a.Value).ToArray());

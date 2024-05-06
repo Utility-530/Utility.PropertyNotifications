@@ -15,24 +15,12 @@ namespace Utility.Descriptors
                     var descriptors = TypeDescriptor.GetProperties(Instance);
                     foreach (Descriptor descriptor in descriptors)
                     {
-                        var propertyDescriptor = await DescriptorFactory.ToValue(Instance, descriptor, Guid);
+                        var propertyDescriptor = new PropertyDescriptor(descriptor, Instance) { Guid  = Guid };
                         observer.OnNext(new(propertyDescriptor, Changes.Type.Add));
                     }
                     return Disposable.Empty;
                 });
             }
         }
-
-        public override object? Get()
-        {
-
-            return null;
-        }
-
-        public override void Set(object? value)
-        {
-            //Descriptor.SetValue(Instance, value);
-        }
-
     }
 }

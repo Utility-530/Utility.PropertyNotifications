@@ -66,7 +66,7 @@ internal record LongValue(Descriptor Descriptor, object Instance) : ValueDescrip
 
 internal record NullableLongValue(Descriptor Descriptor, object Instance) : NullableValueDescriptor<long>(Descriptor, Instance);
 
-internal record NullValue(Descriptor Descriptor, object Instance) : PropertyDescriptor(Descriptor, Instance), IValue
+internal record NullValue(Descriptor Descriptor, object Instance) : PropertyValueDescriptor(Descriptor, Instance), IValue
 {
     public override object? Get()
     {
@@ -82,7 +82,10 @@ internal record NullValue(Descriptor Descriptor, object Instance) : PropertyDesc
     {
     }
 
-
+    public override void Set(object? value)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 

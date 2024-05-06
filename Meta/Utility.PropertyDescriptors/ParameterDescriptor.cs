@@ -1,7 +1,7 @@
 ﻿
 namespace Utility.Descriptors
 {
-    internal record ParameterDescriptor(ParameterInfo ParameterInfo, Dictionary<int, object?> Component) : MemberDescriptor(ParameterInfo.ParameterType)
+    internal record ParameterDescriptor(ParameterInfo ParameterInfo, Dictionary<int, object?> Component) : ValueMemberDescriptor(ParameterInfo.ParameterType)
     {
         public override Type ParentType => typeof(Dictionary<string, object?>);
 
