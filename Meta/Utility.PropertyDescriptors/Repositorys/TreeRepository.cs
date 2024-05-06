@@ -1,6 +1,8 @@
 ﻿using System;
 using Utility.Descriptors.Types;
 using Guid = System.Guid;
+using static Utility.Constants;
+using TommasoScalici.MathExtensions;
 
 namespace Utility.Descriptors.Repositorys
 {
@@ -400,6 +402,22 @@ namespace Utility.Descriptors.Repositorys
 
             var type = connection.Table<Type>().Where(v => v.Id.Equals(typeId)).First();
             var assemblyQualifiedName = Assembly.CreateQualifiedName(type.Assembly, $"{type.Namespace}.{type.Name}");
+            try
+            {
+                var ass = Assembly.Load(type.Assembly);
+            }
+            catch (Exception ex)
+            {
+                string assemblyFileName = type.Assembly.Split(',')[0];
+                foreach (var file in System.IO.Directory.EnumerateFiles(AssembliesPath, "*.dll"))
+                {
+                    if (file.Contains(assemblyFileName))
+                    {
+                        var ass = Assembly.LoadFrom(file);
+                        break;
+                    }
+                }
+            }
             var systemType = System.Type.GetType(assemblyQualifiedName);
             types[typeId] = systemType;
             return systemType;
@@ -432,6 +450,11 @@ namespace Utility.Descriptors.Repositorys
         }
 
 
-        public static TreeRepository Instance { get; } = new("c:/ProgramData/Utility");
+        const string Utility = nameof(Utility);
+
+        static readonly string DataPath = System.IO.Path.Combine(ProgramData, Utility);
+
+        static readonly string AssembliesPath = System.IO.Path.Combine(ProgramData, Utility, "Assemblies");
+        public static TreeRepository Instance { get; } = new(DataPath);
     }
 }
