@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Interfaces
 {
@@ -6,4 +7,10 @@ namespace Utility.Interfaces
     {
         PropertyDescriptor Descriptor { get; }
     }
+
+    public interface IValueDescriptor : IDescriptor, IGet, ISet, IValue, ISetValue
+    {
+
+    }
+
 }
