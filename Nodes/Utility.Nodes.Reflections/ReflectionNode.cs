@@ -93,15 +93,15 @@ namespace Utility.Nodes.Reflections
 
         public override IObservable<object?> GetChildren()
         {
-            if(data is IChildren children)
-            return children.Children;
+            if (data is IChildren children)
+                return children.Children;
             return Observable.Empty<object?>();
         }
 
 
         public override async Task<bool> HasMoreChildren()
         {
-            return data?.Type.IsValueOrString() == false && await base.HasMoreChildren();
+            return /*data?.Type.IsValueOrString() == false && */await base.HasMoreChildren();
         }
 
         public override string ToString()
