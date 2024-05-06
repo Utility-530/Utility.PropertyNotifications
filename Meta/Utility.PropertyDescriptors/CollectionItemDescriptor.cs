@@ -152,20 +152,6 @@ internal partial record CollectionItemReferenceDescriptor :  ReferenceDescriptor
 
     public override string? Name => Type.Name;
 
-    //public override object Get() => Item;
-
-    //public override void Set(object? value)
-    //{
-    //    if (Item is IList collection)
-    //    {
-    //        collection[Index] = value;
-    //        Item = value;
-
-    //    }
-    //    throw new NotImplementedException();
-    //}
-
-
     public static int ToIndex(string name) => int.Parse(MyRegex().Matches(name).First().Groups[1].Value);
 
     public static string FromIndex(string name, int index) => name + $" [{index}]";

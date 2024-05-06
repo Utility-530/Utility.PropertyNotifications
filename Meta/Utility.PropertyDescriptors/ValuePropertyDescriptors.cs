@@ -89,11 +89,15 @@ internal record NullValue(Descriptor Descriptor, object Instance) : PropertyValu
 }
 
 
-internal record ObjectValue(Descriptor Descriptor, object Instance) : ReferenceDescriptor(Descriptor, Instance);
 
-internal record StructValue(Descriptor Descriptor, object Instance) : ValueDescriptor<object>(Descriptor, Instance)
+internal record ObjectValue(Descriptor Descriptor, object Instance) : ValueDescriptor<object>(Descriptor, Instance)
 {
 }
+
+internal record StructValue(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance)
+{
+}
+
 
 internal record StringValue(Descriptor Descriptor, object Instance) : ValueDescriptor<string>(Descriptor, Instance)
 {

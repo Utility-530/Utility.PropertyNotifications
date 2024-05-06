@@ -1,4 +1,5 @@
 ﻿using Splat;
+using Utility.Interfaces;
 
 namespace Utility.Descriptors
 {
@@ -6,17 +7,17 @@ namespace Utility.Descriptors
     {
         private static ITreeRepository repo => Locator.Current.GetService<ITreeRepository>();
 
-        public static async Task<IDescriptor> ToValue(object? value, Descriptor descriptor, Guid parentGuid)
+        public static async Task<ValueMemberDescriptor> ToValue(object? value, Descriptor descriptor, Guid parentGuid)
         {
             var guid = await repo.Find(parentGuid, descriptor.Name, descriptor.PropertyType);
 
-            MemberDescriptor _descriptor = DescriptorConverter.ToDescriptor(value, descriptor);
+            ValueMemberDescriptor _descriptor = DescriptorConverter.ToDescriptor(value, descriptor);
             _descriptor.Guid = guid;
             _descriptor.ParentGuid = parentGuid;
             return _descriptor;
         }   
 
-        public static async Task<IDescriptor> CreateRoot(Descriptor descriptor, Guid guid)
+        public static async Task<IValueDescriptor> CreateRoot(Descriptor descriptor, Guid guid)
         {
             await repo.InsertRoot(guid, descriptor.Name, descriptor.PropertyType);
             var _descriptor = DescriptorConverter.ToDescriptor(default, descriptor);
@@ -53,9 +54,9 @@ namespace Utility.Descriptors
 
     class DescriptorConverter
     {
-        public static MemberDescriptor ToDescriptor(object? value, Descriptor descriptor)
+        public static ValueMemberDescriptor ToDescriptor(object? value, Descriptor descriptor)
         {
-            MemberDescriptor _descriptor = descriptor.PropertyType switch
+            ValueMemberDescriptor _descriptor = descriptor.PropertyType switch
             {
                 Type t when t == typeof(string) => new StringValue(descriptor, value),
                 Type t when t.BaseType == typeof(Enum) => new EnumValue(descriptor, value),

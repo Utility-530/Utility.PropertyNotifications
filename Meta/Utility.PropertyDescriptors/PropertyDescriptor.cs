@@ -10,8 +10,6 @@ public record PropertyDescriptor(Descriptor Descriptor, object Instance) : Membe
 
     public override bool IsReadOnly => Descriptor.IsReadOnly;
 
-
-
     public virtual IObservable<object> Children
     {
         get
@@ -30,19 +28,10 @@ public record PropertyDescriptor(Descriptor Descriptor, object Instance) : Membe
 
     public override void Finalise(object? item = null)
     {
-        //throw new NotImplementedException();
     }
-
 
     public override void Initialise(object? item = null)
     {
-        this.VisitChildren(a =>
-        {
-            //if (a is PropertyValueDescriptor descriptor)
-            //{
-            //    descriptor.Initialise();
-            //}
-        });
     }
 }
 

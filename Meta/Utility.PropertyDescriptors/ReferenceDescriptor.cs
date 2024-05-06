@@ -45,24 +45,10 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Pr
 
     public override void Initialise(object? item = null)
     {
-        this.VisitChildren(a =>
-        {
-            if (a is PropertyValueDescriptor descriptor)
-            {
-                descriptor.Initialise();
-            }
-        });
     }
 
     public override void Finalise(object? item = null)
     {
-        this.VisitChildren(a =>
-        {
-            if (a is PropertyDescriptor descriptor)
-            {
-                descriptor.Finalise();
-            }
-        });
     }
 
 }
