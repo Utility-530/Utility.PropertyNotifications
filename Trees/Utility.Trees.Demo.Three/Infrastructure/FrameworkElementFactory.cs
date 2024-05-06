@@ -19,12 +19,28 @@ namespace Utility.Trees.Demo.MVVM
 
         public Window CreateWindow()
         {
+            IDisposable? disposable = null;
 
             DockPanel dockPanel = new();
-            ComboBox comboBox = MakeComboBox(dockPanel);
+            ComboBox comboBox = MakeComboBox();
+            dockPanel.Children.Add(comboBox);
 
             var window = new Window { Content = dockPanel };
 
+            var children = dockPanel.Children;
+            comboBox
+           .ValueChanges()
+           .Cast<Descriptors.Repositorys.Key>()
+           // type can be null because type from another assembly not loaded 
+           .Where(a => a.Type != null)
+           .Subscribe(a =>
+           {
+               if (children.Count > 1)
+                   children.RemoveAt(1);
+               children.Add(MakeGrid(a.Type));
+               disposable?.Dispose();
+               disposable = Disposable();
+           });
 
 
             return window;
@@ -48,7 +64,7 @@ namespace Utility.Trees.Demo.MVVM
             return grid;
         }
 
-        ComboBox MakeComboBox(DockPanel dockPanel)
+        ComboBox MakeComboBox()
         {
             var rootKeys = TreeRepository.Instance.SelectKeys().GetAwaiter().GetResult();
             ComboBox comboBox = new()
@@ -59,23 +75,6 @@ namespace Utility.Trees.Demo.MVVM
             };
 
             DockPanel.SetDock(comboBox, Dock.Top);
-            dockPanel.Children.Add(comboBox);
-
-            IDisposable? disposable = null;
-            comboBox
-                .ValueChanges()
-                .Cast<Descriptors.Repositorys.Key>()
-                // type can be null because type from another assembly not loaded 
-                .Where(a => a.Type != null)
-                .Subscribe(a =>
-                {
-                    if (dockPanel.Children.Count > 1)
-                        dockPanel.Children.RemoveAt(1);
-                    dockPanel.Children.Add(MakeGrid(a.Type));
-                    disposable?.Dispose();
-                    disposable = Disposable();
-                });
-
             return comboBox;
         }
 
@@ -221,11 +220,9 @@ namespace Utility.Trees.Demo.MVVM
                 ViewModel = view,
                 TreeViewItemFactory = Default.TreeViewItemFactory.Instance,
                 TreeViewBuilder = TreeViewBuilder.Instance,
-
                 PanelsConverter = View.ItemsPanelConverter.Instance,
                 DataTemplateSelector = View.DataTemplateSelector.Instance,
                 StyleSelector = View.StyleSelector.Instance,
-
                 TreeViewFilter = Default.Filter.Instance,
                 EventListener = Default.EventListener.Instance
             };
