@@ -28,7 +28,8 @@
     }
     public class Property
     {
-        public int Value { get; } = 1;
+        public int ReadOnlyIntValue { get; } = 1;
+        public double DoubleValue { get; set; } = 1.43;
         public bool BooleanValue { get; set; } = false;
     }
 }

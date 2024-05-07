@@ -3,6 +3,8 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using Utility.Descriptors;
 using Utility.Enums;
 using Utility.Interfaces;
@@ -21,9 +23,6 @@ namespace Utility.Trees.Demo.MVVM.MVVM
         {
             public static DataTemplateSelector Instance { get; } = new();
 
-
-
-
             public override DataTemplate SelectTemplate(object item, DependencyObject container)
             {
 
@@ -35,24 +34,24 @@ namespace Utility.Trees.Demo.MVVM.MVVM
                 //{
                 //    return MakeTemplate(item, "None");
                 //}
-                if (item is IReadOnlyTree { Data: IHeaderDescriptor { } })
+                else if (item is IReadOnlyTree { Data: IHeaderDescriptor { } })
                 {
                     return MakeHeaderTemplate(item, 1);
                 }
-                if (item is IReadOnlyTree { Data: ICollectionDescriptor { } })
+                else if (item is IReadOnlyTree { Data: ICollectionDescriptor { } })
                 {
                     return MakeEmptyTemplate();
                 }
                 // method
-                if (item is IReadOnlyTree { Data: IMethodDescriptor { } })
+                else if (item is IReadOnlyTree { Data: IMethodDescriptor { } })
                 {
                     return MakeButtonTemplate(item);
                 }
-                if (item is IReadOnlyTree { Parent.Data: ICollectionItemDescriptor { } _ })
+                else if (item is IReadOnlyTree { Parent.Data: ICollectionItemDescriptor { } _ })
                 {
                     return MakeEmptyTemplate();
                 }
-                if (item is IReadOnlyTree { Parent.Parent.Data: ICollectionItemDescriptor { Index: { } _index } _ })
+                else if (item is IReadOnlyTree { Parent.Parent.Data: ICollectionItemDescriptor { Index: { } _index } _ })
                 {
                     return MakeTemplate(item);
                 }
@@ -62,20 +61,30 @@ namespace Utility.Trees.Demo.MVVM.MVVM
                 //    return MakeTemplate(item, "None");
                 //}
                 // root
-                if (item is IReadOnlyTree { Data: IPropertyDescriptor { Descriptor: RootDescriptor { } } })
+
+                else if (item is ITree { Data: IValueDescriptor { } })
+                {
+                    return MakeTemplate(item);
+                }
+                else if (item is IReadOnlyTree { Data: IPropertyDescriptor {  } })
                 {
                     //return MakeHeaderTemplate(item, depth);
                     return MakeEmptyTemplate();
                 }
                 // default
-                if (item is ITree { Depth: { } depth, Data: IPropertyDescriptor { Descriptor: { } } })
-                {
-                    return MakeHeaderTemplate(item, depth);
-                }
+                //else if (item is ITree { Depth: { } depth, Data: IPropertyDescriptor { Descriptor: { } } })
+                //{
+                //    return MakeHeaderTemplate(item, depth);
+                //}
+        
                 // collection item
-                if (item is ITree { Data: ICollectionItemDescriptor { } })
+                else if (item is ITree { Data: ICollectionHeadersDescriptor { } })
                 {
                     return MakeEmptyTemplate();
+                }
+                else if (item is ITree { Data: ICollectionItemDescriptor { } })
+                {
+                    return MakeLineTemplate();
                 }
                 // inner collection item descriptor
 
@@ -85,16 +94,16 @@ namespace Utility.Trees.Demo.MVVM.MVVM
                 //    return MakeTemplate(item);
                 //}
                 // methods
-                if (item is IReadOnlyTree { Data: IMethodsDescriptor { } })
+                else if (item is IReadOnlyTree { Data: IMethodsDescriptor { } })
                 {
                     return MakeEmptyTemplate();
                 }
-                if (item is IReadOnlyTree { Data: IPropertiesDescriptor { } })
+                else if (item is IReadOnlyTree { Data: IPropertiesDescriptor { } })
                 {
                     //return MakeHeaderTemplate(item, depth);
                 }
                 // method
-                if (item is IReadOnlyTree { Data: IMethodDescriptor { } })
+                else if (item is IReadOnlyTree { Data: IMethodDescriptor { } })
                 {
                     return MakeEmptyTemplate();
                 }
@@ -129,6 +138,20 @@ namespace Utility.Trees.Demo.MVVM.MVVM
                     return contentControl;
                 });
             }
+
+            private DataTemplate MakeLineTemplate()
+            {
+                return TemplateGenerator.CreateDataTemplate(() =>
+                {
+                    Grid grid = new() { HorizontalAlignment = HorizontalAlignment.Stretch };
+
+                    var rect = new Rectangle { HorizontalAlignment = HorizontalAlignment.Stretch, Fill = Brushes.Gray, Height = 2, MinWidth = 40 };
+                    grid.Children.Add(rect);
+                    return grid;
+                });
+            }
+
+
 
 
             //<DataTemplate x:Key="Header"  >

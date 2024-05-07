@@ -97,6 +97,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Helpers", "..\W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Reactives", "..\WPF\Utility.WPF.Reactives\Utility.WPF.Reactives.csproj", "{760A7230-B404-4F28-A881-98F1C5063EE7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Constants", "..\Infrastructure\Utility.Constants\Utility.Constants.csproj", "{E96F1A64-084C-419B-B743-2D8567956768}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -283,6 +285,10 @@ Global
 		{760A7230-B404-4F28-A881-98F1C5063EE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{760A7230-B404-4F28-A881-98F1C5063EE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{760A7230-B404-4F28-A881-98F1C5063EE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E96F1A64-084C-419B-B743-2D8567956768}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E96F1A64-084C-419B-B743-2D8567956768}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E96F1A64-084C-419B-B743-2D8567956768}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E96F1A64-084C-419B-B743-2D8567956768}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -331,6 +337,7 @@ Global
 		{D3E9DDE0-55CD-4158-AD1D-58F8D36918F1} = {72C8D224-6E72-442B-A16A-29A6E7EA2051}
 		{84832D34-C342-4B97-A690-EFC803DA0794} = {72C8D224-6E72-442B-A16A-29A6E7EA2051}
 		{760A7230-B404-4F28-A881-98F1C5063EE7} = {72C8D224-6E72-442B-A16A-29A6E7EA2051}
+		{E96F1A64-084C-419B-B743-2D8567956768} = {72C8D224-6E72-442B-A16A-29A6E7EA2051}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {00EBD15C-E22A-4F19-88DE-BC9861507581}
