@@ -3,7 +3,7 @@ using Splat;
 
 namespace Utility.Descriptors;
 
-internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : PropertyDescriptor(Descriptor, Instance), IReferenceDescriptor
+internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : ValuePropertyDescriptor(Descriptor, Instance), IReferenceDescriptor
 {
     private readonly ITreeRepository repo = Locator.Current.GetService<ITreeRepository>();
 
@@ -45,10 +45,24 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Pr
 
     public override void Initialise(object? item = null)
     {
+        this.VisitChildren(a =>
+        {
+            if (a is ValuePropertyDescriptor descriptor)
+            {
+                descriptor.Initialise();
+            }
+        });
     }
 
     public override void Finalise(object? item = null)
     {
+        this.VisitChildren(a =>
+        {
+            if (a is PropertyDescriptor descriptor)
+            {
+                descriptor.Finalise();
+            }
+        });
     }
 
 }

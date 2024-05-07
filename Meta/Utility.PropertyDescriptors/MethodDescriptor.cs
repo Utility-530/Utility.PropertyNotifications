@@ -3,7 +3,7 @@ using Splat;
 
 namespace Utility.Descriptors;
 
-internal record MethodDescriptor : MemberDescriptor, IMethodDescriptor, IChildren
+internal record MethodDescriptor : ChildlessMemberDescriptor, IMethodDescriptor, IChildren
 {
     Dictionary<int, object?> dictionary = new();
 

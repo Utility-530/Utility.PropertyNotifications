@@ -11,6 +11,9 @@ namespace Utility.Descriptors
 
         public override bool IsReadOnly => false;
 
+        public override IObservable<object> Children => Observable.Empty<object>();
+
+
         public override void Finalise(object? item = null)
         {
          

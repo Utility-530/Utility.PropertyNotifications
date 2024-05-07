@@ -1,16 +1,9 @@
 ﻿using Utility.Interfaces;
 
 namespace Utility.Descriptors;
-public record PropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor.PropertyType), IInstance, IPropertyDescriptor, IChildren
+public record PropertyDescriptor(Descriptor Descriptor, object Instance) : ValuePropertyDescriptor(Descriptor,  Instance), IInstance, IPropertyDescriptor, IChildren
 {
-
-    public override string? Name => Descriptor.Name;
-
-    public override Type ParentType => Descriptor.ComponentType;
-
-    public override bool IsReadOnly => Descriptor.IsReadOnly;
-
-    public virtual IObservable<object> Children
+    public override IObservable<object> Children
     {
         get
         {
@@ -38,7 +31,7 @@ public record PropertyDescriptor(Descriptor Descriptor, object Instance) : Membe
 
 
 
-public abstract record PropertyValueDescriptor(Descriptor Descriptor, object Instance) : ValueMemberDescriptor(Descriptor.PropertyType), IRaisePropertyChanged, IInstance, IPropertyDescriptor
+public abstract record ValuePropertyDescriptor(Descriptor Descriptor, object Instance) : ValueMemberDescriptor(Descriptor.PropertyType), IRaisePropertyChanged, IInstance, IPropertyDescriptor
 {
     public override string? Name => Descriptor.Name;
 

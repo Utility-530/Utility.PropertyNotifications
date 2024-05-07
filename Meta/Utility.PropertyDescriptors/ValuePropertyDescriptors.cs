@@ -21,7 +21,7 @@ internal record DateTimeValue(Descriptor Descriptor, object Instance) : ValueDes
 {
 }
 
-internal record TypeValue(Descriptor Descriptor, object Instance) : ValueDescriptor<System.Type>(Descriptor, Instance)
+internal record TypeValue(Descriptor Descriptor, object Instance) : ValueDescriptor<Type>(Descriptor, Instance)
 {
 }
 
@@ -66,8 +66,10 @@ internal record LongValue(Descriptor Descriptor, object Instance) : ValueDescrip
 
 internal record NullableLongValue(Descriptor Descriptor, object Instance) : NullableValueDescriptor<long>(Descriptor, Instance);
 
-internal record NullValue(Descriptor Descriptor, object Instance) : PropertyValueDescriptor(Descriptor, Instance), IValue
+internal record NullValue(Descriptor Descriptor, object Instance) : ValuePropertyDescriptor(Descriptor, Instance), IValue
 {
+    public override IObservable<object> Children => Observable.Empty<object>();
+
     public override object? Get()
     {
         return null;
@@ -90,7 +92,7 @@ internal record NullValue(Descriptor Descriptor, object Instance) : PropertyValu
 
 
 
-internal record ObjectValue(Descriptor Descriptor, object Instance) : ValueDescriptor<object>(Descriptor, Instance)
+internal record ObjectValue(Descriptor Descriptor, object Instance) : ReferenceDescriptor(Descriptor, Instance)
 {
 }
 

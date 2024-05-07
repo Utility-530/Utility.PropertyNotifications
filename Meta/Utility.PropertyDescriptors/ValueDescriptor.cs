@@ -17,10 +17,12 @@ internal abstract record NullableValueDescriptor<T>(Descriptor Descriptor, objec
     T? IValue<T?>.Value => Get() is T t ? t : default; 
 }
 
-internal record ValueDescriptor(Descriptor Descriptor, object Instance) : PropertyValueDescriptor(Descriptor, Instance)
+internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValuePropertyDescriptor(Descriptor, Instance)
 {
     private object? value;
     private readonly ITreeRepository repo = Locator.Current.GetService<ITreeRepository>();
+
+    public override System.IObservable<object> Children => Observable.Empty<object>();
 
     public override object? Get()
     {
@@ -55,5 +57,6 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : Proper
         repo.Set(Guid, value, DateTime.Now);
     }
 }
+
 
 
