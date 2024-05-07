@@ -15,7 +15,7 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
 
     public override bool IsReadOnly => true;
 
-    public IObservable<object> Children
+    public override IObservable<object> Children
     {
         get
         {
@@ -54,7 +54,7 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
 
 }
 
-internal record HeaderDescriptor : MemberDescriptor, IHeaderDescriptor
+internal record HeaderDescriptor : ChildlessMemberDescriptor, IHeaderDescriptor
 {
     public HeaderDescriptor(Type type, Type parentType, string name) : base(type)
     {

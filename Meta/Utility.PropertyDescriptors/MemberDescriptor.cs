@@ -3,7 +3,7 @@ using Utility.Interfaces;
 
 namespace Utility.Descriptors;
 
-public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly
+public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, IChildren
 {
     public Guid Guid { get; set; }
 
@@ -28,6 +28,7 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
     public virtual bool IsCollectionItemValueType => CollectionItemPropertyType != null && CollectionItemPropertyType.IsValueType;
 
     public abstract bool IsReadOnly { get; }
+    public abstract IObservable<object> Children { get; }
 
     public virtual bool Equals(MemberDescriptor? other) => this.Guid.Equals(other?.Guid);
 
@@ -62,3 +63,9 @@ public abstract record ValueMemberDescriptor(Type Type) : MemberDescriptor(Type)
 
 }
 
+public abstract record ChildlessMemberDescriptor(Type Type) : MemberDescriptor(Type)
+{
+
+
+    public override IObservable<object> Children { get; } = Observable.Empty<object>();
+}

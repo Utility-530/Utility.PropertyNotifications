@@ -7,11 +7,11 @@ namespace Utility.Descriptors
     {
         private static ITreeRepository repo => Locator.Current.GetService<ITreeRepository>();
 
-        public static async Task<ValueMemberDescriptor> ToValue(object? value, Descriptor descriptor, Guid parentGuid)
+        public static async Task<ValuePropertyDescriptor> ToValue(object? value, Descriptor descriptor, Guid parentGuid)
         {
             var guid = await repo.Find(parentGuid, descriptor.Name, descriptor.PropertyType);
 
-            ValueMemberDescriptor _descriptor = DescriptorConverter.ToDescriptor(value, descriptor);
+            ValuePropertyDescriptor _descriptor = DescriptorConverter.ToDescriptor(value, descriptor);
             _descriptor.Guid = guid;
             _descriptor.ParentGuid = parentGuid;
             return _descriptor;
@@ -54,9 +54,9 @@ namespace Utility.Descriptors
 
     class DescriptorConverter
     {
-        public static ValueMemberDescriptor ToDescriptor(object? value, Descriptor descriptor)
+        public static ValuePropertyDescriptor ToDescriptor(object? value, Descriptor descriptor)
         {
-            ValueMemberDescriptor _descriptor = descriptor.PropertyType switch
+            ValuePropertyDescriptor _descriptor = descriptor.PropertyType switch
             {
                 Type t when t == typeof(string) => new StringValue(descriptor, value),
                 Type t when t.BaseType == typeof(Enum) => new EnumValue(descriptor, value),
