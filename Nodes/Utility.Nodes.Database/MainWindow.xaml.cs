@@ -46,7 +46,7 @@ namespace Utility.Nodes.Database
                             tree.Add(new Tree<Key>(new Key(default, default, default, get.Value.ToString(), default)));
                         return tree;
                     }
-                    ).ToArray();
+                    );
                     TreeView.ItemsSource = tree.ToObservableCollection();
                 });
 
