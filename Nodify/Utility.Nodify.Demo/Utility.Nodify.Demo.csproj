@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.Descriptors.csproj" />
     <ProjectReference Include="..\..\Nodes\Utility.Nodes\Utility.Nodes.csproj" />

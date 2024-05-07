@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Utility.Descriptors;
+using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodify.Operations.Infrastructure;
 
@@ -8,7 +9,7 @@ namespace Utility.Nodify.Operations.Operations
     public class ObjectOperation : IOperation, ISerialise, IIsReadOnly, IValue, IType
     {
         private readonly ObjectInfo objectInfo;
-        private PropertyDescriptor rootDescriptor;
+        private ValuePropertyDescriptor rootDescriptor;
 
         public ObjectOperation(ObjectInfo objectInfo)
         {
@@ -49,7 +50,7 @@ namespace Utility.Nodify.Operations.Operations
             }
         }
 
-        private PropertyDescriptor Create()
+        private ValuePropertyDescriptor Create()
         {
             var instance = Activator.CreateInstance(objectInfo.Type);
             var rootDescriptor = new RootDescriptor(objectInfo.Type);

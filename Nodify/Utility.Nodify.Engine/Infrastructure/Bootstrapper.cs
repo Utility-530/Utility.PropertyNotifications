@@ -13,7 +13,6 @@ using System.Collections.ObjectModel;
 using Message = Utility.Nodify.Operations.Message;
 using Utility.Nodify.Engine.ViewModels;
 using Utility.Nodify.Demo;
-using Keys = Utility.Nodify.Demo.Keys;
 
 namespace Utility.Nodify.Engine.Infrastructure
 {
@@ -36,8 +35,8 @@ namespace Utility.Nodify.Engine.Infrastructure
             container.Register<IDiagramViewModel, ViewModels.DiagramViewModel>();
             container.RegisterInstanceMany<ISubject<object>>(new ReplaySubject<object>(1), serviceKey: OperationKeys.Next);
             container.RegisterInstanceMany<ISubject<object>>(new ReplaySubject<object>(1), serviceKey: OperationKeys.Previous);
-            container.RegisterDelegate<ICommand>(c => new Command(() => c.Resolve<IObserver<object>>(OperationKeys.Next).OnNext(default)), serviceKey: Keys.NextCommand);
-            container.RegisterDelegate<ICommand>(c => new Command(() => c.Resolve<IObserver<object>>(OperationKeys.Previous).OnNext(default)), serviceKey: Keys.PreviousCommand);
+            container.RegisterDelegate<ICommand>(c => new Command(() => c.Resolve<IObserver<object>>(OperationKeys.Next).OnNext(default)), serviceKey: DemoKeys.NextCommand);
+            container.RegisterDelegate<ICommand>(c => new Command(() => c.Resolve<IObserver<object>>(OperationKeys.Previous).OnNext(default)), serviceKey: DemoKeys.PreviousCommand);
             container.RegisterMany<Dictionary<string, FilterInfo>>();
             container.Register<RangeObservableCollection<Diagram>>(serviceKey: DemoKeys.SelectedDiagram);
             container.RegisterDelegate(c => c.Resolve<IEnumerable<Diagram>>(), serviceKey: DemoKeys.Diagrams);

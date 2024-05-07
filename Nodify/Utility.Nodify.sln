@@ -55,6 +55,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Converters",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Interfaces", "..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj", "{96920FE9-1C99-49DB-8D75-F684711A3CBE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Extensions", "..\Helpers\Utility.Extensions\Utility.Extensions.csproj", "{0ED2B99D-7446-4047-86E1-81AD1B765C20}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Constants", "..\Infrastructure\Utility.Constants\Utility.Constants.csproj", "{644F7DB5-FAF3-4E53-9CA4-8EDC9C3E2334}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -157,6 +161,14 @@ Global
 		{96920FE9-1C99-49DB-8D75-F684711A3CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96920FE9-1C99-49DB-8D75-F684711A3CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{96920FE9-1C99-49DB-8D75-F684711A3CBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ED2B99D-7446-4047-86E1-81AD1B765C20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ED2B99D-7446-4047-86E1-81AD1B765C20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ED2B99D-7446-4047-86E1-81AD1B765C20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ED2B99D-7446-4047-86E1-81AD1B765C20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{644F7DB5-FAF3-4E53-9CA4-8EDC9C3E2334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{644F7DB5-FAF3-4E53-9CA4-8EDC9C3E2334}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{644F7DB5-FAF3-4E53-9CA4-8EDC9C3E2334}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{644F7DB5-FAF3-4E53-9CA4-8EDC9C3E2334}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -180,6 +192,8 @@ Global
 		{A53D3769-A23B-4FEB-85DF-5B79A3010648} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{05F4319F-40CD-423F-A62F-55E1E577DCAC} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{96920FE9-1C99-49DB-8D75-F684711A3CBE} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
+		{0ED2B99D-7446-4047-86E1-81AD1B765C20} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
+		{644F7DB5-FAF3-4E53-9CA4-8EDC9C3E2334} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C218ADB7-210D-4A37-BC47-800268D4894F}

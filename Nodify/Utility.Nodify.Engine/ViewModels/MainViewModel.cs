@@ -19,7 +19,7 @@ public class MainViewModel
         this.container = container;
         TabsViewModel.AddEditorCommand.Execute(container.Resolve<DiagramsViewModel>());
 
-        var selected = container.Resolve<RangeObservableCollection<Diagram>>(serviceKey: Keys.SelectedDiagram);
+        var selected = container.Resolve<RangeObservableCollection<Diagram>>(serviceKey: Utility.Nodify.Demo.Keys.SelectedDiagram);
         selected.CollectionChanged += MainViewModel_CollectionChanged;
         if (selected.FirstOrDefault() is Diagram item)
         {

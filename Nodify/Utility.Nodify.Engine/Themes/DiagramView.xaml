@@ -4,7 +4,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:core="clr-namespace:Utility.Nodify.Core;assembly=Utility.Nodify.ViewModels"
-             xmlns:op="clr-namespace:Utility.Nodify.Operations;assembly=Utility.Nodify.Operations"
              xmlns:nodify="https://miroiu.github.io/nodify"        
                      xmlns:templates="http://schemas.utility.com/templates"
              mc:Ignorable="d">

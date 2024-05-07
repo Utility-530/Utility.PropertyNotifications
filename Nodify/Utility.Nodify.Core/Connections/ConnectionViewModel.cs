@@ -1,8 +1,6 @@
-﻿using Utility.Nodify.Core;
-using System;
-using Utility.Collections;
-using Utility.Models;
+﻿using System;
 using Utility.ViewModels.Base;
+using Utility.Helpers.Generic;
 
 namespace Utility.Nodify.Core
 {

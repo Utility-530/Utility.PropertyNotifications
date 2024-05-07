@@ -9,8 +9,8 @@ using Splat;
 using Utility.Nodify.Engine.Infrastructure;
 using IConverter = Utility.Nodify.Engine.Infrastructure.IConverter;
 using Utility.Descriptors;
-using Utility.Descriptors.Common;
-using Utility.Interfaces.NonGeneric;
+using Utility.Interfaces;
+using Utility.Extensions;
 
 namespace Utility.Nodify.Demo
 {
@@ -18,7 +18,7 @@ namespace Utility.Nodify.Demo
     public partial class App : Application
     {
         IContainer container;
-        IDescriptor rootDescriptor;
+        IValueDescriptor rootDescriptor;
 
         Guid guid = Guid.Parse("25ee5731-11cf-4fc1-a925-50272fb99bba");
 
@@ -30,6 +30,7 @@ namespace Utility.Nodify.Demo
 
             var rootPropertyDescriptor = new RootDescriptor(typeof(Diagram), name: "diagram_test");
             rootDescriptor = await DescriptorFactory.CreateRoot(rootPropertyDescriptor, guid);
+
             var diagram = rootDescriptor.Get<Diagram>();
             rootDescriptor.Initialise();
             base.OnStartup(e);

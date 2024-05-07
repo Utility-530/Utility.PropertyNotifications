@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Input;
 using Utility.Collections;
 using Utility.Commands;
+using Utility.Helpers.Generic;
 using Utility.ViewModels.Base;
 
 namespace Utility.Nodify.Core
