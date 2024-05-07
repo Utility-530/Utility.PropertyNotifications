@@ -1,5 +1,6 @@
 ﻿
 using Splat;
+using System.Diagnostics;
 
 namespace Utility.Descriptors;
 
@@ -42,29 +43,6 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
             return Observable.Empty<Change<IDescriptor>>();
         }
     }
-
-    public override void Initialise(object? item = null)
-    {
-        this.VisitChildren(a =>
-        {
-            if (a is ValuePropertyDescriptor descriptor)
-            {
-                descriptor.Initialise();
-            }
-        });
-    }
-
-    public override void Finalise(object? item = null)
-    {
-        this.VisitChildren(a =>
-        {
-            if (a is PropertyDescriptor descriptor)
-            {
-                descriptor.Finalise();
-            }
-        });
-    }
-
 }
 
 

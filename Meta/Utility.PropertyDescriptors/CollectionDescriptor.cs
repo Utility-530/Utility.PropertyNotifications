@@ -14,6 +14,16 @@ namespace Utility.Descriptors
 
         public override string? Name => _Name;
 
+        public override object? Get()
+        {
+            return null;
+        }
+
+        public override void Set(object? value)
+        {
+            throw new NotImplementedException();
+        }   
+        
         public override IObservable<object> Children
         {
             get

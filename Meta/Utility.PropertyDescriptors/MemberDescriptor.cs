@@ -1,4 +1,5 @@
 ﻿
+using System.Diagnostics;
 using Utility.Interfaces;
 
 namespace Utility.Descriptors;
@@ -34,8 +35,48 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
 
     public override int GetHashCode() => this.Guid.GetHashCode();
 
-    public abstract void Initialise(object? item = null);
-    public abstract void Finalise(object? item = null);
+    public virtual void Initialise(object? item = null)
+    {
+        VisitChildren(this, a =>
+        {
+            if (a is IDescriptor descriptor)
+            {
+                descriptor.Initialise();
+            }
+        });
+    }
+
+    public virtual void Finalise(object? item = null)
+    {
+        VisitChildren(this, a =>
+        {
+            if (a is IDescriptor descriptor)
+            {
+                descriptor.Finalise();
+            }
+        });
+    }
+    static void VisitChildren(IChildren tree, Action<object> action)
+    {
+        tree.Children
+            .Cast<Change<IDescriptor>>()
+            .Subscribe(a =>
+            {
+                if (a.Type == Changes.Type.Add)
+                {
+                    Trace.WriteLine(a.Value.ParentType + " " + a.Value.Type?.Name + " " + a.Value.Name);
+                    action(a.Value);
+                }
+                else
+                {
+                }
+            }, e =>
+            {
+
+            });
+    }
+
+
 }
 
 

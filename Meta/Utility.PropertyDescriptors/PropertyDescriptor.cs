@@ -19,13 +19,6 @@ public record PropertyDescriptor(Descriptor Descriptor, object Instance) : Value
         }
     }
 
-    public override void Finalise(object? item = null)
-    {
-    }
-
-    public override void Initialise(object? item = null)
-    {
-    }
 }
 
 

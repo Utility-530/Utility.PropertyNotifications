@@ -22,5 +22,15 @@ namespace Utility.Descriptors
                 });
             }
         }
+
+        public override object? Get()
+        {
+            return null;
+        }
+
+        public override void Set(object? value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
