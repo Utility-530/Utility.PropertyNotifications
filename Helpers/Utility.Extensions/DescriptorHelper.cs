@@ -1,6 +1,9 @@
 ﻿using System.Diagnostics;
+using System.Reactive.Linq;
+using Utility.Changes;
+using Utility.Interfaces.NonGeneric;
 
-namespace Utility.Descriptors.Common
+namespace Utility.Extensions
 {
     public static class DescriptorHelper
     {
@@ -24,8 +27,8 @@ namespace Utility.Descriptors.Common
                 {
 
                 });
-        }      
-        
+        }
+
         public static void VisitChildren(this IChildren tree, Action<object> action)
         {
             tree.Children
