@@ -38,7 +38,7 @@ namespace Utility.WPF.Templates
             {
                 if (templates == null)
                 {
-                    templates = new Templates();
+                    templates = Utility.WPF.Templates.Templates.Instance;
                     templates.InitializeComponent();
                 }
                 return templates;

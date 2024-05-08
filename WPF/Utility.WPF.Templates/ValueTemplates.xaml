@@ -12,6 +12,7 @@
                     xmlns:ad="http://schemas.utility.com/adorners"
                     xmlns:bhvrs="http://schemas.utility.com/behaviors" 
                     xmlns:num="clr-namespace:NumericUpDownLib;assembly=NumericUpDownLib"
+                    xmlns:controls1="clr-namespace:Utility.WPF.Templates.Infrastructure"                    
                     xmlns:controls="http://schemas.utility.com">
 
     <conv:IntToEnumConverter x:Key="IntToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
@@ -46,7 +47,7 @@
         <num:DecimalUpDown Value="{Binding Path=Value, Mode=TwoWay}"></num:DecimalUpDown>
     </DataTemplate>
 
-    
+
 
     <DataTemplate DataType="{x:Type sys:DateTime}">
         <TextBox Text="{Binding Path=Value, Mode=TwoWay}"></TextBox>
@@ -78,8 +79,8 @@
         <!--<ItemsControl ItemsSource="{Binding Value, Mode=OneWay}"></ItemsControl>-->
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type sys:Guid}">  
-        <controls:GuidBox Guid="{Binding Path=Value}" />        
+    <DataTemplate DataType="{x:Type sys:Guid}">
+        <controls:GuidBox Guid="{Binding Path=Value}" />
     </DataTemplate>
 
     <DataTemplate x:Key="Object">
@@ -146,11 +147,9 @@
         </TextBox>
     </DataTemplate>
 
-    <DataTemplate x:Key="Missing">
-        <TextBlock Text="Missing Value Template" Background="Transparent"  HorizontalAlignment="Center" >
-            <Run>Missing Template</Run>
-            <Run  Text="{Binding  Mode=OneTime, Converter={StaticResource TypeNameConverter}}"></Run>
-        </TextBlock>
-    </DataTemplate>
+
     
+    
+
+
 </ResourceDictionary>

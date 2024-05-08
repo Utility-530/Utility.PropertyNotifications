@@ -50,8 +50,9 @@ namespace Utility.WPF.Templates
             //var _descriptor = item is IPropertyDescriptor descriptor ? descriptor : null;
             //var _info = item is IPropertyInfo propertyInfo ? propertyInfo : null;
 
+           
 
-            return (Templates["Missing"] as DataTemplate) ?? throw new Exception("dfs 33091111111");
+            return (Utility.WPF.Templates.Templates.Instance["Missing"] as DataTemplate) ?? throw new Exception("dfs 33091111111");
         }
 
 

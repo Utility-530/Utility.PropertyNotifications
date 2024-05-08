@@ -10,6 +10,7 @@
 		<ProjectReference Include="..\..\..\Projects\Wpf TextBox\NumericUpDownLib\source\NumericUpDownLib\NumericUpDownLib.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Adorners\Utility.WPF.Adorners.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Behaviors\Utility.WPF.Behaviors.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Colours\Utility.WPF.Colours.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
@@ -26,6 +27,9 @@
 	<ItemGroup>
 		<Compile Update="Templates.cs">
 			<DependentUpon>Templates.xaml</DependentUpon>
+		</Compile>		
+		<Compile Update="Infrastructure\MissingTemplateControl.cs">
+			<DependentUpon>MissingTemplateControl.xaml</DependentUpon>
 		</Compile>	
 		<Compile Update="ValueTemplates.cs">
 			<DependentUpon>ValueTemplates.xaml</DependentUpon>
