@@ -91,11 +91,6 @@ internal record NullValue(Descriptor Descriptor, object Instance) : ValuePropert
 }
 
 
-
-internal record ObjectValue(Descriptor Descriptor, object Instance) : ReferenceDescriptor(Descriptor, Instance)
-{
-}
-
 internal record StructValue(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance)
 {
 }

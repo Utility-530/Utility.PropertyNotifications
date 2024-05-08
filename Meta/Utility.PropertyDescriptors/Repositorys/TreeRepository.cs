@@ -456,5 +456,8 @@ namespace Utility.Descriptors.Repositorys
 
         static readonly string AssembliesPath = System.IO.Path.Combine(ProgramData, Utility, "Assemblies");
         public static TreeRepository Instance { get; } = new(DataPath);
+
+        static readonly Dictionary<string, TreeRepository> dictionary = new();
+        public static TreeRepository Create(string name) => dictionary.GetValueOrCreate(name, () => new TreeRepository(Path.Combine(ProgramData, name)));
     }
 }

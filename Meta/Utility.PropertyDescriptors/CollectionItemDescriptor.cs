@@ -1,6 +1,6 @@
 ﻿namespace Utility.Descriptors;
 
-internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeadersDescriptor, IEquatable, IChildren
+internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeadersDescriptor, IEquatable
 {
     internal CollectionHeadersDescriptor(Type propertyType, Type componentType) : base(propertyType)
     {
@@ -155,6 +155,24 @@ internal partial record CollectionItemReferenceDescriptor :  ReferenceDescriptor
     public static int ToIndex(string name) => int.Parse(MyRegex().Matches(name).First().Groups[1].Value);
 
     public static string FromIndex(string name, int index) => name + $" [{index}]";
+
+
+    public override IObservable<object> Children
+    {
+        get
+        {
+            return Observable.Create<Change<IDescriptor>>(async observer =>
+            {
+                var descriptors = TypeDescriptor.GetProperties(Instance);
+                foreach (Descriptor descriptor in descriptors)
+                {
+                    var _descriptor = await DescriptorFactory.ToValue(Instance, descriptor, Guid);
+                    observer.OnNext(new(_descriptor, Changes.Type.Add));
+                }
+                return Disposable.Empty;
+            });
+        }
+    }
 
     public bool Equals(IEquatable? other)
     {

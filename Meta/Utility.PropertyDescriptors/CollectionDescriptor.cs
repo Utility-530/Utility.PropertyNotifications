@@ -6,23 +6,13 @@ using Utility.Helpers.NonGeneric;
 
 namespace Utility.Descriptors
 {
-    internal record CollectionDescriptor(Descriptor PropertyDescriptor, Type ElementType, IEnumerable Collection) : ReferenceDescriptor(PropertyDescriptor, Collection), ICollectionDescriptor
+    internal record CollectionDescriptor(Descriptor PropertyDescriptor, Type ElementType, IEnumerable Collection) : BasePropertyDescriptor(PropertyDescriptor, Collection), ICollectionDescriptor
     {
         private static ITreeRepository repo => Locator.Current.GetService<ITreeRepository>();
 
         public static string _Name => "Collection";
 
         public override string? Name => _Name;
-
-        public override object? Get()
-        {
-            return null;
-        }
-
-        public override void Set(object? value)
-        {
-            throw new NotImplementedException();
-        }   
         
         public override IObservable<object> Children
         {

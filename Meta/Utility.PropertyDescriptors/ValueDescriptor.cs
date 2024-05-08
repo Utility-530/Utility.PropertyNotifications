@@ -8,13 +8,13 @@ namespace Utility.Descriptors;
 internal abstract record ValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IValue<T>
 {
 
-    T IValue<T>.Value => Get() is T t ? t : default; 
+    T IValue<T>.Value => Get() is T t ? t : default;
 }
 
 internal abstract record NullableValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IValue<T?>
 {
 
-    T? IValue<T?>.Value => Get() is T t ? t : default; 
+    T? IValue<T?>.Value => Get() is T t ? t : default;
 }
 
 internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValuePropertyDescriptor(Descriptor, Instance)
@@ -54,7 +54,8 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
     public override void Finalise(object? item = null)
     {
         var value = Descriptor.GetValue(Instance);
-        repo.Set(Guid, value, DateTime.Now);
+        if (value != null)
+            repo.Set(Guid, value, DateTime.Now);
     }
 }
 

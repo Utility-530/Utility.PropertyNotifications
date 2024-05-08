@@ -1,7 +1,7 @@
 ﻿
 namespace Utility.Descriptors
 {
-    internal record PropertiesDescriptor(Descriptor PropertyDescriptor, object Instance) : ReferenceDescriptor(PropertyDescriptor, Instance), IPropertiesDescriptor
+    internal record PropertiesDescriptor(Descriptor PropertyDescriptor, object Instance) : BasePropertyDescriptor(PropertyDescriptor, Instance)
     {
         public static string _Name => "Properties";
         public override string? Name => _Name;
@@ -21,16 +21,6 @@ namespace Utility.Descriptors
                     return Disposable.Empty;
                 });
             }
-        }
-
-        public override object? Get()
-        {
-            return null;
-        }
-
-        public override void Set(object? value)
-        {
-            throw new NotImplementedException();
         }
     }
 }

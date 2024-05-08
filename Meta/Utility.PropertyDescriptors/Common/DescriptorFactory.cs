@@ -84,7 +84,7 @@ namespace Utility.Descriptors
                 Type t when t.IsValueType => new StructValue(descriptor, value),
 
 
-                Type t when t.IsDerivedFrom<object>() => new ObjectValue(descriptor, value),
+                Type t when t.IsDerivedFrom<object>() => new ReferenceDescriptor(descriptor, value),
 
                 _ => new NullValue(descriptor, value),
 

@@ -3,7 +3,6 @@ using System.Diagnostics;
 using Utility.Interfaces;
 
 namespace Utility.Descriptors;
-
 public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, IChildren
 {
     public Guid Guid { get; set; }
@@ -13,8 +12,6 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
     public abstract string? Name { get; }
 
     public abstract Type ParentType { get; }
-
-
 
     public bool IsCollection => Type != null && Type != typeof(string) && typeof(IEnumerable).IsAssignableFrom(Type);
 
@@ -75,8 +72,6 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
 
             });
     }
-
-
 }
 
 
@@ -97,7 +92,7 @@ public abstract record ValueMemberDescriptor(Type Type) : MemberDescriptor(Type)
         }
     }
 
-    public abstract object? Get();
+    public abstract object Get();
 
     public abstract void Set(object? value);
 
@@ -106,7 +101,5 @@ public abstract record ValueMemberDescriptor(Type Type) : MemberDescriptor(Type)
 
 public abstract record ChildlessMemberDescriptor(Type Type) : MemberDescriptor(Type)
 {
-
-
     public override IObservable<object> Children { get; } = Observable.Empty<object>();
 }
