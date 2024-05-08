@@ -37,29 +37,29 @@ namespace Utility.Trees.Demo.MVVM
            {
                if (children.Count > 1)
                    children.RemoveAt(1);
-               children.Add(MakeGrid(a.Type));
+               children.Add(MakeGrid(a.Type, a.Name, a.Guid));
                disposable?.Dispose();
                disposable = Disposable();
            });
 
-
             return window;
         }
 
-        Panel MakeGrid(Type type)
+        Panel MakeGrid(Type type, string name, Guid guid)
         {
-            model = new RootNode();
-            model.Initialise(type).GetAwaiter().GetResult();
+            model = new RootNode(guid);
+            model.Initialise(type, name).GetAwaiter().GetResult();
             viewModel = new() { Key = model.Key };
             view = new() { Key = model.Key };
             data = new() { Key = model.Key };
 
-
-
             var grid = new UniformGrid() { Rows = 1 };
             grid.Children.Add(ModelTreeViewer(model));
-            grid.Children.Add(ViewModelTreeViewer(viewModel));
-            grid.Children.Add(ViewTreeViewer(view));
+            if (false)
+            {
+                grid.Children.Add(ViewModelTreeViewer(viewModel));
+                grid.Children.Add(ViewTreeViewer(view));
+            }
             grid.Children.Add(DataTreeViewer(data));
             return grid;
         }
@@ -82,62 +82,66 @@ namespace Utility.Trees.Demo.MVVM
         IDisposable Disposable()
         {
             CompositeDisposable disposable = new();
-            model.Subscribe((a =>
-            {
-                if (a.Type == Changes.Type.Add)
+
+            if (false)
+                //view model
+                model.Subscribe((a =>
                 {
-                    var clone = a.Value.Key;
-                    var x = new ViewModelTree { Key = clone };
-                    var parentMatch = TreeExtensions.MatchDescendant(viewModel, (d => d.Key?.Equals(a.Value.Parent?.Key) == true)) as Tree;
-                    if (parentMatch != null)
-                        parentMatch.Add(x);
-                }
-                if (a.Type == Changes.Type.Remove)
-                {
-                    var match = TreeExtensions.MatchDescendant(viewModel, (d => d.Key.Equals(a.Value.Key))) as Tree;
-                    match.Parent.Remove(a.Value);
-                }
-            })).DisposeWith(disposable);
+                    if (a.Type == Changes.Type.Add)
+                    {
+                        var clone = a.Value.Key;
+                        var x = new ViewModelTree { Key = clone };
+                        var parentMatch = TreeExtensions.MatchDescendant(viewModel, (d => d.Key?.Equals(a.Value.Parent?.Key) == true)) as Tree;
+                        if (parentMatch != null)
+                            parentMatch.Add(x);
+                    }
+                    if (a.Type == Changes.Type.Remove)
+                    {
+                        var match = TreeExtensions.MatchDescendant(viewModel, (d => d.Key.Equals(a.Value.Key))) as Tree;
+                        match.Parent.Remove(a.Value);
+                    }
+                })).DisposeWith(disposable);
 
 
             // View
-            model.Subscribe(a =>
-            {
-                if (a.Type == Changes.Type.Add)
+            if (false)
+                model.Subscribe(a =>
                 {
-                    var clone = a.Value.Key;
-                    var guid = ((GuidKey)a.Value.Key)?.Value;
-                    if (guid == null)
-                        return;
-                    var type = TreeRepository.Instance.GetType(guid.Value, nameof(Model));
-                    Tree tree = null;
-                    //if (type != null)
-                    //{
-                    //    var instance = Activator.CreateInstance(type);
-                    //    //var rootDescriptor = new RootDescriptor(type);
-                    //    //var data = await DescriptorFactory.ToValue(instance, rootDescriptor, guid.Value);
-                    //    //var reflectionNode = new ReflectionNode(data);
-                    //    //reflectionNode.RefreshChildrenAsync();
+                    if (a.Type == Changes.Type.Add)
+                    {
+                        var clone = a.Value.Key;
+                        var guid = ((GuidKey)a.Value.Key)?.Value;
+                        if (guid == null)
+                            return;
+                        var type = TreeRepository.Instance.GetType(guid.Value, nameof(Model));
+                        Tree tree = null;
+                        //if (type != null)
+                        //{
+                        //    var instance = Activator.CreateInstance(type);
+                        //    //var rootDescriptor = new RootDescriptor(type);
+                        //    //var data = await DescriptorFactory.ToValue(instance, rootDescriptor, guid.Value);
+                        //    //var reflectionNode = new ReflectionNode(data);
+                        //    //reflectionNode.RefreshChildrenAsync();
 
-                    //    tree = new Tree { Key = clone, Data = instance };
+                        //    tree = new Tree { Key = clone, Data = instance };
 
-                    //}
-                    //else
-                    //{
-                    //    tree = new Tree { Key = clone, Data = null };
-                    //}
-                    tree = new Tree { Key = clone, Data = null };
+                        //}
+                        //else
+                        //{
+                        //    tree = new Tree { Key = clone, Data = null };
+                        //}
+                        tree = new Tree { Key = clone, Data = null };
 
-                    var parentMatch = TreeExtensions.MatchDescendant(view, (d => d.Key.Equals(a.Value.Parent?.Key))) as Tree;
-                    if (parentMatch != null)
-                        parentMatch.Add(tree);
-                }
-                if (a.Type == Changes.Type.Remove)
-                {
-                    var match = TreeExtensions.MatchDescendant(view, (d => d.Key.Equals(a.Value.Key))) as Tree;
-                    match.Parent.Remove(a.Value);
-                }
-            }).DisposeWith(disposable);
+                        var parentMatch = TreeExtensions.MatchDescendant(view, (d => d.Key.Equals(a.Value.Parent?.Key))) as Tree;
+                        if (parentMatch != null)
+                            parentMatch.Add(tree);
+                    }
+                    if (a.Type == Changes.Type.Remove)
+                    {
+                        var match = TreeExtensions.MatchDescendant(view, (d => d.Key.Equals(a.Value.Key))) as Tree;
+                        match.Parent.Remove(a.Value);
+                    }
+                }).DisposeWith(disposable);
 
             // Data
             model.Subscribe(a =>

@@ -30,7 +30,6 @@ namespace Utility.Trees.Demo.MVVM
 
         static App()
         {
-
         }
 
         protected override void OnStartup(StartupEventArgs e)

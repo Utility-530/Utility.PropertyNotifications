@@ -12,12 +12,10 @@
 
         <local1:IndentConverter x:Key="IndentConverter" />
 
-
-
         <HierarchicalDataTemplate DataType="{x:Type t:Tree}" ItemsSource="{Binding }">
             <ContentControl Content="{Binding Data, Mode=OneTime}"/>
         </HierarchicalDataTemplate>
-        
+       
         
         <DataTemplate DataType="{x:Type local:ViewModel}">
             <UniformGrid Rows="1">
@@ -421,18 +419,16 @@
             </Grid>
         </DataTemplate>-->
 
-        <DataTemplate x:Key="Header"  >
-
+        <DataTemplate x:Key="Header">
             <TextBlock Width="120" Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
             <!--<ContentControl Style="{StaticResource ContentControlStyle}" Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>-->
-
         </DataTemplate>
 
         <!--<DataTemplate x:Key="Body"  >
             <ContentControl Width="120" Style="{StaticResource ContentControlStyle}" Content="{Binding }" ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"/>
         </DataTemplate>-->
 
-        <DataTemplate x:Key="Name"  >
+        <DataTemplate x:Key="Name">
             <TextBlock  Text="{Binding Name}" Style="{StaticResource TextBlockStyle}"></TextBlock>
         </DataTemplate>
 
@@ -449,7 +445,7 @@
         </DataTemplate>
 
         <!--DataType="{x:Type vm:MethodDescriptor}"-->
-        <DataTemplate x:Key="Method"   >
+        <DataTemplate x:Key="Method">
             <Button Content="{Binding Name, Mode=OneTime }" Command="{Binding Command, Mode=OneTime}"></Button>
         </DataTemplate>
 

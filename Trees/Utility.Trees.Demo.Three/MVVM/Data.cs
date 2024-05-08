@@ -28,7 +28,7 @@ namespace Utility.Trees.Demo.MVVM.MVVM
 
                 if (item is IReadOnlyTree { Data: IPropertiesDescriptor { } })
                 {
-                    return MakeEmptyTemplate();
+                    //return MakeEmptyTemplate(nameof(IPropertiesDescriptor));
                 }
                 //if (item is CustomMethodsNode { Data: { } })
                 //{
@@ -40,7 +40,11 @@ namespace Utility.Trees.Demo.MVVM.MVVM
                 }
                 else if (item is IReadOnlyTree { Data: ICollectionDescriptor { } })
                 {
-                    return MakeEmptyTemplate();
+                    //return MakeEmptyTemplate(nameof(ICollectionDescriptor));
+                }
+                else if (item is IReadOnlyTree { Data: ICollectionItemDescriptor { } })
+                {
+                    //return MakeEmptyTemplate(nameof(ICollectionItemDescriptor));
                 }
                 // method
                 else if (item is IReadOnlyTree { Data: IMethodDescriptor { } })
@@ -49,7 +53,7 @@ namespace Utility.Trees.Demo.MVVM.MVVM
                 }
                 else if (item is IReadOnlyTree { Parent.Data: ICollectionItemDescriptor { } _ })
                 {
-                    return MakeEmptyTemplate();
+                    return MakeTemplate(item);
                 }
                 else if (item is IReadOnlyTree { Parent.Parent.Data: ICollectionItemDescriptor { Index: { } _index } _ })
                 {
@@ -61,26 +65,30 @@ namespace Utility.Trees.Demo.MVVM.MVVM
                 //    return MakeTemplate(item, "None");
                 //}
                 // root
-
+                else if (item is IReadOnlyTree { Data: PropertyDescriptor { } })
+                {
+                    //return MakeHeaderTemplate(item, depth);
+                    //return MakeEmptyTemplate(nameof(PropertyDescriptor));
+                }
                 else if (item is ITree { Data: IValueDescriptor { } })
                 {
                     return MakeTemplate(item);
                 }
-                else if (item is IReadOnlyTree { Data: IPropertyDescriptor {  } })
+                else if (item is IReadOnlyTree { Data: IPropertyDescriptor { } })
                 {
                     //return MakeHeaderTemplate(item, depth);
-                    return MakeEmptyTemplate();
+                    //return MakeEmptyTemplate(nameof(IPropertyDescriptor));
                 }
                 // default
                 //else if (item is ITree { Depth: { } depth, Data: IPropertyDescriptor { Descriptor: { } } })
                 //{
                 //    return MakeHeaderTemplate(item, depth);
                 //}
-        
+
                 // collection item
                 else if (item is ITree { Data: ICollectionHeadersDescriptor { } })
                 {
-                    return MakeEmptyTemplate();
+                    //return MakeEmptyTemplate(nameof(ICollectionHeadersDescriptor));
                 }
                 else if (item is ITree { Data: ICollectionItemDescriptor { } })
                 {
@@ -96,7 +104,7 @@ namespace Utility.Trees.Demo.MVVM.MVVM
                 // methods
                 else if (item is IReadOnlyTree { Data: IMethodsDescriptor { } })
                 {
-                    return MakeEmptyTemplate();
+                    //return MakeEmptyTemplate(nameof(IMethodsDescriptor));
                 }
                 else if (item is IReadOnlyTree { Data: IPropertiesDescriptor { } })
                 {
@@ -105,7 +113,7 @@ namespace Utility.Trees.Demo.MVVM.MVVM
                 // method
                 else if (item is IReadOnlyTree { Data: IMethodDescriptor { } })
                 {
-                    return MakeEmptyTemplate();
+                    //return MakeEmptyTemplate(nameof(IMethodDescriptor));
                 }
 
                 return MakeTemplate(item);
@@ -129,12 +137,12 @@ namespace Utility.Trees.Demo.MVVM.MVVM
                 });
             }
 
-            private DataTemplate MakeEmptyTemplate()
+            private DataTemplate MakeEmptyTemplate(string a)
             {
                 return TemplateGenerator.CreateDataTemplate(() =>
                 {
 
-                    var contentControl = new ContentPresenter { };
+                    var contentControl = new TextBlock { Text = a, FontSize = 8 };
                     return contentControl;
                 });
             }
@@ -273,7 +281,7 @@ namespace Utility.Trees.Demo.MVVM.MVVM
         }
 
 
-        public class ItemsPanelConverter : System.Windows.Data.IValueConverter
+        public class ItemsPanelConverter : IValueConverter
         {
             public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
             {
@@ -288,11 +296,15 @@ namespace Utility.Trees.Demo.MVVM.MVVM
 
                 //}
                 {
+                    if (tree.Data is PropertyDescriptor { } _descriptor)
+                        return ItemsPanelFactory.Template(default, default, O.Horizontal, Arrangement.Stacked);
+                }
+                {
                     if (tree.Data is ICollectionHeadersDescriptor { } _descriptor)
                         return ItemsPanelFactory.Template(default, default, O.Horizontal, Arrangement.Stacked);
                 }
                 {
-                    if (tree.Parent?.Data is ICollectionItemDescriptor { } _descriptor)
+                    if (tree?.Data is ICollectionItemDescriptor { } _descriptor)
                         return ItemsPanelFactory.Template(default, default, O.Horizontal, Arrangement.Stacked);
                 }
 

@@ -95,9 +95,27 @@ namespace Utility.WPF.Nodes
                     else
                         break;
                 }
-                return (T?)hit;
+                return hit as T;
             }
             return null;
         }
+
+        //public static DependencyObject? GetSelectedItem(UIElement? sender, UIElement objTreeViewControl) 
+        //{
+        //    Point? point = sender?.TranslatePoint(new Point(0, 0), objTreeViewControl);
+        //    if (point.HasValue)
+        //    {
+        //        var hit = objTreeViewControl.InputHitTest(point.Value) as DependencyObject;
+        //        while (hit is not null and not T)
+        //        {
+        //            if (hit is Visual or Visual3D)
+        //                hit = VisualTreeHelper.GetParent(hit);
+        //            else
+        //                break;
+        //        }
+        //        return hit as DependencyObject;
+        //    }
+        //    return null;
+        //}
     }
 }
