@@ -1,21 +1,15 @@
 ﻿using Newtonsoft.Json;
-using ReactiveUI;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Extensions;
-using Utility.ProjectStructure;
-using Utility.Trees;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
-using Utility.WPF.Reactives;
 using Utility.WPF.ResourceDictionarys;
 
 namespace Utility.WPF.Controls.Trees
