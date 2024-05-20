@@ -32,6 +32,7 @@ namespace Utility.PropertyNotifications
 
     public abstract record NotifyProperty : INotifyPropertyCalled, INotifyPropertyReceived, INotifyPropertyChanged
     {
+        bool flag;
         //private Lazy<Dictionary<string, PropertyInfo>> properties;
         //private Lazy<Dictionary<string, FieldInfo>> fields;
 
@@ -200,25 +201,25 @@ namespace Utility.PropertyNotifications
         /// <summary>
         /// Raised when a property on this object has a new value.
         /// </summary>
-        public event PropertyCalledEventHandler PropertyCalled;
+        public event PropertyCalledEventHandler? PropertyCalled;
 
         /// <summary>
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        protected virtual void RaisePropertyCalled(object value, [CallerMemberName] string propertyName = null)
+        protected virtual void RaisePropertyCalled(object? value, [CallerMemberName] string propertyName = null)
         {
             //if (PropertyChangedName != propertyName)
             //{
-
-            PropertyCalled?.Invoke(this, PropertyCalledArgs(propertyName, value));
+            if (flag == false)
+                PropertyCalled?.Invoke(this, PropertyCalledArgs(propertyName, value));
 
             //}
             //else
             //    PropertyChangedName = null;
         }
 
-        private PropertyCalledEventArgs PropertyCalledArgs(string propertyName, object value)
+        private PropertyCalledEventArgs PropertyCalledArgs(string propertyName, object? value)
         {
             //var info = properties.Value[propertyName];
             //if (fields.Value.TryGetValue(propertyName, out var fieldInfo) == false)
@@ -239,7 +240,7 @@ namespace Utility.PropertyNotifications
         /// <summary>
         /// Raised when a property on this object has a new value.
         /// </summary>
-        public event PropertyReceivedEventHandler PropertyReceived;
+        public event PropertyReceivedEventHandler? PropertyReceived;
 
 
 
@@ -260,8 +261,10 @@ namespace Utility.PropertyNotifications
                 //    //    throw new InvalidOperationException(propertyName);
                 //    //}
                 //}
+                flag = true;
                 var e = new PropertyReceivedEventArgs(propertyName, value);
                 handler(this, e);
+                flag = false;
             }
 
         }
