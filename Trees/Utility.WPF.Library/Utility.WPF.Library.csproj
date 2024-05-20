@@ -6,4 +6,11 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="DataTemplate\**" />
+    <EmbeddedResource Remove="DataTemplate\**" />
+    <None Remove="DataTemplate\**" />
+    <Page Remove="DataTemplate\**" />
+  </ItemGroup>
+
 </Project>
