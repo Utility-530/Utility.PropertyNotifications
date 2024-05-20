@@ -3,7 +3,7 @@
 
 
 
-    <Color x:Key="SelectedBackgroundColor">#FFC5CBF9</Color>
+    <!--<Color x:Key="SelectedBackgroundColor">#FFC5CBF9</Color>
     <Color x:Key="SelectedUnfocusedColor">#FFDDDDDD</Color>
     <Style x:Key="TreeViewItemFocusVisual">
         <Setter Property="Control.Template">
@@ -19,10 +19,10 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>-->
 
 
-    <Style x:Key="CustomTreeViewItemStyle" TargetType="{x:Type TreeViewItem}">
+    <!--<Style x:Key="CustomTreeViewItemStyle" TargetType="{x:Type TreeViewItem}">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
         <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
@@ -65,7 +65,7 @@
                                         </Storyboard>
                                     </VisualState>
                                 </VisualStateGroup>
-                                <!--<VisualStateGroup x:Name="ExpansionStates">
+                                --><!--<VisualStateGroup x:Name="ExpansionStates">
                                 <VisualState x:Name="Expanded">
                                     <Storyboard>
                                         <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
@@ -76,13 +76,13 @@
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Collapsed" />
-                            </VisualStateGroup>-->
+                            </VisualStateGroup>--><!--
                             </VisualStateManager.VisualStateGroups>
-                            <!--<ToggleButton x:Name="Expander"
+                            --><!--<ToggleButton x:Name="Expander"
                         Style="{StaticResource ExpandCollapseToggleStyle}"
                         ClickMode="Press"
                         IsChecked="{Binding IsExpanded, 
-            RelativeSource={RelativeSource TemplatedParent}}"/>-->
+            RelativeSource={RelativeSource TemplatedParent}}"/>--><!--
 
                             <ContentPresenter x:Name="PART_Header"
                                                      Grid.Column="1"
@@ -95,14 +95,14 @@
                           Grid.Column="1"
                           Grid.ColumnSpan="2"
                          />
-                            <!--Visibility="Collapsed"-->
+                            --><!--Visibility="Collapsed"--><!--
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="BorderBrush" Value="#7DA2CE"/>
                         </Trigger>
-                        <!--<Trigger Property="HasItems" Value="false">
+                        --><!--<Trigger Property="HasItems" Value="false">
                             -->
                         <!--<Setter TargetName="Expander"                    Property="Visibility"                    Value="Hidden" />-->
                         <!--
@@ -128,11 +128,11 @@
                             <Setter TargetName="PART_Header"
                     Property="MinHeight"
                     Value="19" />
-                        </MultiTrigger>-->
+                        </MultiTrigger>--><!--
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>-->
 
 </ResourceDictionary>

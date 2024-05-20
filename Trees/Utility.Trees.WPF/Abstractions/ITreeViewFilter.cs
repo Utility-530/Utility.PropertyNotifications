@@ -1,4 +1,4 @@
-﻿namespace Views.Trees
+﻿namespace Utility.Trees.WPF.Abstractions
 {
     public interface ITreeViewFilter
     {

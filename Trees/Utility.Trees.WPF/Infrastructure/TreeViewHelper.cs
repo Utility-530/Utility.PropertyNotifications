@@ -5,7 +5,7 @@ using Utility.WPF.Nodes;
 
 namespace Utility.WPF.Nodes
 {
-    public static class TreeViewHelper
+    internal static class TreeViewHelper
     {
         /// <summary>
         /// <a href="https://social.msdn.microsoft.com/Forums/vstudio/en-US/c01df033-0acd-4690-a24d-3b7090694bc0/how-can-handle-treeviewitems-mouseclick-or-mousedoubleclick-event?forum=wpf"></a>

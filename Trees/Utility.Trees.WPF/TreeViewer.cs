@@ -8,11 +8,11 @@ using Utility.WPF.Nodes;
 using Utility.Trees.Abstractions;
 using Utility.Extensions;
 using Utility.Infrastructure;
-using Utility.Trees.WPF;
+using Utility.Trees.WPF.Abstractions;
 
-namespace Views.Trees
+namespace Utility.Trees.WPF
 {
-    public partial class TreeViewer : UserControl
+    public class TreeViewer : ContentControl
     {
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register("ViewModel", typeof(object), typeof(TreeViewer), new PropertyMetadata(Changed));
         public static readonly DependencyProperty TreeViewItemFactoryProperty = DependencyProperty.Register("TreeViewItemFactory", typeof(ITreeViewItemFactory), typeof(TreeViewer), new PropertyMetadata(Changed));
@@ -24,12 +24,11 @@ namespace Views.Trees
         public static readonly DependencyProperty EventListenerProperty = DependencyProperty.Register("EventListener", typeof(IEventListener), typeof(TreeViewer), new PropertyMetadata());
 
         private IDisposable disposable;
-        private TreeView treeView;
+        private readonly TreeView treeView;
 
         public TreeViewer()
         {
-            InitializeComponent();
-            treeView = new TreeView();          
+            treeView = new TreeView();
             this.Content = treeView;
             Initialise(treeView);
             this.Loaded += Viewer_Loaded;
@@ -62,10 +61,10 @@ namespace Views.Trees
                     if (a is { Header: ITree { } node })
                     {
                         EventListener?.Send(new DoubleClickChange(a, node));
-                    }                  
+                    }
                 });
 
-            this.AddHandler(CustomTreeViewItem.ConditionalClickEvent, new RoutedEventHandler(ItemLoaded));
+            this.AddHandler(TreeViewItem.LoadedEvent, new RoutedEventHandler(ItemLoaded));
 
             treeView
                 .MouseSingleClicks()
@@ -101,7 +100,7 @@ namespace Views.Trees
 
         private void ItemLoaded(object sender, RoutedEventArgs e)
         {
-            if(e.OriginalSource is TreeViewItem { Header:IReadOnlyTree tree})
+            if (e.OriginalSource is TreeViewItem { Header: IReadOnlyTree tree })
             {
                 EventListener?.Send(new OnLoadedChange(e.OriginalSource, tree));
             }
@@ -169,11 +168,11 @@ namespace Views.Trees
 
         public void Reload()
         {
-            TreeExtensions.Visit(treeView as ItemsControl, 
+            TreeExtensions.Visit(treeView as ItemsControl,
             a =>
             {
                 return a.Items.Cast<TreeViewItem>();
-            }, 
+            },
             a =>
             {
                 if (a is TreeView { DataContext: var datacontext })

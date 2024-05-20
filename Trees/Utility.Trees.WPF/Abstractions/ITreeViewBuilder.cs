@@ -2,9 +2,8 @@
 using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Interfaces.NonGeneric;
-using Views.Trees;
 
-namespace Utility.WPF.Nodes
+namespace Utility.Trees.WPF.Abstractions
 {
     public interface ITreeViewBuilder
     {

@@ -4,7 +4,7 @@ using System.Windows.Data;
 using Utility.Extensions;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.NonGeneric;
-using Utility.WPF.Nodes;
+using Utility.Trees.WPF.Abstractions;
 
 namespace Views.Trees
 {

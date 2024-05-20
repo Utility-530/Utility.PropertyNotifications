@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Views.Trees
+namespace Utility.Trees.WPF.Abstractions
 {
     public interface ITreeViewItemFactory
     {

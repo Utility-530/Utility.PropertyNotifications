@@ -12,7 +12,7 @@ using System.Windows.Media.Media3D;
 
 namespace Utility.WPF.Nodes
 {
-    public static class ControlHelper
+    internal static class ControlHelper
     {
         /// <summary>
         /// <a href="https://social.msdn.microsoft.com/Forums/vstudio/en-US/c01df033-0acd-4690-a24d-3b7090694bc0/how-can-handle-treeviewitems-mouseclick-or-mousedoubleclick-event?forum=wpf"></a>
