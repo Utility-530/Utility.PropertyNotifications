@@ -3,7 +3,7 @@ using Splat;
 
 namespace Utility.Descriptors;
 
-internal record MethodDescriptor : ChildlessMemberDescriptor, IMethodDescriptor, IChildren
+internal record MethodDescriptor : MemberDescriptor, IMethodDescriptor
 {
     Dictionary<int, object?> dictionary = new();
 
@@ -36,21 +36,11 @@ internal record MethodDescriptor : ChildlessMemberDescriptor, IMethodDescriptor,
         methodInfo.Invoke(instance, dictionary.OrderBy(a => a.Key).Select(a => a.Value).ToArray());
     }
 
-    public override void Initialise(object? item = null)
-    {
-        throw new NotImplementedException();
-    }
-
-    public override void Finalise(object? item = null)
-    {
-        throw new NotImplementedException();
-    }
-
     public ICommand Command => command.Value;
 
     public override bool IsReadOnly => true;
 
-    public IObservable<object> Children
+    public override IObservable<object> Children
     {
         get
         {

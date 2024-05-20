@@ -15,14 +15,25 @@ namespace Utility.Descriptors
             _descriptor.Guid = guid;
             _descriptor.ParentGuid = parentGuid;
             return _descriptor;
-        }   
+        }
 
-        public static async Task<IValueDescriptor> CreateRoot(Descriptor descriptor, Guid guid)
+
+        public static async Task<IValueDescriptor> CreateRoot(Type type, Guid guid, string? name = null)
         {
-            await repo.InsertRoot(guid, descriptor.Name, descriptor.PropertyType);
-            var _descriptor = DescriptorConverter.ToDescriptor(default, descriptor);
-            _descriptor.Guid = guid;
-            return _descriptor;
+            var instance = Activator.CreateInstance(type);
+            var rootDescriptor = new RootDescriptor(type, name: name);
+            rootDescriptor.SetValue(null, instance);
+            var root = await CreateRoot(rootDescriptor, guid);
+            root.Initialise();
+            return root;
+
+            static async Task<IValueDescriptor> CreateRoot(Descriptor descriptor, Guid guid)
+            {
+                await repo.InsertRoot(guid, descriptor.Name, descriptor.PropertyType);
+                var _descriptor = DescriptorConverter.ToDescriptor(default, descriptor);
+                _descriptor.Guid = guid;
+                return _descriptor;
+            }
         }
 
         public static async Task<IDescriptor> CreateItem(object item, int index, Type type, Type parentType, Guid parentGuid)

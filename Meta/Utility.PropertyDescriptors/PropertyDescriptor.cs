@@ -9,8 +9,8 @@ public record PropertyDescriptor(Descriptor Descriptor, object Instance) : BaseP
         {
             return Observable.Create<Change<IDescriptor>>(async observer =>
             {
-                var headerDescriptor = new HeaderDescriptor(Descriptor.PropertyType, Descriptor.ComponentType, Descriptor.Name);
-                observer.OnNext(new(headerDescriptor, Changes.Type.Add));
+                //var headerDescriptor = new HeaderDescriptor(Descriptor.PropertyType, Descriptor.ComponentType, Descriptor.Name);
+                //observer.OnNext(new(headerDescriptor, Changes.Type.Add));
 
                 var descriptor = await DescriptorFactory.ToValue(Instance, Descriptor, Guid);
                 observer.OnNext(new(descriptor, Changes.Type.Add));

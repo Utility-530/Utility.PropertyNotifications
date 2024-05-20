@@ -188,6 +188,9 @@ namespace Utility.Descriptors.Repositorys
 
         public async Task<Guid> Find(Guid parentGuid, string name, System.Type? type = null, int? index = null)
         {
+            if (parentGuid == default)
+                throw new Exception($"{nameof(parentGuid)} is default");
+
             await initialisationTask;
 
             var table_name = tablelookup[parentGuid];
