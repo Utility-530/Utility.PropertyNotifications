@@ -12,6 +12,9 @@
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/LinesStyle.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Colors.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboBoxToggleButton.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/AddRemoveButtons.xaml"/>
+
+
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/ComboBoxTreeView.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/AssemblyTreeSelector.xaml"/>
     </ResourceDictionary.MergedDictionaries>
