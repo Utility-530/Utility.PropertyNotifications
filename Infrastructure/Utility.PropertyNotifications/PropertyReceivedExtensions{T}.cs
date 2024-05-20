@@ -33,18 +33,15 @@ namespace Utility.PropertyNotifications
                     _observer = observer;
                     _target.PropertyReceived += onPropertyReceived;
 
-        
-                        var value = (T)_info.GetValue(_target);
-                        _observer.OnNext(value);
-                    
+                    var value = (T)_info.GetValue(_target);
+                    _observer.OnNext(value);
+
                 }
 
                 private void onPropertyReceived(object sender, PropertyReceivedEventArgs e)
                 {
                     if (e.PropertyName == _info.Name)
                     {
-        
-
                         var value = (T)_info.GetValue(_target);
                         _observer.OnNext(value);
                     }
