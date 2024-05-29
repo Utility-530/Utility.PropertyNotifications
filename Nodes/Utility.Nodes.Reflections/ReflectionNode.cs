@@ -1,4 +1,5 @@
-﻿using Utility.Interfaces.NonGeneric;
+﻿using System.Reactive.Linq;
+using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
 using Utility.Trees.Abstractions;
 
@@ -12,11 +13,13 @@ namespace Utility.Nodes.Reflections
         {
             this.data = propertyData;
             Key = new GuidKey(data.Guid);
+            if (data is IChildren children)
+                children.Children.Cast<Changes.Change<IDescriptor>>().Subscribe(changes);
         }
 
-        public ReflectionNode()
-        {
-        }
+        //public ReflectionNode()
+        //{
+        //}
         public override object Data
         {
             get => data;
