@@ -583,7 +583,7 @@ namespace Utility.WPF.Colours
             }
             //-----------------------------------------------------------------
             Color color = _color;
-            Type type = Type;
+            Type? type = Type;
             //-----------------------------------------------------------------
             if (type == null)
             {
@@ -603,27 +603,19 @@ namespace Utility.WPF.Colours
                     }
                 }
             }
-            //-----------------------------------------------------------------
-            if (
-                type == typeof(Brush)
-            || type == typeof(SolidColorBrush)
-               )
+            if (type == typeof(Brush) || type == typeof(SolidColorBrush))
             {
                 return new SolidColorBrush(color);
             }
-            //-----------------------------------------------------------------
             else if (type == typeof(Color))
             {
                 return color;
             }
-            //-----------------------------------------------------------------
             else if (type == typeof(string))
             {
                 return $"#{color.A:X2}{color.R:X2}{color.G:X2}{color.B:X2}";
             }
-            //-----------------------------------------------------------------
             return new SolidColorBrush(color);
-            //=================================================================
         }
     }
 }
@@ -646,14 +638,13 @@ namespace Leepfrog.WpfFramework
             }
             else
             {
-                ret = new Binding();
-                ret.Source = param;
+                ret = new Binding
+                {
+                    Source = param
+                };
             }
 
-            if (
-                (ret.Converter == null)
-             && (ret.Converter != conv)
-               )
+            if (ret.Converter == null && ret.Converter != conv)
             {
                 try
                 {
@@ -665,8 +656,7 @@ namespace Leepfrog.WpfFramework
                 }
             }
 
-            if ((ret.Mode == BindingMode.TwoWay)               //|| (ret.Mode == BindingMode.Default)
-               )
+            if (ret.Mode == BindingMode.TwoWay)               //|| (ret.Mode == BindingMode.Default)
             {
                 try
                 {
@@ -707,24 +697,14 @@ namespace Leepfrog.WpfFramework
 
         public static bool IsTargetNull(IServiceProvider serviceProvider)
         {
-            var target = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
-            // if target is not available...
-            return
-                (
-                 (target == null)
-              || (target.TargetProperty == null)
-                );
+            return serviceProvider.GetService(typeof(IProvideValueTarget)) is not IProvideValueTarget target || target.TargetProperty == null;
         }
 
         public static bool IsTemplate(IServiceProvider serviceProvider)
         {
             var target = serviceProvider.GetService(typeof(IProvideValueTarget)) as IProvideValueTarget;
             // return true if null or SharedDP
-            return (
-                    (target.TargetObject == null)
-                 || (target.TargetObject.GetType().FullName == "System.Windows.SharedDp")
-                   );
+            return target.TargetObject == null|| target.TargetObject.GetType().FullName == "System.Windows.SharedDp";
         }
-
     }
 }
