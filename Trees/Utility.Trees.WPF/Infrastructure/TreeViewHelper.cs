@@ -13,34 +13,34 @@ namespace Utility.WPF.Nodes
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public static IObservable<TreeViewItem?> MouseDoubleClicks(this TreeView control)
+        public static IObservable<HeaderedItemsControl?> MouseDoubleClicks(this ItemsControl control)
         {
             return control
-                    .MouseDoubleClickSelections<TreeViewItem>();
+                    .MouseDoubleClickSelections<HeaderedItemsControl>();
         }
 
-        public static IObservable<TreeViewItem?> MouseSingleClicks(this TreeView control)
+        public static IObservable<HeaderedItemsControl?> MouseSingleClicks(this ItemsControl control)
         {
             return control
-                    .MouseSingleClickSelections<TreeViewItem>();
+                    .MouseSingleClickSelections<HeaderedItemsControl>();
         }
 
-        public static IObservable<TreeViewItem> MouseHoverEnters(this TreeView control)
+        public static IObservable<HeaderedItemsControl> MouseHoverEnters(this ItemsControl control)
         {
             return control
-                    .MouseHoverEnterSelections<TreeViewItem>();
+                    .MouseHoverEnterSelections<HeaderedItemsControl>();
         }
 
-        public static IObservable<TreeViewItem> MouseHoverLeaves(this TreeView control)
+        public static IObservable<HeaderedItemsControl> MouseHoverLeaves(this ItemsControl control)
         {
             return control
-                    .MouseHoverLeaveSelections<TreeViewItem>();
+                    .MouseHoverLeaveSelections<HeaderedItemsControl>();
         }
 
-        public static IObservable<(TreeViewItem item, Point point)> MouseMoves(this TreeView control)
+        public static IObservable<(HeaderedItemsControl item, Point point)> MouseMoves(this ItemsControl control)
         {
             return control
-                    .MouseMoveSelections<TreeViewItem>();
+                    .MouseMoveSelections<HeaderedItemsControl>();
         }
 
     }

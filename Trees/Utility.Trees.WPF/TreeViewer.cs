@@ -12,7 +12,7 @@ using Utility.Trees.WPF.Abstractions;
 
 namespace Utility.Trees.WPF
 {
-    public class TreeViewer : ContentControl
+    public class TreeViewer : ItemsControl
     {
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty.Register("ViewModel", typeof(object), typeof(TreeViewer), new PropertyMetadata(Changed));
         public static readonly DependencyProperty TreeViewItemFactoryProperty = DependencyProperty.Register("TreeViewItemFactory", typeof(ITreeViewItemFactory), typeof(TreeViewer), new PropertyMetadata(Changed));
@@ -24,13 +24,13 @@ namespace Utility.Trees.WPF
         public static readonly DependencyProperty EventListenerProperty = DependencyProperty.Register("EventListener", typeof(IEventListener), typeof(TreeViewer), new PropertyMetadata());
 
         private IDisposable disposable;
-        private readonly TreeView treeView;
+
 
         public TreeViewer()
         {
-            treeView = new TreeView();
-            this.Content = treeView;
-            Initialise(treeView);
+        
+         
+            Initialise(this);
             this.Loaded += Viewer_Loaded;
 
             void Viewer_Loaded(object sender, RoutedEventArgs e)
@@ -42,9 +42,9 @@ namespace Utility.Trees.WPF
                     disposable?.Dispose();
                     if (ViewModel is IItems items)
                     {
-                        treeView.ItemContainerStyleSelector = StyleSelector;
-                        treeView.ItemTemplateSelector = DataTemplateSelector;
-                        disposable = TreeViewBuilder.Build(treeView, items, TreeViewItemFactory, PanelsConverter, StyleSelector, DataTemplateSelector, TreeViewFilter);
+                        this.ItemContainerStyleSelector = StyleSelector;
+                        this.ItemTemplateSelector = DataTemplateSelector;
+                        disposable = TreeViewBuilder.Build(this, items, TreeViewItemFactory, PanelsConverter, StyleSelector, DataTemplateSelector, TreeViewFilter);
                     }
                     else
                         throw new Exception("ds 38787");
@@ -52,7 +52,7 @@ namespace Utility.Trees.WPF
             }
         }
 
-        void Initialise(TreeView treeView)
+        void Initialise(ItemsControl treeView)
         {
             treeView
                 .MouseDoubleClicks()
@@ -64,7 +64,7 @@ namespace Utility.Trees.WPF
                     }
                 });
 
-            this.AddHandler(TreeViewItem.LoadedEvent, new RoutedEventHandler(ItemLoaded));
+            this.AddHandler(LoadedEvent, new RoutedEventHandler(ItemLoaded));
 
             treeView
                 .MouseSingleClicks()
@@ -168,27 +168,27 @@ namespace Utility.Trees.WPF
 
         public void Reload()
         {
-            TreeExtensions.Visit(treeView as ItemsControl,
+            TreeExtensions.Visit<ItemsControl>(this,
             a =>
             {
-                return a.Items.Cast<TreeViewItem>();
+                return a.Items.Cast<HeaderedItemsControl>();
             },
             a =>
             {
-                if (a is TreeView { DataContext: var datacontext })
+                if (a is ItemsControl { DataContext: var datacontext })
                 { }
-                else if (a is TreeViewItem { Header: ISave viewModel })
+                else if (a is HeaderedItemsControl { Header: ISave viewModel })
                     viewModel.Save(null);
                 else
                     throw new Exception("sdf 3l8hjhg");
             });
 
-            treeView.Items.Clear();
+            this.Items.Clear();
             //root.Load(); 
             disposable.Dispose();
 
             if (ViewModel is IItems items)
-                disposable = TreeViewBuilder.Build(treeView, items, TreeViewItemFactory, PanelsConverter, StyleSelector, DataTemplateSelector, TreeViewFilter);
+                disposable = TreeViewBuilder.Build(this, items, TreeViewItemFactory, PanelsConverter, StyleSelector, DataTemplateSelector, TreeViewFilter);
             else
                 throw new Exception("ds 38787");
         }
@@ -196,16 +196,16 @@ namespace Utility.Trees.WPF
         public object Add()
         {
             //Guid guid = default;
-            object obj = default;
-            TreeExtensions.Visit(treeView as ItemsControl, a =>
+            object? obj = default;
+            TreeExtensions.Visit(this as ItemsControl, a =>
             {
 
-                var items = a.Items.Cast<TreeViewItem>();
+                var items = a.Items.Cast<HeaderedItemsControl>();
                 return items;
             }, a =>
             {
 
-                if (a is TreeViewItem { Header: IIsSelected { IsSelected: true } viewModel })
+                if (a is HeaderedItemsControl { Header: IIsSelected { IsSelected: true } viewModel })
                     obj = viewModel;
                 else
                 {
@@ -219,15 +219,15 @@ namespace Utility.Trees.WPF
 
         public void Remove()
         {
-            TreeExtensions.Visit(treeView as ItemsControl, a =>
+            TreeExtensions.Visit(this as ItemsControl, a =>
             {
 
-                var items = a.Items.Cast<TreeViewItem>();
+                var items = a.Items.Cast<HeaderedItemsControl>();
                 return items;
             }, a =>
             {
 
-                if (a is TreeViewItem { Header: IIsSelected { IsSelected: true } viewModel })
+                if (a is HeaderedItemsControl { Header: IIsSelected { IsSelected: true } viewModel })
                 {
                     if (viewModel is IDelete delete)
                         delete.Delete(null);

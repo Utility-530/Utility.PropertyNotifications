@@ -8,7 +8,7 @@ namespace Utility.Trees.WPF.Abstractions
     public interface ITreeViewBuilder
     {
         IDisposable Build(
-            TreeView treeView,
+            ItemsControl treeView,
             IItems root,
             ITreeViewItemFactory factory,
             IValueConverter ItemsPanelConverter,
