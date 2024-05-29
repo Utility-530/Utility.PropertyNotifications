@@ -9,7 +9,7 @@ namespace Utility.Nodes
 
     public abstract class Node<T> : Node, IExpand
     {
-        ReplaySubject<Changes.Change<T>> changes = new();
+        protected ReplaySubject<Changes.Change<T>> changes = new();
         private bool isExpanded;
 
         public Node(bool isExpanded = true)
