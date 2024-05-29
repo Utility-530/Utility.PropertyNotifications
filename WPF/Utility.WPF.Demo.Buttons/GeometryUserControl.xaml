@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:view="http://schemas.utility.com/buttons"
+             xmlns:c="http://schemas.utility.com/colours"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.Resources>
@@ -18,7 +19,7 @@
             </PathGeometry>
             <Geometry x:Key="PlusGeometry" >M0,5 H10 M5,0 V10</Geometry>
 
-            <Path  x:Key="Geometry" Stroke="Blue" StrokeThickness="2">
+            <Path  x:Key="Geometry" Stroke="{c:Red }" StrokeThickness="2">
                 <Path.Data>
                     <EllipseGeometry Center="100,100" RadiusX="100" RadiusY="100"/>
                 </Path.Data>
@@ -33,24 +34,18 @@
                 <CombinedGeometry.Geometry1>
                     <EllipseGeometry RadiusX="99" RadiusY="99" Center="50,50"  />
                 </CombinedGeometry.Geometry1>
-                <!--<CombinedGeometry.Geometry2>
-                    <Geometry  >M0,5 H10 M5,0 V10</Geometry>
-                </CombinedGeometry.Geometry2>-->
             </CombinedGeometry>
 
 
-            <!--<GeometryGroup x:Key="GroupGeometry" FillRule="EvenOdd">
-                <LineGeometry StartPoint="10,10" EndPoint="50,30" />
-                <EllipseGeometry Center="40,70" RadiusX="30" RadiusY="30" />
-                <RectangleGeometry Rect="30,55 100 30" />
-            </GeometryGroup>-->
-
+      
             <GeometryGroup x:Key="GroupGeometry" FillRule="EvenOdd">
                 <StaticResource ResourceKey="CombinedGeometry"/>
                 <Geometry >M0,50 H100 M50,0 V100</Geometry>
             </GeometryGroup>
 
-
+            <Geometry x:Key="ChevronGeometry1">M10 7L15 12L10 17</Geometry>
+            <Geometry x:Key="ChevronGeometry2">M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z</Geometry>
+    
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Buttons;component/Themes/Button.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
@@ -79,7 +74,15 @@
                     Data="{StaticResource GroupGeometry}"
                     HoverBackground="BurlyWood" />
 
-
+        <view:GeometryButton
+                    Height="70"
+                    Data="{StaticResource ChevronGeometry1}"
+                    Foreground="{c:Green}" />
+        <view:GeometryButton
+                    Height="70"
+                    Data="{StaticResource ChevronGeometry2}"
+                    Background="{c:BlueGrey}" />
+        
         <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
             <view:GeometryButton x:Name="PathButton" Height="100" />
             <TextBox

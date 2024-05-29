@@ -10,6 +10,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Meta\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
 		<ProjectReference Include="..\Utility.ViewModels.Customs\Utility.ViewModels.Customs.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Colours\Utility.WPF.Colours.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Demo.Data\Utility.WPF.Demo.Data.csproj" />
