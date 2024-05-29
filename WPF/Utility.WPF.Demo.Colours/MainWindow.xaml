@@ -1,0 +1,61 @@
+﻿<Window x:Class="Utility.WPF.Demo.Colours.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Utility.WPF.Demo.Colours"
+        xmlns:c="http://schemas.utility.com/colours"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <FrameworkElement.Resources>
+        <Style TargetType="{x:Type Ellipse}">
+            <Setter Property="Height" Value="40"></Setter>
+            <Setter Property="Width" Value="40"></Setter>
+        </Style>
+    </FrameworkElement.Resources>
+    <UniformGrid Columns="13">
+
+
+        <Ellipse   Fill="{c:Red 1}"></Ellipse>
+        <Ellipse   Fill="{c:Red 2}"></Ellipse>
+        <Ellipse   Fill="{c:Red 3}"></Ellipse>
+        <Ellipse   Fill="{c:Red 4}"></Ellipse>
+        <Ellipse   Fill="{c:Red 5}"></Ellipse>
+        <Ellipse   Fill="{c:Red 6}"></Ellipse>
+        <Ellipse   Fill="{c:Red 7}"></Ellipse>
+        <Ellipse   Fill="{c:Red 8}"></Ellipse>
+        <Ellipse   Fill="{c:Red 9}"></Ellipse>
+        <Ellipse   Fill="{c:Red 10}"></Ellipse>
+        <Ellipse   Fill="{c:Red 11}"></Ellipse>
+        <Ellipse   Fill="{c:Red 12}"></Ellipse>
+        <Ellipse   Fill="{c:Red 13}"></Ellipse>
+
+        <Ellipse   Fill="{c:Blue 1}"></Ellipse>
+        <Ellipse   Fill="{c:Blue 2}"></Ellipse>
+        <Ellipse   Fill="{c:Blue 3}"></Ellipse>
+        <Ellipse   Fill="{c:Blue 4}"></Ellipse>
+        <Ellipse   Fill="{c:Blue 5}"></Ellipse>
+        <Ellipse   Fill="{c:Blue 6}"></Ellipse>
+        <Ellipse   Fill="{c:Blue 7}"></Ellipse>
+        <Ellipse   Fill="{c:Blue 8}"></Ellipse>
+        <Ellipse   Fill="{c:Blue 9}"></Ellipse>
+        <Ellipse   Fill="{c:Blue 10}"></Ellipse>
+        <Ellipse   Fill="{c:Blue 11}"></Ellipse>
+        <Ellipse   Fill="{c:Blue 12}"></Ellipse>
+        <Ellipse   Fill="{c:Blue 13}"></Ellipse>
+
+        <Ellipse   Fill="{c:Green 1}"></Ellipse>
+        <Ellipse   Fill="{c:Green 2}"></Ellipse>
+        <Ellipse   Fill="{c:Green 3}"></Ellipse>
+        <Ellipse   Fill="{c:Green 4}"></Ellipse>
+        <Ellipse   Fill="{c:Green 5}"></Ellipse>
+        <Ellipse   Fill="{c:Green 6}"></Ellipse>
+        <Ellipse   Fill="{c:Green 7}"></Ellipse>
+        <Ellipse   Fill="{c:Green 8}"></Ellipse>
+        <Ellipse   Fill="{c:Green 9}"></Ellipse>
+        <Ellipse   Fill="{c:Green 10}"></Ellipse>
+        <Ellipse   Fill="{c:Green 11}"></Ellipse>
+        <Ellipse   Fill="{c:Green 12}"></Ellipse>
+        <Ellipse   Fill="{c:Green 13}"></Ellipse>
+    </UniformGrid>
+</Window>
