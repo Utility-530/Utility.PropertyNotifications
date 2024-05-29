@@ -86,8 +86,8 @@ namespace Utility.Trees.Demo.MVVM
                 }
                 return TemplateGenerator.CreateDataTemplate(() => new Ellipse { Fill = Brushes.Red, Height = 20, Width = 20 });
             }
-
         }
+
         public class StyleSelector : System.Windows.Controls.StyleSelector
         {
             public override Style SelectStyle(object item, DependencyObject container)

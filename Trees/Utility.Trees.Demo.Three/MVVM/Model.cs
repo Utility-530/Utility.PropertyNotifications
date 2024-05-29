@@ -8,8 +8,9 @@ using System.Collections;
 using Utility.Descriptors;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
-using Views.Trees;
 using System.Collections.ObjectModel;
+using Utility.Trees.WPF.Abstractions;
+using Utility.WPF.Controls.Trees;
 
 namespace Utility.Trees.Demo.MVVM
 {
@@ -39,11 +40,16 @@ namespace Utility.Trees.Demo.MVVM
 
         public class StyleSelector : System.Windows.Controls.StyleSelector
         {
+            ResourceDictionary resourceDictionary = new ResourceDictionary
+            {
+                Source = new Uri($"/{typeof(CustomTreeViewItem).Namespace};component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute)
+            };
+
             public override Style SelectStyle(object item, DependencyObject container)
             {
                 if (item is TreeViewItem { })
                 {
-                    var style = App.Current.Resources["ButtonsFlankTreeViewItemStyle"] as Style;
+                    var style = resourceDictionary["ButtonsAddRemoveStyle"] as Style;
                     return style;
                 }
                 return base.SelectStyle(item, container);

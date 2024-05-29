@@ -5,7 +5,6 @@
              xmlns:btns="http://schemas.utility.com/buttons"
              xmlns:local="clr-namespace:Utility.Trees.Demo.MVVM" 
              xmlns:t="clr-namespace:Utility.Trees;assembly=Utility.Trees"
-             xmlns:temp="http://schemas.utility.com/templates"
              xmlns:tree="http://schemas.utility.com/trees"
              xmlns:local1="clr-namespace:Utility.Trees.Demo.MVVM.Infrastructure">
     <Application.Resources>
@@ -24,7 +23,6 @@
                 <tree:StyleTreeSelector Assemblies="{x:Static local:App.Assemblies }" FullKey="{Binding StyleKey, Mode=TwoWay}"/>
             </UniformGrid>
         </DataTemplate>
-
 
         <DataTemplate DataType="{x:Type local:Model}">
             <tree:TypeSelector Type="{Binding Type}" Assemblies="{x:Static local:App.SystemAssemblies }"/>

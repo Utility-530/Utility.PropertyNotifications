@@ -6,13 +6,16 @@ using Utility.Commands;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.WPF;
 using Utility.WPF.Factorys;
-using Views.Trees;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using Utility.Trees.Abstractions;
 using Utility.Interfaces.Generic;
 using Utility.Keys;
 using Utility.Trees.Demo.MVVM.Infrastructure;
+using Utility.Trees.WPF.Abstractions;
+using Utility.WPF.Controls.Base;
+using Utility.Reactives;
+using Utility.WPF.Controls.Trees;
 
 namespace Utility.Trees.Demo.MVVM.MVVM
 {
@@ -21,7 +24,7 @@ namespace Utility.Trees.Demo.MVVM.MVVM
         public class TreeViewItemFactory : ITreeViewItemFactory
         {
             Random random = new();
-            public TreeViewItem Make(object instance)
+            public HeaderedItemsControl Make(object instance)
             {
                 var item = new CustomTreeViewItem
                 {
@@ -88,14 +91,17 @@ namespace Utility.Trees.Demo.MVVM.MVVM
 
 
 
-        public class EventListener : IEventListener
+        public class EventListener : ReplayModel<IEvent>, IEventListener
         {
+   
             public static EventListener Instance { get; } = new();
 
             public void Send(IEvent @event)
             {
-
+                OnNext(@event);
             }
+
+      
         }
     }
 }

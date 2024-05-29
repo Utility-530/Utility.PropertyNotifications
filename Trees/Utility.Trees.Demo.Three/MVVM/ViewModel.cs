@@ -9,7 +9,6 @@ namespace Utility.Trees.Demo.MVVM
         private string styleKey;
         private string itemsPanelTemplateKey;
 
-
         public string DataTemplateKey
         {
             get

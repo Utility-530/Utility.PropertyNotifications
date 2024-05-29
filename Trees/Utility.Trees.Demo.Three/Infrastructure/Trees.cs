@@ -84,43 +84,30 @@ namespace Utility.Trees.Demo.MVVM.Infrastructure
         }
     }
 
-    public class RootNode : ReflectionNode
-    {
-        private bool flag;
-        private readonly Guid guid;
+    //public class RootNode : ReflectionNode
+    //{
+    //    //private bool flag;
+    //    private readonly Guid guid;
 
-        //static Guid guid = Guid.Parse("ea3ef30a-4bb9-4e02-bd78-bcd757d48815");
-        //Guid guid = Guid.Parse("25ee5731-11cf-4fc1-a925-50272fb99bba");
-        public RootNode(Guid guid) : base()
-        {
-            Key = new GuidKey(guid);
-            this.guid = guid;
-        }
+    //    //static Guid guid = Guid.Parse("ea3ef30a-4bb9-4e02-bd78-bcd757d48815");
+    //    //Guid guid = Guid.Parse("25ee5731-11cf-4fc1-a925-50272fb99bba");
+    //    public RootNode(Guid guid) : base()
+    //    {
+    //        Key = new GuidKey(guid);
+    //        this.guid = guid;
+    //    }
 
-        public async Task Initialise(Type type, string name)
-        {
-            //var type = typeof(Utility.Trees.Demo.Models.Model);
-            var instance = Activator.CreateInstance(type);
-            var rootDescriptor = new RootDescriptor(type, name: name);
-            rootDescriptor.SetValue(null, instance);
-            var root= await DescriptorFactory.CreateRoot(rootDescriptor, guid);
-            root.Initialise();
-            this.Data = root;
-            this.OnPropertyChanged(nameof(Data));
-            //flag = false;
-            //await base.RefreshChildrenAsync();
-            //flag = true;
-        }
-        public override async Task<bool> HasMoreChildren()
-        {
-            return (Data as IDescriptor)?.Type.IsValueOrString() == false && flag == false;
-        }
+  
+    //    //public override async Task<bool> HasMoreChildren()
+    //    //{
+    //    //    return (Data as IDescriptor)?.Type.IsValueOrString() == false && flag == false;
+    //    //}
 
-        public override string ToString()
-        {
-            return nameof(Utility.Trees.Demo.Models.Model);
-        }
-    }
+    //    public override string ToString()
+    //    {
+    //        return nameof(RootNode);
+    //    }
+    //}
 
 
 
@@ -168,7 +155,7 @@ namespace Utility.Trees.Demo.MVVM.Infrastructure
     public class ModelTree : ObservableTree
     {
         private GuidKey key;
-        public ModelTree(System.Type key)
+        public ModelTree(Type key)
         {
             this.key = new GuidKey(key.GUID);
             TreeRepository.Instance.InsertRoot(key.GUID, key.Name, key);

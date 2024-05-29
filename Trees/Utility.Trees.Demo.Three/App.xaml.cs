@@ -1,15 +1,11 @@
 ﻿using Splat;
 using System;
-using System.Linq;
-using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using Utility.Descriptors;
 using Utility.Descriptors.Repositorys;
-using Utility.Extensions;
-using Utility.Keys;
+using Utility.Nodes.Reflections;
 using Utility.Trees.Demo.MVVM.Infrastructure;
-using Utility.WPF.Templates;
 
 namespace Utility.Trees.Demo.MVVM
 {
@@ -23,7 +19,7 @@ namespace Utility.Trees.Demo.MVVM
         public static Assembly[] Assemblies => new Assembly[] { typeof(Utility.WPF.Library.Class1).Assembly };
         public static Assembly[] SystemAssemblies => new Assembly[] { new Utility.Meta.SystemAssembly() };
 
-        RootNode model;
+        ReflectionNode model;
         ViewModelTree viewModel;
         Tree view;
         Tree data;
@@ -38,9 +34,11 @@ namespace Utility.Trees.Demo.MVVM
             SQLitePCL.Batteries.Init();
             Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
 
-            var rootPropertyDescriptor = new RootDescriptor(typeof(Model), name: "model");
-            DescriptorFactory.CreateRoot(rootPropertyDescriptor, guid).Wait();
-            
+            //{
+            //    var rootPropertyDescriptor = new RootDescriptor(typeof(Model), name: "model");
+            //    DescriptorFactory.CreateRoot(rootPropertyDescriptor, guid).Wait();
+            //}
+
             Window window = CreateWindow();
             window.Show();
             base.OnStartup(e);

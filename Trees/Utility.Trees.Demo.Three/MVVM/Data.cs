@@ -10,9 +10,9 @@ using Utility.Enums;
 using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
+using Utility.Trees.WPF.Abstractions;
 using Utility.WPF.Factorys;
 using Utility.WPF.Templates;
-using Views.Trees;
 using O = System.Windows.Controls.Orientation;
 
 namespace Utility.Trees.Demo.MVVM.MVVM
@@ -65,9 +65,9 @@ namespace Utility.Trees.Demo.MVVM.MVVM
                 //    return MakeTemplate(item, "None");
                 //}
                 // root
-                else if (item is IReadOnlyTree { Data: PropertyDescriptor { } })
+                else if (item is ITree { Data: PropertyDescriptor {  }, Depth :{ } depth })
                 {
-                    //return MakeHeaderTemplate(item, depth);
+                    return MakeHeaderTemplate(item, depth);
                     //return MakeEmptyTemplate(nameof(PropertyDescriptor));
                 }
                 else if (item is ITree { Data: IValueDescriptor { } })
@@ -253,7 +253,7 @@ namespace Utility.Trees.Demo.MVVM.MVVM
 
         public class TreeViewItemFactory : ITreeViewItemFactory
         {
-            public TreeViewItem Make(object instance)
+            public HeaderedItemsControl Make(object instance)
             {
                 //if (instance is not IReadOnlyTree { } tree)
                 //{

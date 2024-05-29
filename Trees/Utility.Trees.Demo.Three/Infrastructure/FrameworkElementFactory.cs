@@ -11,6 +11,12 @@ using Utility.Trees.Demo.MVVM.Infrastructure;
 using Utility.Extensions;
 using Utility.Keys;
 using System.Reactive.Disposables;
+using static Utility.Trees.Demo.MVVM.MVVM.Default;
+using Utility.Infrastructure;
+using Utility.Trees.Abstractions;
+using Utility.Descriptors;
+using Utility.Nodes.Reflections;
+using Utility.Trees.WPF;
 
 namespace Utility.Trees.Demo.MVVM
 {
@@ -47,21 +53,30 @@ namespace Utility.Trees.Demo.MVVM
 
         Panel MakeGrid(Type type, string name, Guid guid)
         {
-            model = new RootNode(guid);
-            model.Initialise(type, name).GetAwaiter().GetResult();
+            model = new ReflectionNode(DescriptorFactory.CreateRoot(type, guid, name).GetAwaiter().GetResult()) {   };
+          
             viewModel = new() { Key = model.Key };
             view = new() { Key = model.Key };
             data = new() { Key = model.Key };
 
-            var grid = new UniformGrid() { Rows = 1 };
-            grid.Children.Add(ModelTreeViewer(model));
+            var uGrid = new UniformGrid() { Rows = 1 };
+            var contentControl = new ContentControl { };
+            EventListener.Instance.Subscribe(a =>
+            {
+                if (a is ClickChange { Node: IReadOnlyTree { Data: MemberDescriptor data } tree })
+                {
+                    contentControl.Content = new ViewModelTree() { Key = new GuidKey(data.Guid) };
+                }
+            });
+            uGrid.Children.Add(ModelTreeViewer(model));
             if (false)
             {
-                grid.Children.Add(ViewModelTreeViewer(viewModel));
-                grid.Children.Add(ViewTreeViewer(view));
+                uGrid.Children.Add(ViewModelTreeViewer(viewModel));
+                uGrid.Children.Add(ViewTreeViewer(view));
             }
-            grid.Children.Add(DataTreeViewer(data));
-            return grid;
+            uGrid.Children.Add(DataTreeViewer(data));
+            uGrid.Children.Add(contentControl);
+            return uGrid;
         }
 
         ComboBox MakeComboBox()
