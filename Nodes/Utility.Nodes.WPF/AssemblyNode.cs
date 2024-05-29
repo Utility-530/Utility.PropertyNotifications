@@ -80,8 +80,9 @@ namespace Utility.Nodes.Solutions
         {
             return Observable.Create<object?>(observer =>
             {
-                foreach (var item in lazy.Value)
-                    observer.OnNext(item);
+                if (lazy.Value != null)
+                    foreach (var item in lazy.Value)
+                        observer.OnNext(item);
                 return Disposable.Empty;
             });
         }
