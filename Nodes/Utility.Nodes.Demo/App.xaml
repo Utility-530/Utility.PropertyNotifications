@@ -7,9 +7,6 @@
              xmlns:infra="clr-namespace:Utility.Nodes.Demo.Infrastructure" 
              xmlns:io="clr-namespace:System.IO;assembly=mscorlib"        
              xmlns:local="clr-namespace:Utility.Nodes.Demo"
-             xmlns:vm="clr-namespace:Utility.ViewModels;assembly=Utility.ViewModels"
-             xmlns:com="clr-namespace:System.ComponentModel;assembly=System" 
-             xmlns:templates="http://schemas.utility.com/templates"
              xmlns:ui="http://schemas.modernwpf.com/2019">
     <Application.Resources>
         <ResourceDictionary>
