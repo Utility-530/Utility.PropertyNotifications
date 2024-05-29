@@ -13,49 +13,72 @@
             <Setter Property="Width" Value="40"></Setter>
         </Style>
     </FrameworkElement.Resources>
-    <UniformGrid Columns="13">
+    
+    <UniformGrid Columns="1">
+        <UniformGrid>
+            <Ellipse Fill="{c:Amber}"></Ellipse>
+            <Ellipse Fill="{c:Blue}"></Ellipse>
+            <Ellipse Fill="{c:BlueGrey}"></Ellipse>
+            <Ellipse Fill="{c:Brown}"></Ellipse>
+            <Ellipse Fill="{c:Cyan}"></Ellipse>
+            <Ellipse Fill="{c:DeepOrange}"></Ellipse>
+            <Ellipse Fill="{c:DeepPurple}"></Ellipse>
+            <Ellipse Fill="{c:Green}"></Ellipse>
+            <Ellipse Fill="{c:Grey}"></Ellipse>
+            <Ellipse Fill="{c:Indigo}"></Ellipse>
+            <Ellipse Fill="{c:Indigo}"></Ellipse>
+            <Ellipse Fill="{c:LightGreen}"></Ellipse>
+            <Ellipse Fill="{c:Lime}"></Ellipse>
+            <Ellipse Fill="{c:Orange}"></Ellipse>
+            <Ellipse Fill="{c:Pink}"></Ellipse>
+            <Ellipse Fill="{c:Purple}"></Ellipse>
+            <Ellipse Fill="{c:Red}"></Ellipse>
+            <Ellipse Fill="{c:Teal}"></Ellipse>
+            <Ellipse Fill="{c:Yellow}"></Ellipse>
+        </UniformGrid>
 
+        <UniformGrid Columns="13">
+            <Ellipse   Fill="{c:Red 1}"></Ellipse>
+            <Ellipse   Fill="{c:Red 2}"></Ellipse>
+            <Ellipse   Fill="{c:Red 3}"></Ellipse>
+            <Ellipse   Fill="{c:Red 4}"></Ellipse>
+            <Ellipse   Fill="{c:Red 5}"></Ellipse>
+            <Ellipse   Fill="{c:Red 6}"></Ellipse>
+            <Ellipse   Fill="{c:Red 7}"></Ellipse>
+            <Ellipse   Fill="{c:Red 8}"></Ellipse>
+            <Ellipse   Fill="{c:Red 9}"></Ellipse>
+            <Ellipse   Fill="{c:Red 10}"></Ellipse>
+            <Ellipse   Fill="{c:Red 11}"></Ellipse>
+            <Ellipse   Fill="{c:Red 12}"></Ellipse>
+            <Ellipse   Fill="{c:Red 13}"></Ellipse>
 
-        <Ellipse   Fill="{c:Red 1}"></Ellipse>
-        <Ellipse   Fill="{c:Red 2}"></Ellipse>
-        <Ellipse   Fill="{c:Red 3}"></Ellipse>
-        <Ellipse   Fill="{c:Red 4}"></Ellipse>
-        <Ellipse   Fill="{c:Red 5}"></Ellipse>
-        <Ellipse   Fill="{c:Red 6}"></Ellipse>
-        <Ellipse   Fill="{c:Red 7}"></Ellipse>
-        <Ellipse   Fill="{c:Red 8}"></Ellipse>
-        <Ellipse   Fill="{c:Red 9}"></Ellipse>
-        <Ellipse   Fill="{c:Red 10}"></Ellipse>
-        <Ellipse   Fill="{c:Red 11}"></Ellipse>
-        <Ellipse   Fill="{c:Red 12}"></Ellipse>
-        <Ellipse   Fill="{c:Red 13}"></Ellipse>
+            <Ellipse   Fill="{c:Blue 1}"></Ellipse>
+            <Ellipse   Fill="{c:Blue 2}"></Ellipse>
+            <Ellipse   Fill="{c:Blue 3}"></Ellipse>
+            <Ellipse   Fill="{c:Blue 4}"></Ellipse>
+            <Ellipse   Fill="{c:Blue 5}"></Ellipse>
+            <Ellipse   Fill="{c:Blue 6}"></Ellipse>
+            <Ellipse   Fill="{c:Blue 7}"></Ellipse>
+            <Ellipse   Fill="{c:Blue 8}"></Ellipse>
+            <Ellipse   Fill="{c:Blue 9}"></Ellipse>
+            <Ellipse   Fill="{c:Blue 10}"></Ellipse>
+            <Ellipse   Fill="{c:Blue 11}"></Ellipse>
+            <Ellipse   Fill="{c:Blue 12}"></Ellipse>
+            <Ellipse   Fill="{c:Blue 13}"></Ellipse>
 
-        <Ellipse   Fill="{c:Blue 1}"></Ellipse>
-        <Ellipse   Fill="{c:Blue 2}"></Ellipse>
-        <Ellipse   Fill="{c:Blue 3}"></Ellipse>
-        <Ellipse   Fill="{c:Blue 4}"></Ellipse>
-        <Ellipse   Fill="{c:Blue 5}"></Ellipse>
-        <Ellipse   Fill="{c:Blue 6}"></Ellipse>
-        <Ellipse   Fill="{c:Blue 7}"></Ellipse>
-        <Ellipse   Fill="{c:Blue 8}"></Ellipse>
-        <Ellipse   Fill="{c:Blue 9}"></Ellipse>
-        <Ellipse   Fill="{c:Blue 10}"></Ellipse>
-        <Ellipse   Fill="{c:Blue 11}"></Ellipse>
-        <Ellipse   Fill="{c:Blue 12}"></Ellipse>
-        <Ellipse   Fill="{c:Blue 13}"></Ellipse>
-
-        <Ellipse   Fill="{c:Green 1}"></Ellipse>
-        <Ellipse   Fill="{c:Green 2}"></Ellipse>
-        <Ellipse   Fill="{c:Green 3}"></Ellipse>
-        <Ellipse   Fill="{c:Green 4}"></Ellipse>
-        <Ellipse   Fill="{c:Green 5}"></Ellipse>
-        <Ellipse   Fill="{c:Green 6}"></Ellipse>
-        <Ellipse   Fill="{c:Green 7}"></Ellipse>
-        <Ellipse   Fill="{c:Green 8}"></Ellipse>
-        <Ellipse   Fill="{c:Green 9}"></Ellipse>
-        <Ellipse   Fill="{c:Green 10}"></Ellipse>
-        <Ellipse   Fill="{c:Green 11}"></Ellipse>
-        <Ellipse   Fill="{c:Green 12}"></Ellipse>
-        <Ellipse   Fill="{c:Green 13}"></Ellipse>
+            <Ellipse   Fill="{c:Green 1}"></Ellipse>
+            <Ellipse   Fill="{c:Green 2}"></Ellipse>
+            <Ellipse   Fill="{c:Green 3}"></Ellipse>
+            <Ellipse   Fill="{c:Green 4}"></Ellipse>
+            <Ellipse   Fill="{c:Green 5}"></Ellipse>
+            <Ellipse   Fill="{c:Green 6}"></Ellipse>
+            <Ellipse   Fill="{c:Green 7}"></Ellipse>
+            <Ellipse   Fill="{c:Green 8}"></Ellipse>
+            <Ellipse   Fill="{c:Green 9}"></Ellipse>
+            <Ellipse   Fill="{c:Green 10}"></Ellipse>
+            <Ellipse   Fill="{c:Green 11}"></Ellipse>
+            <Ellipse   Fill="{c:Green 12}"></Ellipse>
+            <Ellipse   Fill="{c:Green 13}"></Ellipse>
+        </UniformGrid>
     </UniformGrid>
 </Window>

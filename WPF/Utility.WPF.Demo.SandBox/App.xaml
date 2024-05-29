@@ -6,86 +6,9 @@
     <Application.Resources>
         <ResourceDictionary>
 
-            <!--<Style TargetType="{x:Type local:MeasurementsControl}">
-                <Setter Property="ItemsPanel">
-                    <Setter.Value>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal"></WrapPanel>
-                        </ItemsPanelTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>-->
-
-            <Style x:Key="NumberItemStyle" TargetType="{x:Type local:NumberItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                <Setter Property="MinWidth" Value="100"></Setter>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type local:NumberItem}">
-                            <Viewbox HorizontalAlignment="Stretch" RenderTransformOrigin=".5, .5" x:Name="Main_ViewBox">
-
-                                <Viewbox.RenderTransform>
-                                    <ScaleTransform x:Name="ScaleTransform" ScaleX="1" ScaleY="1" />
-                                </Viewbox.RenderTransform>
-                                <UniformGrid Columns="1">
-                                    <TextBlock Height="25" Width="50"  ></TextBlock>
-                                    <NumberBox Height="25" Width="100"  SpinButtonPlacementMode="Inline"></NumberBox>
-                                </UniformGrid>
-                            </Viewbox>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <!--<Style TargetType="{x:Type local:NumberItem}" BasedOn="{StaticResource NumberItemStyle}">
-            </Style>
-
-            <Style TargetType="{x:Type local:NumbersControl}" BasedOn="{StaticResource {x:Type ListBox}}">
-                <Setter Property="ItemsPanel">
-                    <Setter.Value>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal"></WrapPanel>
-                        </ItemsPanelTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="ItemContainerStyle" Value="{StaticResource NumberItemStyle}" />
-            </Style>
-
-            <utl:TypeConverter x:Key="converter"></utl:TypeConverter>
-
-            <Style TargetType="{x:Type local:MeasurementsControl}" BasedOn="{StaticResource {x:Type view:DoubleContentControl}}">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type local:MeasurementsControl}">
-                            <DockPanel x:Name="PART_DockPanel" Background="{Binding Background, Source=TemplatedParent}">
-                                <WrapPanel x:Name="PART_WrapPanel">
-                                    <ComboBox>
-                                        <i:Interaction.Behaviors>
-                                            <utl:EnumSelectorBehavior EnumFilterCollection="{Binding EnumFilterCollection,RelativeSource={RelativeSource Mode=TemplatedParent} }"
-                                                                  EnumType="{Binding Unit, RelativeSource={RelativeSource Mode=TemplatedParent}, Converter={StaticResource converter}}"></utl:EnumSelectorBehavior>
-                                        </i:Interaction.Behaviors>
-                                    </ComboBox>
-                                </WrapPanel>
-                                <ContentPresenter />
-                            </DockPanel>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Content">
-                    <Setter.Value>
-                        <local:NumbersControl
-                            DisplayMemberPath="{Binding DisplayMemberPath, RelativeSource={RelativeSource AncestorType=local:MeasurementsControl}}"
-                            DisplayKeyPath="{Binding DisplayKeyPath, RelativeSource={RelativeSource AncestorType=local:MeasurementsControl}}">
-                        </local:NumbersControl>
-                    </Setter.Value>
-                </Setter>
-            </Style>-->
+          
 
             <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Grey.xaml" />-->
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
