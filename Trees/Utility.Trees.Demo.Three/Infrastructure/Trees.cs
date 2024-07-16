@@ -1,14 +1,21 @@
-﻿using System;
+﻿using Fasterflect;
+using System;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
-using System.Threading.Tasks;
-using Utility.Descriptors;
+using System.Runtime.CompilerServices;
 using Utility.Descriptors.Repositorys;
 using Utility.Helpers;
+using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
-using Utility.Nodes.Reflections;
 using Utility.PropertyNotifications;
+using Utility.Reactives.Helpers;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Trees.Demo.MVVM.Infrastructure
 {
@@ -49,40 +56,40 @@ namespace Utility.Trees.Demo.MVVM.Infrastructure
     }
 
 
-    public class _RootNode : ModelTree
-    {
-        public static readonly System.Type[] Types = new[]{
-                //typeof(void),
-                typeof(string),
-                typeof(Enum),
-                typeof(bool),
-                typeof(int),
-                typeof(short),
-                typeof(long),
-                typeof(double),
-                typeof(byte),
-                typeof(Guid),
-                typeof(DateTime),
-                typeof(object),
-        };
+    //public class _RootNode : ModelTree
+    //{
+    //    public static readonly System.Type[] Types = new[]{
+    //            //typeof(void),
+    //            typeof(string),
+    //            typeof(Enum),
+    //            typeof(bool),
+    //            typeof(int),
+    //            typeof(short),
+    //            typeof(long),
+    //            typeof(double),
+    //            typeof(byte),
+    //            typeof(Guid),
+    //            typeof(DateTime),
+    //            typeof(object),
+    //    };
 
-        static Guid guid = Guid.Parse("1e6eea88-6537-4b7a-8bed-8c310d3ae268");
+    //    static Guid guid = Guid.Parse("1e6eea88-6537-4b7a-8bed-8c310d3ae268");
 
-        public _RootNode() : base(typeof(void))
-        {
-            Key = new GuidKey(guid);
+    //    public _RootNode() : base(typeof(void))
+    //    {
+    //        Key = new GuidKey(guid);
 
-            foreach (var type in Types)
-            {
-                this.Add(new ModelTree(type));
-            }
+    //        foreach (var type in Types)
+    //        {
+    //            this.Add(new ModelTree(type));
+    //        }
 
-            //this.Add(new ModelTree(typeof(object)));
+    //        //this.Add(new ModelTree(typeof(object)));
 
 
-            TreeRepository.Instance.InsertRoot(guid, "root", typeof(void));
-        }
-    }
+    //        TreeRepository.Instance.InsertRoot(guid, "root", typeof(void));
+    //    }
+    //}
 
     //public class RootNode : ReflectionNode
     //{
@@ -97,7 +104,7 @@ namespace Utility.Trees.Demo.MVVM.Infrastructure
     //        this.guid = guid;
     //    }
 
-  
+
     //    //public override async Task<bool> HasMoreChildren()
     //    //{
     //    //    return (Data as IDescriptor)?.Type.IsValueOrString() == false && flag == false;
@@ -109,94 +116,254 @@ namespace Utility.Trees.Demo.MVVM.Infrastructure
     //    }
     //}
 
+    public enum AndOr
+    { And, Or }
 
 
-    public class ViewModelTree : Tree
+    public interface IDecision
     {
-        public ViewModelTree()
+        bool Evaluate(object input);
+        //object Input { get; set; }
+        //object Output { get; set; }
+
+        //Expression<Func<object, object?>> Predicate { get; }
+        //AndOr AndOr { get; }
+    }
+
+
+    //public class Decider : Decider<object>
+    //{
+    //    public Decider(Expression<Func<object, object>> predicate):base(predicate)
+    //    {
+    //    }
+
+    //    public static Decider<T> Create<T>(Expression<Func<T, object>> func) => new(func);
+    //}
+
+    public class Decision : IDecision
+    {
+        public Decision()
         {
-            var viewModel = new ViewModel();
-            Data = viewModel;
+        }
+        public Decision(Expression<Func<object, bool>> predicate)
+        {
+            if (predicate == null)
+            {
+
+            }
+            Predicate = predicate;
+        }
+
+        public Expression<Func<object, bool>> Predicate { get; set; }
 
 
-            viewModel.WhenReceived()
-                      .Subscribe(a =>
-                      {
-                          var model = a.Value;
-                          var guid = ((GuidKey)this.Key).Value;
+        public virtual bool Evaluate(object input)
+        {
+            return Predicate.Compile().Invoke(input);
+        }
+        //public object Input { get; set; }
 
-                          TreeRepository.Instance.Find(guid, a.Name)
-                          .ToObservable()
-                          .Subscribe(guid =>
-                          {
-                              TreeRepository.Instance.Set(guid, model, DateTime.Now);
-                          });
-                      });
+        //public object Output { get; set; }
 
-            viewModel.WhenCalled()
-                .Subscribe(a =>
-                {
-                    var guid = ((GuidKey)this.Key).Value;
-                    if (guid == default)
-                        return;
-                    TreeRepository.Instance.Find(guid, a.Name)
-                    .ToObservable()
-                    .Subscribe(guid =>
-                    {
-                        var key = TreeRepository.Instance.Get(guid);
-                        if (key != null && viewModel.SetPrivateFieldValue(a.Name, key.Value.Value))
-                            viewModel.RaisePropertyChanged(a.Name);
-                    });
-                });
+        public AndOr AndOr { get; set; } = AndOr.And;
 
+        public override string ToString()
+        {
+            return Predicate.ToString();
         }
     }
 
-    public class ModelTree : ObservableTree
+    public class Decision<T> : Decision
     {
-        private GuidKey key;
-        public ModelTree(Type key)
+        public Decision(Expression<Func<T, bool>> predicate)
         {
-            this.key = new GuidKey(key.GUID);
-            TreeRepository.Instance.InsertRoot(key.GUID, key.Name, key);
-            var model = new Model() { Type = key, IsReadOnly = true };
-            Data = model;
-        }
-        public override string Key { get => key; set => key = (GuidKey)value; }
-
-        public ModelTree(string name, Guid guid, Guid parentGuid)
-        {
-            var type = TreeRepository.Instance.TypeId(typeof(void));
-            TreeRepository.Instance.InsertByParent(parentGuid, name, typeId: type);
-
-            var model = new Model();
-            Data = model;
-            model.WhenReceived()
-                .Subscribe(a =>
-                {
-                    var guid = (this.key).Value;
-                    if (guid == default)
-                        return;
-                    TreeRepository.Instance.Set(guid, a, DateTime.Now);
-                });
-
-
-            model.WhenCalled()
-                .Subscribe(a =>
-                {
-                    var guid = (this.key).Value;
-                    if (guid == default)
-                        return;
-                    TreeRepository.Instance.Find(guid, a.Name)
-                    .ToObservable()
-                    .Subscribe(guid =>
-                    {
-                        var key = TreeRepository.Instance.Get(guid);
-                        if (key != null && model.SetPrivateFieldValue(a.Name, key))
-                            model.RaisePropertyChanged(a.Name);
-                    });
-                });
+            Predicate = predicate;
         }
 
+        public new Expression<Func<T, bool>> Predicate { get; }
+
+        public override bool Evaluate(object input)
+        {
+            if (input is not T _t)
+            {
+                return false;
+            }
+            try
+            {
+
+                return Predicate.Compile().Invoke(_t);
+            }
+            catch(NullReferenceException ex)
+            {
+                return false;
+            }
+        }
+
+        public override string ToString()
+        {
+            return Predicate.ToString();
+        }
     }
+
+    //public class ViewModelTree : ObservableTree, INotifyPropertyReceived
+    //{
+    //    //readonly ReplaySubject<Utility.Changes.Update<IReadOnlyTree>> subject = new();
+    //    private bool isSelected;
+
+    //    public ViewModelTree()
+    //    {
+    //        var viewModel = new ViewModel();
+    //        Data = viewModel;
+
+
+    //        viewModel.WhenReceived()
+    //                  .Subscribe(a =>
+    //                  {
+    //                      var model = a.Value;
+    //                      var guid = ((GuidKey)this.Key).Value;
+
+    //                      TreeRepository.Instance.Find(guid, a.Name)
+    //                      .ToObservable()
+    //                      .Subscribe(guid =>
+    //                      {
+    //                          TreeRepository.Instance.Set(guid, model, DateTime.Now);
+    //                      });
+    //                  });
+
+    //        viewModel.WhenCalled()
+    //            .Subscribe(a =>
+    //            {
+    //                var guid = ((GuidKey)this.Key).Value;
+    //                if (guid == default)
+    //                    return;
+    //                TreeRepository.Instance.Find(guid, a.Name)
+    //                .ToObservable()
+    //                .Subscribe(guid =>
+    //                {
+    //                    var key = TreeRepository.Instance.Get(guid);
+    //                    if (key != null && viewModel.SetPrivateFieldValue(a.Name, key.Value.Value))
+    //                        viewModel.RaisePropertyChanged(a.Name);
+    //                });
+    //            });
+
+    //    }
+    //    public bool IsSelected
+    //    {
+    //        get
+    //        {
+    //            //this.RaisePropertyCalled(isSelected);
+    //            return isSelected;
+    //        }
+    //        set
+    //        {
+    //            if (value.Equals(isSelected))
+    //                return;
+    //            isSelected = value;
+    //            this.RaisePropertyReceived(value);
+    //        }
+    //    }
+
+
+
+    //    protected override void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
+    //    {
+    //        if (args.Action == NotifyCollectionChangedAction.Add && args.NewItems != null)
+    //        {
+    //            foreach (var item in args.NewItems.Cast<IReadOnlyTree>())
+    //            {
+
+    //                if (item is INotifyPropertyReceived received)
+    //                    received.WhenReceived()
+    //                    .Subscribe(a =>
+    //                    {
+    //                        //subject.OnNext(new Utility.Changes.Update<IReadOnlyTree>(item, a.Name));
+    //                        RaisePropertyReceived(a.Value, a.Name, item);
+    //                    });
+
+    //            }
+    //        }
+    //    }
+
+    //    /// <summary>
+    //    /// Raised when a property on this object has a new value.
+    //    /// </summary>
+    //    public event PropertyReceivedEventHandler? PropertyReceived;
+
+
+
+    //    /// <summary>
+    //    /// Raises this object's PropertyChanged event.
+    //    /// </summary>
+    //    /// <param name="propertyName">The property that has a new value.</param>
+    //    protected virtual void RaisePropertyReceived(object value, [CallerMemberName] string? propertyName = null, object? source = null)
+    //    {
+    //        var handler = PropertyReceived;
+    //        if (handler != null)
+    //        {
+
+    //            //if (fields.Value.TryGetValue(propertyName, out var fieldInfo) == false)
+    //            //{
+    //            //    //if (fields.Value.TryGetValue("_" + propertyName, out fieldInfo) == false)
+    //            //    //{
+    //            //    //    throw new InvalidOperationException(propertyName);
+    //            //    //}
+    //            //}
+    //            //flag = true;
+    //            var e = new PropertyReceivedEventArgs(propertyName, value, source);
+    //            handler(this, e);
+    //            //flag = false;
+    //        }
+
+    //    }
+
+
+
+    //}
+
+    //public class ModelTree : ObservableTree
+    //{
+    //    private GuidKey key;
+    //    public ModelTree(Type key)
+    //    {
+    //        this.key = new GuidKey(key.GUID);
+    //        TreeRepository.Instance.InsertRoot(key.GUID, key.Name, key);
+    //        var model = new Model() { Type = key, IsReadOnly = true };
+    //        Data = model;
+    //    }
+    //    public override string Key { get => key; set => key = (GuidKey)value; }
+
+    //    public ModelTree(string name, Guid guid, Guid parentGuid)
+    //    {
+    //        var type = TreeRepository.Instance.TypeId(typeof(void));
+    //        TreeRepository.Instance.InsertByParent(parentGuid, name, typeId: type);
+
+    //        var model = new Model();
+    //        Data = model;
+    //        model.WhenReceived()
+    //            .Subscribe(a =>
+    //            {
+    //                var guid = (this.key).Value;
+    //                if (guid == default)
+    //                    return;
+    //                TreeRepository.Instance.Set(guid, a, DateTime.Now);
+    //            });
+
+    //        model.WhenCalled()
+    //            .Subscribe(a =>
+    //            {
+    //                var guid = (this.key).Value;
+    //                if (guid == default)
+    //                    return;
+    //                TreeRepository.Instance.Find(guid, a.Name)
+    //                .ToObservable()
+    //                .Subscribe(guid =>
+    //                {
+    //                    var key = TreeRepository.Instance.Get(guid);
+    //                    if (key != null && model.SetPrivateFieldValue(a.Name, key))
+    //                        model.RaisePropertyChanged(a.Name);
+    //                });
+    //            });
+    //    }
+
+    //}
 }

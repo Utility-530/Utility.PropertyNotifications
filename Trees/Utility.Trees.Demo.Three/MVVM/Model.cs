@@ -4,17 +4,14 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows;
 using Utility.PropertyNotifications;
-using System.Collections;
-using Utility.Descriptors;
-using Utility.Interfaces.NonGeneric;
-using Utility.Trees.Abstractions;
-using System.Collections.ObjectModel;
-using Utility.Trees.WPF.Abstractions;
 using Utility.WPF.Controls.Trees;
+using Utility.Trees.Demo.MVVM.Infrastructure;
+using Utility.Helpers.NonGeneric;
+using Utility.Infrastructure;
 
 namespace Utility.Trees.Demo.MVVM
 {
-    public record Model : NotifyProperty
+    public partial record Model : NotifyProperty
     {
         private Type type;
 
@@ -64,75 +61,237 @@ namespace Utility.Trees.Demo.MVVM
         }
 
 
-        internal class Filter : ITreeViewFilter
+
+    }
+
+    public class StringDecisionTree<T> : DecisionTree<T, string>
+    {
+        public StringDecisionTree(IDecision decision, Func<T, object>? transform = null) : base(decision, transform)
         {
-            public bool Convert(object item)
+            Data = decision;
+        }
+    }
+    public class StringDecisionTree : DecisionTree
+    {
+        public StringDecisionTree(IDecision decision, Func<object, object>? transform = null) : base(decision, transform)
+        {
+            Data = decision;
+        }
+
+        protected override object ToBackPut(List<object> backputs)
+        {
+            return backputs.FirstOrDefault(a => a is string);
+        }
+    }
+
+
+
+
+    public class DecisionTree<T, TR> : DecisionTree<T>
+    {
+        public DecisionTree(IDecision decision, Func<T, object>? transform = null) : base(decision, transform)
+        {
+            Data = decision;
+        }
+
+        protected override object ToBackPut(List<object> backputs)
+        {
+            return backputs.FirstOrDefault(a => a is TR);
+        }
+    }
+    public class DataTemplateDecisionTree<T> : DecisionTree<T, DataTemplate>
+    {
+        public DataTemplateDecisionTree(IDecision decision, Func<T, object>? transform = null) : base(decision, transform)
+        {
+            Data = decision;
+        }
+    }
+
+    public class DataTemplateDecisionTree : DecisionTree
+    {
+        public DataTemplateDecisionTree(IDecision decision, Func<object, object>? transform = null) : base(decision, transform)
+        {
+            Data = decision;
+        }
+
+        protected override object ToBackPut(List<object> backputs)
+        {
+            return backputs.FirstOrDefault(a => a is DataTemplate);
+        }
+    }
+
+
+    public class BooleanDecisionTree<T> : DecisionTree<T>
+    {
+
+        public BooleanDecisionTree(IDecision decision, Func<T, object>? transform = null) : base(decision, transform)
+        {
+            Data = decision;
+        }
+
+        protected override object ToBackPut(List<object> backputs)
+        {
+            if (AndOr is AndOr.And)
             {
-                if (item is IReadOnlyTree { Data: IMethodDescriptor { Type: { } type } })
-                {
-                    if (type.IsArray)
-                    {
-                        return false;
-                    }
-                }
+                return backputs.All(a => a is bool b ? b : true);
+            }
+            if (AndOr is AndOr.Or)
+            {
+                return backputs.Any(a => a is bool b ? b : true);
+            }
+            throw new Exception(" £3344333");
+        }
+    }
 
+    public class BooleanDecisionTree : DecisionTree
+    {
+        public BooleanDecisionTree(IDecision decision, Func<object, object>? transform = null) : base(decision, transform)
+        {
+            Data = decision;
+        }
 
-                if (item is IReadOnlyTree { Data: IDescriptor { ParentType: { } componentType, Name: { } displayName } propertyNode })
-                {
-                    if (componentType.Name == "Array")
-                    {
-                        if (displayName == "IsFixedSize")
-                            return false;
-                        if (displayName == "IsReadOnly")
-                            return false;
-                        if (displayName == "IsSynchronized")
-                            return false;
-                        if (displayName == "LongLength")
-                            return false;
-                        if (displayName == "Length")
-                            return false;
-                        if (displayName == "Rank")
-                            return false;
-                        if (displayName == "SyncRoot")
-                            return false;
-                    }
-                    if (componentType.Name == "String")
-                    {
+        protected override object ToBackPut(List<object> backputs)
+        {
+            if (AndOr is AndOr.And)
+            {
+                return backputs.All(a => a is bool b ? b : true);
+            }
+            if (AndOr is AndOr.Or)
+            {
+                return backputs.Any(a => a is bool b ? b : true);
+            }
+            throw new Exception(" £3344333");
+        }
+    }
 
-                        if (displayName == "Length")
-                            return false;
-                    }
+    public abstract class DecisionTree<T> : DecisionTree
+    {
+        private readonly Func<T, object>? transform;
 
-                    if (componentType.IsAssignableTo(typeof(IList)))
-                    {
-                        if (displayName == nameof(IList.Remove))
-                            return false;
-                        if (displayName == nameof(IList.GetEnumerator))
-                            return false;
-                        if (displayName == nameof(IList.CopyTo))
-                            return false;
-                        if (displayName == nameof(IList.IndexOf))
-                            return false;
-                        if (displayName == nameof(IList.Contains))
-                            return false;
-                        if (displayName == nameof(IList.Add))
-                            return false;
-                        if (displayName == nameof(IList.RemoveAt))
-                            return false;
-                        if (displayName == nameof(ObservableCollection<object>.Move))
-                            return false;
-                        if (displayName == nameof(IList.Remove))
-                            return false;
-                        if (displayName == nameof(IList.Insert))
-                            return false;
-                    }
-                    return true;
-                }
+        public DecisionTree(IDecision decision, Func<T, object>? transform = null) : base(decision)
+        {
+            Data = decision;
+            this.transform = transform;
+        }
 
-                return true;
+        protected override object Transform(object value)
+        {
+            if (value is not T t)
+            {
+                throw new Exception("fds df33 dffd");
             }
 
-            public static Filter Instance { get; } = new();
+            return transform.Invoke(t);
         }
+
+    }
+
+    public abstract class DecisionTree : Tree
+    {
+        private readonly IDecision decision;
+        private object input;
+        private object output;
+        private object backput;
+        private Func<object, object>? transform;
+
+        public DecisionTree(IDecision decision, bool match = true)
+        {
+            Data = decision;
+            this.decision = decision;
+            Match = match;
+        }
+
+        protected DecisionTree(IDecision decision, Func<object, object>? transform, bool match = true) : this(decision, match)
+        {
+            this.decision = decision;
+            this.transform = transform ?? new Func<object, object>(a => a);
+        }
+
+        public AndOr AndOr { get; set; }
+
+
+        public void Evaluate()
+        {
+            Backput = eval();
+        }
+
+        public void Reset()
+        {
+            Input = null;
+            Output = null;
+            Backput = null;
+            if (Items.Any())
+            {
+                foreach (DecisionTree x in Items)
+                {
+                    x.Reset();
+                } 
+            } 
+        }
+
+
+        private object eval()
+        {
+            List<object> outputs = new();
+
+            //var compile = (Data as IDecision).Predicate.Compile().Invoke(Input);
+
+            var result = decision.Evaluate(Input);
+
+            if (result == Match)
+            {
+                Output = Transform(Input);
+                if (Items.Any())
+                {
+                    foreach (DecisionTree x in Items)
+                    {
+                        x.Input = Output;
+                        outputs.Add(x.eval());
+                    }
+                    return Backput = ToBackPut(outputs);
+                }
+                return Output;
+            }
+            return null;
+        }
+
+        protected virtual object Transform(object value)
+        {
+            if (transform != null)
+                return transform.Invoke(value);
+            throw new Exception(" ew332 324");
+        }
+
+        protected abstract object ToBackPut(List<object> backputs);
+
+
+        public object Input
+        {
+            get => input; set
+            {
+                input = value;
+                OnPropertyChanged();
+            }
+        }
+        public object Output
+        {
+            get => output; set
+            {
+                output = value;
+                OnPropertyChanged();
+            }
+        }
+        public object Backput
+        {
+            get => backput; set
+            {
+                backput = value;
+                OnPropertyChanged();
+            }
+        }
+
+
+        public bool Match { get; }
+        //public Decision<IDescriptor> Decision { get; }
     }
 }

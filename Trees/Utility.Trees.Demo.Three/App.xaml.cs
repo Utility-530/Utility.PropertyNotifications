@@ -20,8 +20,8 @@ namespace Utility.Trees.Demo.MVVM
         public static Assembly[] SystemAssemblies => new Assembly[] { new Utility.Meta.SystemAssembly() };
 
         ReflectionNode model;
-        ViewModelTree viewModel;
-        Tree view;
+        //ViewModelTree viewModel;
+        //Tree view;
         Tree data;
 
         static App()

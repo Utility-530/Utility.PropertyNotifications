@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="Utility.Trees.Demo.MVVM.Views.MainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Utility.Trees.Demo.MVVM.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <DockPanel>
+        <ComboBox x:Name="combobox"  DockPanel.Dock="Top" Margin="8"></ComboBox>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0" x:Name="maingrid"  >
+                <ScrollViewer x:Name="scrollviewer" HorizontalScrollBarVisibility="Visible">
+                    
+                </ScrollViewer>
+            </Grid>
+            <TabControl Grid.Column="1">
+                <TabItem Header="Property-Grid" x:Name="propertygrid">
+
+                </TabItem>
+                <!--<TabItem Header="Model-Tree" x:Name="modeltree" TextBlock.FontSize="8">
+                    <ScrollViewer x:Name="modeltree_ScrollViewer" HorizontalScrollBarVisibility="Visible">
+                        
+                    </ScrollViewer>
+                </TabItem>-->
+                <TabItem Header="Filter-Tree" x:Name="filtertree">
+
+                </TabItem>    
+                <TabItem Header="DataTemplate-Tree" x:Name="datatemplatetree">
+
+                </TabItem>  
+                <TabItem Header="Style-Tree" x:Name="styletree">
+
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </DockPanel>
+
+</UserControl>
