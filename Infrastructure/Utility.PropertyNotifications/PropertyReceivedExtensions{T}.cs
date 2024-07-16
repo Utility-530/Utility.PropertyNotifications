@@ -26,15 +26,18 @@ namespace Utility.PropertyNotifications
                 private readonly PropertyInfo _info;
                 private readonly IObserver<T> _observer;
 
-                public Subscription(INotifyPropertyReceived target, PropertyInfo info, IObserver<T> observer)
+                public Subscription(INotifyPropertyReceived target, PropertyInfo info, IObserver<T> observer, bool includeInitial = true)
                 {
                     _target = target;
                     _info = info;
                     _observer = observer;
                     _target.PropertyReceived += onPropertyReceived;
 
-                    var value = (T)_info.GetValue(_target);
-                    _observer.OnNext(value);
+                    if (includeInitial)
+                    {
+                        var value = (T)_info.GetValue(_target);
+                        _observer.OnNext(value);
+                    }
 
                 }
 
@@ -42,7 +45,7 @@ namespace Utility.PropertyNotifications
                 {
                     if (e.PropertyName == _info.Name)
                     {
-                        var value = (T)_info.GetValue(_target);
+                        var value = (T)_info.GetValue(e.Source ?? _target);
                         _observer.OnNext(value);
                     }
                 }

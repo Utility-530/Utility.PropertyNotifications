@@ -4,7 +4,7 @@ using Utility.Interfaces;
 
 namespace Utility.PropertyNotifications
 {
-    public record PropertyReception(object Target, object Value, string Name) ;
+    public record PropertyReception(object Target, object Value, string Name);
 
     public static partial class PropertyReceivedExtensions
     {
@@ -31,7 +31,7 @@ namespace Utility.PropertyNotifications
 
                 private void onPropertyReceived(object sender, PropertyReceivedEventArgs e)
                 {
-                    _observer.OnNext(new(_target, e.Value, e.PropertyName));
+                    _observer.OnNext(new(e.Source ?? _target, e.Value, e.PropertyName));
                 }
 
                 public void Dispose()
