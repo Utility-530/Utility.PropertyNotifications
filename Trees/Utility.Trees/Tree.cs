@@ -15,7 +15,7 @@ namespace Utility.Trees
     /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
     /// </summary>
     /// <typeparam name="object"></typeparam>
-    public class Tree : ITree, IEnumerable<ITree>, INotifyPropertyChanged, IEquatable, IParent<ITree>
+    public class Tree : ITree, INotifyPropertyChanged, IEquatable, IParent<ITree>
     {
         private IList items;
         protected ITree? parent;
@@ -94,20 +94,21 @@ namespace Utility.Trees
             if (data is ITree tree)
             {
                 m_items.Add(tree);
+                tree.Parent ??= this;
                 return;
             }
             if (data is IEnumerable treeCollection)
             {
                 foreach (var item in treeCollection)
                     if (item is ITree)
-                        m_items.Add(item);
+                        Add(item);
                     else
-                        m_items.Add(new Tree(item));
+                        Add(new Tree(item));
                 return;
             }
             if (data is not null)
             {
-                m_items.Add(new Tree((object)data));
+                Add(new Tree((object)data));
                 return;
             }
 
@@ -324,7 +325,7 @@ namespace Utility.Trees
 
         bool IEquatable<IReadOnlyTree>.Equals(IReadOnlyTree? other)
         {
-            throw new NotImplementedException();
+            return other?.Key?.Equals(this.Key) == true;
         }
 
         public bool Equals(IEquatable? other)
