@@ -27,7 +27,7 @@ namespace Utility.Trees
             return collection;
         }
 
-        private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
+        protected virtual void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
             if (args.Action == NotifyCollectionChangedAction.Add && args.NewItems != null)
             {
