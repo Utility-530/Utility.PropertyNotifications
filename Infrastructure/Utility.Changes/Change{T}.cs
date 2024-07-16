@@ -24,5 +24,15 @@ namespace Utility.Changes
         }
     }
 
+    public record Update<T> :Change<T>
+    {
+        public Update(T? tValue, string property) : base(tValue, Type.Update)
+        {
+            Property = property;
+        }
+
+        public string Property { get; }
+    }
+
 
 }
