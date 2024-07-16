@@ -17,10 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Utility.Collections\Utility.Collections\Utility.Collections.csproj" />
-    <ProjectReference Include="..\..\Utility.Model\Utility.Packages\Utility.Packages.csproj" />
-    <ProjectReference Include="..\..\Utility.WPF\Utility.Commands\Utility.Commands.csproj" />
-    <ProjectReference Include="..\..\Utility.WPF\Utility.WPF.Panels\Utility.WPF.Panels.csproj" />
+    <ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
+    <ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.Commands\Utility.Commands.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Panels\Utility.WPF.Panels.csproj" />
     <ProjectReference Include="..\CoffeeFlow.Infrastructure\CoffeeFlow.Infrastructure.csproj" />
     <ProjectReference Include="..\FlowParser\FlowParser.csproj" />
     <ProjectReference Include="..\Utility.Curves\Utility.Curves.csproj" />

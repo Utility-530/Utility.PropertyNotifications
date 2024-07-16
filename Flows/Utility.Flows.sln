@@ -19,13 +19,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Curves", "Utility.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowParser", "FlowParser\FlowParser.csproj", "{76B523CF-22D7-4A26-8E16-44DA49861447}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Panels", "..\Utility.WPF\Utility.WPF.Panels\Utility.WPF.Panels.csproj", "{CA35AE31-3F28-4B10-8FC8-547C180AF21D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Panels", "..\WPF\Utility.WPF.Panels\Utility.WPF.Panels.csproj", "{CA35AE31-3F28-4B10-8FC8-547C180AF21D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Collections", "..\Utility.Collections\Utility.Collections\Utility.Collections.csproj", "{A090B59D-DE88-478A-96ED-FC89F2D0E539}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Collections", "..\Collections\Utility.Collections\Utility.Collections.csproj", "{A090B59D-DE88-478A-96ED-FC89F2D0E539}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commands", "..\Utility.WPF\Utility.Commands\Utility.Commands.csproj", "{DAFD3630-48A0-4124-AF0B-CFCC278D5F8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commands", "..\WPF\Utility.Commands\Utility.Commands.csproj", "{DAFD3630-48A0-4124-AF0B-CFCC278D5F8C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Packages", "..\Utility.Model\Utility.Packages\Utility.Packages.csproj", "{34B8795B-7B65-4970-92B2-961B1E276F94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Packages", "..\Packages\Utility.Packages\Utility.Packages.csproj", "{34B8795B-7B65-4970-92B2-961B1E276F94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
