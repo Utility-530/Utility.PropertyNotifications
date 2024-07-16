@@ -12,7 +12,7 @@ public abstract class Filter : Model, IPredicate, IEquatable
 
     public string Header { get; }
 
-    public abstract bool Invoke(object value);
+    public abstract bool Evaluate(object value);
 
     public bool Equals(IEquatable? other)
     {

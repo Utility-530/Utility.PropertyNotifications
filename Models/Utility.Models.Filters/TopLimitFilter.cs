@@ -26,7 +26,7 @@ namespace Utility.Models.Filters
                 .Subscribe();
         }
 
-        public override bool Invoke(object value)
+        public override bool Evaluate(object value)
         {
             return 0 <= collection.IndexOf((T)value) && collection.IndexOf((T)value) < Value.Value;
         }

@@ -41,7 +41,7 @@ namespace Utility.Models.Filters
             }
         }
 
-        public override bool Invoke(object value)
+        public override bool Evaluate(object value)
         {
             return array.Any(a => a.Invoke((T)value, Value.Value));
         }

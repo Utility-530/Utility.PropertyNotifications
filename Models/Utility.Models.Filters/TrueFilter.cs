@@ -10,7 +10,7 @@ namespace Utility.Models.Filters
         }
         public override Property<bool> Value { get; } = new Property<bool>(true);
 
-        public override bool Invoke(object value)
+        public override bool Evaluate(object value)
         {
             return true;
         }

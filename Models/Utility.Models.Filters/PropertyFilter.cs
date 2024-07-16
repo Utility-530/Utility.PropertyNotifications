@@ -49,7 +49,7 @@ namespace Utility.Models.Filters
             this.propertyInfo = propertyInfo;
         }
 
-        public override bool Invoke(object value)
+        public override bool Evaluate(object value)
         {
             return propertyInfo.GetValue(value).Equals(Value.Value);
         }

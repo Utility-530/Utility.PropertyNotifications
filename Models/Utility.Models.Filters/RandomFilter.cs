@@ -16,7 +16,7 @@ namespace Utility.Models.Filters
         }
         public override ReactiveProperty<int> Value { get; }
 
-        public override bool Invoke(object _)
+        public override bool Evaluate(object _)
         {
             var value = random.Next(0, 2);
             var truth = Value.Value > 0;
