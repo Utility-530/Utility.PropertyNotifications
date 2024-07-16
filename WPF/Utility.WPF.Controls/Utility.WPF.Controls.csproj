@@ -167,7 +167,9 @@
 		<Compile Update="GuidBox.cs">
 			<DependentUpon>GuidBox.xaml</DependentUpon>
 		</Compile>
-
+	<Compile Update="PointControl.cs">
+			<DependentUpon>PointControl.xaml</DependentUpon>
+		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
