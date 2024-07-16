@@ -7,6 +7,6 @@ namespace Utility.Trees.Abstractions
 {
     public interface IReadOnlyTree : IEquatable<IReadOnlyTree>, IItems, IData, IParent<IReadOnlyTree>, IKey, IValue, IType
     {
-
+        int Depth { get; }
     }
 }

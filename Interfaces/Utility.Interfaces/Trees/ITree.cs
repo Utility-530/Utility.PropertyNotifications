@@ -20,8 +20,6 @@ namespace Utility.Trees.Abstractions
 
         IIndex Index { get; }
 
-        int Depth { get; }
-
         ITree? this[int index] { get; set; }
 
         void Remove(Guid index);

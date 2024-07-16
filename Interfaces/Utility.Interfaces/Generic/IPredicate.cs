@@ -7,7 +7,7 @@ namespace Utility.Interfaces.Generic
 
     public interface IPredicate<T>
     {
-        bool Check(T value);
+        bool Evaluate(T value);
     }
 
 }

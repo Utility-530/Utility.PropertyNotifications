@@ -2,6 +2,6 @@
 {
     public interface IPredicate
     {
-        bool Invoke(object value);
+        bool Evaluate(object value);
     }
 }
