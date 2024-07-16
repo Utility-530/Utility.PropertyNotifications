@@ -3,7 +3,13 @@
     public interface ICollectionItemDescriptor : IDescriptor
     {
         int Index { get; }
-    }
+    }   
+       
+    public interface ICollectionItemReferenceDescriptor : IReferenceDescriptor, ICollectionItemDescriptor
+    {
+   
+    }   
+    
 
     public interface ICollectionDescriptor : IDescriptor, ICount
     {

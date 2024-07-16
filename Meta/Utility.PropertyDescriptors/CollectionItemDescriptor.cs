@@ -133,7 +133,7 @@ internal partial record CollectionItemDescriptor : ValueDescriptor, ICollectionI
 }
 
 
-internal partial record CollectionItemReferenceDescriptor :  ReferenceDescriptor, ICollectionItemDescriptor, IEquatable
+internal partial record CollectionItemReferenceDescriptor :  ReferenceDescriptor, ICollectionItemReferenceDescriptor, IEquatable
 {
     public CollectionItemReferenceDescriptor(object item, int index, Type componentType) : base(new RootDescriptor(item.GetType(), componentType) { }, item)
     {
