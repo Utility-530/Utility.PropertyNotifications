@@ -29,7 +29,7 @@ namespace Utility.Nodify.Demo
             Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
 
 
-            var rootDescriptor = await DescriptorFactory.CreateRoot(typeof(Diagram), guid, name: "diagram_test");
+            rootDescriptor = await DescriptorFactory.CreateRoot(typeof(Diagram), guid, name: "diagram_test2");
             var diagram = rootDescriptor.Get<Diagram>();
             rootDescriptor.Initialise();
             base.OnStartup(e);

@@ -5,7 +5,6 @@ using DryIoc;
 using System.Collections.ObjectModel;
 using DynamicData;
 using Utility.Helpers;
-using Utility.Collections;
 using Utility.Helpers.Generic;
 using Utility.Nodify.Operations.Operations;
 using Newtonsoft.Json;
@@ -55,7 +54,7 @@ namespace Utility.Nodify.Engine.Infrastructure
             var nodeViewModel = new NodeViewModel
             {
                 Title = node.Name,
-                Location = node.Location
+                Location = new System.Windows.Point(node.Location.X, node.Location.Y)
             };
             container.RegisterInstanceMany<INodeViewModel>(nodeViewModel);
             if (node.Content.DeserialiseMethod() is MethodInfo methodInfo)
@@ -115,7 +114,7 @@ namespace Utility.Nodify.Engine.Infrastructure
             Node node = new ()
             {
                 Name = nodeViewModel.Title,
-                Location = nodeViewModel.Location,
+                Location = new Utility.Structs.Point(nodeViewModel.Location.X, nodeViewModel.Location.Y),
                 Inputs = new Collection<Connector>(),
                 Outputs = new Collection<Connector>()
             };

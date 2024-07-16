@@ -25,7 +25,6 @@ namespace Utility.Nodify.Demo
             if (type == null)
             {
                 nodes.AddRange(items.Value);
-
             }
             else if (isInput.HasValue && isInput.Value)
             {

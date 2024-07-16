@@ -8,7 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\UtilityStandard\Structs\Utility.Structs\Utility.Structs.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.ViewModels.Base\Utility.ViewModels.Base.csproj" />
+    <ProjectReference Include="..\Utility.Nodify.Entities\Utility.Nodify.Entities.csproj" />
   </ItemGroup>
 
 </Project>
