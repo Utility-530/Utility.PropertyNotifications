@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReactiveUI;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reactive.Disposables;
@@ -50,8 +51,15 @@ namespace Utility.WPF.Reactives
                     .MouseMoveSelections<TreeViewItem>();
         }
 
-
-
+        public static IObservable<object> SelectedItemChanges(this TreeView selector)
+        {
+            return
+                Observable
+                .FromEventPattern<RoutedPropertyChangedEventHandler<object>, object>
+                (a => selector.SelectedItemChanged += a, a => selector.SelectedItemChanged -= a)
+                .StartWith(selector.SelectedItem)
+                .WhereNotNull();
+        }
 
         /// <summary>
         /// Recursively search for an item in this subtree.
