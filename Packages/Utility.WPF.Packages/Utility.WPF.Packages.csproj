@@ -25,9 +25,9 @@
 		<PackageReference Include="HandyControl" Version="3.4.0" />
 		<PackageReference Include="SpicyTaco.AutoGrid" Version="1.2.29" />
 		<PackageReference Include="Tiny.Toolkits.Wpf" Version="4.5.1" />
+		<PackageReference Include="WpfScreenHelper" Version="2.1.0" />
 		<PackageReference Include="WPFTransitionals" Version="1.1.0" />
 	</ItemGroup>
-
 
 	<ItemGroup>
 	  <Reference Include="Julmar.Core">
