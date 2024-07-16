@@ -99,12 +99,12 @@ public class CheckedCollectionCommandViewModel<T, TR> : FilterCheckContentCollec
     {
         command = ReactiveCommand.Create<Dictionary<object, bool?>, Func<T, bool>>(dictionary =>
         {
-            return a => filterCollection.All(o => !(o.IsChecked ?? false) || ((TR)o.Model.Value).Invoke(a));
+            return a => filterCollection.All(o => !(o.IsChecked ?? false) || ((TR)o.Model.Value).Evaluate(a));
         });
 
         replaySubject
             .ToCollection()
-            .Select(a => new Func<T, bool>(o => a.All(ob => !(ob.IsChecked ?? false) || ((TR)ob.Model.Value).Invoke(o))))
+            .Select(a => new Func<T, bool>(o => a.All(ob => !(ob.IsChecked ?? false) || ((TR)ob.Model.Value).Evaluate(o))))
             .Subscribe(filterService);
     }
 
