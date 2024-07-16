@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using Utility.Helpers.NonGeneric;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Trees.Demo.Infrastructure
@@ -42,11 +43,11 @@ namespace Utility.Trees.Demo.Infrastructure
             {
                 return State.Up;
             }
-            if (one.Parent?.HasItems == true && two.Parent == one.Parent && index(one) + 1 == index(two))
+            if (one.Parent?.Items.Any() == true && two.Parent == one.Parent && index(one) + 1 == index(two))
             {
                 return State.Back;
             }
-            if (one.Parent?.HasItems == true && two.Parent == one.Parent && index(one) - 1 == index(two))
+            if (one.Parent?.Items.Any() == true && two.Parent == one.Parent && index(one) - 1 == index(two))
             {
                 return State.Forward;
             }
