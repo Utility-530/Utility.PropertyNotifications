@@ -13,7 +13,9 @@
                     xmlns:bhvrs="http://schemas.utility.com/behaviors" 
                     xmlns:num="clr-namespace:NumericUpDownLib;assembly=NumericUpDownLib"
                     xmlns:controls1="clr-namespace:Utility.WPF.Templates.Infrastructure"                    
-                    xmlns:controls="http://schemas.utility.com">
+                    xmlns:controls="http://schemas.utility.com"
+                    xmlns:structs="clr-namespace:Utility.Structs;assembly=Utility.Structs"
+                    xmlns:windows="clr-namespace:System.Windows;assembly=WindowsBase">
 
     <conv:IntToEnumConverter x:Key="IntToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
 
@@ -148,8 +150,50 @@
     </DataTemplate>
 
 
-    
+    <Style TargetType="ToolTip" x:Key="WrappedToolTip">
+        <Setter Property="MaxWidth" Value="20" />
+        <!--OR-->
+        <!--<Setter Property="MaxWidth" Value="{Binding Path=(lib:ToolTipProperties.MaxWidth)}" />-->
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <TextBlock Text="{TemplateBinding Content}">
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="TextWrapping" Value="Wrap" />
+                                <Setter Property="Width" Value="300" />
+                                <Setter Property="Height" Value="300" />
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     
 
+    <DataTemplate x:Key="Missing">
+        <controls1:MissingTemplateControl>
+            <TextBlock FontSize="8">
+                <Run>Missing Template for</Run>
+                <LineBreak/>
+                <Run Text="{Binding Value, Mode=OneTime,Converter={StaticResource TypeNameConverter}}" FontWeight="Bold" >
+                    <Run.ToolTip>
+                        <ToolTip Style="{StaticResource WrappedToolTip}" Content="{Binding Mode=OneTime}">                               
+                        </ToolTip>
+                    </Run.ToolTip>
+                </Run>
+            </TextBlock>
+        </controls1:MissingTemplateControl>
+    </DataTemplate>
+
+
+    <DataTemplate DataType="{x:Type structs:Point}">
+        <controls:PointControl X="{Binding Value.X}" Y ="{Binding Value.Y}"></controls:PointControl>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type windows:Point}">
+        <controls:PointControl X="{Binding Value.X}" Y ="{Binding Value.Y}"></controls:PointControl>
+    </DataTemplate>
 
 </ResourceDictionary>

@@ -59,7 +59,8 @@ namespace Utility.WPF.Templates
                FontSize = 14,
                HorizontalAlignment = HorizontalAlignment.Stretch,
                VerticalAlignment = VerticalAlignment.Stretch,
-               Text = $"item is null"
+               FontStyle= FontStyles.Italic,
+               Text = $"null"
            });
 
     }

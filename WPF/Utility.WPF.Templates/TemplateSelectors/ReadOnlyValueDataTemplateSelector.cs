@@ -19,25 +19,8 @@ namespace Utility.WPF.Templates
 
             if (item is IType { Type: { } type })
             {
-                if (Nullable.GetUnderlyingType(type) != null)
-                {
-                    var underlyingType = Nullable.GetUnderlyingType(type);
-                    var underlyingTypeName = underlyingType.BaseType == typeof(Enum) ? underlyingType.BaseType.Name : underlyingType.Name;
-                    if (Templates[$"{type.Name}[{underlyingTypeName}]"] is DataTemplate dt)
-                        return dt;
-                }
-                if (type.BaseType == typeof(Enum))
-                {
-                    if (Templates[new DataTemplateKey(type.BaseType)] is DataTemplate __dt)
-                        return __dt;
-                }
-
-                if (type == typeof(object))
-                {
-                    return Templates["Object"] as DataTemplate;
-                }
-
-                return Templates[new DataTemplateKey(type)] as DataTemplate;
+                if (FromType(type) is DataTemplate template)
+                    return template;
             }
             if (value == null)
                 return TemplateFactory.CreateNullTemplate();
@@ -45,6 +28,32 @@ namespace Utility.WPF.Templates
             return (Templates["Missing"] as DataTemplate) ?? throw new Exception("dfs 33091111111");
         }
 
+
+        public DataTemplate FromType(Type type)
+        {
+            if (Nullable.GetUnderlyingType(type) != null)
+            {
+                var underlyingType = Nullable.GetUnderlyingType(type);
+                var underlyingTypeName = underlyingType.BaseType == typeof(Enum) ? underlyingType.BaseType.Name : underlyingType.Name;
+                if (Templates[$"{type.Name}[{underlyingTypeName}]"] is DataTemplate dt)
+                    return dt;
+            }
+            if (type.BaseType == typeof(Enum))
+            {
+                if (Templates[new DataTemplateKey(type.BaseType)] is DataTemplate __dt)
+                    return __dt;
+            }
+
+            if (type == typeof(object))
+            {
+                return Templates["Object"] as DataTemplate;
+            }
+
+            if (Templates.Contains(new DataTemplateKey(type)))
+                return Templates[new DataTemplateKey(type)] as DataTemplate;
+
+            return null;
+        }
 
         public override ResourceDictionary Templates
         {

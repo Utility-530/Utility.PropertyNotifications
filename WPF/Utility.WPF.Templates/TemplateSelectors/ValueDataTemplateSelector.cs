@@ -52,7 +52,7 @@ namespace Utility.WPF.Templates
 
            
 
-            return (Utility.WPF.Templates.Templates.Instance["Missing"] as DataTemplate) ?? throw new Exception("dfs 33091111111");
+            return Templates["Missing"] as DataTemplate ?? throw new Exception("dfs 33091111111");
         }
 
 

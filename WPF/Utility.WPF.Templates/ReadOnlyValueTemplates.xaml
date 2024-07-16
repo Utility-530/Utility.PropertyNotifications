@@ -9,6 +9,8 @@
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:ad="http://schemas.utility.com/adorners"
                     xmlns:bhvrs="http://schemas.utility.com/behaviors" 
+                    xmlns:structs="clr-namespace:Utility.Structs;assembly=Utility.Structs"
+                    xmlns:windows="clr-namespace:System.Windows;assembly=WindowsBase"
                     xmlns:controls="http://schemas.utility.com">
 
     <conv:IntToEnumConverter x:Key="IntToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
@@ -124,6 +126,14 @@
                         <Run>Missing ReadOnly Template</Run>
             <Run Text="{Binding  Mode=OneTime, Converter={StaticResource TypeNameConverter}}"></Run>
         </TextBlock>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type structs:Point}">
+        <controls:PointControl X="{Binding Value.X,Mode=OneWay}" Y ="{Binding Value.Y,Mode=OneWay}"></controls:PointControl>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type windows:Point}">
+        <controls:PointControl X="{Binding Value.X,Mode=OneWay}" Y ="{Binding Value.Y,Mode=OneWay}"></controls:PointControl>
     </DataTemplate>
 
 </ResourceDictionary>

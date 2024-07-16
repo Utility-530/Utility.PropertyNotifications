@@ -21,15 +21,19 @@ namespace Utility.WPF.Templates
                 return (readOnlyValueDataTemplateSelector ??= new ReadOnlyValueDataTemplateSelector()).SelectTemplate(item, container);
             }
 
-            var type = item?.GetType();
+            if (item is DataTemplate dataTemplate)
+                return dataTemplate;
 
-            //if (type is Type && new DataTemplateKey(type) is var key &&
-            //    (container as FrameworkElement)?.TryFindResource(key) is DataTemplate dataTemplate)
-            //    return dataTemplate;
+            if (item is null)
+                return TemplateFactory.CreateNullTemplate();
 
-            //var interfaces = type.GetInterfaces();
+            var type = item.GetType();
 
-            return( Templates["Missing"] as DataTemplate) ?? throw new Exception("dfs 33091111111");
+            if (FromType(type) is DataTemplate template)
+                return template;
+
+            return (Templates["Missing"] as DataTemplate) ?? throw new Exception("dfs 33091111111");
+
         }
 
         public ResourceDictionary Templates
@@ -59,5 +63,32 @@ namespace Utility.WPF.Templates
         //}
 
         public static CustomDataTemplateSelector Instance => new();
+
+
+        public DataTemplate FromType(Type type)
+        {
+            if (Nullable.GetUnderlyingType(type) != null)
+            {
+                var underlyingType = Nullable.GetUnderlyingType(type);
+                var underlyingTypeName = underlyingType.BaseType == typeof(Enum) ? underlyingType.BaseType.Name : underlyingType.Name;
+                if (Templates[$"{type.Name}[{underlyingTypeName}]"] is DataTemplate dt)
+                    return dt;
+            }
+            if (type.BaseType == typeof(Enum))
+            {
+                if (Templates[new DataTemplateKey(type.BaseType)] is DataTemplate __dt)
+                    return __dt;
+            }
+
+            if (type == typeof(object))
+            {
+                return Templates["Object"] as DataTemplate;
+            }
+
+            if (Templates.Contains(new DataTemplateKey(type)))
+                return Templates[new DataTemplateKey(type)] as DataTemplate;
+
+            return null;
+        }
     }
 }
