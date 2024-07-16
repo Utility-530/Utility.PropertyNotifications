@@ -80,6 +80,21 @@ namespace Utility.Nodes
 
         Type IType.Type => this.Data.GetType();
 
+        public int Depth
+        {
+            get
+            {
+                IReadOnlyTree parent = this;
+                int depth = 0;
+                while (parent.Parent != null)
+                {
+                    depth++;
+                    parent = parent.Parent;
+                }
+                return depth;
+            }
+        }
+
         protected virtual void PropertyChanged_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Item[]")
