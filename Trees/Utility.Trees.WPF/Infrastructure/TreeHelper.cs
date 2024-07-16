@@ -27,7 +27,7 @@ namespace Utility.WPF.Nodes
                    s => control.MouseDoubleClick -= s)
                 .Select(evt =>
                 {
-                    return GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control);
+                    return ToObject<T>(control, evt);
                 });
         }
 
@@ -38,13 +38,10 @@ namespace Utility.WPF.Nodes
                    s => control.PreviewMouseLeftButtonUp -= s)
                 .Select(evt =>
                 {
-                    return GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control);
+                    return ToObject<T>(control, evt);
+
                 });
-
-
         }
-
-
         public static IObservable<T?> MouseHoverEnterSelections<T>(this Control control) where T : DependencyObject
         {
             return Observable.FromEventPattern<MouseEventHandler, MouseEventArgs>(
@@ -52,7 +49,7 @@ namespace Utility.WPF.Nodes
                    s => control.MouseEnter -= s)
                 .Select(evt =>
                 {
-                    return GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control);
+                    return ToObject<T>(control, evt);
                 });
         }
 
@@ -65,7 +62,7 @@ namespace Utility.WPF.Nodes
                 {
                     var point = evt.EventArgs.GetPosition(evt.EventArgs.OriginalSource as IInputElement);
                     //Point? point = control?.TranslatePoint(new Point(0, 0), objTreeViewControl);
-                    return (GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control), point);
+                    return (ToObject<T>(control, evt), point);
                 });
         }
 
@@ -100,22 +97,18 @@ namespace Utility.WPF.Nodes
             return null;
         }
 
-        //public static DependencyObject? GetSelectedItem(UIElement? sender, UIElement objTreeViewControl) 
-        //{
-        //    Point? point = sender?.TranslatePoint(new Point(0, 0), objTreeViewControl);
-        //    if (point.HasValue)
-        //    {
-        //        var hit = objTreeViewControl.InputHitTest(point.Value) as DependencyObject;
-        //        while (hit is not null and not T)
-        //        {
-        //            if (hit is Visual or Visual3D)
-        //                hit = VisualTreeHelper.GetParent(hit);
-        //            else
-        //                break;
-        //        }
-        //        return hit as DependencyObject;
-        //    }
-        //    return null;
-        //}
+        private static T? ToObject<T>(Control control, System.Reactive.EventPattern<MouseButtonEventArgs> evt) where T : DependencyObject
+        {
+            if (evt.EventArgs.Source is T _t)
+                return _t;
+            return GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control);
+        }
+
+        private static T? ToObject<T>(Control control, System.Reactive.EventPattern<MouseEventArgs> evt) where T : DependencyObject
+        {
+            if (evt.EventArgs.Source is T _t)
+                return _t;
+            return GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control);
+        }
     }
 }

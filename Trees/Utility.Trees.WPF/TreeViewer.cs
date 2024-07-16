@@ -54,6 +54,21 @@ namespace Utility.Trees.WPF
 
         void Initialise(ItemsControl treeView)
         {
+
+            if(treeView is TreeView _treeView)
+            {
+                _treeView.SelectedItemChanges().Subscribe(a =>
+                {
+                    if (a is HeaderedItemsControl { Header: ITree { } node })
+                    {
+                        EventListener?.Send(new SelectedItemChange(a, node));
+                    }
+                });
+            }
+
+            //ScrollViewer.SetHorizontalScrollBarVisibility(this, ScrollBarVisibility.Visible);
+            //ScrollViewer.SetHorizontalScrollBarVisibility(this, ScrollBarVisibility.Visible);
+
             treeView
                 .MouseDoubleClicks()
                 .Subscribe(a =>

@@ -1,6 +1,9 @@
-﻿using System;
+﻿using ReactiveUI;
+using System;
+using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using Utility.WPF.Nodes;
 
 namespace Utility.WPF.Nodes
@@ -43,5 +46,24 @@ namespace Utility.WPF.Nodes
                     .MouseMoveSelections<HeaderedItemsControl>();
         }
 
+        public static IObservable<object> SelectionChanges(this Selector selector)
+        {
+            return 
+                Observable
+                .FromEventPattern<SelectionChangedEventHandler, SelectionChangedEventArgs>
+                (a => selector.SelectionChanged += a, a => selector.SelectionChanged -= a)
+                .Select(a => selector.SelectedValue).StartWith(selector.SelectedValue)
+                .WhereNotNull();
+        }
+
+        public static IObservable<object> SelectedItemChanges(this TreeView selector)
+        {
+            return 
+                Observable
+                .FromEventPattern<RoutedPropertyChangedEventHandler<object>, object>
+                (a => selector.SelectedItemChanged += a, a => selector.SelectedItemChanged -= a)
+                .StartWith(selector.SelectedItem)
+                .WhereNotNull();
+        }
     }
 }
