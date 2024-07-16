@@ -33,6 +33,7 @@ public record MethodParametersResponse(object?[]? Parameters) : Response(Paramet
 
 public record ClickChange(object Source, IReadOnlyTree Node) : Event();
 public record DoubleClickChange(object Source, IReadOnlyTree Node) : Event();
+public record SelectedItemChange(object Source, IReadOnlyTree Node) : Event();
 public record OnHoverChange(object Source, IReadOnlyTree Node, bool IsMouseOver, Point Point) : Event();
 public record OnLoadedChange(object Source, IReadOnlyTree Node) : Event();
 public record TreeViewItemInitialised(object Source, IReadOnlyTree Node) : Event();
