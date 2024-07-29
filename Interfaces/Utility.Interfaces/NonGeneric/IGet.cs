@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Utility.Interfaces.NonGeneric
+﻿namespace Utility.Interfaces.NonGeneric
 {
     public interface IGet
     {
-        public object Get();
+        public object? Get();
     }  
 }
