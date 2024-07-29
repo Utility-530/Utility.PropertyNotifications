@@ -4,7 +4,6 @@ using Splat;
 using System.Reactive;
 using System.Reactive.Subjects;
 using Utility.Helpers.NonGeneric;
-using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Descriptors
 {
@@ -75,10 +74,8 @@ namespace Utility.Descriptors
                             }
                         });
                 }
-
             }
         }
-
 
         public void Refresh()
         {
@@ -128,7 +125,6 @@ namespace Utility.Descriptors
             descriptor.Guid = _guid;
             observer.OnNext(new(descriptor, Changes.Type.Add));
         }
-
 
         async void AddFromInstance(IObserver<Change<IDescriptor>> observer)
         {
