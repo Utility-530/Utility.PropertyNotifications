@@ -14,7 +14,7 @@ namespace Utility.Trees.Demo.MVVM
     /// </summary>
     public partial class App : Application
     {
-        Guid guid = new Guid("5262625e-53c5-47c0-8351-a3be4111988e");
+        //Guid guid = new Guid("5262625e-53c5-47c0-8351-a3be4111988e");
 
         public static Assembly[] Assemblies => new Assembly[] { typeof(Utility.WPF.Library.Class1).Assembly };
         public static Assembly[] SystemAssemblies => new Assembly[] { new Utility.Meta.SystemAssembly() };
@@ -22,7 +22,7 @@ namespace Utility.Trees.Demo.MVVM
         ReflectionNode model;
         //ViewModelTree viewModel;
         //Tree view;
-        Tree data;
+        //Tree data;
 
         static App()
         {

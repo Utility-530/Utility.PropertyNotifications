@@ -8,16 +8,16 @@ using Utility.Keys;
 
 namespace Utility.Trees.Demo.MVVM.MVVM
 {
-    public partial class Data
-    {
+    //public partial class Data
+    //{
 
 
-    }
+    //}
 
-    public class Value : IValue, IType
-    {
-        public Type Type => typeof(object);
+    //public class Value : IValue, IType
+    //{
+    //    public Type Type => typeof(object);
 
-        object IValue.Value => null;
-    }
+    //    object IValue.Value => null;
+    //}
 }

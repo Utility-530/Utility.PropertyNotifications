@@ -55,9 +55,9 @@
                 </UniformGrid>
             </DataTemplate>-->
 
-            <DataTemplate DataType="{x:Type local:Model}">
+            <!--<DataTemplate DataType="{x:Type local:Model}">
                 <tree:TypeSelector Type="{Binding Type}" Assemblies="{x:Static local:App.SystemAssemblies }"/>
-            </DataTemplate>
+            </DataTemplate>-->
 
             <DataTemplate x:Key="Tree">
                 <ContentPresenter Content="{Binding Data}"/>

@@ -1,21 +1,5 @@
-﻿using Fasterflect;
-using System;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
+﻿using System;
 using System.Linq.Expressions;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Reactive.Threading.Tasks;
-using System.Runtime.CompilerServices;
-using Utility.Descriptors.Repositorys;
-using Utility.Helpers;
-using Utility.Interfaces;
-using Utility.Interfaces.NonGeneric;
-using Utility.Keys;
-using Utility.PropertyNotifications;
-using Utility.Reactives.Helpers;
-using Utility.Trees.Abstractions;
 
 namespace Utility.Trees.Demo.MVVM.Infrastructure
 {

@@ -11,58 +11,58 @@ using Utility.Infrastructure;
 
 namespace Utility.Trees.Demo.MVVM
 {
-    public partial record Model : NotifyProperty
-    {
-        private Type type;
+    //public partial record Model : NotifyProperty
+    //{
+    //    private Type type;
 
-        public Type Type
-        {
-            get
-            {
+    //    public Type Type
+    //    {
+    //        get
+    //        {
 
-                this.RaisePropertyCalled(type);
-                return type;
+    //            this.RaisePropertyCalled(type);
+    //            return type;
 
-            }
-            set
-            {
-                if (value.Equals(type))
-                    return;
-                type = value;
-                this.RaisePropertyReceived(value);
-            }
-        }
+    //        }
+    //        set
+    //        {
+    //            if (value.Equals(type))
+    //                return;
+    //            type = value;
+    //            this.RaisePropertyReceived(value);
+    //        }
+    //    }
 
-        public bool IsReadOnly { get; internal set; }
+    //    public bool IsReadOnly { get; internal set; }
 
-        public class StyleSelector : System.Windows.Controls.StyleSelector
-        {
-            ResourceDictionary resourceDictionary = new ResourceDictionary
-            {
-                Source = new Uri($"/{typeof(CustomTreeViewItem).Namespace};component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute)
-            };
+    //    //public class StyleSelector : System.Windows.Controls.StyleSelector
+    //    //{
+    //    //    ResourceDictionary resourceDictionary = new ResourceDictionary
+    //    //    {
+    //    //        Source = new Uri($"/{typeof(CustomTreeViewItem).Namespace};component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute)
+    //    //    };
 
-            public override Style SelectStyle(object item, DependencyObject container)
-            {
-                if (item is TreeViewItem { })
-                {
-                    var style = resourceDictionary["ButtonsAddRemoveStyle"] as Style;
-                    return style;
-                }
-                return base.SelectStyle(item, container);
-            }
+    //    //    public override Style SelectStyle(object item, DependencyObject container)
+    //    //    {
+    //    //        if (item is TreeViewItem { })
+    //    //        {
+    //    //            var style = resourceDictionary["ButtonsAddRemoveStyle"] as Style;
+    //    //            return style;
+    //    //        }
+    //    //        return base.SelectStyle(item, container);
+    //    //    }
 
-            //public ResourceDictionary NewTemplates => new()
-            //{
-            //    Source = new Uri($"/{typeof(CustomStyleSelector).Assembly.GetName().Name};component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute)
-            //};
+    //    //    //public ResourceDictionary NewTemplates => new()
+    //    //    //{
+    //    //    //    Source = new Uri($"/{typeof(CustomStyleSelector).Assembly.GetName().Name};component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute)
+    //    //    //};
 
-            public static StyleSelector Instance { get; } = new();
-        }
+    //    //    public static StyleSelector Instance { get; } = new();
+    //    //}
 
 
 
-    }
+    //}
 
     public class StringDecisionTree<T> : DecisionTree<T, string>
     {

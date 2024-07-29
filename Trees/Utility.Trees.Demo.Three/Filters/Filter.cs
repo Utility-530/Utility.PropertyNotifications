@@ -13,8 +13,8 @@ using Utility.Helpers.NonGeneric;
 
 namespace Utility.Trees.Demo.MVVM
 {
-    public partial record Model
-    {
+    //public partial record Model
+    //{
         internal class Filter : ITreeViewFilter
         {
             public Filter()
@@ -86,5 +86,5 @@ namespace Utility.Trees.Demo.MVVM
 
 
 
-    }
+    //}
 }

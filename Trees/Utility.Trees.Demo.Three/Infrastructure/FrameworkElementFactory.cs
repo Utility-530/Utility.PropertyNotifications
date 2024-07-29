@@ -13,6 +13,10 @@ using Utility.Trees.WPF;
 using Xceed.Wpf.Toolkit.PropertyGrid;
 using System.Linq;
 using Utility.Trees.Demo.MVVM.Views;
+using Utility.WPF.Templates;
+using static Utility.Helpers.EnumHelper;
+using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Trees.Demo.MVVM
 {
@@ -49,28 +53,36 @@ namespace Utility.Trees.Demo.MVVM
         {
             model = new ReflectionNode(DescriptorFactory.CreateRoot(type, guid, name).GetAwaiter().GetResult()) { };
 
+
+            AutoCompleteConverter.Instance.Subscribe(a =>
+            {
+                var _ = model;
+            
+                if(a is SuggestionPrompt { Value: IDescriptor { ParentType:{ } type } value, Filter: { } filter })
+                {
+                    //if(type == typeof(Connection) && model is Diagram)
+                    //{
+                        
+                    //}
+                }
+            });
             //viewModel = new() { Key = model.Key };
             //view = new() { Key = model.Key };
             //data = new() { Key = model.Key };
 
             //var uGrid = new UniformGrid() { Rows = 1 };
-            //var contentControl = new ContentControl { };
-
+     
             EventListener.Instance.Subscribe(a =>
             {
                 if (a is ClickChange { Node: IReadOnlyTree { Data: MemberDescriptor data } tree, Source:{ } source })
                 {
-                    //var _tree = new ViewModelTree() { Key = new GuidKey(data.Guid) };
-                    //contentControl.Content = _tree;
                     MainView.Instance.propertygrid.Content = new PropertyGrid { SelectedObject = data };
-
-                    Model.Filter.Instance.Convert(tree);
+                    Filter.Instance.Convert(tree);
                     DataTemplateSelector.Instance.SelectTemplate(tree, null);
                     StyleSelector.Instance.SelectStyle(source, null);               
                 }
             });
 
-            //uGrid.Children.Add(tr);
    
             if (false)
             {
@@ -265,11 +277,11 @@ namespace Utility.Trees.Demo.MVVM
             return new TreeViewer
             {
                 ViewModel = data,
-                TreeViewItemFactory = Data.TreeViewItemFactory.Instance,
+                TreeViewItemFactory = TreeViewItemFactory.Instance,
                 TreeViewBuilder = TreeViewBuilder.Instance,
                 PanelsConverter = ItemsPanelConverter.Instance,
                 DataTemplateSelector = DataTemplateSelector.Instance,
-                TreeViewFilter = Model.Filter.Instance,
+                TreeViewFilter = Filter.Instance,
                 StyleSelector = StyleSelector.Instance,
                 EventListener = EventListener.Instance
             };
