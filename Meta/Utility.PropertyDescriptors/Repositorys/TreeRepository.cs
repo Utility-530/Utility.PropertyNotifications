@@ -328,7 +328,11 @@ namespace Utility.Descriptors.Repositorys
 
         public void Set(Guid guid, object value, DateTime dateTime)
         {
-            var text = JsonConvert.SerializeObject(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+            string text;
+            //if (value is not string str)
+                text = JsonConvert.SerializeObject(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+            //else
+            //    text = value?.ToString();
             var query = $"SELECT * FROM '{nameof(Values)}' WHERE Guid = '{guid}' AND Value = '{text}'";
             if (connection.Query<Values>(query).Any() == false)
             {
@@ -381,10 +385,22 @@ namespace Utility.Descriptors.Repositorys
                 if (type == null)
                     throw new Exception("sd s389989898");
 
-                var value = JsonConvert.DeserializeObject(text, type);
+                object? value = null;
+          
+                try
+                {
+                    value = JsonConvert.DeserializeObject(text, type);
+
+                }
+                catch (JsonReaderException ex)
+                {
+                    value = text;
+                }
+
                 var _value = new DateValue(added, value);
                 values.Add(guid, _value);
                 return _value;
+
             }
             return null;
         }

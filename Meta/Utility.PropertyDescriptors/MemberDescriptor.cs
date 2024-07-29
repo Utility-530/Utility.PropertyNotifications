@@ -3,7 +3,15 @@ using System.Diagnostics;
 using Utility.Interfaces;
 
 namespace Utility.Descriptors;
-public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, IChildren
+
+public interface ICollectionDetailsDescriptor
+{
+    bool IsCollection { get; }
+    Type CollectionItemPropertyType { get; }
+    bool IsCollectionItemValueType { get; }
+}
+
+public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, IChildren, ICollectionDetailsDescriptor
 {
     public Guid Guid { get; set; }
 
@@ -77,7 +85,7 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
 
 public abstract record ValueMemberDescriptor(Type Type) : MemberDescriptor(Type), IValueDescriptor
 {
-    public virtual object Value
+    public virtual object? Value
     {
         get
         {
@@ -92,7 +100,7 @@ public abstract record ValueMemberDescriptor(Type Type) : MemberDescriptor(Type)
         }
     }
 
-    public abstract object Get();
+    public abstract object? Get();
 
     public abstract void Set(object? value);
 

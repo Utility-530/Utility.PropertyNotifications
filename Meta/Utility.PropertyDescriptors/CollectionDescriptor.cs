@@ -2,12 +2,25 @@
 
 using Splat;
 using System.Reactive;
+using System.Reactive.Subjects;
 using Utility.Helpers.NonGeneric;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Descriptors
 {
-    internal record CollectionDescriptor(Descriptor PropertyDescriptor, Type ElementType, IEnumerable Collection) : BasePropertyDescriptor(PropertyDescriptor, Collection), ICollectionDescriptor
+    public interface IValueCollection
     {
+        IEnumerable Collection { get; }
+    }
+
+    internal record CollectionDescriptor(Descriptor PropertyDescriptor, Type ElementType, IEnumerable Collection) : BasePropertyDescriptor(PropertyDescriptor, Collection),
+        ICollectionDescriptor,
+        IValueCollection,
+        IRefresh
+    {
+        ReplaySubject<Change<IDescriptor>> replaySubject = new();
+        List<CollectionItemDescriptor> descriptors = new();
+
         private static ITreeRepository repo => Locator.Current.GetService<ITreeRepository>();
 
         public static string _Name => "Collection";
@@ -18,21 +31,14 @@ namespace Utility.Descriptors
         {
             get
             {
-                List<CollectionItemDescriptor> descriptors = new();
                 return Observable.Create<Change<IDescriptor>>(async observer =>
                 {
                     AddHeaderDescriptor(observer, ElementType, Instance.GetType());
                     AddFromInstance(observer);
+                    AddFromRefreshes(observer);
                     return AddFromChanges(observer);
                 });
 
-                async void AddHeaderDescriptor(IObserver<Change<IDescriptor>> observer, Type elementType, Type componentType)
-                {
-                    var descriptor = new CollectionHeadersDescriptor(elementType, componentType);
-                    var _guid = await repo.Find(Guid, elementType.Name, elementType, 0);
-                    descriptor.Guid = _guid;
-                    observer.OnNext(new(descriptor, Changes.Type.Add));
-                }
 
                 IDisposable AddFromChanges(IObserver<Change<IDescriptor>> observer)
                 {
@@ -69,7 +75,16 @@ namespace Utility.Descriptors
                             }
                         });
                 }
+
             }
+        }
+
+
+        public void Refresh()
+        {
+            replaySubject.OnNext(new(default, Utility.Changes.Type.Reset));
+            AddHeaderDescriptor(replaySubject, ElementType, Instance.GetType());
+            AddFromInstance(replaySubject);
         }
 
         // collection
@@ -100,6 +115,20 @@ namespace Utility.Descriptors
             });
             AddFromInstance(observer);
         }
+
+        void AddFromRefreshes(IObserver<Change<IDescriptor>> observer)
+        {
+            replaySubject.Subscribe(observer);
+        }
+
+        async void AddHeaderDescriptor(IObserver<Change<IDescriptor>> observer, Type elementType, Type componentType)
+        {
+            var descriptor = new CollectionHeadersDescriptor(elementType, componentType);
+            var _guid = await repo.Find(Guid, elementType.Name, elementType, 0);
+            descriptor.Guid = _guid;
+            observer.OnNext(new(descriptor, Changes.Type.Add));
+        }
+
 
         async void AddFromInstance(IObserver<Change<IDescriptor>> observer)
         {

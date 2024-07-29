@@ -7,7 +7,7 @@ namespace Utility.Descriptors
 
         public override string? Name => ParameterInfo.Name ?? ParameterInfo.Position.ToString();
 
-        public object Value { get => Get(); set => Set(value); }
+        //public object Value { get => Get(); set => Set(value); }
 
         public override bool IsReadOnly => false;
 
