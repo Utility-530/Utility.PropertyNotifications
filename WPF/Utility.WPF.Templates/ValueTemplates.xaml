@@ -15,7 +15,10 @@
                     xmlns:controls1="clr-namespace:Utility.WPF.Templates.Infrastructure"                    
                     xmlns:controls="http://schemas.utility.com"
                     xmlns:structs="clr-namespace:Utility.Structs;assembly=Utility.Structs"
-                    xmlns:windows="clr-namespace:System.Windows;assembly=WindowsBase">
+                    xmlns:windows="clr-namespace:System.Windows;assembly=WindowsBase"
+                    xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
+                    xmlns:hc="https://handyorg.github.io/handycontrol"            
+                    xmlns:dotNetKitControls="http://wpfcontrols.com/">
 
     <conv:IntToEnumConverter x:Key="IntToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
 
@@ -23,6 +26,7 @@
 
     <local:VisibilityConverter x:Key="VisibilityConverter" />
     <conv:TypeNameConverter x:Key="TypeNameConverter" />
+    <local:AutoCompleteConverter x:Key="AutoCompleteConverter" />
 
     <DataTemplate DataType="{x:Type sys:Int32}">
         <num:NumericUpDown Value="{Binding Path=Value, Mode=TwoWay}"></num:NumericUpDown>
@@ -39,8 +43,7 @@
     <DataTemplate DataType="{x:Type sys:Int64}">
         <num:LongUpDown Value="{Binding Path=Value, Mode=TwoWay}"></num:LongUpDown>
     </DataTemplate>
-
-
+    
     <DataTemplate DataType="{x:Type sys:Double}">
         <num:DoubleUpDown Value="{Binding Path=Value, Mode=TwoWay}"></num:DoubleUpDown>
     </DataTemplate>
@@ -49,10 +52,8 @@
         <num:DecimalUpDown Value="{Binding Path=Value, Mode=TwoWay}"></num:DecimalUpDown>
     </DataTemplate>
 
-
-
     <DataTemplate DataType="{x:Type sys:DateTime}">
-        <TextBox Text="{Binding Path=Value, Mode=TwoWay}"></TextBox>
+        <xc:DateTimePicker Value="{Binding Path=Value, Mode=TwoWay}"/>
     </DataTemplate>
 
     <DataTemplate x:Key="Number">
@@ -60,21 +61,22 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type draw:Color}">
-        <Rectangle Fill="{Binding Path=Value, Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"></Rectangle>
+        <xc:ColorPicker SelectedColor="{Binding Path=Value, Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type Color}">
-        <Rectangle Fill="{Binding Path=Value, Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"></Rectangle>
+        <xc:ColorPicker SelectedColor="{Binding Path=Value, Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:Boolean}">
-        <Grid         MinHeight="30"                                     MinWidth="30">
+        <Grid MinHeight="30"                                     MinWidth="30">
             <CheckBox IsChecked="{Binding Path=Value, Mode=TwoWay}"/>
         </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:String}">
-        <TextBox Text="{Binding Path=Value, Mode=TwoWay }" VerticalContentAlignment="Center" ></TextBox>
+        <dotNetKitControls:AutoCompleteComboBox Text="{Binding Value}" Provider="{Binding Converter={x:Static local:AutoCompleteConverter.Instance}}"/>
+        <!--<xc:AutoCompleteBox Text="{Binding Path=Value, Mode=TwoWay}" VerticalContentAlignment="Center" ItemsSource="{Binding Converter={StaticResource AutoCompleteConverter}}" />-->
     </DataTemplate>
 
     <DataTemplate x:Key="Enumerable">
@@ -86,23 +88,16 @@
     </DataTemplate>
 
     <DataTemplate x:Key="Object">
-        <!--<ContentControl Content="{Binding }"></ContentControl>-->
         <TextBlock Text="Object"></TextBlock>
     </DataTemplate>
 
-
     <DataTemplate DataType="{x:Type sys:Type}">
-        <!--<ContentControl Content="{Binding }"></ContentControl>-->
         <t:TypeSelector x:Name="TypeSelector" Type="{Binding Value, Mode=TwoWay, Converter={x:Static conv:DefaultConverter.Instance}}">
             <i:Interaction.Behaviors>
                 <infra:EntryAssemblyBehavior/>
             </i:Interaction.Behaviors>
         </t:TypeSelector>
     </DataTemplate>
-    <!--<DataTemplate DataType="{x:Type sys:Guid}">
-        <TextBox Text="{Binding Path=Value, Mode=TwoWay, StringFormat={}{0:N0}}"></TextBox>
-    </DataTemplate>-->
-
 
     <DataTemplate DataType="{x:Type sys:Enum}">
         <ComboBox >
