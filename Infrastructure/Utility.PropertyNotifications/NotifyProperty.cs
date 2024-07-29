@@ -24,13 +24,21 @@ namespace Utility.PropertyNotifications
     //    }
     //}
 
+
+    public interface IRaiseChanges
+    {
+        void RaisePropertyCalled(object? value, [CallerMemberName] string propertyName = null);
+        void RaisePropertyChanged([CallerMemberName] string? propertyName = null);
+        void RaisePropertyReceived(object value, [CallerMemberName] string propertyName = null);
+    }
+
     /// <summary>
     /// Base class for all ViewModel classes in the application.
     /// It provides support for property change notifications
     /// and has a DisplayName property.  This class is abstract.
     /// </summary>
 
-    public abstract record NotifyProperty : INotifyPropertyCalled, INotifyPropertyReceived, INotifyPropertyChanged
+    public abstract record NotifyProperty : INotifyPropertyCalled, INotifyPropertyReceived, INotifyPropertyChanged, IRaiseChanges
     {
         bool flag;
         //private Lazy<Dictionary<string, PropertyInfo>> properties;
@@ -207,7 +215,7 @@ namespace Utility.PropertyNotifications
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        protected virtual void RaisePropertyCalled(object? value, [CallerMemberName] string propertyName = null)
+        public virtual void RaisePropertyCalled(object? value, [CallerMemberName] string propertyName = null)
         {
             //if (PropertyChangedName != propertyName)
             //{
@@ -248,7 +256,7 @@ namespace Utility.PropertyNotifications
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        protected virtual void RaisePropertyReceived(object value, [CallerMemberName] string propertyName = null)
+        public virtual void RaisePropertyReceived(object value, [CallerMemberName] string propertyName = null)
         {
             var handler = PropertyReceived;
             if (handler != null)
