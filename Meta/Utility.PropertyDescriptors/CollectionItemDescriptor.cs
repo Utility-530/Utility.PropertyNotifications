@@ -26,7 +26,7 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
             {
                 foreach (Descriptor descriptor in TypeDescriptor.GetProperties(Type))
                 {
-                    observer.OnNext(new(new HeaderDescriptor(descriptor.PropertyType, descriptor.ComponentType, descriptor.Name), Changes.Type.Add));
+                    observer.OnNext(new(new HeaderDescriptor(descriptor.PropertyType, descriptor.ComponentType, descriptor.Name) { Guid =Guid.NewGuid(), ParentGuid = this.Guid }, Changes.Type.Add));
                 }
                 return Disposable.Empty;
             });
