@@ -1,6 +1,7 @@
 ﻿
 using Splat;
 using Utility.Interfaces.Generic;
+using Utility.Repos;
 
 namespace Utility.Descriptors;
 
@@ -13,7 +14,6 @@ internal abstract record ValueDescriptor<T>(Descriptor Descriptor, object Instan
 
 internal abstract record NullableValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IValue<T?>
 {
-
     T? IValue<T?>.Value => Get() is T t ? t : default;
 }
 
@@ -21,17 +21,23 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
 {
     private object? value;
     private readonly ITreeRepository repo = Locator.Current.GetService<ITreeRepository>();
+    private System.IObservable<DateValue?> dateValue;
 
     public override System.IObservable<object> Children => Observable.Empty<object>();
 
     public override object? Get()
     {
-        if (repo.Get(Guid) is { Value: { } _value } x)
-            value = _value;
-        else
-        {
-            value ??= Descriptor.GetValue(Instance);
-        }
+        if (value == null)
+            (dateValue??=repo.Get(Guid))
+                .Subscribe(a =>
+            {
+                if (a is { Value: { } _value } x)
+                {
+                    RaisePropertyChanged(_value);
+                }
+            });
+
+        value ??= Descriptor.GetValue(Instance);
         return value;
     }
 
@@ -46,9 +52,17 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
 
     public override void Initialise(object? item = null)
     {
-        if (Descriptor.IsReadOnly == false)
-            if (repo.Get(Guid) is { Value: { } value })
-                Descriptor.SetValue(Instance, value);
+        //if (Descriptor.IsReadOnly == false)
+        //{
+        //    (dateValue ??= repo.Get(Guid))
+        //        .Subscribe(a =>
+        //    {
+        //        if (a is { Value: { } _value } x)
+        //        {
+        //            RaisePropertyChanged(_value);
+        //        }
+        //    });
+        //}
     }
 
     public override void Finalise(object? item = null)
