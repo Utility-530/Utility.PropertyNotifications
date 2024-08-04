@@ -5,26 +5,6 @@ using Utility.Interfaces;
 namespace Utility.PropertyNotifications
 {
 
-    //public abstract class ViewModelBase<T> : ViewModelBase
-    //{
-    //    private T value;
-
-    //    public T Value
-    //    {
-    //        get
-    //        {
-    //            RaisePropertyCalled();
-    //            return value;
-    //        }
-    //        set
-    //        {
-    //            this.value = value;
-    //            RaisePropertyReceived();
-    //        }
-    //    }
-    //}
-
-
     public interface IRaiseChanges
     {
         void RaisePropertyCalled(object? value, [CallerMemberName] string propertyName = null);
@@ -33,7 +13,7 @@ namespace Utility.PropertyNotifications
     }
 
     /// <summary>
-    /// Base class for all ViewModel classes in the application.
+    /// Base class for all ViewModel records in the application.
     /// It provides support for property change notifications
     /// and has a DisplayName property.  This class is abstract.
     /// </summary>
