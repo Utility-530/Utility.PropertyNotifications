@@ -7,6 +7,10 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
+	</ItemGroup>
+
 
 	<ItemGroup>
 		<Reference Include="PresentationCore">

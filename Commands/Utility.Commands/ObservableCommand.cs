@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Windows.Input;
-using System.Collections.ObjectModel;
+using Utility.Models;
 
 namespace Utility.Commands
 {
@@ -107,37 +107,6 @@ namespace Utility.Commands
             foreach (var output in Outputs)
                 observer.OnNext(output);
             return new Disposer<object>(observers, observer);
-        }
-
-        public class Disposer<TObserver, T> : IDisposable where TObserver : IObserver<T>
-        {
-            private readonly ICollection<TObserver> observers;
-            private readonly TObserver observer;
-
-            public Disposer(ICollection<TObserver> observers, TObserver observer)
-            {
-                (this.observers = observers).Add(observer);
-                this.observer = observer;
-            }
-
-            public IEnumerable Observers => observers;
-            public IObserver<T> Observer => observer;
-
-            public void Dispose()
-            {
-                observers?.Remove(observer);
-            }
-
-            public static Disposer<TObserver, T> Empty => new(new Collection<TObserver>(), default);
-
-        }
-
-        public sealed class Disposer<T> : Disposer<IObserver<T>, T>
-        {
-
-            public Disposer(ICollection<IObserver<T>> observers, IObserver<T> observer) : base(observers, observer)
-            {
-            }
         }
 
     }
