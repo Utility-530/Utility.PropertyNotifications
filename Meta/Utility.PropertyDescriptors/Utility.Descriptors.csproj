@@ -22,6 +22,10 @@
 		<ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
 
 		<ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
+
+		<ProjectReference Include="..\..\Reactives\Utility.Reactives\Utility.Reactives.csproj" />
+
+		<ProjectReference Include="..\..\Repos\Utility.Repos\Utility.Repos.csproj" />
 	</ItemGroup>
 
 </Project>

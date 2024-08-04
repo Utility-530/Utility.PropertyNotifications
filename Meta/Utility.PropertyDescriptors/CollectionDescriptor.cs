@@ -4,6 +4,7 @@ using Splat;
 using System.Reactive;
 using System.Reactive.Subjects;
 using Utility.Helpers.NonGeneric;
+using Utility.Repos;
 
 namespace Utility.Descriptors
 {

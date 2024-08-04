@@ -16,7 +16,6 @@ global using System.Diagnostics.CodeAnalysis;
 global using System.Globalization;
 global using System.Windows.Input;
 global using Utility.Commands;
-global using Utility.Descriptors.Repositorys;
 global using System.Collections.Specialized;
 //global using Utility.Interfaces.Generic;
 global using Utility.PropertyNotifications;
