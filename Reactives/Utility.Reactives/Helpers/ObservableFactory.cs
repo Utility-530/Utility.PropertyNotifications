@@ -12,6 +12,20 @@ namespace Utility.Reactives
 
     public static class ObservableFactory
     {
+
+        public static IObservable<T> ToObservable<T>(this Task<T> enumerable)
+        {
+            return Observable.Create<T>(observer =>
+            {
+                var task = enumerable.ContinueWith(a =>
+                {
+                    observer.OnNext(a.Result);
+                });
+                return task;
+            });
+        }
+
+
         public static IObservable<T> ToObservable<T>(this IEnumerable<T> enumerable, TimeSpan ts, IScheduler scheduler = null)
         {
             var x = enumerable.GetEnumerator();
