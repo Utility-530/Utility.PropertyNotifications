@@ -2,7 +2,7 @@
 using System.Web;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-
+using _Key = Utility.Models.Key;
 namespace Utility.Repos
 {
     public class HttpRepository : IRepository
@@ -18,7 +18,7 @@ namespace Utility.Repos
 
         public async Task<IEquatable[]> FindKeys(IEquatable key)
         {
-            if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
+            if (key is not _Key { Guid: var guid, Name: var name, Type: var type } _key)
             {
                 throw new Exception("reg 43cs ");
             }
@@ -33,12 +33,12 @@ namespace Utility.Repos
             Guid? model = JsonSerializer.Deserialize<Guid>(jsonResponseBody);
             if (model.HasValue == false)
                 throw new Exception("sdfklj3 fsdfsd3433");
-            return new[] { new Key(model.Value, name, type) };
+            return new[] { new _Key(model.Value, name, type) };
         }
 
         public async Task<object?> FindValue(IEquatable key)
         {
-            if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
+            if (key is not _Key { Guid: var guid, Name: var name, Type: var type } _key)
             {
                 throw new Exception("reg 43cs ");
             }
@@ -57,7 +57,7 @@ namespace Utility.Repos
 
         public async Task Update(IEquatable key, object value)
         {
-            if (key is not Key { Guid: var guid, Name: var name, Type: var type } _key)
+            if (key is not _Key { Guid: var guid, Name: var name, Type: var type } _key)
             {
                 throw new Exception("reg 43cs ");
             }

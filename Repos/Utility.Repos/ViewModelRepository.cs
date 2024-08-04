@@ -4,6 +4,7 @@ using System.Reflection;
 using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+using _Key = Utility.Models.Key;
 
 namespace Utility.Repos
 {
@@ -63,7 +64,7 @@ namespace Utility.Repos
 
         public Task<object?> FindValue(IEquatable? equatable)
         {
-            if (equatable is not Key { } key)
+            if (equatable is not _Key { } key)
             {
                 throw new Exception("vsd s33322 vd");
             }
@@ -105,7 +106,7 @@ namespace Utility.Repos
 
         public Task Update(IEquatable equatable, object value)
         {
-            if (equatable is not Key key)
+            if (equatable is not _Key key)
             {
                 throw new Exception("vsd s33322 vd");
             }

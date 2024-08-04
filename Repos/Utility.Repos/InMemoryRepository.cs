@@ -4,6 +4,7 @@ using Utility.Conversions;
 using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+using _Key = Utility.Models.Key;
 
 namespace Utility.Repos
 {
@@ -130,20 +131,20 @@ namespace Utility.Repos
 
             await initialisationTask;
 
-            if (key is Key { Name: null, Type: null })
+            if (key is _Key { Name: null, Type: null })
             {
                 var tables = Tables.Where(a => a.Parent == parent);
                 List<IEquatable> childKeys = new();
                 foreach (var table in tables)
                 {
                     var clrType = TypeHelper.ToType(table.Type.Assembly, table.Type.Namespace, table.Type.Name);
-                    var childKey = new Key(table.Guid, table.Name, clrType);
+                    var childKey = new _Key(table.Guid, table.Name, clrType);
                     childKeys.Add(childKey);
                 }
                 return childKeys.ToArray();
             }
 
-            if (key is Key { Name: var name, Type: System.Type type })
+            if (key is _Key { Name: var name, Type: System.Type type })
             {
                 if (name == null)
                 {
@@ -156,7 +157,7 @@ namespace Utility.Repos
                     foreach (var table in tables)
                     {
                         var clrType = TypeHelper.ToType(singleType.Assembly, singleType.Namespace, singleType.Name);
-                        var childKey = new Key(table.Guid, table.Name, clrType);
+                        var childKey = new _Key(table.Guid, table.Name, clrType);
                         childKeys.Add(childKey);
                     }
                     return childKeys.ToArray();
@@ -179,12 +180,12 @@ namespace Utility.Repos
                         {
                             throw;
                         }
-                        return new[] { new Key(guid, name, type) };
+                        return new[] { new _Key(guid, name, type) };
                     }
                     if (tables.Count == 1)
                     {
                         var table = tables.Single();
-                        return new[] { new Key(table.Guid, name, type) };
+                        return new[] { new _Key(table.Guid, name, type) };
                     }
                     else
                     {
