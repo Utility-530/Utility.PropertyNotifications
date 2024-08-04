@@ -11,6 +11,7 @@ namespace Utility.Nodes
     {
         protected ReplaySubject<Changes.Change<T>> changes = new();
         private bool isExpanded;
+        private bool isSelected;
 
         public Node(bool isExpanded = true)
         {
@@ -35,6 +36,9 @@ namespace Utility.Nodes
                 //RefreshChildrenAsync();
             }
         }
+
+
+        public bool IsSelected { get => isSelected; set => isSelected = value; }
 
         public override async Task<bool> RefreshChildrenAsync()
         {
