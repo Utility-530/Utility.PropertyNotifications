@@ -25,18 +25,16 @@ namespace Utility.Trees.WPF
 
         private IDisposable disposable;
 
-
         public TreeViewer()
         {
-        
-         
             Initialise(this);
             this.Loaded += Viewer_Loaded;
 
             void Viewer_Loaded(object sender, RoutedEventArgs e)
             {
-                if (ViewModel != null)
+                if (ViewModel != null && IsInitialised == false)
                 {
+                    IsInitialised = true;
                     if (ViewModel is ILoad load)
                         load.Load();
                     disposable?.Dispose();
@@ -52,10 +50,13 @@ namespace Utility.Trees.WPF
             }
         }
 
+        public bool IsInitialised { get; set; }
+
+
         void Initialise(ItemsControl treeView)
         {
 
-            if(treeView is TreeView _treeView)
+            if (treeView is TreeView _treeView)
             {
                 _treeView.SelectedItemChanges().Subscribe(a =>
                 {
