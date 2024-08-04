@@ -29,7 +29,8 @@ namespace Utility.Trees.Demo.MVVM.MVVM
                 AddCommand = new Command(() => Add(instance)),
                 RemoveCommand = new Command(() => Remove(instance)),
                 Header = instance,
-                DataContext = instance
+                DataContext = instance,
+                IsExpanded = true
             };
             return item;
         }

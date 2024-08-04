@@ -3,8 +3,8 @@ using System;
 using System.Reflection;
 using System.Windows;
 using Utility.Descriptors;
-using Utility.Descriptors.Repositorys;
 using Utility.Nodes.Reflections;
+using Utility.Repos;
 using Utility.Trees.Demo.MVVM.Infrastructure;
 
 namespace Utility.Trees.Demo.MVVM
@@ -19,10 +19,6 @@ namespace Utility.Trees.Demo.MVVM
         public static Assembly[] Assemblies => new Assembly[] { typeof(Utility.WPF.Library.Class1).Assembly };
         public static Assembly[] SystemAssemblies => new Assembly[] { new Utility.Meta.SystemAssembly() };
 
-        ReflectionNode model;
-        //ViewModelTree viewModel;
-        //Tree view;
-        //Tree data;
 
         static App()
         {
@@ -32,7 +28,9 @@ namespace Utility.Trees.Demo.MVVM
         {
 
             SQLitePCL.Batteries.Init();
-            Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
+            Locator.CurrentMutable.RegisterConstant<ITreeRepository>(PipeRepository.Instance2);
+            Locator.CurrentMutable.RegisterConstant<PipeRepository>(PipeRepository.Instance2);
+            Locator.CurrentMutable.RegisterLazySingleton<PipeController>(() => new ());
 
             //{
             //    var rootPropertyDescriptor = new RootDescriptor(typeof(Model), name: "model");
@@ -45,7 +43,7 @@ namespace Utility.Trees.Demo.MVVM
 
 
             // ViewModel
-        
+
         }
     }
 }

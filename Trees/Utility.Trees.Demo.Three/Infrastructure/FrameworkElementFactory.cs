@@ -1,7 +1,6 @@
 ﻿using System.Reactive.Linq;
 using System;
 using System.Windows;
-using Utility.Descriptors.Repositorys;
 using Utility.Trees.Demo.MVVM.MVVM;
 using Utility.WPF.Reactives;
 using Views.Trees;
@@ -17,34 +16,63 @@ using Utility.WPF.Templates;
 using static Utility.Helpers.EnumHelper;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
+using Utility.Repos;
+using Splat;
+using Utility.Reactives;
+using Utility.Extensions;
+using Utility.PropertyNotifications;
+using Utility.WPF.Controls.Trees;
 
 namespace Utility.Trees.Demo.MVVM
 {
+
+    public class Table
+    {
+        public string Name { get; set; }
+    }
+
+    public class Model
+    {
+        public Table[] Tables { get; set; }
+        public Table SelectedTable { get; set; }
+    }
+
     public partial class App
     {
+        ReflectionNode model;
+
+        public Window CreateWindow2()
+        {
+            var window = new Window { Content = MainView.Instance };
+
+            model = new ReflectionNode(DescriptorFactory.CreateRoot(typeof(Model), Guid.Parse("76bca65d-6496-4a45-84f9-87705e665599"), "model").GetAwaiter().GetResult()) { };
+
+            var treeViewer = DataTreeViewer(model);
+
+            MainView.Instance.scrollviewer.Content = treeViewer;
+
+            return window;
+        }
+
+
         public Window CreateWindow()
         {
-            //IDisposable? disposable = null;
-
-
             MakeComboBox();
-
 
             var window = new Window { Content = MainView.Instance };
 
-
             MainView.Instance.combobox
-           .ValueChanges()
-           .Cast<Descriptors.Repositorys.Key>()
-           // type can be null because type from another assembly not loaded 
-           .Where(a => a.Type != null)
-           .Subscribe(a =>
-           {
+            .ValueChanges()
+            .Cast<Utility.Repos.Key>()
+            // type can be null because type from another assembly not loaded 
+            .Where(a => a.Type != null)
+            .Subscribe(a =>
+            {
 
-               MakeGrid(a.Type, a.Name, a.Guid);
-               //disposable?.Dispose();
-               //disposable = Disposable();
-           });
+                MakeGrid(a.Type, a.Name, a.Guid);
+                //disposable?.Dispose();
+                //disposable = Disposable();
+            });
 
             return window;
         }
@@ -57,12 +85,12 @@ namespace Utility.Trees.Demo.MVVM
             AutoCompleteConverter.Instance.Subscribe(a =>
             {
                 var _ = model;
-            
-                if(a is SuggestionPrompt { Value: IDescriptor { ParentType:{ } type } value, Filter: { } filter })
+
+                if (a is SuggestionPrompt { Value: IDescriptor { ParentType: { } type } value, Filter: { } filter })
                 {
                     //if(type == typeof(Connection) && model is Diagram)
                     //{
-                        
+
                     //}
                 }
             });
@@ -71,40 +99,61 @@ namespace Utility.Trees.Demo.MVVM
             //data = new() { Key = model.Key };
 
             //var uGrid = new UniformGrid() { Rows = 1 };
-     
+
             EventListener.Instance.Subscribe(a =>
             {
-                if (a is ClickChange { Node: IReadOnlyTree { Data: MemberDescriptor data } tree, Source:{ } source })
+                if (a is ClickChange { Node: IReadOnlyTree { Data: MemberDescriptor data } tree, Source: { } source })
                 {
                     MainView.Instance.propertygrid.Content = new PropertyGrid { SelectedObject = data };
                     Filter.Instance.Convert(tree);
                     DataTemplateSelector.Instance.SelectTemplate(tree, null);
-                    StyleSelector.Instance.SelectStyle(source, null);               
+                    StyleSelector.Instance.SelectStyle(source, null);
                 }
             });
 
-   
+            ReflectionNode? last = null;
+
+            Pipe.Instance.WithChangesTo(a => a.Next).Skip(1).Subscribe(a =>
+            {
+                if (a is QueueItem { Guid: { } guid } qi)
+                {
+                    var d = TreeExtensions.MatchDescendant(model, a => (a.Data as MemberDescriptor).Guid == guid);
+                    if (last is ReflectionNode node)
+                    {
+                        node.IsSelected = false;
+                        node.RaisePropertyChanged(nameof(ViewModelTree.IsSelected));
+
+                    }
+                    if (d is ReflectionNode tree)
+                    {
+                        last = tree;
+                        tree.IsSelected = true;
+                        tree.RaisePropertyChanged(nameof(ViewModelTree.IsSelected));
+                    }
+                }
+            });
+
             if (false)
             {
                 //uGrid.Children.Add(ViewModelTreeViewer(viewModel));
                 //uGrid.Children.Add(ViewTreeViewer(view));
             }
-            var x = DataTreeViewer(model); ;
+            var treeViewer = DataTreeViewer(model);
 
-            MainView.Instance.scrollviewer.Content = x;
+            MainView.Instance.scrollviewer.Content = treeViewer;
 
 
             //var _tr = ModelTreeViewer(model);
 
             //_tr.Style = this.Resources["A"] as Style;
-       
-            //MainView.Instance.modeltree_ScrollViewer.Content = _tr;
 
-            MainView.Instance.filtertree.Content = x;
+            //MainView.Instance.modeltree_ScrollViewer.Content = _tr;
+            MainView.Instance.PipeView.DataContext = Splat.Locator.Current.GetService<PipeController>();
+            MainView.Instance.filtertree.Content = treeViewer;
             MainView.Instance.filtertree.ContentTemplate = this.Resources["TVF"] as DataTemplate;
-            MainView.Instance.datatemplatetree.Content = x;
+            MainView.Instance.datatemplatetree.Content = treeViewer;
             MainView.Instance.datatemplatetree.ContentTemplate = this.Resources["DTS"] as DataTemplate;
-            MainView.Instance.styletree.Content = x;
+            MainView.Instance.styletree.Content = treeViewer;
             MainView.Instance.styletree.ContentTemplate = this.Resources["SS"] as DataTemplate;
 
 
@@ -112,9 +161,9 @@ namespace Utility.Trees.Demo.MVVM
 
         void MakeComboBox()
         {
-            var rootKeys = TreeRepository.Instance.SelectKeys().GetAwaiter().GetResult();
+            var rootKeys = Splat.Locator.Current.GetService<ITreeRepository>().SelectKeys().GetAwaiter().GetResult();
             MainView.Instance.combobox.ItemsSource = rootKeys;
-            MainView.Instance.combobox.DisplayMemberPath = nameof(Descriptors.Repositorys.Key.Name);
+            MainView.Instance.combobox.DisplayMemberPath = nameof(Utility.Repos.Key.Name);
             MainView.Instance.combobox.SelectedIndex = 0;
         }
 

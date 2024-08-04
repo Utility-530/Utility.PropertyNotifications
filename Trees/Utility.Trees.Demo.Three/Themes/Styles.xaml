@@ -32,10 +32,27 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TreeViewItem}">
-                    <ContentPresenter x:Name="PART_Header"
+                    <Border x:Name="Bd"
+       
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  Padding="{TemplateBinding Padding}">
+                        <ContentPresenter x:Name="PART_Header"
                                       Width="200"
                                       ContentSource="Header"
                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="BorderBrush" Value="LightGreen"  TargetName="Bd"/>
+                            <Setter Property="BorderThickness" Value="1"  TargetName="Bd"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="BorderBrush" Value="LightBlue"  TargetName="Bd"/>
+                            <Setter Property="BorderThickness" Value="2"  TargetName="Bd"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -46,29 +63,42 @@
         <Setter Property="Template" >
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TreeViewItem}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Rectangle HorizontalAlignment="Stretch" Stroke="{TemplateBinding Background}" Fill="LightGray"
+                    <Border x:Name="Bd"
+ 
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  Padding="{TemplateBinding Padding}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Rectangle HorizontalAlignment="Stretch" Stroke="{TemplateBinding Background}" Fill="LightGray"
+                                   x:Name="Rectangle"
                                    StrokeThickness="1"
                                    VerticalAlignment="Stretch" MinWidth="40" Height="2"  Margin="2"/>
-                        <ItemsPresenter Grid.Row="1"/>
+                            <ItemsPresenter Grid.Row="1"/>
 
-                        <UniformGrid Rows="1" Grid.Row="2" Background="GhostWhite" Margin="4">
-                            <btns:PlusGeometryButton x:Name="PlusButton"  Width="16" Height="16"   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />
-                            <!--<btns:MinusGeometryButton x:Name="MinusButton"  Width="16" Height="16"    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />-->
-                        </UniformGrid>
-                    </Grid>
+                            <UniformGrid Rows="1" Grid.Row="2" Background="GhostWhite" Margin="4">
+                                <btns:PlusGeometryButton x:Name="PlusButton"  Width="16" Height="16"   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />
+                                <!--<btns:MinusGeometryButton x:Name="MinusButton"  Width="16" Height="16"    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />-->
+                            </UniformGrid>
+                        </Grid>
+                    </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="LightGreen"/>
+                            <Setter Property="BorderBrush" Value="LightGreen"  TargetName="Bd"/>
+                            <Setter Property="BorderThickness" Value="1"  TargetName="Bd"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="BorderBrush" Value="LightBlue"  TargetName="Bd"/>
+                            <Setter Property="BorderThickness" Value="2"  TargetName="Bd"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -80,6 +110,13 @@
         <Setter Property="Template" >
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                    <Border x:Name="Bd"
+      
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  Padding="{TemplateBinding Padding}">
+  
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"></ColumnDefinition>
@@ -98,9 +135,16 @@
                             <btns:MinusGeometryButton x:Name="MinusButton"  Width="16" Height="16"    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />
                         </UniformGrid>
                     </Grid>
+                    </Border>
+
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="LightGreen"/>
+                        <Trigger Property="IsMouseOver" Value="True" >
+                            <Setter Property="BorderBrush" Value="LightGreen"  TargetName="Bd"/>
+                            <Setter Property="BorderThickness" Value="1"  TargetName="Bd"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="BorderBrush" Value="LightBlue"  TargetName="Bd"/>
+                            <Setter Property="BorderThickness" Value="2"  TargetName="Bd"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -113,12 +157,21 @@
         <Setter Property="Template" >
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TreeViewItem}">
-                    <Border BorderThickness="2" BorderBrush="{TemplateBinding Background}">  
+                    <Border x:Name="Bd"      
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  Padding="{TemplateBinding Padding}">
                         <ItemsPresenter />
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="LightGreen"/>
+                            <Setter Property="BorderBrush" Value="LightGreen"  TargetName="Bd"/>
+                            <Setter Property="BorderThickness" Value="1"  TargetName="Bd"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="BorderBrush" Value="LightBlue"  TargetName="Bd"/>
+                            <Setter Property="BorderThickness" Value="2"  TargetName="Bd"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
