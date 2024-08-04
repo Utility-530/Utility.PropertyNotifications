@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
+using Utility.PropertyNotifications;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Trees
@@ -15,7 +16,7 @@ namespace Utility.Trees
     /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
     /// </summary>
     /// <typeparam name="object"></typeparam>
-    public class Tree : ITree, INotifyPropertyChanged, IEquatable, IParent<ITree>
+    public class Tree : NotifyPropertyClass, ITree, IEquatable, IParent<ITree>
     {
         private IList items;
         protected ITree? parent;
