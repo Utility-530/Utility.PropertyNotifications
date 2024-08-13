@@ -8,12 +8,13 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Reactive.Disposables;
 using Utility.Helpers;
+using System.Reactive.Threading.Tasks;
 
 namespace Utility.Repos
 {
     public readonly record struct Duplication(Guid Old, Guid New);
     public readonly record struct DateValue(DateTime DateTime, object Value);
-    public readonly record struct Key(Guid Guid, Guid ParentGuid, Type Type, string Name, int? Index)
+    public readonly record struct Key(Guid Guid, Guid ParentGuid, object Instance, string Name, int? Index)
     {
         public override string ToString()
         {
@@ -118,7 +119,7 @@ namespace Utility.Repos
         //    return Task.FromResult((IReadOnlyCollection<Key>)childKeys);
         //}
 
-        public Task<IReadOnlyCollection<Key>> SelectKeys(Guid? parentGuid = null, string? name = null, string? table_name = default)
+        public virtual IObservable<IReadOnlyCollection<Key>> SelectKeys(Guid? parentGuid = null, string? name = null, string? table_name = default)
         {
             List<Relationships> tables;
 
@@ -130,12 +131,19 @@ namespace Utility.Repos
             else if (parentGuid.HasValue)
             {
                 table_name = tablelookup[parentGuid.Value];
-                string query = $"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}'" + (name == null ? string.Empty : $" AND Name = '{name}' ORDER BY {nameof(Relationships._Index)}");
+                string query = $"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}'" + 
+                                (name == null ? string.Empty : $" AND Name = '{name}'") +
+                                $" ORDER BY {nameof(Relationships._Index)}";
                 tables = connection.Query<Relationships>(query);
             }
             else
             {
                 tables = connection.Table<Relationships>().ToList();
+                int i = 0;
+                foreach(var table in tables)
+                {
+                    table._Index = i++;
+                }
             }
             List<Key> selections = new();
             foreach (var table in tables)
@@ -147,12 +155,19 @@ namespace Utility.Repos
                 System.Type type = null;
                 if (table.TypeId.HasValue)
                     type = ToType(table.TypeId.Value);
-                //if (type == null)
-                //    throw new Exception("3 333 ff");
-                tablelookup[table.Guid] = table.Name;
-                selections.Add(new(table.Guid, table.Parent, type, table.Name, table._Index));
+
+                object item = null;
+                if (type?.IsValueType == true|| type?.GetConstructor(System.Type.EmptyTypes) != null)
+                {
+                    item = Activator.CreateInstance(type);
+
+                }
+                    //if (type == null)
+                    //    throw new Exception("3 333 ff");
+                    tablelookup[table.Guid] = table.Name;
+                selections.Add(new(table.Guid, table.Parent, item, table.Name, table._Index));
             }
-            return Task.FromResult((IReadOnlyCollection<Key>)selections);
+            return Observable.Return((IReadOnlyCollection<Key>)selections);
         }
 
         public IEnumerable<Duplication> Duplicate(Guid oldGuid, Guid? newParentGuid = default)
@@ -191,51 +206,68 @@ namespace Utility.Repos
             }
         }
 
-        public async Task<Guid> Find(Guid parentGuid, string name, System.Type? type = null, int? index = null)
+        public virtual IObservable<Guid> Find(Guid parentGuid, string name, System.Type? type = null, int? index = null)
         {
+
             if (parentGuid == default)
                 throw new Exception($"{nameof(parentGuid)} is default");
-
-            await initialisationTask;
-
-            var table_name = tablelookup[parentGuid];
-
-            if (parentGuid == Guid.Empty)
+            return Observable.Create<Guid>(observer =>
             {
+                return initialisationTask.ToObservable()
+                    .Subscribe(a =>
+                    {
+                        var table_name = tablelookup[parentGuid];
 
-            }
-            var typeId = type != null ? (int?)TypeId(type) : null;
-            var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' AND Name = '{name}' AND _Index {ToComparisonAndValue(index)} AND TypeId {ToComparisonAndValue(typeId)}");
-            if (tables.Count == 0)
-            {
-                if (await InsertByParent(parentGuid, name, table_name, typeId, index) is Guid guid)
-                    return guid;
-                else
-                    throw new Exception("* 44 fd3323");
-            }
-            else if (tables.Count == 1)
-            {
-                var table = tables.Single();
-                tablelookup[table.Guid] = table_name;
-                return table.Guid;
-            }
-            else
-            {
-                throw new Exception("3e909re 4323");
-            }
-            throw new Exception("09re 4323");
+                        if (parentGuid == Guid.Empty)
+                        {
+
+                        }
+                        var typeId = type != null ? (int?)TypeId(type) : null;
+                        var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' AND Name = '{name}' AND _Index {ToComparisonAndValue(index)} AND TypeId {ToComparisonAndValue(typeId)}");
+                        if (tables.Count == 0)
+                        {
+                            InsertByParent(parentGuid, name, table_name, typeId, index)
+                            .Subscribe(a =>
+                            {
+                                if (a is Guid guid)
+                                    observer.OnNext(guid);
+                                else
+                                    throw new Exception("* 44 fd3323");
+                                observer.OnCompleted();
+                            });
+                        }
+                        else if (tables.Count == 1)
+                        {
+                            var table = tables.Single();
+                            tablelookup[table.Guid] = table_name;
+                            observer.OnNext(table.Guid);
+                            observer.OnCompleted();
+                        }
+                        else
+                        {
+                            throw new Exception("3e909re 4323");
+                        }
+                        //throw new Exception("09re 4323");
+                    });
+            });
         }
 
-        public async Task<Guid> InsertByParent(Guid parentGuid, string name, string? table_name = null, int? typeId = null, int? index = null)
+        public IObservable<Guid> InsertByParent(Guid parentGuid, string name, string? table_name = null, int? typeId = null, int? index = null)
         {
-            await initialisationTask;
-            table_name ??= tablelookup[parentGuid];
-            var guid = Guid.NewGuid();
-            tablelookup[guid] = table_name;
-            //var i = connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
-            var query = $"INSERT INTO {table_name} (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {ToValue(index)}, '{parentGuid}', '{DateTime.Now}', {ToValue(typeId)});";
-            var i = connection.Execute(query);
-            return guid;
+            return Observable.Create<Guid>(observer =>
+            {
+                return initialisationTask.ToObservable().Subscribe(a =>
+                {
+                    table_name ??= tablelookup[parentGuid];
+                    var guid = Guid.NewGuid();
+                    tablelookup[guid] = table_name;
+                    //var i = connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
+                    var query = $"INSERT INTO {table_name} (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {ToValue(index)}, '{parentGuid}', '{DateTime.Now}', {ToValue(typeId)});";
+                    var i = connection.Execute(query);
+                    observer.OnNext(guid);
+                });
+            });
+         
         }
 
 
@@ -263,7 +295,7 @@ namespace Utility.Repos
         //}
 
 
-        public Task<Key> InsertRoot(Guid guid, string name, System.Type type)
+        public IObservable<Key> InsertRoot(Guid guid, string name, System.Type type)
         {
 
             // create table if not exists
@@ -292,7 +324,7 @@ namespace Utility.Repos
                 tablelookup[item.Guid] = name;
             }
 
-            return Task.FromResult(new Key(guid, default, type, name, 0));
+            return Observable.Return(new Key(guid, default, type, name, 0));
         }
 
 
