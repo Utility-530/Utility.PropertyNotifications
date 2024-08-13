@@ -92,7 +92,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:Type}">
-        <t:TypeSelector x:Name="TypeSelector" Type="{Binding Value, Mode=TwoWay, Converter={x:Static conv:DefaultConverter.Instance}}">
+        <t:TypeSelector x:Name="TypeSelector" Type="{Binding Value, Mode=TwoWay}">
             <i:Interaction.Behaviors>
                 <infra:EntryAssemblyBehavior/>
             </i:Interaction.Behaviors>
