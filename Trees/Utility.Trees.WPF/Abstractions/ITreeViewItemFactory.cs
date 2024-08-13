@@ -4,7 +4,7 @@ namespace Utility.Trees.WPF.Abstractions
 {
     public interface ITreeViewItemFactory
     {
-        HeaderedItemsControl Make(object instance);
+        HeaderedItemsControl Make(object instance, ItemsControl parent);
 
     }
 }

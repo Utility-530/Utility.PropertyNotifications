@@ -12,9 +12,9 @@ namespace Views.Trees
     {
         public IDisposable Build(ItemsControl treeView, IItems rootViewModel, ITreeViewItemFactory factory, IValueConverter ItemsPanelConverter, StyleSelector styleSelector, DataTemplateSelector dataTemplateSelector, ITreeViewFilter filter)
         {
-            return TreeExtensions.ExploreTree(treeView.Items, (itemcollection, viewModel) =>
+            return TreeExtensions.ExploreTree(treeView, t =>t.Items, (itemcollection, viewModel, treeView) =>
             {
-                var treeViewItem = factory.Make(viewModel);
+                var treeViewItem = factory.Make(viewModel, treeView);
 
                 treeViewItem.ItemContainerStyleSelector = styleSelector;
                 var binding = new Binding()
@@ -29,12 +29,18 @@ namespace Views.Trees
                 treeViewItem.HeaderTemplateSelector = dataTemplateSelector;
 
                 itemcollection.Add(treeViewItem);
-                return treeViewItem.Items;
+                itemcollection.CurrentChanged += Itemcollection_CurrentChanged;
+                return treeViewItem;
             },
             (itemCollection, node) => itemCollection.RemoveAt(itemCollection.IndexOf(a=> (a as TreeViewItem)?.Header, node)),
             a => a.Clear(),
             rootViewModel,
             filter.Convert);
+        }
+
+        private void Itemcollection_CurrentChanged(object? sender, EventArgs e)
+        {
+   
         }
 
         public static TreeViewBuilder Instance { get; } = new();
