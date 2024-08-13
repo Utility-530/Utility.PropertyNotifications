@@ -33,6 +33,7 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
             {
                 if (a is { Value: { } _value } x)
                 {
+                    value = _value;
                     RaisePropertyChanged(_value);
                 }
             });

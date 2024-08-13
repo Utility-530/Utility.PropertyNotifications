@@ -13,6 +13,7 @@
 
     public interface ICollectionDescriptor : IDescriptor, ICount
     {
+        public Type ElementType { get; }
     }
 
     public interface ICollectionHeadersDescriptor : ICollectionItemDescriptor
@@ -41,6 +42,6 @@
     }
     public interface IReferenceDescriptor : IDescriptor, IChildren
     {
-
+        object Instance { get; }
     }
 }

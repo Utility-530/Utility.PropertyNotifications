@@ -9,12 +9,11 @@ public record PropertyDescriptor(Descriptor Descriptor, object Instance) : BaseP
         {
             return Observable.Create<Change<IDescriptor>>(async observer =>
             {
-                //var headerDescriptor = new HeaderDescriptor(Descriptor.PropertyType, Descriptor.ComponentType, Descriptor.Name);
-                //observer.OnNext(new(headerDescriptor, Changes.Type.Add));
-
-                var descriptor = await DescriptorFactory.ToValue(Instance, Descriptor, Guid);
-                observer.OnNext(new(descriptor, Changes.Type.Add));
-                return Disposable.Empty;
+                return DescriptorFactory.ToValue(Instance, Descriptor, Guid)
+                 .Subscribe(descriptor =>
+                 {
+                     observer.OnNext(new(descriptor, Changes.Type.Add));
+                 });
             });
         }
     }
@@ -45,7 +44,15 @@ public abstract record ValuePropertyDescriptor(Descriptor Descriptor, object Ins
     {
         if (Descriptor.IsReadOnly == true)
             return;
-        Descriptor.SetValue(Instance, value);
+        if(Descriptor.PropertyType == typeof(Type) || Descriptor.PropertyType == value.GetType())
+        {
+            Descriptor.SetValue(Instance, value);
+        }
+        else
+        {
+            throw new Exception("ds fsd33r dv331``");
+        }
+        Value = value;
         base.RaisePropertyChanged(nameof(Value));
     }
 

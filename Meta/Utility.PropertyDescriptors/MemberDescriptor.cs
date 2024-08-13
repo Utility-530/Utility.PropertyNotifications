@@ -77,7 +77,7 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
                 }
             }, e =>
             {
-
+                throw e;
             });
     }
 }

@@ -166,8 +166,11 @@ internal partial record CollectionItemReferenceDescriptor :  ReferenceDescriptor
                 var descriptors = TypeDescriptor.GetProperties(Instance);
                 foreach (Descriptor descriptor in descriptors)
                 {
-                    var _descriptor = await DescriptorFactory.ToValue(Instance, descriptor, Guid);
-                    observer.OnNext(new(_descriptor, Changes.Type.Add));
+                    DescriptorFactory.ToValue(Instance, descriptor, Guid)
+                    .Subscribe(_descriptor =>
+                    {
+                        observer.OnNext(new(_descriptor, Changes.Type.Add));
+                    });
                 }
                 return Disposable.Empty;
             });

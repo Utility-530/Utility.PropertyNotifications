@@ -1,7 +1,10 @@
 ﻿
+using Bogus.DataSets;
 using Splat;
+using System;
 using System.Diagnostics;
 using Utility.Repos;
+using Utility.Trees;
 
 namespace Utility.Descriptors;
 
@@ -21,18 +24,44 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                 }
                 return Observable.Create<Change<IDescriptor>>(async observer =>
                 {
+                    CompositeDisposable disp = new();
+                    if(inst is null)
+                    {
+                        repo.SelectKeys(this.Guid)
+                        .Subscribe(async a =>
+                        {
+                            foreach (var table in a)
+                            {
+                                if (table.Instance is { } item)
+                                {
+                                    DescriptorFactory.CreateRoot(item.GetType(), table.Guid, table.Name)
+                                    .Subscribe(root =>
+                                    {
+                                        observer.OnNext(new(default, Changes.Type.Reset));
+                                        observer.OnNext(new(root, Changes.Type.Add));
+                                    });
+                                }
+                            }
+                        });
+                    }
                     if (inst is object obj)
                     {
                         var propertiesDescriptor = new PropertiesDescriptor(Descriptor, inst);
-                        var pguid = await repo.Find(this.Guid, propertiesDescriptor.Name);
-                        observer.OnNext(new(propertiesDescriptor with { Guid = pguid }, Changes.Type.Add));
+                        repo.Find(this.Guid, propertiesDescriptor.Name).Subscribe(pguid =>
+                        {
+                            observer.OnNext(new(propertiesDescriptor with { Guid = pguid }, Changes.Type.Add));
+                        }).DisposeWith(disp);
                     }
 
                     if (inst is IEnumerable enumerable && inst is not string s && inst.GetType() is Type _type && _type.GetCollectionElementType() is Type elementType)
                     {
                         var collectionDescriptor = new CollectionDescriptor(Descriptor, elementType, enumerable);
-                        var cguid = await repo.Find(this.Guid, collectionDescriptor.Name);
-                        observer.OnNext(new(collectionDescriptor with { Guid = cguid }, Changes.Type.Add));
+                        repo
+                        .Find(this.Guid, collectionDescriptor.Name)
+                        .Subscribe(cguid =>
+                        {
+                            observer.OnNext(new(collectionDescriptor with { Guid = cguid }, Changes.Type.Add));
+                        }).DisposeWith(disp);
                     }
 
                     //var methodsDescriptor = new MethodsDescriptor(Descriptor, inst);

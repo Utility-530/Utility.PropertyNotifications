@@ -1,5 +1,6 @@
 ﻿
 using Splat;
+using Utility.Reactives;
 using Utility.Repos;
 
 namespace Utility.Descriptors;
@@ -51,13 +52,15 @@ internal record MethodDescriptor : MemberDescriptor, IMethodDescriptor
                 .GetParameters()
                 .Select(a => new ParameterDescriptor(a, dictionary)).ToArray();
 
-
                 foreach (var paramDescriptor in descriptors)
                 {
-                    var guid = await Locator.Current.GetService<ITreeRepository>().Find(this.Guid, paramDescriptor.Name, paramDescriptor.Type);
-                    paramDescriptor.Guid = guid;
-                    dictionary[paramDescriptor.ParameterInfo.Position] = GetValue(paramDescriptor.ParameterInfo);
-                    observer.OnNext(new Change<IDescriptor>(paramDescriptor, Changes.Type.Add));
+                    Locator.Current.GetService<ITreeRepository>().Find(this.Guid, paramDescriptor.Name, paramDescriptor.Type)
+                    .Subscribe(guid =>
+                    {
+                        paramDescriptor.Guid = guid;
+                        dictionary[paramDescriptor.ParameterInfo.Position] = GetValue(paramDescriptor.ParameterInfo);
+                        observer.OnNext(new Change<IDescriptor>(paramDescriptor, Changes.Type.Add));
+                    });
                 }
                 return Disposable.Empty;
             });

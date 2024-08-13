@@ -26,7 +26,7 @@ namespace Utility.Descriptors
         public static string _Name => "Collection";
 
         public override string? Name => _Name;
-        
+
         public override IObservable<object> Children
         {
             get
@@ -35,7 +35,13 @@ namespace Utility.Descriptors
                 {
                     AddHeaderDescriptor(observer, ElementType, Instance.GetType());
                     AddFromInstance(observer);
-                    AddFromRefreshes(observer);
+                    AddFromRefreshes(observer);            
+                    repo
+                    .SelectKeys(Guid)
+                    .Subscribe(tables =>
+                    {
+                        AddFromDataSource(observer, tables);
+                    });
                     return AddFromChanges(observer);
                 });
 
@@ -97,8 +103,7 @@ namespace Utility.Descriptors
                     initialise.Initialise();
                 }
             });
-            var tables = await repo.SelectKeys(Guid);
-            AddFromDataSource(observer, tables);
+    
         }
 
         public override void Finalise(object? item = null)
@@ -119,22 +124,28 @@ namespace Utility.Descriptors
             replaySubject.Subscribe(observer);
         }
 
-        async void AddHeaderDescriptor(IObserver<Change<IDescriptor>> observer, Type elementType, Type componentType)
+        void AddHeaderDescriptor(IObserver<Change<IDescriptor>> observer, Type elementType, Type componentType)
         {
             var descriptor = new CollectionHeadersDescriptor(elementType, componentType);
-            var _guid = await repo.Find(Guid, elementType.Name, elementType, 0);
-            descriptor.Guid = _guid;
-            observer.OnNext(new(descriptor, Changes.Type.Add));
+            repo.Find(Guid, elementType.Name, elementType, 0)
+                .Subscribe(_guid =>
+                {
+                    descriptor.Guid = _guid;
+                    observer.OnNext(new(descriptor, Changes.Type.Add));
+                });
         }
 
-        async void AddFromInstance(IObserver<Change<IDescriptor>> observer)
+        void AddFromInstance(IObserver<Change<IDescriptor>> observer)
         {
             int i = 1;
             foreach (var item in Collection)
             {
                 var type = item.GetType();
-                var _guid = await repo.Find(Guid, type.Name, type, i);
+                //repo.Find(Guid, type.Name, type, i)
+                //    .Subscribe(a =>
+                //{
                 Next(observer, item, item.GetType(), Type, Changes.Type.Add, i++);
+                //});
             }
         }
 
@@ -143,11 +154,8 @@ namespace Utility.Descriptors
             foreach (var table in tables)
             {
                 //&& descriptors.SingleOrDefault(a => a.Index == table.Index) is not { } x
-                if (table.Index is not 0 && table.Type is { } elementType)
+                if (table.Index is not 0 && table.Instance is { } item)
                 {
-                    if (elementType.IsValueType || elementType.GetConstructor(System.Type.EmptyTypes) != null)
-                    {
-                        var item = Activator.CreateInstance(elementType);
                         if (Instance is IList collection)
                         {
                             if (collection.Count < table.Index)
@@ -158,20 +166,18 @@ namespace Utility.Descriptors
                         {
                             throw new Exception(" s898d");
                         }
-                        Next(observer, item, elementType, Type, Changes.Type.Add, table.Index.Value);
-                    }
-                    else
-                    {
-                        throw new Exception("s;)dfsd979797");
-                    }
+                        Next(observer, item, item.GetType(), Type, Changes.Type.Add, table.Index.Value);
                 }
             }
         }
 
-        async void Next(IObserver<Change<IDescriptor>> observer, object item, Type type, Type parentType, Changes.Type changeType, int i)
+        void Next(IObserver<Change<IDescriptor>> observer, object item, Type type, Type parentType, Changes.Type changeType, int i)
         {
-            var descriptor = await DescriptorFactory.CreateItem(item, i, type, parentType, Guid);
-            observer.OnNext(new(descriptor, changeType));
+            DescriptorFactory.CreateItem(item, i, type, parentType, Guid)
+                .Subscribe(descriptor =>
+                {
+                    observer.OnNext(new(descriptor, changeType));
+                });
         }
     }
 }
