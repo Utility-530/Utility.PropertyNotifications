@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using Utility.Interfaces.NonGeneric;
+﻿using System.Collections.ObjectModel;
 
 namespace Utility.Collections
 {
@@ -11,14 +8,17 @@ namespace Utility.Collections
 
         public ThreadSafeObservableCollection(IEnumerable<T> collection) : base(collection)
         {
+            Context = SynchronizationContext.Current;
         }
 
         public ThreadSafeObservableCollection(List<T> list) : base(list)
         {
+            Context = SynchronizationContext.Current;
         }
 
         public ThreadSafeObservableCollection() : base()
         {
+            Context = SynchronizationContext.Current;
         }
 
         #region Collection Events
