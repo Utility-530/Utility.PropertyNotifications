@@ -39,8 +39,8 @@
                                     VerticalAlignment="Center"
                                     Data="{Binding Data, RelativeSource={RelativeSource TemplatedParent}}"
                                     Stretch="Uniform"
-                                    Fill="{StaticResource NormalForegroundBrush}"
-                                    Stroke="{StaticResource NormalForegroundBrush}"
+                                    Fill="{TemplateBinding Foreground}"
+                                    Stroke="{TemplateBinding Foreground}"
                                     StrokeEndLineCap="Square"
                                     StrokeStartLineCap="Square"
                                     StrokeThickness="12">
