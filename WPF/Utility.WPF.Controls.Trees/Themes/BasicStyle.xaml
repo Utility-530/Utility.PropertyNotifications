@@ -78,8 +78,10 @@
        TargetType="{x:Type TreeViewItem}">
         <Setter Property="Background"
           Value="Transparent" />
-        <!--<Setter Property="IsSelected"
-          Value="{Binding IsSelected}" />-->
+        <Setter Property="IsSelected"
+          Value="{Binding IsSelected, Mode=TwoWay}" />
+        <Setter Property="IsExpanded"
+          Value="{Binding IsExpanded, Mode=TwoWay}" />
         <Setter Property="HorizontalContentAlignment"
           Value="{Binding Path=HorizontalContentAlignment,
     RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
@@ -261,6 +263,9 @@
                             <Setter Property="Background" Value="Green"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="LightBlue"/>
+                            <Setter TargetName="Expander"
+                                    Property="Foreground" Value="LightBlue" />
                             <Setter Property="Background" Value="Orange"/>
                         </Trigger>
                         <Trigger Property="IsMouseCaptured" Value="True">
