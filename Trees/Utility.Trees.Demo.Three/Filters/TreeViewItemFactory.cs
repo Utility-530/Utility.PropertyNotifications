@@ -5,10 +5,8 @@ using System.Windows.Controls;
 using Utility.Commands;
 using Utility.Descriptors;
 using Utility.Interfaces;
-using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
-using Utility.Keys;
-using Utility.PropertyNotifications;
+using Utility.Nodes;
 using Utility.Trees.Abstractions;
 using Utility.Trees.WPF.Abstractions;
 using Utility.WPF.Controls.Trees;
@@ -19,21 +17,39 @@ namespace Utility.Trees.Demo.MVVM.MVVM
     public class TreeViewItemFactory : ITreeViewItemFactory
     {
         Random random = new();
-        public HeaderedItemsControl Make(object instance)
+        public HeaderedItemsControl Make(object instance, ItemsControl parent)
         {
-
-            var item = new CustomTreeViewItem
+            HeaderedItemsControl item = null;
+            if (instance is Node node && node.Data as ICollectionDescriptor != null && (node.Data as ICollectionDescriptor).ElementType == typeof(Table))
             {
-                //AddCommand = new Command(() => { if (instance is ITree { } item) item.Add(new ModelTree(Helpers.Names.Random(random), Guid.NewGuid(), ((GuidKey)item.Key).Value)); }),
-                //RemoveCommand = new Command(() => { if (instance is IParent<ITree> { Parent: { } parent }) parent.Remove(instance); }),
-                AddCommand = new Command(() => Add(instance)),
-                RemoveCommand = new Command(() => Remove(instance)),
-                Header = instance,
-                DataContext = instance,
-                IsExpanded = true
-            };
+
+                item = new ComboTreeViewItem
+                {
+                    Header = instance,
+                    DataContext = instance,
+                    IsExpanded = true
+                };
+            }
+            else
+            {
+                item = new CustomTreeViewItem
+                {
+                    //AddCommand = new Command(() => { if (instance is ITree { } item) item.Add(new ModelTree(Helpers.Names.Random(random), Guid.NewGuid(), ((GuidKey)item.Key).Value)); }),
+                    //RemoveCommand = new Command(() => { if (instance is IParent<ITree> { Parent: { } parent }) parent.Remove(instance); }),
+                    AddCommand = new Command(() => Add(instance)),
+                    RemoveCommand = new Command(() => Remove(instance)),
+                    Header = instance,
+                    DataContext = instance,
+                    IsExpanded = true
+                };
+            }
+            if(item is TreeViewItem treeViewItem)
+            {
+                treeViewItem.Selected += (s,e)=> { if (parent is ISelection selection) selection.Selection = treeViewItem; };
+            }
             return item;
         }
+
 
         private void Remove(object instance)
         {

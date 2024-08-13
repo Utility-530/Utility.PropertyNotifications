@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using Utility.Helpers.NonGeneric;
 using Utility.Models;
 
 namespace Utility.Trees.Demo.MVVM
@@ -31,18 +33,28 @@ namespace Utility.Trees.Demo.MVVM
 
         public void OnNext(T value)
         {
-            foreach (var x in Collection)
+            if(Collection.Any()==false)
+            {
+
+            }
+            foreach (var x in Collection.ToArray())
                 x.OnNext(value);
         }
 
         public IDisposable Subscribe(IObserver<T> observer)
         {
-            return new Disposer<T>(Collection, observer);
+     
+            var disposer = new Disposer<T>(Collection, observer);
+            if (Collection.Any() == false)
+            {
+
+            }
+            return disposer;
         }
 
         public void OnCompleted()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void OnError(Exception error)

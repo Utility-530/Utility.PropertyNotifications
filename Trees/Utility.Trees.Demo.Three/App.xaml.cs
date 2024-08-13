@@ -6,6 +6,7 @@ using Utility.Descriptors;
 using Utility.Nodes.Reflections;
 using Utility.Repos;
 using Utility.Trees.Demo.MVVM.Infrastructure;
+using Utility.Trees.Demo.MVVM.Views;
 
 namespace Utility.Trees.Demo.MVVM
 {
@@ -31,13 +32,16 @@ namespace Utility.Trees.Demo.MVVM
             Locator.CurrentMutable.RegisterConstant<ITreeRepository>(PipeRepository.Instance2);
             Locator.CurrentMutable.RegisterConstant<PipeRepository>(PipeRepository.Instance2);
             Locator.CurrentMutable.RegisterLazySingleton<PipeController>(() => new ());
+            Locator.CurrentMutable.RegisterLazySingleton<Model>(() => new ());
 
             //{
             //    var rootPropertyDescriptor = new RootDescriptor(typeof(Model), name: "model");
             //    DescriptorFactory.CreateRoot(rootPropertyDescriptor, guid).Wait();
             //}
 
-            Window window = CreateWindow();
+            InitialiseModel();
+            //InitialiseModelOld();
+            var window = new Window { Content = MainView.Instance };
             window.Show();
             base.OnStartup(e);
 

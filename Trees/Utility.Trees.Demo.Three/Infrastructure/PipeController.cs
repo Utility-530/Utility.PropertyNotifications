@@ -112,56 +112,61 @@ namespace Utility.Trees.Demo.MVVM
 
     public class Pipe : BaseViewModel, IObserver<Unit>
     {
-        private readonly TaskFactory factory;
-        //private readonly DispatcherTimer timer = new DispatcherTimer();
-        private readonly Timer timer;
+        //private readonly TaskFactory factory;
+        ////private readonly DispatcherTimer timer = new DispatcherTimer();
+        //private readonly Timer timer;
 
         public ObservableCollection<QueueItem> Pending { get; } = new();
         public ObservableCollection<QueueItem> Completed { get; } = new();
         public QueueItem Last { get; set; }
-        public QueueItem Next
-        {
-            get
-            {
-                var item = Pending.FirstOrDefault();
-                return item;
-            }
-        }
+        public QueueItem Next { get; set; }
 
         Pipe()
         {
 
-            factory = new TaskFactory(new ConstrainedTaskScheduler() { MaximumTaskCount = 1 });
-           
+            //factory = new TaskFactory(new ConstrainedTaskScheduler() { MaximumTaskCount = 1 });
+
         }
 
 
         public void Queue(QueueItem queueItem)
         {
-            Pending.Add(queueItem);  
+            if (Next == null)
+            {
+                Next = queueItem;
+                this.OnPropertyChanged(nameof(Next));
+
+            }
+            else
+                Pending.Add(queueItem);
         }
 
         public void OnNext(Unit unit)
         {
             lock (Pending)
-                if (Pending.ToArray().Any())
+                if (Next!=null)
                 //if (Pending.TryDequeue(out var item))
                 {
                     Last = Next;
-                    this.OnPropertyChanged(nameof(Next));
-                    Pending.RemoveAt(0);
-                    
-                    factory.StartNew(() => Splat.Locator.Current.GetService<PipeRepository>().Select(Last.Guid))
-                        .ContinueWith(tsk =>
-                        {
-                            Completed.Add(Last);
-                        }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext())
-                        .ContinueWith(tsk =>
-                        {
-                            var flattenedException = tsk.Exception.Flatten();
-                            //AddLog("Exception! " + flattenedException);
-                            return true;
-                        }, TaskContinuationOptions.OnlyOnFaulted);
+                    Next = Pending.FirstOrDefault();
+                    OnPropertyChanged(nameof(Next));
+                    if (Pending.Any())
+                        Pending.RemoveAt(0);
+
+                    Splat.Locator.Current.GetService<PipeRepository>().OnNext(Last);
+                    Completed.Add(Last);
+
+                    //factory.StartNew(() => Splat.Locator.Current.GetService<PipeRepository>().Select(Last))
+                    //    .ContinueWith(tsk =>
+                    //    {
+                    //        Completed.Add(Last);
+                    //    }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext())
+                    //    .ContinueWith(tsk =>
+                    //    {
+                    //        var flattenedException = tsk.Exception.Flatten();
+                    //        //AddLog("Exception! " + flattenedException);
+                    //        return true;
+                    //    }, TaskContinuationOptions.OnlyOnFaulted);
 
                 }
         }
@@ -179,6 +184,8 @@ namespace Utility.Trees.Demo.MVVM
         public static Pipe Instance { get; } = new();
     }
 
-    public record QueueItem(Guid Guid);
+    public record QueueItem(Guid Guid, string? Name = default, Type? Type = default, int? Index = default, string? TableName = default, Guid? ParentGuid = default)
+    {
+    }
 }
 

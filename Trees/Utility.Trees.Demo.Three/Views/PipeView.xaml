@@ -93,23 +93,24 @@
             <conv:TypeToNameConverter x:Key="TypeNameConverter"></conv:TypeToNameConverter>
 
             <DataTemplate DataType="{x:Type local:QueueItem}">
-                <Grid   Width="820" TextBlock.FontSize="12">
+                <Grid    TextBlock.FontSize="12">
                     <Grid.ColumnDefinitions>
                         <!--<ColumnDefinition Width="0"></ColumnDefinition>
                         <ColumnDefinition Width="20"></ColumnDefinition>
 
                         <ColumnDefinition Width="150"></ColumnDefinition>-->
-                        <ColumnDefinition Width="30"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <!--<ColumnDefinition Width="30"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>-->
 
                     </Grid.ColumnDefinitions>
 
                     <!--<TextBlock Grid.Column="2"   Text="{Binding Type, Converter={StaticResource TypeNameConverter}}"></TextBlock>-->
-                    <UniformGrid Grid.Column="0" Columns="1">
-                        <TextBlock Text="Guid" FontWeight="DemiBold"></TextBlock>                     
-                    </UniformGrid>
-                    <UniformGrid Grid.Column="1" Columns="1">
+            
+                    <UniformGrid  Rows="1">
                         <TextBlock Text="{Binding Guid}"></TextBlock>
+                        <TextBlock Text="{Binding Name}"></TextBlock>
+                        <TextBlock Text="{Binding Index}"></TextBlock>
+                        <TextBlock Text="{Binding Type, Converter={StaticResource TypeNameConverter}}"></TextBlock>
                         <!--<TextBlock Text="{Binding Old.Value}"></TextBlock>-->
                     </UniformGrid>
                 </Grid>
@@ -133,14 +134,19 @@
         </WrapPanel>
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
             <Grid.RowDefinitions>
+                <RowDefinition Height="30"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="8"></RowDefinition>
                 <RowDefinition Height="80"></RowDefinition>
                 <RowDefinition Height="8"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-
-            <ScrollViewer>
+            <UniformGrid Grid.Column="0" Rows="1">
+                <TextBlock Text="Guid" FontWeight="DemiBold"></TextBlock>
+                <TextBlock Text="Name" FontWeight="DemiBold"></TextBlock>
+                <TextBlock Text="Index" FontWeight="DemiBold"></TextBlock>
+                <TextBlock Text="Type" FontWeight="DemiBold"></TextBlock>
+            </UniformGrid>
+            <ScrollViewer Grid.Row="1">
                 <ItemsControl  ItemsSource="{Binding Source={x:Static common:Pipe.Instance}, Path=Completed}"/>
             </ScrollViewer>
 

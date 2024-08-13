@@ -22,7 +22,7 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
-                <ComboBox x:Name="combobox"  DockPanel.Dock="Top" Margin="8"></ComboBox>
+                <ComboBox x:Name="combobox"  DockPanel.Dock="Top" Margin="8" Visibility="Collapsed"></ComboBox>
 
                 <ScrollViewer x:Name="scrollviewer" HorizontalScrollBarVisibility="Visible" Grid.Row="1">
                     
