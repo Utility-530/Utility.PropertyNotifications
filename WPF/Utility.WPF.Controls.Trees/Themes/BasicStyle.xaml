@@ -260,7 +260,7 @@
                             <Setter Property="Background" Value="LightGreen"/>
                         </Trigger>
                         <Trigger Property="IsMouseDirectlyOver" Value="True">
-                            <Setter Property="Background" Value="Green"/>
+                            <Setter Property="Background" Value="Cyan"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Foreground" Value="LightBlue"/>

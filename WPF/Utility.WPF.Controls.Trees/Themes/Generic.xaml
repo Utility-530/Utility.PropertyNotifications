@@ -15,6 +15,7 @@
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/AddRemoveButtons.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/GraphStyle.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/BasicStyle.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml"/>
 
 
 

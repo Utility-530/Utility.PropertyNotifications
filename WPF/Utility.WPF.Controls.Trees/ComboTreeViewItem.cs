@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,6 +14,8 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Utility.Trees.Abstractions;
+using Utility.WPF.Demo.Panels;
 using Utility.WPF.Panels;
 
 namespace Utility.WPF.Controls.Trees
@@ -22,13 +26,42 @@ namespace Utility.WPF.Controls.Trees
         static ComboTreeViewItem()
         {
             ToolTipService.IsEnabledProperty.OverrideMetadata(typeof(ComboTreeViewItem), new FrameworkPropertyMetadata(null, new CoerceValueCallback(CoerceToolTipIsEnabled)));
+            EventManager.RegisterClassHandler(typeof(ComboBox), Mouse.LostMouseCaptureEvent, new MouseEventHandler(OnLostMouseCapture));
+            EventManager.RegisterClassHandler(typeof(TreeViewItem), Mouse.MouseDownEvent, new MouseButtonEventHandler(OnMouseButtonDown), true);
+
         }
 
         public ComboTreeViewItem()
         {
-
         }
 
+        private static void OnMouseButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            TreeViewItem tvi = (TreeViewItem)sender;
+            //TreeView tv = tvi.ParentTreeView;
+            //if (tv != null)
+            //{
+            //    tv.HandleMouseButtonDown();
+            //}
+        }
+
+        //private void Select(bool selected)
+        //{
+        //    TreeView tree = ParentTreeView;
+        //    ItemsControl parent = ParentItemsControl;
+        //    if ((tree != null) && (parent != null) && !tree.IsSelectionChangeActive)
+        //    {
+        //        // Give the TreeView a reference to this container and its data
+        //        object data = parent.GetItemOrContainerFromContainer(this);
+        //        tree.ChangeSelection(data, this, selected);
+
+        //        // Making focus of TreeViewItem synchronize with selection if needed.
+        //        if (selected && tree.IsKeyboardFocusWithin && !IsKeyboardFocusWithin)
+        //        {
+        //            Focus();
+        //        }
+        //    }
+        //}
 
 
         public double MaxDropDownHeight
@@ -40,9 +73,6 @@ namespace Utility.WPF.Controls.Trees
 
         public static readonly DependencyProperty MaxDropDownHeightProperty = ComboBox.MaxDropDownHeightProperty.AddOwner(typeof(ComboTreeViewItem));
 
-
-
-
         public object Selection
         {
             get { return (object)GetValue(SelectionProperty); }
@@ -50,13 +80,13 @@ namespace Utility.WPF.Controls.Trees
         }
 
 
-        public static readonly DependencyProperty SelectionProperty = DependencyProperty.Register("Selection", typeof(object), typeof(CustomTreeViewItem), new PropertyMetadata(SelectionChanged));
+        public static readonly DependencyProperty SelectionProperty = DependencyProperty.Register("Selection", typeof(object), typeof(ComboTreeViewItem), new PropertyMetadata(SelectionChanged));
 
         private static void SelectionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is ComboTreeViewItem && e.NewValue is TreeViewItem treeViewItem)
+            if (d is ComboTreeViewItem combo )
             {
-
+                combo.SetValue(IsDropDownOpenProperty, BooleanBoxes.FalseBox);
             }
         }
 
@@ -286,63 +316,52 @@ namespace Utility.WPF.Controls.Trees
         }
 
 
-        //internal void MakeVisible(FrameworkElement container, FocusNavigationDirection direction, bool alwaysAtTopOfViewport)
-        //{
-        //    if (ScrollHost != null && ItemsHost != null)
-        //    {
-        //        double oldHorizontalOffset;
-        //        double oldVerticalOffset;
 
-        //        FrameworkElement viewportElement = GetViewportElement();
+        private static void OnLostMouseCapture(object sender, MouseEventArgs e)
+        {
+            ComboTreeViewItem comboBox = (ComboTreeViewItem)sender;
 
-        //        while (container != null && !IsOnCurrentPage(viewportElement, container, direction, false /*fullyVisible*/))
-        //        {
-        //            oldHorizontalOffset = ScrollHost.HorizontalOffset;
-        //            oldVerticalOffset = ScrollHost.VerticalOffset;
+            // ISSUE (jevansa) -- task 22022:
+            //        We need a general mechanism to do this, or at the very least we should
+            //        share it amongst the controls which need it (Popup, MenuBase, ComboBox).
+            if (Mouse.Captured != comboBox)
+            {
+                if (e.OriginalSource == comboBox)
+                {
+                    // If capture is null or it's not below the combobox, close.
+                    // More workaround for task 22022 -- check if it's a descendant (following Logical links too)
+                    if (Mouse.Captured == null || !(bool)typeof(MenuBase).GetMethod("IsDescendant", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(default, new object[] { comboBox, Mouse.Captured as DependencyObject }))
+                    {
+                        comboBox.Close();
+                    }
+                }
+                else
+                {
+                    if ((bool)typeof(MenuBase).GetMethod("IsDescendant", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(default, new object[] { comboBox, e.OriginalSource as DependencyObject }))
+                    {
+                        // Take capture if one of our children gave up capture (by closing their drop down)
+                        if (comboBox.IsDropDownOpen && Mouse.Captured == null && MS.Win32.SafeNativeMethods.GetCapture() == IntPtr.Zero)
+                        {
+                            Mouse.Capture(comboBox, CaptureMode.SubTree);
+                            e.Handled = true;
+                        }
+                    }
+                    else
+                    {
+                        comboBox.Close();
+                    }
+                }
+            }
+        }
 
-        //            container.BringIntoView();
+        private void Close()
+        {
+            if (IsDropDownOpen)
+            {
+                this.SetValue(IsDropDownOpenProperty, false);
+            }
+        }
 
-        //            // Wait for layout
-        //            ItemsHost.UpdateLayout();
-
-        //            // If offset does not change - exit the loop
-        //            if (DoubleUtil.AreClose(oldHorizontalOffset, ScrollHost.HorizontalOffset) &&
-        //                DoubleUtil.AreClose(oldVerticalOffset, ScrollHost.VerticalOffset))
-        //                break;
-        //        }
-
-        //        if (container != null && alwaysAtTopOfViewport)
-        //        {
-        //            bool isHorizontal = (ItemsHost.HasLogicalOrientation && ItemsHost.LogicalOrientation == Orientation.Horizontal);
-
-        //            FrameworkElement firstElement;
-        //            GetFirstItemOnCurrentPage(container, FocusNavigationDirection.Up, out firstElement);
-        //            while (firstElement != container)
-        //            {
-        //                oldHorizontalOffset = ScrollHost.HorizontalOffset;
-        //                oldVerticalOffset = ScrollHost.VerticalOffset;
-
-        //                if (isHorizontal)
-        //                {
-        //                    ScrollHost.LineRight();
-        //                }
-        //                else
-        //                {
-        //                    ScrollHost.LineDown();
-        //                }
-
-        //                ScrollHost.UpdateLayout();
-
-        //                // If offset does not change - exit the loop
-        //                if (DoubleUtil.AreClose(oldHorizontalOffset, ScrollHost.HorizontalOffset) &&
-        //                    DoubleUtil.AreClose(oldVerticalOffset, ScrollHost.VerticalOffset))
-        //                    break;
-
-        //                GetFirstItemOnCurrentPage(container, FocusNavigationDirection.Up, out firstElement);
-        //            }
-        //        }
-        //    }
-        //}
 
         private void OnPopupClosed(object source, EventArgs e)
         {
@@ -418,6 +437,11 @@ namespace Utility.WPF.Controls.Trees
             //}
         }
 
+        public void Select(object obj)
+        {
+            this.Selection = obj;     
+        }
+
         /// <summary>
         ///     DropDown Open event
         /// </summary>
@@ -442,11 +466,67 @@ namespace Utility.WPF.Controls.Trees
 
     public interface ISelection
     {
-        object Selection { get; set; }
+        void Select(object obj);
     }
 
     public class dasf : ComboBox
     {
 
+    }
+}
+
+namespace MS.Win32
+{
+    public class SafeNativeMethods
+    {
+        internal static class ExternDll
+        {
+            public const string Activeds = "activeds.dll";
+            public const string Advapi32 = "advapi32.dll";
+            public const string Comctl32 = "comctl32.dll";
+            public const string Comdlg32 = "comdlg32.dll";
+            public const string DwmAPI = "dwmapi.dll";
+            public const string Gdi32 = "gdi32.dll";
+            public const string Gdiplus = "gdiplus.dll";
+            public const string Hhctrl = "hhctrl.ocx";
+            public const string Imm32 = "imm32.dll";
+            public const string Kernel32 = "kernel32.dll";
+            public const string Loadperf = "Loadperf.dll";
+            public const string Mqrt = "mqrt.dll";
+            public const string Mscoree = "mscoree.dll";
+            public const string MsDrm = "msdrm.dll";
+            public const string Mshwgst = "mshwgst.dll";
+            public const string Msi = "msi.dll";
+            public const string NaturalLanguage6 = "naturallanguage6.dll";
+            public const string Ntdll = "ntdll.dll";
+            public const string Ole32 = "ole32.dll";
+            public const string Oleacc = "oleacc.dll";
+            public const string Oleaut32 = "oleaut32.dll";
+            public const string Olepro32 = "olepro32.dll";
+            public const string Penimc = "PenIMC_cor3.dll";
+            public const string PresentationCore = "PresentationCore.dll";
+            public const string PresentationFramework = "PresentationFramework.dll";
+            public const string PresentationHostDll = "PresentationHost_cor3.dll";
+            public const string PresentationNativeDll = "PresentationNative_cor3.dll";
+            public const string Psapi = "psapi.dll";
+            public const string Shcore = "shcore.dll";
+            public const string Shell32 = "shell32.dll";
+            public const string Shfolder = "shfolder.dll";
+            public const string Urlmon = "urlmon.dll";
+            public const string User32 = "user32.dll";
+            public const string Uxtheme = "uxtheme.dll";
+            public const string Version = "version.dll";
+            public const string Vsassert = "vsassert.dll";
+            public const string WindowsBase = "windowsbase.dll";
+            public const string Wininet = "wininet.dll";
+            public const string Winmm = "winmm.dll";
+            public const string Winspool = "winspool.drv";
+            public const string Wldp = "wldp.dll";
+            public const string WpfGfx = "WpfGfx_cor3.dll";
+            public const string WtsApi32 = "wtsapi32.dll";
+        }
+
+        [DllImport(ExternDll.User32, ExactSpelling = true, CharSet = CharSet.Auto)]
+        public static extern IntPtr GetCapture();
     }
 }
