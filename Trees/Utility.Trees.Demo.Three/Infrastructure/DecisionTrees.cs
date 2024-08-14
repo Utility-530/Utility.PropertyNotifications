@@ -3,66 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows;
-using Utility.PropertyNotifications;
-using Utility.WPF.Controls.Trees;
 using Utility.Trees.Demo.MVVM.Infrastructure;
 using Utility.Helpers.NonGeneric;
-using Utility.Infrastructure;
 
 namespace Utility.Trees.Demo.MVVM
 {
-    //public partial record Model : NotifyProperty
-    //{
-    //    private Type type;
-
-    //    public Type Type
-    //    {
-    //        get
-    //        {
-
-    //            this.RaisePropertyCalled(type);
-    //            return type;
-
-    //        }
-    //        set
-    //        {
-    //            if (value.Equals(type))
-    //                return;
-    //            type = value;
-    //            this.RaisePropertyReceived(value);
-    //        }
-    //    }
-
-    //    public bool IsReadOnly { get; internal set; }
-
-    //    //public class StyleSelector : System.Windows.Controls.StyleSelector
-    //    //{
-    //    //    ResourceDictionary resourceDictionary = new ResourceDictionary
-    //    //    {
-    //    //        Source = new Uri($"/{typeof(CustomTreeViewItem).Namespace};component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute)
-    //    //    };
-
-    //    //    public override Style SelectStyle(object item, DependencyObject container)
-    //    //    {
-    //    //        if (item is TreeViewItem { })
-    //    //        {
-    //    //            var style = resourceDictionary["ButtonsAddRemoveStyle"] as Style;
-    //    //            return style;
-    //    //        }
-    //    //        return base.SelectStyle(item, container);
-    //    //    }
-
-    //    //    //public ResourceDictionary NewTemplates => new()
-    //    //    //{
-    //    //    //    Source = new Uri($"/{typeof(CustomStyleSelector).Assembly.GetName().Name};component/Themes/Generic.xaml", UriKind.RelativeOrAbsolute)
-    //    //    //};
-
-    //    //    public static StyleSelector Instance { get; } = new();
-    //    //}
 
 
+    public class TreeViewItemDecisionTree : DecisionTree<object, TreeViewItem>
+    {
+        public TreeViewItemDecisionTree(IDecision decision, Func<object, object>? transform = null) : base(decision, transform)
+        {
+            Data = decision;
+        }
+    }
 
-    //}
 
     public class StringDecisionTree<T> : DecisionTree<T, string>
     {
@@ -171,7 +126,7 @@ namespace Utility.Trees.Demo.MVVM
         public DecisionTree(IDecision decision, Func<T, object>? transform = null) : base(decision)
         {
             Data = decision;
-            this.transform = transform;
+            this.transform = transform ?? new Func<T, object>(a => a);
         }
 
         protected override object Transform(object value)
