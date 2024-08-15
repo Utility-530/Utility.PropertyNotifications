@@ -39,7 +39,7 @@ namespace Utility.Trees.Demo.MVVM
             //    DescriptorFactory.CreateRoot(rootPropertyDescriptor, guid).Wait();
             //}
 
-            InitialiseModel();
+            Initialise();
             //InitialiseModelOld();
             var window = new Window { Content = MainView.Instance };
             window.Show();

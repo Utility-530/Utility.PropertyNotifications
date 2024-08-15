@@ -29,6 +29,8 @@ using System.ComponentModel.Design;
 namespace Utility.Trees.Demo.MVVM
 {
 
+
+
     public class Table
     {
         public string Name { get; set; }
@@ -44,16 +46,16 @@ namespace Utility.Trees.Demo.MVVM
 
     public partial class App
     {
-        ReflectionNode model;
+        ReflectionNode root;
 
-        public void InitialiseModel()
+        public void Initialise()
         {
             DescriptorFactory.CreateRoot(Locator.Current.GetService<Model>(), Guid.Parse("76bca65d-6496-4a45-84f9-87705e665599"), "model")
-                .Subscribe(a =>
+                .Subscribe(descriptor =>
             {
-                model = new ReflectionNode(a);
-                UpdateModel(model);
-                Initialise();
+                root = new ReflectionNode(descriptor);
+                UpdateView(root);
+                InitialiseView(root);
             });
         }
 
@@ -87,11 +89,11 @@ namespace Utility.Trees.Demo.MVVM
 
 
 
-        void Initialise()
+        void InitialiseView(ReflectionNode model)
         {
             AutoCompleteConverter.Instance.Subscribe(a =>
             {
-                var _ = model;
+                //var _ = model;
 
                 if (a is SuggestionPrompt { Value: IDescriptor { ParentType: { } type } value, Filter: { } filter })
                 {
@@ -158,7 +160,7 @@ namespace Utility.Trees.Demo.MVVM
 
         }
 
-        void UpdateModel(object data)
+        void UpdateView(object data)
         {
             var treeViewer = DataTreeViewer(data);
             MainView.Instance.scrollviewer.Content = treeViewer;
@@ -171,13 +173,13 @@ namespace Utility.Trees.Demo.MVVM
             MainView.Instance.styletree.ContentTemplate = this.Resources["SS"] as DataTemplate;
         }
 
-        void MakeComboBox()
-        {
-            var rootKeys = Splat.Locator.Current.GetService<ITreeRepository>().SelectKeys().GetAwaiter().GetResult();
-            MainView.Instance.combobox.ItemsSource = rootKeys;
-            MainView.Instance.combobox.DisplayMemberPath = nameof(Utility.Repos.Key.Name);
-            MainView.Instance.combobox.SelectedIndex = 0;
-        }
+        //void MakeComboBox()
+        //{
+        //    var rootKeys = Splat.Locator.Current.GetService<ITreeRepository>().SelectKeys().GetAwaiter().GetResult();
+        //    MainView.Instance.combobox.ItemsSource = rootKeys;
+        //    MainView.Instance.combobox.DisplayMemberPath = nameof(Utility.Repos.Key.Name);
+        //    MainView.Instance.combobox.SelectedIndex = 0;
+        //}
 
 
         //IDisposable Disposable()
