@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:view="http://schemas.utility.com/buttons"
              xmlns:c="http://schemas.utility.com/colours"
+             d:Background="White"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.Resources>
@@ -46,13 +47,57 @@
             <Geometry x:Key="ChevronGeometry1">M10 7L15 12L10 17</Geometry>
             <Geometry x:Key="ChevronGeometry2">M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z</Geometry>
     
+     
+
+   
+                    <PathGeometry x:Key="Tick_Rounded">
+                        <PathGeometry.Figures>
+                            <PathFigureCollection>
+                                <PathFigure IsClosed="False"  StartPoint="4,2">
+                                    <PathFigure.Segments>
+                                        <PathSegmentCollection>
+                                            <LineSegment Point="8,6" />
+                                            <LineSegment Point="17,-6" />
+                                        </PathSegmentCollection>
+                                    </PathFigure.Segments>
+                                </PathFigure>
+                            </PathFigureCollection>
+                        </PathGeometry.Figures>
+                    </PathGeometry>
+          
+
+         
+                    <PathGeometry x:Key="Cancel_Rounded">
+                        <PathGeometry.Figures>
+                            <PathFigureCollection>
+                                <PathFigure IsClosed="False"  StartPoint="9,9">
+                                    <PathFigure.Segments>
+                                        <PathSegmentCollection>
+                                            <LineSegment Point="21,21" />
+                                        </PathSegmentCollection>
+                                    </PathFigure.Segments>
+                                </PathFigure>
+
+                                <PathFigure IsClosed="False"  StartPoint="9,21">
+                                    <PathFigure.Segments>
+                                        <PathSegmentCollection>
+                                            <LineSegment Point="21,9" />
+                                        </PathSegmentCollection>
+                                    </PathFigure.Segments>
+                                </PathFigure>
+
+                            </PathFigureCollection>
+                        </PathGeometry.Figures>
+                    </PathGeometry>
+          
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Buttons;component/Themes/Button.xaml"></ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
-    <UniformGrid Columns="1">
+    <UniformGrid>
         <view:GeometryButton
                     Height="70"
                     Data="{StaticResource XGeometry}"
@@ -81,8 +126,28 @@
         <view:GeometryButton
                     Height="70"
                     Data="{StaticResource ChevronGeometry2}"
-                    Background="{c:BlueGrey}" />
-        
+                    HoverBackground="{c:BlueGrey}" />
+
+        <view:GeometryToggleButton
+                    Height="140"
+                    Data="{StaticResource ChevronGeometry2}"
+            CheckedBackground="{c:Red}"
+                    HoverBackground="{c:BlueGrey}" />
+
+        <view:GeometryToggleButton
+                    Height="60"
+                    Data="{StaticResource Cancel_Rounded}"
+            CheckedBackground="{c:Red}"
+                    HoverBackground="{c:BlueGrey}" />
+
+
+        <view:GeometryToggleButton
+                    Height="60"
+                    Data="{StaticResource Tick_Rounded}"
+            CheckedBackground="{c:Red}"
+                    HoverBackground="{c:BlueGrey}" />
+
+
         <StackPanel HorizontalAlignment="Center" Orientation="Vertical">
             <view:GeometryButton x:Name="PathButton" Height="100" />
             <TextBox

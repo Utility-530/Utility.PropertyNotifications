@@ -39,10 +39,11 @@
                                     VerticalAlignment="Center"
                                     Data="{Binding Data, RelativeSource={RelativeSource TemplatedParent}}"
                                     Stretch="Uniform"
-                                    Fill="{TemplateBinding Foreground}"
+                                    Fill="{TemplateBinding Fill}"
                                     Stroke="{TemplateBinding Foreground}"
-                                    StrokeEndLineCap="Square"
-                                    StrokeStartLineCap="Square"
+                                 StrokeEndLineCap="Round" 
+                                StrokeLineJoin="Round"  
+                                StrokeStartLineCap="Round"
                                     StrokeThickness="12">
                             </Path>
                         </Grid>
@@ -53,7 +54,7 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="backgroundEllipse" Property="Fill" Value="{Binding HoverBackground, RelativeSource={RelativeSource TemplatedParent}}" />
                             <Setter TargetName="ButtonPath" Property="Stroke" Value="{StaticResource HoverForegroundBrush}" />
-                            <Setter TargetName="ButtonPath" Property="Fill" Value="{StaticResource HoverForegroundBrush}" />
+                            <!--<Setter TargetName="ButtonPath" Property="Fill" Value="{StaticResource HoverForegroundBrush}" />-->
                         </Trigger>
 
                         <Trigger Property="IsEnabled" Value="false">
@@ -61,7 +62,7 @@
                         </Trigger>
 
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="backgroundEllipse" Property="Fill" Value="{StaticResource PressedBackgroundBrush}" />
+                            <!--<Setter TargetName="backgroundEllipse" Property="Fill" Value="{StaticResource PressedBackgroundBrush}" />-->
                             <Setter TargetName="backgroundEllipse" Property="Stroke" Value="{StaticResource PressedBorderBrush}" />
                             <Setter TargetName="ButtonPath" Property="Stroke" Value="{StaticResource PressedForegroundBrush}" />
                         </Trigger>
@@ -70,4 +71,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    
+    
+
 </ResourceDictionary>
