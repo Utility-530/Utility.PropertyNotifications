@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace Utility.WPF.Colours
 {
@@ -13,7 +15,30 @@ namespace Utility.WPF.Colours
     {
         public static class Light
         {
-
+            public static readonly Color Bisque = Colors.Bisque;
+            public static readonly Color AliceBlue = Colors.AliceBlue;
+            public static readonly Color AntiqueWhite = Colors.AntiqueWhite;
+            public static readonly Color Beige = Colors.Beige;
+            public static readonly Color Cornsilk = Colors.Cornsilk;
+            public static readonly Color FloralWhite = Colors.FloralWhite;
+            public static readonly Color Gainsboro = Colors.Gainsboro;
+            public static readonly Color Honeydew = Colors.Honeydew;
+            public static readonly Color Lavender = Colors.Lavender;
+            public static readonly Color LavenderBlush = Colors.LavenderBlush;
+            public static readonly Color LemonChiffon = Colors.LemonChiffon;
+            public static readonly Color LightBlue = Colors.LightBlue;
+            public static readonly Color LightGoldenrodYellow = Colors.LightGoldenrodYellow;
+            public static readonly Color LightGray = Colors.LightGray;
+            public static readonly Color LightYellow = Colors.LightYellow;
+            public static readonly Color LightSteelBlue = Colors.LightSteelBlue;
+            public static readonly Color Linen = Colors.Linen;
+            public static readonly Color MintCream = Colors.MintCream;
+            public static readonly Color MistyRose = Colors.MistyRose;
+            public static readonly Color PowderBlue = Colors.PowderBlue;
+            public static readonly Color Thistle = Colors.Thistle;
+            public static readonly Color SeaShell = Colors.SeaShell;
+            public static readonly Color WhiteSmoke = Colors.WhiteSmoke;
+            public static readonly Color Tan = Colors.Tan;
         }
 
         public static class Regular
