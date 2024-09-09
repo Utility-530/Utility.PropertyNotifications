@@ -30,6 +30,7 @@
 		<PackageReference Include="Tiny.Toolkits.Wpf" Version="4.5.1" />
 		<PackageReference Include="WpfScreenHelper" Version="2.1.0" />
 		<PackageReference Include="WPFTransitionals" Version="1.1.0" />
+		<PackageReference Include="WriteableBitmapEx" Version="1.6.8" />
 	</ItemGroup>
 
 	<ItemGroup>
