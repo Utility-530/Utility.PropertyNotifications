@@ -45,12 +45,7 @@
 	<Target Name="PostPack" AfterTargets="CustomPack" Condition="'$(Configuration)'=='Release'">
 		<Exec Command="&#xD;&#xA;      set source=&quot;$(ProjectDir)bin\release &quot;&#xD;&#xA;&#xD;&#xA;      set target=&quot;C:\Users\rytal\Documents\Visual Studio 2019\NugetPackages &quot;  &#xD;&#xA;&#xD;&#xA;      RoboCopy %25source%25 %25target%25 *.nupkg  /XO  /NFL /NDL /NJH   &#xD;&#xA;&#xD;&#xA;      IF %ERRORLEVEL% GEQ 8 exit 1&#xD;&#xA;&#xD;&#xA;      exit 0" />
 	</Target>
-	<ItemGroup>
-	  <Compile Remove="Infrastructure\**" />
-	  <EmbeddedResource Remove="Infrastructure\**" />
-	  <None Remove="Infrastructure\**" />
-	  <Page Remove="Infrastructure\**" />
-	</ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
 		<ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
@@ -60,12 +55,18 @@
 		<Compile Update="AssemblyInfo.cs">
 			<SubType>Code</SubType>
 		</Compile>
-		<Compile Update="Control\BlinkControl.cs">
+		<Compile Update="Controls\BlinkControl.cs">
 			<SubType>Code</SubType>
+		</Compile>
+		<Compile Update="Controls\MarqueeTextUserControl.xaml.cs">
+		  <SubType>Code</SubType>
 		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
+		<Page Update="Controls\MarqueeTextUserControl.xaml">
+		  <SubType>Designer</SubType>
+		</Page>
 		<Page Update="Themes\BorderFix.xaml">
 			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 			<SubType>Designer</SubType>
