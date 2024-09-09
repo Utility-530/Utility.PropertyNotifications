@@ -9,7 +9,7 @@
     {
         None = 0,
         Left = 1,
-        Right = 2,     
+        Right = 2,
         Top = 16,
         Bottom = 32,
         All = Left | Right | Top | Bottom
