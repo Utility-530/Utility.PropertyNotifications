@@ -20,7 +20,7 @@ namespace Utility.Trees.Demo.FilterBuilder.Infrastructure
         public class TreeViewItemFactory : ITreeViewItemFactory
         {
             Random random = new();
-            public HeaderedItemsControl Make(object instance)
+            public HeaderedItemsControl Make(object instance, ItemsControl itemsControl)
             {
                 TreeViewItem item = null;
                 if (instance is TypeNode {  })
