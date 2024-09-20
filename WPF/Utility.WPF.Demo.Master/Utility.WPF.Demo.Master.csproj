@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <OutputType>WinExe</OutputType>
     <AssemblyVersion>1.0.1.0</AssemblyVersion>
@@ -13,7 +13,6 @@
   <ItemGroup>
 	  <ProjectReference Include="..\..\Persists\Utility.Persists\Utility.Persists.csproj" />
 	  <ProjectReference Include="..\Utility.ViewModels.Customs\Utility.ViewModels.Customs.csproj" />
-    <ProjectReference Include="..\Utility.ViewModels\Utility.ViewModels.csproj" />
     <ProjectReference Include="..\Utility.WPF.Markup\Utility.WPF.Markup.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Dragablz\Utility.WPF.Controls.Dragablz.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Master\Utility.WPF.Controls.Master.csproj" />

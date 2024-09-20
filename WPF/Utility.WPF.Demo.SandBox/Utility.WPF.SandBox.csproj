@@ -2,9 +2,13 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Smiley_Love.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Svg" Version="3.4.6" />
@@ -15,6 +19,10 @@
     <ProjectReference Include="..\Utility.WPF.Colours\Utility.WPF.Colours.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
     <ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Smiley_Love.png" />
   </ItemGroup>
 
 </Project>
