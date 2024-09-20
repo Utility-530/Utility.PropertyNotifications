@@ -131,7 +131,7 @@ namespace Utility.Repos
             else if (parentGuid.HasValue)
             {
                 table_name = tablelookup[parentGuid.Value];
-                string query = $"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}'" + 
+                string query = $"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}'" +
                                 (name == null ? string.Empty : $" AND Name = '{name}'") +
                                 $" ORDER BY {nameof(Relationships._Index)}";
                 tables = connection.Query<Relationships>(query);
@@ -140,7 +140,7 @@ namespace Utility.Repos
             {
                 tables = connection.Table<Relationships>().ToList();
                 int i = 0;
-                foreach(var table in tables)
+                foreach (var table in tables)
                 {
                     table._Index = i++;
                 }
@@ -157,15 +157,22 @@ namespace Utility.Repos
                     type = ToType(table.TypeId.Value);
 
                 object item = null;
-                if (type?.IsValueType == true|| type?.GetConstructor(System.Type.EmptyTypes) != null)
+                if (type?.ContainsGenericParameters != false)
                 {
-                    item = Activator.CreateInstance(type);
-
+                    throw new Exception("dgfsd..lll");
                 }
+                else
+                {
+                    if (type?.IsValueType == true || type?.GetConstructor(System.Type.EmptyTypes) != null)
+                    {
+                        item = Activator.CreateInstance(type);
+
+                    }
                     //if (type == null)
                     //    throw new Exception("3 333 ff");
                     tablelookup[table.Guid] = table.Name;
-                selections.Add(new(table.Guid, table.Parent, item, table.Name, table._Index));
+                    selections.Add(new(table.Guid, table.Parent, item, table.Name, table._Index));
+                }
             }
             return Observable.Return((IReadOnlyCollection<Key>)selections);
         }
@@ -267,7 +274,7 @@ namespace Utility.Repos
                     observer.OnNext(guid);
                 });
             });
-         
+
         }
 
 
@@ -367,7 +374,7 @@ namespace Utility.Repos
         {
             string text;
             //if (value is not string str)
-                text = JsonConvert.SerializeObject(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+            text = JsonConvert.SerializeObject(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
             //else
             //    text = value?.ToString();
             var query = $"SELECT * FROM '{nameof(Values)}' WHERE Guid = '{guid}' AND Value = '{text}'";
