@@ -1,5 +1,4 @@
 ﻿# nullable enable
-
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
@@ -10,6 +9,7 @@ using System.Buffers.Text;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -20,6 +20,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using Utility.Helpers;
 using static LambdaConverters.ValueConverter;
 
 namespace Utility.WPF.Controls.Objects
@@ -42,7 +43,7 @@ namespace Utility.WPF.Controls.Objects
             new StringToGuidConverter(),
             new Newtonsoft.Json.Converters.IsoDateTimeConverter(),
             new Newtonsoft.Json.Converters.StringEnumConverter()};
-
+        private static LiteDB.LiteDatabase db;
         public static readonly DependencyProperty JsonProperty = DependencyProperty.Register(nameof(Json), typeof(string), typeof(JsonControl), new PropertyMetadata(null, Change2));
 
         private static void Change2(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -62,6 +63,8 @@ namespace Utility.WPF.Controls.Objects
         static JsonControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(JsonControl), new FrameworkPropertyMetadata(typeof(JsonControl)));
+            Directory.CreateDirectory("../../../Data");
+            db = new LiteDB.LiteDatabase("../../../Data/schemas.litedb");
         }
 
         public JsonControl()
@@ -83,10 +86,26 @@ namespace Utility.WPF.Controls.Objects
             this.WhenAnyValue(a => a.Object)
                 .WhereNotNull()
                 .Select(a =>
-                {
+                {      
+                 
+                    var collection = db.GetCollection<TypeSchema>();
+                    {
+                        var type = a.GetType();
+                        var name = type.AsString();
+                        var x = collection.FindOne(a=> a.Type == name);
+                        if (x != null)
+                        {
+                            var _schema = JSchema.Parse(x.Schema);
+                            return _schema;
+                        }
+  
+                    }
+
                     JSchemaGenerator generator = new();
-                    var schema = generator.Generate(a.GetType());     
+                    var schema = generator.Generate(a.GetType());
+                    collection.Insert(new TypeSchema { Schema = schema.ToString(), Type = a.GetType().AsString() });
                     return schema;
+         
                 })
                 .Merge(this.WhenAnyValue(a => a.Json).WhereNotNull().Select(a => JSchema.Parse(a)))
                 .Subscribe(schema =>
@@ -105,6 +124,12 @@ namespace Utility.WPF.Controls.Objects
                 e.CanExecute = true;
                 e.Handled = true;
             }
+        }
+
+        public class TypeSchema
+        {
+            public string Type { get; set; }
+            public string Schema { get; set; }
         }
 
         public string Json
