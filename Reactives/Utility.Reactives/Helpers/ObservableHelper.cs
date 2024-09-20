@@ -19,6 +19,38 @@ namespace Utility.Reactives;
 public static partial class ObservableHelper
 {
 
+    public static IObservable<T[]> Combine<T>(this IEnumerable<IObservable<T>> observables)
+    {
+        return Observable.Create<T[]>(observer =>
+        {
+            CompositeDisposable disposables = new();
+            var length = observables.ToArray().Length;
+            int count = 0;
+
+            Dictionary<IObservable<T>, T> keyValuePairs = new();
+
+            foreach (var obs in observables)
+            {
+                obs.Subscribe(a =>
+                {
+                    count++;
+                    keyValuePairs[obs] = a;
+
+                    if (length == count)
+                    {
+                        observer.OnNext(keyValuePairs.Select(a => a.Value).ToArray());
+                    }
+                }, () =>
+                {
+                  
+                }).DisposeWith(disposables);
+            }
+            return disposables;
+        });
+        // return observable.SelectMany().Subscribe(observer);
+    }
+
+
     public static IDisposable SubscribeMany<T>(this IEnumerable<IObservable<T>> observable, IObserver<T> observer)
     {
         var cd = new CompositeDisposable();
