@@ -2,7 +2,6 @@
 using System;
 using System.Windows;
 using Utility.Trees.Demo.MVVM.MVVM;
-using Utility.WPF.Reactives;
 using Views.Trees;
 using Utility.Infrastructure;
 using Utility.Trees.Abstractions;
@@ -13,18 +12,13 @@ using Xceed.Wpf.Toolkit.PropertyGrid;
 using System.Linq;
 using Utility.Trees.Demo.MVVM.Views;
 using Utility.WPF.Templates;
-using static Utility.Helpers.EnumHelper;
-using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
-using Utility.Repos;
 using Splat;
-using Utility.Reactives;
 using Utility.Extensions;
 using Utility.PropertyNotifications;
 using Utility.WPF.Controls.Trees;
 using System.Collections.Generic;
 using Utility.Trees.Demo.MVVM.Infrastructure;
-using System.ComponentModel.Design;
 
 namespace Utility.Trees.Demo.MVVM
 {
@@ -59,36 +53,6 @@ namespace Utility.Trees.Demo.MVVM
             });
         }
 
-
-        //public void InitialiseModelOld()
-        //{
-        //    MakeComboBox();
-        //    Initialise();
-
-        //    MainView.Instance.combobox
-        //    .ValueChanges()
-        //    .Cast<Utility.Repos.Key>()
-        //    // type can be null because type from another assembly not loaded 
-        //    .Where(a => a.Instance != null)
-        //    .Subscribe(a =>
-        //    {
-
-        //        var model = CreateModel(a.Instance.GetType(), a.Name, a.Guid);
-        //        UpdateModel(model);
-        //        //disposable?.Dispose();
-        //        //disposable = Disposable();
-        //    });
-
-
-        //    ReflectionNode CreateModel(Type type, string name, Guid guid)
-        //    {
-        //        model = new ReflectionNode(DescriptorFactory.CreateRoot(type, guid, name).GetAwaiter().GetResult()) { };
-        //        return model;
-        //    }
-        //}
-
-
-
         void InitialiseView(ReflectionNode model)
         {
             AutoCompleteConverter.Instance.Subscribe(a =>
@@ -121,7 +85,7 @@ namespace Utility.Trees.Demo.MVVM
                         //pipeRepository.Get((node.Data as MemberDescriptor).Guid);
 
                         //Pipe.Instance.Queue(new QueueItem(default, ParentGuid: Guid.Parse("1f51406b-9e37-429d-8ed2-c02cff90cfdb")));
-                        Pipe.Instance.Queue(new QueueItem(default, ParentGuid: Guid.Parse("72022097-e5f6-4767-a18a-50763514ca01")));
+                        Pipe.Instance.Queue(new RepoQueueItem(default, QueueItemType.SelectKeys, ParentGuid: Guid.Parse("72022097-e5f6-4767-a18a-50763514ca01")));
                     }
                     MainView.Instance.propertygrid.Content = new PropertyGrid { SelectedObject = data };
                     Filter.Instance.Convert(tree);
@@ -134,7 +98,7 @@ namespace Utility.Trees.Demo.MVVM
 
             Pipe.Instance.WithChangesTo(a => a.Next).Skip(1).Subscribe(a =>
             {
-                if (a is QueueItem { Guid: { } guid } qi)
+                if (a is RepoQueueItem { Guid: { } guid } qi)
                 {
                     var d = TreeExtensions.MatchDescendant(model, a => (a.Data as MemberDescriptor).Guid == guid);
                     if (last is ReflectionNode node)
@@ -173,168 +137,7 @@ namespace Utility.Trees.Demo.MVVM
             MainView.Instance.styletree.ContentTemplate = this.Resources["SS"] as DataTemplate;
         }
 
-        //void MakeComboBox()
-        //{
-        //    var rootKeys = Splat.Locator.Current.GetService<ITreeRepository>().SelectKeys().GetAwaiter().GetResult();
-        //    MainView.Instance.combobox.ItemsSource = rootKeys;
-        //    MainView.Instance.combobox.DisplayMemberPath = nameof(Utility.Repos.Key.Name);
-        //    MainView.Instance.combobox.SelectedIndex = 0;
-        //}
-
-
-        //IDisposable Disposable()
-        //{
-        //    CompositeDisposable disposable = new();
-
-        //    if (false)
-        //        //view model
-        //        model.Subscribe((a =>
-        //        {
-        //            if (a.Type == Changes.Type.Add)
-        //            {
-        //                var clone = a.Value.Key;
-        //                var x = new ViewModelTree { Key = clone };
-        //                var parentMatch = TreeExtensions.MatchDescendant(viewModel, (d => d.Key?.Equals(a.Value.Parent?.Key) == true)) as Tree;
-        //                if (parentMatch != null)
-        //                    parentMatch.Add(x);
-        //            }
-        //            if (a.Type == Changes.Type.Remove)
-        //            {
-        //                var match = TreeExtensions.MatchDescendant(viewModel, (d => d.Key.Equals(a.Value.Key))) as Tree;
-        //                match.Parent.Remove(a.Value);
-        //            }
-        //        })).DisposeWith(disposable);
-
-
-        //    // View
-        //    if (false)
-        //        model.Subscribe(a =>
-        //        {
-        //            if (a.Type == Changes.Type.Add)
-        //            {
-        //                var clone = a.Value.Key;
-        //                var guid = ((GuidKey)a.Value.Key)?.Value;
-        //                if (guid == null)
-        //                    return;
-        //                var type = TreeRepository.Instance.GetType(guid.Value, nameof(Model));
-        //                Tree tree = null;
-        //                //if (type != null)
-        //                //{
-        //                //    var instance = Activator.CreateInstance(type);
-        //                //    //var rootDescriptor = new RootDescriptor(type);
-        //                //    //var data = await DescriptorFactory.ToValue(instance, rootDescriptor, guid.Value);
-        //                //    //var reflectionNode = new ReflectionNode(data);
-        //                //    //reflectionNode.RefreshChildrenAsync();
-
-        //                //    tree = new Tree { Key = clone, Data = instance };
-
-        //                //}
-        //                //else
-        //                //{
-        //                //    tree = new Tree { Key = clone, Data = null };
-        //                //}
-        //                tree = new Tree { Key = clone, Data = null };
-
-        //                var parentMatch = TreeExtensions.MatchDescendant(view, (d => d.Key.Equals(a.Value.Parent?.Key))) as Tree;
-        //                if (parentMatch != null)
-        //                    parentMatch.Add(tree);
-        //            }
-        //            if (a.Type == Changes.Type.Remove)
-        //            {
-        //                var match = TreeExtensions.MatchDescendant(view, (d => d.Key.Equals(a.Value.Key))) as Tree;
-        //                match.Parent.Remove(a.Value);
-        //            }
-        //        }).DisposeWith(disposable);
-
-        //    // Data
-        //    model.Subscribe(a =>
-        //    {
-        //        if (a.Type == Changes.Type.Add)
-        //        {
-        //            var clone = a.Value.Key;
-        //            //var guid = ((GuidKey)a.Value.Key)?.Value;
-        //            //if (guid == null)
-        //            //    return;
-        //            //var type = TreeRepository.Instance.GetType(guid.Value, nameof(Model));
-
-        //            Tree tree = null;
-        //            //object? instance = default;
-        //            //if (type != null)
-        //            //{
-        //            //    var types = ValueDataTemplateSelector.Instance.Types;
-
-        //            //    if (ValueDataTemplateSelector.Instance.Types.Contains(type))
-        //            //    {
-        //            //        var value = TreeRepository.Instance.Get(guid.Value);
-        //            //        if (value == null)
-        //            //        {
-        //            //            instance = Activator.CreateInstance(type);
-        //            //        }
-        //            //        else
-        //            //        {
-        //            //            instance = value.Value;
-        //            //        }
-        //            //    }              
-        //            //}
-        //            tree = new Tree { Key = clone, Data = a.Value.Data };
-
-        //            var parentMatch = TreeExtensions.MatchDescendant(data, (d => d.Key.Equals(a.Value.Parent?.Key))) as Tree;
-        //            parentMatch?.Add(tree);
-        //        }
-        //        if (a.Type == Changes.Type.Remove)
-        //        {
-        //            var match = TreeExtensions.MatchDescendant(data, (d => d.Key.Equals(a.Value.Key))) as Tree;
-        //            match?.Parent?.Remove(a.Value);
-        //        }
-        //    }).DisposeWith(disposable);
-        //    return disposable;
-        //}
-
-        //public static TreeViewer ModelTreeViewer(object model)
-        //{
-        //    return new TreeViewer
-        //    {
-        //        ViewModel = model,
-        //        TreeViewItemFactory = Default.TreeViewItemFactory.Instance,
-        //        TreeViewBuilder = TreeViewBuilder.Instance,
-        //        PanelsConverter = Default.ItemsPanelConverter.Instance,
-        //        DataTemplateSelector = Default.DataTemplateSelector.Instance,
-        //        TreeViewFilter = Model.Filter.Instance,
-        //        StyleSelector = Model.StyleSelector.Instance,
-        //        EventListener = Default.EventListener.Instance
-        //    };
-        //}
-
-        //public static TreeViewer ViewModelTreeViewer(object viewModel)
-        //{
-        //    return new TreeViewer
-        //    {
-        //        ViewModel = viewModel,
-        //        TreeViewItemFactory = Default.TreeViewItemFactory.Instance,
-        //        TreeViewBuilder = TreeViewBuilder.Instance,
-        //        PanelsConverter = Default.ItemsPanelConverter.Instance,
-        //        DataTemplateSelector = Default.DataTemplateSelector.Instance,
-        //        TreeViewFilter = Default.Filter.Instance,
-        //        StyleSelector = ViewModel.StyleSelector.Instance,
-        //        EventListener = Default.EventListener.Instance
-        //    };
-        //}
-
-        //public static TreeViewer ViewTreeViewer(object view)
-        //{
-        //    return new TreeViewer
-        //    {
-        //        ViewModel = view,
-        //        TreeViewItemFactory = Default.TreeViewItemFactory.Instance,
-        //        TreeViewBuilder = TreeViewBuilder.Instance,
-        //        PanelsConverter = View.ItemsPanelConverter.Instance,
-        //        DataTemplateSelector = View.DataTemplateSelector.Instance,
-        //        StyleSelector = View.StyleSelector.Instance,
-        //        TreeViewFilter = Default.Filter.Instance,
-        //        EventListener = Default.EventListener.Instance
-        //    };
-        //}
-
+       
         public static TreeViewer DataTreeViewer(object data)
         {
             return new TreeViewer

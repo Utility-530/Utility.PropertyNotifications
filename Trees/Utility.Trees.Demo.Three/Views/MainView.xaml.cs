@@ -1,7 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using Tiny.Toolkits;
-using Utility.Helpers.NonGeneric;
+﻿using System.Windows.Controls;
 
 namespace Utility.Trees.Demo.MVVM.Views
 {

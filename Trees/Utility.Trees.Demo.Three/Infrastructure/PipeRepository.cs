@@ -1,154 +1,128 @@
 ﻿using Splat;
 using System;
 using System.Collections.Generic;
-using System.Reactive.Linq;
 using Utility.Helpers;
+using IObserver = Utility.Models.IObserver;
 using Utility.Repos;
 
 namespace Utility.Trees.Demo.MVVM.Infrastructure
 {
     public class PipeRepository : TreeRepository, IObserver<QueueItem>
     {
-        Dictionary<QueueItem, object> dictionary = new();
+
+
+        public class D2Tree : DecisionTree<RepoQueueItem>
+        {
+            public D2Tree(IDecision decision, Func<RepoQueueItem, object>? transform = null) : base(decision, transform)
+            {
+            }
+        }
+
+        Dictionary<QueueItem, IObserver> dictionary = new();
 
         public Table? SelectedTable { get; set; }
 
         protected PipeRepository(string? dbDirectory = null) : base(dbDirectory)
         {
-            Predicate = new StringDecisionTree(new Decision(item => (QueueItem)item != null) { })
-                {
-                    new StringDecisionTree(new Decision<QueueItem>(item => item.ParentGuid == Guid.Parse("dbf5b684-894f-47ee-9b05-6b6e7a2ea931")), md=>"B"),
-                    //new StringDecisionTree(new Decision<QueueItem>(item => item.Guid == Guid.Parse("307fcf2d-696e-45ec-89fe-6db94e02e9e6")), md=>"C"),
-                    new StringDecisionTree(new Decision<QueueItem>(item => item.ParentGuid == Guid.Parse("1f51406b-9e37-429d-8ed2-c02cff90cfdb")), md=>"D"),
-                    new StringDecisionTree(new Decision<QueueItem>(item => item.ParentGuid == Guid.Parse("72022097-e5f6-4767-a18a-50763514ca01")), md=>"D"),
-                    //new StringDecisionTree(new Decision<QueueItem>(item => false), md=>"B"),
-                    new StringDecisionTree(new Decision<QueueItem>(item => true){  }, md=>"A"),
+            Predicate = new DecisionTree(new Decision(item => (QueueItem)item != null) { })
+            {
+                new D2Tree(new Decision<RepoQueueItem>(item => item.ParentGuid == Guid.Parse("dbf5b684-894f-47ee-9b05-6b6e7a2ea931") && item.QueueItemType == QueueItemType.SelectKeys),
 
-                };
+                    cdv =>
+                    System.Reactive.Linq.Observable.Select( base.SelectKeys(),_keys =>
+                            {
+                                List<Key> keys = [];
+                                foreach (var key in _keys)
+                                {
+                                    var table = new Table { Name = key.Name, Guid = key.Guid, Type = key.Instance.GetType() };
+                                    keys.Add(key with { Instance = table });
+                                }
+                                return keys;
+                            })
+                ),
+                new D2Tree(new Decision<RepoQueueItem>(item => item.ParentGuid == Guid.Parse("72022097-e5f6-4767-a18a-50763514ca01")&& item.QueueItemType == QueueItemType.SelectKeys),
+                cdv =>
+                    {
+                        if (Locator.Current.GetService<Model>() is { SelectedTable:{ } selectedTable } )
+                        {
+                            return new List<Key>([new Key { Name = selectedTable.Name, Guid = selectedTable.Guid, Instance = Activator.CreateInstance(selectedTable.Type) }]);
+                        }
+                        return new object();
+                    }
+
+                ),
+                new D2Tree(new Decision<RepoQueueItem>(item => true){  })
+                {
+                        new D2Tree(new Decision<RepoQueueItem>(item => item.QueueItemType == QueueItemType.Get){  }, qi=>base.Get(qi.Guid)                            ),
+
+                        new D2Tree(new Decision<RepoQueueItem>(item => item.QueueItemType == QueueItemType.Find){  },
+                        qi=>
+                        base.Find(qi.Guid, qi.Name, qi.Type, qi.Index)
+
+                        ),
+
+                        new D2Tree(new Decision<RepoQueueItem>(item =>  item.QueueItemType == QueueItemType.SelectKeys){  },
+                        qi=>
+                        base.SelectKeys(qi.ParentGuid, qi.Name, qi.TableName)
+
+                        ),
+                },
+            };
         }
 
         public override IObservable<DateValue?> Get(Guid guid)
         {
-            if(guid== Guid.Parse("307fcf2d-696e-45ec-89fe-6db94e02e9e6"))
-            {
-
-            }
-            var qi = new QueueItem(guid);
-            var observable = dictionary.Get(qi, a => new Observable2<DateValue?>());
+            var qi = new RepoQueueItem(guid, QueueItemType.Get);
             Pipe.Instance.Queue(qi);
-            return observable as Observable2<DateValue?>;
+            return dictionary.Get(qi, a => new Subject<DateValue?>()) as IObservable<DateValue?>;
         }
-
-        //public void Set(Guid guid)
-        //{
-        //    var qi = new QueueItem(guid);
-        //    Pipe.Instance.Queue(qi);
-        //}
 
         public override IObservable<Guid> Find(Guid guid, string name, System.Type? type = null, int? index = null)
         {
-            var qi = new QueueItem(guid, name, type, index);
-            var observable = dictionary.Get(qi, a => new Observable2<Guid>());
+            var qi = new RepoQueueItem(guid, QueueItemType.Find, name, type, index);
             Pipe.Instance.Queue(qi);
-            return observable as Observable2<Guid>;
+            return dictionary.Get(qi, a => new Subject<Guid>()) as Subject<Guid>; ;
         }
 
         public override IObservable<IReadOnlyCollection<Key>> SelectKeys(Guid? parentGuid = null, string? name = null, string? table_name = null)
         {
-
-            var qi = new QueueItem(default, name, default, default, table_name, parentGuid);
-            var observable = dictionary.Get(qi, a => new Observable2<IReadOnlyCollection<Key>>());
+            var qi = new RepoQueueItem(default, QueueItemType.SelectKeys, name, default, default, table_name, parentGuid);
             Pipe.Instance.Queue(qi);
-            return observable as Observable2<IReadOnlyCollection<Key>>;
+            return dictionary.Get(qi, a => new Subject<IReadOnlyCollection<Key>>()) as Subject<IReadOnlyCollection<Key>>;
         }
 
         public DecisionTree Predicate { get; set; }
 
         public void OnNext(QueueItem queueItem)
         {
-            //if (item is TreeViewItem _item)
-            //{
             Predicate.Reset();
+
             Predicate.Input = queueItem;
+
             Predicate.Evaluate();
 
-            if (Predicate.Backput is string s)
+            if (Predicate.Backput is IObservable<DateValue?> dt)
             {
-                var observable = dictionary[queueItem];
-
-                if (s == "A")
+                dt.Subscribe(a =>
                 {
-                    if (observable is Observable2<DateValue?> dv)
-                        base.Get(queueItem.Guid).Subscribe(a => dv.OnNext(a));
-                    else if (observable is Observable2<Guid> _dv)
-                        base.Find(queueItem.Guid, queueItem.Name, queueItem.Type, queueItem.Index)
-                            .Subscribe(a =>
-                        {
-                            _dv.OnNext(a);
-                            _dv.OnCompleted();
-                        });
-                    else if (observable is Observable2<IReadOnlyCollection<Key>> cdv)
-                        base.SelectKeys(queueItem.ParentGuid, queueItem.Name, queueItem.TableName)
-                            .Subscribe(a =>
-                        {
-                            cdv.OnNext(a);
-                            //cdv.OnCompleted();
-                        });
-                }
-                else if (s == "B")
-                {
-                    if (observable is Observable2<IReadOnlyCollection<Key>> cdv)
-                        base.SelectKeys()
-                            .Subscribe(_keys =>
-                            {
-                                List<Key> keys = new();
-
-                                foreach (var x in _keys)
-                                {
-                                    var table = new Table { Name = x.Name, Guid = x.Guid, Type = x.Instance.GetType() };
-                                    keys.Add(x with { Instance = table });
-                                }
-                                cdv.OnNext(keys);
-                                cdv.OnCompleted();
-                            });
-                    else
-                        throw new Exception("DS 33 fff3");
-                    //Observable2<Guid> observable = dictionary.Get(guid, a => new Observable2<Guid>()) as Observable2<Guid>;
-                    //base.Find(guid).Subscribe(a => observable.OnNext(a));
-
-                }
-                //else if (s == "C")
-                //{
-
-                //    if (observable is Observable2<DateValue?> dv)
-                //    {
-                //        if (SelectedTable == null)
-                //        {
-                //            base.Get(queueItem.Guid).Subscribe(a => dv.OnNext(a));
-                //        }
-                //        else
-                //        {
-                //            dv.OnNext(new DateValue(DateTime.Now, SelectedTable));
-                //        }
-                //    }
-                //    return;
-                //}
-                else if (s == "D")
-                {
-                    if (observable is Observable2<IReadOnlyCollection<Key>> cdv)
-                    {
-                        if (Locator.Current.GetService<Model>() is { SelectedTable:{ } selectedTable } )
-                        {
-                            cdv.OnNext(new List<Key>(new Key[] { new Key { Name = selectedTable.Name, Guid = selectedTable.Guid, Instance = Activator.CreateInstance(selectedTable.Type) } }));
-                        }
-                  
-                    }
-                    else
-                        throw new Exception("DS 33 fff3");
-                }
+                    dictionary[Predicate.Input as QueueItem].OnNext(a);
+                });
             }
-            //}
-            //return null;
+            else if (Predicate.Backput is IObservable<Guid> dt2)
+            {
+                dt2.Subscribe(a =>
+                {
+                    dictionary[Predicate.Input as QueueItem].OnNext(a);
+                });
+            }
+            else if (Predicate.Backput is IObservable<IReadOnlyCollection<Key>> dt3)
+            {
+                dt3.Subscribe(a =>
+                {
+                    dictionary[Predicate.Input as QueueItem].OnNext(a);
+                });
+            }
+
         }
 
         public void OnCompleted()

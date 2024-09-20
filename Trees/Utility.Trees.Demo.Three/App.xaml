@@ -118,7 +118,15 @@
                     <TreeView.ItemContainerStyle>
                         <Style  TargetType="TreeViewItem" BasedOn="{StaticResource LeftToRight_GraphStyle}">
                             <Setter Property="IsExpanded" Value="True" />
+
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="BorderBrush" Value="LightBlue"  />
+                                    <Setter Property="BorderThickness" Value="2"  />
+                                </Trigger>
+                            </Style.Triggers>
                         </Style>
+                        
                     </TreeView.ItemContainerStyle>
                 </TreeView>
             </DataTemplate>

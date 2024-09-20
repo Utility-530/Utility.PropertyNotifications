@@ -5,6 +5,10 @@ using System.Windows.Controls;
 using System.Windows;
 using Utility.Trees.Demo.MVVM.Infrastructure;
 using Utility.Helpers.NonGeneric;
+using System.Reactive.Linq;
+using Utility.PropertyNotifications;
+using NetFabric.Hyperlinq;
+using Utility.Reactives;
 
 namespace Utility.Trees.Demo.MVVM
 {
@@ -33,7 +37,7 @@ namespace Utility.Trees.Demo.MVVM
             Data = decision;
         }
 
-        protected override object ToBackPut(List<object> backputs)
+        protected override object ToBackPut(ICollection<object> backputs)
         {
             return backputs.FirstOrDefault(a => a is string);
         }
@@ -49,11 +53,12 @@ namespace Utility.Trees.Demo.MVVM
             Data = decision;
         }
 
-        protected override object ToBackPut(List<object> backputs)
+        protected override object ToBackPut(ICollection<object> backputs)
         {
             return backputs.FirstOrDefault(a => a is TR);
         }
     }
+
     public class DataTemplateDecisionTree<T> : DecisionTree<T, DataTemplate>
     {
         public DataTemplateDecisionTree(IDecision decision, Func<T, object>? transform = null) : base(decision, transform)
@@ -69,7 +74,7 @@ namespace Utility.Trees.Demo.MVVM
             Data = decision;
         }
 
-        protected override object ToBackPut(List<object> backputs)
+        protected override object ToBackPut(ICollection<object> backputs)
         {
             return backputs.FirstOrDefault(a => a is DataTemplate);
         }
@@ -84,7 +89,7 @@ namespace Utility.Trees.Demo.MVVM
             Data = decision;
         }
 
-        protected override object ToBackPut(List<object> backputs)
+        protected override object ToBackPut(ICollection<object> backputs)
         {
             if (AndOr is AndOr.And)
             {
@@ -105,7 +110,7 @@ namespace Utility.Trees.Demo.MVVM
             Data = decision;
         }
 
-        protected override object ToBackPut(List<object> backputs)
+        protected override object ToBackPut(ICollection<object> backputs)
         {
             if (AndOr is AndOr.And)
             {
@@ -141,7 +146,7 @@ namespace Utility.Trees.Demo.MVVM
 
     }
 
-    public abstract class DecisionTree : Tree
+    public class DecisionTree : Tree
     {
         private readonly IDecision decision;
         private object input;
@@ -149,16 +154,10 @@ namespace Utility.Trees.Demo.MVVM
         private object backput;
         private Func<object, object>? transform;
 
-        public DecisionTree(IDecision decision, bool match = true)
-        {
-            Data = decision;
-            this.decision = decision;
-            Match = match;
-        }
-
-        protected DecisionTree(IDecision decision, Func<object, object>? transform, bool match = true) : this(decision, match)
+        public DecisionTree(IDecision decision, Func<object, object>? transform = null, bool match = true) 
         {
             this.decision = decision;
+            this.Match = match;
             this.transform = transform ?? new Func<object, object>(a => a);
         }
 
@@ -166,26 +165,6 @@ namespace Utility.Trees.Demo.MVVM
 
 
         public void Evaluate()
-        {
-            Backput = eval();
-        }
-
-        public void Reset()
-        {
-            Input = null;
-            Output = null;
-            Backput = null;
-            if (Items.Any())
-            {
-                foreach (DecisionTree x in Items)
-                {
-                    x.Reset();
-                } 
-            } 
-        }
-
-
-        private object eval()
         {
             List<object> outputs = new();
 
@@ -198,16 +177,73 @@ namespace Utility.Trees.Demo.MVVM
                 Output = Transform(Input);
                 if (Items.Any())
                 {
-                    foreach (DecisionTree x in Items)
+                    foreach (DecisionTree item in Items)
                     {
-                        x.Input = Output;
-                        outputs.Add(x.eval());
+                        item.Input = Output;
+                        item.Evaluate();
+                        outputs.Add(item.Backput);
                     }
-                    return Backput = ToBackPut(outputs);
+                    Backput = ToBackPut(outputs);
                 }
-                return Output;
+                else
+                {
+                    Backput = Output;
+                }
+                return;
             }
-            return null;
+            Backput = null;
+        }
+
+        public void Reset()
+        {
+            Input = null;
+            Output = null;
+            Backput = null;
+            if (Items.Any())
+            {
+                foreach (DecisionTree x in Items)
+                {
+                    x.Reset();
+                }
+            }
+        }
+
+
+        public void Eval()
+        {
+            List<object> outputs = new();
+
+            //var compile = (Data as IDecision).Predicate.Compile().Invoke(Input);
+
+            var result = decision.Evaluate(Input);
+
+            if (result == Match)
+            {
+                Output = Transform(Input);
+                if (Items.Any())
+                {
+                    Items.Cast<DecisionTree>()
+                        .Select(x =>
+                        {
+                            var xe = x.WithChangesTo(a => a.Backput);
+                            x.Input = Output;
+                            Pipe.Instance.Queue(new DecisionTreeQueueItem(x));
+                            return xe;
+                        })
+                        .Combine()
+                        .Subscribe(outputs =>
+                        {
+                            Backput = ToBackPut(outputs);
+                        });
+                }
+                else
+                {
+                    Backput = Output;
+                }
+         
+                return;
+            }
+            Backput = null;
         }
 
         protected virtual object Transform(object value)
@@ -217,7 +253,10 @@ namespace Utility.Trees.Demo.MVVM
             throw new Exception(" ew332 324");
         }
 
-        protected abstract object ToBackPut(List<object> backputs);
+        protected virtual object ToBackPut(ICollection<object> backputs)
+        {
+            return backputs.SingleOrDefault(a => a != null);
+        }
 
 
         public object Input
@@ -225,7 +264,7 @@ namespace Utility.Trees.Demo.MVVM
             get => input; set
             {
                 input = value;
-                OnPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         public object Output
@@ -233,7 +272,7 @@ namespace Utility.Trees.Demo.MVVM
             get => output; set
             {
                 output = value;
-                OnPropertyChanged();
+                RaisePropertyChanged();
             }
         }
         public object Backput
@@ -241,12 +280,11 @@ namespace Utility.Trees.Demo.MVVM
             get => backput; set
             {
                 backput = value;
-                OnPropertyChanged();
+                RaisePropertyChanged();
             }
         }
 
 
         public bool Match { get; }
-        //public Decision<IDescriptor> Decision { get; }
     }
 }

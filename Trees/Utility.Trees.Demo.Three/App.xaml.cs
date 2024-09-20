@@ -32,6 +32,7 @@ namespace Utility.Trees.Demo.MVVM
             Locator.CurrentMutable.RegisterConstant<ITreeRepository>(PipeRepository.Instance2);
             Locator.CurrentMutable.RegisterConstant<PipeRepository>(PipeRepository.Instance2);
             Locator.CurrentMutable.RegisterLazySingleton<PipeController>(() => new ());
+            //Locator.CurrentMutable.RegisterLazySingleton<Utility.Trees.Demo.MVVM.Filters.PipeController>(() => new ());
             Locator.CurrentMutable.RegisterLazySingleton<Model>(() => new ());
 
             //{

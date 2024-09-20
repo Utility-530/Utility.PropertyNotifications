@@ -2,17 +2,12 @@
 using Jellyfish;
 using Splat;
 using System;
-using System.Collections;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Utility.Interfaces.NonGeneric;
-using Utility.PropertyNotifications;
-using Utility.Repos;
 using Utility.Trees.Demo.MVVM.Infrastructure;
 using Utility.ViewModels.Base;
 
@@ -69,18 +64,10 @@ namespace Utility.Trees.Demo.MVVM
             set
             {
                 isPlaying = value;
-                OnPropertyChanged(nameof(IsPaused));
-            }
-        }
-        public bool IsPaused
-        {
-            get => isPlaying == false;
-            set
-            {
-                isPlaying = !value;
                 OnPropertyChanged(nameof(IsPlaying));
             }
         }
+
         public ICommand StepCommand { get; set; }
     }
 
@@ -112,10 +99,6 @@ namespace Utility.Trees.Demo.MVVM
 
     public class Pipe : BaseViewModel, IObserver<Unit>
     {
-        //private readonly TaskFactory factory;
-        ////private readonly DispatcherTimer timer = new DispatcherTimer();
-        //private readonly Timer timer;
-
         public ObservableCollection<QueueItem> Pending { get; } = new();
         public ObservableCollection<QueueItem> Completed { get; } = new();
         public QueueItem Last { get; set; }
@@ -123,15 +106,11 @@ namespace Utility.Trees.Demo.MVVM
 
         Pipe()
         {
-
-            //factory = new TaskFactory(new ConstrainedTaskScheduler() { MaximumTaskCount = 1 });
-
         }
-
 
         public void Queue(QueueItem queueItem)
         {
-            if (Next == null)
+            if (Next == null && Pending.Any()==false)
             {
                 Next = queueItem;
                 this.OnPropertyChanged(nameof(Next));
@@ -144,31 +123,32 @@ namespace Utility.Trees.Demo.MVVM
         public void OnNext(Unit unit)
         {
             lock (Pending)
-                if (Next!=null)
-                //if (Pending.TryDequeue(out var item))
+                if (Pending.Any() == false)
                 {
-                    Last = Next;
-                    Next = Pending.FirstOrDefault();
-                    OnPropertyChanged(nameof(Next));
-                    if (Pending.Any())
-                        Pending.RemoveAt(0);
-
-                    Splat.Locator.Current.GetService<PipeRepository>().OnNext(Last);
-                    Completed.Add(Last);
-
-                    //factory.StartNew(() => Splat.Locator.Current.GetService<PipeRepository>().Select(Last))
-                    //    .ContinueWith(tsk =>
-                    //    {
-                    //        Completed.Add(Last);
-                    //    }, CancellationToken.None, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.FromCurrentSynchronizationContext())
-                    //    .ContinueWith(tsk =>
-                    //    {
-                    //        var flattenedException = tsk.Exception.Flatten();
-                    //        //AddLog("Exception! " + flattenedException);
-                    //        return true;
-                    //    }, TaskContinuationOptions.OnlyOnFaulted);
-
                 }
+                else
+                {
+                    Next = (QueueItem?)Pending.OfType<DecisionTreeQueueItem>().FirstOrDefault() ?? Pending.OfType<RepoQueueItem>().FirstOrDefault();
+                    OnPropertyChanged(nameof(Next));
+                }
+
+            if (Next != null)
+            {
+                if (Pending.Contains(Next))
+                    Pending.Remove(Next);
+
+                Last = Next;
+                OnPropertyChanged(nameof(Last));
+                if (Last is RepoQueueItem repoQueueItem)
+                {
+                    Splat.Locator.Current.GetService<PipeRepository>().OnNext(repoQueueItem);
+                }
+                else if (Last is DecisionTreeQueueItem decisionTreeQueueItem)
+                    decisionTreeQueueItem.DecisionTree.Eval();
+
+                Completed.Add(Last);
+                Next = null;
+            }
         }
 
         public void OnError(Exception error)
@@ -184,8 +164,20 @@ namespace Utility.Trees.Demo.MVVM
         public static Pipe Instance { get; } = new();
     }
 
-    public record QueueItem(Guid Guid, string? Name = default, Type? Type = default, int? Index = default, string? TableName = default, Guid? ParentGuid = default)
+
+    public record QueueItem()
     {
+    }
+
+    public record RepoQueueItem(Guid Guid, QueueItemType QueueItemType, string? Name = default, Type? Type = default, int? Index = default, string? TableName = default, Guid? ParentGuid = default) : QueueItem
+    {
+    }
+
+    public record DecisionTreeQueueItem(DecisionTree DecisionTree) : QueueItem;
+
+    public enum QueueItemType
+    {
+        Get, Find, SelectKeys
     }
 }
 
