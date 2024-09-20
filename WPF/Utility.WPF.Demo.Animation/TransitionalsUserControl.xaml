@@ -26,41 +26,43 @@
                 <Border BorderBrush="{DynamicResource MaterialDesignShadowBrush}" BorderThickness="1">
 
                     <transc:TransitionElement x:Name="TransitionBox" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <transc:TransitionElement.Style>
-                    <Style TargetType="{x:Type transc:TransitionElement}">
-                        <Setter Property="Content">
-                            <Setter.Value>
-                                <materialDesign:PackIcon
+                        <transc:TransitionElement.Style>
+                            <Style TargetType="{x:Type transc:TransitionElement}">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <materialDesign:PackIcon
                                     Width="300"
                                     Height="300"
 
                                     Kind="Valve" />
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding ElementName=Toggle, Path=IsChecked}" Value="True">
-                                <Setter Property="Content">
-                                    <Setter.Value>
-                                        <materialDesign:PackIcon
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=Toggle, Path=IsChecked}" Value="True">
+                                        <Setter Property="Content">
+                                            <Setter.Value>
+                                                <materialDesign:PackIcon
                                             Width="700"
                                             Height="700"
                                             Margin="30"
                                             Kind="LogicGateAnd" />
-                                    </Setter.Value>
-                                </Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </transc:TransitionElement.Style>
-                <transc:TransitionElement.TransitionSelector>
-                    <trans:RandomTransitionSelector>
-                        <transt:DoorTransition />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </transc:TransitionElement.Style>
+                        <transc:TransitionElement.TransitionSelector>
+                            <trans:RandomTransitionSelector>
+                                <!--<transt:CheckerboardTransition></transt:CheckerboardTransition>-->
+                                <transt:StarTransition></transt:StarTransition>
+                                <!--<transt:DoorTransition />
                         <transt:DotsTransition />
                         <transt:RotateTransition Angle="45" />
-                        <transt:RollTransition />
-                    </trans:RandomTransitionSelector>
-                </transc:TransitionElement.TransitionSelector>
-            </transc:TransitionElement>
+                        <transt:RollTransition />-->
+                            </trans:RandomTransitionSelector>
+                        </transc:TransitionElement.TransitionSelector>
+                    </transc:TransitionElement>
                 </Border>
             </Grid>
         </DockPanel>
