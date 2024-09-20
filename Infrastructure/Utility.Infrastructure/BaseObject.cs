@@ -2,7 +2,8 @@
 using System.Reflection;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
-using Utility.Models;
+using Key = Utility.Models.Key;
+using GuidBase = Utility.Models.GuidBase;
 using Utility.Observables.Generic;
 using Utility.Observables.NonGeneric;
 using LanguageExt;
