@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Linq;
-using Utility.WPF.Helpers;
 using Utility.WPF.Demo.Common.ViewModels;
-using Utility.WPF.Meta;
+using Utility.WPF.ResourceDictionarys;
 
 namespace Utility.WPF.Demo.Dragablz.ViewModels
 {
