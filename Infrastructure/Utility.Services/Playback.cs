@@ -3,7 +3,6 @@ using System.Windows.Input;
 using Utility.Commands;
 using Utility.Enums;
 using Utility.Infrastructure;
-using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.ViewModels.Base;
 
@@ -15,8 +14,6 @@ public class Playback : BaseObject
 
     public override Key Key => new(Guids.Playback, nameof(Playback), typeof(Playback));
     public override object? Model => model;
-
-    public IEnumerable<IObserver> Observers => throw new NotImplementedException();
 
     public Playback()
     {
