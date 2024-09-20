@@ -305,19 +305,6 @@ namespace Utility.Trees
             return Data == default ? this.GetType().Name : Data.ToString();
         }
 
-        #region propertyChanged
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        public virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-
-
-        #endregion propertyChanged
-
         public virtual bool Equals(ITree? other)
         {
             return other?.Key?.Equals(this.Key) == true;
