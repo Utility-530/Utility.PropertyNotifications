@@ -15,11 +15,23 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Threading;
 using Utility.Trees.Abstractions;
+using Utility.WPF.Abstract;
 using Utility.WPF.Demo.Panels;
 using Utility.WPF.Panels;
 
 namespace Utility.WPF.Controls.Trees
 {
+
+    public class NewObjectRoutedEventArgs : RoutedEventArgs
+    {
+        public NewObjectRoutedEventArgs(object newObject, RoutedEvent routedEvent, object source) : base(routedEvent, source)
+        {
+            NewObject = newObject;
+        }
+
+        public object NewObject { get; }
+    }
+
     public class ComboTreeViewItem : TreeViewItem, ISelection
     {
 
@@ -62,6 +74,104 @@ namespace Utility.WPF.Controls.Trees
         //        }
         //    }
         //}
+
+        public override void OnApplyTemplate()
+        {
+            (this.GetTemplateChild("PlusButton") as Button).Click += ComboTreeViewItem_Click; ;
+            base.OnApplyTemplate();
+        }
+
+        private void ComboTreeViewItem_Click(object sender, RoutedEventArgs e)
+        {
+            RaiseCustomRoutedEvent();
+        }
+
+
+        // Register a custom routed event using the Bubble routing strategy.
+        public static readonly RoutedEvent AddEvent = EventManager.RegisterRoutedEvent(
+            name: "Add",
+            routingStrategy: RoutingStrategy.Bubble,
+            handlerType: typeof(RoutedEventHandler<NewObjectRoutedEventArgs>),
+            ownerType: typeof(ComboTreeViewItem));
+
+        // Provide CLR accessors for assigning an event handler.
+        public event RoutedEventHandler<NewObjectRoutedEventArgs> Add
+        {
+            add { AddHandler(AddEvent, value); }
+            remove { RemoveHandler(AddEvent, value); }
+        }
+
+
+        void RaiseCustomRoutedEvent()
+        {
+            // Create a RoutedEventArgs instance.
+            NewObjectRoutedEventArgs routedEventArgs = new(NewObject, AddEvent, this);
+
+            // Raise the event, which will bubble up through the element tree.
+            RaiseEvent(routedEventArgs);
+        }
+
+
+
+        public static readonly RoutedEvent FinishEditEvent = EventManager.RegisterRoutedEvent(
+            name: "FinishEdit",
+            routingStrategy: RoutingStrategy.Bubble,
+            handlerType: typeof(RoutedEventHandler<NewObjectRoutedEventArgs>),
+            ownerType: typeof(ComboTreeViewItem));
+
+        public event RoutedEventHandler<NewObjectRoutedEventArgs> FinishEdit
+        {
+            add { AddHandler(FinishEditEvent, value); }
+            remove { RemoveHandler(FinishEditEvent, value); }
+        }
+
+
+        void RaiseFinishEditEvent()
+        {
+            // Create a RoutedEventArgs instance.
+            NewObjectRoutedEventArgs routedEventArgs = new(NewObject, FinishEditEvent, this);
+
+            // Raise the event, which will bubble up through the element tree.
+            RaiseEvent(routedEventArgs);
+        }
+
+
+
+
+
+        public object NewObject
+        {
+            get { return (object)GetValue(NewObjectProperty); }
+            set { SetValue(NewObjectProperty, value); }
+        }
+
+        public static readonly DependencyProperty NewObjectProperty =
+            DependencyProperty.Register("NewObject", typeof(object), typeof(ComboTreeViewItem), new PropertyMetadata());
+
+
+
+
+
+        public DataTemplate EditTemplate
+        {
+            get { return (DataTemplate)GetValue(EditTemplateProperty); }
+            set { SetValue(EditTemplateProperty, value); }
+        }
+
+
+        public static readonly DependencyProperty EditTemplateProperty =
+            DependencyProperty.Register("EditTemplate", typeof(DataTemplate), typeof(ComboTreeViewItem), new PropertyMetadata());
+
+
+
+        public bool IsEditing
+        {
+            get { return (bool)GetValue(IsEditingProperty); }
+            set { SetValue(IsEditingProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsEditingProperty =
+            DependencyProperty.Register("IsEditing", typeof(bool), typeof(ComboTreeViewItem), new PropertyMetadata());
 
 
         public double MaxDropDownHeight

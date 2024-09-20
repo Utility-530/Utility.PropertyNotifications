@@ -1,7 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:trees="clr-namespace:Utility.WPF.Controls.Trees"
-                    xmlns:res="http://schemas.utility.com/resourcedictionary">
+                    xmlns:res="http://schemas.utility.com/resourcedictionary" 
+                    xmlns:btns="http://schemas.utility.com/buttons">
 
 
     <ResourceDictionary.MergedDictionaries>
@@ -124,6 +125,10 @@
                   SnapsToDevicePixels="True"
                   MinWidth="{TemplateBinding ActualWidth}"
                   MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
                                 <Border x:Name="DropDownBorder"
                       BorderThickness="1">
                                     <Border.BorderBrush>
@@ -138,6 +143,24 @@
                                     <ItemsPresenter 
                             KeyboardNavigation.DirectionalNavigation="Contained" />
                                 </ScrollViewer>
+
+                                <Border  Grid.Row="1" Background="LightGray" Margin="4">
+                                    
+                                    <Grid>
+                                        <ContentControl Content="{TemplateBinding NewObject}"
+                                                        Opacity="0.5"
+                                                        ContentTemplate="{TemplateBinding EditTemplate}">
+                                            <ContentControl.OpacityMask>
+                                                <VisualBrush Visual="{Binding ElementName=PlusButton}"/>
+                                            </ContentControl.OpacityMask>
+                                        </ContentControl>
+                                        
+                                       
+                                        <btns:PlusGeometryButton x:Name="PlusButton"  Width="24" Height="24" Foreground="Transparent"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />
+
+                                    </Grid>
+                                    <!--<btns:MinusGeometryButton x:Name="MinusButton"  Width="16" Height="16"    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />-->
+                                </Border>
                             </Grid>
                         </Popup>
                     </Grid>
