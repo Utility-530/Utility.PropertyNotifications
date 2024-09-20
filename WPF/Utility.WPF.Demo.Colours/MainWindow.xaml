@@ -42,11 +42,13 @@
 
 
     <UniformGrid >
-        
+
         <HeaderedContentControl Header="Native">
-          
-                <local:NativeColoursView />
-           
+            <local:NativeColoursView />
+        </HeaderedContentControl>
+
+        <HeaderedContentControl Header="Random">
+            <local:RandomRectanglesView  MinHeight="300"/>
         </HeaderedContentControl>
 
         <HeaderedContentControl Header="Custom">
