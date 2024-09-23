@@ -18,7 +18,7 @@ namespace Utility.WPF.Controls
         private Control SpacedBox;
         private Grid? Grid;
         public static readonly DependencyProperty GuidProperty = Register("Guid", typeof(Guid), typeof(GuidBox), new PropertyMetadata(Changed)),
-            GuidAsStringProperty = Register("GuidAsString", typeof(string), typeof(GuidBox), new PropertyMetadata(Changed)),
+            GuidAsStringProperty = Register("GuidAsString", typeof(string), typeof(GuidBox), new PropertyMetadata("00000000-0000-0000-0000-000000000000", Changed)),
             IsLowerCaseProperty = Register("IsLowerCase", typeof(bool), typeof(GuidBox), new PropertyMetadata(true, Changed)),
             IsReadOnlyProperty = Register("IsReadOnly", typeof(bool), typeof(GuidBox), new PropertyMetadata(true, IsReadOnlyChanged));
 
