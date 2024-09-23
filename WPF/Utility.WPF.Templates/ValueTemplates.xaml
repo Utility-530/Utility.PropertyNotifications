@@ -74,17 +74,21 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type sys:String}">
+    <!--<DataTemplate DataType="{x:Type sys:String}">
         <dotNetKitControls:AutoCompleteComboBox Text="{Binding Value}" Provider="{Binding Converter={x:Static local:AutoCompleteConverter.Instance}}"/>
-        <!--<xc:AutoCompleteBox Text="{Binding Path=Value, Mode=TwoWay}" VerticalContentAlignment="Center" ItemsSource="{Binding Converter={StaticResource AutoCompleteConverter}}" />-->
+        --><!--<xc:AutoCompleteBox Text="{Binding Path=Value, Mode=TwoWay}" VerticalContentAlignment="Center" ItemsSource="{Binding Converter={StaticResource AutoCompleteConverter}}" />--><!--
+    </DataTemplate>-->
+    
+    <DataTemplate DataType="{x:Type sys:String}">
+        <TextBox Text="{Binding Value, Mode=TwoWay}" />      
     </DataTemplate>
-
+    
     <DataTemplate x:Key="Enumerable">
         <!--<ItemsControl ItemsSource="{Binding Value, Mode=OneWay}"></ItemsControl>-->
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:Guid}">
-        <controls:GuidBox Guid="{Binding Path=Value}" />
+        <controls:GuidBox Guid="{Binding Path=Value, Mode=TwoWay}" />
     </DataTemplate>
 
     <DataTemplate x:Key="Object">
