@@ -159,7 +159,7 @@ namespace Utility.Repos
                 object item = null;
                 if (type?.ContainsGenericParameters != false)
                 {
-                    throw new Exception("dgfsd..lll");
+                    //throw new Exception("dgfsd..lll");
                 }
                 else
                 {
@@ -382,7 +382,7 @@ namespace Utility.Repos
             {
                 var typeId = TypeId(value.GetType());
                 connection.InsertOrReplace(new Values { Guid = guid, Value = text, Added = dateTime, TypeId = typeId });
-                values[guid] = new(dateTime, text);
+                values[guid] = new(dateTime, value);
             }
         }
 
