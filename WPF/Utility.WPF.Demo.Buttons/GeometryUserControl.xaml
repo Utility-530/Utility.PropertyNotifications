@@ -98,13 +98,48 @@
     </FrameworkElement.Resources>
 
     <UniformGrid>
+
+        <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid
+
+                            Background="Transparent">
+                <!--  The background of the button, as an ellipse.  -->
+                <Ellipse
+                                x:Name="backgroundEllipse"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Fill="{c:Cyan}"
+                                Width="160"
+                                Height="160" />
+                <Path
+                                    x:Name="ButtonPath"
+                                    Width="80"
+                                    Height="80"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                   Data="{StaticResource XGeometry}"
+                                   Stretch="Uniform"
+                                    Stroke="{c:BlueGrey}"
+                                 StrokeEndLineCap="Round" 
+                                StrokeLineJoin="Round"  
+                                StrokeStartLineCap="Round"
+                                    StrokeThickness="12">
+                </Path>
+            </Grid>
+        </Viewbox>
+        
+        
         <view:GeometryButton
                     Height="70"
+                    Background="{c:Red}"
+                    PressedBackground="{c:Amber}"
+            PressedForeground="{c:Brown}"
                     Data="{StaticResource XGeometry}"
                     HoverBackground="RoyalBlue" />
 
         <view:GeometryButton
                     Height="70"
+              Background="{c:Red}"
                     Data="{StaticResource PlusGeometry}"
                     HoverBackground="BurlyWood" />
 
@@ -131,6 +166,7 @@
         <view:GeometryToggleButton
                     Height="140"
                     Data="{StaticResource ChevronGeometry2}"
+            Background="Black"
             CheckedBackground="{c:Red}"
                     HoverBackground="{c:BlueGrey}" />
 
