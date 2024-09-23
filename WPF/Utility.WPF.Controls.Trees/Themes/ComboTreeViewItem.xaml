@@ -2,8 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:trees="clr-namespace:Utility.WPF.Controls.Trees"
                     xmlns:res="http://schemas.utility.com/resourcedictionary" 
-                    xmlns:btns="http://schemas.utility.com/buttons">
-
+                    xmlns:btns="http://schemas.utility.com/buttons"
+                    xmlns:sys="clr-namespace:System;assembly=netstandard"           
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:c="http://schemas.utility.com/colours">
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/BasicStyle.xaml"/>
@@ -12,14 +14,66 @@
 
 
     <ControlTemplate x:Key="ComboBoxTextBox"
-                 TargetType="{x:Type TextBox}">
+                    TargetType="{x:Type TextBox}">
         <Border x:Name="PART_ContentHost"
-          Focusable="False"
-          Background="{TemplateBinding Background}" />
+            Focusable="False"
+            Background="{TemplateBinding Background}" />
     </ControlTemplate>
 
-    
-    <Style TargetType="{x:Type trees:ComboTreeViewItem}" BasedOn="{StaticResource GenericTreeViewItem}">
+
+    <sys:Double x:Key="MaxDropDownHeight" >400.0</sys:Double>
+
+
+    <PathGeometry x:Key="Tick_Rounded">
+        <PathGeometry.Figures>
+            <PathFigureCollection>
+                <PathFigure IsClosed="False"  StartPoint="4,2">
+                    <PathFigure.Segments>
+                        <PathSegmentCollection>
+                            <LineSegment Point="8,6" />
+                            <LineSegment Point="17,-6" />
+                        </PathSegmentCollection>
+                    </PathFigure.Segments>
+                </PathFigure>
+            </PathFigureCollection>
+        </PathGeometry.Figures>
+    </PathGeometry>
+
+
+    <PathGeometry x:Key="Cancel_Rounded">
+        <PathGeometry.Figures>
+            <PathFigureCollection>
+                <PathFigure IsClosed="False"  StartPoint="9,9">
+                    <PathFigure.Segments>
+                        <PathSegmentCollection>
+                            <LineSegment Point="21,21" />
+                        </PathSegmentCollection>
+                    </PathFigure.Segments>
+                </PathFigure>
+
+                <PathFigure IsClosed="False"  StartPoint="9,21">
+                    <PathFigure.Segments>
+                        <PathSegmentCollection>
+                            <LineSegment Point="21,9" />
+                        </PathSegmentCollection>
+                    </PathFigure.Segments>
+                </PathFigure>
+
+            </PathFigureCollection>
+        </PathGeometry.Figures>
+    </PathGeometry>
+
+
+
+
+    <Style  TargetType="{x:Type trees:ComboTreeViewItem}" BasedOn="{StaticResource GenericTreeViewItem}">
+        <Style.Resources>
+            <DataTemplate x:Key="EditTemplate">
+                <Grid Background="#DCDCDC" Name="rootElement">
+                    <TextBlock Text="no template"></TextBlock>
+                </Grid>
+            </DataTemplate>
+        </Style.Resources>
         <Setter Property="SnapsToDevicePixels"
           Value="true" />
         <Setter Property="OverridesDefaultStyle"
@@ -34,7 +88,6 @@
           Value="120" />
         <Setter Property="MinHeight"
           Value="20" />
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type trees:ComboTreeViewItem}">
@@ -121,10 +174,11 @@
                  AllowsTransparency="True"
                  Focusable="False"
                  PopupAnimation="Slide">
-                            <Grid x:Name="DropDown"
+                            
+                            <Grid x:Name="DropDown" VerticalAlignment="Top"
                   SnapsToDevicePixels="True"
-                  MinWidth="{TemplateBinding ActualWidth}"
-                  MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                  MinWidth="{Binding ActualWidth}"
+                  MaxHeight="{StaticResource MaxDropDownHeight}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*"></RowDefinition>
                                     <RowDefinition Height="Auto"></RowDefinition>
@@ -140,53 +194,116 @@
                                 </Border>
                                 <ScrollViewer Margin="4,6,4,6"
                             SnapsToDevicePixels="True">
-                                    <ItemsPresenter 
+                                    <ItemsPresenter
                             KeyboardNavigation.DirectionalNavigation="Contained" />
                                 </ScrollViewer>
 
                                 <Border  Grid.Row="1" Background="LightGray" Margin="4">
-                                    
-                                    <Grid>
-                                        <ContentControl Content="{TemplateBinding NewObject}"
-                                                        Opacity="0.5"
-                                                        ContentTemplate="{TemplateBinding EditTemplate}">
-                                            <ContentControl.OpacityMask>
-                                                <VisualBrush Visual="{Binding ElementName=PlusButton}"/>
-                                            </ContentControl.OpacityMask>
-                                        </ContentControl>
-                                        
-                                       
-                                        <btns:PlusGeometryButton x:Name="PlusButton"  Width="24" Height="24" Foreground="Transparent"  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />
 
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <ContentControl x:Name="content_control" 
+                                                                Content="{TemplateBinding NewObject}"
+                                                       
+                                                        ContentTemplate="{TemplateBinding EditTemplate}">
+                                            <!--<ContentControl.OpacityMask>
+                        <VisualBrush Visual="{Binding ElementName=PlusButton}"/>
+                    </ContentControl.OpacityMask>-->
+
+                                            <FrameworkElement.Style>
+                                                <Style TargetType="{x:Type ContentControl}">
+                                                    <Setter Property="Opacity" Value="0"></Setter>
+                                                    <Style.Triggers>
+                                                        <!--<DataTrigger Binding="{Binding ElementName=PlusButton, Path=IsChecked}" Value="False">
+                                                                <Setter Property="Opacity" Value="0.5" />
+                                                                </DataTrigger>-->
+                                                        <DataTrigger Binding="{Binding ElementName=PlusButton, Path=IsChecked}" Value="False">
+                                                            <!--<Setter Property="Height" Value="0" />-->
+                                                            <DataTrigger.EnterActions>
+                                                                <BeginStoryboard>
+                                                                    <Storyboard>
+                                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.1"></DoubleAnimation>
+                                                                    </Storyboard>
+                                                                </BeginStoryboard>
+                                                            </DataTrigger.EnterActions>
+                                                            <DataTrigger.ExitActions>
+                                                                <BeginStoryboard>
+                                                                    <Storyboard>
+                                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1"></DoubleAnimation>
+                                                                    </Storyboard>
+                                                                </BeginStoryboard>
+                                                            </DataTrigger.ExitActions>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </FrameworkElement.Style>
+                                        </ContentControl>
+
+                                        <btns:GeometryToggleButton x:Name="PlusButton"                                   
+                                           Data="M0,1 H2 M1,0 V2"
+                                           Foreground="Black"              
+                                                                           
+                                           HorizontalAlignment="Stretch" 
+                                           VerticalAlignment="Stretch" Margin="2" Padding="2">
+                                            <FrameworkElement.Style>
+                                                <Style TargetType="{x:Type btns:GeometryToggleButton}">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsChecked" Value="True">
+                                                            <Setter Property="Height" Value="0" />
+                                                            <Setter Property="Width" Value="0" />
+                                                        </Trigger>
+                                                        <Trigger Property="IsChecked" Value="False">
+                                                            <Setter Property="Height" Value="24" />
+                                                            <Setter Property="Width" Value="24" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+
+                                            </FrameworkElement.Style>
+                                        </btns:GeometryToggleButton>
+
+
+                                        <WrapPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" Margin="2">
+                                            <FrameworkElement.Style>
+                                                <Style TargetType="{x:Type WrapPanel}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=PlusButton, Path=IsChecked}" Value="False">
+                                                            <Setter Property="Height" Value="0" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </FrameworkElement.Style>
+                                            <btns:GeometryButton x:Name="Accept_Button" Data="{StaticResource Tick_Rounded}"   
+                                                                         Width="32" Margin="2"
+                                                                         Foreground="White"
+                                                                         Background="{c:Green 7}"
+                                                                         Height="32" >
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <i:ChangePropertyAction TargetName="PlusButton" PropertyName="IsChecked" Value="False"></i:ChangePropertyAction>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </btns:GeometryButton>
+                                            <btns:GeometryButton x:Name="Decline_Button"   Data="{StaticResource Cancel_Rounded}"   
+                                                                         Width="32" Margin="2"
+                                                                         Foreground="White"
+                                                                         Background="{c:Red 7}"
+                                                                         Height="32" >
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <i:ChangePropertyAction TargetName="PlusButton" PropertyName="IsChecked" Value="False"></i:ChangePropertyAction>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </btns:GeometryButton>
+                                        </WrapPanel>
                                     </Grid>
-                                    <!--<btns:MinusGeometryButton x:Name="MinusButton"  Width="16" Height="16"    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />-->
                                 </Border>
                             </Grid>
                         </Popup>
                     </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="HasItems"
-                   Value="false">
-                            <Setter TargetName="DropDownBorder"
-                    Property="MinHeight"
-                    Value="95" />
-                        </Trigger>
-                        <Trigger Property="IsGrouping"
-                   Value="true">
-                            <Setter Property="ScrollViewer.CanContentScroll"
-                    Value="false" />
-                        </Trigger>
-                        <Trigger SourceName="Popup"
-                   Property="AllowsTransparency"
-                   Value="true">
-                            <Setter TargetName="DropDownBorder"
-                    Property="CornerRadius"
-                    Value="4" />
-                            <Setter TargetName="DropDownBorder"
-                    Property="Margin"
-                    Value="0,2,0,0" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

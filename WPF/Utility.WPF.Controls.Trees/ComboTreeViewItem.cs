@@ -1,22 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Tracing;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
 using System.Windows.Threading;
-using Utility.Trees.Abstractions;
 using Utility.WPF.Abstract;
-using Utility.WPF.Demo.Panels;
 using Utility.WPF.Panels;
 
 namespace Utility.WPF.Controls.Trees
@@ -24,13 +15,18 @@ namespace Utility.WPF.Controls.Trees
 
     public class NewObjectRoutedEventArgs : RoutedEventArgs
     {
-        public NewObjectRoutedEventArgs(object newObject, RoutedEvent routedEvent, object source) : base(routedEvent, source)
+        public NewObjectRoutedEventArgs(bool isAccepted, object newObject, RoutedEvent routedEvent, object source) : base(routedEvent, source)
         {
             NewObject = newObject;
+            IsAccepted = isAccepted;
         }
 
         public object NewObject { get; }
+        public bool IsAccepted { get; }
     }
+
+    public delegate void FinishEditRoutedEventHandler(object sender, NewObjectRoutedEventArgs e);
+
 
     public class ComboTreeViewItem : TreeViewItem, ISelection
     {
@@ -77,37 +73,33 @@ namespace Utility.WPF.Controls.Trees
 
         public override void OnApplyTemplate()
         {
-            (this.GetTemplateChild("PlusButton") as Button).Click += ComboTreeViewItem_Click; ;
+            if (this.GetTemplateChild("Accept_Button") is Button button)
+                button.Click += AcceptComboTreeViewItem_Click;
+            if (this.GetTemplateChild("Decline_Button") is Button _button)
+                _button.Click += DeclineComboTreeViewItem_Click;
+            if (Style.Resources["EditTemplate"] is DataTemplate dataTemplate)
+                EditTemplate = dataTemplate;
             base.OnApplyTemplate();
         }
 
-        private void ComboTreeViewItem_Click(object sender, RoutedEventArgs e)
+        private void DeclineComboTreeViewItem_Click(object sender, RoutedEventArgs e)
         {
-            RaiseCustomRoutedEvent();
+            RaiseCustomRoutedEvent(false);
+        }
+
+        private void AcceptComboTreeViewItem_Click(object sender, RoutedEventArgs e)
+        {
+            RaiseCustomRoutedEvent(true);
+
+
+            this.Items.Refresh();
+            this.UpdateLayout();
         }
 
 
-        // Register a custom routed event using the Bubble routing strategy.
-        public static readonly RoutedEvent AddEvent = EventManager.RegisterRoutedEvent(
-            name: "Add",
-            routingStrategy: RoutingStrategy.Bubble,
-            handlerType: typeof(RoutedEventHandler<NewObjectRoutedEventArgs>),
-            ownerType: typeof(ComboTreeViewItem));
-
-        // Provide CLR accessors for assigning an event handler.
-        public event RoutedEventHandler<NewObjectRoutedEventArgs> Add
+        void RaiseCustomRoutedEvent(bool isAccepted)
         {
-            add { AddHandler(AddEvent, value); }
-            remove { RemoveHandler(AddEvent, value); }
-        }
-
-
-        void RaiseCustomRoutedEvent()
-        {
-            // Create a RoutedEventArgs instance.
-            NewObjectRoutedEventArgs routedEventArgs = new(NewObject, AddEvent, this);
-
-            // Raise the event, which will bubble up through the element tree.
+            NewObjectRoutedEventArgs routedEventArgs = new(isAccepted, NewObject, FinishEditEvent, this);
             RaiseEvent(routedEventArgs);
         }
 
@@ -116,27 +108,15 @@ namespace Utility.WPF.Controls.Trees
         public static readonly RoutedEvent FinishEditEvent = EventManager.RegisterRoutedEvent(
             name: "FinishEdit",
             routingStrategy: RoutingStrategy.Bubble,
-            handlerType: typeof(RoutedEventHandler<NewObjectRoutedEventArgs>),
+            handlerType: typeof(FinishEditRoutedEventHandler),
             ownerType: typeof(ComboTreeViewItem));
 
-        public event RoutedEventHandler<NewObjectRoutedEventArgs> FinishEdit
+
+        public event FinishEditRoutedEventHandler FinishEdit
         {
             add { AddHandler(FinishEditEvent, value); }
             remove { RemoveHandler(FinishEditEvent, value); }
         }
-
-
-        void RaiseFinishEditEvent()
-        {
-            // Create a RoutedEventArgs instance.
-            NewObjectRoutedEventArgs routedEventArgs = new(NewObject, FinishEditEvent, this);
-
-            // Raise the event, which will bubble up through the element tree.
-            RaiseEvent(routedEventArgs);
-        }
-
-
-
 
 
         public object NewObject
@@ -194,7 +174,7 @@ namespace Utility.WPF.Controls.Trees
 
         private static void SelectionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is ComboTreeViewItem combo )
+            if (d is ComboTreeViewItem combo)
             {
                 combo.SetValue(IsDropDownOpenProperty, BooleanBoxes.FalseBox);
             }
@@ -429,7 +409,11 @@ namespace Utility.WPF.Controls.Trees
 
         private static void OnLostMouseCapture(object sender, MouseEventArgs e)
         {
-            ComboTreeViewItem comboBox = (ComboTreeViewItem)sender;
+            if(sender is not ComboTreeViewItem comboBox)
+            {
+                return;
+            }
+            //ComboTreeViewItem comboBox = (ComboTreeViewItem)sender;
 
             // ISSUE (jevansa) -- task 22022:
             //        We need a general mechanism to do this, or at the very least we should
@@ -549,7 +533,7 @@ namespace Utility.WPF.Controls.Trees
 
         public void Select(object obj)
         {
-            this.Selection = obj;     
+            this.Selection = obj;
         }
 
         /// <summary>
