@@ -12,14 +12,6 @@ namespace Utility.Trees.Demo.MVVM
     {
         public override Style SelectStyle(object item, DependencyObject container)
         {
-            //if (item is TreeViewItem { })
-            //{
-            //    var style = App.Current.Resources["GenericTreeViewItem"] as Style;
-            //    return style;
-            //}
-            //return base.SelectStyle(item, container);
-
-
             if (item is TreeViewItem _item)
             {
                 Predicate.Reset();

@@ -25,9 +25,6 @@ namespace Utility.Trees.Demo.MVVM.Infrastructure
     //            Type t when t == typeof(Guid?) => new NullableGuidValue(descriptor, value),
     //            Type t when t == typeof(DateTime?) => new NullableDateTimeValue(descriptor, value),
 
-
-
-
     public static class Keys
     {
         public static (Guid, string) Zero = new(Guid.Parse("8c58f0e5-a2de-46e2-873e-8075f44aa2c9"), "Zero");

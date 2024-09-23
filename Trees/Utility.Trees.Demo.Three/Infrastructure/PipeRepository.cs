@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Utility.Helpers;
 using IObserver = Utility.Models.IObserver;
 using Utility.Repos;
+using System.Linq;
 
 namespace Utility.Trees.Demo.MVVM.Infrastructure
 {
@@ -16,6 +17,12 @@ namespace Utility.Trees.Demo.MVVM.Infrastructure
             public D2Tree(IDecision decision, Func<RepoQueueItem, object>? transform = null) : base(decision, transform)
             {
             }
+
+            protected override object ToBackPut(ICollection<object> backputs)
+            {
+                return backputs.FirstOrDefault(a => a != null);
+            }
+
         }
 
         Dictionary<QueueItem, IObserver> dictionary = new();
@@ -24,30 +31,31 @@ namespace Utility.Trees.Demo.MVVM.Infrastructure
 
         protected PipeRepository(string? dbDirectory = null) : base(dbDirectory)
         {
-            Predicate = new DecisionTree(new Decision(item => (QueueItem)item != null) { })
+            Predicate = new D2Tree(new Decision(item => (QueueItem)item != null) { })
             {
-                new D2Tree(new Decision<RepoQueueItem>(item => item.ParentGuid == Guid.Parse("dbf5b684-894f-47ee-9b05-6b6e7a2ea931") && item.QueueItemType == QueueItemType.SelectKeys),
+                //new D2Tree(new Decision<RepoQueueItem>(item => item.ParentGuid == Guid.Parse("dbf5b684-894f-47ee-9b05-6b6e7a2ea931") && item.QueueItemType == QueueItemType.SelectKeys),
 
-                    cdv =>
-                    System.Reactive.Linq.Observable.Select( base.SelectKeys(),_keys =>
-                            {
-                                List<Key> keys = [];
-                                foreach (var key in _keys)
-                                {
-                                    var table = new Table { Name = key.Name, Guid = key.Guid, Type = key.Instance.GetType() };
-                                    keys.Add(key with { Instance = table });
-                                }
-                                return keys;
-                            })
-                ),
-                new D2Tree(new Decision<RepoQueueItem>(item => item.ParentGuid == Guid.Parse("72022097-e5f6-4767-a18a-50763514ca01")&& item.QueueItemType == QueueItemType.SelectKeys),
+                //    cdv =>
+                //    System.Reactive.Linq.Observable.Select( base.SelectKeys(),_keys =>
+                //            {
+                //                List<Key> keys = [];
+                //                foreach (var key in _keys)
+                //                {
+                //                    var table = new Table { Name = key.Name, Guid = key.Guid, Type = key.Instance.GetType() };
+                //                    keys.Add(key with { Instance = table });
+                //                }
+                //                return keys;
+                //            })
+                //),
+                // guid of row in model where Name = 'SelectedTable' 
+                new D2Tree(new Decision<RepoQueueItem>(item => item.ParentGuid == Guid.Parse("2da19d13-a875-4a05-8ee3-e751130ee6a6")&& item.QueueItemType == QueueItemType.SelectKeys),
                 cdv =>
                     {
                         if (Locator.Current.GetService<Model>() is { SelectedTable:{ } selectedTable } )
                         {
-                            return new List<Key>([new Key { Name = selectedTable.Name, Guid = selectedTable.Guid, Instance = Activator.CreateInstance(selectedTable.Type) }]);
+                            return System.Reactive.Linq.Observable.Return(new List<Key>([new Key { Name = selectedTable.Name, Guid = selectedTable.Guid, Instance = Activator.CreateInstance(selectedTable.Type) }]));
                         }
-                        return new object();
+                        return System.Reactive.Linq.Observable.Empty<List<Key>>();
                     }
 
                 ),
@@ -58,7 +66,6 @@ namespace Utility.Trees.Demo.MVVM.Infrastructure
                         new D2Tree(new Decision<RepoQueueItem>(item => item.QueueItemType == QueueItemType.Find){  },
                         qi=>
                         base.Find(qi.Guid, qi.Name, qi.Type, qi.Index)
-
                         ),
 
                         new D2Tree(new Decision<RepoQueueItem>(item =>  item.QueueItemType == QueueItemType.SelectKeys){  },

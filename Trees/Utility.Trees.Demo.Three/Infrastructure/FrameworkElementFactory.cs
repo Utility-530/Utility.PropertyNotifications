@@ -57,21 +57,13 @@ namespace Utility.Trees.Demo.MVVM
         {
             AutoCompleteConverter.Instance.Subscribe(a =>
             {
-                //var _ = model;
 
                 if (a is SuggestionPrompt { Value: IDescriptor { ParentType: { } type } value, Filter: { } filter })
                 {
-                    //if(type == typeof(Connection) && model is Diagram)
-                    //{
-
-                    //}
+ 
                 }
             });
-            //viewModel = new() { Key = model.Key };
-            //view = new() { Key = model.Key };
-            //data = new() { Key = model.Key };
 
-            //var uGrid = new UniformGrid() { Rows = 1 };
 
             EventListener.Instance.Subscribe(a =>
             {
@@ -80,12 +72,10 @@ namespace Utility.Trees.Demo.MVVM
                     if (data.Name == "Table")
                     {
                         var model = Locator.Current.GetService<Model>();
-                        //var node = (Utility.Extensions.TreeExtensions.MatchDescendant(model, a => (a.Data is MemberDescriptor { Name: "SelectedTable" }))).MatchDesc;
                         model.SelectedTable = ((data as ICollectionItemReferenceDescriptor).Instance as Table);
-                        //pipeRepository.Get((node.Data as MemberDescriptor).Guid);
 
                         //Pipe.Instance.Queue(new QueueItem(default, ParentGuid: Guid.Parse("1f51406b-9e37-429d-8ed2-c02cff90cfdb")));
-                        Pipe.Instance.Queue(new RepoQueueItem(default, QueueItemType.SelectKeys, ParentGuid: Guid.Parse("72022097-e5f6-4767-a18a-50763514ca01")));
+                        Pipe.Instance.Queue(new RepoQueueItem(default, QueueItemType.SelectKeys, ParentGuid: Guid.Parse("2da19d13-a875-4a05-8ee3-e751130ee6a6")));
                     }
                     MainView.Instance.propertygrid.Content = new PropertyGrid { SelectedObject = data };
                     Filter.Instance.Convert(tree);

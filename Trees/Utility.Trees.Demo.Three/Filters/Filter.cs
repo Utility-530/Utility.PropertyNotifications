@@ -13,15 +13,13 @@ using Utility.Helpers.NonGeneric;
 
 namespace Utility.Trees.Demo.MVVM
 {
-    //public partial record Model
-    //{
-        internal class Filter : ITreeViewFilter
+    internal class Filter : ITreeViewFilter
+    {
+        public Filter()
         {
-            public Filter()
-            {
-                //var tre_e = new Tree() { new Decider(a=>true), new Decider(a => true) };
+            //var tre_e = new Tree() { new Decider(a=>true), new Decider(a => true) };
 
-                Predicate = new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => true) { }, a => a.Data)
+            Predicate = new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => true) { }, a => a.Data)
                 {
                     new BooleanDecisionTree(new Decision(item => item as IMethodDescriptor!=null){  })
                     {
@@ -47,44 +45,37 @@ namespace Utility.Trees.Demo.MVVM
                                 new BooleanDecisionTree(new Decision<string>(item => item == "Length"),  a=> true) { }
                             },
                             new BooleanDecisionTree<IDescriptor>(new Decision<IDescriptor>(item => item.ParentType.IsAssignableTo(typeof(IList))), item =>item.Name)
-                        {
+                            {
                             new BooleanDecisionTree(new Decision<string>(item => item == nameof(IList.Remove)),  a=> false) { },
-                             new BooleanDecisionTree(  new Decision<string>(item => item == nameof(IList.GetEnumerator)),  a=> false) { },
-                             new BooleanDecisionTree(  new Decision<string>(item => item == nameof(IList.CopyTo)),  a=> false) { },
-                             new BooleanDecisionTree(  new Decision<string>(item => item == nameof(IList.IndexOf)),  a=> false) { },
+                            new BooleanDecisionTree(  new Decision<string>(item => item == nameof(IList.GetEnumerator)),  a=> false) { },
+                            new BooleanDecisionTree(  new Decision<string>(item => item == nameof(IList.CopyTo)),  a=> false) { },
+                            new BooleanDecisionTree(  new Decision<string>(item => item == nameof(IList.IndexOf)),  a=> false) { },
                             new BooleanDecisionTree(   new Decision<string>(item => item == nameof(IList.Contains)),  a=> false) { },
                             new BooleanDecisionTree(   new Decision<string>(item => item == nameof(IList.Add)),  a=> false) { },
                             new BooleanDecisionTree(   new Decision<string>(item => item == nameof(IList.RemoveAt)),  a=> false) { },
-                             new BooleanDecisionTree(  new Decision<string>(item => item == nameof(ObservableCollection<object>.Move))) { },
+                            new BooleanDecisionTree(  new Decision<string>(item => item == nameof(ObservableCollection<object>.Move))) { },
                             new BooleanDecisionTree(   new Decision<string>(item => item == nameof(IList.Remove)),  a=> false) { },
-                             new BooleanDecisionTree(  new Decision<string>(item => item == nameof(IList.Insert)),  a=> false) { },
-                             new BooleanDecisionTree(  new Decision<string>(item => item == nameof(IList.Add)), a=> false)
+                            new BooleanDecisionTree(  new Decision<string>(item => item == nameof(IList.Insert)),  a=> false) { },
+                            new BooleanDecisionTree(  new Decision<string>(item => item == nameof(IList.Add)), a=> false)
                         }
 
                     }
                 };
-             
-            }
-
-            public bool Convert(object item)
-            {
-                Predicate.Reset();
-                Predicate.Input = item;
-                Predicate.Evaluate();
-                return (bool)Predicate.Backput;
-                //return true;
-            }
-
-
-            public DecisionTree Predicate { get; set; }
-
-            public static Filter Instance { get; } = new();
-
-
 
         }
 
+        public bool Convert(object item)
+        {
+            Predicate.Reset();
+            Predicate.Input = item;
+            Predicate.Evaluate();
+            return (bool)Predicate.Backput;
+            //return true;
+        }
 
 
-    //}
+        public DecisionTree Predicate { get; set; }
+
+        public static Filter Instance { get; } = new();
+    }
 }

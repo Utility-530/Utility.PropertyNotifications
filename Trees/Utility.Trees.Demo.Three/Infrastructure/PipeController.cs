@@ -110,7 +110,14 @@ namespace Utility.Trees.Demo.MVVM
 
         public void Queue(QueueItem queueItem)
         {
-            if (Next == null && Pending.Any()==false)
+            if (queueItem is RepoQueueItem { QueueItemType: QueueItemType.Find, Guid: { } guid })
+            {
+                if (guid == Guid.Empty)
+                {
+
+                }
+            }
+            if (Next == null && Pending.Any() == false)
             {
                 Next = queueItem;
                 this.OnPropertyChanged(nameof(Next));

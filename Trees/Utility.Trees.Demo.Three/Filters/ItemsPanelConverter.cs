@@ -18,12 +18,6 @@ namespace Utility.Trees.Demo.MVVM.MVVM
                 {
                     return ItemsPanelFactory.Template(default, default, O.Vertical, Arrangement.Stacked);
                 }
-
-                //{
-                //    if (tree.Data is ICollectionHeadersDescriptor { } _descriptor)
-                //        return ItemsPanelFactory.Template(default, default, O.Horizontal, Arrangement.Stacked);
-
-                //}
                 {
                     if (tree.Data is PropertyDescriptor { } _descriptor)
                         return ItemsPanelFactory.Template(default, default, O.Horizontal, Arrangement.Stacked);
