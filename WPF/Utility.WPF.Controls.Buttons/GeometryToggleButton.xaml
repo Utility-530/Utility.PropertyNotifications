@@ -81,7 +81,10 @@
 
     <ControlTemplate x:Key="GTBControlTemplate"
                  TargetType="{x:Type local:GeometryToggleButton}">
-        <Grid>
+        <Grid Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" 
+              VerticalAlignment="{TemplateBinding VerticalAlignment}"
+              HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+              >
             <Grid.Resources>
                 <!--https://stackoverflow.com/questions/42487517/bind-to-controls-property-inside-visualstatemanager-->
                 <wpf:BindingProxy
@@ -99,49 +102,49 @@
                 <VisualStateGroup x:Name="CommonStates">
                     <VisualState x:Name="Normal" />
                     <VisualState x:Name="MouseOver">
-                        <Storyboard>
+                        <!--<Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).
                 (GradientBrush.GradientStops)[1].(GradientStop.Color)"
                                           Storyboard.TargetName="Border">
                                 <EasingColorKeyFrame KeyTime="0:0:0.2"
                                    Value="{Binding Data, Source={StaticResource HoverBackground}}" />
                             </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
+                        </Storyboard>-->
                     </VisualState>
                     <VisualState x:Name="Pressed" />
                     <VisualState x:Name="Disabled">
                         <Storyboard>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).
+                            <!--<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).
                 (GradientBrush.GradientStops)[1].(GradientStop.Color)"
                                           Storyboard.TargetName="Border">
                                 <EasingColorKeyFrame KeyTime="0"
                                    Value="{StaticResource DisabledControlDarkColor}" />
-                            </ColorAnimationUsingKeyFrames>
+                            </ColorAnimationUsingKeyFrames>-->
                             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).
                 (SolidColorBrush.Color)"
                                           Storyboard.TargetName="Arrow">
                                 <EasingColorKeyFrame KeyTime="0"
                                    Value="{StaticResource DisabledForegroundColor}" />
                             </ColorAnimationUsingKeyFrames>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).
+                            <!--<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).
                 (GradientBrush.GradientStops)[1].(GradientStop.Color)"
                                           Storyboard.TargetName="Border">
                                 <EasingColorKeyFrame KeyTime="0"
                                    Value="{StaticResource DisabledBorderDarkColor}" />
-                            </ColorAnimationUsingKeyFrames>
+                            </ColorAnimationUsingKeyFrames>-->
                         </Storyboard>
                     </VisualState>
                 </VisualStateGroup>
                 <VisualStateGroup x:Name="CheckStates">
                     <VisualState x:Name="Checked">
-                        <Storyboard>
+                        <!--<Storyboard>
                             <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).
                 (GradientBrush.GradientStops)[1].(GradientStop.Color)"
                                           Storyboard.TargetName="Border">
                                 <EasingColorKeyFrame KeyTime="0:0:0.5"
                                Value="{Binding Data, Source={StaticResource CheckedBackground}}" /> 
                             </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
+                        </Storyboard>-->
                     </VisualState>
                     <VisualState x:Name="Unchecked" />
                     <VisualState x:Name="Indeterminate" />
@@ -159,7 +162,7 @@
                         Offset="1" />
                     </LinearGradientBrush>
                 </Border.BorderBrush>-->
-                <Border.Background>
+                <!--<Border.Background>
                     <RadialGradientBrush  GradientOrigin="0.5,0.5" 
           Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
                         <RadialGradientBrush.GradientStops>
@@ -167,12 +170,12 @@
                                 <GradientStop Color="{DynamicResource ControlDarkColor}" />
                                 <GradientStop Color="{DynamicResource ControlMediumColor}"
                             Offset="0.2" />
-                                <!--<GradientStop Color="{DynamicResource ControlLightColor}"  Offset="0.9"/>-->
+                                --><!--<GradientStop Color="{DynamicResource ControlLightColor}"  Offset="0.9"/>--><!--
                             </GradientStopCollection>
                         </RadialGradientBrush.GradientStops>
                     </RadialGradientBrush>
 
-                </Border.Background>
+                </Border.Background>-->
 
                 <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Grid Background="Transparent">
@@ -191,7 +194,7 @@
                                     VerticalAlignment="Center"
                                     Data="{Binding Data, RelativeSource={RelativeSource TemplatedParent}}"
                                     Stretch="Uniform"
-                                    Fill="{TemplateBinding Fill}"
+                                    Fill="{TemplateBinding Background}"
                                     Stroke="{TemplateBinding Foreground}"
                             
                                StrokeEndLineCap="Round" 

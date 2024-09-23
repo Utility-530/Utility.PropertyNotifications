@@ -10,9 +10,10 @@ namespace Utility.WPF.Controls.Buttons
 
         public static readonly DependencyProperty DataProperty = DependencyProperty.Register("Data", typeof(Geometry), typeof(GeometryButton), new PropertyMetadata());
         public static readonly DependencyProperty HoverBackgroundProperty = DependencyProperty.Register("HoverBackground", typeof(Brush), typeof(GeometryButton), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(255, 255, 139, 0))));
-        // Using a DependencyProperty as the backing store for Fill.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty FillProperty =
-            DependencyProperty.Register("Fill", typeof(Brush), typeof(GeometryButton), new PropertyMetadata(Brushes.Transparent));
+        public static readonly DependencyProperty PressedForegroundProperty = DependencyProperty.Register("PressedForeground", typeof(Brush), typeof(GeometryButton), new PropertyMetadata(Brushes.White));
+        public static readonly DependencyProperty PressedBorderBrushProperty = DependencyProperty.Register("PressedBorderBrush", typeof(Brush), typeof(GeometryButton), new PropertyMetadata(Brushes.Black));
+        public static readonly DependencyProperty PressedBackgroundProperty = DependencyProperty.Register("PressedBackground", typeof(Brush), typeof(GeometryButton), new PropertyMetadata(Brushes.Silver));
+        public static readonly DependencyProperty FillProperty = DependencyProperty.Register("Fill", typeof(Brush), typeof(GeometryButton), new PropertyMetadata(Brushes.Transparent));
 
         static GeometryButton()
         {
@@ -21,11 +22,13 @@ namespace Utility.WPF.Controls.Buttons
         }
 
         public GeometryButton()
-        {
-            var converter = System.ComponentModel.TypeDescriptor.GetConverter(typeof(Geometry));
-            Data = (Geometry)(converter.ConvertFrom(InitialData) ?? new EllipseGeometry(new Rect(new Size(30, 30))));
+        { 
         }
-
+         public override void OnApplyTemplate()
+        {
+            Data ??= Geometry.Parse(InitialData) ?? new EllipseGeometry(new Rect(new Size(30, 30)));
+            base.OnApplyTemplate();
+        }
         #region properties
 
         public Geometry Data
@@ -40,18 +43,32 @@ namespace Utility.WPF.Controls.Buttons
             set => SetValue(HoverBackgroundProperty, value);
         }
 
+        public Brush PressedBorderBrush
+        {
+            get { return (Brush)GetValue(PressedBorderBrushProperty); }
+            set { SetValue(PressedBorderBrushProperty, value); }
+        }
+
+        public Brush PressedBackground
+        {
+            get { return (Brush)GetValue(PressedBackgroundProperty); }
+            set { SetValue(PressedBackgroundProperty, value); }
+        }
+
+        public Brush PressedForeground
+        {
+            get { return (Brush)GetValue(PressedForegroundProperty); }
+            set { SetValue(PressedForegroundProperty, value); }
+        }
+
         public Brush Fill
         {
             get { return (Brush)GetValue(FillProperty); }
             set { SetValue(FillProperty, value); }
         }
 
-
-
-
         #endregion properties
     }
-
 
     public class GeometryToggleButton : ToggleButton
     {
@@ -60,8 +77,6 @@ namespace Utility.WPF.Controls.Buttons
         public static readonly DependencyProperty DataProperty = DependencyProperty.Register("Data", typeof(Geometry), typeof(GeometryToggleButton), new PropertyMetadata());
         public static readonly DependencyProperty HoverBackgroundProperty = DependencyProperty.Register("HoverBackground", typeof(Color), typeof(GeometryToggleButton), new PropertyMetadata(Color.FromArgb(255, 255, 139, 0)));
         public static readonly DependencyProperty CheckedBackgroundProperty =  DependencyProperty.Register("CheckedBackground", typeof(Color), typeof(GeometryToggleButton), new PropertyMetadata(Color.FromArgb(55, 55, 139, 0)));
-        public static readonly DependencyProperty FillProperty =
-    DependencyProperty.Register("Fill", typeof(Brush), typeof(GeometryToggleButton), new PropertyMetadata(Brushes.Transparent));
 
         static GeometryToggleButton()
         {
@@ -70,8 +85,12 @@ namespace Utility.WPF.Controls.Buttons
 
         public GeometryToggleButton()
         {
-            var converter = System.ComponentModel.TypeDescriptor.GetConverter(typeof(Geometry));
-            Data = (Geometry)(converter.ConvertFrom(InitialData) ?? new EllipseGeometry(new Rect(new Size(30, 30))));
+        }
+
+        public override void OnApplyTemplate()
+        {
+            Data ??= Geometry.Parse(InitialData) ?? new EllipseGeometry(new Rect(new Size(30, 30)));
+            base.OnApplyTemplate();
         }
 
         #region properties
@@ -89,11 +108,6 @@ namespace Utility.WPF.Controls.Buttons
         }
 
 
-        public Brush Fill
-        {
-            get { return (Brush)GetValue(FillProperty); }
-            set { SetValue(FillProperty, value); }
-        }
 
         public Color CheckedBackground
         {

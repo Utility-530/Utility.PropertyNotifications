@@ -29,6 +29,8 @@
                                 x:Name="backgroundEllipse"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
+                                Fill="{TemplateBinding Background}"
+                                
                                 Width="160"
                                 Height="160" />
                             <Path
@@ -37,8 +39,8 @@
                                     Height="80"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Data="{Binding Data, RelativeSource={RelativeSource TemplatedParent}}"
-                                    Stretch="Uniform"
+                                    Data="{TemplateBinding Data}"
+                                    Stretch="Uniform"          
                                     Fill="{TemplateBinding Fill}"
                                     Stroke="{TemplateBinding Foreground}"
                                  StrokeEndLineCap="Round" 
@@ -63,8 +65,8 @@
 
                         <Trigger Property="IsPressed" Value="true">
                             <!--<Setter TargetName="backgroundEllipse" Property="Fill" Value="{StaticResource PressedBackgroundBrush}" />-->
-                            <Setter TargetName="backgroundEllipse" Property="Stroke" Value="{StaticResource PressedBorderBrush}" />
-                            <Setter TargetName="ButtonPath" Property="Stroke" Value="{StaticResource PressedForegroundBrush}" />
+                            <Setter TargetName="backgroundEllipse" Property="Stroke" Value="{Binding PressedBackground, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="ButtonPath" Property="Stroke" Value="{Binding PressedForeground, RelativeSource={RelativeSource TemplatedParent}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
