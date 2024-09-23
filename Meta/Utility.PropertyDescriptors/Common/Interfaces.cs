@@ -13,6 +13,8 @@
 
     public interface ICollectionDescriptor : IDescriptor, ICount
     {
+        IEnumerable Collection { get; }
+
         public Type ElementType { get; }
     }
 
