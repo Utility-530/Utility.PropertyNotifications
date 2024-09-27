@@ -1,0 +1,181 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:pipe="clr-namespace:Utility.Pipes;assembly=Utility.Pipes"
+                    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                    xmlns:c="http://schemas.utility.com/colours"
+                    xmlns:conv="http://schemas.utility.com/converters" 
+                    xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks">
+
+
+    <Style x:Key="CustomRadioStyle"  TargetType="{x:Type RadioButton}">
+        <Setter Property="Foreground" Value="#373737" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Margin" Value="2" />
+        <Setter Property="Background" Value="LightGray" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RadioButton}">
+                    <Border CornerRadius="4" Background="{TemplateBinding Background}">
+                        <Grid>
+                            <ContentPresenter  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
+                        </Grid>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{c:Amber}" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{c:Cyan}" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Foreground" Value="{c:Grey}" />
+                            <Setter Property="Background" Value="White" />
+                            <!--<Setter Property="Background" Value="DarkSeaGreen" />-->
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter Property="Foreground" Value="Black" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style  x:Key="CustomButtonStyle"  TargetType="{x:Type Button}">
+        <Setter Property="Foreground" Value="#373737" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Width" Value="40" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Margin" Value="2" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border CornerRadius="4" Background="{TemplateBinding Background}">
+                        <Grid>
+                            <ContentPresenter  HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{c:Amber}" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{c:Cyan}" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <conv:TypeToNameConverter x:Key="TypeNameConverter"></conv:TypeToNameConverter>
+    <conv:FirstItemConverter x:Key="FirstItemConverter"></conv:FirstItemConverter>
+    <conv:LastItemConverter x:Key="LastItemConverter"></conv:LastItemConverter>
+
+
+    <CollectionViewSource x:Key="Pending_Items" Source="{Binding Source={x:Static pipe:Pipe.Instance}, Path=Pending}" >
+        <CollectionViewSource.SortDescriptions>
+            <scm:SortDescription PropertyName="DateTime" Direction="Descending"/>
+        </CollectionViewSource.SortDescriptions>
+    </CollectionViewSource>
+
+    <CollectionViewSource x:Key="Completed_Items" Source="{Binding Source={x:Static pipe:Pipe.Instance}, Path=Completed}" >
+        <CollectionViewSource.SortDescriptions>
+            <scm:SortDescription PropertyName="DateTime" Direction="Descending"/>
+        </CollectionViewSource.SortDescriptions>
+    </CollectionViewSource>
+
+
+    <x:Array x:Key="abc" Type="{x:Type pipe:QueueItem}">
+        <pipe:QueueItem ></pipe:QueueItem>
+        <pipe:QueueItem ></pipe:QueueItem>
+        <pipe:QueueItem ></pipe:QueueItem>
+    </x:Array>
+
+    <DataTemplate DataType="{x:Type pipe:PipeController}">
+        <WrapPanel Height="60" DockPanel.Dock="Top" HorizontalAlignment="Center">
+            <RadioButton x:Name="Play"  GroupName="PlayPause" Style="{StaticResource CustomRadioStyle}"  IsChecked="{Binding IsPlaying}">
+                <iconPacks:PackIconZondicons Kind="Play" />
+            </RadioButton>
+            <RadioButton x:Name="Pause" GroupName="PlayPause" Style="{StaticResource CustomRadioStyle}" IsChecked="{Binding IsPlaying, Converter={x:Static conv:InverseBooleanConverter.Instance}}">
+                <iconPacks:PackIconZondicons Kind="Pause" />
+            </RadioButton>
+            <Button x:Name="Step" Style="{StaticResource CustomButtonStyle}"  Command="{Binding StepCommand}">
+                <Viewbox Margin="8">
+                    <iconPacks:PackIconZondicons Kind="ArrowRight" />
+                </Viewbox>
+            </Button>
+        </WrapPanel>
+    </DataTemplate>
+
+
+    <DataTemplate DataType="{x:Type pipe:Pipe}">
+
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="4,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="8"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <!--<UniformGrid Grid.Column="0" Rows="1">
+                    <TextBlock Text="Guid" FontWeight="DemiBold"></TextBlock>
+                    <TextBlock Text="Name" FontWeight="DemiBold"></TextBlock>
+                    <TextBlock Text="Index" FontWeight="DemiBold"></TextBlock>
+                    <TextBlock Text="Type" FontWeight="DemiBold"></TextBlock>
+                    <TextBlock Text="Type2" FontWeight="DemiBold"></TextBlock>
+                </UniformGrid>-->
+
+            <ScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ItemsControl  ItemsSource="{Binding Source={StaticResource Pending_Items}}" VerticalAlignment="Bottom" >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate >
+                            <Grid  x:Name="grid"  TextBlock.FontSize="12">
+                                <ContentPresenter Content="{Binding}"></ContentPresenter>
+                            </Grid>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Value="True">
+                                    <DataTrigger.Binding>
+                                        <MultiBinding Converter="{StaticResource LastItemConverter}">
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" />
+                                            <Binding RelativeSource="{RelativeSource Self}" />
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" Path="Items.Count" />
+                                        </MultiBinding>
+                                    </DataTrigger.Binding>
+                                    <Setter TargetName="grid" Property="Height" Value="60" />
+                                    <Setter TargetName="grid" Property="Background" Value="{c:Amber}" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <ScrollViewer Grid.Row="3" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ItemsControl  ItemsSource="{Binding Source={StaticResource Completed_Items}}" >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type pipe:QueueItem}">
+                            <Grid  x:Name="grid"  TextBlock.FontSize="12">
+                                <ContentPresenter Content="{Binding}"></ContentPresenter>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </DataTemplate>
+
+
+</ResourceDictionary>
