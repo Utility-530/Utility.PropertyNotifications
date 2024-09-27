@@ -28,7 +28,7 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
     public override object? Get()
     {
         if (value == null)
-            (dateValue??=repo.Get(Guid))
+            (dateValue ??= repo.Get(Guid))
                 .Subscribe(a =>
             {
                 if (a is { Value: { } _value } x)
