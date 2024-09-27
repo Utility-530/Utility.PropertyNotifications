@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="XPlat.UI" Version="1.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.ViewModels.Base\Utility.ViewModels.Base.csproj" />
+  </ItemGroup>
+
+</Project>
