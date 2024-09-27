@@ -5,13 +5,13 @@ using Utility.Descriptors;
 using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
+using Utility.Trees.Decisions;
 using Utility.Trees.Demo.MVVM.Infrastructure;
 using Utility.WPF.Factorys;
 using Utility.WPF.Templates;
 
 namespace Utility.Trees.Demo.MVVM
 {
-
     public class DataTemplateSelector : System.Windows.Controls.DataTemplateSelector
     {
         public static DataTemplateSelector Instance { get; } = new();
@@ -138,12 +138,5 @@ namespace Utility.Trees.Demo.MVVM
                 };
             }
         }
-
-
-        //var style = App.Current.Resources["CustomTree"] as DataTemplate;
-        //    return style;
-        //}
     }
-
-
 }

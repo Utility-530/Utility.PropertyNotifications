@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using Utility.Descriptors;
 using Utility.Interfaces;
 using Utility.Trees.Abstractions;
-using Utility.Trees.Demo.MVVM.Infrastructure;
+using Utility.Trees.Decisions;
 
 namespace Utility.Trees.Demo.MVVM
 {

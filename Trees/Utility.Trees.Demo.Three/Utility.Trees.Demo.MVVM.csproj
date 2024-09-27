@@ -20,13 +20,16 @@
     <ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
     <ProjectReference Include="..\..\Nodes\Utility.Nodes.Reflections\Utility.Nodes.Reflections.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Colours\Utility.WPF.Colours.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Reactives\Utility.WPF.Reactives.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
+    <ProjectReference Include="..\Utility.Pipes\Utility.Pipes.csproj" />
+    <ProjectReference Include="..\Utility.Trees.Decisions\Utility.Trees.Decisions.csproj" />
     <ProjectReference Include="..\Utility.Trees.Demo.Model\Utility.Trees.Demo.Models.csproj" />
     <ProjectReference Include="..\Utility.Trees.WPF\Utility.Trees.WPF.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Library\Utility.WPF.Library.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Pipes\Utility.WPF.Pipes.csproj" />
   </ItemGroup>
 
 </Project>

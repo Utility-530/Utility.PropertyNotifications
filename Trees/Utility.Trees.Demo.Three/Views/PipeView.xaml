@@ -6,16 +6,20 @@
              xmlns:local="clr-namespace:Utility.Trees.Demo.MVVM"        
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:conv="http://schemas.utility.com/converters"
-             xmlns:common="clr-namespace:Utility.Trees.Demo.MVVM"
+             xmlns:common="clr-namespace:Utility.Trees.Demo.MVVM" 
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              d:DataContext="{d:DesignInstance common:PipeController}"
+             xmlns:c="http://schemas.utility.com/colours" 
+             xmlns:pipes="clr-namespace:Utility.Pipes;assembly=Utility.Pipes"
+             d:Background="White"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <FrameworkElement.Resources>
+    <!--<FrameworkElement.Resources>
 
         <ResourceDictionary>
-            <!--<ResourceDictionary.MergedDictionaries>
+            --><!--<ResourceDictionary.MergedDictionaries>
                 <res:SharedResourceDictionary Source="/Puttshack.Views.Templates;component/Themes/Styles.xaml"/>
-            </ResourceDictionary.MergedDictionaries>-->
+            </ResourceDictionary.MergedDictionaries>--><!--
 
 
             <Style x:Key="CustomRadioStyle"  TargetType="{x:Type RadioButton}">
@@ -48,7 +52,7 @@
                                 <Trigger Property="IsChecked" Value="True">
                                     <Setter Property="Foreground" Value="LightGray" />
                                     <Setter Property="Background" Value="White" />
-                                    <!--<Setter Property="Background" Value="DarkSeaGreen" />-->
+                                    --><!--<Setter Property="Background" Value="DarkSeaGreen" />--><!--
                                 </Trigger>
                                 <Trigger Property="IsChecked" Value="False">
                                     <Setter Property="Foreground" Value="Black" />
@@ -91,36 +95,28 @@
             </Style>
 
             <conv:TypeToNameConverter x:Key="TypeNameConverter"></conv:TypeToNameConverter>
+            <conv:FirstItemConverter x:Key="FirstItemConverter"></conv:FirstItemConverter>
+            <conv:LastItemConverter x:Key="LastItemConverter"></conv:LastItemConverter>
 
-            <DataTemplate DataType="{x:Type local:QueueItem}">
-                <Grid    TextBlock.FontSize="12">
-                    <Grid.ColumnDefinitions>
-                        <!--<ColumnDefinition Width="0"></ColumnDefinition>
-                        <ColumnDefinition Width="20"></ColumnDefinition>
 
-                        <ColumnDefinition Width="150"></ColumnDefinition>-->
-                        <!--<ColumnDefinition Width="30"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>-->
+            <CollectionViewSource x:Key="Pending_Items" Source="{Binding Source={x:Static common:Pipe.Instance}, Path=Pending}" >
+                <CollectionViewSource.SortDescriptions>
+                    <scm:SortDescription PropertyName="DateTime" Direction="Descending"/>
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
+            
+            <CollectionViewSource x:Key="Completed_Items" Source="{Binding Source={x:Static common:Pipe.Instance}, Path=Completed}" >
+                <CollectionViewSource.SortDescriptions>
+                    <scm:SortDescription PropertyName="DateTime" Direction="Descending"/>
+                </CollectionViewSource.SortDescriptions>
+            </CollectionViewSource>
 
-                    </Grid.ColumnDefinitions>
-
-                    <!--<TextBlock Grid.Column="2"   Text="{Binding Type, Converter={StaticResource TypeNameConverter}}"></TextBlock>-->
-
-                    <ScrollViewer>
-                        
-             
-                    <UniformGrid  Rows="1" TextBlock.FontSize="8">
-                        <TextBlock Text="{Binding Guid}"></TextBlock>
-                        <TextBlock Text="{Binding Name}"></TextBlock>
-                        <TextBlock Text="{Binding Index}"></TextBlock>
-                        <TextBlock Text="{Binding Type, Converter={StaticResource TypeNameConverter}}"></TextBlock>
-                        <TextBlock Text="{Binding  Converter={StaticResource TypeNameConverter}}"></TextBlock>
-                        <!--<TextBlock Text="{Binding Old.Value}"></TextBlock>-->
-                    </UniformGrid>
-                    </ScrollViewer>
-                </Grid>
-            </DataTemplate>
-        </ResourceDictionary>
+            <x:Array x:Key="abc" Type="{x:Type local:QueueItem}">
+                <local:QueueItem ></local:QueueItem>
+                <local:QueueItem ></local:QueueItem>
+                <local:QueueItem ></local:QueueItem>
+            </x:Array>
+        </ResourceDictionary>      
     </FrameworkElement.Resources>
 
     <DockPanel>
@@ -137,11 +133,11 @@
                 </Viewbox>
             </Button>
         </WrapPanel>
-        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="4,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-                <RowDefinition Height="80"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                --><!--<RowDefinition Height="80"></RowDefinition>--><!--
                 <RowDefinition Height="8"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
@@ -150,18 +146,65 @@
                 <TextBlock Text="Name" FontWeight="DemiBold"></TextBlock>
                 <TextBlock Text="Index" FontWeight="DemiBold"></TextBlock>
                 <TextBlock Text="Type" FontWeight="DemiBold"></TextBlock>
+                <TextBlock Text="Type2" FontWeight="DemiBold"></TextBlock>
             </UniformGrid>
-            <ScrollViewer Grid.Row="1">
-                <ItemsControl  ItemsSource="{Binding Source={x:Static common:Pipe.Instance}, Path=Completed}"/>
-            </ScrollViewer>
 
-            <Border Background="#7FFF8000"  Grid.Row="2">
+            <ScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ItemsControl  ItemsSource="{Binding Source={StaticResource Pending_Items}}" VerticalAlignment="Bottom"  d:ItemsSource="{StaticResource abc }">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type local:QueueItem}">
+                            <Grid  x:Name="grid"  TextBlock.FontSize="12">
+                                <UniformGrid  Rows="1" TextBlock.FontSize="8" >
+                                    <TextBlock Text="{Binding Guid}" Background="{c:Grey 1}"></TextBlock>
+                                    <TextBlock Text="{Binding Name}" ></TextBlock>
+                                    <TextBlock Text="{Binding Index}" Background="{c:Grey 1}"></TextBlock>
+                                    <TextBlock Text="{Binding Type, Converter={StaticResource TypeNameConverter}}"></TextBlock>
+                                    <TextBlock Text="{Binding  Converter={StaticResource TypeNameConverter}}" Background="{c:Grey 1}"></TextBlock>
+                                    --><!--<TextBlock Text="{Binding Old.Value}"></TextBlock>--><!--
+                                </UniformGrid>
+                            </Grid>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Value="True">
+                                    <DataTrigger.Binding>
+                                        <MultiBinding Converter="{StaticResource LastItemConverter}">
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" />
+                                            <Binding RelativeSource="{RelativeSource Self}" />
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" Path="Items.Count" />
+                                        </MultiBinding>
+                                    </DataTrigger.Binding>
+                                    <Setter TargetName="grid" Property="Height" Value="60" />
+                                    <Setter TargetName="grid" Property="Background" Value="{c:Amber}" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            --><!--<Border Background="#7FFF8000"  Grid.Row="2">
                 <ContentControl Content="{Binding Next}" TextBlock.FontWeight="Bold" TextBlock.FontSize="18">
 
                 </ContentControl>
-            </Border>
-            <ItemsControl  Grid.Row="4"  ItemsSource="{Binding Source={x:Static common:Pipe.Instance}, Path=Pending}"/>
+            </Border>--><!--
+            <ScrollViewer Grid.Row="3" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ItemsControl  ItemsSource="{Binding Source={StaticResource Completed_Items}}" d:ItemsSource="{StaticResource abc }">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type local:QueueItem}">
+                            <Grid  x:Name="grid"  TextBlock.FontSize="12">
+                                <UniformGrid  Rows="1" TextBlock.FontSize="8" >
+                                    <TextBlock Text="{Binding Guid}" Background="{c:Grey 1}"></TextBlock>
+                                    <TextBlock Text="{Binding Name}"></TextBlock>
+                                    <TextBlock Text="{Binding Index}" Background="{c:Grey 1}"></TextBlock>
+                                    <TextBlock Text="{Binding Type, Converter={StaticResource TypeNameConverter}}"></TextBlock>
+                                    <TextBlock Text="{Binding  Converter={StaticResource TypeNameConverter}}" Background="{c:Grey 1}"></TextBlock>
+                                    --><!--<TextBlock Text="{Binding Old.Value}"></TextBlock>--><!--
+                                </UniformGrid>
+                            </Grid>               
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
         </Grid>
-    </DockPanel>
+    </DockPanel>-->
 
 </UserControl>

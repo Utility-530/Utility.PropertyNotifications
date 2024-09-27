@@ -135,8 +135,6 @@
                             </Grid.RowDefinitions>
                             <Rectangle HorizontalAlignment="Stretch" Fill="LightGray" Height="2" Margin="2" Stroke="{TemplateBinding Background}" StrokeThickness="1"  VerticalAlignment="Stretch" MinWidth="40"/>
                             <ItemsPresenter Grid.Row="1"/>
-
-
                             <UniformGrid Rows="1" Grid.Column="1" Grid.RowSpan="2">
                                 <btns:PlusGeometryButton x:Name="PlusButton"  Width="16" Height="16"   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />
                                 <btns:MinusGeometryButton x:Name="MinusButton"  Width="16" Height="16"    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />

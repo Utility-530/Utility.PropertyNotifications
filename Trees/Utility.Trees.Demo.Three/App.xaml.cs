@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Windows;
 using Utility.Descriptors;
 using Utility.Nodes.Reflections;
+using Utility.Pipes;
 using Utility.Repos;
 using Utility.Trees.Demo.MVVM.Infrastructure;
 using Utility.Trees.Demo.MVVM.Views;
@@ -17,7 +18,7 @@ namespace Utility.Trees.Demo.MVVM
     {
         //Guid guid = new Guid("5262625e-53c5-47c0-8351-a3be4111988e");
 
-        public static Assembly[] Assemblies => new Assembly[] { typeof(Utility.WPF.Library.Class1).Assembly };
+        //public static Assembly[] Assemblies => new Assembly[] { typeof(Utility.WPF.Library.Class1).Assembly };
         public static Assembly[] SystemAssemblies => new Assembly[] { new Utility.Meta.SystemAssembly() };
 
 

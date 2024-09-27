@@ -4,15 +4,18 @@
              xmlns:att="http://schemas.utility.com/attached"
              xmlns:btns="http://schemas.utility.com/buttons"
              xmlns:local="clr-namespace:Utility.Trees.Demo.MVVM" 
+             xmlns:dt="clr-namespace:Utility.Trees.Decisions;assembly=Utility.Trees.Decisions"
              xmlns:t="clr-namespace:Utility.Trees;assembly=Utility.Trees"
              xmlns:tl="clr-namespace:Utility.Trees.WPF;assembly=Utility.Trees.WPF"
              xmlns:tree="http://schemas.utility.com/trees"
              xmlns:trs="clr-namespace:Utility.Trees.WPF;assembly=Utility.Trees.WPF"
+             xmlns:c="http://schemas.utility.com/colours"
              xmlns:temp="http://schemas.utility.com/templates">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Generic.xaml"/>
+                <ResourceDictionary Source="/Utility.WPF.Pipes;component/Themes/Generic.xaml"/>
                 <ResourceDictionary Source="/Themes/Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
@@ -20,30 +23,30 @@
                 <ContentControl Content="{Binding Data, Mode=OneTime}"/>
             </HierarchicalDataTemplate>
 
-            <HierarchicalDataTemplate DataType="{x:Type local:DecisionTree}" ItemsSource="{Binding }">
+            <HierarchicalDataTemplate DataType="{x:Type dt:DecisionTree}" ItemsSource="{Binding }">
                 <Border BorderBrush="Gray" BorderThickness="1" MaxWidth="200"  TextBlock.FontSize="8">
                     <ScrollViewer HorizontalScrollBarVisibility="Visible">
-                        
-              
-                    <Grid >
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                        </Grid.RowDefinitions>
 
-                        <ContentControl Content="{Binding Data, Mode=OneTime}" />
 
-                        <UniformGrid Rows="1" Grid.Row="1" Width="200" HorizontalAlignment="Left">
-                            <!--<TextBlock Text="Input"></TextBlock>-->
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+
+                            <ContentControl Content="{Binding Data, Mode=OneTime}" />
+
+                            <UniformGrid Rows="1" Grid.Row="1" Width="200" HorizontalAlignment="Left">
+                                <!--<TextBlock Text="Input"></TextBlock>-->
                                 <TextBlock Text="Out" FontWeight="DemiBold" Foreground="Gray"/>
-                            <!--<ContentControl Content="{Binding Input, Mode=OneWay}" ContentTemplateSelector="{x:Static temp:CustomDataTemplateSelector.Instance}"/>-->
+                                <!--<ContentControl Content="{Binding Input, Mode=OneWay}" ContentTemplateSelector="{x:Static temp:CustomDataTemplateSelector.Instance}"/>-->
                                 <ContentControl Content="{Binding Output, Mode=OneWay}" ContentTemplateSelector="{x:Static temp:CustomDataTemplateSelector.Instance}"  HorizontalAlignment="Left"/>
                                 <TextBlock Text="Back" FontWeight="DemiBold" Foreground="Gray"/>
 
                                 <ContentControl Content="{Binding Backput, Mode=OneWay}" ContentTemplateSelector="{x:Static temp:CustomDataTemplateSelector.Instance}"  HorizontalAlignment="Left"/>
-                        </UniformGrid>
-                    </Grid>
-                        </ScrollViewer>
+                            </UniformGrid>
+                        </Grid>
+                    </ScrollViewer>
                 </Border>
             </HierarchicalDataTemplate>
 
@@ -58,6 +61,18 @@
             <!--<DataTemplate DataType="{x:Type local:Model}">
                 <tree:TypeSelector Type="{Binding Type}" Assemblies="{x:Static local:App.SystemAssemblies }"/>
             </DataTemplate>-->
+
+            <DataTemplate DataType="{x:Type local:RepoQueueItem}">
+                <UniformGrid  Rows="1" TextBlock.FontSize="8" >
+                    <TextBlock Text="{Binding Guid}" Background="{c:Grey 1}"></TextBlock>
+                    <TextBlock Text="{Binding Name}" ></TextBlock>
+                    <TextBlock Text="{Binding Index}" Background="{c:Grey 1}"></TextBlock>
+                    <TextBlock Text="{Binding Type, Converter={StaticResource TypeNameConverter}}"></TextBlock>
+                    <TextBlock Text="{Binding  Converter={StaticResource TypeNameConverter}}" Background="{c:Grey 1}"></TextBlock>
+                    <!--<TextBlock Text="{Binding Old.Value}"></TextBlock>-->
+                </UniformGrid>
+            </DataTemplate>
+
 
             <DataTemplate x:Key="Tree">
                 <ContentPresenter Content="{Binding Data}"/>
@@ -111,8 +126,8 @@
                         </Style>
                     </TreeView.ItemContainerStyle>
                 </TreeView>
-            </DataTemplate>        
-            
+            </DataTemplate>
+
             <DataTemplate x:Key="SS" DataType="{x:Type tl:TreeViewer}">
                 <TreeView trs:TreeEx.Root="{Binding StyleSelector.Predicate}" >
                     <TreeView.ItemContainerStyle>
@@ -126,7 +141,7 @@
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
-                        
+
                     </TreeView.ItemContainerStyle>
                 </TreeView>
             </DataTemplate>

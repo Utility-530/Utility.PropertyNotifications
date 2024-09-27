@@ -5,6 +5,9 @@ using Utility.Helpers;
 using IObserver = Utility.Models.IObserver;
 using Utility.Repos;
 using System.Linq;
+using Utility.Trees.Decisions;
+using Utility.Interfaces.NonGeneric;
+using Utility.Pipes;
 
 namespace Utility.Trees.Demo.MVVM.Infrastructure
 {

@@ -19,12 +19,10 @@ using Utility.PropertyNotifications;
 using Utility.WPF.Controls.Trees;
 using System.Collections.Generic;
 using Utility.Trees.Demo.MVVM.Infrastructure;
+using Utility.Pipes;
 
 namespace Utility.Trees.Demo.MVVM
 {
-
-
-
     public class Table
     {
         public string Name { get; set; }
@@ -118,7 +116,8 @@ namespace Utility.Trees.Demo.MVVM
         {
             var treeViewer = DataTreeViewer(data);
             MainView.Instance.scrollviewer.Content = treeViewer;
-            MainView.Instance.PipeView.DataContext = Splat.Locator.Current.GetService<PipeController>();
+            MainView.Instance.pipe_view.Content = Splat.Locator.Current.GetService<PipeController>();
+            MainView.Instance.queue_view.Content = Pipe.Instance;
             MainView.Instance.filtertree.Content = treeViewer;
             MainView.Instance.filtertree.ContentTemplate = this.Resources["TVF"] as DataTemplate;
             MainView.Instance.datatemplatetree.Content = treeViewer;

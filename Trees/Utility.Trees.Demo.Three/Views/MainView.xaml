@@ -16,7 +16,10 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
-            <local:PipeView x:Name="PipeView"></local:PipeView>
+            <DockPanel>
+                <ContentControl x:Name="pipe_view" DockPanel.Dock="Top"></ContentControl>
+                <ContentControl x:Name="queue_view"></ContentControl>                
+            </DockPanel>
 
             <Grid Grid.Column="1" x:Name="maingrid"  >
                 <Grid.RowDefinitions>

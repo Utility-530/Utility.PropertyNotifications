@@ -6,10 +6,10 @@ using Utility.Descriptors;
 using Utility.Interfaces.NonGeneric;
 using System.Collections.ObjectModel;
 using Utility.Trees.WPF.Abstractions;
-using Utility.Trees.Demo.MVVM.Infrastructure;
 using Utility.Extensions;
 using Utility.Trees.Abstractions;
 using Utility.Helpers.NonGeneric;
+using Utility.Trees.Decisions;
 
 namespace Utility.Trees.Demo.MVVM
 {
