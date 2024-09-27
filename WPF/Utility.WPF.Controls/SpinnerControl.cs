@@ -73,8 +73,9 @@ namespace Utility.WPF.Controls
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             NumberFormatInfo numberFormatInfo = new NumberFormatInfo() { NumberDecimalDigits = DecimalPlaces };
-            var dec = decimal.Parse((sender as TextBox).Text, numberFormatInfo);
-            this.SetValue(ValueProperty, dec);
+
+            if (decimal.TryParse((sender as TextBox).Text, numberFormatInfo, out var dec))
+                this.SetValue(ValueProperty, dec);
 
         }
 
