@@ -116,6 +116,10 @@
         <DataTemplate DataType="{x:Type sys:Double}">
         <TextBlock Text="{Binding Mode=OneTime, StringFormat={}{0:N0}}"></TextBlock>
         </DataTemplate>
+    
+        <DataTemplate DataType="{x:Type sys:Decimal}">
+        <TextBlock Text="{Binding Mode=OneTime, StringFormat={}{0:N0}}"></TextBlock>
+        </DataTemplate>
 
         <DataTemplate DataType="{x:Type sys:Enum}">
             <ComboBox IsEnabled="false">
