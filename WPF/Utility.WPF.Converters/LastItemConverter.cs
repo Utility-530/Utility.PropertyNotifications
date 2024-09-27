@@ -10,14 +10,15 @@ namespace Utility.WPF.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            ItemsControl itemscontrol = values[0] as ItemsControl;
-            int count = itemscontrol.Items.Count;
-
-            if (values != null && values.Length == 2 && count > 0)
+            if (values[0] is ItemsControl itemscontrol && (values[1] is FrameworkElement fe))
             {
-                var itemContext = (values[1] as ContentPresenter).DataContext;
-                var lastItem = itemscontrol.Items[count - 1];
-                return Equals(lastItem, itemContext);
+                int count = itemscontrol.Items.Count;
+
+                if (values != null && values.Length >= 2 && count > 0)
+                {
+                    var lastItem = itemscontrol.Items[count - 1];
+                    return Equals(lastItem, fe.DataContext);
+                }
             }
 
             return DependencyProperty.UnsetValue;

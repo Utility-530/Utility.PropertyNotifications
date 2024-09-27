@@ -1,4 +1,7 @@
-﻿namespace Utility.WPF.Converters
+﻿using System;
+using System.Globalization;
+
+namespace Utility.WPF.Converters
 {
     public class BooleanConverter : BaseConverter<bool>
     {
@@ -11,6 +14,11 @@
     public class InverseBooleanConverter : BooleanConverter
     {
         protected override bool Check(object value) => !System.Convert.ToBoolean(value);
+
+        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return Check(value);
+        }
 
         public static InverseBooleanConverter Instance => new();
     }
