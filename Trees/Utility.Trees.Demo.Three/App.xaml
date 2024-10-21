@@ -17,6 +17,7 @@
                 <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Generic.xaml"/>
                 <ResourceDictionary Source="/Utility.WPF.Pipes;component/Themes/Generic.xaml"/>
                 <ResourceDictionary Source="/Themes/Styles.xaml"/>
+                <ResourceDictionary Source="/Themes/PipeRepository.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <HierarchicalDataTemplate DataType="{x:Type t:Tree}" ItemsSource="{Binding }">
@@ -24,9 +25,8 @@
             </HierarchicalDataTemplate>
 
             <HierarchicalDataTemplate DataType="{x:Type dt:DecisionTree}" ItemsSource="{Binding }">
-                <Border BorderBrush="Gray" BorderThickness="1" MaxWidth="200"  TextBlock.FontSize="8">
+                <Border x:Name="border"  BorderThickness="1" MaxWidth="200"  TextBlock.FontSize="8">
                     <ScrollViewer HorizontalScrollBarVisibility="Visible">
-
 
                         <Grid >
                             <Grid.RowDefinitions>
@@ -48,6 +48,15 @@
                         </Grid>
                     </ScrollViewer>
                 </Border>
+
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Path=IsInvoked}" Value="True">
+                        <Setter Property="BorderBrush" Value="Orange" TargetName="border" />
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=IsInvoked}" Value="False">
+                        <Setter Property="BorderBrush" Value="Gray" TargetName="border" />
+                    </DataTrigger>
+                </DataTemplate.Triggers>
             </HierarchicalDataTemplate>
 
             <!--<DataTemplate DataType="{x:Type local:ViewModel}">
@@ -62,16 +71,49 @@
                 <tree:TypeSelector Type="{Binding Type}" Assemblies="{x:Static local:App.SystemAssemblies }"/>
             </DataTemplate>-->
 
-            <DataTemplate DataType="{x:Type local:RepoQueueItem}">
+            <DataTemplate DataType="{x:Type local:RepoItem}">
                 <UniformGrid  Rows="1" TextBlock.FontSize="8" >
-                    <TextBlock Text="{Binding Guid}" Background="{c:Grey 1}"></TextBlock>
-                    <TextBlock Text="{Binding Name}" ></TextBlock>
-                    <TextBlock Text="{Binding Index}" Background="{c:Grey 1}"></TextBlock>
-                    <TextBlock Text="{Binding Type, Converter={StaticResource TypeNameConverter}}"></TextBlock>
-                    <TextBlock Text="{Binding  Converter={StaticResource TypeNameConverter}}" Background="{c:Grey 1}"></TextBlock>
+                    <TextBlock Text="{Binding Guid}" Background="{c:Grey 1}" ToolTip="Guid"></TextBlock>
+                    <TextBlock Text="{Binding ItemType}" Background="{c:Grey 1}" ToolTip="Guid"></TextBlock>
+                    <TextBlock Text="{Binding Name}" ToolTip="Name" ></TextBlock>
+                    <TextBlock Text="{Binding Index}" Background="{c:Grey 1}" ToolTip="Index"></TextBlock>
+                    <TextBlock Text="{Binding Type, Converter={StaticResource TypeNameConverter}}" ToolTip="Type-Name"></TextBlock>
+                    <TextBlock Text="{Binding  Converter={StaticResource TypeNameConverter}}" Background="{c:Grey 1}" ToolTip="Type"></TextBlock>
                     <!--<TextBlock Text="{Binding Old.Value}"></TextBlock>-->
                 </UniformGrid>
             </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type local:RepoResult}">
+                <UniformGrid  Rows="1" TextBlock.FontSize="8" >
+                    <ContentControl Content="{Binding RepoItem}"></ContentControl>
+                    <TextBlock Text="{Binding Observable,  Converter={StaticResource TypeNameConverter}}" ToolTip="Name" ></TextBlock>
+                </UniformGrid>
+            </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type dt:BackItem}">
+                <Grid  TextBlock.FontSize="8" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="15"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding Tree.Key}" Background="{c:Grey 1}"></TextBlock>
+                    <ContentControl Content="{Binding Value}" Grid.Column="1" ></ContentControl>
+                </Grid>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type dt:ForwardItem}">
+                <Grid TextBlock.FontSize="8" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="15"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding Tree.Key}" Background="{c:Grey 1}"></TextBlock>
+                    <ContentControl Content="{Binding Value}" Grid.Column="1" ></ContentControl>
+                </Grid>
+            </DataTemplate>
+
 
 
             <DataTemplate x:Key="Tree">
@@ -146,6 +188,17 @@
                 </TreeView>
             </DataTemplate>
 
+            
+            
+            <DataTemplate x:Key="Pipe_Repository_Template" DataType="{x:Type local:PipeRepository}">
+                <TreeView trs:TreeEx.Root="{Binding Predicate}" >
+                    <TreeView.ItemContainerStyle>
+                        <Style  TargetType="TreeViewItem" >
+                            <Setter Property="IsExpanded" Value="True" />                         
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                </TreeView>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

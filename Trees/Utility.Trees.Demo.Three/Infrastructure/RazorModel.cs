@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Utility.Trees.Demo.MVVM.Infrastructure
 {
@@ -22,7 +18,6 @@ namespace Utility.Trees.Demo.MVVM.Infrastructure
 
     public class Product
     {
-
         public List<Description> Descriptions { get; set; }
     }
 

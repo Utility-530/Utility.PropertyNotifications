@@ -1,5 +1,4 @@
 ﻿using AnyClone;
-using Splat;
 using System;
 using System.Collections;
 using System.Reactive.Linq;
@@ -17,9 +16,8 @@ using Utility.Trees.WPF.Abstractions;
 using Utility.WPF.Controls.Trees;
 using Views.Trees;
 
-namespace Utility.Trees.Demo.MVVM.MVVM
+namespace Utility.Trees.Demo.MVVM
 {
-
     public class TreeViewItemFactory : ITreeViewItemFactory
     {
         public static readonly Guid _guid = Guid.Parse("a996b3a6-3e73-4e93-8b34-cf324aac5749");
@@ -37,7 +35,7 @@ namespace Utility.Trees.Demo.MVVM.MVVM
                       {
                         var table = Activator.CreateInstance(typeof(Table));
                         var root = DescriptorFactory.CreateRoot(table, _guid, "table_add").Take(1).Wait();
-                        var reflectionNode = new ReflectionNode(root);
+                        var reflectionNode = new ReflectionNode(root) { Parent = (ITree)instance };
                         var item =  new ComboTreeViewItem
                         {
                             Header = instance,
@@ -54,19 +52,100 @@ namespace Utility.Trees.Demo.MVVM.MVVM
                                 var newObject = (e.NewObject as TreeViewer).ViewModel as ReflectionNode;
                                 var root= newObject.Data as IValueDescriptor;
                                 var inst = root.Get();
-                                var cd = ((instance as IReadOnlyTree).Data as ICollectionDescriptor).Collection as IList;
-                                cd.Add(inst);
-                                
-                                ((instance as IReadOnlyTree).Data as IRefresh).Refresh();
+                                if(instance is IReadOnlyTree tree)
+                                {
+                                    var cd = (tree.Data as ICollectionDescriptor).Collection as IList;
+                                    cd.Add(inst);
+                                    //root.Initialise();
+                                    (tree.Data as IRefresh).Refresh();
+                                }
                             }
                         }
                         return item;
                         })
                 },
+                new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item =>(item.Data as IReferenceDescriptor)!=null))
+                {
+                  new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item => (item.Data as ICollectionItemReferenceDescriptor)!=null))
+                  {
+                    new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item => (item.Data as ICollectionItemReferenceDescriptor).Type == typeof(Table)),
+                    instance =>
+                    {
+                        return new CustomTreeViewItem
+                        {
+                            //AddCommand = new Command(() => { if (instance is ITree { } item) item.Add(new ModelTree(Helpers.Names.Random(random), Guid.NewGuid(), ((GuidKey)item.Key).Value)); }),
+                            //RemoveCommand = new Command(() => { if (instance is IParent<ITree> { Parent: { } parent }) parent.Remove(instance); }),
+
+                            Header = instance,
+                            DataContext = instance,
+                            IsExpanded = true
+                        };
+                    }),
+                  },
+                    new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item => (item.Data as IReferenceDescriptor).Type == typeof(Table)))
+                    {
+
+                        new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item => item.Parent as ICollectionDescriptor!=null), instance =>                       
+                        new CustomTreeViewItem
+                        {
+                                        //AddCommand = new Command(() => { if (instance is ITree { } item) item.Add(new ModelTree(Helpers.Names.Random(random), Guid.NewGuid(), ((GuidKey)item.Key).Value)); }),
+                                        //RemoveCommand = new Command(() => { if (instance is IParent<ITree> { Parent: { } parent }) parent.Remove(instance); }),
+                            AddCommand = new Command(() => Add(instance)),
+                            RemoveCommand = new Command(() => Remove(instance)),
+                            Header = instance,
+                            DataContext = instance,
+                            IsExpanded = true
+                        }),
+                        //(((instance as IReadOnlyTree)?.Data as INotifyPropertyChanged).WithChangesTo(a=>(a as IValue).Value).Subscribe(a =>
+                        //{
+
+                        //})
+                        new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item => (item.Parent as ICollectionDescriptor)==null),
+                        instance =>
+                        {
+                            var table = (((instance as IReadOnlyTree)?.Data as IValue)?.Value as Table);
+                            if(table is { Type: { } type, Guid:{ } guid, Name:{ } name })
+                            {
+                                var root =  DescriptorFactory.CreateRoot(table.Type ,table.Guid, table.Name).Take(1).Wait();
+                                var reflectionNode = new ReflectionNode(root);
+                                var treeViewer = DataTreeViewer(reflectionNode);
+                                return treeViewer;
+                            }
+                        else if ((instance as IReadOnlyTree)?.Parent.Data is not ICollectionDescriptor)
+                        {
+                            var treeViewer = DataTreeViewer();
+                            ((instance as IReadOnlyTree)?.Data as IValueChanges)
+                            .Subscribe(change =>
+                            {
+                                var table = (((instance as IReadOnlyTree)?.Data as IValue)?.Value as Table);
+                                if(table is { Type: { } type, Guid:{ } guid, Name:{ } name })
+                                {
+                                    var root =  DescriptorFactory.CreateRoot(table.Type ,table.Guid, table.Name).Take(1).Wait();
+                                    var reflectionNode = new ReflectionNode(root);
+                                    treeViewer.ViewModel = reflectionNode;
+                                }
+                            });
+                            return treeViewer;
+                        }
+                            else
+                            {
+                                                return new CustomTreeViewItem
+                        {
+                            //AddCommand = new Command(() => { if (instance is ITree { } item) item.Add(new ModelTree(Helpers.Names.Random(random), Guid.NewGuid(), ((GuidKey)item.Key).Value)); }),
+                            //RemoveCommand = new Command(() => { if (instance is IParent<ITree> { Parent: { } parent }) parent.Remove(instance); }),
+
+                            Header = instance,
+                            DataContext = instance,
+                            IsExpanded = true
+                        };
+                            }
+                        })
+                    }
+                },
                 new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item =>true){  }, instance =>
                 new CustomTreeViewItem
                 {
-                    //AddCommand = new Command(() => { if (instance is ITree { } item) item.Add(new ModelTree(Helpers.Names.Random(random), Guid.NewGuid(), ((GuidKey)item.Key).Value)); }),
+                        //AddCommand = new Command(() => { if (instance is ITree { } item) item.Add(new ModelTree(Helpers.Names.Random(random), Guid.NewGuid(), ((GuidKey)item.Key).Value)); }),
                         //RemoveCommand = new Command(() => { if (instance is IParent<ITree> { Parent: { } parent }) parent.Remove(instance); }),
                         AddCommand = new Command(() => Add(instance)),
                         RemoveCommand = new Command(() => Remove(instance)),
@@ -80,7 +159,7 @@ namespace Utility.Trees.Demo.MVVM.MVVM
 
         public DecisionTree Predicate { get; set; }
 
-        public HeaderedItemsControl Make(object instance, ItemsControl parent)
+        public ItemsControl Make(object instance, ItemsControl parent)
         {
             Predicate.Reset();
             Predicate.Input = instance;
@@ -88,7 +167,11 @@ namespace Utility.Trees.Demo.MVVM.MVVM
             if (Predicate.Backput is TreeViewItem treeViewItem)
             {
                 treeViewItem.Selected += (s, e) => { if (parent is ISelection selection) selection.Select(treeViewItem.Header); };
-                return treeViewItem;
+
+            }
+            if (Predicate.Backput is ItemsControl itemsControl)
+            {
+                return itemsControl;
             }
             throw new Exception("DS 3333");
         }
@@ -116,7 +199,7 @@ namespace Utility.Trees.Demo.MVVM.MVVM
 
         public static TreeViewItemFactory Instance { get; } = new();
 
-        public static TreeViewer DataTreeViewer(object data)
+        public static TreeViewer DataTreeViewer(object? data = null)
         {
             return new TreeViewer
             {

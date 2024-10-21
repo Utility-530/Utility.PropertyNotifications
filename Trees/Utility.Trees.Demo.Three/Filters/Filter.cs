@@ -17,20 +17,46 @@ namespace Utility.Trees.Demo.MVVM
     {
         public Filter()
         {
-            //var tre_e = new Tree() { new Decider(a=>true), new Decider(a => true) };
+            Predicate =
+                 new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => true))
+                 {
+                     // prevents child items of a parent Descriptor that is being shown as a Treeviewer from also being shown
+                     new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Data as IPropertiesDescriptor != null))
+                        {
+                            new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => (((IReadOnlyTree)item).Data as IPropertiesDescriptor).Type == typeof(Table)))
+                            {
+                                new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent == null), a => false)
+                                {
 
-            Predicate = new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => true) { }, a => a.Data)
-                {
-                    new BooleanDecisionTree(new Decision(item => item as IMethodDescriptor!=null){  })
+                                },
+                                new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent != null), a => a.Parent)
+                                {
+                                         new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent == null), a => false)
+                                {
+
+                                },
+                                         new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent != null),a=>a.Parent)
+                                         {
+
+                                        new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Data as ICollectionDescriptor ==null), a => false),
+
+                                }
+                               }
+                            }
+                        },
+
+                      new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => true) { }, a => a.Data)
                     {
-                        new BooleanDecisionTree(new Decision<IMethodDescriptor>(md=>md.Type.IsArray==false),  a=> true)
-                    },
-                    new BooleanDecisionTree(new Decision(item => item as IDescriptor != null && (item as IDescriptor).ParentType!=null))
-                    {
-                          new BooleanDecisionTree(new Decision<IDescriptor>(item => item as IPropertiesDescriptor!=null))
-                          {
-                              new BooleanDecisionTree(new Decision<IDescriptor>(item => item.Type.IsAssignableTo(typeof(IEnumerable))),  a=> false)
-                          },
+                        new BooleanDecisionTree(new Decision(item => item as IMethodDescriptor!=null){  })
+                        {
+                            new BooleanDecisionTree(new Decision<IMethodDescriptor>(md=>md.Type.IsArray==false),  a=> true)
+                        },
+                        new BooleanDecisionTree(new Decision(item => item as IDescriptor != null && (item as IDescriptor).ParentType!=null))
+                        {
+                            new BooleanDecisionTree(new Decision<IDescriptor>(item => item as IPropertiesDescriptor!=null))
+                            {
+                                new BooleanDecisionTree(new Decision<IDescriptor>(item => item.Type.IsAssignableTo(typeof(IEnumerable))),  a=> false)
+                            },
                             new BooleanDecisionTree<IDescriptor>(new Decision<IDescriptor>(item => item.ParentType.Name == "Array"), item => item.Name)
                             {
                                 new BooleanDecisionTree( new Decision<string>(item => item == "IsFixedSize"),  a=> false) { },
@@ -59,9 +85,9 @@ namespace Utility.Trees.Demo.MVVM
                             new BooleanDecisionTree(  new Decision<string>(item => item == nameof(IList.Add)), a=> false)
                         }
 
-                    }
+                        }
+                      }
                 };
-
         }
 
         public bool Convert(object item)

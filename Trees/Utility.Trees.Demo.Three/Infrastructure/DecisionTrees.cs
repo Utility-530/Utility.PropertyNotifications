@@ -10,7 +10,7 @@ using Utility.Trees.Decisions;
 
 namespace Utility.Trees.Demo.MVVM.Infrastructure
 {
-    public class TreeViewItemDecisionTree : DecisionTree<object, TreeViewItem>
+    public class TreeViewItemDecisionTree : DecisionTree<object, ItemsControl>
     {
         public TreeViewItemDecisionTree(IDecision decision, Func<object, object>? transform = null) : base(decision, transform)
         {

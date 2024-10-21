@@ -7,7 +7,6 @@ using Utility.Trees.Decisions;
 
 namespace Utility.Trees.Demo.MVVM
 {
-
     public class StyleSelector : System.Windows.Controls.StyleSelector
     {
         public override Style SelectStyle(object item, DependencyObject container)
@@ -29,6 +28,7 @@ namespace Utility.Trees.Demo.MVVM
             }
             return null;
         }
+
         public static StyleSelector Instance { get; } = new();
 
         public DecisionTree Predicate { get; set; }
@@ -65,10 +65,5 @@ namespace Utility.Trees.Demo.MVVM
                     new StringDecisionTree(new Decision<IReadOnlyTree>(item => true), md => "ExpandedTreeViewItem"),
                 };
         }
-
-
     }
-
-
-
 }

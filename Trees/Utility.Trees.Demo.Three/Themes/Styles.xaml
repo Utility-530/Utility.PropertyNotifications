@@ -8,22 +8,18 @@
         <Setter Property="BorderThickness" Value="2"></Setter>
     </Style>
 
-
     <Style TargetType="{x:Type TreeViewItem}" x:Key="ExpandedTreeViewItem" BasedOn="{StaticResource GenericTreeViewItem}">
         <Setter Property="IsExpanded" Value="True"></Setter>
         <Setter Property="BorderThickness" Value="2"></Setter>
     </Style>
 
-
     <Style TargetType="{x:Type TreeViewItem}" x:Key="TableItem" BasedOn="{StaticResource GenericTreeViewItem}">
         <Setter Property="Width"  Value="200"></Setter>
-
     </Style>
 
     <Style TargetType="{x:Type TreeViewItem}" x:Key="HeaderItem" BasedOn="{StaticResource GenericTreeViewItem}">
         <Setter Property="Width"  Value="200"></Setter>
     </Style>
-
 
     <Style TargetType="{x:Type TreeViewItem}" x:Key="CollapsedTableItem" BasedOn="{StaticResource TableItem}">
         <Setter Property="IsExpanded" Value="False"></Setter>
@@ -81,10 +77,11 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
+                            <!-- separator -->
                             <Rectangle HorizontalAlignment="Stretch" Stroke="{TemplateBinding Background}" Fill="LightGray"
                                    x:Name="Rectangle"
                                    StrokeThickness="1"
-                                   VerticalAlignment="Stretch" MinWidth="40" Height="2"  Margin="2"/>
+                                   VerticalAlignment="Stretch" MinWidth="40" Height="2"  Margin="2"/>                      
                             <ItemsPresenter Grid.Row="1"/>
 
                             <UniformGrid Rows="1" Grid.Row="2" Background="LightGray" Margin="4">
@@ -126,6 +123,7 @@
 
                         <Grid>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="12"></ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                                 <ColumnDefinition Width="Auto"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
@@ -133,9 +131,21 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <Rectangle HorizontalAlignment="Stretch" Fill="LightGray" Height="2" Margin="2" Stroke="{TemplateBinding Background}" StrokeThickness="1"  VerticalAlignment="Stretch" MinWidth="40"/>
-                            <ItemsPresenter Grid.Row="1"/>
-                            <UniformGrid Rows="1" Grid.Column="1" Grid.RowSpan="2">
+                            
+                            <Rectangle HorizontalAlignment="Stretch" Fill="LightGray" Height="2" Margin="2" Grid.Column="1" Stroke="{TemplateBinding Background}" StrokeThickness="1"  VerticalAlignment="Stretch" MinWidth="40"/>
+                           <!-- for aiding selection of the item from its list-->
+                            <Rectangle 
+                                       Stroke="LightGray" 
+                                       Fill="DarkGray"
+                                       x:Name="Rectangle2"
+                                       Grid.Row="1"
+                                       StrokeThickness="1"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Stretch" Width="8" Height="8"  Margin="0,0"/>
+
+                            <ItemsPresenter  Grid.Column="1" Grid.Row="1"/>
+                            
+                            <UniformGrid Rows="1" Grid.Column="2" Grid.RowSpan="2">
                                 <btns:PlusGeometryButton x:Name="PlusButton"  Width="16" Height="16"   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />
                                 <btns:MinusGeometryButton x:Name="MinusButton"  Width="16" Height="16"    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />
                             </UniformGrid>

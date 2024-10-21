@@ -8,31 +8,42 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <DockPanel>
-  
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="5"></ColumnDefinition>
+                <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                <ColumnDefinition Width="5"></ColumnDefinition>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
             <DockPanel>
                 <ContentControl x:Name="pipe_view" DockPanel.Dock="Top"></ContentControl>
-                <ContentControl x:Name="queue_view"></ContentControl>                
+                <ContentControl x:Name="queue_view"></ContentControl>
             </DockPanel>
 
-            <Grid Grid.Column="1" x:Name="maingrid"  >
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" ></GridSplitter>
+
+            <ContentControl Grid.Column="2" x:Name="repo_view"></ContentControl>
+
+            <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch" ></GridSplitter>
+
+            <Grid Grid.Column="4" x:Name="maingrid"  >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
-                <ComboBox x:Name="combobox"  DockPanel.Dock="Top" Margin="8" Visibility="Collapsed"></ComboBox>
+                
+                <ComboBox x:Name="combobox"  DockPanel.Dock="Top" Margin="8" Visibility="Collapsed"/>
 
-                <ScrollViewer x:Name="scrollviewer" HorizontalScrollBarVisibility="Visible" Grid.Row="1">
-                    
-                </ScrollViewer>
+                <ScrollViewer x:Name="scrollviewer" HorizontalScrollBarVisibility="Visible" Grid.Row="1"/>
             </Grid>
-            <TabControl Grid.Column="2">
+            <TabControl Grid.Column="5">
+                <TabItem Header="Pipe-Tree" x:Name="pipe_repository_tree">
+
+                </TabItem>
                 <TabItem Header="Property-Grid" x:Name="propertygrid">
 
                 </TabItem>
@@ -43,10 +54,10 @@
                 </TabItem>-->
                 <TabItem Header="Filter-Tree" x:Name="filtertree">
 
-                </TabItem>    
+                </TabItem>
                 <TabItem Header="DataTemplate-Tree" x:Name="datatemplatetree">
 
-                </TabItem>  
+                </TabItem>
                 <TabItem Header="Style-Tree" x:Name="styletree">
 
                 </TabItem>

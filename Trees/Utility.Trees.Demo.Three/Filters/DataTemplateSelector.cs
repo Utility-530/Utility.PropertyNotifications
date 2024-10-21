@@ -24,8 +24,11 @@ namespace Utility.Trees.Demo.MVVM
                 {
                     new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IHeaderDescriptor!=null), md=> MakeHeaderTemplate(md, 1)),
                     new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IMethodDescriptor!=null){  },md=>MakeButtonTemplate(md)),
-                    new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => (item.Data as IReferenceDescriptor) != null), md => MakeHeaderTemplate(md, md.Depth)),
-
+                    new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => (item.Data as IReferenceDescriptor) != null))
+                    {
+                        //new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => (item.Data as IReferenceDescriptor).Instance as Table != null),  md => MakeVoidTemplate()),
+                        new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => true),  md => MakeHeaderTemplate(md, md.Depth))
+                    },
                     //new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionItemDescriptor!=null){  }, md=>MakeLineTemplate()),
                     new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Parent!=null){  })
                     {
@@ -76,7 +79,6 @@ namespace Utility.Trees.Demo.MVVM
                 return contentControl;
             });
         }
-
 
         private DataTemplate MakeHeaderTemplate(object item, int count)
         {
