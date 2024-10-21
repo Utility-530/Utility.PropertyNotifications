@@ -1,11 +1,26 @@
-﻿using System.Text;
+﻿using System.Linq.Expressions;
+using System.Text;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.NonGeneric;
 using Utility.Pipes;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Trees.Decisions
 {
-    public class DecisionTreeX : DecisionTree<decimal>
+    public interface IDecisionTreeX : ITree
+    {
+        bool IsInvoked { get; set; }
+
+        object Input { get; set; }
+        bool IsBackputSet { get; }
+        object Backput { get; }
+
+        void Evaluate(List<object> keys);
+
+        void BackPropagate(List<object> keys);
+    }
+
+    public class DecisionTreeX<T> : DecisionTree<T>, IDecisionTreeX
     {
         private bool isInvoked;
 
@@ -20,9 +35,11 @@ namespace Utility.Trees.Decisions
         }
 
 
+        public bool IsBackputSet { get; set; }
+
         private readonly Func<IEnumerable<object>, object?> combine;
 
-        public DecisionTreeX(IDecision decision, string key, Func<decimal, object>? transform = null, Func<IEnumerable<object>, object?>? combine = null) : base(decision, transform)
+        public DecisionTreeX(Expression<Func<T, bool>> decision, string key, Func<T, object>? transform = null, Func<IEnumerable<object>, object?>? combine = null) : base(new Decision<T>(decision), transform)
         {
             Key = key;
             this.combine = combine ?? new Func<IEnumerable<object>, object?>(a =>
@@ -31,86 +48,101 @@ namespace Utility.Trees.Decisions
         });
         }
 
-        public void Evaluate(List<string> keys)
+        protected override object ToBackPut(ICollection<object> backputs)
         {
+            return combine.Invoke(backputs);
+        }
 
+        public virtual void Evaluate(List<object> keys)
+        {
             var result = decision.Evaluate(Input);
-
+            IsBackputSet = false;
             if (result == Match)
             {
                 Output = Transform(Input);
                 if (Items.Any())
                 {
-                    foreach (DecisionTreeX item in Items)
+                    foreach (IDecisionTreeX item in Items)
                     {
                         item.Parent = this;
-                        item.Input = Output;
-                        var queueItem = new ForwardItem(item, Output, keys);
-
+                        var queueItem = new ForwardItem(item, Output, new List<object>(keys));
                         Pipe.Instance.Queue(queueItem);
                     }
+                    return;
                 }
-                else if (this.Parent is DecisionTreeX x)
+                else if (this.Parent is IDecisionTreeX decisionTreeX)
                 {
                     Backput = this.Output;
-                    Pipe.Instance.Queue(new BackItem(x, Backput, keys));
+                    IsBackputSet = true;
+                    Pipe.Instance.GoBack(new BackItem2(decisionTreeX, Backput, new List<object>(keys)));
                 }
-                return;
+            }
+            else
+            {
+                Backput = Output = null;
+                IsBackputSet = true;
             }
         }
 
 
-        public void BackPropagate(List<string> keys)
+        public virtual void BackPropagate(List<object> keys)
         {
             List<object> outputs = new();
 
-            foreach (DecisionTree item in Items)
+            foreach (IDecisionTreeX item in Items)
             {
-                outputs.Add(item.Output);
+                if (item.IsBackputSet == false)
+                    return;
+                outputs.Add(item.Backput);
             }
 
-            Backput = combine.Invoke(outputs);
-            if (this.Parent is DecisionTreeX x)
+            Backput = ToBackPut(outputs);
+            IsBackputSet = true;
+            if (this.Parent is IDecisionTreeX x)
             {
-                var queueItem = new BackItem(x, Backput, keys);
-                Pipe.Instance.Queue(queueItem);
+                var queueItem = new BackItem(x, Backput, new List<object>(keys));
+                Pipe.Instance.GoBack(queueItem);
             }
         }
 
     }
 
-    public record ForwardItem(DecisionTreeX Tree, object Value, List<string> Keys) : DecisionQueueItem(Tree, Value, Keys)
+    public record ForwardItem(IDecisionTreeX Tree, object Value, List<object> Keys) : DecisionQueueItem(Tree, Value, Keys)
     {
         public override void Invoke()
         {
             Decider.Instance.Current = Tree;
-            Keys.Add(Tree.Key);
+            Keys.Add(this);
+            Tree.Input = Value;
             Tree.Evaluate(Keys);
         }
     }
 
 
+    public record BackItem2(IDecisionTreeX Tree, object Value, List<object> Keys) : BackItem(Tree, Value, Keys)
+    {
+    }
 
-    public record BackItem(DecisionTreeX Tree, object Value, List<string> Keys) : DecisionQueueItem(Tree, Value, Keys)
+    public record BackItem(IDecisionTreeX Tree, object Value, List<object> Keys) : DecisionQueueItem(Tree, Value, Keys)
     {
         public override void Invoke()
         {
             Decider.Instance.Current = Tree;
-            Keys.Add(Tree.Key);
+            Keys.Add(this);
             Tree.BackPropagate(Keys);
         }
     }
 
-    public abstract record DecisionQueueItem(DecisionTreeX Tree, object Value, List<string> Keys) : QueueItem
+    public abstract record DecisionQueueItem(IDecisionTreeX Tree, object Value, List<object> Keys) : QueueItem
     {
 
     }
 
     public class Decider
     {
-        private DecisionTreeX current;
+        private IDecisionTreeX? current;
 
-        public DecisionTreeX Current
+        public IDecisionTreeX? Current
         {
             get { return current; }
             set
@@ -118,7 +150,8 @@ namespace Utility.Trees.Decisions
                 if (current != null)
                     current.IsInvoked = false;
                 current = value;
-                current.IsInvoked = true;
+                if (current != null)
+                    current.IsInvoked = true;
             }
         }
 
