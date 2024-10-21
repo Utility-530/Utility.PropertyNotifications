@@ -92,8 +92,8 @@ namespace Utility.WPF.Controls.Trees
             RaiseCustomRoutedEvent(true);
 
 
-            this.Items.Refresh();
-            this.UpdateLayout();
+            //this.Items.Refresh();
+            //this.UpdateLayout();
         }
 
 
