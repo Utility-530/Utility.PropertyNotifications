@@ -17,17 +17,20 @@ namespace Views.Trees
                 var treeViewItem = factory.Make(viewModel, treeView);
 
                 treeViewItem.ItemContainerStyleSelector = styleSelector;
-                var binding = new Binding()
+
+                if (treeViewItem is HeaderedItemsControl headeredItemsControl)
                 {
-                    //Source = new PropertyPath(),
-                    Source = treeViewItem.Header,
-                    Converter = ItemsPanelConverter,
-                    Mode = BindingMode.OneTime
-                };
+                    var binding = new Binding()
+                    {
+                        //Source = new PropertyPath(),
+                        Source = headeredItemsControl.Header,
+                        Converter = ItemsPanelConverter,
+                        Mode = BindingMode.OneTime
+                    };
 
-                treeViewItem.SetBinding(ItemsControl.ItemsPanelProperty, binding);
-                treeViewItem.HeaderTemplateSelector = dataTemplateSelector;
-
+                    headeredItemsControl.SetBinding(ItemsControl.ItemsPanelProperty, binding);
+                    headeredItemsControl.HeaderTemplateSelector = dataTemplateSelector;
+                }
                 itemcollection.Add(treeViewItem);
                 itemcollection.CurrentChanged += Itemcollection_CurrentChanged;
                 return treeViewItem;

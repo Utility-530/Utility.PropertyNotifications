@@ -32,9 +32,9 @@ namespace Utility.Trees.WPF
 
             void Viewer_Loaded(object sender, RoutedEventArgs e)
             {
-                if (ViewModel != null && IsInitialised == false)
+                if (ViewModel != null && IsInitialised == null)
                 {
-                    IsInitialised = true;
+                    IsInitialised = ViewModel;
                     if (ViewModel is ILoad load)
                         load.Load();
                     disposable?.Dispose();
@@ -50,7 +50,7 @@ namespace Utility.Trees.WPF
             }
         }
 
-        public bool IsInitialised { get; set; }
+        public object IsInitialised { get; set; }
 
 
         void Initialise(ItemsControl treeView)
@@ -124,6 +124,15 @@ namespace Utility.Trees.WPF
 
         private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+            if (e.Property == ViewModelProperty && e.NewValue!=e.OldValue)
+            {
+                if (e.NewValue is IItems items && d is TreeViewer treeViewer && e.NewValue != treeViewer.IsInitialised && treeViewer.TreeViewBuilder != null)
+                {
+                    treeViewer.ItemContainerStyleSelector = treeViewer.StyleSelector;
+                    treeViewer.ItemTemplateSelector = treeViewer.DataTemplateSelector;
+                    treeViewer.disposable = treeViewer.TreeViewBuilder.Build(treeViewer, items, treeViewer.TreeViewItemFactory, treeViewer.PanelsConverter, treeViewer.StyleSelector, treeViewer.DataTemplateSelector, treeViewer.TreeViewFilter);
+                }
+            }
             if (e.NewValue is ILoad viewModel)
             {
                 viewModel.Load();
