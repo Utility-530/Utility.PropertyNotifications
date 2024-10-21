@@ -159,7 +159,7 @@ namespace Utility.Repos
                 object item = null;
                 if (type?.ContainsGenericParameters != false)
                 {
-                    //throw new Exception("dgfsd..lll");
+                    throw new Exception("dgfsd..lll");
                 }
                 else
                 {
@@ -215,7 +215,7 @@ namespace Utility.Repos
 
         public virtual IObservable<Guid> Find(Guid parentGuid, string name, System.Type? type = null, int? index = null)
         {
-
+     
             if (parentGuid == default)
                 throw new Exception($"{nameof(parentGuid)} is default");
             return Observable.Create<Guid>(observer =>
@@ -237,7 +237,10 @@ namespace Utility.Repos
                             .Subscribe(a =>
                             {
                                 if (a is Guid guid)
+                                {
+                                    tablelookup[guid] = table_name;
                                     observer.OnNext(guid);
+                                }
                                 else
                                     throw new Exception("* 44 fd3323");
                                 observer.OnCompleted();
@@ -269,7 +272,7 @@ namespace Utility.Repos
                     var guid = Guid.NewGuid();
                     tablelookup[guid] = table_name;
                     //var i = connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
-                    var query = $"INSERT INTO {table_name} (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {ToValue(index)}, '{parentGuid}', '{DateTime.Now}', {ToValue(typeId)});";
+                    var query = $"INSERT INTO '{table_name}' (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {ToValue(index)}, '{parentGuid}', '{DateTime.Now}', {ToValue(typeId)});";
                     var i = connection.Execute(query);
                     observer.OnNext(guid);
                 });
@@ -417,12 +420,15 @@ namespace Utility.Repos
             return null;
         }
 
-        public virtual IObservable<DateValue?> Get(Guid guid)
+        public virtual IObservable<DateValue> Get(Guid guid)
         {
-            return Observable.Create<DateValue?>(observer =>
+            return Observable.Create<DateValue>(observer =>
             {
                 if (values.ContainsKey(guid))
-                    observer.OnNext((DateValue?)values[guid]);
+                {
+                    observer.OnNext((DateValue)values[guid]);
+                    return Disposable.Empty;
+                }
 
                 var table = connection.Find<Values>(guid);
                 if (table is Values { Value: { } text, Added: { } added, TypeId: { } typeId })
@@ -451,8 +457,12 @@ namespace Utility.Repos
                     }
                     else
                     {
-                        observer.OnNext((DateValue?)values[guid]);
+                        observer.OnNext((DateValue)values[guid]);
                     }
+                }
+                else
+                {
+                    observer.OnNext(new DateValue(default, null));
                 }
                 return Disposable.Empty;
             });
