@@ -76,6 +76,7 @@
 
     <Style x:Key="GenericTreeViewItem"
        TargetType="{x:Type TreeViewItem}">
+        <Setter Property="BorderThickness" Value="1"></Setter>
         <Setter Property="Background"
           Value="Transparent" />
         <Setter Property="IsSelected"
