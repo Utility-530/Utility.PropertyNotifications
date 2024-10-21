@@ -12,12 +12,12 @@ public record PropertyDescriptor(Descriptor Descriptor, object Instance) : BaseP
                 return DescriptorFactory.ToValue(Instance, Descriptor, Guid)
                 .Subscribe(descriptor =>
                 {
+                    descriptor.Subscribe(changes);
                     observer.OnNext(new(descriptor, Changes.Type.Add));
                 });
             });
         }
     }
-
 }
 
 public abstract record BasePropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor.PropertyType),  IInstance, IPropertyDescriptor
@@ -28,8 +28,6 @@ public abstract record BasePropertyDescriptor(Descriptor Descriptor, object Inst
 
     public override bool IsReadOnly => Descriptor.IsReadOnly;
 }
-
-
 
 public abstract record ValuePropertyDescriptor(Descriptor Descriptor, object Instance) : ValueMemberDescriptor(Descriptor.PropertyType), IRaisePropertyChanged, IInstance, IPropertyDescriptor
 {

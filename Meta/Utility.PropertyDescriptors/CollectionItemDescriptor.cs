@@ -135,6 +135,8 @@ internal partial record CollectionItemDescriptor : ValueDescriptor, ICollectionI
 
 internal partial record CollectionItemReferenceDescriptor :  ReferenceDescriptor, ICollectionItemReferenceDescriptor, IEquatable
 {
+    private IObservable<Change<IDescriptor>> observable;
+
     public CollectionItemReferenceDescriptor(object item, int index, Type componentType) : base(new RootDescriptor(item.GetType(), componentType) { }, item)
     {
         Item = item;
@@ -161,7 +163,7 @@ internal partial record CollectionItemReferenceDescriptor :  ReferenceDescriptor
     {
         get
         {
-            return Observable.Create<Change<IDescriptor>>(async observer =>
+            return observable ??= Observable.Create<Change<IDescriptor>>(async observer =>
             {
                 var descriptors = TypeDescriptor.GetProperties(Instance);
                 foreach (Descriptor descriptor in descriptors)
