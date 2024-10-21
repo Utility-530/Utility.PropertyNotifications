@@ -1,7 +1,5 @@
 ﻿using Splat;
 using System.Windows;
-using Utility.Helpers.NonGeneric;
-using Utility.Interfaces.NonGeneric;
 using Utility.Pipes;
 using Utility.Trees.Decisions;
 
@@ -12,31 +10,33 @@ namespace Utility.Trees.Demos.Decisions
     /// </summary>
     public partial class MainWindow : Window
     {
-        DecisionTreeX dTree;
+        IDecisionTreeX dTree;
 
         public MainWindow()
         {
             InitializeComponent();
-            dTree = new DecisionTreeX(new Decision<decimal>(a => a > 1), Guid.NewGuid().ToString(),
-            a =>
+            dTree = new DecisionTreeX<decimal>((a => a > 1), Guid.NewGuid().ToString(),
+                a =>
+                {
+                    return a / 2m;
+                })
             {
-                return a / 2m;
-            })
-
-            {
-                new DecisionTreeX(new Decision<decimal>(a => a > 5), Guid.NewGuid().ToString(),a =>
-            {
-                return a;
-            }),
-                new DecisionTreeX(new Decision<decimal>(a => a > 3), Guid.NewGuid().ToString(), a =>
-            {
-                return a;
-            })
+                new DecisionTreeX<decimal>((a => a > 5), Guid.NewGuid().ToString(),
+                a =>
+                {
+                    return a;
+                }),
+                new DecisionTreeX < decimal >((a => a > 3), Guid.NewGuid().ToString(),
+                a =>
+                {
+                    return a;
+                })
             };
 
             Tree_View.ItemsSource = new[] { dTree };
 
             Queue_View.Content = Pipe.Instance;
+
             Splat.Locator.CurrentMutable.RegisterLazySingleton<PipeController>(() => new());
             Splat.Locator.CurrentMutable.RegisterConstant(dTree);
 
@@ -55,13 +55,13 @@ namespace Utility.Trees.Demos.Decisions
 
         private void Spinner_Control_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
         {
-            dTree.Input = (decimal)e.NewValue;
-            Pipe.Instance.Queue(new ForwardItem(dTree, dTree.Input, new List<string>()));
+
+            Pipe.Instance.New(new ForwardItem(dTree, Spinner_Control.Value, []));
         }
     }
 
 
- 
 
- 
+
+
 }

@@ -59,6 +59,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="5" />
             <ColumnDefinition Width="2*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <DockPanel>
@@ -66,7 +67,8 @@
             <ContentControl x:Name="Queue_View" ></ContentControl>
 
         </DockPanel>
-        <DockPanel Grid.Column="1">
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" ></GridSplitter>
+        <DockPanel Grid.Column="2">
             <wpf:SpinnerControl x:Name="Spinner_Control" Height="60" DockPanel.Dock="Top"></wpf:SpinnerControl>
             <TreeView x:Name="Tree_View" >
                 <TreeView.ItemContainerStyle>
@@ -75,7 +77,6 @@
                     </Style>
                 </TreeView.ItemContainerStyle>
             </TreeView>
-        </DockPanel>
- 
+        </DockPanel> 
     </Grid>
 </Window>
