@@ -1,5 +1,6 @@
 ﻿
 using System.Diagnostics;
+using System.Reactive.Subjects;
 using Utility.Interfaces;
 
 namespace Utility.Descriptors;
@@ -11,8 +12,10 @@ public interface ICollectionDetailsDescriptor
     bool IsCollectionItemValueType { get; }
 }
 
-public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, IChildren, ICollectionDetailsDescriptor
+public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, IChildren, ICollectionDetailsDescriptor, IValueChanges
 {
+    protected ReplaySubject<object> changes = new ReplaySubject<object>();  
+
     public Guid Guid { get; set; }
 
     public Guid ParentGuid { get; set; }
@@ -80,6 +83,11 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
                 throw e;
             });
     }
+
+    public IDisposable Subscribe(IObserver<object> observer)
+    {
+        return changes.Subscribe(observer);
+    }
 }
 
 
@@ -103,7 +111,6 @@ public abstract record ValueMemberDescriptor(Type Type) : MemberDescriptor(Type)
     public abstract object? Get();
 
     public abstract void Set(object? value);
-
 
 }
 

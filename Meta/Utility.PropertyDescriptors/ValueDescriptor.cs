@@ -1,5 +1,6 @@
 ﻿
 using Splat;
+using System.Reactive.Subjects;
 using Utility.Interfaces.Generic;
 using Utility.Repos;
 
@@ -21,24 +22,32 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
 {
     private object? value;
     private readonly ITreeRepository repo = Locator.Current.GetService<ITreeRepository>();
-    private System.IObservable<DateValue?> dateValue;
+    private IDisposable dateValue;
 
     public override System.IObservable<object> Children => Observable.Empty<object>();
 
     public override object? Get()
     {
-        if (value == null)
-            (dateValue ??= repo.Get(Guid))
+        if (dateValue == null)
+        {
+            dateValue = repo.Get(Guid)
                 .Subscribe(a =>
             {
                 if (a is { Value: { } _value } x)
                 {
                     value = _value;
-                    RaisePropertyChanged(_value);
                 }
-            });
-
-        value ??= Descriptor.GetValue(Instance);
+                else if (Descriptor.GetValue(Instance) is { } _val)
+                {
+                    value = _val;
+                    repo.Set(Guid, _val, DateTime.Now);
+                }
+                else
+                    return;
+                changes.OnNext(value);
+                RaisePropertyChanged(value);
+            });            
+        }
         return value;
     }
 
@@ -48,11 +57,19 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
         {
             repo.Set(Guid, value, DateTime.Now);
             Descriptor.SetValue(Instance, value);
+            this.value = value;
+            changes.OnNext(value);
         }
     }
 
     public override void Initialise(object? item = null)
     {
+        //Get();
+        //if (value == null)
+        //{
+        //    value = Descriptor.GetValue(Instance);
+        //    repo.Set(Guid, value, DateTime.Now);
+        //}
         //if (Descriptor.IsReadOnly == false)
         //{
         //    (dateValue ??= repo.Get(Guid))

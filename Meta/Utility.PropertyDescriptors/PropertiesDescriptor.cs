@@ -15,7 +15,8 @@ namespace Utility.Descriptors
                     var descriptors = TypeDescriptor.GetProperties(Instance);
                     foreach (Descriptor descriptor in descriptors)
                     {
-                        var propertyDescriptor = new PropertyDescriptor(descriptor, Instance) { Guid  = Guid };
+                        var propertyDescriptor = new PropertyDescriptor(descriptor, Instance) { Guid = Guid };
+                        propertyDescriptor.Subscribe(changes);
                         observer.OnNext(new(propertyDescriptor, Changes.Type.Add));
                     }
                     return Disposable.Empty;
