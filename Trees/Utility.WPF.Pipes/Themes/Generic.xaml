@@ -85,7 +85,20 @@
     <conv:LastItemConverter x:Key="LastItemConverter"></conv:LastItemConverter>
 
 
-    <CollectionViewSource x:Key="Pending_Items" Source="{Binding Source={x:Static pipe:Pipe.Instance}, Path=Pending}" >
+    <CollectionViewSource x:Key="Backlog_Items" Source="{Binding Source={x:Static pipe:Pipe.Instance}, Path=Backlog}" >
+        <CollectionViewSource.SortDescriptions>
+            <scm:SortDescription PropertyName="DateTime" Direction="Descending"/>
+        </CollectionViewSource.SortDescriptions>
+    </CollectionViewSource>  
+    
+    
+    <CollectionViewSource x:Key="Back_Items" Source="{Binding Source={x:Static pipe:Pipe.Instance}, Path=Back}" >
+        <CollectionViewSource.SortDescriptions>
+            <scm:SortDescription PropertyName="DateTime" Direction="Descending"/>
+        </CollectionViewSource.SortDescriptions>
+    </CollectionViewSource>
+
+    <CollectionViewSource x:Key="Pending_Items" Source="{Binding Source={x:Static pipe:Pipe.Instance}, Path=Forward}" >
         <CollectionViewSource.SortDescriptions>
             <scm:SortDescription PropertyName="DateTime" Direction="Descending"/>
         </CollectionViewSource.SortDescriptions>
@@ -124,8 +137,14 @@
     <DataTemplate DataType="{x:Type pipe:Pipe}">
 
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="4,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"></RowDefinition>
+                <!--<RowDefinition Height="30"></RowDefinition>-->
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="8"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
@@ -138,8 +157,71 @@
                     <TextBlock Text="Type2" FontWeight="DemiBold"></TextBlock>
                 </UniformGrid>-->
 
-            <ScrollViewer Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                <ItemsControl  ItemsSource="{Binding Source={StaticResource Pending_Items}}" VerticalAlignment="Bottom" >
+            <Viewbox>
+                <ItemsControl ItemsSource="{Binding Source='back-log          '}" />
+            </Viewbox>
+            
+            <ScrollViewer Grid.Row="0" Grid.Column="1" x:Name="backlog" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="{c:DeepOrange 1}">
+                <ItemsControl  ItemsSource="{Binding Source={StaticResource Backlog_Items}}" VerticalAlignment="Bottom" >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate >
+                            <Grid  x:Name="grid"  TextBlock.FontSize="12">
+                                <ContentPresenter Content="{Binding}"></ContentPresenter>
+                            </Grid>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Value="True">
+                                    <DataTrigger.Binding>
+                                        <MultiBinding Converter="{StaticResource LastItemConverter}">
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" />
+                                            <Binding RelativeSource="{RelativeSource Self}" />
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" Path="Items.Count" />
+                                        </MultiBinding>
+                                    </DataTrigger.Binding>
+                                    <Setter TargetName="grid" Property="Height" Value="60" />
+                                    <Setter TargetName="grid" Property="Background" Value="{c:DeepOrange}" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+
+            <Viewbox Grid.Row="1" >
+                <ItemsControl ItemsSource="{Binding Source='back          '}" />
+            </Viewbox>
+            <ScrollViewer Grid.Row="1" Grid.Column="1" x:Name="back" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="{c:BlueGrey 1}">
+                <ListBox  ItemsSource="{Binding Source={StaticResource Back_Items}}" VerticalAlignment="Bottom" >
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate >
+                            <Grid  x:Name="grid"  TextBlock.FontSize="12">
+                                <ContentPresenter Content="{Binding}"></ContentPresenter>
+                            </Grid>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Value="True">
+                                    <DataTrigger.Binding>
+                                        <MultiBinding Converter="{StaticResource LastItemConverter}">
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" />
+                                            <Binding RelativeSource="{RelativeSource Self}" />
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}" Path="Items.Count" />
+                                        </MultiBinding>
+                                    </DataTrigger.Binding>
+                                    <Setter TargetName="grid" Property="Height" Value="60" />
+                                    <Setter TargetName="grid" Property="Background" Value="{c:BlueGrey}" />
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+
+                    </ItemsControl.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+
+            <Viewbox Grid.Row="2" >
+                <ItemsControl ItemsSource="{Binding Source='pending         '}" />
+            </Viewbox>
+            <ScrollViewer Grid.Row="2"  Grid.Column="1"  x:Name="pending" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="{c:Amber 1}">
+                <ListBox  ItemsSource="{Binding Source={StaticResource Pending_Items}}" VerticalAlignment="Bottom" >
                     <ItemsControl.ItemTemplate>
                         <DataTemplate >
                             <Grid  x:Name="grid"  TextBlock.FontSize="12">
@@ -161,10 +243,16 @@
                         </DataTemplate>
 
                     </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                </ListBox>
             </ScrollViewer>
-            <ScrollViewer Grid.Row="3" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                <ItemsControl  ItemsSource="{Binding Source={StaticResource Completed_Items}}" >
+
+
+
+            <Viewbox Grid.Row="4" >
+                <ItemsControl ItemsSource="{Binding Source='completed'}" />
+            </Viewbox>
+            <ScrollViewer Grid.Row="4"  Grid.Column="1"  x:Name="completed" ScrollViewer.VerticalScrollBarVisibility="Auto" Background="{c:Brown 1}">
+                <ListBox  ItemsSource="{Binding Source={StaticResource Completed_Items}}" SelectedItem="{Binding SelectedCompletedItem}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate DataType="{x:Type pipe:QueueItem}">
                             <Grid  x:Name="grid"  TextBlock.FontSize="12">
@@ -172,7 +260,7 @@
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
-                </ItemsControl>
+                </ListBox>
             </ScrollViewer>
         </Grid>
     </DataTemplate>
