@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.ViewModels.Base\Utility.ViewModels.Base.csproj" />
   </ItemGroup>
 

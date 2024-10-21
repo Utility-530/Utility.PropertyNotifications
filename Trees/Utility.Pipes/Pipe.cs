@@ -1,76 +1,79 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Reactive;
+using System.Reactive.Subjects;
+using Utility.Interfaces;
+using Utility.PropertyNotifications;
 using Utility.ViewModels.Base;
 
 namespace Utility.Pipes
 {
-    public class Pipe : BaseViewModel, IObserver<Unit>
+    public record Pipe : NotifyProperty, IObserver<Unit>
     {
         private SynchronizationContext current;
+        private QueueItem selectedCompletedItem;
 
-        public ObservableCollection<QueueItem> Pending { get; } = new();
+        public ObservableCollection<QueueItem> Forward { get; } = new();
+        public ObservableCollection<QueueItem> Back { get; } = new();
+        public ObservableCollection<QueueItem> Backlog { get; } = new();
         public ObservableCollection<QueueItem> Completed { get; } = new();
-        public QueueItem Last { get; set; }
-        public QueueItem? Next => Pending.FirstOrDefault();
+
+        public QueueItem SelectedCompletedItem
+        {
+            get => selectedCompletedItem; set
+            {
+                selectedCompletedItem = value;
+                RaisePropertyReceived(value);
+            }
+        }
+
+
+
+        public QueueItem? Next => Forward.FirstOrDefault() ?? Back.FirstOrDefault() ?? Backlog.FirstOrDefault();
 
         Pipe()
         {
-            current = SynchronizationContext.Current?? throw new Exception("FGD $$$$$"); 
+            current = SynchronizationContext.Current ?? throw new Exception("FGD $$$$$");
         }
+
+
+        public void New(QueueItem forwardItem)
+        {
+            Backlog.Add(forwardItem);
+        }
+
+        public void GoBack(QueueItem queueItem)
+        {
+
+            Back.Add(queueItem);
+        }
+
 
         public void Queue(QueueItem queueItem)
         {
-            //if (queueItem is RepoQueueItem { QueueItemType: QueueItemType.Find, Guid: { } guid })
-            //{
-            //    if (guid == Guid.Empty)
-            //    {
-
-            //    }
-            //}
-
-            Pending.Add(queueItem);
-
-            if (Next == null && Pending.Any() == false)
-            {
-                //this.OnPropertyChanged(nameof(Next));
-            }
+            Forward.Add(queueItem);
         }
 
         public void OnNext(Unit unit)
         {
-            //lock (Pending)
-            //    if (Pending.Any() == false)
-            //    {
-            //    }
-            //    else
-            //    {
-            //        //Next = (QueueItem?)Pending.OfType<DecisionTreeQueueItem>().FirstOrDefault() ?? Pending.OfType<RepoQueueItem>().FirstOrDefault();
-            //        OnPropertyChanged(nameof(Next));
-            //    }
-
-            if (Next != null)
+            current.Send((a) =>
             {
-                //if (Pending.Contains(Next))
 
-
-                //Last = Next;
-                //OnPropertyChanged(nameof(Last));
-                //if (Next is RepoQueueItem repoQueueItem)
-                //{
-                //    Splat.Locator.Current.GetService<PipeRepository>().OnNext(repoQueueItem);
-                //}
-
-                current.Send((a) =>
+                if (Next != null)
                 {
+                    var next = Next;
                     Next.Invoke();
-                    //else if (Last is DecisionTreeQueueItem decisionTreeQueueItem)
-                    //   decisionTreeQueueItem.DecisionTree.Eval();
 
-                    Completed.Add(Next);
-                    Pending.Remove(Next);
-                }, null);
-                //Next = null;
-            }
+                    Completed.Add(next);
+                    if (Backlog.Contains(next))
+                        Backlog.Remove(next);
+                    else if (Back.Contains(next))
+                        Back.Remove(next);
+                    else if (Forward.Contains(next))
+                        Forward.Remove(next);
+
+                }
+            }, null);
         }
 
         public void OnError(Exception error)
