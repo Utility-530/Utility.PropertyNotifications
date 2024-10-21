@@ -1,10 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Reactive;
-using System.Reactive.Subjects;
-using Utility.Interfaces;
 using Utility.PropertyNotifications;
-using Utility.ViewModels.Base;
 
 namespace Utility.Pipes
 {
