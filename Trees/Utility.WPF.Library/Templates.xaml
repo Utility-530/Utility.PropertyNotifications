@@ -1,7 +1,0 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
-    <DataTemplate x:Key="Test">
-        <Ellipse Fill="Black" Height="20" Width="20"></Ellipse>
-    </DataTemplate>
-</ResourceDictionary>
