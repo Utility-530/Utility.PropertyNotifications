@@ -1,6 +1,5 @@
 ﻿using Splat;
 using Utility.Interfaces;
-using Utility.Interfaces.NonGeneric;
 using Utility.Reactives;
 using Utility.Repos;
 
@@ -36,16 +35,15 @@ namespace Utility.Descriptors
             //root.Initialise();
             return root;
 
-            static IObservable<IValueDescriptor> CreateRoot(Descriptor descriptor, Guid guid)
+            IObservable<IValueDescriptor> CreateRoot(Descriptor descriptor, Guid guid)
             {
                 return Observable.Create<IValueDescriptor>(obs =>
                 {
                     return repo.InsertRoot(guid, descriptor.Name, descriptor.PropertyType)
                         .Subscribe(key =>
                         {
-                            var _descriptor = DescriptorConverter.ToDescriptor(default, descriptor);
+                            var _descriptor = DescriptorConverter.ToDescriptor(instance, descriptor);
                             _descriptor.Guid = key.Guid;
-
                             obs.OnNext(_descriptor);
                         });
                 });
@@ -60,16 +58,15 @@ namespace Utility.Descriptors
             //root.Initialise();
             return root;
 
-            static IObservable<IValueDescriptor> CreateRoot(Descriptor descriptor, Guid guid)
+            IObservable<IValueDescriptor> CreateRoot(Descriptor descriptor, Guid guid)
             {
                 return Observable.Create<IValueDescriptor>(obs =>
                 {
                     return repo.InsertRoot(guid, descriptor.Name, descriptor.PropertyType)
                         .Subscribe(key =>
                         {
-                            var _descriptor = DescriptorConverter.ToDescriptor(default, descriptor);
+                            var _descriptor = DescriptorConverter.ToDescriptor(instance, descriptor);
                             _descriptor.Guid = key.Guid;
-
                             obs.OnNext(_descriptor);
                         });
                 });
@@ -146,6 +143,8 @@ namespace Utility.Descriptors
                 _ => new NullValue(descriptor, value),
 
             };
+
+            //_descriptor.Initialise();
             return _descriptor;
         }
     }
