@@ -20,6 +20,7 @@ namespace Utility.Descriptors
     {
         ReplaySubject<Change<IDescriptor>> replaySubject = new();
         List<CollectionItemDescriptor> descriptors = new();
+        List<object> itemsInCollection = new List<object>();
 
         private static ITreeRepository repo => Locator.Current.GetService<ITreeRepository>();
 
@@ -86,24 +87,23 @@ namespace Utility.Descriptors
 
         public void Refresh()
         {
-            replaySubject.OnNext(new(default, Utility.Changes.Type.Reset));
-            AddHeaderDescriptor(replaySubject, ElementType, Instance.GetType());
+            //replaySubject.OnNext(new(default, Utility.Changes.Type.Reset));
+            //AddHeaderDescriptor(replaySubject, ElementType, Instance.GetType());
             AddFromInstance(replaySubject);
         }
 
         // collection
         public virtual int Count => Instance is IEnumerable enumerable ? enumerable.Count() : 0;
 
-        public override async void Initialise(object? item = null)
+        public override void Initialise(object? item = null)
         {
-            var observer = Observer.Create<Change<IDescriptor>>((a) =>
-            {
-                if (a.Type == Changes.Type.Add && a.Value is IInitialise initialise)
-                {
-                    initialise.Initialise();
-                }
-            });
-    
+            //var observer = Observer.Create<Change<IDescriptor>>((a) =>
+            //{
+            //    if (a.Type == Changes.Type.Add && a.Value is IInitialise initialise)
+            //    {
+            //        initialise.Initialise();
+            //    }
+            //});    
         }
 
         public override void Finalise(object? item = null)
@@ -137,17 +137,39 @@ namespace Utility.Descriptors
 
         void AddFromInstance(IObserver<Change<IDescriptor>> observer)
         {
-            int i = 1;
+            int i = 0;
             foreach (var item in Collection)
             {
-                var type = item.GetType();
+              
                 //repo.Find(Guid, type.Name, type, i)
                 //    .Subscribe(a =>
                 //{
-                Next(observer, item, item.GetType(), Type, Changes.Type.Add, i++);
+                i++;
+                if (itemsInCollection.Contains(item) == false)
+                {    
+                    Next(observer, item, item.GetType(), Type, Changes.Type.Add, i);
+                }
                 //});
             }
         }
+
+        //void AddFromRefresh(IObserver<Change<IDescriptor>> observer)
+        //{
+        //    int i = 0;
+        //    foreach (var item in Collection)
+        //    {
+
+        //        //repo.Find(Guid, type.Name, type, i)
+        //        //    .Subscribe(a =>
+        //        //{
+        //        i++;
+        //        if (itemsInCollection.Contains(item) == false)
+        //        {
+        //            Next(observer, item, item.GetType(), Type, Changes.Type.Add, i, true);
+        //        }
+        //        //});
+        //    }
+        //}
 
         void AddFromDataSource(IObserver<Change<IDescriptor>> observer, IEnumerable<Key> tables)
         {
@@ -171,12 +193,15 @@ namespace Utility.Descriptors
             }
         }
 
-        void Next(IObserver<Change<IDescriptor>> observer, object item, Type type, Type parentType, Changes.Type changeType, int i)
+        void Next(IObserver<Change<IDescriptor>> observer, object item, Type type, Type parentType, Changes.Type changeType, int i, bool refresh = false)
         {
             DescriptorFactory.CreateItem(item, i, type, parentType, Guid)
                 .Subscribe(descriptor =>
                 {
                     observer.OnNext(new(descriptor, changeType));
+                    itemsInCollection.Add(item);
+                    if (refresh)
+                        descriptor.Initialise();
                 });
         }
     }
