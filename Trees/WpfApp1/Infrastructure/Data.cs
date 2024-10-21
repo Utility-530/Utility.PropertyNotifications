@@ -10,8 +10,6 @@ using Utility.Enums;
 using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
-using Utility.Trees.Demo.FilterBuilder;
-using Utility.Trees.WPF.Abstractions;
 using Utility.WPF.Factorys;
 using Utility.WPF.Templates;
 using O = System.Windows.Controls.Orientation;

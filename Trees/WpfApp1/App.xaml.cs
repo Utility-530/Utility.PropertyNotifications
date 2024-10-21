@@ -4,11 +4,12 @@ using System.Reactive.Subjects;
 using System.Reflection;
 using System.Windows;
 using Utility.Descriptors;
-using Utility.Descriptors.Repositorys;
+
 using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
 using Utility.Nodes;
 using Utility.PropertyNotifications;
+using Utility.Repos;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Demo.FilterBuilder.Infrastructure;
 using Utility.Trees.WPF;
@@ -21,7 +22,7 @@ namespace Utility.Trees.Demo.FilterBuilder
     /// </summary>
     public partial class App : Application
     {
-        public static Assembly[] Assemblies => new Assembly[] { typeof(Utility.WPF.Library.Class1).Assembly };
+        public static Assembly[] Assemblies => new Assembly[] { };
 
         protected override void OnStartup(StartupEventArgs e)
         {
