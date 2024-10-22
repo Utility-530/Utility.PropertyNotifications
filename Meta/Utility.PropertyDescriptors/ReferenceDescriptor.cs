@@ -6,6 +6,7 @@ namespace Utility.Descriptors;
 internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : ValuePropertyDescriptor(Descriptor, Instance), IReferenceDescriptor
 {
     private readonly ITreeRepository repo = Locator.Current.GetService<ITreeRepository>();
+    private IObservable<Change<IDescriptor>> observable;
 
     public override IObservable<object> Children
     {
@@ -17,7 +18,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                 {
                     return Observable.Empty<Change<IDescriptor>>();
                 }
-                return Observable.Create<Change<IDescriptor>>(async observer =>
+                return observable ??=Observable.Create<Change<IDescriptor>>(async observer =>
                 {
                     CompositeDisposable disp = new();
                     if(inst is null)
