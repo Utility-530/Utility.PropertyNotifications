@@ -11,7 +11,7 @@
         <ListBox ItemsSource="{Binding Dictionary}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <UniformGrid Rows="1"  Width="700">
+                    <UniformGrid Rows="1"  Width="350">
                         <ScrollViewer Width="200" HorizontalScrollBarVisibility="Visible">
                             <ContentControl Width="400" Content="{Binding Key}"/>
                         </ScrollViewer>
@@ -23,7 +23,7 @@
                    
                         <Grid>
                             <TextBlock Text="Values" FontWeight="UltraLight"/>
-                            <TextBlock Text="{Binding Value.Count}" HorizontalAlignment="Center"/>
+                            <TextBlock Text="{Binding Value.Values.Count}" HorizontalAlignment="Center"/>
                         </Grid>
                     </UniformGrid>        
                 </DataTemplate>       

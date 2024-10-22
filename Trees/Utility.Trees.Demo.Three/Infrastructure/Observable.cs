@@ -1,11 +1,8 @@
-﻿using DynamicData;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Utility.Helpers.NonGeneric;
 using Utility.Models;
 using Utility.PropertyNotifications;
-using static Utility.Repos.TreeRepository;
 
 namespace Utility.Trees.Demo.MVVM
 {
@@ -42,35 +39,30 @@ namespace Utility.Trees.Demo.MVVM
 
         public void OnNext(T value)
         {
-            if (Collection.Any() == false)
-            {
-
-            }
+            //if (Collection.Any() == false)
+            //{
+            //}
             Values.Add(value);
             if (Values.Count > 1)
             {
 
             }
 
-            RaisePropertyChanged(nameof(Count));
             foreach (var x in Collection.ToArray())
                 x.OnNext(value);
         }
 
         public void OnNext(object value)
-        {
-
-    
+        {    
             Values.Add(value);
             if (Values.Count > 1)
             {
-
             }
+
             if (value is T t)
             {
                 foreach (var x in Collection.ToArray())
                 {
-                    RaisePropertyChanged(nameof(Count));
                     x.OnNext(t);
                 }
             }

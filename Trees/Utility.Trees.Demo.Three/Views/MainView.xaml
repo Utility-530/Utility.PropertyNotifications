@@ -47,11 +47,6 @@
                 <TabItem Header="Property-Grid" x:Name="propertygrid">
 
                 </TabItem>
-                <!--<TabItem Header="Model-Tree" x:Name="modeltree" TextBlock.FontSize="8">
-                    <ScrollViewer x:Name="modeltree_ScrollViewer" HorizontalScrollBarVisibility="Visible">
-                        
-                    </ScrollViewer>
-                </TabItem>-->
                 <TabItem Header="Filter-Tree" x:Name="filtertree">
 
                 </TabItem>
