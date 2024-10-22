@@ -1,4 +1,5 @@
 ﻿using AnyClone;
+using Splat;
 using System;
 using System.Collections;
 using System.Reactive.Linq;
@@ -8,6 +9,7 @@ using Utility.Descriptors;
 using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Reflections;
+using Utility.Repos;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Decisions;
 using Utility.Trees.Demo.MVVM.Infrastructure;
@@ -20,10 +22,6 @@ namespace Utility.Trees.Demo.MVVM
 {
     public class TreeViewItemFactory : ITreeViewItemFactory
     {
-        public static readonly Guid _guid = Guid.Parse("a996b3a6-3e73-4e93-8b34-cf324aac5749");
-
-        Random random = new();
-
         private TreeViewItemFactory()
         {
             Predicate = new TreeViewItemDecisionTree(new Decision(item => (item as IReadOnlyTree) != null) { })
@@ -33,18 +31,25 @@ namespace Utility.Trees.Demo.MVVM
                       new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item => (item.Data as ICollectionDescriptor).ElementType == typeof(Table)),
                       instance =>
                       {
-                        var table = Activator.CreateInstance(typeof(Table));
-                        var root = DescriptorFactory.CreateRoot(table, _guid, "table_add").Take(1).Wait();
-                        var reflectionNode = new ReflectionNode(root) { Parent = (ITree)instance };
-                        var item =  new ComboTreeViewItem
-                        {
-                            Header = instance,
-                            DataContext = instance,
-                            NewObject = DataTreeViewer(reflectionNode),
-                            IsExpanded = true
-                        };
-                        item.FinishEdit += Item_FinishEdit;
 
+                        var guid = (((ITree)instance).Data as IDescriptor).Guid;
+                        var item = new ComboTreeViewItem
+                        {
+                                Header = instance,
+                                DataContext = instance,                               
+                                IsExpanded = true
+                        };
+
+                        Locator.Current.GetService<ITreeRepository>()
+                        .Find(guid, "table_add", typeof(Table))
+                        .Subscribe(_guid =>
+                        {
+                            var table = Activator.CreateInstance(typeof(Table));
+                            var root = DescriptorFactory.CreateRoot(table, _guid, "table_add").Take(1).Wait();
+                            var reflectionNode = new ReflectionNode(root) { Parent = (ITree)instance };
+                            item.NewObject = DataTreeViewer(reflectionNode);
+                            item.FinishEdit += Item_FinishEdit;
+                        });
                         void Item_FinishEdit(object sender, NewObjectRoutedEventArgs e)
                         {
                             if(e.IsAccepted)
@@ -85,7 +90,7 @@ namespace Utility.Trees.Demo.MVVM
                     new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item => (item.Data as IReferenceDescriptor).Type == typeof(Table)))
                     {
 
-                        new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item => item.Parent as ICollectionDescriptor!=null), instance =>                       
+                        new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item => item.Parent as ICollectionDescriptor!=null), instance =>
                         new CustomTreeViewItem
                         {
                                         //AddCommand = new Command(() => { if (instance is ITree { } item) item.Add(new ModelTree(Helpers.Names.Random(random), Guid.NewGuid(), ((GuidKey)item.Key).Value)); }),
