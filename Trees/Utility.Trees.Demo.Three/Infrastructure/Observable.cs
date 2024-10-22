@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DynamicData;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Utility.Helpers.NonGeneric;
@@ -28,7 +29,7 @@ namespace Utility.Trees.Demo.MVVM
         private int count;
 
         public Collection<IObserver<T>> Collection { get; set; } = new();
-        public Collection<T> Values { get; set; } = new();
+        public ObservableCollection<object> Values { get; set; } = new();
 
         public int Count { get => count; set => count = value; }
 
@@ -46,11 +47,11 @@ namespace Utility.Trees.Demo.MVVM
 
             }
             Values.Add(value);
-            Count++;
-            if (Count > 1)
+            if (Values.Count > 1)
             {
 
             }
+
             RaisePropertyChanged(nameof(Count));
             foreach (var x in Collection.ToArray())
                 x.OnNext(value);
@@ -58,8 +59,10 @@ namespace Utility.Trees.Demo.MVVM
 
         public void OnNext(object value)
         {
-            Count++;
-            if (Count > 1)
+
+    
+            Values.Add(value);
+            if (Values.Count > 1)
             {
 
             }
