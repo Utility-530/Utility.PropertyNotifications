@@ -12,6 +12,8 @@ namespace Utility.WPF.Controls.Buttons
         static DualButtonControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(DualButtonControl), new FrameworkPropertyMetadata(typeof(DualButtonControl)));
+            BackgroundProperty.OverrideMetadata(typeof(DualButtonControl), new FrameworkPropertyMetadata(SystemColors.ControlLightBrush));
+            ForegroundProperty.OverrideMetadata(typeof(DualButtonControl), new FrameworkPropertyMetadata(SystemColors.ControlDarkBrush));
         }
 
         public DualButtonControl()

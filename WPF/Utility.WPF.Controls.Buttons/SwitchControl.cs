@@ -7,6 +7,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using static Utility.WPF.Controls.Buttons.SwitchControl;
 using Evan.Wpf;
+
 namespace Utility.WPF.Controls.Buttons
 {
     public class SwitchControl : Control
