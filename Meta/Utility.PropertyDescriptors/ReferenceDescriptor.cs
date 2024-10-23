@@ -18,22 +18,39 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                 {
                     return Observable.Empty<Change<IDescriptor>>();
                 }
-                return observable ??=Observable.Create<Change<IDescriptor>>(async observer =>
+                return observable ??= Observable.Create<Change<IDescriptor>>(async observer =>
                 {
                     CompositeDisposable disp = new();
-                    if(inst is null)
+                    if (inst is null)
                     {
                         int i = 0;
- 
-                        repo.Find(this.Guid, "Properties", Descriptor.PropertyType)
-                        .Subscribe(pguid =>
+
+                        if (Descriptor.PropertyType.IsAssignableTo(typeof(IEnumerable)) && Descriptor.PropertyType.IsAssignableTo(typeof(string)) == false && Descriptor.PropertyType.GetCollectionElementType() is Type _elementType)
                         {
-                            inst = Activator.CreateInstance(Descriptor.PropertyType);
-                            var propertiesDescriptor = new PropertiesDescriptor(Descriptor, inst);
-                            var propertiesDescriptor2 = propertiesDescriptor with { Guid = pguid };
-                            propertiesDescriptor2.Subscribe(changes);
-                            observer.OnNext(new(propertiesDescriptor2, Changes.Type.Add));
-                        }).DisposeWith(disp);
+                            repo
+                            .Find(this.Guid, CollectionDescriptor._Name, Descriptor.PropertyType)
+                            .Subscribe(cguid =>
+                            {
+                                var enumerable = (IEnumerable)Activator.CreateInstance(Descriptor.PropertyType);
+                                var collectionDescriptor = new CollectionDescriptor(Descriptor, _elementType, enumerable);
+                                if (i++ > 0)
+                                {
+                                    return;
+                                }
+                                collectionDescriptor.Subscribe(changes);
+                                observer.OnNext(new(collectionDescriptor with { Guid = cguid }, Changes.Type.Add));
+                            }).DisposeWith(disp);
+                        }
+                        else
+                            repo.Find(this.Guid, "Properties", Descriptor.PropertyType)
+                            .Subscribe(pguid =>
+                            {
+                                inst = Activator.CreateInstance(Descriptor.PropertyType);
+                                var propertiesDescriptor = new PropertiesDescriptor(Descriptor, inst);
+                                var propertiesDescriptor2 = propertiesDescriptor with { Guid = pguid };
+                                propertiesDescriptor2.Subscribe(changes);
+                                observer.OnNext(new(propertiesDescriptor2, Changes.Type.Add));
+                            }).DisposeWith(disp);
 
                     }
                     if (inst is object obj)
@@ -51,13 +68,13 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
 
                     if (inst is IEnumerable enumerable && inst is not string s && inst.GetType() is Type _type && _type.GetCollectionElementType() is Type elementType)
                     {
-                        var collectionDescriptor = new CollectionDescriptor(Descriptor, elementType, enumerable);
                         int i = 0;
+                        var collectionDescriptor = new CollectionDescriptor(Descriptor, elementType, enumerable);
                         repo
-                        .Find(this.Guid, collectionDescriptor.Name, Descriptor.PropertyType)          
+                        .Find(this.Guid, collectionDescriptor.Name, Descriptor.PropertyType)
                         .Subscribe(cguid =>
                         {
-                            if(i++ > 0)
+                            if (i++ > 0)
                             {
                                 return;
                             }
