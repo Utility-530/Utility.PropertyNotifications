@@ -3,22 +3,43 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Converters
 {
     public class ColorConverter : IValueConverter
     {
+        public bool Inverse { get; set; }
+
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if(value is SolidColorBrush brush)
+            {
+                value = brush.Color;
+            }
+
             var val = value is System.Drawing.Color color ?
-                color.ToUIColor() :
-                value is System.Windows.Media.Color?
-                 (System.Windows.Media.Color)value:
-                 parameter is System.Windows.Media.Color defaultColour ?
+                color.ToMediaColor() :
+                value is Color color1 ?
+                 color1 :
+                 parameter is Color defaultColour ?
                  defaultColour :
                  DependencyProperty.UnsetValue;
-            return targetType == typeof(Brush) && val is Color col ? new SolidColorBrush(col) : val;
+
+
+            return val is Color col ?
+                targetType == typeof(Brush) ? 
+                new SolidColorBrush(Invert(col)) :
+                Invert(col) :
+                val;
+
+            Color Invert(Color col)
+            {
+                return Inverse ? col.Inverse() : col;
+            }
+
         }
+
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -26,13 +47,5 @@ namespace Utility.WPF.Converters
         }
 
         public static ColorConverter Instance { get; } = new ColorConverter();
-    }
-
-    public static class ColorConverterHelper
-    {
-        public static Color ToUIColor(this System.Drawing.Color color)
-        {
-            return Color.FromArgb(color.A, color.R, color.G, color.B);
-        }
     }
 }
