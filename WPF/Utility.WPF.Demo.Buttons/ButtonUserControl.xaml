@@ -9,6 +9,7 @@
     xmlns:o="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
     d:DesignHeight="300"
     d:DesignWidth="300"
+    d:Background="White"
     mc:Ignorable="d">
     <FrameworkElement.Resources>
 
@@ -26,9 +27,101 @@
         <Geometry x:Key="Triangle2Geometry">
             M 1.084606,0.9296623 2.3241558,57.94895 43.849072,33.003012 43.694128,27.734925 Z
         </Geometry>
+
+        <Geometry x:Key="Core">
+            M333.284,88.276l20.311,12.74v0.038c-0.667-0.025-1.346-0.038-2.012-0.038
+	c-12.174,0-23.883,48.307-34.838,54.709c-18.148-15.218-38.812-15.092-60.746-15.092s-42.597-3.899-60.746,11.319
+	c-10.954-6.402-22.663-10.719-34.838-10.719c-0.679,0-1.346-40.204-2.025-40.179v-0.038l20.324-12.74
+	c13.922-8.716,25.116-20.714,32.825-34.649c7.71-13.922,11.935-29.782,11.935-46.22h65.034
+	C288.511,40.283,305.427,70.832,333.284,88.276
+        </Geometry>
+
+
+        <Geometry x:Key="Pumpkin">
+            M412.48,119.743c-4.062,0-8.074,0.428-12.011,1.27c-14.174-12.325-30.071-19.444-46.874-19.959
+	c-0.667-0.025-1.346-0.038-2.012-0.038c-12.174,0-23.883,3.459-34.838,9.86C298.598,95.659,277.934,87.044,256,87.044
+	s-42.597,8.615-60.746,23.833c-5.307-3.094-10.778-5.496-16.4-7.156c-5.987-1.786-12.149-2.704-18.438-2.704
+	c-0.679,0-1.346,0.013-2.025,0.038c-16.803,0.528-32.687,7.647-46.861,19.959c-3.937-0.843-7.949-1.27-12.011-1.27
+	C44.56,119.743,0,198.575,0,295.818S44.56,471.893,99.52,471.893c4.062,0,8.074-0.428,12.011-1.27
+	c14.74,12.803,31.341,19.997,48.886,19.997c12.174,0,23.883-3.459,34.838-9.86c18.148,15.218,38.812,23.833,60.746,23.833
+	s42.598-8.615,60.746-23.833c10.954,6.402,22.663,9.86,34.838,9.86c17.545,0,34.146-7.194,48.886-19.997
+	c3.937,0.843,7.949,1.27,12.011,1.27c54.96,0,99.52-78.831,99.52-176.075S467.441,119.743,412.48,119.743z
+        </Geometry>
+
+        <Geometry x:Key="A">
+            M384.094,340.453c-18.475,21.204-40.271,37.869-64.267,48.647v-22.626h-31.442v33.001
+		c-10.527,2.276-21.343,3.471-32.385,3.471c-28.034,0-54.659-7.647-78.617-21.368c-18.211-10.439-34.901-24.374-49.515-41.139
+		c25.631,5.358,51.514,9.08,77.511,11.193v31.19h33.957v-29.367C287.807,354.74,336.378,350.426,384.094,340.453z
+        </Geometry>
+
+
+        <Geometry x:Key="Triangle">
+            M 21.9 19.3 C 18.9 14.1 15.9 8.9 12.9 3.7 C 12.4939 3.0899 11.4561 3.0587 11.1468 3.7922 C 8.1645 8.9615 5.1823 14.1307 2.2 19.3 c -0.392 0.679 -0.104 1.501 1.0662 1.5 c 5.9561 -0.001 11.9121 0.0021 17.8682 -0.0016 C 21.8553 20.7782 22.1774 19.8883 21.9 19.3 Z
+        </Geometry>
+
+
+        <!-- https://yqnn.github.io/svg-path-editor/ -->
+        <Geometry x:Key="Triangle_Wink">
+            M 21.9 2.4125 C 18.9 1.7625 15.9 1.1125 12.9 0.4625 C 12.4939 0.3862 11.4561 0.3823 11.1468 0.474 C 8.1645 1.1202 5.1823 1.7663 2.2 2.4125 c -0.392 0.0849 -0.104 0.1876 1.0662 0.1875 c 5.9561 -0.0001 11.9121 0.0003 17.8682 -0.0002 C 21.8553 2.5973 22.1774 2.486 21.9 2.4125 Z
+        </Geometry>
+
     </FrameworkElement.Resources>
 
     <UniformGrid>
+
+        <GroupBox Header="Pumpkin">
+            <FrameworkElement.Resources>
+
+                <Storyboard
+                    x:Key="StoryboardOnLoaded2"
+                    AutoReverse="True"
+                    RepeatBehavior="Forever">
+                    <hc:GeometryAnimationUsingKeyFrames Storyboard.TargetName="Path2Demo" Storyboard.TargetProperty="Data">
+                        <hc:DiscreteGeometryKeyFrame KeyTime="0:0:0" Value="{StaticResource Triangle}" />
+                        <hc:EasingGeometryKeyFrame KeyTime="0:0:1.2" Value="{StaticResource Triangle_Wink}">
+                            <hc:EasingGeometryKeyFrame.EasingFunction>
+                                <QuarticEase EasingMode="EaseInOut" />
+                            </hc:EasingGeometryKeyFrame.EasingFunction>
+                        </hc:EasingGeometryKeyFrame>
+                    </hc:GeometryAnimationUsingKeyFrames>
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Path2Demo" Storyboard.TargetProperty="Fill.(SolidColorBrush.Color)">
+                        <DiscreteColorKeyFrame KeyTime="0:0:0.0" Value="Yellow" />
+                        <EasingColorKeyFrame KeyTime="0:0:1.2" Value="#FFE89500">
+                            <EasingColorKeyFrame.EasingFunction>
+                                <QuarticEase EasingMode="EaseInOut" />
+                            </EasingColorKeyFrame.EasingFunction>
+                        </EasingColorKeyFrame>
+                        
+                    </ColorAnimationUsingKeyFrames>
+                </Storyboard>
+                
+            </FrameworkElement.Resources>
+            <FrameworkElement.Triggers>
+                <EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                    <BeginStoryboard Name="BeginStoryboard3" Storyboard="{StaticResource StoryboardOnLoaded2}" />
+                </EventTrigger>
+                <EventTrigger RoutedEvent="FrameworkElement.Unloaded">
+                    <StopStoryboard BeginStoryboardName="BeginStoryboard3" />
+                </EventTrigger>
+            </FrameworkElement.Triggers>
+
+            <Grid Width="100" Height="100">
+                <Path Data="{StaticResource Core}" Fill="Green" Stretch="Uniform" Margin="25,-80,25,0"></Path>
+                <Path Data="{StaticResource Pumpkin}" Fill="Orange" Stretch="Uniform"></Path>
+                <Path Data="{StaticResource A}" Fill="Yellow" Stretch="Uniform" Margin="20,20,20,-20"></Path>
+                <Path Data="{StaticResource Triangle}" Fill="Yellow" Stretch="Uniform" Margin="0,0,30,28" Width="20"></Path>
+                <hc:TransitioningContentControl>
+                    <Path
+                      Margin="30,0,0,28" Width="20"
+                    Name="Path2Demo"
+       Stretch="Uniform"
+                    Data="{StaticResource Triangle}"
+                    Fill="Yellow" />
+                </hc:TransitioningContentControl>
+
+            </Grid>
+
+        </GroupBox>
 
         <GroupBox Header="Interactivity">
             <Grid Width="100" Height="60">
@@ -67,7 +160,7 @@
                     x:Key="StoryboardOnLoaded"
                     AutoReverse="True"
                     RepeatBehavior="Forever">
-                    <hc:GeometryAnimationUsingKeyFrames Storyboard.TargetName="Path2Demo" Storyboard.TargetProperty="Data">
+                    <hc:GeometryAnimationUsingKeyFrames Storyboard.TargetName="Path3Demo" Storyboard.TargetProperty="Data">
                         <hc:DiscreteGeometryKeyFrame KeyTime="0:0:0.7" Value="{StaticResource CupGeometry}" />
                         <hc:EasingGeometryKeyFrame KeyTime="0:0:1.2" Value="{StaticResource Cup2Geometry}">
                             <hc:EasingGeometryKeyFrame.EasingFunction>
@@ -75,15 +168,14 @@
                             </hc:EasingGeometryKeyFrame.EasingFunction>
                         </hc:EasingGeometryKeyFrame>
                     </hc:GeometryAnimationUsingKeyFrames>
-                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Path2Demo" Storyboard.TargetProperty="Fill.(SolidColorBrush.Color)">
-                        <DiscreteColorKeyFrame KeyTime="0:0:0.7" Value="#3b5998" />
-                        <EasingColorKeyFrame KeyTime="0:0:1.2" Value="#4099ff">
+                    <!--<ColorAnimationUsingKeyFrames Storyboard.TargetName="Path3Demo" Storyboard.TargetProperty="Fill.(SolidColorBrush.Color)">
+                        <DiscreteColorKeyFrame KeyTime="0:0:0.7" Value="Yellow" />
+                        <EasingColorKeyFrame KeyTime="0:0:1.2" Value="LightYellow">
                             <EasingColorKeyFrame.EasingFunction>
                                 <QuarticEase EasingMode="EaseInOut" />
                             </EasingColorKeyFrame.EasingFunction>
-                        </EasingColorKeyFrame>
-                        <EasingColorKeyFrame KeyTime="0:0:1.9" Value="#4099ff" />
-                    </ColorAnimationUsingKeyFrames>
+                        </EasingColorKeyFrame>                   
+                    </ColorAnimationUsingKeyFrames>-->
                 </Storyboard>
             </FrameworkElement.Resources>
             <FrameworkElement.Triggers>
@@ -96,7 +188,7 @@
             </FrameworkElement.Triggers>
             <hc:TransitioningContentControl>
                 <Path
-                    Name="Path2Demo"
+                    Name="Path3Demo"
                     Width="100"
                     Height="100"
                     Data="{StaticResource CupGeometry}"
@@ -118,7 +210,7 @@
                     x:Key="StoryboardOnLoaded2"
                     AutoReverse="True"
                     RepeatBehavior="Forever">
-                    <hc:GeometryAnimationUsingKeyFrames Storyboard.TargetName="Path3Demo" Storyboard.TargetProperty="Data">
+                    <hc:GeometryAnimationUsingKeyFrames Storyboard.TargetName="Path4Demo" Storyboard.TargetProperty="Data">
                         <hc:DiscreteGeometryKeyFrame KeyTime="0:0:0.7" Value="{StaticResource TriangleGeometry}" />
                         <hc:EasingGeometryKeyFrame KeyTime="0:0:1.2" Value="{StaticResource SquareGeometry}">
                             <hc:EasingGeometryKeyFrame.EasingFunction>
@@ -126,7 +218,7 @@
                             </hc:EasingGeometryKeyFrame.EasingFunction>
                         </hc:EasingGeometryKeyFrame>
                     </hc:GeometryAnimationUsingKeyFrames>
-                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Path3Demo" Storyboard.TargetProperty="Fill.(SolidColorBrush.Color)">
+                    <ColorAnimationUsingKeyFrames Storyboard.TargetName="Path4Demo" Storyboard.TargetProperty="Fill.(SolidColorBrush.Color)">
                         <DiscreteColorKeyFrame KeyTime="0:0:0.7" Value="#3b5998" />
                         <EasingColorKeyFrame KeyTime="0:0:1.2" Value="#4099ff">
                             <EasingColorKeyFrame.EasingFunction>
@@ -147,7 +239,7 @@
             </FrameworkElement.Triggers>
             <hc:TransitioningContentControl>
                 <Path
-                    Name="Path3Demo"
+                    Name="Path4Demo"
                     Width="100"
                     Height="100"
                     Data="{StaticResource TriangleGeometry}"
