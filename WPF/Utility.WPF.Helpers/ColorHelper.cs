@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System.Drawing;
+using System.Windows.Media;
 using DrawingColor = System.Drawing.Color;
 using MediaBrush = System.Windows.Media.Brush;
 using MediaColor = System.Windows.Media.Color;
@@ -27,6 +28,7 @@ namespace Utility.WPF.Helpers
         public static string ToHexColor(this DrawingColor c) => "#" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
 
         public static string ToRGBColor(this DrawingColor c) => "RGB(" + c.R.ToString() + "," + c.G.ToString() + "," + c.B.ToString() + ")";
+        public static MediaColor Inverse(this MediaColor c) => DrawingColor.FromArgb(c.ToDrawingColor().ToArgb() ^ 0xffffff).ToMediaColor();
 
         public static (DrawingColor, DrawingColor) GetColorFromRYGGradient(double percentage)
         {
