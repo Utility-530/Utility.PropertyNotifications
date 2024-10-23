@@ -16,6 +16,7 @@
                 <ColumnDefinition Width="1.5*"></ColumnDefinition>
                 <ColumnDefinition Width="5"></ColumnDefinition>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
+                <ColumnDefinition Width="5"></ColumnDefinition>
                 <ColumnDefinition Width="*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
 
@@ -40,7 +41,8 @@
 
                 <ScrollViewer x:Name="scrollviewer" HorizontalScrollBarVisibility="Visible" Grid.Row="1"/>
             </Grid>
-            <TabControl Grid.Column="5">
+            <GridSplitter Grid.Column="5" Width="5" HorizontalAlignment="Stretch" ></GridSplitter>
+            <TabControl Grid.Column="6">
                 <TabItem Header="Pipe-Tree" x:Name="pipe_repository_tree">
 
                 </TabItem>
