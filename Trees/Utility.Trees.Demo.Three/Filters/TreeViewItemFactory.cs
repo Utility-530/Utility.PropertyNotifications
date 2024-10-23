@@ -44,7 +44,7 @@ namespace Utility.Trees.Demo.MVVM
                         .Find(guid, "table_add", typeof(Table))
                         .Subscribe(_guid =>
                         {
-                            var table = Activator.CreateInstance(typeof(Table));
+                            var table = (Table)Activator.CreateInstance(typeof(Table));                    
                             var root = DescriptorFactory.CreateRoot(table, _guid, "table_add").Take(1).Wait();
                             var reflectionNode = new ReflectionNode(root) { Parent = (ITree)instance };
                             item.NewObject = DataTreeViewer(reflectionNode);
@@ -108,10 +108,12 @@ namespace Utility.Trees.Demo.MVVM
                         new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item => (item.Parent as ICollectionDescriptor)==null),
                         instance =>
                         {
-                            var table = (((instance as IReadOnlyTree)?.Data as IValue)?.Value as Table);
-                            if(table is { Type: { } type, Guid:{ } guid, Name:{ } name })
+                            var tree = (instance as IReadOnlyTree);
+                            var data = tree?.Data as IDescriptor;
+                            var table = (data as IValue)?.Value as Table;
+                            if(table is { Type: { } type, Name:{ } name })
                             {
-                                var root =  DescriptorFactory.CreateRoot(table.Type ,table.Guid, table.Name).Take(1).Wait();
+                                var root =  DescriptorFactory.CreateRoot(table.Type , data.Guid, table.Name).Take(1).Wait();
                                 var reflectionNode = new ReflectionNode(root);
                                 var treeViewer = DataTreeViewer(reflectionNode);
                                 return treeViewer;
@@ -122,10 +124,12 @@ namespace Utility.Trees.Demo.MVVM
                             ((instance as IReadOnlyTree)?.Data as IValueChanges)
                             .Subscribe(change =>
                             {
-                                var table = (((instance as IReadOnlyTree)?.Data as IValue)?.Value as Table);
-                                if(table is { Type: { } type, Guid:{ } guid, Name:{ } name })
+                                var tree = (instance as IReadOnlyTree);
+                                var data = tree?.Data as IDescriptor;
+                                var table = (data as IValue)?.Value as Table;
+                                if(table is { Type: { } type, Name:{ } name })
                                 {
-                                    var root =  DescriptorFactory.CreateRoot(table.Type ,table.Guid, table.Name).Take(1).Wait();
+                                    var root =  DescriptorFactory.CreateRoot(table.Type , data.Guid, table.Name).Take(1).Wait();
                                     var reflectionNode = new ReflectionNode(root);
                                     treeViewer.ViewModel = reflectionNode;
                                 }
@@ -188,18 +192,33 @@ namespace Utility.Trees.Demo.MVVM
 
         private void Add(object instance)
         {
-            if (instance is ITree { Parent: ITree { } tree, Data: IInstance { Instance: { } _instance } })
-                if (tree is { Data: IInstance { Instance: IList lst } data } item &&
-                    tree is { Data: ICollectionDetailsDescriptor { CollectionItemPropertyType: { } type } })
-                {
-                    var newInstance = Activator.CreateInstance(type);
-                    _instance.CloneTo(newInstance);
-                    lst.Add(newInstance);
-                    if (data is IRefresh refresh)
+            {
+                if (instance is ITree { Parent: ITree { } tree, Data: IInstance { Instance: { } _instance } })
+                    if (tree is { Data: IInstance { Instance: IList lst } data } item &&
+                        tree is { Data: ICollectionDetailsDescriptor { CollectionItemPropertyType: { } type } })
                     {
-                        refresh.Refresh();
+                        var newInstance = Activator.CreateInstance(type);
+                        _instance.CloneTo(newInstance);
+                        lst.Add(newInstance);
+                        if (data is IRefresh refresh)
+                        {
+                            refresh.Refresh();
+                        }
                     }
-                }
+            }
+            {
+          
+                    if (instance is ITree { Data: IInstance { Instance: IList lst } data } tree &&
+                        tree is { Data: ICollectionDetailsDescriptor { CollectionItemPropertyType: { } type } })
+                    {
+                        var newInstance = Activator.CreateInstance(type);                      
+                        lst.Add(newInstance);
+                        if (data is IRefresh refresh)
+                        {
+                            refresh.Refresh();
+                        }
+                    }
+            }
         }
 
         public static TreeViewItemFactory Instance { get; } = new();

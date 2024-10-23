@@ -63,7 +63,7 @@ namespace Utility.Trees.Demo.MVVM
                         disposable = (func() as IObservable<IReadOnlyCollection<Key>>).Subscribe(next);
                         break;
                     case RepoResultType.Special when ca is RepoResultX { Table: { } selectedTable }:
-                        next(new List<Key>([new Key { Name = selectedTable.Name, Guid = selectedTable.Guid, Instance = Activator.CreateInstance(selectedTable.Type) }]));
+                        next(new List<Key>([new Key { Name = selectedTable.Name, /*Guid = selectedTable.Guid, */Instance = Activator.CreateInstance(selectedTable.Type) }]));
                         break;
                 }
                 void next(object? a)
