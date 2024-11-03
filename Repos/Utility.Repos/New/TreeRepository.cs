@@ -1,6 +1,4 @@
-﻿using System;
-//using Utility.Descriptors.Types;
-using Guid = System.Guid;
+﻿using Guid = System.Guid;
 using static Utility.Constants;
 using SQLite;
 using Newtonsoft.Json;
@@ -14,7 +12,7 @@ namespace Utility.Repos
 {
     public readonly record struct Duplication(Guid Old, Guid New);
     public readonly record struct DateValue(DateTime DateTime, object Value);
-    public readonly record struct Key(Guid Guid, Guid ParentGuid, object Instance, string Name, int? Index)
+    public readonly record struct Key(Guid Guid, Guid ParentGuid, object Instance, string Name, int? Index, DateTime? Removed)
     {
         public override string ToString()
         {
@@ -74,7 +72,6 @@ namespace Utility.Repos
         private readonly SQLiteConnection connection;
         private readonly Task initialisationTask;
 
-
         protected TreeRepository(string? dbDirectory = default)
         {
             if (dbDirectory != default)
@@ -96,7 +93,7 @@ namespace Utility.Repos
                 {
                     foreach (var relationship in connection.Table<Relationships>().ToList())
                     {
-                        tablelookup[relationship.Guid] = relationship.Name;
+                        setName(relationship.Guid, relationship.Name);
                     }
                     IsInitialised = true;
                 });
@@ -104,21 +101,7 @@ namespace Utility.Repos
             return Task.CompletedTask;
         }
 
-        //public Task<IReadOnlyCollection<Key>> Keys(string? name = default)
-        //{
-        //    var tables = connection.Table<Relationships>();
-        //    List<Key> childKeys = new();
-        //    foreach (var table in tables)
-        //    {
-        //        var type = ToType(table.TypeId ?? throw new Exception("DF 32cd"));
-        //        if (type == null)
-        //            throw new Exception("3 333 ff");
-        //        tablelookup[table.Guid] = table.Name;
-        //        childKeys.Add(new(table.Guid, type, table.Name));
-        //    }
-        //    return Task.FromResult((IReadOnlyCollection<Key>)childKeys);
-        //}
-
+ 
         public virtual IObservable<IReadOnlyCollection<Key>> SelectKeys(Guid? parentGuid = null, string? name = null, string? table_name = default)
         {
             List<Relationships> tables;
@@ -130,7 +113,7 @@ namespace Utility.Repos
             }
             else if (parentGuid.HasValue)
             {
-                table_name = tablelookup[parentGuid.Value];
+                table_name = getName(parentGuid.Value);
                 string query = $"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}'" +
                                 (name == null ? string.Empty : $" AND Name = '{name}'") +
                                 $" ORDER BY {nameof(Relationships._Index)}";
@@ -170,8 +153,9 @@ namespace Utility.Repos
                     }
                     //if (type == null)
                     //    throw new Exception("3 333 ff");
-                    tablelookup[table.Guid] = table.Name;
-                    selections.Add(new(table.Guid, table.Parent, item, table.Name, table._Index));
+                    if (table_name != null)
+                        setName(table.Guid, table_name);
+                    selections.Add(new(table.Guid, table.Parent, item, table.Name, table._Index, table.Removed));
                 }
             }
             return Observable.Return((IReadOnlyCollection<Key>)selections);
@@ -179,7 +163,7 @@ namespace Utility.Repos
 
         public IEnumerable<Duplication> Duplicate(Guid oldGuid, Guid? newParentGuid = default)
         {
-            var table_name = tablelookup[oldGuid];
+            var table_name = getName(oldGuid);
 
             var _tables = newParentGuid != default ? connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{newParentGuid}'") : (IList<Relationships>)Array.Empty<Relationships>();
 
@@ -190,7 +174,7 @@ namespace Utility.Repos
 
                 var lastIndex = MaxIndex(table.Parent) + 1;
                 guid = Guid.NewGuid();
-                tablelookup[guid] = table_name;
+                setName(guid, table_name);
                 var i = connection.Insert(new Relationships { Guid = guid, Name = table.Name, _Index = lastIndex, Parent = newParentGuid ?? table.Parent, Added = DateTime.Now });
             }
             else if (_tables.Count == 1)
@@ -215,7 +199,7 @@ namespace Utility.Repos
 
         public virtual IObservable<Guid> Find(Guid parentGuid, string name, System.Type? type = null, int? index = null)
         {
-     
+
             if (parentGuid == default)
                 throw new Exception($"{nameof(parentGuid)} is default");
             return Observable.Create<Guid>(observer =>
@@ -223,7 +207,7 @@ namespace Utility.Repos
                 return initialisationTask.ToObservable()
                     .Subscribe(a =>
                     {
-                        var table_name = tablelookup[parentGuid];
+                        var table_name = getName(parentGuid);
 
                         if (parentGuid == Guid.Empty)
                         {
@@ -238,7 +222,7 @@ namespace Utility.Repos
                             {
                                 if (a is Guid guid)
                                 {
-                                    tablelookup[guid] = table_name;
+                                    setName(guid, table_name);
                                     observer.OnNext(guid);
                                 }
                                 else
@@ -249,7 +233,7 @@ namespace Utility.Repos
                         else if (tables.Count == 1)
                         {
                             var table = tables.Single();
-                            tablelookup[table.Guid] = table_name;
+                            setName(table.Guid, table_name);
                             observer.OnNext(table.Guid);
                             observer.OnCompleted();
                         }
@@ -268,9 +252,9 @@ namespace Utility.Repos
             {
                 return initialisationTask.ToObservable().Subscribe(a =>
                 {
-                    table_name ??= tablelookup[parentGuid];
+                    table_name ??= getName(parentGuid);
                     var guid = Guid.NewGuid();
-                    tablelookup[guid] = table_name;
+                    setName(guid, table_name);
                     //var i = connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
                     var query = $"INSERT INTO '{table_name}' (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {ToValue(index)}, '{parentGuid}', '{DateTime.Now}', {ToValue(typeId)});";
                     var i = connection.Execute(query);
@@ -327,21 +311,21 @@ namespace Utility.Repos
                 connection.Insert(new Relationships { Guid = guid, Name = name, TypeId = typeId });
             }
 
-            tablelookup[guid] = name;
+            setName(guid, name);
             var all = connection.Query<Relationships>($"SELECT * FROM '{name}'");
             foreach (var item in all)
             {
-                tablelookup[item.Guid] = name;
+                setName(item.Guid, name);
             }
 
-            return Observable.Return(new Key(guid, default, type, name, 0));
+            return Observable.Return(new Key(guid, default, type, name, 0, null));
         }
 
 
 
         public int? MaxIndex(Guid parentGuid, string? name = default)
         {
-            var proto_name = tablelookup[parentGuid];
+            var proto_name = getName(parentGuid);
 
             string query = $"SELECT MAX({nameof(Relationships._Index)}) FROM '{proto_name}' WHERE {nameof(Relationships.Parent)} = '{parentGuid}'";
             var index = connection.ExecuteScalar<int?>(query + (name == default ? string.Empty : $"AND {nameof(Relationships.Name)} = '{name}'"));
@@ -350,12 +334,9 @@ namespace Utility.Repos
 
         public void Remove(Guid guid)
         {
-            var proto_name = tablelookup[guid];
-
-            var find = connection.FindWithQuery<Relationships>($"SELECT * FROM '{proto_name}' WHERE Guid = '{guid}'");
-            find.Removed = DateTime.Now;
-            connection.Update(find);
-
+            var table_name = getName(guid);
+            string cmd = $"UPDATE '{table_name}' SET Removed = date('now') WHERE Guid = '{guid}'";
+            connection.Execute(cmd);    
         }
 
         private static string ToComparisonAndValue(object? value)
@@ -376,6 +357,8 @@ namespace Utility.Repos
         public virtual void Set(Guid guid, object value, DateTime dateTime)
         {
             string text;
+            if (values.ContainsKey(guid) && values[guid].Value.Equals(value))
+                return;
             //if (value is not string str)
             text = JsonConvert.SerializeObject(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
             //else
@@ -530,7 +513,16 @@ namespace Utility.Repos
                 return singleType.Id;
             }
         }
+        
+        private void setName(Guid guid, string name)
+        {
+            tablelookup[guid] = name;
+        }
 
+        private string getName(Guid guid)
+        {
+            return tablelookup[guid];
+        }
 
         public const string Utility = nameof(Utility);
 
