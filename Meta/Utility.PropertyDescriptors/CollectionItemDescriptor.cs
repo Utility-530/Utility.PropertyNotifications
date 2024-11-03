@@ -36,6 +36,8 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
 
     public DateTime? Removed => null;
 
+    public object Item => null;
+
     public bool Equals(IEquatable? other)
     {
         if (other is CollectionHeadersDescriptor collectionHeaderDescriptor)
@@ -68,9 +70,6 @@ internal record HeaderDescriptor : ChildlessMemberDescriptor, IHeaderDescriptor
     public override Type ParentType { get; }
 
     public override bool IsReadOnly => true;
-
-    //public override object Value { get => null; set => throw new NotImplementedException(); }
-
 
     public override void Initialise(object? item = null)
     {

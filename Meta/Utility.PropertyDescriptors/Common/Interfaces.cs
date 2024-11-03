@@ -1,10 +1,11 @@
 ﻿namespace Utility.Descriptors
 {
-    public interface ICollectionItemDescriptor : IDescriptor
+    public interface ICollectionItemDescriptor : IDescriptor, IItem
     {
         int Index { get; }
 
         DateTime? Removed { get;  }
+  
     }   
        
     public interface ICollectionItemReferenceDescriptor : IReferenceDescriptor, ICollectionItemDescriptor
