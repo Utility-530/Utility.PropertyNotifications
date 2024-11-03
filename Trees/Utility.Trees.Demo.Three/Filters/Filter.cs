@@ -57,6 +57,10 @@ namespace Utility.Trees.Demo.MVVM
                             {
                                 new BooleanDecisionTree(new Decision<IDescriptor>(item => item.Type.IsAssignableTo(typeof(IEnumerable))),  a=> false)
                             },
+                            new BooleanDecisionTree(new Decision<IDescriptor>(item => item as ICollectionItemDescriptor!=null))
+                            {
+                                new BooleanDecisionTree(new Decision<IDescriptor>(item => (item as ICollectionItemDescriptor).Removed != null ),  a=> false)
+                            },
                             new BooleanDecisionTree<IDescriptor>(new Decision<IDescriptor>(item => item.ParentType.Name == "Array"), item => item.Name)
                             {
                                 new BooleanDecisionTree( new Decision<string>(item => item == "IsFixedSize"),  a=> false) { },
@@ -96,7 +100,6 @@ namespace Utility.Trees.Demo.MVVM
             Predicate.Input = item;
             Predicate.Evaluate();
             return (bool)Predicate.Backput;
-            //return true;
         }
 
 
