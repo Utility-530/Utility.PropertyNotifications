@@ -36,7 +36,7 @@ namespace Utility.Trees.Demo.MVVM
                         var item = new ComboTreeViewItem
                         {
                                 Header = instance,
-                                DataContext = instance,                               
+                                DataContext = instance,
                                 IsExpanded = true
                         };
 
@@ -44,7 +44,7 @@ namespace Utility.Trees.Demo.MVVM
                         .Find(guid, "table_add", typeof(Table))
                         .Subscribe(_guid =>
                         {
-                            var table = (Table)Activator.CreateInstance(typeof(Table));                    
+                            var table = (Table)Activator.CreateInstance(typeof(Table));
                             var root = DescriptorFactory.CreateRoot(table, _guid, "table_add").Take(1).Wait();
                             var reflectionNode = new ReflectionNode(root) { Parent = (ITree)instance };
                             item.NewObject = DataTreeViewer(reflectionNode);
@@ -101,10 +101,7 @@ namespace Utility.Trees.Demo.MVVM
                             DataContext = instance,
                             IsExpanded = true
                         }),
-                        //(((instance as IReadOnlyTree)?.Data as INotifyPropertyChanged).WithChangesTo(a=>(a as IValue).Value).Subscribe(a =>
-                        //{
 
-                        //})
                         new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item => (item.Parent as ICollectionDescriptor)==null),
                         instance =>
                         {
@@ -113,40 +110,47 @@ namespace Utility.Trees.Demo.MVVM
                             var table = (data as IValue)?.Value as Table;
                             if(table is { Type: { } type, Name:{ } name })
                             {
-                                var root =  DescriptorFactory.CreateRoot(table.Type , data.Guid, table.Name).Take(1).Wait();
-                                var reflectionNode = new ReflectionNode(root);
-                                var treeViewer = DataTreeViewer(reflectionNode);
-                                return treeViewer;
-                            }
-                        else if ((instance as IReadOnlyTree)?.Parent.Data is not ICollectionDescriptor)
-                        {
-                            var treeViewer = DataTreeViewer();
-                            ((instance as IReadOnlyTree)?.Data as IValueChanges)
-                            .Subscribe(change =>
-                            {
-                                var tree = (instance as IReadOnlyTree);
-                                var data = tree?.Data as IDescriptor;
-                                var table = (data as IValue)?.Value as Table;
-                                if(table is { Type: { } type, Name:{ } name })
+                                var treeViewer = DataTreeViewer();
+                                Locator.Current.GetService<ITreeRepository>()
+                                .Find(data.Guid, "branch")
+                                .Subscribe(_guid =>
                                 {
-                                    var root =  DescriptorFactory.CreateRoot(table.Type , data.Guid, table.Name).Take(1).Wait();
+                                    var root =  DescriptorFactory.CreateRoot(table.Type , _guid, table.Name).Take(1).Wait();
                                     var reflectionNode = new ReflectionNode(root);
                                     treeViewer.ViewModel = reflectionNode;
-                                }
+                                });
+
+                                return treeViewer;
+                            }
+                            else if ((instance as IReadOnlyTree)?.Parent.Data is not ICollectionDescriptor)
+                            {
+                                var treeViewer = DataTreeViewer();
+                                ((instance as IReadOnlyTree)?.Data as IValueChanges)
+                                .Subscribe(change =>
+                                {
+                                    var tree = (instance as IReadOnlyTree);
+                                    var data = tree?.Data as IDescriptor;
+                                    var table = (data as IValue)?.Value as Table;
+                                    if(table is { Type: { } type, Name:{ } name })
+                                    {
+                                        var root =  DescriptorFactory.CreateRoot(table.Type , data.Guid, table.Name).Take(1).Wait();
+                                        var reflectionNode = new ReflectionNode(root);
+                                        treeViewer.ViewModel = reflectionNode;
+                                    }
                             });
-                            return treeViewer;
-                        }
+                                return treeViewer;
+                            }
                             else
                             {
-                                                return new CustomTreeViewItem
-                        {
-                            //AddCommand = new Command(() => { if (instance is ITree { } item) item.Add(new ModelTree(Helpers.Names.Random(random), Guid.NewGuid(), ((GuidKey)item.Key).Value)); }),
-                            //RemoveCommand = new Command(() => { if (instance is IParent<ITree> { Parent: { } parent }) parent.Remove(instance); }),
+                                return new CustomTreeViewItem
+                                {
+                                //AddCommand = new Command(() => { if (instance is ITree { } item) item.Add(new ModelTree(Helpers.Names.Random(random), Guid.NewGuid(), ((GuidKey)item.Key).Value)); }),
+                                //RemoveCommand = new Command(() => { if (instance is IParent<ITree> { Parent: { } parent }) parent.Remove(instance); }),
 
-                            Header = instance,
-                            DataContext = instance,
-                            IsExpanded = true
-                        };
+                                Header = instance,
+                                DataContext = instance,
+                                IsExpanded = true
+                                };
                             }
                         })
                     }
@@ -187,7 +191,18 @@ namespace Utility.Trees.Demo.MVVM
 
         private void Remove(object instance)
         {
-
+            {
+                if (instance is ITree { Parent: ITree { } tree, Data: IInstance { Instance: { } _instance } })
+                    if (tree is { Data: IInstance { Instance: IList lst } data } item)
+                    {
+      
+                        lst.Remove(_instance);
+                        if (data is IRefresh refresh)
+                        {
+                            refresh.Refresh();
+                        }
+                    }
+            }
         }
 
         private void Add(object instance)
@@ -207,17 +222,17 @@ namespace Utility.Trees.Demo.MVVM
                     }
             }
             {
-          
-                    if (instance is ITree { Data: IInstance { Instance: IList lst } data } tree &&
-                        tree is { Data: ICollectionDetailsDescriptor { CollectionItemPropertyType: { } type } })
+
+                if (instance is ITree { Data: IInstance { Instance: IList lst } data } tree &&
+                    tree is { Data: ICollectionDetailsDescriptor { CollectionItemPropertyType: { } type } })
+                {
+                    var newInstance = Activator.CreateInstance(type);
+                    lst.Add(newInstance);
+                    if (data is IRefresh refresh)
                     {
-                        var newInstance = Activator.CreateInstance(type);                      
-                        lst.Add(newInstance);
-                        if (data is IRefresh refresh)
-                        {
-                            refresh.Refresh();
-                        }
+                        refresh.Refresh();
                     }
+                }
             }
         }
 
