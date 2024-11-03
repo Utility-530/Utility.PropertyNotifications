@@ -10,6 +10,7 @@
              xmlns:tree="http://schemas.utility.com/trees"
              xmlns:trs="clr-namespace:Utility.Trees.WPF;assembly=Utility.Trees.WPF"
              xmlns:c="http://schemas.utility.com/colours"
+             xmlns:controls="http://schemas.utility.com"
              xmlns:temp="http://schemas.utility.com/templates">
     <Application.Resources>
         <ResourceDictionary>
@@ -37,13 +38,10 @@
                             <ContentControl Content="{Binding Data, Mode=OneTime}" />
 
                             <UniformGrid Rows="1" Grid.Row="1" Width="200" HorizontalAlignment="Left">
-                                <!--<TextBlock Text="Input"></TextBlock>-->
-                                <TextBlock Text="Out" FontWeight="DemiBold" Foreground="Gray"/>
-                                <!--<ContentControl Content="{Binding Input, Mode=OneWay}" ContentTemplateSelector="{x:Static temp:CustomDataTemplateSelector.Instance}"/>-->
-                                <ContentControl Content="{Binding Output, Mode=OneWay}" ContentTemplateSelector="{x:Static temp:CustomDataTemplateSelector.Instance}"  HorizontalAlignment="Left"/>
                                 <TextBlock Text="Back" FontWeight="DemiBold" Foreground="Gray"/>
-
                                 <ContentControl Content="{Binding Backput, Mode=OneWay}" ContentTemplateSelector="{x:Static temp:CustomDataTemplateSelector.Instance}"  HorizontalAlignment="Left"/>
+                                <TextBlock Text="Out" FontWeight="DemiBold" Foreground="Gray"/>
+                                <ContentControl Content="{Binding Output, Mode=OneWay}" ContentTemplateSelector="{x:Static temp:CustomDataTemplateSelector.Instance}"  HorizontalAlignment="Left"/>
                             </UniformGrid>
                         </Grid>
                     </ScrollViewer>
@@ -102,7 +100,7 @@
                     <ContentControl Content="{Binding Value}" Grid.Column="1" ></ContentControl>
                 </Grid>
             </DataTemplate>
-            
+
             <DataTemplate DataType="{x:Type dt:ForwardItem}">
                 <Grid TextBlock.FontSize="8" >
                     <Grid.ColumnDefinitions>
@@ -188,13 +186,13 @@
                 </TreeView>
             </DataTemplate>
 
-            
-            
+
+
             <DataTemplate x:Key="Pipe_Repository_Template" DataType="{x:Type local:PipeRepository}">
                 <TreeView trs:TreeEx.Root="{Binding Predicate}" >
                     <TreeView.ItemContainerStyle>
                         <Style  TargetType="TreeViewItem" >
-                            <Setter Property="IsExpanded" Value="True" />                         
+                            <Setter Property="IsExpanded" Value="True" />
                         </Style>
                     </TreeView.ItemContainerStyle>
                 </TreeView>
