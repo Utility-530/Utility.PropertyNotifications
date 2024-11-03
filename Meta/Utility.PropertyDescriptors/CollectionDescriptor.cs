@@ -1,6 +1,4 @@
-﻿
-
-using Splat;
+﻿using Splat;
 using System.Reactive;
 using System.Reactive.Subjects;
 using Utility.Helpers.NonGeneric;
@@ -19,8 +17,7 @@ namespace Utility.Descriptors
         IRefresh
     {
         ReplaySubject<Change<IDescriptor>> replaySubject = new();
-        List<CollectionItemDescriptor> descriptors = new();
-        List<object> itemsInCollection = new List<object>();
+        List<ICollectionItemDescriptor> descriptors = new();
 
         private static ITreeRepository repo => Locator.Current.GetService<ITreeRepository>();
 
@@ -36,7 +33,7 @@ namespace Utility.Descriptors
                 {
                     AddHeaderDescriptor(observer, ElementType, Instance.GetType());
                     AddFromInstance(observer);
-                    AddFromRefreshes(observer);            
+                    AddFromRefreshes(observer);
                     repo
                     .SelectKeys(Guid)
                     .Subscribe(tables =>
@@ -77,6 +74,7 @@ namespace Utility.Descriptors
                                     }
                                     break;
                                 case NotifyCollectionChangedAction.Reset:
+                                    descriptors.Clear();
                                     observer.OnNext(new(null, Changes.Type.Reset));
                                     break;
                             }
@@ -87,8 +85,6 @@ namespace Utility.Descriptors
 
         public void Refresh()
         {
-            //replaySubject.OnNext(new(default, Utility.Changes.Type.Reset));
-            //AddHeaderDescriptor(replaySubject, ElementType, Instance.GetType());
             AddFromInstance(replaySubject);
         }
 
@@ -137,69 +133,68 @@ namespace Utility.Descriptors
 
         void AddFromInstance(IObserver<Change<IDescriptor>> observer)
         {
-            int i = 0;
             foreach (var item in Collection)
             {
-              
-                //repo.Find(Guid, type.Name, type, i)
-                //    .Subscribe(a =>
-                //{
-                i++;
-                if (itemsInCollection.Contains(item) == false)
-                {    
+                if (descriptors.Any(a => a.Item == item) == false)
+                {
+                    int i = descriptors.Last().Index + 1;
                     Next(observer, item, item.GetType(), Type, Changes.Type.Add, i);
                 }
-                //});
+            }
+
+            foreach (var descriptor in descriptors.ToArray())
+            {
+                //i++;
+                if (Contains(Collection, descriptor.Item) == false)
+                {
+                    observer.OnNext(new(descriptor, Changes.Type.Remove));
+                    repo.Remove(descriptor.Guid);
+                    descriptors.Remove(descriptor);
+                }
+            }
+
+            bool Contains(IEnumerable source, object value)
+            {
+                foreach (var i in source)
+                {
+                    if (Equals(i, value))
+                        return true;
+                }
+                return false;
             }
         }
 
-        //void AddFromRefresh(IObserver<Change<IDescriptor>> observer)
-        //{
-        //    int i = 0;
-        //    foreach (var item in Collection)
-        //    {
-
-        //        //repo.Find(Guid, type.Name, type, i)
-        //        //    .Subscribe(a =>
-        //        //{
-        //        i++;
-        //        if (itemsInCollection.Contains(item) == false)
-        //        {
-        //            Next(observer, item, item.GetType(), Type, Changes.Type.Add, i, true);
-        //        }
-        //        //});
-        //    }
-        //}
-
-        void AddFromDataSource(IObserver<Change<IDescriptor>> observer, IEnumerable<Key> tables)
+        void AddFromDataSource(IObserver<Change<IDescriptor>> observer, IEnumerable<Key> keys)
         {
-            foreach (var table in tables)
+            foreach (var key in keys)
             {
                 //&& descriptors.SingleOrDefault(a => a.Index == table.Index) is not { } x
-                if (table.Index is not 0 && table.Instance is { } item)
+                if (key.Index is > 0 && key.Instance is { } item)
                 {
-                        if (Instance is IList collection)
-                        {
-                            if (collection.Count < table.Index)
-                                //collection.Insert(table.Index ?? throw new Exception(" 3 efsd"), item);
-                                collection.Add(item);
-                        }
-                        else
-                        {
-                            throw new Exception(" s898d");
-                        }
-                        Next(observer, item, item.GetType(), Type, Changes.Type.Add, table.Index.Value);
+                    if (Instance is IList collection)
+                    {
+                        if (collection.Count < key.Index)
+                            //collection.Insert(table.Index ?? throw new Exception(" 3 efsd"), item);
+                            collection.Add(item);
+                    }
+                    else
+                    {
+                        throw new Exception(" s898d");
+                    }
+                    Next(observer, item, item.GetType(), Type, Changes.Type.Add, key.Index.Value, false, key.Removed);
                 }
             }
         }
 
-        void Next(IObserver<Change<IDescriptor>> observer, object item, Type type, Type parentType, Changes.Type changeType, int i, bool refresh = false)
+        void Next(IObserver<Change<IDescriptor>> observer, object item, Type type, Type parentType, Changes.Type changeType, int i, bool refresh = false, DateTime? removed = null)
         {
             DescriptorFactory.CreateItem(item, i, type, parentType, Guid)
                 .Subscribe(descriptor =>
                 {
+                    var refDescriptor = (CollectionItemReferenceDescriptor)descriptor;
+                    refDescriptor.Removed = removed;
                     observer.OnNext(new(descriptor, changeType));
-                    itemsInCollection.Add(item);
+                    descriptors.Add(refDescriptor);
                     if (refresh)
                         descriptor.Initialise();
                 });

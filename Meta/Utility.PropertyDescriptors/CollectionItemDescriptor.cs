@@ -34,6 +34,7 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
 
     }
 
+    public DateTime? Removed => null;
 
     public bool Equals(IEquatable? other)
     {
@@ -82,7 +83,7 @@ internal record HeaderDescriptor : ChildlessMemberDescriptor, IHeaderDescriptor
 
 }
 
-internal partial record CollectionItemDescriptor : ValueDescriptor, ICollectionItemDescriptor, IEquatable
+internal partial record CollectionItemDescriptor : ValueDescriptor, ICollectionItemDescriptor, IEquatable, IItem
 {
 
     internal CollectionItemDescriptor(object item, int index, Type componentType) : base(new RootDescriptor(item.GetType(), componentType) { }, item)
@@ -99,6 +100,8 @@ internal partial record CollectionItemDescriptor : ValueDescriptor, ICollectionI
     public object Item { get; set; }
 
     public int Index { get; }
+
+    public DateTime? Removed { get; set; }
 
     public override string? Name => Type.Name;
 
@@ -133,7 +136,7 @@ internal partial record CollectionItemDescriptor : ValueDescriptor, ICollectionI
 }
 
 
-internal partial record CollectionItemReferenceDescriptor :  ReferenceDescriptor, ICollectionItemReferenceDescriptor, IEquatable
+internal partial record CollectionItemReferenceDescriptor :  ReferenceDescriptor, ICollectionItemReferenceDescriptor, IEquatable, IItem
 {
     private IObservable<Change<IDescriptor>> observable;
 
@@ -151,6 +154,8 @@ internal partial record CollectionItemReferenceDescriptor :  ReferenceDescriptor
     public object Item { get; set; }
 
     public int Index { get; }
+
+    public DateTime? Removed { get; set; }
 
     public override string? Name => Type.Name;
 
