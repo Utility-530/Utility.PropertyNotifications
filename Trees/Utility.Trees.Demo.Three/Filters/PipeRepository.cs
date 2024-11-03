@@ -8,11 +8,8 @@ using System.Linq;
 using Utility.Trees.Decisions;
 using Utility.Pipes;
 using System.Linq.Expressions;
-using Obs = System.Reactive.Linq.Observable;
 using Cogs.Collections;
-using Utility.Nodes.Reflections;
 using Utility.Extensions;
-using Utility.Descriptors;
 
 namespace Utility.Trees.Demo.MVVM
 {
@@ -43,10 +40,6 @@ namespace Utility.Trees.Demo.MVVM
                     return;
 
                 (RepoResult? ca, IDictionary<RepoItem, IObserver> dictionary, object input) = (Backput)this.Backput;
-                if (ca.RepoItem.Guid == Guid.Parse("34ba4814-fe02-4b89-b39c-73e2f1d790b2") && keys.Count == 3)
-                {
-
-                }
 
                 int i = 0;
                 var qi = ca.RepoItem;
