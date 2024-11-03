@@ -1,9 +1,6 @@
 ﻿using Splat;
-using System;
 using System.Reflection;
 using System.Windows;
-using Utility.Descriptors;
-using Utility.Nodes.Reflections;
 using Utility.Pipes;
 using Utility.Repos;
 using Utility.Trees.Demo.MVVM.Views;
@@ -34,7 +31,7 @@ namespace Utility.Trees.Demo.MVVM
             Locator.CurrentMutable.RegisterLazySingleton<PipeController>(() => new ());
             //Locator.CurrentMutable.RegisterLazySingleton<Utility.Trees.Demo.MVVM.Filters.PipeController>(() => new ());
             Locator.CurrentMutable.RegisterLazySingleton<Model>(() => new ());
-            Locator.CurrentMutable.RegisterLazySingleton<Table>(() => new() { Guid = Guid.Parse("a322b6df-6d59-4a6f-aed9-a799ad66297c"), Name= "test1", Type = typeof(Model)});
+            Locator.CurrentMutable.RegisterLazySingleton<Table>(() => new() { Name= "test1", Type = typeof(Model)});
 
             //{
             //    var rootPropertyDescriptor = new RootDescriptor(typeof(Model), name: "model");
