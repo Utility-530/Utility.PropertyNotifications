@@ -3,6 +3,8 @@
     public interface ICollectionItemDescriptor : IDescriptor
     {
         int Index { get; }
+
+        DateTime? Removed { get;  }
     }   
        
     public interface ICollectionItemReferenceDescriptor : IReferenceDescriptor, ICollectionItemDescriptor
