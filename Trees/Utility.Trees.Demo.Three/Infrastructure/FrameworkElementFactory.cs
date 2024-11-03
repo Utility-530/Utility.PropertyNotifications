@@ -31,7 +31,8 @@ namespace Utility.Trees.Demo.MVVM
 
         public void Initialise()
         {
-            DescriptorFactory.CreateRoot(Locator.Current.GetService<Model>(), Guid.Parse("76bca65d-6496-4a45-84f9-87705e665599"), "model")
+            //DescriptorFactory.CreateRoot(Locator.Current.GetService<Model>(), Guid.Parse("76bca65d-6496-4a45-84f9-87705e665599"), "model")
+            DescriptorFactory.CreateRoot(new Product(), Guid.Parse("910ee619-8fa2-41f2-baaf-883b092f70aa"), "product")
             //DescriptorFactory.CreateRoot(Locator.Current.GetService<Table>(), Guid.Parse("98f29d9c-0528-4096-acef-73f089646e82"), "table_model")
                 .Subscribe(descriptor =>
             {
@@ -56,17 +57,24 @@ namespace Utility.Trees.Demo.MVVM
                 if (a is ClickChange { Node: IReadOnlyTree { Data: MemberDescriptor data } tree, Source: { } source })
                 {
                     if (data.Name == "Table" && data is ICollectionItemReferenceDescriptor { Instance: Table table })
+                    //{
+                    //    var x = (TreeExtensions.MatchDescendant(root, a => (a.Data as IDescriptor).Name == "SelectedTable").Data as IRaisePropertyChanged);
+                    //    x.RaisePropertyChanged(table);
+                    //}
                         if (Locator.Current.GetService<Model>().SelectedTable != table)
                         {
-                            Locator.Current.GetService<Model>().SelectedTable = table;   
-                            var selectedTableGuid = (TreeExtensions.MatchDescendant(root, a => (a.Data as IDescriptor).Name == "SelectedTable").Data as IDescriptor).Guid;
+                            //Locator.Current.GetService<Model>().SelectedTable = table;   
+                            var x = TreeExtensions.MatchDescendant(root, a => a.Data is IReferenceDescriptor { Name: "SelectedTable" });
+                            var yt = (x.Data as ISetValue);
+                            yt.Value = table;
+
                             Locator.Current.GetService<ITreeRepository>()
-                            .Find(selectedTableGuid, "SelectedTable", typeof(Table))
-                            .Subscribe(parentGuid =>
-                            {
-                                //var rqi = new RepoItem(default, RepoItemType.SelectKeys, "SelectedTable", ParentGuid: parentGuid);
-                                //Pipe.Instance.New(new ForwardItem(Locator.Current.GetService<PipeRepository>().Predicate, rqi, new()));
-                            });
+                                .Find((x as IGuid).Guid, "SelectedTable", typeof(Table))
+                                .Subscribe(parentGuid =>
+                                {
+                                    //var rqi = new RepoItem(default, RepoItemType.SelectKeys, "SelectedTable", ParentGuid: parentGuid);
+                                    //Pipe.Instance.New(new ForwardItem(Locator.Current.GetService<PipeRepository>().Predicate, rqi, new()));
+                                });
                         }
                     MainView.Instance.propertygrid.Content = new PropertyGrid { SelectedObject = data };
                     //Filter.Instance.Convert(tree);
