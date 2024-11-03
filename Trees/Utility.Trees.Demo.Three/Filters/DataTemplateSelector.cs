@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Descriptors;
@@ -7,6 +8,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Decisions;
 using Utility.Trees.Demo.MVVM.Infrastructure;
+using Utility.WPF.Controls;
 using Utility.WPF.Factorys;
 using Utility.WPF.Templates;
 
@@ -26,7 +28,6 @@ namespace Utility.Trees.Demo.MVVM
                     new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IMethodDescriptor!=null){  },md=>MakeButtonTemplate(md)),
                     new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => (item.Data as IReferenceDescriptor) != null))
                     {
-                        //new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => (item.Data as IReferenceDescriptor).Instance as Table != null),  md => MakeVoidTemplate()),
                         new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => true),  md => MakeHeaderTemplate(md, md.Depth))
                     },
                     //new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionItemDescriptor!=null){  }, md=>MakeLineTemplate()),
@@ -50,7 +51,6 @@ namespace Utility.Trees.Demo.MVVM
             Predicate.Input = item;
             Predicate.Evaluate();
             return (DataTemplate)Predicate.Backput;
-            //return MakeTemplate(item);
         }
 
         private DataTemplate MakeTemplate(object item)
@@ -84,7 +84,6 @@ namespace Utility.Trees.Demo.MVVM
         {
             return TemplateGenerator.CreateDataTemplate(() =>
             {
-
                 var textBlock = new TextBlock
                 {
                     FontWeight = FontWeight.FromOpenTypeWeight(600 - count * 10),
@@ -92,7 +91,40 @@ namespace Utility.Trees.Demo.MVVM
                 };
                 textBlock.SetBinding(TextBlock.TextProperty, Binding(item));
 
-                return textBlock;
+                var toggle = new DoubleClickCheckBox () { Content = textBlock, Style = App.Current.Resources["NullToggleButton"] as Style };
+
+                if (item is IReadOnlyTree { Data: IDescriptor { } descriptor } data)
+                    if (data is IValue { Value:{ } value } _value)
+                    {
+                        toggle.IsChecked = true;
+                    }
+                toggle.IsCheckedChanged += Toggle_Click;
+                return toggle;
+
+                void Toggle_Click(object sender, RoutedEventArgs e)
+                {
+                    if (item is IReadOnlyTree { Data: IDescriptor { } descriptor } data)
+                        if (data is ISetValue _setValue)
+                            if (data is IValue _value)
+                                if (data is IValueChanges _values)
+                                {
+                                    _values.Subscribe(a =>
+                                    {
+                                        if (a != null)
+                                            toggle.IsChecked = false;
+                                        else
+                                            toggle.IsChecked = true;
+                                    });
+                                    if (toggle.IsChecked == true && _value.Value == null)
+                                    {
+                                        _setValue.Value = Activator.CreateInstance(descriptor.Type);
+                                    }
+                                    else if (toggle.IsChecked != true && _value.Value != null)
+                                    {
+                                        _setValue.Value = null;
+                                    }
+                                }
+                }
             });
 
             static Binding Binding(object item)
