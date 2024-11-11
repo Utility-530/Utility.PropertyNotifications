@@ -54,9 +54,19 @@ namespace Utility.ViewModels.Base
     }
 
 
-    public  class ValueViewModel : ReadOnlyViewModel, IValue
+    public class ValueViewModel : ReadOnlyViewModel, IValue
     {
-        public object? Value { get; set; }
+        private object value;
+
+        public object? Value
+        {
+            get => value;
+            set
+            {
+                this.value = value;
+                this.OnPropertyChanged();
+            }
+        }
     }
 
 }
