@@ -137,7 +137,7 @@ namespace Utility.Descriptors
             {
                 if (descriptors.Any(a => a.Item == item) == false)
                 {
-                    int i = descriptors.Last().Index + 1;
+                    int i = (descriptors.LastOrDefault()?.Index ?? 0) + 1;
                     Next(observer, item, item.GetType(), Type, Changes.Type.Add, i);
                 }
             }
