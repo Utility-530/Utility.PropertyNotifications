@@ -12,18 +12,14 @@ namespace Utility.Interfaces
 
     public class PropertyReceivedEventArgs : PropertyChangedEventArgs
     {
-        public PropertyReceivedEventArgs(string propertyName, object value, object? source = null) : base(propertyName)
+        public PropertyReceivedEventArgs(string? propertyName, object value, object? source = null) : base(propertyName)
         {
 
             Value = value;
             Source = source;
         }
 
-
-
         public object Value { get; }
         public object? Source { get; }
     }
-
-
 }
