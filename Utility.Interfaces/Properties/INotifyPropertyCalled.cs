@@ -12,7 +12,7 @@ namespace Utility.Interfaces
 
     public class PropertyCalledEventArgs : PropertyChangedEventArgs
     {
-        public PropertyCalledEventArgs(string propertyName, object? value) : base(propertyName)
+        public PropertyCalledEventArgs(string? propertyName, object? value) : base(propertyName)
         {
             Value = value;
         }
