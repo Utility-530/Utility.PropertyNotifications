@@ -4,13 +4,15 @@ using System;
 using System.Windows;
 using Utility.Nodify.Operations.Infrastructure;
 using Utility.Nodify.Engine.ViewModels;
-using Utility.Descriptors.Repositorys;
+using Utility.Repos;
 using Splat;
 using Utility.Nodify.Engine.Infrastructure;
 using IConverter = Utility.Nodify.Engine.Infrastructure.IConverter;
 using Utility.Descriptors;
 using Utility.Interfaces;
 using Utility.Extensions;
+using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 
 namespace Utility.Nodify.Demo
 {
@@ -29,7 +31,7 @@ namespace Utility.Nodify.Demo
             Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
 
 
-            rootDescriptor = await DescriptorFactory.CreateRoot(typeof(Diagram), guid, name: "diagram_test2");
+            rootDescriptor = await DescriptorFactory.CreateRoot(typeof(Diagram), guid, name: "diagram_test2").Take(1).ToTask();
             var diagram = rootDescriptor.Get<Diagram>();
             rootDescriptor.Initialise();
             base.OnStartup(e);
