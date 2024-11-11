@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Utility.Trees\Utility.Trees.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
+
 </Project>
