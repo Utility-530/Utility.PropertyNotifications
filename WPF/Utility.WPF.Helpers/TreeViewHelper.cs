@@ -1,12 +1,50 @@
-﻿//using System.Collections.Generic;
-//using System.Collections.ObjectModel;
-//using System.Windows.Controls;
-//using System.Windows.Media;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using System.Windows.Media;
 
-//namespace Utility.WPF.Helpers
-//{
-//    public class TreeViewHelper
-//    {
+namespace Utility.WPF.Helpers
+{
+    public class TreeViewHelper
+    {
+
+        public static T? FindRecursive<T>(ItemsControl treeView, object instance) where T : Control
+        {
+            foreach (var item in treeView.Items)
+            {
+                if (item is T tItem)
+                {
+                    if (tItem.DataContext == instance)
+                    {
+                        return tItem;
+                    }
+                    else if (tItem is ItemsControl itemsControl)
+                    {
+                        if (FindRecursive<T>(itemsControl, instance) is T xx)
+                            return xx;
+                    }
+                }
+                else if (item == instance)
+                {
+                    if (treeView is TreeViewItem { IsExpanded: false } treeViewItem)
+                    {
+                        treeViewItem.IsExpanded = true;
+                        treeViewItem.UpdateLayout();
+                    }
+                    var container = treeView.ItemContainerGenerator.ContainerFromItem(item);
+                    return container as T;
+                }
+                else if (treeView.ItemContainerGenerator.ContainerFromItem(item) is ItemsControl itemsControl)
+                {
+                    var find = FindRecursive<T>(itemsControl, instance);
+                    if (find is T xx)
+                        return xx;
+                }
+            }
+            return null;
+        }
+    }
+}
 //        public static ObservableCollection<TreeViewItem> Obser()
 //        {
 //            ObservableCollection<TreeViewItem> list = new();
