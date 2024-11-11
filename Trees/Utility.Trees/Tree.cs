@@ -259,7 +259,7 @@ namespace Utility.Trees
                 ((ObservableCollection<ITree>)m_items).CollectionChanged -= ItemsOnCollectionChanged;
         }
 
-        private void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
+        protected virtual void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
             if (args.Action == NotifyCollectionChangedAction.Add && args.NewItems != null)
             {
