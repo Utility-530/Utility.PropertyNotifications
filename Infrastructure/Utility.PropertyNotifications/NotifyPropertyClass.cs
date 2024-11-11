@@ -8,41 +8,20 @@ namespace Utility.PropertyNotifications
 
     /// <summary>
     /// Base class for all ViewModel classes in the application.
-    /// It provides support for property change notifications
-    /// and has a DisplayName property.  This class is abstract.
+    /// It provides support for property change notifications.
     /// </summary>
-
     public abstract class NotifyPropertyClass : INotifyPropertyCalled, INotifyPropertyReceived, INotifyPropertyChanged, IRaiseChanges
     {
         bool flag;
 
 
-        #region Constructor
-
-        protected NotifyPropertyClass()
-            : base()
+        protected NotifyPropertyClass(): base()
         {   
         }
 
 
 
-        #endregion Constructor
-
-        #region events
-
-
-        #endregion
-
-
-
-        #region Debugging Aides
-
-       
-
-
-        #endregion Debugging Aides
-
-        public event PropertyChangingEventHandler PropertyChanging;
+        public event PropertyChangingEventHandler? PropertyChanging;
 
         #region INotifyPropertyChanged Members
 
@@ -81,17 +60,16 @@ namespace Utility.PropertyNotifications
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        public virtual void RaisePropertyCalled(object? value, [CallerMemberName] string propertyName = null)
+        public virtual void RaisePropertyCalled(object? value, [CallerMemberName] string? propertyName = null)
         {
         
             if (flag == false)
                 PropertyCalled?.Invoke(this, PropertyCalledArgs(propertyName, value));
         }
 
-        private PropertyCalledEventArgs PropertyCalledArgs(string propertyName, object? value)
+        private PropertyCalledEventArgs PropertyCalledArgs(string? propertyName, object? value)
         {         
-            var e = new PropertyCalledEventArgs(propertyName, value);
-            return e;
+            return new PropertyCalledEventArgs(propertyName, value);
         }
 
         #endregion INotifyPropertyCalled Members
@@ -109,7 +87,7 @@ namespace Utility.PropertyNotifications
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        public virtual void RaisePropertyReceived(object value, [CallerMemberName] string propertyName = null)
+        public virtual void RaisePropertyReceived(object value, [CallerMemberName] string? propertyName = null)
         {
             var handler = PropertyReceived;
             if (handler != null)
