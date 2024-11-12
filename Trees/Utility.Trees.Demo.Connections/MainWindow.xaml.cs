@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Utility.Extensions;
 
-namespace Utility.Trees.Demo.Two
+namespace Utility.Trees.Demo.Connections
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

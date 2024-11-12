@@ -3,9 +3,10 @@ using MintPlayer.ObservableCollection;
 using System;
 using System.Collections.Generic;
 using System.Reactive.Subjects;
+using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
 
-namespace Utility.Trees.Demo.Two
+namespace Utility.Trees.Demo.Connections
 {
     public class BootStrapper
     {
@@ -48,11 +49,6 @@ namespace Utility.Trees.Demo.Two
         }
     }
 
-
-    public interface IName
-    {
-        string Name { get; set; }
-    }
 
     public class Service : IName, IObservable<object>, IObserver<object>
     {

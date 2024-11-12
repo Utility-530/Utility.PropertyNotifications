@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Utility.Trees.Demo.Two
+namespace Utility.Trees.Demo.Connections
 {
     /// <summary>
     /// Interaction logic for App.xaml

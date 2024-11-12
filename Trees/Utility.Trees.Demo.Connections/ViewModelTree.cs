@@ -3,7 +3,7 @@ using System.Collections.Specialized;
 using System.Reactive.Subjects;
 using Utility.PropertyNotifications;
 
-namespace Utility.Trees.Demo.Two
+namespace Utility.Trees.Demo.Connections
 {
     public class ViewModelTree : Tree, IObservable<Change>
     {
