@@ -25,7 +25,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Common", "..\Common
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{72C8D224-6E72-442B-A16A-29A6E7EA2051}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees.Demo.Connections", "Utility.Trees.Demo.Two\Utility.Trees.Demo.Connections.csproj", "{C33260F6-C1A5-46D4-9128-D92C43866F8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees.Demo.Connections", "Utility.Trees.Demo.Connections\Utility.Trees.Demo.Connections.csproj", "{C33260F6-C1A5-46D4-9128-D92C43866F8F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Interfaces", "..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj", "{70755FE0-7567-4723-9455-CAB4CDB2D5DA}"
 EndProject
