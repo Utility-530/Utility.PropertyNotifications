@@ -12,9 +12,9 @@ public interface ICollectionDetailsDescriptor
     bool IsCollectionItemValueType { get; }
 }
 
-public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, IChildren, ICollectionDetailsDescriptor, IValueChanges
+public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, IChildren, ICollectionDetailsDescriptor, IValueChanges, IName, IGuid
 {
-    protected ReplaySubject<object> changes = new ReplaySubject<object>();  
+    protected ReplaySubject<ValueChange> changes = new ReplaySubject<ValueChange>();  
 
     public Guid Guid { get; set; }
 
@@ -84,7 +84,7 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
             });
     }
 
-    public IDisposable Subscribe(IObserver<object> observer)
+    public IDisposable Subscribe(IObserver<ValueChange> observer)
     {
         return changes.Subscribe(observer);
     }

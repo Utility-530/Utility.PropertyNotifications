@@ -44,9 +44,9 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
                 }
                 else
                     return;
-                changes.OnNext(value);
+                changes.OnNext(new(Name, value));
                 RaisePropertyChanged(value);
-            });            
+            });
         }
         return value;
     }
@@ -58,7 +58,7 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
             repo.Set(Guid, value, DateTime.Now);
             Descriptor.SetValue(Instance, value);
             this.value = value;
-            changes.OnNext(value);
+            changes.OnNext(new(Name, value));
         }
     }
 
