@@ -27,7 +27,7 @@ namespace Utility.Trees
             return collection;
         }
 
-        protected virtual void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
+        protected override void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
             if (args.Action == NotifyCollectionChangedAction.Add && args.NewItems != null)
             {
@@ -47,6 +47,7 @@ namespace Utility.Trees
                     subject.OnNext(new Change<IReadOnlyTree>(item, Changes.Type.Remove));
                 }
             }
+            base.ItemsOnCollectionChanged(sender, args);
         }
     }
 
