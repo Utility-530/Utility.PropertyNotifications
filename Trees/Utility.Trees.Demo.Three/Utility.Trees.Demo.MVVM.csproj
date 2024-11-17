@@ -29,6 +29,8 @@
     <ProjectReference Include="..\Utility.Pipes\Utility.Pipes.csproj" />
     <ProjectReference Include="..\Utility.Trees.Decisions\Utility.Trees.Decisions.csproj" />
     <ProjectReference Include="..\Utility.Trees.Demo.Model\Utility.Trees.Demo.Models.csproj" />
+    <ProjectReference Include="..\Utility.Trees.Demo.Connections\Utility.Trees.Demo.Connections.csproj" />
+    <ProjectReference Include="..\Utility.Trees.Demo.Two\Utility.Trees.Demo.Connections.csproj" />
     <ProjectReference Include="..\Utility.Trees.WPF\Utility.Trees.WPF.csproj" />
     <ProjectReference Include="..\Utility.WPF.Pipes\Utility.WPF.Pipes.csproj" />
   </ItemGroup>

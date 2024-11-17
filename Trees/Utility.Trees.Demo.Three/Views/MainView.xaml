@@ -4,9 +4,20 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Utility.Trees.Demo.MVVM.Views"
+             xmlns:conn="clr-namespace:Utility.Trees.Demo.Connections;assembly=Utility.Trees.Demo.Connections" 
              d:Background="White"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <FrameworkElement.Resources>
+        <DataTemplate DataType="{x:Type conn:Service}">
+            <TextBlock Text="{Binding Name}"></TextBlock>
+        </DataTemplate>
+
+        <conn:DirectionBrushConverter x:Key="DirectionBrushConverter"/>
+
+    </FrameworkElement.Resources>
+
     <DockPanel>
 
         <Grid>
@@ -32,32 +43,48 @@
             <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch" ></GridSplitter>
 
             <Grid Grid.Column="4" x:Name="maingrid"  >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                
-                <ComboBox x:Name="combobox"  DockPanel.Dock="Top" Margin="8" Visibility="Collapsed"/>
 
-                <ScrollViewer x:Name="scrollviewer" HorizontalScrollBarVisibility="Visible" Grid.Row="1"/>
+                <ItemsControl Grid.Column="1" x:Name="Lines" >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas IsItemsHost="True"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>          
+                        <DataTemplate>
+                            <Line 
+                            X1="{Binding StartPoint.X}"
+                            Y1="{Binding StartPoint.Y}"
+                            X2="{Binding EndPoint.X}"
+                            Y2="{Binding EndPoint.Y}"                        
+                            Stroke="{Binding Direction, Converter={StaticResource DirectionBrushConverter}}"     
+                            StrokeDashArray="1"
+                            StrokeThickness="2"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <ScrollViewer x:Name="scrollviewer" HorizontalScrollBarVisibility="Visible" Grid.Row="1"/>
+
+                    <Grid Grid.Column="1"></Grid>
+                    <ListBox Grid.Column="2" Background="Transparent" x:Name="TreeView2"/>
+                </Grid>
             </Grid>
             <GridSplitter Grid.Column="5" Width="5" HorizontalAlignment="Stretch" ></GridSplitter>
             <TabControl Grid.Column="6">
-                <TabItem Header="Pipe-Tree" x:Name="pipe_repository_tree">
-
-                </TabItem>
-                <TabItem Header="Property-Grid" x:Name="propertygrid">
-
-                </TabItem>
-                <TabItem Header="Filter-Tree" x:Name="filtertree">
-
-                </TabItem>
-                <TabItem Header="DataTemplate-Tree" x:Name="datatemplatetree">
-
-                </TabItem>
-                <TabItem Header="Style-Tree" x:Name="styletree">
-
-                </TabItem>
+                <TabItem Header="Pipe-Tree" x:Name="pipe_repository_tree"/>
+                <TabItem Header="Property-Grid" x:Name="propertygrid"/>
+                <TabItem Header="Filter-Tree" x:Name="filtertree"/>
+                <TabItem Header="DataTemplate-Tree" x:Name="datatemplatetree"/>
+                <TabItem Header="Style-Tree" x:Name="styletree"/>
             </TabControl>
         </Grid>
     </DockPanel>

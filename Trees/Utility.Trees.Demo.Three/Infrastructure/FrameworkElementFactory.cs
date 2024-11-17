@@ -15,19 +15,19 @@ using Utility.Interfaces.NonGeneric;
 using Splat;
 using Utility.Extensions;
 using Utility.PropertyNotifications;
-using Utility.WPF.Controls.Trees;
 using Utility.Trees.Demo.MVVM.Infrastructure;
 using Utility.Pipes;
 using Utility.Trees.Decisions;
 using Utility.Repos;
 using Utility.Helpers.NonGeneric;
+using Utility.Trees.Demo.Connections;
 
 namespace Utility.Trees.Demo.MVVM
 {
-
     public partial class App
     {
-        ReflectionNode root;
+        private ReflectionNode root;
+        private TreeViewer treeViewer;
 
         public void Initialise()
         {
@@ -39,6 +39,7 @@ namespace Utility.Trees.Demo.MVVM
                 root = new ReflectionNode(descriptor);
                 Locator.CurrentMutable.RegisterConstant(root);
                 UpdateView(root);
+                UpdateConnectionsView();
                 InitialiseView(root);
             });
         }
@@ -57,24 +58,27 @@ namespace Utility.Trees.Demo.MVVM
                 if (a is ClickChange { Node: IReadOnlyTree { Data: MemberDescriptor data } tree, Source: { } source })
                 {
                     if (data.Name == "Table" && data is ICollectionItemReferenceDescriptor { Instance: Table table })
-                    //{
-                    //    var x = (TreeExtensions.MatchDescendant(root, a => (a.Data as IDescriptor).Name == "SelectedTable").Data as IRaisePropertyChanged);
-                    //    x.RaisePropertyChanged(table);
-                    //}
+                        //{
+                        //    var x = (TreeExtensions.MatchDescendant(root, a => (a.Data as IDescriptor).Name == "SelectedTable").Data as IRaisePropertyChanged);
+                        //    x.RaisePropertyChanged(table);
+                        //}
                         if (Locator.Current.GetService<Model>().SelectedTable != table)
                         {
                             //Locator.Current.GetService<Model>().SelectedTable = table;   
-                            var x = TreeExtensions.MatchDescendant(root, a => a.Data is IReferenceDescriptor { Name: "SelectedTable" });
-                            var yt = (x.Data as ISetValue);
-                            yt.Value = table;
+                            TreeExtensions.MatchDescendant(root, a => a.Data is IReferenceDescriptor { Name: "SelectedTable" })
+                            .Subscribe(x =>
+                            {
+                                var yt = (x.Data as ISetValue);
+                                yt.Value = table;
 
-                            Locator.Current.GetService<ITreeRepository>()
-                                .Find((x as IGuid).Guid, "SelectedTable", typeof(Table))
-                                .Subscribe(parentGuid =>
-                                {
-                                    //var rqi = new RepoItem(default, RepoItemType.SelectKeys, "SelectedTable", ParentGuid: parentGuid);
-                                    //Pipe.Instance.New(new ForwardItem(Locator.Current.GetService<PipeRepository>().Predicate, rqi, new()));
-                                });
+                                Locator.Current.GetService<ITreeRepository>()
+                                    .Find((x as IGuid).Guid, "SelectedTable", typeof(Table))
+                                    .Subscribe(parentGuid =>
+                                    {
+                                        //var rqi = new RepoItem(default, RepoItemType.SelectKeys, "SelectedTable", ParentGuid: parentGuid);
+                                        //Pipe.Instance.New(new ForwardItem(Locator.Current.GetService<PipeRepository>().Predicate, rqi, new()));
+                                    });
+                            });
                         }
                     MainView.Instance.propertygrid.Content = new PropertyGrid { SelectedObject = data };
                     //Filter.Instance.Convert(tree);
@@ -93,14 +97,14 @@ namespace Utility.Trees.Demo.MVVM
                     if (last is ReflectionNode node)
                     {
                         node.IsSelected = false;
-                        node.RaisePropertyChanged(nameof(ViewModelTree.IsSelected));
+                        node.RaisePropertyChanged(nameof(ReflectionNode.IsSelected));
 
                     }
                     if (d is ReflectionNode tree)
                     {
                         last = tree;
                         tree.IsSelected = true;
-                        tree.RaisePropertyChanged(nameof(ViewModelTree.IsSelected));
+                        tree.RaisePropertyChanged(nameof(ReflectionNode.IsSelected));
                     }
                 }
             });
@@ -114,7 +118,7 @@ namespace Utility.Trees.Demo.MVVM
                     {
                         last = tree;
                         tree.IsSelected = true;
-                        tree.RaisePropertyChanged(nameof(ViewModelTree.IsSelected));
+                        tree.RaisePropertyChanged(nameof(ReflectionNode.IsSelected));
                     }
                 }
             });
@@ -128,7 +132,7 @@ namespace Utility.Trees.Demo.MVVM
 
         void UpdateView(object data)
         {
-            var treeViewer = DataTreeViewer(data);
+            treeViewer = DataTreeViewer(data);
             MainView.Instance.scrollviewer.Content = treeViewer;
             MainView.Instance.pipe_view.Content = Locator.Current.GetService<PipeController>();
             MainView.Instance.queue_view.Content = Pipe.Instance;
@@ -141,6 +145,79 @@ namespace Utility.Trees.Demo.MVVM
             MainView.Instance.pipe_repository_tree.Content = Locator.Current.GetService<PipeRepository>();
             MainView.Instance.pipe_repository_tree.ContentTemplate = this.Resources["Pipe_Repository_Template"] as DataTemplate;
             MainView.Instance.repo_view.Content = Locator.Current.GetService<PipeRepository>();
+        }
+
+        void UpdateConnectionsView()
+        {
+
+            //var tree = new ViewModelTree(new ViewModel() { Name = "root" },
+            //         new ViewModelTree(new ViewModel { Name = "A" },
+            //         new ViewModelTree(new ViewModel { Name = "B" }),
+            //         new ViewModelTree(new ViewModel { Name = "C" }),
+            //         new ViewModelTree(new ViewModel { Name = "D" })));
+
+            //TreeView.ItemsSource = tree.Items;
+
+            var a = new Service { Name = "Service A", Func = new Func<object, object>(a => a) };
+            var b = new Service { Name = "Service B", Func = new Func<object, object>(a => a) };
+
+            var _viewModel = new ConnectionsViewModel()
+            {
+                ServiceModel = new() { a, b },
+                Tree = root
+            };
+
+            var x = new Connector()
+            {
+                TreeView = treeViewer,
+                TreeView2 = MainView.Instance.TreeView2,
+                viewModel = _viewModel,
+                Container = MainView.Instance.maingrid
+            };
+            x.Loaded();
+
+            MainView.Instance.TreeView2.ItemsSource = _viewModel.ServiceModel;
+            MainView.Instance.Lines.ItemsSource = _viewModel.Lines;
+
+            (root.Data as IValueChanges).Subscribe(t =>
+            {
+                foreach (var connection in _viewModel.Connections.Where(a => a.ViewModelName == t.Name && a.Movement == Movement.FromViewModelToService))
+                {
+                    if (connection == null)
+                        return;
+                    var serviceName = connection.ServiceName;
+                    var service = _viewModel.ServiceModel.Single(a => a.Name == serviceName);
+                    service.OnNext(t.Value);
+                }
+            });
+
+            a.Subscribe(a =>
+            {
+                foreach (var connection in _viewModel.Connections.Where(a => a.ServiceName == "Service A" && a.Movement == Movement.ToViewModelFromService))
+                {
+                    var viewModelName = connection.ViewModelName;
+                    var viewModel = root.MatchDescendant(a => (a.Data as IName).Name == viewModelName)
+                    .Subscribe(viewModel =>
+                    {
+                        (viewModel.Data as ViewModel).Value = a;
+                        (viewModel.Data as ViewModel).RaisePropertyChanged(nameof(ViewModel.Value));
+                    });
+                }
+            });
+
+            b.Subscribe(b =>
+            {
+                foreach (var connection in _viewModel.Connections.Where(a => a.ServiceName == "Service B" && a.Movement == Movement.ToViewModelFromService))
+                {
+                    var viewModelName = connection.ViewModelName;
+                    root.MatchDescendant(a => (a.Data as IName).Name == viewModelName)
+                      .Subscribe(viewModel =>
+                      {
+                          (viewModel.Data as ViewModel).Value = b;
+                          (viewModel.Data as ViewModel).RaisePropertyChanged(nameof(ViewModel.Value));
+                      });
+                }
+            });
         }
 
         public static TreeViewer DataTreeViewer(object data)
