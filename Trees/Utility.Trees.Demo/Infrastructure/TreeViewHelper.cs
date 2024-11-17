@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace Utility.Trees.Demo.Two
+namespace Utility.Trees.Demo
 {
     public static class TreeViewHelper
     {

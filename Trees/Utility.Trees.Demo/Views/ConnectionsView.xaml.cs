@@ -13,7 +13,7 @@ using Utility.Helpers.Generic;
 using Utility.Persists;
 using Utility.Trees.Demo.Infrastructure;
 
-namespace Utility.Trees.Demo.Two
+namespace Utility.Trees.Demo
 {
     /// <summary>
     /// Interaction logic for ConnectionsUserControl.xaml
@@ -58,6 +58,9 @@ namespace Utility.Trees.Demo.Two
             {
                 ViewModel.Connections.Add(item);
                 var line = converter.To(item);
+                if (line == null)
+                    return;
+
                 ViewModel.Lines.Add(line);
                 dictionary.Add(line, new() { IsPersisted = true });
             }

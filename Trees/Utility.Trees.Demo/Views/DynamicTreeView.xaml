@@ -9,7 +9,7 @@
              xmlns:julmar="http://www.julmar.com/wpfhelpers"
              xmlns:trees="http://schemas.utility.com/trees"
              xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
-             xmlns:local1="clr-namespace:Utility.Trees.Demo.Two"
+             xmlns:local1="clr-namespace:Utility.Trees.Demo"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 

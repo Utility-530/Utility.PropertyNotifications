@@ -15,7 +15,6 @@ using Utility.Enums;
 using Utility.Helpers;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Demo.Infrastructure;
-using Utility.Trees.Demo.Two;
 using Svc = Utility.Trees.Demo.Infrastructure.Service;
 
 namespace Utility.Trees.Demo
@@ -147,7 +146,7 @@ namespace Utility.Trees.Demo
 
             var _tree = tree.Tree;
             var _treeView = new TreeView();
-            Utility.Trees.Demo.Two.TreeHelper.ExploreTree(
+            TreeHelper.ExploreTree(
                 _treeView.Items,
                 (a, b) => { a.Add(new TreeViewItem() { Header = (b.Data), HeaderTemplateSelector = HeaderTemplateSelector }); return a; },
                 (a, b) => { },

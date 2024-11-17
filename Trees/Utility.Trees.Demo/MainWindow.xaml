@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Utility.Trees.Demo.Infrastructure"
         xmlns:demo="clr-namespace:Utility.Trees.Demo"
         xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees" 
-        xmlns:two="clr-namespace:Utility.Trees.Demo.Two" 
+        xmlns:two="clr-namespace:Utility.Trees.Demo.Connections" 
         xmlns:view="http://schemas.utility.com" 
         xmlns:shared="https://github.com/wim07101993/AnyObjectEditor"
         mc:Ignorable="d"

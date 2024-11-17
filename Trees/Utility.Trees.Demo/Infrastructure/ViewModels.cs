@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
-using Utility.Trees.Demo.Two;
 
 namespace Utility.Trees.Demo.Infrastructure
 {
