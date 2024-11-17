@@ -10,7 +10,6 @@ using Utility.Interfaces.Generic;
 
 namespace Utility.Nodes
 {
-    // property node
     public abstract class ValueNode : AutoObject, IReadOnlyTree, INotifyCollectionChanged
     {
         protected Collection _children = new();
@@ -135,5 +134,4 @@ namespace Utility.Nodes
             return Key.Equals(other?.Key);
         }
     }
-
 }

@@ -45,7 +45,6 @@ namespace Utility.Nodes.Reflections
         {
             if (value is IDescriptor { } descriptor)
             {
-
                 return Task.FromResult((IReadOnlyTree)new ReflectionNode(descriptor) { Parent = this });
             }
             else

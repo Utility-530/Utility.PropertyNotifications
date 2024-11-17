@@ -8,8 +8,5 @@
         <!-- The below use AncestorType-RelativeSource bindings, so can't be auto-loaded -->
         <ResourceDictionary Source="/Utility.WPF.Controls;component/RangeSlider.xaml" />
         <ResourceDictionary Source="/Utility.WPF.Controls;component/SliderItemsControl.xaml" />
-
-        <!--Styles-->
-        <!--<ResourceDictionary Source="/Utility.WPF.Controls;component/Themes/ToggleButton.xaml" />-->
     </ResourceDictionary.MergedDictionaries>
 </res:AutoResourceDictionary>
