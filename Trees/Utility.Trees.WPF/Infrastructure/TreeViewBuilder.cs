@@ -1,4 +1,5 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Extensions;
@@ -12,17 +13,17 @@ namespace Views.Trees
     {
         public IDisposable Build(ItemsControl treeView, IItems rootViewModel, ITreeViewItemFactory factory, IValueConverter ItemsPanelConverter, StyleSelector styleSelector, DataTemplateSelector dataTemplateSelector, ITreeViewFilter filter)
         {
-            return TreeExtensions.ExploreTree(treeView, t =>t.Items, (itemcollection, viewModel, treeView) =>
+            return TreeExtensions.ExploreTree(treeView, t => t.Items, (itemcollection, viewModel, treeView) =>
             {
                 var treeViewItem = factory.Make(viewModel, treeView);
 
+                treeViewItem.ItemsSource = new ObservableCollection<ItemsControl>();
                 treeViewItem.ItemContainerStyleSelector = styleSelector;
 
                 if (treeViewItem is HeaderedItemsControl headeredItemsControl)
                 {
                     var binding = new Binding()
-                    {
-                        //Source = new PropertyPath(),
+                    { 
                         Source = headeredItemsControl.Header,
                         Converter = ItemsPanelConverter,
                         Mode = BindingMode.OneTime
@@ -31,7 +32,8 @@ namespace Views.Trees
                     headeredItemsControl.SetBinding(ItemsControl.ItemsPanelProperty, binding);
                     headeredItemsControl.HeaderTemplateSelector = dataTemplateSelector;
                 }
-                itemcollection.Add(treeViewItem);
+                (treeView.ItemsSource as ObservableCollection<ItemsControl>).Add(treeViewItem);
+                //itemcollection.Add(treeViewItem);
                 itemcollection.CurrentChanged += Itemcollection_CurrentChanged;
                 return treeViewItem;
             },
@@ -43,7 +45,7 @@ namespace Views.Trees
 
         private void Itemcollection_CurrentChanged(object? sender, EventArgs e)
         {
-   
+            
         }
 
         public static TreeViewBuilder Instance { get; } = new();

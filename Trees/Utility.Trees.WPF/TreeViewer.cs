@@ -9,6 +9,7 @@ using Utility.Trees.Abstractions;
 using Utility.Extensions;
 using Utility.Infrastructure;
 using Utility.Trees.WPF.Abstractions;
+using System.Collections.ObjectModel;
 
 namespace Utility.Trees.WPF
 {
@@ -41,7 +42,7 @@ namespace Utility.Trees.WPF
                     if (ViewModel is IItems items)
                     {
                         this.ItemContainerStyleSelector = StyleSelector;
-                        this.ItemTemplateSelector = DataTemplateSelector;
+                        this.ItemTemplateSelector = DataTemplateSelector;         
                         disposable = TreeViewBuilder.Build(this, items, TreeViewItemFactory, PanelsConverter, StyleSelector, DataTemplateSelector, TreeViewFilter);
                     }
                     else
@@ -55,6 +56,7 @@ namespace Utility.Trees.WPF
 
         void Initialise(ItemsControl treeView)
         {
+            this.ItemsSource = new ObservableCollection<ItemsControl>();
 
             if (treeView is TreeView _treeView)
             {
