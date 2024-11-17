@@ -16,6 +16,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Persists;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Helpers;
+using Utility.WPF.Reactives;
 
 namespace Utility.Trees.Demo.Connections
 {
@@ -24,7 +25,7 @@ namespace Utility.Trees.Demo.Connections
         private Point? point0, point1;
         private LineViewModel? last;
         private LiteDbRepository repository = new(new(typeof(ConnectionModel), nameof(ConnectionModel.Id)));
-        private Dictionary<LineViewModel, LineViewModelInfo> dictionary = new();
+        private Dictionary<LineViewModel, LineViewModelInfo> dictionary = [];
         private TreeViewItem hitResult;
         private TextBox hitResultT;
         private ItemsControl treeView;
@@ -64,12 +65,10 @@ namespace Utility.Trees.Demo.Connections
             }
             else
                 Add(Direction.EndToStart);
-
         }
 
         private void TreeView_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
             Point pt = e.GetPosition((UIElement)sender);
             VisualTreeHelper.HitTest(TreeView, new HitTestFilterCallback(MyHitTestFilter), new HitTestResultCallback(MyHitTestResult), new PointHitTestParameters(pt));
             if (hitResult == null)
@@ -80,11 +79,11 @@ namespace Utility.Trees.Demo.Connections
 
             if (hitResult is not TreeViewItem { RenderSize: Size size } element)
             {
-                element = TreeViewHelper.FindRecursive<TreeViewItem>(TreeView, hitResult) as TreeViewItem;
+                element = TreeView.FindRecursive<TreeViewItem>(hitResult) as TreeViewItem;
                 size = element.RenderSize;
             }
 
-            point0 = new Point(element.RenderSize.Width, TreeView.FindDepth(element));
+            point0 = new Point(element.RenderSize.Width, TreeView.FindDistanceFromTop(element));
 
             if (hitResultT is not null)
             {
@@ -99,7 +98,6 @@ namespace Utility.Trees.Demo.Connections
             }
             else
                 Add(Direction.StartToEnd);
-
         }
 
         private void ConnectionsView_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
@@ -113,19 +111,23 @@ namespace Utility.Trees.Demo.Connections
 
         public void Loaded()
         {
-
+            viewModel.Connections.CollectionChanged += Connections_CollectionChanged;
             foreach (var item in repository.All<ConnectionModel>())
             {
                 viewModel.Connections.Add(item);
-                To(item).Subscribe(line =>
-                {
-                    viewModel.Lines.Add(line);
-                    dictionary.Add(line, new LineViewModelInfo() { IsPersisted = true });
-                });
+
+            }
+
+            void Connections_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+            {
+                foreach (ConnectionModel item in e.NewItems)
+                    To(item).Subscribe(line =>
+                    {
+                        viewModel.Lines.Add(line);
+                        dictionary.Add(line, new LineViewModelInfo() { IsPersisted = true });
+                    });
             }
         }
-
-
 
         public ItemsControl TreeView
         {
@@ -139,8 +141,6 @@ namespace Utility.Trees.Demo.Connections
             }
         }
 
-
-
         public ItemsControl TreeView2
         {
             get => treeView2; set
@@ -151,8 +151,6 @@ namespace Utility.Trees.Demo.Connections
                 TreeView2.PreviewMouseUp += TreeView2_PreviewMouseUp;
             }
         }
-
-
 
         public FrameworkElement Container
         {
@@ -189,8 +187,6 @@ namespace Utility.Trees.Demo.Connections
         {
             last = null;
         }
-
-
 
         private void ConnectionsUserControl_MouseMove(object sender, MouseEventArgs e)
         {
@@ -258,14 +254,20 @@ namespace Utility.Trees.Demo.Connections
                     }
                 }
             }
-            //TreeView2.SelectedItem = null;
             TreeView.ClearSelections();
         }
 
         void Add(Direction direction)
         {
             var pos = Mouse.GetPosition(Container);
-            viewModel.Lines.Add(last = new LineViewModel { Id = Guid.NewGuid(), StartPoint = point0.HasValue ? point0.Value : pos, EndPoint = point1.HasValue ? point1.Value : pos, Direction = direction });
+            viewModel.Lines.Add(last =
+                new LineViewModel
+                {
+                    Id = Guid.NewGuid(),
+                    StartPoint = point0.HasValue ? point0.Value : pos,
+                    EndPoint = point1.HasValue ? point1.Value : pos,
+                    Direction = direction
+                });
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)
@@ -274,9 +276,6 @@ namespace Utility.Trees.Demo.Connections
             viewModel.Connections.Clear();
             repository.Clear();
         }
-
-
-
 
         public IObservable<LineViewModel> To(ConnectionModel connectionViewModel)
         {
@@ -290,46 +289,63 @@ namespace Utility.Trees.Demo.Connections
                     return oTree.MatchDescendant(new((a) => (a.Data as IName).Name == connectionViewModel.ViewModelName))
                         .Subscribe(a =>
                         {
-                            observer.OnNext(MatchTree(a));
+                            MatchTree(a).Subscribe(observer);
                         });
                 }
                 else
                 {
                     var d = viewModel.Tree.MatchDescendant(new((a) => (a.Data as IName).Name == connectionViewModel.ViewModelName));
-                    observer.OnNext(MatchTree(d));
+                    MatchTree(d).Subscribe(observer);
                     return Disposable.Empty;
                 }
             });
 
-            LineViewModel MatchTree(IReadOnlyTree viewmodel)
+            IObservable<LineViewModel> MatchTree(IReadOnlyTree viewmodel)
             {
-
-                var treeViewItem = TreeViewHelper.FindRecursive<TreeViewItem>(TreeView, viewmodel);
+                return Observable.Create<LineViewModel>(observer =>
                 {
-                    var y = TreeView.FindDepth(treeViewItem);
+                    var treeViewItem = TreeView.FindRecursive<TreeViewItem>(viewmodel);
+
+                    if (treeViewItem == null)
+                    {
+                        TreeView.FindRecursiveAsync<TreeViewItem>(viewmodel).Subscribe(treeViewItem =>
+                        {
+                            observer.OnNext(match(treeViewItem));
+                            observer.OnCompleted();
+                        });
+                    }
+                    else
+                    {
+                        observer.OnNext(match(treeViewItem));
+                    }
+                    return Disposable.Empty;
+                });
+
+
+
+                LineViewModel match(TreeViewItem treeViewItem)
+                {
+                    var y = TreeView.FindDistanceFromTop(treeViewItem);
                     pointA = new Point(TreeView.ActualWidth, y);
-                }
-                IName service = null;
-                foreach (var x in viewModel.ServiceModel)
-                {
-                    var data = x as IName;
-                    if (connectionViewModel.ServiceName == (x as IName).Name)
-                        service = data;
-                }
 
-                var listBoxItem = TreeViewHelper.FindRecursive<ListBoxItem>(TreeView2, service);
-                {
+                    IName service = null;
+                    foreach (var x in viewModel.ServiceModel)
+                    {
+                        var data = x as IName;
+                        if (connectionViewModel.ServiceName == (x as IName).Name)
+                            service = data;
+                    }
+
+                    var listBoxItem = TreeView2.FindRecursive<ListBoxItem>(service);
 
                     Size size = listBoxItem.RenderSize;
                     Point ofs = new(0, size.Height / 2d);
                     pointB = listBoxItem.TransformToAncestor(Container).Transform(ofs);
 
+                    return new LineViewModel { Id = connectionViewModel.Id, StartPoint = pointA, EndPoint = pointB, Direction = connectionViewModel.Movement == Movement.FromViewModelToService ? Direction.StartToEnd : Direction.EndToStart };
                 }
-
-                return new LineViewModel { Id = connectionViewModel.Id, StartPoint = pointA, EndPoint = pointB, Direction = connectionViewModel.Movement == Movement.FromViewModelToService ? Direction.StartToEnd : Direction.EndToStart };
             }
         }
-
 
         public ConnectionModel? To(LineViewModel lineViewModel)
         {
@@ -351,7 +367,6 @@ namespace Utility.Trees.Demo.Connections
             throw new Exception("s66d es3333!FV$");
         }
 
-        // Filter the hit test values for each object in the enumeration.
         public HitTestFilterBehavior MyHitTestFilter(DependencyObject o)
         {
             // Test for the object value you want to filter.
@@ -370,7 +385,6 @@ namespace Utility.Trees.Demo.Connections
             }
         }
 
-        // Return the result of the hit test to the callback.
         public HitTestResultBehavior MyHitTestResult(HitTestResult result)
         {
             // Add the hit test result to the list that will be processed after the enumeration.
@@ -398,7 +412,6 @@ namespace Utility.Trees.Demo.Connections
             }
         }
 
-        // Return the result of the hit test to the callback.
         public HitTestResultBehavior MyHitTestResult2(HitTestResult result)
         {
             // Add the hit test result to the list that will be processed after the enumeration.
@@ -512,7 +525,7 @@ namespace Utility.Trees.Demo.Connections
             return treeViewItem.TransformToAncestor(treeView).Transform(pointA).Y;
         }
 
-        public static double FindDepth(this ItemsControl treeView, Control treeViewItem)
+        public static double FindDistanceFromTop(this ItemsControl treeView, Control treeViewItem)
         {
             var headerControl = GetHeaderControl(treeViewItem);
             Point pointA;
