@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using Utility.Descriptors;
 using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
@@ -54,7 +56,7 @@ namespace Utility.Nodify.Operations.Operations
         {
             var instance = Activator.CreateInstance(objectInfo.Type);
             var rootDescriptor = new RootDescriptor(objectInfo.Type);
-            var data = DescriptorFactory.ToValue(instance, rootDescriptor, objectInfo.Guid).GetAwaiter().GetResult();
+            var data = DescriptorFactory.ToValue(instance, rootDescriptor, objectInfo.Guid).Take(1).ToTask().Result;
             return data;
         }
 
