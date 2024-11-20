@@ -1,16 +1,12 @@
 ﻿using NetFabric.Hyperlinq;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Text;
 using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
-using Utility.Interfaces.NonGeneric;
 using Utility.Changes;
 using Type = Utility.Changes.Type;
 
@@ -18,7 +14,16 @@ namespace Utility.Reactives
 {
     public static class CollectionChangedHelper
     {
+        [Obsolete]
         public static IObservable<T> ToNewItemsObservable<T>(this INotifyCollectionChanged notifyCollectionChanged)
+        {
+            return notifyCollectionChanged
+              .Changes()
+              .SelectMany(x => x.NewItems?.Cast<T>() ?? new T[] { });
+
+        }
+              
+        public static IObservable<T> Additions<T>(this INotifyCollectionChanged notifyCollectionChanged)
         {
             return notifyCollectionChanged
               .Changes()
@@ -72,7 +77,7 @@ namespace Utility.Reactives
                 });
         }
 
-        public static IObservable<Set<T>> Changes<T>(this IEnumerable collection)
+        public static IObservable<Set<T>> AndChanges<T>(this IEnumerable collection)
         {
             return Observable.Create<Set<T>>(observer =>
             {
