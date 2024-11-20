@@ -83,12 +83,11 @@ namespace Utility.Persists
             {
                 var converted = Convert(item);
                 var query = Query.EQ("_id", converted["_id"]);
-                var select = collection.Find(query).ToArray();
-                if (select.Length != 1)
-                {
-                    throw new ApplicationException($"Expected length from query,{select.Length}, does not match one.");
-                }
-                return collection.Delete(converted["_id"]);
+                var exists = collection.Exists(query);
+                if (exists)
+                    return collection.Delete(converted["_id"]);
+                else
+                    return null;
             }
         }
 
