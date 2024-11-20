@@ -13,5 +13,11 @@ namespace Utility.Trees.Demo.Connections
     /// </summary>
     public partial class App : Application
     {
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            new BootStrapper();
+            base.OnStartup(e);
+        }
     }
 }

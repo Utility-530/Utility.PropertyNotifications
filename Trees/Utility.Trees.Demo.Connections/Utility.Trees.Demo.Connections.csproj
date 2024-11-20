@@ -10,8 +10,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
     <ProjectReference Include="..\..\Persists\Utility.Persists\Utility.Persists.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Base\Utility.WPF.Controls.Base.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
+    <ProjectReference Include="..\Utility.Pipes\Utility.Pipes.csproj" />
     <ProjectReference Include="..\Utility.Trees\Utility.Trees.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Pipes\Utility.WPF.Pipes.csproj" />
   </ItemGroup>
 
   <ItemGroup>

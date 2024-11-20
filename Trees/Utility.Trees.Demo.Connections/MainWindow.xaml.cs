@@ -1,86 +1,123 @@
-﻿using System;
+﻿using Splat;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using Utility.Extensions;
+using Utility.Pipes;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Trees.Demo.Connections
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    public record ConnectionQueueItem(ConnectionModel Connection, Service Service, Change Change) : QueueItem
+    {
+        public override void Invoke()
+        {
+            Service.OnNext(new Change(Connection.ParameterName, Change.Value));
+        }
+    }
+    
+    public record TreeQueueItem(IReadOnlyTree Tree, object Value) : QueueItem
+    {
+        public override void Invoke()
+        {
+            (Tree.Data as ViewModel).Value = Value;
+            (Tree.Data as ViewModel).RaisePropertyChanged(nameof(ViewModel.Value));
+        }
+    }
+
     public partial class MainWindow : Window
     {
-        ConnectionsViewModel _viewModel;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            var tree = new ViewModelTree(new ViewModel() { Name = "root" },
+            ViewModelTree tree = getTree();
+            List<Service> ms = getServices();
+
+            ConnectionsViewModel _viewModel = new ()
+            {
+                ServiceModel = ms,
+                Tree = tree
+            };
+
+            tree.Subscribe(t =>
+            {
+           
+                foreach (var connection in _viewModel.Connections.Where(a => a.ViewModelName == t.Name && a.Movement == Movement.FromViewModelToService))
+                {
+                    var serviceName = connection.ServiceName;
+                    var service = _viewModel.ServiceModel.Single(a => a.Name == serviceName);                    
+                    Pipe.Instance.Queue(new ConnectionQueueItem(connection, service, t));
+                }
+            });
+
+            pipe_view.Content = Locator.Current.GetService<PipeController>();
+            queue_view.Content = Pipe.Instance;
+
+            foreach (var service in ms)
+            {
+                service.Subscribe(a =>
+                {
+                    foreach (var connection in _viewModel.Connections.Where(a => a.ServiceName == service.Name && a.Movement == Movement.ToViewModelFromService))
+                    {
+                        var viewModelName = connection.ViewModelName;
+                        var viewModel = tree.MatchDescendant(a => (a.Data as ViewModel).Name == viewModelName);
+                        //(viewModel.Data as ViewModel).Value = a;
+                        //(viewModel.Data as ViewModel).RaisePropertyChanged(nameof(ViewModel.Value));
+
+                        Pipe.Instance.Queue(new TreeQueueItem(viewModel, a));
+                    }
+                });
+            }
+
+            DataContext = _viewModel;
+            this.Loaded += (s,e)=> MainWindow_Loaded(_viewModel);
+        }
+
+        private static ViewModelTree getTree()
+        {
+            return new ViewModelTree(new ViewModel() { Name = "root" },
                      new ViewModelTree(new ViewModel { Name = "A" },
                      new ViewModelTree(new ViewModel { Name = "B" }),
                      new ViewModelTree(new ViewModel { Name = "C" }),
                      new ViewModelTree(new ViewModel { Name = "D" })));
-
-            TreeView.ItemsSource = tree.Items;
-
-            var a = new Service { Name = "Service A", Func = new Func<object, object>(a => a) };
-            var b = new Service { Name = "Service B", Func = new Func<object, object>(a => a) };
-
-            _viewModel = new ConnectionsViewModel()
-            {
-                ServiceModel = new() { a, b },
-                Tree = tree
-            };
-
-
-            tree.Subscribe(t =>
-            {
-                foreach (var connection in _viewModel.Connections.Where(a => a.ViewModelName == t.Name && a.Movement == Movement.FromViewModelToService))
-                {
-                    if (connection == null)
-                        return;
-                    var serviceName = connection.ServiceName;
-                    var service = _viewModel.ServiceModel.Single(a => a.Name == serviceName);
-                    service.OnNext(t.Value);
-                }
-            });
-
-            a.Subscribe(a =>
-            {
-                foreach (var connection in _viewModel.Connections.Where(a => a.ServiceName == "Service A" && a.Movement == Movement.ToViewModelFromService))
-                {
-                    var viewModelName = connection.ViewModelName;
-                    var viewModel = tree.MatchDescendant(a => (a.Data as ViewModel).Name == viewModelName);
-                    (viewModel.Data as ViewModel).Value = a;
-                    (viewModel.Data as ViewModel).RaisePropertyChanged(nameof(ViewModel.Value));
-                }
-            });
-
-            b.Subscribe(b =>
-            {
-                foreach (var connection in _viewModel.Connections.Where(a => a.ServiceName == "Service B" && a.Movement == Movement.ToViewModelFromService))
-                {
-                    var viewModelName = connection.ViewModelName;
-                    var viewModel = tree.MatchDescendant(a => (a.Data as ViewModel).Name == viewModelName);
-                    (viewModel.Data as ViewModel).Value = b;
-                    (viewModel.Data as ViewModel).RaisePropertyChanged(nameof(ViewModel.Value));
-                }
-            });
-
-            DataContext = _viewModel;
-            this.Loaded += MainWindow_Loaded;
         }
 
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private static List<Service> getServices()
         {
-            var x = new Connector()
+            return typeof(Methods)
+                .GetMethods(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)
+                .Select(a =>
+                {
+                    var service = new Service
+                    {
+                        Name = a.Name,
+                        MethodInfo = a,
+                        Instance = null,
+                        Inputs = new ObservableCollection<Parameter>(
+                         a.GetParameters()
+                        .Select(p =>
+                        {
+                            return new Parameter(p, a);
+                        })),
+                        Outputs = new ObservableCollection<Parameter>(new Parameter[] { new(a.ReturnParameter, a) })
+                    };
+                    return service;
+                }).ToList();
+        }
+
+        private void MainWindow_Loaded(ConnectionsViewModel  _viewModel)
+        {
+            //var x = new ConnectionEditor()
+            var x = new ConnectionsService()
             {
                 TreeView = TreeView,
                 TreeView2 = TreeView2,
                 viewModel = _viewModel,
-                Container = this
+                Container = Grid
             };
             x.Loaded();
         }
