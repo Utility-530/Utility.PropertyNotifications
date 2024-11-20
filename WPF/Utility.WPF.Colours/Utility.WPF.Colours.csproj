@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
     <ProjectReference Include="..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
+    <ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
   </ItemGroup>
 
 </Project>
