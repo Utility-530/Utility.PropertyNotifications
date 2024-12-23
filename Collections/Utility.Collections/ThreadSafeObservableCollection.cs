@@ -18,7 +18,7 @@ namespace Utility.Collections
 
         public ThreadSafeObservableCollection() : base()
         {
-            Context = SynchronizationContext.Current;
+            Context = SynchronizationContext.Current ?? throw new Exception("DVS sdddsd");
         }
 
         #region Collection Events
