@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <Reference Include="Utility.Commands">
-      <HintPath>..\..\Commands\Utility.Commands\obj\Debug\net7.0\ref\Utility.Commands.dll</HintPath>
+      <HintPath>..\..\Commands\Utility.Commands\obj\Debug\net8.0\ref\Utility.Commands.dll</HintPath>
     </Reference>
   </ItemGroup>
 
