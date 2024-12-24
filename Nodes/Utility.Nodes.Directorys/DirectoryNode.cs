@@ -1,9 +1,9 @@
 ﻿
+using System.Threading.Tasks;
 using Utility.Collections;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
-using Utility.Models;
 using Utility.Observables;
 using Utility.Observables.NonGeneric;
 using Utility.Trees.Abstractions;
@@ -97,8 +97,8 @@ namespace Utility.Nodes
                 childrenflag = true;
             else
                 return Task.FromResult(false);
-            Task.Run(() =>
-            {
+            //Task.Run(() =>
+            //{
                 try
                 {
                     foreach (var directoryInfo in Directory.EnumerateDirectories(Data.FullName).Select(item => new DirectoryInfo(item)))
@@ -108,12 +108,12 @@ namespace Utility.Nodes
                 }
                 catch (UnauthorizedAccessException ex)
                 {
-                    return;
-                }
+                    return Task.FromResult(false);
+            }
                 catch (Exception ex)
                 {
                 }
-            });
+            //});
             return Task.FromResult(true);
         }
 
@@ -124,8 +124,8 @@ namespace Utility.Nodes
             else
                 return Task.FromResult(false);
 
-            Task.Run(() =>
-            {
+            //Task.Run(() =>
+            //{
                 try
                 {
                     foreach (var fileInfo in Directory.EnumerateFiles(Data.FullName).Select(item => new FileInfo(item)))
@@ -134,13 +134,13 @@ namespace Utility.Nodes
                     }
                 }
                 catch (UnauthorizedAccessException ex)
-                {
-                    return;
-                }
+            {
+                    return Task.FromResult(false);
+            }
                 catch (Exception ex)
                 {
                 }
-            });
+            //});
             return Task.FromResult(true);
         }
 
