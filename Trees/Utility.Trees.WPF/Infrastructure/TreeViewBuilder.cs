@@ -37,7 +37,7 @@ namespace Views.Trees
                 itemcollection.CurrentChanged += Itemcollection_CurrentChanged;
                 return treeViewItem;
             },
-            (itemCollection, node) => itemCollection.RemoveAt(itemCollection.IndexOf(a=> (a as TreeViewItem)?.Header, node)),
+            (itemCollection, node) => itemCollection.SourceCollection.RemoveAt(itemCollection.IndexOf(a=> (a as TreeViewItem)?.Header, node)),
             a => a.Clear(),
             rootViewModel,
             filter.Convert);
