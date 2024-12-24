@@ -4,6 +4,7 @@ using System.Reactive.Threading.Tasks;
 using Utility.Changes;
 using Utility.Interfaces;
 using Utility.Nodes.Reflections;
+using Utility.Repos;
 
 namespace Utility.Nodes.Demo
 {
@@ -55,15 +56,14 @@ namespace Utility.Nodes.Demo
             {
                 return Locator.Current.GetService<ITreeRepository>()
                     .SelectKeys()
-                    .ToObservable()
                     .Subscribe(async keys =>
                     {
                         int i = 0;
                         foreach (var key in keys)
                         {
-                            if (key.Type != null)
+                            if (key.Instance != null)
                             {
-                                var collectionItemDescriptor = await DescriptorFactory.CreateItem(key, ++i, key.Type, null, key.Guid);
+                                var collectionItemDescriptor = await DescriptorFactory.CreateItem(key, ++i, key.Instance.GetType()e, null, key.Guid);
                                 collectionItemDescriptor.Initialise();
                                 observable.OnNext(new(collectionItemDescriptor, Changes.Type.Add));
                             }

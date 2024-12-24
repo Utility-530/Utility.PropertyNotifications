@@ -1,6 +1,7 @@
-﻿ using Splat;
+﻿using Splat;
 using System.Threading;
 using Utility.Collections;
+using Utility.Repos;
 using Views.Trees;
 
 namespace Utility.Nodes.Demo

@@ -7,7 +7,6 @@ global using System.Text;
 global using System.Threading.Tasks;
 global using Utility.Interfaces.NonGeneric;
 global using Utility.Descriptors;
-global using Utility.Descriptors.Repositorys;
 global using Utility.Trees;
 global using Utility.Trees.Abstractions;
 global using System.Reactive.Subjects;
