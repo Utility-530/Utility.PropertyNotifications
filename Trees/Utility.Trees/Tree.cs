@@ -253,7 +253,7 @@ namespace Utility.Trees
         private void ResetOnCollectionChangedEvent()
         {
             if (m_items != null)
-                ((ObservableCollection<ITree>)m_items).CollectionChanged -= ItemsOnCollectionChanged;
+                ((INotifyCollectionChanged)m_items).CollectionChanged -= ItemsOnCollectionChanged;
         }
 
         protected virtual void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
