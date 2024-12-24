@@ -2,7 +2,7 @@
 
 namespace Utility.Pipes
 {
-    public class PipeLoader : IPipeLoader
+    public class PipeLoader : IPipeInitialiser
     {
         Timer timer;
 

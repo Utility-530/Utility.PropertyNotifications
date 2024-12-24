@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive;
 using System.Threading;
+using System.Timers;
 using System.Windows.Input;
 using Utility.Commands;
 using Utility.ViewModels.Base;
@@ -9,9 +10,10 @@ using XPlat.UI;
 
 namespace Utility.Pipes
 {
-    public class PipeController : BaseViewModel, IPipeLoader
+    public class PipeController : BaseViewModel, IPipeInitialiser
     {
         private DispatcherTimer dispatcherTimer;
+        private System.Threading.Timer timer;
         private bool isPlaying;
 
         public PipeController()
@@ -19,10 +21,11 @@ namespace Utility.Pipes
 
 
             dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += new EventHandler<object>(dispatcherTimer_Tick);
+            //dispatcherTimer.Tick += new EventHandler<object>(dispatcherTimer_Tick);
             dispatcherTimer.Interval = TimeSpan.FromSeconds(0.1);
             dispatcherTimer.Start();
 
+            timer = new System.Threading.Timer(callback, null, 0, 10);
 
             StepCommand = new Command(() =>
             {
@@ -33,21 +36,17 @@ namespace Utility.Pipes
             //Pipe.Instance.Pending.CollectionChanged += Pending_CollectionChanged;
         }
 
-        private void dispatcherTimer_Tick(object sender, object e)
+        private void callback(object? state)
         {
             if (isPlaying)
                 Pipe.Instance.OnNext(Unit.Default);
         }
 
-        //private void Pending_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        //{
-        //    OnPropertyChanged(nameof(Next));
-        //}
-
-        //public IEnumerable Pending => Pipe.Instance.Pending;
-        //public IEnumerable Completed => Pipe.Instance.Completed;
-        //public QueueItem Next => Pipe.Instance.Next;
-
+        private void dispatcherTimer_Tick(object sender, object e)
+        {
+            if (isPlaying)
+                Pipe.Instance.OnNext(Unit.Default);
+        }
 
         public void Initialise()
         {
@@ -68,7 +67,7 @@ namespace Utility.Pipes
     }
 
 
-    public interface IPipeLoader
+    public interface IPipeInitialiser
     {
         void Initialise();
     }
