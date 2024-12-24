@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Decisions;
 
-namespace Utility.Trees.Demo.MVVM.Infrastructure
+namespace Utility.Trees.Demo.Filters.Infrastructure
 {
     public class TreeViewItemDecisionTree : DecisionTree<object, ItemsControl>
     {

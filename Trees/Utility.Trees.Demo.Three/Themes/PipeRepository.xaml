@@ -1,13 +1,14 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Utility.Trees.Demo.MVVM">
+                    xmlns:local="clr-namespace:Utility.Trees.Demo.MVVM"
+                    xmlns:filters="clr-namespace:Utility.Trees.Demo.Filters;assembly=Utility.Trees.Demo.Filters">
 
 
     <!--<DataTemplate DataType="{x:Type local:RepoItem}">
         <TextBlock Text="{Binding Guid}"></TextBlock>
     </DataTemplate>-->
-    
-    <DataTemplate DataType="{x:Type local:PipeRepository}">
+
+    <DataTemplate DataType="{x:Type filters:PipeRepository}">
         <ListBox ItemsSource="{Binding Dictionary}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>

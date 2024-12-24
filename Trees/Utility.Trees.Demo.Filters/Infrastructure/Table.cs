@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Utility.Trees.Demo.MVVM
+namespace Utility.Trees.Demo.Filters
 {
     public class Table
     {

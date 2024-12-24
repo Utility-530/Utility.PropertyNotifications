@@ -46,7 +46,6 @@ namespace Utility.Trees.Demo.Connections
                 this.RaisePropertyCalled(value);
                 return value;
             }
-
             set
             {
                 this.value = value;

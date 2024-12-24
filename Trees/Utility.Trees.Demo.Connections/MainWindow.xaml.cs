@@ -1,7 +1,6 @@
 ﻿using Splat;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using Utility.Extensions;
@@ -29,13 +28,12 @@ namespace Utility.Trees.Demo.Connections
 
     public partial class MainWindow : Window
     {
-
         public MainWindow()
         {
             InitializeComponent();
 
             ViewModelTree tree = getTree();
-            List<Service> ms = getServices();
+            List<Service> ms = typeof(Methods).ToServices().ToList();
 
             ConnectionsViewModel _viewModel = new ()
             {
@@ -86,28 +84,7 @@ namespace Utility.Trees.Demo.Connections
                      new ViewModelTree(new ViewModel { Name = "D" })));
         }
 
-        private static List<Service> getServices()
-        {
-            return typeof(Methods)
-                .GetMethods(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)
-                .Select(a =>
-                {
-                    var service = new Service
-                    {
-                        Name = a.Name,
-                        MethodInfo = a,
-                        Instance = null,
-                        Inputs = new ObservableCollection<Parameter>(
-                         a.GetParameters()
-                        .Select(p =>
-                        {
-                            return new Parameter(p, a);
-                        })),
-                        Outputs = new ObservableCollection<Parameter>(new Parameter[] { new(a.ReturnParameter, a) })
-                    };
-                    return service;
-                }).ToList();
-        }
+
 
         private void MainWindow_Loaded(ConnectionsViewModel  _viewModel)
         {

@@ -12,13 +12,13 @@ using Utility.Nodes.Reflections;
 using Utility.Repos;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Decisions;
-using Utility.Trees.Demo.MVVM.Infrastructure;
+using Utility.Trees.Demo.Filters.Infrastructure;
 using Utility.Trees.WPF;
 using Utility.Trees.WPF.Abstractions;
 using Utility.WPF.Controls.Trees;
 using Views.Trees;
 
-namespace Utility.Trees.Demo.MVVM
+namespace Utility.Trees.Demo.Filters
 {
     public class TreeViewItemFactory : ITreeViewItemFactory
     {
@@ -247,7 +247,7 @@ namespace Utility.Trees.Demo.MVVM
                 TreeViewBuilder = TreeViewBuilder.Instance,
                 PanelsConverter = ItemsPanelConverter.Instance,
                 DataTemplateSelector = DataTemplateSelector.Instance,
-                TreeViewFilter = Filter.Instance,
+                TreeViewFilter = TreeViewFilter.Instance,
                 StyleSelector = StyleSelector.Instance,
                 EventListener = EventListener.Instance
             };

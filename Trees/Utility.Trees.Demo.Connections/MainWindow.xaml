@@ -27,31 +27,6 @@
                 <Setter Property="Margin" Value="2"  />
             </Style>
 
-
-            <DataTemplate DataType="{x:Type local:ViewModel}">
-                <TextBlock Text="{Binding Name}"></TextBlock>
-            </DataTemplate>
-
-
-            <DataTemplate DataType="{x:Type local:Service}">
-                <TextBlock Text="{Binding Name}"></TextBlock>
-            </DataTemplate>
-
-            <DataTemplate DataType="{x:Type local:Parameter}">
-                <TextBlock Text="{Binding Name}"></TextBlock>
-            </DataTemplate>
-
-
-            <HierarchicalDataTemplate DataType="{x:Type tree:Tree}" ItemsSource="{Binding }">
-                <ContentControl Content="{Binding Data, Mode=OneTime}">
-                </ContentControl>
-            </HierarchicalDataTemplate>
-
-            <conn:DirectionBrushConverter x:Key="DirectionBrushConverter"/>
-
-
-
-
             <Style TargetType="Grid" x:Key="HeaderGridStyle">
                 <Setter Property="Height" Value="20" />
             </Style>
@@ -90,17 +65,7 @@
                 </Grid>
             </DataTemplate>
 
-
-            <Style TargetType="{x:Type local:SortableListView}" >
-                <Setter Property="HeaderTemplateDefault" Value="{StaticResource HeaderTemplateDefault}"></Setter>
-                <Setter Property="HeaderTemplateArrowUp" Value="{StaticResource HeaderTemplateArrowUp}"></Setter>
-                <Setter Property="HeaderTemplateArrowDown" Value="{StaticResource HeaderTemplateArrowDown}"></Setter>
-            </Style>
-
-
-            <Style TargetType="{x:Type ListViewItem}">
-                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
-            </Style>
+            <local:DirectionBrushConverter x:Key="DirectionBrushConverter"/>
 
             <PathGeometry x:Key="CrossGeometry">
                 <PathGeometry.Figures>
@@ -121,15 +86,11 @@
                     </PathFigure>
                 </PathGeometry.Figures>
             </PathGeometry>
-
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
 
-    <DockPanel>
-
-
-        
+    <DockPanel>        
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*"/>

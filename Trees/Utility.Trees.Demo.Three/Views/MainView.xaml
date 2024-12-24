@@ -24,7 +24,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="5"></ColumnDefinition>
-                <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                <ColumnDefinition Width="0*"></ColumnDefinition>
                 <ColumnDefinition Width="5"></ColumnDefinition>
                 <ColumnDefinition Width="3*"></ColumnDefinition>
                 <ColumnDefinition Width="5"></ColumnDefinition>
@@ -44,13 +44,41 @@
 
             <Grid Grid.Column="4" x:Name="maingrid"  >
 
-                <ItemsControl Grid.Column="1" x:Name="Lines" >
+    
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <ScrollViewer x:Name="scrollviewer" HorizontalScrollBarVisibility="Visible" Grid.Row="1"/>
+
+                    <conn:NodeGroup Grid.Column="1" Background="Transparent"                 
+                     x:Name="TreeView2">
+                        <conn:NodeGroup.Style>
+                            <Style TargetType="{x:Type conn:NodeGroup}">
+                                <Setter Property="BorderThickness" Value="0"></Setter>
+                            </Style>
+                        </conn:NodeGroup.Style>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="{x:Type conn:Node}" BasedOn="{StaticResource {x:Type conn:Node}}">
+                                <Setter Property="Inputs" Value="{Binding Inputs}"/>
+                                <Setter Property="Outputs" Value="{Binding Outputs}"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                    </conn:NodeGroup>
+                </Grid>
+
+                <ItemsControl x:Name="Lines" >
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas IsItemsHost="True"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>          
+                    <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Line 
                             X1="{Binding StartPoint.X}"
@@ -63,20 +91,6 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <ScrollViewer x:Name="scrollviewer" HorizontalScrollBarVisibility="Visible" Grid.Row="1"/>
-
-                    <Grid Grid.Column="1"></Grid>
-                    <ListBox Grid.Column="2" Background="Transparent" x:Name="TreeView2"/>
-                </Grid>
             </Grid>
             <GridSplitter Grid.Column="5" Width="5" HorizontalAlignment="Stretch" ></GridSplitter>
             <TabControl Grid.Column="6">

@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Windows;
 using Utility.Pipes;
 using Utility.Repos;
+using Utility.Trees.Demo.Filters;
 using Utility.Trees.Demo.MVVM.Views;
 
 namespace Utility.Trees.Demo.MVVM

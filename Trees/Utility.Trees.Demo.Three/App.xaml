@@ -11,11 +11,13 @@
              xmlns:trs="clr-namespace:Utility.Trees.WPF;assembly=Utility.Trees.WPF"
              xmlns:c="http://schemas.utility.com/colours"
              xmlns:controls="http://schemas.utility.com"
+             xmlns:filters="clr-namespace:Utility.Trees.Demo.Filters;assembly=Utility.Trees.Demo.Filters"
              xmlns:temp="http://schemas.utility.com/templates">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Generic.xaml"/>
+                <ResourceDictionary Source="/Utility.Trees.Demo.Connections;component/Themes/Generic.xaml"/>
                 <ResourceDictionary Source="/Utility.WPF.Pipes;component/Themes/Generic.xaml"/>
                 <ResourceDictionary Source="/Themes/Styles.xaml"/>
                 <ResourceDictionary Source="/Themes/PipeRepository.xaml"/>
@@ -69,7 +71,7 @@
                 <tree:TypeSelector Type="{Binding Type}" Assemblies="{x:Static local:App.SystemAssemblies }"/>
             </DataTemplate>-->
 
-            <DataTemplate DataType="{x:Type local:RepoItem}">
+            <DataTemplate DataType="{x:Type filters:RepoItem}">
                 <UniformGrid  Rows="1" TextBlock.FontSize="8" >
                     <TextBlock Text="{Binding Guid}" Background="{c:Grey 1}" ToolTip="Guid"></TextBlock>
                     <TextBlock Text="{Binding ItemType}" Background="{c:Grey 1}" ToolTip="Guid"></TextBlock>
@@ -82,7 +84,7 @@
             </DataTemplate>
 
 
-            <DataTemplate DataType="{x:Type local:RepoResult}">
+            <DataTemplate DataType="{x:Type filters:RepoResult}">
                 <UniformGrid  Rows="1" TextBlock.FontSize="8" >
                     <ContentControl Content="{Binding RepoItem}"></ContentControl>
                     <TextBlock Text="{Binding Observable,  Converter={StaticResource TypeNameConverter}}" ToolTip="Name" ></TextBlock>
@@ -188,7 +190,7 @@
 
 
 
-            <DataTemplate x:Key="Pipe_Repository_Template" DataType="{x:Type local:PipeRepository}">
+            <DataTemplate x:Key="Pipe_Repository_Template" DataType="{x:Type filters:PipeRepository}">
                 <TreeView trs:TreeEx.Root="{Binding Predicate}" >
                     <TreeView.ItemContainerStyle>
                         <Style  TargetType="TreeViewItem" >

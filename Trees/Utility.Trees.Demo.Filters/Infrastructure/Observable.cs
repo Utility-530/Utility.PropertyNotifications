@@ -4,7 +4,7 @@ using System.Linq;
 using Utility.Models;
 using Utility.PropertyNotifications;
 
-namespace Utility.Trees.Demo.MVVM
+namespace Utility.Trees.Demo.Filters
 {
     public class Observable<T> : ObservableCollection<IObserver<T>>, IObservable<T>
     {

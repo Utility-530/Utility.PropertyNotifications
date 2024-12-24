@@ -20,6 +20,7 @@
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
     <ProjectReference Include="..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
+    <ProjectReference Include="..\Utility.Trees.Demo.Connections\Utility.Trees.Demo.Connections.csproj" />
     <ProjectReference Include="..\Utility.Trees\Utility.Trees.csproj" />
   </ItemGroup>
 

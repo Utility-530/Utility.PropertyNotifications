@@ -7,12 +7,13 @@ using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Decisions;
-using Utility.Trees.Demo.MVVM.Infrastructure;
+using Utility.Trees.Demo.Filters;
+using Utility.Trees.Demo.Filters.Infrastructure;
 using Utility.WPF.Controls;
 using Utility.WPF.Factorys;
 using Utility.WPF.Templates;
 
-namespace Utility.Trees.Demo.MVVM
+namespace Utility.Trees.Demo.Filters
 {
     public class DataTemplateSelector : System.Windows.Controls.DataTemplateSelector
     {

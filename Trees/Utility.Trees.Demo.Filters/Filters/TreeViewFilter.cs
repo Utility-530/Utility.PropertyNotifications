@@ -11,11 +11,11 @@ using Utility.Trees.Abstractions;
 using Utility.Helpers.NonGeneric;
 using Utility.Trees.Decisions;
 
-namespace Utility.Trees.Demo.MVVM
+namespace Utility.Trees.Demo.Filters
 {
-    internal class Filter : ITreeViewFilter
+    public class TreeViewFilter : ITreeViewFilter
     {
-        public Filter()
+        public TreeViewFilter()
         {
             Predicate =
                  new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => true))
@@ -31,17 +31,15 @@ namespace Utility.Trees.Demo.MVVM
                                 },
                                 new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent != null), a => a.Parent)
                                 {
-                                         new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent == null), a => false)
+                                    new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent == null), a => false)
                                 {
 
                                 },
-                                         new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent != null),a=>a.Parent)
-                                         {
-
+                                    new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Parent != null),a=>a.Parent)
+                                    {
                                         new BooleanDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Data as ICollectionDescriptor ==null), a => false),
-
+                                    }
                                 }
-                               }
                             }
                         },
 
@@ -105,6 +103,6 @@ namespace Utility.Trees.Demo.MVVM
 
         public DecisionTree Predicate { get; set; }
 
-        public static Filter Instance { get; } = new();
+        public static TreeViewFilter Instance { get; } = new();
     }
 }

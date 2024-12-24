@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
 using System.Collections.ObjectModel;
@@ -175,7 +172,7 @@ namespace Utility.Trees.Demo.Connections
 
             if (headerControl == null)
             {
-                pointA = new(headerControl.ActualWidth, treeViewItem.RenderSize.Height / 2d);
+                pointA = new(treeViewItem.ActualWidth, treeViewItem.RenderSize.Height / 2d);
             }
             else
             {

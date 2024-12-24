@@ -1,9 +1,51 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Utility.Trees.Demo.Connections"      
+                    xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
+                    >
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Controls/Connector.xaml"/>
-        <ResourceDictionary Source="/Controls/Node.xaml"/>
+        <ResourceDictionary Source="/Utility.Trees.Demo.Connections;component/Controls/Connector.xaml"/>
+        <ResourceDictionary Source="/Utility.Trees.Demo.Connections;component/Controls/Node.xaml"/>
     </ResourceDictionary.MergedDictionaries>
+
+
+    <DataTemplate DataType="{x:Type local:ViewModel}">
+        <TextBlock Text="{Binding Name}"></TextBlock>
+    </DataTemplate>
+
+
+    <DataTemplate DataType="{x:Type local:Service}">
+        <TextBlock Text="{Binding Name}"></TextBlock>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type local:Parameter}">
+        <TextBlock Text="{Binding Name}"></TextBlock>
+    </DataTemplate>
+
+
+    <HierarchicalDataTemplate DataType="{x:Type tree:Tree}" ItemsSource="{Binding }">
+        <ContentControl Content="{Binding Data, Mode=OneTime}">
+        </ContentControl>
+    </HierarchicalDataTemplate>
+
+
+
+
+
+    <Style TargetType="{x:Type local:SortableListView}" >
+        <Setter Property="HeaderTemplateDefault" Value="{StaticResource HeaderTemplateDefault}"></Setter>
+        <Setter Property="HeaderTemplateArrowUp" Value="{StaticResource HeaderTemplateArrowUp}"></Setter>
+        <Setter Property="HeaderTemplateArrowDown" Value="{StaticResource HeaderTemplateArrowDown}"></Setter>
+    </Style>
+
+
+    <Style TargetType="{x:Type ListViewItem}">
+        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+    </Style>
+
+
+
+    
     
 </ResourceDictionary>

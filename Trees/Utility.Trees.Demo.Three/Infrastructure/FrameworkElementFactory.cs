@@ -21,6 +21,8 @@ using Utility.Trees.Decisions;
 using Utility.Repos;
 using Utility.Helpers.NonGeneric;
 using Utility.Trees.Demo.Connections;
+using System.Collections.Generic;
+using Utility.Trees.Demo.Filters;
 
 namespace Utility.Trees.Demo.MVVM
 {
@@ -32,7 +34,8 @@ namespace Utility.Trees.Demo.MVVM
         public void Initialise()
         {
             //DescriptorFactory.CreateRoot(Locator.Current.GetService<Model>(), Guid.Parse("76bca65d-6496-4a45-84f9-87705e665599"), "model")
-            DescriptorFactory.CreateRoot(new Product(), Guid.Parse("910ee619-8fa2-41f2-baaf-883b092f70aa"), "product")
+            //DescriptorFactory.CreateRoot(new Product(), Guid.Parse("910ee619-8fa2-41f2-baaf-883b092f70aa"), "product")
+            DescriptorFactory.CreateRoot(new Utility.Trees.Demo.Filters.Models(), Guid.Parse("fc7208ca-6502-4dcc-acba-a0e5ca0ca52b"), "models")
             //DescriptorFactory.CreateRoot(Locator.Current.GetService<Table>(), Guid.Parse("98f29d9c-0528-4096-acef-73f089646e82"), "table_model")
                 .Subscribe(descriptor =>
             {
@@ -158,16 +161,15 @@ namespace Utility.Trees.Demo.MVVM
 
             //TreeView.ItemsSource = tree.Items;
 
-            var a = new Service { Name = "Service A", Func = new Func<object, object>(a => a) };
-            var b = new Service { Name = "Service B", Func = new Func<object, object>(a => a) };
+            List<Service> ms = typeof(Methods).ToServices().ToList();
 
             var _viewModel = new ConnectionsViewModel()
             {
-                ServiceModel = new() { a, b },
+                ServiceModel = ms,
                 Tree = root
             };
 
-            var x = new Connector()
+            var x = new ConnectionsService()
             {
                 TreeView = treeViewer,
                 TreeView2 = MainView.Instance.TreeView2,
@@ -176,8 +178,8 @@ namespace Utility.Trees.Demo.MVVM
             };
             x.Loaded();
 
-            MainView.Instance.TreeView2.ItemsSource = _viewModel.ServiceModel;
-            MainView.Instance.Lines.ItemsSource = _viewModel.Lines;
+            //MainView.Instance.TreeView2.ItemsSource = _viewModel.ServiceModel;
+            //MainView.Instance.Lines.ItemsSource = _viewModel.Lines;
 
             (root.Data as IValueChanges).Subscribe(t =>
             {
@@ -187,37 +189,26 @@ namespace Utility.Trees.Demo.MVVM
                         return;
                     var serviceName = connection.ServiceName;
                     var service = _viewModel.ServiceModel.Single(a => a.Name == serviceName);
-                    service.OnNext(t.Value);
+                    service.OnNext(t);
                 }
             });
 
-            a.Subscribe(a =>
+
+            foreach (var service in ms)
             {
-                foreach (var connection in _viewModel.Connections.Where(a => a.ServiceName == "Service A" && a.Movement == Movement.ToViewModelFromService))
+                service.Subscribe(a =>
                 {
-                    var viewModelName = connection.ViewModelName;
-                    var viewModel = root.MatchDescendant(a => (a.Data as IName).Name == viewModelName)
-                    .Subscribe(viewModel =>
+                    foreach (var connection in _viewModel.Connections.Where(a => a.ServiceName == service.Name && a.Movement == Movement.ToViewModelFromService))
                     {
-                        (viewModel.Data as ViewModel).Value = a;
-                        (viewModel.Data as ViewModel).RaisePropertyChanged(nameof(ViewModel.Value));
-                    });
-                }
-            });
+                        var viewModelName = connection.ViewModelName;
+                        var viewModel = root.MatchDescendant(a => (a.Data as ViewModel).Name == viewModelName)
+                        .Subscribe(vm => {
+                            Pipe.Instance.Queue(new TreeQueueItem(vm, a));
+                        });
+                    }
+                });
+            }
 
-            b.Subscribe(b =>
-            {
-                foreach (var connection in _viewModel.Connections.Where(a => a.ServiceName == "Service B" && a.Movement == Movement.ToViewModelFromService))
-                {
-                    var viewModelName = connection.ViewModelName;
-                    root.MatchDescendant(a => (a.Data as IName).Name == viewModelName)
-                      .Subscribe(viewModel =>
-                      {
-                          (viewModel.Data as ViewModel).Value = b;
-                          (viewModel.Data as ViewModel).RaisePropertyChanged(nameof(ViewModel.Value));
-                      });
-                }
-            });
         }
 
         public static TreeViewer DataTreeViewer(object data)
@@ -229,7 +220,7 @@ namespace Utility.Trees.Demo.MVVM
                 TreeViewBuilder = TreeViewBuilder.Instance,
                 PanelsConverter = ItemsPanelConverter.Instance,
                 DataTemplateSelector = DataTemplateSelector.Instance,
-                TreeViewFilter = Filter.Instance,
+                TreeViewFilter = TreeViewFilter.Instance,
                 StyleSelector = StyleSelector.Instance,
                 EventListener = EventListener.Instance
             };

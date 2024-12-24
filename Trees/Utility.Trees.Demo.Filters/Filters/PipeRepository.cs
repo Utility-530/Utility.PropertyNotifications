@@ -11,7 +11,7 @@ using System.Linq.Expressions;
 using Cogs.Collections;
 using Utility.Extensions;
 
-namespace Utility.Trees.Demo.MVVM
+namespace Utility.Trees.Demo.Filters
 {
     public class PipeRepository : TreeRepository
     {

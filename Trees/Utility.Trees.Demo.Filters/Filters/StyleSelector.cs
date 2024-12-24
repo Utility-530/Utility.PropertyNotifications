@@ -4,8 +4,9 @@ using Utility.Descriptors;
 using Utility.Interfaces;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Decisions;
+using Utility.Trees.Demo.Filters;
 
-namespace Utility.Trees.Demo.MVVM
+namespace Utility.Trees.Demo.Filters
 {
     public class StyleSelector : System.Windows.Controls.StyleSelector
     {

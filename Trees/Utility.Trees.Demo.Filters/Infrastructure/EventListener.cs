@@ -1,7 +1,7 @@
 ﻿using Utility.Interfaces.NonGeneric;
 using Utility.Reactives;
 
-namespace Utility.Trees.Demo.MVVM.Infrastructure
+namespace Utility.Trees.Demo.Filters
 {
     public class EventListener : ReplayModel<IEvent>, IEventListener
     {
