@@ -9,10 +9,11 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Extensions;
 using Utility.Trees.Abstractions;
+using Utility.WPF.Controls.Trees;
 using Utility.WPF.Factorys;
 using Utility.WPF.ResourceDictionarys;
 
-namespace Utility.WPF.Controls.Trees
+namespace Utility.WPF.Controls.ComboBoxes
 {
     public class DataTemplateTreeSelector : AssemblyTreeSelector
     {
@@ -98,7 +99,7 @@ namespace Utility.WPF.Controls.Trees
 
         protected override void Set(object data)
         {
-            this.SelectedStyle = (Style)data;
+            SelectedStyle = (Style)data;
         }
     }
 
@@ -142,7 +143,7 @@ namespace Utility.WPF.Controls.Trees
                 && NewMethod(x.Element, key)
                 && a.Parent is { Data: ResourceDictionaryKeyValue { } res } parent
                 && res.Entry.Key.Equals(x.ResourceDictionary) == true
-                && parent.Parent is { Data: Assembly assembly} 
+                && parent.Parent is { Data: Assembly assembly }
                 && assembly.GetName().Name.Equals(x.Assembly)) is { } innerTree)
             {
                 IsError = false;
@@ -260,7 +261,7 @@ namespace Utility.WPF.Controls.Trees
                 ChangeType(tree, type);
 
             ParentPath = "Parent";
-            this.SelectedItemTemplateSelector = CustomItemTemplateSelector.Instance;
+            SelectedItemTemplateSelector = CustomItemTemplateSelector.Instance;
         }
 
         protected override void SelectedNodesChanged(object value)
@@ -335,7 +336,7 @@ namespace Utility.WPF.Controls.Trees
 
         public object Key
         {
-            get { return (object)GetValue(KeyProperty); }
+            get { return GetValue(KeyProperty); }
             set { SetValue(KeyProperty, value); }
         }
 

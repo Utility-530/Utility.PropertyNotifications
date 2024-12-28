@@ -1,15 +1,11 @@
-﻿using Kaos.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Trees.Abstractions;
+using Utility.WPF.Controls.Trees;
 using Utility.WPF.Factorys;
 
-namespace Utility.WPF.Controls.Trees
+namespace Utility.WPF.Controls.ComboBoxes
 {
     public class TreeSelector : ComboBoxTreeView
     {

@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using Utility.Interfaces.NonGeneric;
 
-namespace Utility.WPF.Controls.Trees
+namespace Utility.WPF.Controls.ComboBoxes
 {
     public class KeyValueConverter : IValueConverter
     {

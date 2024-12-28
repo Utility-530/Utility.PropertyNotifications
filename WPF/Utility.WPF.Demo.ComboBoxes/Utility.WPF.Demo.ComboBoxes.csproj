@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Meta\Utility.WPF.Controls.Meta\Utility.WPF.Controls.Meta.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Controls.ComboBoxes\Utility.WPF.Controls.ComboBoxes.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Data\Utility.WPF.Demo.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ComboBoxUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>

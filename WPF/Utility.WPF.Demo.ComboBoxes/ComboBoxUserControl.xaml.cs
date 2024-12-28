@@ -5,8 +5,9 @@ using System.Windows;
 using System.Windows.Controls;
 using Utility.Meta;
 using Utility.Trees;
+using Utility.WPF.Controls.ComboBoxes;
 
-namespace Utility.WPF.Demo.Trees
+namespace Utility.WPF.Demo.ComboBoxes
 {
     /// <summary>
     /// Interaction logic for ComboBoxUserControl.xaml

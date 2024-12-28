@@ -1,20 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net8.0-windows</TargetFramework>
-		<Nullable>enable</Nullable>
-		<UseWPF>true</UseWPF>
-	</PropertyGroup>
+  <PropertyGroup>
+	<TargetFramework>net8.0-windows</TargetFramework>
+	<Nullable>enable</Nullable>
+	<UseWPF>true</UseWPF>
+	<ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
 
-	<ItemGroup>
-
-		<Compile Update="Deprecated\MyTreeView.cs">
-			<DependentUpon>MyTreeView.xaml</DependentUpon>
-		</Compile>
-		<Compile Update="TreeListView.cs">
-			<DependentUpon>TreeListView.xaml</DependentUpon>
-		</Compile>
-	</ItemGroup>
+  <ItemGroup>
+	<Compile Update="AssemblyTreeSelector.cs">
+	  <DependentUpon>AssemblyTreeSelector.xaml</DependentUpon>
+	</Compile>
+	<Compile Update="ComboBoxTreeView.cs">
+	  <DependentUpon>ComboBoxTreeView.xaml</DependentUpon>
+	</Compile>
+  </ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Keys\Utility.Keys.csproj" />
@@ -22,8 +22,8 @@
 		<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Colours\Utility.WPF.Colours.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
 		<ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
 	</ItemGroup>
-
 </Project>

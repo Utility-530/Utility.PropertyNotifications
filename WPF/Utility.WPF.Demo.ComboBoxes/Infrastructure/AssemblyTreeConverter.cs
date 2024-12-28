@@ -8,7 +8,7 @@ using Utility.ProjectStructure;
 using System.Linq;
 using System.Collections;
 
-namespace Utility.WPF.Demo.Trees
+namespace Utility.WPF.Demo.ComboBoxes
 {
     public class AssemblyTreeConverter : IValueConverter
     {
@@ -19,7 +19,7 @@ namespace Utility.WPF.Demo.Trees
             {
                 sParameter = str;
             }
-            ITree tree = Utility.WPF.Controls.Trees.Ex.ToTree(new[] { typeof(Utility.WPF.Demo.Data.Model.Character).Assembly }, new Predicate<DictionaryEntry>(a =>
+            ITree tree = Utility.WPF.Controls.ComboBoxes.Ex.ToTree(new[] { typeof(Utility.WPF.Demo.Data.Model.Character).Assembly }, new Predicate<DictionaryEntry>(a =>
             {
                 return a.Value.GetType().ToString().Contains(sParameter);
 

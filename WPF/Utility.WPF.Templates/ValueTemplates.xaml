@@ -16,6 +16,7 @@
                     xmlns:controls="http://schemas.utility.com"
                     xmlns:structs="clr-namespace:Utility.Structs;assembly=Utility.Structs"
                     xmlns:windows="clr-namespace:System.Windows;assembly=WindowsBase"
+                    xmlns:cbx="http://schemas.utility.com/cboxes"
                     xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
                     xmlns:hc="https://handyorg.github.io/handycontrol"            
                     xmlns:dotNetKitControls="http://wpfcontrols.com/">
@@ -96,11 +97,11 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:Type}">
-        <t:TypeSelector x:Name="TypeSelector" Type="{Binding Value, Mode=TwoWay}">
+        <cbx:TypeSelector x:Name="TypeSelector" Type="{Binding Value, Mode=TwoWay}">
             <i:Interaction.Behaviors>
                 <infra:EntryAssemblyBehavior/>
             </i:Interaction.Behaviors>
-        </t:TypeSelector>
+        </cbx:TypeSelector>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:Enum}">

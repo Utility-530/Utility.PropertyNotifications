@@ -2,7 +2,6 @@
 using ReactiveUI;
 using System;
 using System.Collections;
-using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
@@ -11,11 +10,10 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Utility.Extensions;
-using Utility.Trees;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
 
-namespace Utility.WPF.Controls.Trees
+namespace Utility.WPF.Controls.ComboBoxes
 {
     public class TypeSelector : TreeSelector
     {

@@ -6,8 +6,9 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Utility.WPF.Controls.Trees;
 
-namespace Utility.WPF.Controls.Trees
+namespace Utility.WPF.Controls.ComboBoxes
 {
 
     public class CustomItemsControl : ItemsControl
