@@ -28,7 +28,7 @@ namespace Utility.WPF.Controls.Trees
     public delegate void FinishEditRoutedEventHandler(object sender, NewObjectRoutedEventArgs e);
 
 
-    public class ComboTreeViewItem : TreeViewItem, ISelection
+    public class ComboTreeViewItem : CustomTreeViewItem, ISelection
     {
 
         static ComboTreeViewItem()
@@ -36,7 +36,7 @@ namespace Utility.WPF.Controls.Trees
             ToolTipService.IsEnabledProperty.OverrideMetadata(typeof(ComboTreeViewItem), new FrameworkPropertyMetadata(null, new CoerceValueCallback(CoerceToolTipIsEnabled)));
             EventManager.RegisterClassHandler(typeof(ComboBox), Mouse.LostMouseCaptureEvent, new MouseEventHandler(OnLostMouseCapture));
             EventManager.RegisterClassHandler(typeof(TreeViewItem), Mouse.MouseDownEvent, new MouseButtonEventHandler(OnMouseButtonDown), true);
-
+            //DefaultStyleKeyProperty.OverrideMetadata(typeof(ComboTreeViewItem), new FrameworkPropertyMetadata(typeof(ComboTreeViewItem)));
         }
 
         public ComboTreeViewItem()
@@ -132,26 +132,26 @@ namespace Utility.WPF.Controls.Trees
 
 
 
-        public DataTemplate EditTemplate
-        {
-            get { return (DataTemplate)GetValue(EditTemplateProperty); }
-            set { SetValue(EditTemplateProperty, value); }
-        }
+        //public DataTemplate EditTemplate
+        //{
+        //    get { return (DataTemplate)GetValue(EditTemplateProperty); }
+        //    set { SetValue(EditTemplateProperty, value); }
+        //}
 
 
-        public static readonly DependencyProperty EditTemplateProperty =
-            DependencyProperty.Register("EditTemplate", typeof(DataTemplate), typeof(ComboTreeViewItem), new PropertyMetadata());
+        //public static readonly DependencyProperty EditTemplateProperty =
+        //    DependencyProperty.Register("EditTemplate", typeof(DataTemplate), typeof(ComboTreeViewItem), new PropertyMetadata());
 
 
 
-        public bool IsEditing
-        {
-            get { return (bool)GetValue(IsEditingProperty); }
-            set { SetValue(IsEditingProperty, value); }
-        }
+        //public bool IsEditing
+        //{
+        //    get { return (bool)GetValue(IsEditingProperty); }
+        //    set { SetValue(IsEditingProperty, value); }
+        //}
 
-        public static readonly DependencyProperty IsEditingProperty =
-            DependencyProperty.Register("IsEditing", typeof(bool), typeof(ComboTreeViewItem), new PropertyMetadata());
+        //public static readonly DependencyProperty IsEditingProperty =
+        //    DependencyProperty.Register("IsEditing", typeof(bool), typeof(ComboTreeViewItem), new PropertyMetadata());
 
 
         public double MaxDropDownHeight
@@ -563,10 +563,6 @@ namespace Utility.WPF.Controls.Trees
         void Select(object obj);
     }
 
-    public class dasf : ComboBox
-    {
-
-    }
 }
 
 namespace MS.Win32

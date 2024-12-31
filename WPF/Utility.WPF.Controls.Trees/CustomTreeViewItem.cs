@@ -1,79 +1,80 @@
-﻿using System;
+﻿using System.Windows.Controls;
 using System.Windows;
-using System.Windows.Controls;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Windows.Input;
+using System.Collections;
+//using Trees.Abstractions;
 
 namespace Utility.WPF.Controls.Trees
 {
-    public class CustomTreeViewItem : TreeViewItem, IObservable<object>
+    public class CustomTreeView : TreeView
     {
-        ReplaySubject<object> _playSubject = new(1);
-        private Button? plus;
-        private Button? minus;
-        public static readonly DependencyProperty AddCommandProperty = DependencyProperty.Register("AddCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata(AddChanged));
-
-        private static void AddChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        protected override DependencyObject GetContainerForItemOverride()
         {
-            if (d is CustomTreeViewItem { plus: { } plus } item && e.NewValue is ICommand command)
-                plus.Command = command;
+            return new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector };
+        }
+    }
+
+    public class CustomTreeViewItem : TreeViewItem
+    {
+        public static readonly DependencyProperty AddCommandProperty = DependencyProperty.Register("AddCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty RemoveCommandProperty = DependencyProperty.Register("RemoveCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty AddParentCommandProperty = DependencyProperty.Register("AddParentCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty EditCommandProperty = DependencyProperty.Register("EditCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty IsHighlightedProperty = DependencyProperty.Register("IsHighlighted", typeof(bool?), typeof(CustomTreeViewItem), new PropertyMetadata(null));
+        public static readonly DependencyProperty IsEditingProperty = DependencyProperty.Register("IsEditing", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata(false, IsEditingChanged));
+        public static readonly DependencyProperty IsValidProperty = DependencyProperty.Register("IsValid", typeof(bool?), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty EditTemplateProperty = DependencyProperty.Register("EditTemplate", typeof(DataTemplate), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty IsEditableProperty = DependencyProperty.Register("IsEditable", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty NodeTemplateProperty = DependencyProperty.Register("NodeTemplate", typeof(DataTemplate), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty IsShowingProperty = DependencyProperty.Register("IsShowing", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata(false));
+        public static readonly DependencyProperty NodeTemplateSelectorProperty = DependencyProperty.Register("NodeTemplateSelector", typeof(DataTemplateSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty NodeModelsProperty = DependencyProperty.Register("NodeModels", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty EditTemplateSelectorProperty = DependencyProperty.Register("EditTemplateSelector", typeof(DataTemplateSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
+        //public static readonly DependencyProperty ChildrenSelectorProperty = DependencyProperty.Register("ChildrenSelector", typeof(IChildrenSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty NodeContainerStyleSelectorProperty = DependencyProperty.Register("NodeContainerStyleSelector", typeof(StyleSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty NodeItemsSourceProperty = DependencyProperty.Register("NodeItemsSource", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty SplitButtonStyleProperty = DependencyProperty.Register("SplitButtonStyle", typeof(Style), typeof(CustomTreeViewItem), new PropertyMetadata());
+
+
+        static CustomTreeViewItem()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomTreeViewItem), new FrameworkPropertyMetadata(typeof(CustomTreeViewItem)));
         }
 
-        public static readonly DependencyProperty RemoveCommandProperty = DependencyProperty.Register("RemoveCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata(RemoveChanged));
-
-        private static void RemoveChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        protected override DependencyObject GetContainerForItemOverride()
         {
-            if (d is CustomTreeViewItem { minus: { } minus } item && e.NewValue is ICommand command)
-                minus.Command = command;
+            return new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector };
+        }
+
+        public bool IsShowing
+        {
+            get { return (bool)GetValue(IsShowingProperty); }
+            set { SetValue(IsShowingProperty, value); }
+        }
+
+        public bool IsEditable
+        {
+            get { return (bool)GetValue(IsEditableProperty); }
+            set { SetValue(IsEditableProperty, value); }
         }
 
 
-
-        public CustomTreeViewItem()
+        public bool? IsValid
         {
-
-
-            var contextMenu = new ContextMenu { };
-            var show = new MenuItem { Header = "show" };
-            show.Click += Show_Click;
-            contextMenu.Items.Add(show);
-             ContextMenu = contextMenu;
-
+            get { return (bool?)GetValue(IsValidProperty); }
+            set { SetValue(IsValidProperty, value); }
         }
 
-
-        private void Show_Click(object sender, RoutedEventArgs e)
+        public bool IsEditing
         {
-            _playSubject.OnNext(null);
+            get { return (bool)GetValue(IsEditingProperty); }
+            set { SetValue(IsEditingProperty, value); }
         }
 
-        public override void OnApplyTemplate()
+        public DataTemplate EditTemplate
         {
-            base.OnApplyTemplate();
-
-            var headerBorder = GetTemplateChild("Bd") as Border;
-            plus = GetTemplateChild("PlusButton") as Button;
-            minus = GetTemplateChild("MinusButton") as Button;
-            if (plus != null)
-                plus.Command = AddCommand;
-            if (minus != null)
-                minus.Command = RemoveCommand;
-            //SetBinding(Grid.RowProperty, new Binding { Source = Header, Path = new PropertyPath(nameof(ViewModel.Row)) });
-            //SetBinding(Grid.ColumnProperty, new Binding { Source = Header, Path = new PropertyPath(nameof(ViewModel.Column)) });
-            ////this.SetBinding(TreeMapPanel.AreaProperty, new Binding { Source = Header, Path = new PropertyPath(nameof(ViewModel.Area)) });
-            ////this.SetBinding(TreeStackPanel.AreaProperty, new Binding { Source = Header, Path = new PropertyPath(nameof(ViewModel.Area)) });
-            ////this.SetBinding(AutoGrid.RowHeightOverrideProperty, new Binding { Source = Header, Path = new PropertyPath(nameof(ViewModel.Height)) });
-            ////this.SetBinding(AutoGrid.ColumnWidthOverrideProperty, new Binding { Source = Header, Path = new PropertyPath(nameof(ViewModel.Width)) });
-            //SetBinding(IsSelectedProperty, new Binding { Source = Header, Path = new PropertyPath(nameof(ViewModel.IsSelected)) });
-            //headerBorder.SetBinding(IsEnabledProperty, new Binding { Source = Header, Path = new PropertyPath(nameof(ViewModel.IsEnabled)) });
-            //headerBorder.SetBinding(VisibilityProperty, new Binding { Source = Header, Path = new PropertyPath(nameof(ViewModel.Visibility)) });
-            //this.SetBinding(TreeViewItem.IsExpandedProperty, new Binding { Source = Header, Path = new PropertyPath(nameof(ViewModel.IsExpanded)), Mode = BindingMode.TwoWay });
-
-            //var x = headerBorder.FindVisualChildren<ContentPresenter>().Single();
-            //adornerController = new ButtonAdornerController(x);
-            //adornerController.Subscribe(_playSubject);
+            get { return (DataTemplate)GetValue(EditTemplateProperty); }
+            set { SetValue(EditTemplateProperty, value); }
         }
 
         public ICommand AddCommand
@@ -81,25 +82,82 @@ namespace Utility.WPF.Controls.Trees
             get { return (ICommand)GetValue(AddCommandProperty); }
             set { SetValue(AddCommandProperty, value); }
         }
+
         public ICommand RemoveCommand
         {
             get { return (ICommand)GetValue(RemoveCommandProperty); }
             set { SetValue(RemoveCommandProperty, value); }
         }
 
-
-
-        public IDisposable Subscribe(IObserver<object> observer)
+        public ICommand AddParentCommand
         {
-
-            return _playSubject
-                .Select(a =>
-                {
-                    return Header;
-                })
-                .Subscribe(observer);
+            get { return (ICommand)GetValue(AddParentCommandProperty); }
+            set { SetValue(AddParentCommandProperty, value); }
         }
 
+        public ICommand EditCommand
+        {
+            get { return (ICommand)GetValue(EditCommandProperty); }
+            set { SetValue(EditCommandProperty, value); }
+        }
 
+        public bool? IsHighlighted
+        {
+            get { return (bool?)GetValue(IsHighlightedProperty); }
+            set { SetValue(IsHighlightedProperty, value); }
+        }
+
+        public IEnumerable NodeModels
+        {
+            get { return (IEnumerable)GetValue(NodeModelsProperty); }
+            set { SetValue(NodeModelsProperty, value); }
+        }
+
+        public DataTemplate NodeTemplate
+        {
+            get { return (DataTemplate)GetValue(NodeTemplateProperty); }
+            set { SetValue(NodeTemplateProperty, value); }
+        }
+
+        public DataTemplateSelector NodeTemplateSelector
+        {
+            get { return (DataTemplateSelector)GetValue(NodeTemplateSelectorProperty); }
+            set { SetValue(NodeTemplateSelectorProperty, value); }
+        }
+
+        public DataTemplateSelector EditTemplateSelector
+        {
+            get { return (DataTemplateSelector)GetValue(EditTemplateSelectorProperty); }
+            set { SetValue(EditTemplateSelectorProperty, value); }
+        }
+
+        //public IChildrenSelector ChildrenSelector
+        //{
+        //    get { return (IChildrenSelector)GetValue(ChildrenSelectorProperty); }
+        //    set { SetValue(ChildrenSelectorProperty, value); }
+        //}
+
+        public StyleSelector NodeContainerStyleSelector
+        {
+            get { return (StyleSelector)GetValue(NodeContainerStyleSelectorProperty); }
+            set { SetValue(NodeContainerStyleSelectorProperty, value); }
+        }
+
+        public Style SplitButtonStyle
+        {
+            get { return (Style)GetValue(SplitButtonStyleProperty); }
+            set { SetValue(SplitButtonStyleProperty, value); }
+        }
+
+        public IEnumerable NodeItemsSource
+        {
+            get { return (IEnumerable)GetValue(NodeItemsSourceProperty); }
+            set { SetValue(NodeItemsSourceProperty, value); }
+        }
+
+        private static void IsEditingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+
+        }
     }
 }

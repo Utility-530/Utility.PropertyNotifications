@@ -1,7 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:att="http://schemas.utility.com/attached"
-                    xmlns:local="clr-namespace:Utility.WPF.Controls.Trees">
+                    xmlns:local="clr-namespace:Utility.WPF.Controls.Trees"
+                    xmlns:res="http://schemas.utility.com/resourcedictionary">
+
+    <ResourceDictionary.MergedDictionaries>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
 
     <local:IndentConverter x:Key="IndentConverter" />
 

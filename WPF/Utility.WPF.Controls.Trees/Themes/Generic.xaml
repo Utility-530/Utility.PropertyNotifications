@@ -10,16 +10,17 @@
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ButtonsFlank.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Dictionary1.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/LinesStyle.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Colors.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboBoxToggleButton.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/AddRemoveButtons.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/GraphStyle.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/BasicStyle.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/HorizontalStyle.xaml"/>
+        <!--<res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItemStyle.xaml"/>-->
 
+        <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItemStyle.xaml"/>
 
-
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/ComboBoxTreeView.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/AssemblyTreeSelector.xaml"/>
+        <!--<res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/ComboBoxTreeView.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/AssemblyTreeSelector.xaml"/>-->
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

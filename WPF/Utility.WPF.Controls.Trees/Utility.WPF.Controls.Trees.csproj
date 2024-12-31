@@ -22,7 +22,9 @@
 		<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Colours\Utility.WPF.Colours.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Controls.SplitButton\Utility.WPF.Controls.SplitButtons.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
 		<ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
 	</ItemGroup>
 
