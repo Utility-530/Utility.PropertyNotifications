@@ -26,13 +26,7 @@ namespace Utility.Observables.Generic
 
     }
 
-    public sealed class Disposer< T> : Disposer<IObserver<T>, T>
-    {
- 
-        public Disposer(ICollection<IObserver<T>> observers, IObserver<T> observer):base(observers, observer)
-        {
-        }   
-    }
+
 
     //public sealed class Disposer<T> : IDisposable
     //{

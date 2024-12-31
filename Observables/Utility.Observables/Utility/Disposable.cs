@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Utility.Interfaces.NonGeneric;
 
-namespace Utility.Observables.Generic
+namespace Utility.Observables
 {
     public class Disposable : IObservableCollection<IDisposable>, ICollection<IDisposable>
     {
@@ -118,5 +118,13 @@ namespace Utility.Observables.Generic
         }
 
 
+    }
+
+    public sealed class Disposer<T> : Generic.Disposer<IObserver<T>, T>
+    {
+
+        public Disposer(ICollection<IObserver<T>> observers, IObserver<T> observer) : base(observers, observer)
+        {
+        }
     }
 }
