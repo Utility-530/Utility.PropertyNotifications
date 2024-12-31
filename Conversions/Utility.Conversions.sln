@@ -5,6 +5,8 @@ VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Conversions", "Utility.Conversions\Utility.Conversions.csproj", "{F8C614A1-F980-43E2-B732-B06B4043D4C7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Conversions.Json.Newtonsoft", "Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj", "{17F7D760-7B20-4B99-AAD9-CEA98C8011EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{F8C614A1-F980-43E2-B732-B06B4043D4C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8C614A1-F980-43E2-B732-B06B4043D4C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8C614A1-F980-43E2-B732-B06B4043D4C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17F7D760-7B20-4B99-AAD9-CEA98C8011EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17F7D760-7B20-4B99-AAD9-CEA98C8011EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17F7D760-7B20-4B99-AAD9-CEA98C8011EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17F7D760-7B20-4B99-AAD9-CEA98C8011EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
