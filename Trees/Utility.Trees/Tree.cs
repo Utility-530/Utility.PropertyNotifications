@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Utility.Helpers.NonGeneric;
@@ -18,6 +19,8 @@ namespace Utility.Trees
         private IList items;
         protected ITree? parent;
         private bool flag;
+
+        public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
         protected IList m_items
         {
@@ -120,7 +123,7 @@ namespace Utility.Trees
 
             if (data is IEquatable key)
             {
-                var single = m_items.OfType<ITree>().Single(t =>  t.Equals(key));
+                var single = m_items.OfType<ITree>().Single(t => t.Equals(key));
                 m_items.Remove(single);
                 return;
             }
@@ -142,14 +145,21 @@ namespace Utility.Trees
             throw new InvalidOperationException("Cannot add unknown content type.");
         }
 
+        public virtual void Clear()
+        {
+            m_items.Clear();
+        }
+
+
+
         public virtual Tree Clone()
         {
-            object clone = Data;     
+            object clone = Data;
             if (Data is IClone cln)
             {
                 clone = cln.Clone();
             }
-        
+
             return new Tree(clone) { Key = this.Key };
         }
 
@@ -241,14 +251,16 @@ namespace Utility.Trees
             }
         }
 
-   
+
         public virtual Task<bool> HasMoreChildren() => Task.FromResult(false);
 
-        IReadOnlyTree IParent<IReadOnlyTree>.Parent { get => Parent; set => Parent= value as ITree; }
+        IReadOnlyTree IParent<IReadOnlyTree>.Parent { get => Parent; set => Parent = value as ITree; }
 
         object IValue.Value => Data;
 
         Type IType.Type => Data?.GetType();
+
+
 
         private void ResetOnCollectionChangedEvent()
         {
@@ -262,7 +274,8 @@ namespace Utility.Trees
             {
                 foreach (var item in args.NewItems.Cast<Tree>())
                 {
-                    item.Parent = this;
+                    if (item.Parent == null)
+                        item.Parent = this;
                 }
             }
             else if (args.Action != NotifyCollectionChangedAction.Move && args.OldItems != null)
@@ -273,6 +286,7 @@ namespace Utility.Trees
                     item.ResetOnCollectionChangedEvent();
                 }
             }
+            this.CollectionChanged?.Invoke(sender, args);
         }
 
 
@@ -318,6 +332,34 @@ namespace Utility.Trees
             return other?.Equals(this.Key) == true;
         }
 
+        public int Count => m_items.Count;
+        public bool IsReadOnly => false;
+
+        public void RemoveAt(int index)
+        {
+            m_items.RemoveAt(index);
+        }
+
+        public void Add(ITree item)
+        {
+            m_items.Add(item);
+        }
+
+        public bool Contains(ITree item)
+        {
+            return m_items.Contains(item);
+        }
+
+        public void CopyTo(ITree[] array, int arrayIndex)
+        {
+            m_items.CopyTo(array, arrayIndex);
+        }
+
+        public bool Remove(ITree item)
+        {
+            m_items.Remove(item);
+            return true;
+        }
     }
 
     internal static class TreeHelper
