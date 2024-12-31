@@ -62,27 +62,31 @@ namespace Utility.WPF.Demo.Trees
             var collection = new ObservableCollection<ButtonViewModel>();
             ItemsControl.ItemsSource = collection;
 
-            foreach (var style in FindResourcesByType(resourceDictionary, typeof(TreeViewItem)).ToArray())
+            try
             {
-
-                collection.Add(new ButtonViewModel
+                foreach (var style in FindResourcesByType(resourceDictionary, typeof(TreeViewItem)).ToArray())
                 {
-                    Header = style.Key,
-                    Command = new RelayCommand((a) =>
+
+                    collection.Add(new ButtonViewModel
                     {
-                        MyTreeView.ItemContainerStyleSelector = null;
-                        TreeItemContainerStyleSelector.Instance.Current = style.Value;
-                        MyTreeView.ItemContainerStyleSelector = TreeItemContainerStyleSelector.Instance;
-
-                        foreach (var item in _collection)
+                        Header = style.Key,
+                        Command = new RelayCommand((a) =>
                         {
-                            item.ItemContainerStyleSelector = null;
-                            item.ItemContainerStyleSelector = TreeItemContainerStyleSelector.Instance;
-                        }
-                    })
-                });
+                            MyTreeView.ItemContainerStyleSelector = null;
+                            TreeItemContainerStyleSelector.Instance.Current = style.Value;
+                            MyTreeView.ItemContainerStyleSelector = TreeItemContainerStyleSelector.Instance;
 
+                            foreach (var item in _collection)
+                            {
+                                item.ItemContainerStyleSelector = null;
+                                item.ItemContainerStyleSelector = TreeItemContainerStyleSelector.Instance;
+                            }
+                        })
+                    });
+
+                }
             }
+            catch (Exception ex) { }
 
 
         }
