@@ -25,8 +25,10 @@ namespace Utility.WPF.Helpers
                 {
                     if (treeView is TreeViewItem { IsExpanded: false } treeViewItem)
                     {
+                        var isExpanded = treeViewItem.IsExpanded;
                         treeViewItem.IsExpanded = true;
                         treeViewItem.UpdateLayout();
+                        treeViewItem.IsExpanded = isExpanded;
                     }
                     var container = treeView.ItemContainerGenerator.ContainerFromItem(item);
                     return container as T;
