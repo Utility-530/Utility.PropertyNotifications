@@ -286,9 +286,14 @@ namespace Utility.Trees
                     item.ResetOnCollectionChangedEvent();
                 }
             }
-            this.CollectionChanged?.Invoke(sender, args);
+            this.InvokeCollectionChanged(sender, args);
         }
 
+        protected void InvokeCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
+        {
+            this.CollectionChanged?.Invoke(sender, args);
+
+        }
 
         public virtual IEnumerator<ITree> GetEnumerator()
         {
