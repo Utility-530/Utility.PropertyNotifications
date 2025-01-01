@@ -1,12 +1,11 @@
 ﻿using Guid = System.Guid;
-using static Utility.Constants;
 using SQLite;
 using Newtonsoft.Json;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Reactive.Disposables;
-using Utility.Helpers;
 using System.Reactive.Threading.Tasks;
+using static System.Environment;
 
 namespace Utility.Repos
 {
@@ -28,6 +27,7 @@ namespace Utility.Repos
         Dictionary<int, System.Type> types = new();
         Dictionary<Guid, string> tablelookup = new();
 
+        public const string No_Existing_Table_No_Name_To_Create_New_One = "ioioi* 22144 fd3323";
 
         public record Relationships
         {
@@ -101,7 +101,7 @@ namespace Utility.Repos
             return Task.CompletedTask;
         }
 
- 
+
         public virtual IObservable<IReadOnlyCollection<Key>> SelectKeys(Guid? parentGuid = null, string? name = null, string? table_name = default)
         {
             List<Relationships> tables;
@@ -161,6 +161,19 @@ namespace Utility.Repos
             return Observable.Return((IReadOnlyCollection<Key>)selections);
         }
 
+        public bool ValueExists(Guid guid)
+        {
+            if (values.ContainsKey(guid))
+                return true;
+
+            var table = connection.Find<Values>(guid);
+            if (table is Values { Value: { } text, Added: { } added, TypeId: { } typeId })
+            {
+                return true;
+            }
+            return false;
+        }
+
         public IEnumerable<Duplication> Duplicate(Guid oldGuid, Guid? newParentGuid = default)
         {
             var table_name = getName(oldGuid);
@@ -197,12 +210,58 @@ namespace Utility.Repos
             }
         }
 
-        public virtual IObservable<Guid> Find(Guid parentGuid, string name, System.Type? type = null, int? index = null)
+        public IObservable<Guid> FindParent(Guid guid)
+        {
+            if (guid == default)
+                throw new Exception($"{nameof(guid)} is default");
+            return Observable.Create<Guid>(observer =>
+            {
+                return initialisationTask.ToObservable()
+                    .Subscribe(a =>
+                    {
+                        var table_name = getName(guid);
+
+                        if (guid == Guid.Empty)
+                        {
+                        }
+
+                        //var typeId = type != null ? (int?)TypeId(type) : null;
+                        var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Guid = '{guid}'");
+                        if (tables.Count == 0)
+                        {
+                            //InsertByParent(parentGuid, name, table_name, typeId, index)
+                            //.Subscribe(a =>
+                            //{
+                            //    if (a is Guid guid)
+                            //    {
+                            //        setName(guid, table_name);
+                            //        observer.OnNext(guid);
+                            //    }
+                            //    else
+                            //        throw new Exception("* 44 fd3323");
+                            //    observer.OnCompleted();
+                            //});
+                        }
+                        else if (tables.Count == 1)
+                        {
+                            observer.OnNext(tables.Single().Parent);
+                        }
+                        else
+                        {
+                            throw new Exception("3e909re 4323");
+                        }
+                        //throw new Exception("09re 4323");
+                    });
+            });
+        }
+
+
+        public virtual IObservable<Key> Find(Guid parentGuid, string? name = null, System.Type? type = null, int? index = null)
         {
 
             if (parentGuid == default)
                 throw new Exception($"{nameof(parentGuid)} is default");
-            return Observable.Create<Guid>(observer =>
+            return Observable.Create<Key>(observer =>
             {
                 return initialisationTask.ToObservable()
                     .Subscribe(a =>
@@ -214,16 +273,24 @@ namespace Utility.Repos
 
                         }
                         var typeId = type != null ? (int?)TypeId(type) : null;
-                        var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' AND Name = '{name}' AND _Index {ToComparisonAndValue(index)} AND TypeId {ToComparisonAndValue(typeId)}");
+                        var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' {includeClause($"AND Name {ToComparisonAndValue(name)}", name)}  {includeClause($"AND _Index {ToComparisonAndValue(index)}", index)}  {includeClause($"AND TypeId {ToComparisonAndValue(typeId)}", name)}");
                         if (tables.Count == 0)
                         {
+                            if (string.IsNullOrEmpty(name))
+                            {
+                             
+                                throw new Exception(No_Existing_Table_No_Name_To_Create_New_One);
+                                //observer.OnNext(new Key(NoTableNoName, parentGuid, null, name, index, default));
+                                //observer.OnCompleted();
+                                //return;
+                            }
                             InsertByParent(parentGuid, name, table_name, typeId, index)
                             .Subscribe(a =>
                             {
                                 if (a is Guid guid)
                                 {
                                     setName(guid, table_name);
-                                    observer.OnNext(guid);
+                                    observer.OnNext(new Key(guid, parentGuid, null, name, index, default));
                                 }
                                 else
                                     throw new Exception("* 44 fd3323");
@@ -234,7 +301,16 @@ namespace Utility.Repos
                         {
                             var table = tables.Single();
                             setName(table.Guid, table_name);
-                            observer.OnNext(table.Guid);
+                            observer.OnNext(new Key(table.Guid, parentGuid, null, table.Name, index, default));
+                            observer.OnCompleted();
+                        }
+                        else if (name == null)
+                        {
+                            foreach (var table in tables)
+                            {
+                                setName(table.Guid, table_name);
+                                observer.OnNext(new Key(table.Guid, parentGuid, null, table.Name, index, default));
+                            }
                             observer.OnCompleted();
                         }
                         else
@@ -244,6 +320,11 @@ namespace Utility.Repos
                         //throw new Exception("09re 4323");
                     });
             });
+        }
+
+        private string includeClause<T>(string clause, T? ss = default)
+        {
+            return ss == null ? string.Empty : clause;
         }
 
         public IObservable<Guid> InsertByParent(Guid parentGuid, string name, string? table_name = null, int? typeId = null, int? index = null)
@@ -336,7 +417,7 @@ namespace Utility.Repos
         {
             var table_name = getName(guid);
             string cmd = $"UPDATE '{table_name}' SET Removed = date('now') WHERE Guid = '{guid}'";
-            connection.Execute(cmd);    
+            connection.Execute(cmd);
         }
 
         private static string ToComparisonAndValue(object? value)
@@ -410,6 +491,7 @@ namespace Utility.Repos
                 if (values.ContainsKey(guid))
                 {
                     observer.OnNext((DateValue)values[guid]);
+                    observer.OnCompleted();
                     return Disposable.Empty;
                 }
 
@@ -424,7 +506,7 @@ namespace Utility.Repos
 
                     try
                     {
-                        value = JsonConvert.DeserializeObject(text, type);
+                        value = JsonConvert.DeserializeObject(text, type, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
 
                     }
                     catch (JsonReaderException ex)
@@ -433,19 +515,25 @@ namespace Utility.Repos
                     }
 
                     var _value = new DateValue(added, value);
-                    if (values.ContainsKey(guid) == false)
-                    {
-                        values.Add(guid, _value);
-                        observer.OnNext(_value);
-                    }
-                    else
-                    {
-                        observer.OnNext((DateValue)values[guid]);
-                    }
+                    lock (values)
+                        if (values.ContainsKey(guid) == false)
+                        {
+                            values.Add(guid, _value);
+                            observer.OnNext(_value);
+                            observer.OnCompleted();
+                        }
+                        else
+                        {
+                            observer.OnNext((DateValue)values[guid]);
+                            observer.OnCompleted();
+
+                        }
                 }
                 else
                 {
                     observer.OnNext(new DateValue(default, null));
+                    observer.OnCompleted();
+
                 }
                 return Disposable.Empty;
             });
@@ -484,7 +572,8 @@ namespace Utility.Repos
                 }
             }
             var systemType = System.Type.GetType(assemblyQualifiedName);
-            types[typeId] = systemType;
+            lock (types)
+                types[typeId] = systemType;
             return systemType;
         }
 
@@ -513,25 +602,34 @@ namespace Utility.Repos
                 return singleType.Id;
             }
         }
-        
+
         private void setName(Guid guid, string name)
         {
-            tablelookup[guid] = name;
+            //lock (tablelookup)
+                tablelookup[guid] = name;
         }
 
         private string getName(Guid guid)
         {
-            return tablelookup[guid];
+            if (tablelookup.TryGetValue(guid, out string value))
+            {
+                return value;
+            }
+            throw new Exception("Have you created a root?");
         }
 
+
         public const string Utility = nameof(Utility);
+
+        public static readonly string ProgramData = GetFolderPath(SpecialFolder.CommonApplicationData);
 
         public static readonly string DataPath = System.IO.Path.Combine(ProgramData, Utility);
 
         public static readonly string AssembliesPath = System.IO.Path.Combine(ProgramData, Utility, "Assemblies");
-        public static TreeRepository Instance { get; } = new(DataPath);
+
+        public static TreeRepository Instance { get; } = new("../../../Data");
 
         static readonly Dictionary<string, TreeRepository> dictionary = new();
-        public static TreeRepository Create(string name) => dictionary.GetValueOrCreate(name, () => new TreeRepository(Path.Combine(ProgramData, name)));
+        //public static TreeRepository Create(string name) => dictionary.GetValueOrCreate(name, () => new TreeRepository(Path.Combine(ProgramData, name)));
     }
 }
