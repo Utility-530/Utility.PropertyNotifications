@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using Utility.Descriptors.Repositorys;
+using Utility.Repos;
 using ReactiveUI;
 using System.Linq;
 using Utility.Extensions;
@@ -41,9 +41,12 @@ namespace Utility.Nodes.Database
                     var tree = TreeExtensions.ToTree(keys.ToObservable(), a => a.Guid, a => a.ParentGuid, a.Guid, func: a =>
                     {
                         var tree = (ITree<Key>)new Tree<Key>(a);
-                        var get = TreeRepository.Instance.Get(a.Guid);
-                        if (get != null)
-                            tree.Add(new Tree<Key>(new Key(default, default, default, get.Value.ToString(), default)));
+                        var get = TreeRepository.Instance.Get(a.Guid).Subscribe(a =>
+                        {
+                            if (a.Value is { }  x)
+                                tree.Add(new Tree<Key>(new Key(default, default, x, default, default, default)));
+                        });
+
                         return tree;
                     }
                     );
