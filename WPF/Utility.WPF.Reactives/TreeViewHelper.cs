@@ -232,7 +232,8 @@ namespace Utility.WPF.Reactives
                     }
                     catch (ArgumentOutOfRangeException ex)
                     {
-                        throw ex;
+                        //throw ex;
+                        return;
                     }
 
                     // Ensure that the generator for this panel has been created.
