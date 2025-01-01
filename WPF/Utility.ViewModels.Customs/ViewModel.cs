@@ -54,7 +54,7 @@ namespace Utility.ViewModels
 
         private ReadOnlyObservableCollection<PropertyChange> propertyCollection;
         private ReadOnlyObservableCollection<ViewModel> childCollection;
-        protected Utility.Observables.Generic.Disposable disposer = new();
+        protected Utility.Observables.Disposable disposer = new();
         private ReplaySubject<Message> childMessages;
         private ReplaySubject<Message> parentMessages;
         private int count;

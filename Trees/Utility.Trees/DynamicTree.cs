@@ -2,9 +2,7 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
-using Utility.Observables.Generic;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Trees
@@ -243,7 +241,7 @@ namespace Utility.Trees
         public IDisposable Subscribe(System.IObserver<ITree> observer)
         {
 
-            return new Disposer<ITree>(observers, observer);
+            return new Utility.Observables.Disposer<ITree>(observers, observer);
         }
 
 

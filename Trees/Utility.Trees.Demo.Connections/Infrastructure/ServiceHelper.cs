@@ -10,8 +10,7 @@ namespace Utility.Trees.Demo.Connections
         public static IEnumerable<Service> ToServices(this Type type)
         {
             return from a in type.GetMethods(System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public)
-                   select
-                       new Service
+                   select new Service
                        {
                            Name = a.Name,
                            MethodInfo = a,

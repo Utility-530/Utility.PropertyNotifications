@@ -152,7 +152,6 @@ namespace Utility.Trees.Demo.MVVM
 
         void UpdateConnectionsView()
         {
-
             //var tree = new ViewModelTree(new ViewModel() { Name = "root" },
             //         new ViewModelTree(new ViewModel { Name = "A" },
             //         new ViewModelTree(new ViewModel { Name = "B" }),
