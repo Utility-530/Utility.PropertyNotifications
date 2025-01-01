@@ -67,7 +67,7 @@
 
 
 
-    <Style  TargetType="{x:Type trees:ComboTreeViewItem}" BasedOn="{StaticResource GenericTreeViewItem}">
+    <Style x:Key="ComboTreeViewItem" TargetType="{x:Type trees:ComboTreeViewItem}" BasedOn="{StaticResource GenericTreeViewItem}">
         <Style.Resources>
             <DataTemplate x:Key="EditTemplate">
                 <Grid Background="#DCDCDC" Name="rootElement">
@@ -147,7 +147,9 @@
                                       IsHitTestVisible="False"
                                       Width="200"
                                       Margin="3,3,23,3"
-                                      Content="{Binding Selection, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                      Content="{TemplateBinding Selection}"
+                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                      ContentTemplateSelector="{TemplateBinding SelectionBoxTemplateSelector}"
                                       VerticalAlignment="Stretch"
                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
                         <!--<ContentPresenter x:Name="PART_Header"
@@ -175,7 +177,7 @@
                  AllowsTransparency="True"
                  Focusable="False"
                  PopupAnimation="Slide">
-                            
+
                             <Grid x:Name="DropDown" VerticalAlignment="Top"
                   SnapsToDevicePixels="True"
                   MinWidth="{Binding ActualWidth}"
@@ -206,14 +208,11 @@
                                             <RowDefinition Height="*"/>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
+                                        
                                         <ContentControl x:Name="content_control" 
-                                                                Content="{TemplateBinding NewObject}"
-                                                       
-                                                        ContentTemplate="{TemplateBinding EditTemplate}">
-                                            <!--<ContentControl.OpacityMask>
-                        <VisualBrush Visual="{Binding ElementName=PlusButton}"/>
-                    </ContentControl.OpacityMask>-->
-
+                                                                Content="{TemplateBinding NewObject}"                                                      
+                                                                ContentTemplate="{TemplateBinding EditTemplate}"
+                                                                ContentTemplateSelector="{TemplateBinding EditTemplateSelector}">
                                             <FrameworkElement.Style>
                                                 <Style TargetType="{x:Type ContentControl}">
                                                     <Setter Property="Opacity" Value="0"></Setter>
@@ -309,4 +308,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+
+    <Style  x:Key="{x:Type trees:ComboTreeViewItem}"  TargetType="{x:Type trees:ComboTreeViewItem}" BasedOn="{StaticResource ComboTreeViewItem}"/>
+    
 </ResourceDictionary>

@@ -28,6 +28,15 @@ namespace Utility.WPF.Controls.Trees
     public delegate void FinishEditRoutedEventHandler(object sender, NewObjectRoutedEventArgs e);
 
 
+    public class ComboTreeView : TreeView
+    {
+        protected override DependencyObject GetContainerForItemOverride()
+        {
+            return new ComboTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector };
+        }
+    }
+
+
     public class ComboTreeViewItem : CustomTreeViewItem, ISelection
     {
 
@@ -180,14 +189,29 @@ namespace Utility.WPF.Controls.Trees
             }
         }
 
-        public object SelectionBoxItemTemplate
+        public DataTemplate SelectionBoxItemTemplate
         {
-            get { return (object)GetValue(SelectionBoxItemTemplateProperty); }
+            get { return (DataTemplate)GetValue(SelectionBoxItemTemplateProperty); }
             set { SetValue(SelectionBoxItemTemplateProperty, value); }
         }
 
 
         public static readonly DependencyProperty SelectionBoxItemTemplateProperty = ComboBox.SelectionBoxItemTemplateProperty.AddOwner(typeof(ComboTreeViewItem));
+
+
+
+
+        public DataTemplateSelector SelectionBoxTemplateSelector
+        {
+            get { return (DataTemplateSelector)GetValue(SelectionBoxTemplateSelectorProperty); }
+            set { SetValue(SelectionBoxTemplateSelectorProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SelectionBoxTemplateSelector.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectionBoxTemplateSelectorProperty =
+            DependencyProperty.Register("SelectionBoxTemplateSelector", typeof(DataTemplateSelector), typeof(ComboTreeViewItem), new PropertyMetadata());
+
+
 
         public bool IsReadOnly
         {
