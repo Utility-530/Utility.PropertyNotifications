@@ -223,6 +223,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Demo.ComboBoxes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.ComboBoxes", "Utility.WPF.Controls.ComboBoxes\Utility.WPF.Controls.ComboBoxes.csproj", "{F7F5B759-206A-4C64-9300-BE0447E1075F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.Breadcrumbs", "Utility.WPF.Controls.Breadcrumbs\Utility.WPF.Controls.Breadcrumbs.csproj", "{3C1D7CF5-D60B-406F-B832-339DD06163E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.SplitButtons", "Utility.WPF.Controls.SplitButton\Utility.WPF.Controls.SplitButtons.csproj", "{C5C200CA-D64F-4810-9D9D-C820CF6B77F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -649,6 +653,14 @@ Global
 		{F7F5B759-206A-4C64-9300-BE0447E1075F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7F5B759-206A-4C64-9300-BE0447E1075F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7F5B759-206A-4C64-9300-BE0447E1075F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C1D7CF5-D60B-406F-B832-339DD06163E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C1D7CF5-D60B-406F-B832-339DD06163E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C1D7CF5-D60B-406F-B832-339DD06163E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C1D7CF5-D60B-406F-B832-339DD06163E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5C200CA-D64F-4810-9D9D-C820CF6B77F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5C200CA-D64F-4810-9D9D-C820CF6B77F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5C200CA-D64F-4810-9D9D-C820CF6B77F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5C200CA-D64F-4810-9D9D-C820CF6B77F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -760,6 +772,8 @@ Global
 		{0805251A-F7B4-46B3-8BA5-1D06DC30E858} = {CF03926E-9E72-4A61-B447-2EF7E3C17461}
 		{498147B7-6BCD-4E99-B4CC-46185BB1537F} = {3E8F851B-BECA-4BAA-9275-2104CDEAEC3D}
 		{F7F5B759-206A-4C64-9300-BE0447E1075F} = {2ED92AB3-1BF8-4B9F-85BF-2739EDF1915C}
+		{3C1D7CF5-D60B-406F-B832-339DD06163E0} = {2ED92AB3-1BF8-4B9F-85BF-2739EDF1915C}
+		{C5C200CA-D64F-4810-9D9D-C820CF6B77F2} = {2ED92AB3-1BF8-4B9F-85BF-2739EDF1915C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D60CFCE-498F-4A6D-9B9B-5546561C117E}
