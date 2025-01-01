@@ -28,7 +28,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                             {
                                 repo
                                 .Find(this.Guid, CollectionDescriptor._Name, Descriptor.PropertyType)
-                                .Subscribe(cguid =>
+                                .Subscribe(c =>
                                 {
                                     var enumerable = (IEnumerable)Activator.CreateInstance(Descriptor.PropertyType);
                                     var collectionDescriptor = new CollectionDescriptor(Descriptor, _elementType, enumerable);
@@ -37,7 +37,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                                         return;
                                     }
                                     collectionDescriptor.Subscribe(changes);
-                                    observer.OnNext(new(collectionDescriptor with { Guid = cguid }, Changes.Type.Add));
+                                    observer.OnNext(new(collectionDescriptor with { Guid = c.Guid }, Changes.Type.Add));
                                 }).DisposeWith(disp);
                             }
                             else
@@ -62,7 +62,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                             observer.OnNext(new(default, Changes.Type.Reset));
 
                             repo.Find(this.Guid, "Properties" /*propertiesDescriptor.Name*/, Descriptor.PropertyType)
-                            .Subscribe(pguid =>
+                            .Subscribe(p =>
                             {
                                 if (inst == null)
                                     return;
@@ -73,7 +73,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                                 propertiesDescriptor = new PropertiesDescriptor(Descriptor, inst);
                                 propertiesDescriptor.Subscribe(changes);
 
-                                observer.OnNext(new(propertiesDescriptor with { Guid = pguid }, Changes.Type.Add));
+                                observer.OnNext(new(propertiesDescriptor with { Guid = p.Guid }, Changes.Type.Add));
                             }).DisposeWith(disp);
                         }
                         if (inst is IEnumerable enumerable && inst is not string s && inst.GetType() is Type _type && _type.GetCollectionElementType() is Type elementType)
@@ -82,14 +82,14 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                             var collectionDescriptor = new CollectionDescriptor(Descriptor, elementType, enumerable);
                             repo
                             .Find(this.Guid, collectionDescriptor.Name, Descriptor.PropertyType)
-                            .Subscribe(cguid =>
+                            .Subscribe(c =>
                             {
                                 if (i++ > 0)
                                 {
                                     return;
                                 }
                                 collectionDescriptor.Subscribe(changes);
-                                observer.OnNext(new(collectionDescriptor with { Guid = cguid }, Changes.Type.Add));
+                                observer.OnNext(new(collectionDescriptor with { Guid = c.Guid }, Changes.Type.Add));
                             }).DisposeWith(disp);
                         }
                     });

@@ -55,9 +55,9 @@ internal record MethodDescriptor : MemberDescriptor, IMethodDescriptor
                 foreach (var paramDescriptor in descriptors)
                 {
                     Locator.Current.GetService<ITreeRepository>().Find(this.Guid, paramDescriptor.Name, paramDescriptor.Type)
-                    .Subscribe(guid =>
+                    .Subscribe(c =>
                     {
-                        paramDescriptor.Guid = guid;
+                        paramDescriptor.Guid = c.Guid;
                         dictionary[paramDescriptor.ParameterInfo.Position] = GetValue(paramDescriptor.ParameterInfo);
                         observer.OnNext(new Change<IDescriptor>(paramDescriptor, Changes.Type.Add));
                     });

@@ -109,7 +109,7 @@ namespace Utility.Trees.Demo.Connections
 
         public IDisposable Subscribe(IObserver<object> observer)
         {
-            return new Utility.Observables.Generic.Disposer<object>(observers, observer);
+            return new Utility.Observables.Disposer<object>(observers, observer);
         }
     }
 

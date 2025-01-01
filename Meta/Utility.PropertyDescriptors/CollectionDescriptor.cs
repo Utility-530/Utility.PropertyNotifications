@@ -124,9 +124,9 @@ namespace Utility.Descriptors
         {
             var descriptor = new CollectionHeadersDescriptor(elementType, componentType);
             repo.Find(Guid, elementType.Name, elementType, 0)
-                .Subscribe(_guid =>
+                .Subscribe(c =>
                 {
-                    descriptor.Guid = _guid;
+                    descriptor.Guid = c.Guid;
                     observer.OnNext(new(descriptor, Changes.Type.Add));
                 });
         }

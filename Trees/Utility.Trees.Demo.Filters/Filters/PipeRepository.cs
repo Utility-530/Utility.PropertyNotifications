@@ -50,7 +50,7 @@ namespace Utility.Trees.Demo.Filters
                         disposable = (func() as IObservable<DateValue>).Subscribe(_a => next(_a));
                         break;
                     case RepoResultType.Find when ca is RepoResult2X { Func: { } func }:
-                        disposable = (func() as IObservable<Guid>).Subscribe(_a => next(_a));
+                        disposable = (func() as IObservable<Key>).Subscribe(_a => next(_a));
                         break;
                     case RepoResultType.SelectKeys when ca is RepoResult2X { Func: { } func }:
                         disposable = (func() as IObservable<IReadOnlyCollection<Key>>).Subscribe(next);
@@ -128,7 +128,7 @@ namespace Utility.Trees.Demo.Filters
             return Dictionary.Get(qi, a => new Subject<DateValue>()) as IObservable<DateValue>;
         }
 
-        public override IObservable<Guid> Find(Guid guid, string name, System.Type? type = null, int? index = null)
+        public override IObservable<Key> Find(Guid guid, string name, System.Type? type = null, int? index = null)
         {
             var qi = new RepoItem(guid, RepoItemType.Find, name, type, index);
             Pipe.Instance.New(new ForwardItem(Predicate, qi, []));
@@ -136,7 +136,7 @@ namespace Utility.Trees.Demo.Filters
             {
 
             }
-            return Dictionary.Get(qi, a => new Subject<Guid>()) as Subject<Guid>; ;
+            return Dictionary.Get(qi, a => new Subject<Key>()) as Subject<Key>; ;
         }
 
         public override IObservable<IReadOnlyCollection<Key>> SelectKeys(Guid? parentGuid = null, string? name = null, string? table_name = null)

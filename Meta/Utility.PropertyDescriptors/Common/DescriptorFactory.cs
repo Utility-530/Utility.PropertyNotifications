@@ -15,10 +15,10 @@ namespace Utility.Descriptors
                 Observable.Create<ValuePropertyDescriptor>(observer =>
                 {
                     return repo.Find(parentGuid, descriptor.Name, descriptor.PropertyType)
-                    .Subscribe(guid =>
+                    .Subscribe(c =>
                     {
                         ValuePropertyDescriptor _descriptor = DescriptorConverter.ToDescriptor(value, descriptor);
-                        _descriptor.Guid = guid;
+                        _descriptor.Guid = c.Guid;
                         _descriptor.ParentGuid = parentGuid;
                         observer.OnNext(_descriptor);
                     });
@@ -86,10 +86,10 @@ namespace Utility.Descriptors
             }
             return Observable.Create<IDescriptor>(observer =>
             {
-                return repo.Find(parentGuid, type.Name, type, index).Subscribe(_guid =>
+                return repo.Find(parentGuid, type.Name, type, index).Subscribe(c =>
                 {
 
-                    descriptor.Guid = _guid;
+                    descriptor.Guid = c.Guid;
                     descriptor.ParentGuid = parentGuid;
                     observer.OnNext( descriptor);
                 });
@@ -99,8 +99,8 @@ namespace Utility.Descriptors
         public static async Task<IDescriptor> CreateMethodItem(object item, MethodInfo methodInfo, Type type, Guid parentGuid)
         {
             var descriptor = new MethodDescriptor(methodInfo, item);
-            var _guid = await repo.Find(parentGuid, type.Name).ToTask();
-            descriptor.Guid = _guid;
+            var c = await repo.Find(parentGuid, type.Name).ToTask();
+            descriptor.Guid = c.Guid;
             descriptor.ParentGuid = parentGuid;
             return descriptor;
         }
