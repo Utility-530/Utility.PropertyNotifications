@@ -200,14 +200,7 @@ namespace Utility.Trees
         {
             get
             {
-                if (m_items is IReadOnlyList<ITree> list)
-                {
-                    return list;
-                }
-                else
-                {
-                    return m_items.Cast<ITree>().ToArray();
-                }
+                return m_items;
             }
         }
 
@@ -332,7 +325,7 @@ namespace Utility.Trees
             return other?.Key?.Equals(this.Key) == true;
         }
 
-        public bool Equals(IEquatable? other)
+        public virtual bool Equals(IEquatable? other)
         {
             return other?.Equals(this.Key) == true;
         }
