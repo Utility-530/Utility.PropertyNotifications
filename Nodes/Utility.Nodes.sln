@@ -51,7 +51,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Meta", "Meta", "{C0A380CA-E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodes.Reflections", "Utility.Nodes.Reflections\Utility.Nodes.Reflections.csproj", "{6D372312-A0B0-4645-89DE-9E17C7D7796A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodes.Directorys", "Utility.Nodes.Directorys\Utility.Nodes.Directorys.csproj", "{37FD1FDC-CCF5-45CA-BCBB-554D25E23E77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodes.Directories", "Utility.Nodes.Directorys\Utility.Nodes.Directories.csproj", "{37FD1FDC-CCF5-45CA-BCBB-554D25E23E77}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commands", "..\Commands\Utility.Commands\Utility.Commands.csproj", "{8B38C6EF-FFF0-43A6-8064-21F4D5ECDEBA}"
 EndProject
@@ -118,6 +118,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnumSourceConverter", "..\External\EnumSourceConverter\EnumSourceConverter.csproj", "{7377C762-7CD4-48E1-A5EB-344C72E80FF5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.Breadcrumbs", "..\WPF\Utility.WPF.Controls.Breadcrumbs\Utility.WPF.Controls.Breadcrumbs.csproj", "{4A22104D-10A6-4B92-907C-20BC208DC14F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodes.Demo.ComboBoxes", "Utility.Nodes.Demo.ComboBoxes\Utility.Nodes.Demo.ComboBoxes.csproj", "{81EA4F9D-2A37-4B4C-A1F6-EF52C40E3B75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.ComboBoxes", "..\WPF\Utility.WPF.Controls.ComboBoxes\Utility.WPF.Controls.ComboBoxes.csproj", "{65157055-C800-4508-9704-C28BCC37E5FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Attached", "..\WPF\Utility.WPF.Attached\Utility.WPF.Attached.csproj", "{6AAEA402-23DB-4A1B-8827-363F4942F49F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Colours", "..\WPF\Utility.WPF.Colours\Utility.WPF.Colours.csproj", "{89F0350C-8025-41D9-A3E1-7D08A9025442}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.Buttons", "..\WPF\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj", "{F9437CAC-363E-4BED-8F7B-9B9A2BC614C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Meta", "..\Meta\Utility.Meta\Utility.Meta.csproj", "{654C7CEA-DC03-465E-B763-01305374B7DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -341,6 +353,30 @@ Global
 		{4A22104D-10A6-4B92-907C-20BC208DC14F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A22104D-10A6-4B92-907C-20BC208DC14F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A22104D-10A6-4B92-907C-20BC208DC14F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81EA4F9D-2A37-4B4C-A1F6-EF52C40E3B75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81EA4F9D-2A37-4B4C-A1F6-EF52C40E3B75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81EA4F9D-2A37-4B4C-A1F6-EF52C40E3B75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81EA4F9D-2A37-4B4C-A1F6-EF52C40E3B75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65157055-C800-4508-9704-C28BCC37E5FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65157055-C800-4508-9704-C28BCC37E5FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65157055-C800-4508-9704-C28BCC37E5FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65157055-C800-4508-9704-C28BCC37E5FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AAEA402-23DB-4A1B-8827-363F4942F49F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AAEA402-23DB-4A1B-8827-363F4942F49F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AAEA402-23DB-4A1B-8827-363F4942F49F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AAEA402-23DB-4A1B-8827-363F4942F49F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89F0350C-8025-41D9-A3E1-7D08A9025442}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89F0350C-8025-41D9-A3E1-7D08A9025442}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89F0350C-8025-41D9-A3E1-7D08A9025442}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89F0350C-8025-41D9-A3E1-7D08A9025442}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9437CAC-363E-4BED-8F7B-9B9A2BC614C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9437CAC-363E-4BED-8F7B-9B9A2BC614C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9437CAC-363E-4BED-8F7B-9B9A2BC614C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9437CAC-363E-4BED-8F7B-9B9A2BC614C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{654C7CEA-DC03-465E-B763-01305374B7DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{654C7CEA-DC03-465E-B763-01305374B7DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{654C7CEA-DC03-465E-B763-01305374B7DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{654C7CEA-DC03-465E-B763-01305374B7DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -391,6 +427,12 @@ Global
 		{92BB12E4-ECEB-49C1-8009-517A4203D53F} = {CD19D46F-F1DB-461A-9814-C48D0161E7F1}
 		{7377C762-7CD4-48E1-A5EB-344C72E80FF5} = {CD19D46F-F1DB-461A-9814-C48D0161E7F1}
 		{4A22104D-10A6-4B92-907C-20BC208DC14F} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{81EA4F9D-2A37-4B4C-A1F6-EF52C40E3B75} = {28597BEF-6983-4377-A102-82F69FF978DE}
+		{65157055-C800-4508-9704-C28BCC37E5FB} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{6AAEA402-23DB-4A1B-8827-363F4942F49F} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{89F0350C-8025-41D9-A3E1-7D08A9025442} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{F9437CAC-363E-4BED-8F7B-9B9A2BC614C4} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{654C7CEA-DC03-465E-B763-01305374B7DE} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1F5991F-9180-4F40-A959-E24A6DDA6C5C}
