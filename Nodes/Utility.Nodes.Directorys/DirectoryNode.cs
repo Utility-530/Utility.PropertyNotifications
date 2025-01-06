@@ -165,7 +165,7 @@ namespace Utility.Nodes
             throw new NotImplementedException();
         }
 
-        public bool Equals(IEquatable? other)
+        public override bool Equals(IEquatable? other)
         {
             return (other as DirectoryNode)?.path == path;
         }
