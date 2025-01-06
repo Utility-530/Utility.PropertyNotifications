@@ -88,7 +88,7 @@ namespace Utility.WPF.Controls.Trees
             base.OnApplyTemplate();
         }
 
-        public ExtendedTreeViewItem(string isExpandedPath, string isSelectedPath)
+        public ExtendedTreeViewItem(string isExpandedPath, string isSelectedPath) : this()
         {
             this.isExpandedPath = isExpandedPath;
             this.isSelectedPath = isSelectedPath;

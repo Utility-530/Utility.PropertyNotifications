@@ -23,28 +23,10 @@
 
 
 
-    <LinearGradientBrush x:Key="ProgressBarIndicatorAnimatedFill"
-                     StartPoint="0,0"
-                     EndPoint="1,0">
-        <LinearGradientBrush.GradientStops>
-            <GradientStopCollection>
-                <GradientStop Color="#000000FF"
-                    Offset="0" />
-                <GradientStop Color="#600000FF"
-                    Offset="0.4" />
-                <GradientStop Color="#600000FF"
-                    Offset="0.6" />
-                <GradientStop Color="#000000FF"
-                    Offset="1" />
-            </GradientStopCollection>
-        </LinearGradientBrush.GradientStops>
-    </LinearGradientBrush>
 
 
 
-
-    <Style x:Key="{x:Type local:CustomTreeViewItem}"
-       TargetType="{x:Type local:CustomTreeViewItem}">
+    <Style x:Key="{x:Type local:CustomTreeViewItem}" TargetType="{x:Type local:CustomTreeViewItem}">
         <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
         <Setter Property="IsValid" Value="{Binding Path=IsValid, Mode=TwoWay}" />
         <Setter Property="IsEditable" Value="{Binding Path=IsEditable, Mode=TwoWay}" />
@@ -164,6 +146,7 @@
                                         x:Name="SplitButton"
                                         Style="{TemplateBinding SplitButtonStyle}"
                                         ItemContainerStyleSelector="{TemplateBinding NodeContainerStyleSelector}"
+                                        ItemContainerStyle="{TemplateBinding NodeContainerStyle}"
                                         ItemTemplateSelector="{TemplateBinding NodeTemplateSelector}"
                                         ItemsSource="{TemplateBinding NodeItemsSource}"
                                         ItemTemplate="{TemplateBinding NodeTemplate}">
@@ -357,40 +340,6 @@
     </Style>
 
 
-    <Style x:Key="CustomStyle"
-       TargetType="TreeView">
-        <Setter Property="OverridesDefaultStyle"
-          Value="True" />
-        <Setter Property="SnapsToDevicePixels"
-          Value="True" />
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
-          Value="Auto" />
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
-          Value="Auto" />
-        <!--<Setter Property="ItemContainerStyle"
-          Value="{StaticResource CustomTreeViewItemStyle}" />-->
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="TreeView">
-                    <Border Name="Border"
-                CornerRadius="1"
-                BorderThickness="1">
-                        <Border.BorderBrush>
-                            <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
-                        </Border.BorderBrush>
-                        <Border.Background>
-                            <SolidColorBrush Color="{DynamicResource ControlLightColor}" />
-                        </Border.Background>
-                        <ScrollViewer Focusable="False"
-                        CanContentScroll="False"
-                        Padding="4">
-                            <ItemsPresenter />
-                        </ScrollViewer>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
 
     <!--<Style  x:Key="{x:Type local:CustomTreeViewItem}" TargetType="{x:Type local:CustomTreeViewItem}"  BasedOn="{StaticResource CustomTreeViewItemStyle}"/>-->

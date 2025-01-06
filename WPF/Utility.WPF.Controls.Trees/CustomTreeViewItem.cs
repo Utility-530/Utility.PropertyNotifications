@@ -10,7 +10,7 @@ namespace Utility.WPF.Controls.Trees
     {
         protected override DependencyObject GetContainerForItemOverride()
         {
-            return new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector };
+            return new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector, ItemContainerStyle = ItemContainerStyle };
         }
     }
 
@@ -30,20 +30,21 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty NodeTemplateSelectorProperty = DependencyProperty.Register("NodeTemplateSelector", typeof(DataTemplateSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty NodeModelsProperty = DependencyProperty.Register("NodeModels", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty EditTemplateSelectorProperty = DependencyProperty.Register("EditTemplateSelector", typeof(DataTemplateSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
-        //public static readonly DependencyProperty ChildrenSelectorProperty = DependencyProperty.Register("ChildrenSelector", typeof(IChildrenSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty ChildrenSelectorProperty = DependencyProperty.Register("ChildrenSelector", typeof(IChildrenSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty NodeContainerStyleSelectorProperty = DependencyProperty.Register("NodeContainerStyleSelector", typeof(StyleSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty NodeItemsSourceProperty = DependencyProperty.Register("NodeItemsSource", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty SplitButtonStyleProperty = DependencyProperty.Register("SplitButtonStyle", typeof(Style), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty NodeContainerStyleProperty = DependencyProperty.Register("NodeContainerStyle", typeof(Style), typeof(CustomTreeViewItem), new PropertyMetadata());
 
 
         static CustomTreeViewItem()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomTreeViewItem), new FrameworkPropertyMetadata(typeof(CustomTreeViewItem)));
+           DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomTreeViewItem), new FrameworkPropertyMetadata(typeof(CustomTreeViewItem)));
         }
 
         protected override DependencyObject GetContainerForItemOverride()
         {
-            return new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector };
+            return new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector, ItemContainerStyle = ItemContainerStyle };
         }
 
         public bool IsShowing
@@ -131,11 +132,11 @@ namespace Utility.WPF.Controls.Trees
             set { SetValue(EditTemplateSelectorProperty, value); }
         }
 
-        //public IChildrenSelector ChildrenSelector
-        //{
-        //    get { return (IChildrenSelector)GetValue(ChildrenSelectorProperty); }
-        //    set { SetValue(ChildrenSelectorProperty, value); }
-        //}
+        public IChildrenSelector ChildrenSelector
+        {
+            get { return (IChildrenSelector)GetValue(ChildrenSelectorProperty); }
+            set { SetValue(ChildrenSelectorProperty, value); }
+        }
 
         public StyleSelector NodeContainerStyleSelector
         {
@@ -147,6 +148,12 @@ namespace Utility.WPF.Controls.Trees
         {
             get { return (Style)GetValue(SplitButtonStyleProperty); }
             set { SetValue(SplitButtonStyleProperty, value); }
+        }
+
+        public Style NodeContainerStyle
+        {
+            get { return (Style)GetValue(NodeContainerStyleProperty); }
+            set { SetValue(NodeContainerStyleProperty, value); }
         }
 
         public IEnumerable NodeItemsSource

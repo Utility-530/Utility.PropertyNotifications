@@ -18,9 +18,7 @@
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/HorizontalStyle.xaml"/>
         <!--<res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItemStyle.xaml"/>-->
 
-        <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItemStyle.xaml"/>
-
-        <!--<res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/ComboBoxTreeView.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/AssemblyTreeSelector.xaml"/>-->
+        <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItem.xaml"/>
+        
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

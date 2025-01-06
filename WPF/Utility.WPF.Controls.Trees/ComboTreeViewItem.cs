@@ -45,7 +45,7 @@ namespace Utility.WPF.Controls.Trees
             ToolTipService.IsEnabledProperty.OverrideMetadata(typeof(ComboTreeViewItem), new FrameworkPropertyMetadata(null, new CoerceValueCallback(CoerceToolTipIsEnabled)));
             EventManager.RegisterClassHandler(typeof(ComboBox), Mouse.LostMouseCaptureEvent, new MouseEventHandler(OnLostMouseCapture));
             EventManager.RegisterClassHandler(typeof(TreeViewItem), Mouse.MouseDownEvent, new MouseButtonEventHandler(OnMouseButtonDown), true);
-            //DefaultStyleKeyProperty.OverrideMetadata(typeof(ComboTreeViewItem), new FrameworkPropertyMetadata(typeof(ComboTreeViewItem)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(ComboTreeViewItem), new FrameworkPropertyMetadata(typeof(ComboTreeViewItem)));
         }
 
         public ComboTreeViewItem()
