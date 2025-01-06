@@ -22,11 +22,6 @@ namespace Utility.WPF.Demo.ComboBoxes
             TypeSelector.Type = typeof(Tree);
             Type2Selector.Type = typeof(string);
             DataTemplate2Selector.FullKey = "{\"Assembly\":\"Utility.WPF.Demo.Data\",\"ResourceDictionary\":\"datatemplate/character.baml\",\"Element\":\"CharacterBaseClass\"}";
-            TypeSelector.WhenAnyValue(a => a.SelectedItems)
-                .Subscribe(a =>
-                {
-
-                });
 
             ItemsPanelTemplate2Selector.Key = "WrapPanel";
         }
