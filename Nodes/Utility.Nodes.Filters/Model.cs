@@ -8,7 +8,6 @@ using Utility.Repos;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.Trees.Abstractions;
-using Utility.Trees;
 using Utility.Extensions;
 using System.Linq;
 using Utility.Changes;
@@ -17,7 +16,6 @@ using TreeView.Infrastructure;
 using Utility.ViewModels;
 using Utility.Interfaces.NonGeneric;
 using Fasterflect;
-using Optional;
 
 namespace Utility.Nodes.Filters
 {
@@ -76,7 +74,7 @@ namespace Utility.Nodes.Filters
                     .Where(a => a != null)
                     .Subscribe(a =>
                     {
-                        Update(value, a);
+                        Update(value, (Node)a);
                     });
 
                 node.Items
@@ -116,7 +114,7 @@ namespace Utility.Nodes.Filters
             {
 
             }
-            this.Node = node;
+            this.Node = (Node)node;
         }
         int i = 0;
         public virtual void Initialise(Node node)
@@ -197,7 +195,7 @@ namespace Utility.Nodes.Filters
                             }
                         });
                     }
-                    else if (node.Select(a => (a as IGuid).Guid).Contains(a.Guid) == false)
+                    else if (node.Items.Cast<IGuid>().Select(a => a.Guid).Contains(a.Guid) == false)
                     {
                         node.Add(a);
                         a.Parent = node;

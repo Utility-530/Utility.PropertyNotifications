@@ -118,7 +118,7 @@ namespace Utility.Nodes.Filters
 
         public override bool TryGetValue(object instance, out object? value)
         {
-            Update(Node, Node.Current);
+            Update(Node, (Node)Node.Current);
 
             //var type = instance.GetType();
             if (base.TryGetValue(instance, out value))
@@ -1295,7 +1295,7 @@ namespace Utility.Nodes.Filters
             child.IsExpanded = false;
             while (child.Current != null)
             {
-                items.Add(child = child.Current);
+                items.Add(child = (Node)child.Current);
                 //Extract(child);
                 child.IsExpanded = false;
             }

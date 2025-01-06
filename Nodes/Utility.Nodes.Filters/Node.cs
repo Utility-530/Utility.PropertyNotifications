@@ -21,28 +21,11 @@ namespace Utility.Nodes.Filters
         void SetNode(Node node);
     }
 
-    public class Node : Tree, IGuid, IName, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible //, INode, 
-    {
 
-        private bool? isHighlighted;
-        private bool isExpanded;
-        private ITree parent;
-        private string itemsPanelKey;
-        private Arrangement arrangement;
-        private int columns;
-        private int rows;
-        private Orientation orientation;
-        private bool? isVisible = true;
-        private bool? isValid = null;
-        private object data;
-        private bool isEditable;
-        private ObservableCollection<Node> items;
-        private Node currentNode;
-        private Node selectedNode;
-        private Guid guid;
-        private bool isClicked;
-        private bool isSelected;
-        //int? _index;
+
+    public class Node : ViewModelTree, IGuid, IName, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible //, INode, 
+    {
+        object data;
 
         public Node(string name, object data) : this()
         {
@@ -81,21 +64,6 @@ namespace Utility.Nodes.Filters
             });
         }
 
-        public string Name { get; set; }
-
-        public int? LocalIndex { get; set; }
-
-        public Guid Guid
-        {
-            get => guid; set
-            {
-                if (value != guid)
-                {
-                    guid = value;
-                    RaisePropertyChanged(nameof(Guid));
-                }
-            }
-        }
         public ICommand AddCommand { get; }
         public ICommand RemoveCommand { get; }
         public ICommand EditCommand { get; }
@@ -139,175 +107,6 @@ namespace Utility.Nodes.Filters
             }
         }
 
-        public Node Root
-        {
-            get => this.items.FirstOrDefault();
-            set => this.Add(value);
-        }
-
-        public bool? IsValid
-        {
-            get => isValid; set
-            {
-                if (value != isValid)
-                {
-                    isValid = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
-        public bool IsEditable
-        {
-            get => isEditable; set
-            {
-                if (value != isEditable)
-                {
-                    isEditable = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-
-
-        public bool? IsHighlighted
-        {
-            get => isHighlighted;
-            set
-            {
-                if (value != isHighlighted)
-                {
-                    isHighlighted = value;
-                    base.RaisePropertyChanged();
-                }
-            }
-        }
-
-        public bool IsClicked
-        {
-            get => isClicked; set
-            {
-                isClicked = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool IsSelected
-        {
-            get => isSelected; set
-            {
-                isSelected = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public bool IsExpanded
-        {
-            get => isExpanded;
-            set
-            {
-                if (value != isExpanded)
-                {
-                    isExpanded = value;
-                    base.RaisePropertyChanged();
-                }
-            }
-        }
-
-        public Arrangement Arrangement
-        {
-            get => arrangement;
-            set
-            {
-                if (value != arrangement)
-                {
-                    arrangement = value;
-                    base.RaisePropertyChanged();
-                }
-            }
-        }
-
-        public Orientation Orientation
-        {
-            get => orientation;
-            set
-            {
-                if (value != orientation)
-                {
-                    orientation = value;
-                    base.RaisePropertyChanged();
-                }
-            }
-        }
-
-        public int Rows
-        {
-            get => rows;
-            set
-            {
-                if (value != rows)
-                {
-                    rows = value;
-                    base.RaisePropertyChanged();
-                }
-            }
-        }
-
-        public int Columns
-        {
-            get => columns;
-            set
-            {
-                if (value != columns)
-                {
-                    columns = value;
-                    base.RaisePropertyChanged();
-                }
-            }
-        }
-
-        public bool? IsVisible
-        {
-            get => isVisible;
-            set
-            {
-                if (value != isVisible)
-                {
-                    isVisible = value;
-                    base.RaisePropertyChanged();
-                }
-            }
-        }
-
-        public bool IsPersistable { get; set; }
-
-        public Node Current
-        {
-            get => currentNode;
-            set
-            {
-                if (currentNode != value)
-                {
-                    if (currentNode != null)
-                        currentNode.IsPersistable = false;
-                    value.IsPersistable = true;
-                    currentNode = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
-        public Node Selected
-        {
-            get => selectedNode;
-            set
-            {
-                if (selectedNode != value)
-                {
-                    selectedNode = value;
-                    RaisePropertyChanged();
-                }
-            }
-        }
 
         protected override void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
@@ -336,43 +135,14 @@ namespace Utility.Nodes.Filters
             return Data?.ToString();
         }
 
-        public override bool Equals(object? obj)
-        {
-            if (obj is Node node)
-            {
-                return node.Guid == this.Guid;
-            }
-            return base.Equals(obj);
-        }
 
         public override bool Equals(ITree other)
         {
-            if (other is Node node)
-                return Equals(node);
+            if (other is ViewModelTree node)
+                return node.Equals(this);
             else
                 return base.Equals(other);
         }
 
-
-        public bool Equals(Node? obj)
-        {
-            if (obj is Node node)
-            {
-                return node.Guid == this.Guid;
-            }
-            return false;
-        }
-
-        internal void Load()
-        {
-            TreeRepository.Instance
-                .Get(this.Guid)
-                .Subscribe(guid =>
-                {
-                    if (guid.Value is NodeDTO node)
-                        Splat.Locator.Current.GetService<IMapper>()?.Map(node, this);
-                });
-
-        }
     }
 }
