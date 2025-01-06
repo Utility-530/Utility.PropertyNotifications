@@ -97,11 +97,11 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:Type}">
-        <cbx:TypeSelector x:Name="TypeSelector" Type="{Binding Value, Mode=TwoWay}">
+        <cbx:ComboBoxTreeView >
             <i:Interaction.Behaviors>
-                <infra:EntryAssemblyBehavior/>
+                <cbx:TypeSelectorBehavior  x:Name="TypeSelector" Type="{Binding Value, Mode=TwoWay}" UseEntryAssembly="True"/>
             </i:Interaction.Behaviors>
-        </cbx:TypeSelector>
+        </cbx:ComboBoxTreeView>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:Enum}">
