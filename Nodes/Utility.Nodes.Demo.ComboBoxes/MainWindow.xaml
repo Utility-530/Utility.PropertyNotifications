@@ -1,0 +1,119 @@
+﻿<Window x:Class="Utility.Nodes.Demo.ComboBoxes.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Utility.Nodes.Demo.ComboBoxes"
+        xmlns:io="clr-namespace:System.IO;assembly=mscorlib"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:cb="http://schemas.utility.com/cboxes" xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <FrameworkElement.Resources>
+
+
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <ResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/ButtonComboBoxTreeViewStyle.xaml"></ResourceDictionary>
+                </ResourceDictionary.MergedDictionaries>
+
+                <HierarchicalDataTemplate x:Key="treeViewDataTemplate" ItemsSource="{Binding Items}">
+                    <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
+                        <ContentControl Content="{Binding Data}"/>
+                    </Border>
+                </HierarchicalDataTemplate>
+
+                <!--<DataTemplate DataType="{x:Type sys:Type}">
+                <TextBlock Text="{Binding Name}" ToolTip="{Binding FullName}"></TextBlock>
+            </DataTemplate>-->
+
+                <DataTemplate DataType="{x:Type io:FileSystemInfo}">
+                    <Border Height="28"
+                            Padding="16 0"
+                            Background="#01FFFFFF">
+                        <Border.InputBindings>
+                            <MouseBinding MouseAction="LeftClick"
+                                          Command="{Binding Path=DataContext.SetCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                          CommandParameter="{Binding}" />
+                        </Border.InputBindings>
+                        <Grid>
+                            <Grid.Resources>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextTrimming"
+                                            Value="CharacterEllipsis" />
+                                    <Setter Property="Foreground"
+                                            Value="#505050" />
+                                    <Setter Property="VerticalAlignment"
+                                            Value="Center" />
+                                </Style>
+                            </Grid.Resources>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*" />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="16" />
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="16" />
+                            </Grid.ColumnDefinitions>
+
+
+                            <!--<Image Grid.Column="0" Width="16" Height="16" Source="{Binding FullName, Converter={StaticResource iconConverter}}" />-->
+
+                            <TextBlock Grid.Column="2"
+                                       Text="{Binding Name}" />
+
+                            <TextBlock Grid.Column="4"
+                                       Text="{Binding Attributes}" />
+                            <TextBlock Grid.Column="6"
+                                       Text="{Binding LastWriteTime}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+
+                <Style x:Key="BTCStyle" TargetType="{x:Type cb:ComboBoxTreeView}" BasedOn="{StaticResource ButtonComboBoxTreeViewStyle}">
+                    <Setter Property="ToggleButtonContent">
+                        <Setter.Value>
+                            <icons:PackIconIonicons x:Name="Icon" Kind="AddMD" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"/>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+
+                <Style x:Key="FilingStyle" TargetType="{x:Type cb:ComboBoxTreeView}" BasedOn="{StaticResource ButtonComboBoxTreeViewStyle}">
+                    <Setter Property="ToggleButtonContent">
+                        <Setter.Value>
+                            <icons:PackIconIonicons x:Name="Icon" Kind="FolderiOS" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"/>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ResourceDictionary>
+
+        </FrameworkElement.Resources>
+
+        <StackPanel>
+            <cb:ComboBoxTreeView 
+                x:Name="DirectorySelector"                
+                ParentPath="Parent"       
+                Style="{StaticResource FilingStyle}"
+                ItemTemplate="{StaticResource treeViewDataTemplate}">
+                <!--<cb:ComboBoxTreeView.SelectedItemTemplate>
+                    <DataTemplate >
+                        <Border BorderThickness="1" BorderBrush="Gray" Margin="1">
+                            <TextBlock Text="{Binding Data, Converter={x:Static controls:KeyValueConverter.Instance}}"/>
+                        </Border>
+                    </DataTemplate>
+                </cb:ComboBoxTreeView.SelectedItemTemplate>-->
+
+            </cb:ComboBoxTreeView>
+
+
+            <cb:ComboBoxTreeView Style="{StaticResource BTCStyle}">
+                <i:Interaction.Behaviors>
+                    <cb:TypeSelectorBehavior  x:Name="Type2Selector" UseEntryAssembly="True" ></cb:TypeSelectorBehavior>
+                </i:Interaction.Behaviors>
+            </cb:ComboBoxTreeView>
+
+
+        </StackPanel>
+    </Grid>
+</Window>
