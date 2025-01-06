@@ -15,14 +15,15 @@ using Utility.WPF.Factorys;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
-    public class TypeSelector : TreeSelector
+    public class TypeSelectorBehavior : TreeSelectorBehavior
     {
-        public static readonly DependencyProperty AssembliesProperty = DependencyProperty.Register("Assemblies", typeof(IEnumerable), typeof(TypeSelector), new PropertyMetadata(AssembliesChanged));
-        public static readonly DependencyProperty TypeProperty = DependencyProperty.Register("Type", typeof(Type), typeof(TypeSelector), new PropertyMetadata(TypeChanged));
+        public static readonly DependencyProperty AssembliesProperty = DependencyProperty.Register("Assemblies", typeof(IEnumerable), typeof(TypeSelectorBehavior), new PropertyMetadata(AssembliesChanged));
+        public static readonly DependencyProperty TypeProperty = DependencyProperty.Register("Type", typeof(Type), typeof(TypeSelectorBehavior), new PropertyMetadata(TypeChanged));
+        public static readonly DependencyProperty UseEntryAssemblyProperty = DependencyProperty.Register("UseEntryAssembly", typeof(bool), typeof(TypeSelectorBehavior), new PropertyMetadata(false));
 
         private static void TypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is TypeSelector { ItemsSource: IReadOnlyTree tree } typeSelector && e.NewValue is Type type)
+            if (d is TypeSelectorBehavior { AssociatedObject.ItemsSource: IReadOnlyTree tree } typeSelector && e.NewValue is Type type)
             {
                 typeSelector.ChangeType(tree, type);
             }
@@ -30,7 +31,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         private static void AssembliesChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is TypeSelector typeSelector && e.NewValue is IEnumerable enumerable)
+            if (d is TypeSelectorBehavior typeSelector && e.NewValue is IEnumerable enumerable)
             {
                 Set(typeSelector, enumerable);
                 if (enumerable is IReadOnlyTree tree && typeSelector.Type is Type type)
@@ -38,12 +39,12 @@ namespace Utility.WPF.Controls.ComboBoxes
             }
         }
 
-
-        public TypeSelector()
+        protected override void OnAttached()
         {
-            this.SelectedItemTemplateSelector = CustomItemTemplateSelector.Instance;
 
-            this.WhenAnyValue(a => a.SelectedNode)
+            this.AssociatedObject.SelectedItemTemplateSelector = CustomItemTemplateSelector.Instance;
+
+            this.AssociatedObject.WhenAnyValue(a => a.SelectedNode)
                 .OfType<IReadOnlyTree>()
                 .Select(a => a.Data)
                 .OfType<Type>()
@@ -52,54 +53,56 @@ namespace Utility.WPF.Controls.ComboBoxes
                     Type = a;
                 });
 
-            //this.WhenAnyValue(a => a.ItemsSource)
-            //    .WhereNotNull()
-            //    .Subscribe(a =>
-            //    {
-            //        if (a is IReadOnlyTree tree && Type is Type type)
-            //            ChangeType(tree, type);
-            //    });
 
+            if (UseEntryAssembly)
+            {
+                Assemblies = new List<Assembly>([Assembly.GetEntryAssembly()]);
+            }
+            if (Assemblies != null)
+                Set(this, Assemblies);
+
+            if (Type is Type type && AssociatedObject.TreeView != null && this.AssociatedObject.ItemsSource is IReadOnlyTree tree)
+            {
+                ChangeType(tree, type);
+            }
+
+            base.OnAttached();
         }
-
         void ChangeType(IReadOnlyTree tree, Type _type)
         {
             if (tree.MatchDescendant(a => a.Data is Type type && type == _type) is IReadOnlyTree { } innerTree)
             {
-                IsError = false;
-                UpdateSelectedItems(innerTree);
-                if (_treeView?.ItemContainerGenerator.ContainerFromItem(_treeView.SelectedItem) is TreeViewItem item)
+                AssociatedObject.IsError = false;
+                AssociatedObject.UpdateSelectedItems(innerTree);
+                if (AssociatedObject.TreeView?.ItemContainerGenerator.ContainerFromItem(AssociatedObject.TreeView.SelectedItem) is TreeViewItem item)
                     item.IsSelected = true;
-                SelectedNode = innerTree;
+                AssociatedObject.SelectedNode = innerTree;
             }
             else
             {
-                IsError = true;
+                AssociatedObject.IsError = true;
             }
         }
 
-
- 
-        static void Set(TypeSelector typeSelector, IEnumerable enumerable)
+        static void Set(TypeSelectorBehavior typeSelector, IEnumerable enumerable)
         {
-
-            var assemblyTree = Ex.ToTree(enumerable.Cast<Assembly>().ToArray());
-
-            typeSelector.ItemsSource = assemblyTree; 
+            var assemblyTree = NodeExtensions.ToTree(enumerable.Cast<Assembly>().ToArray());
+            typeSelector.AssociatedObject.ItemsSource = assemblyTree;
         }
 
 
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-            if (Assemblies != null)
-                Set(this, Assemblies);
+        //public override void OnApplyTemplate()
+        //{
 
-            if (Type is Type type && _treeView != null && this.ItemsSource is IReadOnlyTree tree)
-            {
-                ChangeType(tree, type);
-            }
-        }
+        //    base.OnApplyTemplate();
+        //    if (Assemblies != null)
+        //        Set(this, Assemblies);
+
+        //    if (Type is Type type && AssociatedObject.TreeView != null && this.AssociatedObject.ItemsSource is IReadOnlyTree tree)
+        //    {
+        //        ChangeType(tree, type);
+        //    }
+        //}
 
 
         public Type Type
@@ -114,6 +117,13 @@ namespace Utility.WPF.Controls.ComboBoxes
             get { return (IEnumerable)GetValue(AssembliesProperty); }
             set { SetValue(AssembliesProperty, value); }
         }
+
+        public bool UseEntryAssembly
+        {
+            get { return (bool)GetValue(UseEntryAssemblyProperty); }
+            set { SetValue(UseEntryAssemblyProperty, value); }
+        }
+
 
         class CustomItemTemplateSelector : DataTemplateSelector
         {
@@ -141,29 +151,5 @@ namespace Utility.WPF.Controls.ComboBoxes
             public static CustomItemTemplateSelector Instance { get; } = new();
         }
 
-        //private void ExpandAll(ItemsControl items, Predicate<object> predicate)
-        //{
-        //    bool b = false;
-        //    foreach (object obj in items.Items)
-        //    {
-        //        if (b) break;
-        //        ItemsControl childControl = items.ItemContainerGenerator.ContainerFromItem(obj) as ItemsControl;
-        //        if (childControl != null)
-        //        {
-        //            ExpandAll(childControl, predicate);
-        //        }
-        //        TreeViewItem item = childControl as TreeViewItem;
-        //        if (item != null)
-        //        {
-        //            item.IsExpanded = true;
-        //            item.IsSelected = true;
-        //        }
-        //        if (predicate(item))
-        //        {
-        //            item.IsSelected = true;
-        //        }
-        //        b = true;
-        //    }
-        //}
     }
 }
