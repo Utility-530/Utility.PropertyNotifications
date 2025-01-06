@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Utility.Nodes.Filters;
 
-namespace Utility.Nodes.Demo.Filters.Infrastructure
+namespace Utility.Nodes.Demo.Filters
 {
     public class EditTemplateSelector : DataTemplateSelector
     {

@@ -4,7 +4,7 @@ using Utility.ViewModels;
 
 namespace Utility.Nodes.Demo.Filters
 {
-    public class MainViewModel :NotifyPropertyChangedBase
+    public class MainViewModel : NotifyPropertyChangedBase
     {
         IReadOnlyTree[] control, selection, content, filters;
 
@@ -12,21 +12,15 @@ namespace Utility.Nodes.Demo.Filters
         {
             get
             {
-                if (control != null)
-                    return control;
-                NodeSource
-                    .Instance
-                    .Single(nameof(Factory.BuildControlRoot))
-                    .Subscribe(a =>
-                    {
-                        control = [a];
-                        base.RaisePropertyChanged(nameof(Controls));
-                    });
-
+                if (control == null)
+                    NodeSource.Instance.Single(nameof(Factory.BuildControlRoot))
+                        .Subscribe(a =>
+                        {
+                            control = [a]; base.RaisePropertyChanged(nameof(Controls));
+                        });
                 return control;
             }
         }
-
 
         public IReadOnlyTree[] Selection
         {
@@ -60,17 +54,6 @@ namespace Utility.Nodes.Demo.Filters
                 return filters;
             }
         }
-
-        //public IReadOnlyTree BuildFiltersRoot
-        //{
-        //    get
-        //    {
-        //        if (content == null)
-        //            NodeSource.Instance.Single(nameof(Factory.BuildDefault2))
-        //                .Subscribe(a => { content = a; OnPropertyChanged(nameof(Content)); });
-        //        return content;
-        //    }
-        //}
     }
 }
 

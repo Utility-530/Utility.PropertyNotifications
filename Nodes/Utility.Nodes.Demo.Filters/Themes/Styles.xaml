@@ -3,12 +3,18 @@
                     xmlns:customtrees="CustomTrees"
                     xmlns:trees="http://schemas.utility.com/trees"
                     xmlns:local="clr-namespace:Utility.Nodes.Demo.Filters" 
-                    xmlns:conv="clr-namespace:Utility.Nodes.Demo.Filters.Infrastructure">
+                    xmlns:conv="http://schemas.utility.com/converters" 
+                    xmlns:att="http://schemas.utility.com/attached" 
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+                    xmlns:beh="http://schemas.utility.com/behaviors" 
+                    xmlns:controls="http://schemas.utility.com/cboxes" xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItemStyle.xaml"></ResourceDictionary>
+        <ResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
+    <local:FinishEditConverter x:Key="FinishEditConverter"></local:FinishEditConverter>
+    <local:SelectedNodeChangeConverter x:Key="SelectedNodeChangeConverter"></local:SelectedNodeChangeConverter>
 
     <Style TargetType="{x:Type Button}">
         <Setter Property="Foreground" Value="#373737" />
@@ -86,11 +92,8 @@
     </Style>
 
     <conv:TypeNameConverter x:Key="TypeNameConverter"/>
-    <!--<views:ChildrenSelector x:Key="ChildrenSelector"/>-->
-
+    <local:ChildrenSelector x:Key="ChildrenSelector"/>
     <local:ChildrenSelectorConverter x:Key="ChildrenSelectorConverter"/>
-
-
 
     <Style x:Key="DefaultStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
         <Setter Property="ToolTip" Value="{Binding Guid}"></Setter>
@@ -102,25 +105,23 @@
                     <Binding Path="SelectedIndex"  ElementName="SplitButton"/>
                     <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=Self}"/>
                     <Binding Path="NodeModels" RelativeSource="{RelativeSource Mode=Self}"/>
-                    <Binding Path="ChildrenSelector"  RelativeSource="{RelativeSource Mode=Self}"/>
                 </MultiBinding>
             </Setter.Value>
         </Setter>
         <Setter Property="EditTemplateSelector">
             <Setter.Value>
-                <conv:EditTemplateSelector>
-                    <conv:EditTemplateSelector.AndOrModelTemplate>
+                <local:EditTemplateSelector>
+                    <local:EditTemplateSelector.AndOrModelTemplate>
                         <DataTemplate>
                             <Ellipse Fill="Red"  Height="20" Width="20"></Ellipse>
-
                         </DataTemplate>
-                    </conv:EditTemplateSelector.AndOrModelTemplate>
-                    <conv:EditTemplateSelector.ResolvableModelTemplate>
+                    </local:EditTemplateSelector.AndOrModelTemplate>
+                    <local:EditTemplateSelector.ResolvableModelTemplate>
                         <DataTemplate>
                             <TextBox Text="{Binding Name}"></TextBox>
                         </DataTemplate>
-                    </conv:EditTemplateSelector.ResolvableModelTemplate>
-                </conv:EditTemplateSelector>
+                    </local:EditTemplateSelector.ResolvableModelTemplate>
+                </local:EditTemplateSelector>
             </Setter.Value>
         </Setter>
         <Setter Property="NodeTemplate">
@@ -133,6 +134,67 @@
     </Style>
 
 
+    <icons:PackIconIonicons x:Key="Icon" x:Shared="false" Kind="AddMD" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"/>
+
+
+    <Style x:Key="DefaultContentStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource CustomComboTreeViewItemStyle}">
+        <Style.Resources>
+            <Style x:Key="Type_Style" TargetType="{x:Type controls:ComboBoxTreeView}" BasedOn="{StaticResource ButtonComboBoxTreeViewStyle}">
+                <Setter Property="ToggleButtonContent" Value="{StaticResource Icon}"/>
+                <Setter Property="ParentPath" Value="Parent"></Setter>
+                <Setter Property="att:InteractivityItems.Template">
+                    <Setter.Value>
+                        <att:InteractivityTemplate>
+                            <att:InteractivityItems>
+                                <att:InteractivityItems.Triggers>
+                                    <i:EventTrigger EventName="SelectedNodeChanged">
+                                        <beh:InvokeCommandAction Command="{Binding AddCommand}" EventArgsConverter="{StaticResource SelectedNodeChangeConverter}"/>
+                                    </i:EventTrigger>
+                                </att:InteractivityItems.Triggers>
+                            </att:InteractivityItems>
+                        </att:InteractivityTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Style.Resources>
+        <Setter Property="IsEditable" Value="True"></Setter>
+        <Setter Property="ChildrenSelector" Value="{StaticResource ChildrenSelector}"></Setter>
+        <Setter Property="SplitButtonStyle" Value="{StaticResource Type_Style }"></Setter>
+        <Setter Property="ToolTip" Value="{Binding Guid}"></Setter>
+        <Setter Property="NodeItemsSource">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource ChildrenSelectorConverter}">
+                    <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=Self}"/>
+                    <Binding Path="ChildrenSelector"  RelativeSource="{RelativeSource Mode=Self}"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="EditTemplateSelector">
+            <Setter.Value>
+                <local:EditTemplateSelector>
+                    <local:EditTemplateSelector.AndOrModelTemplate>
+                        <DataTemplate>
+                            <Ellipse Fill="Red"  Height="20" Width="20"></Ellipse>
+                        </DataTemplate>
+                    </local:EditTemplateSelector.AndOrModelTemplate>
+                    <local:EditTemplateSelector.ResolvableModelTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Name}"></TextBox>
+                        </DataTemplate>
+                    </local:EditTemplateSelector.ResolvableModelTemplate>
+                </local:EditTemplateSelector>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="NodeTemplate">
+            <Setter.Value>
+                <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                    <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
+                        <ContentControl Content="{Binding Data}"/>
+                    </Border>
+                </HierarchicalDataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 
 
