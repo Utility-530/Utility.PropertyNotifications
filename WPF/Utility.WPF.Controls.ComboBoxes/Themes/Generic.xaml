@@ -3,8 +3,9 @@
                     xmlns:res="http://schemas.utility.com/resourcedictionary">
 
     <ResourceDictionary.MergedDictionaries>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/ButtonComboBoxTreeViewStyle.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/ComboBoxTreeView.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/AssemblyTreeSelector.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>
     

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Utility.WPF.Controls.Trees;
 
@@ -28,49 +28,64 @@ namespace Utility.WPF.Controls.ComboBoxes
 
     public class ComboBoxTreeView : ComboBox
     {
-        public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register("SelectedItems", typeof(IEnumerable), typeof(ComboBoxTreeView), new PropertyMetadata(null, Changed2));
+        public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register("SelectedItems", typeof(IEnumerable), typeof(ComboBoxTreeView), new PropertyMetadata(null));
         public static readonly DependencyProperty ParentPathProperty = DependencyProperty.Register("ParentPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata());
-        public static readonly DependencyProperty SelectedNodeProperty = DependencyProperty.Register("SelectedNode", typeof(object), typeof(ComboBoxTreeView), new FrameworkPropertyMetadata(default, Changed));
-
-
+        public static readonly DependencyProperty SelectedNodeProperty = DependencyProperty.Register("SelectedNode", typeof(object), typeof(ComboBoxTreeView), new FrameworkPropertyMetadata(default));
         public static readonly DependencyProperty IsCheckedPathProperty = DependencyProperty.Register("IsCheckedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty IsExpandedPathProperty = DependencyProperty.Register("IsExpandedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata("IsExpanded"));
         public static readonly DependencyProperty IsSelectedPathProperty = DependencyProperty.Register("IsSelectedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata("IsSelected"));
         public static readonly DependencyProperty SelectedItemTemplateProperty = DependencyProperty.Register("SelectedItemTemplate", typeof(DataTemplate), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty SelectedItemTemplateSelectorProperty = DependencyProperty.Register("SelectedItemTemplateSelector", typeof(DataTemplateSelector), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty IsErrorProperty = DependencyProperty.Register("IsError", typeof(bool), typeof(ComboBoxTreeView), new PropertyMetadata(false));
+        public static readonly RoutedEvent SelectedNodeChangedEvent = EventManager.RegisterRoutedEvent("SelectedNodeChanged", RoutingStrategy.Bubble, typeof(SelectedNodeEventHandler), typeof(ComboBoxTreeView));
+        public static readonly DependencyProperty ToggleButtonContentProperty = DependencyProperty.Register("ToggleButtonContent", typeof(object), typeof(ComboBoxTreeView), new PropertyMetadata());
 
 
-        private static void Changed2(DependencyObject d, DependencyPropertyChangedEventArgs e)
+
+        public delegate void SelectedNodeEventHandler(object sender, SelectedNodeEventArgs e);
+
+        public class SelectedNodeEventArgs : RoutedEventArgs
         {
-            if(d is ComboBoxTreeView treeView && e.NewValue is { } value)
+            public SelectedNodeEventArgs(RoutedEvent routedEvent, object source, object value) : base(routedEvent, source)
             {
-                treeView.SelectedNodesChanged(value);
-
+                Value = value;
             }
+
+            public object Value { get; }
         }
-        
-        private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        public ComboBoxTreeView()
         {
-            if(d is ComboBoxTreeView treeView && e.NewValue is { } value)
-            {
-                treeView.SelectedNodeChanged(value);
-
-            }
+            this.DropDownClosed += ComboBoxTreeView_DropDownClosed;
+            this.LostFocus += ComboBoxTreeView_LostFocus;
+           
         }
 
-        protected virtual void SelectedNodeChanged(object value)
+        private void ComboBoxTreeView_LostFocus(object sender, RoutedEventArgs e)
         {
-
+            //IsDropDownOpen = false;
         }
-             
-        protected virtual void SelectedNodesChanged(object value)
+
+        protected override void OnMouseLeave(MouseEventArgs e)
+         {
+            IsDropDownOpen = false;
+            base.OnMouseLeave(e);
+        }
+
+
+        protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
-
+            IsDropDownOpen = false;
+            base.OnMouseLeftButtonDown(e);
+        }
+        private void ComboBoxTreeView_DropDownClosed(object? sender, EventArgs e)
+        {
         }
 
-        protected ExtendedTreeView _treeView;
-        private ObservableCollection<object> list = new();
+        public ExtendedTreeView TreeView { get; set; }
+        public ToggleButton ToggleButton { get; set; }
+        public Popup Popup { get; set; }
+
+        public ObservableCollection<object> List = new();
 
         static ComboBoxTreeView()
         {
@@ -84,12 +99,47 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         public override void OnApplyTemplate()
         {
-            _treeView = (ExtendedTreeView)GetTemplateChild("treeView");
-            _treeView.OnHierarchyMouseUp += new MouseEventHandler(OnTreeViewHierarchyMouseUp);
-            _treeView.OnChecked += _treeView_OnChecked;
-            if (_treeView.SelectedItem != null)
-                UpdateSelectedItems(_treeView.SelectedItem);
+            this.DropDownClosed += ComboBoxTreeView_DropDownClosed;
+            Popup = (Popup)GetTemplateChild("Popup");
+            ToggleButton = (ToggleButton)GetTemplateChild("ToggleButton");
+            ToggleButton.Checked += ToggleButton_Checked;
+
+            //Popup.MouseEnter += (s, e) => e.Handled = true;
+            //Popup.MouseLeave += (s, e) => e.Handled = true;
+
+
+            TreeView = (ExtendedTreeView)GetTemplateChild("treeView");
+            TreeView.SelectedItemChanged += TreeView_SelectedItemChanged;
+            TreeView.OnHierarchyMouseUp += new MouseEventHandler(OnTreeViewHierarchyMouseUp);
+            TreeView.OnChecked += _treeView_OnChecked;
+            if (TreeView.SelectedItem != null)
+                UpdateSelectedItems(TreeView.SelectedItem);
             base.OnApplyTemplate();
+        }
+
+        private void ComboBoxTreeView_DropDownClosed1(object? sender, EventArgs e)
+        {
+
+        }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (TreeView.SelectedItem != null)
+            {
+                var hierarchy = SelectItems(TreeView.SelectedItem);
+
+                //SelectedItems = hierarchy;
+                UpdateSelectedItems(TreeView.SelectedItem);
+
+                //IsDropDownOpen = false;
+            }
+        }
+        private void ToggleButton_Checked(object sender, RoutedEventArgs e)
+        {
+            if(ToggleButton.IsChecked==false)
+            {
+
+            }
         }
 
         private void _treeView_OnChecked(object sender, RoutedEventArgs e)
@@ -98,28 +148,28 @@ namespace Utility.WPF.Controls.ComboBoxes
             {
                 if (isChecked)
                 {
-                    list.Add(item.DataContext);
+                    List.Add(item.DataContext);
                 }
-                else if (list.Contains(item))
+                else if (List.Contains(item))
                 {
-                    list.Remove(item.DataContext);
+                    List.Remove(item.DataContext);
                 }
-                SelectedItems = list;
+                SelectedItems = List;
             }
+            IsDropDownOpen = false;
         }
 
         protected override void OnDropDownClosed(EventArgs e)
         {
-            base.OnDropDownClosed(e);
-            if (_treeView.SelectedItem != null)
-                UpdateSelectedItems(_treeView.SelectedItem);
+            if (TreeView?.SelectedItem != null)
+                UpdateSelectedItems(TreeView.SelectedItem);
         }
 
         protected override void OnDropDownOpened(EventArgs e)
         {
             base.OnDropDownOpened(e);
-            if (_treeView.SelectedItem != null)
-                UpdateSelectedItems(_treeView.SelectedItem);
+            if (TreeView?.SelectedItem != null)
+                UpdateSelectedItems(TreeView.SelectedItem);
         }
 
         /// <summary>
@@ -127,15 +177,17 @@ namespace Utility.WPF.Controls.ComboBoxes
         /// </summary>
         private void OnTreeViewHierarchyMouseUp(object sender, MouseEventArgs e)
         {
-            if (_treeView.SelectedItem != null)
+            if (TreeView.SelectedItem != null)
             {
-                var hierarchy = SelectItems(_treeView.SelectedItem);
-         
-                //SelectedItems = hierarchy;
-                UpdateSelectedItems(_treeView.SelectedItem);
-
-                IsDropDownOpen = false;
+                //IsDropDownOpen = false;
+                ToggleButton.IsChecked = false;
             }
+        }
+
+        private void RaiseSelectedNodeChangedEvent(object value)
+        {
+            RoutedEventArgs newEventArgs = new SelectedNodeEventArgs(SelectedNodeChangedEvent, this, value);
+            RaiseEvent(newEventArgs);
         }
 
         #region properties
@@ -182,6 +234,11 @@ namespace Utility.WPF.Controls.ComboBoxes
             set { SetValue(SelectedItemsProperty, value); }
         }
 
+        public object ToggleButtonContent
+        {
+            get { return (object)GetValue(ToggleButtonContentProperty); }
+            set { SetValue(ToggleButtonContentProperty, value); }
+        }
 
         public DataTemplateSelector SelectedItemTemplateSelector
         {
@@ -194,15 +251,21 @@ namespace Utility.WPF.Controls.ComboBoxes
             set { SetValue(IsErrorProperty, value); }
         }
 
+        public event SelectedNodeEventHandler SelectedNodeChanged
+        {
+            add { AddHandler(SelectedNodeChangedEvent, value); }
+            remove { RemoveHandler(SelectedNodeChangedEvent, value); }
+        }
 
         #endregion properties
 
-        protected void UpdateSelectedItems(object selectedItem)
+        public void UpdateSelectedItems(object selectedItem)
         {
 
             var hierarchy = SelectItems(selectedItem);
             SelectedItems = hierarchy;
             SelectedNode = selectedItem;
+            RaiseSelectedNodeChangedEvent(selectedItem);
         }
 
         private object[] SelectItems(object selectedItem)
