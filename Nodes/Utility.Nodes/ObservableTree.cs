@@ -10,11 +10,9 @@ using Utility.Trees.Abstractions;
 namespace Utility.Trees
 {
 
-    public class ObservableTree : Tree, IObservable<Change<IReadOnlyTree>>
+    public abstract class ObservableTree : Tree, IObservable<Change<IReadOnlyTree>>
     {
         readonly ReplaySubject<Change<IReadOnlyTree>> subject = new();
-
-
         public IDisposable Subscribe(IObserver<Change<IReadOnlyTree>> observer)
         {
             return subject.Subscribe(observer);

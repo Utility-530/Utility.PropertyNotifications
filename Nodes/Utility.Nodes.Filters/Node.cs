@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Utility.Enums;
 using Utility.Interfaces.NonGeneric;
@@ -20,8 +21,6 @@ namespace Utility.Nodes.Filters
     {
         void SetNode(Node node);
     }
-
-
 
     public class Node : ViewModelTree, IGuid, IName, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible //, INode, 
     {
@@ -38,13 +37,7 @@ namespace Utility.Nodes.Filters
             AddCommand = new RelayCommand(a =>
             {
                 this.IsExpanded = true;
-                var index = TreeRepository.Instance.MaxIndex(this.Guid, Name + "_child") ?? 0;
-                var node = new Node(Name + "_child", a)
-                {
-                    LocalIndex = index + 1,
-                    //IsEditable = true,
-                };
-                node.Parent = this;
+                var node = ToTree(a);
                 Add(node);
             });
 
@@ -68,6 +61,17 @@ namespace Utility.Nodes.Filters
         public ICommand RemoveCommand { get; }
         public ICommand EditCommand { get; }
         public ICommand AddParentCommand { get; }
+
+        public override Task<ITree> ToTree(object value)
+        {
+            var index = TreeRepository.Instance.MaxIndex(this.Guid, Name + "_child") ?? 0;
+            var node = new Node(Name + "_child", value)
+            {
+                LocalIndex = index + 1,
+                Parent = this
+            };
+            return Task.FromResult((ITree)node);
+        }
 
         public override object Data
         {
@@ -143,6 +147,7 @@ namespace Utility.Nodes.Filters
             else
                 return base.Equals(other);
         }
+
 
     }
 }

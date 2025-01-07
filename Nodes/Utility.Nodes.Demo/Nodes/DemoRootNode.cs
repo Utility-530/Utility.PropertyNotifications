@@ -31,7 +31,7 @@ namespace Utility.Nodes.Demo
             });
         }
 
-        public override async Task<IReadOnlyTree> ToNode(object value)
+        public override async Task<ITree> ToTree(object value)
         {
             if (value is NodeType nodeType)
                 return nodeType switch
@@ -79,7 +79,7 @@ namespace Utility.Nodes.Demo
             return Task.FromResult(false);
         }
 
-        public override Task<IReadOnlyTree> ToNode(object value)
+        public override Task<ITree> ToTree(object value)
         {
             throw new NotImplementedException();
         }

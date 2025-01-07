@@ -67,7 +67,7 @@ namespace Utility.Nodes
                                 else
                                 {
                                     //var conversion = ObjectConverter.ToValue(inst, desc);
-                                    var node = await ToNode(desc);
+                                    var node = await ToTree(desc);
                                     //await node.RefreshChildrenAsync();
                                     m_items.Add(node);
                                 }

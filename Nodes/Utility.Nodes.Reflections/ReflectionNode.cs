@@ -41,11 +41,11 @@ namespace Utility.Nodes.Reflections
         }
 
 
-        public override Task<IReadOnlyTree> ToNode(object value)
+        public override Task<ITree> ToTree(object value)
         {
             if (value is IDescriptor { } descriptor)
             {
-                return Task.FromResult((IReadOnlyTree)new ReflectionNode(descriptor) { Parent = this });
+                return Task.FromResult((ITree)new ReflectionNode(descriptor) { Parent = this });
             }
             else
             {

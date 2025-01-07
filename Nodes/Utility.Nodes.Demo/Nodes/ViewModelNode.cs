@@ -1,7 +1,5 @@
 ﻿using System.Threading.Tasks;
 using System;
-using Utility.Interfaces.NonGeneric;
-using Utility.Models;
 using Utility.Helpers;
 using Utility.Nodes.Demo.Infrastructure;
 using System.Reactive.Linq;
@@ -42,9 +40,9 @@ namespace Utility.Nodes.Demo
             return type.Name;
         }
 
-        public override Task<IReadOnlyTree> ToNode(object value)
+        public override Task<ITree> ToTree(object value)
         {
-            return Task.FromResult<IReadOnlyTree>(new ViewModelNode(value as Type));
+            return Task.FromResult<ITree>(new ViewModelNode(value as Type));
         }
 
         public override Task<bool> HasMoreChildren()

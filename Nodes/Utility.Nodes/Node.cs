@@ -8,15 +8,12 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
-    public abstract class Node : ObservableTree
+    public abstract class Node : ViewModelTree
     {
         private bool isRefreshing;
         bool flag;
-        //protected Collection items = new();
 
         public abstract IObservable<object?> GetChildren();
-
-        public abstract Task<IReadOnlyTree> ToNode(object value);
 
         public override IEnumerable Items
         {
@@ -60,7 +57,7 @@ namespace Utility.Nodes
             GetChildren()
                 .Subscribe(async a =>
                 {
-                    var node =await ToNode(a);
+                    var node =await ToTree(a);
                     m_items.Add(node);
                 },
                 e =>
