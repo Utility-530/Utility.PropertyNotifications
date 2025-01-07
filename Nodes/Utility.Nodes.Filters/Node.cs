@@ -9,8 +9,10 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Utility.Changes;
 using Utility.Enums;
 using Utility.Interfaces.NonGeneric;
+using Utility.PropertyNotifications;
 using Utility.Repos;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
@@ -34,10 +36,10 @@ namespace Utility.Nodes.Filters
 
         public Node()
         {
-            AddCommand = new RelayCommand(a =>
+            AddCommand = new RelayCommand(async a =>
             {
                 this.IsExpanded = true;
-                var node = ToTree(a);
+                var node = await ToTree(a);
                 Add(node);
             });
 
@@ -82,6 +84,35 @@ namespace Utility.Nodes.Filters
                 {
                     iSetNode.SetNode(this);
                 }
+                if (data is IGuidSet guid)
+                {
+                    if (this.Guid == default)
+                    {
+                        this.WithChangesTo(a => a.Guid)
+                            .Where(a => a != default)
+                            .Subscribe(a => guid.Guid = a);
+                    }
+                    else
+                        guid.Guid = this.Guid;
+                }
+                if (data is IChildren children)
+                {
+                    this.WithChangesTo(a => a.IsExpanded)
+                        .Where(a => a)
+                        .Subscribe(a =>
+                        {
+                            children.Children.Subscribe(async a =>
+                            {
+
+                                if (a is Change { Type: Changes.Type.Add, Value:{ } value })
+                                {
+
+                                    this.m_items.Add(await ToTree(value));
+                                }
+                            });
+                        });
+                }
+
                 RaisePropertyChanged();
             }
         }
