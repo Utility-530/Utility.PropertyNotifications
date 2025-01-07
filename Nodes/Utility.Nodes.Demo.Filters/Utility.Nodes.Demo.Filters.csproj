@@ -13,12 +13,15 @@
     <ProjectReference Include="..\..\External\EnumSourceConverter\EnumSourceConverter.csproj" />
     <ProjectReference Include="..\..\External\TextBoxEx\TextBoxEx.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.Meta\Utility.Meta.csproj" />
+    <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.Descriptors.csproj" />
+    <ProjectReference Include="..\..\Trees\Utility.Trees.Demo.Filters\Utility.Trees.Demo.Filters.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Behaviors\Utility.WPF.Behaviors.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Breadcrumbs\Utility.WPF.Controls.Breadcrumbs.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.ComboBoxes\Utility.WPF.Controls.ComboBoxes.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
+    <ProjectReference Include="..\Models\Models.csproj" />
     <ProjectReference Include="..\Utility.Nodes.Filters\Utility.Nodes.Filters.csproj" />
   </ItemGroup>
 
@@ -31,5 +34,6 @@
   <ItemGroup>
     <Folder Include="Data\" />
   </ItemGroup>
+
 
 </Project>

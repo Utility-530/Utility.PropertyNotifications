@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DryIoc.ImTools;
+using LiteDB;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Splat;
@@ -10,6 +11,7 @@ using System.Windows;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Nodes.Demo.Filters.Infrastructure;
 using Utility.Nodes.Filters;
+using Utility.Repos;
 using N = Utility.Nodes.Filters.Node;
 
 namespace Utility.Nodes.Demo.Filters
@@ -23,7 +25,12 @@ namespace Utility.Nodes.Demo.Filters
         {
             SQLitePCL.Batteries.Init();
 
+            Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
             Splat.Locator.CurrentMutable.RegisterLazySingleton<MainViewModel>(() => new MainViewModel());
+
+
+            var x = Utility.Trees.Demo.Filters.DataTemplateSelector.Instance;
+
 
             Splat.Locator.CurrentMutable.RegisterLazySingleton(() =>
             {

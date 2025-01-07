@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
+using Utility.Descriptors;
 using Utility.Helpers.NonGeneric;
+using Utility.Interfaces;
+using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Filters;
+using Utility.Trees.Abstractions;
 using Utility.WPF.Controls.ComboBoxes;
 using Utility.WPF.Controls.Trees;
 
@@ -49,11 +54,49 @@ namespace Utility.Nodes.Demo.Filters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: { } obj } args)
+            if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: IReadOnlyTree { Data: Type type } obj } args)
             {
-                return obj;
+                var xx = CreateRoot(type);
+                return xx;
+            }
+            else
+            {
+                throw new Exception("V dfr44");
             }
             return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static IValueDescriptor CreateRoot(Type type, string? name = null)
+        {
+            var instance = Activator.CreateInstance(type);
+            var rootDescriptor = new RootDescriptor(type, name: name);
+            rootDescriptor.SetValue(null, instance);
+            var root = CreateRoot(rootDescriptor);
+            //root.Initialise();
+            return root;
+
+            IValueDescriptor CreateRoot(System.ComponentModel.PropertyDescriptor descriptor)
+            {
+                var _descriptor = DescriptorConverter.ToDescriptor(instance, descriptor);
+                return _descriptor;
+            }
+        }                
+    }
+
+    public class VisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is IReadOnlyTree { Data: IDescriptor descriptor })
+            {
+                return Utility.Trees.Demo.Filters.TreeViewFilter.Instance.Convert(value) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            return Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

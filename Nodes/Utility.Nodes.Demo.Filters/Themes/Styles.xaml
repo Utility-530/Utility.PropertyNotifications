@@ -7,6 +7,7 @@
                     xmlns:att="http://schemas.utility.com/attached" 
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
                     xmlns:beh="http://schemas.utility.com/behaviors" 
+                    xmlns:filters="clr-namespace:Utility.Trees.Demo.Filters;assembly=Utility.Trees.Demo.Filters"
                     xmlns:controls="http://schemas.utility.com/cboxes" xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
     <ResourceDictionary.MergedDictionaries>
@@ -94,6 +95,8 @@
     <conv:TypeNameConverter x:Key="TypeNameConverter"/>
     <local:ChildrenSelector x:Key="ChildrenSelector"/>
     <local:ChildrenSelectorConverter x:Key="ChildrenSelectorConverter"/>
+    <local:VisibilityConverter x:Key="VisibilityConverter"/>
+
 
     <Style x:Key="DefaultStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
         <Setter Property="ToolTip" Value="{Binding Guid}"></Setter>
@@ -133,6 +136,14 @@
         </Setter>
     </Style>
 
+    <Style x:Key="ViewContentStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
+        <Setter Property="IsExpanded" Value="True"></Setter>
+        <Setter Property="IsEditable" Value="False"></Setter>
+        <Setter Property="ToolTip" Value="{Binding Guid}"></Setter>
+        <Setter Property="Header" Value="{Binding Path=.}" />
+        <Setter Property="Visibility" Value="{Binding Converter={StaticResource VisibilityConverter}}"></Setter>
+
+    </Style>
 
     <icons:PackIconIonicons x:Key="Icon" x:Shared="false" Kind="AddMD" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"/>
 
