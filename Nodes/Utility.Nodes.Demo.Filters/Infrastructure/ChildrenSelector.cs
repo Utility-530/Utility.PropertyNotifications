@@ -17,7 +17,7 @@ namespace Utility.Nodes.Demo.Filters
 
         public IEnumerable Select(object data)
         {
-            return NodeExtensions.ToTree([typeof(Tree).Assembly, new SystemAssembly()]);
+            return NodeExtensions.ToTree([typeof(CustomModels.Controls).Assembly, new SystemAssembly()]);
 
         }
     }
