@@ -56,19 +56,18 @@ namespace Utility.Trees.Demo.Filters
 
         private DataTemplate MakeTemplate(object item)
         {
-            return TemplateGenerator.CreateDataTemplate(() =>
+            var template = TemplateGenerator.CreateHierarcialDataTemplate(() =>
             {
-                var binding = new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Data)), Source = item };
+                var binding = new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Data)), Source = item };    
                 var contentControl = new ContentPresenter
                 {
                     ContentTemplateSelector = CustomDataTemplateSelector.Instance
                 };
-                //if (name is string _name)
-                //    contentControl.ContentTemplate = ResourceHelper.FindResource<DataTemplate>(_name);
                 contentControl.SetBinding(ContentPresenter.ContentProperty, binding);
-
                 return contentControl;
-            });
+            }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Items)), Source = item });
+
+            return template;
         }
 
 
@@ -83,7 +82,7 @@ namespace Utility.Trees.Demo.Filters
 
         private DataTemplate MakeHeaderTemplate(object item, int count)
         {
-            return TemplateGenerator.CreateDataTemplate(() =>
+            return TemplateGenerator.CreateHierarcialDataTemplate(() =>
             {
                 var textBlock = new TextBlock
                 {
@@ -126,7 +125,7 @@ namespace Utility.Trees.Demo.Filters
                                     }
                                 }
                 }
-            });
+            }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Items)), Source = item });
 
             static Binding Binding(object item)
             {

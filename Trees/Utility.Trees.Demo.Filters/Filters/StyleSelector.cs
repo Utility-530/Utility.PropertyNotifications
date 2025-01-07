@@ -4,37 +4,58 @@ using Utility.Descriptors;
 using Utility.Interfaces;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Decisions;
-using Utility.Trees.Demo.Filters;
 
 namespace Utility.Trees.Demo.Filters
 {
     public class StyleSelector : System.Windows.Controls.StyleSelector
     {
+        private bool isInitialised = false;
+        private ResourceDictionary? res;
+
         public override Style SelectStyle(object item, DependencyObject container)
         {
+            object input = null;
             if (item is TreeViewItem _item)
             {
-                Predicate.Reset();
-                Predicate.Input = _item.Header;
-                Predicate.Evaluate();
-                if (Predicate.Backput is string s)
-                {
-                    var style = App.Current.Resources[Predicate.Backput] as Style;
-                    if (s is "CollapsedTreeViewItem")
-                    {
-
-                    }
-                    return style;
-                }
+                input = _item.Header;
             }
+            else
+            {
+                input = item;
+            }
+            if (isInitialised == false)
+            {
+                var uri = new Uri(@"/Utility.Trees.Demo.Filters;component/Themes/Styles.xaml", UriKind.RelativeOrAbsolute);
+                //var res = new ResourceDictionary() { Source = uri };
+                res = Application.LoadComponent(uri) as ResourceDictionary;
+                App.Current.Resources.Add(uri, res);
+                //var _style = App.Current.Resources["GenericTreeViewItem"] as System.Windows.Style;
+                //_style.Setters.Add(new Setter { Property = TreeViewItem.HeaderProperty, Value = new Binding { Path = new PropertyPath(".") } });
+                isInitialised = true;
+            }
+            Predicate.Reset();
+            Predicate.Input = input;
+            Predicate.Evaluate();
+            if (Predicate.Backput is string s)
+            {
+                var style = App.Current.Resources[Predicate.Backput] as Style;
+                if (style == null)
+                    style= res[Predicate.Backput] as Style;
+          
+           
+                return style;
+            }
+        
             return null;
         }
+
+        public string DefaultStyle { get; set; } = "ExpandedTreeViewItem";
 
         public static StyleSelector Instance { get; } = new();
 
         public DecisionTree Predicate { get; set; }
 
-        private StyleSelector()
+        public StyleSelector()
         {
             Predicate = new StringDecisionTree(new Decision(item => (item as IReadOnlyTree) != null) { })
                 {
@@ -63,7 +84,7 @@ namespace Utility.Trees.Demo.Filters
                     //new StringDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => (item.Data as PropertyDescriptor) != null), md => "ExpandedTreeViewItem"),
                     new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IValueDescriptor != null){  }, md =>"ExpandedTreeViewItem"),
                      new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IPropertyDescriptor != null){  }, md =>"ItemsStyle"),
-                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => true), md => "ExpandedTreeViewItem"),
+                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => true), md => DefaultStyle),
                 };
         }
     }
