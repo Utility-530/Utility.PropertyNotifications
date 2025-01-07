@@ -106,7 +106,7 @@ namespace Utility.Descriptors
         }
     }
 
-    class DescriptorConverter
+    public class DescriptorConverter
     {
         public static ValuePropertyDescriptor ToDescriptor(object? value, Descriptor descriptor)
         {

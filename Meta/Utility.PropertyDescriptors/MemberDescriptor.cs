@@ -12,7 +12,7 @@ public interface ICollectionDetailsDescriptor
     bool IsCollectionItemValueType { get; }
 }
 
-public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, IChildren, ICollectionDetailsDescriptor, IValueChanges, IName, IGuid
+public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, IChildren, ICollectionDetailsDescriptor, IValueChanges, IName, IGuid, IGuidSet
 {
     protected ReplaySubject<ValueChange> changes = new ReplaySubject<ValueChange>();  
 
