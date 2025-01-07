@@ -121,6 +121,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Pipes", "Utilit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Trees.Demo.Filters", "Utility.Trees.Demo.Filters\Utility.Trees.Demo.Filters.csproj", "{5113CAA4-4F85-4777-8E05-CE3E89AC8087}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Adorners", "..\WPF\Utility.WPF.Adorners\Utility.WPF.Adorners.csproj", "{EFAFDC25-1F3E-43D0-A0C9-41B7C9AA317D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -355,6 +357,10 @@ Global
 		{5113CAA4-4F85-4777-8E05-CE3E89AC8087}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5113CAA4-4F85-4777-8E05-CE3E89AC8087}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5113CAA4-4F85-4777-8E05-CE3E89AC8087}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFAFDC25-1F3E-43D0-A0C9-41B7C9AA317D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFAFDC25-1F3E-43D0-A0C9-41B7C9AA317D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFAFDC25-1F3E-43D0-A0C9-41B7C9AA317D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFAFDC25-1F3E-43D0-A0C9-41B7C9AA317D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -414,6 +420,7 @@ Global
 		{41C78C06-5E05-40A1-8EC6-9363B8AE30AA} = {72C8D224-6E72-442B-A16A-29A6E7EA2051}
 		{3B00CB2E-92FF-482C-A1F2-88D4A0D7221F} = {72C8D224-6E72-442B-A16A-29A6E7EA2051}
 		{5113CAA4-4F85-4777-8E05-CE3E89AC8087} = {0E77E344-1EED-4EDC-BDF9-744CF0425AAF}
+		{EFAFDC25-1F3E-43D0-A0C9-41B7C9AA317D} = {72C8D224-6E72-442B-A16A-29A6E7EA2051}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {00EBD15C-E22A-4F19-88DE-BC9861507581}

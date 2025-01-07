@@ -121,7 +121,6 @@ namespace Utility.Trees
             throw new InvalidOperationException("Cannot add unknown content type.");
         }
 
- 
         public virtual void Remove(object data)
         {
             if (data == null)
