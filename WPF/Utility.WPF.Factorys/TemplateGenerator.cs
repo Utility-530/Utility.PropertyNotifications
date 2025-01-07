@@ -45,7 +45,7 @@ namespace Utility.WPF.Factorys
             return dataTemplate;
         }
 
-        public static HierarchicalDataTemplate CreateHierarcialDataTemplate(Func<object> factory)
+        public static HierarchicalDataTemplate CreateHierarcialDataTemplate(Func<object> factory, BindingBase itemsSourceBinding )
         {
             if (factory == null)
                 throw new ArgumentNullException(nameof(factory));
@@ -57,6 +57,7 @@ namespace Utility.WPF.Factorys
             {
                 VisualTree = frameworkElementFactory
             };
+            dataTemplate.ItemsSource = itemsSourceBinding;
             return dataTemplate;
         }
 

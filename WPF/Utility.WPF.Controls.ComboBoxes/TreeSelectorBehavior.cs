@@ -25,9 +25,8 @@ namespace Utility.WPF.Controls.ComboBoxes
                 var contentControl = new ContentControl();
                 contentControl.SetBinding(ContentControl.ContentProperty, new Binding() { Path = new PropertyPath(nameof(ITree.Data)) });
                 return contentControl;
-            });
+            }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Items)) });
             AssociatedObject.ItemTemplate = hierarchicalDataTemplate;
-            hierarchicalDataTemplate.ItemsSource = new Binding(nameof(ITree.Items));
             AssociatedObject.ParentPath = nameof(IReadOnlyTree.Parent);
 
             base.OnAttached();
