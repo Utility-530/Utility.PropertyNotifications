@@ -16,9 +16,9 @@ namespace Utility.Trees.Abstractions
     {
         bool HasItems { get; }
 
-        ITree Add();
+        Task<ITree> Add();
 
-        ITree Remove();
+        Task<ITree> Remove();
 
         IIndex Index { get; }
 
