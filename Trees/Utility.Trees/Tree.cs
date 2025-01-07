@@ -70,6 +70,11 @@ namespace Utility.Trees
         //    }
         //}
 
+        public virtual Task<ITree> ToTree(object data)
+        {
+            return Task.FromResult((ITree)new Tree((object)data));
+        }
+
         public virtual ITree? this[int index]
         {
             get
@@ -87,7 +92,7 @@ namespace Utility.Trees
 
 
 
-        public virtual void Add(object data)
+        public virtual async void Add(object data)
         {
             if (data == null)
                 return;
@@ -104,18 +109,19 @@ namespace Utility.Trees
                     if (item is ITree)
                         Add(item);
                     else
-                        Add(new Tree(item));
+                        Add(await ToTree(item));
                 return;
             }
             if (data is not null)
             {
-                Add(new Tree((object)data));
+                Add(await ToTree((object)data));
                 return;
             }
 
             throw new InvalidOperationException("Cannot add unknown content type.");
         }
 
+ 
         public virtual void Remove(object data)
         {
             if (data == null)
@@ -123,21 +129,21 @@ namespace Utility.Trees
 
             if (data is IEquatable key)
             {
-                var single = m_items.OfType<ITree>().Single(t => t.Equals(key));
+                var single = m_items.OfType<IReadOnlyTree>().Single(t => t.Equals(key));
                 m_items.Remove(single);
                 return;
             }
 
             if (data is ITree tree)
             {
-                var single = m_items.OfType<ITree>().Single(t => t == tree);
+                var single = m_items.OfType<IReadOnlyTree>().Single(t => t == tree);
                 m_items.Remove(single);
                 return;
             }
 
             if (data is not null)
             {
-                var single = m_items.OfType<ITree>().Single(t => t.Data == data);
+                var single = m_items.OfType<IReadOnlyTree>().Single(t => t.Data == data);
                 m_items.Remove(single);
                 return;
             }
@@ -152,18 +158,19 @@ namespace Utility.Trees
 
 
 
-        public virtual Tree Clone()
+        public virtual async Task<Tree> Clone()
         {
             object clone = Data;
             if (Data is IClone cln)
             {
                 clone = cln.Clone();
             }
-
-            return new Tree(clone) { Key = this.Key };
+            var cloneTree = await ToTree(clone) as Tree;
+            cloneTree.Key = this.Key;
+            return cloneTree;
         }
 
-        public virtual ITree Add()
+        public virtual async Task<ITree> Add()
         {
             object clone = Data;
             if (Data is IClone cln)
@@ -171,17 +178,17 @@ namespace Utility.Trees
                 clone = cln.Clone();
             }
 
-            var tree = new Tree(clone);
+            var tree = await ToTree(clone);
             this.items.Add(tree);
             tree.Parent = this;
-            return tree;
+            return tree as ITree;
         }
 
-        public virtual ITree Remove()
+        public virtual Task<ITree> Remove()
         {
             this.Parent = null;
             this.Parent?.Remove(this);
-            return this.Parent;
+            return Task.FromResult(this.Parent);
         }
 
         public void Remove(Guid index)

@@ -67,9 +67,9 @@ namespace Utility.Trees
 
         public ITree Back => children[Index - 1];
 
-        ITree Add => Current.Add();
+        Task<ITree> Add => Current.Add();
 
-        ITree Remove => Current.Remove();
+        Task<ITree> Remove => Current.Remove();
 
 
 
@@ -131,7 +131,7 @@ namespace Utility.Trees
                 //Update();
                 Broadcast();
 
-                void SetCurrent(State value)
+                async void SetCurrent(State value)
                 {
                     switch (value)
                     {
@@ -167,14 +167,14 @@ namespace Utility.Trees
                             if (CanAdd == false)
                                 throw new Exception($"{State.Add} V3 fds");
                             //Add();
-                            current = Add;
+                            current = await Add;
                             //current.State = State.Add;
                             break;
 
                         case State.Remove:
                             if (CanRemove == false)
                                 throw new Exception($"{State.Remove} V3 fds");
-                            current = Remove;
+                            current = await Remove;
                             //current.State = State.Remove;
                             break;
 
