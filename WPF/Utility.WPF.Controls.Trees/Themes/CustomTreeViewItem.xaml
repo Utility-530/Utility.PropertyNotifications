@@ -116,8 +116,7 @@
                                       Opacity="0.2"
                         Style="{StaticResource ExpandCollapseToggleStyle}"
                         ClickMode="Press"
-                        IsChecked="{Binding IsExpanded, 
-            RelativeSource={RelativeSource TemplatedParent}}"/>
+                        IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"/>
                         <Border x:Name="Bd"                              
                   Grid.Column="1"
                   Background="{TemplateBinding Background}"
@@ -135,8 +134,10 @@
                                     <RowDefinition></RowDefinition>
                                     <RowDefinition Height="auto"></RowDefinition>
                                 </Grid.RowDefinitions>
-                                <ContentPresenter x:Name="PART_Header" Grid.Column="1" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                              ContentSource="Header"                            />
+                                <ContentPresenter x:Name="PART_Header" 
+                                                  Grid.Column="1" 
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  ContentSource="Header"/>
 
                                 <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="4" Grid.Row="1" x:Name="WrapPanel1" Opacity="1" IsEnabled="{TemplateBinding IsShowing}" 
                                            Visibility="{TemplateBinding IsEditable, Converter={StaticResource VisibilityConverter}}"

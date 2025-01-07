@@ -8,30 +8,10 @@
 
 
 
-
-
-    <LinearGradientBrush x:Key="ProgressBarIndicatorAnimatedFill"
-                     StartPoint="0,0"
-                     EndPoint="1,0">
-        <LinearGradientBrush.GradientStops>
-            <GradientStopCollection>
-                <GradientStop Color="#000000FF"
-                    Offset="0" />
-                <GradientStop Color="#600000FF"
-                    Offset="0.4" />
-                <GradientStop Color="#600000FF"
-                    Offset="0.6" />
-                <GradientStop Color="#000000FF"
-                    Offset="1" />
-            </GradientStopCollection>
-        </LinearGradientBrush.GradientStops>
-    </LinearGradientBrush>
-
     <Style x:Key="GenericTreeViewItem"
        TargetType="{x:Type TreeViewItem}">
         <Setter Property="BorderThickness" Value="1"></Setter>
-        <Setter Property="Background"
-          Value="Transparent" />
+        <Setter Property="Background" Value="Transparent" />
         <Setter Property="IsSelected"
           Value="{Binding IsSelected, Mode=TwoWay}" />
         <Setter Property="IsExpanded"
