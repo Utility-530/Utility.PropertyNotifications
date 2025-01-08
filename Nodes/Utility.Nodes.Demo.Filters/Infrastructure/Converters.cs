@@ -49,7 +49,6 @@ namespace Utility.Nodes.Demo.Filters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-
             if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: IReadOnlyTree { Data: Type type } obj } args)
             {
                 if (parameter is IGuid { Guid: { } guid })

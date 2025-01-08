@@ -31,7 +31,7 @@ namespace Utility.Nodes.Demo.Filters
 
             var x = Utility.Trees.Demo.Filters.DataTemplateSelector.Instance;
 
-
+            JsonConvert.DefaultSettings = NewMethod;
             Splat.Locator.CurrentMutable.RegisterLazySingleton(() =>
             {
                 var config = new MapperConfiguration(cfg =>
@@ -43,7 +43,7 @@ namespace Utility.Nodes.Demo.Filters
                     {
                         try
                         {
-                            dest.Data = JsonConvert.SerializeObject(src.Data, NewMethod());
+                            dest.Data = JsonConvert.SerializeObject(src.Data);
                         }
                         catch (Exception ex)
                         {
@@ -87,7 +87,7 @@ namespace Utility.Nodes.Demo.Filters
         object convertBackFromPersistable(string data)
         {
 
-            return JsonConvert.DeserializeObject(data, NewMethod());
+            return JsonConvert.DeserializeObject(data);
 
         }
 
@@ -106,6 +106,7 @@ namespace Utility.Nodes.Demo.Filters
                 yield return (new PropertyInfoJsonConverter());
                 yield return (new MethodInfoJsonConverter());
                 yield return (new ParameterInfoJsonConverter());
+                yield return (new AttributeCollectionConverter());
             }
         }
     }
