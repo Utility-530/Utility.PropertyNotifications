@@ -5,9 +5,9 @@ namespace Utility.Descriptors;
 
 internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : ValuePropertyDescriptor(Descriptor, Instance), IReferenceDescriptor
 {
-    private readonly ITreeRepository repo = Locator.Current.GetService<ITreeRepository>();
-    private IObservable<Change<IDescriptor>> observable;
-    private PropertiesDescriptor propertiesDescriptor;
+    private readonly ITreeRepository? repo = Locator.Current.GetService<ITreeRepository>();
+    private IObservable<Change<IDescriptor>>? observable;
+    private PropertiesDescriptor? propertiesDescriptor;
 
     public override IObservable<object> Children
     {
@@ -30,7 +30,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                                 .Find(this.Guid, CollectionDescriptor._Name, Descriptor.PropertyType)
                                 .Subscribe(c =>
                                 {
-                                    var enumerable = (IEnumerable)Activator.CreateInstance(Descriptor.PropertyType);
+                                    var enumerable = (IEnumerable?)Activator.CreateInstance(Descriptor.PropertyType);
                                     var collectionDescriptor = new CollectionDescriptor(Descriptor, _elementType, enumerable);
                                     if (i++ > 0)
                                     {
@@ -61,7 +61,8 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                         {
                             observer.OnNext(new(default, Changes.Type.Reset));
 
-                            repo.Find(this.Guid, "Properties" /*propertiesDescriptor.Name*/, Descriptor.PropertyType)
+                            repo
+                            .Find(this.Guid, "Properties" /*propertiesDescriptor.Name*/, Descriptor.PropertyType)
                             .Subscribe(p =>
                             {
                                 if (inst == null)
