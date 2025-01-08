@@ -66,11 +66,11 @@ namespace Utility.Nodes.Filters
 
         public override Task<ITree> ToTree(object value)
         {
-            var index = TreeRepository.Instance.MaxIndex(this.Guid, Name + "_child") ?? 0;
+         
             var node = new Node(Name + "_child", value)
             {
-                LocalIndex = index + 1,
-                Parent = this
+                Parent = this,
+                IsPersistable = true
             };
             return Task.FromResult((ITree)node);
         }
@@ -84,16 +84,9 @@ namespace Utility.Nodes.Filters
                 {
                     iSetNode.SetNode(this);
                 }
-                if (data is IGuidSet guid)
+                if (data is IGuid guid)
                 {
-                    if (this.Guid == default)
-                    {
-                        this.WithChangesTo(a => a.Guid)
-                            .Where(a => a != default)
-                            .Subscribe(a => guid.Guid = a);
-                    }
-                    else
-                        guid.Guid = this.Guid;
+                    this.Guid = guid.Guid;
                 }
                 if (data is IChildren children)
                 {
@@ -125,18 +118,7 @@ namespace Utility.Nodes.Filters
                     return;
                 parent = value;
 
-                if (value == null)
-                {
-                    NodeSource.Instance.Nodes.Remove(this);
-                    return;
-                }
-                NodeSource.Instance.Nodes.Add(this);
-                TreeRepository.Instance
-                    .Find((value as IGuid).Guid, this.Name, typeof(object), this.LocalIndex)
-                    .Subscribe(guid =>
-                    {
-                        Guid = guid.Guid;
-                    });
+
 
                 RaisePropertyChanged();
             }

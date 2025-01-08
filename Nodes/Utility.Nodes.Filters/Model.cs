@@ -55,18 +55,18 @@ namespace Utility.Nodes.Filters
             {
                 node = value;
 
+                node.WithChangesTo(a => a.Parent)
+                    .Where(a => a != default)
+                    //.Take(1)
+                    .Subscribe(a =>
+                    Initialise((Node)a));
+
                 node.WithChangesTo(a => a.Guid)
                 .StartWith(node.Guid)
                 .Where(a => a != default)
                 .Take(1)
                 .Subscribe(a =>
                 {
-                    node.WithChangesTo(a => a.Parent)
-                    .Where(a => a != default)
-                    .Take(1)
-                    .Subscribe(a =>
-                    Initialise(value));
-
                     node.WithChangesTo(a => a.IsExpanded)
                     .StartWith(node.IsExpanded)
                     .Where(a => a)
@@ -123,14 +123,31 @@ namespace Utility.Nodes.Filters
             }
             this.Node = (Node)node;
         }
-        int i = 0;
-        public virtual void Initialise(Node node)
+
+        public virtual void Initialise(Node parent)
         {
-            if (i++ > 1)
+            //if (i++ > 1)
+            //{
+            //}
+
+            if (parent == null)
             {
+                NodeSource.Instance.Nodes.Remove(this.Node);
+                return;
             }
 
-            TreeRepository.Instance.Get(node.Guid)
+            TreeRepository.Instance
+                .Find((parent as IGuid).Guid, this.Name, typeof(object), this.Node.LocalIndex)
+                .Subscribe(guid =>
+                {
+                    Node.Guid = guid.Guid;
+                    NodeSource.Instance.Nodes.Add(this.Node);
+                });
+
+            var index = TreeRepository.Instance.MaxIndex(parent.Guid, Name + "_child") ?? 0;
+
+
+            TreeRepository.Instance.Get(parent.Guid)
                 .Subscribe(_d =>
                 {
                     if (_d.Value == null)
@@ -147,7 +164,8 @@ namespace Utility.Nodes.Filters
                             .SingleByGuidAsync(((NodeDTO)value).CurrentGuid)
                             .Subscribe(x =>
                             {
-                                x.Parent = node;
+                                x.Parent = parent;
+                                x.LocalIndex = index + 1;
                                 //node.Current = x;
                                 if (x.Data is ValueModel valueModel)
                                 {
@@ -263,30 +281,30 @@ namespace Utility.Nodes.Filters
 
             IEnumerable<Node> nodesFromProperties()
             {
-            foreach (var x in this.GetType().GetProperties().Select(a => (a.PropertyType, Attribute: a.Attribute<ChildAttribute>())).Where(a => a.Attribute != default))
-            {
-                Model instance = null;
-                if (x.Attribute != null)
+                foreach (var x in this.GetType().GetProperties().Select(a => (a.PropertyType, Attribute: a.Attribute<ChildAttribute>())).Where(a => a.Attribute != default))
                 {
-                    if (x.PropertyType.IsAssignableTo(typeof(Model)))
+                    Model instance = null;
+                    if (x.Attribute != null)
                     {
-                        instance = (Model)Activator.CreateInstance(x.PropertyType);
-                    }
-                    else if (x.Attribute.Type.IsAssignableTo(typeof(Model)))
-                    {
-                        instance = (Model)Activator.CreateInstance(x.Attribute.Type);
-                    }
-                    else
-                    {
-                        throw new NotSupportedException();
-                    }
-                    instance.Name = x.Attribute.Name;
+                        if (x.PropertyType.IsAssignableTo(typeof(Model)))
+                        {
+                            instance = (Model)Activator.CreateInstance(x.PropertyType);
+                        }
+                        else if (x.Attribute.Type.IsAssignableTo(typeof(Model)))
+                        {
+                            instance = (Model)Activator.CreateInstance(x.Attribute.Type);
+                        }
+                        else
+                        {
+                            throw new NotSupportedException();
+                        }
+                        instance.Name = x.Attribute.Name;
 
-                    yield return new Node(x.Attribute.Name, instance);
+                        yield return new Node(x.Attribute.Name, instance);
+                    }
                 }
             }
         }
-
 
         public virtual IEnumerable Proliferation()
         {
