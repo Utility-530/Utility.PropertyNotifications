@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Text.Json.Serialization;
 using Utility.Repos;
 using Observable = System.Reactive.Linq.Observable;
 
@@ -146,9 +146,8 @@ namespace Utility.Nodes.Filters
                 //.Single(nameof(BuildRoot))
                 //.Subscribe(rootNode =>
                 //{
-                var _node = new Node("Groups", new Model { Name = "Groups" }) { IsExpanded = true };
+                var _node = build();
                 //rootNode.Add(_node);
-         
                 //observer.OnNext(_node);
 
                 return TreeRepository.Instance
@@ -156,38 +155,47 @@ namespace Utility.Nodes.Filters
        .Subscribe(a =>
        {
            _node.Guid = a.Guid;
-           build(_node);
            //subRoot.Load();
            observer.OnNext(_node);
        });
                 //});
             });
 
-            static void build(Node rootNode)
+            static Node build()
             {
-                var branch1 = new Node("Group 1", new Model { Name = "Group 1" }) { Parent = rootNode };
-                branch1.Add(new Node("test 1", new Model { Name = "test 1" }) { Parent = branch1 });
-                branch1.Add(new Node("test 2", new Model { Name = "test 2" }) { Parent = branch1 });
-                branch1.Add(new Node("test 3", new Model { Name = "test 3" }) { Parent = branch1 });
-                var branch2 = new Node("Group 2", new Model { Name = "Group 2" }) { Parent = rootNode };
-                branch2.Add(new Node("test 1", new Model { Name = "test 1" }) { Parent = branch2 });
-                branch2.Add(new Node("five", new IndexModel { Value = 5 }) { Parent = branch2 });
-                var node = new Node("test 5", new Model { Name = "test 5" }) { Parent = branch2 };
-                node.Add(new Node("lower", new Model { Name = "lower" }) { Parent = node });
-                branch2.Add(node);
-                branch2.Add(new Node("nom", new Model { Name = "nom" }) { Parent = branch2 });
-                var branch3 = new Node("Group 3", new Model { Name = "Group 3" }) { Parent = rootNode };
-                branch3.Add(new Node("test 1", new Model { Name = "test 1" }) { Parent = branch3 });
-                branch3.Add(new Node("test 7", new Model { Name = "test 7" }) { Parent = branch3 });
-                branch3.Add(new Node("test 8", new Model { Name = "test 8" }) { Parent = branch3 });
-                branch3.Add(new Node("eight", new IndexModel { Value = 8 }) { Parent = branch3 });
+                return new Node("Groups", new Model(() =>
+                {
+                    return [ new Node("Group 1", new Model(() =>
+                    {
+                        return new List<string> { "test 1", "test 2", "test 3" }.Select(a => new Node(a, new Model { Name = a }));
+                    })
+                    { Name = "Group 1" })
+                    { IsExpanded =true },
 
-                rootNode.Add(branch1);
-                rootNode.Add(branch2);
-                rootNode.Add(branch3);
+                    new Node("Group 2", new Model(() =>
+                    {
+                        return [
+                            new("test 1", new Model { Name = "test 1" }),
+                            new("five", new IndexModel { Value = 5 }) {  },
+                            new("test 5", new Model(()=> [new ("lower", new Model { Name = "lower" })]) { Name = "test 5" }),
+                            new Node("nom", new Model { Name = "nom" })
+                       ];
+                    }){ Name = "Group 2"}),
+                    new Node("Group 3", new Model(() =>
+                    {
+                        return [
+                            (new Node("test 1", new Model { Name = "test 1" }) { }),
+                            (new Node("test 7", new Model { Name = "test 7" }) {  }),
+                            (new Node("test 8", new Model { Name = "test 8" }) {  }),
+                            (new Node("eight", new IndexModel { Value = 8 }) {  }),
+                       ];
+                    }){ Name = "Group 3"})];
+                })
+                { Name = "Groups" })
+                { IsExpanded = true }
+               ;
             }
         }
-
 
 
         //public static IObservable<Node> BuildAndOr()

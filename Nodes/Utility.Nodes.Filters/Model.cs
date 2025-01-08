@@ -23,6 +23,8 @@ namespace Utility.Nodes.Filters
     {
         protected string m_name = "unknown";
         private Node node;
+        int i = 0;
+        private readonly Func<IEnumerable<Node>> func;
         protected SynchronizationContext? current;
 
         public virtual Version Version { get; set; } = new();
@@ -39,6 +41,11 @@ namespace Utility.Nodes.Filters
         public Model()
         {
             current = SynchronizationContext.Current;
+        }
+
+        public Model(Func<IEnumerable<Node>> func) : this()
+        {
+            this.func = func;
         }
 
         [JsonIgnore]
@@ -249,6 +256,13 @@ namespace Utility.Nodes.Filters
 
         public virtual IEnumerable<Node> CreateChildren()
         {
+            if (func != null)
+                return func.Invoke();
+            else
+                return nodesFromProperties();
+
+            IEnumerable<Node> nodesFromProperties()
+            {
             foreach (var x in this.GetType().GetProperties().Select(a => (a.PropertyType, Attribute: a.Attribute<ChildAttribute>())).Where(a => a.Attribute != default))
             {
                 Model instance = null;
