@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Conversions", "Util
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Conversions.Json.Newtonsoft", "Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj", "{17F7D760-7B20-4B99-AAD9-CEA98C8011EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Conversion.Tests", "Utility.Conversion.Tests\Utility.Conversion.Tests.csproj", "{ECFBB33E-3678-4F00-B7D1-DBB6ECB16539}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{17F7D760-7B20-4B99-AAD9-CEA98C8011EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17F7D760-7B20-4B99-AAD9-CEA98C8011EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17F7D760-7B20-4B99-AAD9-CEA98C8011EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ECFBB33E-3678-4F00-B7D1-DBB6ECB16539}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ECFBB33E-3678-4F00-B7D1-DBB6ECB16539}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ECFBB33E-3678-4F00-B7D1-DBB6ECB16539}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ECFBB33E-3678-4F00-B7D1-DBB6ECB16539}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
