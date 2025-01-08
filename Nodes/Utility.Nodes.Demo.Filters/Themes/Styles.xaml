@@ -159,7 +159,9 @@
                             <att:InteractivityItems>
                                 <att:InteractivityItems.Triggers>
                                     <i:EventTrigger EventName="SelectedNodeChanged">
-                                        <beh:InvokeCommandAction Command="{Binding AddCommand}" EventArgsConverter="{StaticResource SelectedNodeChangeConverter}"/>
+                                        <beh:InvokeCommandAction Command="{Binding AddCommand}" 
+                                                                 EventArgsConverter="{StaticResource SelectedNodeChangeConverter}" 
+                                                                 EventArgsConverterParameter="{Binding Path=DataContext, RelativeSource={RelativeSource AncestorType=TreeViewItem}}"/>
                                     </i:EventTrigger>
                                 </att:InteractivityItems.Triggers>
                             </att:InteractivityItems>

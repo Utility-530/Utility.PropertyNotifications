@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using Utility.Descriptors;
@@ -54,16 +49,16 @@ namespace Utility.Nodes.Demo.Filters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+
             if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: IReadOnlyTree { Data: Type type } obj } args)
             {
-                var xx = CreateRoot(type);
-                return xx;
+                if (parameter is IGuid { Guid: { } guid })
+                {
+                    var xx = CreateRoot(type, guid);
+                    return xx;
+                }
             }
-            else
-            {
-                throw new Exception("V dfr44");
-            }
-            return DependencyProperty.UnsetValue;
+            throw new Exception("V dfr44");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -71,21 +66,21 @@ namespace Utility.Nodes.Demo.Filters
             throw new NotImplementedException();
         }
 
-        public static IValueDescriptor CreateRoot(Type type, string? name = null)
+        public static IValueDescriptor CreateRoot(Type type, Guid guid)
         {
             var instance = Activator.CreateInstance(type);
-            var rootDescriptor = new RootDescriptor(type, name: name);
+            var rootDescriptor = new RootDescriptor(type) { };
             rootDescriptor.SetValue(null, instance);
             var root = CreateRoot(rootDescriptor);
-            //root.Initialise();
             return root;
 
             IValueDescriptor CreateRoot(System.ComponentModel.PropertyDescriptor descriptor)
             {
                 var _descriptor = DescriptorConverter.ToDescriptor(instance, descriptor);
+                _descriptor.Guid = guid;
                 return _descriptor;
             }
-        }                
+        }
     }
 
     public class VisibilityConverter : IValueConverter
