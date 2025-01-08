@@ -89,12 +89,12 @@ namespace Utility.Nodes.Types
             return Task.FromResult(true);
         }
 
-        public override Task<IReadOnlyTree> ToNode(object value)
+        public override Task<ITree> ToTree(object value)
         {
             return Task.FromResult(NewMethod(value));
         }
 
-        private static IReadOnlyTree NewMethod(object value)
+        private static ITree NewMethod(object value)
         {
             if (value is string assemblyName)
             {

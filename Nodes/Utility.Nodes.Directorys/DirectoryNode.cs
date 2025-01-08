@@ -55,14 +55,14 @@ namespace Utility.Nodes
             return await Task.FromResult(flag == false);
         }
 
-        public override Task<IReadOnlyTree> ToNode(object value)
+        public override Task<ITree> ToTree(object value)
         {
             //if (value is string str)
             //    return Task.FromResult<IReadOnlyTree>(new DirectoryNode(new str) { Parent = this });
             if (value is DirectoryInfo info)
-                return Task.FromResult<IReadOnlyTree>(new DirectoryNode(info) { Parent = this });
+                return Task.FromResult<ITree>(new DirectoryNode(info) { Parent = this });
             else if (value is FileInfo _info)
-                return Task.FromResult<IReadOnlyTree>(new DirectoryNode(_info) { Parent = this });
+                return Task.FromResult<ITree>(new DirectoryNode(_info) { Parent = this });
             throw new Exception("r 3 33");
         }
 
@@ -152,7 +152,7 @@ namespace Utility.Nodes
             else if (value is FileInfo fileInfo)
                 _leaves.Add(fileInfo);
 
-            m_items.Add(await ToNode(value));
+            m_items.Add(await ToTree(value));
         }
 
         public void OnCompleted()
