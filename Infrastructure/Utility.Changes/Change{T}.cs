@@ -29,24 +29,17 @@ namespace Utility.Changes
             return new Change<TR>(Value as TR ?? throw new Exception("sd ssss"), Type);
         }
 
-
-
-        public static Change<T> Add(T NewItem) => new Change<T>(NewItem, default, Changes.Type.Add);
-        public static Change<T> Remove(T NewItem) => new Change<T>(NewItem, default, Changes.Type.Remove);
-        public static Change<T> Update(T NewItem, T OldItem) => new Change<T>(NewItem, OldItem, Changes.Type.Update);
-
-
-
+        public static Change<T> Add(T NewItem) => new(NewItem, default, Changes.Type.Add);
+        public static Change<T> Remove(T NewItem) => new(NewItem, default, Changes.Type.Remove);
+        public static Change<T> Update(T NewItem, T OldItem) => new(NewItem, OldItem, Changes.Type.Update);
     }
-
 
     public readonly record struct TreeChange<T>(T NewItem, T? OldItem, Type Type, int Level)
     {
-        public static TreeChange<T> Add(T NewItem, int level) => new TreeChange<T>(NewItem, default, Type.Add, level);
-        public static TreeChange<T> Remove(T NewItem, int level) => new TreeChange<T>(NewItem, default, Type.Remove, level);
-        public static TreeChange<T> Replace(T NewItem, T OldItem, int level) => new TreeChange<T>(NewItem, OldItem, Type.Update, level);
+        public static TreeChange<T> Add(T NewItem, int level) => new(NewItem, default, Type.Add, level);
+        public static TreeChange<T> Remove(T NewItem, int level) => new(NewItem, default, Type.Remove, level);
+        public static TreeChange<T> Replace(T NewItem, T OldItem, int level) => new(NewItem, OldItem, Type.Update, level);
     }
-
 
     public record Update<T> : Change<T>
     {
@@ -57,6 +50,4 @@ namespace Utility.Changes
 
         public string Property { get; }
     }
-
-
 }
