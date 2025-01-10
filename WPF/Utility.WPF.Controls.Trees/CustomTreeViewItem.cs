@@ -35,6 +35,8 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty NodeItemsSourceProperty = DependencyProperty.Register("NodeItemsSource", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty SplitButtonStyleProperty = DependencyProperty.Register("SplitButtonStyle", typeof(Style), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty NodeContainerStyleProperty = DependencyProperty.Register("NodeContainerStyle", typeof(Style), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty ItemsPresenterVisibilityProperty = DependencyProperty.Register("ItemsPresenterVisibility", typeof(Visibility), typeof(CustomTreeViewItem), new PropertyMetadata(Visibility.Collapsed));
+
 
 
         static CustomTreeViewItem()
@@ -45,6 +47,13 @@ namespace Utility.WPF.Controls.Trees
         protected override DependencyObject GetContainerForItemOverride()
         {
             return new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector, ItemContainerStyle = ItemContainerStyle };
+        }
+
+        #region Properties
+        public Visibility ItemsPresenterVisibility
+        {
+            get { return (Visibility)GetValue(ItemsPresenterVisibilityProperty); }
+            set { SetValue(ItemsPresenterVisibilityProperty, value); }
         }
 
         public bool IsShowing
@@ -161,6 +170,7 @@ namespace Utility.WPF.Controls.Trees
             get { return (IEnumerable)GetValue(NodeItemsSourceProperty); }
             set { SetValue(NodeItemsSourceProperty, value); }
         }
+        #endregion Properties
 
         private static void IsEditingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
