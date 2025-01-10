@@ -2,17 +2,17 @@
 {
     public record GuidKey : ValueKey<Guid>
     {
-        public GuidKey(Guid? value = default) : base(value?? Guid.NewGuid())
+        public GuidKey(Guid? value = default) : base(value ?? Guid.NewGuid())
         {
-            if(Value== default(Guid))
+            if (Value == default)
             {
 
             }
         }
 
-        public static explicit operator GuidKey(string b) => new GuidKey(Guid.Parse(b));
+        public static explicit operator GuidKey(string b) => new(Guid.Parse(b));
 
-
+        public static explicit operator string(GuidKey b) => b.ToString();
         public override string ToString()
         {
             return Value.ToString();
