@@ -6,7 +6,10 @@
                     xmlns:local="clr-namespace:Utility.Nodes.Demo.Filters"
                     xmlns:e="clr-namespace:Utility.Enums;assembly=Utility.Enums"
                     xmlns:inf="clr-namespace:Utility.Nodes.Filters;assembly=Utility.Nodes.Filters"
-                    xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020">
+                    xmlns:des="clr-namespace:Utility.Descriptors;assembly=Utility.Descriptors"
+                    xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit" 
+                    xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                    xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020">
 
     <!--<local:Assemblies x:Key="Assemblies"/>-->
 
@@ -101,7 +104,26 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:HtmlModel}">
+        <avalonedit:TextEditor x:Name="textHtml" 
+                               Text="{Binding Value, Mode=OneWay}" 
+                               SyntaxHighlighting="HTML" 
+                               ShowLineNumbers="True" />
+    </DataTemplate>
+
+    <!--<DataTemplate DataType="{x:Type inf:HtmlModel}">
         <abel:WpfHtmlControlBase  
                       Html="{Binding Value, Mode=OneWay}"/>
+    </DataTemplate>-->
+
+
+    <DataTemplate DataType="{x:Type des:MemberDescriptor}">
+        <Expander Header="{Binding Converter={StaticResource TypeNameConverter}}" Content="{Binding }" >
+            <Expander.ContentTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Converter={StaticResource ObjectDumperConverter}}"></TextBlock>
+                </DataTemplate>
+            </Expander.ContentTemplate>
+        </Expander>
+        <!--<HeaderedContentControl Header="{Binding Converter={StaticResource TypeNameConverter}}"></HeaderedContentControl>-->
     </DataTemplate>
 </ResourceDictionary>

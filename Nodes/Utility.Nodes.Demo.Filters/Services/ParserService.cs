@@ -1,11 +1,5 @@
 ﻿using AngleSharp.Dom;
 using AngleSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http;
 using AngleSharp.Html.Dom;
 using Utility.Trees.Abstractions;
 using Utility.Extensions;
@@ -14,6 +8,7 @@ using Utility.Nodes.Filters;
 using AngleSharp.Html;
 using System.IO;
 using Utility.Interfaces.NonGeneric;
+using Utility.PropertyNotifications;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -24,26 +19,34 @@ namespace Utility.Nodes.Demo.Filters.Services
             NodeSource.Instance.Single(nameof(Factory.BuildContentRoot))
                 .Subscribe(node =>
                 {
-                    AddElementByPositionAsync(node)
-                    .Subscribe(html =>
+                    NodeSource.Instance.Single(nameof(Factory.BuildHtmlRoot))
+                    .Subscribe(htmlNode =>
                     {
-                        NodeSource.Instance.Single(nameof(Factory.BuildHtmlRoot))
-                        .Subscribe(node =>
+                        if (htmlNode.Data is StringModel stringModel)
                         {
-                            if (node.Data is StringModel stringModel)
+                            NodeSource.Instance.Single(nameof(Factory.BuildHtmlRenderRoot))
+                            .Subscribe(_node =>
                             {
-                                stringModel.Value = html;
-                            }
-                        });      
-                        
-                        NodeSource.Instance.Single(nameof(Factory.BuildHtmlRenderRoot))
-                        .Subscribe(node =>
-                        {
-                            if (node.Data is HtmlModel stringModel)
-                            {
-                                stringModel.Value = html;
-                            }
-                        });
+                                if (_node.Data is HtmlModel _stringModel)
+                                {
+                                    stringModel
+                                    .WithChangesTo(a => a.Value)
+                                    .Subscribe(a =>
+                                    {
+                                        _stringModel.Value = a;
+                                    });
+
+                                }
+                            });
+
+                            AddElementByPositionAsync(node)
+                                .Subscribe(html =>
+                                {
+                                    stringModel.Value = html;
+                                });
+
+                        }
+
                     });
                 });
 
@@ -90,7 +93,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                     .Subscribe(n =>
                 {
                     IElement newElement;
-                    if (n.Data is Utility.Interfaces.Generic.IValue<string> { Value:var value } descriptor)
+                    if (n.Data is Utility.Interfaces.Generic.IValue<string> { Value: var value } descriptor)
                     {
                         newElement = document.CreateElement<IHtmlDivElement>(); // Create a new element
                         var p = document.CreateElement<IHtmlParagraphElement>();

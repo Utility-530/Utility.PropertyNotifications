@@ -96,6 +96,7 @@
     <local:ChildrenSelector x:Key="ChildrenSelector"/>
     <local:ChildrenSelectorConverter x:Key="ChildrenSelectorConverter"/>
     <local:VisibilityConverter x:Key="VisibilityConverter"/>
+    <conv:ObjectDumperConverter x:Key="ObjectDumperConverter"/>
 
 
     <Style x:Key="DefaultStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
@@ -170,6 +171,14 @@
                 </Setter>
             </Style>
         </Style.Resources>
+        <Setter Property="ItemsPresenterVisibility" Value="Visible"></Setter>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
         <Setter Property="IsEditable" Value="True"></Setter>
         <Setter Property="ChildrenSelector" Value="{StaticResource ChildrenSelector}"></Setter>
         <Setter Property="SplitButtonStyle" Value="{StaticResource Type_Style }"></Setter>

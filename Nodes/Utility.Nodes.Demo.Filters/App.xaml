@@ -11,7 +11,7 @@
              xmlns:beh="http://schemas.utility.com/behaviors"
              xmlns:att="http://schemas.utility.com/attached"
              xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
-             xmlns:filters="clr-namespace:Utility.Trees.Demo.Filters;assembly=Utility.Trees.Demo.Filters">
+             xmlns:filters="clr-namespace:Utility.Trees.Demo.Filters;assembly=Utility.Trees.Demo.Filters" xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit" xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020">
 
     <Application.Resources>
         <ResourceDictionary>
@@ -88,128 +88,157 @@
             </HierarchicalDataTemplate>
 
             <DataTemplate DataType="{x:Type local:MainViewModel}">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"></ColumnDefinition>
-                        <ColumnDefinition Width="5"></ColumnDefinition>
-                        <ColumnDefinition Width="0.2*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="0.2*"/>
-                            <RowDefinition Height="0.2*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
+                <DockPanel>
 
-                        <ct:ComboTreeView  Grid.Row="0" ItemsSource="{Binding Selection}">
-                            <ItemsControl.ItemContainerStyleSelector>
-                                <local:ComboContainerStyleSelector
-                                    DefaultStyle="{StaticResource DefaultStyle}" 
-                                    ComboStyle="{StaticResource ComboExStyle}">
-                                </local:ComboContainerStyleSelector>
-                            </ItemsControl.ItemContainerStyleSelector>
-                        </ct:ComboTreeView>
-
-                        <ct:CustomTreeView Grid.Row="1" ItemsSource="{Binding Controls}" ItemContainerStyle="{StaticResource DefaultStyle}">
+                
+                        <ct:CustomTreeView DockPanel.Dock="Left" ItemsSource="{Binding Content}" ItemContainerStyle="{StaticResource DefaultContentStyle}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectedItemChanged">
+                                    <beh:SetSelectedItemAction PropertyName="Content" TargetObject="{Binding ElementName=TreeContent}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                         </ct:CustomTreeView>
 
 
-                        <Grid  Grid.Row="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*"></ColumnDefinition>
-                                <ColumnDefinition Width="5"></ColumnDefinition>
-                                <ColumnDefinition Width="1*"></ColumnDefinition>
-                                <ColumnDefinition Width="1*"></ColumnDefinition>
-                                <ColumnDefinition Width="1*"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"></ColumnDefinition>
+                            <ColumnDefinition Width="5"></ColumnDefinition>
+                            <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.2*"/>
+                                <RowDefinition Height="0.2*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
 
-                            <ct:CustomTreeView ItemsSource="{Binding Content}" >
+                            <ct:ComboTreeView  Grid.Row="0" ItemsSource="{Binding Selection}">
                                 <ItemsControl.ItemContainerStyleSelector>
                                     <local:ComboContainerStyleSelector
-                                    DefaultStyle="{StaticResource DefaultContentStyle}" 
-                                    ComboStyle="{StaticResource DefaultContentStyle}">
+                                    DefaultStyle="{StaticResource DefaultStyle}" 
+                                    ComboStyle="{StaticResource ComboExStyle}">
                                     </local:ComboContainerStyleSelector>
                                 </ItemsControl.ItemContainerStyleSelector>
+                            </ct:ComboTreeView>
 
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="SelectedItemChanged">
-                                        <beh:SetSelectedItemAction PropertyName="Content" TargetObject="{Binding ElementName=TreeContent}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
+                            <ct:CustomTreeView Grid.Row="1" ItemsSource="{Binding Controls}" ItemContainerStyle="{StaticResource DefaultStyle}">
                             </ct:CustomTreeView>
 
-                            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
 
-                            <ct:CustomTreeView Grid.Column="2" ItemsSource="{Binding Content}" ItemContainerStyleSelector="{StaticResource StyleSelector }" >
-                                <TreeView.ItemTemplate>
-                                    <HierarchicalDataTemplate ItemsSource="{Binding Items}">
-                                        <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
-                                            <ContentControl Content="{Binding Path=.}" ContentTemplateSelector="{x:Static filters:DataTemplateSelector.Instance}"/>
-                                        </Border>
-                                    </HierarchicalDataTemplate>
-                                </TreeView.ItemTemplate>
+                            <Grid  Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                                    <ColumnDefinition Width="5"></ColumnDefinition>
+                                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                                    <ColumnDefinition Width="5"></ColumnDefinition>
+                                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                   
+                                <ct:CustomTreeView Grid.Column="0" ItemsSource="{Binding Content}" ItemContainerStyleSelector="{StaticResource StyleSelector }" >
+                                    <TreeView.ItemTemplate>
+                                        <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                                            <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
+                                                <ContentControl Content="{Binding Path=.}" ContentTemplateSelector="{x:Static filters:DataTemplateSelector.Instance}"/>
+                                            </Border>
+                                        </HierarchicalDataTemplate>
+                                    </TreeView.ItemTemplate>
 
-                                <!--<ItemsControl.ItemContainerStyleSelector>
+                                    <!--<ItemsControl.ItemContainerStyleSelector>
                                     <local:ComboContainerStyleSelector
                                     DefaultStyle="{StaticResource ViewContentStyle}" 
                                     ComboStyle="{StaticResource ViewContentStyle}">
                                     </local:ComboContainerStyleSelector>
                                 </ItemsControl.ItemContainerStyleSelector>-->
 
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="SelectedItemChanged">
+                                            <beh:SetSelectedItemAction PropertyName="Content" TargetObject="{Binding ElementName=TreeContent}" />
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </ct:CustomTreeView>
+
+                                <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+
+                                <TreeView Grid.Column="2" ItemsSource="{Binding Html}">
+                                    <ItemsControl.ItemContainerStyle>
+                                        <Style TargetType="{x:Type TreeViewItem}">
+                                            <Setter Property="Header" Value="{Binding Data}"/>
+                                        </Style>
+                                    </ItemsControl.ItemContainerStyle>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <avalonedit:TextEditor 
+                                            x:Name="textHtml" 
+                                            local:TextEdit.Text="{Binding Value, Mode=TwoWay}" 
+                                            SyntaxHighlighting="HTML" 
+                                            ShowLineNumbers="True" />
+                                            <!--<TextBox Text="{Binding Value, Mode=TwoWay}" ></TextBox>-->
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </TreeView>
+
+                                <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch" />
+                                
+                                
+                                <TreeView Grid.Column="4" ItemsSource="{Binding Html_Render}">
+                                    <ItemsControl.ItemContainerStyle>
+                                        <Style TargetType="{x:Type TreeViewItem}">
+                                            <Setter Property="Header" Value="{Binding Data}"/>
+                                        </Style>
+                                    </ItemsControl.ItemContainerStyle>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <abel:WpfHtmlControlBase Html="{Binding Value, Mode=OneWay}"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </TreeView>
+                            </Grid>
+
+
+                            <ct:CustomTreeView Grid.Row="3" ItemsSource="{Binding Filters}" >
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="SelectedItemChanged">
                                         <beh:SetSelectedItemAction PropertyName="Content" TargetObject="{Binding ElementName=TreeContent}" />
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
-                            </ct:CustomTreeView>
-
-                            <TreeView Grid.Column="3" ItemsSource="{Binding Html}"></TreeView>
-                            
-                            <TreeView Grid.Column="4" ItemsSource="{Binding Html_Render}"></TreeView>
-                        </Grid>
-
-
-                        <ct:CustomTreeView Grid.Row="3" ItemsSource="{Binding Filters}" >
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectedItemChanged">
-                                    <beh:SetSelectedItemAction PropertyName="Content" TargetObject="{Binding ElementName=TreeContent}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                            <ct:CustomTreeView.ItemContainerStyleSelector>
-                                <bc:ItemContainerStyleSelector
+                                <ct:CustomTreeView.ItemContainerStyleSelector>
+                                    <bc:ItemContainerStyleSelector
                                     DefaultStyle="{StaticResource DefaultStyle}" 
                                     SelectableStyle="{StaticResource SelectedTreeViewItem}" 
                                     BreadcrumbStyle="{StaticResource BreachCrumb}" 
                                     BreadcrumbRootStyle ="{StaticResource BreadCrumbRootTree}">
-                                </bc:ItemContainerStyleSelector>
-                            </ct:CustomTreeView.ItemContainerStyleSelector>
-                        </ct:CustomTreeView>
+                                    </bc:ItemContainerStyleSelector>
+                                </ct:CustomTreeView.ItemContainerStyleSelector>
+                            </ct:CustomTreeView>
 
+                        </Grid>
+
+                        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
+
+                        <ContentControl x:Name="TreeContent" Grid.Column="2">
+                            <ContentControl.Resources>
+                                <ResourceDictionary>
+                                    <ResourceDictionary.MergedDictionaries>
+                                        <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
+                                        <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
+                                    </ResourceDictionary.MergedDictionaries>
+                                </ResourceDictionary>
+                            </ContentControl.Resources>
+                            <ContentControl.ContentTemplate>
+                                <DataTemplate DataType="{x:Type inf:Node}">
+                                    <UniformGrid Columns="1">
+                                        <hc:PropertyGrid SelectedObject="{Binding }"/>
+
+                                        <hc:PropertyGrid SelectedObject="{Binding Data}"/>
+                                    </UniformGrid>
+                                </DataTemplate>
+                            </ContentControl.ContentTemplate>
+                        </ContentControl>
                     </Grid>
-
-                    <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
-
-                    <ContentControl x:Name="TreeContent" Grid.Column="2">
-                        <ContentControl.Resources>
-                            <ResourceDictionary>
-                                <ResourceDictionary.MergedDictionaries>
-                                    <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
-                                    <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
-                                </ResourceDictionary.MergedDictionaries>
-                            </ResourceDictionary>
-                        </ContentControl.Resources>
-                        <ContentControl.ContentTemplate>
-                            <DataTemplate DataType="{x:Type inf:Node}">
-                                <UniformGrid Columns="1">
-                                    <hc:PropertyGrid SelectedObject="{Binding }"/>
-
-                                    <hc:PropertyGrid SelectedObject="{Binding Data}"/>
-                                </UniformGrid>
-                            </DataTemplate>
-                        </ContentControl.ContentTemplate>
-                    </ContentControl>
-                </Grid>
+                </DockPanel>
+             
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
