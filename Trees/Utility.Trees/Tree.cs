@@ -19,6 +19,7 @@ namespace Utility.Trees
         private IList items;
         protected ITree? parent;
         private bool flag;
+        private string key;
 
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
@@ -45,7 +46,14 @@ namespace Utility.Trees
                 Add(items);
         }
 
-        public virtual string Key { get; set; }
+        public virtual string Key
+        {
+            get => key; set
+            {
+                key = value;
+                RaisePropertyChanged();
+            }
+        }
 
 
 
