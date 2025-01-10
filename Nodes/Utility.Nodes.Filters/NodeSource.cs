@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Utility.Reactives;
 using System.Linq;
+using Utility.Keys;
 
 namespace Utility.Nodes.Filters
 {
@@ -33,11 +34,11 @@ namespace Utility.Nodes.Filters
             if (e.NewItems != null)
                 foreach (Node node in e.NewItems)
                 {
-                    if(node.Guid.ToString()== "1c6e643b-2f8d-486d-aee2-e49144383728")
+                    if(node.Key== "1c6e643b-2f8d-486d-aee2-e49144383728")
                     {
 
                     }
-                    if (Nodes.Count(x => x.Guid == node.Guid) > 1)
+                    if (Nodes.Count(x => x.Key == node.Key) > 1)
                     {
 
                     }
@@ -95,7 +96,7 @@ namespace Utility.Nodes.Filters
 
         public Node? SingleByGuid(Guid guid)
         {
-            if (Nodes.SingleOrDefault(a => a.Guid == guid) is not Node node)
+            if (Nodes.SingleOrDefault(a => a.Key == guid.ToString()) is not Node node)
             {
                 return null;
             }
@@ -110,7 +111,7 @@ namespace Utility.Nodes.Filters
         {
             return Observable.Create<Node>(observer =>
             {
-                if (Nodes.SingleOrDefault(a => a.Guid == guid) is not Node node)
+                if (Nodes.SingleOrDefault(a => a.Key == new GuidKey(guid)) is not Node node)
                 {
                     return TreeRepository.Instance.Get(guid)
                             .Subscribe(_d =>
@@ -129,7 +130,7 @@ namespace Utility.Nodes.Filters
                                     else
                                     {
 
-                                        var node = new Node(null, null) { Guid = guid };
+                                        var node = new Node(null, null) { Key = new GuidKey(guid) };
                                         observer.OnNext(node);
                                         observer.OnCompleted();
                                     }
@@ -224,7 +225,7 @@ namespace Utility.Nodes.Filters
             {
                 return Nodes.SelfAndAdditions().Subscribe(a =>
                 {
-                    if (a.Guid == currentGuid)
+                    if (a.Key == new GuidKey(currentGuid))
                         observer.OnNext(a);
                 });
             });

@@ -1,20 +1,14 @@
-﻿using AutoMapper;
-using Jellyfish;
-using Splat;
+﻿using Jellyfish;
 using System;
-using System.Collections;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Utility.Changes;
-using Utility.Enums;
 using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
 using Utility.PropertyNotifications;
-using Utility.Repos;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
 
@@ -25,7 +19,7 @@ namespace Utility.Nodes.Filters
         void SetNode(Node node);
     }
 
-    public class Node : ViewModelTree, IGuid, IName, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible //, INode, 
+    public class Node : ViewModelTree, /*IGuid,*/ IName, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible //, INode, 
     {
         object data;
 
@@ -59,9 +53,6 @@ namespace Utility.Nodes.Filters
                 node.Add(this);
             });
         }
-
-        public override string Key { get => new GuidKey(this.Guid); set => throw new Exception("d s3333"); }
-
         public ICommand AddCommand { get; }
         public ICommand RemoveCommand { get; }
         public ICommand EditCommand { get; }
@@ -89,7 +80,7 @@ namespace Utility.Nodes.Filters
                 }
                 if (data is IGuid guid)
                 {
-                    this.Guid = guid.Guid;
+                    this.Key = new GuidKey(guid.Guid);
                 }
                 if (data is IChildren children)
                 {
@@ -120,9 +111,6 @@ namespace Utility.Nodes.Filters
                 if (parent?.Equals(value) == true)
                     return;
                 parent = value;
-
-
-
                 RaisePropertyChanged();
             }
         }
@@ -154,16 +142,5 @@ namespace Utility.Nodes.Filters
         {
             return Data?.ToString();
         }
-
-
-        public override bool Equals(ITree other)
-        {
-            if (other is ViewModelTree node)
-                return node.Equals(this);
-            else
-                return base.Equals(other);
-        }
-
-
     }
 }

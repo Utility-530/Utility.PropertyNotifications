@@ -36,7 +36,7 @@ namespace Utility.Nodes.Demo.Filters
                 var config = new MapperConfiguration(cfg =>
                 {
                     cfg.CreateMap<N, NodeDTO>()
-                    .ForMember(dest => dest.CurrentGuid, opt => opt.MapFrom(a => a.Current.Guid))
+                    .ForMember(dest => dest.CurrentGuid, opt => opt.MapFrom(a => Guid.Parse(a.Current.Key)))
                             .ForMember(dest => dest.Index, opt => opt.MapFrom(a => a.LocalIndex))
                     .AfterMap((src, dest) =>
                     {

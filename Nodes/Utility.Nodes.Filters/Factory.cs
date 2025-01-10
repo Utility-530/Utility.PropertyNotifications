@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Utility.Keys;
 using Utility.Repos;
 using Observable = System.Reactive.Linq.Observable;
 
@@ -52,7 +53,7 @@ namespace Utility.Nodes.Filters
                 Observable.Create<Node>(observer =>
                 {
                     TreeRepository.Instance.InsertRoot(guid, tableName, typeof(object));
-                    observer.OnNext(new Node("root", new Model { Name = "root" }) { Guid = guid });
+                    observer.OnNext(new Node("root", new Model { Name = "root" }) { Key = new GuidKey(guid) });
                     return Disposable.Empty;
                 });
         }
@@ -68,7 +69,7 @@ namespace Utility.Nodes.Filters
                 .InsertRoot(controlsGuid, subControlRoot.Name, typeof(object))
                 .Subscribe(a =>
                 {
-                    subControlRoot.Guid = a.Guid;
+                    subControlRoot.Key = new GuidKey(a.Guid);
                     observer.OnNext(subControlRoot);
                 });
             });
@@ -85,7 +86,7 @@ namespace Utility.Nodes.Filters
                 .InsertRoot(subGuid, subControlRoot.Name, typeof(object))
                 .Subscribe(a =>
                 {
-                    subControlRoot.Guid = a.Guid;
+                    subControlRoot.Key = new GuidKey(a.Guid);
                     observer.OnNext(subControlRoot);
                 });
 
@@ -132,7 +133,7 @@ namespace Utility.Nodes.Filters
                 .InsertRoot(filterGuid, subRoot.Name, typeof(object))
                 .Subscribe(a =>
                 {
-                    subRoot.Guid = a.Guid;
+                    subRoot.Key = new GuidKey(a.Guid);
                     //subRoot.Load();
                     observer.OnNext(subRoot);
                 });
@@ -149,7 +150,7 @@ namespace Utility.Nodes.Filters
                 .InsertRoot(htmlGuid, node.Name, typeof(object))
                 .Subscribe(a =>
                 {
-                    node.Guid = a.Guid;
+                    node.Key = new GuidKey(a.Guid);
                     observer.OnNext(node);
                 });
             });
@@ -164,7 +165,7 @@ namespace Utility.Nodes.Filters
                 .InsertRoot(htmlRenderGuid, node.Name, typeof(object))
                 .Subscribe(a =>
                 {
-                    node.Guid = a.Guid;
+                    node.Key = new GuidKey(a.Guid);
                     observer.OnNext(node);
                 });
             });
@@ -179,7 +180,7 @@ namespace Utility.Nodes.Filters
                 .InsertRoot(contentGuid, _node.Name, typeof(object))
                 .Subscribe(a =>
                 {
-                    _node.Guid = a.Guid;
+                    _node.Key = new GuidKey(a.Guid);
                     observer.OnNext(_node);
                 });
             });

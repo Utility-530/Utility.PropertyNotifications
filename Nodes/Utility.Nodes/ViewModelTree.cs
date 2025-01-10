@@ -7,11 +7,11 @@ using Utility.Trees;
 namespace Utility.Nodes
 {
 
-    public class ViewModelTree : ObservableTree, IGuid, IName, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible //, INode, 
+    public class ViewModelTree : ObservableTree, /*IGuid,*/ IName, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible //, INode, 
     {
 
         private bool? isHighlighted;
-        private bool isExpanded;
+        private bool isExpanded = true;
         private string itemsPanelKey;
         private Arrangement arrangement;
         private int columns;
@@ -44,18 +44,6 @@ namespace Utility.Nodes
 
         public int? LocalIndex { get; set; }
 
-        public Guid Guid
-        {
-            get => guid; set
-            {
-                if (value != guid)
-                {
-                    guid = value;
-                    RaisePropertyChanged(nameof(Guid));
-                }
-            }
-        }
-   
         public Node Root
         {
             get => this.m_items.FirstOrDefault() as Node;
@@ -218,29 +206,6 @@ namespace Utility.Nodes
         public override string ToString()
         {
             return Data?.ToString();
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (obj is IGuid node)
-            {
-                return node.Guid == this.Guid;
-            }
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return Guid.GetHashCode();
-        }
-
-        public bool Equals(ViewModelTree? obj)
-        {
-            if (obj is IGuid node)
-            {
-                return node.Guid == this.Guid;
-            }
-            return false;
         }
     }
 }

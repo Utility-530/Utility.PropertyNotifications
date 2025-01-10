@@ -16,6 +16,7 @@ using TreeView.Infrastructure;
 using Utility.ViewModels;
 using Utility.Interfaces.NonGeneric;
 using Fasterflect;
+using Utility.Keys;
 
 namespace Utility.Nodes.Filters
 {
@@ -61,8 +62,8 @@ namespace Utility.Nodes.Filters
                     .Subscribe(a =>
                     Initialise((Node)a));
 
-                node.WithChangesTo(a => a.Guid)
-                .StartWith(node.Guid)
+                node.WithChangesTo(a => a.Key)
+                .StartWith(node.Key)
                 .Where(a => a != default)
                 .Take(1)
                 .Subscribe(a =>
@@ -117,10 +118,10 @@ namespace Utility.Nodes.Filters
 
         public virtual void SetNode(Node node)
         {
-            if (Node?.Equals(node) == true)
-            {
+            //if (Node?.Equals(node) == true)
+            //{
 
-            }
+            //}
             this.Node = (Node)node;
         }
 
@@ -137,17 +138,17 @@ namespace Utility.Nodes.Filters
             }
 
             TreeRepository.Instance
-                .Find((parent as IGuid).Guid, this.Name, typeof(object), this.Node.LocalIndex)
+                .Find(Guid.Parse(parent.Key), this.Name, typeof(object), this.Node.LocalIndex)
                 .Subscribe(guid =>
                 {
-                    Node.Guid = guid.Guid;
+                    Node.Key = new GuidKey(guid.Guid);
                     NodeSource.Instance.Nodes.Add(this.Node);
                 });
 
-            var index = TreeRepository.Instance.MaxIndex(parent.Guid, Name + "_child") ?? 0;
+            var index = TreeRepository.Instance.MaxIndex(Guid.Parse(parent.Key), Name + "_child") ?? 0;
 
 
-            TreeRepository.Instance.Get(parent.Guid)
+            TreeRepository.Instance.Get(Guid.Parse(parent.Key))
                 .Subscribe(_d =>
                 {
                     if (_d.Value == null)
@@ -192,7 +193,7 @@ namespace Utility.Nodes.Filters
             IsInitialising = true;
 
             NodeSource.Instance
-                .ChildrenByGuidAsync(node.Guid)
+                .ChildrenByGuidAsync(Guid.Parse(node.Key))
                 .Subscribe(a =>
                 {
                     if (a.Name == NodeSource.New)
@@ -220,7 +221,7 @@ namespace Utility.Nodes.Filters
                             }
                         });
                     }
-                    else if (node.Items.Cast<IGuid>().Select(a => a.Guid).Contains(a.Guid) == false)
+                    else if (node.Items.Cast<IKey>().Select(a => a.Key).Contains(a.Key) == false)
                     {
                         node.Add(a);
                         a.Parent = node;
@@ -232,19 +233,6 @@ namespace Utility.Nodes.Filters
                 },
                 () =>
                 {
-                    //if (Version > new Version())
-                    //{
-                    //    ChildrenAsync()
-                    //     .Subscribe(child =>
-                    //     {
-                    //         if (node.Items.Select(a => a.Name).Contains(child.Name))
-                    //         {
-                    //             return;
-                    //         }
-                    //         child.Parent = node;
-                    //         node.Items.Add(child);
-                    //     });
-                    //} 
                     IsInitialising = false;
                 });
         }

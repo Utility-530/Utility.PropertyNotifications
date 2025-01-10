@@ -19,6 +19,7 @@ using Utility.Enums;
 using Utility.Extensions;
 using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
+using Utility.Keys;
 using Utility.Observables;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
@@ -1586,7 +1587,7 @@ namespace Utility.Nodes.Filters
         public ResolvableNode(System.Guid guid, Assembly assembly) : base("main", new ResolvableModel { Name = "main" })
         {
 
-            Guid = guid;
+            Key = new GuidKey(guid);
             IsExpanded = true;
 
             //this.Items.Add(new Node("root2", new AssemblyModel { Name = "root2", Assembly = assembly }) { Parent = this });

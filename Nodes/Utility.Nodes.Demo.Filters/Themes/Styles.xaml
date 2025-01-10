@@ -100,7 +100,7 @@
 
 
     <Style x:Key="DefaultStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
-        <Setter Property="ToolTip" Value="{Binding Guid}"></Setter>
+        <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
         <!--<Setter Property="ChildrenSelector" Value="{StaticResource ChildrenSelector}"/>-->
         <Setter Property="NodeItemsSource">
             <Setter.Value>
@@ -140,7 +140,7 @@
     <Style x:Key="ViewContentStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
         <Setter Property="IsExpanded" Value="True"></Setter>
         <Setter Property="IsEditable" Value="False"></Setter>
-        <Setter Property="ToolTip" Value="{Binding Guid}"></Setter>
+        <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
         <Setter Property="Header" Value="{Binding Path=.}" />
         <Setter Property="Visibility" Value="{Binding Converter={StaticResource VisibilityConverter}}"></Setter>
 
@@ -182,7 +182,7 @@
         <Setter Property="IsEditable" Value="True"></Setter>
         <Setter Property="ChildrenSelector" Value="{StaticResource ChildrenSelector}"></Setter>
         <Setter Property="SplitButtonStyle" Value="{StaticResource Type_Style }"></Setter>
-        <Setter Property="ToolTip" Value="{Binding Guid}"></Setter>
+        <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
         <Setter Property="NodeItemsSource">
             <Setter.Value>
                 <MultiBinding Converter="{StaticResource ChildrenSelectorConverter}">
