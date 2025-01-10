@@ -6,7 +6,7 @@
                     xmlns:local="clr-namespace:Utility.Nodes.Demo.Filters"
                     xmlns:e="clr-namespace:Utility.Enums;assembly=Utility.Enums"
                     xmlns:inf="clr-namespace:Utility.Nodes.Filters;assembly=Utility.Nodes.Filters"
-                    xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit">
+                    xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit" xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020">
 
     <!--<local:Assemblies x:Key="Assemblies"/>-->
 
@@ -98,5 +98,10 @@
     <DataTemplate DataType="{x:Type inf:ExceptionModel}">
         <TextBlock Text="{Binding Exception.Message}" Foreground="Red" MinHeight="25" MinWidth="180" Background="GhostWhite">
         </TextBlock>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type inf:HtmlModel}">
+        <abel:WpfHtmlControlBase  
+                      Html="{Binding Value, Mode=OneWay}"/>
     </DataTemplate>
 </ResourceDictionary>

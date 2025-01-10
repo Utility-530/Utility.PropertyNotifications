@@ -1,15 +1,14 @@
 ﻿using AutoMapper;
-using DryIoc.ImTools;
 using LiteDB;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Splat;
-using System.Configuration;
 using System.Data;
-using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Windows;
+using System.Windows.Markup;
+using TinyHtml.Wpf;
 using Utility.Conversions.Json.Newtonsoft;
-using Utility.Nodes.Demo.Filters.Infrastructure;
+using Utility.Nodes.Demo.Filters.Services;
 using Utility.Nodes.Filters;
 using Utility.Repos;
 using N = Utility.Nodes.Filters.Node;
@@ -72,17 +71,31 @@ namespace Utility.Nodes.Demo.Filters
             });
 
 
-            Service service = new();
-            var _service = new ControlsService();
+            TransformerService service = new();
+            ControlsService _service = new();
+            ParserService parserService = new();
 
 
             var mainViewModel = Locator.Current.GetService<MainViewModel>();
-
+            //WpfHtmlControlBase.SetMasterStylesheet(combine());
+            combine();
             var window = new Window() { Content = mainViewModel };
+            window.Loaded += Window_Loaded;
             window.Show();
 
+
+
             base.OnStartup(e);
+
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            string serializedXaml = XamlWriter.Save(this.MainWindow);
+            Console.WriteLine(serializedXaml);
+        }
+
+
 
         object convertBackFromPersistable(string data)
         {
@@ -108,6 +121,29 @@ namespace Utility.Nodes.Demo.Filters
                 yield return (new ParameterInfoJsonConverter());
                 yield return (new AttributeCollectionConverter());
             }
+        }
+
+        void combine()
+        {
+            string name = typeof(App).Assembly.GetManifestResourceNames().Where(a => a.Contains("master.css")).First();
+
+            using (var s = typeof(App).Assembly.GetManifestResourceStream(name))
+            {
+                WpfHtmlControlBase.SetMasterStylesheet(new StreamReader(s).ReadToEnd());
+            }
+            //StringBuilder result = new StringBuilder();
+            //foreach (var filename in System.IO.Directory.EnumerateFiles("../../../bootstrap-5.3.3-dist/css"))
+            //{
+            //    using (StreamReader reader = new StreamReader(filename))
+            //    {
+            //        if (filename.Contains(".css"))
+            //        {
+            //            result.Append(reader.ReadToEnd());
+            //            result.AppendLine();
+            //        }                     
+            //    }
+            //}
+            //return result.ToString();            
         }
     }
 }

@@ -8,7 +8,6 @@
              xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              xmlns:inf="clr-namespace:Utility.Nodes.Filters;assembly=Utility.Nodes.Filters"
              xmlns:hc="https://handyorg.github.io/handycontrol"
-             xmlns:conv="clr-namespace:Utility.Nodes.Demo.Filters.Infrastructure" 
              xmlns:beh="http://schemas.utility.com/behaviors"
              xmlns:att="http://schemas.utility.com/attached"
              xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
@@ -121,6 +120,8 @@
                                 <ColumnDefinition Width="2*"></ColumnDefinition>
                                 <ColumnDefinition Width="5"></ColumnDefinition>
                                 <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
+                                <ColumnDefinition Width="1*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
 
                             <ct:CustomTreeView ItemsSource="{Binding Content}" >
@@ -163,6 +164,9 @@
                                 </i:Interaction.Triggers>
                             </ct:CustomTreeView>
 
+                            <TreeView Grid.Column="3" ItemsSource="{Binding Html}"></TreeView>
+                            
+                            <TreeView Grid.Column="4" ItemsSource="{Binding Html_Render}"></TreeView>
                         </Grid>
 
 
@@ -181,6 +185,7 @@
                                 </bc:ItemContainerStyleSelector>
                             </ct:CustomTreeView.ItemContainerStyleSelector>
                         </ct:CustomTreeView>
+
                     </Grid>
 
                     <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />

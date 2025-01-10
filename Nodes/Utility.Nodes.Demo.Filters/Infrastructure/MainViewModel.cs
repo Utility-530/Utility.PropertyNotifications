@@ -1,4 +1,5 @@
-﻿using Utility.Nodes.Filters;
+﻿using ColorCode.Compilation.Languages;
+using Utility.Nodes.Filters;
 using Utility.Trees.Abstractions;
 using Utility.ViewModels;
 
@@ -6,7 +7,7 @@ namespace Utility.Nodes.Demo.Filters
 {
     public class MainViewModel : NotifyPropertyChangedBase
     {
-        IReadOnlyTree[] control, selection, content, filters;
+        IReadOnlyTree[] control, selection, content, filters, html,html_render;
 
         public IReadOnlyTree[] Controls
         {
@@ -52,6 +53,29 @@ namespace Utility.Nodes.Demo.Filters
                     NodeSource.Instance.Single(nameof(Factory.BuildFiltersRoot))
                         .Subscribe(a => { filters = [a]; RaisePropertyChanged(nameof(Filters)); });
                 return filters;
+            }
+        }   
+        
+        public IReadOnlyTree[] Html
+        {
+            get
+            {
+                if (html == null)
+                    NodeSource.Instance.Single(nameof(Factory.BuildHtmlRoot))
+                        .Subscribe(a => { html = [a]; RaisePropertyChanged(nameof(Html)); });
+                return html;
+            }
+        }
+
+
+        public IReadOnlyTree[] Html_Render
+        {
+            get
+            {
+                if (html_render == null)
+                    NodeSource.Instance.Single(nameof(Factory.BuildHtmlRenderRoot))
+                        .Subscribe(a => { html_render = [a]; RaisePropertyChanged(nameof(Html_Render)); });
+                return html_render;
             }
         }
     }

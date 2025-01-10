@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.Keys\Utility.Keys.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.ViewModels\Utility.ViewModels.csproj" />
     <ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />

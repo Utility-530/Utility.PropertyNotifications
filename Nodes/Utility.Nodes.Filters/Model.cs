@@ -94,11 +94,11 @@ namespace Utility.Nodes.Filters
                 node.DescendantsAsync()
                     .Subscribe(a =>
                     {
-                        if (a.Update == Changes.Type.Add)
+                        if (a.Type == Changes.Type.Add)
                             this.AddDescendant(a.NewItem, a.Level);
-                        else if (a.Update == Changes.Type.Remove)
+                        else if (a.Type == Changes.Type.Remove)
                             this.SubtractDescendant(a.NewItem, a.Level);
-                        else if (a.Update == Changes.Type.Update)
+                        else if (a.Type == Changes.Type.Update)
                             this.ReplaceDescendant(a.NewItem, a.OldItem, a.Level);
                         else
                             throw new Exception("Cds 333222");
@@ -249,15 +249,15 @@ namespace Utility.Nodes.Filters
                 });
         }
 
-        public virtual void AddDescendant(ITree node, int level)
+        public virtual void AddDescendant(IReadOnlyTree node, int level)
         {
         }
 
-        public virtual void SubtractDescendant(ITree node, int level)
+        public virtual void SubtractDescendant(IReadOnlyTree node, int level)
         {
         }
 
-        public virtual void ReplaceDescendant(ITree @new, ITree old, int level)
+        public virtual void ReplaceDescendant(IReadOnlyTree @new, IReadOnlyTree old, int level)
         {
         }
 

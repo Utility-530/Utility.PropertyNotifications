@@ -11,8 +11,9 @@ using Utility.Extensions;
 using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
 using NetFabric.Hyperlinq;
+using Utility.Nodes.Demo.Filters.Services;
 
-namespace Utility.Nodes.Demo.Filters.Infrastructure
+namespace Utility.Nodes.Demo.Filters.Services
 {
     public class TransformerException : Exception
     {
@@ -24,9 +25,9 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
         public TransformerModel TransformerModel { get; }
     }
 
-    public class Service
+    public class TransformerService
     {
-        public Service()
+        public TransformerService()
         {
             int i = 0;
             Observable.Create<Exception>(observer =>
@@ -283,10 +284,10 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
 
                 if (a is TransformerException { TransformerModel: { } transformer } ex)
                 {
-                    transformer.Exceptions.Node.Add(new Utility.Nodes.Filters.Node(i++.ToString(), new ExceptionModel(ex)));
+                    transformer.Exceptions.Node.Add(new Nodes.Filters.Node(i++.ToString(), new ExceptionModel(ex)));
                 }
             });
-            }
+        }
 
         private static IObservable<Unit> changes(TransformerModel transformer)
         {

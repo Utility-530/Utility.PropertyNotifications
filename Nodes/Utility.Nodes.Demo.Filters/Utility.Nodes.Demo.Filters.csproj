@@ -9,6 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Data\master.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Data\master.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Conversions\Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj" />
     <ProjectReference Include="..\..\External\EnumSourceConverter\EnumSourceConverter.csproj" />
     <ProjectReference Include="..\..\External\TextBoxEx\TextBoxEx.csproj" />
@@ -32,7 +42,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
+    <PackageReference Include="AngleSharp" Version="1.2.0" />
+    <PackageReference Include="AngleSharp.Css" Version="1.0.0-beta.144" />
+    <PackageReference Include="AngleSharp.Diffing" Version="1.0.0" />
+    <PackageReference Include="ICSharpCode.WpfDesigner" Version="8.1.56" />
+    <PackageReference Include="TinyHtml.Wpf" Version="1.2.2" />
   </ItemGroup>
 
 

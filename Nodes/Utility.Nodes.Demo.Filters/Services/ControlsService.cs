@@ -13,7 +13,7 @@ using Utility.Repos;
 using Utility.Reactives;
 using Utility.Trees.Abstractions;
 
-namespace Utility.Nodes.Demo.Filters.Infrastructure
+namespace Utility.Nodes.Demo.Filters.Services
 {
     public class ControlsService
     {

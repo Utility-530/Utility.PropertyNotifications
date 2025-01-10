@@ -83,7 +83,7 @@ namespace Utility.Nodes.Filters
             }
         }
 
-        public override void AddDescendant(ITree node, int level)
+        public override void AddDescendant(IReadOnlyTree node, int level)
         {
             if (node == null)
                 throw new NullReferenceException();
@@ -358,7 +358,7 @@ namespace Utility.Nodes.Filters
 
         public Exception Exception { get; } = Exception;
     }
-
+    
     public class ExceptionsModel() : Model
     {
         public ObservableCollection<Exception> Exceptions { get; } = [];
@@ -384,7 +384,7 @@ namespace Utility.Nodes.Filters
 
         }
 
-        public override void AddDescendant(ITree node, int level)
+        public override void AddDescendant(IReadOnlyTree node, int level)
         {
             if (node is Node _node)
                 _node.WithChangesTo(a => a.Current)
@@ -472,6 +472,26 @@ namespace Utility.Nodes.Filters
     }
 
     public class StringModel : Model
+    {
+        protected string value;
+
+        public string Value
+        {
+            get => value;
+            set
+            {
+                this.value = value;
+                base.RaisePropertyChanged();
+            }
+        }
+
+        public override string ToString()
+        {
+            return value?.ToString() ?? "_unknown_";
+        }
+    }
+    
+    public class HtmlModel : Model
     {
         protected string value;
 
@@ -676,7 +696,7 @@ namespace Utility.Nodes.Filters
             }
         }
 
-        public override void AddDescendant(ITree node, int level)
+        public override void AddDescendant(IReadOnlyTree node, int level)
         {
             if (node == null)
                 throw new NullReferenceException();
@@ -768,7 +788,7 @@ namespace Utility.Nodes.Filters
                 this.value = value;
             }
         }
-        public override void AddDescendant(ITree node, int level)
+        public override void AddDescendant(IReadOnlyTree node, int level)
         {
             if (node == null)
                 throw new NullReferenceException();
@@ -784,7 +804,7 @@ namespace Utility.Nodes.Filters
             }
         }
 
-        public override void ReplaceDescendant(ITree @new, ITree old, int level)
+        public override void ReplaceDescendant(IReadOnlyTree @new, IReadOnlyTree old, int level)
         {
             switch (@new.Data)
             {
@@ -808,7 +828,7 @@ namespace Utility.Nodes.Filters
 
 
         }
-        public override void SubtractDescendant(ITree @new, int level)
+        public override void SubtractDescendant(IReadOnlyTree @new, int level)
         {
             switch (@new.Data)
             {
@@ -1414,7 +1434,7 @@ namespace Utility.Nodes.Filters
             yield return (new Node("ass_root", new GlobalAssembliesModel { Name = "ass_root" }) { });
         }
 
-        public override void AddDescendant(ITree change, int level)
+        public override void AddDescendant(IReadOnlyTree change, int level)
         {
             if (change is Node node)
                 node.WithChangesTo(a => a.Current)
@@ -1475,7 +1495,7 @@ namespace Utility.Nodes.Filters
             }
         }
 
-        public override void ReplaceDescendant(ITree node, ITree old, int level)
+        public override void ReplaceDescendant(IReadOnlyTree node, IReadOnlyTree old, int level)
         {
 
             switch (node?.Data)

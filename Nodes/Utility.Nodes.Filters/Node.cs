@@ -12,6 +12,7 @@ using System.Windows.Input;
 using Utility.Changes;
 using Utility.Enums;
 using Utility.Interfaces.NonGeneric;
+using Utility.Keys;
 using Utility.PropertyNotifications;
 using Utility.Repos;
 using Utility.Trees;
@@ -58,6 +59,8 @@ namespace Utility.Nodes.Filters
                 node.Add(this);
             });
         }
+
+        public override string Key { get => new GuidKey(this.Guid); set => throw new Exception("d s3333"); }
 
         public ICommand AddCommand { get; }
         public ICommand RemoveCommand { get; }
