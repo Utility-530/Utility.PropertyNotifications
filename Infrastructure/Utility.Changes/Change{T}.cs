@@ -40,7 +40,7 @@ namespace Utility.Changes
     }
 
 
-    public readonly record struct TreeChange<T>(T NewItem, T? OldItem, Type Update, int Level)
+    public readonly record struct TreeChange<T>(T NewItem, T? OldItem, Type Type, int Level)
     {
         public static TreeChange<T> Add(T NewItem, int level) => new TreeChange<T>(NewItem, default, Type.Add, level);
         public static TreeChange<T> Remove(T NewItem, int level) => new TreeChange<T>(NewItem, default, Type.Remove, level);
