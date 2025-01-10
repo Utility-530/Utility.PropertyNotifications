@@ -176,14 +176,12 @@ namespace Utility.Nodes.Filters
             {
                 var _node = build();
                 return TreeRepository.Instance
-       .InsertRoot(contentGuid, _node.Name, typeof(object))
-       .Subscribe(a =>
-       {
-           _node.Guid = a.Guid;
-           //subRoot.Load();
-           observer.OnNext(_node);
-       });
-                //});
+                .InsertRoot(contentGuid, _node.Name, typeof(object))
+                .Subscribe(a =>
+                {
+                    _node.Guid = a.Guid;
+                    observer.OnNext(_node);
+                });
             });
 
             static Node build()
@@ -200,30 +198,22 @@ namespace Utility.Nodes.Filters
                     new Node("Group 2", new Model(() =>
                     {
                         return [
-                            new("test 1", new Model { Name = "test 1" }),
                             new("five", new IndexModel { Value = 5 }) {  },
                             new("test 5", new Model(()=> [new ("lower", new Model { Name = "lower" })]) { Name = "test 5" }),
-                            new Node("nom", new Model { Name = "nom" })
                        ];
                     }){ Name = "Group 2"}),
                     new Node("Group 3", new Model(() =>
                     {
                         return [
-                            (new Node("test 1", new Model { Name = "test 1" }) { }),
-                            (new Node("test 7", new Model { Name = "test 7" }) {  }),
-                            (new Node("test 8", new Model { Name = "test 8" }) {  }),
+                            (new Node("test 6", new Model { Name = "test 6" }) { }),
                             (new Node("eight", new IndexModel { Value = 8 }) {  }),
                        ];
                     }){ Name = "Group 3"})];
                 })
                 { Name = "Groups" })
-                { IsExpanded = true }
-               ;
+                { IsExpanded = true };
             }
         }
-
-
-
 
         public static IObservable<Node> Assembly()
         {
