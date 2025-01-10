@@ -33,20 +33,25 @@ namespace Utility.Trees.Demo.Filters
                 //_style.Setters.Add(new Setter { Property = TreeViewItem.HeaderProperty, Value = new Binding { Path = new PropertyPath(".") } });
                 isInitialised = true;
             }
-            Predicate.Reset();
-            Predicate.Input = input;
-            Predicate.Evaluate();
-            if (Predicate.Backput is string s)
+            if (SelectKey(item) is string s)
             {
                 var style = App.Current.Resources[Predicate.Backput] as Style;
                 if (style == null)
-                    style= res[Predicate.Backput] as Style;
-          
-           
+                    style = res[Predicate.Backput] as Style;
+
+
                 return style;
             }
-        
+
             return null;
+        }
+
+        public string SelectKey(object input)
+        {
+            Predicate.Reset();
+            Predicate.Input = input;
+            Predicate.Evaluate();
+            return Predicate.Backput?.ToString();
         }
 
         public string DefaultStyle { get; set; } = "ExpandedTreeViewItem";
