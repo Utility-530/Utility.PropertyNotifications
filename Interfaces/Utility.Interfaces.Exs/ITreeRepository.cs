@@ -1,4 +1,8 @@
-﻿namespace Utility.Repos
+﻿using System;
+using System.Collections.Generic;
+using Utility.Structs.Repos;
+
+namespace Utility.Repos
 {
     public interface ITreeRepository
     {
