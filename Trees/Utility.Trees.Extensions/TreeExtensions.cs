@@ -13,6 +13,7 @@
     using Utility.PropertyNotifications;
     using System.ComponentModel;
     using System.Collections;
+    using System.Collections.Specialized;
 
     public static partial class TreeExtensions
     {
@@ -244,7 +245,7 @@
         }
 
 
-        public static IObservable<IReadOnlyTree?> MatchDescendant(this ObservableTree tree, Predicate<IReadOnlyTree> action)
+        public static IObservable<IReadOnlyTree?> MatchDescendant(this ITree tree, Predicate<IReadOnlyTree> action)
         {
             return Observable.Create<IReadOnlyTree?>(observer =>
             {
@@ -257,7 +258,7 @@
                 List<IReadOnlyTree> trees = new();
                 var items = tree.Items;
 
-                return tree.Subscribe(a =>
+                return tree.Changes().Subscribe(a =>
                 {
 
                     if (a.Type == Type.Add)
@@ -276,17 +277,51 @@
                         else
                             throw new Exception("c 333211");
 
-                        if (tChild is ObservableTree oTree)
-                            oTree.MatchDescendant(action).Subscribe(observer);
-                        else
-                            observer.OnNext(tChild.MatchDescendant(action));
-            
-                            //if (c.MatchDescendant(action) is { } match)
-                            //    observer.OnNext(match);
-                        
+                        if (tChild is ITree _tree)
+                            _tree.MatchDescendant(action).Subscribe(observer);
+                        else if (tChild.MatchDescendant(action) is IReadOnlyTree match)
+                            observer.OnNext(match);
+
+                        //if (c.MatchDescendant(action) is { } match)
+                        //    observer.OnNext(match);
+
                     }
                 });
 
+            });
+        }
+
+        public static IObservable<Change<IReadOnlyTree>> Changes(this ITree tree)
+        {
+            return Observable.Create<Change<IReadOnlyTree>>(observer =>
+            {
+                CompositeDisposable disposables = new();
+                tree.CollectionChanged += (sender, args) =>
+                {
+
+                    if (args.Action == NotifyCollectionChangedAction.Add && args.NewItems != null)
+                    {
+                        foreach (IReadOnlyTree item in args.NewItems.Cast<IReadOnlyTree>())
+                        {
+                            item.Parent = tree;
+                            observer.OnNext(new Change<IReadOnlyTree>(item, Utility.Changes.Type.Add));
+
+                            if (item is ITree _tree)
+                                _tree.Changes().Subscribe(observer).DisposeWith(disposables);
+                        }
+                    }
+                    else if (args.Action != NotifyCollectionChangedAction.Move && args.OldItems != null)
+                    {
+                        foreach (var item in args.OldItems.Cast<Tree>())
+                        {
+                            item.Parent = null;
+                            observer.OnNext(new Change<IReadOnlyTree>(item, Utility.Changes.Type.Remove));
+                        }
+                    }
+                    //base.ItemsOnCollectionChanged(sender, args);
+
+                };
+                return disposables;
             });
         }
 
@@ -376,7 +411,7 @@
         }
 
         public static IReadOnlyTree? Root(this IReadOnlyTree tree) => MatchAncestors(tree, t => t.IsRoot()).SingleOrDefault();
-      
+
 
         public static IEnumerable<IReadOnlyTree> MatchAncestors(this IReadOnlyTree tree, Predicate<IReadOnlyTree> predicate)
         {
@@ -438,22 +473,22 @@
                 }
                 else
                 {
-                    if(tree is Tree changed)
-                    return changed.WithChangesTo(a => a.Parent)
-                    .Where(a => a != null)
-                    .Subscribe(p =>
-                    {
-                        SelfAndAncestorsAsync(p, action, level++)
-                        .Subscribe(a =>
-                        observer.OnNext(a))
+                    if (tree is Tree changed)
+                        return changed.WithChangesTo(a => a.Parent)
+                        .Where(a => a != null)
+                        .Subscribe(p =>
+                        {
+                            SelfAndAncestorsAsync(p, action, level++)
+                            .Subscribe(a =>
+                            observer.OnNext(a))
+                            .DisposeWith(disposables);
+                        })
                         .DisposeWith(disposables);
-                    })
-                    .DisposeWith(disposables);
-                    else if(tree.Parent!=null)
+                    else if (tree.Parent != null)
                     {
                         return SelfAndAncestorsAsync(tree.Parent, action, level++)
                       .Subscribe(a =>
-                      observer.OnNext(a)); 
+                      observer.OnNext(a));
                     }
                     else
                     {
@@ -557,7 +592,7 @@
                 tree.Items.AndAdditions<ITree>()
                 .Subscribe(item =>
                 {
-                    SelfAndDescendantsAsync(item, action, 1) 
+                    SelfAndDescendantsAsync(item, action, 1)
                     .Subscribe(x =>
                     {
                         observer.OnNext(x);
