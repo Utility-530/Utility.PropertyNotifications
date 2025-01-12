@@ -1,30 +1,8 @@
-﻿using ReactiveUI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reactive;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using Utility.WPF.Attached;
-using Utility.Enums;
-using Utility.WPF.Controls.Base;
-using Evan.Wpf;
-using Jellyfish;
-using Utility.Helpers;
-using System.Windows.Input;
-using System.Reactive.Subjects;
-using MintPlayer.ObservableCollection;
-using Utility.WPF.Helpers;
-using Utility.Models;
-using Utility.Infrastructure;
-using Visibility = System.Windows.Visibility;
-using Arrangement = Utility.Enums.Arrangement;
 using System.Windows.Data;
 using Utility.WPF.Behaviors;
 using Microsoft.Xaml.Behaviors;
-using Utility.WPF.Behaviors;
 
 namespace Utility.WPF.Controls
 {
