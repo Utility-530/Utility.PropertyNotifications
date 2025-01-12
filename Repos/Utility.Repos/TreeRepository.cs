@@ -6,21 +6,10 @@ using System.Reflection;
 using System.Reactive.Disposables;
 using System.Reactive.Threading.Tasks;
 using static System.Environment;
+using Utility.Structs.Repos;
 
 namespace Utility.Repos
-{
-    public readonly record struct Duplication(Guid Old, Guid New);
-    public readonly record struct DateValue(DateTime DateTime, object Value);
-    public readonly record struct Key(Guid Guid, Guid ParentGuid, object Instance, string Name, int? Index, DateTime? Removed)
-    {
-        public override string ToString()
-        {
-            return JsonConvert.SerializeObject(this);
-        }
-    }
-
-
-    public class TreeRepository : ITreeRepository
+{    public class TreeRepository : ITreeRepository
     {
 
         Dictionary<Guid, DateValue> values = new();
@@ -76,7 +65,7 @@ namespace Utility.Repos
         {
             if (dbDirectory != default)
                 Directory.CreateDirectory(dbDirectory);
-            connection = new SQLiteConnection(Path.Combine(dbDirectory ?? string.Empty, "data" + "." + "sqlite"));
+            connection = new SQLiteConnection(Path.Combine(dbDirectory ?? string.Empty, "data" + "." + "sqlite"), false) { };
             connection.CreateTable<Relationships>();
             connection.CreateTable<Values>();
             connection.CreateTable<Type>();
@@ -278,7 +267,7 @@ namespace Utility.Repos
                         {
                             if (string.IsNullOrEmpty(name))
                             {
-                             
+
                                 throw new Exception(No_Existing_Table_No_Name_To_Create_New_One);
                                 //observer.OnNext(new Key(NoTableNoName, parentGuid, null, name, index, default));
                                 //observer.OnCompleted();
@@ -301,7 +290,7 @@ namespace Utility.Repos
                         {
                             var table = tables.Single();
                             setName(table.Guid, table_name);
-                            observer.OnNext(new Key(table.Guid, parentGuid, null, table.Name, index, default));
+                            observer.OnNext(new Key(table.Guid, parentGuid, null, table.Name, index, table.Removed));
                             observer.OnCompleted();
                         }
                         else if (name == null)
@@ -309,7 +298,7 @@ namespace Utility.Repos
                             foreach (var table in tables)
                             {
                                 setName(table.Guid, table_name);
-                                observer.OnNext(new Key(table.Guid, parentGuid, null, table.Name, index, default));
+                                observer.OnNext(new Key(table.Guid, parentGuid, null, table.Name, index, table.Removed));
                             }
                             observer.OnCompleted();
                         }
@@ -337,7 +326,7 @@ namespace Utility.Repos
                     var guid = Guid.NewGuid();
                     setName(guid, table_name);
                     //var i = connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
-                    var query = $"INSERT INTO '{table_name}' (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {ToValue(index)}, '{parentGuid}', '{DateTime.Now}', {ToValue(typeId)});";
+                    var query = $"INSERT INTO '{table_name}' (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {ToValue(index)}, '{parentGuid}', {date()}', {ToValue(typeId)});";
                     var i = connection.Execute(query);
                     observer.OnNext(guid);
                 });
@@ -416,7 +405,7 @@ namespace Utility.Repos
         public void Remove(Guid guid)
         {
             var table_name = getName(guid);
-            string cmd = $"UPDATE '{table_name}' SET Removed = date('now') WHERE Guid = '{guid}'";
+            string cmd = $"UPDATE '{table_name}' SET Removed = '{date()}' WHERE Guid = '{guid}'";
             connection.Execute(cmd);
         }
 
@@ -606,7 +595,7 @@ namespace Utility.Repos
         private void setName(Guid guid, string name)
         {
             //lock (tablelookup)
-                tablelookup[guid] = name;
+            tablelookup[guid] = name;
         }
 
         private string getName(Guid guid)
@@ -618,6 +607,11 @@ namespace Utility.Repos
             throw new Exception("Have you created a root?");
         }
 
+        private string date(DateTime? date = null)
+        {
+            //return (date ?? DateTime.Now).ToString("'yyyy-MM-dd HH:mm:ss'");
+            return (date ?? DateTime.Now).ToString("'yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'");
+        }
 
         public const string Utility = nameof(Utility);
 

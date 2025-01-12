@@ -16,6 +16,7 @@
     <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Constants\Utility.Constants.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Guids\Utility.Guids.csproj" />
+    <ProjectReference Include="..\..\Interfaces\Utility.Interfaces.Exs\Utility.Interfaces.Exs.csproj" />
     <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
     <ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
     <ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
