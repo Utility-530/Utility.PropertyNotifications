@@ -64,7 +64,7 @@ namespace Utility.Structs
             {
                 throw new Exception("sdfsdfsd  type");
             }
-            return new TypeRecord(type.Assembly.FullName, type.Namespace, type.Name);
+            return new TypeRecord(type.Assembly.FullName.AsSpan(), type.Namespace.AsSpan(), type.Name.AsSpan());
         }
     }
 }
