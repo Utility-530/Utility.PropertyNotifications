@@ -1,11 +1,12 @@
 ﻿
+using System;
 using Utility.Interfaces.NonGeneric;
 
-namespace Utility.Models;
+namespace Utility.Entities.Comms;
 
 public record Cause() : IGuid
 {
-    Guid IGuid.Guid => this.GetType().GUID;
+    Guid IGuid.Guid => GetType().GUID;
 }
 
 public record Effect() : Cause();

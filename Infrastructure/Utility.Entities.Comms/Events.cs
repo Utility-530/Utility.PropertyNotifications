@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using Utility.Interfaces.NonGeneric;
-using Utility.Models;
 using Utility.Structs;
 using Utility.Trees.Abstractions;
 
-namespace Utility.Infrastructure;
+namespace Utility.Entities.Comms;
 
 public record InitialisedEvent(object Value) : Event();
 //public record ConnectionsEvent(Outputs[] Outputs, object Source) : Event();
@@ -29,7 +29,7 @@ public record ObjectCreationResponse(object Instance) : Response(Instance);
 public record TypeRequest(Type Type) : Request;
 public record TypeResponse(Type Type) : Response(Type);
 public record MethodParametersRequest(MethodInfo MethodInfo, object Data) : Request;
-public record MethodParametersResponse(object?[]? Parameters) : Response(Parameters);
+public record MethodParametersResponse(object[] Parameters) : Response(Parameters);
 
 public record ClickChange(object Source, IReadOnlyTree Node) : Event();
 public record DoubleClickChange(object Source, IReadOnlyTree Node) : Event();
