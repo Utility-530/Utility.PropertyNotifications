@@ -1,7 +1,4 @@
-﻿
-using LanguageExt.ClassInstances.Pred;
-
-namespace Utility.Models.Types
+﻿namespace Utility.Models.Types
 {
     public record Type
     {
