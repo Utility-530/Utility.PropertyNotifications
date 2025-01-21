@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+	  <LangVersion>8.0</LangVersion>
+	  <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
+    <ProjectReference Include="..\..\Structs\Utility.Structs.Repos\Utility.Structs.Repos.csproj" />
+    <ProjectReference Include="..\..\Structs\Utility.Structs\Utility.Structs.csproj" />
+    <ProjectReference Include="..\Utility.Interfaces\Utility.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>
