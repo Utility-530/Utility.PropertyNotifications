@@ -1,83 +1,135 @@
-﻿using System.Collections;
+﻿using Jellyfish;
+using System;
+using System.Collections.Specialized;
+using System.Linq;
 using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
-using Utility.Collections;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Utility.Changes;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
+using Utility.Keys;
+using Utility.PropertyNotifications;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
-    public abstract class Node : ViewModelTree
+    public class Node : ViewModelTree, INode, /*IGuid,*/ /*IName,*/ IIsEditable, IIsExpanded, IIsPersistable, IIsVisible //, INode, 
     {
-        private bool isRefreshing;
-        bool flag;
+        object data;
 
-        public abstract IObservable<object?> GetChildren();
-
-        public override IEnumerable Items
+        public Node(object data) : this()
         {
-            get
+            Data = data;
+        }
+
+        public Node()
+        {
+            AddCommand = new RelayCommand(async a =>
             {
-                try
+                this.IsExpanded = true;
+                var node = await ToTree(a);
+                Add(node);
+            });
+
+            RemoveCommand = new RelayCommand(a =>
+            Parent.Remove(this));
+
+            EditCommand = new RelayCommand(a =>
+            {
+                if (a != null)
+                    this.Data = a;
+            });
+
+            AddParentCommand = new RelayCommand(async a =>
+            {
+                Node node = (Node)(await ToTree(a));
+                node.Add(this);
+            });
+        }
+        public ICommand AddCommand { get; }
+        public ICommand RemoveCommand { get; }
+        public ICommand EditCommand { get; }
+        public ICommand AddParentCommand { get; }
+
+        public override Task<ITree> ToTree(object value)
+        {
+         
+            var node = new Node(value)
+            {
+                Parent = this,
+                IsPersistable = true
+            };
+            return Task.FromResult((ITree)node);
+        }
+
+        public override object Data
+        {
+            get => data; set
+            {
+                data = value;
+                if (data is ISetNode iSetNode)
                 {
-                    if (!isRefreshing)
-                    {
-                        isRefreshing = true;
-                        _ = RefreshChildrenAsync()
-                            .ToObservable()
-                            .Subscribe(a =>
+                    iSetNode.SetNode(this);
+                }
+                if (data is IGuid guid)
+                {
+                    this.Key = new GuidKey(guid.Guid);
+                }
+                if (data is IChildren children)
+                {
+                    this.WithChangesTo(a => a.IsExpanded)
+                        .Where(a => a)
+                        .Subscribe(a =>
+                        {
+                            children.Children.Subscribe(async a =>
                             {
-                                flag = a;
-                                isRefreshing = false;
+
+                                if (a is Change { Type: Changes.Type.Add, Value:{ } value })
+                                {
+
+                                    this.m_items.Add(await ToTree(value));
+                                }
                             });
-                        flag = true;
-                    }
+                        });
                 }
-                catch (Exception ex)
-                {
-                    isRefreshing = false;
-                    Error = ex;
-                }
-                finally
-                {
-                }
-                return m_items;
+
+                RaisePropertyChanged();
+            }
+        }
+
+        public override ITree Parent
+        {
+            get => parent; set
+            {
+                if (parent?.Equals(value) == true)
+                    return;
+                parent = value;
+                RaisePropertyChanged();
             }
         }
 
 
-        public virtual async Task<bool> RefreshChildrenAsync()
+        protected override void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
-
-            if (await HasMoreChildren() == false)
-                return false;
-
-            m_items.Clear();
-            GetChildren()
-                .Subscribe(async a =>
+            if (args.Action == NotifyCollectionChangedAction.Add && args.NewItems != null)
+            {
+                foreach (var item in args.NewItems.Cast<Tree>())
                 {
-                    var node =await ToTree(a);
-                    m_items.Add(node);
-                },
-                e =>
+                    if (item.Parent == null)
+                        item.Parent = this;
+                }
+            }
+            else if (args.Action != NotifyCollectionChangedAction.Move && args.OldItems != null)
+            {
+                foreach (var item in args.OldItems.Cast<Tree>())
                 {
-                },
-                () =>
-                {
-                    //_isRefreshing = false;
-                    if(m_items is IComplete complete)
-                        complete.Complete();
-                });
-            return true;
-        }
-
-
-        public Exception Error { get; set; }
-
-        public override Task<bool> HasMoreChildren()
-        {
-            return Task.FromResult(Data != null && flag == false);
+                    //item.Parent = null;
+                    //item.ResetOnCollectionChangedEvent();
+                }
+            }
+            this.InvokeCollectionChanged(sender, args);
         }
     }
 }

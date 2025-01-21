@@ -2,45 +2,36 @@
 using System.Reactive.Subjects;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.NonGeneric;
+using Utility.PropertyNotifications;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
 
-    public abstract class Node<T> : Node, IExpand
+    public abstract class Node<T> : Utility.Nodes.Node, IExpand
     {
         protected ReplaySubject<Changes.Change<T>> changes = new();
-        private bool isExpanded;
-        private bool isSelected;
 
         public Node(bool isExpanded = true)
         {
             this.IsExpanded = isExpanded;
+
+            this.WithChangesTo(a => a.IsExpanded)
+                .Subscribe(value =>
+                {
+                    if (value)
+                    {
+                        if (Data is IChildren children)
+                            children.Children.Cast<Changes.Change<T>>().Subscribe(changes);
+                    }
+                    else
+                    {
+                        changes.OnNext(new Changes.Change<T>(default, Changes.Type.Reset));
+                    }
+                });
         }
 
-        public bool IsExpanded
-        {
-            get { return isExpanded; }
-            set
-            {
-                isExpanded = value;
-                if (value)
-                {
-                    if (Data is IChildren children)
-                        children.Children.Cast<Changes.Change<T>>().Subscribe(changes);
-                }
-                else
-                {
-                    changes.OnNext(new Changes.Change<T>(default, Changes.Type.Reset));
-                }
-                //RefreshChildrenAsync();
-            }
-        }
-
-
-        public bool IsSelected { get => isSelected; set => isSelected = value; }
-
-        public override async Task<bool> RefreshChildrenAsync()
+        public virtual async Task<bool> RefreshChildrenAsync()
         {
             if (await HasMoreChildren() == false)
                 return true;
@@ -97,7 +88,7 @@ namespace Utility.Nodes
         }
 
 
-        public override IObservable<object?> GetChildren()
+        public IObservable<object?> GetChildren()
         {
             //if (Data is IChildren children)
             //    children.Children.Cast<Changes.Change<T>>().Subscribe(changes);

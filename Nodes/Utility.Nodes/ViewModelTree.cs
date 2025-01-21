@@ -1,37 +1,35 @@
-﻿using System.Reactive.Linq;
+﻿using System.Collections;
+using System.Reactive.Linq;
+using Utility.Collections;
 using Utility.Enums;
 using Utility.Helpers.NonGeneric;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees;
 
 namespace Utility.Nodes
 {
 
-    public class ViewModelTree : ObservableTree, /*IGuid,*/ IName, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible //, INode, 
+    public class ViewModelTree : Tree, /*IGuid,*/ /*IName, */IIsEditable, IIsExpanded, IIsPersistable, IIsVisible, IRemoved //, INode, 
     {
 
         private bool? isHighlighted;
         private bool isExpanded = true;
-        private string itemsPanelKey;
         private Arrangement arrangement;
         private int columns;
         private int rows;
         private Orientation orientation;
         private bool? isVisible = true;
         private bool? isValid = null;
-        private object data;
         private bool isEditable;
-        //private ObservableCollection<Node> items;
-        private ViewModelTree currentNode;
-        //private ViewModelTree selectedNode;
-        private Guid guid;
+        private INode currentNode;
         private bool isClicked;
         private bool isSelected;
-        //int? _index;
+        private DateTime? removed;
 
-        public ViewModelTree(string name, object data) : this()
+        public ViewModelTree(/*string name,*/ object data) : this()
         {
-            Name = name;
+            //Name = name;
             Data = data;
         }
 
@@ -40,14 +38,34 @@ namespace Utility.Nodes
       
         }
 
-        public string Name { get; set; }
+        protected override IList CreateChildren()
+        {
+            var collection = new Collection();
+            collection.CollectionChanged += ItemsOnCollectionChanged;
+            return collection;
+        }
+
+
+        //public string Name { get; set; }
 
         public int? LocalIndex { get; set; }
 
-        public Node Root
+        public INode Root
         {
-            get => this.m_items.FirstOrDefault() as Node;
+            get => this.m_items.FirstOrDefault() as INode;
             set => this.Add(value);
+        }
+
+        public DateTime? Removed
+        {
+            get => removed; set
+            {
+                if (value != removed)
+                {
+                    removed = value;
+                    RaisePropertyChanged();
+                }
+            }
         }
 
         public bool? IsValid
@@ -186,7 +204,7 @@ namespace Utility.Nodes
 
         public bool IsPersistable { get; set; }
 
-        public ViewModelTree Current
+        public INode Current
         {
             get => currentNode;
             set
