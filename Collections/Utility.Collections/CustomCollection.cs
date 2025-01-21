@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Utility.Nodes.Filters
+namespace Utility.Collections
 {
 
     /// <summary>
@@ -31,10 +31,10 @@ namespace Utility.Nodes.Filters
                 if (index < 0)
                     throw new ArgumentOutOfRangeException(nameof(index), "Index cannot be negative.");
 
-                if (this.Count == 0)
+                if (Count == 0)
                 {
                     indexMapping[index] = 0;
-                    this.Add(item);
+                    Add(item);
                 }
                 else if (indexMapping.ContainsKey(index))
                 {
@@ -57,12 +57,12 @@ namespace Utility.Nodes.Filters
                                 indexMapping[map.Key]++;
                             }
                         }
-                        this.Insert(indexMapping[index], item);
+                        Insert(indexMapping[index], item);
                     }
                     else
                     {
-                        this.Add(item);
-                        indexMapping[index] = this.Count;
+                        Add(item);
+                        indexMapping[index] = Count;
                     }
                 }
             }
@@ -106,7 +106,7 @@ namespace Utility.Nodes.Filters
             int actualIndex = getActualIndex(index);
 
             // Check if the actual index is within bounds of the collection
-            if (actualIndex >= this.Count)
+            if (actualIndex >= Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), "Index is out of bounds.");
             }
@@ -127,7 +127,7 @@ namespace Utility.Nodes.Filters
             // Check if the actual index is within bounds of the collection
 
             // Replace the item at the actual index
-            this.RemoveAt(actualIndex);
+            RemoveAt(actualIndex);
         }
 
         // Method to get the actual index for a given logical index
