@@ -23,7 +23,7 @@
 		<ProjectReference Include="..\..\Structs\Utility.Structs\Utility.Structs.csproj" />
 		<ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.ViewModels.Base\Utility.ViewModels.Base.csproj" />
-		<ProjectReference Include="..\Utility.Entities\Utility.Entities.csproj" />
+		<ProjectReference Include="..\Utility.Entities.Comms\Utility.Entities.Comms.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<Using Include="System" />

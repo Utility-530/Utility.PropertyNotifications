@@ -25,8 +25,7 @@ namespace Utility.Nodes
         {
             _children.CollectionChanged += (s, e) => CollectionChanged?.Invoke(this, e);
         }
-
-        string IKey.Key => this.Key.ToString();
+        string IKey.Key { get; set; }
 
         public IReadOnlyTree Parent { get; set; }
 
@@ -93,6 +92,8 @@ namespace Utility.Nodes
                 return depth;
             }
         }
+
+
 
         protected virtual void PropertyChanged_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {

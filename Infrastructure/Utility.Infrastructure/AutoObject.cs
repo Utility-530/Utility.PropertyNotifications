@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
+using Utility.Entities.Comms;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Observables.Generic;

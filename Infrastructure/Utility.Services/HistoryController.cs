@@ -3,11 +3,11 @@ using System.Reactive.Linq;
 using Utility.Collections;
 using Utility.Models;
 using h = Utility.Enums.History;
-using Response = Utility.Models.Response;
 using System.Reactive.Disposables;
 using static System.Reactive.Linq.Observable;
 using Utility.Infrastructure;
 using Utility.ViewModels.Base;
+using Utility.Entities.Comms;
 
 namespace Utility.Services
 {
