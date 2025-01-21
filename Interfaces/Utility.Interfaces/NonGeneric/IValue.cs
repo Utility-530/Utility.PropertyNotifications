@@ -47,12 +47,6 @@ namespace Utility.Interfaces.NonGeneric
         object Value { get; }
     }
 
-    public readonly record struct ValueChange(string Name, object Value) :IName, IValue;
-
-    public interface IValueChanges : IObservable<ValueChange>
-    {
-    }
-
     public interface ISetValue
     {
         object Value { set; }

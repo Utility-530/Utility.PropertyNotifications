@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
 		<PackageId>Utility.Interfaces</PackageId>
 		<Description>Basic interfaces for general usage in NonGeneric and Generic flavours</Description>
 		<PackageTags>interface utility interfaces</PackageTags>
