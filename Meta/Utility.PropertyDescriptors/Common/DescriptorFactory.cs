@@ -1,5 +1,6 @@
 ﻿using Splat;
 using Utility.Interfaces;
+using Utility.Meta;
 using Utility.Reactives;
 using Utility.Repos;
 
@@ -14,7 +15,7 @@ namespace Utility.Descriptors
             return
                 Observable.Create<ValuePropertyDescriptor>(observer =>
                 {
-                    return repo.Find(parentGuid, descriptor.Name, descriptor.PropertyType)
+                    return repo.Find(parentGuid, descriptor.PropertyType.Name, descriptor.PropertyType)
                     .Subscribe(c =>
                     {
                         ValuePropertyDescriptor _descriptor = DescriptorConverter.ToDescriptor(value, descriptor);

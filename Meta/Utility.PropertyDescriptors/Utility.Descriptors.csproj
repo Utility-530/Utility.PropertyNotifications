@@ -23,6 +23,8 @@
 		<ProjectReference Include="..\..\Reactives\Utility.Reactives\Utility.Reactives.csproj" />
 
 		<ProjectReference Include="..\..\Repos\Utility.Repos\Utility.Repos.csproj" />
+
+		<ProjectReference Include="..\Utility.Meta\Utility.Meta.csproj" />
 	</ItemGroup>
 
 </Project>

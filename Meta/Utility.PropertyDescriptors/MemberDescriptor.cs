@@ -14,7 +14,7 @@ public interface ICollectionDetailsDescriptor
     bool IsCollectionItemValueType { get; }
 }
 
-public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, IChildren, ICollectionDetailsDescriptor, IValueChanges, IName, IGuid, IGuidSet
+public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, IChildren, ICollectionDetailsDescriptor, IValueChanges, IName, IGuid, IGuidSet, IAsyncClone
 {
     protected ReplaySubject<ValueChange> changes = new ReplaySubject<ValueChange>();  
 
@@ -90,11 +90,17 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
     {
         return changes.Subscribe(observer);
     }
+
+    public Task<object> AsyncClone()
+    {
+        return Task.FromResult<object>(this with { });
+    }
 }
 
 
 public abstract record ValueMemberDescriptor(Type Type) : MemberDescriptor(Type), IValueDescriptor
 {
+    [JsonIgnore]
     public virtual object? Value
     {
         get

@@ -38,12 +38,11 @@ public abstract record ValuePropertyDescriptor(Descriptor Descriptor, object Ins
     public override bool IsReadOnly => Descriptor.IsReadOnly;
 
 
-    public void RaisePropertyChanged(object value, string? propertyName = null)
+    public void RaisePropertyChanged(ref object previousValue, object value,  string? propertyName = null)
     {
         if (Descriptor.IsReadOnly == true)
             return;
-        Value = value;
-        base.RaisePropertyChanged(nameof(Value));
+        base.RaisePropertyChanged(ref previousValue, value);
     }
 
     public override object Get()

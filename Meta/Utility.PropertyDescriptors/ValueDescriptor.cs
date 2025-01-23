@@ -1,6 +1,5 @@
 ﻿
 using Splat;
-using System.Reactive.Subjects;
 using Utility.Interfaces.Generic;
 using Utility.Repos;
 
@@ -20,6 +19,8 @@ internal abstract record NullableValueDescriptor<T>(Descriptor Descriptor, objec
 
 internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValuePropertyDescriptor(Descriptor, Instance)
 {
+    public override string? Name => Descriptor.PropertyType.Name;
+
     private object? value;
     private readonly ITreeRepository repo = Locator.Current.GetService<ITreeRepository>();
     private IDisposable dateValue;
@@ -30,7 +31,8 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
     {
         if (dateValue == null)
         {
-            dateValue = repo.Get(Guid)
+            var previous = value;
+            dateValue = repo.Get(Guid, nameof(Value))
                 .Subscribe(a =>
             {
                 if (a is { Value: { } _value } x)
@@ -40,12 +42,12 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
                 else if (Descriptor.GetValue(Instance) is { } _val)
                 {
                     value = _val;
-                    repo.Set(Guid, _val, DateTime.Now);
+                    repo.Set(Guid, nameof(Value), _val, DateTime.Now);
                 }
                 else
                     return;
                 changes.OnNext(new(Name, value));
-                RaisePropertyChanged(value);
+                RaisePropertyChanged(ref previous, value, nameof(Value));
             });
         }
         return value;
@@ -55,7 +57,7 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
     {
         if (Descriptor.IsReadOnly == false)
         {
-            repo.Set(Guid, value, DateTime.Now);
+            repo.Set(Guid, nameof(Value), value, DateTime.Now);
             Descriptor.SetValue(Instance, value);
             this.value = value;
             changes.OnNext(new(Name, value));
@@ -87,7 +89,7 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
     {
         var value = Descriptor.GetValue(Instance);
         if (value != null)
-            repo.Set(Guid, value, DateTime.Now);
+            repo.Set(Guid, nameof(Value), value, DateTime.Now);
     }
 }
 

@@ -1,4 +1,6 @@
-﻿namespace Utility.Descriptors;
+﻿using Utility.Meta;
+
+namespace Utility.Descriptors;
 
 internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeadersDescriptor, IEquatable
 {
