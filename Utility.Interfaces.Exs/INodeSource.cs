@@ -8,7 +8,7 @@ namespace Utility.Nodes.Filters
     {
         string New { get; }
 
-        void Remove(Guid guid);
+        DateTime Remove(Guid guid);
         IObservable<INode> ChildrenByGuidAsync(Guid guid);
         IObservable<INode> SingleByGuidAsync(Guid currentGuid);
         int? MaxIndex(Guid guid, string v);
