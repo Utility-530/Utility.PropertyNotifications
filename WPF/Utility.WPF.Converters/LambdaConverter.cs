@@ -24,10 +24,10 @@ namespace Utility.WPF.Converters
             });
 
         public static IValueConverter HumanizerConverter =>
-            LambdaConverters.ValueConverter.Create<string, string>(a => a.Value.Humanize());
+            LambdaConverters.ValueConverter.Create<string, string>(a => a.Value?.Humanize() ?? "_null_");
 
         public static IValueConverter StringConverter =>
-     LambdaConverters.ValueConverter.Create<object, string>(a => a.Value?.ToString() ?? "null");
+     LambdaConverters.ValueConverter.Create<object, string>(a => a.Value?.ToString() ?? "_null_");
 
         public static IValueConverter CountConverter =>
             LambdaConverters.ValueConverter.Create<int, bool>(a => a.Value != 0);
