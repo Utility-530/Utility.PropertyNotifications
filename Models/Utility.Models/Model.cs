@@ -1,16 +1,10 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Threading;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.Trees.Abstractions;
 using Utility.Extensions;
-using System.Linq;
-using Utility.Changes;
-using System.Collections.Generic;
 using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
 using Splat;
@@ -135,6 +129,7 @@ namespace Utility.Models
             isInitialised = true;
             if (parent == null)
             {
+                throw new Exception(" FSDsssdsss333");
                 source.Remove(Node);
                 return;
             }
@@ -190,7 +185,11 @@ namespace Utility.Models
 
         public virtual void SubtractDescendant(IReadOnlyTree node, int level)
         {
-            source.Remove(Guid.Parse(node.Key));
+            var date = source.Remove(Guid.Parse(node.Key));
+            if(node is IRemoved removed)
+            {
+                removed.Removed = date;
+            }
         }
 
         public virtual void ReplaceDescendant(IReadOnlyTree @new, IReadOnlyTree old, int level)
