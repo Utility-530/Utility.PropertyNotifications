@@ -62,11 +62,14 @@ namespace Utility.Trees.Demo.Connections
                     foreach (var connection in _viewModel.Connections.Where(a => a.ServiceName == service.Name && a.Movement == Movement.ToViewModelFromService))
                     {
                         var viewModelName = connection.ViewModelName;
-                        var viewModel = tree.MatchDescendant(a => (a.Data as ViewModel).Name == viewModelName);
-                        //(viewModel.Data as ViewModel).Value = a;
-                        //(viewModel.Data as ViewModel).RaisePropertyChanged(nameof(ViewModel.Value));
+                        tree.MatchDescendant(a => (a.Data as ViewModel).Name == viewModelName)
+                        .Subscribe(viewModel =>
+                        {
+                            //(viewModel.Data as ViewModel).Value = a;
+                            //(viewModel.Data as ViewModel).RaisePropertyChanged(nameof(ViewModel.Value));
 
-                        Pipe.Instance.Queue(new TreeQueueItem(viewModel, a));
+                            Pipe.Instance.Queue(new TreeQueueItem(viewModel, a));
+                        });
                     }
                 });
             }

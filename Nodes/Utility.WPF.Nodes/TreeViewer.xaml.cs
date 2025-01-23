@@ -9,7 +9,7 @@ using Utility.WPF.Nodes;
 using Utility.Trees.Abstractions;
 using VisualJsonEditor.Test;
 using Utility.Extensions;
-using Utility.Infrastructure;
+using Utility.Entities.Comms;
 
 namespace Views.Trees
 {

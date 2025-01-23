@@ -11,6 +11,7 @@
     <ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
     <ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Changes\Utility.Changes.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.Entities.Comms\Utility.Entities.Comms.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Entities\Utility.Entities.csproj" />
     <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />

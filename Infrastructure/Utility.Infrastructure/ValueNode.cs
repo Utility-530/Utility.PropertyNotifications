@@ -134,5 +134,10 @@ namespace Utility.Nodes
         {
             return Key.Equals(other?.Key);
         }
+
+        public Task<object> AsyncClone()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

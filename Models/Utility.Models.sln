@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models.Filters", "U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Models.Test", "Utility.Models.Test\Utility.Models.Test.csproj", "{DB828B14-8C0F-48E3-8527-A42EFAF52036}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Common", "Utility.Commons\Utility.Common.csproj", "{EEE2F01B-E7AC-4E83-882C-B4D76051ED84}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Observables", "..\Utility.Observables\Utility.Observables\Utility.Observables.csproj", "{B3727B9C-5D7A-4894-BAE8-EE8799851080}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Structs", "..\Utility.Structs\Utility.Structs\Utility.Structs.csproj", "{F53FCEBD-2B2A-4A5E-A3B8-7AF861AC9893}"
@@ -28,6 +26,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Helpers", "..\Utility.Helpers\Utility.Helpers\Utility.Helpers.csproj", "{39BB9B35-5750-4BE0-9BE8-F7723FD3E65A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Interfaces", "..\Utility.Interfaces\Utility.Interfaces\Utility.Interfaces.csproj", "{6C728A09-9042-47F0-B3DF-CF43C1A010AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UtilityModel", "UtilityModel\UtilityModel.csproj", "{89EEE821-8322-4AD6-98FB-76FC686662D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Models.Trees", "Utility.Models.Trees\Utility.Models.Trees.csproj", "{3D7C9FC2-616F-42A1-8286-D1C5D89ACB8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +49,6 @@ Global
 		{DB828B14-8C0F-48E3-8527-A42EFAF52036}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB828B14-8C0F-48E3-8527-A42EFAF52036}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB828B14-8C0F-48E3-8527-A42EFAF52036}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EEE2F01B-E7AC-4E83-882C-B4D76051ED84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EEE2F01B-E7AC-4E83-882C-B4D76051ED84}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EEE2F01B-E7AC-4E83-882C-B4D76051ED84}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EEE2F01B-E7AC-4E83-882C-B4D76051ED84}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B3727B9C-5D7A-4894-BAE8-EE8799851080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B3727B9C-5D7A-4894-BAE8-EE8799851080}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3727B9C-5D7A-4894-BAE8-EE8799851080}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -83,6 +81,14 @@ Global
 		{6C728A09-9042-47F0-B3DF-CF43C1A010AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C728A09-9042-47F0-B3DF-CF43C1A010AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C728A09-9042-47F0-B3DF-CF43C1A010AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89EEE821-8322-4AD6-98FB-76FC686662D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89EEE821-8322-4AD6-98FB-76FC686662D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89EEE821-8322-4AD6-98FB-76FC686662D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89EEE821-8322-4AD6-98FB-76FC686662D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D7C9FC2-616F-42A1-8286-D1C5D89ACB8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D7C9FC2-616F-42A1-8286-D1C5D89ACB8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D7C9FC2-616F-42A1-8286-D1C5D89ACB8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D7C9FC2-616F-42A1-8286-D1C5D89ACB8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

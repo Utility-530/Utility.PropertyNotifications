@@ -225,7 +225,7 @@ namespace Utility.WPF.Controls.Meta.ViewModels
         }
     }
 
-    public class ViewModelEntity : BaseEntity<ViewModelEntity, Guid>, IEquatable, IKey, INotifyPropertyChanged
+    public class ViewModelEntity : BaseEntity<ViewModelEntity, Guid>, IEquatable, IGetKey, INotifyPropertyChanged
     {
         private bool isSelected;
         private bool isChecked;

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
-using Utility.Common.Collection;
+using Utility.Helpers.Ex;
 using Utility.Models;
 using Utility.ViewModels;
 

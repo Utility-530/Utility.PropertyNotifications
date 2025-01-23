@@ -2,7 +2,6 @@
 using System;
 using System.Windows;
 using Views.Trees;
-using Utility.Infrastructure;
 using Utility.Trees.Abstractions;
 using Utility.Descriptors;
 using Utility.Nodes.Reflections;
@@ -15,7 +14,6 @@ using Utility.Interfaces.NonGeneric;
 using Splat;
 using Utility.Extensions;
 using Utility.PropertyNotifications;
-using Utility.Trees.Demo.MVVM.Infrastructure;
 using Utility.Pipes;
 using Utility.Trees.Decisions;
 using Utility.Repos;
@@ -23,6 +21,8 @@ using Utility.Helpers.NonGeneric;
 using Utility.Trees.Demo.Connections;
 using System.Collections.Generic;
 using Utility.Trees.Demo.Filters;
+using Utility.Entities.Comms;
+using Utility.Interfaces.Exs;
 
 namespace Utility.Trees.Demo.MVVM
 {

@@ -3,7 +3,7 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Models.Filters;
 
-public abstract class Filter : Model, IPredicate, IEquatable
+public abstract class Filter : IPredicate, IEquatable
 {
     protected Filter(string header)
     {

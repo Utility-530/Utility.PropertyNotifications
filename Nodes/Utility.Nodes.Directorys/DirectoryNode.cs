@@ -10,7 +10,7 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
-    public class DirectoryNode : Node, IObserver
+    public class DirectoryNode : Node<FileSystemInfo>, IObserver
     {
         private readonly Lazy<FileSystemInfo> lazyContent;
         private readonly string path;
@@ -178,11 +178,6 @@ namespace Utility.Nodes
         public override string ToString()
         {
             return path.EndsWith("\\") ? path.Replace("/", "\\").Remove(path.Length - 1).Split("\\").Last() : path.Replace("/", "\\").Split("\\").Last();
-        }
-
-        public override System.IObservable<object?> GetChildren()
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel;
 using Utility.Common;
-using Utility.Common.Collection;
+using Utility.Helpers.Ex;
 using Utility.Persists;
 using Utility.WPF.Demo.Forms.Infrastructure;
 using Utility.WPF.Demo.Forms.Model;

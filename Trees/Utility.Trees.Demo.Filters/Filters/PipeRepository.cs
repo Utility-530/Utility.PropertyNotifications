@@ -10,6 +10,7 @@ using Utility.Pipes;
 using System.Linq.Expressions;
 using Cogs.Collections;
 using Utility.Extensions;
+using Utility.Structs.Repos;
 
 namespace Utility.Trees.Demo.Filters
 {
@@ -110,16 +111,16 @@ namespace Utility.Trees.Demo.Filters
                     item => true,
                     "b.2")
                 {
-                    new RepoDecisionTree(item => item.ItemType == RepoItemType.Get, "c.1", qi=> new RepoResult2X(qi,()=> base.Get(qi.Guid), RepoResultType.Get)),
+                    new RepoDecisionTree(item => item.ItemType == RepoItemType.Get, "c.1", qi=> new RepoResult2X(qi,()=> base.Get(qi.Guid, qi.Name), RepoResultType.Get)),
                     new RepoDecisionTree(item => item.ItemType == RepoItemType.Find, "c.2", qi=> new RepoResult2X(qi,()=> base.Find(qi.Guid, qi.Name, qi.Type, qi.Index), RepoResultType.Find)),
                     new RepoDecisionTree(item =>  item.ItemType == RepoItemType.SelectKeys, "c.3", qi=> new RepoResult2X(qi,()=> base.SelectKeys(qi.ParentGuid, qi.Name, qi.TableName), RepoResultType.SelectKeys)),
                 },
             };
         }
 
-        public override IObservable<DateValue> Get(Guid guid)
+        public override IObservable<DateValue> Get(Guid guid, string name)
         {
-            var qi = new RepoItem(guid, RepoItemType.Get);
+            var qi = new RepoItem(guid, RepoItemType.Get, name);
             Pipe.Instance.New(new ForwardItem(Predicate, qi, []));
             if (Dictionary.ContainsKey(qi))
             {

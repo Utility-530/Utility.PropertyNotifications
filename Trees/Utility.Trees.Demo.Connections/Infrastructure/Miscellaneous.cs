@@ -25,7 +25,7 @@ namespace Utility.Trees.Demo.Connections
             set
             {
                 point0 = value;
-                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(ref point0, value);
             }
         }
 
@@ -35,7 +35,7 @@ namespace Utility.Trees.Demo.Connections
             set
             {
                 point1 = value;
-                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(ref point1, value);
             }
         }
 
@@ -45,7 +45,7 @@ namespace Utility.Trees.Demo.Connections
             set
             {
                 last = value;
-                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(ref last, value);
             }
         }
     }
@@ -71,7 +71,7 @@ namespace Utility.Trees.Demo.Connections
             set
             {
                 _startPoint = value;
-                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(ref _startPoint, value);
             }
         }
 
@@ -84,7 +84,7 @@ namespace Utility.Trees.Demo.Connections
             set
             {
                 _endPoint = value;
-                this.RaisePropertyChanged();
+                this.RaisePropertyChanged(ref _endPoint, value);
             }
         }
 
@@ -95,7 +95,7 @@ namespace Utility.Trees.Demo.Connections
             {
                 if (isSelected == value) return;
                 isSelected = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(ref isSelected, value);
             }
         }
     }
@@ -126,7 +126,7 @@ namespace Utility.Trees.Demo.Connections
                 if (isSelected == value) return;
 
                 isSelected = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(ref isSelected, value);
             }
         }
 
@@ -135,7 +135,7 @@ namespace Utility.Trees.Demo.Connections
             get => isDeleted; set
             {
                 isDeleted = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(ref isDeleted, value);
             }
         }
     }

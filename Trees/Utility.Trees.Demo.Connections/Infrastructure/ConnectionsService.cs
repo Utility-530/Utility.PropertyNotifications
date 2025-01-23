@@ -21,6 +21,7 @@ using Utility.WPF.Helpers;
 using Utility.WPF.Reactives;
 using Utility.Reactives;
 using DynamicData;
+using System.Collections.Specialized;
 
 namespace Utility.Trees.Demo.Connections
 {
@@ -380,20 +381,20 @@ namespace Utility.Trees.Demo.Connections
 
             return Observable.Create<LineViewModel>(observer =>
             {
-                if (viewModel.Tree is ObservableTree oTree)
-                {
-                    return oTree.MatchDescendant(new((a) => (a.Data as IName).Name == connectionViewModel.ViewModelName))
+                //if (viewModel.Tree is INotifyCollectionChanged oTree)
+                //{
+                    return viewModel.Tree.MatchDescendant(new((a) => (a.Data as IName).Name == connectionViewModel.ViewModelName))
                         .Subscribe(a =>
                         {
                             MatchTree(a).Subscribe(observer);
                         });
-                }
-                else
-                {
-                    var d = viewModel.Tree.MatchDescendant(new((a) => (a.Data as IName).Name == connectionViewModel.ViewModelName));
-                    MatchTree(d).Subscribe(observer);
-                    return Disposable.Empty;
-                }
+                //}
+                //else
+                //{
+                //    var d = viewModel.Tree.MatchDescendant(new((a) => (a.Data as IName).Name == connectionViewModel.ViewModelName));
+                //    MatchTree(d).Subscribe(observer);
+                //    return Disposable.Empty;
+                //}
             });
 
             IObservable<LineViewModel> MatchTree(IReadOnlyTree viewmodel)

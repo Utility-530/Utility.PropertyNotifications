@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Descriptors;
 using Utility.Interfaces;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Decisions;
@@ -110,7 +111,7 @@ namespace Utility.Trees.Demo.Filters
                                 {
                                     _values.Subscribe(a =>
                                     {
-                                        if (a != null)
+                                        if (a.Equals(default))
                                             toggle.IsChecked = false;
                                         else
                                             toggle.IsChecked = true;
