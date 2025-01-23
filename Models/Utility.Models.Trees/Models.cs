@@ -25,7 +25,6 @@ using Utility.Trees.Abstractions;
 using Type = System.Type;
 using Utility.Collections;
 
-
 namespace Utility.Models.Trees
 {
     public interface IAndOr
@@ -268,7 +267,8 @@ namespace Utility.Models.Trees
             get => relation; set
             {
                 relation = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(ref relation, value);
+
             }
         }
     }
@@ -277,39 +277,45 @@ namespace Utility.Models.Trees
     {
         public PropertyInfo PropertyInfo { get; set; }
 
-        public override IObservable<Change<Model>> ChildrenAsync()
+
+        public override IEnumerable<Model> CreateChildren()
         {
-            return Observable.Create<Change<Model>>(observer =>
-            {
-                return Node.SelfAndAncestorsAsync(a => a.Item1?.Data is BreadCrumbModel)
-                            .Subscribe(ancestor =>
-                            {
-                                if (ancestor.Data is IValue)
-                                {
-                                    if (PropertyInfo.PropertyType.Equals(typeof(string)))
-                                    {
-                                        observer.OnNext(Change<Model>.Add(
-                                             new ValueModel { Name = PropertyInfo.Name, Value = string.Empty }));
-                                    }
-                                    else if (TypeConstants.ValueTypes.Contains(PropertyInfo.PropertyType))
-                                    {
-                                        observer.OnNext(Change<Model>.Add(
-                                            new ValueModel { Name = PropertyInfo.Name, Value = Activator.CreateInstance(PropertyInfo.PropertyType) }));
-                                    }
-                                }
-
-                                if (PropertyInfo.PropertyType == typeof(object))
-                                {
-                                    //observer.OnNext(
-                                    //    new Node("ref_value", new ResolvableModel { Name = PropertyInfo.Name })
-                                    //    { IsExpanded = true });
-
-                                    observer.OnNext(
-                                        Change<Model>.Add(new GlobalAssembliesModel { Name = "ass_root" }));
-                                }
-                            });
-            });
+            yield return (new GlobalAssembliesModel { Name = "ass_root" });
+           
         }
+        //public override IObservable<Change<Model>> ChildrenAsync()
+        //{
+        //    return Observable.Create<Change<Model>>(observer =>
+        //    {
+        //        return Node.SelfAndAncestorsAsync(a => a.Item1?.Data is BreadCrumbModel)
+        //                    .Subscribe(ancestor =>
+        //                    {
+        //                        if (ancestor.Data is IValue)
+        //                        {
+        //                            if (PropertyInfo.PropertyType.Equals(typeof(string)))
+        //                            {
+        //                                observer.OnNext(Change<Model>.Add(
+        //                                     new ValueModel { Name = PropertyInfo.Name, Value = string.Empty }));
+        //                            }
+        //                            else if (TypeConstants.ValueTypes.Contains(PropertyInfo.PropertyType))
+        //                            {
+        //                                observer.OnNext(Change<Model>.Add(
+        //                                    new ValueModel { Name = PropertyInfo.Name, Value = Activator.CreateInstance(PropertyInfo.PropertyType) }));
+        //                            }
+        //                        }
+
+        //                        if (PropertyInfo.PropertyType == typeof(object))
+        //                        {
+        //                            //observer.OnNext(
+        //                            //    new Node("ref_value", new ResolvableModel { Name = PropertyInfo.Name })
+        //                            //    { IsExpanded = true });
+
+        //                            observer.OnNext(
+        //                                Change<Model>.Add(new GlobalAssembliesModel { Name = "ass_root" }));
+        //                        }
+        //                    });
+        //    });
+        //}
     }
 
     public class ValueModel : Model, IBreadCrumb
@@ -321,8 +327,8 @@ namespace Utility.Models.Trees
             get => _value;
             set
             {
-                _value = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(ref _value, value);
+
             }
         }
     }
@@ -387,7 +393,8 @@ namespace Utility.Models.Trees
         {
             get => method; set
             {
-                method = value; RaisePropertyChanged();
+                RaisePropertyChanged(ref method, value);
+
             }
         }
 
@@ -442,7 +449,7 @@ namespace Utility.Models.Trees
 
         public CommandModel()
         {
-            Command = new Commands.Command(() => base.RaisePropertyChanged(null));
+            Command = new Commands.Command(() => base.RaisePropertyChanged());
         }
 
 
@@ -456,11 +463,7 @@ namespace Utility.Models.Trees
         public string SearchText
         {
             get => searchText;
-            set
-            {
-                searchText = value;
-                RaisePropertyChanged();
-            }
+            set => this.RaisePropertyChanged(ref searchText, value);
         }
     }
 
@@ -471,11 +474,7 @@ namespace Utility.Models.Trees
         public int Value
         {
             get => value;
-            set
-            {
-                this.value = value;
-                base.RaisePropertyChanged();
-            }
+            set => base.RaisePropertyChanged(ref this.value, value);
         }
 
         public override string ToString()
@@ -491,11 +490,7 @@ namespace Utility.Models.Trees
         public string Value
         {
             get => value;
-            set
-            {
-                this.value = value;
-                base.RaisePropertyChanged();
-            }
+            set => base.RaisePropertyChanged(ref this.value, value);
         }
 
         public override string ToString()
@@ -511,11 +506,7 @@ namespace Utility.Models.Trees
         public string Value
         {
             get => value;
-            set
-            {
-                this.value = value;
-                base.RaisePropertyChanged();
-            }
+            set => base.RaisePropertyChanged(ref this.value, value);
         }
 
         public override string ToString()
@@ -531,11 +522,7 @@ namespace Utility.Models.Trees
         public Guid Value
         {
             get => value;
-            set
-            {
-                this.value = value;
-                base.RaisePropertyChanged();
-            }
+            set => base.RaisePropertyChanged(ref this.value, value);
         }
 
         public override string ToString()
@@ -558,11 +545,7 @@ namespace Utility.Models.Trees
         public AndOr Value
         {
             get => value;
-            set
-            {
-                this.value = value;
-                base.RaisePropertyChanged();
-            }
+            set => base.RaisePropertyChanged(ref this.value, value);
         }
 
         public bool Get(object data)
@@ -768,8 +751,7 @@ namespace Utility.Models.Trees
         {
             get => _value; set
             {
-                _value = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(ref _value, value);
             }
         }
 
@@ -955,11 +937,7 @@ namespace Utility.Models.Trees
         public string Value
         {
             get => value;
-            set
-            {
-                this.value = value;
-                base.RaisePropertyChanged();
-            }
+            set => base.RaisePropertyChanged(ref this.value, value);
         }
     }
 
@@ -1087,21 +1065,15 @@ namespace Utility.Models.Trees
         [JsonIgnore]
         public AndOrModel Filter
         {
-            get => _filter; set
-            {
-                _filter = value;
-                RaisePropertyChanged();
-            }
+            get => _filter;
+            set => base.RaisePropertyChanged(ref this._filter, value);
         }
 
         [JsonIgnore]
         public NodePropertyRootsModel Element
         {
-            get => _element; set
-            {
-                _element = value;
-                RaisePropertyChanged();
-            }
+            get => _element;
+            set => base.RaisePropertyChanged(ref this._element, value);
         }
 
         public ParameterInfo Parameter { get; set; }
@@ -1159,21 +1131,15 @@ namespace Utility.Models.Trees
         [JsonIgnore]
         public InputsModel Inputs
         {
-            get => _inputs; set
-            {
-                _inputs = value;
-                RaisePropertyChanged();
-            }
+            get => _inputs;
+            set => base.RaisePropertyChanged(ref this._inputs, value);
         }
 
         [JsonIgnore]
         public ThroughPutModel Output
         {
-            get => _output; set
-            {
-                _output = value;
-                RaisePropertyChanged();
-            }
+            get => _output;
+            set => base.RaisePropertyChanged(ref this._output, value);
         }
 
         [JsonIgnore]
@@ -1182,6 +1148,7 @@ namespace Utility.Models.Trees
             get => converterModel;
             set
             {
+                var previous = converterModel;
                 converterModel = value;
                 disposable?.Dispose();
                 disposable = value.WithChangesTo(a => a.Method)
@@ -1208,7 +1175,7 @@ namespace Utility.Models.Trees
 
                     });
 
-                RaisePropertyChanged();
+                RaisePropertyChanged(ref previous, value);
             }
         }
 
@@ -1216,11 +1183,8 @@ namespace Utility.Models.Trees
         [JsonIgnore]
         public ExceptionsModel Exceptions
         {
-            get => _exceptions; set
-            {
-                _exceptions = value;
-                RaisePropertyChanged();
-            }
+            get => _exceptions;
+            set => base.RaisePropertyChanged(ref this._exceptions, value);
         }
 
         public override IEnumerable<Model> CreateChildren()
@@ -1276,11 +1240,8 @@ namespace Utility.Models.Trees
         [JsonIgnore]
         public NodeRootModel ResolvableModel
         {
-            get => resolvableModel; set
-            {
-                resolvableModel = value;
-                RaisePropertyChanged();
-            }
+            get => resolvableModel;
+            set => base.RaisePropertyChanged(ref this.resolvableModel, value);
         }
 
         public override IEnumerable<Model> CreateChildren()
