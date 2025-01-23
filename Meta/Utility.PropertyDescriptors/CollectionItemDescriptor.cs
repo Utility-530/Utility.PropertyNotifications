@@ -4,7 +4,7 @@ namespace Utility.Descriptors;
 
 internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeadersDescriptor, IEquatable
 {
-    internal CollectionHeadersDescriptor(Type propertyType, Type componentType) : base(propertyType)
+    public CollectionHeadersDescriptor(Type propertyType, Type componentType) : base(propertyType)
     {
         this.ParentType = componentType;
     }
