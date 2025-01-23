@@ -15,8 +15,8 @@ namespace Utility.PropertyNotifications
         bool flag;
 
 
-        protected NotifyPropertyClass(): base()
-        {   
+        protected NotifyPropertyClass() : base()
+        {
         }
 
 
@@ -30,12 +30,9 @@ namespace Utility.PropertyNotifications
         /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        /// <summary>
-        /// Raises this object's PropertyChanged event.
-        /// </summary>
-        /// <param name="propertyName">The property that has a new value.</param>
         public virtual void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
         {
+
             var handler = PropertyChanged;
             if (handler != null)
             {
@@ -44,8 +41,27 @@ namespace Utility.PropertyNotifications
             }
         }
 
+        /// <summary>
+        /// Raises this object's PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">The property that has a new value.</param>
+        public virtual void RaisePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (value == null && previousValue == null)
+                return;
+            if (value?.Equals(previousValue) == true)
+                return;
 
-     
+            var handler = PropertyChanged;
+            var _previousValue = previousValue;
+            previousValue = value;
+            if (handler != null)
+            {
+                var e = new PropertyChangedExEventArgs(propertyName, value, _previousValue);
+                handler(this, e);
+            }
+        }
+
         #endregion INotifyPropertyChanged Members
 
         #region INotifyPropertyCalled Members
@@ -62,13 +78,13 @@ namespace Utility.PropertyNotifications
         /// <param name="propertyName">The property that has a new value.</param>
         public virtual void RaisePropertyCalled(object? value, [CallerMemberName] string? propertyName = null)
         {
-        
+
             if (flag == false)
                 PropertyCalled?.Invoke(this, PropertyCalledArgs(propertyName, value));
         }
 
         private PropertyCalledEventArgs PropertyCalledArgs(string? propertyName, object? value)
-        {         
+        {
             return new PropertyCalledEventArgs(propertyName, value);
         }
 
@@ -92,7 +108,7 @@ namespace Utility.PropertyNotifications
             var handler = PropertyReceived;
             if (handler != null)
             {
-            
+
                 flag = true;
                 var e = new PropertyReceivedEventArgs(propertyName, value);
                 handler(this, e);
