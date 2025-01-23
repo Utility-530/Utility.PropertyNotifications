@@ -1,20 +1,23 @@
 ﻿using Jellyfish;
+using Splat;
 using System.Collections.Specialized;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using Utility.Changes;
+using Utility.Enums;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
 using Utility.Nodes.Common;
+using Utility.Nodes.Filters;
 using Utility.PropertyNotifications;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
-    public class Node : ViewModelTree, INode, /*IGuid,*/ /*IName,*/ IIsEditable, IIsExpanded, IIsPersistable, IIsVisible //, INode, 
+    public class Node : ViewModelTree, INode, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible
     {
         object data;
 
@@ -117,10 +120,18 @@ namespace Utility.Nodes
         {
             if (args.Action == NotifyCollectionChangedAction.Add && args.NewItems != null)
             {
-                foreach (var item in args.NewItems.Cast<Tree>())
+                foreach (var item in args.NewItems.Cast<INode>())
                 {
-                    if (item.Parent == null)
-                        item.Parent = this;
+                    item.Parent ??= this;
+                    if (item.Key != default)
+                        Locator.Current.GetService<INodeSource>().Add(item);
+                }
+            }
+            if (args.Action == NotifyCollectionChangedAction.Remove && args.OldItems != null)
+            {
+                foreach (var item in args.OldItems.Cast<Tree>())
+                {
+                    item.Parent = null;
                 }
             }
             else if (args.Action != NotifyCollectionChangedAction.Move && args.OldItems != null)
