@@ -7,12 +7,14 @@ using System.Reactive.Disposables;
 using System.Reactive.Threading.Tasks;
 using static System.Environment;
 using Utility.Structs.Repos;
+using Utility.Helpers;
 
 namespace Utility.Repos
-{    public class TreeRepository : ITreeRepository
+{
+    public class TreeRepository : ITreeRepository
     {
 
-        Dictionary<Guid, DateValue> values = new();
+        Dictionary<Guid, Dictionary<string, DateValue>> values = new();
         Dictionary<int, System.Type> types = new();
         Dictionary<Guid, string> tablelookup = new();
 
@@ -33,9 +35,8 @@ namespace Utility.Repos
 
         public record Values
         {
-            [PrimaryKey]
-
             public Guid Guid { get; set; }
+            public string Name { get; set; }
             public string Value { get; set; }
             public int TypeId { get; set; }
             public DateTime Added { get; set; }
@@ -326,7 +327,7 @@ namespace Utility.Repos
                     var guid = Guid.NewGuid();
                     setName(guid, table_name);
                     //var i = connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
-                    var query = $"INSERT INTO '{table_name}' (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {ToValue(index)}, '{parentGuid}', {date()}', {ToValue(typeId)});";
+                    var query = $"INSERT INTO '{table_name}' (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {ToValue(index)}, '{parentGuid}', '{date()}', {ToValue(typeId)});";
                     var i = connection.Execute(query);
                     observer.OnNext(guid);
                 });
@@ -424,40 +425,40 @@ namespace Utility.Repos
             return value == null ? "null" : $"'{value}'";
         }
 
-        public virtual void Set(Guid guid, object value, DateTime dateTime)
+        public virtual void Set(Guid guid, string name, object value, DateTime dateTime)
         {
             string text;
-            if (values.ContainsKey(guid) && values[guid].Value.Equals(value))
+            if (values.ContainsKey(guid) && values[guid].ContainsKey(name) && values[guid][name].Value.Equals(value))
                 return;
             //if (value is not string str)
             text = JsonConvert.SerializeObject(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
             //else
             //    text = value?.ToString();
-            var query = $"SELECT * FROM '{nameof(Values)}' WHERE Guid = '{guid}' AND Value = '{text}'";
+            var query = $"SELECT * FROM '{nameof(Values)}' WHERE Guid = '{guid}' AND Name = '{name}' AND Value = '{text}'";
             if (connection.Query<Values>(query).Any() == false)
             {
                 var typeId = TypeId(value.GetType());
-                connection.InsertOrReplace(new Values { Guid = guid, Value = text, Added = dateTime, TypeId = typeId });
-                values[guid] = new(dateTime, value);
+                connection.Insert(new Values { Guid = guid, Value = text, Name = name, Added = dateTime, TypeId = typeId });
+                values.GetValueOrNew(guid)[name] = new(guid, name, dateTime, value);
             }
         }
 
-        public System.Type GetType(Guid guid)
-        {
-            if (values.ContainsKey(guid))
-                return values[guid].Value.GetType();
+        //public System.Type GetType(Guid guid)
+        //{
+        //    if (values.ContainsKey(guid))
+        //        return values[guid][name].Value.GetType();
 
-            var table = connection.Find<Values>(guid);
-            if (table is Values { Value: { } text, Added: { } added, TypeId: { } typeId })
-            {
-                System.Type? type = ToType(typeId);
-                if (type == null)
-                    throw new Exception("sd s389989898");
-                return type;
-            }
+        //    var table = connection.Find<Values>(guid);
+        //    if (table is Values { Value: { } text, Added: { } added, TypeId: { } typeId })
+        //    {
+        //        System.Type? type = ToType(typeId);
+        //        if (type == null)
+        //            throw new Exception("sd s389989898");
+        //        return type;
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
         public System.Type? GetType(Guid guid, string tableName)
         {
@@ -473,54 +474,60 @@ namespace Utility.Repos
             return null;
         }
 
-        public virtual IObservable<DateValue> Get(Guid guid)
+        public virtual IObservable<DateValue> Get(Guid guid, string? name = null)
         {
             return Observable.Create<DateValue>(observer =>
             {
-                if (values.ContainsKey(guid))
+                if (values.ContainsKey(guid) && name != null && values[guid].ContainsKey(name))
                 {
-                    observer.OnNext((DateValue)values[guid]);
+                    observer.OnNext((DateValue)values[guid][name]);
                     observer.OnCompleted();
                     return Disposable.Empty;
                 }
 
-                var table = connection.Find<Values>(guid);
-                if (table is Values { Value: { } text, Added: { } added, TypeId: { } typeId })
+                List<Values>? tables = null;
+                if (name == null)
+                    tables = connection.Query<Values>($"SELECT * FROM 'Values' WHERE Guid = '{guid}' GROUP BY Name HAVING Max({nameof(Values.Added)})");
+                else
+                    tables = connection.Query<Values>($"SELECT * FROM 'Values' WHERE Guid = '{guid}' AND Name = '{name}' Order By '{nameof(Values.Added)}' Desc Limit 1");
+
+
+                if (tables.Count != 0)
                 {
-                    System.Type? type = ToType(typeId);
-                    if (type == null)
-                        throw new Exception("sd s389989898");
-
-                    object? value = null;
-
-                    try
+                    foreach (var table in tables)
                     {
-                        value = JsonConvert.DeserializeObject(text, type, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-
-                    }
-                    catch (JsonReaderException ex)
-                    {
-                        value = text;
-                    }
-
-                    var _value = new DateValue(added, value);
-                    lock (values)
-                        if (values.ContainsKey(guid) == false)
+                        if (table is Values { Value: { } text, Added: { } added, Name: { } _name, TypeId: { } typeId })
                         {
-                            values.Add(guid, _value);
+                            System.Type? type = ToType(typeId) ?? throw new Exception("sd s389989898");
+                            object? value = null;
+
+                            try
+                            {
+                                value = JsonConvert.DeserializeObject(text, type, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                            }
+                            catch (JsonReaderException ex)
+                            {
+                                value = text;
+                            }
+
+                            var _value = new DateValue(guid, _name, added, value);
+                            lock (values)
+                                if (values.ContainsKey(guid) == false)
+                                {
+                                    values[guid] = new() { { _name, _value } };
+                                }
+                                else if (values[guid].ContainsKey(_name) == false)
+                                {
+                                    values[guid].Add(_name, _value);
+                                }
                             observer.OnNext(_value);
-                            observer.OnCompleted();
                         }
-                        else
-                        {
-                            observer.OnNext((DateValue)values[guid]);
-                            observer.OnCompleted();
-
-                        }
+                    }
+                    observer.OnCompleted();
                 }
                 else
                 {
-                    observer.OnNext(new DateValue(default, null));
+                    observer.OnNext(new DateValue(guid, name, default, null));
                     observer.OnCompleted();
 
                 }
@@ -561,6 +568,8 @@ namespace Utility.Repos
                 }
             }
             var systemType = System.Type.GetType(assemblyQualifiedName);
+            if (systemType == null)
+                throw new Exception($"Type, {assemblyQualifiedName},  does not exist");
             lock (types)
                 types[typeId] = systemType;
             return systemType;
@@ -610,7 +619,7 @@ namespace Utility.Repos
         private string date(DateTime? date = null)
         {
             //return (date ?? DateTime.Now).ToString("'yyyy-MM-dd HH:mm:ss'");
-            return (date ?? DateTime.Now).ToString("'yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fff'");
+            return (date ?? DateTime.Now).ToString("yyyy-MM-ddTHH:mm:ss.fff");
         }
 
         public const string Utility = nameof(Utility);
