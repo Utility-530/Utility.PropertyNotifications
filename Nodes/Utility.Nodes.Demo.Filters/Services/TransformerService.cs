@@ -12,6 +12,9 @@ using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
 using NetFabric.Hyperlinq;
 using Utility.Nodes.Demo.Filters.Services;
+using Utility.Models;
+using Utility.Models.Trees;
+using Utility.Interfaces.Exs;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -32,10 +35,12 @@ namespace Utility.Nodes.Demo.Filters.Services
             int i = 0;
             Observable.Create<Exception>(observer =>
             {
-                return NodeSource.Instance.Single(nameof(Factory.BuildFiltersRoot)).Subscribe(c_node =>
+                return NodeSource.Instance
+                .Single(nameof(Factory.BuildFiltersRoot))
+                .Subscribe(c_node =>
                 {
                     c_node
-                    .DescendantAsync(a => (a.Item1 as IName).Name == Factory.content_root)
+                    .DescendantAsync(a => (a.Item1 as INode).Data.ToString() == Factory.content_root)
                     .Subscribe(a =>
                     {
                         var transformersModel = a.NewItem.Data as TransformersModel;
@@ -284,7 +289,7 @@ namespace Utility.Nodes.Demo.Filters.Services
 
                 if (a is TransformerException { TransformerModel: { } transformer } ex)
                 {
-                    transformer.Exceptions.Node.Add(new Nodes.Filters.Node(i++.ToString(), new ExceptionModel(ex)));
+                    transformer.Exceptions.Node.Add(new Node(ExceptionModel.Create(ex)));
                 }
             });
         }

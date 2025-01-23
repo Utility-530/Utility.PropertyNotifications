@@ -5,15 +5,41 @@
                     xmlns:ui="http://toniccomputing.com/patterns/ui" 
                     xmlns:local="clr-namespace:Utility.Nodes.Demo.Filters"
                     xmlns:e="clr-namespace:Utility.Enums;assembly=Utility.Enums"
-                    xmlns:inf="clr-namespace:Utility.Nodes.Filters;assembly=Utility.Nodes.Filters"
+                    xmlns:inf="clr-namespace:Utility.Models.Trees;assembly=Utility.Models.Trees"
+                    xmlns:model="clr-namespace:Utility.Models;assembly=Utility.Models"
+                    xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
                     xmlns:des="clr-namespace:Utility.Descriptors;assembly=Utility.Descriptors"
                     xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit" 
                     xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
                     xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020">
 
-    <!--<local:Assemblies x:Key="Assemblies"/>-->
-
-    <DataTemplate DataType="{x:Type inf:Model}">
+    <HierarchicalDataTemplate DataType="{x:Type nodes:Node}" ItemsSource="{Binding Items}">
+        <WrapPanel>
+            <ContentControl Content="{Binding Data}">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=IsHighlighted}" Value="False">
+                                <Setter Property="Opacity" Value="0.3" />
+                            </DataTrigger>
+                            <!--<DataTrigger Binding="{Binding Path=IsHighlighted}" Value="{x:Null}">
+                                        <Setter Property="Foreground" Value="LightSkyBlue" />
+                                    </DataTrigger>-->
+                            <DataTrigger Binding="{Binding Path=IsHighlighted}" Value="True">
+                                <Setter Property="Opacity" Value="1" />
+                                <Setter Property="Foreground" Value="Orange" />
+                                <Setter Property="FontSize" Value="14" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </WrapPanel>
+    </HierarchicalDataTemplate>
+    
+    
+    <DataTemplate DataType="{x:Type model:Model}">
         <TextBlock Text="{Binding Name}"/>
     </DataTemplate>
 

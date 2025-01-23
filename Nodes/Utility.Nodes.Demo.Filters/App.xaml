@@ -11,7 +11,10 @@
              xmlns:beh="http://schemas.utility.com/behaviors"
              xmlns:att="http://schemas.utility.com/attached"
              xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
-             xmlns:filters="clr-namespace:Utility.Trees.Demo.Filters;assembly=Utility.Trees.Demo.Filters" xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit" xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020">
+             xmlns:filters="clr-namespace:Utility.Trees.Demo.Filters;assembly=Utility.Trees.Demo.Filters" 
+             xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit" 
+             xmlns:node="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
+             xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020">
 
     <Application.Resources>
         <ResourceDictionary>
@@ -19,87 +22,34 @@
                 <ResourceDictionary Source="/Themes/Styles.xaml"/>
                 <ResourceDictionary Source="/Themes/Templates.xaml"/>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItem.xaml"/>
-                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml"/>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Breadcrumbs;component/Themes/Generic.xaml"/>
                 <!--<ResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
                 <ResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/ButtonComboBoxTreeViewStyle.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
 
-            <local:NewObjectConverter x:Key="NewObjectConverter"></local:NewObjectConverter>
-            <local:FinishEditConverter x:Key="FinishEditConverter"></local:FinishEditConverter>
+ 
             <filters:StyleSelector x:Key="StyleSelector" DefaultStyle="ViewContentStyle"></filters:StyleSelector>
 
 
-            <Style x:Key="ComboExStyle" TargetType="{x:Type ct:ComboTreeViewItem}" BasedOn="{StaticResource ComboTreeViewItem}">
-                <Setter Property="NewObject" Value="{Binding Data, Converter={StaticResource NewObjectConverter}}"></Setter>
-                <Setter Property="EditTemplate">
-                    <Setter.Value >
-                        <DataTemplate>
-                            <TextBox Text="{Binding Name.Value}"></TextBox>
-                        </DataTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="att:InteractivityItems.Template">
-                    <Setter.Value>
-                        <att:InteractivityTemplate>
-                            <att:InteractivityItems>
-                                <att:InteractivityItems.Triggers>
-                                    <i:EventTrigger EventName="FinishEdit">
-                                        <beh:InvokeCommandAction Command="{Binding AddCommand}" EventArgsConverter="{StaticResource FinishEditConverter}"/>
-                                    </i:EventTrigger>
-                                </att:InteractivityItems.Triggers>
-                            </att:InteractivityItems>
-                        </att:InteractivityTemplate>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Selection" Value="{Binding Current, Mode=TwoWay}"></Setter>
-            </Style>
-
-            <HierarchicalDataTemplate DataType="{x:Type inf:Node}" ItemsSource="{Binding Items}">
-                <WrapPanel>
-                    <ContentControl Content="{Binding Data}">
-                        <ContentControl.Style>
-                            <Style TargetType="{x:Type ContentControl}">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Path=IsHighlighted}" Value="False">
-                                        <Setter Property="Opacity" Value="0.3" />
-                                    </DataTrigger>
-                                    <!--<DataTrigger Binding="{Binding Path=IsHighlighted}" Value="{x:Null}">
-                                        <Setter Property="Foreground" Value="LightSkyBlue" />
-                                    </DataTrigger>-->
-                                    <DataTrigger Binding="{Binding Path=IsHighlighted}" Value="True">
-                                        <Setter Property="Opacity" Value="1" />
-                                        <Setter Property="Foreground" Value="Orange" />
-                                        <Setter Property="FontSize" Value="14" />
-                                        <Setter Property="FontWeight" Value="Bold" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </ContentControl.Style>
-                    </ContentControl>
-                    <!--<Button Command="{Binding AddCommand}" Content="+">
-                        <Button.CommandParameter>
-                            <inf:Model Name="new">
-                            </inf:Model>
-                        </Button.CommandParameter>
-                    </Button>
-                    <Button Command="{Binding RemoveCommand}" Content="-"></Button>-->
-                </WrapPanel>
-            </HierarchicalDataTemplate>
 
             <DataTemplate DataType="{x:Type local:MainViewModel}">
                 <DockPanel>
-
-                
-                        <ct:CustomTreeView DockPanel.Dock="Left" ItemsSource="{Binding Content}" ItemContainerStyle="{StaticResource DefaultContentStyle}">
+                    <ct:ComboTreeView  DockPanel.Dock="Top" ItemsSource="{Binding Selection}">
+                        <ItemsControl.ItemContainerStyleSelector>
+                            <local:ComboContainerStyleSelector
+                                    DefaultStyle="{StaticResource DefaultStyle}" 
+                                    ComboStyle="{StaticResource ComboExStyle}">
+                            </local:ComboContainerStyleSelector>
+                        </ItemsControl.ItemContainerStyleSelector>
+                    </ct:ComboTreeView>
+                    
+                    <ct:CustomTreeView DockPanel.Dock="Left" ItemsSource="{Binding Clones}" ItemContainerStyle="{StaticResource DefaultContentStyle}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectedItemChanged">
                                     <beh:SetSelectedItemAction PropertyName="Content" TargetObject="{Binding ElementName=TreeContent}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ct:CustomTreeView>
-
-
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"></ColumnDefinition>
@@ -109,23 +59,15 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="0.2*"/>
-                                <RowDefinition Height="0.2*"/>
+                                <RowDefinition Height="5"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="5"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <ct:ComboTreeView  Grid.Row="0" ItemsSource="{Binding Selection}">
-                                <ItemsControl.ItemContainerStyleSelector>
-                                    <local:ComboContainerStyleSelector
-                                    DefaultStyle="{StaticResource DefaultStyle}" 
-                                    ComboStyle="{StaticResource ComboExStyle}">
-                                    </local:ComboContainerStyleSelector>
-                                </ItemsControl.ItemContainerStyleSelector>
-                            </ct:ComboTreeView>
+                            <ct:CustomTreeView Grid.Row="0" ItemsSource="{Binding Controls}" ItemContainerStyle="{StaticResource DefaultStyle}"/>
 
-                            <ct:CustomTreeView Grid.Row="1" ItemsSource="{Binding Controls}" ItemContainerStyle="{StaticResource DefaultStyle}">
-                            </ct:CustomTreeView>
-
+                            <GridSplitter Grid.Row="1" Width="5" VerticalAlignment="Stretch" />
 
                             <Grid  Grid.Row="2">
                                 <Grid.ColumnDefinitions>
@@ -134,8 +76,9 @@
                                     <ColumnDefinition Width="1*"></ColumnDefinition>
                                     <ColumnDefinition Width="5"></ColumnDefinition>
                                     <ColumnDefinition Width="1*"></ColumnDefinition>
+                                    <ColumnDefinition Width="0.5*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                   
+
                                 <ct:CustomTreeView Grid.Column="0" ItemsSource="{Binding Content}" ItemContainerStyleSelector="{StaticResource StyleSelector }" >
                                     <TreeView.ItemTemplate>
                                         <HierarchicalDataTemplate ItemsSource="{Binding Items}">
@@ -144,13 +87,6 @@
                                             </Border>
                                         </HierarchicalDataTemplate>
                                     </TreeView.ItemTemplate>
-
-                                    <!--<ItemsControl.ItemContainerStyleSelector>
-                                    <local:ComboContainerStyleSelector
-                                    DefaultStyle="{StaticResource ViewContentStyle}" 
-                                    ComboStyle="{StaticResource ViewContentStyle}">
-                                    </local:ComboContainerStyleSelector>
-                                </ItemsControl.ItemContainerStyleSelector>-->
 
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="SelectedItemChanged">
@@ -194,10 +130,36 @@
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </TreeView>
+
+                                <ListView Grid.Column="5" ItemsSource="{Binding Dirty}">
+                                    <ListView.View>
+
+                                        <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Employee Information">
+
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Key}" Header="Key" Width="100"/>
+
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Value.PropertyName}" Header="Old Value" Width="100"/>
+                                            
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Value.NewValue}" Header="Old Value" Width="100"/>
+                                            
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Value.PreviousValue}" Width="100">
+                                                <GridViewColumnHeader>New Value
+                                                    <GridViewColumnHeader.ContextMenu>
+                                                        <ContextMenu Name="LastNameCM">
+                                                            <MenuItem Header="Ascending" />
+                                                            <MenuItem Header="Descending" />
+                                                        </ContextMenu>
+                                                    </GridViewColumnHeader.ContextMenu>
+                                                </GridViewColumnHeader>
+                                            </GridViewColumn>                
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
                             </Grid>
 
+                            <GridSplitter Grid.Row="3" Width="5" VerticalAlignment="Stretch" />
 
-                            <ct:CustomTreeView Grid.Row="3" ItemsSource="{Binding Filters}" >
+                            <ct:CustomTreeView Grid.Row="4" ItemsSource="{Binding Filters}" >
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="SelectedItemChanged">
                                         <beh:SetSelectedItemAction PropertyName="Content" TargetObject="{Binding ElementName=TreeContent}" />
@@ -212,7 +174,6 @@
                                     </bc:ItemContainerStyleSelector>
                                 </ct:CustomTreeView.ItemContainerStyleSelector>
                             </ct:CustomTreeView>
-
                         </Grid>
 
                         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
@@ -227,10 +188,9 @@
                                 </ResourceDictionary>
                             </ContentControl.Resources>
                             <ContentControl.ContentTemplate>
-                                <DataTemplate DataType="{x:Type inf:Node}">
+                                <DataTemplate DataType="{x:Type node:Node}">
                                     <UniformGrid Columns="1">
                                         <hc:PropertyGrid SelectedObject="{Binding }"/>
-
                                         <hc:PropertyGrid SelectedObject="{Binding Data}"/>
                                     </UniformGrid>
                                 </DataTemplate>

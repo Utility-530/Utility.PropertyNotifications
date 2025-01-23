@@ -1,4 +1,5 @@
-﻿using ColorCode.Compilation.Languages;
+﻿using System.Collections;
+using Utility.Extensions;
 using Utility.Nodes.Filters;
 using Utility.Trees.Abstractions;
 using Utility.ViewModels;
@@ -7,7 +8,8 @@ namespace Utility.Nodes.Demo.Filters
 {
     public class MainViewModel : NotifyPropertyChangedBase
     {
-        IReadOnlyTree[] control, selection, content, filters, html,html_render;
+        IReadOnlyTree[] control, selection, content, filters, html, html_render, clones;
+        private bool isRemovedShown;
 
         public IReadOnlyTree[] Controls
         {
@@ -45,6 +47,23 @@ namespace Utility.Nodes.Demo.Filters
             }
         }
 
+        public IReadOnlyTree[] Clones
+        {
+            get
+            {
+                if (clones == null)
+                    NodeSource.Instance.Single(nameof(Factory.BuildContentRoot))
+                        .Subscribe(a =>
+                        {
+                            clones = [a.Abstract()];
+                            RaisePropertyChanged(nameof(Clones));
+                        });
+
+
+                return clones;
+            }
+        }
+
         public IReadOnlyTree[] Filters
         {
             get
@@ -54,8 +73,8 @@ namespace Utility.Nodes.Demo.Filters
                         .Subscribe(a => { filters = [a]; RaisePropertyChanged(nameof(Filters)); });
                 return filters;
             }
-        }   
-        
+        }
+
         public IReadOnlyTree[] Html
         {
             get
@@ -76,6 +95,18 @@ namespace Utility.Nodes.Demo.Filters
                     NodeSource.Instance.Single(nameof(Factory.BuildHtmlRenderRoot))
                         .Subscribe(a => { html_render = [a]; RaisePropertyChanged(nameof(Html_Render)); });
                 return html_render;
+            }
+        }
+
+        public IEnumerable Dirty => NodeSource.Instance.DirtyNodes;
+
+
+        public bool IsRemovedShown
+        {
+            get => isRemovedShown; set
+            {
+                isRemovedShown = value;
+                RaisePropertyChanged();
             }
         }
     }

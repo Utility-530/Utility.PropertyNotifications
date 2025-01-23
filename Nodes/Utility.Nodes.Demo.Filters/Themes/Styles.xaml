@@ -8,14 +8,25 @@
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
                     xmlns:beh="http://schemas.utility.com/behaviors" 
                     xmlns:filters="clr-namespace:Utility.Trees.Demo.Filters;assembly=Utility.Trees.Demo.Filters"
-                    xmlns:controls="http://schemas.utility.com/cboxes" xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks">
+                    xmlns:controls="http://schemas.utility.com/cboxes" 
+                    xmlns:ct="http://schemas.utility.com/trees"                    
+                    xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
+        <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
-    <local:FinishEditConverter x:Key="FinishEditConverter"></local:FinishEditConverter>
     <local:SelectedNodeChangeConverter x:Key="SelectedNodeChangeConverter"></local:SelectedNodeChangeConverter>
+    <conv:TypeNameConverter x:Key="TypeNameConverter"/>
+    <local:ChildrenSelector x:Key="ChildrenSelector"/>
+    <local:ChildrenSelectorConverter x:Key="ChildrenSelectorConverter"/>
+    <local:VisibilityConverter x:Key="VisibilityConverter"/>
+    <conv:ObjectDumperConverter x:Key="ObjectDumperConverter"/>
+    <conv:InverseNullToBooleanConverter x:Key="InverseNullToBooleanConverter"/>
+    <icons:PackIconIonicons x:Key="Icon" x:Shared="false" Kind="AddMD" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"/>
+    <local:NewObjectConverter x:Key="NewObjectConverter"></local:NewObjectConverter>
+    <local:FinishEditConverter x:Key="FinishEditConverter"></local:FinishEditConverter>
 
     <Style TargetType="{x:Type Button}">
         <Setter Property="Foreground" Value="#373737" />
@@ -24,7 +35,6 @@
         <Setter Property="Height" Value="20" />
         <Setter Property="SnapsToDevicePixels" Value="True" />
         <Setter Property="Margin" Value="0" />
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -92,11 +102,6 @@
         </Setter>
     </Style>
 
-    <conv:TypeNameConverter x:Key="TypeNameConverter"/>
-    <local:ChildrenSelector x:Key="ChildrenSelector"/>
-    <local:ChildrenSelectorConverter x:Key="ChildrenSelectorConverter"/>
-    <local:VisibilityConverter x:Key="VisibilityConverter"/>
-    <conv:ObjectDumperConverter x:Key="ObjectDumperConverter"/>
 
 
     <Style x:Key="DefaultStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
@@ -138,7 +143,7 @@
     </Style>
 
     <Style x:Key="ViewContentStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
-        <Setter Property="IsExpanded" Value="True"></Setter>
+        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"></Setter>
         <Setter Property="IsEditable" Value="False"></Setter>
         <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
         <Setter Property="Header" Value="{Binding Path=.}" />
@@ -146,15 +151,13 @@
 
     </Style>
 
-    <icons:PackIconIonicons x:Key="Icon" x:Shared="false" Kind="AddMD" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"/>
-
 
     <Style x:Key="DefaultContentStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource CustomComboTreeViewItemStyle}">
         <Style.Resources>
             <Style x:Key="Type_Style" TargetType="{x:Type controls:ComboBoxTreeView}" BasedOn="{StaticResource ButtonComboBoxTreeViewStyle}">
                 <Setter Property="ToggleButtonContent" Value="{StaticResource Icon}"/>
                 <Setter Property="ParentPath" Value="Parent"></Setter>
-                <Setter Property="att:InteractivityItems.Template">
+                <att:InteractivitySetter>
                     <Setter.Value>
                         <att:InteractivityTemplate>
                             <att:InteractivityItems>
@@ -168,7 +171,7 @@
                             </att:InteractivityItems>
                         </att:InteractivityTemplate>
                     </Setter.Value>
-                </Setter>
+                </att:InteractivitySetter>
             </Style>
         </Style.Resources>
         <Setter Property="ItemsPresenterVisibility" Value="Visible"></Setter>
@@ -179,6 +182,7 @@
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"></Setter>
         <Setter Property="IsEditable" Value="True"></Setter>
         <Setter Property="ChildrenSelector" Value="{StaticResource ChildrenSelector}"></Setter>
         <Setter Property="SplitButtonStyle" Value="{StaticResource Type_Style }"></Setter>
@@ -213,11 +217,42 @@
                     <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
                         <ContentControl Content="{Binding Data}"/>
                     </Border>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Removed, Converter={StaticResource InverseNullToBooleanConverter}}" Value="True" >
+                            <Setter Property="IsEnabled" Value="False"></Setter>
+                            <Setter Property="Height" Value="20"></Setter>
+                            <Setter Property="Content" Value="{Binding Removed}"></Setter>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
                 </HierarchicalDataTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
+    <Style x:Key="ComboExStyle" TargetType="{x:Type ct:ComboTreeViewItem}" BasedOn="{StaticResource ComboTreeViewItem}">
+        <Setter Property="NewObject" Value="{Binding Data, Converter={StaticResource NewObjectConverter}}"></Setter>
+        <Setter Property="EditTemplate">
+            <Setter.Value >
+                <DataTemplate>
+                    <TextBox Text="{Binding Name.Value}"></TextBox>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+        <att:InteractivitySetter>
+            <Setter.Value>
+                <att:InteractivityTemplate>
+                    <att:InteractivityItems>
+                        <att:InteractivityItems.Triggers>
+                            <i:EventTrigger EventName="FinishEdit">
+                                <beh:InvokeCommandAction Command="{Binding AddCommand}" EventArgsConverter="{StaticResource FinishEditConverter}"/>
+                            </i:EventTrigger>
+                        </att:InteractivityItems.Triggers>
+                    </att:InteractivityItems>
+                </att:InteractivityTemplate>
+            </Setter.Value>
+        </att:InteractivitySetter>
+        <Setter Property="Selection" Value="{Binding Current, Mode=TwoWay}"></Setter>
+    </Style>
 
 
 </ResourceDictionary>

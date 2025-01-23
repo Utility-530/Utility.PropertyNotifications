@@ -2,10 +2,9 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using TreeView.Infrastructure;
 using Utility.Extensions;
+using Utility.Interfaces.Exs;
 using Utility.Meta;
-using Utility.Trees;
 using Utility.WPF.Controls.Trees;
 
 namespace Utility.Nodes.Demo.Filters
@@ -28,7 +27,7 @@ namespace Utility.Nodes.Demo.Filters
         {
             var childrenSelector = values.SingleOrDefault(a => a is IChildrenSelector);
             var items = values.SingleOrDefault(a => a is IEnumerable);
-            var node = values.SingleOrDefault(a => a is Utility.Nodes.Filters.Node);
+            var node = values.SingleOrDefault(a => a is INode);
 
             if (node != null)
             {
@@ -36,7 +35,7 @@ namespace Utility.Nodes.Demo.Filters
                 {
                     return selector.Select(node);
                 }
-                if (node is Utility.Nodes.Filters.Node { Data: IProliferation data })
+                if (node is Node { Data: IProliferation data })
                 {
                     return data.Proliferation();
                 }

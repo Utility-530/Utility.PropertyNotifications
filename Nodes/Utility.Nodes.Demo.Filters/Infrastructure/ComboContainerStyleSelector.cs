@@ -7,7 +7,7 @@ using System.Windows.Controls;
 using System.Windows;
 using Utility.Interfaces.NonGeneric;
 using Utility.WPF.Helpers;
-using Utility.Nodes.Filters;
+using Utility.Models.Trees;
 
 namespace Utility.Nodes.Demo.Filters
 {

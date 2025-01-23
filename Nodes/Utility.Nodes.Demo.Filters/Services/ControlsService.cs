@@ -8,16 +8,17 @@ using Splat;
 using Utility.Extensions;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Filters;
-using _Node = Utility.Nodes.Filters.Node;
 using Utility.Repos;
 using Utility.Reactives;
 using Utility.Trees.Abstractions;
+using Utility.Models;
+using Utility.Models.Trees;
+using Utility.Interfaces.Exs;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
     public class ControlsService
     {
-        Dictionary<Guid, bool> dirtyNodes = new();
         Dictionary<Guid, IDisposable> disposables = new();
 
         public ControlsService()
@@ -29,14 +30,14 @@ namespace Utility.Nodes.Demo.Filters.Services
                     NodeSource.Instance.Single(nameof(Factory.BuildControlRoot))
                     .Subscribe(_n =>
                     {
-                        foreach (_Node _node in _n)
+                        foreach (INode INode in _n)
                         {
-                            if (_node is { Data: Model { Name: string name } model })
+                            if (INode is { Data: Model { Name: string name } model })
                             {
                                 model.WhenAnyPropertyChanged().Subscribe(_ =>
                                 {
                                     var contentRoot = root.MatchDescendant(a => (a as IName).Name == Factory.content_root);
-                                    Switch(name, model, contentRoot as _Node);
+                                    Switch(name, model, contentRoot as INode);
                                 });
                             }
                         }
@@ -44,7 +45,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 });
         }
 
-        private void Switch(string name, Model model, _Node? contentRoot)
+        private void Switch(string name, Model model, INode? contentRoot)
         {
             switch (name)
             {
@@ -79,9 +80,9 @@ namespace Utility.Nodes.Demo.Filters.Services
             }
         }
 
-        //public void Search(_Node node, string value)
+        //public void Search(INode node, string value)
         //{
-        //    foreach (_Node n in node.Descendants().Reverse())
+        //    foreach (INode n in node.Descendants().Reverse())
         //    {
         //        var x =
         //         n.Data is Model model && model.Name.Contains(value, StringComparison.InvariantCultureIgnoreCase);
@@ -108,25 +109,94 @@ namespace Utility.Nodes.Demo.Filters.Services
         //    }
         //}
 
-        public void Save(_Node node)
+        public void Save(INode node)
+        {
+            NodeSource.Instance.Save();
+        //    NodeSource.Instance.
+        //        Single(nameof(Factory.BuildFiltersRoot))
+        //        .Subscribe(a =>
+        //        {
+        //            a.Foreach((_n, i) =>
+        //            {
+        //                try
+        //                {
+        //                    if ((_n as IIsPersistable).IsPersistable == false)
+        //                    {
+        //                    }
+        //                    else
+        //                    {
+        //                        //var INode = Locator.Current.GetService<IMapper>().Map<INode, NodeDTO>(_n as INode);
+        //                        //TreeRepository.Instance.Set(INode.Guid, INode, DateTime.Now);
+        //                    }
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    NodeSource.Instance.Single(nameof(Factory.BuildControlRoot))
+        //                    .Subscribe(a =>
+        //                    {
+        //                        a.Items.AndAdditions<ITree>().Subscribe(node =>
+        //                        {
+        //                            if (node is { Data: ExceptionsModel { Name: string name } model })
+        //                            {
+        //                                node.Add(new Node(ExceptionModel.Create(ex)));
+        //                            }
+        //                        });
+        //                    });
+        //                }
+        //            });
+        //        });
+        //    NodeSource.Instance.
+        //Single(nameof(Factory.BuildComboRoot))
+        //.Subscribe(a =>
+        //{
+        //    a.Foreach((_n, i) =>
+        //    {
+        //        try
+        //        {
+        //            if ((_n as IIsPersistable).IsPersistable == false)
+        //            {
+        //            }
+        //            else
+        //            {
+        //                //var INode = Locator.Current.GetService<IMapper>().Map<INode, NodeDTO>(_n as INode);
+        //                //TreeRepository.Instance.Set(INode.Guid, INode, DateTime.Now);
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            NodeSource.Instance.Single(nameof(Factory.BuildControlRoot))
+        //            .Subscribe(a =>
+        //            {
+        //                a.Items.AndAdditions<ITree>().Subscribe(node =>
+        //                {
+        //                    if (node is { Data: ExceptionsModel { Name: string name } model })
+        //                    {
+        //                        node.Add(new Node(ExceptionModel.Create(ex)));
+        //                    }
+        //                });
+        //            });
+        //        }
+        //    });
+        //});
+        }
+
+        public void SaveFilters(INode node)
         {
             NodeSource.Instance.
-                Single(nameof(Factory.BuildFiltersRoot))
+                Single(nameof(Factory.BuildContentRoot))
                 .Subscribe(a =>
                 {
                     a.Foreach((_n, i) =>
                     {
-
                         try
                         {
                             if ((_n as IIsPersistable).IsPersistable == false)
                             {
-
                             }
                             else
                             {
-                                var _node = Locator.Current.GetService<IMapper>().Map<_Node, NodeDTO>(_n as _Node);
-                                TreeRepository.Instance.Set(_node.Guid, _node, DateTime.Now);
+                                //var INode = Locator.Current.GetService<IMapper>().Map<INode, NodeDTO>(_n as INode);
+                                //TreeRepository.Instance.Set(INode.Guid, INode, DateTime.Now);
                             }
                         }
                         catch (Exception ex)
@@ -138,102 +208,19 @@ namespace Utility.Nodes.Demo.Filters.Services
                                 {
                                     if (node is { Data: ExceptionsModel { Name: string name } model })
                                     {
-                                        node.Add(new _Node(ex.Message, new ExceptionModel(ex)));
+                                        node.Add(new Node(ExceptionModel.Create(ex)));
                                     }
                                 });
                             });
                         }
-
-                        dirtyNodes[(_n as IGuid).Guid] = false;
                     });
                 });
-            NodeSource.Instance.
-        Single(nameof(Factory.BuildComboRoot))
-        .Subscribe(a =>
-        {
-            a.Foreach((_n, i) =>
-            {
-
-                try
-                {
-                    if ((_n as IIsPersistable).IsPersistable == false)
-                    {
-
-                    }
-                    else
-                    {
-                        var _node = Locator.Current.GetService<IMapper>().Map<_Node, NodeDTO>(_n as _Node);
-                        TreeRepository.Instance.Set(_node.Guid, _node, DateTime.Now);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    NodeSource.Instance.Single(nameof(Factory.BuildControlRoot))
-                    .Subscribe(a =>
-                    {
-                        a.Items.AndAdditions<ITree>().Subscribe(node =>
-                        {
-                            if (node is { Data: ExceptionsModel { Name: string name } model })
-                            {
-                                node.Add(new _Node(ex.Message, new ExceptionModel(ex)));
-                            }
-                        });
-                    });
-                }
-
-                dirtyNodes[(_n as IGuid).Guid] = false;
-            });
-        });
 
         }
 
-        public void SaveFilters(_Node node)
-        {
-            {
-                NodeSource.Instance.
-                    Single(nameof(Factory.BuildContentRoot))
-                    .Subscribe(a =>
-                    {
-                        a.Foreach((_n, i) =>
-                        {
-
-
-                            try
-                            {
-                                if ((_n as IIsPersistable).IsPersistable == false)
-                                {
-
-                                }
-                                else
-                                {
-                                    var _node = Locator.Current.GetService<IMapper>().Map<_Node, NodeDTO>(_n as _Node);
-                                    TreeRepository.Instance.Set(_node.Guid, _node, DateTime.Now);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                NodeSource.Instance.Single(nameof(Factory.BuildControlRoot))
-                                .Subscribe(a =>
-                                {
-                                    a.Items.AndAdditions<ITree>().Subscribe(node =>
-                                    {
-                                        if (node is { Data: ExceptionsModel { Name: string name } model })
-                                        {
-                                            node.Add(new _Node(ex.Message, new ExceptionModel(ex)));
-                                        }
-                                    });
-                                });
-                            }
-
-                            dirtyNodes[(_n as IGuid).Guid] = false;
-                        });
-                    });
-            }
-        }
-
-        //    public async void Load(_Node _node)
+        //    public async void Load(INode INode)
         //    {
-        //        if (_node == null)
+        //        if (INode == null)
         //        {
         //            NodeSource.Instance.Single(nameof(Factory.BuildContentRoot))
         //                .Subscribe(a =>
@@ -243,20 +230,20 @@ namespace Utility.Nodes.Demo.Filters.Services
         //        }
         //        else
         //        {
-        //            selectKeys(_node);
+        //            selectKeys(INode);
         //        }
-        //        void selectKeys(_Node node)
+        //        void selectKeys(INode node)
         //        {
         //            TreeRepository.Instance.SelectKeys(table_name: Factory.content_root)
         //                .Subscribe(keys =>
         //                {
         //                    foreach (var key in keys)
         //                    {
-        //                        if (node.MatchDescendant(a => (a as IGuid).Guid.Equals(key.Guid)) is _Node)
+        //                        if (node.MatchDescendant(a => (a as IGuid).Guid.Equals(key.Guid)) is INode)
         //                        {
         //                            continue;
         //                        }
-        //                        if (node.MatchDescendant(a => (a as IGuid).Guid.Equals(key.ParentGuid)) is _Node parentNode)
+        //                        if (node.MatchDescendant(a => (a as IGuid).Guid.Equals(key.ParentGuid)) is INode parentNode)
         //                        {
         //                            load(key.Guid, parentNode);
         //                        }
@@ -268,13 +255,13 @@ namespace Utility.Nodes.Demo.Filters.Services
         //                });
         //        }
 
-        //        void load(Guid guid, _Node parentNode)
+        //        void load(Guid guid, INode parentNode)
         //        {
         //            TreeRepository.Instance.Get(guid).Subscribe(get =>
         //            {
         //                if (get.Value == null)
         //                    return;
-        //                var _node = Locator.Current.GetService<IMapper>().Map<NodeDTO, _Node>((NodeDTO)get.Value);
+        //                var INode = Locator.Current.GetService<IMapper>().Map<NodeDTO, INode>((NodeDTO)get.Value);
 
         //                TreeRepository.Instance.Find(guid)
         //                .Subscribe(parentGuid =>
@@ -283,20 +270,20 @@ namespace Utility.Nodes.Demo.Filters.Services
         //                    .Subscribe(parent =>
         //                    {
         //                        //var parent = parentNode.Find(a => a.Guid.Equals(parentGuid));
-        //                        _node.Parent = parent;
-        //                        _node.IsEditable = true;
-        //                        parent.Add(_node);
+        //                        INode.Parent = parent;
+        //                        INode.IsEditable = true;
+        //                        parent.Add(INode);
 
         //                        if (disposables.TryGetValue(guid, out IDisposable? disposable))
         //                            disposable?.Dispose();
 
-        //                        disposables[guid] = _node.WithChanges()
+        //                        disposables[guid] = INode.WithChanges()
         //                                                .Subscribe(ac =>
         //                                                {
         //                                                    //Queue(ac);
-        //                                                    dirtyNodes[_node.Guid] = true;
+        //                                                    dirtyNodes[INode.Guid] = true;
         //                                                });
-        //                        dirtyNodes[_node.Guid] = false;
+        //                        dirtyNodes[INode.Guid] = false;
 
         //                    });
 
@@ -308,12 +295,12 @@ namespace Utility.Nodes.Demo.Filters.Services
         //        }
         //    }
 
-        //    public void Clear(_Node node)
+        //    public void Clear(INode node)
         //    {
         //        node.Clear();
         //    }
 
-        //    public void New(_Node node)
+        //    public void New(INode node)
         //    {
 
         //        NodeSource.Instance.Single(nameof(Factory.BuildDefault))
@@ -324,12 +311,12 @@ namespace Utility.Nodes.Demo.Filters.Services
         //            }));
         //    }
 
-        //    public void Expand(_Node node)
+        //    public void Expand(INode node)
         //    {
         //        node.Foreach((a, i) => (a as IIsExpanded).IsExpanded = true);
         //    }
 
-        //    public void Collapse(_Node node)
+        //    public void Collapse(INode node)
         //    {
         //        node.Foreach((a, i) => (a as IIsExpanded).IsExpanded = false);
         //    }

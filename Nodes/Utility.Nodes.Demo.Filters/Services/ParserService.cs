@@ -9,6 +9,9 @@ using AngleSharp.Html;
 using System.IO;
 using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
+using Utility.Trees.Demo.Filters;
+using Utility.Descriptors;
+using Utility.Models.Trees;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -60,21 +63,22 @@ namespace Utility.Nodes.Demo.Filters.Services
 </head>
 <body>
 
-<h1>This is a Heading</h1>
-<p>This is a paragraph.</p>
+<!--<h1>This is a Heading</h1>
+<p>This is a paragraph.</p>-->
 
 </body>
 </html>";
 
         public static IObservable<string> AddElementByPositionAsync(IReadOnlyTree node)
         {
+            var context = BrowsingContext.New(Configuration.Default);
+            var document = context.OpenAsync(req => req.Content(htmlContent)).Result;
+
             return Observable.Create<string>(obs =>
             {
                 Dictionary<IReadOnlyTree, IElement> dictionary = new();
 
-                // Parse the HTML content into an AngleSharp document.
-                var context = BrowsingContext.New(Configuration.Default);
-                var document = context.OpenAsync(req => req.Content(htmlContent)).Result;
+    
 
                 // Ensure we have a root element (usually the <html> element).
                 IElement body = document.Body;
@@ -93,37 +97,43 @@ namespace Utility.Nodes.Demo.Filters.Services
                     .Subscribe(n =>
                 {
                     IElement newElement;
-                    if (n.Data is Utility.Interfaces.Generic.IValue<string> { Value: var value } descriptor)
+
+                    newElement = document.CreateElement<IHtmlDivElement>(); // Create a new element
+
+                    if (n.Data is Utility.Interfaces.NonGeneric.IValue { Value: var value } descriptor)
                     {
-                        newElement = document.CreateElement<IHtmlDivElement>(); // Create a new element
-                        var p = document.CreateElement<IHtmlParagraphElement>();
-                        p.TextContent = value;
-                        newElement.AppendChild(p);
+                        var key = StyleSelector.Instance.SelectKey(n);
+
+                        if (descriptor is IReferenceDescriptor iRef)
+                        {
+                            var p = document.CreateElement<IHtmlParagraphElement>();
+                            p.TextContent = iRef.Name;
+                            newElement.AppendChild(p);
+                        }
+                        else
+                        {
+                            var innerElement = create(value);        
+                            newElement.AppendChild(innerElement);
+                        }
                     }
                     else
                     {
-                        newElement = document.CreateElement<IHtmlDivElement>(); // Create a new element
+                        
                     }
 
                     if (n.Parent == null)
                     {
                         body.AppendChild(newElement);
-                        //Console.WriteLine("Index out of range, element appended to the end.");
                     }
                     else if ((dictionary.TryGetValue(n.Parent, out var elem)))
                     {
                         elem.AppendChild(newElement);
-                        //// Insert the new element at the target index.
-                        //body.InsertBefore(newElement, childElements[targetIndex]);
-                        //Console.WriteLine($"Element inserted at index {targetIndex}");
                     }
                     else
                     {
-                        // Append to the end if the index is out of range.
                         body.AppendChild(newElement);
-                        //Console.WriteLine("Index out of range, element appended to the end.");
                     }
-                    newElement.ClassName = ((IName)n).Name;
+                    newElement.ClassName = n.Data.ToString();
                     dictionary[n] = newElement;
 
                     var sw = new StringWriter();
@@ -134,6 +144,21 @@ namespace Utility.Nodes.Demo.Filters.Services
                 });
             });
 
+
+            IElement create(object value)
+            {
+                switch (value)
+                {
+                    case string str:
+                        var p = document.CreateElement<IHtmlParagraphElement>();
+                        p.TextContent = str;
+                        return p;
+
+                }
+
+                return document.CreateElement<IHtmlParagraphElement>(); 
+                //throw new NotImplementedException("erew33111");
+            }
         }
     }
 }
