@@ -2,15 +2,24 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
                     xmlns:btns="http://schemas.utility.com/buttons"
                     xmlns:trees="http://schemas.utility.com/trees" 
-                    xmlns:res="http://schemas.utility.com/resourcedictionary">
+                    xmlns:res="http://schemas.utility.com/resourcedictionary" 
+                    xmlns:conv="http://schemas.utility.com/converters">
 
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/BasicStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
+    <conv:InverseNullToBooleanConverter x:Key="InverseNullToBooleanConverter"/>
+
+    
     <Style x:Key="DefaultStyle" TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource GenericTreeViewItem}">
         <Setter Property="Header" Value="{Binding Path=.}"></Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Removed, Converter={StaticResource InverseNullToBooleanConverter}}" Value="True" >
+                <Setter Property="Visibility" Value="Collapsed"></Setter>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
 
