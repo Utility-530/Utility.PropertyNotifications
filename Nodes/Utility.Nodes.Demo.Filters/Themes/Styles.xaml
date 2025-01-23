@@ -27,7 +27,7 @@
     <icons:PackIconIonicons x:Key="Icon" x:Shared="false" Kind="AddMD" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"/>
     <local:NewObjectConverter x:Key="NewObjectConverter"></local:NewObjectConverter>
     <local:FinishEditConverter x:Key="FinishEditConverter"></local:FinishEditConverter>
-
+    
     <Style TargetType="{x:Type Button}">
         <Setter Property="Foreground" Value="#373737" />
         <Setter Property="FontSize" Value="12" />
@@ -147,8 +147,11 @@
         <Setter Property="IsEditable" Value="False"></Setter>
         <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
         <Setter Property="Header" Value="{Binding Path=.}" />
-        <Setter Property="Visibility" Value="{Binding Converter={StaticResource VisibilityConverter}}"></Setter>
-
+          <Style.Triggers>
+            <DataTrigger Binding="{Binding Removed, Converter={StaticResource InverseNullToBooleanConverter}}" Value="True" >
+                <Setter Property="Visibility" Value="Collapsed"></Setter>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
 
@@ -174,7 +177,16 @@
                 </att:InteractivitySetter>
             </Style>
         </Style.Resources>
-        <Setter Property="ItemsPresenterVisibility" Value="Visible"></Setter>
+        <Setter Property="ItemsPresenterVisibility" Value="Visible"></Setter> 
+        <!-- IsExpanded needs to be false otherwise ItemsPresenterVisibility won't have an effect -->
+        <Setter Property="IsExpanded" Value="False"></Setter>
+        <Setter Property="IsEditable" Value="True"></Setter>
+        <Setter Property="ChildrenSelector" Value="{StaticResource ChildrenSelector}"></Setter>
+        <Setter Property="SplitButtonStyle" Value="{StaticResource Type_Style }"></Setter>
+        <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
+        <Setter Property="Background" Value="White"></Setter>
+        <Setter Property="Orientation" Value="Horizontal"></Setter>
+        <Setter Property="BorderThickness" Value="2"></Setter>
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
@@ -182,11 +194,6 @@
                 </ItemsPanelTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"></Setter>
-        <Setter Property="IsEditable" Value="True"></Setter>
-        <Setter Property="ChildrenSelector" Value="{StaticResource ChildrenSelector}"></Setter>
-        <Setter Property="SplitButtonStyle" Value="{StaticResource Type_Style }"></Setter>
-        <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
         <Setter Property="NodeItemsSource">
             <Setter.Value>
                 <MultiBinding Converter="{StaticResource ChildrenSelectorConverter}">
@@ -217,16 +224,28 @@
                     <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
                         <ContentControl Content="{Binding Data}"/>
                     </Border>
-                    <DataTemplate.Triggers>
-                        <DataTrigger Binding="{Binding Removed, Converter={StaticResource InverseNullToBooleanConverter}}" Value="True" >
-                            <Setter Property="IsEnabled" Value="False"></Setter>
-                            <Setter Property="Height" Value="20"></Setter>
-                            <Setter Property="Content" Value="{Binding Removed}"></Setter>
-                        </DataTrigger>
-                    </DataTemplate.Triggers>
                 </HierarchicalDataTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                    <Border  BorderThickness="1" Margin="1">
+                        <ContentControl Content="{Binding }" Foreground="{Binding TemplatedParent.Foreground, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
+                    </Border>
+                </HierarchicalDataTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Removed, Converter={StaticResource InverseNullToBooleanConverter}}" Value="True" >
+                <Setter Property="Background" Value="LightGray"></Setter>
+                <Setter Property="Foreground" Value="White"></Setter>
+                <Setter Property="IsEnabled" Value="False"></Setter>
+                <Setter Property="IsEditable" Value="False"></Setter>
+                <Setter Property="ItemsPresenterVisibility" Value="Collapsed"></Setter>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="ComboExStyle" TargetType="{x:Type ct:ComboTreeViewItem}" BasedOn="{StaticResource ComboTreeViewItem}">
