@@ -18,6 +18,6 @@ namespace Utility.Interfaces
         }
 
         public object? Value { get; }
-    }
+    }    
 
 }
