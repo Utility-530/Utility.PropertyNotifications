@@ -99,9 +99,11 @@
                                 <ContentPresenter x:Name="PART_Header" Grid.Column="1" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                               ContentSource="Header"                            />
 
-                                <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="4" Grid.Row="1" x:Name="WrapPanel1" Opacity="1" IsEnabled="{TemplateBinding IsShowing}" 
-                                           Visibility="{TemplateBinding IsEditable, Converter={StaticResource VisibilityConverter}}"
-                                           Width="80" >
+                                <WrapPanel 
+                                    x:Name="WrapPanel1"
+                                    Orientation="Horizontal" Grid.ColumnSpan="4" Grid.Row="1" Opacity="1" IsEnabled="{TemplateBinding IsShowing}" 
+                                    Visibility="{TemplateBinding IsEditable, Converter={StaticResource VisibilityConverter}}"
+                                    Width="80" >
 
                                     <local:ComboBoxTreeView                  
                                         x:Name="SplitButton"
@@ -143,12 +145,12 @@
                           Visibility="{TemplateBinding ItemsPresenterVisibility}" />
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="HasItems"
+                        <!--<Trigger Property="HasItems"
                    Value="false">
                             <Setter TargetName="Expander"
                     Property="Visibility"
                     Value="Hidden" />
-                        </Trigger>
+                        </Trigger>-->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="HasHeader"
@@ -238,6 +240,10 @@
                         <Trigger Property="IsValid" Value="False" >                       
                             <Setter Property="BorderBrush" TargetName="Bd" Value="Red" />
                             <Setter Property="BorderThickness" TargetName="Bd" Value="2" />
+                        </Trigger>
+                        <Trigger Property="Orientation" Value="Horizontal">
+                            <Setter Property="Grid.Row" TargetName="WrapPanel1" Value="0" />
+                            <Setter Property="Grid.Column" TargetName="WrapPanel1" Value="2" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
