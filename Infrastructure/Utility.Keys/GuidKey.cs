@@ -4,10 +4,7 @@
     {
         public GuidKey(Guid? value = default) : base(value ?? Guid.NewGuid())
         {
-            if (Value == default)
-            {
 
-            }
         }
 
         public static explicit operator GuidKey(string b) => new(Guid.Parse(b));
