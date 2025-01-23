@@ -39,7 +39,8 @@ namespace Utility.WPF.Demo.DataGrids
     class TypeFilter : IPredicate
     {
         readonly string[] names = new[] { "Name", "FullName" };
-        public bool Invoke(object value)
+
+        public bool Evaluate(object value)
         {
             if (value is IPropertyInfo propertyInfo)
             {
