@@ -340,7 +340,7 @@
 
         public static IReadOnlyTree Simplify(this ITree tree)
         {
-            var clone = new Tree(tree.Data.ToString()) { Key = tree.Key,  };
+            var clone = new Tree(tree.Data.ToString()) { Key = tree.Key, };
 
             CompositeDisposable disposables = new();
             tree.AndAdditions<ITree>().Subscribe(async item =>
@@ -614,14 +614,25 @@
             return Observable.Create<TreeChange<IReadOnlyTree>>(observer =>
             {
                 CompositeDisposable disposables = [];
-                tree.Items.AndAdditions<ITree>()
+                tree.Items.AndChanges<ITree>()
                 .Subscribe(item =>
                 {
-                    SelfAndDescendantsAsync(item, action, 1)
-                    .Subscribe(x =>
+                    foreach (var _o in item)
                     {
-                        observer.OnNext(x);
-                    }).DisposeWith(disposables);
+                        if (_o.Type == Type.Add)
+                        {
+                            SelfAndDescendantsAsync(_o.Value, action, 1)
+                            .Subscribe(x =>
+                            {
+                                observer.OnNext(x);
+                            }).DisposeWith(disposables);
+                            observer.OnNext(TreeChange<IReadOnlyTree>.Add(_o.Value, 1));
+                        }
+                        else if (_o.Type == Type.Remove)
+                        {
+                            observer.OnNext(TreeChange<IReadOnlyTree>.Remove(_o.Value, 1));
+                        }
+                    }
                 }).DisposeWith(disposables);
 
                 return disposables;
