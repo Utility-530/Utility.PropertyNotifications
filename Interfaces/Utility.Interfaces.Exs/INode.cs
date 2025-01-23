@@ -5,7 +5,7 @@ using System.Collections;
 
 namespace Utility.Interfaces.Exs
 {
-    public interface INode : ITree, IIsExpanded, ICurrent<INode>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation
+    public interface INode : ITree, IIsExpanded, ICurrent<INode>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation, IRemoved
     {
     }
 

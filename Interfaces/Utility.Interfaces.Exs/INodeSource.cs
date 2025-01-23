@@ -10,11 +10,11 @@ namespace Utility.Nodes.Filters
 
         void Remove(Guid guid);
         IObservable<INode> ChildrenByGuidAsync(Guid guid);
-        IObservable<INode> SingleByGuidAsync(object currentGuid);
+        IObservable<INode> SingleByGuidAsync(Guid currentGuid);
         int? MaxIndex(Guid guid, string v);
         void Remove(INode node);
-        IObservable<Key> Find(Guid guid, string name, System.Type type, object localIndex);
-        IObservable<GuidValue> Get(Guid guid);
+        IObservable<Key> Find(Guid guid, string name, System.Type type, int? localIndex);
+        IObservable<DateValue> Get(Guid guid, string name);
         void Add(INode node);
     }
 }
