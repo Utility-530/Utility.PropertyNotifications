@@ -13,7 +13,7 @@ namespace Utility.Repos
         IObservable<DateValue> Get(Guid guid, string? name = null);
         IObservable<Guid> InsertByParent(Guid parentGuid, string name, string? table_name = null, int? typeId = null, int? index = null);
         int? MaxIndex(Guid parentGuid, string? name = null);
-        void Remove(Guid guid);
+        DateTime Remove(Guid guid);
         IObservable<IReadOnlyCollection<Key>> SelectKeys(Guid? parentGuid = null, string? name = null, string? table_name = null);
         void Set(Guid guid, string name, object value, DateTime dateTime);
     }
