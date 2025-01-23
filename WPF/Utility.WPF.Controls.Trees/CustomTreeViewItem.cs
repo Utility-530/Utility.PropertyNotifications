@@ -36,12 +36,10 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty SplitButtonStyleProperty = DependencyProperty.Register("SplitButtonStyle", typeof(Style), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty NodeContainerStyleProperty = DependencyProperty.Register("NodeContainerStyle", typeof(Style), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty ItemsPresenterVisibilityProperty = DependencyProperty.Register("ItemsPresenterVisibility", typeof(Visibility), typeof(CustomTreeViewItem), new PropertyMetadata(Visibility.Collapsed));
-
-
-
+        public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(CustomTreeViewItem), new PropertyMetadata(Orientation.Vertical));
         static CustomTreeViewItem()
         {
-           DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomTreeViewItem), new FrameworkPropertyMetadata(typeof(CustomTreeViewItem)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomTreeViewItem), new FrameworkPropertyMetadata(typeof(CustomTreeViewItem)));
         }
 
         protected override DependencyObject GetContainerForItemOverride()
@@ -170,6 +168,13 @@ namespace Utility.WPF.Controls.Trees
             get { return (IEnumerable)GetValue(NodeItemsSourceProperty); }
             set { SetValue(NodeItemsSourceProperty, value); }
         }
+
+        public Orientation Orientation
+        {
+            get { return (Orientation)GetValue(OrientationProperty); }
+            set { SetValue(OrientationProperty, value); }
+        }
+
         #endregion Properties
 
         private static void IsEditingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
