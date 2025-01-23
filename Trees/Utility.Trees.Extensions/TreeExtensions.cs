@@ -215,7 +215,6 @@
                 parent.VisitAncestors(action);
         }
 
-
         public static void VisitDescendants(this IReadOnlyTree tree, Action<IReadOnlyTree> action)
         {
             action(tree);
@@ -325,7 +324,33 @@
             });
         }
 
+        public static async Task<IReadOnlyTree> ToClone(this ITree tree)
+        {
+            var clone = (ITree)(await tree.AsyncClone());
 
+            CompositeDisposable disposables = new();
+            tree.AndAdditions<ITree>().Subscribe(async item =>
+            {
+                var childClone = (ITree)(await item.ToClone());
+                childClone.Parent = clone;
+                clone.Add(childClone);
+            });
+            return clone;
+        }
+
+        public static IReadOnlyTree Simplify(this ITree tree)
+        {
+            var clone = new Tree(tree.Data.ToString()) { Key = tree.Key,  };
+
+            CompositeDisposable disposables = new();
+            tree.AndAdditions<ITree>().Subscribe(async item =>
+            {
+                var childClone = (ITree)(item.Simplify());
+                childClone.Parent = clone;
+                clone.Add(childClone);
+            });
+            return clone;
+        }
 
         public static IReadOnlyTree? MatchDescendant(this IReadOnlyTree tree, Predicate<IReadOnlyTree> action)
         {
