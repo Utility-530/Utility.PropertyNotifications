@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using Utility.Interfaces.Exs;
 using Utility.Keys;
+using Utility.Models;
+using Utility.Models.Trees;
 using Utility.Repos;
 using Observable = System.Reactive.Linq.Observable;
 
@@ -16,9 +19,9 @@ namespace Utility.Nodes.Filters
         public const string filter_root = "filter_root";
         public const string transformer_root = "transformer_root";
 
-        static readonly Guid assGuid = Guid.Parse("10126895-6855-45ab-97af-21ed90c02fe8");
-        static readonly Guid relGuid = Guid.Parse("5c90fcd6-2324-4f88-bffb-73b8f9fbcf6b");
-        static readonly Guid rootModelGuid = Guid.Parse("76ae564a-fda0-419c-9b88-dee3ac7430c1");
+        //static readonly Guid assGuid = Guid.Parse("10126895-6855-45ab-97af-21ed90c02fe8");
+        //static readonly Guid relGuid = Guid.Parse("5c90fcd6-2324-4f88-bffb-73b8f9fbcf6b");
+        //static readonly Guid rootModelGuid = Guid.Parse("76ae564a-fda0-419c-9b88-dee3ac7430c1");
         static readonly Guid assemblyGuid = Guid.Parse("ae00fed1-c58d-4e09-ac24-99cad4fbbc56");
 
 
@@ -32,7 +35,7 @@ namespace Utility.Nodes.Filters
 
         //static readonly Guid assemblyGuid = Guid.Parse("ae00fed1-c58d-4e09-ac24-99cad4fbbc56");
 
-        static readonly Guid transformerGuid = Guid.Parse("2afe3e32-eb9e-4d2c-b862-5fe8ac95559f");
+        //static readonly Guid transformerGuid = Guid.Parse("2afe3e32-eb9e-4d2c-b862-5fe8ac95559f");
 
         private static readonly Guid guid = Guid.Parse("d7bccfe8-2818-4e64-b399-f6230b087a86");
         public const string Refresh = nameof(Refresh);
@@ -53,7 +56,7 @@ namespace Utility.Nodes.Filters
                 Observable.Create<Node>(observer =>
                 {
                     TreeRepository.Instance.InsertRoot(guid, tableName, typeof(object));
-                    observer.OnNext(new Node("root", new Model { Name = "root" }) { Key = new GuidKey(guid) });
+                    observer.OnNext(new Node(new Model { Name = "root" }) { Key = new GuidKey(guid) });
                     return Disposable.Empty;
                 });
         }
@@ -63,10 +66,10 @@ namespace Utility.Nodes.Filters
 
             return Observable.Create<Node>(observer =>
             {
-                var subControlRoot = new Node("controls", new ControlsModel { Name = "controls" });
+                var subControlRoot = new Node(new ControlsModel { Name = "controls" });
 
                 return TreeRepository.Instance
-                .InsertRoot(controlsGuid, subControlRoot.Name, typeof(object))
+                .InsertRoot(controlsGuid, "controls", typeof(object))
                 .Subscribe(a =>
                 {
                     subControlRoot.Key = new GuidKey(a.Guid);
@@ -81,13 +84,13 @@ namespace Utility.Nodes.Filters
 
             return Observable.Create<Node>(observer =>
             {
-                var subControlRoot = new Node("combo", new DatabasesModel { Name = "combo" });
+                var x = new Node(new DatabasesModel { Name = "combo" });
                 return TreeRepository.Instance
-                .InsertRoot(subGuid, subControlRoot.Name, typeof(object))
+                .InsertRoot(subGuid, "combo", typeof(object))
                 .Subscribe(a =>
                 {
-                    subControlRoot.Key = new GuidKey(a.Guid);
-                    observer.OnNext(subControlRoot);
+                    x.Key = new GuidKey(a.Guid);
+                    observer.OnNext(x);
                 });
 
             });
@@ -96,11 +99,11 @@ namespace Utility.Nodes.Filters
 
         public class ControlsModel : Model
         {
-            public override IEnumerable<Node> CreateChildren()
+            public override IEnumerable<Model> CreateChildren()
             {
                 //yield return new Node("load", new CommandModel { Name = Load });
-                yield return new Node("save", new CommandModel { Name = Save });
-                yield return new Node("save_filters", new CommandModel { Name = Save_Filters });
+                yield return new CommandModel { Name = Save };
+                yield return new CommandModel { Name = Save_Filters };
                 //yield return new Node("clear", new CommandModel { Name = Clear });
                 //yield return new Node("_new", new CommandModel { Name = New });
                 //yield return new Node("expand", new CommandModel { Name = Expand });
@@ -110,7 +113,7 @@ namespace Utility.Nodes.Filters
                 //yield return new Node("next", new CommandModel { Name = Next });
                 //yield return new Node("next", new ExceptionsModel { Name = "exceptions" });
             }
-            public override void SetNode(Node node)
+            public override void SetNode(INode node)
             {
                 node.IsExpanded = true;
                 node.Orientation = Enums.Orientation.Horizontal;
@@ -126,11 +129,11 @@ namespace Utility.Nodes.Filters
             {
                 //return NodeSource.Instance.Single(nameof(BuildRoot)).Subscribe(root =>
                 //{
-                var subRoot = new Node("transformers", new TransformersModel { Name = "transformers" }) { IsExpanded = true, Orientation = Enums.Orientation.Vertical };
+                var subRoot = new Node(new TransformersModel { Name = "transformers" }) { IsExpanded = true, Orientation = Enums.Orientation.Vertical };
                 //root.Add(subRoot);
 
                 return TreeRepository.Instance
-                .InsertRoot(filterGuid, subRoot.Name, typeof(object))
+                .InsertRoot(filterGuid, "transformers", typeof(object))
                 .Subscribe(a =>
                 {
                     subRoot.Key = new GuidKey(a.Guid);
@@ -145,9 +148,9 @@ namespace Utility.Nodes.Filters
         {
             return Observable.Create<Node>(observer =>
             {
-                var node = new Node("html", new StringModel { Name = "html" }) { };
+                var node = new Node(new StringModel { Name = "html" }) { };
                 return TreeRepository.Instance
-                .InsertRoot(htmlGuid, node.Name, typeof(object))
+                .InsertRoot(htmlGuid, "html", typeof(object))
                 .Subscribe(a =>
                 {
                     node.Key = new GuidKey(a.Guid);
@@ -160,9 +163,9 @@ namespace Utility.Nodes.Filters
         {
             return Observable.Create<Node>(observer =>
             {
-                var node = new Node("_html", new HtmlModel { Name = "_html" }) { };
+                var node = new Node(new HtmlModel { Name = "_html" }) { };
                 return TreeRepository.Instance
-                .InsertRoot(htmlRenderGuid, node.Name, typeof(object))
+                .InsertRoot(htmlRenderGuid, "_html", typeof(object))
                 .Subscribe(a =>
                 {
                     node.Key = new GuidKey(a.Guid);
@@ -175,9 +178,9 @@ namespace Utility.Nodes.Filters
         {
             return Observable.Create<Node>(observer =>
             {
-                var _node = build();
+                var _node = new Node(build());
                 return TreeRepository.Instance
-                .InsertRoot(contentGuid, _node.Name, typeof(object))
+                .InsertRoot(contentGuid, _node.Data.ToString(), typeof(object))
                 .Subscribe(a =>
                 {
                     _node.Key = new GuidKey(a.Guid);
@@ -185,35 +188,34 @@ namespace Utility.Nodes.Filters
                 });
             });
 
-            static Node build()
+            static Model build()
             {
-                return new Node("Groups", new Model(() =>
+                return new Model(() =>
                 {
-                    return [ new Node("Group 1", new Model(() =>
-                    {
-                        return new List<string> { "test 1", "test 2", "test 3" }.Select(a => new Node(a, new Model { Name = a }));
-                    })
-                    { Name = "Group 1" })
-                    { IsExpanded =true },
-
-                    new Node("Group 2", new Model(() =>
+                    return [
+                        new Model(() =>
+                        {
+                            return new List<string> { "test 1", "test 2", "test 3" }.Select(a => new Model { Name = a });
+                        })
+                        { Name = "Group 1" },
+                        new Model(() =>
+                        {
+                            return [
+                             new IndexModel { Name="index 1", Value = 5 },
+                             new Model(()=> [new Model { Name = "lower" }]) { Name = "test 5" }
+                             ];
+                    }){ Name = "Group 2"},
+                    new Model(() =>
                     {
                         return [
-                            new("five", new IndexModel { Value = 5 }) {  },
-                            new("test 5", new Model(()=> [new ("lower", new Model { Name = "lower" })]) { Name = "test 5" }),
+                            new Model { Name = "test 6" } ,
+                            new IndexModel { Name="index 2", Value = 8 },
                        ];
-                    }){ Name = "Group 2"}),
-                    new Node("Group 3", new Model(() =>
-                    {
-                        return [
-                            (new Node("test 6", new Model { Name = "test 6" }) { }),
-                            (new Node("eight", new IndexModel { Value = 8 }) {  }),
-                       ];
-                    }){ Name = "Group 3"})];
+                    }){ Name = "Group 3"}
+                    ];
                 })
-                { Name = "Groups" })
-                { IsExpanded = true };
-            }
+                { Name = "Groups" };
+            };
         }
 
         public static IObservable<Node> Assembly()
@@ -224,7 +226,7 @@ namespace Utility.Nodes.Filters
                 .Subscribe(a =>
                 {
                     var assembly = typeof(IndexModel).Assembly;
-                    var res = new ResolvableNode(assemblyGuid, assembly) { };
+                    var res = new Node(AssemblyModel.Create(assembly)) { Key = new GuidKey(assemblyGuid) };
                     observer.OnNext(res);
                 });
             });
