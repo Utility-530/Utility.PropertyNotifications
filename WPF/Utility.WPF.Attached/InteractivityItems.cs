@@ -72,4 +72,13 @@ namespace Utility.WPF.Attached
 
 
     }
+
+
+    public class InteractivitySetter : Setter
+    {
+        public InteractivitySetter()
+        {
+            this.Property = InteractivityItems.TemplateProperty;
+        }
+    }
 }
