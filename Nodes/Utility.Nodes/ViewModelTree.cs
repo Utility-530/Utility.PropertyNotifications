@@ -35,7 +35,7 @@ namespace Utility.Nodes
 
         public ViewModelTree()
         {
-      
+
         }
 
         protected override IList CreateChildren()
@@ -60,11 +60,9 @@ namespace Utility.Nodes
         {
             get => removed; set
             {
-                if (value != removed)
-                {
-                    removed = value;
-                    RaisePropertyChanged();
-                }
+
+                RaisePropertyChanged(ref removed, value);
+
             }
         }
 
@@ -72,11 +70,9 @@ namespace Utility.Nodes
         {
             get => isValid; set
             {
-                if (value != isValid)
-                {
-                    isValid = value;
-                    RaisePropertyChanged();
-                }
+
+                RaisePropertyChanged(ref isValid, value);
+
             }
         }
 
@@ -84,11 +80,9 @@ namespace Utility.Nodes
         {
             get => isEditable; set
             {
-                if (value != isEditable)
-                {
-                    isEditable = value;
-                    RaisePropertyChanged();
-                }
+
+                RaisePropertyChanged(ref isEditable, value);
+
             }
         }
 
@@ -98,11 +92,9 @@ namespace Utility.Nodes
             get => isHighlighted;
             set
             {
-                if (value != isHighlighted)
-                {
-                    isHighlighted = value;
-                    base.RaisePropertyChanged();
-                }
+
+                RaisePropertyChanged(ref isHighlighted, value);
+
             }
         }
 
@@ -110,8 +102,7 @@ namespace Utility.Nodes
         {
             get => isClicked; set
             {
-                isClicked = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(ref isClicked, value);
             }
         }
 
@@ -119,8 +110,7 @@ namespace Utility.Nodes
         {
             get => isSelected; set
             {
-                isSelected = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(ref isSelected, value);
             }
         }
 
@@ -129,11 +119,7 @@ namespace Utility.Nodes
             get => isExpanded;
             set
             {
-                if (value != isExpanded)
-                {
-                    isExpanded = value;
-                    base.RaisePropertyChanged();
-                }
+                RaisePropertyChanged(ref isExpanded, value);
             }
         }
 
@@ -142,11 +128,7 @@ namespace Utility.Nodes
             get => arrangement;
             set
             {
-                if (value != arrangement)
-                {
-                    arrangement = value;
-                    base.RaisePropertyChanged();
-                }
+                RaisePropertyChanged(ref arrangement, value);
             }
         }
 
@@ -155,11 +137,7 @@ namespace Utility.Nodes
             get => orientation;
             set
             {
-                if (value != orientation)
-                {
-                    orientation = value;
-                    base.RaisePropertyChanged();
-                }
+                RaisePropertyChanged(ref orientation, value);
             }
         }
 
@@ -168,11 +146,7 @@ namespace Utility.Nodes
             get => rows;
             set
             {
-                if (value != rows)
-                {
-                    rows = value;
-                    base.RaisePropertyChanged();
-                }
+                RaisePropertyChanged(ref rows, value);
             }
         }
 
@@ -181,11 +155,7 @@ namespace Utility.Nodes
             get => columns;
             set
             {
-                if (value != columns)
-                {
-                    columns = value;
-                    base.RaisePropertyChanged();
-                }
+                RaisePropertyChanged(ref columns, value);
             }
         }
 
@@ -194,11 +164,7 @@ namespace Utility.Nodes
             get => isVisible;
             set
             {
-                if (value != isVisible)
-                {
-                    isVisible = value;
-                    base.RaisePropertyChanged();
-                }
+                RaisePropertyChanged(ref isVisible, value);
             }
         }
 
@@ -211,15 +177,16 @@ namespace Utility.Nodes
             {
                 if (currentNode != value)
                 {
+                    var previousValue = currentNode;
                     if (currentNode != null)
                         currentNode.IsPersistable = false;
                     value.IsPersistable = true;
                     currentNode = value;
-                    RaisePropertyChanged();
+                    RaisePropertyChanged(ref previousValue, value);
                 }
             }
         }
-      
+
 
         public override string ToString()
         {

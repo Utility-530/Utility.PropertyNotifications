@@ -48,14 +48,14 @@ namespace Utility.Nodes
                 node.Add(this);
             });
         }
-        public ICommand AddCommand { get; }
-        public ICommand RemoveCommand { get; }
-        public ICommand EditCommand { get; }
-        public ICommand AddParentCommand { get; }
+        public ICommand AddCommand { get; init; }
+        public ICommand RemoveCommand { get; init; }
+        public ICommand EditCommand { get; init; }
+        public ICommand AddParentCommand { get; init; }
 
         public override Task<ITree> ToTree(object value)
         {
-         
+
             var node = new Node(value)
             {
                 Parent = this,
@@ -68,6 +68,11 @@ namespace Utility.Nodes
         {
             get => data; set
             {
+                if (data == value)
+                {
+                    throw new Exception("vdfs 3332222kjj");
+                }
+                var previousValue = data;
                 data = value;
                 if (data is ISetNode iSetNode)
                 {
@@ -86,7 +91,7 @@ namespace Utility.Nodes
                             children.Children.Subscribe(async a =>
                             {
 
-                                if (a is Change { Type: Changes.Type.Add, Value:{ } value })
+                                if (a is Change { Type: Changes.Type.Add, Value: { } value })
                                 {
 
                                     this.m_items.Add(await ToTree(value));
@@ -95,7 +100,7 @@ namespace Utility.Nodes
                         });
                 }
 
-                RaisePropertyChanged();
+                RaisePropertyChanged(ref previousValue, value);
             }
         }
 
@@ -103,10 +108,7 @@ namespace Utility.Nodes
         {
             get => parent; set
             {
-                if (parent?.Equals(value) == true)
-                    return;
-                parent = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(ref parent, value);
             }
         }
 
