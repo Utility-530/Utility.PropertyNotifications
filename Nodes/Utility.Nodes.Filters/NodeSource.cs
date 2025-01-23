@@ -20,6 +20,7 @@ using Utility.PropertyNotifications;
 using Utility.Interfaces;
 using Utility.Helpers;
 using NetFabric.Hyperlinq;
+using Utility.Helpers.Generic;
 
 namespace Utility.Nodes.Filters
 {
@@ -215,9 +216,11 @@ namespace Utility.Nodes.Filters
             });
         }
 
-        public void Remove(Guid guid)
+        public DateTime Remove(Guid guid)
         {
-            repository.Remove(guid);
+            var d = repository.Remove(guid);
+            this.nodes.RemoveBy(a => (GuidKey)a.Key == guid);
+            return d;
         }
 
         public int? MaxIndex(Guid guid, string v)

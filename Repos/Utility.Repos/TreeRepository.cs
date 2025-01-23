@@ -403,11 +403,13 @@ namespace Utility.Repos
             return index;
         }
 
-        public void Remove(Guid guid)
+        public DateTime Remove(Guid guid)
         {
             var table_name = getName(guid);
-            string cmd = $"UPDATE '{table_name}' SET Removed = '{date()}' WHERE Guid = '{guid}'";
+            var _date = DateTime.Now;
+            string cmd = $"UPDATE '{table_name}' SET Removed = '{date(_date)}' WHERE Guid = '{guid}'";
             connection.Execute(cmd);
+            return _date;
         }
 
         private static string ToComparisonAndValue(object? value)
