@@ -50,8 +50,7 @@ namespace Utility.Trees
         {
             get => key; set
             {
-                key = value;
-                RaisePropertyChanged();
+                RaisePropertyChanged(ref key, value);
             }
         }
 
@@ -165,13 +164,18 @@ namespace Utility.Trees
 
 
 
-        public virtual async Task<Tree> Clone()
+        public virtual async Task<Tree> AsyncClone()
         {
             object clone = Data;
             if (Data is IClone cln)
             {
                 clone = cln.Clone();
             }
+            if(Data is IAsyncClone asyncClone)
+            {
+                clone = await asyncClone.AsyncClone();
+            }
+
             var cloneTree = await ToTree(clone) as Tree;
             cloneTree.Key = this.Key;
             return cloneTree;
@@ -352,10 +356,6 @@ namespace Utility.Trees
             m_items.RemoveAt(index);
         }
 
-        public void Add(ITree item)
-        {
-            m_items.Add(item);
-        }
 
         public bool Contains(ITree item)
         {
@@ -371,6 +371,16 @@ namespace Utility.Trees
         {
             m_items.Remove(item);
             return true;
+        }
+
+        void ICollection<ITree>.Add(ITree item)
+        {    
+            m_items.Add(item);
+        }
+
+        async Task<object> IAsyncClone.AsyncClone()
+        {
+            return await this.AsyncClone();
         }
     }
 
