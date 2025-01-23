@@ -1,14 +1,13 @@
 ﻿using Jellyfish;
-using System;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Utility.Changes;
+using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
+using Utility.Nodes.Common;
 using Utility.PropertyNotifications;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
@@ -84,20 +83,21 @@ namespace Utility.Nodes
                 }
                 if (data is IChildren children)
                 {
-                    this.WithChangesTo(a => a.IsExpanded)
-                        .Where(a => a)
-                        .Subscribe(a =>
+                    children
+                        .Children
+                        .Filter(this.WithChangesTo(a => a.IsExpanded))
+                        .Subscribe(async a =>
                         {
-                            children.Children.Subscribe(async a =>
+                            if (a is Change { Type: Changes.Type.Add, Value: { } value })
                             {
-
-                                if (a is Change { Type: Changes.Type.Add, Value: { } value })
-                                {
-
-                                    this.m_items.Add(await ToTree(value));
-                                }
-                            });
+                                this.m_items.Add(await ToTree(value));
+                            }
+                            else if (a is Change { Type: Changes.Type.Remove, Value: { } _value })
+                            {
+                                this.m_items.RemoveBy(c => (c as IData).Data == _value);
+                            }
                         });
+
                 }
 
                 RaisePropertyChanged(ref previousValue, value);
