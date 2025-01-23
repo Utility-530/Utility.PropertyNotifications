@@ -21,7 +21,7 @@ namespace Utility.Models
 {
 
 
-    public class Model : NotifyPropertyClass, ISetNode, IProliferation
+    public class Model : NotifyPropertyClass, ISetNode, IProliferation, IClone
     {
         protected string m_name = "unknown";
         private INode node;
@@ -122,19 +122,17 @@ namespace Utility.Models
 
         public virtual void SetNode(INode node)
         {
-            //if (Node?.Equals(node) == true)
-            //{
-
-            //}
             Node = node;
         }
 
+        bool isInitialised = false;
         public virtual void Initialise(IReadOnlyTree parent)
         {
-            //if (i++ > 1)
-            //{
-            //}
+            if (isInitialised)
+            {
 
+            }
+            isInitialised = true;
             if (parent == null)
             {
                 source.Remove(Node);
@@ -148,53 +146,16 @@ namespace Utility.Models
                     Node.Key = new Keys.GuidKey(guid.Guid);
                     source.Add(Node);
                 });
-
-            var index = source.MaxIndex(Guid.Parse(parent.Key), Name + "_child") ?? 0;
-
-
-            source.Get(Guid.Parse(parent.Key))
-                .Subscribe(_d =>
-                {
-                    if (_d == null)
-                    {
-                        IsInitialising = false;
-                        return;
-                    }
-                    var value = _d.Guid;
-                    try
-                    {
-                        if (value != default)
-                        {
-                            var x = source
-                            .SingleByGuidAsync(value)
-                            .Subscribe(x =>
-                            {
-                                x.Parent = parent;
-                                x.LocalIndex = index + 1;
-                                //node.Current = x;
-                                //if (x.Data is ValueModel valueModel)
-                                //{
-                                //    //if (Value != null)
-                                //    //{
-                                //    //    valueModel.Value = Value;
-                                //    //    ValueModel_PropertyChanged(valueModel, new PropertyChangedEventArgs(nameof(Value)));
-                                //    //}
-                                //}
-                                //Update(node, x);
-                            });
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-
-                });
         }
 
         public virtual void InitialiseChildren(INode node)
         {
             IsInitialising = true;
+            if (node.Key == "56dfda62-c8d8-4df6-ab05-faa9d728e841")
+            {
+
+
+            }
 
             source
                 .ChildrenByGuidAsync(Guid.Parse(node.Key))
@@ -202,31 +163,15 @@ namespace Utility.Models
                 {
                     if (a.Data?.ToString() == source.New)
                     {
-                        ChildrenAsync()
-                        .Subscribe(child =>
+                        CreateChildren()
+                        .ForEach(child =>
                         {
-                            if (child.Type == Changes.Type.Add)
-                            {
-                                node.Add(child.Value);
-                            }
+                            node.Add(child);
                         });
                     }
-                    else if (a.Data == null)
-                    {
-                        ChildrenAsync()
-                        .Where(_a => _a.Value.Name == a.Data.ToString())
-                        .Subscribe(child =>
-                        {
-                            if (child.Type == Changes.Type.Add)
-                            {
-                                node.Add(child.Value);
-                            }
-                        });
-                    }
-                    else if (node.Items.Cast<IKey>().Select(a => a.Key).Contains(a.Key) == false)
+                    else if (a.Data != null)
                     {
                         node.Add(a);
-                        a.Parent = node;
                     }
                     else
                     {
@@ -252,17 +197,6 @@ namespace Utility.Models
         {
         }
 
-        public virtual IObservable<Change<Model>> ChildrenAsync()
-        {
-            return Observable.Create<Change<Model>>(observer =>
-            {
-                foreach (var child in CreateChildren())
-                    observer.OnNext(Change<Model>.Add(child));
-                observer.OnCompleted();
-                return Disposable.Empty;
-            });
-        }
-
         public virtual IEnumerable<Model> CreateChildren()
         {
             if (func != null)
@@ -272,27 +206,26 @@ namespace Utility.Models
 
             IEnumerable<Model> nodesFromProperties()
             {
-                foreach (var x in GetType().GetProperties().Select(a => (a.PropertyType, Attribute: a.GetAttribute<ChildAttribute>())).Where(a => a.Attribute != default))
+                foreach (var x in GetType().GetProperties().Select(a => (a.PropertyType, Attribute: a.GetAttributeSafe<ChildAttribute>())).Where(a => a.Attribute.success))
                 {
                     Model instance = null;
-                    if (x.Attribute != null)
-                    {
-                        if (x.PropertyType.IsAssignableTo(typeof(Model)))
-                        {
-                            instance = (Model)Activator.CreateInstance(x.PropertyType);
-                        }
-                        else if (x.Attribute.Type.IsAssignableTo(typeof(Model)))
-                        {
-                            instance = (Model)Activator.CreateInstance(x.Attribute.Type);
-                        }
-                        else
-                        {
-                            throw new NotSupportedException();
-                        }
-                        instance.Name = x.Attribute.Name;
 
-                        yield return instance;
+                    if (x.PropertyType.IsAssignableTo(typeof(Model)))
+                    {
+                        instance = (Model)Activator.CreateInstance(x.PropertyType);
                     }
+                    else if (x.Attribute.attribute.Type.IsAssignableTo(typeof(Model)))
+                    {
+                        instance = (Model)Activator.CreateInstance(x.Attribute.attribute.Type);
+                    }
+                    else
+                    {
+                        throw new NotSupportedException();
+                    }
+                    instance.Name = x.Attribute.attribute.Name;
+
+                    yield return instance;
+
                 }
             }
         }
@@ -318,6 +251,13 @@ namespace Utility.Models
         public override string ToString()
         {
             return Name;
+        }
+
+        public object Clone()
+        {
+            var instance = ActivateAnything.Activate.New(this.GetType()) as Model;
+            instance.Name = Name;
+            return instance;
         }
     }
 
