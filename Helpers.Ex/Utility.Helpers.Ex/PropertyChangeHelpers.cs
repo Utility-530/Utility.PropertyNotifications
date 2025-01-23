@@ -3,12 +3,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using Fasterflect;
+using Utility.Changes;
 using Utility.Helpers;
 
-namespace Utility.Common.Collection
+namespace Utility.Helpers.Ex
 {
-    public record PropertyChange(object Source, string? PropertyName, object? NewValue);
-
     public static class PropertyChangeHelpers
     {
         /// <summary>
@@ -20,7 +19,7 @@ namespace Utility.Common.Collection
         public static IObservable<PropertyChange> Changes<T>(this T source, bool startWithSource = false)
             where T : INotifyPropertyChanged
         {
-            var obs = System.Reactive.Linq.Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+            var obs = Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
                                 handler => handler.Invoke,
                                 h => source.PropertyChanged += h,
                                 h => source.PropertyChanged -= h)
@@ -32,7 +31,7 @@ namespace Utility.Common.Collection
             where T : INotifyPropertyChanged
         {
             var xx = typeof(T).GetProperty(name);
-            return System.Reactive.Linq.Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+            return Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
                                 handler => handler.Invoke,
                                 h => source.PropertyChanged += h,
                                 h => source.PropertyChanged -= h)
@@ -44,7 +43,7 @@ namespace Utility.Common.Collection
     where T : INotifyPropertyChanged
         {
             var xx = typeof(T).GetProperty(name);
-            return System.Reactive.Linq.Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+            return Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
                                 handler => handler.Invoke,
                                 h => source.PropertyChanged += h,
                                 h => source.PropertyChanged -= h)
@@ -56,7 +55,7 @@ namespace Utility.Common.Collection
 where T : INotifyPropertyChanged
         {
             var xx = typeof(T).GetProperty(name);
-            return System.Reactive.Linq.Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
+            return Observable.FromEventPattern<PropertyChangedEventHandler, PropertyChangedEventArgs>(
                                 handler => handler.Invoke,
                                 h => source.PropertyChanged += h,
                                 h => source.PropertyChanged -= h)
