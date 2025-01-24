@@ -23,6 +23,7 @@ using System.Collections.Generic;
 using Utility.Trees.Demo.Filters;
 using Utility.Entities.Comms;
 using Utility.Interfaces.Exs;
+using Utility.Trees.Extensions.Async;
 
 namespace Utility.Trees.Demo.MVVM
 {
@@ -68,14 +69,14 @@ namespace Utility.Trees.Demo.MVVM
                         if (Locator.Current.GetService<Model>().SelectedTable != table)
                         {
                             //Locator.Current.GetService<Model>().SelectedTable = table;   
-                            TreeExtensions.MatchDescendant(root, a => a.Data is IReferenceDescriptor { Name: "SelectedTable" })
+                            root.Descendant( a => a.tree.Data is IReferenceDescriptor { Name: "SelectedTable" })
                             .Subscribe(x =>
                             {
-                                var yt = (x.Data as ISetValue);
+                                var yt = (x.NewItem.Data as ISetValue);
                                 yt.Value = table;
 
                                 Locator.Current.GetService<ITreeRepository>()
-                                    .Find((x as IGuid).Guid, "SelectedTable", typeof(Table))
+                                    .Find((x.NewItem as IGuid).Guid, "SelectedTable", typeof(Table))
                                     .Subscribe(parentGuid =>
                                     {
                                         //var rqi = new RepoItem(default, RepoItemType.SelectKeys, "SelectedTable", ParentGuid: parentGuid);
@@ -96,7 +97,7 @@ namespace Utility.Trees.Demo.MVVM
             {
                 if (a is DecisionQueueItem { Value: RepoItem { Guid: { } guid } qi })
                 {
-                    var d = TreeExtensions.MatchDescendant(model, a => (a.Data as MemberDescriptor).Guid == guid);
+                    var d = model.Descendant(a => (a.tree.Data as MemberDescriptor).Guid == guid);
                     if (last is ReflectionNode node)
                     {
                         node.IsSelected = false;
@@ -116,7 +117,7 @@ namespace Utility.Trees.Demo.MVVM
             {
                 if (a is DecisionQueueItem { Value: RepoItem { Guid: { } guid } qi })
                 {
-                    var d = TreeExtensions.MatchDescendant(model, a => (a.Data as MemberDescriptor).Guid == guid);
+                    var d = model.Descendant(a => (a.tree.Data as MemberDescriptor).Guid == guid);
                     if (d is ReflectionNode tree)
                     {
                         last = tree;
@@ -200,9 +201,9 @@ namespace Utility.Trees.Demo.MVVM
                     foreach (var connection in _viewModel.Connections.Where(a => a.ServiceName == service.Name && a.Movement == Movement.ToViewModelFromService))
                     {
                         var viewModelName = connection.ViewModelName;
-                        var viewModel = root.MatchDescendant(a => (a.Data as ViewModel).Name == viewModelName)
+                        var viewModel = root.Descendant(a => (a.tree.Data as ViewModel).Name == viewModelName)
                         .Subscribe(vm => {
-                            Pipe.Instance.Queue(new TreeQueueItem(vm, a));
+                            Pipe.Instance.Queue(new TreeQueueItem(vm.NewItem, a));
                         });
                     }
                 });

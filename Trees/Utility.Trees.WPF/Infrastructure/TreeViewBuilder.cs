@@ -2,7 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.Extensions;
+using Utility.Trees.Extensions;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.WPF.Abstractions;
@@ -13,7 +13,7 @@ namespace Views.Trees
     {
         public IDisposable Build(ItemsControl treeView, IItems rootViewModel, ITreeViewItemFactory factory, IValueConverter ItemsPanelConverter, StyleSelector styleSelector, DataTemplateSelector dataTemplateSelector, ITreeViewFilter filter)
         {
-            return TreeExtensions.ExploreTree(treeView, t => t.Items, (itemcollection, viewModel, treeView) =>
+            return Explore.With(treeView, t => t.Items, (itemcollection, viewModel, treeView) =>
             {
                 var treeViewItem = factory.Make(viewModel, treeView);
 

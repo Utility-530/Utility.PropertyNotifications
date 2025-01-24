@@ -105,6 +105,7 @@
 
 
     <Style x:Key="DefaultStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
+        <Setter Property="Header" Value="{Binding Data}"/>
         <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
         <!--<Setter Property="ChildrenSelector" Value="{StaticResource ChildrenSelector}"/>-->
         <Setter Property="NodeItemsSource">
@@ -143,6 +144,7 @@
     </Style>
 
     <Style x:Key="ViewContentStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
+        <Setter Property="Header" Value="{Binding Data}"/>
         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"></Setter>
         <Setter Property="IsEditable" Value="False"></Setter>
         <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
@@ -180,6 +182,7 @@
         <Setter Property="ItemsPresenterVisibility" Value="Visible"></Setter> 
         <!-- IsExpanded needs to be false otherwise ItemsPresenterVisibility won't have an effect -->
         <Setter Property="IsExpanded" Value="False"></Setter>
+        <Setter Property="Header" Value="{Binding Data}"/>
         <Setter Property="IsEditable" Value="True"></Setter>
         <Setter Property="ChildrenSelector" Value="{StaticResource ChildrenSelector}"></Setter>
         <Setter Property="SplitButtonStyle" Value="{StaticResource Type_Style }"></Setter>
@@ -248,7 +251,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="ComboExStyle" TargetType="{x:Type ct:ComboTreeViewItem}" BasedOn="{StaticResource ComboTreeViewItem}">
+    <Style x:Key="ComboExStyle" TargetType="{x:Type ct:CustomTreeViewItem}" BasedOn="{StaticResource ComboTreeViewItem}">
         <Setter Property="NewObject" Value="{Binding Data, Converter={StaticResource NewObjectConverter}}"></Setter>
         <Setter Property="EditTemplate">
             <Setter.Value >

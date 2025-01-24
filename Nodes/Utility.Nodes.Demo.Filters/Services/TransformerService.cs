@@ -8,6 +8,7 @@ using System.Reflection;
 using Utility.Nodes.Filters;
 using Utility.Reactives;
 using Utility.Extensions;
+using Utility.Trees.Extensions.Async;
 using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
 using NetFabric.Hyperlinq;
@@ -40,7 +41,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 .Subscribe(c_node =>
                 {
                     c_node
-                    .DescendantAsync(a => (a.Item1 as INode).Data.ToString() == Factory.content_root)
+                    .Descendant(a => (a.Item1 as INode).Data.ToString() == Factory.content_root)
                     .Subscribe(a =>
                     {
                         var transformersModel = a.NewItem.Data as TransformersModel;

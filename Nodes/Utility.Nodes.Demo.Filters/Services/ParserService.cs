@@ -2,7 +2,7 @@
 using AngleSharp;
 using AngleSharp.Html.Dom;
 using Utility.Trees.Abstractions;
-using Utility.Extensions;
+using Utility.Trees.Extensions.Async;
 using System.Reactive.Linq;
 using Utility.Nodes.Filters;
 using AngleSharp.Html;
@@ -91,7 +91,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 var childElements = body.Children;
 
                 // Check if the target index is within range.
-                return node.SelfAndDescendantsAsync()
+                return node.SelfAndDescendants()
                     .Where(c => c.Type == Changes.Type.Add)
                     .Select(c => c.NewItem)
                     .Subscribe(n =>

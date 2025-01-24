@@ -70,7 +70,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         }
         void ChangeType(IReadOnlyTree tree, Type _type)
         {
-            if (tree.MatchDescendant(a => a.Data is Type type && type == _type) is IReadOnlyTree { } innerTree)
+            if (tree.Descendant(a => (a.tree.Data is Type type && type == _type) ||(a.tree.Data is IType itype && itype.Type == _type)) is IReadOnlyTree { } innerTree)
             {
                 AssociatedObject.IsError = false;
                 AssociatedObject.UpdateSelectedItems(innerTree);

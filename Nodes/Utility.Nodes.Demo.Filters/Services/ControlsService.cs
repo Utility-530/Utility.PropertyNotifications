@@ -14,6 +14,7 @@ using Utility.Trees.Abstractions;
 using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Interfaces.Exs;
+using Utility.Trees.Extensions;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -36,7 +37,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                             {
                                 model.WhenAnyPropertyChanged().Subscribe(_ =>
                                 {
-                                    var contentRoot = root.MatchDescendant(a => (a as IName).Name == Factory.content_root);
+                                    var contentRoot = root.Descendant(a => (a.tree as IName).Name == Factory.content_root);
                                     Switch(name, model, contentRoot as INode);
                                 });
                             }

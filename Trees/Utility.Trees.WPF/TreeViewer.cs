@@ -10,6 +10,7 @@ using Utility.Extensions;
 using Utility.Trees.WPF.Abstractions;
 using System.Collections.ObjectModel;
 using Utility.Entities.Comms;
+using Utility.Trees.Extensions;
 
 namespace Utility.Trees.WPF
 {
@@ -195,7 +196,7 @@ namespace Utility.Trees.WPF
 
         public void Reload()
         {
-            TreeExtensions.Visit<ItemsControl>(this,
+            this.Visit<ItemsControl>(
             a =>
             {
                 return a.Items.Cast<HeaderedItemsControl>();
@@ -224,7 +225,7 @@ namespace Utility.Trees.WPF
         {
             //Guid guid = default;
             object? obj = default;
-            TreeExtensions.Visit(this as ItemsControl, a =>
+            (this as ItemsControl).Visit( a =>
             {
 
                 var items = a.Items.Cast<HeaderedItemsControl>();
@@ -246,7 +247,7 @@ namespace Utility.Trees.WPF
 
         public void Remove()
         {
-            TreeExtensions.Visit(this as ItemsControl, a =>
+            (this as ItemsControl).Visit(a =>
             {
 
                 var items = a.Items.Cast<HeaderedItemsControl>();

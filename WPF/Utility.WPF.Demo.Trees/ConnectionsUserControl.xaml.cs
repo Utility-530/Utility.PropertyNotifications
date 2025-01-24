@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Utility.Common.Helper;
-using Utility.Extensions;
+using Utility.Trees.Extensions;
 using Utility.Infrastructure;
 using Utility.Persists;
 using Utility.Trees;
@@ -218,7 +218,7 @@ namespace Utility.WPF.Demo.Trees
             {
 
                 Point pointA, pointB;
-                Tree viewmodel = TreeExtensions.MatchDescendant(dataContext.ViewModel, new((a) => (a.Data as IName).Name == connectionViewModel.ViewModelName)) as Tree;
+                Tree viewmodel = dataContext.ViewModel.Descendant(new((a) => (a.tree.Data as IName).Name == connectionViewModel.ViewModelName)) as Tree;
 
                 var treeViewItem = TreeHelper.FindRecursive<TreeViewItem>(userControl.MyTreeView, viewmodel);
                 {

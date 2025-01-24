@@ -22,6 +22,7 @@ using Utility.WPF.Reactives;
 using Utility.Reactives;
 using DynamicData;
 using System.Collections.Specialized;
+using Utility.Trees.Extensions.Async;
 
 namespace Utility.Trees.Demo.Connections
 {
@@ -383,10 +384,10 @@ namespace Utility.Trees.Demo.Connections
             {
                 //if (viewModel.Tree is INotifyCollectionChanged oTree)
                 //{
-                    return viewModel.Tree.MatchDescendant(new((a) => (a.Data as IName).Name == connectionViewModel.ViewModelName))
+                    return viewModel.Tree.Descendant(new((a) => (a.tree.Data as IName).Name == connectionViewModel.ViewModelName))
                         .Subscribe(a =>
                         {
-                            MatchTree(a).Subscribe(observer);
+                            MatchTree(a.NewItem).Subscribe(observer);
                         });
                 //}
                 //else

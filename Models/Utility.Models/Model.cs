@@ -4,12 +4,12 @@ using System.Reactive.Linq;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.Trees.Abstractions;
-using Utility.Extensions;
 using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
 using Splat;
 using Utility.Interfaces.Exs;
 using Utility.Nodes.Filters;
+using Utility.Trees.Extensions.Async;
 
 namespace Utility.Models
 {
@@ -90,7 +90,7 @@ namespace Utility.Models
                         Addition(value, a);
                     });
 
-                node.DescendantsAsync()
+                node.Descendants()
                     .Subscribe(a =>
                     {
                         if (a.Type == Changes.Type.Add)

@@ -1,12 +1,26 @@
-﻿using Utility.Helpers.Generic;
+﻿using System.Collections;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
+using Utility.Helpers.Generic;
 using Utility.Helpers.NonGeneric;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
 
-namespace Utility.Extensions
+namespace Utility.Trees.Extensions
 {
-    public static class TreeExtensions_Generic
+    public static class Generic
     {
+
+        public static void Foreach<T>(Func<T, IReadOnlyTree, int, T> action, IEnumerable collection, T parent, int level = 0)
+        {
+            foreach (IReadOnlyTree item in collection)
+            {
+                var newTtem = action(parent, item, level);
+                Foreach(action, item.Items, newTtem, ++level);
+            }
+        }
+
+
         public static IEnumerable<ITree<T>> ToTree<T, K>(this IEnumerable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, K? root_id = default)
         {
             return ToTree(collection, id_selector, parent_id_selector, a => (ITree<T>)new Tree<T>(a), root_id);
@@ -29,7 +43,7 @@ namespace Utility.Extensions
                 Visit(item, children, action);
         }
 
-        public static bool IsRoot(this IReadOnlyTree tree)  => tree.Parent == null;
+        public static bool IsRoot(this IReadOnlyTree tree) => tree.Parent == null;
 
         public static bool IsLeaf<T>(this ITree<T> tree) => tree.Count() == 0;
 
