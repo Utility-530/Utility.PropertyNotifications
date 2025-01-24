@@ -27,7 +27,7 @@
                 <ResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/ButtonComboBoxTreeViewStyle.xaml"/>-->
             </ResourceDictionary.MergedDictionaries>
 
- 
+
             <filters:StyleSelector x:Key="StyleSelector" DefaultStyle="ViewContentStyle"></filters:StyleSelector>
 
 
@@ -42,27 +42,54 @@
                             </local:ComboContainerStyleSelector>
                         </ItemsControl.ItemContainerStyleSelector>
                     </ct:ComboTreeView>
-                    
-                    <ct:CustomTreeView DockPanel.Dock="Left" ItemsSource="{Binding Clones}" ItemContainerStyle="{StaticResource DefaultContentStyle}">
+
+                    <Grid DockPanel.Dock="Left">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="3*"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <ct:CustomTreeView ItemsSource="{Binding Clones}" ItemContainerStyle="{StaticResource DefaultContentStyle}">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="SelectedItemChanged">
                                     <beh:SetSelectedItemAction PropertyName="Content" TargetObject="{Binding ElementName=TreeContent}" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </ct:CustomTreeView>
+                        <ListView Grid.Row="1" ItemsSource="{Binding Dirty}">
+                            <ListView.View>
+                                <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Employee Information">
+
+                                    <GridViewColumn DisplayMemberBinding="{Binding Path=Key}" Header="Key" Width="100"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Path=Value.PropertyName}" Header="Name" Width="100"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Path=Value.NewValue}" Header="New Value" Width="100"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Path=Value.PreviousValue}" Width="100">
+                                        <GridViewColumnHeader>Old Value
+                                            <!--<GridViewColumnHeader.ContextMenu>
+                                                <ContextMenu Name="LastNameCM">
+                                                    <MenuItem Header="Ascending" />
+                                                    <MenuItem Header="Descending" />
+                                                </ContextMenu>
+                                            </GridViewColumnHeader.ContextMenu>-->
+                                        </GridViewColumnHeader>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+      
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"></ColumnDefinition>
                             <ColumnDefinition Width="5"></ColumnDefinition>
-                            <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <Grid>
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="0.07*"/>
+                                <RowDefinition Height="5"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="5"/>
                                 <RowDefinition Height="0.2*"/>
-                                <RowDefinition Height="5"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="5"/>
-                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
                             <ct:CustomTreeView Grid.Row="0" ItemsSource="{Binding Controls}" ItemContainerStyle="{StaticResource DefaultStyle}"/>
@@ -76,7 +103,7 @@
                                     <ColumnDefinition Width="1*"></ColumnDefinition>
                                     <ColumnDefinition Width="5"></ColumnDefinition>
                                     <ColumnDefinition Width="1*"></ColumnDefinition>
-                                    <ColumnDefinition Width="0.5*"></ColumnDefinition>
+                                    <!--<ColumnDefinition Width="0.5*"></ColumnDefinition>-->
                                 </Grid.ColumnDefinitions>
 
                                 <ct:CustomTreeView Grid.Column="0" ItemsSource="{Binding Content}" ItemContainerStyleSelector="{StaticResource StyleSelector }" >
@@ -116,8 +143,8 @@
                                 </TreeView>
 
                                 <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch" />
-                                
-                                
+
+
                                 <TreeView Grid.Column="4" ItemsSource="{Binding Html_Render}">
                                     <ItemsControl.ItemContainerStyle>
                                         <Style TargetType="{x:Type TreeViewItem}">
@@ -131,30 +158,7 @@
                                     </ItemsControl.ItemTemplate>
                                 </TreeView>
 
-                                <ListView Grid.Column="5" ItemsSource="{Binding Dirty}">
-                                    <ListView.View>
 
-                                        <GridView AllowsColumnReorder="true" ColumnHeaderToolTip="Employee Information">
-
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Key}" Header="Key" Width="100"/>
-
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Value.PropertyName}" Header="Old Value" Width="100"/>
-                                            
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Value.NewValue}" Header="Old Value" Width="100"/>
-                                            
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Value.PreviousValue}" Width="100">
-                                                <GridViewColumnHeader>New Value
-                                                    <GridViewColumnHeader.ContextMenu>
-                                                        <ContextMenu Name="LastNameCM">
-                                                            <MenuItem Header="Ascending" />
-                                                            <MenuItem Header="Descending" />
-                                                        </ContextMenu>
-                                                    </GridViewColumnHeader.ContextMenu>
-                                                </GridViewColumnHeader>
-                                            </GridViewColumn>                
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
                             </Grid>
 
                             <GridSplitter Grid.Row="3" Width="5" VerticalAlignment="Stretch" />
@@ -178,7 +182,39 @@
 
                         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
 
-                        <ContentControl x:Name="TreeContent" Grid.Column="2">
+                        <ContentControl x:Name="TreeContent" Grid.Column="2" >
+                            <ContentControl.Template>
+                                <ControlTemplate TargetType="{x:Type ContentControl}">
+                                    <DockPanel>
+                                        <ToggleButton x:Name="hider" DockPanel.Dock="Top">hide</ToggleButton>
+                                        <Border x:Name="presenter" Width="400">
+                                            <ContentPresenter />
+                                        </Border>
+                                    </DockPanel>
+                                    <ControlTemplate.Triggers>
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=hider}" Value="True">
+                                            <Setter TargetName="presenter" Property="Visibility" Value="Collapsed" />
+                                            <Setter TargetName="hider" Property="Content" Value="show" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsChecked, ElementName=hider}" Value="False">
+                                            <Setter TargetName="presenter" Property="Visibility" Value="Visible" />
+                                            <Setter TargetName="hider" Property="Content" Value="hide" />
+                                        </DataTrigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </ContentControl.Template>
+                            <ContentControl.Style>
+                                <Style TargetType="{x:Type ContentControl}" BasedOn="{StaticResource {x:Type ContentControl}}">
+                                    <Style.Triggers>
+                                        <Trigger Property="Content" 
+                                                 Value="{x:Null}">
+                                            <Setter 
+                                                Property="Visibility"
+                                                Value="Collapsed" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ContentControl.Style>
                             <ContentControl.Resources>
                                 <ResourceDictionary>
                                     <ResourceDictionary.MergedDictionaries>
@@ -198,7 +234,7 @@
                         </ContentControl>
                     </Grid>
                 </DockPanel>
-             
+
             </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
