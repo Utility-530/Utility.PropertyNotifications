@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using Utility.WPF.Controls.Trees;
+using Utility.WPF.Demo.Data.Model;
 
 namespace Utility.WPF.Demo.Trees
 {
@@ -16,6 +17,7 @@ namespace Utility.WPF.Demo.Trees
             var parent = new ComboTreeViewItem() {
                 Width = 200,
                 Height = 30, 
+                ItemTemplate = this.Resources[new DataTemplateKey(typeof(Character))] as DataTemplate,
                 //Style= this.Resources["Demo"] as Style, 
                 EditTemplate = this.Resources["EditTemplate"] as DataTemplate,
                 ItemsSource = this.Resources["Characters"] as IEnumerable,
@@ -39,7 +41,7 @@ namespace Utility.WPF.Demo.Trees
             MessageBox.Show($"{e.IsAccepted}");
         }
 
-        private static void Add(ComboTreeViewItem parent, TreeViewItem child)
+        private static void Add(CustomTreeViewItem parent, TreeViewItem child)
         {
             child.Selected += (s, e) => { if (parent is ISelection selection) selection.Select(child.Header); };// selection.Selection = child.Header; };
             parent.Items.Add(child);

@@ -127,6 +127,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Trees.Extensions", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Entities.Comms", "..\Infrastructure\Utility.Entities.Comms\Utility.Entities.Comms.csproj", "{5D1FA88E-D5D2-4A97-8EBD-4EAA16651582}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Packages", "..\Packages\Utility.Packages\Utility.Packages.csproj", "{32372B28-939B-4A50-BA62-00F6B34BF922}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -373,6 +375,10 @@ Global
 		{5D1FA88E-D5D2-4A97-8EBD-4EAA16651582}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D1FA88E-D5D2-4A97-8EBD-4EAA16651582}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D1FA88E-D5D2-4A97-8EBD-4EAA16651582}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32372B28-939B-4A50-BA62-00F6B34BF922}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32372B28-939B-4A50-BA62-00F6B34BF922}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32372B28-939B-4A50-BA62-00F6B34BF922}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32372B28-939B-4A50-BA62-00F6B34BF922}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -434,6 +440,7 @@ Global
 		{5113CAA4-4F85-4777-8E05-CE3E89AC8087} = {0E77E344-1EED-4EDC-BDF9-744CF0425AAF}
 		{EFAFDC25-1F3E-43D0-A0C9-41B7C9AA317D} = {72C8D224-6E72-442B-A16A-29A6E7EA2051}
 		{5D1FA88E-D5D2-4A97-8EBD-4EAA16651582} = {72C8D224-6E72-442B-A16A-29A6E7EA2051}
+		{32372B28-939B-4A50-BA62-00F6B34BF922} = {72C8D224-6E72-442B-A16A-29A6E7EA2051}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {00EBD15C-E22A-4F19-88DE-BC9861507581}

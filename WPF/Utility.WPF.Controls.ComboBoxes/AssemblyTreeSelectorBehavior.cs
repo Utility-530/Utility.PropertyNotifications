@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.Extensions;
+using Utility.Trees.Extensions;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
 using Utility.WPF.ResourceDictionarys;
@@ -136,7 +136,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                     return;
             }
 
-            var descendants = tree.MatchDescendants(a => a is IReadOnlyTree { Data: DictionaryEntry { Key: { } key } }).ToArray();
+            var descendants = tree.Descendants(a => a.tree is IReadOnlyTree { Data: DictionaryEntry { Key: { } key } }).ToArray();
             if (descendants.SingleOrDefault(a => a
                 is { Data: DictionaryEntry { Key: { } key } }
                 && NewMethod(x.Element, key)
@@ -198,7 +198,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                     return;
             }
 
-            var descendants = tree.MatchDescendants(a => a is IReadOnlyTree { Data: DictionaryEntry { Key: { } key } }).ToArray();
+            var descendants = tree.Descendants(a => a.tree is IReadOnlyTree { Data: DictionaryEntry { Key: { } key } }).ToArray();
             if (descendants.SingleOrDefault(a => a
                 is { Data: DictionaryEntry { Key: { } key } }
                 && NewMethod(_key, key)) is { } innerTree)

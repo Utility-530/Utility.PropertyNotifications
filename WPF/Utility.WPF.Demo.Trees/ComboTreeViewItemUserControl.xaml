@@ -100,38 +100,6 @@
                 </Grid>
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type data:Character}">
-                <Grid Background="LightGray">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25"/>
-                        <RowDefinition Height="25"/>
-                    </Grid.RowDefinitions>
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="50"/>
-                        <ColumnDefinition Width="20"/>
-                        <ColumnDefinition Width="70"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Image Source="{Binding Image}" Grid.RowSpan="2"/>
-
-                    <Label Grid.Column="2" Content="First Name:"/>
-                    <TextBox Name="tbxFirstName" Grid.Column="3" Width="50"
-                    Text="{Binding First}"
-                    HorizontalAlignment="Left" VerticalAlignment="Center"/>
-
-                    <Label Grid.Row="1" Grid.Column="2" Content="Last Name:"/>
-                    <TextBox Name="tbxLastName" Width="135"
-                    Grid.Row="1" Grid.Column="3"
-                    Text="{Binding Last}"
-                    HorizontalAlignment="Left" VerticalAlignment="Center"/>
-
-                    <Border Grid.RowSpan="2" Grid.ColumnSpan="4"
-                BorderBrush="Black" BorderThickness="1"/>
-                </Grid>
-            </DataTemplate>
-
             <DataTemplate x:Key="ItemTemplate">
                 <Border Width="100" Height="20" Background="Snow" Margin="4">
                     <TextBlock Text="{Binding}"></TextBlock>
@@ -184,7 +152,7 @@
 
 
 
-            <Style x:Key="Demo" TargetType="{x:Type trees:ComboTreeViewItem}" >
+            <Style x:Key="Demo" TargetType="{x:Type trees:CustomTreeViewItem}" >
                 <Setter Property="SnapsToDevicePixels"
           Value="true" />
                 <Setter Property="OverridesDefaultStyle"
@@ -202,7 +170,7 @@
 
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type trees:ComboTreeViewItem}">
+                        <ControlTemplate TargetType="{x:Type trees:CustomTreeViewItem}">
                             <Grid>
                                 <!--<VisualStateManager.VisualStateGroups>
                         <VisualStateGroup x:Name="CommonStates">

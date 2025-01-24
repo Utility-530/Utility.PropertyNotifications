@@ -227,6 +227,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.Breadc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.SplitButtons", "Utility.WPF.Controls.SplitButton\Utility.WPF.Controls.SplitButtons.csproj", "{C5C200CA-D64F-4810-9D9D-C820CF6B77F2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Trees.Extensions", "..\Trees\Utility.Trees.Extensions\Utility.Trees.Extensions.csproj", "{9130BD49-26DB-445D-995E-D2D14C2C174F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Models.Trees", "..\Models\Utility.Models.Trees\Utility.Models.Trees.csproj", "{15185458-D1F2-414A-9092-65AA22EE3EDE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -661,6 +665,14 @@ Global
 		{C5C200CA-D64F-4810-9D9D-C820CF6B77F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5C200CA-D64F-4810-9D9D-C820CF6B77F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5C200CA-D64F-4810-9D9D-C820CF6B77F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9130BD49-26DB-445D-995E-D2D14C2C174F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9130BD49-26DB-445D-995E-D2D14C2C174F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9130BD49-26DB-445D-995E-D2D14C2C174F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9130BD49-26DB-445D-995E-D2D14C2C174F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15185458-D1F2-414A-9092-65AA22EE3EDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15185458-D1F2-414A-9092-65AA22EE3EDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15185458-D1F2-414A-9092-65AA22EE3EDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15185458-D1F2-414A-9092-65AA22EE3EDE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -774,6 +786,8 @@ Global
 		{F7F5B759-206A-4C64-9300-BE0447E1075F} = {2ED92AB3-1BF8-4B9F-85BF-2739EDF1915C}
 		{3C1D7CF5-D60B-406F-B832-339DD06163E0} = {2ED92AB3-1BF8-4B9F-85BF-2739EDF1915C}
 		{C5C200CA-D64F-4810-9D9D-C820CF6B77F2} = {2ED92AB3-1BF8-4B9F-85BF-2739EDF1915C}
+		{9130BD49-26DB-445D-995E-D2D14C2C174F} = {CF03926E-9E72-4A61-B447-2EF7E3C17461}
+		{15185458-D1F2-414A-9092-65AA22EE3EDE} = {CF03926E-9E72-4A61-B447-2EF7E3C17461}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D60CFCE-498F-4A6D-9B9B-5546561C117E}

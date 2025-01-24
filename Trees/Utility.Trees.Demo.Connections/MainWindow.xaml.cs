@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using Utility.Extensions;
+using Utility.Trees.Extensions.Async;
 using Utility.Pipes;
 using Utility.Trees.Abstractions;
 
@@ -62,13 +62,13 @@ namespace Utility.Trees.Demo.Connections
                     foreach (var connection in _viewModel.Connections.Where(a => a.ServiceName == service.Name && a.Movement == Movement.ToViewModelFromService))
                     {
                         var viewModelName = connection.ViewModelName;
-                        tree.MatchDescendant(a => (a.Data as ViewModel).Name == viewModelName)
+                        tree.Descendant(a => (a.tree.Data as ViewModel).Name == viewModelName)
                         .Subscribe(viewModel =>
                         {
                             //(viewModel.Data as ViewModel).Value = a;
                             //(viewModel.Data as ViewModel).RaisePropertyChanged(nameof(ViewModel.Value));
 
-                            Pipe.Instance.Queue(new TreeQueueItem(viewModel, a));
+                            Pipe.Instance.Queue(new TreeQueueItem(viewModel.NewItem, a));
                         });
                     }
                 });
