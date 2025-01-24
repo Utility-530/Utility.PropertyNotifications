@@ -31,7 +31,6 @@
         <Setter Property="IsValid" Value="{Binding Path=IsValid, Mode=TwoWay}" />
         <Setter Property="IsEditable" Value="{Binding Path=IsEditable, Mode=TwoWay}" />
         <!--<Setter Property="ItemContainerStyleSelector" Value="{StaticResource ItemContainerStyleSelector}"></Setter>-->
-        <Setter Property="Header" Value="{Binding Path=Data}" />
         <Setter Property="AddCommand" Value="{Binding Path=AddCommand}" />
         <Setter Property="RemoveCommand" Value="{Binding Path=RemoveCommand}" />
         <!--<Setter Property="EditCommand" Value="{Binding Path=EditCommand}" />-->
@@ -342,8 +341,7 @@
 
 
 
-
-    <!--<Style  x:Key="{x:Type local:CustomTreeViewItem}" TargetType="{x:Type local:CustomTreeViewItem}"  BasedOn="{StaticResource CustomTreeViewItemStyle}"/>-->
+    <Style  x:Key="CustomTreeViewItem" TargetType="{x:Type local:CustomTreeViewItem}"  BasedOn="{StaticResource {x:Type local:CustomTreeViewItem}}"/>
 
 
 </ResourceDictionary>

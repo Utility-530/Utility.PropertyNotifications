@@ -8,13 +8,14 @@
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/BasicStyle.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <conv:InverseNullToBooleanConverter x:Key="InverseNullToBooleanConverter"/>
 
     
     <Style x:Key="DefaultStyle" TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource GenericTreeViewItem}">
-        <Setter Property="Header" Value="{Binding Path=.}"></Setter>
+        <!--<Setter Property="Header" Value="{Binding Path=Data}"></Setter>-->
         <Style.Triggers>
             <DataTrigger Binding="{Binding Removed, Converter={StaticResource InverseNullToBooleanConverter}}" Value="True" >
                 <Setter Property="Visibility" Value="Collapsed"></Setter>
@@ -77,10 +78,10 @@
     </Style>
 
 
-    <Style TargetType="{x:Type TreeViewItem}" x:Key="LineStyle" BasedOn="{StaticResource DefaultStyle}">
+    <Style TargetType="{x:Type trees:CustomTreeViewItem}" x:Key="LineStyle" BasedOn="{StaticResource DefaultStyle}">
         <Setter Property="Template" >
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                <ControlTemplate TargetType="{x:Type trees:CustomTreeViewItem}">
                     <Border x:Name="Bd"
  
                   Background="{TemplateBinding Background}"
@@ -126,7 +127,7 @@
     </Style>
 
 
-    <Style x:Key="ComboStyle" TargetType="{x:Type  trees:ComboTreeViewItem}" BasedOn="{StaticResource {x:Type trees:ComboTreeViewItem}}">    
+    <Style x:Key="ComboStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource ComboTreeViewItem}">    
     </Style>
 
 
