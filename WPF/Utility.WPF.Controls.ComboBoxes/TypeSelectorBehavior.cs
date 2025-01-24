@@ -9,9 +9,11 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Utility.Trees.Extensions;
 using Utility.Extensions;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
@@ -23,9 +25,10 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         private static void TypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is TypeSelectorBehavior { AssociatedObject.ItemsSource: IReadOnlyTree tree } typeSelector && e.NewValue is Type type)
+            if (d is TypeSelectorBehavior { AssociatedObject.ItemsSource: IReadOnlyTree tree } typeSelector )
             {
-                typeSelector.ChangeType(tree, type);
+                if (e.NewValue is Type type)
+                    typeSelector.ChangeType(tree, type);
             }
         }
 
@@ -47,10 +50,15 @@ namespace Utility.WPF.Controls.ComboBoxes
             this.AssociatedObject.WhenAnyValue(a => a.SelectedNode)
                 .OfType<IReadOnlyTree>()
                 .Select(a => a.Data)
-                .OfType<Type>()
                 .Subscribe(a =>
                 {
-                    Type = a;
+                    if (a is Type type)
+                        Type = type;
+                    else if (a is IType { Type: { } _type })
+                    {
+                        Type = _type;
+                    }
+
                 });
 
 
@@ -131,7 +139,7 @@ namespace Utility.WPF.Controls.ComboBoxes
             {
                 if (item is IReadOnlyTree { Data: var data } tree)
                 {
-                    if (data is Type type)
+                    if (data is Type || data is IType || data is Assembly || data is IGetAssembly)
                         return TemplateGenerator.CreateDataTemplate(() =>
                         {
 
@@ -142,6 +150,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                             textBlock.SetBinding(TextBlock.DataContextProperty, binding2);
                             return textBlock;
                         });
+
                     return TemplateGenerator.CreateDataTemplate(() => new Ellipse { Fill = Brushes.Black, Height = 2, Width = 2, VerticalAlignment = VerticalAlignment.Bottom, ToolTip = new ContentControl { Content = data }, Margin = new Thickness(4, 0, 4, 0) });
 
                 }

@@ -29,9 +29,9 @@ namespace Utility.Trees.Demo.Filters
             {
                 new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionDescriptor != null))
                 {
-                      new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item => (item.Data as ICollectionDescriptor).ElementType == typeof(Table)),
-                      instance =>
-                      {
+                    new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item => (item.Data as ICollectionDescriptor).ElementType == typeof(Table)),
+                    instance =>
+                    {
 
                         var guid = (((ITree)instance).Data as IDescriptor).Guid;
                         var item = new ComboTreeViewItem
@@ -68,7 +68,7 @@ namespace Utility.Trees.Demo.Filters
                             }
                         }
                         return item;
-                        })
+                    })
                 },
                 new TreeViewItemDecisionTree(new Decision<IReadOnlyTree>(item =>(item.Data as IReferenceDescriptor)!=null))
                 {

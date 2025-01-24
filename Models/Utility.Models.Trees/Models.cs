@@ -13,7 +13,7 @@ using System.Windows.Input;
 using System.Xml.Linq;
 using Utility.Changes;
 using Utility.Enums;
-using Utility.Extensions;
+using Utility.Trees.Extensions;
 using Utility.Helpers;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
@@ -40,10 +40,9 @@ namespace Utility.Models.Trees
 
     public readonly record struct ValueChanged(PropertyInfo PropertyInfo, object Value);
 
-    public class TypeModel : Model, IBreadCrumb
+    public class TypeModel : Model, IBreadCrumb, IType
     {
         public Type Type { get; set; }
-
 
         public override IEnumerable<Model> CreateChildren()
         {
@@ -212,7 +211,7 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class AssemblyModel : Model, IBreadCrumb
+    public class AssemblyModel : Model, IBreadCrumb, IGetAssembly
     {
         //public AssemblyModel(Assembly assembly):this(assembly.GetName().Name)
         //{
@@ -967,11 +966,11 @@ namespace Utility.Models.Trees
 
         public override void Addition(IReadOnlyTree value, IReadOnlyTree a)
         {
-            switch (a.Data.ToString())
+            switch (a.Data)
             {
-                case _string: Alias = a.Data as StringModel; break;
+                case StringModel stringModel: Alias = stringModel; break;
                 //case _guid: Guid = a.Data as GuidModel; break;
-                case _filePath: FilePath = a.Data as FileModel; break;
+                case FileModel fileModel: FilePath = fileModel; break;
                 //case converter: Converter = a.Data as ConverterModel; break;
                 default: throw new ArgumentOutOfRangeException("ds 33` 33kfl.. ");
             }
