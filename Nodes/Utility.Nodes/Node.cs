@@ -17,7 +17,7 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
-    public class Node : ViewModelTree, INode, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible
+    public class Node : ViewModelTree, INode, IIsEditable, IIsExpanded, IIsPersistable
     {
         object data;
 

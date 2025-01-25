@@ -21,6 +21,7 @@ using Utility.Interfaces;
 using Utility.Helpers;
 using NetFabric.Hyperlinq;
 using Utility.Helpers.Generic;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Nodes.Filters
 {
@@ -35,6 +36,9 @@ namespace Utility.Nodes.Filters
         private readonly ObservableCollection<KeyValuePair<string, PropertyChange>> dirtyNodes = [];
 
         ITreeRepository repository = Locator.Current.GetService<ITreeRepository>();
+        Lazy<IFilter> filter = new(()=> Locator.Current.GetService<IFilter>());
+
+
         private Lazy<Dictionary<string, Action<object, object>>> setdictionary = new(() => typeof(Node)
                                                     .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                                                     .ToDictionary(a => a.Name, a => new Action<object, object>((instance, value) => a.SetValue(instance, value))));
@@ -248,6 +252,13 @@ namespace Utility.Nodes.Filters
             if (this.Nodes.Any(a => a.Key == node.Key) == false)
             {
                 this.nodes.Add(node);
+                Task.Run(() =>
+                {
+                    if (filter.Value.Filter(node) == false)
+                    {
+                        node.IsVisible = false;
+                    }
+                });
                 node.PropertyChanged += Node_PropertyChanged;
                 node.AndAdditions<INode>().Subscribe(Add);
 

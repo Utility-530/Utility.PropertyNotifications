@@ -1,7 +1,9 @@
-﻿namespace Utility.Trees.WPF.Abstractions
+﻿using Utility.Interfaces.NonGeneric;
+
+namespace Utility.Trees.WPF.Abstractions
 {
-    public interface ITreeViewFilter
+    public interface ITreeViewFilter: IFilter
     {
-        public bool Convert(object item);
+        //public bool Filter(object item);
     }
 }

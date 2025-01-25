@@ -84,7 +84,9 @@ namespace Utility.Trees.Demo.Filters
                             new BooleanDecisionTree(  new Decision<string>(item => item == nameof(ObservableCollection<object>.Move))) { },
                             new BooleanDecisionTree(   new Decision<string>(item => item == nameof(IList.Remove)),  a=> false) { },
                             new BooleanDecisionTree(  new Decision<string>(item => item == nameof(IList.Insert)),  a=> false) { },
-                            new BooleanDecisionTree(  new Decision<string>(item => item == nameof(IList.Add)), a=> false)
+                            new BooleanDecisionTree(  new Decision<string>(item => item == nameof(IList.Add)), a=> false),
+                            new BooleanDecisionTree(  new Decision<string>(item => item == nameof(IList.Count)), a=> false),
+                            new BooleanDecisionTree(  new Decision<string>(item => item == nameof(List<object>.Capacity)), a=> false)
                         }
 
                         }
@@ -92,8 +94,9 @@ namespace Utility.Trees.Demo.Filters
                 };
         }
 
-        public bool Convert(object item)
+        public bool Filter(object item)
         {
+
             Predicate.Reset();
             Predicate.Input = item;
             Predicate.Evaluate();

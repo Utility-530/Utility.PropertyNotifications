@@ -40,7 +40,7 @@ namespace Views.Trees
             (itemCollection, node) => itemCollection.SourceCollection.RemoveAt(itemCollection.IndexOf(a=> (a as TreeViewItem)?.Header, node)),
             a => a.Clear(),
             rootViewModel,
-            filter.Convert);
+            filter.Filter);
         }
 
         private void Itemcollection_CurrentChanged(object? sender, EventArgs e)
