@@ -19,36 +19,40 @@ namespace Utility.Nodes
         private bool propertyflag;
         private bool childrenflag;
         private bool flag;
-
-        //public DirectoryNode(string path) : this()
-        //{
-        //    lazyContent = new Lazy<FileSystemInfo>(() => new(path));
-        //    this.path = path;
-        //}
-
-        public DirectoryNode(DirectoryInfo info) : this()
-        {
-            lazyContent = new Lazy<FileSystemInfo>(() => info);
-            path = info.Name;
-        }
-            
-        public DirectoryNode(FileInfo info) : this()
-        {
-            lazyContent = new Lazy<FileSystemInfo>(() => info);
-            path = info.Name;
-        }
-
         private Subject subject = new();
 
-        private DirectoryNode()
+        public DirectoryNode(DirectoryInfo info) : this((FileSystemInfo)info)
         {
+        }
+
+        public DirectoryNode(FileInfo info) : this((FileSystemInfo)info)
+        {
+        }
+
+
+
+        private DirectoryNode(FileSystemInfo info) : base(false)
+        {
+            lazyContent = new Lazy<FileSystemInfo>(() => info);
+            RaisePropertyChanged(nameof(Data));
+            path = info.Name;
             subject.Subscribe(this);
         }
 
         public override string Key => lazyContent.Value.FullName;
 
 
-        public override FileSystemInfo Data => lazyContent.Value;
+        public override FileSystemInfo Data
+        {
+            get
+            {
+                if (lazyContent == null)
+                {
+                    return null;
+                }
+                return lazyContent.Value;
+            }
+        }
 
         public override async Task<bool> HasMoreChildren()
         {
@@ -57,8 +61,6 @@ namespace Utility.Nodes
 
         public override Task<ITree> ToTree(object value)
         {
-            //if (value is string str)
-            //    return Task.FromResult<IReadOnlyTree>(new DirectoryNode(new str) { Parent = this });
             if (value is DirectoryInfo info)
                 return Task.FromResult<ITree>(new DirectoryNode(info) { Parent = this });
             else if (value is FileInfo _info)
@@ -99,20 +101,20 @@ namespace Utility.Nodes
                 return Task.FromResult(false);
             //Task.Run(() =>
             //{
-                try
+            try
+            {
+                foreach (var directoryInfo in Directory.EnumerateDirectories(Data.FullName).Select(item => new DirectoryInfo(item)))
                 {
-                    foreach (var directoryInfo in Directory.EnumerateDirectories(Data.FullName).Select(item => new DirectoryInfo(item)))
-                    {
-                        subject.OnNext(directoryInfo);
-                    }
+                    subject.OnNext(directoryInfo);
                 }
-                catch (UnauthorizedAccessException ex)
-                {
-                    return Task.FromResult(false);
             }
-                catch (Exception ex)
-                {
-                }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Task.FromResult(false);
+            }
+            catch (Exception ex)
+            {
+            }
             //});
             return Task.FromResult(true);
         }
@@ -126,25 +128,25 @@ namespace Utility.Nodes
 
             //Task.Run(() =>
             //{
-                try
-                {
-                    foreach (var fileInfo in Directory.EnumerateFiles(Data.FullName).Select(item => new FileInfo(item)))
-                    {
-                        subject.OnNext(fileInfo);
-                    }
-                }
-                catch (UnauthorizedAccessException ex)
+            try
             {
-                    return Task.FromResult(false);
-            }
-                catch (Exception ex)
+                foreach (var fileInfo in Directory.EnumerateFiles(Data.FullName).Select(item => new FileInfo(item)))
                 {
+                    subject.OnNext(fileInfo);
                 }
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Task.FromResult(false);
+            }
+            catch (Exception ex)
+            {
+            }
             //});
             return Task.FromResult(true);
         }
 
-  
+
         public async void OnNext(object value)
         {
             if (value is DirectoryInfo directoryInfo)

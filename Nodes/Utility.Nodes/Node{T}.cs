@@ -1,5 +1,7 @@
-﻿using System.Reactive.Linq;
+﻿using System.Collections;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Reactive.Threading.Tasks;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
@@ -8,18 +10,21 @@ using Utility.Trees.Abstractions;
 namespace Utility.Nodes
 {
 
-    public abstract class Node<T> : Utility.Nodes.Node, IExpand
+    public abstract class Node<T> : ViewModelTree, IExpand
     {
         protected ReplaySubject<Changes.Change<T>> changes = new();
+        private bool isRefreshing;
+        bool flag;
 
         public Node(bool isExpanded = true)
         {
             this.IsExpanded = isExpanded;
 
             this.WithChangesTo(a => a.IsExpanded)
+                .CombineLatest(this.WithChangesTo(a => a.Data).Where(a => a != null))
                 .Subscribe(value =>
                 {
-                    if (value)
+                    if (value.First)
                     {
                         if (Data is IChildren children)
                             children.Children.Cast<Changes.Change<T>>().Subscribe(changes);
@@ -30,6 +35,41 @@ namespace Utility.Nodes
                     }
                 });
         }
+
+
+
+        public override IEnumerable Items
+        {
+            get
+            {
+                try
+                {
+                    if (!isRefreshing)
+                    {
+                        isRefreshing = true;
+                        _ = RefreshChildrenAsync()
+                            .ToObservable()
+                            .Subscribe(a =>
+                            {
+                                flag = a;
+                                isRefreshing = false;
+                            });
+                        flag = true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    isRefreshing = false;
+                    Error = ex;
+                }
+                finally
+                {
+                }
+                return m_items;
+            }
+        }
+
+
 
         public virtual async Task<bool> RefreshChildrenAsync()
         {
@@ -90,15 +130,18 @@ namespace Utility.Nodes
 
         public IObservable<object?> GetChildren()
         {
-            //if (Data is IChildren children)
-            //    children.Children.Cast<Changes.Change<T>>().Subscribe(changes);
             return changes;
         }
 
-
-        public override async Task<bool> HasMoreChildren()
+        public override Task<bool> HasMoreChildren()
         {
-            return /*data?.Type.IsValueOrString() == false && */await base.HasMoreChildren();
+            return Task.FromResult(Data != null && flag == false);
         }
+
+
+        public Exception Error { get; set; }
+
+
     }
 }
+
