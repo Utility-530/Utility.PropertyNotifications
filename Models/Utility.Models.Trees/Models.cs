@@ -203,7 +203,7 @@ namespace Utility.Models.Trees
 
         public override IEnumerable<Model> CreateChildren()
         {
-            foreach (var prop in typeof(INode).GetProperties().Where(a => types.Any(x => a.PropertyType.Equals(x))))
+            foreach (var prop in typeof(INode).PublicInstanceProperties().Where(a => types.Any(x => a.PropertyType.Equals(x))))
             {
                 var pnode = new PropertyModel { Name = prop.Name, PropertyInfo = prop };
                 yield return pnode;
@@ -239,7 +239,7 @@ namespace Utility.Models.Trees
             }
         }
 
-        public static AssemblyModel Create(Assembly assembly) => new AssemblyModel { Assembly = assembly, Name = assembly.GetName().Name };
+        public static AssemblyModel Create(Assembly assembly) => new () { Assembly = assembly, Name = assembly.GetName().Name };
     }
 
     /// <summary>
@@ -279,8 +279,10 @@ namespace Utility.Models.Trees
 
         public override IEnumerable<Model> CreateChildren()
         {
-            yield return (new GlobalAssembliesModel { Name = "ass_root" });
-           
+            if (PropertyInfo.PropertyType == typeof(object))
+            {
+                yield return (new GlobalAssembliesModel { Name = "ass_root" });
+            }           
         }
         //public override IObservable<Change<Model>> ChildrenAsync()
         //{
@@ -632,11 +634,6 @@ namespace Utility.Models.Trees
             node.IsPersistable = true;
             node.IsEditable = true;
             base.SetNode(node);
-        }
-
-        public override string ToString()
-        {
-            return value.ToString();
         }
 
         public IDisposable Subscribe(IObserver<Unit> observer)
@@ -1086,10 +1083,10 @@ namespace Utility.Models.Trees
 
         public override void Addition(IReadOnlyTree value, IReadOnlyTree a)
         {
-            switch (a.Data.ToString())
+            switch (a.Data)
             {
-                case element: Element = a.Data as NodePropertyRootsModel; break;
-                case filter: Filter = a.Data as AndOrModel; break;
+                case NodePropertyRootsModel: Element = a.Data as NodePropertyRootsModel; break;
+                case AndOrModel: Filter = a.Data as AndOrModel; break;
                 //case converter: Converter = a.Data as ConverterModel; break;
                 default: throw new ArgumentOutOfRangeException("ds 33` 33kfl.. ");
             }
