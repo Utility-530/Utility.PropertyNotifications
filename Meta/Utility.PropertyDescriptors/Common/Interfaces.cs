@@ -1,11 +1,8 @@
 ﻿namespace Utility.Descriptors
 {
-    public interface ICollectionItemDescriptor : IDescriptor, IItem
+    public interface ICollectionItemDescriptor : IDescriptor, IItem, IRemoved
     {
-        int Index { get; }
-
-        DateTime? Removed { get;  }
-  
+        int Index { get; }  
     }   
        
     public interface ICollectionItemReferenceDescriptor : IReferenceDescriptor, ICollectionItemDescriptor
@@ -18,7 +15,7 @@
     {
         IEnumerable Collection { get; }
 
-        public Type ElementType { get; }
+        Type ElementType { get; }
     }
 
     public interface ICollectionHeadersDescriptor : ICollectionItemDescriptor
