@@ -33,7 +33,7 @@ namespace Utility.Nodes.Demo.Filters
             Splat.Locator.CurrentMutable.RegisterLazySingleton<MainViewModel>(() => new MainViewModel());
 
 
-            var x = Utility.Trees.Demo.Filters.DataTemplateSelector.Instance;
+            var x = DataTemplateSelector.Instance;
 
             JsonConvert.DefaultSettings = NewMethod;
 
@@ -84,7 +84,12 @@ namespace Utility.Nodes.Demo.Filters
 
         void combine()
         {
-            string name = typeof(App).Assembly.GetManifestResourceNames().Where(a => a.Contains("master.css")).First();
+             string cssFile = "master.css";
+             //string cssFile = "pico.min.css";
+            // string cssFile = "entireframework.min.css";
+            //string cssFile = "pico.classless.blue.css";
+
+            string name = typeof(App).Assembly.GetManifestResourceNames().Where(a => a.Contains(cssFile)).First();
 
             using (var s = typeof(App).Assembly.GetManifestResourceStream(name))
             {

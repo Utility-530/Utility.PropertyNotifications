@@ -12,6 +12,7 @@ using Utility.PropertyNotifications;
 using Utility.Trees.Demo.Filters;
 using Utility.Descriptors;
 using Utility.Models.Trees;
+using Utility.Interfaces;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -78,7 +79,7 @@ namespace Utility.Nodes.Demo.Filters.Services
             {
                 Dictionary<IReadOnlyTree, IElement> dictionary = new();
 
-    
+
 
                 // Ensure we have a root element (usually the <html> element).
                 IElement body = document.Body;
@@ -98,13 +99,68 @@ namespace Utility.Nodes.Demo.Filters.Services
                 {
                     IElement newElement;
 
-                    newElement = document.CreateElement<IHtmlDivElement>(); // Create a new element
+                    if (n != node && dictionary.ContainsKey(n.Parent) == false)
+                    {
+                        return;
+                    }
+                    if (n is Utility.Interfaces.Exs.INode _node)
+                    {
+                        if (_node.IsVisible == false)
+                            return;
 
+                        if (_node.Removed != null)
+                            return;
+                    }
+
+
+                    if (n.Data is ICollectionDescriptor collectionDescriptor)
+                    {
+                        newElement = document.CreateElement<IHtmlTableElement>();
+
+                    }
+                    else if (n.Data is ICollectionHeadersDescriptor headersDescriptor)
+                    {
+                        newElement = document.CreateElement<IHtmlTableRowElement>();
+
+                    }
+                    else if (n.Data is IHeaderDescriptor headerDescriptor)
+                    {
+                        newElement = document.CreateElement<IHtmlTableHeaderCellElement>();
+                        newElement.TextContent = headerDescriptor.Name;
+
+                    }
+                    else if (n.Data is ICollectionItemDescriptor collectionItemDescriptor)
+                    {
+                        newElement = document.CreateElement<IHtmlTableRowElement>();
+
+                    }
+                    else if (n.Parent?.Data is ICollectionItemDescriptor)
+                    {
+                        newElement = document.CreateElement<IHtmlTableDataCellElement>();
+                    }
+                    else
+                    {
+                        newElement = document.CreateElement<IHtmlDivElement>(); // Create a new element
+                    }
+
+                    //else if(n.Data is ICollectionItemDescriptor {  ParentType } collectionItemDescriptor)
+                    //{
+                    //    newElement = document.CreateElement<IHtmlTableDataCellElement>();
+
+                    //}
                     if (n.Data is Utility.Interfaces.NonGeneric.IValue { Value: var value } descriptor)
                     {
                         var key = StyleSelector.Instance.SelectKey(n);
 
-                        if (descriptor is IReferenceDescriptor iRef)
+                        if (descriptor is ICollectionItemReferenceDescriptor)
+                        {
+
+                        }
+                        //else if (n.Parent?.Data is ICollectionItemReferenceDescriptor)
+                        //{
+
+                        //}
+                        else if (descriptor is IReferenceDescriptor iRef && n.Parent.Data is not ICollectionItemReferenceDescriptor)
                         {
                             var p = document.CreateElement<IHtmlParagraphElement>();
                             p.TextContent = iRef.Name;
@@ -112,14 +168,20 @@ namespace Utility.Nodes.Demo.Filters.Services
                         }
                         else
                         {
-                            var innerElement = create(value);        
+                            var innerElement = create(value);
                             newElement.AppendChild(innerElement);
                         }
                     }
+                    //else if(n.Data is IHeaderDescriptor header)
+                    //{
+                    //    var p = document.CreateElement<IHtmlParagraphElement>();
+                    //    newElement.AppendChild();
+                    //}
                     else
                     {
-                        
+
                     }
+
 
                     if (n.Parent == null)
                     {
@@ -153,10 +215,15 @@ namespace Utility.Nodes.Demo.Filters.Services
                         var p = document.CreateElement<IHtmlParagraphElement>();
                         p.TextContent = str;
                         return p;
+                    case bool b:
+                        var input = document.CreateElement<IHtmlInputElement>();
+                        input.IsChecked = b;
+                        input.Type = "submit";
+                        return input;
 
                 }
 
-                return document.CreateElement<IHtmlParagraphElement>(); 
+                return document.CreateElement<IHtmlParagraphElement>();
                 //throw new NotImplementedException("erew33111");
             }
         }

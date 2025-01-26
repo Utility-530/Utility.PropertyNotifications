@@ -254,7 +254,7 @@ namespace Utility.Nodes.Filters
                 this.nodes.Add(node);
                 Task.Run(() =>
                 {
-                    if (filter.Value.Filter(node) == false)
+                    if (filter.Value?.Filter(node) == false)
                     {
                         node.IsVisible = false;
                     }

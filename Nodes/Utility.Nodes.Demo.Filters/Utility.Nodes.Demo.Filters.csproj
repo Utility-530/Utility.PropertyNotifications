@@ -9,13 +9,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Data\entireframework.min.css" />
     <None Remove="Data\master.css" />
+    <None Remove="Data\pico.classless.blue.css" />
+    <None Remove="Data\pico.min.css" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Data\entireframework.min.css" />
     <EmbeddedResource Include="Data\master.css">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
+    <EmbeddedResource Include="Data\pico.classless.blue.css" />
+    <EmbeddedResource Include="Data\pico.min.css" />
   </ItemGroup>
 
   <ItemGroup>

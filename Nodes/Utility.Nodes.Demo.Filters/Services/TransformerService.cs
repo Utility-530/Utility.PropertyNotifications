@@ -45,7 +45,11 @@ namespace Utility.Nodes.Demo.Filters.Services
                     .Subscribe(a =>
                     {
                         var transformersModel = a.NewItem.Data as TransformersModel;
-
+                        if (transformersModel == null)
+                        {
+                            observer.OnNext(new TransformerException(null, $"{a.NewItem.Data.ToString()}, is not {(nameof(TransformersModel))}"));
+                            return;
+                        }
                         observer.OnNext(null);
                         transformersModel.Transformers.SelfAndAdditions().Subscribe(transformer =>
                         {

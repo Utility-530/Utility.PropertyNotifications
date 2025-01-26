@@ -26,7 +26,6 @@
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
 		<ProjectReference Include="..\Utility.Nodes.Reflections\Utility.Nodes.Reflections.csproj" />
 		<ProjectReference Include="..\Utility.Nodes\Utility.Nodes.csproj" />
-		<ProjectReference Include="..\Utility.WPF.Nodes\Utility.WPF.Trees.csproj" />
 	</ItemGroup>
 	
 	
