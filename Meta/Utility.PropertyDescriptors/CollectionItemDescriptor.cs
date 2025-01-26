@@ -4,6 +4,8 @@ namespace Utility.Descriptors;
 
 internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeadersDescriptor, IEquatable
 {
+    private DateTime? removed;
+
     public CollectionHeadersDescriptor(Type propertyType, Type componentType) : base(propertyType)
     {
         this.ParentType = componentType;
@@ -36,7 +38,7 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
 
     }
 
-    public DateTime? Removed => null;
+    public DateTime? Removed { get => removed; set => removed = value; }
 
     public object Item => null;
 
