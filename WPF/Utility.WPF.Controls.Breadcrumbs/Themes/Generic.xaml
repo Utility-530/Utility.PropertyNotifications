@@ -97,7 +97,7 @@
         </Setter>
     </Style>-->
 
-    <Style x:Key="BreadCrumbRootTree" TargetType="{x:Type TreeViewItem}" >
+    <Style x:Key="BreadCrumbRootTreeViewItem" TargetType="{x:Type TreeViewItem}" >
         <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
         <Setter Property="SnapsToDevicePixels"          Value="True" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"          Value="Auto" />
