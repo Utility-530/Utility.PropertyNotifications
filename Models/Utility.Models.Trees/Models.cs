@@ -56,7 +56,6 @@ namespace Utility.Models.Trees
         }
     }
 
-
     public interface IValue
     {
         object Value { get; set; }
@@ -284,39 +283,6 @@ namespace Utility.Models.Trees
                 yield return (new GlobalAssembliesModel { Name = "ass_root" });
             }           
         }
-        //public override IObservable<Change<Model>> ChildrenAsync()
-        //{
-        //    return Observable.Create<Change<Model>>(observer =>
-        //    {
-        //        return Node.SelfAndAncestorsAsync(a => a.Item1?.Data is BreadCrumbModel)
-        //                    .Subscribe(ancestor =>
-        //                    {
-        //                        if (ancestor.Data is IValue)
-        //                        {
-        //                            if (PropertyInfo.PropertyType.Equals(typeof(string)))
-        //                            {
-        //                                observer.OnNext(Change<Model>.Add(
-        //                                     new ValueModel { Name = PropertyInfo.Name, Value = string.Empty }));
-        //                            }
-        //                            else if (TypeConstants.ValueTypes.Contains(PropertyInfo.PropertyType))
-        //                            {
-        //                                observer.OnNext(Change<Model>.Add(
-        //                                    new ValueModel { Name = PropertyInfo.Name, Value = Activator.CreateInstance(PropertyInfo.PropertyType) }));
-        //                            }
-        //                        }
-
-        //                        if (PropertyInfo.PropertyType == typeof(object))
-        //                        {
-        //                            //observer.OnNext(
-        //                            //    new Node("ref_value", new ResolvableModel { Name = PropertyInfo.Name })
-        //                            //    { IsExpanded = true });
-
-        //                            observer.OnNext(
-        //                                Change<Model>.Add(new GlobalAssembliesModel { Name = "ass_root" }));
-        //                        }
-        //                    });
-        //    });
-        //}
     }
 
     public class ValueModel : Model, IBreadCrumb
@@ -422,24 +388,9 @@ namespace Utility.Models.Trees
         public override void SetNode(INode node)
         {
             node.IsPersistable = true;
-            //node.Items.CollectionChanged += Items_CollectionChanged;
             base.SetNode(node);
 
 
-            //void Items_CollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-            //{
-            //    if (node.Current == null && e.NewItems is IEnumerable newItems)
-            //    {
-            //        foreach (Node item in newItems)
-            //        //node.Current = item;
-            //        {
-            //            if (item.Name == "methods")
-            //            {
-
-            //            }
-            //        }
-            //    }
-            //}
         }
     }
 
@@ -1553,33 +1504,4 @@ namespace Utility.Models.Trees
             base.SetNode(node);
         }
     }
-
-    //public class ResolvableNode : Node
-    //{
-    //    public ResolvableNode(System.Guid guid, Assembly assembly) : base(new ResolvableModel { Name = "main" })
-    //    {
-
-    //        Key = new GuidKey(guid);
-    //        IsExpanded = true;
-
-    //        //this.Items.Add(new Node("root2", new AssemblyModel { Name = "root2", Assembly = assembly }) { Parent = this });
-
-
-    //        //var types = assembly.ExportedTypes;
-
-    //        //foreach (Type type in types)
-    //        //{
-    //        //    var node = new Node(type.Name, new TypeModel { Name = type.Name, Type = type }) { Parent = Root };
-    //        //    foreach (var prop in type.GetProperties())
-    //        //    {
-    //        //        var pnode = new Node(prop.Name, new PropertyModel { Name = prop.Name, PropertyInfo = prop }) { Parent = node };
-    //        //        node.Items.Add(pnode);
-    //        //        if (type.ContainsGenericParameters == false)
-    //        //            pnode.Items.Add(new Node(prop.Name + "value", new ValueModel { Value = type.IsValueType ? Activator.CreateInstance(type) : null }) { Parent = pnode });
-    //        //    }
-    //        //    Root.Items.Add(node);
-
-    //        //}
-    //    }
-    //}
 }
