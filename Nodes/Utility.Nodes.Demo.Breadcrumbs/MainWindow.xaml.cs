@@ -24,7 +24,7 @@ namespace Utility.Nodes.Breadcrumbs
 
 
             NodeSource.Instance
-                .Single(nameof(Factory.Assembly))
+                .Single(nameof(Factory.BreadcrumbRoot))
                 .Subscribe(node =>
                 {
                     this.DataContext = node;

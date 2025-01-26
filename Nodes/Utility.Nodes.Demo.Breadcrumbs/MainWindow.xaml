@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:inf="clr-namespace:Utility.Nodes.Filters;assembly=Utility.Nodes.Filters"
+        xmlns:inf="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
+        xmlns:model="clr-namespace:Utility.Models;assembly=Utility.Models"
+        xmlns:trees="clr-namespace:Utility.Models.Trees;assembly=Utility.Models.Trees"
         xmlns:bc="http://schemas.utility.com/Breadcrumbs"
         xmlns:local="clr-namespace:Utility.Nodes.Breadcrumbs"
         mc:Ignorable="d"
@@ -21,19 +23,19 @@
                 <ContentControl Content="{Binding Data}"/>
             </HierarchicalDataTemplate>
 
-            <DataTemplate DataType="{x:Type inf:Model}">
+            <DataTemplate DataType="{x:Type model:Model}">
                 <TextBlock Text="{Binding Name}">
                 </TextBlock>
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type inf:ValueModel}">
+            <DataTemplate DataType="{x:Type trees:ValueModel}">
                 <TextBox Text="{Binding Value}" Width="60" Height="25" Background="LightSalmon"/>
 
             </DataTemplate>
 
             <bc:ItemContainerStyleSelector x:Key="StyleSelector"
                                            SelectableStyle="{StaticResource SelectedTreeViewItem}"
-                                           BreadcrumbRootStyle="{StaticResource BreadCrumbRootTree}"
+                                           BreadcrumbRootStyle="{StaticResource BreadCrumbRootTreeViewItem}"
                                            BreadcrumbStyle="{StaticResource BreachCrumb}"
                                            >
                 
@@ -44,8 +46,7 @@
     </FrameworkElement.Resources>
 
     <UniformGrid Columns="1">
-        <bc:BreadCrumbTree 
-          
+        <bc:BreadCrumbTree           
             ItemsSource="{Binding Items}" ItemContainerStyleSelector="{StaticResource StyleSelector}"></bc:BreadCrumbTree>
 
         <!--<bc:HorizontalTreeView 

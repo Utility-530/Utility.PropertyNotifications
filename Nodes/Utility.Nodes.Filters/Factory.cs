@@ -218,15 +218,15 @@ namespace Utility.Nodes.Filters
             };
         }
 
-        public static IObservable<Node> Assembly()
+
+        public static IObservable<Node> BreadcrumbRoot()
         {
             return Observable.Create<Node>(observer =>
             {
                 return TreeRepository.Instance.InsertRoot(assemblyGuid, "too", typeof(object))
                 .Subscribe(a =>
                 {
-                    var assembly = typeof(IndexModel).Assembly;
-                    var res = new Node(AssemblyModel.Create(assembly)) { Key = new GuidKey(assemblyGuid) };
+                    var res = new Node(new NodePropertyRootModel() { Name = "too" }){ Key = new GuidKey(assemblyGuid), IsExpanded = true };
                     observer.OnNext(res);
                 });
             });

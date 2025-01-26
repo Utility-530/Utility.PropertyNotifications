@@ -1,6 +1,9 @@
-﻿using System.Configuration;
+﻿using Splat;
+using System.Configuration;
 using System.Data;
 using System.Windows;
+using Utility.Nodes.Filters;
+using Utility.Repos;
 
 namespace Utility.Nodes.Breadcrumbs
 {
@@ -12,7 +15,8 @@ namespace Utility.Nodes.Breadcrumbs
         protected override void OnStartup(StartupEventArgs e)
         {
             SQLitePCL.Batteries.Init();
-
+            Locator.CurrentMutable.Register<ITreeRepository>(() => TreeRepository.Instance);
+            Locator.CurrentMutable.Register<INodeSource>(() => NodeSource.Instance);
             base.OnStartup(e);
         }
     }
