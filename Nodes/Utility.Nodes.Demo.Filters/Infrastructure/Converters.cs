@@ -89,25 +89,4 @@ namespace Utility.Nodes.Demo.Filters
         }
     }
 
-    public class VisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is IRemoved removed && Locator.Current.GetService<MainViewModel>().IsRemovedShown == false && removed.Removed != default)
-            {
-                return Visibility.Collapsed;
-            }
-            if (value is IReadOnlyTree { Data: IDescriptor descriptor })
-            {
-
-                return Utility.Trees.Demo.Filters.TreeViewFilter.Instance.Convert(value) ? Visibility.Visible : Visibility.Collapsed;
-            }
-            return Visibility.Visible;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
 }

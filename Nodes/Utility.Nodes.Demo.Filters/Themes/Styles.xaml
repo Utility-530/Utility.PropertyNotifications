@@ -21,7 +21,6 @@
     <conv:TypeNameConverter x:Key="TypeNameConverter"/>
     <local:ChildrenSelector x:Key="ChildrenSelector"/>
     <local:ChildrenSelectorConverter x:Key="ChildrenSelectorConverter"/>
-    <local:VisibilityConverter x:Key="VisibilityConverter"/>
     <conv:ObjectDumperConverter x:Key="ObjectDumperConverter"/>
     <conv:InverseNullToBooleanConverter x:Key="InverseNullToBooleanConverter"/>
     <icons:PackIconIonicons x:Key="Icon" x:Shared="false" Kind="AddMD" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"/>
@@ -149,7 +148,7 @@
         <Setter Property="IsEditable" Value="False"></Setter>
         <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
         <Setter Property="Header" Value="{Binding Path=.}" />
-          <Style.Triggers>
+        <Style.Triggers>
             <DataTrigger Binding="{Binding Removed, Converter={StaticResource InverseNullToBooleanConverter}}" Value="True" >
                 <Setter Property="Visibility" Value="Collapsed"></Setter>
             </DataTrigger>
