@@ -1,5 +1,7 @@
-﻿using System;
+﻿using DynamicData.Binding;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Utility.Changes;
@@ -12,36 +14,54 @@ namespace Utility.Nodes.Common
         {
             return Observable.Create<Change>(observer =>
             {
-                List<object> list = new();
-                CompositeDisposable c = new();
+                ObservableCollection<object> collection = new();
+                CompositeDisposable composite = new();
+                IDisposable? dis = null;
+
                 observable.Subscribe(a =>
                 {
                     if (a is Change change)
                     {
                         if (change.Type == Changes.Type.Add)
                         {
-                            list.Add(change.Value);
+                            collection.Add(change.Value);
                         }
                         else if (change.Type == Changes.Type.Remove)
                         {
-                            if (list.Contains(change.Value))
-                                list.Remove(change.Value);
+                            if (collection.Contains(change.Value))
+                                collection.Remove(change.Value);
                         }
                     }
                     else
-                        list.Add(a);
+                        collection.Add(a);
 
-                }).DisposeWith(c);
+                }).DisposeWith(composite);
 
-                filter.Subscribe(a =>
+                filter
+                .Subscribe(_filter =>
                 {
-                    foreach (var x in list)
+                    foreach (var x in collection)
                     {
-                        observer.OnNext(new Change(x, null, a ? Changes.Type.Add : Changes.Type.Remove));
+                        observer.OnNext(new Change(x, null, _filter ? Changes.Type.Add : Changes.Type.Remove));
                     }
+                    if (_filter)
+                    {
+                        dis?.Dispose();
+                        dis = collection
+                                .ObserveCollectionChanges()
+                                .Subscribe(a =>
+                                {
+                                    if (a.EventArgs.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+                                        foreach (var x in a.EventArgs.NewItems)
+                                            observer.OnNext(new Change(x, null, Changes.Type.Add));
+                                    if (a.EventArgs.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Remove)
+                                        foreach (var x in a.EventArgs.OldItems)
+                                            observer.OnNext(new Change(x, null, Changes.Type.Remove));
+                                }).DisposeWith(composite);
+                    }
+                }).DisposeWith(composite);
 
-                }).DisposeWith(c);
-                return c;
+                return composite;
             });
         }
     }
