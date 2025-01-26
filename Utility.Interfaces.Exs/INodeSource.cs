@@ -13,7 +13,7 @@ namespace Utility.Nodes.Filters
         IObservable<INode> SingleByGuidAsync(Guid currentGuid);
         int? MaxIndex(Guid guid, string v);
         void Remove(INode node);
-        IObservable<Key> Find(Guid guid, string name, System.Type type, int? localIndex);
+        IObservable<Key?> Find(Guid guid, string name, System.Type type, int? localIndex);
         IObservable<DateValue> Get(Guid guid, string name);
         void Add(INode node);
     }
