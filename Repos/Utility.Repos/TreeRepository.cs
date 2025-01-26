@@ -246,12 +246,12 @@ namespace Utility.Repos
         }
 
 
-        public virtual IObservable<Key> Find(Guid parentGuid, string? name = null, System.Type? type = null, int? index = null)
+        public virtual IObservable<Key?> Find(Guid parentGuid, string? name = null, System.Type? type = null, int? index = null)
         {
 
             if (parentGuid == default)
                 throw new Exception($"{nameof(parentGuid)} is default");
-            return Observable.Create<Key>(observer =>
+            return Observable.Create<Key?>(observer =>
             {
                 return initialisationTask.ToObservable()
                     .Subscribe(a =>
@@ -268,11 +268,9 @@ namespace Utility.Repos
                         {
                             if (string.IsNullOrEmpty(name))
                             {
-
-                                throw new Exception(No_Existing_Table_No_Name_To_Create_New_One);
-                                //observer.OnNext(new Key(NoTableNoName, parentGuid, null, name, index, default));
-                                //observer.OnCompleted();
-                                //return;
+                                observer.OnNext(null);
+                                observer.OnCompleted();
+                                return;
                             }
                             InsertByParent(parentGuid, name, table_name, typeId, index)
                             .Subscribe(a =>
@@ -307,7 +305,6 @@ namespace Utility.Repos
                         {
                             throw new Exception("3e909re 4323");
                         }
-                        //throw new Exception("09re 4323");
                     });
             });
         }
@@ -360,7 +357,7 @@ namespace Utility.Repos
         //}
 
 
-        public IObservable<Key> InsertRoot(Guid guid, string name, System.Type type)
+        public IObservable<Key?> InsertRoot(Guid guid, string name, System.Type type)
         {
 
             // create table if not exists
@@ -374,22 +371,25 @@ namespace Utility.Repos
             var typeId = TypeId(type);
             var tables = connection.Query<Relationships>($"SELECT * FROM '{nameof(Relationships)}' WHERE Name = '{name}' AND Guid = '{guid}' AND TypeId = '{typeId}'");
 
+            setName(guid, name);
+
             //this.name = name;
             if (tables.Count > 1)
                 throw new Exception("dsf 33p[p[");
             else if (tables.Count == 0)
             {
                 connection.Insert(new Relationships { Guid = guid, Name = name, TypeId = typeId });
+                return Observable.Return<Key?>(new Key(guid, default, type, name, 0, null));
             }
-
-            setName(guid, name);
-            var all = connection.Query<Relationships>($"SELECT * FROM '{name}'");
-            foreach (var item in all)
+            else
             {
-                setName(item.Guid, name);
+                var all = connection.Query<Relationships>($"SELECT * FROM '{name}'");
+                foreach (var item in all)
+                {
+                    setName(item.Guid, name);
+                }
+                return Observable.Return<Key?>(null);
             }
-
-            return Observable.Return(new Key(guid, default, type, name, 0, null));
         }
 
 

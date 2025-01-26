@@ -1,18 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
-using AutoMapper;
 using DynamicData;
 using DynamicData.Binding;
-using Splat;
-using Utility.Extensions;
-using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Filters;
-using Utility.Repos;
-using Utility.Reactives;
-using Utility.Trees.Abstractions;
 using Utility.Models;
-using Utility.Models.Trees;
 using Utility.Interfaces.Exs;
 using Utility.Trees.Extensions;
 
@@ -37,7 +29,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                             {
                                 model.WhenAnyPropertyChanged().Subscribe(_ =>
                                 {
-                                    var contentRoot = root.Descendant(a => (a.tree as IName).Name == Factory.content_root);
+                                    var contentRoot = root.Descendant(a => a.tree.Data.ToString() == Factory.content_root);
                                     Switch(name, model, contentRoot as INode);
                                 });
                             }
@@ -60,12 +52,12 @@ namespace Utility.Nodes.Demo.Filters.Services
             }
         }
 
-
+   
         public void Save(INode node)
         {
             NodeSource.Instance.Save();
-
-                        }
+       
+        }
 
     }
 

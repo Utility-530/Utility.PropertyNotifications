@@ -24,7 +24,7 @@ namespace Utility.Descriptors
                         repo.Find(Guid, descriptor.Name, descriptor.PropertyType)
                         .Subscribe(a =>
                         {
-                            var propertyDescriptor = new PropertyDescriptor(descriptor, Instance) { Guid = a.Guid };
+                            var propertyDescriptor = new PropertyDescriptor(descriptor, Instance) { Guid = a.Value.Guid };
                             propertyDescriptor.Subscribe(changes);
                             observer.OnNext(new(propertyDescriptor, Changes.Type.Add));
                         }).DisposeWith(composite);

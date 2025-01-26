@@ -129,7 +129,7 @@ namespace Utility.Trees.Demo.Filters
             return Dictionary.Get(qi, a => new Subject<DateValue>()) as IObservable<DateValue>;
         }
 
-        public override IObservable<Key> Find(Guid guid, string name, System.Type? type = null, int? index = null)
+        public override IObservable<Key?> Find(Guid guid, string name, System.Type? type = null, int? index = null)
         {
             var qi = new RepoItem(guid, RepoItemType.Find, name, type, index);
             Pipe.Instance.New(new ForwardItem(Predicate, qi, []));
@@ -137,7 +137,7 @@ namespace Utility.Trees.Demo.Filters
             {
 
             }
-            return Dictionary.Get(qi, a => new Subject<Key>()) as Subject<Key>; ;
+            return Dictionary.Get(qi, a => new Subject<Key?>()) as Subject<Key?>; ;
         }
 
         public override IObservable<IReadOnlyCollection<Key>> SelectKeys(Guid? parentGuid = null, string? name = null, string? table_name = null)

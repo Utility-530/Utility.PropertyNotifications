@@ -19,7 +19,7 @@ namespace Utility.Descriptors
                     .Subscribe(c =>
                     {
                         ValuePropertyDescriptor _descriptor = DescriptorConverter.ToDescriptor(value, descriptor);
-                        _descriptor.Guid = c.Guid;
+                        _descriptor.Guid = c.Value.Guid;
                         _descriptor.ParentGuid = parentGuid;
                         observer.OnNext(_descriptor);
                     });
@@ -44,7 +44,7 @@ namespace Utility.Descriptors
                         .Subscribe(key =>
                         {
                             var _descriptor = DescriptorConverter.ToDescriptor(instance, descriptor);
-                            _descriptor.Guid = key.Guid;
+                            _descriptor.Guid = guid;
                             obs.OnNext(_descriptor);
                         });
                 });
@@ -67,7 +67,7 @@ namespace Utility.Descriptors
                         .Subscribe(key =>
                         {
                             var _descriptor = DescriptorConverter.ToDescriptor(instance, descriptor);
-                            _descriptor.Guid = key.Guid;
+                            _descriptor.Guid = guid;
                             obs.OnNext(_descriptor);
                         });
                 });
@@ -90,7 +90,7 @@ namespace Utility.Descriptors
                 return repo.Find(parentGuid, type.Name, type, index).Subscribe(c =>
                 {
 
-                    descriptor.Guid = c.Guid;
+                    descriptor.Guid = c.Value.Guid;
                     descriptor.ParentGuid = parentGuid;
                     observer.OnNext( descriptor);
                 });
@@ -101,7 +101,7 @@ namespace Utility.Descriptors
         {
             var descriptor = new MethodDescriptor(methodInfo, item);
             var c = await repo.Find(parentGuid, type.Name).ToTask();
-            descriptor.Guid = c.Guid;
+            descriptor.Guid = c.Value.Guid;
             descriptor.ParentGuid = parentGuid;
             return descriptor;
         }

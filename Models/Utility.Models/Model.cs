@@ -58,7 +58,7 @@ namespace Utility.Models
                     .Where(a => a != default)
                     //.Take(1)
                     .Subscribe(a =>
-                    Initialise(a));
+                    Initialise(a));       
 
                 node.WithChangesTo(a => a.Key)
                 .StartWith(node.Key)
@@ -66,6 +66,8 @@ namespace Utility.Models
                 .Take(1)
                 .Subscribe(a =>
                 {
+                    source.Add(Node);
+
                     node.WithChangesTo(a => a.IsExpanded)
                     .StartWith(node.IsExpanded)
                     .Where(a => a)
@@ -138,8 +140,8 @@ namespace Utility.Models
                 .Find(Guid.Parse(parent.Key), Name, typeof(object), Node.LocalIndex)
                 .Subscribe(guid =>
                 {
-                    Node.Key = new Keys.GuidKey(guid.Guid);
-                    source.Add(Node);
+                    Node.Key = new Keys.GuidKey(guid.Value.Guid);
+
                 });
         }
 

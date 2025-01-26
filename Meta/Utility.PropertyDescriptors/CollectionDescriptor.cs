@@ -127,7 +127,7 @@ namespace Utility.Descriptors
             repo.Find(Guid, elementType.Name, elementType, 0)
                 .Subscribe(c =>
                 {
-                    descriptor.Guid = c.Guid;
+                    descriptor.Guid = c.Value.Guid;
                     observer.OnNext(new(descriptor, Changes.Type.Add));
                 });
         }

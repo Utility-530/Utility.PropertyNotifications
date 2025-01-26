@@ -22,6 +22,8 @@ using Utility.Helpers;
 using NetFabric.Hyperlinq;
 using Utility.Helpers.Generic;
 using Utility.Interfaces.NonGeneric;
+using Utility.Trees;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Filters
 {
@@ -36,11 +38,12 @@ namespace Utility.Nodes.Filters
         private readonly ObservableCollection<KeyValuePair<string, PropertyChange>> dirtyNodes = [];
 
         ITreeRepository repository = Locator.Current.GetService<ITreeRepository>();
-        Lazy<IFilter> filter = new(()=> Locator.Current.GetService<IFilter>());
+        Lazy<IFilter> filter = new(() => Locator.Current.GetService<IFilter>());
 
 
         private Lazy<Dictionary<string, Action<object, object>>> setdictionary = new(() => typeof(Node)
                                                     .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                                                    .Where(a => a.Name != nameof(IReadOnlyTree.Parent))
                                                     .ToDictionary(a => a.Name, a => new Action<object, object>((instance, value) => a.SetValue(instance, value))));
         private ObservableCollection<INode> nodes = [];
 
@@ -74,26 +77,27 @@ namespace Utility.Nodes.Filters
                     return repository.Find(guid)
                         .Subscribe(a =>
                         {
-                            if (a.Guid == default)
+                            if (a.HasValue == false)
                             {
-
+                                var node = new Node(New);
+                                observer.OnNext(node);
+                                observer.OnCompleted();
                             }
-                            SingleByGuidAsync(a.Guid)
-                            .Subscribe(_a =>
-                            {
-                                //_a.Name ??= a.Name;
-                                _a.Data ??= a.Name;
-                                _a.Removed = a.Removed;
-                                observer.OnNext(_a);
-                            }
-                            );
+                            else
+                                SingleByGuidAsync(a.Value.Guid)
+                                .Subscribe(_a =>
+                                {
+                                    //_a.Name ??= a.Name;
+                                    _a.Data ??= a.Value.Name;
+                                    _a.Removed = a.Value.Removed;
+                                    observer.OnNext(_a);
+                                }
+                                );
                         }, () => observer.OnCompleted());
                 }
-                catch (Exception ex) when (ex.Message == TreeRepository.No_Existing_Table_No_Name_To_Create_New_One)
+                catch (Exception ex) //when (ex.Message == TreeRepository.No_Existing_Table_No_Name_To_Create_New_One)
                 {
-                    var node = new Node(New);
-                    observer.OnNext(node);
-                    observer.OnCompleted();
+
                 }
                 return Disposable.Empty;
             });
@@ -119,16 +123,10 @@ namespace Utility.Nodes.Filters
                 {
                     node = new Node("_New_") { Key = new GuidKey(guid) };
 
-                    return repository.Get(guid)
-                            .Subscribe(_d =>
-                            {
-                                if (_d.Value != null && setdictionary.Value.ContainsKey(_d.Name))
-                                    setdictionary.Value[_d.Name].Invoke(node, _d.Value);
-                            }, () =>
-                        {
-                            observer.OnNext(node);
-                            observer.OnCompleted();
-                        });
+                    observer.OnNext(node);
+                    observer.OnCompleted();
+
+                    return Disposable.Empty;
                 }
                 else
                 {
@@ -173,6 +171,7 @@ namespace Utility.Nodes.Filters
                             dictionary[key].Nodes.Add(_node);
                             dictionaryMethodNameKeys[key] = _node.Data.ToString(); ;
                             //_node.Name = key;
+                            Add(_node);
                             obs.OnNext(_node);
                         });
                     });
@@ -192,6 +191,7 @@ namespace Utility.Nodes.Filters
                         {
                             var result = (Node)dictionary[key].Task.GetType().GetProperty("Result").GetValue(dictionary[key].Task);
                             dictionary[key].Nodes.Add(result);
+                            Add(result);
                             o.OnNext(result);
                         });
 
@@ -202,6 +202,7 @@ namespace Utility.Nodes.Filters
             {
                 foreach (var x in dictionary[key].Nodes)
                 {
+                    Add(x);
                     obs.OnNext(x);
                 }
                 return Disposable.Empty;
@@ -237,7 +238,7 @@ namespace Utility.Nodes.Filters
             this.nodes.Remove(node);
         }
 
-        public IObservable<Structs.Repos.Key> Find(Guid guid, string name, System.Type type, int? localIndex)
+        public IObservable<Structs.Repos.Key?> Find(Guid guid, string name, System.Type type, int? localIndex)
         {
             return repository.Find(guid, name, type, localIndex);
         }
@@ -249,6 +250,9 @@ namespace Utility.Nodes.Filters
 
         public void Add(INode node)
         {
+            //if (node.Data == null)
+            //{
+            //}
             if (this.Nodes.Any(a => a.Key == node.Key) == false)
             {
                 this.nodes.Add(node);
@@ -259,6 +263,15 @@ namespace Utility.Nodes.Filters
                         node.IsVisible = false;
                     }
                 });
+
+
+                repository.Get((GuidKey)node.Key)
+                    .Subscribe(_d =>
+                    {
+                        if (_d.Value != null && setdictionary.Value.ContainsKey(_d.Name))
+                            setdictionary.Value[_d.Name].Invoke(node, _d.Value);
+                    });
+
                 node.PropertyChanged += Node_PropertyChanged;
                 node.AndAdditions<INode>().Subscribe(Add);
 

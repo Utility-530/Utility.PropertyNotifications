@@ -46,7 +46,7 @@ namespace Utility.Trees.Demo.Filters
                         .Subscribe(_guid =>
                         {
                             var table = (Table)Activator.CreateInstance(typeof(Table));
-                            var root = DescriptorFactory.CreateRoot(table, _guid.Guid, "table_add").Take(1).Wait();
+                            var root = DescriptorFactory.CreateRoot(table, _guid.Value.Guid, "table_add").Take(1).Wait();
                             var reflectionNode = new ReflectionNode(root) { Parent = (ITree)instance };
                             item.NewObject = DataTreeViewer(reflectionNode);
                             item.FinishEdit += Item_FinishEdit;
@@ -116,7 +116,7 @@ namespace Utility.Trees.Demo.Filters
                                 .Find(data.Guid, "branch")
                                 .Subscribe(_guid =>
                                 {
-                                    var root =  DescriptorFactory.CreateRoot(table.Type , _guid.Guid, table.Name).Take(1).Wait();
+                                    var root =  DescriptorFactory.CreateRoot(table.Type , _guid.Value.Guid, table.Name).Take(1).Wait();
                                     var reflectionNode = new ReflectionNode(root);
                                     treeViewer.ViewModel = reflectionNode;
                                 });

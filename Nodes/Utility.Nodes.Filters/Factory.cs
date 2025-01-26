@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Utility.Interfaces.Exs;
 using Utility.Keys;
 using Utility.Models;
 using Utility.Models.Trees;
@@ -55,9 +53,17 @@ namespace Utility.Nodes.Filters
             return
                 Observable.Create<Node>(observer =>
                 {
-                    TreeRepository.Instance.InsertRoot(guid, tableName, typeof(object));
-                    observer.OnNext(new Node(new Model { Name = "root" }) { Key = new GuidKey(guid) });
-                    return Disposable.Empty;
+                    var node = new Node("root");
+
+                    return TreeRepository.Instance.InsertRoot(guid, tableName, typeof(object)).Subscribe(a =>
+                    {
+                        if (a.HasValue)
+                        {
+                            node.Data = new Model { Name = "root" };
+                        }
+                        node.Key = new GuidKey(guid);
+                        observer.OnNext(node);
+                    });
                 });
         }
         public static IObservable<Node> BuildControlRoot()
@@ -66,14 +72,18 @@ namespace Utility.Nodes.Filters
 
             return Observable.Create<Node>(observer =>
             {
-                var subControlRoot = new Node(new ControlsModel { Name = "controls" });
+                Node node = new("controls") { IsExpanded = true, Orientation = Enums.Orientation.Horizontal };
 
                 return TreeRepository.Instance
                 .InsertRoot(controlsGuid, "controls", typeof(object))
                 .Subscribe(a =>
                 {
-                    subControlRoot.Key = new GuidKey(a.Guid);
-                    observer.OnNext(subControlRoot);
+                    if (a.HasValue)
+                    {
+                        node.Data = new Model(() => [new CommandModel { Name = Save }]) { Name = "controls" };
+                    }
+                    node.Key = new GuidKey(controlsGuid);
+                    observer.OnNext(node);
                 });
             });
         }
@@ -84,41 +94,20 @@ namespace Utility.Nodes.Filters
 
             return Observable.Create<Node>(observer =>
             {
-                var x = new Node(new DatabasesModel { Name = "combo" });
+                var node = new Node("combo");
                 return TreeRepository.Instance
                 .InsertRoot(subGuid, "combo", typeof(object))
                 .Subscribe(a =>
                 {
-                    x.Key = new GuidKey(a.Guid);
-                    observer.OnNext(x);
+                    if(a.HasValue != false)
+                    {
+                        node.Data = new DatabasesModel { Name = "combo" };
+                    }
+                    node.Key = new GuidKey(subGuid);
+                    observer.OnNext(node);
                 });
 
             });
-        }
-
-
-        public class ControlsModel : Model
-        {
-            public override IEnumerable<Model> CreateChildren()
-            {
-                //yield return new Node("load", new CommandModel { Name = Load });
-                yield return new CommandModel { Name = Save };
-                yield return new CommandModel { Name = Save_Filters };
-                //yield return new Node("clear", new CommandModel { Name = Clear });
-                //yield return new Node("_new", new CommandModel { Name = New });
-                //yield return new Node("expand", new CommandModel { Name = Expand });
-                //yield return new Node("collapse", new CommandModel { Name = Collapse });
-                //yield return new Node("refresh", new CommandModel { Name = Refresh });
-                //yield return new Node("search", new SearchModel { Name = Search });
-                //yield return new Node("next", new CommandModel { Name = Next });
-                //yield return new Node("next", new ExceptionsModel { Name = "exceptions" });
-            }
-            public override void SetNode(INode node)
-            {
-                node.IsExpanded = true;
-                node.Orientation = Enums.Orientation.Horizontal;
-                base.SetNode(node);
-            }
         }
 
         public static IObservable<Node> BuildFiltersRoot()
@@ -127,20 +116,20 @@ namespace Utility.Nodes.Filters
 
             return Observable.Create<Node>(observer =>
             {
-                //return NodeSource.Instance.Single(nameof(BuildRoot)).Subscribe(root =>
-                //{
-                var subRoot = new Node(new TransformersModel { Name = "transformers" }) { IsExpanded = true, Orientation = Enums.Orientation.Vertical };
-                //root.Add(subRoot);
+
+                var node = new Node("transformers") { IsExpanded = true, Orientation = Enums.Orientation.Vertical };
 
                 return TreeRepository.Instance
                 .InsertRoot(filterGuid, "transformers", typeof(object))
                 .Subscribe(a =>
                 {
-                    subRoot.Key = new GuidKey(a.Guid);
-                    //subRoot.Load();
-                    observer.OnNext(subRoot);
+                    if (a.HasValue)
+                    {
+                        node.Data = new TransformersModel { Name = "transformers" };
+                    }
+                    node.Key = new GuidKey(filterGuid);
+                    observer.OnNext(node);
                 });
-                //});
             });
         }
 
@@ -148,12 +137,16 @@ namespace Utility.Nodes.Filters
         {
             return Observable.Create<Node>(observer =>
             {
-                var node = new Node(new StringModel { Name = "html" }) { };
+                var node = new Node("html") { };
                 return TreeRepository.Instance
                 .InsertRoot(htmlGuid, "html", typeof(object))
                 .Subscribe(a =>
                 {
-                    node.Key = new GuidKey(a.Guid);
+                    if (a.HasValue)
+                    {
+                        node.Data = new StringModel { Name = "html" };
+                    }
+                    node.Key = new GuidKey(htmlGuid);
                     observer.OnNext(node);
                 });
             });
@@ -163,12 +156,16 @@ namespace Utility.Nodes.Filters
         {
             return Observable.Create<Node>(observer =>
             {
-                var node = new Node(new HtmlModel { Name = "_html" }) { };
+                var node = new Node("_html") { };
                 return TreeRepository.Instance
                 .InsertRoot(htmlRenderGuid, "_html", typeof(object))
                 .Subscribe(a =>
                 {
-                    node.Key = new GuidKey(a.Guid);
+                    if(a.HasValue)
+                    {
+                        node.Data = new HtmlModel { Name = "_html" };
+                    }
+                    node.Key = new GuidKey(htmlRenderGuid);
                     observer.OnNext(node);
                 });
             });
@@ -178,13 +175,17 @@ namespace Utility.Nodes.Filters
         {
             return Observable.Create<Node>(observer =>
             {
-                var _node = new Node(build());
+                var node = new Node("Groups");
                 return TreeRepository.Instance
-                .InsertRoot(contentGuid, _node.Data.ToString(), typeof(object))
+                .InsertRoot(contentGuid, "Groups", typeof(object))
                 .Subscribe(a =>
                 {
-                    _node.Key = new GuidKey(a.Guid);
-                    observer.OnNext(_node);
+                    if(a.HasValue)
+                    {
+                        node.Data = build();
+                    }
+                    node.Key = new GuidKey(contentGuid);
+                    observer.OnNext(node);
                 });
             });
 
@@ -226,7 +227,7 @@ namespace Utility.Nodes.Filters
                 return TreeRepository.Instance.InsertRoot(assemblyGuid, "too", typeof(object))
                 .Subscribe(a =>
                 {
-                    var res = new Node(new NodePropertyRootModel() { Name = "too" }){ Key = new GuidKey(assemblyGuid), IsExpanded = true };
+                    var res = new Node(new NodePropertyRootModel() { Name = "too" }) { Key = new GuidKey(assemblyGuid), IsExpanded = true };
                     observer.OnNext(res);
                 });
             });

@@ -14,7 +14,7 @@ namespace Utility.Nodes
     {
 
         private bool? isHighlighted;
-        private bool isExpanded;
+        private bool isExpanded = false;
         private Arrangement arrangement;
         private int columns;
         private int rows;

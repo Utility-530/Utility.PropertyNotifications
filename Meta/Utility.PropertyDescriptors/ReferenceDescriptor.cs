@@ -37,7 +37,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                                         return;
                                     }
                                     collectionDescriptor.Subscribe(changes);
-                                    observer.OnNext(new(collectionDescriptor with { Guid = c.Guid }, Changes.Type.Add));
+                                    observer.OnNext(new(collectionDescriptor with { Guid = c.Value.Guid }, Changes.Type.Add));
                                 }).DisposeWith(disp);
                             }
                             else
@@ -74,7 +74,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                                 propertiesDescriptor = new PropertiesDescriptor(Descriptor, inst);
                                 propertiesDescriptor.Subscribe(changes);
 
-                                observer.OnNext(new(propertiesDescriptor with { Guid = p.Guid }, Changes.Type.Add));
+                                observer.OnNext(new(propertiesDescriptor with { Guid = p.Value.Guid }, Changes.Type.Add));
                             }).DisposeWith(disp);
                         }
                         if (inst is IEnumerable enumerable && inst is not string s && inst.GetType() is Type _type && _type.GetCollectionElementType() is Type elementType)
@@ -90,7 +90,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                                     return;
                                 }
                                 collectionDescriptor.Subscribe(changes);
-                                observer.OnNext(new(collectionDescriptor with { Guid = c.Guid }, Changes.Type.Add));
+                                observer.OnNext(new(collectionDescriptor with { Guid = c.Value.Guid }, Changes.Type.Add));
                             }).DisposeWith(disp);
                         }
                     });

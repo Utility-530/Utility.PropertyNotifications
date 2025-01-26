@@ -59,7 +59,6 @@ namespace Utility.Nodes.Demo.Filters
                             RaisePropertyChanged(nameof(Clones));
                         });
 
-
                 return clones;
             }
         }
