@@ -5,8 +5,7 @@ namespace CustomModels
     public class RazorModel
     {
         public Controls Controls { get; set; }
-        public List<Product> Product { get; set; } = new();
-        public Product SelectedProduct { get; set; }
+        public List<Product> Products { get; set; } = new();
     }
 
     public class Controls
