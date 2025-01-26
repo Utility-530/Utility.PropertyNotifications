@@ -192,10 +192,10 @@ namespace Utility.Descriptors
             DescriptorFactory.CreateItem(item, i, type, parentType, Guid)
                 .Subscribe(descriptor =>
                 {
-                    var refDescriptor = (CollectionItemReferenceDescriptor)descriptor;
-                    refDescriptor.Removed = removed;
+                    var itemDescriptor = (ICollectionItemDescriptor)descriptor;
+                    itemDescriptor.Removed = removed;
                     observer.OnNext(new(descriptor, changeType));
-                    descriptors.Add(refDescriptor);
+                    descriptors.Add(itemDescriptor);
                     if (refresh)
                         descriptor.Initialise();
                 });
