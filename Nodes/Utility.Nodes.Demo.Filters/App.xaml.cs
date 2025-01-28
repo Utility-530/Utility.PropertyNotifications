@@ -10,10 +10,12 @@ using TinyHtml.Wpf;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Descriptors;
 using Utility.Interfaces.NonGeneric;
+using Utility.Models;
 using Utility.Nodes.Demo.Filters.Services;
 using Utility.Nodes.Filters;
 using Utility.Repos;
 using Utility.Trees.Demo.Filters;
+using Utility.Trees.Demo.Filters.Filters;
 
 namespace Utility.Nodes.Demo.Filters
 {
@@ -29,7 +31,8 @@ namespace Utility.Nodes.Demo.Filters
             Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
             Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeSource.Instance);
             Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
-            var f = Locator.Current.GetService<IFilter>();
+            Locator.CurrentMutable.RegisterConstant<IExpander>(Expander.Instance);
+            Locator.CurrentMutable.RegisterConstant<IContext>(Context.Instance);
             Splat.Locator.CurrentMutable.RegisterLazySingleton<MainViewModel>(() => new MainViewModel());
 
 

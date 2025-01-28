@@ -37,7 +37,7 @@ namespace Utility.Nodes.Demo.Filters.Services
             Observable.Create<Exception>(observer =>
             {
                 return NodeSource.Instance
-                .Single(nameof(Factory.BuildFiltersRoot))
+                .Single(nameof(Factory.BuildTransformersRoot))
                 .Subscribe(c_node =>
                 {
                     c_node

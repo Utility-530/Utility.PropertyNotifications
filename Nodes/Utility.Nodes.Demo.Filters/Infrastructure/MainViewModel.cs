@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Splat;
+using System.Collections;
 using Utility.Extensions;
 using Utility.Nodes.Filters;
 using Utility.Trees.Abstractions;
@@ -8,15 +9,16 @@ namespace Utility.Nodes.Demo.Filters
 {
     public class MainViewModel : NotifyPropertyChangedBase
     {
-        IReadOnlyTree[] control, selection, content, filters, html, html_render, clones;
+        IReadOnlyTree[] control, selection, content, transformers, html, html_render, clones;
         private bool isRemovedShown;
+        Lazy<INodeSource> source = new(() => Locator.Current.GetService<INodeSource>());
 
         public IReadOnlyTree[] Controls
         {
             get
             {
                 if (control == null)
-                    NodeSource.Instance.Single(nameof(Factory.BuildControlRoot))
+                    source.Value.Single(nameof(Factory.BuildControlRoot))
                         .Subscribe(a =>
                         {
                             control = [a]; base.RaisePropertyChanged(nameof(Controls));
@@ -30,7 +32,7 @@ namespace Utility.Nodes.Demo.Filters
             get
             {
                 if (selection == null)
-                    NodeSource.Instance.Single(nameof(Factory.BuildComboRoot))
+                    source.Value.Single(nameof(Factory.BuildComboRoot))
                         .Subscribe(a => { selection = [a]; RaisePropertyChanged(nameof(Selection)); });
                 return selection;
             }
@@ -41,7 +43,7 @@ namespace Utility.Nodes.Demo.Filters
             get
             {
                 if (content == null)
-                    NodeSource.Instance.Single(nameof(Factory.BuildContentRoot))
+                    source.Value.Single(nameof(Factory.BuildContentRoot))
                         .Subscribe(a => { content = [a]; RaisePropertyChanged(nameof(Content)); });
                 return content;
             }
@@ -52,7 +54,7 @@ namespace Utility.Nodes.Demo.Filters
             get
             {
                 if (clones == null)
-                    NodeSource.Instance.Single(nameof(Factory.BuildContentRoot))
+                    source.Value.Single(nameof(Factory.BuildContentRoot))
                         .Subscribe(a =>
                         {
                             clones = [a.Abstract()];
@@ -63,14 +65,14 @@ namespace Utility.Nodes.Demo.Filters
             }
         }
 
-        public IReadOnlyTree[] Filters
+        public IReadOnlyTree[] Transformers
         {
             get
             {
-                if (filters == null)
-                    NodeSource.Instance.Single(nameof(Factory.BuildFiltersRoot))
-                        .Subscribe(a => { filters = [a]; RaisePropertyChanged(nameof(Filters)); });
-                return filters;
+                if (transformers == null)
+                    source.Value.Single(nameof(Factory.BuildTransformersRoot))
+                        .Subscribe(a => { transformers = [a]; RaisePropertyChanged(nameof(Transformers)); });
+                return transformers;
             }
         }
 
@@ -79,7 +81,7 @@ namespace Utility.Nodes.Demo.Filters
             get
             {
                 if (html == null)
-                    NodeSource.Instance.Single(nameof(Factory.BuildHtmlRoot))
+                    source.Value.Single(nameof(Factory.BuildHtmlRoot))
                         .Subscribe(a => { html = [a]; RaisePropertyChanged(nameof(Html)); });
                 return html;
             }
@@ -91,7 +93,7 @@ namespace Utility.Nodes.Demo.Filters
             get
             {
                 if (html_render == null)
-                    NodeSource.Instance.Single(nameof(Factory.BuildHtmlRenderRoot))
+                    source.Value.Single(nameof(Factory.BuildHtmlRenderRoot))
                         .Subscribe(a => { html_render = [a]; RaisePropertyChanged(nameof(Html_Render)); });
                 return html_render;
             }

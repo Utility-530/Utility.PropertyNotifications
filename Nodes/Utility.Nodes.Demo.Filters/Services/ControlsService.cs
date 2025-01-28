@@ -6,7 +6,7 @@ using DynamicData.Binding;
 using Utility.Nodes.Filters;
 using Utility.Models;
 using Utility.Interfaces.Exs;
-using Utility.Trees.Extensions;
+using Utility.Trees.Extensions.Async;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -23,9 +23,10 @@ namespace Utility.Nodes.Demo.Filters.Services
                     NodeSource.Instance.Single(nameof(Factory.BuildControlRoot))
                     .Subscribe(_n =>
                     {
-                        foreach (INode INode in _n)
+                        _n.Descendants()
+                        .Subscribe(node =>
                         {
-                            if (INode is { Data: Model { Name: string name } model })
+                            if (node.NewItem is INode { Data: Model { Name: string name } model })
                             {
                                 model.WhenAnyPropertyChanged().Subscribe(_ =>
                                 {
@@ -33,7 +34,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                                     Switch(name, model, contentRoot as INode);
                                 });
                             }
-                        }
+                        });                 
                     });
                 });
         }

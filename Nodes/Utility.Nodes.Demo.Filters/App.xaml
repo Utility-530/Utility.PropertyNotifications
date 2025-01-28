@@ -14,17 +14,22 @@
              xmlns:filters="clr-namespace:Utility.Trees.Demo.Filters;assembly=Utility.Trees.Demo.Filters" 
              xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit" 
              xmlns:node="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
-             xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020">
+             xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020" 
+             xmlns:res="http://schemas.utility.com/resourcedictionary">
 
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Themes/Styles.xaml"/>
-                <ResourceDictionary Source="/Themes/Templates.xaml"/>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItem.xaml"/>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Breadcrumbs;component/Themes/Generic.xaml"/>
                 <!--<ResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
                 <ResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/ButtonComboBoxTreeViewStyle.xaml"/>-->
+
+
+                <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
+                <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml"/>
+                <res:SharedResourceDictionary Source="/Utility.Nodes.Demo.Styles;component/Themes/Generic.xaml"/>
+
             </ResourceDictionary.MergedDictionaries>
 
 
@@ -100,30 +105,33 @@
 
                             <Grid  Grid.Row="2">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                                    <ColumnDefinition ></ColumnDefinition>
                                     <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                                    <ColumnDefinition ></ColumnDefinition>
                                     <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                                    <ColumnDefinition ></ColumnDefinition>
                                     <!--<ColumnDefinition Width="0.5*"></ColumnDefinition>-->
                                 </Grid.ColumnDefinitions>
 
-                                <ct:CustomTreeView Grid.Column="0" ItemsSource="{Binding Content}" ItemContainerStyleSelector="{StaticResource StyleSelector }" >
-                                    <TreeView.ItemTemplate>
-                                        <HierarchicalDataTemplate ItemsSource="{Binding Items}">
-                                            <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
-                                                <ContentControl Content="{Binding Path=.}" ContentTemplateSelector="{x:Static filters:DataTemplateSelector.Instance}"/>
-                                            </Border>
-                                        </HierarchicalDataTemplate>
-                                    </TreeView.ItemTemplate>
+                                <Grid  Grid.Column="0">
+                                    <ct:CustomTreeView ItemsSource="{Binding Content}" ItemContainerStyleSelector="{StaticResource StyleSelector }" >
+                                        <TreeView.ItemTemplate>
+                                            <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                                                <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
+                                                    <ContentControl Content="{Binding Path=.}" ContentTemplateSelector="{x:Static filters:DataTemplateSelector.Instance}"/>
+                                                </Border>
+                                            </HierarchicalDataTemplate>
+                                        </TreeView.ItemTemplate>
 
-                                    <i:Interaction.Triggers>
-                                        <i:EventTrigger EventName="SelectedItemChanged">
-                                            <beh:SetSelectedItemAction PropertyName="Content" TargetObject="{Binding ElementName=TreeContent}" />
-                                        </i:EventTrigger>
-                                    </i:Interaction.Triggers>
-                                </ct:CustomTreeView>
+                                        <i:Interaction.Triggers>
+                                            <i:EventTrigger EventName="SelectedItemChanged">
+                                                <beh:SetSelectedItemAction PropertyName="Content" TargetObject="{Binding ElementName=TreeContent}" />
+                                            </i:EventTrigger>
+                                        </i:Interaction.Triggers>
+                                    </ct:CustomTreeView>
 
+                                </Grid>
+        
                                 <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch"               ShowsPreview="True"/>
 
                                 <TreeView Grid.Column="2" ItemsSource="{Binding Html}">
@@ -169,7 +177,7 @@
                                           ShowsPreview="True"
                                           Height="5" />
 
-                            <ct:CustomTreeView Grid.Row="4" ItemsSource="{Binding Filters}" >
+                            <ct:CustomTreeView Grid.Row="4" ItemsSource="{Binding Transformers}" >
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="SelectedItemChanged">
                                         <beh:SetSelectedItemAction PropertyName="Content" TargetObject="{Binding ElementName=TreeContent}" />
