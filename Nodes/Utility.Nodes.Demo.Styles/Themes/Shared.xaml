@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:local="clr-namespace:Utility.Nodes.Demo.Styles" 
+                    xmlns:conv="http://schemas.utility.com/converters" 
+                    xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks">
+
+
+    
+    <local:SelectedNodeChangeConverter x:Key="SelectedNodeChangeConverter"></local:SelectedNodeChangeConverter>
+    <conv:TypeNameConverter x:Key="TypeNameConverter"/>
+    <local:ChildrenSelector x:Key="ChildrenSelector"/>
+    <local:ChildrenSelectorConverter x:Key="ChildrenSelectorConverter"/>
+    <conv:ObjectDumperConverter x:Key="ObjectDumperConverter"/>
+    <conv:InverseNullToBooleanConverter x:Key="InverseNullToBooleanConverter"/>
+    <icons:PackIconIonicons x:Key="Icon" x:Shared="false" Kind="AddMD" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"/>
+    <local:NewObjectConverter x:Key="NewObjectConverter"></local:NewObjectConverter>
+    <local:FinishEditConverter x:Key="FinishEditConverter"></local:FinishEditConverter>
+
+
+    
+</ResourceDictionary>

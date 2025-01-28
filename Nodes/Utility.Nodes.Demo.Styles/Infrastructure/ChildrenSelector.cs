@@ -7,7 +7,7 @@ using Utility.Interfaces.Exs;
 using Utility.Meta;
 using Utility.WPF.Controls.Trees;
 
-namespace Utility.Nodes.Demo.Filters
+namespace Utility.Nodes.Demo.Styles
 {
 
 

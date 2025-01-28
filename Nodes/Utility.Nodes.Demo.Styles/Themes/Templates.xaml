@@ -3,7 +3,7 @@
                     xmlns:bc="Breadcrumbs.WPF" 
                     xmlns:test="clr-namespace:TextBoxEx;assembly=TextBoxEx"
                     xmlns:ui="http://toniccomputing.com/patterns/ui" 
-                    xmlns:local="clr-namespace:Utility.Nodes.Demo.Filters"
+                    xmlns:local="clr-namespace:Utility.Nodes.Demo.Styles"
                     xmlns:e="clr-namespace:Utility.Enums;assembly=Utility.Enums"
                     xmlns:inf="clr-namespace:Utility.Models.Trees;assembly=Utility.Models.Trees"
                     xmlns:model="clr-namespace:Utility.Models;assembly=Utility.Models"
@@ -61,18 +61,18 @@
         <Border BorderThickness="4">
 
             <TextBox Grid.Row="0"      
-                          Background="LightCyan"
-                          Width="100" Height="25"
-                        test:TextBoxHelper.IsClearButtonVisible="True"
-                         Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=500}"/>
+                    Background="LightCyan"
+                    Width="100" Height="25"
+                    test:TextBoxHelper.IsClearButtonVisible="True"
+                    Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=500}"/>
         </Border>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:AndOrModel}">
         <ComboBox  Margin="4" Grid.Row="1" 
-                           ItemsSource="{ui:EnumSource {Binding Value, Mode=OneTime}}" 
-                           SelectedItem="{ui:EnumBinding {Binding Value}}" 
-                          />
+                    ItemsSource="{ui:EnumSource {Binding Value, Mode=OneTime}}" 
+                    SelectedItem="{ui:EnumBinding {Binding Value}}" 
+                    />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:BooleanModel}">
@@ -82,9 +82,9 @@
     <DataTemplate DataType="{x:Type inf:SearchModel}">
         <UniformGrid Rows="1">
             <TextBox Grid.Row="0"      
-                             Width="200"
-                        test:TextBoxHelper.IsClearButtonVisible="True"
-                         Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=250}"/>
+                    Width="200"
+                    test:TextBoxHelper.IsClearButtonVisible="True"
+                    Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=250}"/>
         </UniformGrid>
     </DataTemplate>
 
@@ -131,9 +131,9 @@
 
     <DataTemplate DataType="{x:Type inf:HtmlModel}">
         <avalonedit:TextEditor x:Name="textHtml" 
-                               Text="{Binding Value, Mode=OneWay}" 
-                               SyntaxHighlighting="HTML" 
-                               ShowLineNumbers="True" />
+                    Text="{Binding Value, Mode=OneWay}" 
+                    SyntaxHighlighting="HTML" 
+                    ShowLineNumbers="True" />
     </DataTemplate>
 
     <!--<DataTemplate DataType="{x:Type inf:HtmlModel}">

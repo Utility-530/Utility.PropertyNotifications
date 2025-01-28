@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
 using Utility.Descriptors;
@@ -15,7 +16,7 @@ using Utility.Trees.Abstractions;
 using Utility.WPF.Controls.ComboBoxes;
 using Utility.WPF.Controls.Trees;
 
-namespace Utility.Nodes.Demo.Filters
+namespace Utility.Nodes.Demo.Styles
 {
     public class NewObjectConverter : IValueConverter
     {
@@ -60,6 +61,10 @@ namespace Utility.Nodes.Demo.Filters
                     var xx = CreateRoot(type, guid);       
                     return xx;
                 }
+            }
+            else if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: IReadOnlyTree { Data: AssemblyModel { Assembly: Assembly ass } } })
+            {
+                return DependencyProperty.UnsetValue;
             }
             throw new Exception("V dfr44");
         }
