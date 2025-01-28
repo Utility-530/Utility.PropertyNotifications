@@ -4,8 +4,8 @@ using System.Collections.Specialized;
 using System.Reactive.Linq;
 using System.Windows.Input;
 using Utility.Changes;
-using Utility.Enums;
 using Utility.Helpers.NonGeneric;
+using Utility.Interfaces;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
@@ -21,6 +21,8 @@ namespace Utility.Nodes
     {
         object data;
 
+        Lazy<INodeSource> source = new(() => Locator.Current.GetService<INodeSource>());
+
         public Node(object data) : this()
         {
             Data = data;
@@ -30,9 +32,9 @@ namespace Utility.Nodes
         {
             AddCommand = new RelayCommand(async a =>
             {
-                this.IsExpanded = true;
                 var node = await ToTree(a);
                 Add(node);
+                this.IsExpanded = true;
             });
 
             RemoveCommand = new RelayCommand(a =>
@@ -57,11 +59,9 @@ namespace Utility.Nodes
 
         public override Task<ITree> ToTree(object value)
         {
-
             var node = new Node(value)
             {
                 Parent = this,
-                IsPersistable = true
             };
             return Task.FromResult((ITree)node);
         }
@@ -80,36 +80,90 @@ namespace Utility.Nodes
                 {
                     iSetNode.SetNode(this);
                 }
-                if (data is IGuid guid)
+                if (data is IGuid guid && this.Key == null)
                 {
                     this.Key = new GuidKey(guid.Guid);
-                }
-                if (data is IChildren children)
-                {
-                    children
-                        .Children
-                        .Filter(this.WithChangesTo(a => a.IsExpanded))
-                        .Subscribe(async a =>
-                        {
-                            if (a is Change { Type: Changes.Type.Add, Value: { } value })
-                            {
-                                this.m_items.Add(await ToTree(value));
-                            }
-                            else if (a is Change { Type: Changes.Type.Remove, Value: { } _value })
-                            {
-                                this.m_items.RemoveBy(c => (c as IData).Data == _value);
-                            }
-                        });
-
                 }
 
                 RaisePropertyChanged(ref previousValue, value);
             }
         }
 
+        public override string Key
+        {
+            get => base.Key; set
+            {
+                if (Key != null)
+                {
+                    throw new Exception($"Key {Key} not null!");
+                }
+                base.Key = value;
+
+                this.WithChangesTo(a => a.Data)
+                    .Where(a => a is not string)
+                    .Take(1)
+                    .Subscribe(data =>
+                    {
+                        //if (data is IDescriptor && data is ICount)
+                        //{
+
+                        //}
+                        if (data is IChildren children)
+                        {
+                            if (data is IHasChildren { HasChildren: false } hasChildren)
+                            {
+
+                            }
+                            else
+                                _children(children, Guid.Parse(value))
+                                    .Filter(this.WithChangesTo(a => a.IsExpanded))
+                                    .Subscribe(async a =>
+                                    {
+                                        if (a is Change { Type: Changes.Type.Add, Value: { } value })
+                                        {
+                                            if (value is INode node)
+                                                this.m_items.Add(node);
+                                            else
+                                                this.m_items.Add(await ToTree(value));
+                                        }
+                                        else if (a is Change { Type: Changes.Type.Remove, Value: { } _value })
+                                        {
+                                            this.m_items.RemoveBy(c => (c as IData).Data == _value);
+                                        }
+                                    });
+                        }
+                    });
+
+                IObservable<object> _children(IChildren children, Guid guid)
+                {
+                    return Observable.Create<object>(observer =>
+                    {
+                        return source.Value
+                        .ChildrenByGuidAsync(guid)
+                        .Subscribe(a =>
+                        {
+                            if (a.Data?.ToString() == source.Value.New || data is ICount)
+                            {
+                                children.Children.Subscribe(a => observer.OnNext(a));
+                            }
+                            else if (a.Data != null && m_items.Any(n => ((IKey)n).Key == a.Key) == false)
+                            {
+                                observer.OnNext(a);
+                            }
+                            else
+                            {
+
+                            }
+                        });
+                    });
+                }
+            }
+        }
+
         public override ITree Parent
         {
-            get => parent; set
+            get => parent;
+            set
             {
                 RaisePropertyChanged(ref parent, value);
             }
@@ -124,7 +178,11 @@ namespace Utility.Nodes
                 {
                     item.Parent ??= this;
                     if (item.Key != default)
-                        Locator.Current.GetService<INodeSource>().Add(item);
+                        source.Value.Add(item);
+                    else
+                    {
+
+                    }
                 }
             }
             if (args.Action == NotifyCollectionChangedAction.Remove && args.OldItems != null)

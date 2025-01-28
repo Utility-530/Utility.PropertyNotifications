@@ -9,7 +9,6 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
-
     public abstract class Node<T> : ViewModelTree, IExpand
     {
         protected ReplaySubject<Changes.Change<T>> changes = new();
@@ -35,8 +34,6 @@ namespace Utility.Nodes
                     }
                 });
         }
-
-
 
         public override IEnumerable Items
         {
@@ -128,7 +125,7 @@ namespace Utility.Nodes
         }
 
 
-        public IObservable<object?> GetChildren()
+        public virtual IObservable<object?> GetChildren()
         {
             return changes;
         }

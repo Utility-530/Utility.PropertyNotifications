@@ -14,8 +14,8 @@ namespace Utility.Nodes.Common
         {
             return Observable.Create<Change>(observer =>
             {
-                ObservableCollection<object> collection = new();
-                CompositeDisposable composite = new();
+                ObservableCollection<object> collection = [];
+                CompositeDisposable composite = [];
                 IDisposable? dis = null;
 
                 observable.Subscribe(a =>
