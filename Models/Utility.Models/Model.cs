@@ -129,14 +129,14 @@ namespace Utility.Models
                 source.Remove(Node);
                 return;
             }
+            if (node.Key == default)
+                source
+                    .Find(Guid.Parse(parent.Key), Name, typeof(object), Node.LocalIndex)
+                    .Subscribe(guid =>
+                    {
+                        Node.Key = new Keys.GuidKey(guid.Value.Guid);
 
-            //source
-            //    .Find(Guid.Parse(parent.Key), Name, typeof(object), Node.LocalIndex)
-            //    .Subscribe(guid =>
-            //    {
-            //        Node.Key = new Keys.GuidKey(guid.Value.Guid);
-
-            //    });
+                    });
         }
 
         public virtual void AddDescendant(IReadOnlyTree node, int level)
