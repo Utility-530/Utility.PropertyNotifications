@@ -3,12 +3,13 @@ using System.Reactive.Disposables;
 using System.Reactive.Threading.Tasks;
 using Utility.Changes;
 using Utility.Interfaces;
+using Utility.Meta;
 using Utility.Nodes.Reflections;
 using Utility.Repos;
 
 namespace Utility.Nodes.Demo
 {
-    public class MasterSlaveNode : Node
+    public class MasterSlaveNode : Node<int>
     {
         bool flag;
 
@@ -25,12 +26,12 @@ namespace Utility.Nodes.Demo
             });
         }
 
-        public override Task<IReadOnlyTree> ToNode(object value)
+        public override Task<ITree> ToTree(object value)
         {
             if (value is 0)
-                return Task.FromResult<IReadOnlyTree>(new MasterNode() { Parent = this });
+                return Task.FromResult<ITree>(new MasterNode() { Parent = this });
             else if (value is 1)
-                return Task.FromResult<IReadOnlyTree>(new SlaveNode() { Parent = this });
+                return Task.FromResult<ITree>(new SlaveNode() { Parent = this });
 
             throw new Exception("2r 11 4333");
         }
@@ -158,7 +159,7 @@ namespace Utility.Nodes.Demo
         }
     }
 
-    public class RootNode : Node
+    public class RootNode : Node<T>
     {
         bool flag;
 
