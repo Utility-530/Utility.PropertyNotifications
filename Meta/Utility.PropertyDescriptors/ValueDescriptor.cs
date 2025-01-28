@@ -27,6 +27,8 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
 
     public override System.IObservable<object> Children => Observable.Empty<object>();
 
+    public override bool HasChildren => false;
+
     public override object? Get()
     {
         if (dateValue == null)

@@ -1,10 +1,13 @@
-﻿using Utility.Meta;
+﻿using Splat;
+using Utility.Meta;
+using Utility.Repos;
 
 namespace Utility.Descriptors;
 
 internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeadersDescriptor, IEquatable
 {
     private DateTime? removed;
+    private static ITreeRepository repo => Locator.Current.GetService<ITreeRepository>();
 
     public CollectionHeadersDescriptor(Type propertyType, Type componentType) : base(propertyType)
     {
@@ -30,7 +33,13 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
             {
                 foreach (Descriptor descriptor in TypeDescriptor.GetProperties(Type))
                 {
-                    observer.OnNext(new(new HeaderDescriptor(descriptor.PropertyType, descriptor.ComponentType, descriptor.Name) { Guid =Guid.NewGuid(), ParentGuid = this.Guid }, Changes.Type.Add));
+                    repo
+                        .Find(Guid, descriptor.Name, descriptor.PropertyType)
+                   .Subscribe(key =>
+                   {
+                        observer.OnNext(new(new HeaderDescriptor(descriptor.PropertyType, descriptor.ComponentType, descriptor.Name) { Guid = key.Value.Guid, ParentGuid = this.Guid }, Changes.Type.Add));
+                   });
+
                 }
                 return Disposable.Empty;
             });

@@ -105,7 +105,6 @@ namespace Utility.Descriptors
 
         public override void Finalise(object? item = null)
         {
-
             var observer = Observer.Create<Change<IDescriptor>>((a) =>
             {
                 if (a.Type == Changes.Type.Add && a.Value is IFinalise finalise)

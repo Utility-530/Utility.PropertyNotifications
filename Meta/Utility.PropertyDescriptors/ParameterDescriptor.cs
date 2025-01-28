@@ -11,6 +11,7 @@ namespace Utility.Descriptors
 
         public override IObservable<object> Children => Observable.Empty<object>();
 
+        public override bool HasChildren => false;
 
         public override void Finalise(object? item = null)
         {

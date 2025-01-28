@@ -70,6 +70,8 @@ internal record NullValue(Descriptor Descriptor, object Instance) : ValuePropert
 {
     public override IObservable<object> Children => Observable.Empty<object>();
 
+    public override bool HasChildren => false;
+
     public override object? Get()
     {
         return null;

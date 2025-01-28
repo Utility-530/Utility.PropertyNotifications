@@ -14,7 +14,7 @@ public interface ICollectionDetailsDescriptor
     bool IsCollectionItemValueType { get; }
 }
 
-public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, IChildren, ICollectionDetailsDescriptor, IValueChanges, IName, IGuid, IGuidSet, IAsyncClone
+public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, IChildren, ICollectionDetailsDescriptor, IValueChanges, IName, IGuid, IGuidSet, IAsyncClone, IHasChildren
 {
     protected ReplaySubject<ValueChange> changes = new ReplaySubject<ValueChange>();  
 
@@ -28,6 +28,7 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
 
     public bool IsCollection => Type != null && Type != typeof(string) && typeof(IEnumerable).IsAssignableFrom(Type);
 
+    [JsonIgnore]
     public virtual Type? CollectionItemPropertyType => Type?.IsArray == true ? Type.GetElementType() : IsCollection ? Type.GenericTypeArguments().SingleOrDefault() : null;
 
     public bool IsObservableCollection => Type != null && typeof(INotifyCollectionChanged).IsAssignableFrom(Type);
@@ -39,11 +40,15 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
     public virtual bool IsCollectionItemValueType => CollectionItemPropertyType != null && CollectionItemPropertyType.IsValueType;
 
     public abstract bool IsReadOnly { get; }
+
+    [JsonIgnore]
     public abstract IObservable<object> Children { get; }
 
     public virtual bool Equals(MemberDescriptor? other) => this.Guid.Equals(other?.Guid);
 
     public override int GetHashCode() => this.Guid.GetHashCode();
+
+    public virtual bool HasChildren { get; } = true;
 
     public virtual void Initialise(object? item = null)
     {
@@ -125,4 +130,6 @@ public abstract record ValueMemberDescriptor(Type Type) : MemberDescriptor(Type)
 public abstract record ChildlessMemberDescriptor(Type Type) : MemberDescriptor(Type)
 {
     public override IObservable<object> Children { get; } = Observable.Empty<object>();
+
+    public override bool HasChildren => false;
 }

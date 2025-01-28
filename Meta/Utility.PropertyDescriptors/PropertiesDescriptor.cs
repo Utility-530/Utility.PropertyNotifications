@@ -29,6 +29,7 @@ namespace Utility.Descriptors
                             observer.OnNext(new(propertyDescriptor, Changes.Type.Add));
                         }).DisposeWith(composite);
                     }
+                    observer.OnCompleted();
                     return composite;
                 });
             }
