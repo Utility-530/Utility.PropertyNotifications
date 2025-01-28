@@ -15,7 +15,7 @@ namespace Utility.Models
 {
 
 
-    public class Model : NotifyPropertyClass, ISetNode, IProliferation, IClone
+    public class Model : NotifyPropertyClass, ISetNode, IProliferation, IClone, IChildren
     {
         protected string m_name = "unknown";
         private INode node;
@@ -24,7 +24,6 @@ namespace Utility.Models
         protected SynchronizationContext? current;
 
         protected INodeSource source = Locator.Current.GetService<INodeSource>();
-
 
         public virtual Version Version { get; set; } = new();
         public required string Name
@@ -58,7 +57,7 @@ namespace Utility.Models
                     .Where(a => a != default)
                     //.Take(1)
                     .Subscribe(a =>
-                    Initialise(a));       
+                    Initialise(a));
 
                 node.WithChangesTo(a => a.Key)
                 .StartWith(node.Key)
@@ -67,15 +66,6 @@ namespace Utility.Models
                 .Subscribe(a =>
                 {
                     source.Add(Node);
-
-                    node.WithChangesTo(a => a.IsExpanded)
-                    .StartWith(node.IsExpanded)
-                    .Where(a => a)
-                    .Take(1)
-                    .Subscribe(a =>
-                    {
-                        InitialiseChildren(value);
-                    });
                 });
 
                 node.WithChangesTo(a => a.Current)
@@ -116,9 +106,13 @@ namespace Utility.Models
 
         public bool IsInitialising { get; set; }
 
+        [JsonIgnore]
+        public IObservable<object> Children => CreateChildren().ToObservable();
+
         public virtual void SetNode(INode node)
         {
             Node = node;
+            node.IsPersistable = true;
         }
 
         bool isInitialised = false;
@@ -136,49 +130,13 @@ namespace Utility.Models
                 return;
             }
 
-            source
-                .Find(Guid.Parse(parent.Key), Name, typeof(object), Node.LocalIndex)
-                .Subscribe(guid =>
-                {
-                    Node.Key = new Keys.GuidKey(guid.Value.Guid);
+            //source
+            //    .Find(Guid.Parse(parent.Key), Name, typeof(object), Node.LocalIndex)
+            //    .Subscribe(guid =>
+            //    {
+            //        Node.Key = new Keys.GuidKey(guid.Value.Guid);
 
-                });
-        }
-
-        public virtual void InitialiseChildren(INode node)
-        {
-            IsInitialising = true;
-            if (node.Key == "56dfda62-c8d8-4df6-ab05-faa9d728e841")
-            {
-
-
-            }
-
-            source
-                .ChildrenByGuidAsync(Guid.Parse(node.Key))
-                .Subscribe(a =>
-                {
-                    if (a.Data?.ToString() == source.New)
-                    {
-                        CreateChildren()
-                        .ForEach(child =>
-                        {
-                            node.Add(child);
-                        });
-                    }
-                    else if (a.Data != null)
-                    {
-                        node.Add(a);
-                    }
-                    else
-                    {
-
-                    }
-                },
-                () =>
-                {
-                    IsInitialising = false;
-                });
+            //    });
         }
 
         public virtual void AddDescendant(IReadOnlyTree node, int level)
@@ -188,7 +146,7 @@ namespace Utility.Models
         public virtual void SubtractDescendant(IReadOnlyTree node, int level)
         {
             var date = source.Remove(Guid.Parse(node.Key));
-            if(node is IRemoved removed)
+            if (node is IRemoved removed)
             {
                 removed.Removed = date;
             }
