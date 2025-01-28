@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
+using System.Collections;
 
 namespace Utility.Conversions.Json.Newtonsoft
 {
@@ -53,13 +54,22 @@ namespace Utility.Conversions.Json.Newtonsoft
                 return new Utility.Meta.RootDescriptor(propertyType, name: propertyName);
             }
 
-            var type = Type.GetType(typeName);
-            if (type == null)
+            if (Type.GetType(typeName) is Type type)
             {
+                if (typeof(ICollection).IsAssignableFrom(type))
+                {
+                    var propertyTypeName = jObject["PropertyType"]?.ToString();
+                    var propertyType = Type.GetType(propertyTypeName);
+                    return new Utility.Meta.RootDescriptor(propertyType, name: propertyName);
+                }
+
+                if (TypeDescriptor.GetProperties(type)[propertyName] is PropertyDescriptor propertyDescriptor)
+                    return propertyDescriptor;
+                else
+                    throw new Exception($"{type}.{propertyName}");
+            }
+            else
                 throw new JsonSerializationException($"Unable to resolve type: {typeName}");
-            }            
- 
-            return TypeDescriptor.GetProperties(type)[propertyName];    
         }
     }
 }
