@@ -2,7 +2,7 @@
 {
     public interface IDecision
     {
-        bool Evaluate(object input);
+        bool Evaluate(object? input);
     }
 
 }
