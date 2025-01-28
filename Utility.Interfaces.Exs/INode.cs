@@ -2,11 +2,23 @@
 using Utility.Interfaces.NonGeneric;
 using Utility.Enums;
 using System.Collections;
+using System.Windows.Input;
 
 namespace Utility.Interfaces.Exs
 {
-    public interface INode : ITree, IIsExpanded, ICurrent<INode>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation, IRemoved, IIsVisible
+    public interface INode : ITree, IIsExpanded, ICurrent<INode>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation, IRemoved, IIsVisible, IAddCommand, IRemoveCommand
     {
+    }
+
+    public interface IRemoveCommand
+    {
+        ICommand AddCommand { get; }
+    }
+
+    public interface IAddCommand
+    {
+        ICommand RemoveCommand { get; }
+
     }
 
     public interface ICurrent<T>
