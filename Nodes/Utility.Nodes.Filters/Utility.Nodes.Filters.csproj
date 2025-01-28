@@ -9,6 +9,7 @@
     <ProjectReference Include="..\..\Infrastructure\Utility.Keys\Utility.Keys.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.ViewModels\Utility.ViewModels.csproj" />
+    <ProjectReference Include="..\..\Meta\Utility.Meta\Utility.Meta.csproj" />
     <ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
     <ProjectReference Include="..\..\Reactives\Utility.Reactives\Utility.Reactives.csproj" />
     <ProjectReference Include="..\..\Repos\Utility.Repos\Utility.Repos.csproj" />
