@@ -63,6 +63,7 @@ namespace Utility.Nodes
             {
                 Parent = this,
             };
+
             return Task.FromResult((ITree)node);
         }
 
@@ -124,7 +125,9 @@ namespace Utility.Nodes
                                             if (value is INode node)
                                                 this.m_items.Add(node);
                                             else
+                                            {
                                                 this.m_items.Add(await ToTree(value));
+                                            }
                                         }
                                         else if (a is Change { Type: Changes.Type.Remove, Value: { } _value })
                                         {
