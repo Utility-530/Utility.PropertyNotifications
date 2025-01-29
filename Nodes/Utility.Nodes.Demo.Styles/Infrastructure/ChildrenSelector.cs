@@ -17,7 +17,6 @@ namespace Utility.Nodes.Demo.Styles
         public IEnumerable Select(object data)
         {
             return NodeExtensions.ToViewModelTree([typeof(CustomModels.Controls).Assembly, new SystemAssembly()]);
-
         }
     }
 
