@@ -38,7 +38,7 @@ namespace Utility.Nodes.Demo.Filters
 
             var x = DataTemplateSelector.Instance;
 
-            JsonConvert.DefaultSettings = NewMethod;
+            JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
 
             TransformerService service = new();
             ControlsService _service = new();
@@ -65,30 +65,11 @@ namespace Utility.Nodes.Demo.Filters
         }
 
 
-        private static JsonSerializerSettings NewMethod()
-        {
-            var _settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, CheckAdditionalContent = false };
-            foreach (var setting in settings())
-            {
-                _settings.Converters.Add(setting);
-            }
-            return _settings;
-
-            static IEnumerable<JsonConverter> settings()
-            {
-                yield return new AssemblyJsonConverter();
-                yield return (new PropertyInfoJsonConverter());
-                yield return (new MethodInfoJsonConverter());
-                yield return (new ParameterInfoJsonConverter());
-                yield return (new AttributeCollectionConverter());
-                yield return (new Utility.Conversions.Json.Newtonsoft.DescriptorConverter());
-            }
-        }
 
         void combine()
         {
-             string cssFile = "master.css";
-             //string cssFile = "pico.min.css";
+            string cssFile = "master.css";
+            //string cssFile = "pico.min.css";
             // string cssFile = "entireframework.min.css";
             //string cssFile = "pico.classless.blue.css";
 
