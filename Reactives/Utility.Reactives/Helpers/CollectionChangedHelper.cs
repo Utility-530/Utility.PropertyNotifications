@@ -12,7 +12,6 @@ using Type = Utility.Changes.Type;
 using System.Collections.Generic;
 using O = System.Reactive.Linq.Observable;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 
 namespace Utility.Reactives
 {
@@ -23,30 +22,43 @@ namespace Utility.Reactives
         {
             return notifyCollectionChanged
               .Changes()
-              .SelectMany(x => x.NewItems?.Cast<T>() ?? new T[] { });
+              .Where(a => a.Action == NotifyCollectionChangedAction.Add)
+              .SelectMany(x => x.NewItems?.Cast<T>() ?? []);
 
         }
 
         public static IObservable<T> Additions<T>(this INotifyCollectionChanged notifyCollectionChanged)
         {
             return notifyCollectionChanged
-              .Changes()
-              .SelectMany(x => x.NewItems?.Cast<T>() ?? new T[] { });
+                .Changes()
+                .Where(a=>a.Action == NotifyCollectionChangedAction.Add)
+                .SelectMany(x => x.NewItems?.Cast<T>() ?? []);
 
         }
 
         public static IObservable<T> ToOldItemsObservable<T>(this INotifyCollectionChanged notifyCollectionChanged)
         {
             return notifyCollectionChanged
-              .Changes()
-              .SelectMany(x => x.OldItems?.Cast<T>() ?? new T[] { });
+                .Changes()
+                .Where(a => a.Action == NotifyCollectionChangedAction.Remove)
+                .SelectMany(x => x.OldItems?.Cast<T>() ?? []);
+        }
+
+        public static IObservable<T> Subtractions<T>(this IEnumerable collection)
+        {
+            return collection is INotifyCollectionChanged collectionChanged?
+                collectionChanged
+                .Changes()
+                .Where(a => a.Action == NotifyCollectionChangedAction.Remove)
+                .SelectMany(x => x.OldItems?.Cast<T>() ?? [])
+                :Observable.Empty<T>();
         }
 
         public static IObservable<NotifyCollectionChangedAction> ToActionsObservable<T>(this INotifyCollectionChanged notifyCollectionChanged)
         {
             return notifyCollectionChanged
-              .Changes()
-              .Select(x => x.Action);
+                .Changes()
+                .Select(x => x.Action);
         }
 
         public static IObservable<NotifyCollectionChangedEventArgs> Changes(this INotifyCollectionChanged collection)
@@ -71,7 +83,7 @@ namespace Utility.Reactives
                     {
                         NotifyCollectionChangedAction.Add => new Set<T>(a.NewItems.Cast<T>().Select(c => new Change<T>(c, Type.Add)).ToArray()),
                         NotifyCollectionChangedAction.Remove => new Set<T>(a.OldItems.Cast<T>().Select(c => new Change<T>(c, Type.Remove)).ToArray()),
-                        NotifyCollectionChangedAction.Replace => throw new ArgumentOutOfRangeException($"{a.Serialize()} f dfde33330"),
+                        NotifyCollectionChangedAction.Replace => new Set<T>(a.OldItems.Cast<T>().Join(a.NewItems.Cast<T>(), a => a, a => a, (oldItem, newItem) => (oldItem, newItem)).Select(c => new Change<T>(c.newItem, c.oldItem, Type.Update)).ToArray()),  /* throw new ArgumentOutOfRangeException($"{a.Serialize()} f dfde33330"),*/
                         NotifyCollectionChangedAction.Move => throw new ArgumentOutOfRangeException($"{a.Serialize()} f dfde33330"),
                         NotifyCollectionChangedAction.Reset => new Set<T>(new Change<T>(default, Type.Reset)),
                         _ => throw new ArgumentOutOfRangeException($"{a.Serialize()} f222 dfde33330"),
@@ -107,26 +119,7 @@ namespace Utility.Reactives
             });
         }
 
-        public static IObservable<TR> Subtractions<TR>(this IEnumerable collection)
-        {
-            return O.Create<TR>(observer =>
-            {
-                if(collection is INotifyCollectionChanged changed)
-                return O
-                    .FromEvent<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
-                    handler => (sender, args) => handler(args),
-                    handler => changed.CollectionChanged += handler,
-                    handler => changed.CollectionChanged -= handler)
-                               .Where(a => a.Action == NotifyCollectionChangedAction.Remove)
-                    .Subscribe(a =>
-                    {
-                        //if (a.OldItems != null)
-                        foreach (var newItem in a.OldItems.Cast<TR>())
-                            observer.OnNext(newItem);
-                    });
-                throw new Exception("££$£$FDFD");
-            });
-        }
+
 
         public static IObservable<TR> SelfAndAdditions<T, TR>(this T collection) where T : IEnumerable<TR>, INotifyCollectionChanged
         {
@@ -134,49 +127,21 @@ namespace Utility.Reactives
             {
                 foreach (var x in collection)
                     observer.OnNext(x);
-                return O
-                    .FromEvent<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
-                    handler => (sender, args) => handler(args),
-                    handler => collection.CollectionChanged += handler,
-                    handler => collection.CollectionChanged -= handler)
-                               .Where(a => a.Action == NotifyCollectionChangedAction.Add)
-                    .Subscribe(a =>
-                    {
-                        //if (a.NewItems != null)
-                        foreach (var newItem in a.NewItems.Cast<TR>())
-                            observer.OnNext(newItem);
-                    });
+
+                return Additions<TR>(collection).Subscribe(observer);
             });
         }
 
         public static IObservable<TR> Subtractions<T, TR>(this T collection) where T : IEnumerable<TR>, INotifyCollectionChanged
         {
-            return O.Create<TR>(observer =>
-            {
-                return O
-                    .FromEvent<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
-                    handler => (sender, args) => handler(args),
-                    handler => collection.CollectionChanged += handler,
-                    handler => collection.CollectionChanged -= handler)
-                               .Where(a => a.Action == NotifyCollectionChangedAction.Remove)
-                    .Subscribe(a =>
-                    {
-                        //if (a.OldItems != null)
-                        foreach (var newItem in a.OldItems.Cast<TR>())
-                            observer.OnNext(newItem);
-                    });
-            });
+            return Subtractions<TR>(collection);
         }
 
         public static IObservable<(TR @new, TR @old)> Replacements<T, TR>(this T collection) where T : IEnumerable<TR>, INotifyCollectionChanged
         {
             return O.Create<(TR, TR)>(observer =>
             {
-                return O
-                    .FromEvent<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
-                    handler => (sender, args) => handler(args),
-                    handler => collection.CollectionChanged += handler,
-                    handler => collection.CollectionChanged -= handler)
+                return Changes(collection)
                     .Where(a => a.Action == NotifyCollectionChangedAction.Replace)
                     .Subscribe(a =>
                     {
