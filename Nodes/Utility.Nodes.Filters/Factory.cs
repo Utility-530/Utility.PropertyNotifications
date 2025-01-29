@@ -54,27 +54,17 @@ namespace Utility.Nodes.Filters
             return create(root, guid, s => new Node(s), s => new Model() { Name = s });
         }
 
-
-        public static IObservable<Node> BreadcrumbRoot()
+        public static IObservable<INode> BreadcrumbRoot()
         {
-            return Observable.Create<Node>(observer =>
-            {
-                return TreeRepository.Instance.InsertRoot(assemblyGuid, "too", typeof(Model))
-                .Subscribe(a =>
-                {
-                    var res = new Node(new NodePropertyRootModel() { Name = "too" }) { Key = new GuidKey(assemblyGuid), IsExpanded = true };
-                    observer.OnNext(res);
-                });
-            });
+            return create("too", assemblyGuid, s => new Node(s) {  }, s => new NodePropertyRootModel { Name = s });
         }
-
 
         public static IObservable<INode> BuildControlRoot()
         {
             return create("controls",
-    controlsGuid,
-    s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Horizontal },
-    s => new Model(() => [new CommandModel { Name = Save }]) { Name = s });
+                controlsGuid,
+                s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Horizontal },
+                s => new Model(() => [new CommandModel { Name = Save }]) { Name = s });
         }
 
         public static IObservable<INode> BuildComboRoot()
@@ -97,7 +87,7 @@ namespace Utility.Nodes.Filters
         {
             return create(filters,
                 filterGuid,
-                (s) => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Vertical },
+                s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Vertical },
                 s => new FilterModel { Name = s });
         }
 
@@ -106,7 +96,7 @@ namespace Utility.Nodes.Filters
         {
             return create("html",
                 htmlGuid,
-                (s) => new Node(s),
+                s => new Node(s),
                 s => new StringModel { Name = s });
         }
 
@@ -114,7 +104,7 @@ namespace Utility.Nodes.Filters
         {
             return create("_html",
                 htmlRenderGuid,
-                (s) => new Node(s),
+                s => new Node(s),
                 s => new HtmlModel { Name = s });
         }
 
@@ -162,7 +152,8 @@ namespace Utility.Nodes.Filters
                 .Subscribe(a =>
                 {
                     var node = nodeFactory(name);
-                    if (a.HasValue)                    {
+                    if (a.HasValue)
+                    {
                         node.Data = data;
                     }
                     node.Key = new GuidKey(guid);
