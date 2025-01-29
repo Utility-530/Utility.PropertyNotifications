@@ -85,7 +85,7 @@ namespace Utility.WPF.Controls.Breadcrumbs
                 return;
 
 
-            if (sender.DataContext != e.NewValue)
+            if (sender.DataContext.Equals(e.NewValue)==false)
             {
                 if (sender.FindRecursive<TreeViewItem>(e.NewValue) is not TreeViewItem find)
                 {

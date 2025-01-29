@@ -97,7 +97,7 @@
         </Setter>
     </Style>-->
 
-    <Style x:Key="BreadCrumbRootTreeViewItem" TargetType="{x:Type TreeViewItem}" >
+    <Style x:Key="BreadCrumbRootTreeViewItem" TargetType="{x:Type TreeViewItem}" >        
         <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
         <Setter Property="SnapsToDevicePixels"          Value="True" />
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"          Value="Auto" />
@@ -153,7 +153,8 @@
 
     <Style  x:Key="SelectedTreeViewItem" TargetType="{x:Type TreeViewItem}" >
         <Setter Property="local:TreeViewEx.SelectedItem" Value="{Binding Current, Mode=TwoWay}"/>
-        <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
+        <!-- delay of 10ms ensures that SelectedItem is set before IsExpanded since when IsExpanded is false items may potentially be removed from the collection that TreeViewEx depends on for its logic -->
+        <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay, Delay=10}" />
         <Setter Property="Background"
       Value="Transparent"/>
         <Setter Property="HorizontalContentAlignment"
@@ -275,7 +276,8 @@
 
     <Style  x:Key="BreachCrumb" TargetType="{x:Type TreeViewItem}" >
         <Setter Property="local:TreeViewEx.SelectedItem" Value="{Binding Current, Mode=TwoWay}"/>
-        <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
+        <!-- delay of 10ms ensures that SelectedItem is set before IsExpanded since when IsExpanded is false items may potentially be removed from the collection that TreeViewEx depends on for its logic -->
+        <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay, Delay=10}" />
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
