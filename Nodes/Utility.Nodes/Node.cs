@@ -131,7 +131,7 @@ namespace Utility.Nodes
                                         }
                                         else if (a is Change { Type: Changes.Type.Remove, Value: { } _value })
                                         {
-                                            this.m_items.RemoveBy(c => (c as IData).Data == _value);
+                                            this.m_items.RemoveBy(c => (c as IKey).Key.Equals((_value as IKey).Key));
                                         }
                                     });
                         }
@@ -141,22 +141,25 @@ namespace Utility.Nodes
                 {
                     return Observable.Create<object>(observer =>
                     {
+                        bool b = false;
                         return source.Value
                         .ChildrenByGuidAsync(guid)
                         .Subscribe(a =>
                         {
                             if (a.Data?.ToString() == source.Value.New || data is ICount)
                             {
-                                children.Children.Subscribe(a => observer.OnNext(a));
+                                b = true;
+                                children.Children.Subscribe(a => observer.OnNext(a), () => observer.OnCompleted());
                             }
                             else if (a.Data != null && m_items.Any(n => ((IKey)n).Key == a.Key) == false)
                             {
                                 observer.OnNext(a);
                             }
-                            else
-                            {
-
-                            }
+                        },
+                        () =>
+                        {
+                            if (b == false)
+                                observer.OnCompleted();
                         });
                     });
                 }
