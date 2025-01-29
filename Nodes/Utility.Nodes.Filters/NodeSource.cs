@@ -21,6 +21,7 @@ using NetFabric.Hyperlinq;
 using Utility.Helpers.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
+using Utility.Extensions;
 
 namespace Utility.Nodes.Filters
 {
@@ -88,8 +89,7 @@ namespace Utility.Nodes.Filters
                                         _a.Data = a.Value.Instance ?? a.Value.Name;
                                     _a.Removed = a.Value.Removed;
                                     observer.OnNext(_a);
-                                }
-                                );
+                                });
                         }, () => observer.OnCompleted());
                 }
                 catch (Exception ex) //when (ex.Message == TreeRepository.No_Existing_Table_No_Name_To_Create_New_One)
@@ -280,7 +280,7 @@ namespace Utility.Nodes.Filters
                 {
                     if (e is PropertyChangedExEventArgs { PreviousValue: var previousValue, PropertyName: string name, Value: var value })
                     {
-                        context.Value.UI.Post(_ => dirtyNodes.Add(new(node.Key, new PropertyChange(sender, name, value, previousValue))), null);
+                        context.Value.UI(() => dirtyNodes.Add(new(node.Key, new PropertyChange(sender, name, value, previousValue))));
                     }
                     else
                         throw new Exception("ss FGre333333333");
