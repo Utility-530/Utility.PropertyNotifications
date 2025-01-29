@@ -12,11 +12,14 @@ namespace Utility.PropertyNotifications
             private readonly INotifyPropertyChanged _target;
             private readonly PropertyInfo? _info;
             private readonly bool _includeNulls;
-            public PropertyObservable(INotifyPropertyChanged target, PropertyInfo? info = null, bool includeNulls = false)
+            private readonly bool includeInitialValue;
+
+            public PropertyObservable(INotifyPropertyChanged target, PropertyInfo? info = null, bool includeNulls = false, bool includeInitialValue = true)
             {
                 _target = target;
                 _info = info;
                 _includeNulls = includeNulls;
+                this.includeInitialValue = includeInitialValue;
             }
 
             private class Subscription : IDisposable
@@ -27,14 +30,15 @@ namespace Utility.PropertyNotifications
                 private readonly bool _includeNulls;
                 private Dictionary<string, PropertyInfo> dictionary = new();
 
-                public Subscription(INotifyPropertyChanged target, PropertyInfo info, IObserver<T> observer, bool includeNulls)
+                public Subscription(INotifyPropertyChanged target, PropertyInfo info, IObserver<T> observer, bool includeNulls, bool includeInitialValue)
                 {
                     _target = target;
                     _info = info;
                     _observer = observer;
                     _includeNulls = includeNulls;
                     _target.PropertyChanged += OnPropertyChanged;
-                    raiseChange();
+                    if (includeInitialValue)
+                        raiseChange();
                 }
 
                 private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -68,83 +72,29 @@ namespace Utility.PropertyNotifications
 
             public IDisposable Subscribe(IObserver<T> observer)
             {
-                return new Subscription(_target, _info, observer, _includeNulls);
+                return new Subscription(_target, _info, observer, _includeNulls, includeInitialValue);
             }
         }
 
         public static IObservable<TRes> WithChangesTo<TModel, TRes>(this TModel model,
-            Expression<Func<TModel, TRes>> expr, bool includeNulls = false) where TModel : INotifyPropertyChanged
+            Expression<Func<TModel, TRes>> expr, bool includeNulls = false, bool includeInitialValue = true) where TModel : INotifyPropertyChanged
         {
             var l = (LambdaExpression)expr;
             var ma = (MemberExpression)l.Body;
             var prop = (PropertyInfo)ma.Member;
-            return new PropertyObservable<TRes>(model, prop, includeNulls);
+            return new PropertyObservable<TRes>(model, prop, includeNulls, includeInitialValue);
         }
 
-        public static IObservable<object> WithChanges<TModel>(this TModel model, bool includeNulls = false) where TModel : INotifyPropertyChanged
+        public static IObservable<object> WithChanges<TModel>(this TModel model, bool includeNulls = false, bool includeInitialValue = true) where TModel : INotifyPropertyChanged
         {
-            return new PropertyObservable<object>(model, null, includeNulls);
+            return new PropertyObservable<object>(model, null, includeNulls, includeInitialValue);
         }
 
 
-        public static IObservable<TRes> WithChanges<TModel, TRes>(this TModel model, bool includeNulls = false) where TModel : INotifyPropertyChanged
+        public static IObservable<TRes> WithChanges<TModel, TRes>(this TModel model, bool includeNulls = false, bool includeInitialValue = true) where TModel : INotifyPropertyChanged
         {
 
-            return new PropertyObservable<TRes>(model, null, includeNulls);
+            return new PropertyObservable<TRes>(model, null, includeNulls, includeInitialValue);
         }
-
-        //public static IObservable<TRes> WhenAnyValue<TModel, T1, T2, TRes>(this TModel model,
-        //    Expression<Func<TModel, T1>> v1,
-        //    Expression<Func<TModel, T2>> v2,
-        //    Func<T1, T2, TRes> cb,
-        //    bool includeNulls = false) where TModel : INotifyPropertyChanged =>
-        //    model.WithChangesTo(v1, includeNulls).CombineLatest(
-        //        model.WithChangesTo(v2, includeNulls),
-        //        cb);
-
-        //public static IObservable<ValueTuple<T1, T2>> WhenAnyValue<TModel, T1, T2>(this TModel model,
-        //    Expression<Func<TModel, T1>> v1,
-        //    Expression<Func<TModel, T2>> v2,
-        //    bool includeNulls = false) where TModel : INotifyPropertyChanged =>
-        //    model.WhenAnyValue(v1, v2, (a1, a2) => (a1, a2), includeNulls);
-
-        //public static IObservable<TRes> WhenAnyValue<TModel, T1, T2, T3, TRes>(this TModel model,
-        //    Expression<Func<TModel, T1>> v1,
-        //    Expression<Func<TModel, T2>> v2,
-        //    Expression<Func<TModel, T3>> v3,
-        //    Func<T1, T2, T3, TRes> cb,
-        //    bool includeNulls = false) where TModel : INotifyPropertyChanged =>
-        //    model.WithChangesTo(v1, includeNulls).CombineLatest(
-        //        model.WithChangesTo(v2, includeNulls),
-        //        model.WithChangesTo(v3, includeNulls),
-        //        cb);
-
-        //public static IObservable<ValueTuple<T1, T2, T3>> WhenAnyValue<TModel, T1, T2, T3>(this TModel model,
-        //    Expression<Func<TModel, T1>> v1,
-        //    Expression<Func<TModel, T2>> v2,
-        //    Expression<Func<TModel, T3>> v3,
-        //    bool includeNulls = false) where TModel : INotifyPropertyChanged =>
-        //    model.WhenAnyValue(v1, v2, v3, (a1, a2, a3) => (a1, a2, a3), includeNulls);
-        //    private void RaisePropertyChanged(object instance, PropertyInfo propertyInfo)
-        //    {
-        //        if (instance is INotifyPropertyChanged propertyChanged)
-        //        {
-        //            var args = new PropertyChangedEventArgs(propertyInfo.Name);
-
-        //            if (viewModelToServiceConnections.TryGetValue(propertyInfo.DeclaringType, out var viewModelValue) == false || viewModelValue?.PropertyChangedEventHandler == null)
-        //            {
-        //                var baseType = propertyInfo.DeclaringType;
-        //                FieldInfo fieldInfo = baseType.GetField(nameof(INotifyPropertyChanged.PropertyChanged), BindingFlags.Instance | BindingFlags.NonPublic);
-        //                while (fieldInfo == null)
-        //                {
-        //                    baseType = baseType.BaseType;
-        //                    fieldInfo = baseType.GetField(nameof(INotifyPropertyChanged.PropertyChanged), BindingFlags.Instance | BindingFlags.NonPublic);
-        //                }
-        //                (viewModelValue = viewModelToServiceConnections.GetValueOrNew(baseType)).PropertyChangedEventHandler = (PropertyChangedEventHandler)fieldInfo.GetValue(instance);
-        //            }
-        //            viewModelValue.PropertyChangedEventHandler?.Invoke(instance, args);
-        //        }
-        //    }
-        //}
     }
 }
