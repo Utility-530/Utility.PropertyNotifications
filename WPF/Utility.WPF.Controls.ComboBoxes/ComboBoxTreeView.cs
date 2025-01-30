@@ -57,7 +57,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         {
             this.DropDownClosed += ComboBoxTreeView_DropDownClosed;
             this.LostFocus += ComboBoxTreeView_LostFocus;
-           
+
         }
 
         private void ComboBoxTreeView_LostFocus(object sender, RoutedEventArgs e)
@@ -66,7 +66,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         }
 
         protected override void OnMouseLeave(MouseEventArgs e)
-         {
+        {
             IsDropDownOpen = false;
             base.OnMouseLeave(e);
         }
@@ -136,7 +136,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         }
         private void ToggleButton_Checked(object sender, RoutedEventArgs e)
         {
-            if(ToggleButton.IsChecked==false)
+            if (ToggleButton.IsChecked == false)
             {
 
             }
@@ -272,6 +272,10 @@ namespace Utility.WPF.Controls.ComboBoxes
         {
             var type = selectedItem.GetType();
             var propInfo = type.GetProperty(ParentPath);
+            if (propInfo == null)
+            {
+                throw new Exception($"{type.Name} && {ParentPath}");
+            }
             return TreeHelper.GetAncestors(selectedItem, a => propInfo.GetValue(a)).Reverse().ToArray();
         }
     }
