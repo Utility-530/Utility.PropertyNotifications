@@ -14,6 +14,7 @@ namespace Utility.Nodes.Filters
         void Remove(INode node);
         IObservable<Key?> Find(Guid guid, string name, System.Type type, int? localIndex);
         IObservable<DateValue> Get(Guid guid, string name);
+        void Set(Guid guid, string name, object value, DateTime dateTime );
         void Add(INode node);
         IObservable<INode?> Single(string v);
     }

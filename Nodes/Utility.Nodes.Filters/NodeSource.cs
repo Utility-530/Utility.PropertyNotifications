@@ -229,6 +229,11 @@ namespace Utility.Nodes.Filters
             return repository.Get(guid, name);
         }
 
+        public void Set(Guid guid, string name, object value, DateTime dateTime)
+        {
+            repository.Set(guid, name, value, dateTime);
+        }
+
         public void Add(INode node)
         {
             if (this.Nodes.Any(a => a.Key == node.Key) == false)
