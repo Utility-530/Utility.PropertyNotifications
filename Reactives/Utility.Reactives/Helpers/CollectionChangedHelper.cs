@@ -31,7 +31,7 @@ namespace Utility.Reactives
         {
             return notifyCollectionChanged
                 .Changes()
-                .Where(a=>a.Action == NotifyCollectionChangedAction.Add)
+                .Where(a => a.Action == NotifyCollectionChangedAction.Add)
                 .SelectMany(x => x.NewItems?.Cast<T>() ?? []);
 
         }
@@ -46,12 +46,12 @@ namespace Utility.Reactives
 
         public static IObservable<T> Subtractions<T>(this IEnumerable collection)
         {
-            return collection is INotifyCollectionChanged collectionChanged?
+            return collection is INotifyCollectionChanged collectionChanged ?
                 collectionChanged
                 .Changes()
                 .Where(a => a.Action == NotifyCollectionChangedAction.Remove)
                 .SelectMany(x => x.OldItems?.Cast<T>() ?? [])
-                :Observable.Empty<T>();
+                : O.Empty<T>();
         }
 
         public static IObservable<NotifyCollectionChangedAction> ToActionsObservable<T>(this INotifyCollectionChanged notifyCollectionChanged)
@@ -104,6 +104,15 @@ namespace Utility.Reactives
             });
         }
 
+        public static IObservable<int> Counts(this IEnumerable collection)
+        {
+            return collection
+                  .AndChanges<object>()
+                  .Select(x => collection.Count())
+                  .StartWith(collection.Count())
+                  .DistinctUntilChanged();
+        }
+
 
         public static IObservable<T> AndAdditions<T>(this IEnumerable collection)
         {
@@ -118,8 +127,6 @@ namespace Utility.Reactives
                 return Disposable.Empty;
             });
         }
-
-
 
         public static IObservable<TR> SelfAndAdditions<T, TR>(this T collection) where T : IEnumerable<TR>, INotifyCollectionChanged
         {
