@@ -24,6 +24,7 @@ using Utility.Models;
 using Utility.Trees.Abstractions;
 using Type = System.Type;
 using Utility.Collections;
+using Utility.Helpers.NonGeneric;
 
 namespace Utility.Models.Trees
 {
@@ -684,17 +685,25 @@ namespace Utility.Models.Trees
             return new ActionDisposable(() => list.Remove(observer));
         }
     }
-    public class BooleanModel : Model
+    public class BooleanModel : ValueModel<bool>
     {
-        private bool _value;
+    }
 
+    public enum Comparison
+    {
+        Between, Contains, DoesNotContain, EndsWith, EqualTo, GreaterThan, GreaterThanOrEqualTo, In, IsEmpty, IsNotEmpty, IsNotNull, IsNotNullOrWhiteSpace, IsNull, IsNullOrWhiteSpace, LessThan, LessThanOrEqualTo, NotEqualTo, NotIn, StartsWith
+    }
 
-        public BooleanModel()
+    public class ComparisonModel : Model
+    {
+        private Comparison _value;
+
+        public ComparisonModel()
         {
 
         }
 
-        public bool Value
+        public Comparison Value
         {
             get => _value; set
             {
@@ -956,7 +965,7 @@ namespace Utility.Models.Trees
 
         public override IEnumerable Proliferation()
         {
-            yield return new DatabaseModel { Name="db", Alias = new StringModel { Name="new", Value = "New" } };
+            yield return new DatabaseModel { Name = "db", Alias = new StringModel { Name = "new", Value = "New" } };
         }
     }
 
