@@ -88,7 +88,7 @@ namespace Utility.Nodes.Filters
             return create(filters,
                 filterGuid,
                 s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Vertical },
-                s => new FilterModel { Name = s });
+                s => new FiltersModel { Name = s });
         }
 
 
