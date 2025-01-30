@@ -121,7 +121,7 @@ namespace Utility.WPF.Controls.Trees
                 button.Click += AcceptComboTreeViewItem_Click;
             if (this.GetTemplateChild("Decline_Button") is Button _button)
                 _button.Click += DeclineComboTreeViewItem_Click;
-            if (Style?.Resources["EditTemplate"] is DataTemplate dataTemplate)
+               if (Style?.Resources["EditTemplate"] is DataTemplate dataTemplate)
                 EditTemplate ??= dataTemplate;
             base.OnApplyTemplate();
         }
@@ -131,7 +131,7 @@ namespace Utility.WPF.Controls.Trees
             RaiseCustomRoutedEvent(false);
         }
 
-        private void AcceptComboTreeViewItem_Click(object sender, RoutedEventArgs e)
+        public void AcceptComboTreeViewItem_Click(object sender, RoutedEventArgs e)
         {
             RaiseCustomRoutedEvent(true);
 

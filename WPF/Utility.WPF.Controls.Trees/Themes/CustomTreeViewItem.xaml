@@ -165,13 +165,14 @@
                                         </sb:SplitButton.ItemsSource>-->
                                         <sb:SplitButton.Content>
                                             <icons:PackIconIonicons Kind="AddMD" />
-                                        </sb:SplitButton.Content>
+                                        </sb:SplitButton.Content>                     
                                         <i:Interaction.Behaviors>
                                             <!-- requies reset otherwise selected item feature doesn't work -->
                                             <b:ResetComboBoxOnOpenedBehavior/>
                                         </i:Interaction.Behaviors>
                                         <i:Interaction.Triggers>
                                             <i:EventTrigger EventName="SelectionChanged">
+                                                <i:CallMethodAction MethodName="AcceptComboTreeViewItem_Click" TargetObject="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                                                 <b:InvokeCommandAction Command="{Binding AddCommand, RelativeSource={RelativeSource Mode=TemplatedParent}}" IgnoreNulls="True"/>
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
