@@ -10,6 +10,8 @@ using System.Reactive.Linq;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
 using Utility.Helpers.Ex;
+using Utility.Structs.Repos;
+using Utility.Trees.Extensions.Async;
 
 namespace Utility.Nodes.Database
 {
@@ -38,18 +40,17 @@ namespace Utility.Nodes.Database
                     var keys = TreeRepository.Instance.SelectKeys(table_name: name).GetAwaiter().GetResult();
 
 
-                    var tree = TreeExtensions.ToTree(keys.ToObservable(), a => a.Guid, a => a.ParentGuid, a.Guid, func: a =>
+                    var tree = keys.ToObservable().ToTree(a => a.Guid, a => a.ParentGuid, a.Guid, func: a =>
                     {
-                        var tree = (ITree<Key>)new Tree<Key>(a);
+                        var _tree = (ITree<Key>)new Tree<Key>(a);
                         var get = TreeRepository.Instance.Get(a.Guid).Subscribe(a =>
                         {
                             if (a.Value is { }  x)
-                                tree.Add(new Tree<Key>(new Key(default, default, x, default, default, default)));
+                                _tree.Add(new Tree<Key>(new Key(default, default, x, default, default, default)));
                         });
 
-                        return tree;
-                    }
-                    );
+                        return _tree;
+                    });
                     TreeView.ItemsSource = tree.ToObservableCollection();
                 });
 
