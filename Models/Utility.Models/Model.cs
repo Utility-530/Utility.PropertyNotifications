@@ -13,18 +13,15 @@ using Utility.Trees.Extensions.Async;
 
 namespace Utility.Models
 {
-
-
-    public class Model : NotifyPropertyClass, ISetNode, IProliferation, IClone, IChildren, IKey
+    public class Model : NotifyPropertyClass, ISetNode, IProliferation, IClone, IChildren, IKey, IName
     {
         protected string m_name = "unknown";
         private INode node;
         int i = 0;
         private readonly Func<IEnumerable<Model>> func;
-        protected SynchronizationContext? current;
 
         protected INodeSource source = Locator.Current.GetService<INodeSource>();
-
+        protected Lazy<IContext> context = new(() => Locator.Current.GetService<IContext>());
         public virtual Version Version { get; set; } = new();
         public required string Name
         {
@@ -38,7 +35,6 @@ namespace Utility.Models
 
         public Model()
         {
-            current = SynchronizationContext.Current;
         }
 
         public Model(Func<IEnumerable<Model>> func) : this()
@@ -49,7 +45,9 @@ namespace Utility.Models
         [JsonIgnore]
         public INode Node
         {
-            get => node; set
+            get => node;
+
+            set
             {
                 node = value;
 
@@ -67,6 +65,24 @@ namespace Utility.Models
                 {
                     source.Add(Node);
                 });
+
+                node.WithChangesTo(a => a.Current)
+                    .Where(a => a != default)
+                    .Subscribe(a =>
+                    {
+                        a.WithChangesTo(a => a.Key)
+                        .Subscribe(key =>
+                        {
+                            try
+                            {
+                                source.Set(Guid.Parse(node.Key), nameof(Node.Current), key, DateTime.Now);
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
+                        });
+                    });
 
                 node.WithChangesTo(a => a.Current)
                     .Where(a => a != null)
@@ -101,6 +117,7 @@ namespace Utility.Models
                     {
                         Subtraction(value, a);
                     });
+                RaisePropertyChanged();
             }
         }
 
@@ -133,7 +150,7 @@ namespace Utility.Models
             }
             if (node.Key == default)
                 source
-                    .Find(Guid.Parse(parent.Key), Name, typeof(object), Node.LocalIndex)
+                    .Find(Guid.Parse(parent.Key), Name, type: this.GetType(), localIndex: Node.LocalIndex)
                     .Subscribe(guid =>
                     {
                         Node.Key = new Keys.GuidKey(guid.Value.Guid);
@@ -221,72 +238,6 @@ namespace Utility.Models
             return instance;
         }
 
-
-    }
-
-    public class ValueModel<T> : Model
-    {
-        private object dateValue;
-        private object value;
-
-        public virtual object? Value
-        {
-            get
-            {
-                var value = Get();
-                RaisePropertyCalled(value);
-                return value;
-            }
-            set
-            {
-                Set(value);
-                RaisePropertyReceived(value);
-            }
-        }
-
-
-        public object? Get()
-        {
-            if (dateValue == null)
-            {
-                var previous = value;
-                Node.WithChangesTo(a => a.Key).Take(1).Subscribe(a =>
-                {
-                    dateValue = source.Get(Guid.Parse(Node.Key), nameof(Value))
-                        .Subscribe(a =>
-                        {
-                            if (a is { Value: { } _value } x)
-                            {
-                                value = _value;
-                            }
-                            else
-                                return;
-
-                            //changes.OnNext(new(Name, value));
-                            RaisePropertyChanged(ref previous, value, nameof(Value));
-                        });
-                });
-            }
-            return value;
-        }
-
-        public void Set(object? value)
-        {
-            this.WithChangesTo(a => a.Node)
-                .Subscribe(a =>
-                {
-                    if (Node.IsReadOnly == false)
-                    {
-                        Node.WithChangesTo(a => a.Key).Take(1).Subscribe(a =>
-                        {
-                            source.Set(Guid.Parse(Node.Key), nameof(Value), value, DateTime.Now);
-                            //Descriptor.SetValue(Instance, value);
-                            this.value = value;
-                            //changes.OnNext(new(Name, value));
-                        });
-                    }
-                });
-        }
 
     }
 

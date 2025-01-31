@@ -1,0 +1,72 @@
+﻿using System.Reactive.Linq;
+using Utility.PropertyNotifications;
+
+namespace Utility.Models
+{
+    public class ValueModel<T> : Model
+    {
+        private object dateValue;
+        private T value;
+
+        public virtual T? Value
+        {
+            get
+            {
+                var value = Get();
+                RaisePropertyCalled(value);
+                return value;
+            }
+            set
+            {
+                Set(value);
+                RaisePropertyReceived(value);
+            }
+        }
+
+
+        public T? Get()
+        {
+            if (dateValue == null)
+            {
+                var previous = value;
+                Node.WithChangesTo(a => a.Key).Take(1).Subscribe(a =>
+                {
+                    dateValue = source.Get(Guid.Parse(Node.Key), nameof(Value))
+                        .Subscribe(a =>
+                        {
+                            if (a is { Value: T _value } x)
+                            {
+                                value = _value;
+                            }
+                            else
+                                return;
+
+                            //changes.OnNext(new(Name, value));
+                            RaisePropertyChanged(ref previous, value, nameof(Value));
+                        });
+                });
+            }
+            return value;
+        }
+
+        public void Set(T? value)
+        {
+            this.WithChangesTo(a => a.Node)
+                .Subscribe(a =>
+                {
+                    if (Node.IsReadOnly == false)
+                    {
+                        Node.WithChangesTo(a => a.Key).Take(1).Subscribe(a =>
+                        {
+                            source.Set(Guid.Parse(Node.Key), nameof(Value), value, DateTime.Now);
+                            //Descriptor.SetValue(Instance, value);
+
+                            //changes.OnNext(new(Name, value));
+                        });
+                    }
+                });
+            this.value = value;
+        }
+
+    }
+}
