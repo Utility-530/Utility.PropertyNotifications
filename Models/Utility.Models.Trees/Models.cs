@@ -50,10 +50,14 @@ namespace Utility.Models.Trees
             if (Type != null)
                 foreach (var prop in Type.GetProperties())
                 {
-                    var pnode = new PropertyModel { Name = prop.Name, PropertyInfo = prop };
+                    var pnode = new PropertyModel { Name = prop.Name, Value = prop };
                     yield return pnode;
 
                 }
+        }
+
+        public override void SubtractDescendant(IReadOnlyTree node, int level)
+        {
         }
     }
 
@@ -62,77 +66,77 @@ namespace Utility.Models.Trees
         object Value { get; set; }
     }
 
-    public class NodeRootModel : NodePropertyRootModel, IValue, IObservable<ValueChanged>, IRoot
-    {
-        List<IObserver<ValueChanged>> list = new();
-        private object value;
+    //public class NodeRootModel : NodePropertyRootModel, IValue, IObservable<ValueChanged>, IRoot
+    //{
+    //    List<IObserver<ValueChanged>> list = new();
+    //    private object value;
 
-        public NodeRootModel()
-        {
-        }
+    //    public NodeRootModel()
+    //    {
+    //    }
 
 
-        public object Value
-        {
-            get => value; set
-            {
+    //    public object Value
+    //    {
+    //        get => value; set
+    //        {
 
-                this.value = value;
-            }
-        }
+    //            this.value = value;
+    //        }
+    //    }
 
-        public override void AddDescendant(IReadOnlyTree node, int level)
-        {
-            if (node == null)
-                throw new NullReferenceException();
+    //    public override void AddDescendant(IReadOnlyTree node, int level)
+    //    {
+    //        if (node == null)
+    //            throw new NullReferenceException();
 
-            switch (node.Data)
-            {
-                case ValueModel { Value: var value } valueModel:
-                    {
-                        valueModel.PropertyChanged -= ValueModel_PropertyChanged;
-                        valueModel.PropertyChanged += ValueModel_PropertyChanged;
-                        Value = value;
-                        break;
-                    }
-            }
+    //        switch (node.Data)
+    //        {
+    //            case ValueModel { Value: var value } valueModel:
+    //                {
+    //                    valueModel.PropertyChanged -= ValueModel_PropertyChanged;
+    //                    valueModel.PropertyChanged += ValueModel_PropertyChanged;
+    //                    Value = value;
+    //                    break;
+    //                }
+    //        }
 
-            base.AddDescendant(node, level);
-        }
+    //        base.AddDescendant(node, level);
+    //    }
 
-        List<ValueChanged> values = new();
+    //    List<ValueChanged> values = new();
 
-        private void ValueModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            var prop = sender.GetType().GetProperty(e.PropertyName);
-            Value = prop.GetValue(sender);
-            values.Add(new ValueChanged(prop, Value));
+    //    private void ValueModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    //    {
+    //        var prop = sender.GetType().GetProperty(e.PropertyName);
+    //        Value = prop.GetValue(sender);
+    //        values.Add(new ValueChanged(prop, Value));
 
-            foreach (var s in list)
-            {
-                s.OnNext(new ValueChanged(prop, Value));
-            }
-        }
+    //        foreach (var s in list)
+    //        {
+    //            s.OnNext(new ValueChanged(prop, Value));
+    //        }
+    //    }
 
-        public override bool TryGetValue(object instance, out object value)
-        {
-            Update(Node, Node.Current);
+    //    public override bool TryGetValue(object instance, out object value)
+    //    {
+    //        Update(Node, Node.Current);
 
-            //var type = instance.GetType();
-            if (base.TryGetValue(instance, out value))
-            {
-                if (Value?.Equals(value) ?? false)
-                    return true;
-            }
-            return false;
-        }
+    //        //var type = instance.GetType();
+    //        if (base.TryGetValue(instance, out value))
+    //        {
+    //            if (Value?.Equals(value) ?? false)
+    //                return true;
+    //        }
+    //        return false;
+    //    }
 
-        public IDisposable Subscribe(IObserver<ValueChanged> observer)
-        {
-            list.Add(observer);
-            return new ActionDisposable(() => list.Remove(observer));
-        }
-    }
+    //    public IDisposable Subscribe(IObserver<ValueChanged> observer)
+    //    {
+    //        list.Add(observer);
+    //        return new ActionDisposable(() => list.Remove(observer));
+    //    }
+    //}
 
     public class NodePropertyRootModel : ResolvableModel
     {
@@ -163,6 +167,11 @@ namespace Utility.Models.Trees
         public override IEnumerable<Model> CreateChildren()
         {
             yield return new NodePropertiesModel() { Name = "npm" };
+        }
+
+        public override void SubtractDescendant(IReadOnlyTree node, int level)
+        {
+            //base.SubtractDescendant(node, level);
         }
     }
 
@@ -205,9 +214,13 @@ namespace Utility.Models.Trees
         {
             foreach (var prop in typeof(INode).PublicInstanceProperties().Where(a => types.Any(x => a.PropertyType.Equals(x))))
             {
-                var pnode = new PropertyModel { Name = prop.Name, PropertyInfo = prop };
+                var pnode = new PropertyModel { Name = prop.Name, Value = prop };
                 yield return pnode;
             }
+        }
+
+        public override void SubtractDescendant(IReadOnlyTree node, int level)
+        {
         }
     }
 
@@ -215,7 +228,7 @@ namespace Utility.Models.Trees
     {
         //public AssemblyModel(Assembly assembly):this(assembly.GetName().Name)
         //{
-   
+
         //    Assembly = assembly;
         //}
 
@@ -239,7 +252,11 @@ namespace Utility.Models.Trees
             }
         }
 
-        public static AssemblyModel Create(Assembly assembly) => new () { Assembly = assembly, Name = assembly.GetName().Name };
+        public static AssemblyModel Create(Assembly assembly) => new() { Assembly = assembly, Name = assembly.GetName().Name };
+
+        public override void SubtractDescendant(IReadOnlyTree node, int level)
+        {
+        }
     }
 
     /// <summary>
@@ -254,6 +271,9 @@ namespace Utility.Models.Trees
                 var _node = AssemblyModel.Create(ass);
                 yield return _node;
             }
+        }
+        public override void SubtractDescendant(IReadOnlyTree node, int level)
+        {
         }
     }
 
@@ -272,33 +292,28 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class PropertyModel : Model, IBreadCrumb
+    public class PropertyModel : ValueModel<PropertyInfo>, IBreadCrumb
     {
-        public PropertyInfo PropertyInfo { get; set; }
+        public PropertyModel()
+        {
 
+        }
 
         public override IEnumerable<Model> CreateChildren()
         {
-            if (PropertyInfo.PropertyType == typeof(object))
+            if (Value.PropertyType == typeof(object))
             {
                 yield return (new GlobalAssembliesModel { Name = "ass_root" });
-            }           
+            }
+        }
+
+        public override void SubtractDescendant(IReadOnlyTree node, int level)
+        {
         }
     }
 
-    public class ValueModel : Model, IBreadCrumb
+    public class ValueModel : ValueModel<object>
     {
-        private object _value;
-
-        public object Value
-        {
-            get => _value;
-            set
-            {
-                RaisePropertyChanged(ref _value, value);
-
-            }
-        }
     }
 
 
@@ -343,7 +358,7 @@ namespace Utility.Models.Trees
 
         public Exception Exception { get; } = Exception;
 
-        public static ExceptionModel Create(Exception ex)=> new ExceptionModel(ex) { Name = ex.Message };
+        public static ExceptionModel Create(Exception ex) => new ExceptionModel(ex) { Name = ex.Message };
     }
 
     public class ExceptionsModel() : Model
@@ -545,10 +560,10 @@ namespace Utility.Models.Trees
                             {
                                 onNext();
                             }).DisposeWith(composite);
-                            a.Subscribe(_a =>
-                            {
-                                onNext();
-                            }).DisposeWith(composite);
+                            //a.Subscribe(_a =>
+                            //{
+                            //    onNext();
+                            //}).DisposeWith(composite);
                         }).DisposeWith(composite);
                     dictionary[filterModel] = composite;
 
@@ -839,24 +854,45 @@ namespace Utility.Models.Trees
         }
     }
 
+    public class FiltersModel : Model
+    {
+        [JsonIgnore]
+        public ObservableCollection<FilterModel> Filters { get; } = new();
+
+        public override void SetNode(INode node)
+        {
+            node.Orientation = Orientation.Vertical;
+            node.IsEditable = true;
+            node.IsExpanded = true;
+            node.IsPersistable = true;
+            node.Items.AndAdditions<INode>().Subscribe(a => Filters.Add(a.Data as FilterModel));
+            base.SetNode(node);
+        }
+        public override IEnumerable Proliferation()
+        {
+            yield return new FilterModel { Name = "filter" };
+        }
+
+        public override void SubtractDescendant(IReadOnlyTree node, int level)
+        {
+            //base.SubtractDescendant(node, level);
+        }
+    }
+
     public class SelectionModel : Model
     {
         public const string _string = nameof(_string);
-        //public const string _guid = nameof(_guid);
         public const string _type = nameof(_type);
 
         private StringModel @string;
-        //private GuidModel guid;
         private TypeModel type;
 
         public StringModel String { get => @string; set => @string = value; }
-        //public GuidModel Guid { get => guid; set => guid = value; }
         public TypeModel Type { get => type; set => type = value; }
 
         public override IEnumerable<Model> CreateChildren()
         {
             yield return new StringModel { Name = _string };
-            //yield return new Node(_guid, new GuidModel { Name = _guid }) { IsExpanded = true };
             yield return new TypeModel { Name = _type };
         }
 
@@ -865,9 +901,7 @@ namespace Utility.Models.Trees
             switch (a.Data.ToString())
             {
                 case _string: String = a.Data as StringModel; break;
-                //case _guid: Guid = a.Data as GuidModel; break;
                 case _type: Type = a.Data as TypeModel; break;
-                //case converter: Converter = a.Data as ConverterModel; break;
                 default: throw new ArgumentOutOfRangeException("ds 33` 33kfl.. ");
             }
         }
@@ -1165,10 +1199,16 @@ namespace Utility.Models.Trees
 
         public override void SetNode(INode node)
         {
-            node.IsEditable = false;
-            node.IsExpanded = true;
-            node.IsPersistable = true;
-            base.SetNode(node);
+            node.WithChangesTo(a => a.Parent).Subscribe(a =>
+            {
+                node.LocalIndex = a.Items.Count();
+                node.IsEditable = false;
+                node.IsExpanded = true;
+                node.IsPersistable = true;
+                base.SetNode(node);
+            });
+
+
         }
     }
 
@@ -1176,34 +1216,59 @@ namespace Utility.Models.Trees
     {
         const string res = nameof(res);
         const string b_ool = nameof(b_ool);
-        private NodeRootModel resolvableModel;
+        const string type = nameof(type);
+        const string _value = nameof(_value);
+
+        private NodePropertyRootModel resolvableModel;
+        private TypeModel typeModel;
+        private ValueModel valueModel;
 
         public FilterModel()
         {
-
         }
 
         public override void SetNode(INode node)
         {
-            node.IsPersistable = true;
-            node.IsExpanded = true;
-            base.SetNode(node);
+            node.WithChangesTo(a => a.Parent).Subscribe(a =>
+            {
+                node.LocalIndex = a.Items.Count();
+                node.IsPersistable = true;
+                node.IsExpanded = true;
+                base.SetNode(node);
+            });
+
         }
 
         [JsonIgnore]
         public BooleanModel BooleanModel { get; set; }
 
         [JsonIgnore]
-        public NodeRootModel ResolvableModel
+        public NodePropertyRootModel ResolvableModel
         {
             get => resolvableModel;
             set => base.RaisePropertyChanged(ref this.resolvableModel, value);
         }
 
+        [JsonIgnore]
+        public TypeModel TypeModel
+        {
+            get => typeModel;
+            set => base.RaisePropertyChanged(ref this.typeModel, value);
+        }
+
+        [JsonIgnore]
+        public ValueModel ValueModel
+        {
+            get => valueModel;
+            set => base.RaisePropertyChanged(ref this.valueModel, value);
+        }
+
         public override IEnumerable<Model> CreateChildren()
         {
-            yield return new NodeRootModel { Name = "res" };
-            yield return new BooleanModel { Name = "b_ool" };
+            yield return new NodePropertyRootModel { Name = res };
+            yield return new BooleanModel { Name = b_ool };
+            yield return new TypeModel { Name = type };
+            yield return new ValueModel { Name = _value };
         }
 
         public override void Addition(IReadOnlyTree value, IReadOnlyTree a)
@@ -1211,21 +1276,30 @@ namespace Utility.Models.Trees
             switch (a.Data.ToString())
             {
                 case res:
-                    ResolvableModel = a.Data as NodeRootModel; break;
+                    ResolvableModel = a.Data as NodePropertyRootModel; break;
                 case b_ool:
                     BooleanModel = a.Data as BooleanModel; break;
+                case type:
+                    TypeModel = a.Data as TypeModel; break;
+                case _value:
+                    ValueModel = a.Data as ValueModel; break;
             }
         }
 
         public bool Get(object instance)
         {
             if (ResolvableModel.TryGetValue(instance, out var value))
-                if (value?.ToString().Equals(ResolvableModel.Value) == true)
+                if (value?.ToString().Equals(ValueModel.Value) == true)
                 {
                     return true;
                 }
             return false;
 
+        }
+
+        public override void SubtractDescendant(IReadOnlyTree node, int level)
+        {
+            //base.SubtractDescendant(node, level);
         }
     }
 
@@ -1245,7 +1319,7 @@ namespace Utility.Models.Trees
 
             List<INode> items = new();
             var child = topNode;
-            child.IsExpanded = false;
+            //child.IsExpanded = false;
             while (child.Current != null)
             {
                 items.Add(child = child.Current);
@@ -1263,7 +1337,7 @@ namespace Utility.Models.Trees
 
                         if (topNode.Count > i)
                         {
-                            if (topNode[i] != items[i])
+                            if (topNode[i] != items[i] && topNode[i].Equals(items[i]) == false)
                             {
                                 topNode[i] = items[i];
                             }
@@ -1276,7 +1350,7 @@ namespace Utility.Models.Trees
                             }
                             catch (InvalidOperationException ex) when (ex.Message == "Cannot change ObservableCollection during a CollectionChanged event.")
                             {
-                                this.current.Post(a => topNode.Add(a as INode), items[i]);
+                                this.context.Value.UI.Post(a => topNode.Add(a as INode), items[i]);
                             }
                         }
                     }
@@ -1387,7 +1461,7 @@ namespace Utility.Models.Trees
                                     types.InsertSpecial(level, type);
                                     break;
                                 }
-                            case PropertyModel { PropertyInfo: { } pInfo }:
+                            case PropertyModel { Value: { } pInfo }:
                                 {
                                     var level = node.Level(Node);
                                     propertyInfos.InsertSpecial(level, pInfo);
@@ -1417,7 +1491,7 @@ namespace Utility.Models.Trees
                         types.RemoveAtSpecial(level);
                         break;
                     }
-                case PropertyModel { PropertyInfo: { } pInfo }:
+                case PropertyModel { Value: { } pInfo }:
                     {
                         var level = a.Level(node);
                         propertyInfos.RemoveAtSpecial(level);
@@ -1426,6 +1500,15 @@ namespace Utility.Models.Trees
                     break;
 
             }
+        }
+
+        public override void SubtractDescendant(IReadOnlyTree node, int level)
+        {
+            //var date = source.Remove(Guid.Parse(node.Key));
+            //if (node is IRemoved removed)
+            //{
+            //    removed.Removed = date;
+            //}
         }
 
         public override void ReplaceDescendant(IReadOnlyTree node, IReadOnlyTree old, int level)
@@ -1443,7 +1526,7 @@ namespace Utility.Models.Trees
                         types.ReplaceSpecial(level, type);
                         break;
                     }
-                case PropertyModel { PropertyInfo: { } pInfo }:
+                case PropertyModel { Value: { } pInfo }:
                     {
                         propertyInfos.ReplaceSpecial(level, pInfo);
                     }
