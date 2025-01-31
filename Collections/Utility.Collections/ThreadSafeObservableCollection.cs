@@ -10,17 +10,17 @@ namespace Utility.Collections
 
         public ThreadSafeObservableCollection(IEnumerable<T> collection) : base(collection)
         {
-            Context = SynchronizationContext.Current ?? Locator.Current.GetService<IContext>().UI ?? throw new Exception("1DVS sdddsd");
+            Context ??= SynchronizationContext.Current ?? Locator.Current.GetService<IContext>().UI ?? throw new Exception("1DVS sdddsd");
         }
 
         public ThreadSafeObservableCollection(List<T> list) : base(list)
         {
-            Context = SynchronizationContext.Current ?? Locator.Current.GetService<IContext>().UI ?? throw new Exception("2DVS sdddsd");
+            Context ??= SynchronizationContext.Current ?? Locator.Current.GetService<IContext>().UI ?? throw new Exception("2DVS sdddsd");
         }
 
         public ThreadSafeObservableCollection() : base()
         {
-            Context = SynchronizationContext.Current ?? Locator.Current.GetService<IContext>().UI ?? throw new Exception("DVS sdddsd");
+            Context ??= SynchronizationContext.Current ?? Locator.Current.GetService<IContext>().UI ?? throw new Exception("DVS sdddsd");
         }
 
         #region Collection Events
