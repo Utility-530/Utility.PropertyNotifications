@@ -22,12 +22,9 @@ using Utility.Helpers.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 using Utility.Extensions;
-using Utility.PropertyNotifications;
 
 namespace Utility.Nodes.Filters
 {
-
-
     public readonly record struct DirtyNode(string Property, INode Node);
     public class NodeSource : INodeSource
     {
@@ -137,7 +134,6 @@ namespace Utility.Nodes.Filters
                 }
                 else
                 {
-                    //repository.FindParent(currentGuid); ;
                     return repository.Find(parentGuid, guid: currentGuid).Subscribe(a =>
                     {
                         var node = new Node(DataActivator.Activate(a));

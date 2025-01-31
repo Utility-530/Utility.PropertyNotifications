@@ -22,8 +22,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItem.xaml"/>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Breadcrumbs;component/Themes/Generic.xaml"/>
-                <!--<ResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
-                <ResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/ButtonComboBoxTreeViewStyle.xaml"/>-->
+                <!--                <ResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/ButtonComboBoxTreeViewStyle.xaml"/>-->
 
 
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
