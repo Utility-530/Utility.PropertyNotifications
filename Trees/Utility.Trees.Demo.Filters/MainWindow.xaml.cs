@@ -11,6 +11,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Utility.Pipes;
 using Utility.Trees.Demo.Filters;
+using Utility.Trees.Demo.Filters.Infrastructure;
 using Utility.Trees.WPF;
 
 namespace Utility.Trees.Demo.Filters
@@ -23,10 +24,8 @@ namespace Utility.Trees.Demo.Filters
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = new MainViewModel();
         }
-
-
-
 
         void UpdateView(object data)
         {
@@ -53,8 +52,5 @@ namespace Utility.Trees.Demo.Filters
 
 
         }
-
-
-
     }
 }

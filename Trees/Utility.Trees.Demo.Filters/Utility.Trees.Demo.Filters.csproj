@@ -9,9 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Conversions\Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj" />
     <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.Descriptors.csproj" />
+    <ProjectReference Include="..\..\Nodes\Utility.Nodes.Demo.Styles\Utility.Nodes.Demo.Styles.csproj" />
+    <ProjectReference Include="..\..\Nodes\Utility.Nodes.Filters\Utility.Nodes.Filters.csproj" />
     <ProjectReference Include="..\..\Nodes\Utility.Nodes.Reflections\Utility.Nodes.Reflections.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Breadcrumbs\Utility.WPF.Controls.Breadcrumbs.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
@@ -19,6 +23,10 @@
     <ProjectReference Include="..\Utility.Trees.Decisions\Utility.Trees.Decisions.csproj" />
     <ProjectReference Include="..\Utility.Trees.WPF\Utility.Trees.WPF.csproj" />
     <ProjectReference Include="..\Utility.Trees\Utility.Trees.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>
