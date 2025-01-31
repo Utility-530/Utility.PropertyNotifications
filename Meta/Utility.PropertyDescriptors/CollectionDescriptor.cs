@@ -123,7 +123,7 @@ namespace Utility.Descriptors
         void AddHeaderDescriptor(IObserver<Change<IDescriptor>> observer, Type elementType, Type componentType)
         {
             var descriptor = new CollectionHeadersDescriptor(elementType, componentType);
-            repo.Find(Guid, elementType.Name, elementType, 0)
+            repo.Find(Guid, elementType.Name, type: elementType, index: 0)
                 .Subscribe(c =>
                 {
                     descriptor.Guid = c.Value.Guid;
@@ -169,19 +169,22 @@ namespace Utility.Descriptors
             foreach (var key in keys)
             {
                 //&& descriptors.SingleOrDefault(a => a.Index == table.Index) is not { } x
-                if (key.Index is > 0 && key.Instance is { } item)
+                if (key.Index is > 0 && key.Type is { } type)
                 {
+                    var item = ActivateAnything.Activate.New(type);
                     if (Instance is IList collection)
                     {
                         if (collection.Count < key.Index)
+                        {
                             //collection.Insert(table.Index ?? throw new Exception(" 3 efsd"), item);
                             collection.Add(item);
+                        }
                     }
                     else
                     {
                         throw new Exception(" s898d");
                     }
-                    Next(observer, item, item.GetType(), Type, Changes.Type.Add, key.Index.Value, false, key.Removed);
+                    Next(observer, item, type, Type, Changes.Type.Add, key.Index.Value, false, key.Removed);
                 }
             }
         }

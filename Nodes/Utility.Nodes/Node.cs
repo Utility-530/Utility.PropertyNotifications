@@ -81,7 +81,7 @@ namespace Utility.Nodes
                 {
                     iSetNode.SetNode(this);
                 }
-                if (data is IGuid guid && this.Key == null)
+                if (data is IGetGuid guid && this.Key == null)
                 {
                     this.Key = new GuidKey(guid.Guid);
                 }

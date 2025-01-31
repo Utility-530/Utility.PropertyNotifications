@@ -4,7 +4,7 @@ using Utility.Observables.Generic;
 
 namespace Utility.Models
 {
-    public record GuidBase(Guid Guid) : IGuid
+    public record GuidBase(Guid Guid) : IGetGuid
     {
         public GuidBase() : this(Guid.NewGuid())
         {

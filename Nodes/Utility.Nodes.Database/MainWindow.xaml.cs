@@ -46,7 +46,7 @@ namespace Utility.Nodes.Database
                         var get = TreeRepository.Instance.Get(a.Guid).Subscribe(a =>
                         {
                             if (a.Value is { }  x)
-                                _tree.Add(new Tree<Key>(new Key(default, default, x, default, default, default)));
+                                _tree.Add(new Tree<Key>(new Key(default, default, x.GetType(), default, default, default)));
                         });
 
                         return _tree;

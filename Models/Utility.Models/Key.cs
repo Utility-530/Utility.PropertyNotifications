@@ -16,7 +16,7 @@ namespace Utility.Models
         {
         }
     }
-    public class Key : ISerialise, IGuid, IType, IName, IEquatable, IEquatable<ISerialise>
+    public class Key : ISerialise, IGetGuid, IType, IName, IEquatable, IEquatable<ISerialise>
     {
         public Key(Guid guid, string name, Type type)
         {

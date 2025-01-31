@@ -8,6 +8,6 @@ namespace Utility.Infrastructure
         //void Clear();
         void Initialise();
         void Send(GuidValue @base);
-        Interfaces.Generic.IObservable<TOutput> Register<TInput, TOutput>(Key key, TInput tInput) where TInput : IGuid;
+        Interfaces.Generic.IObservable<TOutput> Register<TInput, TOutput>(Key key, TInput tInput) where TInput : IGetGuid;
     }
 }

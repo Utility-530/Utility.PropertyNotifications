@@ -4,7 +4,7 @@ using Utility.Keys;
 
 namespace Utility.ProjectStructure
 {
-    public record AssemblyKey(Assembly Assembly) : StringKey(Assembly.FullName), IName
+    public record AssemblyKey(Assembly Assembly) : StringKey(Assembly.FullName), IGetName
     {
         public string GroupKey => nameof(Assembly);
 

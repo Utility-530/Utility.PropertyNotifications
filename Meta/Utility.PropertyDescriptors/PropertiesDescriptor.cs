@@ -21,7 +21,7 @@ namespace Utility.Descriptors
                     CompositeDisposable composite = [];
                     foreach (Descriptor descriptor in descriptors)
                     {
-                        repo.Find(Guid, descriptor.Name, descriptor.PropertyType)
+                        repo.Find(Guid, descriptor.Name, type: descriptor.PropertyType)
                         .Subscribe(a =>
                         {
                             var propertyDescriptor = new PropertyDescriptor(descriptor, Instance) { Guid = a.Value.Guid };

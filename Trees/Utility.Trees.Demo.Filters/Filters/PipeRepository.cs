@@ -57,7 +57,7 @@ namespace Utility.Trees.Demo.Filters
                         disposable = (func() as IObservable<IReadOnlyCollection<Key>>).Subscribe(next);
                         break;
                     case RepoResultType.Special when ca is RepoResultX { Table: { } selectedTable }:
-                        next(new List<Key>([new Key { Name = selectedTable.Name, /*Guid = selectedTable.Guid, */Instance = Activator.CreateInstance(selectedTable.Type) }]));
+                        next(new List<Key>([new Key { Name = selectedTable.Name, /*Guid = selectedTable.Guid, */Type = selectedTable.Type }]));
                         break;
                 }
                 void next(object? a)
@@ -112,7 +112,7 @@ namespace Utility.Trees.Demo.Filters
                     "b.2")
                 {
                     new RepoDecisionTree(item => item.ItemType == RepoItemType.Get, "c.1", qi=> new RepoResult2X(qi,()=> base.Get(qi.Guid, qi.Name), RepoResultType.Get)),
-                    new RepoDecisionTree(item => item.ItemType == RepoItemType.Find, "c.2", qi=> new RepoResult2X(qi,()=> base.Find(qi.Guid, qi.Name, qi.Type, qi.Index), RepoResultType.Find)),
+                    new RepoDecisionTree(item => item.ItemType == RepoItemType.Find, "c.2", qi=> new RepoResult2X(qi,()=> base.Find(qi.Guid, qi.Name, qi.Guid, qi.Type, qi.Index), RepoResultType.Find)),
                     new RepoDecisionTree(item =>  item.ItemType == RepoItemType.SelectKeys, "c.3", qi=> new RepoResult2X(qi,()=> base.SelectKeys(qi.ParentGuid, qi.Name, qi.TableName), RepoResultType.SelectKeys)),
                 },
             };
@@ -129,9 +129,9 @@ namespace Utility.Trees.Demo.Filters
             return Dictionary.Get(qi, a => new Subject<DateValue>()) as IObservable<DateValue>;
         }
 
-        public override IObservable<Key?> Find(Guid guid, string name, System.Type? type = null, int? index = null)
+        public override IObservable<Key?> Find(Guid parenGuid, string name, Guid? guid = null, System.Type? type = null, int? index = null)
         {
-            var qi = new RepoItem(guid, RepoItemType.Find, name, type, index);
+            var qi = new RepoItem(parenGuid, RepoItemType.Find, name, type, index);
             Pipe.Instance.New(new ForwardItem(Predicate, qi, []));
             if (Dictionary.ContainsKey(qi))
             {

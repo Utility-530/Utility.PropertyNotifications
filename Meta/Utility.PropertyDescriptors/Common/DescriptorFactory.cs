@@ -15,7 +15,7 @@ namespace Utility.Descriptors
             return
                 Observable.Create<ValuePropertyDescriptor>(observer =>
                 {
-                    return repo.Find(parentGuid, descriptor.PropertyType.Name, descriptor.PropertyType)
+                    return repo.Find(parentGuid, descriptor.PropertyType.Name, type: descriptor.PropertyType)
                     .Subscribe(c =>
                     {
                         ValuePropertyDescriptor _descriptor = DescriptorConverter.ToDescriptor(value, descriptor);
@@ -87,12 +87,12 @@ namespace Utility.Descriptors
             }
             return Observable.Create<IDescriptor>(observer =>
             {
-                return repo.Find(parentGuid, type.Name, type, index).Subscribe(c =>
+                return repo.Find(parentGuid, type.Name, type: type, index: index).Subscribe(c =>
                 {
 
                     descriptor.Guid = c.Value.Guid;
                     descriptor.ParentGuid = parentGuid;
-                    observer.OnNext( descriptor);
+                    observer.OnNext(descriptor);
                 });
             });
         }

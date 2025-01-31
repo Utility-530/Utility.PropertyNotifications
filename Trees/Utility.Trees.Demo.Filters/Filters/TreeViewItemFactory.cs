@@ -42,7 +42,7 @@ namespace Utility.Trees.Demo.Filters
                         };
 
                         Locator.Current.GetService<ITreeRepository>()
-                        .Find(guid, "table_add", typeof(Table))
+                        .Find(guid, "table_add", type:typeof(Table))
                         .Subscribe(_guid =>
                         {
                             var table = (Table)Activator.CreateInstance(typeof(Table));
@@ -148,9 +148,9 @@ namespace Utility.Trees.Demo.Filters
                                 //AddCommand = new Command(() => { if (instance is ITree { } item) item.Add(new ModelTree(Helpers.Names.Random(random), Guid.NewGuid(), ((GuidKey)item.Key).Value)); }),
                                 //RemoveCommand = new Command(() => { if (instance is IParent<ITree> { Parent: { } parent }) parent.Remove(instance); }),
 
-                                Header = instance,
-                                DataContext = instance,
-                                IsExpanded = true
+                                    Header = instance,
+                                    DataContext = instance,
+                                    IsExpanded = true
                                 };
                             }
                         })
@@ -196,7 +196,7 @@ namespace Utility.Trees.Demo.Filters
                 if (instance is ITree { Parent: ITree { } tree, Data: IInstance { Instance: { } _instance } })
                     if (tree is { Data: IInstance { Instance: IList lst } data } item)
                     {
-      
+
                         lst.Remove(_instance);
                         if (data is IRefresh refresh)
                         {

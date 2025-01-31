@@ -14,7 +14,7 @@ namespace Utility.WPF.ResourceDictionarys
 {
 
 
-    public record ResourceDictionaryKeyValue(DictionaryEntry Entry, ResourceDictionary ResourceDictionary) : IEquatable, IGetKey, IName
+    public record ResourceDictionaryKeyValue(DictionaryEntry Entry, ResourceDictionary ResourceDictionary) : IEquatable, IGetKey, IGetName
     {
         public string Key => ResourceDictionary.Source?.ToString()?? Name;
 

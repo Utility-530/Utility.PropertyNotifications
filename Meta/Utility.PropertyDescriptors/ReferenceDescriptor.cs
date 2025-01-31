@@ -27,7 +27,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                             if (Descriptor.PropertyType.IsAssignableTo(typeof(IEnumerable)) && Descriptor.PropertyType.IsAssignableTo(typeof(string)) == false && Descriptor.PropertyType.GetCollectionElementType() is Type _elementType)
                             {
                                 repo
-                                .Find(this.Guid, CollectionDescriptor._Name, Descriptor.PropertyType)
+                                .Find(this.Guid, CollectionDescriptor._Name, type: Descriptor.PropertyType)
                                 .Subscribe(c =>
                                 {
                                     var enumerable = (IEnumerable?)Activator.CreateInstance(Descriptor.PropertyType);
@@ -42,7 +42,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                             }
                             else
                                 repo
-                                .Find(this.Guid, "Properties", Descriptor.PropertyType)
+                                .Find(this.Guid, "Properties", type: Descriptor.PropertyType)
                                 .Subscribe(pguid =>
                                 {
                                     if (inst != null)
@@ -62,7 +62,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                             observer.OnNext(new(default, Changes.Type.Reset));
 
                             repo
-                            .Find(this.Guid, "Properties" /*propertiesDescriptor.Name*/, Descriptor.PropertyType)
+                            .Find(this.Guid, "Properties" /*propertiesDescriptor.Name*/, type: Descriptor.PropertyType)
                             .Subscribe(p =>
                             {
                                 if (inst == null)
@@ -82,7 +82,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                             int i = 0;
                             var collectionDescriptor = new CollectionDescriptor(Descriptor, elementType, enumerable);
                             repo
-                            .Find(this.Guid, collectionDescriptor.Name, Descriptor.PropertyType)
+                            .Find(this.Guid, collectionDescriptor.Name, type: Descriptor.PropertyType)
                             .Subscribe(c =>
                             {
                                 if (i++ > 0)

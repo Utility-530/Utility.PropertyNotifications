@@ -35,7 +35,7 @@ namespace Utility.Infrastructure
     /// Defines a utility class to implement objects with typed properties without private fields.
     /// This class supports automatically property change notifications and error validations.
     /// </summary>
-    public abstract class AutoObject : BaseObject, IDataErrorInfo, IGuid
+    public abstract class AutoObject : BaseObject, IDataErrorInfo, IGetGuid
     {
         private readonly Guid guid;
         private IDisposable? disposable;

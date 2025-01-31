@@ -14,9 +14,9 @@ using Utility.ViewModels.Base;
 
 namespace Utility.Infrastructure
 {
-    public record GuidValue(IGuid Value)
+    public record GuidValue(IGetGuid Value)
     {
-        public GuidValue(IGuid Value, GuidValue? Previous = default) : this(Value)
+        public GuidValue(IGetGuid Value, GuidValue? Previous = default) : this(Value)
         {
             this.Previous = Previous;
         }
@@ -66,12 +66,12 @@ namespace Utility.Infrastructure
             return (other as IKey<Key>)?.Equals(this.Key) ?? false;
         }
 
-        protected Utility.Interfaces.Generic.IObservable<TOutput> Observe<TOutput, TInput>(TInput tInput, [CallerMemberName] string? callerMemberName = null) where TInput : IGuid
+        protected Utility.Interfaces.Generic.IObservable<TOutput> Observe<TOutput, TInput>(TInput tInput, [CallerMemberName] string? callerMemberName = null) where TInput : IGetGuid
         {
             return Resolver.Register<TInput, TOutput>(this.Key, tInput);
         }
 
-        protected void Send(IGuid guid, [CallerMemberName] string? callerMemberName = null)
+        protected void Send(IGetGuid guid, [CallerMemberName] string? callerMemberName = null)
         {
             if (guid is not GuidValue { Value: var iguid, Target: Guid target, Source: Guid source } guidValue)
             {
@@ -217,7 +217,7 @@ namespace Utility.Infrastructure
             {
                 output = methodInfo._(parameter.Value);
 
-                if(output is IGuid guid)
+                if(output is IGetGuid guid)
                 {
                     var value = new GuidValue(guid, guidValue);
                     Outputs.Add(value);
@@ -237,7 +237,7 @@ namespace Utility.Infrastructure
 
             if (ReflectionHelper.TrySubscribe(output, a =>
             {
-                if (a is not IGuid guid)
+                if (a is not IGetGuid guid)
                     throw new Exception("6 dfdfff444");
                 var value = new GuidValue(guid, guidValue);
                 Outputs.Add(value);
@@ -262,7 +262,7 @@ namespace Utility.Infrastructure
             }
             else
             {
-                if (output is not IGuid guid)
+                if (output is not IGetGuid guid)
                     throw new Exception(" dfdfff444");
                 resolver.Send(new GuidValue(guid, guidValue));
             }

@@ -34,10 +34,10 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
                 foreach (Descriptor descriptor in TypeDescriptor.GetProperties(Type))
                 {
                     repo
-                        .Find(Guid, descriptor.Name, descriptor.PropertyType)
+                        .Find(Guid, descriptor.Name, type: descriptor.PropertyType)
                    .Subscribe(key =>
                    {
-                        observer.OnNext(new(new HeaderDescriptor(descriptor.PropertyType, descriptor.ComponentType, descriptor.Name) { Guid = key.Value.Guid, ParentGuid = this.Guid }, Changes.Type.Add));
+                       observer.OnNext(new(new HeaderDescriptor(descriptor.PropertyType, descriptor.ComponentType, descriptor.Name) { Guid = key.Value.Guid, ParentGuid = this.Guid }, Changes.Type.Add));
                    });
 
                 }
@@ -148,7 +148,7 @@ internal partial record CollectionItemDescriptor : ValueDescriptor, ICollectionI
 }
 
 
-internal partial record CollectionItemReferenceDescriptor :  ReferenceDescriptor, ICollectionItemReferenceDescriptor, IEquatable, IItem
+internal partial record CollectionItemReferenceDescriptor : ReferenceDescriptor, ICollectionItemReferenceDescriptor, IEquatable, IItem
 {
     private IObservable<Change<IDescriptor>> observable;
 

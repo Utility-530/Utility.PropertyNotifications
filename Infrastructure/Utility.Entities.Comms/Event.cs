@@ -4,9 +4,9 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Entities.Comms;
 
-public record Cause() : IGuid
+public record Cause() : IGetGuid
 {
-    Guid IGuid.Guid => GetType().GUID;
+    Guid IGetGuid.Guid => GetType().GUID;
 }
 
 public record Effect() : Cause();

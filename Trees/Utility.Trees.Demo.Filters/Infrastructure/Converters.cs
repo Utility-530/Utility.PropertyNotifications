@@ -1,11 +1,6 @@
 ﻿using Microsoft.Xaml.Behaviors;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using Utility.Collections;
@@ -54,7 +49,6 @@ namespace Utility.Trees.Demo.Filters
 
     public class CustomEventTrigger : Microsoft.Xaml.Behaviors.EventTrigger
     {
-
         public bool IsHandled { get; set; } = true;
 
         protected override void OnEvent(System.EventArgs eventArgs)
