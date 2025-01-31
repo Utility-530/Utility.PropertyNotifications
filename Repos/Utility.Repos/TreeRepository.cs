@@ -85,6 +85,10 @@ namespace Utility.Repos
                     {
                         setName(relationship.Guid, relationship.Name);
                     }
+                    foreach (var type in connection.Table<Type>().ToList())
+                    {
+                        types.Add(type.Id, convert(type));
+                    }
                     IsInitialised = true;
                 });
             }
@@ -136,16 +140,9 @@ namespace Utility.Repos
                 }
                 else
                 {
-                    if (type?.IsValueType == true || type?.GetConstructor(System.Type.EmptyTypes) != null)
-                    {
-                        item = Activator.CreateInstance(type);
-
-                    }
-                    //if (type == null)
-                    //    throw new Exception("3 333 ff");
                     if (table_name != null)
                         setName(table.Guid, table_name);
-                    selections.Add(new(table.Guid, table.Parent, item, table.Name, table._Index, table.Removed));
+                    selections.Add(new(table.Guid, table.Parent, type, table.Name, table._Index, table.Removed));
                 }
             }
             return Observable.Return((IReadOnlyCollection<Key>)selections);
@@ -174,7 +171,6 @@ namespace Utility.Repos
             if (_tables.Count == 0)
             {
                 var table = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Guid = '{oldGuid}'").Single();
-
                 var lastIndex = MaxIndex(table.Parent) + 1;
                 guid = Guid.NewGuid();
                 setName(guid, table_name);
@@ -246,7 +242,7 @@ namespace Utility.Repos
         }
 
 
-        public virtual IObservable<Key?> Find(Guid parentGuid, string? name = null, System.Type? type = null, int? index = null)
+        public virtual IObservable<Key?> Find(Guid parentGuid, string? name = null, Guid? guid = null, System.Type? type = null, int? index = null)
         {
 
             if (parentGuid == default)
@@ -263,7 +259,7 @@ namespace Utility.Repos
 
                         }
                         var typeId = type != null ? (int?)TypeId(type) : null;
-                        var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' {includeClause($"AND Name {ToComparisonAndValue(name)}", name)}  {includeClause($"AND _Index {ToComparisonAndValue(index)}", index)}  {includeClause($"AND TypeId {ToComparisonAndValue(typeId)}", name)}");
+                        var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' {includeClause($"AND Guid {ToComparisonAndValue(guid)}", guid)} {includeClause($"AND Name {ToComparisonAndValue(name)}", name)}  {includeClause($"AND _Index {ToComparisonAndValue(index)}", index)}  {includeClause($"AND TypeId {ToComparisonAndValue(typeId)}", type)}");
                         if (tables.Count == 0)
                         {
                             if (string.IsNullOrEmpty(name))
@@ -278,7 +274,7 @@ namespace Utility.Repos
                                 if (a is Guid guid)
                                 {
                                     setName(guid, table_name);
-                                    observer.OnNext(new Key(guid, parentGuid, null, name, index, default));
+                                    observer.OnNext(new Key(guid, parentGuid, type, name, index, default));
                                 }
                                 else
                                     throw new Exception("* 44 fd3323");
@@ -289,7 +285,7 @@ namespace Utility.Repos
                         {
                             var table = tables.Single();
                             setName(table.Guid, table_name);
-                            observer.OnNext(new Key(table.Guid, parentGuid, null, table.Name, index, table.Removed));
+                            observer.OnNext(new Key(table.Guid, parentGuid, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
                             observer.OnCompleted();
                         }
                         else if (name == null)
@@ -297,7 +293,25 @@ namespace Utility.Repos
                             foreach (var table in tables)
                             {
                                 setName(table.Guid, table_name);
-                                observer.OnNext(new Key(table.Guid, parentGuid, null, table.Name, index, table.Removed));
+                                observer.OnNext(new Key(table.Guid, parentGuid, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
+                            }
+                            observer.OnCompleted();
+                        }
+                        else if (name != null)
+                        {
+                            var table = tables.SingleOrDefault(a => a.Name == name) ?? throw new Exception("FD £££££");
+                            {
+                                setName(table.Guid, table_name);
+                                observer.OnNext(new Key(table.Guid, parentGuid, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
+                            }
+                            observer.OnCompleted();
+                        }
+                        else if (guid.HasValue)
+                        {
+                            var table = tables.SingleOrDefault(a => a.Guid == guid.Value) ?? throw new Exception("3FD £2ui£££44£");
+                            {
+                                setName(guid.Value, table_name);
+                                observer.OnNext(new Key(table.Guid, parentGuid, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
                             }
                             observer.OnCompleted();
                         }
@@ -391,8 +405,6 @@ namespace Utility.Repos
                 return Observable.Return<Key?>(null);
             }
         }
-
-
 
         public int? MaxIndex(Guid parentGuid, string? name = default)
         {
@@ -552,6 +564,16 @@ namespace Utility.Repos
                 return types[typeId];
 
             var type = connection.Table<Type>().Where(v => v.Id.Equals(typeId)).First();
+            var systemType = convert(type);
+
+            lock (types)
+                types[typeId] = systemType;
+
+            return systemType;
+        }
+
+        System.Type convert(Type type)
+        {
             var assemblyQualifiedName = Assembly.CreateQualifiedName(type.Assembly, $"{type.Namespace}.{type.Name}");
             try
             {
@@ -572,8 +594,6 @@ namespace Utility.Repos
             var systemType = System.Type.GetType(assemblyQualifiedName);
             if (systemType == null)
                 throw new Exception($"Type, {assemblyQualifiedName},  does not exist");
-            lock (types)
-                types[typeId] = systemType;
             return systemType;
         }
 
@@ -581,26 +601,18 @@ namespace Utility.Repos
         {
             if (this.types.FirstOrDefault(x => x.Value == type) is { Key: { } key, Value: { } value })
                 return key;
-
-            var types = connection.Query<Type>($"SELECT * FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}'");
-            var singleType = types.SingleOrDefault();
-            if (singleType == default)
+            int typeId = 0;
+            connection.RunInTransaction(() =>
             {
-                connection.RunInTransaction(() =>
-                {
+
                     connection.Insert(new Type { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name });
-                    types = connection.Query<Type>($"SELECT * FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}'");
+                    var types = connection.Query<Type>($"SELECT * FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}'");
                     if (types.Count > 1)
                         throw new Exception("fds ");
-                });
-                var typeId = connection.ExecuteScalar<int>($"SELECT Id FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' ");
-                this.types[typeId] = type;
-                return typeId;
-            }
-            else
-            {
-                return singleType.Id;
-            }
+                    typeId = connection.ExecuteScalar<int>($"SELECT Id FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' ");
+                    this.types[typeId] = type;
+            });
+            return typeId;
         }
 
         private void setName(Guid guid, string name)
