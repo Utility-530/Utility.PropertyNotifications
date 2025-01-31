@@ -12,7 +12,7 @@ namespace Utility.Nodes.Filters
         IObservable<INode> ChildrenByGuidAsync(Guid guid);
         int? MaxIndex(Guid guid, string v);
         void Remove(INode node);
-        IObservable<Key?> Find(Guid guid, string name, System.Type type, int? localIndex);
+        IObservable<Key?> Find(Guid parentGuid, string name, Guid? guid = null, System.Type? type = null, int? localIndex = null);
         IObservable<DateValue> Get(Guid guid, string name);
         void Set(Guid guid, string name, object value, DateTime dateTime );
         void Add(INode node);
