@@ -2,7 +2,7 @@
 
 namespace Utility.Interfaces.NonGeneric
 {
-    public interface IDescriptor : IType, IParentGuid, IGuid, IName, IInitialise, IFinalise
+    public interface IDescriptor : IType, IParentGuid, IGetGuid, IGetName, IInitialise, IFinalise
     {
         Type ParentType { get; }
 
