@@ -1,6 +1,4 @@
 ﻿using DynamicData.Binding;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
@@ -10,6 +8,8 @@ namespace Utility.Nodes.Common
 {
     public static class ChangeHelper
     {
+        private static bool isInitialised;
+
         public static IObservable<Change> Filter<T>(this IObservable<T> observable, IObservable<bool> filter)
         {
             return Observable.Create<Change>(observer =>
@@ -40,6 +40,11 @@ namespace Utility.Nodes.Common
                 filter
                 .Subscribe(_filter =>
                 {
+                    if (_filter == false && isInitialised == false)
+                    {
+                        return;
+                    }
+                    isInitialised = true;
                     foreach (var x in collection)
                     {
                         observer.OnNext(new Change(x, null, _filter ? Changes.Type.Add : Changes.Type.Remove));
