@@ -9,11 +9,8 @@ using Utility.WPF.Controls.Trees;
 
 namespace Utility.Nodes.Demo.Styles
 {
-
-
     public class ChildrenSelector : IChildrenSelector
     {
-
         public IEnumerable Select(object data)
         {
             return NodeExtensions.ToViewModelTree([typeof(CustomModels.Controls).Assembly, new SystemAssembly()]);
@@ -25,7 +22,6 @@ namespace Utility.Nodes.Demo.Styles
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             var childrenSelector = values.SingleOrDefault(a => a is IChildrenSelector);
-            var items = values.SingleOrDefault(a => a is IEnumerable);
             var node = values.SingleOrDefault(a => a is INode);
 
             if (node != null)
@@ -38,14 +34,9 @@ namespace Utility.Nodes.Demo.Styles
                 {
                     return data.Proliferation();
                 }
-
-            }
-            if (items is IEnumerable)
-            {
-                return items;
             }
 
-            return DependencyProperty.UnsetValue;
+            return values.SingleOrDefault(a => a is IEnumerable) ?? DependencyProperty.UnsetValue;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
