@@ -157,6 +157,7 @@ namespace Utility.Nodes.Filters
                         node.Data = data;
                     }
                     node.Key = new GuidKey(guid);
+                    node.Data = DataActivator.Activate(a);
                     observer.OnNext(node);
                 });
             });

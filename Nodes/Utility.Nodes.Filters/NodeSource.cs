@@ -22,9 +22,12 @@ using Utility.Helpers.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 using Utility.Extensions;
+using Utility.PropertyNotifications;
 
 namespace Utility.Nodes.Filters
 {
+
+
     public readonly record struct DirtyNode(string Property, INode Node);
     public class NodeSource : INodeSource
     {
@@ -40,10 +43,10 @@ namespace Utility.Nodes.Filters
         Lazy<IExpander> expander = new(() => Locator.Current.GetService<IExpander>());
         Lazy<IContext> context = new(() => Locator.Current.GetService<IContext>());
 
-        private Lazy<Dictionary<string, Action<object, object>>> setdictionary = new(() => typeof(Node)
+        private Lazy<Dictionary<string, Setter>> setdictionary = new(() => typeof(Node)
                                                     .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                                                     .Where(a => a.Name != nameof(IReadOnlyTree.Parent))
-                                                    .ToDictionary(a => a.Name, a => new Action<object, object>((instance, value) => a.SetValue(instance, value))));
+                                                    .ToDictionary(a => a.Name, a => Rules.Decide(a)));
         private ObservableCollection<INode> nodes = [];
 
         private NodeSource()
@@ -67,7 +70,7 @@ namespace Utility.Nodes.Filters
 
         public IObservable<INode> ChildrenByGuidAsync(Guid guid)
         {
-            return Observable.Create<INode>(observer =>
+            return Obs.Create<INode>(observer =>
             {
                 try
                 {
@@ -86,7 +89,10 @@ namespace Utility.Nodes.Filters
                                 {
                                     //_a.Name ??= a.Name;
                                     if (_a.Data == "_New_")
-                                        _a.Data = a.Value.Instance ?? a.Value.Name;
+                                    {
+                                        _a.Data = DataActivator.Activate(a);
+                                    }
+
                                     _a.Removed = a.Value.Removed;
                                     observer.OnNext(_a);
                                 });
@@ -116,6 +122,117 @@ namespace Utility.Nodes.Filters
                     return Disposable.Empty;
 
                 });
+            }
+        }
+
+        public IObservable<INode> FindNodeAsync(Guid parentGuid, Guid currentGuid)
+        {
+            return Observable.Create<INode>(observer =>
+            {
+                if (nodes.SingleOrDefault(a => a.Key == new GuidKey(currentGuid)) is Node node)
+                {
+                    observer.OnNext(node);
+                    observer.OnCompleted();
+                    return Disposable.Empty;
+                }
+                else
+                {
+                    //repository.FindParent(currentGuid); ;
+                    return repository.Find(parentGuid, guid: currentGuid).Subscribe(a =>
+                    {
+                        var node = new Node(DataActivator.Activate(a));
+                        observer.OnNext(node);
+                        observer.OnCompleted();
+                    });
+                }
+            });
+        }
+
+        public DateTime Remove(Guid guid)
+        {
+            var d = repository.Remove(guid);
+            context.Value.UI(() =>
+       this.nodes.RemoveBy(a => (GuidKey)a.Key == guid));
+            return d;
+        }
+
+        public int? MaxIndex(Guid guid, string v)
+        {
+            return repository.MaxIndex(guid, v);
+        }
+
+        public void Remove(INode node)
+        {
+            this.nodes.Remove(node);
+        }
+
+        public IObservable<Structs.Repos.Key?> Find(Guid parentGuid, string name, Guid? guid = null, System.Type? type = null, int? localIndex = null)
+        {
+            return repository.Find(parentGuid, name, guid, type, localIndex);
+        }
+
+        public IObservable<DateValue> Get(Guid guid, string name)
+        {
+            return repository.Get(guid, name);
+        }
+
+        public void Set(Guid guid, string name, object value, DateTime dateTime)
+        {
+            repository.Set(guid, name, value, dateTime);
+        }
+
+        public void Add(INode node)
+        {
+            if (this.Nodes.Any(a => a.Key == node.Key) == false)
+            {
+                this.nodes.Add(node);
+
+                repository.Get((GuidKey)node.Key)
+                    .Subscribe(_d =>
+                    {
+                        if (_d.Value != null && setdictionary.Value.TryGetValue(_d.Name, out Setter value))
+                            value.Set(node, _d.Value);
+                    }, () =>
+                    {
+                        //Task.Run(() =>
+                        //{
+                        if (filter.Value?.Filter(node) == false)
+                        {
+                            node.IsVisible = false;
+                        }
+                        if (expander.Value?.Expand(node) == true)
+                        {
+                            node.IsExpanded = true;
+                        }
+
+                        node.PropertyChanged += Node_PropertyChanged;
+                    });
+            }
+
+            void Node_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+            {
+                if (sender is INode node)
+                {
+                    if (e is PropertyChangedExEventArgs { PreviousValue: var previousValue, PropertyName: string name, Value: var value })
+                    {
+                        context.Value.UI(() => dirtyNodes.Add(new(node.Key, new PropertyChange(sender, name, value, previousValue))));
+                    }
+                    else
+                        throw new Exception("ss FGre333333333");
+                }
+                else
+                    throw new Exception("dfd 4222243");
+            }
+        }
+
+        public async void Save()
+        {
+            foreach (var item in dirtyNodes.ToArray())
+            {
+                //var node = item.Value.Source as INode;
+                repository.Set(Guid.Parse(item.Key), item.Value.PropertyName, item.Value.Value, DateTime.Now);
+                dirtyNodes.Remove(item);
+                await Task.Delay(200);
             }
         }
 
@@ -188,122 +305,6 @@ namespace Utility.Nodes.Filters
                 }
                 return Disposable.Empty;
             });
-        }
-
-        public IObservable<INode> FindNodeAsync(Guid currentGuid)
-        {
-            return Observable.Create<INode>(observer =>
-            {
-                return nodes.SelfAndAdditions().Subscribe(a =>
-                {
-                    if (a.Key == new GuidKey(currentGuid))
-                        observer.OnNext(a);
-                });
-            });
-        }
-
-        public DateTime Remove(Guid guid)
-        {
-            var d = repository.Remove(guid);
-            this.nodes.RemoveBy(a => (GuidKey)a.Key == guid);
-            return d;
-        }
-
-        public int? MaxIndex(Guid guid, string v)
-        {
-            return repository.MaxIndex(guid, v);
-        }
-
-        public void Remove(INode node)
-        {
-            this.nodes.Remove(node);
-        }
-
-        public IObservable<Structs.Repos.Key?> Find(Guid guid, string name, System.Type type, int? localIndex)
-        {
-            return repository.Find(guid, name, type, localIndex);
-        }
-
-        public IObservable<DateValue> Get(Guid guid, string name)
-        {
-            return repository.Get(guid, name);
-        }
-
-        public void Set(Guid guid, string name, object value, DateTime dateTime)
-        {
-            repository.Set(guid, name, value, dateTime);
-        }
-
-        public void Add(INode node)
-        {
-            if (this.Nodes.Any(a => a.Key == node.Key) == false)
-            {
-                this.nodes.Add(node);
-
-                repository.Get((GuidKey)node.Key)
-                    .Subscribe(_d =>
-                    {
-                        if (_d.Value != null && setdictionary.Value.TryGetValue(_d.Name, out Action<object, object> value))
-                            value.Invoke(node, _d.Value);
-                    }, () =>
-                    {
-                        //Task.Run(() =>
-                        //{
-                        if (filter.Value?.Filter(node) == false)
-                        {
-                            node.IsVisible = false;
-                        }
-                        if (expander.Value?.Expand(node) == true)
-                        {
-                            node.IsExpanded = true;
-                        }
-
-                        node.PropertyChanged += Node_PropertyChanged;
-                        repository
-                        .Get(Guid.Parse(node.Key), nameof(Node.Data))
-                        .Subscribe(a =>
-                        {
-                            if (a.Value == null)
-                            {
-                                try
-                                {
-                                    repository.Set(Guid.Parse(node.Key), nameof(Node.Data), node.Data, DateTime.Now);
-                                }
-                                catch (Exception ex)
-                                {
-
-                                }
-                            }
-                        });
-                        //}
-                    });
-            }
-
-            void Node_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-            {
-                if (sender is INode node)
-                {
-                    if (e is PropertyChangedExEventArgs { PreviousValue: var previousValue, PropertyName: string name, Value: var value })
-                    {
-                        context.Value.UI(() => dirtyNodes.Add(new(node.Key, new PropertyChange(sender, name, value, previousValue))));
-                    }
-                    else
-                        throw new Exception("ss FGre333333333");
-                }
-                else
-                    throw new Exception("dfd 4222243");
-            }
-        }
-
-        public async void Save()
-        {
-            foreach (var item in dirtyNodes.ToArray())
-            {
-                //var node = item.Value.Source as INode;
-                repository.Set(Guid.Parse(item.Key), item.Value.PropertyName, item.Value.Value, DateTime.Now);
-                dirtyNodes.Remove(item);
-                await Task.Delay(200);
-            }
         }
     }
 
