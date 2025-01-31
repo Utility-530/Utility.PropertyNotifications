@@ -302,7 +302,7 @@
                             <ToggleButton x:Name="Expander"             
                                           HorizontalAlignment="Left"
                                           Style="{StaticResource ExpandCollapseToggleStyle}"
-                                          IsChecked="{Binding Path=IsExpanded,                              RelativeSource={RelativeSource TemplatedParent}}"
+                                          IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"
                                           ClickMode="Press">
                             </ToggleButton>
 
