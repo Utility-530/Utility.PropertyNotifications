@@ -30,6 +30,10 @@ namespace Utility.Trees
                 if (flag == false)
                 {
                     items = CreateChildren();
+                    if(items is INotifyCollectionChanged cc)
+                    {
+                        cc.CollectionChanged += ItemsOnCollectionChanged;
+                    }
                     flag = true;
                 }
                 return items;
@@ -320,7 +324,6 @@ namespace Utility.Trees
         protected virtual IList CreateChildren()
         {
             var collection = new ObservableCollection<ITree>();
-            collection.CollectionChanged += ItemsOnCollectionChanged;
             return collection;
         }
 

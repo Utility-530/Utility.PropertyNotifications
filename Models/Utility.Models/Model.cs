@@ -10,6 +10,7 @@ using Splat;
 using Utility.Interfaces.Exs;
 using Utility.Nodes.Filters;
 using Utility.Trees.Extensions.Async;
+using NetFabric.Hyperlinq;
 
 namespace Utility.Models
 {
@@ -23,7 +24,7 @@ namespace Utility.Models
         protected INodeSource source = Locator.Current.GetService<INodeSource>();
         protected Lazy<IContext> context = new(() => Locator.Current.GetService<IContext>());
         public virtual Version Version { get; set; } = new();
-        public required string Name
+        public virtual required string Name
         {
             get => m_name;
             set
@@ -88,6 +89,9 @@ namespace Utility.Models
                     .Where(a => a != null)
                     .Subscribe(a =>
                     {
+                        if (this.Node.Contains(a) == false)
+                            this.Node.Add(a);
+
                         Update(value, a);
                     });
 
@@ -215,15 +219,36 @@ namespace Utility.Models
 
         public virtual void Update(IReadOnlyTree node, IReadOnlyTree current)
         {
-            (node.Parent?.Data as Model)?.Update(node.Parent as IReadOnlyTree, current);
+
+            if (node is INode _node)
+            {
+
+                _node.WithChangesTo(a => a.Parent)
+                    .Subscribe(a =>
+                    {
+                        (a.Data as Model)?.Update(node.Parent, current);
+                    });
+            }
+            //(node.Parent?.Data as Model)?.Update(node.Parent as IReadOnlyTree, current);
         }
 
         public virtual void Addition(IReadOnlyTree value, IReadOnlyTree a)
         {
+            if (a.Parent == null)
+            {
+                a.Parent = value;
+                if (a.Key != default)
+                    source.Add(a as INode);
+                else
+                {
+
+                }
+            }
         }
 
         public virtual void Subtraction(IReadOnlyTree value, IReadOnlyTree a)
         {
+            //a.Parent = null;
         }
 
         public override string ToString()

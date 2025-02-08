@@ -402,7 +402,8 @@ namespace Utility.Repos
                 {
                     setName(item.Guid, name);
                 }
-                return Observable.Return<Key?>(null);
+                //return Observable.Return<Key?>(null);
+                return Observable.Return<Key?>(new Key(guid, default, type, name, 0, null));
             }
         }
 

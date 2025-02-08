@@ -44,7 +44,7 @@ namespace Utility.Nodes.Filters
                                                     .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                                                     .Where(a => a.Name != nameof(IReadOnlyTree.Parent))
                                                     .ToDictionary(a => a.Name, a => Rules.Decide(a)));
-        private ObservableCollection<INode> nodes = [];
+        private readonly ObservableCollection<INode> nodes = [];
 
         private NodeSource()
         {
@@ -112,12 +112,10 @@ namespace Utility.Nodes.Filters
                     }
                     if (node.Key == null)
                     {
-
                     }
                     observer.OnNext(node);
                     observer.OnCompleted();
                     return Disposable.Empty;
-
                 });
             }
         }
@@ -134,12 +132,14 @@ namespace Utility.Nodes.Filters
                 }
                 else
                 {
-                    return repository.Find(parentGuid, guid: currentGuid).Subscribe(a =>
-                    {
-                        var node = new Node(DataActivator.Activate(a));
-                        observer.OnNext(node);
-                        observer.OnCompleted();
-                    });
+                    return repository
+                            .Find(parentGuid, guid: currentGuid)
+                            .Subscribe(a =>
+                            {
+                                var node = new Node(DataActivator.Activate(a));
+                                observer.OnNext(node);
+                                observer.OnCompleted();
+                            });
                 }
             });
         }
@@ -147,8 +147,7 @@ namespace Utility.Nodes.Filters
         public DateTime Remove(Guid guid)
         {
             var d = repository.Remove(guid);
-            context.Value.UI(() =>
-       this.nodes.RemoveBy(a => (GuidKey)a.Key == guid));
+            context.Value.UI(() => this.nodes.RemoveBy(a => (GuidKey)a.Key == guid));
             return d;
         }
 
@@ -269,15 +268,12 @@ namespace Utility.Nodes.Filters
                             obs.OnNext(_node);
                         });
                     });
-
-
                 }
                 else if (output is Task task)
                 {
                     if (dictionary[key].Task == null)
                     {
                         dictionary[key].Task = task;
-
                     }
                     return Obs.Create<Node>(o =>
                     {
@@ -288,7 +284,6 @@ namespace Utility.Nodes.Filters
                             Add(result);
                             o.OnNext(result);
                         });
-
                     });
                 }
             }

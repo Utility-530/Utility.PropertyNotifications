@@ -175,38 +175,9 @@ namespace Utility.Nodes
             }
         }
 
-
         protected override void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
-            if (args.Action == NotifyCollectionChangedAction.Add && args.NewItems != null)
-            {
-                foreach (var item in args.NewItems.Cast<INode>())
-                {
-                    item.Parent ??= this;
-                    if (item.Key != default)
-                        source.Value.Add(item);
-                    else
-                    {
 
-                    }
-                }
-            }
-            if (args.Action == NotifyCollectionChangedAction.Remove && args.OldItems != null)
-            {
-                foreach (var item in args.OldItems.Cast<Tree>())
-                {
-                    item.Parent = null;
-                }
-            }
-            else if (args.Action != NotifyCollectionChangedAction.Move && args.OldItems != null)
-            {
-                foreach (var item in args.OldItems.Cast<Tree>())
-                {
-                    //item.Parent = null;
-                    //item.ResetOnCollectionChangedEvent();
-                }
-            }
-            this.InvokeCollectionChanged(sender, args);
         }
     }
 }

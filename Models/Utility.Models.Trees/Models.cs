@@ -236,8 +236,24 @@ namespace Utility.Models.Trees
         //{
         //    Name = name;
         //}
+        public AssemblyModel()
+        {
+        }
 
         public Assembly Assembly { get; set; }
+
+        public override required string Name
+        {
+            get => Assembly?.FullName ?? m_name;
+            set
+            {
+                m_name = value;
+                Assembly = Assembly.Load(value);
+
+                //base.RaisePropertyChanged();
+            }
+        }
+
 
         public override IEnumerable<Model> CreateChildren()
         {
@@ -252,7 +268,7 @@ namespace Utility.Models.Trees
             }
         }
 
-        public static AssemblyModel Create(Assembly assembly) => new() { Assembly = assembly, Name = assembly.GetName().Name };
+        public static AssemblyModel Create(Assembly assembly) => new() { Name = assembly.FullName };
 
         public override void SubtractDescendant(IReadOnlyTree node, int level)
         {
@@ -571,6 +587,8 @@ namespace Utility.Models.Trees
             }
             else
                 throw new Exception("7 hhjkhj9099   ");
+
+            base.Addition(value, a);
 
             void onNext()
             {
@@ -904,6 +922,7 @@ namespace Utility.Models.Trees
                 case _type: Type = a.Data as TypeModel; break;
                 default: throw new ArgumentOutOfRangeException("ds 33` 33kfl.. ");
             }
+            base.Addition(value, a);
         }
 
         public override void SetNode(INode node)
@@ -965,6 +984,7 @@ namespace Utility.Models.Trees
                 //case converter: Converter = a.Data as ConverterModel; break;
                 default: throw new ArgumentOutOfRangeException("ds 33` 33kfl.. ");
             }
+            base.Addition(value, a);
         }
 
         public override void SetNode(INode node)
@@ -1084,6 +1104,8 @@ namespace Utility.Models.Trees
                 //case converter: Converter = a.Data as ConverterModel; break;
                 default: throw new ArgumentOutOfRangeException("ds 33` 33kfl.. ");
             }
+
+            base.Addition(value, a);
         }
 
     }
@@ -1195,6 +1217,7 @@ namespace Utility.Models.Trees
                 case exceptions: Exceptions = a.Data as ExceptionsModel; break;
                 default: throw new ArgumentOutOfRangeException("ds 33` 33kfl.. ");
             }
+            base.Addition(value, a);
         }
 
         public override void SetNode(INode node)
@@ -1284,6 +1307,7 @@ namespace Utility.Models.Trees
                 case _value:
                     ValueModel = a.Data as ValueModel; break;
             }
+            base.Addition(value, a);
         }
 
         public bool Get(object instance)
@@ -1315,7 +1339,7 @@ namespace Utility.Models.Trees
                 return;
 
             var topNode = top as INode;
-            var currentNode = current as INode;
+            var currentNode = current as IReadOnlyTree;
 
             List<INode> items = new();
             var child = topNode;
@@ -1326,7 +1350,13 @@ namespace Utility.Models.Trees
                 //Extract(child);
                 child.IsExpanded = false;
             }
-
+            //while (currentNode!= top)
+            //{
+            //    items.Add(currentNode as INode);
+            //    currentNode = currentNode.Parent;
+            //    (currentNode as INode).IsExpanded = false;
+            //}
+            //items.Reverse();
             int i = 0;
 
             lock (top.Items)
@@ -1381,6 +1411,15 @@ namespace Utility.Models.Trees
                     foreach (INode item in newItems)
                         node.Current = item;
                 }
+            }
+        }
+
+        public override void Addition(IReadOnlyTree value, IReadOnlyTree a)
+        {
+            if (value.Items.Count() == 1)
+            {
+                (value as INode).Current = a as INode;
+                base.Addition(value, a);
             }
         }
     }

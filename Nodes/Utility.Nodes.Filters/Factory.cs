@@ -56,7 +56,7 @@ namespace Utility.Nodes.Filters
 
         public static IObservable<INode> BreadcrumbRoot()
         {
-            return create("too", assemblyGuid, s => new Node(s) {  }, s => new NodePropertyRootModel { Name = s });
+            return create("too", assemblyGuid, s => new Node(s) { }, s => new NodePropertyRootModel { Name = s });
         }
 
         public static IObservable<INode> BuildControlRoot()
@@ -157,7 +157,8 @@ namespace Utility.Nodes.Filters
                         node.Data = data;
                     }
                     node.Key = new GuidKey(guid);
-                    node.Data = DataActivator.Activate(a);
+                    if (a != null)
+                        node.Data = DataActivator.Activate(a);
                     observer.OnNext(node);
                 });
             });

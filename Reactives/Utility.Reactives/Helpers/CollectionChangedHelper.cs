@@ -29,11 +29,17 @@ namespace Utility.Reactives
 
         public static IObservable<T> Additions<T>(this INotifyCollectionChanged notifyCollectionChanged)
         {
-            return notifyCollectionChanged
+            return Observable.Create<T>(observer =>
+            {
+                return notifyCollectionChanged
                 .Changes()
                 .Where(a => a.Action == NotifyCollectionChangedAction.Add)
-                .SelectMany(x => x.NewItems?.Cast<T>() ?? []);
-
+                .Subscribe(a =>
+                {
+                    foreach (var t in a.NewItems.Cast<T>())
+                        observer.OnNext(t);
+                });
+            });
         }
 
         public static IObservable<T> ToOldItemsObservable<T>(this INotifyCollectionChanged notifyCollectionChanged)
@@ -119,7 +125,7 @@ namespace Utility.Reactives
             return Observable.Create<T>(observer =>
             {
                 if (collection.Any())
-                    foreach (var x in collection.Cast<T>())
+                    foreach (var x in collection.Cast<T>().ToArray())
                         observer.OnNext(x);
 
                 if (collection is INotifyCollectionChanged notifyCollection)
