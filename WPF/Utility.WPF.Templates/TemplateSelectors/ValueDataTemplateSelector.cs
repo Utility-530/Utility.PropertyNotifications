@@ -18,8 +18,8 @@ namespace Utility.WPF.Templates
             {
                 throw new Exception($"Unexpected type for item {item.GetType().Name}");
             }
-            if (item is IType { Type: { } type })
-            {
+            if (get() is Type type)
+            {   
                 if (Nullable.GetUnderlyingType(type) != null)
                 {
                     var underlyingType = Nullable.GetUnderlyingType(type);
@@ -39,7 +39,7 @@ namespace Utility.WPF.Templates
                 }
                 if (Templates[new DataTemplateKey(type)] is DataTemplate _dt)
                     return _dt;
-            }
+            }  
 
 
 
@@ -53,6 +53,15 @@ namespace Utility.WPF.Templates
            
 
             return Templates["Missing"] as DataTemplate ?? throw new Exception("dfs 33091111111");
+        
+            Type? get()
+            {
+                if (item is IType { Type: { } type })
+                    return type;
+                if (value.GetType() is { } _type)
+                    return _type;
+                return null;
+            }
         }
 
 
