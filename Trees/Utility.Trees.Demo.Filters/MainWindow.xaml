@@ -7,18 +7,20 @@
         xmlns:ct="http://schemas.utility.com/trees"
         xmlns:cbx="http://schemas.utility.com/cboxes"
         xmlns:bc="http://schemas.utility.com/Breadcrumbs" 
-        xmlns:res="http://schemas.utility.com/resourcedictionary" xmlns:att="http://schemas.utility.com/attached" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:res="http://schemas.utility.com/resourcedictionary" 
+        xmlns:att="http://schemas.utility.com/attached" 
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
     <FrameworkElement.Resources>
         <ResourceDictionary>
 
-            <Style TargetType="{x:Type TreeViewItem}">
+            <!--<Style TargetType="{x:Type TreeViewItem}">
                 <Setter Property="IsExpanded" Value="True"></Setter>
                 <Setter Property="HeaderTemplateSelector" Value="{x:Static local:DataTemplateSelector.Instance}"></Setter>
                 <Setter Property="ItemContainerStyleSelector" Value="{x:Static local:StyleSelector.Instance}"></Setter>
-            </Style>
+            </Style>-->
 
             <Style x:Key="MyDefaultContentStyle" TargetType="{x:Type ct:CustomTreeViewItem}">
                 <Setter Property="NodeTemplate">
