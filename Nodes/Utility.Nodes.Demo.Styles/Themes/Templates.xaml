@@ -11,7 +11,10 @@
                     xmlns:des="clr-namespace:Utility.Descriptors;assembly=Utility.Descriptors"
                     xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit" 
                     xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
-                    xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020">
+                    xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020"
+                    xmlns:templates="http://schemas.utility.com/templates" 
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:conv="http://schemas.utility.com/converters">
 
     <HierarchicalDataTemplate DataType="{x:Type nodes:Node}" ItemsSource="{Binding Items}">
         <WrapPanel>
@@ -37,8 +40,8 @@
             </ContentControl>
         </WrapPanel>
     </HierarchicalDataTemplate>
-    
-    
+
+
     <DataTemplate DataType="{x:Type model:Model}">
         <TextBlock Text="{Binding Name}"/>
     </DataTemplate>
@@ -56,17 +59,6 @@
         <Button Content="{Binding Name}" Command="{Binding Command}" Width="200"></Button>
     </DataTemplate>
 
-
-    <DataTemplate DataType="{x:Type inf:ValueModel}">
-        <Border BorderThickness="4">
-
-            <TextBox Grid.Row="0"      
-                    Background="LightCyan"
-                    Width="100" Height="25"
-                    test:TextBoxHelper.IsClearButtonVisible="True"
-                    Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=500}"/>
-        </Border>
-    </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:AndOrModel}">
         <ComboBox  Margin="4" Grid.Row="1" 
@@ -98,7 +90,7 @@
         <TextBlock Text="{Binding Type}">
         </TextBlock>
     </DataTemplate>
-    
+
     <DataTemplate DataType="{x:Type inf:StringModel}">
         <Grid>
             <TextBox Text="{Binding Value}" Background="AliceBlue">
@@ -113,6 +105,26 @@
             </TextBox>
         </Grid>
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type inf:ValueModel}">
+        <ContentControl 
+            ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance}" Content="{Binding }">
+            <i:Interaction.Behaviors>
+                <local:UpdateContentControlBehavior Value="{Binding Value}"/>
+            </i:Interaction.Behaviors>
+        </ContentControl>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type inf:ComparisonModel}">
+        <ComboBox
+                  ItemsSource="{ui:EnumSource {Binding Value}}" 
+                  SelectedItem="{ui:EnumBinding {Binding Value, Mode=TwoWay}}" >
+            <i:Interaction.Behaviors>
+                <local:ResetSelectedIndexBehavior></local:ResetSelectedIndexBehavior>
+            </i:Interaction.Behaviors>
+        </ComboBox>
+    </DataTemplate>
+
 
     <DataTemplate DataType="{x:Type inf:DatabaseModel}">
         <Ellipse Height="5" Width="5" Fill="Aqua"></Ellipse>
