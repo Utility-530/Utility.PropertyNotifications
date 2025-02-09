@@ -12,7 +12,6 @@ using Utility.Keys;
 using Utility.Nodes.Common;
 using Utility.Nodes.Filters;
 using Utility.PropertyNotifications;
-using Utility.Trees;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
@@ -38,7 +37,9 @@ namespace Utility.Nodes
             });
 
             RemoveCommand = new RelayCommand(a =>
-            Parent.Remove(this));
+            {
+                Parent.Remove(this);
+            });
 
             EditCommand = new RelayCommand(a =>
             {
@@ -51,6 +52,67 @@ namespace Utility.Nodes
                 Node node = (Node)(await ToTree(a));
                 node.Add(this);
             });
+
+            this.WithChangesTo(a => a.Key)
+                .Subscribe(key =>
+                {
+                    this.WithChangesTo(a => a.Data)
+                    .Where(a => a is not string)
+                    .Take(1)
+                    .Subscribe(data =>
+                    {
+                        if (data is IChildren children && !(data is IHasChildren { HasChildren: false } hasChildren))
+                        {
+                            _children(children, Guid.Parse(key))
+                                .Filter(this.WithChangesTo(a => a.IsExpanded))
+                                .Subscribe(change);
+                        }
+                    });
+
+                    async void change(Change a)
+                    {
+                        if (a is Change { Type: Changes.Type.Add, Value: { } value })
+                        {
+                            if (value is INode node)
+                                this.m_items.Add(node);
+                            else
+                            {
+                                this.m_items.Add(await ToTree(value));
+                            }
+                        }
+                        else if (a is Change { Type: Changes.Type.Remove, Value: { } _value })
+                        {
+                            this.m_items.RemoveBy(c => (c as IKey).Key.Equals((_value as IKey).Key));
+                        }
+                    }
+
+                    IObservable<object> _children(IChildren children, Guid guid)
+                    {
+                        return Observable.Create<object>(observer =>
+                        {
+                            bool b = false;
+                            return source.Value
+                            .ChildrenByGuidAsync(guid)
+                            .Subscribe(a =>
+                            {
+                                if (a.Data?.ToString() == source.Value.New || data is ICount)
+                                {
+                                    b = true;
+                                    children.Children.Subscribe(a => observer.OnNext(a), () => observer.OnCompleted());
+                                }
+                                else if (a.Data != null && m_items.Any(n => ((IKey)n).Key == a.Key) == false)
+                                {
+                                    observer.OnNext(a);
+                                }
+                            },
+                            () =>
+                            {
+                                if (b == false)
+                                    observer.OnCompleted();
+                            });
+                        });
+                    }
+                });
         }
         public ICommand AddCommand { get; init; }
         public ICommand RemoveCommand { get; init; }
@@ -69,7 +131,8 @@ namespace Utility.Nodes
 
         public override object Data
         {
-            get => data; set
+            get => data; 
+            set
             {
                 if (data == value)
                 {
@@ -100,69 +163,7 @@ namespace Utility.Nodes
                 }
                 base.Key = value;
 
-                this.WithChangesTo(a => a.Data)
-                    .Where(a => a is not string)
-                    .Take(1)
-                    .Subscribe(data =>
-                    {
-                        //if (data is IDescriptor && data is ICount)
-                        //{
 
-                        //}
-                        if (data is IChildren children)
-                        {
-                            if (data is IHasChildren { HasChildren: false } hasChildren)
-                            {
-
-                            }
-                            else
-                                _children(children, Guid.Parse(value))
-                                    .Filter(this.WithChangesTo(a => a.IsExpanded))
-                                    .Subscribe(async a =>
-                                    {
-                                        if (a is Change { Type: Changes.Type.Add, Value: { } value })
-                                        {
-                                            if (value is INode node)
-                                                this.m_items.Add(node);
-                                            else
-                                            {
-                                                this.m_items.Add(await ToTree(value));
-                                            }
-                                        }
-                                        else if (a is Change { Type: Changes.Type.Remove, Value: { } _value })
-                                        {
-                                            this.m_items.RemoveBy(c => (c as IKey).Key.Equals((_value as IKey).Key));
-                                        }
-                                    });
-                        }
-                    });
-
-                IObservable<object> _children(IChildren children, Guid guid)
-                {
-                    return Observable.Create<object>(observer =>
-                    {
-                        bool b = false;
-                        return source.Value
-                        .ChildrenByGuidAsync(guid)
-                        .Subscribe(a =>
-                        {
-                            if (a.Data?.ToString() == source.Value.New || data is ICount)
-                            {
-                                b = true;
-                                children.Children.Subscribe(a => observer.OnNext(a), () => observer.OnCompleted());
-                            }
-                            else if (a.Data != null && m_items.Any(n => ((IKey)n).Key == a.Key) == false)
-                            {
-                                observer.OnNext(a);
-                            }
-                        },
-                        () =>
-                        {
-                            if (b == false)
-                                observer.OnCompleted();
-                        });
-                    });
-                }
             }
         }
 
