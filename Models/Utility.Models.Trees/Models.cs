@@ -140,13 +140,20 @@ namespace Utility.Models.Trees
 
     public class NodePropertyRootModel : ResolvableModel
     {
+        private Type type;
+
         public NodePropertyRootModel()
         {
             Assemblies.InsertSpecial(0, typeof(INode).Assembly);
             Types.InsertSpecial(0, typeof(INode));
+            Properties.Changes().Subscribe(a => PropertyType = Properties.Last().PropertyType);
         }
 
-        public ParameterInfo Parameter { get; set; }
+        public Type PropertyType
+        {
+            get => type;
+            set => this.RaisePropertyChanged(ref type, value);
+        }
 
         public override IEnumerable<Model> CreateChildren()
         {
@@ -722,24 +729,60 @@ namespace Utility.Models.Trees
     {
     }
 
-    public enum Comparison
+    public enum StringComparison
     {
-        Between, Contains, DoesNotContain, EndsWith, EqualTo, GreaterThan, GreaterThanOrEqualTo, In, IsEmpty, IsNotEmpty, IsNotNull, IsNotNullOrWhiteSpace, IsNull, IsNullOrWhiteSpace, LessThan, LessThanOrEqualTo, NotEqualTo, NotIn, StartsWith
+        EqualTo, NotEqualtTo, Contains, DoesNotContain, StartsWith, EndsWith, IsNull, IsNotNull, IsNotNullOrWhiteSpace
+    }
+
+    public enum NumberComparison
+    {
+        EqualTo, NotEqualTo, GreaterThan, GreaterThanOrEqualTo, LessThan, LessThanOrEqualTo,
+    }
+
+    public enum BooleanComparison
+    {
+        EqualTo, NotEqualTo
+    }
+
+    public enum ComparisonType
+    {
+        String, Number, Boolean
     }
 
     public class ComparisonModel : Model
     {
-        private Comparison _value;
+        private Enum _value;
+        private ComparisonType type;
 
         public ComparisonModel()
         {
 
         }
 
-        public Comparison Value
+        public ComparisonType Type
+        {
+            get => type; set
+            {
+                type = value;
+                switch (value)
+                {
+                    case ComparisonType.String:
+                        Value = StringComparison.EqualTo; break;
+                    case ComparisonType.Number:
+                        Value = NumberComparison.EqualTo; break;
+                    case ComparisonType.Boolean:
+                        Value = BooleanComparison.EqualTo; break;
+                }
+                RaisePropertyChanged();
+            }
+        }
+
+        public Enum Value
         {
             get => _value; set
             {
+                if (value == null)
+                    return;
                 RaisePropertyChanged(ref _value, value);
             }
         }
@@ -1243,7 +1286,7 @@ namespace Utility.Models.Trees
         const string _value = nameof(_value);
 
         private NodePropertyRootModel resolvableModel;
-        private TypeModel typeModel;
+        private ComparisonModel comparisonModel;
         private ValueModel valueModel;
 
         public FilterModel()
@@ -1259,11 +1302,8 @@ namespace Utility.Models.Trees
                 node.IsExpanded = true;
                 base.SetNode(node);
             });
-
         }
 
-        [JsonIgnore]
-        public BooleanModel BooleanModel { get; set; }
 
         [JsonIgnore]
         public NodePropertyRootModel ResolvableModel
@@ -1273,10 +1313,10 @@ namespace Utility.Models.Trees
         }
 
         [JsonIgnore]
-        public TypeModel TypeModel
+        public ComparisonModel ComparisonModel
         {
-            get => typeModel;
-            set => base.RaisePropertyChanged(ref this.typeModel, value);
+            get => comparisonModel;
+            set => base.RaisePropertyChanged(ref this.comparisonModel, value);
         }
 
         [JsonIgnore]
@@ -1289,8 +1329,7 @@ namespace Utility.Models.Trees
         public override IEnumerable<Model> CreateChildren()
         {
             yield return new NodePropertyRootModel { Name = res };
-            yield return new BooleanModel { Name = b_ool };
-            yield return new TypeModel { Name = type };
+            yield return new ComparisonModel { Name = b_ool };
             yield return new ValueModel { Name = _value };
         }
 
@@ -1299,11 +1338,37 @@ namespace Utility.Models.Trees
             switch (a.Data.ToString())
             {
                 case res:
-                    ResolvableModel = a.Data as NodePropertyRootModel; break;
+                    ResolvableModel = a.Data as NodePropertyRootModel;
+                    ResolvableModel.WithChangesTo(a => a.PropertyType).CombineLatest(this.WithChangesTo(a => a.ValueModel))
+                        .Subscribe(a =>
+                        {
+                            ValueModel.Value = ActivateAnything.Activate.New(a.First);
+                            ValueModel.RaisePropertyChanged(nameof(ValueModel.Value));
+                        });
+                    ResolvableModel.WithChangesTo(a => a.PropertyType).CombineLatest(this.WithChangesTo(a => a.ComparisonModel))
+                        .Subscribe(a =>
+                        {
+                            if (a.First == typeof(string))
+                            {
+                                ComparisonModel.Type = ComparisonType.String;                
+                            }                         
+                            else if (a.First == typeof(long) || a.First == typeof(int) || a.First == typeof(short)|| a.First == typeof(byte) 
+                            ||(a.First == typeof(ulong) || a.First == typeof(uint) || a.First == typeof(ushort)|| a.First == typeof(double) || a.First == typeof(float)))
+                            {
+                                ComparisonModel.Type = ComparisonType.Number;                
+                            }
+                            else
+                            {
+                                ComparisonModel.Type = ComparisonType.Boolean;
+                            }
+                            ComparisonModel.RaisePropertyChanged(nameof(ComparisonModel.Value));
+                        });
+                    break;
+                //ResolvableModel. break;
                 case b_ool:
-                    BooleanModel = a.Data as BooleanModel; break;
-                case type:
-                    TypeModel = a.Data as TypeModel; break;
+                    ComparisonModel = a.Data as ComparisonModel; break;
+                //case type:
+                //    TypeModel = a.Data as TypeModel; break;
                 case _value:
                     ValueModel = a.Data as ValueModel; break;
             }
@@ -1400,18 +1465,7 @@ namespace Utility.Models.Trees
         public override void SetNode(INode node)
         {
             node.IsPersistable = true;
-            node.CollectionChanged += Items_CollectionChanged;
             base.SetNode(node);
-
-
-            void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-            {
-                if (node.Current == null && e.NewItems is IEnumerable newItems)
-                {
-                    foreach (INode item in newItems)
-                        node.Current = item;
-                }
-            }
         }
 
         public override void Addition(IReadOnlyTree value, IReadOnlyTree a)

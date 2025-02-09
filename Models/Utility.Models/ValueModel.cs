@@ -1,9 +1,11 @@
 ﻿using System.Reactive.Linq;
+using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
 
 namespace Utility.Models
 {
-    public class ValueModel<T> : Model
+    public class ValueModel<T> : Model, IValue<T?>, ISetValue
     {
         private object dateValue;
         private T value;
@@ -23,6 +25,9 @@ namespace Utility.Models
             }
         }
 
+        object IValue.Value => Value;
+
+        object ISetValue.Value { set => Value = (T)value; }
 
         public T? Get()
         {
