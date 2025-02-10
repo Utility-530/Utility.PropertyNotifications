@@ -22,6 +22,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Utility.Helpers;
 using static LambdaConverters.ValueConverter;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Controls.Objects
 {
@@ -431,41 +432,6 @@ namespace Utility.WPF.Controls.Objects
     }
 
 
-    static class Helper
-    {
-        /// <summary>
-        /// Finds a Parent of given control
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="child"></param>
-        /// <returns></returns>
-        public static T? FindParent<T>(this DependencyObject child) where T : DependencyObject =>
-            VisualTreeHelper.GetParent(child) switch
-            {
-                null => null,
-                T parent => parent,
-                { } parent => FindParent<T>(parent)
-            };
-
-        /// <summary>
-        /// Finds parent by given name
-        /// </summary>
-        /// <param name="dependencyObject"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static DependencyObject? FindParent(this DependencyObject? dependencyObject, string name)
-        {
-            while (dependencyObject != null &&
-                   VisualTreeHelper.GetParent(dependencyObject) is { } parentObj)
-            {
-                if ((string)parentObj.GetValue(FrameworkElement.NameProperty) == name)
-                    return parentObj;
-
-                dependencyObject = parentObj;
-            }
-            return null;
-        }
-    }
 
     public class ComplexPropertyMethodValueConverter : IValueConverter
     {
