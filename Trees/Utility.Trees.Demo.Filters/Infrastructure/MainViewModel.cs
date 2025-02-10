@@ -20,7 +20,7 @@ namespace Utility.Trees.Demo.Filters.Infrastructure
             get
             {
                 if (filters == null)
-                    source.Value.Single(nameof(Factory.BuildFiltersRoot))
+                    source.Value.Single(nameof(Factory.BuildAndOrRoot))
                         .Subscribe(a => 
                         { 
                             filters = [a]; 

@@ -61,9 +61,9 @@ namespace Utility.Trees.Demo.Filters
                             },
                             new TrueDecisionTree<IDescriptor>(new Decision<IDescriptor>(item => item.ParentType.Name == "Array"), item => item.Name)
                             {
-                                new TrueDecisionTree( new Decision<string>(item => item == "IsFixedSize"),  a=> false) { },
-                                new TrueDecisionTree( new Decision<string>(item => item == "IsReadOnly"),  a=> false) { },
-                                new TrueDecisionTree( new Decision<string>(item => item == "IsSynchronized"),  a=> false) { },
+                                new TrueDecisionTree(new Decision<string>(item => item == "IsFixedSize"),  a=> false) { },
+                                new TrueDecisionTree(new Decision<string>(item => item == "IsReadOnly"),  a=> false) { },
+                                new TrueDecisionTree(new Decision<string>(item => item == "IsSynchronized"),  a=> false) { },
                                 new TrueDecisionTree(new Decision<string>(item => item == "LongLength"),  a=> false) { },
                                 new TrueDecisionTree(new Decision<string>(item => item == "Length"), a=> false) { },
                                 new TrueDecisionTree(new Decision<string>(item => item == "SyncRoot"),  a=> false) { },
@@ -75,18 +75,18 @@ namespace Utility.Trees.Demo.Filters
                             new TrueDecisionTree<IDescriptor>(new Decision<IDescriptor>(item => item.ParentType.IsAssignableTo(typeof(IList))), item =>item.Name)
                             {
                             new TrueDecisionTree(new Decision<string>(item => item == nameof(IList.Remove)),  a=> false) { },
-                            new TrueDecisionTree(  new Decision<string>(item => item == nameof(IList.GetEnumerator)),  a=> false) { },
-                            new TrueDecisionTree(  new Decision<string>(item => item == nameof(IList.CopyTo)),  a=> false) { },
-                            new TrueDecisionTree(  new Decision<string>(item => item == nameof(IList.IndexOf)),  a=> false) { },
-                            new TrueDecisionTree(   new Decision<string>(item => item == nameof(IList.Contains)),  a=> false) { },
-                            new TrueDecisionTree(   new Decision<string>(item => item == nameof(IList.Add)),  a=> false) { },
-                            new TrueDecisionTree(   new Decision<string>(item => item == nameof(IList.RemoveAt)),  a=> false) { },
-                            new TrueDecisionTree(  new Decision<string>(item => item == nameof(ObservableCollection<object>.Move))) { },
-                            new TrueDecisionTree(   new Decision<string>(item => item == nameof(IList.Remove)),  a=> false) { },
-                            new TrueDecisionTree(  new Decision<string>(item => item == nameof(IList.Insert)),  a=> false) { },
-                            new TrueDecisionTree(  new Decision<string>(item => item == nameof(IList.Add)), a=> false),
-                            new TrueDecisionTree(  new Decision<string>(item => item == nameof(IList.Count)), a=> false),
-                            new TrueDecisionTree(  new Decision<string>(item => item == nameof(List<object>.Capacity)), a=> false)
+                            new TrueDecisionTree(new Decision<string>(item => item == nameof(IList.GetEnumerator)),  a=> false) { },
+                            new TrueDecisionTree(new Decision<string>(item => item == nameof(IList.CopyTo)),  a=> false) { },
+                            new TrueDecisionTree(new Decision<string>(item => item == nameof(IList.IndexOf)),  a=> false) { },
+                            new TrueDecisionTree(new Decision<string>(item => item == nameof(IList.Contains)),  a=> false) { },
+                            new TrueDecisionTree(new Decision<string>(item => item == nameof(IList.Add)),  a=> false) { },
+                            new TrueDecisionTree(new Decision<string>(item => item == nameof(IList.RemoveAt)),  a=> false) { },
+                            new TrueDecisionTree(new Decision<string>(item => item == nameof(ObservableCollection<object>.Move))) { },
+                            new TrueDecisionTree(new Decision<string>(item => item == nameof(IList.Remove)),  a=> false) { },
+                            new TrueDecisionTree(new Decision<string>(item => item == nameof(IList.Insert)),  a=> false) { },
+                            new TrueDecisionTree(new Decision<string>(item => item == nameof(IList.Add)), a=> false),
+                            new TrueDecisionTree(new Decision<string>(item => item == nameof(IList.Count)), a=> false),
+                            new TrueDecisionTree(new Decision<string>(item => item == nameof(List<object>.Capacity)), a=> false)
                         }
 
                         }
