@@ -168,6 +168,8 @@ namespace Utility.Models
 
         public virtual void SubtractDescendant(IReadOnlyTree node, int level)
         {
+            if (node.Data is IBreadCrumb)
+                return;
             var date = source.Remove(Guid.Parse(node.Key));
             if (node is IRemoved removed)
             {
