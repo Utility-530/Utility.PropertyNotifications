@@ -58,7 +58,7 @@ namespace Utility.WPF.Templates
             {
                 if (item is IType { Type: { } type })
                     return type;
-                if (value.GetType() is { } _type)
+                if (value?.GetType() is { } _type)
                     return _type;
                 return null;
             }
