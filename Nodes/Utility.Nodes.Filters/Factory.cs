@@ -15,19 +15,26 @@ namespace Utility.Nodes.Filters
     public class Factory
     {
         //public const string tableName = "TableName";
-        public const string content_root = "content_root";
-        public const string filter_root = "filter_root";
-        public const string transformer_root = "transformer_root";
+        public const string content_root = nameof(content_root);
+        public const string filter_root = nameof(filter_root);
+        public const string transformer_root = nameof(transformer_root);
+        public const string and_or = nameof(and_or);
         public const string filters = nameof(filters);
         public const string root = nameof(root);
+        public const string transformers = nameof(transformers);
+        public const string combo = nameof(combo);
+        public const string controls = nameof(controls);
+        public const string breadcrumb = nameof(breadcrumb);
+        public const string html = nameof(html);
+        public const string _html = nameof(_html);
 
         //static readonly Guid assGuid = Guid.Parse("10126895-6855-45ab-97af-21ed90c02fe8");
         //static readonly Guid relGuid = Guid.Parse("5c90fcd6-2324-4f88-bffb-73b8f9fbcf6b");
         //static readonly Guid rootModelGuid = Guid.Parse("76ae564a-fda0-419c-9b88-dee3ac7430c1");
         //static readonly Guid assemblyGuid = Guid.Parse("ae00fed1-c58d-4e09-ac24-99cad4fbbc56");
-        //static readonly Guid transformerGuid = Guid.Parse("2afe3e32-eb9e-4d2c-b862-5fe8ac95559f");
 
-        static readonly Guid assemblyGuid = Guid.Parse("ae00fed1-c58d-4e09-ac24-99cad4fbbc56");
+        static readonly Guid and_orGuid = Guid.Parse("2afe3e32-eb9e-4d2c-b862-5fe8ac95559f");
+        static readonly Guid breadcrumbGuid = Guid.Parse("ae00fed1-c58d-4e09-ac24-99cad4fbbc56");
         static readonly Guid subGuid = Guid.Parse("cd79fd35-46c4-4da6-a53f-2a0fb307781a");
         static readonly Guid transformerGuid = Guid.Parse("76ae564a-fda0-419c-9b88-dee3ac7430c1");
         static readonly Guid filterGuid = Guid.Parse("2db6ac81-590e-4f94-98b9-215a1cd880bb");
@@ -56,12 +63,12 @@ namespace Utility.Nodes.Filters
 
         public static IObservable<INode> BreadcrumbRoot()
         {
-            return create("too", assemblyGuid, s => new Node(s) { }, s => new NodePropertyRootModel { Name = s });
+            return create(breadcrumb, breadcrumbGuid, s => new Node(s) { }, s => new NodePropertyRootModel { Name = s });
         }
 
         public static IObservable<INode> BuildControlRoot()
         {
-            return create("controls",
+            return create(controls,
                 controlsGuid,
                 s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Horizontal },
                 s => new Model(() => [new CommandModel { Name = Save }]) { Name = s });
@@ -69,7 +76,7 @@ namespace Utility.Nodes.Filters
 
         public static IObservable<INode> BuildComboRoot()
         {
-            return create("combo",
+            return create(combo,
                 subGuid,
                 s => new Node(s) { },
                 s => new DatabasesModel { Name = s });
@@ -77,7 +84,7 @@ namespace Utility.Nodes.Filters
 
         public static IObservable<INode> BuildTransformersRoot()
         {
-            return create("transformers",
+            return create(transformers,
                 transformerGuid,
                 s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Vertical },
                 s => new TransformersModel { Name = s });
@@ -92,9 +99,18 @@ namespace Utility.Nodes.Filters
         }
 
 
+        public static IObservable<INode> BuildAndOrRoot()
+        {
+            return create(and_or,
+                and_orGuid,
+                s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Vertical },
+                s => new AndOrModel { Name = s });
+        }
+
+
         public static IObservable<INode> BuildHtmlRoot()
         {
-            return create("html",
+            return create(html,
                 htmlGuid,
                 s => new Node(s),
                 s => new StringModel { Name = s });
@@ -102,7 +118,7 @@ namespace Utility.Nodes.Filters
 
         public static IObservable<INode> BuildHtmlRenderRoot()
         {
-            return create("_html",
+            return create(_html,
                 htmlRenderGuid,
                 s => new Node(s),
                 s => new HtmlModel { Name = s });
