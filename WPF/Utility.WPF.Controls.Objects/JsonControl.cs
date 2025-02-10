@@ -1,4 +1,5 @@
 ﻿# nullable enable
+using NetFabric.Hyperlinq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
@@ -16,16 +17,130 @@ using System.Reactive.Subjects;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using Tiny.Toolkits;
 using Utility.Helpers;
 using static LambdaConverters.ValueConverter;
-using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Controls.Objects
 {
+    public class SchemaProperty
+    {
+        public string Name { get; set; }
+
+        //
+        // Summary:
+        //     Gets or sets the default value.
+        [JsonProperty("default", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public object Default { get; set; }
+
+        //
+        // Summary:
+        //     Gets or sets the required multiple of for the number value.
+        [JsonProperty("multipleOf", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public decimal? MultipleOf { get; set; }
+
+        //
+        // Summary:
+        //     Gets or sets the maximum allowed value.
+        [JsonProperty("maximum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public decimal? Maximum { get; set; }
+
+        //
+        // Summary:
+        //     Gets or sets a value indicating whether the maximum value is excluded.
+        [JsonProperty("exclusiveMaximum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public bool IsExclusiveMaximum { get; set; }
+
+        //
+        // Summary:
+        //     Gets or sets the minimum allowed value.
+        [JsonProperty("minimum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public decimal? Minimum { get; set; }
+
+        //
+        // Summary:
+        //     Gets or sets a value indicating whether the minimum value is excluded.
+        [JsonProperty("exclusiveMinimum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public bool IsExclusiveMinimum { get; set; }
+
+        //
+        // Summary:
+        //     Gets or sets the maximum length of the value string.
+        [JsonProperty("maxLength", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public int? MaxLength { get; set; }
+
+        //
+        // Summary:
+        //     Gets or sets the minimum length of the value string.
+        [JsonProperty("minLength", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public int? MinLength { get; set; }
+
+        //
+        // Summary:
+        //     Gets or sets the validation pattern as regular expression.
+        [JsonProperty("pattern", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public string Pattern { get; set; }
+
+        //
+        // Summary:
+        //     Gets or sets the maximum length of the array.
+        [JsonProperty("maxItems", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public int MaxItems { get; set; }
+
+        //
+        // Summary:
+        //     Gets or sets the minimum length of the array.
+        [JsonProperty("minItems", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public int MinItems { get; set; }
+
+        //
+        // Summary:
+        //     Gets or sets a value indicating whether the items in the array must be unique.
+        [JsonProperty("uniqueItems", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public bool UniqueItems { get; set; }
+
+        //
+        // Summary:
+        //     Gets or sets the maximal number of allowed properties in an object.
+        [JsonProperty("maxProperties", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public int MaxProperties { get; set; }
+
+        //
+        // Summary:
+        //     Gets or sets the minimal number of allowed properties in an object.
+        [JsonProperty("minProperties", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public int MinProperties { get; set; }
+
+        //
+        // Summary:
+        //     Gets the collection of required properties.
+        [JsonIgnore]
+        public ICollection<object> Enumeration { get; internal set; }
+
+        //
+        // Summary:
+        //     Gets a value indicating whether this is enumeration.
+        [JsonIgnore]
+        public bool IsEnumeration => Enumeration.Count > 0;
+
+        public string Format { get; set; }
+    }
+
+
+    public class SchemaType
+    {
+        public string Name { get; set; }
+        public SchemaProperty[] Properties { get; set; }
+    }
+
+    public class Schema
+    {
+        public SchemaType[] Types { get; set; }
+    }
+
     public static class Commands
     {
         public static readonly RoutedCommand FooCommand = new RoutedCommand("Foo", typeof(JsonControl));
@@ -36,36 +151,26 @@ namespace Utility.WPF.Controls.Objects
     /// </summary>
     public partial class JsonControl : TreeView
     {
-        private readonly ReplaySubject<TreeView> subject = new(1);
-        //private readonly ReplaySubject<bool> toggleItems = new(1);
-        private const GeneratorStatus Generated = GeneratorStatus.ContainersGenerated;
+        private readonly ReplaySubject<TreeView> treeViewSubject = new(1);
 
-        private Newtonsoft.Json.JsonConverter[] converters = new JsonConverter[] {
+        private JsonConverter[] converters = [
             new StringToGuidConverter(),
             new Newtonsoft.Json.Converters.IsoDateTimeConverter(),
-            new Newtonsoft.Json.Converters.StringEnumConverter()};
-        private static LiteDB.LiteDatabase db;
+            new Newtonsoft.Json.Converters.StringEnumConverter()];
+
         public static readonly DependencyProperty JsonProperty = DependencyProperty.Register(nameof(Json), typeof(string), typeof(JsonControl), new PropertyMetadata(null, Change2));
-
-        private static void Change2(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-        }
-
         public static readonly DependencyProperty ObjectProperty = DependencyProperty.Register(nameof(Object), typeof(object), typeof(JsonControl), new PropertyMetadata(null, Change));
+        public static readonly DependencyProperty ValidationSchemaProperty = DependencyProperty.Register(nameof(ValidationSchema), typeof(JSchema), typeof(JsonControl), new PropertyMetadata(null, Change));
+        public static readonly DependencyProperty SchemaProperty = DependencyProperty.Register(nameof(Schema), typeof(Schema), typeof(JsonControl), new PropertyMetadata());
 
-        private static void Change(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-        }
-
-
-        public static readonly DependencyProperty SchemaProperty = DependencyProperty.Register("Schema", typeof(JSchema), typeof(JsonControl), new PropertyMetadata(null, Change));
-
+        private static void Change2(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+        private static void Change(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
 
         static JsonControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(JsonControl), new FrameworkPropertyMetadata(typeof(JsonControl)));
             Directory.CreateDirectory("../../../Data");
-            db = new LiteDB.LiteDatabase("../../../Data/schemas.litedb");
+            //db = new LiteDB.LiteDatabase("../../../Data/schemas.litedb");
         }
 
         public JsonControl()
@@ -74,45 +179,22 @@ namespace Utility.WPF.Controls.Objects
 
             this.WhenAnyValue(a => a.Object)
                 .WhereNotNull()
-                .Select(e => Newtonsoft.Json.JsonConvert.SerializeObject(e, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, Converters = converters }))
+                .Select(convert)
                 .Merge(this.WhenAnyValue(a => a.Json).WhereNotNull())
-                .CombineLatest(subject)
+                .CombineLatest(treeViewSubject)
                 .Subscribe(a =>
                 {
                     this.Load(a.First, a.Second);
                 }, e =>
                 {
+                    MessageBox.Show(e.Message);
                 });
 
-            this.WhenAnyValue(a => a.Object)
-                .WhereNotNull()
-                .Select(a =>
-                {      
-                 
-                    var collection = db.GetCollection<TypeSchema>();
-                    {
-                        var type = a.GetType();
-                        var name = type.AsString();
-                        var x = collection.FindOne(a=> a.Type == name);
-                        if (x != null)
-                        {
-                            var _schema = JSchema.Parse(x.Schema);
-                            return _schema;
-                        }
-  
-                    }
 
-                    JSchemaGenerator generator = new();
-                    var schema = generator.Generate(a.GetType());
-                    collection.Insert(new TypeSchema { Schema = schema.ToString(), Type = a.GetType().AsString() });
-                    return schema;
-         
-                })
-                .Merge(this.WhenAnyValue(a => a.Json).WhereNotNull().Select(a => JSchema.Parse(a)))
-                .Subscribe(schema =>
-                {
-                    Schema = schema;
-                });
+            string convert(object e)
+            {
+                return Newtonsoft.Json.JsonConvert.SerializeObject(e, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, Converters = converters });
+            }
 
             static void OnFoo(object sender, RoutedEventArgs e)
             {
@@ -127,12 +209,6 @@ namespace Utility.WPF.Controls.Objects
             }
         }
 
-        public class TypeSchema
-        {
-            public string Type { get; set; }
-            public string Schema { get; set; }
-        }
-
         public string Json
         {
             get => (string)GetValue(JsonProperty);
@@ -144,15 +220,22 @@ namespace Utility.WPF.Controls.Objects
             get => (object)GetValue(ObjectProperty);
             set => SetValue(ObjectProperty, value);
         }
-        public JSchema Schema
+
+        public JSchema ValidationSchema
         {
-            get { return (JSchema)GetValue(SchemaProperty); }
+            get { return (JSchema)GetValue(ValidationSchemaProperty); }
+            set { SetValue(ValidationSchemaProperty, value); }
+        }
+
+        public Schema Schema
+        {
+            get { return (Schema)GetValue(SchemaProperty); }
             set { SetValue(SchemaProperty, value); }
         }
 
         public override void OnApplyTemplate()
         {
-            subject.OnNext(this);
+            treeViewSubject.OnNext(this);
             base.OnApplyTemplate();
         }
 
@@ -163,7 +246,14 @@ namespace Utility.WPF.Controls.Objects
 
             try
             {
-                jsonTreeView.ItemsSource = JToken.Parse(json).Children();
+                var jToken = JToken.Parse(json);
+                if (ValidationSchema != null)
+                    if (jToken.IsValid(ValidationSchema) == false)
+                    {
+                        MessageBox.Show("Schema not valid!");
+                    }
+
+                jsonTreeView.ItemsSource = jToken.Children();
             }
             catch (Exception ex)
             {
@@ -178,80 +268,25 @@ namespace Utility.WPF.Controls.Objects
                 Clipboard.SetText(tb.Text);
             }
         }
-
-        //    private void ExpandAll(object sender, RoutedEventArgs e)
-        //    {
-        //        toggleItems.OnNext(true);
-        //    }
-
-        //    private void CollapseAll(object sender, RoutedEventArgs e)
-        //    {
-        //        toggleItems.OnNext(false);
-        //    }
-
-        //    private void ToggleItems(bool isExpanded, TreeView jsonTreeView)
-        //    {
-        //        if (jsonTreeView.Items.IsEmpty)
-        //            return;
-
-        //        var prevCursor = Cursor;
-        //        //System.Windows.Controls.DockPanel.Opacity = 0.2;
-        //        //System.Windows.Controls.DockPanel.IsEnabled = false;
-        //        Cursor = Cursors.Wait;
-
-        //        var timer = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Normal, (s, e) =>
-        //        {
-        //            ToggleItems(jsonTreeView, jsonTreeView.Items, isExpanded);
-        //            //System.Windows.Controls.DockPanel.Opacity = 1.0;
-        //            //System.Windows.Controls.DockPanel.IsEnabled = true;
-        //            (s as DispatcherTimer)?.Stop();
-        //            Cursor = prevCursor;
-        //        }, Application.Current.Dispatcher);
-        //        timer.Start();
-
-        //        static void ToggleItems(ItemsControl parentContainer, ItemCollection items, bool isExpanded)
-        //        {
-        //            var itemGen = parentContainer.ItemContainerGenerator;
-        //            if (itemGen.Status == Generated)
-        //            {
-        //                Recurse(items, isExpanded, itemGen);
-        //            }
-        //            else
-        //            {
-        //                itemGen.StatusChanged += delegate
-        //                {
-        //                    Recurse(items, isExpanded, itemGen);
-        //                };
-        //            }
-
-        //            static void Recurse(ItemCollection items, bool isExpanded, ItemContainerGenerator itemGen)
-        //            {
-        //                if (itemGen.Status != Generated)
-        //                    return;
-
-        //                foreach (var item in items)
-        //                {
-        //                    var tvi = itemGen.ContainerFromItem(item) as TreeViewItem;
-        //                    tvi.IsExpanded = isExpanded;
-        //                    ToggleItems(tvi, tvi.Items, isExpanded);
-        //                }
-        //            }
-        //        }
-        //    }
     }
 
     public class JsonObjectTypeTemplateSelector : DataTemplateSelector
     {
 
+        Dictionary<string, SchemaType> types = new();
+        Dictionary<string, SchemaProperty> properties = new();
+        private JsonControl jsonControl;
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             var presenter = (FrameworkElement)container;
 
-            if (presenter.FindParent<TreeView>() is JsonControl jsonControl)
-            {
-                Schema = jsonControl.Schema;
-            }
+            jsonControl ??= container.FindParent<JsonControl>();
+
+            //if (presenter.FindParent<TreeView>() is JsonControl jsonControl)
+            //{
+            //    Schema = jsonControl.Schema;
+            //}
 
             if (container is FrameworkElement frameworkElement)
             {
@@ -259,49 +294,70 @@ namespace Utility.WPF.Controls.Objects
                 {
                     if (type == JTokenType.Object)
                         return frameworkElement.FindResource("ObjectPropertyTemplate") as DataTemplate;
-                    if (type == JTokenType.Object)
-                        return frameworkElement.FindResource("ArrayPropertyTemplate") as DataTemplate;
                 }
-                if (item is JProperty { Value: { Type: { } _type } } property)
+                if (item is JProperty { Value: { Type: { } _type }, Parent: var parent } property)
                 {
+                    if (jsonControl.Schema is not null)
+                        if (parent is JObject { First: JProperty { Value: { } value } })
+                        {
+                            if (Type.GetType(value.ToString()) is Type __type)
+                                if (findType(__type.Name.ToString(), out SchemaType schemaType))
+                                    if (findProperty(property.Name, schemaType, out SchemaProperty schemaProperty))
+                                    {
+                                        if (frameworkElement.FindResource(schemaProperty.Format) is DataTemplate dataTemplate)
+                                        {
+                                            return dataTemplate;
+                                        }
+                                    }
+                        }
 
                     return frameworkElement.FindResource(Convert(_type)) as DataTemplate;
 
                 }
-
             }
-
-            //{
-            //    JTokenType.Object => resource.GetValueOrCreate("ObjectPropertyTemplate", () => frameworkElement.FindResource("ObjectPropertyTemplate")),
-            //    JTokenType.Array => resource.GetValueOrCreate("ArrayPropertyTemplate", () => frameworkElement.FindResource("ArrayPropertyTemplate")),
-            //    _ => resource.GetValueOrCreate("PrimitivePropertyTemplate", () => frameworkElement.FindResource("PrimitivePropertyTemplate")),
-            //},
-            //            (JObject jObject, FrameworkElement frameworkElement) => resource.GetValueOrCreate("ObjectPropertyTemplate", () => frameworkElement.FindResource("ObjectPropertyTemplate")),
-            //            (_, FrameworkElement frameworkElement) =>
-            //            frameworkElement.FindResource(new DataTemplateKey(e.Item.GetType())),
-
 
             if (item is JObject)
                 return (DataTemplate)presenter.Resources["RootTemplate"];
 
-            //JsonSchema schema;
-            //if (item is JProperty model)
-            //    schema = model.;
-            //else if (item is JToken model1)
-            //    schema = model1..ActualSchema;
             if (item is null)
                 return MissingTemplate;
-            //else
-            //    throw new NotImplementedException("The item given item type is not supported.");
 
-            //if (schema.Description != null)
-            //{
-            //    if (presenter.TryFindResource(schema.Description) is DataTemplate dataTemplate)
-            //        return dataTemplate;
-            //}
             return presenter.Resources[Extensions.ChooseString(ChooseType(presenter))] as DataTemplate;
-        }
 
+            bool findType(string name, out SchemaType? type)
+            {
+                if (types.TryGetValue(name, out SchemaType __type))
+                {
+                    type = __type;
+                    return true;
+
+                }
+                else if (jsonControl.Schema.Types.SingleOrDefault(a => a.Name == name) is SchemaType _vcds)
+                {
+                    type = types[_vcds.Name] = _vcds;
+                    return true;
+                }
+                type = null;
+                return false;
+            }
+
+            bool findProperty(string name, SchemaType _type, out SchemaProperty property)
+            {
+                if (properties.TryGetValue(name, out SchemaProperty prop))
+                {
+                    property = prop;
+                    return true;
+
+                }
+                else if (_type?.Properties.SingleOrDefault(a => a.Name == name) is SchemaProperty _vcds)
+                {
+                    property = properties[_vcds.Name] = _vcds;
+                    return true;
+                }
+                property = null;
+                return false;
+            }
+        }
         private static string Convert(JTokenType _type)
         {
             return _type switch
@@ -480,32 +536,30 @@ namespace Utility.WPF.Controls.Objects
 
         }
 
-        //public static IValueConverter ComplexPropertyMethodToValueConverter => Create<object, JEnumerable<JToken>?, string>(args =>
-        //(JEnumerable<JToken>)MethodToValueConverter.Convert(args.Value, null, args.Parameter, args.Culture));
-
         public static IValueConverter JArrayLengthConverter { get; } = Create<object, string>(jToken =>
-                      {
-                          if (jToken.Value is JToken { Type: JTokenType type } jtoken)
-                              return type switch
-                              {
-                                  JTokenType.Array => $"[{jtoken.Children().Count()}]",
-                                  JTokenType.Property => $"[ {jtoken.Children().FirstOrDefault()?.Children().Count()} ]",
-                                  _ => throw new ArgumentOutOfRangeException("Type should be JProperty or JArray"),
-                              };
-                          throw new Exception("fsdfdfsd");
-                      }
+        {
+            if (jToken.Value is JToken { Type: JTokenType type } jtoken)
+                return type switch
+                {
+                    JTokenType.Array => $"[{jtoken.Children().Count()}]",
+                    JTokenType.Property => $"[ {jtoken.Children().FirstOrDefault()?.Children().Count()} ]",
+                    _ => throw new ArgumentOutOfRangeException("Type should be JProperty or JArray"),
+                };
+            throw new Exception("fsdfdfsd");
+        }
         , errorStrategy: LambdaConverters.ConverterErrorStrategy.DoNothing);
 
-        public static IValueConverter JTokenConverter { get; } = Create<object, object>(jval => jval.Value switch
-                      {
-                          JValue value when value.Type == JTokenType.Null => "null",
-                          JValue value => value?.Value,
-                          _ => jval.Value.ToString() ?? string.Empty
-                      },
-            a =>
-            {
-                return new JValue(a.Value);
-            });
+        public static IValueConverter JTokenConverter { get; } = Create<object, object>(jval =>
+        jval.Value switch
+        {
+            JValue value when value.Type == JTokenType.Null => "null",
+            JValue value => value?.Value,
+            _ => jval.Value.ToString() ?? string.Empty
+        },
+        a =>
+        {
+            return new JValue(a.Value);
+        });
     }
 
     public class JTokenConverter : IValueConverter
@@ -527,27 +581,6 @@ namespace Utility.WPF.Controls.Objects
         public static JTokenConverter Instance { get; } = new();
     }
 
-    //internal static class TemplateSelector
-    //{
-    //    private static readonly Dictionary<string, object> resource = new();
-
-    //    public static DataTemplateSelector JPropertyDataTemplateSelector =
-    //        Create<object>(
-    //            e =>
-    //                (e.Item, e.Container) switch
-    //                {
-    //                    (JProperty property, FrameworkElement frameworkElement) => property.Value.Type switch
-    //                    {
-    //                        JTokenType.Object => resource.GetValueOrCreate("ObjectPropertyTemplate", () => frameworkElement.FindResource("ObjectPropertyTemplate")),
-    //                        JTokenType.Array => resource.GetValueOrCreate("ArrayPropertyTemplate", () => frameworkElement.FindResource("ArrayPropertyTemplate")),
-    //                        _ => resource.GetValueOrCreate("PrimitivePropertyTemplate", () => frameworkElement.FindResource("PrimitivePropertyTemplate")),
-    //                    },
-    //                    (JObject jObject, FrameworkElement frameworkElement) => resource.GetValueOrCreate("ObjectPropertyTemplate", () => frameworkElement.FindResource("ObjectPropertyTemplate")),
-    //                    (_, FrameworkElement frameworkElement) =>
-    //                    frameworkElement.FindResource(new DataTemplateKey(e.Item.GetType())),
-    //                    _ => null
-    //                } as DataTemplate);
-    //}
 
     internal static class ColorStore
     {
@@ -669,37 +702,6 @@ namespace Utility.WPF.Controls.Objects
 
         public object Convert(object[] value, Type targetType, object parameter, CultureInfo culture)
         {
-            //if (value.Length == 2)
-            //if (value[1] is NJsonSchema.JsonSchema { OneOf: JsonSchema[] { Length: > 0 } oneof })
-            //{
-            //    if (oneof[1] is JsonSchema { Enumeration: { Count: > 0 } enumeration, EnumerationNames: { Count: > 0 } names } jsonSchema)
-            //    {
-            //        this.jsonSchema = jsonSchema;
-            //        if (value[0] is string str)
-            //        {
-
-            //        }
-            //        if (value[0] is long @long)
-            //        {
-            //            return names.ElementAt(enumeration.ToList().IndexOf(@long));
-            //        }
-            //    }
-            //}
-            //else 
-            //    if (value[1] is JsonSchema { Enumeration: { Count: > 0 } enumeration, EnumerationNames: { Count: > 0 } names } jsonSchema)
-            //    {
-
-            //        this.jsonSchema = jsonSchema;
-            //        if (value[0] is string str)
-            //        {
-
-            //        }
-            //        if (value[0] is long @long)
-            //        {
-            //            return names.ElementAt(enumeration.ToList().IndexOf(@long));
-            //        }
-
-            //    }
             return DependencyProperty.UnsetValue;
         }
 

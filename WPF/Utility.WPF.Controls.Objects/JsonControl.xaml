@@ -16,7 +16,7 @@
         </ObjectDataProvider.MethodParameters>
     </ObjectDataProvider>
 
-    <ItemsControl x:Key="ItemsControlToolTip" ItemsSource="{Binding Source={StaticResource MyEnumValues}}">
+    <!--<ItemsControl x:Key="ItemsControlToolTip" ItemsSource="{Binding Source={StaticResource MyEnumValues}}">
         <ItemsControl.ItemTemplate>
             <DataTemplate DataType="{x:Type jlinq:JTokenType}">
                 <Border
@@ -39,7 +39,35 @@
                 <WrapPanel />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
-    </ItemsControl>
+    </ItemsControl>-->
+
+    <Style x:Key="TokenToolTipStyle" TargetType="{x:Type ToolTip}">
+        <Setter Property="OverridesDefaultStyle" Value="true"/>
+        <Setter Property="HasDropShadow" Value="True"/>
+        <Setter Property="DataContext" Value="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToolTip">
+                    <Border DataContext="{Binding Value.Type, Mode=OneWay}"
+                    Margin="5"
+                    BorderThickness="1"
+                    CornerRadius="3,3,3,3">
+                        <Border.BorderBrush>
+                            <SolidColorBrush Color="{Binding Converter={x:Static controls:Converters.JTokenTypeToColorConverter}}" />
+                        </Border.BorderBrush>
+                        <Label Content="{Binding Mode=OneWay}" Foreground="WhiteSmoke">
+                            <Label.Background>
+                                <SolidColorBrush Color="{Binding Converter={x:Static controls:Converters.JTokenTypeToColorConverter}}" />
+                            </Label.Background>
+                        </Label>
+                    </Border>                  
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <ToolTip x:Key="TokenToolTip" Style="{StaticResource TokenToolTipStyle}"/>
 
     <Style x:Key="JsonTreeViewItem" TargetType="{x:Type TreeViewItem}">
         <Setter Property="IsExpanded" Value="True" />
@@ -123,7 +151,7 @@
                 <Setter Property="Opacity" Value="0.9"></Setter>
                 <Setter Property="HorizontalAlignment" Value="Right"></Setter>
                 <Setter Property="FontWeight" Value="DemiBold"></Setter>
-                <Setter Property="ToolTip" Value="{StaticResource ItemsControlToolTip}"></Setter>
+                <Setter Property="ToolTip" Value="{StaticResource TokenToolTip}"></Setter>
                 <Setter Property="ToolTipService.InitialShowDelay" Value="300"></Setter>
                 <Setter Property="Text" Value="{Binding Path=Name, Mode=OneWay}"></Setter>
                 <Setter Property="Foreground">

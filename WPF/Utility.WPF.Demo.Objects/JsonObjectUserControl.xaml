@@ -11,6 +11,27 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <sys:Exception x:Key="exception" />
+
+        <DataTemplate x:Key="Ellipse">
+            <UniformGrid Rows="1" >
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,4" />
+                    <!--<TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4"
+                               Visibility="{Binding Schema.Description, Converter={StaticResource VisibilityConverter}}" />-->
+                </StackPanel>
+                <Ellipse Fill="Red" Height="20" Width="20"/>
+            </UniformGrid>
+        </DataTemplate>
+        
+        <x:Array x:Key="properties" Type="{x:Type view:SchemaProperty}">
+            <view:SchemaProperty Name="First" Format="Ellipse"></view:SchemaProperty>
+        </x:Array>
+
+        <x:Array x:Key="types" Type="{x:Type view:SchemaType}">
+            <view:SchemaType Name="Character" Properties="{StaticResource properties}"/>
+        </x:Array>
+
+        <view:Schema x:Key="CharacterSchema" Types="{StaticResource types}"/>
     </UserControl.Resources>
     <DockPanel Name="DockPanel" Visibility="Visible">
         <StackPanel DockPanel.Dock="Top">
@@ -26,7 +47,7 @@
         </StackPanel>
         <Grid>
             <UniformGrid>
-                <view:JsonControl Object="{StaticResource Characters}" />
+                <view:JsonControl Object="{StaticResource Characters}" Schema="{StaticResource CharacterSchema}"/>
                 <view:JsonControl Object="{StaticResource exception}" />
                 <DockPanel>
                     <Button DockPanel.Dock="Top" 
