@@ -522,21 +522,16 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class AndOrModel : Model, IAndOr, IObservable<Unit>
+    public class AndOrModel : ValueModel<AndOr>, IAndOr, IObservable<Unit>
     {
         protected AndOr value = 0;
         List<IObserver<Unit>> observers = new List<IObserver<Unit>>();
         List<AndOrModel> list = new List<AndOrModel>();
         List<FilterModel> filters = new List<FilterModel>();
+        Dictionary<Model, IDisposable> dictionary = new();
 
         public AndOrModel()
         {
-        }
-
-        public AndOr Value
-        {
-            get => value;
-            set => base.RaisePropertyChanged(ref this.value, value);
         }
 
         public bool Get(object data)
@@ -553,7 +548,6 @@ namespace Utility.Models.Trees
                 throw new ArgumentOutOfRangeException("sd 3433 33 x");
         }
 
-        Dictionary<Model, IDisposable> dictionary = new();
 
 
         public override void Addition(IReadOnlyTree value, IReadOnlyTree a)
