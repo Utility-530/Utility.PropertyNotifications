@@ -1,0 +1,44 @@
+{
+  "OperatorType": "And",
+  "Operands": [
+    {
+      "OperatorType": 0,
+      "Operands": null,
+      "Field": "Id",
+      "FilterType": 4,
+      "Value": 10
+    },
+    {
+      "OperatorType": 0,
+      "Operands": null,
+      "Field": "Cars.MaxSpeed",
+      "FilterType": 4,
+      "Value": 200
+    },
+    {
+      "OperatorType": 1,
+      "Operands": [
+        {
+          "OperatorType": 0,
+          "Operands": null,
+          "Field": "Name",
+          "FilterType": 1,
+          "Value": "Alex"
+        },
+        {
+          "OperatorType": 0,
+          "Operands": null,
+          "Field": "Age",
+          "FilterType": 6,
+          "Value": 21
+        }
+      ],
+      "Field": null,
+      "FilterType": 0,
+      "Value": null
+    }
+  ],
+  "Field": null,
+  "FilterType": 0,
+  "Value": null
+}
