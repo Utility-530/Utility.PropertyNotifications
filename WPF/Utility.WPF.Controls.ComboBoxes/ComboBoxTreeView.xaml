@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
                     xmlns:local="clr-namespace:Utility.WPF.Controls.ComboBoxes"
+                    xmlns:base="clr-namespace:Utility.WPF.Controls.Base;assembly=Utility.WPF.Controls.Base"
                     xmlns:trees="http://schemas.utility.com/trees">
 
     <ResourceDictionary.MergedDictionaries>
@@ -223,7 +224,7 @@
                         IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, 
               RelativeSource={RelativeSource TemplatedParent}}"/>
                                 <Grid            IsHitTestVisible="False">
-                                    <local:CustomItemsControl x:Name="ContentSite"        
+                                    <base:CustomItemsControl x:Name="ContentSite"        
                                       VerticalAlignment="Center" VerticalContentAlignment="Center"
                                       HorizontalContentAlignment="Center"
                                       HorizontalAlignment="Left"
@@ -259,7 +260,7 @@
                                                 </Setter>
                                             </Style>
                                         </ItemsControl.ItemContainerStyle>
-                                    </local:CustomItemsControl>
+                                    </base:CustomItemsControl>
                                 </Grid>
                                 <TextBox x:Name="PART_EditableTextBox"
                    Style="{x:Null}"

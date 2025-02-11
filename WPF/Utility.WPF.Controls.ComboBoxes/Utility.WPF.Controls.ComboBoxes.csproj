@@ -18,6 +18,7 @@
 		<ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Colours\Utility.WPF.Colours.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Controls.Base\Utility.WPF.Controls.Base.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />

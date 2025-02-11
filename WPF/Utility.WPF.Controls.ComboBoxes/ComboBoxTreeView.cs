@@ -11,20 +11,6 @@ using Utility.WPF.Controls.Trees;
 namespace Utility.WPF.Controls.ComboBoxes
 {
 
-    public class CustomItemsControl : ItemsControl
-    {
-        protected override DependencyObject GetContainerForItemOverride()
-        {
-            return new ContentControl();
-        }
-
-        protected override bool IsItemItsOwnContainerOverride(object item)
-        {
-            // Even wrap other ContentControls
-            return false;
-        }
-    }
-
 
     public class ComboBoxTreeView : ComboBox
     {
