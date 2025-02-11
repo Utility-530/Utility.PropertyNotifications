@@ -1,0 +1,14 @@
+{
+  "Types": [
+    {
+      "Name": "Exception",
+      "Properties": [
+        {
+          "Name": "Message",
+          "Format": "MessageTemplate"
+        },
+
+      ]
+    }
+  ]
+}

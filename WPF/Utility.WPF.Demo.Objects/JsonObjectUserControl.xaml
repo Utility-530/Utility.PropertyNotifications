@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:Utility.WPF.Demo.Objects"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:view="http://schemas.utility.com/objects"
     d:DesignHeight="450"
@@ -22,7 +23,26 @@
                 <Ellipse Fill="Red" Height="20" Width="20"/>
             </UniformGrid>
         </DataTemplate>
+
+        <DataTemplate x:Key="MessageTemplate">
+            <UniformGrid Rows="1" >
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" FontWeight="ExtraBold" Margin="0,0,0,4" />
+                    <!--<TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4"
+                               Visibility="{Binding Schema.Description, Converter={StaticResource VisibilityConverter}}" />-->
+                </StackPanel>
+                <Ellipse Fill="Blue" Height="20" Width="20"/>
+            </UniformGrid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="NumberTemplate">
+            <ContentControl Style="{DynamicResource LabelValueContent}">
+                <Ellipse Fill="Blue" Height="20" Width="20"/>
+            </ContentControl>
+        </DataTemplate>
         
+        
+
         <x:Array x:Key="properties" Type="{x:Type view:SchemaProperty}">
             <view:SchemaProperty Name="First" Format="Ellipse"></view:SchemaProperty>
         </x:Array>
@@ -32,6 +52,14 @@
         </x:Array>
 
         <view:Schema x:Key="CharacterSchema" Types="{StaticResource types}"/>
+
+
+        <ObjectDataProvider x:Key="SchemaFromFile"
+                ObjectType="{x:Type local:SchemaLoader}"
+                MethodName="LoadSchema" >
+        </ObjectDataProvider>
+        
+        
     </UserControl.Resources>
     <DockPanel Name="DockPanel" Visibility="Visible">
         <StackPanel DockPanel.Dock="Top">
@@ -47,8 +75,9 @@
         </StackPanel>
         <Grid>
             <UniformGrid>
+             
+                <view:JsonControl Object="{StaticResource exception}" Schema="{Binding Source={StaticResource SchemaFromFile}}"/>
                 <view:JsonControl Object="{StaticResource Characters}" Schema="{StaticResource CharacterSchema}"/>
-                <view:JsonControl Object="{StaticResource exception}" />
                 <DockPanel>
                     <Button DockPanel.Dock="Top" 
                         Click="Button_Click"

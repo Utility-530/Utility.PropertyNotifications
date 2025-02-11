@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using Newtonsoft.Json;
+using System.Windows;
 using System.Windows.Controls;
+using Utility.Helpers;
 using Utility.WPF.Controls.Objects;
 
 namespace Utility.WPF.Demo.Objects
@@ -22,5 +24,17 @@ namespace Utility.WPF.Demo.Objects
                 JsonControl.Json = clipboardText;
             }
         }
+
+
+
     }
+
+    public static class SchemaLoader
+    {
+        public static Schema LoadSchema()
+        {
+            Schema schema = JsonConvert.DeserializeObject<Schema>(Utility.Helpers.ResourceHelper.GetEmbeddedResource("exception.schema.json").AsString());
+            return schema;
+        }
+    } 
 }
