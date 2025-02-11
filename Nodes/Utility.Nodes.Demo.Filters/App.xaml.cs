@@ -49,7 +49,7 @@ namespace Utility.Nodes.Demo.Filters
             //WpfHtmlControlBase.SetMasterStylesheet(combine());
             combine();
             var window = new Window() { Content = mainViewModel };
-            window.Loaded += Window_Loaded;
+
             window.Show();
 
 
@@ -57,14 +57,6 @@ namespace Utility.Nodes.Demo.Filters
             base.OnStartup(e);
 
         }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            string serializedXaml = XamlWriter.Save(this.MainWindow);
-            Console.WriteLine(serializedXaml);
-        }
-
-
 
         void combine()
         {
