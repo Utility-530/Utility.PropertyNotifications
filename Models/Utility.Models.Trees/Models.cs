@@ -255,8 +255,10 @@ namespace Utility.Models.Trees
             set
             {
                 m_name = value;
-                Assembly = Assembly.Load(value);
-
+                if (Assembly == null)
+                {
+                    Assembly = Assembly.Load(value);
+                }
                 //base.RaisePropertyChanged();
             }
         }
@@ -275,7 +277,7 @@ namespace Utility.Models.Trees
             }
         }
 
-        public static AssemblyModel Create(Assembly assembly) => new() { Name = assembly.FullName };
+        public static AssemblyModel Create(Assembly assembly) => new() { Assembly = assembly, Name = assembly.FullName };
 
         public override void SubtractDescendant(IReadOnlyTree node, int level)
         {
