@@ -6,7 +6,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Utility.WPF.Demo.Data;component/Themes/Generic.xaml" />
-                <ResourceDictionary Source="/Utility.WPF.Controls;component/Themes/Generic.xaml" />
+                <!--<ResourceDictionary Source="/Utility.WPF.Controls;component/Themes/Generic.xaml" />-->
                 <ResourceDictionary Source="/Utility.WPF.Demo.Common;component/View/Templates.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
