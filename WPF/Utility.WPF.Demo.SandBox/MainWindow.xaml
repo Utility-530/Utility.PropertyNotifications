@@ -4,156 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:sandbox="clr-namespace:Utility.WPF.Demo.SandBox" 
-        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:c="http://schemas.utility.com/colours"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+        xmlns:sys="clr-namespace:System.Reactive.Linq;assembly=System.Reactive"
+        xmlns:local="clr-namespace:Utility.WPF.SandBox"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
-    <!--<Grid>
-        <TabControl>
-            <TabControl.Resources>
-                <Style x:Key="ImageStyle" TargetType="{x:Type Image}">
-                    <Style.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="BitmapEffect">
-                                <Setter.Value>
-                                    <OuterGlowBitmapEffect GlowColor="Gold" 
-                                                           GlowSize="8"/>
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
 
-                <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
-                    <Style.Triggers>
-                        <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="BitmapEffect">
-                                <Setter.Value>
-                                    <OuterGlowBitmapEffect GlowColor="Red" 
-                                                           GlowSize="8"/>
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </TabControl.Resources>
-            <TabItem Header="Triggered Effects">
-                <Grid>
-                    <Image Source="pack:://application:,,,/Assets/Smiley_Love.png" Cursor="Hand"
-                           
-                           Style="{DynamicResource ImageStyle}"
-                           Margin="32" VerticalAlignment="Top" 
-                           HorizontalAlignment="Left" 
-                           d:LayoutOverrides="Width">
-                    </Image>
-                    <TextBox Height="23" Style="{DynamicResource TextBoxStyle}"
-                             Margin="32" VerticalAlignment="Bottom">
-                    </TextBox>
-                </Grid>
-            </TabItem>
-        </TabControl>
+    <StackPanel>
 
-    </Grid>-->
-
-    <Grid>
-        <FrameworkElement.Resources>
-
-            <VisualBrush 
-      x:Key="HatchBrush" 
-                 Opacity="0.3"
-      TileMode="Tile" Viewport="0,0,10,10" 
-      ViewportUnits="Absolute" Viewbox="0,0,10,10"    
-      ViewboxUnits="Absolute">
-                <VisualBrush.Visual>
-                    <Canvas>    
-                        <Path Stroke="{c:Pink}" Data="M 0 10 l 10 -10"  />
-                    </Canvas>
-                </VisualBrush.Visual>
-            </VisualBrush>
-            
-            <VisualBrush 
-      x:Key="FadedHatchBrush" 
-             Opacity="0.5"
-      TileMode="Tile" Viewport="0,0,10,10" 
-      ViewportUnits="Absolute" Viewbox="0,0,10,10"    
-      ViewboxUnits="Absolute">
-                <VisualBrush.Visual>
-                    <Canvas>           
-                        <Path Stroke="{c:Pink}" Data="M 0 10 l 10 -10" />
-                    </Canvas>
-                </VisualBrush.Visual>
-            </VisualBrush>
-
-            <VisualBrush 
-      x:Key="FadedHatchBrush2" 
-             Opacity="0.2"
-      TileMode="Tile" Viewport="0,0,10,10" 
-      ViewportUnits="Absolute" Viewbox="0,0,10,10"    
-      ViewboxUnits="Absolute">
-                <VisualBrush.Visual>
-                    <Canvas>
-                        <Path Stroke="{c:Pink}" Data="M 0 0 l 10 10" />                    
-                    </Canvas>
-                </VisualBrush.Visual>
-            </VisualBrush>
+        <local:HatchSwitchView/>
 
 
-            <Style x:Key="InfoToggleButton"
-     TargetType="{x:Type ToggleButton}">
-        
-                <Setter Property="BorderThickness" Value="0"/>             
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Border CornerRadius="0" 
-                                    Background="{TemplateBinding Background}"
-                      BorderBrush="{TemplateBinding BorderBrush}"
-                      BorderThickness="{TemplateBinding BorderThickness}">
-                                <ContentPresenter x:Name="contentPresenter" 
-                                        ContentTemplate="{TemplateBinding ContentTemplate}" 
-                                        Content="{TemplateBinding Content}"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="False">
-                                    <Setter Property="Background" Value="{StaticResource FadedHatchBrush}"/>
-                                    <!--<Setter Property="BorderThickness" Value="15"/>-->
-                                </Trigger>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter Property="Background" Value="Transparent"/>
-                                    <!--<Setter Property="BorderThickness" Value="0"/>-->
-                                </Trigger>
-                                <!--<Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="{StaticResource HatchBrush}"/>
-                                    --><!--<Setter Property="BorderThickness" Value="0"/>--><!--
-                                </Trigger>-->
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="IsMouseOver" Value="True" />
-                                        <Condition Property="IsChecked" Value="True" />
-                                    </MultiTrigger.Conditions>
-                                    <MultiTrigger.Setters>
-                                        <Setter Property="Background" Value="{StaticResource FadedHatchBrush2}" />
-                                    </MultiTrigger.Setters>
-                                </MultiTrigger>
-                                <MultiTrigger>
-                                    <MultiTrigger.Conditions>
-                                        <Condition Property="IsMouseOver" Value="True" />
-                                        <Condition Property="IsChecked" Value="False" />
-                                    </MultiTrigger.Conditions>
-                                    <MultiTrigger.Setters>
-                                        <Setter Property="Background" Value="{StaticResource FadedHatchBrush}" />
-                                    </MultiTrigger.Setters>
-                                </MultiTrigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </FrameworkElement.Resources>
-
-        <ToggleButton Style="{StaticResource InfoToggleButton}" Height="30" Width="100">
-            <TextBlock Text="Toggle" ></TextBlock>
-        </ToggleButton>
-    </Grid>
+    </StackPanel>
 </Window>

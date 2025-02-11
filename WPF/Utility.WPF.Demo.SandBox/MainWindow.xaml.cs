@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace Utility.WPF.Demo.SandBox
 {
@@ -11,5 +12,20 @@ namespace Utility.WPF.Demo.SandBox
         {
             InitializeComponent();      
         }
-    }     
+    }
+
+    public class CustomItemsControl : ItemsControl
+    {
+        protected override DependencyObject GetContainerForItemOverride()
+        {
+            return new ContentControl();
+        }
+
+        protected override bool IsItemItsOwnContainerOverride(object item)
+        {
+            // Even wrap other ContentControls
+            return false;
+        }
+    }
+
 }
