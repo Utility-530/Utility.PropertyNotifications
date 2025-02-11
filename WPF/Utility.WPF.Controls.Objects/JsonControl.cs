@@ -3,10 +3,8 @@ using NetFabric.Hyperlinq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
-using Newtonsoft.Json.Schema.Generation;
 using ReactiveUI;
 using System;
-using System.Buffers.Text;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
@@ -127,23 +125,66 @@ namespace Utility.WPF.Controls.Objects
         public bool IsEnumeration => Enumeration.Count > 0;
 
         public string Format { get; set; }
-    }
-
-
-    public class SchemaType
-    {
-        public string Name { get; set; }
-        public SchemaProperty[] Properties { get; set; }
+        public string EnumType { get; set; }
+        public string Type { get; internal set; }
     }
 
     public class Schema
     {
-        public SchemaType[] Types { get; set; }
+        public SchemaProperty[] Properties { get; set; }
     }
 
     public static class Commands
     {
         public static readonly RoutedCommand FooCommand = new RoutedCommand("Foo", typeof(JsonControl));
+    }
+
+    public class EnumConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values.SingleOrDefault(a => a is Schema) is Schema schema && values.SingleOrDefault(a => a is JProperty) is JProperty s)
+            {
+                return new EnumViewModel(schema, s);
+            }
+
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class EnumViewModel : Utility.PropertyNotifications.NotifyPropertyClass
+    {
+        private readonly Schema schema;
+        private readonly JProperty jProperty;
+        private Enum value;
+
+        public EnumViewModel(Schema schema, JProperty jProperty)
+        {
+            //var value = s.Value;
+            if (schema.Properties.SingleOrDefault(a => a.Name == jProperty.Name) is SchemaProperty prop)
+            {
+                var type = Type.GetType(prop.EnumType);
+                value = (Enum)Enum.Parse(type, jProperty.Value.Value<string>());
+                this.RaisePropertyChanged(nameof(Value));
+            }
+
+            this.schema = schema;
+            this.jProperty = jProperty;
+        }
+
+        public Enum Value
+        {
+            get => value; set
+            {
+                this.value = value;
+                jProperty.Value = JContainer.FromObject(value.ToString()); 
+            }
+        }
     }
 
     /// <summary>
@@ -159,7 +200,7 @@ namespace Utility.WPF.Controls.Objects
             new Newtonsoft.Json.Converters.StringEnumConverter()];
 
         public static readonly DependencyProperty JsonProperty = DependencyProperty.Register(nameof(Json), typeof(string), typeof(JsonControl), new PropertyMetadata(null, Change2));
-        public static readonly DependencyProperty ObjectProperty = DependencyProperty.Register(nameof(Object), typeof(object), typeof(JsonControl), new PropertyMetadata(null, Change));
+        public static readonly DependencyProperty ObjectProperty = DependencyProperty.Register(nameof(Object), typeof(JToken), typeof(JsonControl), new PropertyMetadata(null, Change));
         public static readonly DependencyProperty ValidationSchemaProperty = DependencyProperty.Register(nameof(ValidationSchema), typeof(JSchema), typeof(JsonControl), new PropertyMetadata(null, Change));
         public static readonly DependencyProperty SchemaProperty = DependencyProperty.Register(nameof(Schema), typeof(Schema), typeof(JsonControl), new PropertyMetadata());
 
@@ -176,25 +217,6 @@ namespace Utility.WPF.Controls.Objects
         public JsonControl()
         {
             CommandManager.RegisterClassCommandBinding(typeof(UIElement), new CommandBinding(Commands.FooCommand, OnFoo, OnCanFoo));
-
-            this.WhenAnyValue(a => a.Object)
-                .WhereNotNull()
-                .Select(convert)
-                .Merge(this.WhenAnyValue(a => a.Json).WhereNotNull())
-                .CombineLatest(treeViewSubject)
-                .Subscribe(a =>
-                {
-                    this.Load(a.First, a.Second);
-                }, e =>
-                {
-                    MessageBox.Show(e.Message);
-                });
-
-
-            string convert(object e)
-            {
-                return Newtonsoft.Json.JsonConvert.SerializeObject(e, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, Converters = converters });
-            }
 
             static void OnFoo(object sender, RoutedEventArgs e)
             {
@@ -215,9 +237,9 @@ namespace Utility.WPF.Controls.Objects
             set => SetValue(JsonProperty, value);
         }
 
-        public object Object
+        public JToken Object
         {
-            get => (object)GetValue(ObjectProperty);
+            get => (JToken)GetValue(ObjectProperty);
             set => SetValue(ObjectProperty, value);
         }
 
@@ -235,18 +257,35 @@ namespace Utility.WPF.Controls.Objects
 
         public override void OnApplyTemplate()
         {
-            treeViewSubject.OnNext(this);
+            this.WhenAnyValue(a => a.Object)
+                         .WhereNotNull()
+                         .Merge(this.WhenAnyValue(a => a.Json).WhereNotNull().Select(convert))
+                         .Subscribe(a =>
+                         {
+                             this.Load(a, this);
+                         }, e =>
+                         {
+                             MessageBox.Show(e.Message);
+                         });
+
+
+            JToken convert(string json)
+            {
+                //return Newtonsoft.Json.JsonConvert.SerializeObject(e, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, Converters = converters });
+                return JToken.Parse(json); 
+            }
+
             base.OnApplyTemplate();
         }
 
-        private void Load(string json, TreeView jsonTreeView)
+        private void Load(JToken jToken, TreeView jsonTreeView)
         {
             jsonTreeView.ItemsSource = null;
             jsonTreeView.Items.Clear();
 
             try
             {
-                var jToken = JToken.Parse(json);
+                //var jToken = JToken.Parse(json);
                 if (ValidationSchema != null)
                     if (jToken.IsValid(ValidationSchema) == false)
                     {
@@ -272,16 +311,13 @@ namespace Utility.WPF.Controls.Objects
 
     public class JsonObjectTypeTemplateSelector : DataTemplateSelector
     {
-
-        Dictionary<string, SchemaType> types = new();
         Dictionary<string, SchemaProperty> properties = new();
-        private JsonControl jsonControl;
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             var presenter = (FrameworkElement)container;
 
-            jsonControl ??= container.FindParent<JsonControl>();
+            var jsonControl = container.FindParent<JsonControl>();
 
             //if (presenter.FindParent<TreeView>() is JsonControl jsonControl)
             //{
@@ -295,24 +331,31 @@ namespace Utility.WPF.Controls.Objects
                     if (type == JTokenType.Object)
                         return frameworkElement.FindResource("ObjectPropertyTemplate") as DataTemplate;
                 }
-                if (item is JProperty { Value: { Type: { } _type }, Parent: var parent } property)
+                if (item is JProperty { Value: { Type: { } _type } _value, Parent: var parent } property)
                 {
+                    if (property.Name == "$type")
+                    {
+                        return frameworkElement.FindResource("TypeTemplate") as DataTemplate;
+                    }
                     if (jsonControl.Schema is not null)
-                        if (parent is JObject { First: JProperty { Value: { } value } })
+
+
+                        if (findProperty(property.Name, parent, jsonControl.Schema, out SchemaProperty schemaProperty))
                         {
-                            if (Type.GetType(value.ToString()) is Type __type)
-                                if (findType(__type.Name.ToString(), out SchemaType schemaType))
-                                    if (findProperty(property.Name, schemaType, out SchemaProperty schemaProperty))
-                                    {
-                                        if (frameworkElement.FindResource(schemaProperty.Format) is DataTemplate dataTemplate)
-                                        {
-                                            return dataTemplate;
-                                        }
-                                    }
+                            if (schemaProperty.EnumType != null)
+                            {
+                                //var etype = Type.GetType(schemaProperty.EnumType);
+
+                                return frameworkElement.FindResource("EnumTemplate") as DataTemplate;
+                            }
+                            if (frameworkElement.FindResource(schemaProperty.Format) is DataTemplate dataTemplate)
+                            {
+                                return dataTemplate;
+                            }
                         }
 
-                    return frameworkElement.FindResource(Convert(_type)) as DataTemplate;
 
+                    return frameworkElement.FindResource(Convert(_type)) as DataTemplate;
                 }
             }
 
@@ -324,38 +367,38 @@ namespace Utility.WPF.Controls.Objects
 
             return presenter.Resources[Extensions.ChooseString(ChooseType(presenter))] as DataTemplate;
 
-            bool findType(string name, out SchemaType? type)
+            bool findProperty(string name, JContainer? parent, Schema schema, out SchemaProperty? property)
             {
-                if (types.TryGetValue(name, out SchemaType __type))
-                {
-                    type = __type;
-                    return true;
-
-                }
-                else if (jsonControl.Schema.Types.SingleOrDefault(a => a.Name == name) is SchemaType _vcds)
-                {
-                    type = types[_vcds.Name] = _vcds;
-                    return true;
-                }
-                type = null;
-                return false;
-            }
-
-            bool findProperty(string name, SchemaType _type, out SchemaProperty property)
-            {
-                if (properties.TryGetValue(name, out SchemaProperty prop))
+                if (properties.TryGetValue(name, out SchemaProperty? prop))
                 {
                     property = prop;
                     return true;
 
                 }
-                else if (_type?.Properties.SingleOrDefault(a => a.Name == name) is SchemaProperty _vcds)
+                else if (schema?.Properties.Where(a => a.Name == name).ToArray() is SchemaProperty[] props)
                 {
-                    property = properties[_vcds.Name] = _vcds;
-                    return true;
+                    foreach (var x in props)
+                    {
+                        if (x.Type != null)
+                            if (type() is string _type && x.Type != _type)
+                            {
+                                continue;
+                            }
+                        property = properties[x.Name] = x;
+                        return true;
+                    }
                 }
                 property = null;
                 return false;
+
+                string type()
+                {
+                    if (parent is JObject { First: JProperty { Value: { } value } })
+                    {
+                        return value.ToString();
+                    }
+                    return null;
+                }
             }
         }
         private static string Convert(JTokenType _type)
