@@ -60,7 +60,11 @@
 		<ProjectReference Include="..\Utility.WPF.Panels\Utility.WPF.Panels.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>		
+	<ItemGroup>
+
+		<Compile Update="BreadCrumbs.cs">
+			<DependentUpon>BreadCrumbs.xaml</DependentUpon>
+		</Compile>
 		<Compile Update="CollapseBox.cs">
 			<DependentUpon>CollapseBox.xaml</DependentUpon>
 		</Compile>		
@@ -159,7 +163,6 @@
 		<Compile Update="TypeControl.cs">
 			<DependentUpon>TypeControl.xaml</DependentUpon>
 		</Compile>
-
 		<Compile Update="ValidationForm.cs">
 			<DependentUpon>ValidationForm.xaml</DependentUpon>
 		</Compile>
