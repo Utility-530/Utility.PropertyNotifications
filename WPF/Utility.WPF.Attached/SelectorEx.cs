@@ -159,7 +159,7 @@ namespace Utility.WPF.Attached
 
                 // Search up the visual tree, stopping at either a ComboBox or
                 // a ComboBoxItem (or null). This will determine which template to use
-                while (itemToCheck != null && !(itemToCheck is ComboBoxItem) && !(itemToCheck is ComboBox))
+                while (itemToCheck != null && itemToCheck is not ComboBoxItem && itemToCheck is not ComboBox)
                     itemToCheck = VisualTreeHelper.GetParent(itemToCheck);
 
                 // If you stopped at a ComboBoxItem, you're in the dropdown

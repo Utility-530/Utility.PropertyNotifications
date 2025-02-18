@@ -52,7 +52,7 @@
             <TabItem Header="With Detail">
                 <view2:MasterDetail  Orientation="Horizontal" UseDataContext="True">
                     <view2:MasterControl Width="200"
-                        ItemsSource="{Binding Data, Mode=OneWay, Converter={x:Static conv2:DefaultConverter.Instance}}"
+                        ItemsSource="{Binding Data, Mode=OneWay}"
                                          Change="{util:Command ChangeCommand, ConversionType=Default}"
                                          CommandParameter="{Binding NewItem}"
                                          ButtonTypes="Add,Remove">
@@ -63,17 +63,7 @@
                     </HeaderedContentControl.Header>
                 </view2:MasterDetail>
             </TabItem>
-            <TabItem Header="With Detail">
-                <view2:MasterDetail  Orientation="Horizontal">
-                    <view2:MasterControl Width="300"
-                                         ItemsSource="{Binding Data, Mode=OneWay, Converter={x:Static conv2:DefaultConverter.Instance}}"
-                                         Change="{util:Command ChangeCommand, ConversionType=Default}"
-                                         CommandParameter="{Binding NewItem}"
-                                         ButtonTypes="Add,Remove">
-                        <StaticResource ResourceKey="DragablzItemsControl1"></StaticResource>
-                    </view2:MasterControl>
-                </view2:MasterDetail>
-            </TabItem>
+            
             <TabItem Header="Without Detail">
                 <view2:MasterControl ItemsSource="{Binding Data, Mode=OneTime}"
                                      Change="{util:Command ChangeCommand, ConversionType=Default}"

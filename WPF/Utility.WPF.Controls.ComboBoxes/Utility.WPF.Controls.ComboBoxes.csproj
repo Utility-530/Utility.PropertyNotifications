@@ -13,8 +13,9 @@
 	</Compile>
   </ItemGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Keys\Utility.Keys.csproj" />
+		<ProjectReference Include="..\..\Nodes\Utility.Nodes.Ex\Utility.Nodes.Ex.csproj" />
+		<ProjectReference Include="..\..\Trees\Utility.Trees.Extensions\Utility.Trees.Extensions.csproj" />
 		<ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Colours\Utility.WPF.Colours.csproj" />

@@ -5,7 +5,7 @@
                     xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:local="clr-namespace:Utility.WPF.Controls.Dragablz">
     <ResourceDictionary.MergedDictionaries>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Dragablz;component/GeometryResources.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml" />
     </ResourceDictionary.MergedDictionaries>
     <Style x:Key="DragablzGroupStyle" TargetType="dragablz:DragablzItem">
         <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>

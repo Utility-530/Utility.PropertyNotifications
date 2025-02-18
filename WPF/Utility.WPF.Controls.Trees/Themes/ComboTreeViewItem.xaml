@@ -11,6 +11,7 @@
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/BasicStyle.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboBoxToggleButton.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
 
@@ -23,47 +24,6 @@
 
 
     <sys:Double x:Key="MaxDropDownHeight" >400.0</sys:Double>
-
-
-    <PathGeometry x:Key="Tick_Rounded">
-        <PathGeometry.Figures>
-            <PathFigureCollection>
-                <PathFigure IsClosed="False"  StartPoint="4,2">
-                    <PathFigure.Segments>
-                        <PathSegmentCollection>
-                            <LineSegment Point="8,6" />
-                            <LineSegment Point="17,-6" />
-                        </PathSegmentCollection>
-                    </PathFigure.Segments>
-                </PathFigure>
-            </PathFigureCollection>
-        </PathGeometry.Figures>
-    </PathGeometry>
-
-
-    <PathGeometry x:Key="Cancel_Rounded">
-        <PathGeometry.Figures>
-            <PathFigureCollection>
-                <PathFigure IsClosed="False"  StartPoint="9,9">
-                    <PathFigure.Segments>
-                        <PathSegmentCollection>
-                            <LineSegment Point="21,21" />
-                        </PathSegmentCollection>
-                    </PathFigure.Segments>
-                </PathFigure>
-
-                <PathFigure IsClosed="False"  StartPoint="9,21">
-                    <PathFigure.Segments>
-                        <PathSegmentCollection>
-                            <LineSegment Point="21,9" />
-                        </PathSegmentCollection>
-                    </PathFigure.Segments>
-                </PathFigure>
-
-            </PathFigureCollection>
-        </PathGeometry.Figures>
-    </PathGeometry>
-
 
 
 

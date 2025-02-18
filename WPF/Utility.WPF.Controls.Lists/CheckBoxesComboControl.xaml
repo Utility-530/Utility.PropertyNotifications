@@ -4,7 +4,7 @@
                     xmlns:res="http://schemas.utility.com/resourcedictionary"
                     xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:local="clr-namespace:Utility.WPF.Controls.Lists"
-                    xmlns:ctrl="http://schemas.utility.com/extrinsic">
+                    xmlns:ctrl="http://schemas.utility.com/external">
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Lists;component/Themes/Styles.xaml"></res:SharedResourceDictionary>

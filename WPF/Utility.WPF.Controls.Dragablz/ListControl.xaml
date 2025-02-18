@@ -8,7 +8,7 @@
                     xmlns:conv="http://schemas.utility.com/converters">
 
     <ResourceDictionary.MergedDictionaries>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Dragablz;component/GeometryResources.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Color x:Key="ControlPressedColor">#FF211AA9</Color>

@@ -10,7 +10,7 @@
 	  <ProjectReference Include="..\Utility.WPF.Markup\Utility.WPF.Markup.csproj" />
 	  <ProjectReference Include="..\Utility.WPF.Controls.Chart\Utility.WPF.Controls.Chart.csproj" />
 	  <ProjectReference Include="..\Utility.WPF.Controls.Dragablz\Utility.WPF.Controls.Dragablz.csproj" />
-	  <ProjectReference Include="..\Utility.WPF.Controls.Extrinsic\Utility.WPF.Controls.Extrinsic.csproj" />
+	  <ProjectReference Include="..\Utility.WPF.Controls.External\Utility.WPF.Controls.External.csproj" />
 	  <ProjectReference Include="..\Utility.WPF.Demo.Data\Utility.WPF.Demo.Data.csproj" />
 	</ItemGroup>
 

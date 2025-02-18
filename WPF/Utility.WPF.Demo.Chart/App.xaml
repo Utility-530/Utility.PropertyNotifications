@@ -2,7 +2,7 @@
     x:Class="Utility.WPF.Chart.Demo.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:extrinsic="http://schemas.utility.com/extrinsic"
+    xmlns:external="http://schemas.utility.com/external"
     xmlns:demo="clr-namespace:Utility.WPF.Chart.Demo.ViewModels"
     StartupUri="MainWindow.xaml">
 
@@ -15,7 +15,7 @@
                             <SolidColorBrush Color="{Binding Color}"></SolidColorBrush>
                         </Ellipse.Fill>
                     </Ellipse>
-                    <extrinsic:OutlinedTextBlock Text="{Binding Id}" StrokeThickness="3" Stroke="White"></extrinsic:OutlinedTextBlock>
+                    <external:OutlinedTextBlock Text="{Binding Id}" StrokeThickness="3" Stroke="White"></external:OutlinedTextBlock>
                 </Grid>
             </DataTemplate>
 

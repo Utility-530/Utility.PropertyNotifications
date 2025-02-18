@@ -114,6 +114,6 @@
             </i:Interaction.Behaviors>
         </controls:ComboBoxTreeView>
 
-        <ContentControl x:Name="Content2x" Content="{Binding ElementName=TypeSelector, Path=Type}"></ContentControl>
+        <ContentControl x:Name="Content2x" Content="{Binding ElementName=TypeSelector, Path=Type}"/>
     </StackPanel>
 </UserControl>

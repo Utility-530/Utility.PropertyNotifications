@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Controls.Extrinsic\Utility.WPF.Controls.Extrinsic.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Controls.External\Utility.WPF.Controls.External.csproj" />
     <ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
   </ItemGroup>
 

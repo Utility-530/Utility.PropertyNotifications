@@ -27,7 +27,7 @@
     <ProjectReference Include="..\Utility.WPF.Demo.Data\Utility.WPF.Demo.Data.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Dialogs\Utility.WPF.Demo.Dialogs.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Dragablz\Utility.WPF.Demo.Dragablz.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Demo.Extrinsic\Utility.WPF.Demo.Extrinsic.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.External\Utility.WPF.Demo.External.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.FileSystem\Utility.WPF.Demo.FileSystem.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Forms\Utility.WPF.Demo.Forms.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Hybrid\Utility.WPF.Demo.Hybrid.csproj" />
