@@ -6,7 +6,19 @@ using _Key = Utility.Models.Key;
 
 namespace Utility.Repos
 {
-    public partial class LiteDBRepository : IRepository
+    public interface ILiteRepository
+    {
+        IEquatable Key { get; }
+
+        Task<object?> FindValue(IEquatable key);
+
+        Task<IEquatable[]> FindKeys(IEquatable key);
+
+        Task Update(IEquatable key, object value);
+        Task<object[]> All();
+    }
+
+    public partial class LiteDBRepository : ILiteRepository
     {
         private BsonMapper _mapper = new() { SerializeNullValues = true };
         private readonly DatabaseSettings settings;
@@ -27,10 +39,26 @@ namespace Utility.Repos
         }
 
 
+
         public Task<IEquatable[]> FindKeys(IEquatable key)
         {
             throw new NotImplementedException();
         }
+
+        public Task<object[]> All()
+        {
+            List<object> objects = new();
+            using (GetCollection(out var collection))
+            {
+                foreach (var item in collection.FindAll())
+                {
+                    var deserialised = _mapper.Deserialize(settings.Type, item);
+                    objects.Add(deserialised);
+                }
+                return Task.FromResult(objects.ToArray());
+            }
+        }
+
 
         public Task<object?> FindValue(IEquatable? equatable)
         {

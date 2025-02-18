@@ -8,6 +8,7 @@ using System.Reactive.Threading.Tasks;
 using static System.Environment;
 using Utility.Structs.Repos;
 using Utility.Helpers;
+using Utility.Interfaces.Exs;
 
 namespace Utility.Repos
 {
@@ -38,7 +39,7 @@ namespace Utility.Repos
             public Guid Guid { get; set; }
             public string Name { get; set; }
             public string Value { get; set; }
-            public int TypeId { get; set; }
+            public int? TypeId { get; set; }
             public DateTime Added { get; set; }
 
         }
@@ -637,6 +638,11 @@ namespace Utility.Repos
             return (date ?? DateTime.Now).ToString("yyyy-MM-ddTHH:mm:ss.fff");
         }
 
+        public void Reset()
+        {
+            throw new NotImplementedException();
+        }
+
         public const string Utility = nameof(Utility);
 
         public static readonly string ProgramData = GetFolderPath(SpecialFolder.CommonApplicationData);
@@ -650,4 +656,7 @@ namespace Utility.Repos
         static readonly Dictionary<string, TreeRepository> dictionary = new();
         //public static TreeRepository Create(string name) => dictionary.GetValueOrCreate(name, () => new TreeRepository(Path.Combine(ProgramData, name)));
     }
+
+
+
 }
