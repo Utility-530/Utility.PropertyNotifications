@@ -9,41 +9,24 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Data\entireframework.min.css" />
-    <None Remove="Data\master.css" />
-    <None Remove="Data\pico.classless.blue.css" />
-    <None Remove="Data\pico.min.css" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Data\entireframework.min.css" />
-    <EmbeddedResource Include="Data\master.css">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\pico.classless.blue.css" />
-    <EmbeddedResource Include="Data\pico.min.css" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\Conversions\Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj" />
-    <ProjectReference Include="..\..\Trees\Utility.Trees.Demo.Filters\Utility.Trees.Demo.Filters.csproj" />   
-    <ProjectReference Include="..\Utility.Nodes.Demo.Styles\Utility.Nodes.Demo.Styles.csproj" />
+    <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
+    <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.Descriptors.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Breadcrumbs\Utility.WPF.Controls.Breadcrumbs.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
+    <ProjectReference Include="..\..\Trees\Utility.Trees.Decisions\Utility.Trees.Decisions.csproj" />
+    <ProjectReference Include="..\..\Trees\Utility.Trees.WPF\Utility.Trees.WPF.csproj" />
+    <ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
+    <ProjectReference Include="..\Utility.Nodes.Demo.Styles\Utility.Nodes.WPF.Styles.csproj" />
     <ProjectReference Include="..\Utility.Nodes.Filters\Utility.Nodes.Filters.csproj" />
+    <ProjectReference Include="..\Utility.Nodes.WPF\Utility.Nodes.WPF.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ApplicationDefinition Update="App.xaml">
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
+    <Folder Include="Data\" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="1.2.0" />
-    <PackageReference Include="AngleSharp.Css" Version="1.0.0-beta.144" />
-    <PackageReference Include="AngleSharp.Diffing" Version="1.0.0" />
-
-    <PackageReference Include="TinyHtml.Wpf" Version="1.2.2" />
-  </ItemGroup>
-
 
 </Project>

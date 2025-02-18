@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
+		<ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.Descriptors.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
+		<ProjectReference Include="..\..\Trees\Utility.Trees.Decisions\Utility.Trees.Decisions.csproj" />
+		<ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
+	</ItemGroup>
+
+	
+</Project>
