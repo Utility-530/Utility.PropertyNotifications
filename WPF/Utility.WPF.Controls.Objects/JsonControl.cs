@@ -137,6 +137,7 @@ namespace Utility.WPF.Controls.Objects
     public static class Commands
     {
         public static readonly RoutedCommand FooCommand = new RoutedCommand("Foo", typeof(JsonControl));
+        public static readonly RoutedCommand UnFooCommand = new RoutedCommand("UnFoo", typeof(JsonControl));
     }
 
     public class EnumConverter : IMultiValueConverter
@@ -182,7 +183,7 @@ namespace Utility.WPF.Controls.Objects
             get => value; set
             {
                 this.value = value;
-                jProperty.Value = JContainer.FromObject(value.ToString()); 
+                jProperty.Value = JContainer.FromObject(value.ToString());
             }
         }
     }
@@ -193,11 +194,6 @@ namespace Utility.WPF.Controls.Objects
     public partial class JsonControl : TreeView
     {
         private readonly ReplaySubject<TreeView> treeViewSubject = new(1);
-
-        private JsonConverter[] converters = [
-            new StringToGuidConverter(),
-            new Newtonsoft.Json.Converters.IsoDateTimeConverter(),
-            new Newtonsoft.Json.Converters.StringEnumConverter()];
 
         public static readonly DependencyProperty JsonProperty = DependencyProperty.Register(nameof(Json), typeof(string), typeof(JsonControl), new PropertyMetadata(null, Change2));
         public static readonly DependencyProperty ObjectProperty = DependencyProperty.Register(nameof(Object), typeof(JToken), typeof(JsonControl), new PropertyMetadata(null, Change));
@@ -210,25 +206,86 @@ namespace Utility.WPF.Controls.Objects
         static JsonControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(JsonControl), new FrameworkPropertyMetadata(typeof(JsonControl)));
-            Directory.CreateDirectory("../../../Data");
-            //db = new LiteDB.LiteDatabase("../../../Data/schemas.litedb");
+            CommandManager.RegisterClassCommandBinding(typeof(UIElement), new CommandBinding(Commands.FooCommand, OnFoo, OnCanFoo));
+            CommandManager.RegisterClassCommandBinding(typeof(UIElement), new CommandBinding(Commands.UnFooCommand, OnUnFoo, OnCanUnFoo));
         }
 
         public JsonControl()
         {
-            CommandManager.RegisterClassCommandBinding(typeof(UIElement), new CommandBinding(Commands.FooCommand, OnFoo, OnCanFoo));
+        }
 
-            static void OnFoo(object sender, RoutedEventArgs e)
+        private static void OnCanUnFoo(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+            e.Handled = true;
+        }
+
+        private static void OnUnFoo(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (((sender as Control).DataContext as JObject).Parent is JArray jArray)
             {
-                // here I need to have the instance of MyCustomControl so that I can call myCustCtrl.Foo();
-                // Foo(); // <--- problem! can't access this
+                jArray.Remove(((sender as Control).DataContext as JObject));
+            }
+            else if ((sender as Control).DataContext is JObject jObject)
+            {
+                clear(jObject);
             }
 
-            static void OnCanFoo(object sender, CanExecuteRoutedEventArgs e)
+            e.Handled = true;
+        }
+
+
+        static void clear(JObject jObject)
+        {
+            foreach (var x in jObject.Properties())
             {
-                e.CanExecute = true;
-                e.Handled = true;
+                switch (((x.Value) as JValue).Type)
+                {
+                    case JTokenType.String:
+                        x.Value = string.Empty;
+                        break;
+                    case JTokenType.Integer:
+                        x.Value = 0;
+                        break;
+                    case JTokenType.TimeSpan:
+                        x.Value = TimeSpan.Zero;
+                        break;
+                }
             }
+        }
+        static void OnFoo(object sender, RoutedEventArgs e)
+        {
+
+            var jArray = (sender as Control).DataContext as JArray;
+
+            if (((sender as TreeView).SelectedItem as TreeViewItem)?.DataContext is JObject jObject)
+            {
+                jArray.Add(jObject);
+            }
+            else
+            {
+                jArray.Add(jArray[0]);
+            }
+
+            clear((jArray.Last as JObject));
+            e.Handled = true;
+            // here I need to have the instance of MyCustomControl so that I can call myCustCtrl.Foo();
+            // Foo(); // <--- problem! can't access this
+
+            static object GetDefault(Type type)
+            {
+                if (type.IsValueType)
+                {
+                    return Activator.CreateInstance(type);
+                }
+                return null;
+            }
+        }
+
+        static void OnCanFoo(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = (sender as Control).DataContext is JArray { Count: > 0 };
+            e.Handled = true;
         }
 
         public string Json
@@ -272,7 +329,7 @@ namespace Utility.WPF.Controls.Objects
             JToken convert(string json)
             {
                 //return Newtonsoft.Json.JsonConvert.SerializeObject(e, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, Converters = converters });
-                return JToken.Parse(json); 
+                return JToken.Parse(json);
             }
 
             base.OnApplyTemplate();
@@ -292,7 +349,7 @@ namespace Utility.WPF.Controls.Objects
                         MessageBox.Show("Schema not valid!");
                     }
 
-                jsonTreeView.ItemsSource = jToken.Children();
+                jsonTreeView.ItemsSource = new[] { jToken };//.Children();
             }
             catch (Exception ex)
             {
@@ -331,7 +388,11 @@ namespace Utility.WPF.Controls.Objects
                     if (type == JTokenType.Object)
                         return frameworkElement.FindResource("ObjectPropertyTemplate") as DataTemplate;
                 }
-                if (item is JProperty { Value: { Type: { } _type } _value, Parent: var parent } property)
+                else if (item is JArray { } jArray)
+                {
+                    return frameworkElement.FindResource("ArrayPropertyTemplate") as DataTemplate;
+                }
+                else if (item is JProperty { Value: { Type: { } _type } _value, Parent: var parent } property)
                 {
                     if (property.Name == "$type")
                     {
@@ -407,7 +468,7 @@ namespace Utility.WPF.Controls.Objects
             {
                 //JTokenType.DateTime => "DateTimeTemplate",
                 JTokenType.Date => "DateTemplate",
-                //JTokenType.Time => "TimeTemplate",
+                JTokenType.TimeSpan => "TimeTemplate",
                 //JTokenType.Enum => "EnumTemplate",
                 JTokenType.String => "StringTemplate",
                 JTokenType.Integer => "IntegerTemplate",

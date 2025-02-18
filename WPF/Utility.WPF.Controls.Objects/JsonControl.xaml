@@ -8,8 +8,13 @@
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:conv="http://schemas.utility.com/converters"
     xmlns:local="clr-namespace:Utility.WPF.Controls.Objects"
-    xmlns:c="http://schemas.utility.com">
+    xmlns:c="http://schemas.utility.com"
+    xmlns:res="http://schemas.utility.com/resourcedictionary">
 
+    <ResourceDictionary.MergedDictionaries>
+        <res:SharedResourceDictionary  Source="/Utility.WPF.Geometries;component/Resources.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    
     <local:EnumConverter x:Key="EnumConverter"></local:EnumConverter>
     
     <ObjectDataProvider
@@ -202,22 +207,40 @@
                 </Grid>
             </DataTemplate>
 
-            <HierarchicalDataTemplate DataType="{x:Type jlinq:JObject}" ItemsSource="{Binding ., Converter={x:Static controls:Converters.MethodToValueConverter}, ConverterParameter='Children'}">
-            </HierarchicalDataTemplate>
+            <Style x:Key="BasicButtonStyle" TargetType="{x:Type Button}">
+                <Setter Property="Background" Value="Transparent"></Setter>
+                <Setter Property="BorderBrush" Value="Transparent"></Setter>
+                <Setter Property="Height" Value="16"></Setter>
+                <Setter Property="Width" Value="16"></Setter>
+            </Style>
 
-            <HierarchicalDataTemplate DataType="{x:Type jlinq:JConstructor}" ItemsSource="{Binding ., Converter={x:Static controls:Converters.MethodToValueConverter}, ConverterParameter='Children'}">
+            <!--<HierarchicalDataTemplate DataType="{x:Type jlinq:JObject}" ItemsSource="{Binding ., Converter={x:Static controls:Converters.MethodToValueConverter}, ConverterParameter='Children'}">
+            </HierarchicalDataTemplate>-->
+
+            <!--<HierarchicalDataTemplate DataType="{x:Type jlinq:JConstructor}" ItemsSource="{Binding ., Converter={x:Static controls:Converters.MethodToValueConverter}, ConverterParameter='Children'}">
                 <TextBlock Text="Constructor" />
             </HierarchicalDataTemplate>
             <HierarchicalDataTemplate DataType="{x:Type jlinq:JRaw}" ItemsSource="{Binding ., Converter={x:Static controls:Converters.MethodToValueConverter}, ConverterParameter='Children'}">
                 <TextBlock Text="Raw" />
             </HierarchicalDataTemplate>
+            -->
 
-            <HierarchicalDataTemplate DataType="{x:Type jlinq:JArray}"  ItemsSource="{Binding ., Converter={x:Static controls:Converters.MethodToValueConverter}, ConverterParameter='Children'}"/>
-
-            <HierarchicalDataTemplate DataType="{x:Type jlinq:JProperty}" x:Key="ArrayPropertyTemplate" ItemsSource="{Binding Value}" />
-
+            <HierarchicalDataTemplate DataType="{x:Type jlinq:JArray}" x:Key="ArrayPropertyTemplate" ItemsSource="{Binding .}" >
+                <Grid>
+                    <Button Style="{StaticResource BasicButtonStyle}" Command="{Binding Source={x:Static local:Commands.FooCommand}}">
+                        <Path  Stroke="Gray" StrokeThickness="2"   Stretch="UniformToFill" Data="{StaticResource Plus}"/>
+                    </Button>
+                </Grid>
+            </HierarchicalDataTemplate>
+            
             <HierarchicalDataTemplate DataType="{x:Type jlinq:JObject}" x:Key="ObjectPropertyTemplate" ItemsSource="{Binding ., Converter={x:Static controls:ComplexPropertyMethodValueConverter.Instance}, ConverterParameter='Children'}">
-                <ContentControl Style="{StaticResource LabelValueContent}"/>
+                <ContentControl Style="{StaticResource LabelValueContent}">
+                    <Grid>
+                        <Button Style="{StaticResource BasicButtonStyle}" HorizontalAlignment="Right" Command="{Binding Source={x:Static local:Commands.UnFooCommand}}">
+                            <Path  Stroke="Gray" StrokeThickness="2"  Stretch="UniformToFill" Data="{StaticResource Cross}"/>
+                        </Button>            
+                    </Grid>       
+                </ContentControl>
             </HierarchicalDataTemplate>
 
             <!--<VisibilityConverter x:Key="VisibilityConverter" />-->
@@ -239,6 +262,7 @@
             <DataTemplate x:Key="TypeTemplate">
                 <c:BreadCrumbs ItemsSource="{Binding Value.Value, Converter={x:Static conv:TypeHierarchyConverter.Instance}}"/>
             </DataTemplate>
+            
             <DataTemplate x:Key="StringTemplate">
                 <ContentControl Style="{StaticResource LabelValueContent}">
                     <!--<TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4" Visibility="{Binding Schema.Description, Converter={StaticResource VisibilityConverter}}" />-->
@@ -283,14 +307,11 @@
                 </UniformGrid>
             </DataTemplate>
             <DataTemplate x:Key="TimeTemplate">
-                <UniformGrid Rows="1">
-                    <StackPanel >
-                        <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,4" />
-                    </StackPanel>
 
+                <ContentControl Style="{StaticResource LabelValueContent}">
                     <xctk:TimePicker Margin="0,0,0,8" HorizontalAlignment="Stretch" 
                                      Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeConverter}}" />
-                </UniformGrid>
+                </ContentControl>
             </DataTemplate>
             <DataTemplate x:Key="NumberTemplate">
 
@@ -353,40 +374,14 @@
                         </b:Interaction.Behaviors>
                     </ComboBox>
                 </ContentControl>
-                <!--<UniformGrid Rows="1" >
-                    <StackPanel >
-                        <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,4" />
-                    </StackPanel>
-                    <WrapPanel>
-                        <ComboBox Margin="0,0,0,8" ItemsSource="{Binding Schema.ActualSchema.EnumerationNames}"                             >
-                            <ComboBox.SelectedValue>
-                                <MultiBinding>
-                                    <Binding Path="Value" Mode="TwoWay" />
-                                    <Binding Path="Schema.ActualSchema" Mode="OneTime" />
-                                    <MultiBinding.Converter>
-                                        <StaticResource ResourceKey="EnumToNumberConverter"></StaticResource>
-                                    </MultiBinding.Converter>
-                                </MultiBinding>
-                            </ComboBox.SelectedValue>
-                        </ComboBox>
-
-                    </WrapPanel>
-                </UniformGrid>-->
+ 
             </DataTemplate>
             <DataTemplate x:Key="NullTemplate">
                 <ContentControl Style="{StaticResource LabelValueContent}">
-                    <!--<TextBlock>null</TextBlock>-->
-                    <Path Stroke="Gray" StrokeThickness="2">
-                        <Path.Data>
-                            <GeometryGroup>
-                                <EllipseGeometry Center="10,10" RadiusX="7.5" RadiusY="7.5" />
-                                <LineGeometry StartPoint="0,20" EndPoint="20,0" />
-                            </GeometryGroup>
-                        </Path.Data>
-                    </Path>
+                    <Path Stroke="Gray" StrokeThickness="2" Data="{StaticResource Null}"/>
                 </ContentControl>
             </DataTemplate>
-            <DataTemplate x:Key="EnumNullTemplate">
+            <!--<DataTemplate x:Key="EnumNullTemplate">
                 <UniformGrid Rows="1" >
                     <StackPanel >
                         <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,4" />
@@ -405,7 +400,7 @@
                         </ToggleButton>
                     </WrapPanel>
                 </UniformGrid>
-            </DataTemplate>
+            </DataTemplate>-->
             <DataTemplate x:Key="BooleanTemplate">
                 <UniformGrid Rows="1"  >
                     <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,4" />

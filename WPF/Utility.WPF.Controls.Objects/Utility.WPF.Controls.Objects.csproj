@@ -21,6 +21,7 @@
     <ProjectReference Include="..\Utility.WPF.Behaviors\Utility.WPF.Behaviors.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Base\Utility.WPF.Controls.Base.csproj" />
     <ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Geometry\Utility.WPF.Geometries.csproj" />
     <ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Panels\Utility.WPF.Demo.Panels.csproj" />
     <ProjectReference Include="..\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />

@@ -4,7 +4,7 @@
                     xmlns:controls="clr-namespace:Utility.WPF.Controls.Objects"
                     xmlns:converter="http://schemas.utility.com/converters"
                     xmlns:panel="http://schemas.utility.com/panels">
-
+    
     <Style TargetType="{x:Type controls:ObjectControl}" BasedOn="{StaticResource {x:Type ContentControl}}">
         <Style.Resources>
             <system:Int32 x:Key="Factor">2</system:Int32>
