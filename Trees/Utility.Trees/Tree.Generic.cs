@@ -22,7 +22,7 @@ namespace Utility.Trees
                 Add(items);
         }
 
-        public Tree(params object[] items) : base(items)
+        public Tree(params object[] items) : base(null, items)
         {
             if (items.Any())
                 Add(items);
