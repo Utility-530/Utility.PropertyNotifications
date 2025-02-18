@@ -24,6 +24,7 @@ namespace Utility.WPF.Demo.Data.Model
         private Gender _gender = Gender.Unknown;
         private Point _location = new Point();
         private Color color;
+        private bool isRhPositive;
 
         public string First
         {
@@ -93,6 +94,15 @@ namespace Utility.WPF.Demo.Data.Model
             set
             {
                 color = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public bool IsRhPositive
+        {
+            get => isRhPositive; set
+            {
+                isRhPositive = value;
                 RaisePropertyChanged();
             }
         }
