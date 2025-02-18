@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:view="http://schemas.utility.com/buttons"
+             xmlns:ab="http://schemas.utility.com/adorners"
              xmlns:c="http://schemas.utility.com/colours"
              d:Background="White"
              mc:Ignorable="d"
@@ -117,12 +118,12 @@
                                     Height="80"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                   Data="{StaticResource XGeometry}"
-                                   Stretch="Uniform"
+                                    Data="{StaticResource XGeometry}"
+                                    Stretch="Uniform"
                                     Stroke="{c:BlueGrey}"
-                                 StrokeEndLineCap="Round" 
-                                StrokeLineJoin="Round"  
-                                StrokeStartLineCap="Round"
+                                    StrokeEndLineCap="Round" 
+                                    StrokeLineJoin="Round"  
+                                    StrokeStartLineCap="Round"
                                     StrokeThickness="12">
                 </Path>
             </Grid>
@@ -130,58 +131,68 @@
         
         
         <view:GeometryButton
+                   ab:Header.Text="minus"
                     Height="70"
                     Background="{c:Red}"
-                    PressedBackground="{c:Amber}"
-            PressedForeground="{c:Brown}"
+                    PressedBackgroundBrush="{c:Amber}"
+                    PressedForegroundBrush="{c:Brown}"
                     Data="{StaticResource XGeometry}"
-                    HoverBackground="RoyalBlue" />
+                    HoverBackgroundBrush="RoyalBlue" />
 
         <view:GeometryButton
                     Height="70"
               Background="{c:Red}"
                     Data="{StaticResource PlusGeometry}"
-                    HoverBackground="BurlyWood" />
+                    HoverBackgroundBrush="BurlyWood" />
 
         <view:GeometryButton
+            StrokeThickness="6"
                     Height="70"
                     Data="{StaticResource CombinedGeometry}"
-                    HoverBackground="BurlyWood" /> 
+                    HoverBackgroundBrush="BurlyWood" /> 
         
   
         <view:GeometryButton
                     Height="70"
                     Data="{StaticResource GroupGeometry}"
-                    HoverBackground="BurlyWood" />
+                    HoverBackgroundBrush="BurlyWood" />
 
         <view:GeometryButton
-                    Height="70"
+                    ab:Header.Text="CHEVRON RIGHT"
+                    Height="80"
                     Data="{StaticResource ChevronGeometry1}"
+            BorderThickness="4"
                     Foreground="{c:Green}" />
         <view:GeometryButton
+               ab:Header.Text="CHEVRON DOWN 1"
                     Height="70"
                     Data="{StaticResource ChevronGeometry2}"
-                    HoverBackground="{c:BlueGrey}" />
+                    HoverBackgroundBrush="{c:BlueGrey}" />
 
         <view:GeometryToggleButton
                     Height="140"
+            Foreground="{c:Amber}"
+            Fill="{c:Red}"
                     Data="{StaticResource ChevronGeometry2}"
-            Background="Black"
-            CheckedBackground="{c:Red}"
-                    HoverBackground="{c:BlueGrey}" />
+            Background="{c:Blue}"
+            StrokeThickness="12"
+            CheckedBackgroundBrush="{c:Red}"
+                    HoverBackgroundBrush="{c:BlueGrey}" />
 
         <view:GeometryToggleButton
+            StrokeThickness="12"
                     Height="60"
                     Data="{StaticResource Cancel_Rounded}"
-            CheckedBackground="{c:Red}"
-                    HoverBackground="{c:BlueGrey}" />
+            CheckedBackgroundBrush="{c:Red}"
+                    HoverBackgroundBrush="{c:BlueGrey}" />
 
 
         <view:GeometryToggleButton
+              StrokeThickness="1"
                     Height="60"
                     Data="{StaticResource Tick_Rounded}"
-            CheckedBackground="{c:Red}"
-                    HoverBackground="{c:BlueGrey}" />
+            CheckedBackgroundBrush="{c:Red}"
+                    HoverBackgroundBrush="{c:BlueGrey}" />
 
 
         <StackPanel HorizontalAlignment="Center" Orientation="Vertical">

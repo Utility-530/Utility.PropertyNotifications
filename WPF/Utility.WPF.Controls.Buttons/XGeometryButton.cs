@@ -20,7 +20,7 @@ namespace Utility.WPF.Controls.Buttons
                     } }
                 }
             };
-            HoverBackground = new System.Windows.Media.SolidColorBrush(Colors.IndianRed);
+            HoverBackgroundBrush = new System.Windows.Media.SolidColorBrush(Colors.IndianRed);
         }
     }
 
@@ -32,7 +32,7 @@ namespace Utility.WPF.Controls.Buttons
             {
 
             };
-            HoverBackground = new System.Windows.Media.SolidColorBrush(Colors.CadetBlue);
+            HoverBackgroundBrush = new System.Windows.Media.SolidColorBrush(Colors.CadetBlue);
         }
     }
 
@@ -52,7 +52,7 @@ namespace Utility.WPF.Controls.Buttons
                     }
                 }
             };
-            HoverBackground = new System.Windows.Media.SolidColorBrush(Colors.LightCoral);
+            HoverBackgroundBrush = new System.Windows.Media.SolidColorBrush(Colors.LightCoral);
         }
     }
 }

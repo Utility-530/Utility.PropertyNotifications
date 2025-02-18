@@ -4,7 +4,7 @@
     xmlns:local="clr-namespace:Utility.WPF.Controls.Buttons">
 
     <Style TargetType="{x:Type local:GeometryButton}">
-        <Style.Resources>
+        <!--<Style.Resources>
             <SolidColorBrush x:Key="NormalBackgroundBrush" Color="#00000000" />
             <SolidColorBrush x:Key="NormalBorderBrush" Color="#FFFFFFFF" />
             <SolidColorBrush x:Key="NormalForegroundBrush" Color="#FF8f949b" />
@@ -15,7 +15,7 @@
             <SolidColorBrush x:Key="PressedBackgroundBrush" Color="#FF431e20" />
             <SolidColorBrush x:Key="PressedBorderBrush" Color="#FF110033" />
             <SolidColorBrush x:Key="PressedForegroundBrush" Color="#FFf9ebeb" />
-        </Style.Resources>
+        </Style.Resources>-->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:GeometryButton}">
@@ -43,10 +43,10 @@
                                     Stretch="Uniform"          
                                     Fill="{TemplateBinding Fill}"
                                     Stroke="{TemplateBinding Foreground}"
-                                 StrokeEndLineCap="Round" 
-                                StrokeLineJoin="Round"  
-                                StrokeStartLineCap="Round"
-                                    StrokeThickness="12">
+                                    StrokeEndLineCap="Round" 
+                                    StrokeLineJoin="Round"  
+                                    StrokeStartLineCap="Round"
+                                    StrokeThickness="{TemplateBinding StrokeThickness}">
                             </Path>
                         </Grid>
                     </Viewbox>
@@ -54,8 +54,8 @@
 
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="backgroundEllipse" Property="Fill" Value="{Binding HoverBackground, RelativeSource={RelativeSource TemplatedParent}}" />
-                            <Setter TargetName="ButtonPath" Property="Stroke" Value="{StaticResource HoverForegroundBrush}" />
+                            <Setter TargetName="backgroundEllipse" Property="Fill" Value="{Binding HoverBackgroundBrush, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            <Setter TargetName="ButtonPath" Property="Stroke" Value="{Binding HoverForegroundBrush, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                             <!--<Setter TargetName="ButtonPath" Property="Fill" Value="{StaticResource HoverForegroundBrush}" />-->
                         </Trigger>
 
@@ -65,8 +65,8 @@
 
                         <Trigger Property="IsPressed" Value="true">
                             <!--<Setter TargetName="backgroundEllipse" Property="Fill" Value="{StaticResource PressedBackgroundBrush}" />-->
-                            <Setter TargetName="backgroundEllipse" Property="Stroke" Value="{Binding PressedBackground, RelativeSource={RelativeSource TemplatedParent}}" />
-                            <Setter TargetName="ButtonPath" Property="Stroke" Value="{Binding PressedForeground, RelativeSource={RelativeSource TemplatedParent}}" />
+                            <Setter TargetName="backgroundEllipse" Property="Stroke" Value="{Binding PressedBackgroundBrush, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                            <Setter TargetName="ButtonPath" Property="Stroke" Value="{Binding PressedForegroundBrush, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

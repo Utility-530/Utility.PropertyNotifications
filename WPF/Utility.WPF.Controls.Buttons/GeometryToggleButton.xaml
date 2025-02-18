@@ -79,12 +79,12 @@
 
 
 
-    <ControlTemplate x:Key="GTBControlTemplate"
-                 TargetType="{x:Type local:GeometryToggleButton}">
-        <Grid Height="{TemplateBinding Height}" Width="{TemplateBinding Width}" 
+    <ControlTemplate x:Key="GTBControlTemplate" TargetType="{x:Type local:GeometryToggleButton}">
+        <Grid Height="{TemplateBinding Height}" 
+              Width="{TemplateBinding Width}" 
               VerticalAlignment="{TemplateBinding VerticalAlignment}"
-              HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-              >
+              Background="{TemplateBinding Background}"
+              HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
             <Grid.Resources>
                 <!--https://stackoverflow.com/questions/42487517/bind-to-controls-property-inside-visualstatemanager-->
                 <wpf:BindingProxy
@@ -151,8 +151,11 @@
                 </VisualStateGroup>
             </VisualStateManager.VisualStateGroups>
             <Border x:Name="Border"     
-            CornerRadius="50"
-            BorderThickness="1">
+                    CornerRadius="50" 
+                    BorderThickness="1"
+                    VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                    Background="{TemplateBinding Background}"
+                    HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
                 <!--<Border.BorderBrush>
                     <LinearGradientBrush EndPoint="0,1"
                              StartPoint="0,0">
@@ -177,7 +180,7 @@
 
                 </Border.Background>-->
 
-                <Viewbox HorizontalAlignment="Center" VerticalAlignment="Center">
+           
                     <Grid Background="Transparent">
                         <!--  The background of the button, as an ellipse.  -->
                         <!--<Ellipse
@@ -188,22 +191,21 @@
                                 Height="160" />-->
                         <Path
                                     x:Name="ButtonPath"
-                                    Width="80"
-                                    Height="80"
+                                   
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Data="{Binding Data, RelativeSource={RelativeSource TemplatedParent}}"
+                                    Data="{TemplateBinding Data}"
                                     Stretch="Uniform"
-                                    Fill="{TemplateBinding Background}"
+                                    Fill="{TemplateBinding Fill}"
                                     Stroke="{TemplateBinding Foreground}"
                             
                                StrokeEndLineCap="Round" 
                                 StrokeLineJoin="Round"  
                                 StrokeStartLineCap="Round"
-                                    StrokeThickness="12">
+                                    StrokeThickness="{TemplateBinding StrokeThickness}">
                         </Path>
                     </Grid>
-                </Viewbox>
+                <!--</Viewbox>-->
             </Border>
             <!--<Border Grid.Column="0"
             CornerRadius="2,0,0,2"
@@ -222,10 +224,26 @@
                 </Path.Fill>
             </Path>-->
         </Grid>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{Binding HoverBackgroundBrush, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                <Setter TargetName="ButtonPath" Property="Stroke" Value="{Binding HoverForegroundBrush, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                <!--<Setter TargetName="ButtonPath" Property="Fill" Value="{StaticResource HoverForegroundBrush}" />-->
+            </Trigger>
+
+            <Trigger Property="IsEnabled" Value="false">
+                <Setter Property="Visibility" Value="Collapsed" />
+            </Trigger>
+
+            <Trigger Property="IsChecked" Value="true">
+                <!--<Setter TargetName="backgroundEllipse" Property="Fill" Value="{StaticResource PressedBackgroundBrush}" />-->
+                <Setter TargetName="Border" Property="BorderBrush" Value="{Binding PressedBackgroundBrush, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                <Setter TargetName="ButtonPath" Property="Stroke" Value="{Binding PressedForegroundBrush, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style 
-                 TargetType="{x:Type local:GeometryToggleButton}">
+    <Style TargetType="{x:Type local:GeometryToggleButton}">
         <Setter Property="Template" Value="{StaticResource GTBControlTemplate}"></Setter>
     </Style>
 </ResourceDictionary>
