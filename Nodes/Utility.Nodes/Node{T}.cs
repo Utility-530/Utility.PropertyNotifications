@@ -2,6 +2,7 @@
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
+using Utility.Changes;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
@@ -76,41 +77,48 @@ namespace Utility.Nodes
             m_items.Clear();
 
             _ = GetChildren()
-                .Cast<Changes.Change<T>>()
+
                 .Subscribe(async a =>
                 {
-                    switch (a.Type)
+                    if (a is Change<T> change)
+                        switch (change.Type)
+                        {
+                            case Changes.Type.Add:
+                                {
+                                    if (change.Value is not { } desc)
+                                    {
+                                        throw new Exception(" wrwe334 33");
+                                    }
+                                    //else if (desc.Type == data?.Type)
+                                    //{
+                                    //    var node = await ToNode(desc);
+                                    //    m_items.Add(node);
+                                    //}
+                                    else
+                                    {
+                                        //var conversion = ObjectConverter.ToValue(inst, desc);
+                                        var node = await ToTree(desc);
+                                        //await node.RefreshChildrenAsync();
+                                        m_items.Add(node);
+                                    }
+                                    break;
+                                }
+                            case Changes.Type.Remove:
+                                {
+                                    m_items.RemoveOne(e => (e as IReadOnlyTree)?.Data.Equals(change.Value) == true);
+                                    break;
+                                }
+                            case Changes.Type.Reset:
+                                {
+                                    m_items.Clear();
+                                    break;
+                                }
+                        }
+                    else if(a is T t)
                     {
-                        case Changes.Type.Add:
-                            {
-                                if (a.Value is not { } desc)
-                                {
-                                    throw new Exception(" wrwe334 33");
-                                }
-                                //else if (desc.Type == data?.Type)
-                                //{
-                                //    var node = await ToNode(desc);
-                                //    m_items.Add(node);
-                                //}
-                                else
-                                {
-                                    //var conversion = ObjectConverter.ToValue(inst, desc);
-                                    var node = await ToTree(desc);
-                                    //await node.RefreshChildrenAsync();
-                                    m_items.Add(node);
-                                }
-                                break;
-                            }
-                        case Changes.Type.Remove:
-                            {
-                                m_items.RemoveOne(e => (e as IReadOnlyTree)?.Data.Equals(a.Value) == true);
-                                break;
-                            }
-                        case Changes.Type.Reset:
-                            {
-                                m_items.Clear();
-                                break;
-                            }
+                        var node = await ToTree(t);
+                        //await node.RefreshChildrenAsync();
+                        m_items.Add(node);
                     }
                 },
             e =>
