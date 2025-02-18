@@ -20,10 +20,11 @@
     <ProjectReference Include="..\..\Nodes\Utility.Nodes\Utility.Nodes.csproj" />
     <ProjectReference Include="..\Utility.WPF.Behaviors\Utility.WPF.Behaviors.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.WPF.Controls.Meta\Utility.WPF.Controls.Meta.csproj" />
-    <ProjectReference Include="..\Utility.WPF.Controls.Extrinsic\Utility.WPF.Controls.Extrinsic.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Controls.External\Utility.WPF.Controls.External.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Objects\Utility.WPF.Controls.Objects.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Common\Utility.WPF.Demo.Common.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Data\Utility.WPF.Demo.Data.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.FileSystem\Utility.WPF.Demo.FileSystem.csproj" />
   </ItemGroup>
 
   <ItemGroup>

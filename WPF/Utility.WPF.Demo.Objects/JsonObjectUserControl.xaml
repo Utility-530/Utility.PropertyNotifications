@@ -7,58 +7,41 @@
     xmlns:local="clr-namespace:Utility.WPF.Demo.Objects"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:view="http://schemas.utility.com/objects"
+    xmlns:conv="http://schemas.utility.com/converters"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
         <sys:Exception x:Key="exception" />
+        <conv:ColorConverter x:Key="ColorConverter"></conv:ColorConverter>
 
         <DataTemplate x:Key="Ellipse">
-            <UniformGrid Rows="1" >
-                <StackPanel>
-                    <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="0,0,0,4" />
-                    <!--<TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4"
-                               Visibility="{Binding Schema.Description, Converter={StaticResource VisibilityConverter}}" />-->
-                </StackPanel>
-                <Ellipse Fill="Red" Height="20" Width="20"/>
-            </UniformGrid>
-        </DataTemplate>
-
-        <DataTemplate x:Key="MessageTemplate">
-            <UniformGrid Rows="1" >
-                <StackPanel>
-                    <TextBlock Text="{Binding Name}" FontWeight="ExtraBold" Margin="0,0,0,4" />
-                    <!--<TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4"
-                               Visibility="{Binding Schema.Description, Converter={StaticResource VisibilityConverter}}" />-->
-                </StackPanel>
-                <Ellipse Fill="Blue" Height="20" Width="20"/>
-            </UniformGrid>
-        </DataTemplate>
-
-        <DataTemplate x:Key="NumberTemplate">
             <ContentControl Style="{DynamicResource LabelValueContent}">
-                <Ellipse Fill="Blue" Height="20" Width="20"/>
+                <Rectangle Fill="{Binding Value.Value, Converter={StaticResource ColorConverter}}"></Rectangle>
             </ContentControl>
         </DataTemplate>
-        
+
+
+
+        <DataTemplate x:Key="MessageTemplate">
+            <ContentControl Style="{DynamicResource LabelValueContent}">
+                <TextBlock FontSize="16" FontStyle="Italic" Text="{Binding Value}"></TextBlock>
+            </ContentControl>
+        </DataTemplate>        
         
 
         <x:Array x:Key="properties" Type="{x:Type view:SchemaProperty}">
-            <view:SchemaProperty Name="First" Format="Ellipse"></view:SchemaProperty>
+            <view:SchemaProperty Name="Color" Format="Ellipse"></view:SchemaProperty>
         </x:Array>
 
-        <x:Array x:Key="types" Type="{x:Type view:SchemaType}">
-            <view:SchemaType Name="Character" Properties="{StaticResource properties}"/>
-        </x:Array>
-
-        <view:Schema x:Key="CharacterSchema" Types="{StaticResource types}"/>
-
+        <view:Schema x:Key="CharacterSchema" Properties="{StaticResource properties}"/>
 
         <ObjectDataProvider x:Key="SchemaFromFile"
                 ObjectType="{x:Type local:SchemaLoader}"
                 MethodName="LoadSchema" >
         </ObjectDataProvider>
-        
+
+        <local:ObjectToTokenConverter x:Key="ObjectToTokenConverter"/>
         
     </UserControl.Resources>
     <DockPanel Name="DockPanel" Visibility="Visible">
@@ -75,9 +58,8 @@
         </StackPanel>
         <Grid>
             <UniformGrid>
-             
-                <view:JsonControl Object="{StaticResource exception}" Schema="{Binding Source={StaticResource SchemaFromFile}}"/>
-                <view:JsonControl Object="{StaticResource Characters}" Schema="{StaticResource CharacterSchema}"/>
+                <view:JsonControl Object="{Binding Source={StaticResource Characters}, Converter={StaticResource ObjectToTokenConverter}}" Schema="{StaticResource CharacterSchema}"/>
+                <view:JsonControl Object="{Binding Source={StaticResource exception}, Converter={StaticResource ObjectToTokenConverter}}" Schema="{Binding Source={StaticResource SchemaFromFile}}"/>
                 <DockPanel>
                     <Button DockPanel.Dock="Top" 
                         Click="Button_Click"
@@ -90,7 +72,7 @@
                     <Grid.Resources>
                         <!--  DataTemplate for Published Date column defined in Grid.Resources.  PublishDate is a property on the ItemsSource of type DateTime  -->
                         <DataTemplate x:Key="DateTemplate">
-                            <view:JsonControl Object="{Binding}" />
+                            <view:JsonControl Object="{Binding Converter={StaticResource ObjectToTokenConverter}}" />
                         </DataTemplate>
                         <!--  DataTemplate for the Published Date column when in edit mode.  -->
                         <DataTemplate x:Key="EditingDateTemplate">
@@ -107,13 +89,6 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
-                <!--<ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <forge:DynamicForm Model="{x:Static local:Login.Instance}" Margin="16" />
-                    </ScrollViewer>-->
-
-                <!--<ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <forge:DynamicForm Model="{StaticResource Bart}" Margin="16" />
-                </ScrollViewer>-->
             </UniformGrid>
         </Grid>
     </DockPanel>
