@@ -70,7 +70,7 @@ namespace Utility.Trees.Demo.Infrastructure
     }
 
 
-    public class Service : IName, IGuid
+    public class Service : IGetName, IGetGuid
     {
         public Guid Guid => Guid.Parse("ba941812-7711-49e8-a3ab-cb5284503215");
 

@@ -5,6 +5,7 @@ using Utility.Extensions;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Demo.Infrastructure;
 using Svc = Utility.Trees.Demo.Infrastructure.Service;
+using Utility.Trees.Extensions;
 
 namespace Utility.Trees.Demo
 {
@@ -26,7 +27,7 @@ namespace Utility.Trees.Demo
         {
             dataContext = userControl.DataContext as ConnectionsViewModel;
             Point pointA, pointB;
-            Tree viewmodel = TreeExtensions.MatchDescendant(dataContext.ViewModel, new((a) => (a.Data as IGuid).Guid == connectionViewModel.Guid)) as Tree;
+            Tree viewmodel = dataContext.ViewModel.Descendant(new((a) => (a.tree.Data as IGuid).Guid == connectionViewModel.Guid)) as Tree;
 
             if (viewmodel == null)
                 return null;

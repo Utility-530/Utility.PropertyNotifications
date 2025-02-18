@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using Newtonsoft.Json.Linq;
+using ReactiveUI;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -39,10 +40,11 @@ namespace Utility.Trees.Demo
             InitializeComponent();
 
             this.WhenAnyValue(a => a.Value)
+                .WhereNotNull()
                 .Subscribe(a =>
                 {
 
-                    ObjectListBox.Object = a;
+                    ObjectListBox.Object = JToken.FromObject(a);
                     TypesComboBox.IsEnabled = true;
                     ObjectListBox.IsEnabled = a != null;
                     SaveButton.IsEnabled = a != null;
@@ -63,7 +65,7 @@ namespace Utility.Trees.Demo
                         {
                             initialise.Initialise(default);
                         }
-                        ObjectListBox.Object = instance;
+                        ObjectListBox.Object = JToken.FromObject(instance);
                     }
                     else
                     {
@@ -83,7 +85,7 @@ namespace Utility.Trees.Demo
             if (e.AddedItems.Cast<object>().Single() is Type type)
             {
                 var instance = Activator.CreateInstance(type);
-                ObjectListBox.Object = instance;
+                ObjectListBox.Object = JToken.FromObject(instance);
             }
         }
 

@@ -14,6 +14,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Persists;
 using Utility.Trees.Abstractions;
+using Utility.Trees.Extensions;
 
 namespace Utility.Trees.Demo.Infrastructure
 {
@@ -74,7 +75,7 @@ namespace Utility.Trees.Demo.Infrastructure
             {
 
                 List<ChildParentPair> pairs = new();
-                tree.Visit(t =>
+                tree.Foreach((t, i) =>
                 {
                     //if (t.IsRoot())
                     //    return;
@@ -93,9 +94,9 @@ namespace Utility.Trees.Demo.Infrastructure
                     var keyParent = t.Parent as IGuid;
                     //var key = t.Parent?.Key;
 
-                        if (t.Data is IOrm orm)
-                            orm.Orm = uow.Orm;
-                        persist.Save(key.Guid);
+                    if (t.Data is IOrm orm)
+                        orm.Orm = uow.Orm;
+                    persist.Save(key.Guid);
                     if (t.IsRoot() == false)
                     {
                         var x = new ChildParentPair { Parent = keyParent?.Guid ?? Guid.Empty, Child = key.Guid };

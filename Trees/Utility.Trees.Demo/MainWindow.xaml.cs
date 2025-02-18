@@ -60,20 +60,20 @@ namespace Utility.Trees.Demo
 
     }
 
-    public class PersistTree : Tree<Persist>
-    {
-        public PersistTree(Persist data, params object[] items) : base(data, items)
-        {
-        }
+    //public class PersistTree : Tree<Persist>
+    //{
+    //    public PersistTree(Persist data, params object[] items) : base(data, items)
+    //    {
+    //    }
 
-        public override Tree Clone()
-        {
-            if (Data is Persist persist)
-            {
-                return new Tree(new Persist { Guid = Guid.NewGuid() });
-            }
-            throw new Exception("FDSGF fddfgfd");
-        }
-    }
+    //    public override Tree Clone()
+    //    {
+    //        if (Data is Persist persist)
+    //        {
+    //            return new Tree(new Persist { Guid = Guid.NewGuid() });
+    //        }
+    //        throw new Exception("FDSGF fddfgfd");
+    //    }
+    //}
 
 }
