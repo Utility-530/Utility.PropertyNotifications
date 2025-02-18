@@ -6,7 +6,7 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Types
 {
-    public class TypeNode : Node
+    public class TypeNode : Node<object>
     {
         Lazy<IEnumerable> lazy = new();
         object data;
