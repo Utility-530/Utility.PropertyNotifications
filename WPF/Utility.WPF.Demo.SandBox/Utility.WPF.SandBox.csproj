@@ -17,7 +17,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Utility.WPF.Colours\Utility.WPF.Colours.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Controls.Objects\Utility.WPF.Controls.Objects.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Controls.PropertyTrees\Utility.WPF.Controls.PropertyTrees.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Demo.Data\Utility.WPF.Demo.Data.csproj" />
     <ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
   </ItemGroup>
 

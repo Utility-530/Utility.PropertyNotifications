@@ -7,14 +7,45 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
         xmlns:sys="clr-namespace:System.Reactive.Linq;assembly=System.Reactive"
         xmlns:local="clr-namespace:Utility.WPF.SandBox"
+        xmlns:local2="clr-namespace:Utility.WPF.Demo.SandBox"
+        xmlns:dm="clr-namespace:Utility.WPF.Demo.Data.Model;assembly=Utility.WPF.Demo.Data"
+        xmlns:pt="clr-namespace:Utility.WPF.Controls.PropertyTrees;assembly=Utility.WPF.Controls.PropertyTrees"
+        xmlns:conv="http://schemas.utility.com/converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Utility.WPF.Demo.Data;component/DataTemplate/Character.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+   
 
-    <StackPanel>
+
+    <Grid x:Name="MainGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
 
         <local:HatchSwitchView/>
 
+        <local2:CustomSelector Grid.Row="1"
+                               CheckedPropertyName="IsRhPositive"
+                               d:DataContext="{d:DesignInstance local2:MainWindow}"
+                               d:ItemsSource="{StaticResource Characters}" 
+                               ItemsSource="{Binding Items}" 
+                               NewObject="{Binding NewObject}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="FinishEdit">
+                    <i:InvokeCommandAction Command="{Binding FinishEdit}"  PassEventArgsToCommand="True"></i:InvokeCommandAction>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </local2:CustomSelector>
 
-    </StackPanel>
+        <!--<pt:PropertyTree Grid.Row="1" Object="{Binding Source={StaticResource Character}}"></pt:PropertyTree>-->
+
+    </Grid>
 </Window>
