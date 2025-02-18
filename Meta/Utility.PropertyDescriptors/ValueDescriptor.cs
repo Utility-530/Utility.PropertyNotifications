@@ -1,7 +1,7 @@
 ﻿
 using Splat;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
-using Utility.Repos;
 
 namespace Utility.Descriptors;
 
@@ -19,7 +19,7 @@ internal abstract record NullableValueDescriptor<T>(Descriptor Descriptor, objec
 
 internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValuePropertyDescriptor(Descriptor, Instance)
 {
-    public override string? Name => Descriptor.PropertyType.Name;
+    //public override string? Name => Descriptor.PropertyType.Name;
 
     private object? value;
     private readonly ITreeRepository repo = Locator.Current.GetService<ITreeRepository>();

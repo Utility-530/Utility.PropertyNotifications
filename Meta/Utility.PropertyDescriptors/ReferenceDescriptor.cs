@@ -1,5 +1,5 @@
 ﻿using Splat;
-using Utility.Repos;
+using Utility.Interfaces.Exs;
 
 namespace Utility.Descriptors;
 
@@ -13,8 +13,8 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
     {
         get
         {
-            return
-                observable ??= Observable.Create<Change<IDescriptor>>(async observer =>
+            if (observable == null)
+                return observable = Observable.Create<Change<IDescriptor>>(async observer =>
                 {
                     CompositeDisposable disp = new();
                     this.WhenReceivedFrom(a => a.Value)
@@ -96,6 +96,8 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                     });
                     return disp;
                 });
+            else
+                return observable;
         }
     }
 }
