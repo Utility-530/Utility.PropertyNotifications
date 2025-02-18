@@ -5,6 +5,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:conv="http://schemas.utility.com/converters"
              xmlns:infra="clr-namespace:Utility.Nodes.Demo.Infrastructure" 
+             xmlns:wpf="clr-namespace:Utility.Nodes.WPF;assembly=Utility.Nodes.WPF"
              xmlns:io="clr-namespace:System.IO;assembly=mscorlib"        
              xmlns:local="clr-namespace:Utility.Nodes.Demo"
              xmlns:ui="http://schemas.modernwpf.com/2019">
@@ -67,28 +68,31 @@
                 </Border>
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type local:DemoRootNode}">
-                <TreeView ItemsSource="{Binding Items}">
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Items}">
-                            <StackPanel Orientation="Horizontal">
-                                <StackPanel.Style>
-                                    <Style>
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, 
+            <HierarchicalDataTemplate x:Key="template" ItemsSource="{Binding Items}">
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel.Style>
+                        <Style>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding RelativeSource={RelativeSource FindAncestor, 
                                                  AncestorType={x:Type TreeViewItem}}, Path=IsSelected}" 
                                                  Value="True">
-                                                <Setter Property="StackPanel.Background" Value="LightBlue"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </StackPanel.Style>
+                                    <Setter Property="StackPanel.Background" Value="LightBlue"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
 
-                                <ContentControl Content="{Binding Data}"  VerticalAlignment="Center">
-                                </ContentControl>
-                            </StackPanel>
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
+                    <ContentControl Content="{Binding Data}"  VerticalAlignment="Center">
+                    </ContentControl>
+                </StackPanel>
+            </HierarchicalDataTemplate>
+
+            <local:DataTemplateSelector x:Key="selector" DefaultTemplate="{StaticResource template}"></local:DataTemplateSelector>
+            <local:StyleSelector x:Key="styleSelector"></local:StyleSelector>
+
+            <DataTemplate DataType="{x:Type local:DemoRootNode}">
+                <TreeView ItemsSource="{Binding Items}" ItemTemplateSelector="{StaticResource selector}" ItemContainerStyleSelector="{StaticResource styleSelector}">
+    
                 </TreeView>
             </DataTemplate>
 

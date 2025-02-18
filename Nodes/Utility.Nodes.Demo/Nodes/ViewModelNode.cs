@@ -9,7 +9,7 @@ using Utility.Keys;
 
 namespace Utility.Nodes.Demo
 {
-    public class ViewModelNode : Node
+    public class ViewModelNode : Node<object>
     {
         private Type type;
         bool flag;
@@ -17,9 +17,20 @@ namespace Utility.Nodes.Demo
         public ViewModelNode(Type type)
         {
             this.type = type;
+            RaisePropertyChanged(nameof(Data));
         }
 
-        public override object Data => Activator.CreateInstance(type);
+        public override object Data
+        {
+            get
+            {
+                if (type != null)
+                {
+                    return Activator.CreateInstance(type);
+                }
+                return null;
+            }
+        }
 
         public override string Key => new StringKey(type.AsString());
 

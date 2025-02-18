@@ -24,7 +24,7 @@
     public class LEDMessage
     {
         public byte Channel { get; set; }
-        //public int PatternIndex { get; set; }
+        public int PatternIndex { get; set; }
         //public int LedFrom { get; set; }
         //public int LedTo { get; set; }
         //public int SkipFrame { get; set; }

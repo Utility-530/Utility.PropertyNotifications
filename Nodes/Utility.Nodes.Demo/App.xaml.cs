@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Splat;
 using System.Collections;
 using System.Globalization;
 using System.Threading;
 using System.Windows;
 using Utility.Collections;
+using Utility.Interfaces.Exs;
+using Utility.Nodes.Demo.Infrastructure;
 
 namespace Utility.Nodes.Demo
 {
@@ -16,12 +18,16 @@ namespace Utility.Nodes.Demo
         {
             base.OnStartup(e);
             Collection.Context = SynchronizationContext.Current;
-
-
+            Locator.CurrentMutable.RegisterLazySingleton<ITreeRepository>(() => new InMemoryTreeRepository());
+            Locator.CurrentMutable.RegisterLazySingleton(() =>
+            {
+                return Resolver.Instance
+                            .Register<TopViewModel, BreadcrumbsViewModel>()
+                            .Register<BreadcrumbsViewModel, RootViewModel>()
+                            .Register<BreadcrumbsViewModel, DescendantsViewModel>();
+            });
             var window = new Window { Content = new DemoRootNode() };
             window.Show();
         }
     }
-
-   
 }

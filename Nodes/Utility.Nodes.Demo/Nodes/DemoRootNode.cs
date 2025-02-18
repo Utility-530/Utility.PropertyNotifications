@@ -2,15 +2,19 @@
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Utility.Descriptors;
 using Utility.Interfaces.NonGeneric;
+using Utility.Nodes.Demo.Infrastructure;
+using Utility.Nodes.Reflections;
 using Utility.Nodes.Solutions;
 using Utility.Nodes.Types;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Demo
 {
-    public class DemoRootNode : Node
+    public class DemoRootNode : Node<NodeType>
     {
+        const string _guid = "c5eb6a09-2787-4b85-9f1c-bf9abb9ccb06";
         bool flag;
         public DemoRootNode()
         {
@@ -37,13 +41,22 @@ namespace Utility.Nodes.Demo
                 return nodeType switch
                 {
                     NodeType.ViewModel => new RootViewModelNode(),
-                    NodeType.Directory => new DirectoryNode(new System.IO.DirectoryInfo(@"C:\")),             
+                    NodeType.Directory => new DirectoryNode(new System.IO.DirectoryInfo(@"C:\")),
                     NodeType.Assembly => new AssemblyNode(),
                     NodeType.Type => new TypeNode(),
+                    NodeType.Object => create(),
                     _ => new ExceptionNode(new Exception("Out of range"))
                     //_ => throw new Exception("r 4333"),
                 };
             throw new Exception("2r 11 4333");
+
+            ReflectionNode create()
+            {
+                var table = (LEDMessage)Activator.CreateInstance(typeof(LEDMessage));
+                var root = DescriptorFactory.CreateRoot(table, Guid.Parse(_guid), "table_add").Take(1).Wait();
+                var reflectionNode = new ReflectionNode(root) { Parent = (ITree)this };
+                return reflectionNode;
+            }
         }
 
         public override Task<bool> HasMoreChildren()
@@ -57,7 +70,7 @@ namespace Utility.Nodes.Demo
         }
     }
 
-    public class ExceptionNode : Node
+    public class ExceptionNode : Node<object>
     {
         private Exception exception;
         private object data;

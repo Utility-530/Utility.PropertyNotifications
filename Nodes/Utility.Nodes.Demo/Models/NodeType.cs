@@ -6,7 +6,8 @@
         Directory,
         Model,
         Assembly,
-        Type
+        Type,
+        Object
         //Property
     }
 }
