@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ReactiveUI.WPF" Version="16.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\SplitButton\SplitButton.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Themes\Brushes.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Themes\Generic.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Breadcrumb.cs">
+			<DependentUpon>Breadcrumb.xaml</DependentUpon>
+		</Compile>	
+		<Compile Update="Deprecated\BreadcrumbButton.cs">
+			<DependentUpon>BreadcrumbButton.xaml</DependentUpon>
+		</Compile>	
+		<Compile Update="BreadcrumbItem.cs">
+			<DependentUpon>BreadcrumbItem.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+</Project>
