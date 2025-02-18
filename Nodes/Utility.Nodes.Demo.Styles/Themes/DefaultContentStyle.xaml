@@ -13,7 +13,7 @@
                     xmlns:res="http://schemas.utility.com/resourcedictionary">
 
     <ResourceDictionary.MergedDictionaries>
-        <res:SharedResourceDictionary Source="/Utility.Nodes.Demo.Styles;component/Themes/Shared.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Shared.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 

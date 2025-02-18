@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Windows;
 using Utility.Conversions.Json.Newtonsoft;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Nodes.Filters;

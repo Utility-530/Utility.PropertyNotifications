@@ -3,13 +3,13 @@
                     xmlns:res="http://schemas.utility.com/resourcedictionary">
 
     <ResourceDictionary.MergedDictionaries>
-        <res:SharedResourceDictionary Source="/Utility.Nodes.Demo.Styles;component/Themes/ComboExStyle.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.Nodes.Demo.Styles;component/Themes/DefaultContentStyle.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.Nodes.Demo.Styles;component/Themes/DefaultStyle.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/ComboExStyle.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/DefaultContentStyle.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/DefaultStyle.xaml"/>
 
-        <res:SharedResourceDictionary Source="/Utility.Nodes.Demo.Styles;component/Themes/Styles.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.Nodes.Demo.Styles;component/Themes/Templates.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.Nodes.Demo.Styles;component/Themes/ViewContentStyle.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Styles.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Templates.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/ViewContentStyle.xaml"/>
 
     </ResourceDictionary.MergedDictionaries>
 

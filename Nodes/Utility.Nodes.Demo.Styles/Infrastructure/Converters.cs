@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Data;
 using Utility.Descriptors;
 using Utility.Helpers.NonGeneric;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Meta;
 using Utility.Models;

@@ -162,15 +162,6 @@ namespace Utility.Services
             disposable?.Dispose();
         }
 
-        //private static void RepositoryChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
-        //{
-        //    (dependencyObject as PersistBehavior).repositoryChanges.OnNext(e.NewValue as IRepository);
-        //}
-
-        //private void Change_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public IDisposable Subscribe(IObserver<CollectionChangeMessage> observer)
         {

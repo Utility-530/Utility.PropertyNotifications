@@ -10,7 +10,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Utility.Common.Helper;
-using Utility.Extensions;
 using Utility.Helpers.NonGeneric;
 using Utility.Helpers.Generic;
 using Utility.Interfaces.NonGeneric;

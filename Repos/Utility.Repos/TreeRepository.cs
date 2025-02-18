@@ -656,7 +656,4 @@ namespace Utility.Repos
         static readonly Dictionary<string, TreeRepository> dictionary = new();
         //public static TreeRepository Create(string name) => dictionary.GetValueOrCreate(name, () => new TreeRepository(Path.Combine(ProgramData, name)));
     }
-
-
-
 }
