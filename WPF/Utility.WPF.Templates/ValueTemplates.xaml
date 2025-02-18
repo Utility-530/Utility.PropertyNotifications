@@ -18,7 +18,8 @@
                     xmlns:windows="clr-namespace:System.Windows;assembly=WindowsBase"
                     xmlns:cbx="http://schemas.utility.com/cboxes"
                     xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
-                    xmlns:hc="https://handyorg.github.io/handycontrol"            
+                    xmlns:hc="https://handyorg.github.io/handycontrol"       
+                    xmlns:wpf="http://schemas.utility.com/utilitywpf"
                     xmlns:dotNetKitControls="http://wpfcontrols.com/">
 
     <conv:IntToEnumConverter x:Key="IntToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
@@ -44,7 +45,7 @@
     <DataTemplate DataType="{x:Type sys:Int64}">
         <num:LongUpDown Value="{Binding Path=Value, Mode=TwoWay}"></num:LongUpDown>
     </DataTemplate>
-    
+
     <DataTemplate DataType="{x:Type sys:Double}">
         <num:DoubleUpDown Value="{Binding Path=Value, Mode=TwoWay}"></num:DoubleUpDown>
     </DataTemplate>
@@ -62,11 +63,19 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type draw:Color}">
-        <xc:ColorPicker SelectedColor="{Binding Path=Value, Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"/>
+        <xc:ColorPicker SelectedColor="{Binding Path=Value, Mode=TwoWay, Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type Color}">
-        <xc:ColorPicker SelectedColor="{Binding Path=Value, Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"/>
+        <Grid>
+            <Grid.Resources>
+                <wpf:DataContextSpy x:Key="DataContextSpy" Property="Value"></wpf:DataContextSpy>
+            </Grid.Resources>
+
+            <xc:ColorPicker SelectedColor="{Binding Path=Value, Mode=TwoWay, Converter={x:Static conv:ColorConverter.Instance}, ConverterParameter={StaticResource DataContextSpy}}" 
+                        VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2">
+            </xc:ColorPicker>
+        </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type sys:Boolean}">
@@ -77,13 +86,15 @@
 
     <!--<DataTemplate DataType="{x:Type sys:String}">
         <dotNetKitControls:AutoCompleteComboBox Text="{Binding Value}" Provider="{Binding Converter={x:Static local:AutoCompleteConverter.Instance}}"/>
-        --><!--<xc:AutoCompleteBox Text="{Binding Path=Value, Mode=TwoWay}" VerticalContentAlignment="Center" ItemsSource="{Binding Converter={StaticResource AutoCompleteConverter}}" />--><!--
+        -->
+    <!--<xc:AutoCompleteBox Text="{Binding Path=Value, Mode=TwoWay}" VerticalContentAlignment="Center" ItemsSource="{Binding Converter={StaticResource AutoCompleteConverter}}" />-->
+    <!--
     </DataTemplate>-->
-    
+
     <DataTemplate DataType="{x:Type sys:String}">
-        <TextBox Text="{Binding Value, Mode=TwoWay}" />      
+        <TextBox Text="{Binding Value, Mode=TwoWay}" />
     </DataTemplate>
-    
+
     <DataTemplate x:Key="Enumerable">
         <!--<ItemsControl ItemsSource="{Binding Value, Mode=OneWay}"></ItemsControl>-->
     </DataTemplate>
@@ -170,7 +181,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
 
     <DataTemplate x:Key="Missing">
         <controls1:MissingTemplateControl>
