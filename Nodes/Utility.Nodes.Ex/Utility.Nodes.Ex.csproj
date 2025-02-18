@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Interfaces\Utility.Interfaces.Exs\Utility.Interfaces.Exs.csproj" />
+    <ProjectReference Include="..\..\Models\Utility.Models.Trees\Utility.Models.Trees.csproj" />
+    <ProjectReference Include="..\Utility.Nodes\Utility.Nodes.csproj" />
+  </ItemGroup>
+
+</Project>

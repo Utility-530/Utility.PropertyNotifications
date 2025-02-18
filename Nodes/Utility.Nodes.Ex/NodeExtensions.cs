@@ -3,7 +3,6 @@ using Utility.Trees.Abstractions;
 using Utility.Nodes;
 using Utility.Models.Trees;
 using Utility.Reactives;
-using Utility.Trees;
 using System.Reactive.Disposables;
 using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
