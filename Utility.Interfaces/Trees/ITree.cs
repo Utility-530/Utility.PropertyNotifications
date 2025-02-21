@@ -27,6 +27,8 @@ namespace Utility.Trees.Abstractions
         void Remove(Guid index);
 
         Task<bool> HasMoreChildren();
+
+        Task<ITree> ToTree(object d);
     }
 
 
