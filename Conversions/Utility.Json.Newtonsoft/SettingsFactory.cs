@@ -36,6 +36,7 @@ namespace Utility.Conversions.Json.Newtonsoft
                     yield return (new ParameterInfoJsonConverter());
                     yield return (new AttributeCollectionConverter());
                     yield return (new Utility.Conversions.Json.Newtonsoft.DescriptorConverter());
+                    yield return (new StringToGuidConverter());
                 }
             }
         }
