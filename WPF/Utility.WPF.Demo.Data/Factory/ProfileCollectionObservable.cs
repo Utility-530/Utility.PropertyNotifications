@@ -15,7 +15,7 @@ namespace Utility.WPF.Demo.Data.Factory
         private readonly int startCount;
         private readonly int speed;
         private IDisposable? observable;
-        private readonly Lazy<ReadOnlyCollection<Profile>> pool = new(() => ProfileFactory.BuildPool());
+        private readonly Lazy<ReadOnlyCollection<Profile>> pool = new(() => new(ProfileFactory.BuildPool()));
         private ReplaySubject<Profile> profiles = new();
 
         public ProfileCollectionObservable(int startCount = 0, int speed = 1)

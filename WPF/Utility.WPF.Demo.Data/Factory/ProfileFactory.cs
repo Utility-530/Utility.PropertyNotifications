@@ -25,10 +25,8 @@ namespace Utility.WPF.Demo.Data.Factory
         private static BitmapImage GetImage(string path) =>
             new BitmapImage(PathHelper.FindUri(typeof(ProfileFactory).Assembly.GetName().Name, "ProfilePics", path + ".png"));
 
-        public static ReadOnlyCollection<Profile> BuildPool() =>
-                new ReadOnlyCollection<Profile>(
-                    new List<Profile>
-                    {
+        public static List<Profile> BuildPool() =>
+                    [
                     new Profile(
                         "UI/UX designer",
                         "$55/hr",
@@ -161,7 +159,7 @@ namespace Utility.WPF.Demo.Data.Factory
                         new List<string>{ "UI", "UX", "photoshop" },
                         4,
                          GetImage("11_Jogory"))
-                    });
+                    ];
 
         private static BitmapImage ToBitmapImage(System.Drawing.Bitmap bitmap)
         {
