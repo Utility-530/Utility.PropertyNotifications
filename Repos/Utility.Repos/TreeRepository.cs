@@ -374,38 +374,43 @@ namespace Utility.Repos
 
         public IObservable<Key?> InsertRoot(Guid guid, string name, System.Type type)
         {
-
-            // create table if not exists
-            if (connection.Query<String>($"SELECT sql as Name FROM sqlite_schema WHERE type ='table' AND name LIKE '{name}'").Any() == false)
+            return Observable.Create<Key?>(observer =>
             {
-                var statement = connection.FindWithQuery<String>($"SELECT sql as Name FROM sqlite_schema WHERE type ='table' AND name LIKE '{nameof(Relationships)}'");
-                var newStatement = statement.Name.Replace($"{nameof(Relationships)}", name);
-                connection.Execute(newStatement);
-            }
-
-            var typeId = TypeId(type);
-            var tables = connection.Query<Relationships>($"SELECT * FROM '{nameof(Relationships)}' WHERE Name = '{name}' AND Guid = '{guid}' AND TypeId = '{typeId}'");
-
-            setName(guid, name);
-
-            //this.name = name;
-            if (tables.Count > 1)
-                throw new Exception("dsf 33p[p[");
-            else if (tables.Count == 0)
-            {
-                connection.Insert(new Relationships { Guid = guid, Name = name, TypeId = typeId });
-                return Observable.Return<Key?>(new Key(guid, default, type, name, 0, null));
-            }
-            else
-            {
-                var all = connection.Query<Relationships>($"SELECT * FROM '{name}'");
-                foreach (var item in all)
+                return initialisationTask.ToObservable().Subscribe(a =>
                 {
-                    setName(item.Guid, name);
-                }
-                //return Observable.Return<Key?>(null);
-                return Observable.Return<Key?>(new Key(guid, default, type, name, 0, null));
-            }
+                    // create table if not exists
+                    if (connection.Query<String>($"SELECT sql as Name FROM sqlite_schema WHERE type ='table' AND name LIKE '{name}'").Any() == false)
+                    {
+                        var statement = connection.FindWithQuery<String>($"SELECT sql as Name FROM sqlite_schema WHERE type ='table' AND name LIKE '{nameof(Relationships)}'");
+                        var newStatement = statement.Name.Replace($"{nameof(Relationships)}", name);
+                        connection.Execute(newStatement);
+                    }
+
+                    var typeId = TypeId(type);
+                    var tables = connection.Query<Relationships>($"SELECT * FROM '{nameof(Relationships)}' WHERE Name = '{name}' AND Guid = '{guid}' AND TypeId = '{typeId}'");
+
+                    setName(guid, name);
+
+                    //this.name = name;
+                    if (tables.Count > 1)
+                        throw new Exception("dsf 33p[p[");
+                    else if (tables.Count == 0)
+                    {
+                        connection.Insert(new Relationships { Guid = guid, Name = name, TypeId = typeId });
+                        observer.OnNext(new Key(guid, default, type, name, 0, null));
+                    }
+                    else
+                    {
+                        var all = connection.Query<Relationships>($"SELECT * FROM '{name}'");
+                        foreach (var item in all)
+                        {
+                            setName(item.Guid, name);
+                        }
+                        //return Observable.Return<Key?>(null);
+                        observer.OnNext(new Key(guid, default, type, name, 0, null));
+                    }
+                });
+            });
         }
 
         public int? MaxIndex(Guid parentGuid, string? name = default)
@@ -576,7 +581,16 @@ namespace Utility.Repos
 
         System.Type convert(Type type)
         {
-            var assemblyQualifiedName = Assembly.CreateQualifiedName(type.Assembly, $"{type.Namespace}.{type.Name}");
+            string assemblyQualifiedName = null;
+            if (type.ClassName != null)
+            {
+                assemblyQualifiedName = Assembly.CreateQualifiedName(type.Assembly, $"{type.Namespace}.{type.Name}[[{type.ClassName}]]");
+            }
+            else
+            {
+                assemblyQualifiedName = Assembly.CreateQualifiedName(type.Assembly, $"{type.Namespace}.{type.Name}");
+            }
+
             try
             {
                 var ass = Assembly.Load(type.Assembly);
@@ -601,18 +615,22 @@ namespace Utility.Repos
 
         public int TypeId(System.Type type)
         {
-            if (this.types.FirstOrDefault(x => x.Value == type) is { Key: { } key, Value: { } value })
+            if (this.types.ToArray().FirstOrDefault(x => x.Value == type) is { Key: { } key, Value: { } value })
                 return key;
+            if (type.GenericTypeArguments.Any())
+            {
+
+            }
             int typeId = 0;
             connection.RunInTransaction(() =>
             {
-
-                    connection.Insert(new Type { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name });
-                    var types = connection.Query<Type>($"SELECT * FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}'");
-                    if (types.Count > 1)
-                        throw new Exception("fds ");
-                    typeId = connection.ExecuteScalar<int>($"SELECT Id FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' ");
-                    this.types[typeId] = type;
+                var str = string.Join(',', type.GenericTypeArguments.Select(a => a.ToString()));
+                connection.Insert(new Type { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name, ClassName = type.GenericTypeArguments.Any() ? str : null });
+                var types = connection.Query<Type>($"SELECT * FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' AND ClassName = '{str}'");
+                if (types.Count > 1)
+                    throw new Exception("fds ");
+                typeId = connection.ExecuteScalar<int>($"SELECT Id FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' AND ClassName = '{str}'");
+                this.types[typeId] = type;
             });
             return typeId;
         }
@@ -640,7 +658,7 @@ namespace Utility.Repos
 
         public void Reset()
         {
-            throw new NotImplementedException();
+
         }
 
         public const string Utility = nameof(Utility);
