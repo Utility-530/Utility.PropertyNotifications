@@ -64,5 +64,7 @@ namespace Utility.Randoms
         {
             return chars[index % 26];
         }
+
+        public static Next Instance { get; } = new Next(new Random());
     }
 }
