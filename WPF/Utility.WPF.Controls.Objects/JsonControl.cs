@@ -19,120 +19,14 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using Tiny.Toolkits;
+using Utility.Commands;
 using Utility.Helpers;
+using Utility.Models;
+using Utility.WPF.Controls.Trees;
 using static LambdaConverters.ValueConverter;
 
 namespace Utility.WPF.Controls.Objects
 {
-    public class SchemaProperty
-    {
-        public string Name { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the default value.
-        [JsonProperty("default", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public object Default { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the required multiple of for the number value.
-        [JsonProperty("multipleOf", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public decimal? MultipleOf { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the maximum allowed value.
-        [JsonProperty("maximum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public decimal? Maximum { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets a value indicating whether the maximum value is excluded.
-        [JsonProperty("exclusiveMaximum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public bool IsExclusiveMaximum { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the minimum allowed value.
-        [JsonProperty("minimum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public decimal? Minimum { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets a value indicating whether the minimum value is excluded.
-        [JsonProperty("exclusiveMinimum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public bool IsExclusiveMinimum { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the maximum length of the value string.
-        [JsonProperty("maxLength", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public int? MaxLength { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the minimum length of the value string.
-        [JsonProperty("minLength", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public int? MinLength { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the validation pattern as regular expression.
-        [JsonProperty("pattern", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public string Pattern { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the maximum length of the array.
-        [JsonProperty("maxItems", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public int MaxItems { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the minimum length of the array.
-        [JsonProperty("minItems", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public int MinItems { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets a value indicating whether the items in the array must be unique.
-        [JsonProperty("uniqueItems", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public bool UniqueItems { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the maximal number of allowed properties in an object.
-        [JsonProperty("maxProperties", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public int MaxProperties { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the minimal number of allowed properties in an object.
-        [JsonProperty("minProperties", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public int MinProperties { get; set; }
-
-        //
-        // Summary:
-        //     Gets the collection of required properties.
-        [JsonIgnore]
-        public ICollection<object> Enumeration { get; internal set; }
-
-        //
-        // Summary:
-        //     Gets a value indicating whether this is enumeration.
-        [JsonIgnore]
-        public bool IsEnumeration => Enumeration.Count > 0;
-
-        public string Format { get; set; }
-        public string EnumType { get; set; }
-        public string Type { get; internal set; }
-    }
-
-    public class Schema
-    {
-        public SchemaProperty[] Properties { get; set; }
-    }
 
     public static class Commands
     {
@@ -140,68 +34,39 @@ namespace Utility.WPF.Controls.Objects
         public static readonly RoutedCommand UnFooCommand = new RoutedCommand("UnFoo", typeof(JsonControl));
     }
 
-    public class EnumConverter : IMultiValueConverter
+    public class ValueChangedRoutedEventArgs : RoutedEventArgs
     {
-        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        public ValueChangedRoutedEventArgs(JPropertyNewValue jPropertyNewValue, RoutedEvent routedEvent, object source) : base(routedEvent, source)
         {
-            if (values.SingleOrDefault(a => a is Schema) is Schema schema && values.SingleOrDefault(a => a is JProperty) is JProperty s)
-            {
-                return new EnumViewModel(schema, s);
-            }
-
-            return DependencyProperty.UnsetValue;
+            JPropertyNewValue = jPropertyNewValue;
         }
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public JPropertyNewValue JPropertyNewValue { get; }
     }
 
-    public class EnumViewModel : Utility.PropertyNotifications.NotifyPropertyClass
-    {
-        private readonly Schema schema;
-        private readonly JProperty jProperty;
-        private Enum value;
-
-        public EnumViewModel(Schema schema, JProperty jProperty)
-        {
-            //var value = s.Value;
-            if (schema.Properties.SingleOrDefault(a => a.Name == jProperty.Name) is SchemaProperty prop)
-            {
-                var type = Type.GetType(prop.EnumType);
-                value = (Enum)Enum.Parse(type, jProperty.Value.Value<string>());
-                this.RaisePropertyChanged(nameof(Value));
-            }
-
-            this.schema = schema;
-            this.jProperty = jProperty;
-        }
-
-        public Enum Value
-        {
-            get => value; set
-            {
-                this.value = value;
-                jProperty.Value = JContainer.FromObject(value.ToString());
-            }
-        }
-    }
+    public delegate void ValueChangedRoutedEventHandler(object sender, ValueChangedRoutedEventArgs e);
 
     /// <summary>
     /// <a href="https://github.com/catsgotmytongue/JsonControls-WPF">JSON controls</a>
     /// </summary>
     public partial class JsonControl : TreeView
     {
-        private readonly ReplaySubject<TreeView> treeViewSubject = new(1);
 
         public static readonly DependencyProperty JsonProperty = DependencyProperty.Register(nameof(Json), typeof(string), typeof(JsonControl), new PropertyMetadata(null, Change2));
         public static readonly DependencyProperty ObjectProperty = DependencyProperty.Register(nameof(Object), typeof(JToken), typeof(JsonControl), new PropertyMetadata(null, Change));
         public static readonly DependencyProperty ValidationSchemaProperty = DependencyProperty.Register(nameof(ValidationSchema), typeof(JSchema), typeof(JsonControl), new PropertyMetadata(null, Change));
         public static readonly DependencyProperty SchemaProperty = DependencyProperty.Register(nameof(Schema), typeof(Schema), typeof(JsonControl), new PropertyMetadata());
+        public static readonly DependencyProperty ChangeValueCommandProperty = DependencyProperty.Register("ChangeValueCommand", typeof(ICommand), typeof(JsonControl), new PropertyMetadata());
 
+        public static readonly RoutedEvent ValueChangedEvent = EventManager.RegisterRoutedEvent(
+    name: "ValueChanged",
+    routingStrategy: RoutingStrategy.Bubble,
+    handlerType: typeof(ValueChangedRoutedEventHandler),
+    ownerType: typeof(CustomTreeViewItem));
         private static void Change2(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
-        private static void Change(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
+        private static void Change(DependencyObject d, DependencyPropertyChangedEventArgs e) {
+        
+        }
 
         static JsonControl()
         {
@@ -212,6 +77,10 @@ namespace Utility.WPF.Controls.Objects
 
         public JsonControl()
         {
+            ChangeValueCommand = new Command<JPropertyNewValue>((a) =>
+            {
+                RaiseEvent(new ValueChangedRoutedEventArgs(a, ValueChangedEvent, this));
+            });
         }
 
         private static void OnCanUnFoo(object sender, CanExecuteRoutedEventArgs e)
@@ -288,6 +157,12 @@ namespace Utility.WPF.Controls.Objects
             e.Handled = true;
         }
 
+        public event ValueChangedRoutedEventHandler ValueChanged
+        {
+            add { AddHandler(ValueChangedEvent, value); }
+            remove { RemoveHandler(ValueChangedEvent, value); }
+        }
+
         public string Json
         {
             get => (string)GetValue(JsonProperty);
@@ -310,6 +185,12 @@ namespace Utility.WPF.Controls.Objects
         {
             get { return (Schema)GetValue(SchemaProperty); }
             set { SetValue(SchemaProperty, value); }
+        }
+
+        public ICommand ChangeValueCommand
+        {
+            get { return (ICommand)GetValue(ChangeValueCommandProperty); }
+            set { SetValue(ChangeValueCommandProperty, value); }
         }
 
         public override void OnApplyTemplate()
@@ -590,8 +471,50 @@ namespace Utility.WPF.Controls.Objects
 
         }
     }
+    internal static class ColorStore
+    {
+        public static readonly Dictionary<string, string> Collection = new()
+        {
+            { "navy", "#001F3F" },
+            { "blue", "#0074D9" },
+            { "aqua", "#7FDBFF" },
+            { "teal", "#39CCCC" },
+            { "olive", "#3D9970" },
+            { "green", "#2ECC40" },
+            { "d", "#d59aea" },
+            { "yellow", "#FFDC00" },
+            { "black", "#111111" },
+            { "red", "#FF4136" },
+            { "fuchsia", "#F012BE" },
+            { "purple", "#B10DC9" },
+            { "maroon", "#85144B" },
+            { "gray", "#AAAAAA" },
+            { "silver", "#DDDDDD" },
+            { "orange", "#FF851B" },
+            { "a", "#ff035c" },
+            { "b", "#9eb4cc" },
+            { "c", "#fbead3" },
+        };
+    }
+
+    #region converters
 
 
+    public record JPropertyNewValue(object EventArgs, JProperty JProperty);
+
+
+    public class EventArgsConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return new JPropertyNewValue(value, parameter as JProperty);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
     public class ComplexPropertyMethodValueConverter : IValueConverter
     {
@@ -672,7 +595,7 @@ namespace Utility.WPF.Controls.Objects
         {
             if (value is JValue { Value: var _value })
             {
-                return _value;
+                return _value.ToString();
             }
             return DependencyProperty.UnsetValue;
         }
@@ -686,30 +609,54 @@ namespace Utility.WPF.Controls.Objects
     }
 
 
-    internal static class ColorStore
+
+
+    public class EnumConverter : IMultiValueConverter
     {
-        public static readonly Dictionary<string, string> Collection = new()
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            { "navy", "#001F3F" },
-            { "blue", "#0074D9" },
-            { "aqua", "#7FDBFF" },
-            { "teal", "#39CCCC" },
-            { "olive", "#3D9970" },
-            { "green", "#2ECC40" },
-            { "d", "#d59aea" },
-            { "yellow", "#FFDC00" },
-            { "black", "#111111" },
-            { "red", "#FF4136" },
-            { "fuchsia", "#F012BE" },
-            { "purple", "#B10DC9" },
-            { "maroon", "#85144B" },
-            { "gray", "#AAAAAA" },
-            { "silver", "#DDDDDD" },
-            { "orange", "#FF851B" },
-            { "a", "#ff035c" },
-            { "b", "#9eb4cc" },
-            { "c", "#fbead3" },
-        };
+            if (values.SingleOrDefault(a => a is Schema) is Schema schema && values.SingleOrDefault(a => a is JProperty) is JProperty s)
+            {
+                return new EnumViewModel(schema, s);
+            }
+
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class EnumViewModel : Utility.PropertyNotifications.NotifyPropertyClass
+    {
+        private readonly Schema schema;
+        private readonly JProperty jProperty;
+        private Enum value;
+
+        public EnumViewModel(Schema schema, JProperty jProperty)
+        {
+            //var value = s.Value;
+            if (schema.Properties.SingleOrDefault(a => a.Name == jProperty.Name) is SchemaProperty prop)
+            {
+                var type = Type.GetType(prop.EnumType);
+                value = (Enum)Enum.Parse(type, jProperty.Value.Value<string>());
+                this.RaisePropertyChanged(nameof(Value));
+            }
+
+            this.schema = schema;
+            this.jProperty = jProperty;
+        }
+
+        public Enum Value
+        {
+            get => value; set
+            {
+                this.value = value;
+                jProperty.Value = JContainer.FromObject(value.ToString());
+            }
+        }
     }
 
 
@@ -848,42 +795,46 @@ namespace Utility.WPF.Controls.Objects
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value != null ? value.ToString() : null;
+            if (value is JValue { Value: var _value })
+            {
+                return int.Parse(_value.ToString());
+            }
+            return DependencyProperty.UnsetValue;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             try
             {
-                return long.Parse(value.ToString());
+                return new JValue(value);
             }
             catch
             {
-                return default(long);
+                return default(int);
             }
         }
     }
 
-    public class IntegerUpDownRangeConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value == null)
-                return parameter.ToString() == "min" ? int.MinValue : int.MaxValue;
+    //public class IntegerUpDownRangeConverter : IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        if (value == null)
+    //            return parameter.ToString() == "min" ? int.MinValue : int.MaxValue;
 
-            if (value is decimal)
-                return (int)(decimal)value;
-            if (value is double)
-                return (int)(double)value;
+    //        if (value is decimal)
+    //            return (int)(decimal)value;
+    //        if (value is double)
+    //            return (int)(double)value;
 
-            return (int)value;
-        }
+    //        return (int)value;
+    //    }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value;
-        }
-    }
+    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        return value;
+    //    }
+    //}
 
     public class NullableToVisibilityConverter : IValueConverter
     {
@@ -963,6 +914,30 @@ namespace Utility.WPF.Controls.Objects
             }
         }
     }
+     
+    public class GuidConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is JValue { Value: var _value })
+            {
+                return Guid.Parse(_value.ToString());
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            try
+            {
+                return new JValue(value);
+            }
+            catch
+            {
+                return default(int);
+            }
+        }
+    }
 
     public class SchemaNullableToBooleanConverter : IValueConverter
     {
@@ -1021,35 +996,5 @@ namespace Utility.WPF.Controls.Objects
     }
 
 
-
-
-    public class StringToGuidConverter : JsonConverter<Guid>
-    {
-
-        public override Guid ReadJson(JsonReader reader, Type objectType, Guid existingValue, bool hasExistingValue, Newtonsoft.Json.JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.String)
-            {
-                //ReadOnlySpan<byte> span = reader.Sp;
-                //if (Utf8Parser.TryParse(span, out Guid guid, out int bytesConsumed) && span.Length == bytesConsumed)
-                //{
-                //    return guid;
-                //}
-
-                if (Guid.TryParse(reader.ReadAsString(), out var guid))
-                {
-                    return guid;
-                }
-            }
-
-            return Guid.Empty;
-        }
-
-
-        public override void WriteJson(JsonWriter writer, Guid value, Newtonsoft.Json.JsonSerializer serializer)
-        {
-            writer.WriteValue(value.ToString());
-        }
-    }
-
+    #endregion converters
 }
