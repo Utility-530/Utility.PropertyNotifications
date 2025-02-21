@@ -19,3 +19,5 @@ using System.Windows.Markup;
 [assembly: XmlnsDefinition("http://schemas.utility.com/external", "Viamo")] 
 [assembly: XmlnsDefinition("http://schemas.utility.com/external", "UITextBlockControl")] 
 [assembly: XmlnsDefinition("http://schemas.utility.com/external", "DraggAnimatedPanel")] 
+[assembly: XmlnsDefinition("http://schemas.utility.com/external", "AR.WPF.Behaviors")] 
+[assembly: XmlnsDefinition("http://schemas.utility.com/external", "CurrencyTextBox")] 
