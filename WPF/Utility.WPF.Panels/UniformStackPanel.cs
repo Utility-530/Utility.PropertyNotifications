@@ -64,6 +64,9 @@ namespace Utility.WPF.Panels
     /// </summary>
     public class UniformStackPanel : Panel
     {
+        public double DefaultHeight { get; set; } = 30;
+
+
         public static bool GetIsAutoSized(UIElement element)
         {
             if (element == null)
@@ -170,7 +173,7 @@ namespace Utility.WPF.Panels
                 element.Measure(singleFixedSizeElementSize);
             }
 
-            return new Size(maxElementWidth, singleFixedSizeElementHeight + _autoSizeSum);
+            return new Size(maxElementWidth, double.IsInfinity(singleFixedSizeElementHeight) ? DefaultHeight : singleFixedSizeElementHeight + _autoSizeSum);
         }
 
         private double _autoSizeSum;
