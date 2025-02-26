@@ -1,138 +1,139 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Utility.Models
 {
-    public class SchemaProperty
+    public class SchemaStore
     {
-        public string Name { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the default value.
-        [JsonProperty("default", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public object Default { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the required multiple of for the number value.
-        [JsonProperty("multipleOf", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public decimal? MultipleOf { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the maximum allowed value.
-        [JsonProperty("maximum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public decimal? Maximum { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets a value indicating whether the maximum value is excluded.
-        [JsonProperty("exclusiveMaximum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public bool IsExclusiveMaximum { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the minimum allowed value.
-        [JsonProperty("minimum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public decimal? Minimum { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets a value indicating whether the minimum value is excluded.
-        [JsonProperty("exclusiveMinimum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public bool IsExclusiveMinimum { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the maximum length of the value string.
-        [JsonProperty("maxLength", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public int? MaxLength { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the minimum length of the value string.
-        [JsonProperty("minLength", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public int? MinLength { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the validation pattern as regular expression.
-        [JsonProperty("pattern", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public string Pattern { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the maximum length of the array.
-        [JsonProperty("maxItems", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public int MaxItems { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the minimum length of the array.
-        [JsonProperty("minItems", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public int MinItems { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets a value indicating whether the items in the array must be unique.
-        [JsonProperty("uniqueItems", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public bool UniqueItems { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the maximal number of allowed properties in an object.
-        [JsonProperty("maxProperties", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public int MaxProperties { get; set; }
-
-        //
-        // Summary:
-        //     Gets or sets the minimal number of allowed properties in an object.
-        [JsonProperty("minProperties", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-        public int MinProperties { get; set; }
-
-        //
-        // Summary:
-        //     Gets the collection of required properties.
-        [JsonIgnore]
-        public ICollection<object> Enumeration { get; internal set; }
-
-        //
-        // Summary:
-        //     Gets a value indicating whether this is enumeration.
-        [JsonIgnore]
-        public bool IsEnumeration => Enumeration.Count > 0;
-
-        public string Format { get; set; }
-        public string EnumType { get; set; }
-        public string Type { get; internal set; }
-        public Thickness ColumnWidth { get; internal set; }
+        public Dictionary<Type, Schema> Schemas { get; } = new();
+        public static SchemaStore Instance { get; } = new SchemaStore();
     }
 
-    public class Schema
-    {
-        public SchemaProperty[] Properties { get; set; }
-    }
+        public class SchemaProperty
+        {
+            public string Name { get; set; }
 
-    // Licensed to the .NET Foundation under one or more agreements.
-    // The .NET Foundation licenses this file to you under the MIT license.
-    // See the LICENSE file in the project root for more information.
+            //
+            // Summary:
+            //     Gets or sets the default value.
+            [JsonProperty("default", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+            public object Default { get; set; }
 
-    //
-    // Description: Contains the Thickness (double x4) value type. 
-    //
+            //
+            // Summary:
+            //     Gets or sets the required multiple of for the number value.
+            [JsonProperty("multipleOf", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+            public decimal? MultipleOf { get; set; }
 
-    //using MS.Internal;
-    //using System.ComponentModel;
-    //using System.Globalization;
+            //
+            // Summary:
+            //     Gets or sets the maximum allowed value.
+            [JsonProperty("maximum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+            public decimal? Maximum { get; set; }
 
-    //namespace System.Windows
-    //{
+            //
+            // Summary:
+            //     Gets or sets a value indicating whether the maximum value is excluded.
+            [JsonProperty("exclusiveMaximum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+            public bool IsExclusiveMaximum { get; set; }
+
+            //
+            // Summary:
+            //     Gets or sets the minimum allowed value.
+            [JsonProperty("minimum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+            public decimal? Minimum { get; set; }
+
+            //
+            // Summary:
+            //     Gets or sets a value indicating whether the minimum value is excluded.
+            [JsonProperty("exclusiveMinimum", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+            public bool IsExclusiveMinimum { get; set; }
+
+            //
+            // Summary:
+            //     Gets or sets the maximum length of the value string.
+            [JsonProperty("maxLength", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+            public int? MaxLength { get; set; }
+
+            //
+            // Summary:
+            //     Gets or sets the minimum length of the value string.
+            [JsonProperty("minLength", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+            public int? MinLength { get; set; }
+
+            //
+            // Summary:
+            //     Gets or sets the validation pattern as regular expression.
+            [JsonProperty("pattern", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+            public string Pattern { get; set; }
+
+            //
+            // Summary:
+            //     Gets or sets the maximum length of the array.
+            [JsonProperty("maxItems", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+            public int MaxItems { get; set; }
+
+            //
+            // Summary:
+            //     Gets or sets the minimum length of the array.
+            [JsonProperty("minItems", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+            public int MinItems { get; set; }
+
+            //
+            // Summary:
+            //     Gets or sets a value indicating whether the items in the array must be unique.
+            [JsonProperty("uniqueItems", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+            public bool UniqueItems { get; set; }
+
+            //
+            // Summary:
+            //     Gets or sets the maximal number of allowed properties in an object.
+            [JsonProperty("maxProperties", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+            public int MaxProperties { get; set; }
+
+            //
+            // Summary:
+            //     Gets or sets the minimal number of allowed properties in an object.
+            [JsonProperty("minProperties", DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+            public int MinProperties { get; set; }
+
+            //
+            // Summary:
+            //     Gets the collection of required properties.
+            [JsonIgnore]
+            public ICollection<object> Enumeration { get; set; }
+
+            //
+            // Summary:
+            //     Gets a value indicating whether this is enumeration.
+            [JsonIgnore]
+            public bool IsEnumeration => Enumeration.Count > 0;
+
+            public string Template { get; set; }
+            public string EnumType { get; set; }
+            public string Type { get; set; }
+            public bool IsVisible { get; set; }
+            public Thickness ColumnWidth { get; set; }
+        }
+
+        public class Schema
+        {
+            public SchemaProperty[] Properties { get; set; }
+        }
+
+        // Licensed to the .NET Foundation under one or more agreements.
+        // The .NET Foundation licenses this file to you under the MIT license.
+        // See the LICENSE file in the project root for more information.
+
+        //
+        // Description: Contains the Thickness (double x4) value type. 
+        //
+
+        //using MS.Internal;
+        //using System.ComponentModel;
+        //using System.Globalization;
+
+        //namespace System.Windows
+        //{
         /// <summary>
         /// Thickness is a value type used to describe the thickness of frame around a rectangle.
         /// It contains four doubles each corresponding to a side: Left, Top, Right, Bottom.
