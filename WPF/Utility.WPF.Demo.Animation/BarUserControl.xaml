@@ -26,5 +26,43 @@
         <Grid>
             <ani:BarControl Size="{Binding ElementName=height1, Path=Number}" Duration="{Binding ElementName=duration, Path=Value}" />
         </Grid>
+
+        <ToggleButton x:Name="toggleButton1">
+            <ToggleButton.Style>
+                <Style TargetType="{x:Type ToggleButton}">
+                    <Style.Resources>
+                        <Storyboard x:Key="Storyboard1">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(FrameworkElement.Width)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:05" Value="800"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <ColorAnimationUsingKeyFrames Storyboard.TargetName="grid" Storyboard.TargetProperty="(Control.Background).(SolidColorBrush.Color)">
+                                <EasingColorKeyFrame KeyTime="00:00:01" Value="#FFBB2F2F"/>
+                            </ColorAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </Style.Resources>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ToggleButton}">
+
+                                <Grid x:Name="grid"  HorizontalAlignment="Left" Width="400" Background="Green" Height="30">
+
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}}" Value="True">
+                                        <DataTrigger.EnterActions>
+                                            <BeginStoryboard Name="sb" Storyboard="{StaticResource Storyboard1}">
+                                            </BeginStoryboard>
+                                        </DataTrigger.EnterActions>
+                                        <DataTrigger.ExitActions>
+                                            <StopStoryboard BeginStoryboardName="sb" />
+                                        </DataTrigger.ExitActions>
+                                    </DataTrigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ToggleButton.Style>
+        </ToggleButton>
     </DockPanel>
 </UserControl>
