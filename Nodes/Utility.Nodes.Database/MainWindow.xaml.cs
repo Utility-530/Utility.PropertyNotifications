@@ -29,9 +29,9 @@ namespace Utility.Nodes.Database
             ComboBox.ItemsSource = rootKeys;
             ComboBox.DisplayMemberPath = nameof(Key.Name);
             ComboBox.SelectedIndex = 0;
+
             ComboBox.Events().SelectionChanged
                 .SelectMany(a => a.AddedItems.Cast<Key>())
-                .StartWith((Key)ComboBox.SelectedItem)
                 .WhereNotNull()
                 .Subscribe(a =>
                 {

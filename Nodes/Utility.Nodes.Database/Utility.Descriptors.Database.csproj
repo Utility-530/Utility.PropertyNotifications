@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
-    <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.Descriptors.csproj" />
+    <ProjectReference Include="..\..\Meta\Utility.Descriptors\Utility.Descriptors.csproj" />
     <ProjectReference Include="..\..\Repos\Utility.Repos\Utility.Repos.csproj" />
   </ItemGroup>
 
