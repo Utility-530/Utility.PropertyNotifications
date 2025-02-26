@@ -50,9 +50,9 @@ namespace Utility.Nodes
             }
             else if (value.Data is IBreadCrumb breadCrumb && value.Current != null)
             {
-                writer.WritePropertyName("Current");
-                var jObjectkey = JToken.FromObject(value.Current);
-                jObjectkey.WriteTo(writer);
+                //writer.WritePropertyName("Current");
+                //var jObjectkey = JToken.FromObject(value.Current);
+                //jObjectkey.WriteTo(writer);
             }
 
             writer.WriteEndObject();
