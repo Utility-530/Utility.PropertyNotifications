@@ -20,7 +20,7 @@ namespace Utility.Trees.WPF
         public static readonly DependencyProperty PanelsConverterProperty = DependencyProperty.Register("PanelsConverter", typeof(IValueConverter), typeof(TreeViewer), new PropertyMetadata(Changed));
         public static readonly DependencyProperty DataTemplateSelectorProperty = DependencyProperty.Register("DataTemplateSelector", typeof(DataTemplateSelector), typeof(TreeViewer), new PropertyMetadata(Changed));
         public static readonly DependencyProperty TreeViewBuilderProperty = DependencyProperty.Register("TreeViewBuilder", typeof(ITreeViewBuilder), typeof(TreeViewer), new PropertyMetadata());
-        public static readonly DependencyProperty TreeViewFilterProperty = DependencyProperty.Register("TreeViewFilter", typeof(ITreeViewFilter), typeof(TreeViewer), new PropertyMetadata());
+        public static readonly DependencyProperty TreeViewFilterProperty = DependencyProperty.Register("TreeViewFilter", typeof(IFilter), typeof(TreeViewer), new PropertyMetadata());
         public static readonly DependencyProperty StyleSelectorProperty = DependencyProperty.Register("StyleSelector", typeof(StyleSelector), typeof(TreeViewer), new PropertyMetadata());
         public static readonly DependencyProperty EventListenerProperty = DependencyProperty.Register("EventListener", typeof(IEventListener), typeof(TreeViewer), new PropertyMetadata());
 
@@ -185,9 +185,9 @@ namespace Utility.Trees.WPF
             set { SetValue(StyleSelectorProperty, value); }
         }
 
-        public ITreeViewFilter TreeViewFilter
+        public IFilter TreeViewFilter
         {
-            get { return (ITreeViewFilter)GetValue(TreeViewFilterProperty); }
+            get { return (IFilter)GetValue(TreeViewFilterProperty); }
             set { SetValue(TreeViewFilterProperty, value); }
         }
 

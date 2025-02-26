@@ -11,7 +11,7 @@ namespace Views.Trees
 {
     public class TreeViewBuilder : ITreeViewBuilder
     {
-        public IDisposable Build(ItemsControl treeView, IItems rootViewModel, ITreeViewItemFactory factory, IValueConverter ItemsPanelConverter, StyleSelector styleSelector, DataTemplateSelector dataTemplateSelector, ITreeViewFilter filter)
+        public IDisposable Build(ItemsControl treeView, IItems rootViewModel, ITreeViewItemFactory factory, IValueConverter ItemsPanelConverter, StyleSelector styleSelector, DataTemplateSelector dataTemplateSelector, IFilter filter)
         {
             return Explore.With(treeView, t => t.Items, (itemcollection, viewModel, treeView) =>
             {

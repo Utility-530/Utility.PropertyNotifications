@@ -14,7 +14,7 @@ namespace Utility.Trees.WPF.Abstractions
             IValueConverter ItemsPanelConverter,
             StyleSelector styleSelector,
             DataTemplateSelector dataTemplateSelector,
-            ITreeViewFilter filter);
+            IFilter filter);
 
     }
 }
