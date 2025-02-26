@@ -25,7 +25,8 @@ namespace Utility.Nodes.Demo.Queries
         protected override void OnStartup(StartupEventArgs e)
         {
             Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeEngine.Instance);
-            //Locator.CurrentMutable.RegisterConstant<ITreeRepository>(new BasicTreeRepository());
+            Locator.CurrentMutable.RegisterConstant<ITreeRepository>(new Repository());
+            Locator.CurrentMutable.RegisterConstant<IMainViewModel>(new MainViewModel());
             Locator.CurrentMutable.Register<ILiteRepository>(() => new LiteDBRepository(new LiteDBRepository.DatabaseSettings("../../../Data/lite.db", typeof(FilterEntity))));
 
             var name = typeof(User).Assembly.GetName().Name;
@@ -35,7 +36,7 @@ namespace Utility.Nodes.Demo.Queries
             JsonConvert.DefaultSettings = () => settings;
 
             var dataTemplate = App.Current.Resources["MainTemplate"] as DataTemplate;
-            var window = new Window() { Content = new MainViewModel() };
+            var window = new Window() { Content = Locator.Current.GetService<IMainViewModel>() };
             window.Closing += Window_Closing;
             SchemaStore.Instance.Schemas.Add(typeof(FilterEntity), new Schema
             {
@@ -62,6 +63,7 @@ namespace Utility.Nodes.Demo.Queries
         public JsonSerializerSettings settings = new()
         {
             TypeNameHandling = TypeNameHandling.All,
+            //Formatting = Formatting.Indented,
             Converters = [
                 new AssemblyJsonConverter(),
                 new PropertyInfoJsonConverter(),
@@ -70,7 +72,8 @@ namespace Utility.Nodes.Demo.Queries
                 new AttributeCollectionConverter(),
                 new DescriptorConverter(),
                 new StringTypeEnumConverter(),
-                new NodeConverter()
+                new NodeConverter(),
+                new NonGenericPropertyInfoJsonConverter()
                     ]
         };
 

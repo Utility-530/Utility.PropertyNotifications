@@ -22,7 +22,12 @@ using Utility.WPF;
 
 namespace Utility.Nodes.Demo.Queries
 {
-    internal class MainViewModel : NotifyPropertyChangedBase
+    public interface IMainViewModel: INotifyPropertyChanged
+    {
+        public FilterEntity Filter { get; set; }
+    }
+
+    internal class MainViewModel : NotifyPropertyChangedBase, IMainViewModel
     {
         //private const string test = "../../../Data/test.json";
         private bool isInitialised = false;
@@ -122,14 +127,14 @@ namespace Utility.Nodes.Demo.Queries
         {
             if (filterEntity != null)
             {
-                filterEntity.Body = JsonConvert.SerializeObject(nodes[0]);
+                repo.Value.Update(new FilterEntity { Id = filterEntity.Id, Body = JsonConvert.SerializeObject(nodes[0]) , GroupKey = filterEntity.GroupKey, Key = filterEntity.Key});
             }
         }
 
         private void refresh()
         {
             filteredUsers.Clear();
-            
+
             foreach (var filter in _checked)
             {
                 if (filter.Value && string.IsNullOrEmpty(filter.Key.Body) == false)
