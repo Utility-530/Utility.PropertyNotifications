@@ -10,11 +10,14 @@ namespace Utility.Repos
     {
         IEquatable Key { get; }
 
-        Task<object?> FindValue(IEquatable key);
+        Task<object?> FindValue(object key);
 
-        Task<IEquatable[]> FindKeys(IEquatable key);
+        Task<IEquatable[]> FindKeys(object key);
 
-        Task Update(IEquatable key, object value);
+        Task Update(object value);
+
+        Task Remove(object value);
+
         Task<object[]> All();
     }
 
@@ -38,9 +41,7 @@ namespace Utility.Repos
                 );
         }
 
-
-
-        public Task<IEquatable[]> FindKeys(IEquatable key)
+        public Task<IEquatable[]> FindKeys(object key)
         {
             throw new NotImplementedException();
         }
@@ -58,9 +59,19 @@ namespace Utility.Repos
                 return Task.FromResult(objects.ToArray());
             }
         }
+        
+        public Task Remove(object item)
+        {     
+            using (GetCollection(out var collection))
+            {
+                var x = _mapper.Serialize(settings.Type, item); 
+                var result = collection.Delete(x["_id"]);                  
+                return Task.CompletedTask;
+            }
+        }
 
 
-        public Task<object?> FindValue(IEquatable? equatable)
+        public Task<object?> FindValue(object? equatable)
         {
 
             if (equatable == null)
@@ -99,28 +110,13 @@ namespace Utility.Repos
 
                     foreach (var findByType in collection.Find(a => a["Type"] == type))
                         yield return findByType;
-
-                    //var activated = Activator.CreateInstance(settings.Type);
-                    //BsonDocument document = _mapper.ToDocument(settings.Type, activated);
-                    //document["_id"] = key.Guid;
-                    //document["Name"] = key.Name;
-                    //var insert = (object)collection.Insert(document);
-                    //return Task.FromResult(activated);
                 }
             }
         }
 
-        public Task Update(IEquatable equatable, object value)
+        public Task Update(object value)
         {
-            if (equatable is not _Key key)
-            {
-                throw new Exception("vsd s33322 vd");
-            }
-
             BsonDocument document = _mapper.ToDocument(settings.Type, value);
-            //document["_id"] = key.Guid;
-            //document["Name"] = key.Name;
-            //document["Type"] = key.Type.;
 
             using (GetCollection(out var collection))
             {
