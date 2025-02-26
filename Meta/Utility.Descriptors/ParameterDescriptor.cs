@@ -1,5 +1,5 @@
 ﻿
-namespace Utility.PropertyDescriptors
+namespace Utility.Descriptors
 {
     internal record ParameterDescriptor(ParameterInfo ParameterInfo, Dictionary<int, object?> Component) : ValueMemberDescriptor(ParameterInfo.ParameterType)
     {
@@ -9,7 +9,7 @@ namespace Utility.PropertyDescriptors
 
         public override bool IsReadOnly => false;
 
-        public override IEnumerable<object> Children => Array.Empty<object>();
+        public override IObservable<object> Children => Observable.Empty<object>();
 
         public override bool HasChildren => false;
 

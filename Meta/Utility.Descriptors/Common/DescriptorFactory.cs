@@ -1,28 +1,80 @@
-﻿using Utility.Interfaces;
+﻿using Splat;
+using Utility.Interfaces;
+using Utility.Interfaces.Exs;
 using Utility.Meta;
+using Utility.Reactives;
 
-namespace Utility.PropertyDescriptors
+namespace Utility.Descriptors
 {
     public class DescriptorFactory //: IValueConverter
     {
-        public static IValueDescriptor CreateRoot(Type type, string? name = null)
+        private static ITreeRepository repo => Locator.Current.GetService<ITreeRepository>();
+
+        public static IObservable<ValuePropertyDescriptor> ToValue(object? value, Descriptor descriptor, Guid parentGuid)
+        {
+            return
+                Observable.Create<ValuePropertyDescriptor>(observer =>
+                {
+                    return repo.Find(parentGuid, descriptor.Name, type: descriptor.PropertyType)
+                    .Subscribe(c =>
+                    {
+                        ValuePropertyDescriptor _descriptor = DescriptorConverter.ToDescriptor(value, descriptor);
+                        _descriptor.Guid = c.Value.Guid;
+                        _descriptor.ParentGuid = parentGuid;
+                        observer.OnNext(_descriptor);
+                    });
+                });
+        }
+
+
+        public static IObservable<IValueDescriptor> CreateRoot(Type type, Guid guid, string? name = null)
         {
             var instance = Activator.CreateInstance(type);
             var rootDescriptor = new RootDescriptor(type, name: name);
             rootDescriptor.SetValue(null, instance);
-            var root = DescriptorConverter.ToDescriptor(instance, rootDescriptor);
+            var root = CreateRoot(rootDescriptor, guid);
             //root.Initialise();
             return root;
+
+            IObservable<IValueDescriptor> CreateRoot(Descriptor descriptor, Guid guid)
+            {
+                return Observable.Create<IValueDescriptor>(obs =>
+                {
+                    return repo.InsertRoot(guid, descriptor.Name, descriptor.PropertyType)
+                        .Subscribe(key =>
+                        {
+                            var _descriptor = DescriptorConverter.ToDescriptor(instance, descriptor);
+                            _descriptor.Guid = guid;
+                            obs.OnNext(_descriptor);
+                        });
+                });
+            }
         }
 
-        public static IValueDescriptor CreateRoot(object instance, string? name = null)
+        public static IObservable<IValueDescriptor> CreateRoot(object instance, Guid guid, string? name = null)
         {
             var rootDescriptor = new RootDescriptor(instance.GetType(), name: name);
             rootDescriptor.SetValue(null, instance);
-            return DescriptorConverter.ToDescriptor(instance, rootDescriptor);
+            var root = CreateRoot(rootDescriptor, guid);
+            //root.Initialise();
+            return root;
+
+            IObservable<IValueDescriptor> CreateRoot(Descriptor descriptor, Guid guid)
+            {
+                return Observable.Create<IValueDescriptor>(obs =>
+                {
+                    return repo.InsertRoot(guid, descriptor.Name, descriptor.PropertyType)
+                        .Subscribe(key =>
+                        {
+                            var _descriptor = DescriptorConverter.ToDescriptor(instance, descriptor);
+                            _descriptor.Guid = guid;
+                            obs.OnNext(_descriptor);
+                        });
+                });
+            }
         }
 
-        public static IDescriptor CreateItem(object item, int index, Type type, Type parentType)
+        public static IObservable<IDescriptor> CreateItem(object item, int index, Type type, Type parentType, Guid parentGuid)
         {
             MemberDescriptor descriptor;
             if (type.IsValueOrString())
@@ -33,12 +85,24 @@ namespace Utility.PropertyDescriptors
             {
                 descriptor = new CollectionItemReferenceDescriptor(item, index, parentType);
             }
-            return descriptor;
+            return Observable.Create<IDescriptor>(observer =>
+            {
+                return repo.Find(parentGuid, type.Name, type: type, index: index).Subscribe(c =>
+                {
+
+                    descriptor.Guid = c.Value.Guid;
+                    descriptor.ParentGuid = parentGuid;
+                    observer.OnNext(descriptor);
+                });
+            });
         }
 
-        public static IDescriptor CreateMethodItem(object item, MethodInfo methodInfo, Type type)
+        public static async Task<IDescriptor> CreateMethodItem(object item, MethodInfo methodInfo, Type type, Guid parentGuid)
         {
             var descriptor = new MethodDescriptor(methodInfo, item);
+            var c = await repo.Find(parentGuid, type.Name).ToTask();
+            descriptor.Guid = c.Value.Guid;
+            descriptor.ParentGuid = parentGuid;
             return descriptor;
         }
     }

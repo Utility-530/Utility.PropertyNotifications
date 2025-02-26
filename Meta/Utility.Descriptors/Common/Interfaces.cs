@@ -1,25 +1,24 @@
-﻿namespace Utility.PropertyDescriptors
+﻿namespace Utility.Descriptors
 {
-    public interface ICollectionItemDescriptor : IDescriptor, IItem
+    public interface ICollectionItemDescriptor : IDescriptor, IItem, IRemoved
     {
         int Index { get; }  
     }   
        
-    public interface ICollectionItemReferenceDescriptor : IReferenceDescriptor, ICollectionItemDescriptor, IEquatable, IItem, IGetIndex, ICount
+    public interface ICollectionItemReferenceDescriptor : IReferenceDescriptor, ICollectionItemDescriptor
     {
    
     }   
     
 
-    public interface ICollectionDescriptor : IDescriptor, ICount, IObserver<RefreshEventArgs>
+    public interface ICollectionDescriptor : IDescriptor, ICount
     {
         IEnumerable Collection { get; }
 
         Type ElementType { get; }
-
     }
 
-    public interface ICollectionHeadersDescriptor : ICollectionItemDescriptor, ICount
+    public interface ICollectionHeadersDescriptor : ICollectionItemDescriptor
     {
     }
 
@@ -32,6 +31,8 @@
         object? this[int key] { get; set; }
 
         void Invoke();
+
+        ICommand Command { get; }
     }
 
     public interface IMethodsDescriptor : IDescriptor
@@ -41,7 +42,7 @@
     public interface IPropertiesDescriptor : IDescriptor
     {
     }
-    public interface IReferenceDescriptor : IDescriptor
+    public interface IReferenceDescriptor : IDescriptor, IChildren
     {
         object Instance { get; }
     }

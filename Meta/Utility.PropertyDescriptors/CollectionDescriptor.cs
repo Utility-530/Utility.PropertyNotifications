@@ -1,11 +1,7 @@
-﻿using Splat;
-using System.Reactive;
-using System.Reactive.Subjects;
+﻿using System.Reactive;
 using Utility.Helpers.NonGeneric;
-using Utility.Interfaces.Exs;
-using Utility.Structs.Repos;
 
-namespace Utility.Descriptors
+namespace Utility.PropertyDescriptors
 {
     public interface IValueCollection
     {
@@ -17,91 +13,34 @@ namespace Utility.Descriptors
         IValueCollection,
         IRefresh
     {
-        ReplaySubject<Change<IDescriptor>> replaySubject = new();
         List<ICollectionItemDescriptor> descriptors = new();
-
-        private static ITreeRepository repo => Locator.Current.GetService<ITreeRepository>();
 
         public static string _Name => "Collection";
 
         public override string? Name => _Name;
 
-        public override IObservable<object> Children
+        public override IEnumerable Children
         {
             get
             {
-                return Observable.Create<Change<IDescriptor>>(async observer =>
+                yield return new CollectionHeadersDescriptor(ElementType, Instance.GetType());
+
+                foreach (var x in AddFromInstance())
                 {
-                    AddHeaderDescriptor(observer, ElementType, Instance.GetType());
-                    AddFromInstance(observer);
-                    AddFromRefreshes(observer);
-                    repo
-                    .SelectKeys(Guid)
-                    .Subscribe(tables =>
-                    {
-                        AddFromDataSource(observer, tables);
-                    });
-                    return AddFromChanges(observer);
-                });
-
-
-                IDisposable AddFromChanges(IObserver<Change<IDescriptor>> observer)
-                {
-                    if (Instance is not INotifyCollectionChanged collectionChanged)
-                    {
-                        return Disposable.Empty;
-                    }
-
-                    return collectionChanged
-                        .SelectChanges()
-                        .Subscribe(a =>
-                        {
-                            switch (a.Action)
-                            {
-                                case NotifyCollectionChangedAction.Add:
-                                    {
-                                        int lastIndex = repo.MaxIndex(Guid) ?? 0 + 1;
-                                        foreach (var item in a.NewItems)
-                                            Next(observer, item, item.GetType(), Type, Changes.Type.Add, lastIndex);
-                                        break;
-                                    }
-                                case NotifyCollectionChangedAction.Remove:
-                                    foreach (var item in a.OldItems)
-                                    {
-                                        var find = descriptors.Single(a => a.Item == item);
-                                        repo.Remove(find.Guid);
-                                        descriptors.Remove(find);
-                                        observer.OnNext(new(find, Changes.Type.Remove));
-                                    }
-                                    break;
-                                case NotifyCollectionChangedAction.Reset:
-                                    descriptors.Clear();
-                                    observer.OnNext(new(null, Changes.Type.Reset));
-                                    break;
-                            }
-                        });
+                    yield return x;
                 }
             }
         }
 
+
+
         public void Refresh()
         {
-            AddFromInstance(replaySubject);
+            //AddFromInstance(replaySubject);
         }
 
         // collection
         public virtual int Count => Instance is IEnumerable enumerable ? enumerable.Count() : 0;
-
-        public override void Initialise(object? item = null)
-        {
-            //var observer = Observer.Create<Change<IDescriptor>>((a) =>
-            //{
-            //    if (a.Type == Changes.Type.Add && a.Value is IInitialise initialise)
-            //    {
-            //        initialise.Initialise();
-            //    }
-            //});    
-        }
 
         public override void Finalise(object? item = null)
         {
@@ -112,33 +51,20 @@ namespace Utility.Descriptors
                     finalise.Finalise();
                 }
             });
-            AddFromInstance(observer);
         }
 
-        void AddFromRefreshes(IObserver<Change<IDescriptor>> observer)
-        {
-            replaySubject.Subscribe(observer);
-        }
-
-        void AddHeaderDescriptor(IObserver<Change<IDescriptor>> observer, Type elementType, Type componentType)
-        {
-            var descriptor = new CollectionHeadersDescriptor(elementType, componentType);
-            repo.Find(Guid, elementType.Name, type: elementType, index: 0)
-                .Subscribe(c =>
-                {
-                    descriptor.Guid = c.Value.Guid;
-                    observer.OnNext(new(descriptor, Changes.Type.Add));
-                });
-        }
-
-        void AddFromInstance(IObserver<Change<IDescriptor>> observer)
+        IEnumerable<IDescriptor> AddFromInstance()
         {
             foreach (var item in Collection)
             {
                 if (descriptors.Any(a => a.Item == item) == false)
                 {
                     int i = (descriptors.LastOrDefault()?.Index ?? 0) + 1;
-                    Next(observer, item, item.GetType(), Type, Changes.Type.Add, i);
+                    yield return Next(item, item.GetType(), Type, Changes.Type.Add, i);
+                }
+                else
+                {
+
                 }
             }
 
@@ -147,9 +73,7 @@ namespace Utility.Descriptors
                 //i++;
                 if (Contains(Collection, descriptor.Item) == false)
                 {
-                    observer.OnNext(new(descriptor, Changes.Type.Remove));
-                    repo.Remove(descriptor.Guid);
-                    descriptors.Remove(descriptor);
+                    yield return descriptor;
                 }
             }
 
@@ -164,43 +88,29 @@ namespace Utility.Descriptors
             }
         }
 
-        void AddFromDataSource(IObserver<Change<IDescriptor>> observer, IEnumerable<Key> keys)
+
+        IDescriptor Next(object item, Type type, Type parentType, Changes.Type changeType, int i, bool refresh = false, DateTime? removed = null)
         {
-            foreach (var key in keys)
-            {
-                //&& descriptors.SingleOrDefault(a => a.Index == table.Index) is not { } x
-                if (key.Index is > 0 && key.Type is { } type)
-                {
-                    var item = ActivateAnything.Activate.New(type);
-                    if (Instance is IList collection)
-                    {
-                        if (collection.Count < key.Index)
-                        {
-                            //collection.Insert(table.Index ?? throw new Exception(" 3 efsd"), item);
-                            collection.Add(item);
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception(" s898d");
-                    }
-                    Next(observer, item, type, Type, Changes.Type.Add, key.Index.Value, false, key.Removed);
-                }
-            }
+            var descriptor = DescriptorFactory.CreateItem(item, i, type, parentType) as ICollectionItemDescriptor;
+            descriptors.Add(descriptor);
+            if (refresh)
+                descriptor.Initialise();
+            return descriptor;
         }
 
-        void Next(IObserver<Change<IDescriptor>> observer, object item, Type type, Type parentType, Changes.Type changeType, int i, bool refresh = false, DateTime? removed = null)
+        public void OnCompleted()
         {
-            DescriptorFactory.CreateItem(item, i, type, parentType, Guid)
-                .Subscribe(descriptor =>
-                {
-                    var itemDescriptor = (ICollectionItemDescriptor)descriptor;
-                    itemDescriptor.Removed = removed;
-                    observer.OnNext(new(descriptor, changeType));
-                    descriptors.Add(itemDescriptor);
-                    if (refresh)
-                        descriptor.Initialise();
-                });
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(RefreshEventArgs value)
+        {
+            throw new NotImplementedException();
         }
     }
 }

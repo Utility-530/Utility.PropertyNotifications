@@ -1,6 +1,6 @@
 ﻿using Splat;
 
-namespace Utility.PropertyDescriptors;
+namespace Utility.Descriptors;
 
 internal record MethodsDescriptor(Descriptor Descriptor, object Instance) : ReferenceDescriptor(Descriptor, Instance), IMethodsDescriptor
 {
@@ -9,13 +9,23 @@ internal record MethodsDescriptor(Descriptor Descriptor, object Instance) : Refe
     public override string? Name => _Name;
 
 
-    public override IEnumerable<object> Children
+    public override IObservable<object> Children
     {
         get
         {
-            var children = MethodExplorer.MethodInfos(Descriptor.PropertyType).ToArray();   
-            return children.Select(methodInfo => DescriptorFactory.CreateMethodItem(Instance, methodInfo, Type));
+            var children = MethodExplorer.MethodInfos(Descriptor.PropertyType).ToArray();
+            return Observable.Create<Change<IDescriptor>>(async observer =>
+            {
+                var descriptors = children.Select(methodInfo => DescriptorFactory.CreateMethodItem(Instance, methodInfo, Type, Guid)/* new MethodDescriptor(methodInfo, Instance)*/);
+                foreach (var descriptor in descriptors)
+                {
+
+                    observer.OnNext(new(await descriptor, Changes.Type.Add));
+                }
+                return Disposable.Empty;
+            });
         }
+
     }
 }
 

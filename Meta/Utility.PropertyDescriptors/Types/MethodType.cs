@@ -1,5 +1,5 @@
 ﻿
-namespace Utility.Descriptors.Types
+namespace Utility.PropertyDescriptors.Types
 {
     public class MethodType : CustomType
     {

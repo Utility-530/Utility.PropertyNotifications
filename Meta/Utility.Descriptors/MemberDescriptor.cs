@@ -1,12 +1,16 @@
 ﻿
 using System.Diagnostics;
+using System.Reactive.Subjects;
 using Utility.Interfaces;
 using Utility.Interfaces.Exs;
 using Utility.Structs;
 
-namespace Utility.PropertyDescriptors;
+namespace Utility.Descriptors;
 
+public interface IValueDescriptor : IDescriptor, IGet, ISet, IValue, ISetValue
+{
 
+}
 
 public interface ICollectionDetailsDescriptor
 {
@@ -15,9 +19,15 @@ public interface ICollectionDetailsDescriptor
     bool IsCollectionItemValueType { get; }
 }
 
-public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, ICollectionDetailsDescriptor, IAsyncClone, IHasChildren
+public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, IChildren, ICollectionDetailsDescriptor, IValueChanges, IGetGuid, ISetGuid, IAsyncClone, IHasChildren
 {
-    public abstract string Name { get; }
+    protected ReplaySubject<ValueChange> changes = new ReplaySubject<ValueChange>();  
+
+    public Guid Guid { get; set; }
+
+    public Guid ParentGuid { get; set; }
+
+    public abstract string? Name { get; }
 
     public abstract Type ParentType { get; }
 
@@ -37,11 +47,11 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
     public abstract bool IsReadOnly { get; }
 
     [JsonIgnore]
-    public abstract IEnumerable Children { get; }
+    public abstract IObservable<object> Children { get; }
 
-    public virtual bool Equals(MemberDescriptor? other) => this.Name.Equals(other?.Name) && this.Type == other.ParentType;
+    public virtual bool Equals(MemberDescriptor? other) => this.Guid.Equals(other?.Guid);
 
-    public override int GetHashCode() => this.Name.GetHashCode();
+    public override int GetHashCode() => this.Guid.GetHashCode();
 
     public virtual bool HasChildren { get; } = true;
 
@@ -66,17 +76,29 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
             }
         });
     }
-    static void VisitChildren(IYieldChildren tree, Action<object> action)
+    static void VisitChildren(IChildren tree, Action<object> action)
     {
         tree.Children
-            .Cast<IDescriptor>()
-            .ForEach(a =>
+            .Cast<Change<IDescriptor>>()
+            .Subscribe(a =>
             {
-
-                Trace.WriteLine(a.ParentType + " " + a.Type?.Name + " " + a.Name);
-                action(a);
-
+                if (a.Type == Changes.Type.Add)
+                {
+                    Trace.WriteLine(a.Value.ParentType + " " + a.Value.Type?.Name + " " + a.Value.Name);
+                    action(a.Value);
+                }
+                else
+                {
+                }
+            }, e =>
+            {
+                throw e;
             });
+    }
+
+    public IDisposable Subscribe(IObserver<ValueChange> observer)
+    {
+        return changes.Subscribe(observer);
     }
 
     public Task<object> AsyncClone()
@@ -112,7 +134,7 @@ public abstract record ValueMemberDescriptor(Type Type) : MemberDescriptor(Type)
 
 public abstract record ChildlessMemberDescriptor(Type Type) : MemberDescriptor(Type)
 {
-    public override IEnumerable<object> Children { get; } = Array.Empty<object>();
+    public override IObservable<object> Children { get; } = Observable.Empty<object>();
 
     public override bool HasChildren => false;
 }

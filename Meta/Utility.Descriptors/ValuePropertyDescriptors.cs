@@ -1,5 +1,5 @@
 ﻿
-namespace Utility.PropertyDescriptors;
+namespace Utility.Descriptors;
 
 internal record BooleanValue(Descriptor Descriptor, object Instance) : ValueDescriptor<bool>(Descriptor, Instance)
 {
@@ -68,7 +68,7 @@ internal record NullableLongValue(Descriptor Descriptor, object Instance) : Null
 
 internal record NullValue(Descriptor Descriptor, object Instance) : ValuePropertyDescriptor(Descriptor, Instance), IValue
 {
-    public override IEnumerable<object> Children => Array.Empty<object>();
+    public override IObservable<object> Children => Observable.Empty<object>();
 
     public override bool HasChildren => false;
 

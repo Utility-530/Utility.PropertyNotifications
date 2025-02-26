@@ -1,5 +1,5 @@
 ﻿
-namespace Utility.PropertyDescriptors.Types
+namespace Utility.Descriptors.Types
 {
     public class PropertyType : CustomType
     {

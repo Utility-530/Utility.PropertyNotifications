@@ -1,27 +1,18 @@
 ﻿using Utility.Interfaces;
 
-namespace Utility.Descriptors;
-public record PropertyDescriptor(Descriptor Descriptor, object Instance) : BasePropertyDescriptor(Descriptor,  Instance)
+namespace Utility.PropertyDescriptors;
+public record PropertyDescriptor(Descriptor Descriptor, object Instance) : BasePropertyDescriptor(Descriptor, Instance)
 {
-    public override IObservable<object> Children
+    public override IEnumerable<object> Children
     {
         get
         {
-            return Observable.Create<Change<IDescriptor>>(async observer =>
-            {
-                return DescriptorFactory.ToValue(Instance, Descriptor, Guid)
-                .Subscribe(descriptor =>
-                {
-                    descriptor.Subscribe(changes);
-                    observer.OnNext(new(descriptor, Changes.Type.Add));
-                    observer.OnCompleted();
-                });
-            });
+            yield return DescriptorConverter.ToDescriptor(Instance, Descriptor);
         }
     }
 }
 
-public abstract record BasePropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor.PropertyType),  IInstance, IPropertyDescriptor
+public abstract record BasePropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor.PropertyType), IInstance, IPropertyDescriptor
 {
     public override string? Name => Descriptor.Name;
 
@@ -38,7 +29,7 @@ public abstract record ValuePropertyDescriptor(Descriptor Descriptor, object Ins
 
     public override bool IsReadOnly => Descriptor.IsReadOnly;
 
-    public void RaisePropertyChanged(ref object previousValue, object value,  string? propertyName = null)
+    public void RaisePropertyChanged(ref object previousValue, object value, string? propertyName = null)
     {
         if (Descriptor.IsReadOnly == true)
             return;
@@ -47,8 +38,16 @@ public abstract record ValuePropertyDescriptor(Descriptor Descriptor, object Ins
 
     public override object Get()
     {
-        var value = Descriptor.GetValue(Instance);
-        return value;
+
+        try
+        {
+            var value = Descriptor.GetValue(Instance);
+            return value;
+        }
+        catch(NotSupportedException ex)
+        {
+            return null;
+        }
     }
 
     public override void Set(object? value)

@@ -1,4 +1,9 @@
-﻿namespace Utility.PropertyDescriptors;
+﻿
+using Splat;
+using Utility.Interfaces.Exs;
+using Utility.Reactives;
+
+namespace Utility.Descriptors;
 
 internal record MethodDescriptor : MemberDescriptor, IMethodDescriptor
 {
@@ -10,6 +15,10 @@ internal record MethodDescriptor : MemberDescriptor, IMethodDescriptor
 
     internal MethodDescriptor(MethodInfo methodInfo, object instance) : base((System.Type)null)
     {
+        command = new Lazy<Command>(() => new Command(() =>
+        {
+            methodInfo.Invoke(instance, dictionary.OrderBy(a => a.Key).Select(a => a.Value).ToArray());
+        }));
         this.methodInfo = methodInfo;
         this.instance = instance;
     }
@@ -29,23 +38,32 @@ internal record MethodDescriptor : MemberDescriptor, IMethodDescriptor
         methodInfo.Invoke(instance, dictionary.OrderBy(a => a.Key).Select(a => a.Value).ToArray());
     }
 
+    public ICommand Command => command.Value;
+
     public override bool IsReadOnly => true;
 
-    public override IEnumerable<object> Children
+    public override IObservable<object> Children
     {
         get
         {
-
-            var descriptors = methodInfo
-            .GetParameters()
-            .Select(a => new ParameterDescriptor(a, dictionary)).ToArray();
-
-            foreach (var paramDescriptor in descriptors)
+            return Observable.Create<Change<IDescriptor>>(async observer =>
             {
-                dictionary[paramDescriptor.ParameterInfo.Position] = GetValue(paramDescriptor.ParameterInfo);
-                yield return paramDescriptor;
-            }
+                var descriptors = methodInfo
+                .GetParameters()
+                .Select(a => new ParameterDescriptor(a, dictionary)).ToArray();
 
+                foreach (var paramDescriptor in descriptors)
+                {
+                    Locator.Current.GetService<ITreeRepository>().Find(this.Guid, paramDescriptor.Name, type: paramDescriptor.Type)
+                    .Subscribe(c =>
+                    {
+                        paramDescriptor.Guid = c.Value.Guid;
+                        dictionary[paramDescriptor.ParameterInfo.Position] = GetValue(paramDescriptor.ParameterInfo);
+                        observer.OnNext(new Change<IDescriptor>(paramDescriptor, Changes.Type.Add));
+                    });
+                }
+                return Disposable.Empty;
+            });
 
             static object? GetValue(ParameterInfo a)
             {

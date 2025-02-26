@@ -4,7 +4,7 @@ using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 
-namespace Utility.PropertyDescriptors;
+namespace Utility.Descriptors;
 
 
 internal abstract record ValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IValue<T>
@@ -22,12 +22,41 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
 {
     //public override string? Name => Descriptor.PropertyType.Name;
 
-    public override IEnumerable<object> Children => Array.Empty<object>();
+    private object? _value;
+    private readonly ITreeRepository repo = Locator.Current.GetService<ITreeRepository>();
+    private IDisposable dateValue;
+    private bool isInitialised = false;
+    public override System.IObservable<object> Children => Observable.Empty<object>();
 
     public override bool HasChildren => false;
 
     public override object? Get()
     {
+        if (dateValue == null)
+        {
+            var previous = _value;
+            dateValue = repo.Get(Guid, nameof(Value))
+                .Subscribe(a =>
+            {
+                if (a is { Value: { } _value } x)
+                {
+                    _value = _value;
+                }
+                else if (Descriptor.GetValue(Instance) is { } _val)
+                {
+                    _value = _val;
+                    repo.Set(Guid, nameof(Value), _val, DateTime.Now);
+                }
+                else
+                    return;
+                isInitialised = true;
+                changes.OnNext(new(Name, _value));
+                RaisePropertyChanged(ref previous, _value, nameof(Value));
+            });
+        }
+        if (isInitialised)
+            return _value;
+
         return Descriptor.GetValue(Instance);
     }
 
@@ -35,7 +64,10 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
     {
         if (Descriptor.IsReadOnly == false)
         {
-            Descriptor.SetValue(Instance, value); 
+            repo.Set(Guid, nameof(Value), value, DateTime.Now);
+            Descriptor.SetValue(Instance, value);
+            this._value = value;
+            changes.OnNext(new(Name, value));
         }
     }
 
@@ -62,9 +94,9 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
 
     public override void Finalise(object? item = null)
     {
-        //var value = Descriptor.GetValue(Instance);
-        //if (value != null)
-        //    repo.Set(Guid, nameof(Value), value, DateTime.Now);
+        var value = Descriptor.GetValue(Instance);
+        if (value != null)
+            repo.Set(Guid, nameof(Value), value, DateTime.Now);
     }
 }
 

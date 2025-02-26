@@ -1,12 +1,14 @@
-﻿using Utility.Meta;
+﻿using Splat;
+using Utility.Interfaces.Exs;
+using Utility.Meta;
 
-namespace Utility.PropertyDescriptors;
+namespace Utility.Descriptors;
 
 internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeadersDescriptor, IEquatable
 {
     private DateTime? removed;
+    private static ITreeRepository repo => Locator.Current.GetService<ITreeRepository>();
 
-    List<IDescriptor> descriptors = new();
     public CollectionHeadersDescriptor(Type propertyType, Type componentType) : base(propertyType)
     {
         this.ParentType = componentType;
@@ -20,28 +22,27 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
 
     public override bool IsReadOnly => true;
 
-    public override IEnumerable<object> Children
+    public override IObservable<object> Children
     {
         get
         {
             if (Type.GetConstructor(Type.EmptyTypes) == null || Type.IsValueOrString())
-                yield break;
-            else if (descriptors.IsEmpty())
+                return Observable.Empty<Change<IDescriptor>>();
+
+            return Observable.Create<Change<IDescriptor>>(observer =>
             {
                 foreach (Descriptor descriptor in TypeDescriptor.GetProperties(Type))
                 {
-                    var hd = new HeaderDescriptor(descriptor.PropertyType, descriptor.ComponentType, descriptor.Name) { };
-                    descriptors.Add(hd);
-                    yield return hd;
+                    repo
+                        .Find(Guid, descriptor.Name, type: descriptor.PropertyType)
+                   .Subscribe(key =>
+                   {
+                       observer.OnNext(new(new HeaderDescriptor(descriptor.PropertyType, descriptor.ComponentType, descriptor.Name) { Guid = key.Value.Guid, ParentGuid = this.Guid }, Changes.Type.Add));
+                   });
+
                 }
-            }
-            else
-            {
-                foreach (Descriptor descriptor in descriptors)
-                {
-                    yield return descriptor;
-                }
-            }
+                return Disposable.Empty;
+            });
         }
 
     }
@@ -49,8 +50,6 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
     public DateTime? Removed { get => removed; set => removed = value; }
 
     public object Item => null;
-
-    public int Count => descriptors.Count;
 
     public bool Equals(IEquatable? other)
     {
@@ -92,6 +91,8 @@ internal record HeaderDescriptor : ChildlessMemberDescriptor, IHeaderDescriptor
     public override void Finalise(object? item = null)
     {
     }
+
+
 }
 
 internal partial record CollectionItemDescriptor : ValueDescriptor, ICollectionItemDescriptor, IEquatable, IItem
@@ -147,10 +148,10 @@ internal partial record CollectionItemDescriptor : ValueDescriptor, ICollectionI
 }
 
 
-internal partial record CollectionItemReferenceDescriptor : ReferenceDescriptor, ICollectionItemReferenceDescriptor
+internal partial record CollectionItemReferenceDescriptor : ReferenceDescriptor, ICollectionItemReferenceDescriptor, IEquatable, IItem
 {
-    private int count = 0;
-    List<IDescriptor> _descriptors = [];
+    private IObservable<Change<IDescriptor>> observable;
+
     public CollectionItemReferenceDescriptor(object item, int index, Type componentType) : base(new RootDescriptor(item.GetType(), componentType) { }, item)
     {
         Item = item;
@@ -166,38 +167,32 @@ internal partial record CollectionItemReferenceDescriptor : ReferenceDescriptor,
 
     public int Index { get; }
 
-    public int Count => count;
+    public DateTime? Removed { get; set; }
 
-    public override string? Name => Type.Name + $" [{Index}]";
+    public override string? Name => Type.Name;
 
     public static int ToIndex(string name) => int.Parse(MyRegex().Matches(name).First().Groups[1].Value);
 
     public static string FromIndex(string name, int index) => name + $" [{index}]";
 
 
-    public override IEnumerable Children
+    public override IObservable<object> Children
     {
         get
         {
-            if (_descriptors.IsEmpty())
+            return observable ??= Observable.Create<Change<IDescriptor>>(async observer =>
             {
                 var descriptors = TypeDescriptor.GetProperties(Instance);
                 foreach (Descriptor descriptor in descriptors)
                 {
-                    var d = DescriptorConverter.ToDescriptor(Instance, descriptor);
-                    _descriptors.Add(d);
-                    count++;
-                    yield return d;
+                    DescriptorFactory.ToValue(Instance, descriptor, Guid)
+                    .Subscribe(_descriptor =>
+                    {
+                        observer.OnNext(new(_descriptor, Changes.Type.Add));
+                    });
                 }
-            }
-            else
-            {
-                foreach (IDescriptor descriptor in _descriptors)
-                {
-                    //DescriptorFactory.ToValue(Instance, descriptor)
-                    yield return descriptor;
-                }
-            }
+                return Disposable.Empty;
+            });
         }
     }
 
