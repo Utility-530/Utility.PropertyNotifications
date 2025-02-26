@@ -15,7 +15,7 @@ namespace Utility.Conversions.Json.Newtonsoft
             writer.WriteStartObject();
 
             writer.WritePropertyName("$type");
-            writer.WriteValue("Assembly, System.Reflection");
+            writer.WriteValue("System.Reflection.Assembly");
 
             // Write each property to JSON
             writer.WritePropertyName("Name");

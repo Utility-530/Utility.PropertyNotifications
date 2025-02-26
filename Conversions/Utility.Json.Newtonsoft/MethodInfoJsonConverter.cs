@@ -16,7 +16,7 @@ namespace Utility.Conversions.Json.Newtonsoft
             writer.WriteStartObject();
 
             writer.WritePropertyName("$type");
-            writer.WriteValue("MethodInfo, System.Reflection");
+            writer.WriteValue("System.Reflection.MethodInfo");
 
             writer.WritePropertyName("Name");
             writer.WriteValue(value.Name);

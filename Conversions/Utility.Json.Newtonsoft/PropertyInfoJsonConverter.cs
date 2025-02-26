@@ -5,17 +5,40 @@ using System;
 
 namespace Utility.Conversions.Json.Newtonsoft
 {
+    public class NonGenericPropertyInfoJsonConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(PropertyInfo);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            return PropertyInfoJsonConverter.Read(reader);
+
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            PropertyInfoJsonConverter.Write(writer, (PropertyInfo)value);
+        }
+    }
+
     public class PropertyInfoJsonConverter : JsonConverter<PropertyInfo>
     {
 
         public override void WriteJson(JsonWriter writer, PropertyInfo value, JsonSerializer serializer)
         {
-
             // Begin object
+            Write(writer, value);
+        }
+
+        public static void Write(JsonWriter writer, PropertyInfo value)
+        {
             writer.WriteStartObject();
 
             writer.WritePropertyName("$type");
-            writer.WriteValue("PropertyInfo, System.Reflection");
+            writer.WriteValue("System.Reflection.PropertyInfo");
 
             writer.WritePropertyName("Name");
             writer.WriteValue(value.Name);
@@ -38,6 +61,11 @@ namespace Utility.Conversions.Json.Newtonsoft
         //}
 
         public override PropertyInfo ReadJson(JsonReader reader, Type objectType, PropertyInfo existingValue, bool hasExistingValue, JsonSerializer serializer)
+        {
+            return Read(reader);
+        }
+
+        public static PropertyInfo Read(JsonReader reader)
         {
             if (reader.TokenType == JsonToken.Null)
             {

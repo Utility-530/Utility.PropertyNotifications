@@ -15,7 +15,7 @@ namespace Utility.Conversions.Json.Newtonsoft
             writer.WriteStartObject();
 
             writer.WritePropertyName("$type");
-            writer.WriteValue("PropertyDescriptor, System.ComponentModel");
+            writer.WriteValue("System.ComponentModel.PropertyDescriptor");
 
             writer.WritePropertyName("ComponentType");
             writer.WriteValue(value.ComponentType?.AssemblyQualifiedName);
