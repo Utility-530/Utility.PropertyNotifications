@@ -1,9 +1,7 @@
 ﻿namespace Utility.Interfaces.NonGeneric
 {
-    public interface IName 
+    public interface IName :IGetName, ISetName
     {
-        string Name { get; set; }
-
     }
 
     public interface IGetName
