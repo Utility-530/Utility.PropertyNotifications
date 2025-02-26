@@ -28,8 +28,9 @@ namespace Utility.WPF.Demo.Controls
                 PropertyInfo info = item.GetType().GetProperty(e.Property);
                 if (info == null)
                     return false;
-
-                return info.GetValue(item, null).ToString().ToLower().Contains(e.Value.ToLower());
+                if (info.CanRead)
+                    return info.GetValue(item, null).ToString().ToLower().Contains(e.Value.ToLower());
+                return false;
             };
         }
     }
