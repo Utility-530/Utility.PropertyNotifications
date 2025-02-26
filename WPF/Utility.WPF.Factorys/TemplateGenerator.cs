@@ -30,7 +30,7 @@ namespace Utility.WPF.Factorys
         /// <summary>
         /// Creates a data-template that uses the given delegate to create new instances.
         /// </summary>
-        public static DataTemplate CreateDataTemplate(Func<object> factory)
+        public static DataTemplate CreateDataTemplate(Func<FrameworkElement> factory)
         {
             if (factory == null)
                 throw new ArgumentNullException(nameof(factory));
@@ -45,6 +45,9 @@ namespace Utility.WPF.Factorys
             return dataTemplate;
         }
 
+        public static HierarchicalDataTemplate CreateHierarcialDataTemplate(Func<FrameworkElement> factory, string childPropertyName) =>
+            CreateHierarcialDataTemplate(factory, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(childPropertyName)});
+ 
         public static HierarchicalDataTemplate CreateHierarcialDataTemplate(Func<object> factory, BindingBase itemsSourceBinding )
         {
             if (factory == null)
