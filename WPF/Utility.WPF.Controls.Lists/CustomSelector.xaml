@@ -17,7 +17,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <!--<local:CheckedEventArgsConverter x:Key="CheckedEventArgsConverter"/>-->
-    <local:ObjectToTokenConverter x:Key="ObjectToTokenConverter"></local:ObjectToTokenConverter>
+    <obj:ObjectToTokenConverter x:Key="ObjectToTokenConverter"></i:ObjectToTokenConverter>
     <local:ItemsSourceConverter x:Key="ItemsSourceConverter"></local:ItemsSourceConverter>
     <local:ObjectWrapperConverter x:Key="ObjectWrapperConverter"></local:ObjectWrapperConverter>
     
