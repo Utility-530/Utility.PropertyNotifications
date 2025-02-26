@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Utility.WPF.Controls.Lists
+namespace Utility.WPF.Controls.Objects
 {
     public class ObjectToTokenConverter : IValueConverter
     {
