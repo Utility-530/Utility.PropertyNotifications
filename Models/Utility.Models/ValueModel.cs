@@ -34,22 +34,26 @@ namespace Utility.Models
             if (dateValue == null)
             {
                 var previous = value;
-                Node.WithChangesTo(a => a.Key).Take(1).Subscribe(a =>
-                {
-                    dateValue = source.Get(Guid.Parse(Node.Key), nameof(Value))
-                        .Subscribe(a =>
+                this.WithChangesTo(a => a.Node)
+                    .Subscribe(x =>
+                    {
+                        Node.WithChangesTo(a => a.Key).Take(1).Subscribe(key =>
                         {
-                            if (a is { Value: T _value } x)
-                            {
-                                value = _value;
-                            }
-                            else
-                                return;
+                            dateValue = source.Get(Guid.Parse(key), nameof(Value))
+                                .Subscribe(a =>
+                                {
+                                    if (a is { Value: T _value } x)
+                                    {
+                                        value = _value;
+                                    }
+                                    else
+                                        return;
 
-                            //changes.OnNext(new(Name, value));
-                            RaisePropertyChanged(ref previous, value, nameof(Value));
+                                    //changes.OnNext(new(Name, value));
+                                    RaisePropertyChanged(ref previous, value, nameof(Value));
+                                });
                         });
-                });
+                    });
             }
             return value;
         }

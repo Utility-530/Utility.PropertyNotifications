@@ -13,13 +13,13 @@ using NetFabric.Hyperlinq;
 
 namespace Utility.Models
 {
-    public class Model : NotifyPropertyClass, ISetNode, IProliferation, IClone, IChildren, IKey, IName
+    public class Model : NotifyPropertyClass, ISetNode, IProliferation, IClone, IYieldChildren, IKey, IName
     {
         protected string m_name = "unknown";
         private INode node;
         int i = 0;
         private readonly Func<IEnumerable<Model>> func;
-
+        
         protected INodeSource source = Locator.Current.GetService<INodeSource>();
         protected Lazy<IContext> context = new(() => Locator.Current.GetService<IContext>());
         public virtual Version Version { get; set; } = new();
@@ -51,38 +51,20 @@ namespace Utility.Models
             {
                 node = value;
 
-                node.WithChangesTo(a => a.Parent)
-                    .Where(a => a != default)
-                    //.Take(1)
-                    .Subscribe(a =>
-                    Initialise(a));
+                //node.WithChangesTo(a => a.Parent)
+                //    .Where(a => a != default)
+                //    //.Take(1)
+                //    .Subscribe(a =>
+                //    Initialise(a));
 
-                node.WithChangesTo(a => a.Key)
-                .StartWith(node.Key)
-                .Where(a => a != default)
-                .Take(1)
-                .Subscribe(a =>
-                {
-                    source.Add(Node);
-                });
-
-                node.WithChangesTo(a => a.Current)
-                    .Where(a => a != default)
-                    .Subscribe(a =>
-                    {
-                        a.WithChangesTo(a => a.Key)
-                        .Subscribe(key =>
-                        {
-                            try
-                            {
-                                source.Set(Guid.Parse(node.Key), nameof(Node.Current), key, DateTime.Now);
-                            }
-                            catch (Exception ex)
-                            {
-
-                            }
-                        });
-                    });
+                //node.WithChangesTo(a => a.Key)
+                //.StartWith(node.Key)
+                //.Where(a => a != default)
+                //.Take(1)
+                //.Subscribe(a =>
+                //{
+                //    source.Add(Node);
+                //});
 
                 node.WithChangesTo(a => a.Current)
                     .Where(a => a != null)
@@ -127,7 +109,7 @@ namespace Utility.Models
         public bool IsInitialising { get; set; }
 
         [JsonIgnore]
-        public IObservable<object> Children => CreateChildren().ToObservable();
+        public IEnumerable Children => CreateChildren();
 
         string IKey.Key { get => Node.Key; set => Node.Key = value; }
 
@@ -148,17 +130,17 @@ namespace Utility.Models
             if (parent == null)
             {
                 throw new Exception(" FSDsssdsss333");
-                source.Remove(Node);
+                //source.Remove(Node);
                 return;
             }
-            if (node.Key == default)
-                source
-                    .Find(Guid.Parse(parent.Key), Name, type: this.GetType(), localIndex: Node.LocalIndex)
-                    .Subscribe(guid =>
-                    {
-                        Node.Key = new Keys.GuidKey(guid.Value.Guid);
+            //if (node.Key == default)
+            //    source
+            //        .Find(Guid.Parse(parent.Key), Name, type: this.GetType(), localIndex: Node.LocalIndex)
+            //        .Subscribe(guid =>
+            //        {
+            //            Node.Key = new Keys.GuidKey(guid.Value.Guid);
 
-                    });
+            //        });
         }
 
         public virtual void AddDescendant(IReadOnlyTree node, int level)
@@ -169,11 +151,11 @@ namespace Utility.Models
         {
             if (node.Data is IBreadCrumb)
                 return;
-            var date = source.Remove(Guid.Parse(node.Key));
-            if (node is IRemoved removed)
-            {
-                removed.Removed = date;
-            }
+            //var date = source.Remove(Guid.Parse(node.Key));
+            //if (node is IRemoved removed)
+            //{
+            //    removed.Removed = date;
+            //}
         }
 
         public virtual void ReplaceDescendant(IReadOnlyTree @new, IReadOnlyTree old, int level)
@@ -238,12 +220,12 @@ namespace Utility.Models
             if (a.Parent == null)
             {
                 a.Parent = value;
-                if (a.Key != default)
-                    source.Add(a as INode);
-                else
-                {
+                //if (a.Key != default)
+                //    source.Add(a as INode);
+                //else
+                //{
 
-                }
+                //}
             }
         }
 
