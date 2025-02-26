@@ -15,6 +15,7 @@
         <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Shared.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
+    
     <Style x:Key="ComboExStyle" TargetType="{x:Type ct:CustomTreeViewItem}" BasedOn="{StaticResource ComboTreeViewItem}">
         <Setter Property="NewObject" Value="{Binding Data, Converter={StaticResource NewObjectConverter}}"></Setter>
         <Setter Property="EditTemplate">
@@ -24,7 +25,7 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
-        <att:InteractivitySetter>
+        <att:InteractivitySetter Property="att:InteractivityItems.Template">
             <Setter.Value>
                 <att:InteractivityTemplate>
                     <att:InteractivityItems>

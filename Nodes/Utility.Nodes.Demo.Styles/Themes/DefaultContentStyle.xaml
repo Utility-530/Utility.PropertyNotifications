@@ -23,7 +23,7 @@
             <Style x:Key="Type_Style" TargetType="{x:Type controls:ComboBoxTreeView}" BasedOn="{StaticResource ButtonComboBoxTreeViewStyle}">
                 <Setter Property="ToggleButtonContent" Value="{StaticResource Icon}"/>
                 <Setter Property="ParentPath" Value="Parent"></Setter>
-                <att:InteractivitySetter>
+                <att:InteractivitySetter Property="att:InteractivityItems.Template">
                     <Setter.Value>
                         <att:InteractivityTemplate>
                             <att:InteractivityItems>

@@ -14,7 +14,13 @@
                     xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020"
                     xmlns:templates="http://schemas.utility.com/templates" 
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                    xmlns:conv="http://schemas.utility.com/converters">
+                    xmlns:conv="http://schemas.utility.com/converters" 
+                    xmlns:res="http://schemas.utility.com/resourcedictionary" xmlns:controls="http://schemas.utility.com">
+
+
+    <ResourceDictionary.MergedDictionaries>
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Shared.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
 
     <HierarchicalDataTemplate DataType="{x:Type nodes:Node}" ItemsSource="{Binding Items}">
         <WrapPanel>
@@ -82,13 +88,14 @@
 
 
     <DataTemplate DataType="{x:Type inf:AssemblyModel}">
-        <TextBlock Text="{Binding Name}">
+        <TextBlock Text="{Binding Assembly, Converter={x:Static conv:AssemblyNameConverter.Instance}}">
         </TextBlock>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:TypeModel}">
-        <TextBlock Text="{Binding Type}">
-        </TextBlock>
+        <controls:BreadCrumbs
+            ItemsSource="{Binding Type, Converter={x:Static conv:TypeHierarchyConverter.Instance}}">
+        </controls:BreadCrumbs>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:StringModel}">
