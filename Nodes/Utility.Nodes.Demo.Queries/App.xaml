@@ -3,19 +3,37 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Utility.Nodes.Demo.Queries" 
              xmlns:obj="http://schemas.utility.com/objects"
-             x:Name="myApplication"
-     >
+             xmlns:lsts="http://schemas.utility.com/lists" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:ct="http://schemas.utility.com/trees" 
+             xmlns:conv="http://schemas.utility.com/converters"
+             xmlns:res="http://schemas.utility.com/resourcedictionary" 
+             xmlns:bc="http://schemas.utility.com/Breadcrumbs"
+             x:Name="myApplication">
+
     <Application.Resources>
         <ResourceDictionary>
-
             <ObjectDataProvider x:Key="SchemaFromFile"
                 ObjectType="{x:Type local:SchemaLoader}"
                 MethodName="LoadSchema" >
             </ObjectDataProvider>
 
-            
-            <DataTemplate  DataType="{x:Type local:MainViewModel}">
+            <CollectionViewSource x:Key="ListBoxItems" Source="{Binding Path=Filters}">
+                <CollectionViewSource.GroupDescriptions>
+                    <PropertyGroupDescription PropertyName="GroupKey" />
+                </CollectionViewSource.GroupDescriptions>
+            </CollectionViewSource>
 
+
+            <DataTemplate DataType="{x:Type local:User}">
+                <obj:JsonControl Object="{Binding Converter={StaticResource ObjectToTokenConverter}}"></obj:JsonControl>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type local:Car}">
+                <obj:JsonControl Object="{Binding Converter={StaticResource ObjectToTokenConverter}}"></obj:JsonControl>
+            </DataTemplate>
+
+            <DataTemplate  DataType="{x:Type local:MainViewModel}">
                 <DockPanel>
                     <WrapPanel DockPanel.Dock="Top" HorizontalAlignment="Left">
                         <Button Command="{Binding RefreshCommand}" Width="200" Height="30" Margin="2">refresh</Button>
@@ -23,12 +41,24 @@
                     </WrapPanel>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition></ColumnDefinition>
-                            <ColumnDefinition Width="5"></ColumnDefinition>
-                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
+                        <TreeView x:Name="MyTreeView" ItemsSource="{Binding Users}">
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate  ItemsSource="{Binding Cars}">
+                                    <ContentPresenter Content="{Binding }"/>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                            <i:Interaction.Behaviors>
+                                <local:HighlightItems x:Name="a" Items="{Binding Filtered}"/>
+                            </i:Interaction.Behaviors>
+                        </TreeView>
                         <!--<TreeView x:Name="MyTreeView"            
-            AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}" >
+                        AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}" >
 
                         <TreeViewItem Header="Item2" >
                             <TreeViewItem Header="SubItem1"/>
@@ -47,25 +77,99 @@
                                 <TreeViewItem Header="SubSubItem4" />
                             </TreeViewItem>
                         </TreeViewItem>
-
                     </TreeView>-->
 
-                        <DataGrid x:Name="DataGrid" ItemsSource="{Binding Users}"/>
+                        <!--<DataGrid x:Name="DataGrid" ItemsSource="{Binding Users}"/>-->
 
                         <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
 
-                        <obj:JsonControl Grid.Column="2" Object="{Binding Filter}" Schema="{Binding Source={StaticResource SchemaFromFile}}"/>
+                        <DockPanel Grid.Column="2">
+                            <lsts:CustomSelector x:Name="ListBox" ItemsSource="{Binding Filters}"
+                                                 SelectedItem="{Binding Filter, Mode=TwoWay}" 
+                                                 CheckedCommand="{Binding CheckedCommand}" 
+                                                 ItemsWidth="560"
+                                                 ItemsHeight="100" >
+                                <ListBox.GroupStyle>
+                                    <GroupStyle>
+                                        <GroupStyle.Panel>
+                                            <ItemsPanelTemplate>
+                                                <VirtualizingStackPanel Orientation="Vertical" />
+                                            </ItemsPanelTemplate>
+                                        </GroupStyle.Panel>
+                                        <GroupStyle.ContainerStyle>
+                                            <Style TargetType="{x:Type GroupItem}">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate>
+                                                            <Grid>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="*"/>
+                                                                    <RowDefinition Height="*"/>
+                                                                </Grid.RowDefinitions>
+                                                                <TextBlock FontSize="24" Padding="0" Text="{Binding Name}" HorizontalAlignment="Center"/>
+                                                                <ItemsPresenter Grid.Row="1"/>
+                                                            </Grid>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </GroupStyle.ContainerStyle>
+                                    </GroupStyle>
+                                </ListBox.GroupStyle>
+                                <ItemsControl.ItemContainerStyle>
+                                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource ListBoxItemStyle1}"/>
+                                </ItemsControl.ItemContainerStyle>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="FinishEdit">
+                                        <i:InvokeCommandAction Command="{Binding FinishEdit}"  PassEventArgsToCommand="True"></i:InvokeCommandAction>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </lsts:CustomSelector>
+                        </DockPanel>
 
-                        <!--<TabControl Grid.Column="2">
-            <TabItem Header="Pipe-Tree" x:Name="pipe_repository_tree"/>
-            <TabItem Header="Property-Grid" x:Name="propertygrid"/>
-            <TabItem Header="Filter-Tree" x:Name="filtertree"/>
-            <TabItem Header="DataTemplate-Tree" x:Name="datatemplatetree"/>
-            <TabItem Header="Style-Tree" x:Name="styletree"/>
-        </TabControl>-->
+                        <GridSplitter Grid.Column="3" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
 
-                        <!--<Grid Grid.Column="6">
-                        <ct:CustomTreeView Grid.Row="4" ItemsSource="{Binding Filters}" >
+
+                        <ct:CustomTreeView Grid.Column="4" ItemsSource="{Binding Nodes}" >
+                            <TreeView.Resources>
+                                <ResourceDictionary>
+                                    <ResourceDictionary.MergedDictionaries>
+                                        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
+                                        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Generic.xaml"/>
+                                        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Templates.xaml"/>
+                                        <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItem.xaml"/>
+                                        <ResourceDictionary Source="/Utility.WPF.Controls.Breadcrumbs;component/Themes/Generic.xaml"/>
+                                    </ResourceDictionary.MergedDictionaries>
+                                    <Style x:Key="MyDefaultContentStyle" TargetType="{x:Type ct:CustomTreeViewItem}">
+                                        <Setter Property="NodeTemplate">
+                                            <Setter.Value>
+                                                <DataTemplate>
+                                                    <ContentControl Content="{Binding Converter={StaticResource TypeNameConverter}}"></ContentControl>
+                                                </DataTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
+                                        <Setter Property="Background" Value="White"></Setter>
+                                        <Setter Property="Orientation" Value="Horizontal"></Setter>
+                                        <Setter Property="BorderThickness" Value="2"></Setter>
+                                        <Setter Property="ItemsPanel">
+                                            <Setter.Value>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel/>
+                                                </ItemsPanelTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="NodeItemsSource">
+                                            <Setter.Value>
+                                                <MultiBinding  Converter="{StaticResource ChildrenSelectorConverter}" >
+                                                    <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=Self}"/>
+                                                    <!--<Binding Path="ChildrenSelector"  RelativeSource="{RelativeSource Mode=Self}"/>-->
+                                                </MultiBinding>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ResourceDictionary>
+                            </TreeView.Resources>
                             <ct:CustomTreeView.ItemContainerStyleSelector>
                                 <bc:ItemContainerStyleSelector
                                     DefaultStyle="{StaticResource MyDefaultContentStyle}" 
@@ -75,12 +179,13 @@
                                 </bc:ItemContainerStyleSelector>
                             </ct:CustomTreeView.ItemContainerStyleSelector>
                         </ct:CustomTreeView>
-                    </Grid>-->
                     </Grid>
                 </DockPanel>
 
             </DataTemplate>
-            <ResourceDictionary.MergedDictionaries/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Utility.WPF.Controls.Lists;component/CustomSelector.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

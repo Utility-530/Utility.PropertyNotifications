@@ -1,4 +1,4 @@
-﻿namespace QueryDesignerCore.Demo.WPF
+﻿namespace Utility.Nodes.Demo.Queries
 {
     public class User
     {
