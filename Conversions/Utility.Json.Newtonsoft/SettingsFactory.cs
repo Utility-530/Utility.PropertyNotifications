@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Jonnidip;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -31,12 +32,13 @@ namespace Utility.Conversions.Json.Newtonsoft
                 IEnumerable<JsonConverter> converters()
                 {
                     yield return new AssemblyJsonConverter();
-                    yield return (new PropertyInfoJsonConverter());
-                    yield return (new MethodInfoJsonConverter());
-                    yield return (new ParameterInfoJsonConverter());
-                    yield return (new AttributeCollectionConverter());
-                    yield return (new Utility.Conversions.Json.Newtonsoft.DescriptorConverter());
-                    yield return (new StringToGuidConverter());
+                    yield return new PropertyInfoJsonConverter();
+                    yield return new MethodInfoJsonConverter();
+                    yield return new ParameterInfoJsonConverter();
+                    yield return new AttributeCollectionConverter();
+                    yield return new DescriptorConverter();
+                    //yield return new StringToGuidConverter();
+                    yield return new StringTypeEnumConverter();
                 }
             }
         }

@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	  <PackageReference Include="StringTypeEnumConverter.Newtonsoft" Version="1.1.4" />
   </ItemGroup>
 
   <ItemGroup>
