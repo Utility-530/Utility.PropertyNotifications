@@ -7,6 +7,7 @@ using Utility.Conversions.Json.Newtonsoft;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+using Utility.Nodes.Demo.Filters;
 using Utility.Nodes.Filters;
 
 //using Utility.Nodes.Filters;
@@ -25,7 +26,7 @@ namespace Utility.Trees.Demo.Filters
             SQLitePCL.Batteries.Init();
 
             Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
-            Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeSource.Instance);
+            Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeEngine.Instance);
             Locator.CurrentMutable.RegisterConstant<IContext>(Context.Instance);
             //Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
             //Splat.Locator.CurrentMutable.RegisterLazySingleton<MainViewModel>(() => new MainViewModel());

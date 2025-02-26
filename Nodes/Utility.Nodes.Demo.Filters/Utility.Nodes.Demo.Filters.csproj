@@ -11,7 +11,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Conversions\Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj" />
     <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
-    <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.Descriptors.csproj" />
+    <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Breadcrumbs\Utility.WPF.Controls.Breadcrumbs.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
@@ -22,11 +22,14 @@
     <ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
     <ProjectReference Include="..\Utility.Nodes.Demo.Styles\Utility.Nodes.WPF.Styles.csproj" />
     <ProjectReference Include="..\Utility.Nodes.Filters\Utility.Nodes.Filters.csproj" />
-    <ProjectReference Include="..\Utility.Nodes.WPF\Utility.Nodes.WPF.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Data\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StringTypeEnumConverter.Newtonsoft" Version="1.1.4" />
   </ItemGroup>
 
 </Project>
