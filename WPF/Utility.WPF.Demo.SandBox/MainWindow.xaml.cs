@@ -21,6 +21,8 @@ namespace Utility.WPF.Demo.SandBox
     /// </summary>
     public partial class MainWindow : Window
     {
+        private Character newObject = new Character() { Color = Colors.Aqua };
+
         public MainWindow()
         {
             InitializeComponent();
@@ -41,31 +43,15 @@ namespace Utility.WPF.Demo.SandBox
         public ICommand FinishEdit { get; }
 
         public ObservableCollection<Character> Items { get; }
-        public Character NewObject => new Character() { Color = Colors.Aqua };
-    }
-
-
-    public class ObjectToTokenConverter : IValueConverter
-    {
-        private JsonConverter[] converters = [
-            new StringToGuidConverter(),
-            //new Newtonsoft.Json.Converters.IsoDateTimeConverter(),
-            new Newtonsoft.Json.Converters.StringEnumConverter()];
-
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public Character NewObject
         {
-            if (value is null)
-                return DependencyProperty.UnsetValue;
-
-            var serialiser = JsonSerializer.CreateDefault(new JsonSerializerSettings { Converters = converters });
-            return JToken.FromObject(value, serialiser);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
+            get => newObject; set
+            {
+                newObject = value;
+            }
         }
     }
+
+
 
 }

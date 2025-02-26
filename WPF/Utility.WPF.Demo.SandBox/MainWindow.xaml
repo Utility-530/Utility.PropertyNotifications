@@ -27,23 +27,18 @@
     <Grid x:Name="MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
 
+        <!--<UniformGrid Rows="1">
+            <Ellipse Fill="Red" Height="20" Width="20"></Ellipse>
+            <Ellipse Fill="Red" Height="20" Width="20"></Ellipse>
+            <Ellipse Fill="Red" Height="20" Width="20"></Ellipse>
+        </UniformGrid>-->
         <local:HatchSwitchView/>
 
-        <local2:CustomSelector Grid.Row="1"
-                               CheckedPropertyName="IsRhPositive"
-                               d:DataContext="{d:DesignInstance local2:MainWindow}"
-                               d:ItemsSource="{StaticResource Characters}" 
-                               ItemsSource="{Binding Items}" 
-                               NewObject="{Binding NewObject}">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="FinishEdit">
-                    <i:InvokeCommandAction Command="{Binding FinishEdit}"  PassEventArgsToCommand="True"></i:InvokeCommandAction>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </local2:CustomSelector>
 
         <!--<pt:PropertyTree Grid.Row="1" Object="{Binding Source={StaticResource Character}}"></pt:PropertyTree>-->
 

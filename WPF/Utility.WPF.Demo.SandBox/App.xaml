@@ -9,7 +9,7 @@
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Utility.WPF.Demo.Data;component/Themes/Generic.xaml" />
-                <ResourceDictionary Source="/Utility.WPF.SandBox;component/CustomSelector.xaml"></ResourceDictionary>
+        
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
