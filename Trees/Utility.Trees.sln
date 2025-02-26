@@ -63,7 +63,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.WPF.Attached", "..\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Commands", "..\Commands\Utility.Commands\Utility.Commands.csproj", "{81CAD6F2-0030-42D8-8AA6-2FC78AC4E70B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Descriptors", "..\Meta\Utility.PropertyDescriptors\Utility.Descriptors.csproj", "{FBC9FBB6-B9F5-4261-AD74-7579F2B7509E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Descriptors", "..\Meta\Utility.Descriptors\Utility.Descriptors.csproj", "{FBC9FBB6-B9F5-4261-AD74-7579F2B7509E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.PropertyNotifications", "..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj", "{AA1767DB-FDB7-43D9-A79F-7C411A88B54D}"
 EndProject

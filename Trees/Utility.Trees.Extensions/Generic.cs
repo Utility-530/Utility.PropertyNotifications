@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Utility.Helpers.Generic;
+using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
