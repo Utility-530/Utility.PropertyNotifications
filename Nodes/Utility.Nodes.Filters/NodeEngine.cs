@@ -34,6 +34,7 @@ namespace Utility.Nodes.Demo.Filters
         Lazy<IFilter> filter = new(() => Locator.Current.GetService<IFilter>());
         Lazy<IExpander> expander = new(() => Locator.Current.GetService<IExpander>());
         Lazy<IContext> context = new(() => Locator.Current.GetService<IContext>());
+        Lazy<ITreeRepository> repository = new(() => Locator.Current.GetService<ITreeRepository>());
 
         private readonly ObservableCollection<INode> nodes = [];
 
@@ -84,14 +85,12 @@ namespace Utility.Nodes.Demo.Filters
 
         public IObservable<DateValue> Get(Guid guid, string name)
         {
-            return Observable.Empty<DateValue>();
-            //throw new NotImplementedException();
-            //return repository.Get(guid, name);
+            return repository.Value.Get(guid, name);
         }
 
         public void Set(Guid guid, string name, object value, DateTime dateTime)
         {
-            // repository.Set(guid, name, value, dateTime);
+            repository.Value.Set(guid, name, value, dateTime);
         }
 
         public void Add(INode node)
@@ -165,48 +164,47 @@ namespace Utility.Nodes.Demo.Filters
             void configure(INode node)
             {
 
-
-                node.WithChangesTo(a => a.Data)
-                .Where(a => a is not string)
-                .Take(1)
-                .Subscribe(data =>
-                {
-
-                    if (data is ISetNode iSetNode)
-                    {
-                        iSetNode.SetNode(node);
-                    }
-                    if (data is IGetGuid guid && node.Key == null)
-                    {
-                        node.Key = new GuidKey(guid.Guid);
-                    }
-                    else
-                    {
-
-                    }
-
-                    node.WithChangesTo(a => a.IsExpanded)
-                    .Where(a => a == true)
+                node
+                    .WithChangesTo(a => a.Data)
+                    .Where(a => a is not string)
                     .Take(1)
-                        .Subscribe(a =>
+                    .Subscribe(data =>
+                    {
+                        if (data is ISetNode iSetNode)
                         {
-                            if (data is IYieldChildren ychildren)
-                                ychildren.Children.ForEach(async d =>
-                                {
-                                    if (node.Any(a => (a.Data as IGetName).Name == (d as IGetName).Name))
-                                    {
-                                        return;
-                                    }
-                                    var newNode = await node.ToTree(d);
-                                    node.Add(newNode);
-                                    if (newNode.Data is IGetName { Name: "BaseType" })
-                                    {
+                            iSetNode.SetNode(node);
+                        }
+                        if (data is IGetGuid guid && node.Key == null)
+                        {
+                            node.Key = new GuidKey(guid.Guid);
+                        }
+                        else
+                        {
 
-                                    }
-                                    Add(newNode as INode);
-                                });
-                        });
-                });
+                        }
+
+                        node.WithChangesTo(a => a.IsExpanded)
+                        .Where(a => a == true)
+                        .Take(1)
+                            .Subscribe(a =>
+                            {
+                                if (data is IYieldChildren ychildren)
+                                    ychildren.Children.ForEach(async d =>
+                                    {
+                                        if (node.Any(a => (a.Data as IGetName).Name == (d as IGetName).Name))
+                                        {
+                                            return;
+                                        }
+                                        var newNode = await node.ToTree(d);
+                                        node.Add(newNode);
+                                        if (newNode.Data is IGetName { Name: "BaseType" })
+                                        {
+
+                                        }
+                                        Add(newNode as INode);
+                                    });
+                            });
+                    });
 
 
                 IObservable<object> _children(IChildren children, Guid guid)
