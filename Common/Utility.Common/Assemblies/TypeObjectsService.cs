@@ -22,7 +22,7 @@ namespace Utility.Common.Assemblies
              {
                  var (service, type) = st;
                  var name = typeof(IName).IsAssignableFrom(type) ?
-                                                 (service as IName).Name :
+                                                 (service as IGetName).Name :
                                                   type.Name;
                  return new TypeObject { TypeName = type.Name, Key = name, Object = service, Type = type };
              }).ToArray();

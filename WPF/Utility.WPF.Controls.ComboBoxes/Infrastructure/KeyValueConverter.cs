@@ -19,7 +19,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                 //    return dictionaryEntryKeyValue.Key.Contains(nameof(DataTemplateKey)) ? "DTK" : dictionaryEntryKeyValue.Key;
                 //case KeyValue keyValue:
 
-                case IName name:
+                case IGetName name:
                     return name.Name;
                 case IKey keyValue:
                     return keyValue.Key;   

@@ -17,7 +17,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <conv:FilenameToIconConverter x:Key="iconConverter" />
-            
+
             <DataTemplate DataType="{x:Type infra:ViewModel}">
                 <st:AutoGrid Columns="*,*" Rows="*" Height="24">
                     <materialDesign:PackIcon Kind="{Binding Icon}"/>
@@ -54,16 +54,10 @@
                             <ColumnDefinition Width="16" />
                         </Grid.ColumnDefinitions>
 
-
                         <Image Grid.Column="0" Width="16" Height="16" Source="{Binding FullName, Converter={StaticResource iconConverter}}" />
-
-                        <TextBlock Grid.Column="2"
-                                       Text="{Binding Name}" />
-
-                        <TextBlock Grid.Column="4"
-                                       Text="{Binding Attributes}" />
-                        <TextBlock Grid.Column="6"
-                                       Text="{Binding LastWriteTime}" />
+                        <TextBlock Grid.Column="2" Text="{Binding Name}" />
+                        <TextBlock Grid.Column="4" Text="{Binding Attributes}" />
+                        <TextBlock Grid.Column="6"  Text="{Binding LastWriteTime}" />
                     </Grid>
                 </Border>
             </DataTemplate>
@@ -91,11 +85,8 @@
             <local:StyleSelector x:Key="styleSelector"></local:StyleSelector>
 
             <DataTemplate DataType="{x:Type local:DemoRootNode}">
-                <TreeView ItemsSource="{Binding Items}" ItemTemplateSelector="{StaticResource selector}" ItemContainerStyleSelector="{StaticResource styleSelector}">
-    
-                </TreeView>
+                <TreeView ItemsSource="{Binding Items}" ItemTemplateSelector="{StaticResource selector}" ItemContainerStyleSelector="{StaticResource styleSelector}"/>
             </DataTemplate>
-
-       </ResourceDictionary>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

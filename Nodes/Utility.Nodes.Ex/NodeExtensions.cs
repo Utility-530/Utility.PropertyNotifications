@@ -43,7 +43,7 @@ namespace Utility.Extensions
         /// <returns></returns>
         public static INode Abstract(this INode tree)
         {
-            var _name = (tree.Data is IName { Name: { } name }) ? name : tree.Data.ToString();          
+            var _name = (tree.Data is IGetName { Name: { } name }) ? name : tree.Data.ToString();          
             var clone = new Node(new Abstract { Name = _name }) { Key = tree.Key, AddCommand = tree.AddCommand, RemoveCommand = tree.RemoveCommand, Removed = tree.Removed };
             tree.WithChangesTo(a => a.Removed).Subscribe(a => clone.Removed = a);
 

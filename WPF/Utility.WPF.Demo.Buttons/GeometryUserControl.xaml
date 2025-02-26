@@ -21,7 +21,7 @@
             </PathGeometry>
             <Geometry x:Key="PlusGeometry" >M0,5 H10 M5,0 V10</Geometry>
 
-            <Path  x:Key="Geometry" Stroke="{c:Red }" StrokeThickness="2">
+            <Path  x:Key="Geometry" Stroke="{c:Red}" StrokeThickness="2">
                 <Path.Data>
                     <EllipseGeometry Center="100,100" RadiusX="100" RadiusY="100"/>
                 </Path.Data>

@@ -16,8 +16,11 @@ using Utility.Trees.Decisions;
 using Utility.Trees.Demo.Filters.Infrastructure;
 using Utility.Trees.WPF;
 using Utility.Trees.WPF.Abstractions;
+using Utility.WPF;
 using Utility.WPF.Controls.Trees;
 using Views.Trees;
+using IDescriptor = Utility.Interfaces.NonGeneric.IDescriptor;
+using IValueDescriptor = Utility.Interfaces.IValueDescriptor;
 
 namespace Utility.Nodes.Demo.MVVM
 {
@@ -33,7 +36,7 @@ namespace Utility.Nodes.Demo.MVVM
                     instance =>
                     {
 
-                        var guid = (((ITree)instance).Data as IDescriptor).Guid;
+                        //var guid = (((ITree)instance).Data as IDescriptor).Guid;
                         var item = new ComboTreeViewItem
                         {
                                 Header = instance,
@@ -47,7 +50,7 @@ namespace Utility.Nodes.Demo.MVVM
                         {
                             var table = (Table)Activator.CreateInstance(typeof(Table));
                             var root = DescriptorFactory.CreateRoot(table, _guid.Value.Guid, "table_add").Take(1).Wait();
-                            var reflectionNode = new ReflectionNode(root) { Parent = (ITree)instance };
+                            var reflectionNode = new DescriptorNode(root) { Parent = (ITree)instance };
                             item.NewObject = DataTreeViewer(reflectionNode);
                             item.FinishEdit += Item_FinishEdit;
                         });
@@ -55,7 +58,7 @@ namespace Utility.Nodes.Demo.MVVM
                         {
                             if(e.IsAccepted)
                             {
-                                var newObject = (e.NewObject as TreeViewer).ViewModel as ReflectionNode;
+                                var newObject = (e.NewObject as TreeViewer).ViewModel as DescriptorNode;
                                 var root= newObject.Data as IValueDescriptor;
                                 var inst = root.Get();
                                 if(instance is IReadOnlyTree tree)
@@ -117,7 +120,7 @@ namespace Utility.Nodes.Demo.MVVM
                                 .Subscribe(_guid =>
                                 {
                                     var root =  DescriptorFactory.CreateRoot(table.Type , _guid.Value.Guid, table.Name).Take(1).Wait();
-                                    var reflectionNode = new ReflectionNode(root);
+                                    var reflectionNode = new DescriptorNode(root);
                                     treeViewer.ViewModel = reflectionNode;
                                 });
 
@@ -135,7 +138,7 @@ namespace Utility.Nodes.Demo.MVVM
                                     if(table is { Type: { } type, Name:{ } name })
                                     {
                                         var root =  DescriptorFactory.CreateRoot(table.Type , data.Guid, table.Name).Take(1).Wait();
-                                        var reflectionNode = new ReflectionNode(root);
+                                        var reflectionNode = new DescriptorNode(root);
                                         treeViewer.ViewModel = reflectionNode;
                                     }
                             });

@@ -14,16 +14,16 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.ViewModels\Utility.ViewModels.csproj" />
-    <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.Descriptors.csproj" />
+    <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
     <ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Trees\Utility.WPF.Trees.csproj" />
     <ProjectReference Include="..\Utility.Nodes.Directorys\Utility.Nodes.Directories.csproj" />
-    <ProjectReference Include="..\Utility.Nodes.Reflections\Utility.Nodes.Reflections.csproj" />
+    <ProjectReference Include="..\Utility.Nodes.Reflections\Utility.Nodes.Descriptors.csproj" />
     <ProjectReference Include="..\Utility.Nodes.Solutions\Utility.Nodes.Solutions.csproj" />
     <ProjectReference Include="..\Utility.Nodes.Types\Utility.Nodes.Types.csproj" />
     <ProjectReference Include="..\Utility.Nodes.WPF\Utility.Nodes.Solutions.csproj" />
-    <ProjectReference Include="..\Utility.Nodes.WPF\Utility.Nodes.WPF.csproj" />
   </ItemGroup>
 
 </Project>

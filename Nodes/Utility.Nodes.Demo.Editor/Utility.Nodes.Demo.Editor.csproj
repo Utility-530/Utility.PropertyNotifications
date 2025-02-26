@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Conversions\Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Trees\Utility.WPF.Trees.csproj" />
     <ProjectReference Include="..\Utility.Nodes.Demo.Filters\Utility.Nodes.Demo.Filters.csproj" />   
     <ProjectReference Include="..\Utility.Nodes.Demo.Styles\Utility.Nodes.WPF.Styles.csproj" />
     <ProjectReference Include="..\Utility.Nodes.Filters\Utility.Nodes.Filters.csproj" />

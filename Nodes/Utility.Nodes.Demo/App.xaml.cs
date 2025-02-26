@@ -1,11 +1,11 @@
 ﻿using Splat;
-using System.Collections;
-using System.Globalization;
 using System.Threading;
 using System.Windows;
 using Utility.Collections;
 using Utility.Interfaces.Exs;
 using Utility.Nodes.Demo.Infrastructure;
+//using Utility.Repos;
+using Utility.WPF.Templates;
 
 namespace Utility.Nodes.Demo
 {
@@ -18,7 +18,8 @@ namespace Utility.Nodes.Demo
         {
             base.OnStartup(e);
             Collection.Context = SynchronizationContext.Current;
-            Locator.CurrentMutable.RegisterLazySingleton<ITreeRepository>(() => new InMemoryTreeRepository());
+            //Locator.CurrentMutable.RegisterLazySingleton<ITreeRepository>(() => new InMemoryTreeRepository());
+            Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
             Locator.CurrentMutable.RegisterLazySingleton(() =>
             {
                 return Resolver.Instance

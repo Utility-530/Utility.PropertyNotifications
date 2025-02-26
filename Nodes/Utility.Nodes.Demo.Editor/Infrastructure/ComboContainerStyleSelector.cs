@@ -24,7 +24,7 @@ namespace Utility.Nodes.Demo.Filters
                 //IData { Data: IRoot } => BreadcrumbRootStyle,
                 //IData { Data: IBreadCrumb } when parent?.Style == BreadcrumbStyle => SelectableStyle,
                 //IData { Data: IBreadCrumb } => BreadcrumbStyle,
-                _ => DefaultStyle ?? base.SelectStyle(item, container, input),
+                _ => DefaultStyle ?? base.SelectStyle(item, container),
             };
         }
 
