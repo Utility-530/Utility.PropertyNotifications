@@ -20,6 +20,7 @@
 			 M412.458,367.198L144.802,99.542C177.396,76.25,215.594,64,256,64c105.865,0,192,86.135,192,192
 			C448,296.406,435.75,334.604,412.458,367.198z</Geometry>
 
+    <Geometry x:Key="RightChevronGeometry">M 6.0,23.5 17.5,12.0 6.0,0.5</Geometry>
 
     <PathGeometry x:Key="Plus">
         <PathGeometry.Figures>

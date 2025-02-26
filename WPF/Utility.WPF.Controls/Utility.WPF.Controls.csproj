@@ -55,6 +55,7 @@
 		<ProjectReference Include="..\Utility.WPF.Colours\Utility.WPF.Colours.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Controls.Base\Utility.WPF.Controls.Base.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Geometry\Utility.WPF.Geometries.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Resources\Utility.WPF.Resources.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Themes\Utility.WPF.Themes.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Panels\Utility.WPF.Panels.csproj" />
