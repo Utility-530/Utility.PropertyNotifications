@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
@@ -8,7 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Nodes\Utility.Nodes.WPF\Utility.Nodes.WPF.csproj" />
+    <ProjectReference Include="..\..\Randoms\Utility.Randoms\Utility.Randoms.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Trees\Utility.WPF.Trees.csproj" />
   </ItemGroup>
 
 </Project>
