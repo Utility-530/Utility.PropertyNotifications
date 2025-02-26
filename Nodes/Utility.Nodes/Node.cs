@@ -1,16 +1,8 @@
 ﻿using Jellyfish;
-using Splat;
 using System.Collections.Specialized;
-using System.Reactive.Linq;
 using System.Windows.Input;
-using Utility.Changes;
-using Utility.Helpers.NonGeneric;
-using Utility.Interfaces;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
-using Utility.Keys;
-using Utility.Nodes.Common;
-using Utility.PropertyNotifications;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
@@ -19,8 +11,6 @@ namespace Utility.Nodes
     {
         object data;
 
-        Lazy<INodeSource> source = new(() => Locator.Current.GetService<INodeSource>());
-
         public Node(object data) : this()
         {
             Data = data;
@@ -28,6 +18,7 @@ namespace Utility.Nodes
 
         public Node()
         {
+            //IsExpanded = true;
             AddCommand = new RelayCommand(async a =>
             {
                 var node = await ToTree(a);
@@ -52,67 +43,8 @@ namespace Utility.Nodes
                 node.Add(this);
             });
 
-            this.WithChangesTo(a => a.Key)
-                .Subscribe(key =>
-                {
-                    this.WithChangesTo(a => a.Data)
-                    .Where(a => a is not string)
-                    .Take(1)
-                    .Subscribe(data =>
-                    {
-                        if (data is IChildren children && !(data is IHasChildren { HasChildren: false } hasChildren))
-                        {
-                            _children(children, Guid.Parse(key))
-                                .Filter(this.WithChangesTo(a => a.IsExpanded))
-                                .Subscribe(change);
-                        }
-                    });
-
-                    async void change(Change a)
-                    {
-                        if (a is Change { Type: Changes.Type.Add, Value: { } value })
-                        {
-                            if (value is INode node)
-                                this.m_items.Add(node);
-                            else
-                            {
-                                this.m_items.Add(await ToTree(value));
-                            }
-                        }
-                        else if (a is Change { Type: Changes.Type.Remove, Value: { } _value })
-                        {
-                            this.m_items.RemoveBy(c => (c as IKey).Key.Equals((_value as IKey).Key));
-                        }
-                    }
-
-                    IObservable<object> _children(IChildren children, Guid guid)
-                    {
-                        return Observable.Create<object>(observer =>
-                        {
-                            bool b = false;
-                            return source.Value
-                            .ChildrenByGuidAsync(guid)
-                            .Subscribe(a =>
-                            {
-                                if (a.Data?.ToString() == source.Value.New || data is ICount)
-                                {
-                                    b = true;
-                                    children.Children.Subscribe(a => observer.OnNext(a), () => observer.OnCompleted());
-                                }
-                                else if (a.Data != null && m_items.Any(n => ((IKey)n).Key == a.Key) == false)
-                                {
-                                    observer.OnNext(a);
-                                }
-                            },
-                            () =>
-                            {
-                                if (b == false)
-                                    observer.OnCompleted();
-                            });
-                        });
-                    }
-                });
         }
+
         public ICommand AddCommand { get; init; }
         public ICommand RemoveCommand { get; init; }
         public ICommand EditCommand { get; init; }
@@ -130,7 +62,7 @@ namespace Utility.Nodes
 
         public override object Data
         {
-            get => data; 
+            get => data;
             set
             {
                 if (data == value)
@@ -138,16 +70,7 @@ namespace Utility.Nodes
                     throw new Exception("vdfs 3332222kjj");
                 }
                 var previousValue = data;
-                data = value;
-                if (data is ISetNode iSetNode)
-                {
-                    iSetNode.SetNode(this);
-                }
-                if (data is IGetGuid guid && this.Key == null)
-                {
-                    this.Key = new GuidKey(guid.Guid);
-                }
-
+                data = value;            
                 RaisePropertyChanged(ref previousValue, value);
             }
         }
@@ -161,8 +84,6 @@ namespace Utility.Nodes
                     throw new Exception($"Key {Key} not null!");
                 }
                 base.Key = value;
-
-
             }
         }
 
