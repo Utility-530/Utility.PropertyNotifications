@@ -1300,8 +1300,11 @@ namespace Utility.Models.Trees
                         .CombineLatest(this.WithChangesTo(a => a.ValueModel))
                         .Subscribe(a =>
                         {
-                            ValueModel.Value = ActivateAnything.Activate.New(a.First);
-                            ValueModel.RaisePropertyChanged(nameof(ValueModel.Value));
+                            if (ValueModel.Value == null)
+                            {
+                                ValueModel.Value = ActivateAnything.Activate.New(a.First);
+                                ValueModel.RaisePropertyChanged(nameof(ValueModel.Value));
+                            }
                         });
                     ResolvableModel.Properties
                         .Changes().Select(a => ResolvableModel.Properties.LastOrDefault()?.PropertyType).WhereIsNotNull()
@@ -1451,7 +1454,6 @@ namespace Utility.Models.Trees
 
     public class ResolvableModel : BreadCrumbModel, IRoot
     {
-        private Assembly assembly;
         private CustomCollection<Type> types = new();
         private CustomCollection<PropertyInfo> propertyInfos = new();
         private CustomCollection<Assembly> assemblies = [];
