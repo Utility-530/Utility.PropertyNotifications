@@ -2,7 +2,6 @@
 using System;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using _Key = Utility.Models.Key;
 
 namespace Utility.Repos
 {
@@ -10,7 +9,7 @@ namespace Utility.Repos
     {
         IEquatable Key { get; }
 
-        Task<object?> FindValue(object key);
+        Task<object?[]> FindValue(object key);
 
         Task<IEquatable[]> FindKeys(object key);
 
@@ -71,44 +70,18 @@ namespace Utility.Repos
         }
 
 
-        public Task<object?> FindValue(object? equatable)
+        public Task<object?[]> FindValue(object equatable)
         {
 
-            if (equatable == null)
-            {
-                List<object> objects = new();
-                using (GetCollection(out var collection))
-                {
-                    foreach (var item in collection.FindAll())
-                    {
-                        var deserialised = _mapper.Deserialize(settings.Type, item);
-                        objects.Add(deserialised);
-                    }
-                    return Task.FromResult((object)objects);
-                }
-            }
-
-            if (equatable is not _Key key)
-            {
-                throw new Exception("vsd s33322 vd");
-            }
-
             var array = Objects().Select(item => _mapper.Deserialize(settings.Type, item)).ToArray();
-            return Task.FromResult((object?)array);
+            return Task.FromResult((object?[])array);
 
             IEnumerable<BsonDocument> Objects()
             {
                 using (GetCollection(out var collection))
                 {
-                    foreach (var findByParentId in collection.Find(a => a["ParentGuid"].AsGuid == key.Guid))
-                        yield return findByParentId;
 
-                    foreach (var findByName in collection.Find(a => a["Name"] == key.Name))
-                        yield return findByName;
-
-                    var type = _mapper.Serialize(key.Type);
-
-                    foreach (var findByType in collection.Find(a => a["Type"] == type))
+                    foreach (var findByType in collection.Find(a => a["_id"].Equals(equatable)))
                         yield return findByType;
                 }
             }
