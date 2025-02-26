@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CsvHelper.Configuration.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -15,30 +16,27 @@ namespace Utility.WPF.Meta
 
         public const string DemoAppNameAppendage = "Demo";
 
-        public static IEnumerable<FrameworkElementKeyValue> ViewTypes(this Assembly assembly) => assembly
-            .GetTypes()
-            .Where(a => typeof(FrameworkElement).IsAssignableFrom(a))
-            .GroupBy(type =>
-            (type.Name.Contains("UserControl") ? type.Name?.ReplaceLast("UserControl", string.Empty) :
-            type.Name.Contains("View") ? type.Name?.ReplaceLast("View", string.Empty) : type.Name)!)
-            .OrderBy(a => a.Key)
-            .ToDictionaryOnIndex()
-            .Select(a => new FrameworkElementKeyValue(a.Key, a.Value));
+        public static IEnumerable<FrameworkElementKeyValue> ViewTypes(this Assembly assembly) =>
+            from type in assembly.GetTypes()
+            where typeof(FrameworkElement).IsAssignableFrom(type)
+            let _name = type.Name
+            let name = type.GetAttributePropertySafe<ViewAttribute, int?>(a => a.Index)?.ToString() + _name
+            orderby name
+            select new FrameworkElementKeyValue(_name, type);
+      
+        public static IEnumerable<TypeKeyValue> Types(this Assembly assembly) =>
+            from type in assembly.GetTypes()
+            where type.ContainsGenericParameters == false
+            where type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly).Any()
+            select new TypeKeyValue(type.Name, type);
 
 
-        public static IEnumerable<TypeKeyValue> Types(this Assembly assembly) => assembly
-            .GetTypes()
-            .Where(a => a.ContainsGenericParameters == false)
-            .Where(a => a.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly).Any())
-            .Select(a => new TypeKeyValue(a.Name, a));
-
-
-        public static IEnumerable<TypeKeyValue> TypesOf<T>(this Assembly assembly) => assembly
-            .GetTypes()
-            .Where(t => t.IsAssignableTo(typeof(T)))
-            .Where(a => a.ContainsGenericParameters == false)
-            .Where(a => a.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly).Any())
-            .Select(a => new TypeKeyValue(a.Name, a));
+        public static IEnumerable<TypeKeyValue> TypesOf<T>(this Assembly assembly) =>
+            from type in assembly.GetTypes()
+            where type.IsAssignableTo(typeof(T))
+            where type.ContainsGenericParameters == false
+            where type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly).Length != 0
+            select new TypeKeyValue(type.Name, type);
 
         public static IEnumerable<(Assembly, AssemblyType)> FindAssemblies()
         {
@@ -62,11 +60,6 @@ namespace Utility.WPF.Meta
             }
             return true;
         }
-
-        public static Dictionary<string, T> ToDictionaryOnIndex<T>(this IEnumerable<IGrouping<string, T>> groupings)
-            => groupings
-                .SelectMany(grp => grp.Index().ToDictionary(kvp => kvp.Key > 0 ? grp.Key + kvp.Key : grp.Key, c => c.Value))
-                .ToDictionary(a => a.Key, a => a.Value);
 
         public static IEnumerable<KeyValuePair<int, TSource>> Index<TSource>(this IEnumerable<TSource> source, int startIndex = 0)
         {
