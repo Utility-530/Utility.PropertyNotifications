@@ -7,6 +7,7 @@
     xmlns:local="clr-namespace:Utility.WPF.Demo.Objects"
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
     xmlns:view="http://schemas.utility.com/objects"
+    xmlns:model="clr-namespace:Utility.Models;assembly=Utility.Models"
     xmlns:conv="http://schemas.utility.com/converters"
     d:DesignHeight="450"
     d:DesignWidth="800"
@@ -30,18 +31,18 @@
         </DataTemplate>        
         
 
-        <x:Array x:Key="properties" Type="{x:Type view:SchemaProperty}">
-            <view:SchemaProperty Name="Color" Format="Ellipse"></view:SchemaProperty>
+        <x:Array x:Key="properties" Type="{x:Type model:SchemaProperty}">
+            <model:SchemaProperty Name="Color" Template="Ellipse"></model:SchemaProperty>
         </x:Array>
 
-        <view:Schema x:Key="CharacterSchema" Properties="{StaticResource properties}"/>
+        <model:Schema x:Key="CharacterSchema" Properties="{StaticResource properties}"/>
 
         <ObjectDataProvider x:Key="SchemaFromFile"
                 ObjectType="{x:Type local:SchemaLoader}"
                 MethodName="LoadSchema" >
         </ObjectDataProvider>
 
-        <local:ObjectToTokenConverter x:Key="ObjectToTokenConverter"/>
+        <view:ObjectToTokenConverter x:Key="ObjectToTokenConverter"/>
         
     </UserControl.Resources>
     <DockPanel Name="DockPanel" Visibility="Visible">

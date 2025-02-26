@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using Utility.Helpers;
+using Utility.Models;
 using Utility.WPF.Controls.Objects;
 
 namespace Utility.WPF.Demo.Objects
