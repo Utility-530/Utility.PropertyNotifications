@@ -22,6 +22,9 @@ using Utility.Helpers.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 using Utility.Extensions;
+using Utility.PropertyNotifications;
+using Utility.Nodes.Common;
+using Utility.Models;
 
 namespace Utility.Nodes.Filters
 {
@@ -55,10 +58,7 @@ namespace Utility.Nodes.Filters
         public static NodeSource Instance { get; } = new();
         string INodeSource.New => New;
 
-        public IObservable<INode?> Single(string key)
-        {
-            return Many(key).Take(1);
-        }
+
 
         public IObservable<INode> SingleByNameAsync(string name)
         {
@@ -180,8 +180,7 @@ namespace Utility.Nodes.Filters
         {
             if (this.Nodes.Any(a => a.Key == node.Key) == false)
             {
-                this.nodes.Add(node);
-
+                configure(node);
                 repository.Get((GuidKey)node.Key)
                     .Subscribe(_d =>
                     {
@@ -199,7 +198,7 @@ namespace Utility.Nodes.Filters
                         {
                             node.IsExpanded = true;
                         }
-
+                        this.nodes.Add(node);
                         node.PropertyChanged += Node_PropertyChanged;
                     });
             }
@@ -218,6 +217,128 @@ namespace Utility.Nodes.Filters
                 else
                     throw new Exception("dfd 4222243");
             }
+
+            void configure(INode node)
+            {
+                node.WithChangesTo(a => a.Current)
+                    .Where(a => a != default)
+                    .Subscribe(a =>
+                    {
+                        a.WithChangesTo(a => a.Key)
+                        .Subscribe(key =>
+                        {
+                            try
+                            {
+                                this.Set(Guid.Parse(node.Key), nameof(Node.Current), key, DateTime.Now);
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
+                        });
+                    });
+
+                node.WithChangesTo(a => a.Data)
+                .Where(a => a is not string)
+                .Take(1)
+                .Subscribe(data =>
+                {
+                    if (data is ISetNode iSetNode)
+                    {
+                        iSetNode.SetNode(node);
+                    }
+                    if (data is IGetGuid guid && node.Key == null)
+                    {
+                        node.Key = new GuidKey(guid.Guid);
+                    }
+
+                    if (data is IYieldChildren ychildren)
+                        ychildren.Children.Cast<IDescriptor>().ForEach(async d =>
+                        {
+                            var _new = await node.ToTree(d);
+                            node.Add(_new);
+                            this.Add(_new as INode);
+                        });
+
+                    if (data is IChildren children && !(data is IHasChildren { HasChildren: false } hasChildren))
+                    {
+                        node.WithChangesTo(a => a.Key)
+                        .Subscribe(key =>
+                        {
+                            _children(children, Guid.Parse(key))
+                            .Filter(node.WithChangesTo(a => a.IsExpanded))
+                            .Subscribe(change);
+                        });
+                    }
+                });
+
+                async void change(Change a)
+                {
+                    if (a is Change { Type: Changes.Type.Add, Value: { } value })
+                    {
+
+                        if (value is INode _node)
+                        {
+                            node.Add(_node);
+                        }
+                        else
+                        {
+                            _node = (INode)(await node.ToTree(value));
+                         
+                        }                        
+                        node.Add(_node);
+                        this.Add(_node as INode);
+                    }
+                    else if (a is Change { Type: Changes.Type.Remove, Value: { } _value })
+                    {
+                        node.RemoveBy(c =>
+
+                        {
+                            if (c is IKey key)
+                            {
+                                if (_value is IKey _key)
+                                {
+                                    return key.Key.Equals(_key.Key);
+                                }
+                                else if (_value is IGetGuid guid)
+                                {
+                                    return key.Key.Equals(new GuidKey(guid.Guid));
+                                }
+                            }
+                            throw new Exception("44c dd");
+
+                        });
+                    }
+                }
+
+                IObservable<object> _children(IChildren children, Guid guid)
+                {
+                    return Observable.Create<object>(observer =>
+                    {
+                        bool b = false;
+                        return this
+                        .ChildrenByGuidAsync(guid)
+                        .Subscribe(a =>
+                        {
+                            if (a.Data?.ToString() == New || node.Data is ICount)
+                            {
+                                b = true;
+                                children.Children.Subscribe(a => observer.OnNext(a), () => observer.OnCompleted());
+                            }
+                            else if (a.Data != null && node.Any(n => ((IKey)n).Key == a.Key) == false)
+                            {
+                                observer.OnNext(a);
+                            }
+                        },
+                        () =>
+                        {
+                            if (b == false)
+                                observer.OnCompleted();
+                        });
+                    });
+                }
+            }
+
         }
 
         public async void Save()
@@ -231,71 +352,19 @@ namespace Utility.Nodes.Filters
             }
         }
 
+        public IObservable<INode?> Single(string key)
+        {
+            return Many(key).Take(1);
+        }
+
         public IObservable<INode> Many(string key)
         {
-            dictionary ??= typeof(Factory)
-                .GetMethods(BindingFlags.Static | BindingFlags.Public)
-                .ToDictionary(a => a.Name, a => new MethodValue { Method = a });
+            return MethodCache.Instance.Get(key);
+        }
 
-            if (dictionaryMethodNameKeys.ContainsKey(key) == false)
-            {
-                var output = dictionary[key].Method.Invoke(null, Array.Empty<object>());
-                if (output is Node node)
-                {
-                    dictionary[key].Nodes.Add(node);
-                    dictionaryMethodNameKeys[key] = node.Data.ToString();
-                    //node.Name = key;
-                }
-                else if (output is IEnumerable<INode> nodes)
-                {
-                    foreach (var _node in nodes)
-                    {
-                        dictionary[key].Nodes.Add(_node);
-                        dictionaryMethodNameKeys[key] = _node.Data.ToString();
-                        //_node.Name = key;
-                    }
-                }
-                else if (output is IObservable<INode> nodeObservable)
-                {
-                    return Obs.Create<INode>(obs =>
-                    {
-                        return nodeObservable.Subscribe(_node =>
-                        {
-                            dictionary[key].Nodes.Add(_node);
-                            dictionaryMethodNameKeys[key] = _node.Data.ToString(); ;
-                            //_node.Name = key;
-                            Add(_node);
-                            obs.OnNext(_node);
-                        });
-                    });
-                }
-                else if (output is Task task)
-                {
-                    if (dictionary[key].Task == null)
-                    {
-                        dictionary[key].Task = task;
-                    }
-                    return Obs.Create<Node>(o =>
-                    {
-                        return dictionary[key].Task.ToObservable().Subscribe(a =>
-                        {
-                            var result = (Node)dictionary[key].Task.GetType().GetProperty("Result").GetValue(dictionary[key].Task);
-                            dictionary[key].Nodes.Add(result);
-                            Add(result);
-                            o.OnNext(result);
-                        });
-                    });
-                }
-            }
-            return Obs.Create<INode>(obs =>
-            {
-                foreach (var x in dictionary[key].Nodes)
-                {
-                    Add(x);
-                    obs.OnNext(x);
-                }
-                return Disposable.Empty;
-            });
+        public void Reset()
+        {
+            throw new NotImplementedException();
         }
     }
 

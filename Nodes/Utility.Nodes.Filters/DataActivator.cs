@@ -9,10 +9,6 @@ namespace Utility.Nodes.Filters
         {
             var _data = ActivateAnything.Activate.New(a.Value.Type);
             //_a.Data = a.Value.Instance ?? a.Value.Name;
-            if (_data is IName name)
-            {
-                name.Name = a.Value.Name;
-            }
             if (_data is ISetName sname)
             {
                 sname.Name = a.Value.Name;
