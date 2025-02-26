@@ -1,20 +1,20 @@
-﻿using System.Reactive.Linq;
+﻿using Chronic;
+using System.Reactive.Linq;
 using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Reflections
 {
-    public class ReflectionNode : Node<IDescriptor>
+    public class DescriptorNode : Node<IDescriptor>
     {
         IDescriptor data;
-    
-        public ReflectionNode(IDescriptor propertyData)
+
+        public DescriptorNode(IDescriptor propertyData)
         {
-            this.data = propertyData;
-            Key = new GuidKey(data.Guid);
-            if (data is IChildren children)
-                children.Children.Cast<Changes.Change<IDescriptor>>().Subscribe(changes);
+            this.Data = propertyData;
+            if (data is IYieldChildren children)
+                children.Children.Cast<IDescriptor>().ForEach(a => changes.OnNext(new(a, Changes.Type.Add)));
         }
 
         //public ReflectionNode()
@@ -26,7 +26,7 @@ namespace Utility.Nodes.Reflections
             set
             {
                 data = value as IDescriptor ?? throw new NullReferenceException($"{nameof(Data)} value is not of type {nameof(IDescriptor)}");
-                Key = new GuidKey(data.Guid);
+                Key = new TypeNameKey(data.Type, data.Name);
             }
         }
 
@@ -45,7 +45,7 @@ namespace Utility.Nodes.Reflections
         {
             if (value is IDescriptor { } descriptor)
             {
-                return Task.FromResult((ITree)new ReflectionNode(descriptor) { Parent = this });
+                return Task.FromResult((ITree)new DescriptorNode(descriptor) { Parent = this });
             }
             else
             {
