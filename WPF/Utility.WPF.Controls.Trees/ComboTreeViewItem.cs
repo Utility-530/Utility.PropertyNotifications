@@ -12,20 +12,6 @@ using Utility.WPF.Panels;
 namespace Utility.WPF.Controls.Trees
 {
 
-    public class NewObjectRoutedEventArgs : RoutedEventArgs
-    {
-        public NewObjectRoutedEventArgs(bool isAccepted, object newObject, RoutedEvent routedEvent, object source) : base(routedEvent, source)
-        {
-            NewObject = newObject;
-            IsAccepted = isAccepted;
-        }
-
-        public object NewObject { get; }
-        public bool IsAccepted { get; }
-    }
-
-    public delegate void FinishEditRoutedEventHandler(object sender, NewObjectRoutedEventArgs e);
-
 
     static class CustomHelper
     {
@@ -77,8 +63,14 @@ namespace Utility.WPF.Controls.Trees
             name: "FinishEdit",
             routingStrategy: RoutingStrategy.Bubble,
             handlerType: typeof(FinishEditRoutedEventHandler),
-
             ownerType: typeof(CustomTreeViewItem));
+
+        public static readonly RoutedEvent SelectionChangedEvent = EventManager.RegisterRoutedEvent(
+            name: "SelectionChanged",
+        routingStrategy: RoutingStrategy.Bubble,
+            handlerType: typeof(System.Windows.Controls.SelectionChangedEventHandler),
+            ownerType: typeof(CustomTreeViewItem));
+
         public static readonly DependencyProperty IsDropDownOpenProperty = ComboBox.IsDropDownOpenProperty.AddOwner(typeof(CustomTreeViewItem), new FrameworkPropertyMetadata(
                 BooleanBoxes.FalseBox,
                 FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
@@ -87,7 +79,7 @@ namespace Utility.WPF.Controls.Trees
 
         public static readonly DependencyProperty NewObjectProperty = DependencyProperty.Register("NewObject", typeof(object), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty MaxDropDownHeightProperty = ComboBox.MaxDropDownHeightProperty.AddOwner(typeof(CustomTreeViewItem));
-        public static readonly DependencyProperty SelectionProperty = DependencyProperty.Register("Selection", typeof(object), typeof(CustomTreeViewItem), new PropertyMetadata(SelectionChanged));
+        public static readonly DependencyProperty SelectionProperty = DependencyProperty.Register("Selection", typeof(object), typeof(CustomTreeViewItem), new PropertyMetadata(_selectionChanged));
         public static readonly DependencyProperty SelectionBoxTemplateSelectorProperty = DependencyProperty.Register("SelectionBoxTemplateSelector", typeof(DataTemplateSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty SelectionBoxItemTemplateProperty = ComboBox.SelectionBoxItemTemplateProperty.AddOwner(typeof(CustomTreeViewItem));
         public static readonly DependencyProperty IsReadOnlyProperty = ComboBox.IsReadOnlyProperty.AddOwner(typeof(CustomTreeViewItem));
@@ -103,6 +95,7 @@ namespace Utility.WPF.Controls.Trees
 
         public CustomTreeViewItem()
         {
+            initialiseCommands();
         }
 
         private static void OnMouseButtonDown(object sender, MouseButtonEventArgs e)
@@ -121,8 +114,9 @@ namespace Utility.WPF.Controls.Trees
                 button.Click += AcceptComboTreeViewItem_Click;
             if (this.GetTemplateChild("Decline_Button") is Button _button)
                 _button.Click += DeclineComboTreeViewItem_Click;
-               if (Style?.Resources["EditTemplate"] is DataTemplate dataTemplate)
+            if (Style?.Resources["EditTemplate"] is DataTemplate dataTemplate)
                 EditTemplate ??= dataTemplate;
+            this.onApplyAnimatedTemplate();
             base.OnApplyTemplate();
         }
 
@@ -145,6 +139,12 @@ namespace Utility.WPF.Controls.Trees
         {
             NewObjectRoutedEventArgs routedEventArgs = new(isAccepted, NewObject, FinishEditEvent, this);
             RaiseEvent(routedEventArgs);
+            {
+                this.GetBindingExpression(CustomTreeViewItem.NewObjectProperty)?
+                                  .UpdateTarget();
+            }
+
+            FinishEditCommand?.Execute(routedEventArgs);
         }
 
 
@@ -157,6 +157,13 @@ namespace Utility.WPF.Controls.Trees
             add { AddHandler(FinishEditEvent, value); }
             remove { RemoveHandler(FinishEditEvent, value); }
         }
+
+        public event System.Windows.Controls.SelectionChangedEventHandler SelectionChanged
+        {
+            add { AddHandler(SelectionChangedEvent, value); }
+            remove { RemoveHandler(SelectionChangedEvent, value); }
+        }
+
 
         #endregion events
 
@@ -222,11 +229,12 @@ namespace Utility.WPF.Controls.Trees
             return item;
         }
 
-        private static void SelectionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void _selectionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is CustomTreeViewItem combo)
             {
                 combo.SetValue(IsDropDownOpenProperty, BooleanBoxes.FalseBox);
+                combo.RaiseEvent(new SelectionChangedEventArgs(SelectionChangedEvent, new[] { e.OldValue }, new[] { e.NewValue }));
             }
         }
         protected void TreeViewItem_Selected(object sender, RoutedEventArgs e)

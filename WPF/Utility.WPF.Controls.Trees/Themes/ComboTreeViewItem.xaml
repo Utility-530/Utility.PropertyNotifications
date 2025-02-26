@@ -168,7 +168,7 @@
                                             <RowDefinition Height="*"/>
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
-                                        
+
                                         <ContentControl x:Name="content_control" 
                                                                 Content="{TemplateBinding NewObject}"                                                      
                                                                 ContentTemplate="{TemplateBinding EditTemplate}"
@@ -310,7 +310,7 @@
                         IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, 
               RelativeSource={RelativeSource TemplatedParent}}"/>-->
 
-                        <ContentPresenter x:Name="PART_Header"
+                        <!--<ContentPresenter x:Name="PART_Header"
                                       IsHitTestVisible="False"
                                       Width="200"
                                       Margin="3,3,23,3"
@@ -318,11 +318,11 @@
                                       ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                       ContentTemplateSelector="{TemplateBinding SelectionBoxTemplateSelector}"
                                       VerticalAlignment="Stretch"
-                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>-->
 
 
 
-                        <Grid x:Name="DropDown" Grid.Row="1" VerticalAlignment="Top"
+                        <Grid x:Name="DropDown" Grid.Row="0" VerticalAlignment="Top"
                   SnapsToDevicePixels="True"
                   MinWidth="{Binding ActualWidth}"
                   MaxHeight="{StaticResource MaxDropDownHeight}">
@@ -330,7 +330,7 @@
                                 <RowDefinition Height="*"></RowDefinition>
                                 <RowDefinition Height="Auto"></RowDefinition>
                             </Grid.RowDefinitions>
-                            
+
                             <!--<Border x:Name="DropDownBorder"
                       BorderThickness="1">
                                 <Border.BorderBrush>
@@ -340,14 +340,23 @@
                                     <SolidColorBrush Color="{DynamicResource ControlLightColor}" />
                                 </Border.Background>
                             </Border>-->
-                            
-                            <ScrollViewer Margin="4,6,4,6"
-                            SnapsToDevicePixels="True">
-                                <ItemsPresenter x:Name="ItemsHost"
-                            KeyboardNavigation.DirectionalNavigation="Contained" />
-                            </ScrollViewer>
+                            <Border VerticalAlignment="Stretch" MinHeight="100">
+                                <!--<Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="BlueViolet"></Setter>
+                                        <Setter Property="BorderBrush" Value="BlueViolet"></Setter>
+                                        <Setter Property="BorderThickness" Value="7"></Setter>
+                                    </Style>
+                                </Border.Style>-->
 
-                            <Border  Grid.Row="1" Background="LightGray" Margin="4">
+                                <ScrollViewer Margin="4,6,4,6"
+                            SnapsToDevicePixels="True">
+                                    <ItemsPresenter x:Name="ItemsHost"
+                            KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Border>
+
+                            <Border  Grid.Row="1" Background="LightGray" Margin="4" MaxHeight="{Binding MaxHeightOfEditBox, RelativeSource={RelativeSource Mode=TemplatedParent}}" >
 
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -355,101 +364,114 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
 
-                                    <ContentControl x:Name="content_control" 
+                                    <ScrollViewer>
+
+
+                                        <ContentControl x:Name="content_control" 
                                                                 Content="{TemplateBinding NewObject}"                                                      
                                                                 ContentTemplate="{TemplateBinding EditTemplate}"
                                                                 ContentTemplateSelector="{TemplateBinding EditTemplateSelector}">
-                                        <FrameworkElement.Style>
-                                            <Style TargetType="{x:Type ContentControl}">
-                                                <Setter Property="Opacity" Value="0"></Setter>
-                                                <Style.Triggers>
-                                                    <!--<DataTrigger Binding="{Binding ElementName=PlusButton, Path=IsChecked}" Value="False">
+                                            <FrameworkElement.Style>
+                                                <Style TargetType="{x:Type ContentControl}">
+                                                    <Setter Property="Opacity" Value="0"></Setter>
+                                                    <Style.Triggers>
+                                                        <!--<DataTrigger Binding="{Binding ElementName=PlusButton, Path=IsChecked}" Value="False">
                                                                 <Setter Property="Opacity" Value="0.5" />
                                                                 </DataTrigger>-->
-                                                    <DataTrigger Binding="{Binding ElementName=PlusButton, Path=IsChecked}" Value="False">
-                                                        <!--<Setter Property="Height" Value="0" />-->
-                                                        <DataTrigger.EnterActions>
-                                                            <BeginStoryboard>
-                                                                <Storyboard>
-                                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.1"></DoubleAnimation>
-                                                                </Storyboard>
-                                                            </BeginStoryboard>
-                                                        </DataTrigger.EnterActions>
-                                                        <DataTrigger.ExitActions>
-                                                            <BeginStoryboard>
-                                                                <Storyboard>
-                                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1"></DoubleAnimation>
-                                                                </Storyboard>
-                                                            </BeginStoryboard>
-                                                        </DataTrigger.ExitActions>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </FrameworkElement.Style>
-                                    </ContentControl>
+                                                        <DataTrigger Binding="{Binding ElementName=PlusButton, Path=IsChecked}" Value="False">
+                                                            <!--<Setter Property="Height" Value="0" />-->
+                                                            <DataTrigger.EnterActions>
+                                                                <BeginStoryboard>
+                                                                    <Storyboard>
+                                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.1"></DoubleAnimation>
+                                                                    </Storyboard>
+                                                                </BeginStoryboard>
+                                                            </DataTrigger.EnterActions>
+                                                            <DataTrigger.ExitActions>
+                                                                <BeginStoryboard>
+                                                                    <Storyboard>
+                                                                        <DoubleAnimation Storyboard.TargetProperty="Opacity" To="1"></DoubleAnimation>
+                                                                    </Storyboard>
+                                                                </BeginStoryboard>
+                                                            </DataTrigger.ExitActions>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </FrameworkElement.Style>
+                                        </ContentControl>
+                                    </ScrollViewer>
 
-                                    <btns:GeometryToggleButton x:Name="PlusButton"                                   
+                                    <Grid MinHeight="24">
+
+
+                                        <btns:GeometryToggleButton x:Name="PlusButton"                                   
                                            Data="M0,1 H2 M1,0 V2"
                                            Foreground="Black"        
                                                                Grid.Row="1"
                                                                            
                                            HorizontalAlignment="Stretch" 
                                            VerticalAlignment="Stretch" Margin="2" Padding="2">
-                                        <FrameworkElement.Style>
-                                            <Style TargetType="{x:Type btns:GeometryToggleButton}">
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsChecked" Value="True">
-                                                        <Setter Property="Height" Value="0" />
-                                                        <Setter Property="Width" Value="0" />
-                                                    </Trigger>
-                                                    <Trigger Property="IsChecked" Value="False">
-                                                        <Setter Property="Height" Value="24" />
-                                                        <Setter Property="Width" Value="24" />
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
+                                            <FrameworkElement.Style>
+                                                <Style TargetType="{x:Type btns:GeometryToggleButton}">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsChecked" Value="True">
+                                                            <Setter Property="Height" Value="0" />
+                                                            <Setter Property="Width" Value="0" />
+                                                        </Trigger>
+                                                        <Trigger Property="IsChecked" Value="False">
+                                                            <Setter Property="Height" Value="24" />
+                                                            <Setter Property="Width" Value="24" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
 
-                                        </FrameworkElement.Style>
-                                    </btns:GeometryToggleButton>
+                                            </FrameworkElement.Style>
+                                        </btns:GeometryToggleButton>
 
 
-                                    <WrapPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" Margin="2">
-                                        <FrameworkElement.Style>
-                                            <Style TargetType="{x:Type WrapPanel}">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ElementName=PlusButton, Path=IsChecked}" Value="False">
-                                                        <Setter Property="Height" Value="0" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </FrameworkElement.Style>
-                                        <btns:GeometryButton x:Name="Accept_Button" Data="{StaticResource Tick_Rounded}"   
+                                        <WrapPanel VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.Row="1" Margin="2">
+                                            <FrameworkElement.Style>
+                                                <Style TargetType="{x:Type WrapPanel}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ElementName=PlusButton, Path=IsChecked}" Value="False">
+                                                            <Setter Property="Height" Value="0" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </FrameworkElement.Style>
+                                            <btns:GeometryButton x:Name="Accept_Button" Data="{StaticResource Tick_Rounded}"   
                                                                          Width="32" Margin="2"
                                                                          Foreground="White"
                                                                          Background="{c:Green 7}"
                                                                          Height="32" >
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="Click">
-                                                    <i:ChangePropertyAction TargetName="PlusButton" PropertyName="IsChecked" Value="False"></i:ChangePropertyAction>
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </btns:GeometryButton>
-                                        <btns:GeometryButton x:Name="Decline_Button"   Data="{StaticResource Cancel_Rounded}"   
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <i:ChangePropertyAction TargetName="PlusButton" PropertyName="IsChecked" Value="False"></i:ChangePropertyAction>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </btns:GeometryButton>
+                                            <btns:GeometryButton x:Name="Decline_Button"   Data="{StaticResource Cancel_Rounded}"   
                                                                          Width="32" Margin="2"
                                                                          Foreground="White"
                                                                          Background="{c:Red 7}"
                                                                          Height="32" >
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="Click">
-                                                    <i:ChangePropertyAction TargetName="PlusButton" PropertyName="IsChecked" Value="False"></i:ChangePropertyAction>
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </btns:GeometryButton>
-                                    </WrapPanel>
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="Click">
+                                                        <i:ChangePropertyAction TargetName="PlusButton" PropertyName="IsChecked" Value="False"></i:ChangePropertyAction>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </btns:GeometryButton>
+                                        </WrapPanel>
+                                    </Grid>
                                 </Grid>
                             </Border>
                         </Grid>
-                    </Grid>                         
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Path=IsChecked, ElementName=PlusButton}" Value="False">
+                            <Setter TargetName="content_control" Property="Height" Value="0" />
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
