@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
-using Utility.Descriptors;
+using Utility.PropertyDescriptors;
 using Utility.Interfaces.NonGeneric;
 using System.Collections.ObjectModel;
-using Utility.Extensions;
 using Utility.Trees.Abstractions;
 using Utility.Helpers.NonGeneric;
 using Utility.Trees.Decisions;
@@ -56,8 +55,11 @@ namespace Utility.Nodes.WPF
                             },
                             new TrueDecisionTree(new Decision<IDescriptor>(item => item as ICollectionItemDescriptor!=null))
                             {
-                                new TrueDecisionTree(new Decision<IDescriptor>(item => (item as ICollectionItemDescriptor).Removed != null ),  a=> false)
+                                //new TrueDecisionTree(new Decision<IDescriptor>(item => (item as ICollectionItemDescriptor).Removed != null ),  a=> false)
                             },
+                            new TrueDecisionTree<IDescriptor>(new Decision<IDescriptor>(item => item.ParentType.Name == "BitmapImage"), item =>false),
+                            new TrueDecisionTree<IDescriptor>(new Decision<IDescriptor>(item => item.Name == "DependencyObjectType"), item =>false),
+                            new TrueDecisionTree<IDescriptor>(new Decision<IDescriptor>(item => item.Type.Name == "ImageSource"), item =>false),
                             new TrueDecisionTree<IDescriptor>(new Decision<IDescriptor>(item => item.ParentType.Name == "Array"), item => item.Name)
                             {
                                 new TrueDecisionTree(new Decision<string>(item => item == "IsFixedSize"),  a=> false) { },

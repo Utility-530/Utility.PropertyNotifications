@@ -3,10 +3,8 @@ using System.Collections;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using Utility.Collections;
-using Utility.Descriptors;
+using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
-using Utility.WPF.Controls.Trees;
 
 namespace Utility.Nodes.WPF
 {
@@ -16,7 +14,7 @@ namespace Utility.Nodes.WPF
         {
             if(value is ICollectionDescriptor collectionDescriptor)
             {
-                var instance = Activator.CreateInstance(collectionDescriptor.ElementType);
+                var instance = ActivateAnything.Activate.New(collectionDescriptor.ElementType);
                 return instance;
             }
             return DependencyProperty.UnsetValue;
@@ -33,14 +31,17 @@ namespace Utility.Nodes.WPF
 
         protected override void Invoke(object parameter)
         {
-            if(parameter is NewObjectRoutedEventArgs { IsAccepted:true, NewObject:{ } instance } value)
+            if(parameter is Utility.WPF.NewObjectRoutedEventArgs { IsAccepted:true, NewObject:{ } instance } value)
             {
                 var x = AssociatedObject;
                 ;
                 if(x.DataContext is IReadOnlyTree{ Data: ICollectionDescriptor descriptor })
                 {
-                    (descriptor.Collection as IList).Add(instance);
-                    descriptor.Refresh();
+                    if (descriptor.Collection is IList list)
+                    {
+                        list?.Add(instance);
+                        descriptor.OnNext(new System.ComponentModel.RefreshEventArgs(instance));
+                    }
                 }
 
             }

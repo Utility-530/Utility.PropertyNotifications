@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using Utility.Descriptors;
-using Utility.Interfaces;
+using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Decisions;
 
@@ -14,6 +13,8 @@ namespace Utility.Nodes.WPF
 
         public override Style SelectStyle(object item, DependencyObject container)
         {
+            //return base.SelectStyle(item, container);//
+
             object input = null;
             if (item is TreeViewItem _item)
             {
@@ -25,9 +26,9 @@ namespace Utility.Nodes.WPF
             }
             if (isInitialised == false)
             {
-                var uri = new Uri(@$"{typeof(StyleSelector).Assembly.GetName()};component/Themes/Styles.xaml", UriKind.RelativeOrAbsolute);
-                res = Application.LoadComponent(uri) as ResourceDictionary;
-                Application.Current.Resources.Add(uri, res);
+                Uri ??= new Uri(@$"{typeof(StyleSelector).Assembly.GetName().Name};component/Themes/Styles.xaml", UriKind.RelativeOrAbsolute);
+                res = Application.LoadComponent(Uri) as ResourceDictionary;
+                Application.Current.Resources.Add(Uri, res);
                 isInitialised = true;
             }
             if (SelectKey(item) is string s)
@@ -51,6 +52,8 @@ namespace Utility.Nodes.WPF
             return Predicate.Backput?.ToString();
         }
 
+        public Uri Uri { get; set; }
+
         public string DefaultStyle { get; set; } = "ExpandedTreeViewItem";
 
         public static StyleSelector Instance { get; } = new();
@@ -63,30 +66,30 @@ namespace Utility.Nodes.WPF
                 {
                     new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IHeaderDescriptor != null), md =>"HeaderItem"),
                     new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IMethodDescriptor != null){  }, md=>"ExpandedTreeViewItem"),
-                    //new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionDescriptor != null && (item.Data as ICollectionDescriptor).ElementType == typeof(Table)){  }, md=>"ComboStyle"),
+                    ///new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionDescriptor != null && (item.Data as ICollectionDescriptor).ElementType == typeof(Table)){  }, md=>"ComboStyle"),
 
                     new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionDescriptor != null){  }, md=>"LineStyle"),
                     new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionHeadersDescriptor != null){  }, md=>"ItemsStyle"),
                     new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IPropertiesDescriptor != null){  }, md=>"ItemsStyle"),
                     new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionItemReferenceDescriptor != null){  }, md =>"ThinLineStyle"),
 
-                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Parent!=null){  })
-                    {
-                        new StringDecisionTree(new Decision<IReadOnlyTree>(item => (item.Parent .Data as ICollectionItemDescriptor != null)){  })
-                        {
-                            new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IReferenceDescriptor != null){  }, md =>"CollapsedTableItem"),
-                            new StringDecisionTree(new Decision<IReadOnlyTree>(item =>  item.Data as IReferenceDescriptor == null){  }, md =>"ExpandedTableItem")
-                        },
-                        //new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => ((item.Parent ).Parent!=null)){  })
-                        //{
-                        //    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => (((item.Parent ).Parent).Data as ICollectionItemDescriptor!=null)){  }, md=> MakeTemplate(md)),
-                        //},
-                    },
-                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionItemDescriptor != null){  }, md =>"ButtonsAddRemoveStyle"),
-                    //new StringDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => (item.Data as PropertyDescriptor) != null), md => "ExpandedTreeViewItem"),
-                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IValueDescriptor != null){  }, md =>"ExpandedTreeViewItem"),
-                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IPropertyDescriptor != null){  }, md =>"ItemsStyle"),
-                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => true), md => DefaultStyle),
+                    //new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Parent!=null){  })
+                    //{
+                    //    new StringDecisionTree(new Decision<IReadOnlyTree>(item => (item.Parent .Data as ICollectionItemDescriptor != null)){  })
+                    //    {
+                    //        new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IReferenceDescriptor != null){  }, md =>"CollapsedTableItem"),
+                    //        new StringDecisionTree(new Decision<IReadOnlyTree>(item =>  item.Data as IReferenceDescriptor == null){  }, md =>"ExpandedTableItem")
+                    //    },
+                    //    //new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => ((item.Parent ).Parent!=null)){  })
+                    //    //{
+                    //    //    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => (((item.Parent ).Parent).Data as ICollectionItemDescriptor!=null)){  }, md=> MakeTemplate(md)),
+                    //    //},
+                    //},
+                    //new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionItemDescriptor != null){  }, md =>"ButtonsAddRemoveStyle"),
+                    ////new StringDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => (item.Data as PropertyDescriptor) != null), md => "ExpandedTreeViewItem"),
+                    //new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IValueDescriptor != null){  }, md =>"ExpandedTreeViewItem"),
+                    //new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IPropertyDescriptor != null){  }, md =>"ItemsStyle"),
+                    //new StringDecisionTree(new Decision<IReadOnlyTree>(item => true), md => DefaultStyle),
                 };
         }
     }
