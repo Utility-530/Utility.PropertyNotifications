@@ -1,6 +1,5 @@
 ﻿# nullable enable
 using NetFabric.Hyperlinq;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using ReactiveUI;
@@ -8,10 +7,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reactive.Subjects;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -56,13 +53,14 @@ namespace Utility.WPF.Controls.Objects
         public static readonly DependencyProperty ObjectProperty = DependencyProperty.Register(nameof(Object), typeof(JToken), typeof(JsonControl), new PropertyMetadata(null, Change));
         public static readonly DependencyProperty ValidationSchemaProperty = DependencyProperty.Register(nameof(ValidationSchema), typeof(JSchema), typeof(JsonControl), new PropertyMetadata(null, Change));
         public static readonly DependencyProperty SchemaProperty = DependencyProperty.Register(nameof(Schema), typeof(Schema), typeof(JsonControl), new PropertyMetadata());
-        public static readonly DependencyProperty ChangeValueCommandProperty = DependencyProperty.Register("ChangeValueCommand", typeof(ICommand), typeof(JsonControl), new PropertyMetadata());
+        public static readonly DependencyProperty ChangeValueCommandProperty = DependencyProperty.Register(nameof(ChangeValueCommand), typeof(ICommand), typeof(JsonControl), new PropertyMetadata());
 
         public static readonly RoutedEvent ValueChangedEvent = EventManager.RegisterRoutedEvent(
-    name: "ValueChanged",
-    routingStrategy: RoutingStrategy.Bubble,
-    handlerType: typeof(ValueChangedRoutedEventHandler),
-    ownerType: typeof(CustomTreeViewItem));
+            name: "ValueChanged",
+            routingStrategy: RoutingStrategy.Bubble,
+            handlerType: typeof(ValueChangedRoutedEventHandler),
+            ownerType: typeof(CustomTreeViewItem));
+
         private static void Change2(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
         private static void Change(DependencyObject d, DependencyPropertyChangedEventArgs e) {
         
@@ -196,21 +194,27 @@ namespace Utility.WPF.Controls.Objects
         public override void OnApplyTemplate()
         {
             this.WhenAnyValue(a => a.Object)
-                         .WhereNotNull()
-                         .Merge(this.WhenAnyValue(a => a.Json).WhereNotNull().Select(convert))
-                         .Subscribe(a =>
-                         {
-                             this.Load(a, this);
-                         }, e =>
-                         {
-                             MessageBox.Show(e.Message);
-                         });
-
+                .WhereNotNull()
+                .Merge(this.WhenAnyValue(a => a.Json).WhereNotNull().Select(convert))
+                .Subscribe(a =>
+                {
+                    this.Load(a, this);
+                }, e =>
+                {
+                    MessageBox.Show(e.Message);
+                });
 
             JToken convert(string json)
             {
                 //return Newtonsoft.Json.JsonConvert.SerializeObject(e, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, Converters = converters });
-                return JToken.Parse(json);
+                try
+                {
+                    return JToken.Parse(json);
+                }
+                catch(Exception ex)
+                {
+                    return JToken.FromObject(ex);
+                }
             }
 
             base.OnApplyTemplate();
@@ -277,27 +281,29 @@ namespace Utility.WPF.Controls.Objects
                 {
                     if (property.Name == "$type")
                     {
-                        return frameworkElement.FindResource("TypeTemplate") as DataTemplate;
+                        return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
                     }
-                    if (jsonControl.Schema is not null)
-
-
-                        if (findProperty(property.Name, parent, jsonControl.Schema, out SchemaProperty schemaProperty))
+                    if (property.Name == "$values")
+                    {
+                        return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
+                    }
+                    if (findProperty(property.Name, parent, jsonControl.Schema, out SchemaProperty schemaProperty))
+                    {
+                        if (schemaProperty.EnumType != null)
                         {
-                            if (schemaProperty.EnumType != null)
-                            {
-                                //var etype = Type.GetType(schemaProperty.EnumType);
-
-                                return frameworkElement.FindResource("EnumTemplate") as DataTemplate;
-                            }
-                            if (frameworkElement.FindResource(schemaProperty.Format) is DataTemplate dataTemplate)
-                            {
-                                return dataTemplate;
-                            }
+                            return frameworkElement.FindResource("EnumTemplate") as DataTemplate;
                         }
+                        if (schemaProperty.Template is { } template && frameworkElement.FindResource(template) is DataTemplate dataTemplate)
+                        {
+                            return dataTemplate;
+                        }
+                        if (schemaProperty.IsVisible == false)
+                        {
+                            return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
+                        }
+                    }
 
-
-                    return frameworkElement.FindResource(Convert(_type)) as DataTemplate;
+                    return frameworkElement.FindResource(convert(_type)) as DataTemplate;
                 }
             }
 
@@ -307,104 +313,70 @@ namespace Utility.WPF.Controls.Objects
             if (item is null)
                 return MissingTemplate;
 
-            return presenter.Resources[Extensions.ChooseString(ChooseType(presenter))] as DataTemplate;
+            return container.GetResource<DataTemplate>("MissingTemplate");
 
-            bool findProperty(string name, JContainer? parent, Schema schema, out SchemaProperty? property)
+            bool findProperty(string name, JContainer? parent, Schema? schema, out SchemaProperty? property)
             {
-                if (properties.TryGetValue(name, out SchemaProperty? prop))
+                if (properties.TryGetValue(name, out SchemaProperty? schemaProp))
                 {
-                    property = prop;
+                    property = schemaProp;
                     return true;
 
                 }
-                else if (schema?.Properties.Where(a => a.Name == name).ToArray() is SchemaProperty[] props)
+                else if (schema?.Properties.Where(a => a.Name == name).ToArray() is SchemaProperty[] properties)
                 {
-                    foreach (var x in props)
+                    foreach (var prop in properties)
                     {
-                        if (x.Type != null)
-                            if (type() is string _type && x.Type != _type)
-                            {
-                                continue;
-                            }
-                        property = properties[x.Name] = x;
+                        //if (x.Type != null)
+                        if (prop.Name != name)
+                        {
+                            continue;
+                        }
+                        property = this.properties[prop.Name] = prop;
                         return true;
                     }
+                }
+                else if (parent?.First?.Values<string>().First() is string stype && Type.GetType(stype) is Type _type)
+                {
+                    if (SchemaStore.Instance.Schemas.TryGetValue(_type, out var _schema))
+                    {
+                        if (findProperty(name, parent, _schema, out property))
+                        {
+                            return true;
+                        }
+                    }
+                    var propertyType = _type.GetProperty(name).PropertyType;
+                    if (propertyType == typeof(string))
+                    {
+                        property = new SchemaProperty { Template = "StringTemplate" };
+                        return true;
+                    }
+
                 }
                 property = null;
                 return false;
 
-                string type()
+            }
+
+            static string convert(JTokenType _type)
+            {
+                return _type switch
                 {
-                    if (parent is JObject { First: JProperty { Value: { } value } })
-                    {
-                        return value.ToString();
-                    }
-                    return null;
-                }
+                    JTokenType.Date => "DateTemplate",
+                    JTokenType.TimeSpan => "TimeTemplate",
+                    JTokenType.String => "StringTemplate",
+                    JTokenType.Integer => "IntegerTemplate",
+                    JTokenType.Boolean => "BooleanTemplate",
+                    JTokenType.Null => "NullTemplate",
+                    JTokenType.Array => "ArrayPropertyTemplate",
+                    JTokenType.Object => "ObjectPropertyTemplate",
+                    JTokenType.Guid => "GuidTemplate",
+                    _ => throw new Exception("Nsdf33 dd")
+                };
             }
         }
-        private static string Convert(JTokenType _type)
-        {
-            return _type switch
-            {
-                //JTokenType.DateTime => "DateTimeTemplate",
-                JTokenType.Date => "DateTemplate",
-                JTokenType.TimeSpan => "TimeTemplate",
-                //JTokenType.Enum => "EnumTemplate",
-                JTokenType.String => "StringTemplate",
-                JTokenType.Integer => "IntegerTemplate",
-                //JTokenType.Number => "NumberTemplate",
-                JTokenType.Boolean => "BooleanTemplate",
-                JTokenType.Null => "NullTemplate",
-                JTokenType.Array => "ArrayPropertyTemplate",
-                JTokenType.Object => "ObjectPropertyTemplate",
 
-                //Type.Null | Type.Enum => "EnumNullTemplate",
-                //Type.Null | Type.Integer => "IntegerNullTemplate",
-                _ => throw new Exception("Nsdf33 dd")
-            };
-        }
 
-        private static Extensions.Type ChooseType(FrameworkElement presenter)
-        {
-            //if (schema.Type.HasFlag(JType.String) && schema.Format == JsonFormatStrings.DateTime) // TODO: What to do with date/time?
-            return Extensions.Type.DateTime;
-            //else if (schema.Type.HasFlag(JsonObjectType.String) && schema.Format == "date")
-            //    return Type.Date;
-            //else if (schema.Type.HasFlag(JsonObjectType.String) && schema.Format == "time")
-            //    return Type.Time;
-            //else if (schema.Type.HasFlag(JsonObjectType.String) && schema.Enumeration.Count > 0)
-            //    return Type.Enum;
-            //else if (schema.Type.HasFlag(JsonObjectType.String))
-            //    return Type.String;
-            //else if (schema.Type.HasFlag(JsonObjectType.Integer) && schema.Enumeration.Count > 0)
-            //    return Type.Enum;
-            //else if (schema.Type.HasFlag(JsonObjectType.Integer))
-            //    return Type.Integer;
-            //else if (schema.Type.HasFlag(JsonObjectType.Number))
-            //    return Type.Number;
-            //else if (schema.Type.HasFlag(JsonObjectType.Boolean))
-            //    return Type.Boolean;
-            //else if (schema.Type.HasFlag(JsonObjectType.Object))
-            //    return Type.Object;
-            //else if (schema.Type.HasFlag(JsonObjectType.Array))
-            //    return Type.Array;
-            //else if (schema.Type.HasFlag(JsonObjectType.None))
-            //{
-            //    var x = schema.OneOf.SingleOrDefault(a => a.Type != JsonObjectType.Null);
-            //    var xnull = schema.OneOf.SingleOrDefault(a => a.Type == JsonObjectType.Null);
-            //    if (x == null || xnull == null)
-            //    {
-            //        throw new Exception("Nsdf2 2233 dd");
-            //    }
-            //    else
-            //    {
-            //        return Type.Null | ChooseType(presenter, x.ActualSchema);
-            //    }
-            //}
-            //else
-            //    throw new Exception("Nsdf33 dd");
-        }
 
         public DataTemplate MissingTemplate { get; set; }
         public JSchema Schema { get; private set; }
@@ -471,6 +443,7 @@ namespace Utility.WPF.Controls.Objects
 
         }
     }
+
     internal static class ColorStore
     {
         public static readonly Dictionary<string, string> Collection = new()
@@ -595,7 +568,7 @@ namespace Utility.WPF.Controls.Objects
         {
             if (value is JValue { Value: var _value })
             {
-                return _value.ToString();
+                return _value?.ToString();
             }
             return DependencyProperty.UnsetValue;
         }
@@ -609,7 +582,24 @@ namespace Utility.WPF.Controls.Objects
     }
 
 
+    public class ObjectVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is JObject jObject)
+            {
+                if (jObject.Parent == null)
+                    return Visibility.Collapsed;
 
+            }
+            return Visibility.Visible;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
     public class EnumConverter : IMultiValueConverter
     {
@@ -815,26 +805,6 @@ namespace Utility.WPF.Controls.Objects
         }
     }
 
-    //public class IntegerUpDownRangeConverter : IValueConverter
-    //{
-    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        if (value == null)
-    //            return parameter.ToString() == "min" ? int.MinValue : int.MaxValue;
-
-    //        if (value is decimal)
-    //            return (int)(decimal)value;
-    //        if (value is double)
-    //            return (int)(double)value;
-
-    //        return (int)value;
-    //    }
-
-    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        return value;
-    //    }
-    //}
 
     public class NullableToVisibilityConverter : IValueConverter
     {
@@ -914,14 +884,17 @@ namespace Utility.WPF.Controls.Objects
             }
         }
     }
-     
+
     public class GuidConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is JValue { Value: var _value })
             {
-                return Guid.Parse(_value.ToString());
+                if (Guid.TryParse(_value.ToString(), out Guid guid))
+                {
+                    return guid;
+                }
             }
             return DependencyProperty.UnsetValue;
         }

@@ -9,13 +9,17 @@
     xmlns:conv="http://schemas.utility.com/converters"
     xmlns:local="clr-namespace:Utility.WPF.Controls.Objects"
     xmlns:c="http://schemas.utility.com"
-    xmlns:res="http://schemas.utility.com/resourcedictionary">
+    xmlns:res="http://schemas.utility.com/resourcedictionary" 
+    xmlns:att="http://schemas.utility.com/attached">
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary  Source="/Utility.WPF.Geometries;component/Resources.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <local:EnumConverter x:Key="EnumConverter"></local:EnumConverter>
+    <local:ToolTipTemplateSelector x:Key="ToolTipTemplateSelector"></local:ToolTipTemplateSelector>
+    <conv:TypeNameConverter x:Key="TypeNameConverter"></conv:TypeNameConverter>    
+    <local:ObjectVisibilityConverter x:Key="ObjectVisibilityConverter"></local:ObjectVisibilityConverter>
 
     <ObjectDataProvider
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -109,7 +113,24 @@
     <ToolTip x:Key="TokenToolTip" Style="{StaticResource TokenToolTipStyle}"/>
 
     <Style x:Key="JsonTreeViewItem" TargetType="{x:Type TreeViewItem}">
+        <Setter Property="ToolTipService.InitialShowDelay" Value="2000"/>
+        <Setter Property="ToolTip">
+            <Setter.Value>
+                <ContentControl Content="{Binding }" ContentTemplateSelector="{StaticResource ToolTipTemplateSelector}"></ContentControl>
+            </Setter.Value>
+        </Setter>
         <Setter Property="IsExpanded" Value="True" />
+        <att:InteractivitySetter>
+            <Setter.Value>
+                <att:InteractivityTemplate>
+                    <att:InteractivityItems>
+                        <att:InteractivityItems.Behaviors>
+                            <local:PreventCollapseBehavior></local:PreventCollapseBehavior>
+                        </att:InteractivityItems.Behaviors>
+                    </att:InteractivityItems>
+                </att:InteractivityTemplate>
+            </Setter.Value>
+        </att:InteractivitySetter>
     </Style>
 
     <controls:JsonObjectTypeTemplateSelector x:Key="JsonObjectTypeTemplateSelector" />
@@ -233,14 +254,13 @@
                 </Grid>
             </HierarchicalDataTemplate>
 
-            <HierarchicalDataTemplate DataType="{x:Type jlinq:JObject}" x:Key="ObjectPropertyTemplate" ItemsSource="{Binding ., Converter={x:Static controls:ComplexPropertyMethodValueConverter.Instance}, ConverterParameter='Children'}">
-                <ContentControl Style="{StaticResource LabelValueContent}">
-                    <Grid>
-                        <Button Style="{StaticResource BasicButtonStyle}" HorizontalAlignment="Right" Command="{Binding Source={x:Static local:Commands.UnFooCommand}}">
-                            <Path  Stroke="Gray" StrokeThickness="2"  Stretch="UniformToFill" Data="{StaticResource Cross}"/>
-                        </Button>
-                    </Grid>
-                </ContentControl>
+            <HierarchicalDataTemplate DataType="{x:Type jlinq:JObject}" x:Key="ObjectPropertyTemplate" ItemsSource="{Binding ., Converter={x:Static controls:ComplexPropertyMethodValueConverter.Instance}, ConverterParameter='Children'}">       
+                    <Button Style="{StaticResource BasicButtonStyle}" 
+                                HorizontalAlignment="Right" 
+                                Command="{Binding Source={x:Static local:Commands.UnFooCommand}}" 
+                                Visibility="{Binding ., Converter={StaticResource ObjectVisibilityConverter}}">
+                        <Path Stroke="Gray" StrokeThickness="2"  Stretch="UniformToFill" Data="{StaticResource Cross}"/>        
+                    </Button>             
             </HierarchicalDataTemplate>
 
             <!--<VisibilityConverter x:Key="VisibilityConverter" />-->
@@ -357,9 +377,19 @@
                     </WrapPanel>
                 </ContentControl>
             </DataTemplate>
+            <Style x:Key="textBoxInError" TargetType="TextBox">
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="true">
+                        <Setter Property="ToolTip"
+              Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+              Path=(Validation.Errors)[0].ErrorContent}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+
             <DataTemplate x:Key="GuidTemplate">
                 <ContentControl Style="{StaticResource LabelValueContent}">
-                    <TextBox Margin="10" Text="{Binding Value, Mode=TwoWay,Converter={StaticResource GuidConverter}}" Grid.Column="2" Width="244" Height="20">
+                    <TextBox Text="{Binding Value, Mode=TwoWay, ValidatesOnExceptions=True, Converter={StaticResource GuidConverter}}" Style="{StaticResource textBoxInError}">
                         <i:Interaction.Behaviors>
                             <beh:GuidEditBehavior />
                         </i:Interaction.Behaviors>
@@ -413,6 +443,16 @@
                     <Path Stroke="Gray" StrokeThickness="2" Data="{StaticResource Null}"/>
                 </ContentControl>
             </DataTemplate>
+
+            <DataTemplate x:Key="InvisibleTemplate">
+            </DataTemplate>
+
+            <DataTemplate x:Key="MissingTemplate">
+                <Border BorderBrush="Red" BorderThickness="2">
+                    <ContentControl Content="{Binding }"></ContentControl>
+                </Border>
+            </DataTemplate>
+            
             <!--<DataTemplate x:Key="EnumNullTemplate">
                 <UniformGrid Rows="1" >
                     <StackPanel >
