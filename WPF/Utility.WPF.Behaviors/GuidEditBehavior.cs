@@ -29,6 +29,8 @@ namespace Utility.WPF.Behaviors
             this.AssociatedObject.TextChanged += AssociatedObject_TextChanged;
             borderBrush = AssociatedObject.BorderBrush;
             AssociatedObject.FontFamily = new System.Windows.Media.FontFamily("Consolas");
+            AssociatedObject.Height = 20;
+            AssociatedObject.Width = 244;
             _guid = this.AssociatedObject.Text;
 
             DataObject.AddPastingHandler(AssociatedObject, OnPaste);
