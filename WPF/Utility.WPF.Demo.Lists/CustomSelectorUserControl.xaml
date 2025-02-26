@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="Utility.WPF.Demo.Lists.CustomSelectorUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Utility.WPF.Demo.Lists"
+             xmlns:view="http://schemas.utility.com/lists" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <FrameworkElement.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Utility.WPF.Demo.Data;component/DataTemplate/Character.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </FrameworkElement.Resources>
+    <FrameworkElement.DataContext>
+        <local:CustomSelectorViewModel/>
+    </FrameworkElement.DataContext>
+
+    <Grid>
+        <view:CustomSelector ItemsWidth="300" ItemsHeight="500"
+                               CheckedPropertyName="IsRhPositive"                               
+                               d:ItemsSource="{StaticResource Characters}" 
+                               ItemsSource="{Binding Items}" >
+            <!--NewObject="{Binding NewObject,Mode=TwoWay}">-->
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="FinishEdit">
+                    <i:InvokeCommandAction Command="{Binding FinishEdit}"  PassEventArgsToCommand="True"></i:InvokeCommandAction>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </view:CustomSelector>
+    </Grid>
+</UserControl>
