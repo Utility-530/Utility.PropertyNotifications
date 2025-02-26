@@ -19,20 +19,11 @@ namespace Utility.WPF.Templates
                 {
                     return (valueDataTemplateSelector ??= new ValueDataTemplateSelector()).SelectTemplate(item, container);
                 }
-                else
+                else if (item is IIsReadOnly { IsReadOnly: true })
                 {
-                    MethodInfo setMethod = item.GetType().GetProperty(nameof(IValue.Value)).GetSetMethod();
-
-                    if (setMethod == null)
-                    {
-                        // The setter doesn't exist or isn't public.
-                        return (readOnlyValueDataTemplateSelector ??= new ReadOnlyValueDataTemplateSelector()).SelectTemplate(item, container);
-                    }
-                    else
-                    {
-                        return (valueDataTemplateSelector ??= new ValueDataTemplateSelector()).SelectTemplate(item, container);
-                    }
-                }    
+                    return (readOnlyValueDataTemplateSelector ??= new ReadOnlyValueDataTemplateSelector()).SelectTemplate(item, container);
+                }
+                return (valueDataTemplateSelector ??= new ValueDataTemplateSelector()).SelectTemplate(item, container);
             }
 
             if (item is DataTemplate dataTemplate)
