@@ -6,9 +6,7 @@ namespace Utility.Interfaces.Exs
     public interface INodeSource
     {
         string New { get; }
-
         DateTime Remove(Guid guid);
-        IObservable<INode> ChildrenByGuidAsync(Guid guid);
         int? MaxIndex(Guid guid, string v);
         void Remove(INode node);
         IObservable<Key?> Find(Guid parentGuid, string name, Guid? guid = null, Type? type = null, int? localIndex = null);
@@ -16,7 +14,7 @@ namespace Utility.Interfaces.Exs
         void Set(Guid guid, string name, object value, DateTime dateTime);
         void Add(INode node);
         IObservable<INode?> Single(string v);
-
         void Reset();
+        void Save();
     }
 }
