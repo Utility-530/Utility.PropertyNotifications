@@ -1,18 +1,12 @@
 ﻿using Newtonsoft.Json;
 using Splat;
-using System.Configuration;
-using System.Data;
 using System.Windows;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using Utility.Nodes.Demo.Filters;
 using Utility.Nodes.Filters;
-
-//using Utility.Nodes.Filters;
 using Utility.Repos;
-using Utility.Trees.Demo.Filters.Infrastructure;
 
 namespace Utility.Trees.Demo.Filters
 {
