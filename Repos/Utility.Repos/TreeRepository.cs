@@ -9,6 +9,7 @@ using static System.Environment;
 using Utility.Structs.Repos;
 using Utility.Helpers;
 using Utility.Interfaces.Exs;
+using System;
 
 namespace Utility.Repos
 {
@@ -344,7 +345,6 @@ namespace Utility.Repos
                     observer.OnNext(guid);
                 });
             });
-
         }
 
 
@@ -396,7 +396,7 @@ namespace Utility.Repos
                         throw new Exception("dsf 33p[p[");
                     else if (tables.Count == 0)
                     {
-                        connection.Insert(new Relationships { Guid = guid, Name = name, TypeId = typeId });
+                        connection.Insert(new Relationships { Guid = guid, Name = name, TypeId = typeId, Added = DateTime.Now });
                         observer.OnNext(new Key(guid, default, type, name, 0, null));
                     }
                     else
@@ -415,9 +415,12 @@ namespace Utility.Repos
 
         public int? MaxIndex(Guid parentGuid, string? name = default)
         {
-            var proto_name = getName(parentGuid);
+            if (tablelookup.TryGetValue(parentGuid, out string? value) == false)
+            {
+                return null;
+            }
 
-            string query = $"SELECT MAX({nameof(Relationships._Index)}) FROM '{proto_name}' WHERE {nameof(Relationships.Parent)} = '{parentGuid}'";
+            string query = $"SELECT MAX({nameof(Relationships._Index)}) FROM '{value}' WHERE {nameof(Relationships.Parent)} = '{parentGuid}'";
             var index = connection.ExecuteScalar<int?>(query + (name == default ? string.Empty : $"AND {nameof(Relationships.Name)} = '{name}'"));
             return index;
         }
@@ -622,16 +625,17 @@ namespace Utility.Repos
 
             }
             int typeId = 0;
+            var str = type.GenericTypeArguments.Any() ? string.Join(',', type.GenericTypeArguments.Select(a => a.ToString())) : null;
             connection.RunInTransaction(() =>
             {
-                var str = string.Join(',', type.GenericTypeArguments.Select(a => a.ToString()));
-                connection.Insert(new Type { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name, ClassName = type.GenericTypeArguments.Any() ? str : null });
-                var types = connection.Query<Type>($"SELECT * FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' AND ClassName = '{str}'");
+                connection.Insert(new Type { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name, ClassName = str });
+                var types = connection.Query<Type>($"SELECT * FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' AND ClassName {ToComparisonAndValue(str)}");
                 if (types.Count > 1)
                     throw new Exception("fds ");
-                typeId = connection.ExecuteScalar<int>($"SELECT Id FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' AND ClassName = '{str}'");
-                this.types[typeId] = type;
             });
+
+            typeId = connection.ExecuteScalar<int>($"SELECT Id FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' AND ClassName {ToComparisonAndValue(str)}");
+            this.types[typeId] = type;
             return typeId;
         }
 
@@ -647,6 +651,7 @@ namespace Utility.Repos
             {
                 return value;
             }
+
             throw new Exception("Have you created a root?");
         }
 
