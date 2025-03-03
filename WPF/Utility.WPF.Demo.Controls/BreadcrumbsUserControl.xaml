@@ -10,11 +10,25 @@
              d:Background="White"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <FrameworkElement.Resources>
+        <ResourceDictionary Source="/Utility.WPF.Controls;component/BreadCrumbs.xaml"></ResourceDictionary>
+    </FrameworkElement.Resources>
     
-    
-    <UniformGrid Columns="1" Height="30" Width="400">
-        <controls:BreadCrumbs
+    <UniformGrid Columns="1"  Width="400">
+        <controls:BreadCrumbs x:Name="BreadCrumbs1"
             ItemsSource="{Binding Source={x:Type r:Observable}, Converter={x:Static conv:TypeHierarchyConverter.Instance}}">
+        </controls:BreadCrumbs>
+
+        <controls:BreadCrumbs x:Name="BreadCrumbs2" HorizontalAlignment="Left"
+            ItemsSource="{Binding Source={x:Type r:Observable}, Converter={x:Static conv:TypeHierarchyConverter.Instance}}">
+        </controls:BreadCrumbs>
+
+        <controls:BreadCrumbs x:Name="BreadCrumbs3" Style="{DynamicResource BreadCrumbsAlernate2Style}" HorizontalAlignment="Right"
+            ItemsSource="{Binding Source={x:Type local:BreadcrumbsUserControl}, Converter={x:Static conv:TypeHierarchyConverter.Instance}}">
+        </controls:BreadCrumbs>
+
+        <controls:BreadCrumbs x:Name="BreadCrumbs4" Style="{DynamicResource BreadCrumbsAlernateStyle}" HorizontalAlignment="Right"
+            ItemsSource="{Binding Source={x:Type r:QueryDebugger}, Converter={x:Static conv:TypeHierarchyConverter.Instance}}">
         </controls:BreadCrumbs>
     </UniformGrid>
 </UserControl>
