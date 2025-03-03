@@ -8,7 +8,7 @@
                     xmlns:inf="clr-namespace:Utility.Models.Trees;assembly=Utility.Models.Trees"
                     xmlns:model="clr-namespace:Utility.Models;assembly=Utility.Models"
                     xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
-                    xmlns:des="clr-namespace:Utility.Descriptors;assembly=Utility.Descriptors"
+                    xmlns:des="clr-namespace:Utility.PropertyDescriptors;assembly=Utility.PropertyDescriptors"
                     xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit" 
                     xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
                     xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020"
@@ -93,9 +93,11 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:TypeModel}">
-        <controls:BreadCrumbs
+        <!--<controls:BreadCrumbs
             ItemsSource="{Binding Type, Converter={x:Static conv:TypeHierarchyConverter.Instance}}">
-        </controls:BreadCrumbs>
+        </controls:BreadCrumbs>-->
+        <TextBlock Text="{Binding Type, Converter={x:Static conv:TypeNameConverter.Instance}}">
+        </TextBlock>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:StringModel}">
@@ -171,4 +173,37 @@
         </Expander>
         <!--<HeaderedContentControl Header="{Binding Converter={StaticResource TypeNameConverter}}"></HeaderedContentControl>-->
     </DataTemplate>
+
+
+    <DataTemplate DataType="{x:Type inf:DirtyNodesModel}">
+        <DataTemplate.Resources>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Width" Value="100"/>
+                <Setter Property="FontWeight" Value="DemiBold"/>
+            </Style>
+        </DataTemplate.Resources>
+        <WrapPanel >
+
+            <TextBlock Text="SourceKey" />
+            <TextBlock Text="PropertyName"  />
+            <TextBlock Text="NewValue" />
+        </WrapPanel>
+    </DataTemplate>
+
+
+
+    <DataTemplate DataType="{x:Type inf:DirtyNodeModel}">
+        <DataTemplate.Resources>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="Width" Value="100"/>
+            </Style>
+        </DataTemplate.Resources>
+        <WrapPanel>
+            <TextBlock Text="{Binding Path=SourceKey}"  />
+            <TextBlock Text="{Binding Path=PropertyName}"  />
+            <TextBlock Text="{Binding Path=NewValue}"  />
+        </WrapPanel>
+
+    </DataTemplate>
+
 </ResourceDictionary>

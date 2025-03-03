@@ -10,7 +10,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\External\EnumSourceConverter\EnumSourceConverter.csproj" />
 		<ProjectReference Include="..\..\External\TextBoxEx\TextBoxEx.csproj" />
-		<ProjectReference Include="..\..\Meta\Utility.Descriptors\Utility.Descriptors.csproj" />
+		<ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Behaviors\Utility.WPF.Behaviors.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Breadcrumbs\Utility.WPF.Controls.Breadcrumbs.csproj" />

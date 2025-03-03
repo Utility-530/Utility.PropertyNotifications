@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using Utility.Extensions;
 using Utility.Interfaces.Exs;
 using Utility.Meta;
+using Utility.Nodes.Ex;
 using Utility.WPF.Controls.Trees;
 
 namespace Utility.Nodes.Demo.Styles

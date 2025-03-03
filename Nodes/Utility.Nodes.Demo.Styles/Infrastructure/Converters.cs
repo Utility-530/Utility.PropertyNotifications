@@ -1,22 +1,17 @@
-﻿using Splat;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Data;
-using Utility.Descriptors;
+using Utility.PropertyDescriptors;
 using Utility.Helpers.NonGeneric;
-using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Meta;
 using Utility.Models;
 using Utility.Models.Trees;
-using Utility.Repos;
 using Utility.Trees.Abstractions;
 using Utility.WPF;
 using Utility.WPF.Controls.ComboBoxes;
-using Utility.WPF.Controls.Trees;
 
 namespace Utility.Nodes.Demo.Styles
 {
@@ -82,15 +77,12 @@ namespace Utility.Nodes.Demo.Styles
             var instance = ActivateAnything.Activate.New(type);
             var rootDescriptor = new RootDescriptor(type) { };
             rootDescriptor.SetValue(null, instance);
-            var max = Locator.Current.GetService<ITreeRepository>().MaxIndex(guid, RootDescriptor.DefaultName);
-            var x = Locator.Current.GetService<ITreeRepository>().InsertByParent(guid, RootDescriptor.DefaultName, index: max).Take(1).ToTask().Result;
             var root = CreateRoot(rootDescriptor);
             return root;
 
             ValuePropertyDescriptor CreateRoot(System.ComponentModel.PropertyDescriptor descriptor)
             {
                 var _descriptor = DescriptorConverter.ToDescriptor(instance, descriptor);
-                _descriptor.Guid = x;
                 return _descriptor;
             }
         }

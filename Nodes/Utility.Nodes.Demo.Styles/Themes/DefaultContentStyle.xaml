@@ -42,7 +42,7 @@
         </Style.Resources>
         <Setter Property="ItemsPresenterVisibility" Value="Visible"></Setter>
         <!-- IsExpanded needs to be false otherwise ItemsPresenterVisibility won't have an effect -->
-        <Setter Property="IsExpanded" Value="False"></Setter>
+        <!--<Setter Property="IsExpanded" Value="False"></Setter>-->
         <Setter Property="Header" Value="{Binding Data}"/>
         <Setter Property="IsEditable" Value="True"></Setter>
         <Setter Property="ChildrenSelector" Value="{StaticResource ChildrenSelector}"></Setter>
