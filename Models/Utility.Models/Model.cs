@@ -19,7 +19,7 @@ namespace Utility.Models
         private INode node;
         int i = 0;
         private readonly Func<IEnumerable<Model>> func;
-        
+
         protected INodeSource source = Locator.Current.GetService<INodeSource>();
         protected Lazy<IContext> context = new(() => Locator.Current.GetService<IContext>());
         public virtual Version Version { get; set; } = new();

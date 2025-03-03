@@ -39,12 +39,12 @@ namespace Utility.Models
                     {
                         Node.WithChangesTo(a => a.Key).Take(1).Subscribe(key =>
                         {
-                            dateValue = source.Get(Guid.Parse(key), nameof(Value))
+                            dateValue = source.Get(Guid.Parse(key), nameof(Node.Data))
                                 .Subscribe(a =>
                                 {
-                                    if (a is { Value: T _value } x)
+                                    if (a is { Value: ValueModel<T> { Value:{ } value } } x)
                                     {
-                                        value = _value;
+                                        this.value = value;
                                     }
                                     else
                                         return;
@@ -60,6 +60,7 @@ namespace Utility.Models
 
         public void Set(T? value)
         {
+            this.value = value;
             this.WithChangesTo(a => a.Node)
                 .Subscribe(a =>
                 {
@@ -67,14 +68,13 @@ namespace Utility.Models
                     {
                         Node.WithChangesTo(a => a.Key).Take(1).Subscribe(a =>
                         {
-                            source.Set(Guid.Parse(Node.Key), nameof(Value), value, DateTime.Now);
+                            source.Set(Guid.Parse(Node.Key), nameof(Node.Data), this, DateTime.Now);
                             //Descriptor.SetValue(Instance, value);
 
                             //changes.OnNext(new(Name, value));
                         });
                     }
-                });
-            this.value = value;
+                });    
         }
 
     }
