@@ -25,10 +25,10 @@ using Utility.Extensions;
 using Utility.PropertyNotifications;
 using Utility.Nodes.Common;
 using Utility.Models;
+using Utility.Nodes.Ex;
 
 namespace Utility.Nodes.Filters
 {
-    public readonly record struct DirtyNode(string Property, INode Node);
     public class NodeSource : INodeSource
     {
         public static string New = "new";
@@ -181,7 +181,9 @@ namespace Utility.Nodes.Filters
             if (this.Nodes.Any(a => a.Key == node.Key) == false)
             {
                 configure(node);
-                repository.Get((GuidKey)node.Key)
+
+                repository
+                    .Get((GuidKey)node.Key)
                     .Subscribe(_d =>
                     {
                         if (_d.Value != null && setdictionary.Value.TryGetValue(_d.Name, out Setter value))
@@ -198,10 +200,49 @@ namespace Utility.Nodes.Filters
                         {
                             node.IsExpanded = true;
                         }
-                        this.nodes.Add(node);
+                        //this.nodes.Add(node);
                         node.PropertyChanged += Node_PropertyChanged;
+                        node.Items.AndChanges<INode>().Subscribe(a =>
+                        {
+                            foreach (var x in a)
+                                change(x);
+                        });
                     });
             }
+
+            async void change(Change a)
+            {
+                if (a is Change { Type: Changes.Type.Add, Value: { } value })
+                {
+                    if (value is INode _node)
+                        this.nodes.Add(node);
+                    else
+                    {
+                        throw new Exception("11 a 33434");
+                    }
+                }
+                else if (a is Change { Type: Changes.Type.Remove, Value: { } _value })
+                {
+                    this.nodes.RemoveBy(c =>
+
+                    {
+                        if (c is IKey key)
+                        {
+                            if (_value is IKey _key)
+                            {
+                                return key.Key.Equals(_key.Key);
+                            }
+                            else if (_value is IGetGuid guid)
+                            {
+                                return key.Key.Equals(new GuidKey(guid.Guid));
+                            }
+                        }
+                        throw new Exception("44c dd");
+
+                    });
+                }
+            }
+
 
             void Node_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
             {
@@ -220,23 +261,23 @@ namespace Utility.Nodes.Filters
 
             void configure(INode node)
             {
-                node.WithChangesTo(a => a.Current)
-                    .Where(a => a != default)
-                    .Subscribe(a =>
-                    {
-                        a.WithChangesTo(a => a.Key)
-                        .Subscribe(key =>
-                        {
-                            try
-                            {
-                                this.Set(Guid.Parse(node.Key), nameof(Node.Current), key, DateTime.Now);
-                            }
-                            catch (Exception ex)
-                            {
+                //node.WithChangesTo(a => a.Current)
+                //    .Where(a => a != default)
+                //    .Subscribe(a =>
+                //    {
+                //        a.WithChangesTo(a => a.Key)
+                //        .Subscribe(key =>
+                //        {
+                //            try
+                //            {
+                //                this.Set(Guid.Parse(node.Key), nameof(Node.Current), key, DateTime.Now);
+                //            }
+                //            catch (Exception ex)
+                //            {
 
-                            }
-                        });
-                    });
+                //            }
+                //        });
+                //    });
 
                 node.WithChangesTo(a => a.Data)
                 .Where(a => a is not string)
@@ -253,67 +294,28 @@ namespace Utility.Nodes.Filters
                     }
 
                     if (data is IYieldChildren ychildren)
-                        ychildren.Children.Cast<IDescriptor>().ForEach(async d =>
-                        {
-                            var _new = await node.ToTree(d);
-                            node.Add(_new);
-                            this.Add(_new as INode);
-                        });
-
-                    if (data is IChildren children && !(data is IHasChildren { HasChildren: false } hasChildren))
+                        _children(ychildren, (GuidKey)node.Key);
+                    else
                     {
-                        node.WithChangesTo(a => a.Key)
-                        .Subscribe(key =>
-                        {
-                            _children(children, Guid.Parse(key))
-                            .Filter(node.WithChangesTo(a => a.IsExpanded))
-                            .Subscribe(change);
-                        });
+                        throw new Exception("££ !CC");
                     }
+
+                    //if (data is IChildren children && !(data is IHasChildren { HasChildren: false } hasChildren))
+                    //{
+                    //    node.WithChangesTo(a => a.Key)
+                    //    .Subscribe(key =>
+                    //    {
+                    //        _children(children, Guid.Parse(key))
+                    //        .Filter(node.WithChangesTo(a => a.IsExpanded))
+                    //        .Subscribe(change);
+                    //    });
+                    //}
                 });
 
-                async void change(Change a)
+
+                IObservable<INode> _children(IYieldChildren children, Guid guid)
                 {
-                    if (a is Change { Type: Changes.Type.Add, Value: { } value })
-                    {
-
-                        if (value is INode _node)
-                        {
-                            node.Add(_node);
-                        }
-                        else
-                        {
-                            _node = (INode)(await node.ToTree(value));
-                         
-                        }                        
-                        node.Add(_node);
-                        this.Add(_node as INode);
-                    }
-                    else if (a is Change { Type: Changes.Type.Remove, Value: { } _value })
-                    {
-                        node.RemoveBy(c =>
-
-                        {
-                            if (c is IKey key)
-                            {
-                                if (_value is IKey _key)
-                                {
-                                    return key.Key.Equals(_key.Key);
-                                }
-                                else if (_value is IGetGuid guid)
-                                {
-                                    return key.Key.Equals(new GuidKey(guid.Guid));
-                                }
-                            }
-                            throw new Exception("44c dd");
-
-                        });
-                    }
-                }
-
-                IObservable<object> _children(IChildren children, Guid guid)
-                {
-                    return Observable.Create<object>(observer =>
+                    return Observable.Create<INode>(observer =>
                     {
                         bool b = false;
                         return this
@@ -323,7 +325,24 @@ namespace Utility.Nodes.Filters
                             if (a.Data?.ToString() == New || node.Data is ICount)
                             {
                                 b = true;
-                                children.Children.Subscribe(a => observer.OnNext(a), () => observer.OnCompleted());
+                                //children.Children.Subscribe(a => observer.OnNext(a), () => observer.OnCompleted());
+                                children.Children.AndAdditions().Subscribe(async d =>
+                                {
+                                    var _new = (INode)await node.ToTree(d);
+
+                                    repository
+                                    .Find((GuidKey)node.Key, _new.Name())
+                                    .Subscribe(a =>
+                                    {
+                                        if (a.HasValue == false)
+                                            throw new Exception("dde33443 21");
+                                        _new.Key = new GuidKey(a.Value.Guid);
+                                        //node.Add(_new);
+                                        observer.OnNext(_new);
+                                    });
+
+                                });
+
                             }
                             else if (a.Data != null && node.Any(n => ((IKey)n).Key == a.Key) == false)
                             {
@@ -337,6 +356,72 @@ namespace Utility.Nodes.Filters
                         });
                     });
                 }
+
+                //async void change(Change a)
+                //{
+                //    if (a is Change { Type: Changes.Type.Add, Value: { } value })
+                //    {
+
+                //        if (value is INode _node)
+                //        {
+                //            node.Add(_node);
+                //        }
+                //        else
+                //        {
+                //            _node = (INode)(await node.ToTree(value));
+
+                //        }
+                //        node.Add(_node);
+                //        this.Add(_node as INode);
+                //    }
+                //    else if (a is Change { Type: Changes.Type.Remove, Value: { } _value })
+                //    {
+                //        node.RemoveBy(c =>
+
+                //        {
+                //            if (c is IKey key)
+                //            {
+                //                if (_value is IKey _key)
+                //                {
+                //                    return key.Key.Equals(_key.Key);
+                //                }
+                //                else if (_value is IGetGuid guid)
+                //                {
+                //                    return key.Key.Equals(new GuidKey(guid.Guid));
+                //                }
+                //            }
+                //            throw new Exception("44c dd");
+
+                //        });
+                //    }
+                //}
+
+                //IObservable<object> _children(IChildren children, Guid guid)
+                //{
+                //    return Observable.Create<object>(observer =>
+                //    {
+                //        bool b = false;
+                //        return this
+                //        .ChildrenByGuidAsync(guid)
+                //        .Subscribe(a =>
+                //        {
+                //            if (a.Data?.ToString() == New || node.Data is ICount)
+                //            {
+                //                b = true;
+                //                children.Children.Subscribe(a => observer.OnNext(a), () => observer.OnCompleted());
+                //            }
+                //            else if (a.Data != null && node.Any(n => ((IKey)n).Key == a.Key) == false)
+                //            {
+                //                observer.OnNext(a);
+                //            }
+                //        },
+                //        () =>
+                //        {
+                //            if (b == false)
+                //                observer.OnCompleted();
+                //        });
+                //    });
+                //}
             }
 
         }
@@ -366,14 +451,5 @@ namespace Utility.Nodes.Filters
         {
             throw new NotImplementedException();
         }
-    }
-
-    public class MethodValue
-    {
-        public MethodInfo Method { get; set; }
-
-        public Task Task { get; set; }
-
-        public IList<INode> Nodes { get; set; } = [];
     }
 }

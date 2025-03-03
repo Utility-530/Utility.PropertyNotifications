@@ -13,6 +13,7 @@
     <ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
     <ProjectReference Include="..\..\Reactives\Utility.Reactives\Utility.Reactives.csproj" />
     <ProjectReference Include="..\..\Repos\Utility.Repos\Utility.Repos.csproj" />
+    <ProjectReference Include="..\Utility.Nodes.Ex\Utility.Nodes.Ex.csproj" />
     <ProjectReference Include="..\Utility.Nodes\Utility.Nodes.csproj" />
   </ItemGroup>
 

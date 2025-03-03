@@ -27,6 +27,7 @@ namespace Utility.Nodes.Filters
         public const string breadcrumb = nameof(breadcrumb);
         public const string html = nameof(html);
         public const string _html = nameof(_html);
+        public const string dirty = nameof(dirty);
 
         //static readonly Guid assGuid = Guid.Parse("10126895-6855-45ab-97af-21ed90c02fe8");
         //static readonly Guid relGuid = Guid.Parse("5c90fcd6-2324-4f88-bffb-73b8f9fbcf6b");
@@ -43,6 +44,7 @@ namespace Utility.Nodes.Filters
         static readonly Guid htmlRenderGuid = Guid.Parse("48e723e9-5e67-4381-940d-e1f240d31ea6");
         static readonly Guid controlsGuid = Guid.Parse("f4565c31-c35b-4cbf-911a-26a841d3bc04");
         private static readonly Guid guid = Guid.Parse("d7bccfe8-2818-4e64-b399-f6230b087a86");
+        private static readonly Guid dirtyGuid = Guid.Parse("6c9ee869-9d3b-4745-b6de-6de4a8f011f1");
 
         public const string Refresh = nameof(Refresh);
         public const string Save = nameof(Save);
@@ -123,6 +125,14 @@ namespace Utility.Nodes.Filters
                 s => new Node(s),
                 s => new HtmlModel { Name = s });
         }
+        
+        public static IObservable<INode> BuildDirty()
+        {
+            return create(dirty,
+                dirtyGuid,
+                s => new Node(s),
+                s => new CollectionModel<DirtyModel> { Name = s });
+        }
 
         public static IObservable<INode> BuildContentRoot()
         {
@@ -175,10 +185,10 @@ namespace Utility.Nodes.Filters
                     node.Key = new GuidKey(guid);
                     if (a.HasValue && node.Data == null)
                         node.Data = DataActivator.Activate(a);
+                    Locator.Current.GetService<INodeSource>().Add(node);
                     observer.OnNext(node);
                 });
             });
         }
-
     }
 }
