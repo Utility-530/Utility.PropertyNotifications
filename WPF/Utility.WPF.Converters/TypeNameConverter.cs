@@ -11,7 +11,11 @@ namespace Utility.WPF.Converters
         {
             try
             {
-                return value?.GetType().Name ?? "null";
+                if (value == null)
+                    return DependencyProperty.UnsetValue;
+                if (value is Type type)
+                    return type?.Name ?? DependencyProperty.UnsetValue;
+                return Convert(value.GetType(), targetType, parameter, culture);
             }
             catch
             {
