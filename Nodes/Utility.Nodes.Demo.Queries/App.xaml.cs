@@ -6,7 +6,7 @@ using Utility.Conversions.Json.Newtonsoft;
 using Utility.Interfaces.Exs;
 using Utility.Models;
 using Utility.Models.Trees;
-using Utility.Nodes.Demo.Filters;
+using Utility.Nodes.Filters;
 using Utility.Repos;
 using Utility.ViewModels;
 
