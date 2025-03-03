@@ -134,6 +134,8 @@ namespace Utility.Reactives
             });
         }
 
+        public static IObservable<object> AndAdditions(this IEnumerable collection) => AndAdditions<object>(collection);
+
         public static IObservable<TR> SelfAndAdditions<T, TR>(this T collection) where T : IEnumerable<TR>, INotifyCollectionChanged
         {
             return O.Create<TR>(observer =>
