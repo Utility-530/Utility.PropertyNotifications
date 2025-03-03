@@ -10,10 +10,10 @@ using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Utility.Trees.Extensions;
-using Utility.Extensions;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
 using Utility.Interfaces.NonGeneric;
+using Utility.Nodes.Ex;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
