@@ -7,6 +7,7 @@ using Utility.Nodes.Filters;
 using Utility.Models;
 using Utility.Interfaces.Exs;
 using Utility.Trees.Extensions.Async;
+using Splat;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -56,7 +57,7 @@ namespace Utility.Nodes.Demo.Filters.Services
    
         public void Save(INode node)
         {
-            NodeSource.Instance.Save();
+            Locator.Current.GetService<INodeSource>().Save();
        
         }
 

@@ -1,16 +1,16 @@
 ﻿using Splat;
 using System.Collections;
-using Utility.Extensions;
 using Utility.Interfaces.Exs;
+using Utility.Nodes.Ex;
 using Utility.Nodes.Filters;
 using Utility.Trees.Abstractions;
 using Utility.ViewModels;
 
-namespace Utility.Nodes.Demo.Filters
+namespace Utility.Nodes.Demo.Editor
 {
     public class MainViewModel : NotifyPropertyChangedBase
     {
-        IReadOnlyTree[] control, selection, content, transformers, html, html_render, clones;
+        IReadOnlyTree[] control, selection, content, transformers, html, html_render, clones, dirty;
         private bool isRemovedShown;
         Lazy<INodeSource> source = new(() => Locator.Current.GetService<INodeSource>());
 
@@ -66,16 +66,16 @@ namespace Utility.Nodes.Demo.Filters
             }
         }
 
-        public IReadOnlyTree[] Transformers
-        {
-            get
-            {
-                if (transformers == null)
-                    source.Value.Single(nameof(Factory.BuildTransformersRoot))
-                        .Subscribe(a => { transformers = [a]; RaisePropertyChanged(nameof(Transformers)); });
-                return transformers;
-            }
-        }
+        //public IReadOnlyTree[] Transformers
+        //{
+        //    get
+        //    {
+        //        if (transformers == null)
+        //            source.Value.Single(nameof(Factory.BuildTransformersRoot))
+        //                .Subscribe(a => { transformers = [a]; RaisePropertyChanged(nameof(Transformers)); });
+        //        return transformers;
+        //    }
+        //}
 
         public IReadOnlyTree[] Html
         {
@@ -100,8 +100,16 @@ namespace Utility.Nodes.Demo.Filters
             }
         }
 
-        public IEnumerable Dirty => NodeSource.Instance.DirtyNodes;
-
+        public IReadOnlyTree[] Dirty
+        {
+            get
+            {
+                if (dirty == null)
+                    source.Value.Single(nameof(Factory.BuildDirty))
+                        .Subscribe(a => { dirty = [a]; RaisePropertyChanged(nameof(Dirty)); });
+                return dirty;
+            }
+        }
 
         public bool IsRemovedShown
         {

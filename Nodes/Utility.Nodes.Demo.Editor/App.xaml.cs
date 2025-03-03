@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Markup;
 using TinyHtml.Wpf;
 using Utility.Conversions.Json.Newtonsoft;
-using Utility.Descriptors;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
@@ -18,7 +17,7 @@ using Utility.Nodes.WPF;
 using Utility.Repos;
 
 
-namespace Utility.Nodes.Demo.Filters
+namespace Utility.Nodes.Demo.Editor
 {
     /// <summary>
     /// Interaction logic for App.xaml
@@ -30,7 +29,8 @@ namespace Utility.Nodes.Demo.Filters
             SQLitePCL.Batteries.Init();
 
             Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
-            Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeSource.Instance);
+            //Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeSource.Instance);
+            Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeEngine.Instance);
             Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
             Locator.CurrentMutable.RegisterConstant<IExpander>(Expander.Instance);
             Locator.CurrentMutable.RegisterConstant<IContext>(Context.Instance);

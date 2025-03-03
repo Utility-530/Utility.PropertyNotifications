@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Utility.PropertyNotifications;
 
-namespace Utility.Nodes.Demo.Filters
+namespace Utility.Nodes.Demo.Editor
 {
     internal class TextEdit
     {

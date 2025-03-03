@@ -7,12 +7,9 @@ using System.Reactive.Linq;
 using Utility.Nodes.Filters;
 using AngleSharp.Html;
 using System.IO;
-using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
-using Utility.Trees.Demo.Filters;
-using Utility.Descriptors;
+using Utility.PropertyDescriptors;
 using Utility.Models.Trees;
-using Utility.Interfaces;
 using Utility.Nodes.WPF;
 
 namespace Utility.Nodes.Demo.Filters.Services

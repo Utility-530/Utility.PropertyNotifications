@@ -8,8 +8,9 @@ using System.Windows;
 using Utility.Interfaces.NonGeneric;
 using Utility.WPF.Helpers;
 using Utility.Models.Trees;
+using Utility.Models;
 
-namespace Utility.Nodes.Demo.Filters
+namespace Utility.Nodes.Demo.Editor
 {
     public class ComboContainerStyleSelector : StyleSelector
     {
@@ -30,6 +31,26 @@ namespace Utility.Nodes.Demo.Filters
 
         public Style DefaultStyle { get; set; }
         public Style ComboStyle { get; set; }
+
+    }  
+    
+    
+    public class CollectionStyleSelector : StyleSelector
+    {
+
+        public override Style SelectStyle(object item, DependencyObject container)
+        {
+            var parent = (container as TreeViewItem).FindParent<TreeViewItem>();
+
+            return item switch
+            {
+                IData { Data: IChildCollection } => CollectionStyle,
+                IData { Data: ICollectionItem } => ItemStyle,
+            };
+        }
+
+        public Style CollectionStyle { get; set; }
+        public Style ItemStyle { get; set; }
 
     }
 }
