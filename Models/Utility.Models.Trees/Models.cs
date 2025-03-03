@@ -323,9 +323,8 @@ namespace Utility.Models.Trees
         public static ExceptionModel Create(Exception ex) => new ExceptionModel(ex) { Name = ex.Message };
     }
 
-    public class ExceptionsModel() : Model
+    public class ExceptionsModel() : CollectionModel<ExceptionModel>
     {
-        public ObservableCollection<Exception> Exceptions { get; } = [];
     }
 
 
@@ -739,15 +738,34 @@ namespace Utility.Models.Trees
                         case CustomStringComparison.EqualTo:
                             return value1.ToString().Equals(value2.ToString());
                         case CustomStringComparison.NotEqualTo:
-                            return value1.ToString().Equals(value2.ToString()) == false; 
+                            return value1.ToString().Equals(value2.ToString()) == false;
                         case CustomStringComparison.DoesNotContain:
                             return value1.ToString().Contains(value2.ToString()) == false;
                     }
                     break;
                 case ComparisonType.Number:
-                    Value = NumberComparison.EqualTo; break;
+                    switch ((NumberComparison)Value)
+                    {
+                        case NumberComparison.GreaterThanOrEqualTo:
+                            return int.Parse(value1.ToString()) >= int.Parse(value2.ToString());
+                        case NumberComparison.EqualTo:
+                            return int.Parse(value1.ToString()) == int.Parse(value2.ToString());
+                        case NumberComparison.NotEqualTo:
+                            return int.Parse(value1.ToString()) != int.Parse(value2.ToString());
+                        case NumberComparison.LessThanOrEqualTo:
+                            return int.Parse(value1.ToString()) <= int.Parse(value2.ToString());
+                    }
+                    break;
                 case ComparisonType.Boolean:
-                    Value = BooleanComparison.EqualTo; break;
+                    switch ((BooleanComparison)Value)
+                    {
+                        case BooleanComparison.EqualTo:
+                            return value1.ToString().Equals(value2.ToString());
+                        case BooleanComparison.NotEqualTo:
+                            return value1.ToString().Equals(value2.ToString()) == false;
+
+                    }
+                    break;
             }
             throw new NotImplementedException("f 33 dfd33");
         }
@@ -1643,5 +1661,18 @@ namespace Utility.Models.Trees
             node.IsExpanded = true;
             base.SetNode(node);
         }
+    }
+
+
+
+    public class DirtyModel : Model, ICollectionItem
+    {
+        public string PropertyName { get; set; }
+
+        public string SourceKey { get; set; }
+
+        public object OldValue { get; set; }
+
+        public object NewValue { get; set; }
     }
 }
