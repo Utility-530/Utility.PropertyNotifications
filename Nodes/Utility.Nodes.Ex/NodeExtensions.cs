@@ -8,10 +8,19 @@ using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
 using Utility.Interfaces.Exs;
 
-namespace Utility.Extensions
+namespace Utility.Nodes.Ex
 {
     public static class NodeExtensions
     {
+        public static string Name(this INode node)
+        {
+            if(node.Data is IGetName getName)
+            {
+                return getName.Name;
+            }
+            return node.Data.ToString();
+        }
+
         public static ITree ToViewModelTree(this Assembly[] assemblies, Predicate<Type>? typePredicate = null)
         {
             ViewModelTree t_tree = new("root");
@@ -43,14 +52,16 @@ namespace Utility.Extensions
         /// <returns></returns>
         public static INode Abstract(this INode tree)
         {
-            var _name = (tree.Data is IGetName { Name: { } name }) ? name : tree.Data.ToString();          
+            var _name = tree.Data is IGetName { Name: { } name } ? name : tree.Data.ToString();
             var clone = new Node(new Abstract { Name = _name }) { Key = tree.Key, AddCommand = tree.AddCommand, RemoveCommand = tree.RemoveCommand, Removed = tree.Removed };
             tree.WithChangesTo(a => a.Removed).Subscribe(a => clone.Removed = a);
+            tree.WithChangesTo(a => a.IsExpanded).Subscribe(a => clone.IsExpanded = a);
+            clone.WithChangesTo(a => a.IsExpanded).Subscribe(a => tree.IsExpanded = a);
 
             CompositeDisposable disposables = new();
-            tree.AndAdditions<Node>().Subscribe(async item =>
+            tree.Items.AndAdditions<Node>().Subscribe(async item =>
             {
-                var childClone = (ITree)(item.Abstract());
+                var childClone = (ITree)item.Abstract();
                 childClone.Parent = clone;
                 clone.Add(childClone);
             });
