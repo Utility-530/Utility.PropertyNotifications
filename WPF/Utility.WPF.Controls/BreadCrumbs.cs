@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xaml.Behaviors;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -16,13 +17,13 @@ namespace Utility.WPF.Controls
 
         public static readonly DependencyProperty IsExpandedProperty =
             DependencyProperty.Register("IsExpanded", typeof(bool), typeof(BreadCrumbs), new PropertyMetadata());
-
+        public static readonly DependencyProperty ContainerWidthProperty =
+DependencyProperty.Register("ContainerWidth", typeof(double), typeof(BreadCrumbs), new PropertyMetadata(80.0));
         static BreadCrumbs()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(BreadCrumbs), new FrameworkPropertyMetadata(typeof(BreadCrumbs)));
+            HorizontalAlignmentProperty.OverrideMetadata(typeof(BreadCrumbs), new FrameworkPropertyMetadata(HorizontalAlignment.Right));
         }
-
-
 
         public bool IsExpanded
         {
@@ -30,7 +31,11 @@ namespace Utility.WPF.Controls
             set { SetValue(IsExpandedProperty, value); }
         }
 
-
+        public double ContainerWidth
+        {
+            get { return (double)GetValue(ContainerWidthProperty); }
+            set { SetValue(ContainerWidthProperty, value); }
+        }
 
     }
 
@@ -50,7 +55,6 @@ namespace Utility.WPF.Controls
                         return true;
                     }
                     return false;
-
                 }
             }
 
@@ -62,4 +66,28 @@ namespace Utility.WPF.Controls
             throw new NotImplementedException();
         }
     }
+
+    public class ScrollToBottomBehavior : Behavior<System.Windows.Controls.ScrollViewer>
+    {
+        protected override void OnAttached()
+        {
+            base.OnAttached();
+            // Add event handler to scroll to the bottom when content changes
+            AssociatedObject.LayoutUpdated += ScrollToBottom;
+        }
+
+        protected override void OnDetaching()
+        {
+            base.OnDetaching();
+            // Remove event handler
+            AssociatedObject.LayoutUpdated -= ScrollToBottom;
+        }
+
+        private void ScrollToBottom(object sender, System.EventArgs e)
+        {
+            AssociatedObject.ScrollToBottom();
+        }
+    }
 }
+
+
