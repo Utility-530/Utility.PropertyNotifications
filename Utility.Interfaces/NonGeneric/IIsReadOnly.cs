@@ -4,4 +4,9 @@
     {
         bool IsReadOnly { get; }
     }
+
+    public interface ISetIsReadOnly
+    {
+        bool IsReadOnly { set; }
+    }
 }
