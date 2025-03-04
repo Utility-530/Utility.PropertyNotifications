@@ -21,6 +21,7 @@ namespace Utility.Nodes
         private Orientation orientation;
         private bool? isVisible = true;
         private bool? isValid = null;
+        private bool isReadOnly;
         private bool isEditable;
         private INode currentNode;
         private bool isClicked;
@@ -76,13 +77,22 @@ namespace Utility.Nodes
             }
         }
 
+        // relates to the ability to modify the value
+        public override bool IsReadOnly
+        {
+            get => isReadOnly; 
+            set
+            {
+                RaisePropertyChanged(ref isReadOnly, value);
+            }
+        }
+
+        // relates to the ability to add/remove nodes 
         public bool IsEditable
         {
             get => isEditable; set
             {
-
                 RaisePropertyChanged(ref isEditable, value);
-
             }
         }
 
