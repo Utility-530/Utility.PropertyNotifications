@@ -15,6 +15,7 @@ using Utility.Nodes.Demo.Filters.Services;
 using Utility.Nodes.Filters;
 using Utility.Nodes.WPF;
 using Utility.Repos;
+using Utility.WPF.Templates;
 
 
 namespace Utility.Nodes.Demo.Editor
@@ -35,9 +36,10 @@ namespace Utility.Nodes.Demo.Editor
             Locator.CurrentMutable.RegisterConstant<IExpander>(Expander.Instance);
             Locator.CurrentMutable.RegisterConstant<IContext>(Context.Instance);
             Splat.Locator.CurrentMutable.RegisterLazySingleton<MainViewModel>(() => new MainViewModel());
+            Splat.Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
 
 
-            var x = DataTemplateSelector.Instance;
+            //var x = DataTemplateSelector.Instance;
 
             JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
 

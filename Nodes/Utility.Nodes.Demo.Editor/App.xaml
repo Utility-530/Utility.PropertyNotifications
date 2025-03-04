@@ -37,7 +37,7 @@
                                     DefaultStyle="{StaticResource DefaultStyle}" 
                                     ComboStyle="{StaticResource ComboExStyle}">
             </local:ComboContainerStyleSelector>
-
+            <local:DirtyConverter x:Key="DirtyConverter"/>
 
 
             <Style x:Key="SelectedContentStyle" TargetType="{x:Type ContentControl}">
@@ -102,7 +102,12 @@
                             </i:Interaction.Triggers>
                         </ct:CustomTreeView>
 
-                        <TreeView Grid.Row="1" ItemsSource="{Binding Dirty}" ItemContainerStyleSelector="{StaticResource CollectionStyleSelector}">
+                        <TreeView Grid.Row="1" ItemsSource="{Binding Dirty}" Width="300" ItemContainerStyleSelector="{StaticResource CollectionStyleSelector}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectedItemChanged">
+                                    <beh:SetSelectedItemAction PropertyName="Content" Converter="{StaticResource DirtyConverter}"  TargetObject="{Binding ElementName=TreeContent}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
                         </TreeView>
                     </Grid>
 
