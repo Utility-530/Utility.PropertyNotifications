@@ -18,11 +18,12 @@ using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
 using Utility.Nodes.Ex;
-using System.Reactive.Disposables;
 using Utility.Extensions;
 using Utility.Models.Trees;
 using Utility.Trees.Abstractions;
 using Utility.Models;
+using Fasterflect;
+using System.ComponentModel;
 
 
 namespace Utility.Nodes.Filters
@@ -32,10 +33,6 @@ namespace Utility.Nodes.Filters
     {
         public static string New = "new";
         public static readonly string Key = nameof(NodeEngine);
-
-        //private Dictionary<string, MethodValue> dictionary;
-        //private Dictionary<string, string> dictionaryMethodNameKeys = [];
-        //private readonly ObservableCollection<KeyValuePair<string, PropertyChange>> dirtyNodes = [];
 
         Lazy<IFilter> filter = new(() => Locator.Current.GetService<IFilter>());
         Lazy<IExpander> expander = new(() => Locator.Current.GetService<IExpander>());
@@ -102,14 +99,13 @@ namespace Utility.Nodes.Filters
 
         public void Add(INode node)
         {
-            //if (node.Data is not IDescriptor descriptor)
-            //    throw new Exception("Vd 222");
             if (node.Key is null)
             {
                 var index = node.Parent.Items.Count(a => ((INode)a).Name() == node.Name());
+                var type = node.Data is IGetType { } getType ? getType.GetType() : node.Data.GetType();
                 repository
                     .Value
-                    .Find((GuidKey)node.Parent.Key, node.Name(), type: node.Data.GetType(), index: index == 0 ? null : index)
+                    .Find((GuidKey)node.Parent.Key, node.Name(), type: type, index: index == 0 ? null : index)
                     .Subscribe(_key =>
                     {
                         if (_key.HasValue == false)
@@ -121,7 +117,6 @@ namespace Utility.Nodes.Filters
             }
             else
             {
-                //node.Key = new GuidKey(Guid.NewGuid());
                 if (Nodes.Any(a => a.Key == node.Key) == false)
                 {
                     nodes.Add(node);
@@ -151,8 +146,6 @@ namespace Utility.Nodes.Filters
                     foreach (var x in a)
                         change(x);
                 });
-
-
 
                 void node_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
                 {
@@ -223,6 +216,34 @@ namespace Utility.Nodes.Filters
                         load(node).Subscribe(a =>
                         {
                             node.PropertyChanged += node_PropertyChanged;
+                            if (data is INotifyPropertyCalled called)
+                            {
+                                called.WhenCalled()
+                                .Subscribe(call =>
+                                {
+                                    repository.Value
+                                    .Get((GuidKey)node.Key, nameof(Node.Data) + "." + call.Name)
+                                    .Subscribe(a =>
+                                    {
+                                        if (a.Value != null)
+                                        {
+                                            call.Target.TrySetValue(call.Name, a.Value);
+                                            if (call.Target is INotifyPropertyChanged changed)
+                                                changed.RaisePropertyChanged(call.Name);
+                                        }
+                                    });
+                                });
+                            }
+                            if (data is INotifyPropertyReceived received)
+                            {
+                                received.WhenReceived()
+                                .Where(a => a.Value != null)
+                                .Subscribe(reception =>
+                                {
+                                    repository.Value.Set((GuidKey)node.Key, nameof(Node.Data) + "." + reception.Name, reception.Value, DateTime.Now);
+                                });
+                            }
+
 
                             if (data is ISetNode iSetNode)
                             {
@@ -252,7 +273,7 @@ namespace Utility.Nodes.Filters
                                 });
                         });
 
-                    
+
                     });
 
 
@@ -261,10 +282,10 @@ namespace Utility.Nodes.Filters
                     return Observable.Create<INode>(observer =>
                     {
                         return repository.Value.Find(guid)
-                            .Subscribe(async _key =>
+                            .Subscribe(async key =>
                             {
 
-                                if (_key.HasValue == false)
+                                if (key.HasValue == false)
                                 {
                                     children
                                     .Children
@@ -272,6 +293,10 @@ namespace Utility.Nodes.Filters
                                     .Subscribe(async d =>
                                     {
                                         var _new = (INode)await node.ToTree(d);
+                                        if(d is IIsReadOnly readOnly)
+                                        {
+                                            (_new as ISetIsReadOnly).IsReadOnly = readOnly.IsReadOnly;  
+                                        }
                                         repository
                                         .Value
                                         .Find((GuidKey)node.Key, _new.Name(), type: d.GetType())
@@ -286,11 +311,11 @@ namespace Utility.Nodes.Filters
                                 }
                                 else
                                 {
-                                    if (Nodes.SingleOrDefault(a => a.Key == new GuidKey(_key.Value.Guid)) is not Node _node)
+                                    if (Nodes.SingleOrDefault(a => a.Key == new GuidKey(key.Value.Guid)) is not Node _node)
                                     {
-                                        var _new = (INode)await node.ToTree(DataActivator.Activate(_key));
-                                        _new.Key = new GuidKey(_key.Value.Guid);
-                                        _new.Removed = _key.Value.Removed;
+                                        var _new = (INode)await node.ToTree(DataActivator.Activate(key));
+                                        _new.Key = new GuidKey(key.Value.Guid);
+                                        _new.Removed = key.Value.Removed;
                                         observer.OnNext(_new);
                                     }
                                     else
@@ -332,7 +357,7 @@ namespace Utility.Nodes.Filters
                         throw new Exception("DSF 64333");
                     foreach (var item in tree.ToArray())
                     {
-                        if (item.Data is DirtyModel { SourceKey:{ } sk, PropertyName:{ }pn, NewValue:{ } nv } dmodel)
+                        if (item.Data is DirtyModel { SourceKey: { } sk, PropertyName: { } pn, NewValue: { } nv } dmodel)
                         {
                             //var node = item.Value.Source as INode;
                             repository.Value.Set(Guid.Parse(sk), pn, nv, DateTime.Now);
