@@ -1666,10 +1666,9 @@ namespace Utility.Models.Trees
 
 
     public class DirtyModel : Model, ICollectionItem
-    {
-        public string PropertyName { get; set; }
-
+    { 
         public string SourceKey { get; set; }
+        public string PropertyName { get; set; }
 
         public object OldValue { get; set; }
 

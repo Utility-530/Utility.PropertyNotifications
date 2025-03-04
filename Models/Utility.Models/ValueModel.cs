@@ -64,7 +64,7 @@ namespace Utility.Models
             this.WithChangesTo(a => a.Node)
                 .Subscribe(a =>
                 {
-                    if (Node.IsReadOnly == false)
+                    if ((Node as IIsReadOnly).IsReadOnly == false)
                     {
                         Node.WithChangesTo(a => a.Key).Take(1).Subscribe(a =>
                         {
