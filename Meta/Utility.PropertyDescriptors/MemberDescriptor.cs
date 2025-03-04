@@ -1,8 +1,8 @@
 ﻿
 using System.Diagnostics;
+using System.Security.AccessControl;
 using Utility.Interfaces;
-using Utility.Interfaces.Exs;
-using Utility.Structs;
+using Utility.Meta;
 
 namespace Utility.PropertyDescriptors;
 
@@ -15,11 +15,12 @@ public interface ICollectionDetailsDescriptor
     bool IsCollectionItemValueType { get; }
 }
 
-public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor, IIsReadOnly, ICollectionDetailsDescriptor, IAsyncClone, IHasChildren
-{
-    public abstract string Name { get; }
 
-    public abstract Type ParentType { get; }
+public abstract record MemberDescriptor(Descriptor Descriptor) : NotifyProperty, IDescriptor, IIsReadOnly, ICollectionDetailsDescriptor, IAsyncClone, IHasChildren
+{
+    public virtual string Name => Descriptor.Name;
+    public virtual Type ParentType => Descriptor.ComponentType;
+    public virtual Type Type => Descriptor.PropertyType;
 
     public bool IsCollection => Type != null && Type != typeof(string) && typeof(IEnumerable).IsAssignableFrom(Type);
 
@@ -34,7 +35,7 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
 
     public virtual bool IsCollectionItemValueType => CollectionItemPropertyType != null && CollectionItemPropertyType.IsValueType;
 
-    public abstract bool IsReadOnly { get; }
+    public virtual bool IsReadOnly => Descriptor.IsReadOnly;
 
     [JsonIgnore]
     public abstract IEnumerable Children { get; }
@@ -86,7 +87,7 @@ public abstract record MemberDescriptor(Type Type) : NotifyProperty, IDescriptor
 }
 
 
-public abstract record ValueMemberDescriptor(Type Type) : MemberDescriptor(Type), IValueDescriptor
+public abstract record ValueMemberDescriptor(Descriptor Descriptor) : MemberDescriptor(Descriptor), IValueDescriptor
 {
     [JsonIgnore]
     public virtual object? Value
@@ -110,7 +111,7 @@ public abstract record ValueMemberDescriptor(Type Type) : MemberDescriptor(Type)
 
 }
 
-public abstract record ChildlessMemberDescriptor(Type Type) : MemberDescriptor(Type)
+public abstract record ChildlessMemberDescriptor(Descriptor Descriptor) : MemberDescriptor(Descriptor)
 {
     public override IEnumerable<object> Children { get; } = Array.Empty<object>();
 

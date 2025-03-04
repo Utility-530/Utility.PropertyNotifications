@@ -12,22 +12,13 @@ public record PropertyDescriptor(Descriptor Descriptor, object Instance) : BaseP
     }
 }
 
-public abstract record BasePropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor.PropertyType), IInstance, IPropertyDescriptor
+public abstract record BasePropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor), IInstance, IPropertyDescriptor
 {
-    public override string? Name => Descriptor.Name;
 
-    public override Type ParentType => Descriptor.ComponentType;
-
-    public override bool IsReadOnly => Descriptor.IsReadOnly;
 }
 
-public abstract record ValuePropertyDescriptor(Descriptor Descriptor, object Instance) : ValueMemberDescriptor(Descriptor.PropertyType), IRaisePropertyChanged, IInstance, IPropertyDescriptor
+public abstract record ValuePropertyDescriptor(Descriptor Descriptor, object Instance) : ValueMemberDescriptor(Descriptor), IRaisePropertyChanged, IInstance, IPropertyDescriptor
 {
-    public override string? Name => Descriptor.Name;
-
-    public override Type ParentType => Descriptor.ComponentType;
-
-    public override bool IsReadOnly => Descriptor.IsReadOnly;
 
     public void RaisePropertyChanged(ref object previousValue, object value, string? propertyName = null)
     {
@@ -41,7 +32,7 @@ public abstract record ValuePropertyDescriptor(Descriptor Descriptor, object Ins
 
         try
         {
-            var value = Descriptor.GetValue(Instance);
+            var value = Descriptor?.GetValue(Instance);
             return value;
         }
         catch(NotSupportedException ex)
@@ -52,7 +43,7 @@ public abstract record ValuePropertyDescriptor(Descriptor Descriptor, object Ins
 
     public override void Set(object? value)
     {
-        Descriptor.SetValue(Instance, value);
+        Descriptor?.SetValue(Instance, value);
     }
 
 }

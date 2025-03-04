@@ -7,14 +7,9 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
     private DateTime? removed;
 
     List<IDescriptor> descriptors = new();
-    public CollectionHeadersDescriptor(Type propertyType, Type componentType) : base(propertyType)
+    public CollectionHeadersDescriptor(Type propertyType, Type componentType) : base(new RootDescriptor(propertyType, componentType, "Header"))
     {
-        this.ParentType = componentType;
     }
-
-    public override string? Name => "Header";
-
-    public override Type ParentType { get; }
 
     public int Index => 0;
 
@@ -73,15 +68,10 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
 
 internal record HeaderDescriptor : ChildlessMemberDescriptor, IHeaderDescriptor
 {
-    public HeaderDescriptor(Type type, Type parentType, string name) : base(type)
+    public HeaderDescriptor(Type type, Type parentType, string name) : base(new RootDescriptor(type, parentType, name))
     {
-        ParentType = parentType;
-        Name = name;
     }
 
-    public override string? Name { get; }
-
-    public override Type ParentType { get; }
 
     public override bool IsReadOnly => true;
 
@@ -97,7 +87,7 @@ internal record HeaderDescriptor : ChildlessMemberDescriptor, IHeaderDescriptor
 internal partial record CollectionItemDescriptor : ValueDescriptor, ICollectionItemDescriptor, IEquatable, IItem
 {
 
-    internal CollectionItemDescriptor(object item, int index, Type componentType) : base(new RootDescriptor(item.GetType(), componentType) { }, item)
+    internal CollectionItemDescriptor(object item, int index, Type componentType) : base(new RootDescriptor(item.GetType(), componentType, item.GetType().Name) { }, item)
     {
         Item = item;
 
@@ -111,10 +101,6 @@ internal partial record CollectionItemDescriptor : ValueDescriptor, ICollectionI
     public object Item { get; set; }
 
     public int Index { get; }
-
-    public DateTime? Removed { get; set; }
-
-    public override string? Name => Type.Name;
 
     public override object Get()
     {

@@ -1,7 +1,4 @@
 ﻿
-using Splat;
-using Utility.Interfaces.Exs;
-
 namespace Utility.PropertyDescriptors
 {
     public record PropertiesDescriptor(Descriptor PropertyDescriptor, object Instance) : BasePropertyDescriptor(PropertyDescriptor, Instance), IPropertiesDescriptor

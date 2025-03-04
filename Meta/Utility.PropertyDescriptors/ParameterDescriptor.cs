@@ -1,12 +1,10 @@
 ﻿
+using Utility.Meta;
+
 namespace Utility.PropertyDescriptors
 {
-    internal record ParameterDescriptor(ParameterInfo ParameterInfo, Dictionary<int, object?> Component) : ValueMemberDescriptor(ParameterInfo.ParameterType)
+    internal record ParameterDescriptor(ParameterInfo ParameterInfo, Dictionary<int, object?> Component) : ValueMemberDescriptor(new RootDescriptor(ParameterInfo.ParameterType, typeof(Dictionary<string, object?>), ParameterInfo.Name ?? ParameterInfo.Position.ToString()))
     {
-        public override Type ParentType => typeof(Dictionary<string, object?>);
-
-        public override string? Name => ParameterInfo.Name ?? ParameterInfo.Position.ToString();
-
         public override bool IsReadOnly => false;
 
         public override IEnumerable<object> Children => Array.Empty<object>();

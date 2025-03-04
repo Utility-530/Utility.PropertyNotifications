@@ -1,4 +1,6 @@
-﻿namespace Utility.PropertyDescriptors;
+﻿using Utility.Meta;
+
+namespace Utility.PropertyDescriptors;
 
 internal record MethodDescriptor : MemberDescriptor, IMethodDescriptor
 {
@@ -8,7 +10,7 @@ internal record MethodDescriptor : MemberDescriptor, IMethodDescriptor
     private readonly MethodInfo methodInfo;
     private readonly object instance;
 
-    internal MethodDescriptor(MethodInfo methodInfo, object instance) : base((System.Type)null)
+    internal MethodDescriptor(MethodInfo methodInfo, object instance) : base(new RootDescriptor(null, methodInfo.DeclaringType, methodInfo.Name))
     {
         this.methodInfo = methodInfo;
         this.instance = instance;
@@ -19,10 +21,6 @@ internal record MethodDescriptor : MemberDescriptor, IMethodDescriptor
         get { return dictionary[key]; }
         set { dictionary[key] = value; }
     }
-
-    public override string? Name => methodInfo.Name;
-
-    public override Type ParentType => methodInfo.DeclaringType;
 
     public void Invoke()
     {

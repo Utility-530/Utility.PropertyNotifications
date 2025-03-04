@@ -1,7 +1,10 @@
-﻿using Splat;
-using Utility.Interfaces.Exs;
+﻿using Utility.Meta;
 
 namespace Utility.PropertyDescriptors;
+
+internal abstract record ReferenceDescriptor<T, TR>(string name) : ReferenceDescriptor(new RootDescriptor(typeof(T), typeof(TR), name), null)
+{
+}
 
 internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : ValuePropertyDescriptor(Descriptor, Instance), IReferenceDescriptor
 {
