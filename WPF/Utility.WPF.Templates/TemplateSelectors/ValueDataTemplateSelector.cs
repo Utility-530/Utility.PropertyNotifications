@@ -5,9 +5,12 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.WPF.Templates
 {
+    public interface ITemplates
+    {
+        ResourceDictionary Templates { get; }
+    }
 
-
-    public class ValueDataTemplateSelector : GenericDataTemplateSelector
+    public class ValueDataTemplateSelector : GenericDataTemplateSelector, ITemplates
     {
         private ValueTemplates valueTemplates;
         private Type[] types;
@@ -19,38 +22,17 @@ namespace Utility.WPF.Templates
                 throw new Exception($"Unexpected type for item {item.GetType().Name}");
             }
             if (get() is Type type)
-            {   
-                if (Nullable.GetUnderlyingType(type) != null)
-                {
-                    var underlyingType = Nullable.GetUnderlyingType(type);
-                    var underlyingTypeName = underlyingType.BaseType == typeof(Enum) ? underlyingType.BaseType.Name : underlyingType.Name;
-                    if (Templates[$"{type.Name}[{underlyingTypeName}]"] is DataTemplate dt)
-                        return dt;
-                }
-                if (type.BaseType == typeof(Enum))
-                {
-                    if (Templates[new DataTemplateKey(type.BaseType)] is DataTemplate __dt)
-                        return __dt;
-                }
-                // DataTemplate.DataType cannot be type Object.
-                if (type == typeof(object))
-                {
-                    return Templates["Object"] as DataTemplate;
-                }
-                if (Templates[new DataTemplateKey(type)] is DataTemplate _dt)
-                    return _dt;
-            }  
+            {
+                return FromType(this, type);
+            }
 
+            if (item is DataTemplate dataTemplate)
+                return dataTemplate;
 
 
             if (value == null)
                 return NullTemplate ??= TemplateFactory.CreateNullTemplate();
 
-            //var type = value.GetType();
-            //var _descriptor = item is IPropertyDescriptor descriptor ? descriptor : null;
-            //var _info = item is IPropertyInfo propertyInfo ? propertyInfo : null;
-
-           
 
             return Templates["Missing"] as DataTemplate ?? throw new Exception("dfs 33091111111");
         
@@ -69,15 +51,42 @@ namespace Utility.WPF.Templates
         {
             get
             {
-                types ??= NewMethod();
+                types ??= newMethod();
                 return types;
             }
         }
 
-        private Type[] NewMethod()
+        private Type[] newMethod()
         {
             var keys = this.Templates.Keys.OfType<DataTemplateKey>().ToArray();
             return keys.Select(a => a.DataType).OfType<Type>().ToArray(); 
+        }
+
+
+        public static DataTemplate FromType(ITemplates template, Type type)
+        {
+            if (Nullable.GetUnderlyingType(type) != null)
+            {
+                var underlyingType = Nullable.GetUnderlyingType(type);
+                var underlyingTypeName = underlyingType.BaseType == typeof(Enum) ? underlyingType.BaseType.Name : underlyingType.Name;
+                if (template.Templates[$"{type.Name}[{underlyingTypeName}]"] is DataTemplate dt)
+                    return dt;
+            }
+            if (type.BaseType == typeof(Enum))
+            {
+                if (template.Templates[new DataTemplateKey(type.BaseType)] is DataTemplate __dt)
+                    return __dt;
+            }
+
+            if (type == typeof(object))
+            {
+                return template.Templates["Object"] as DataTemplate;
+            }
+
+            if (template.Templates.Contains(new DataTemplateKey(type)))
+                return template.Templates[new DataTemplateKey(type)] as DataTemplate;
+
+            return null;
         }
 
         public override ResourceDictionary Templates
