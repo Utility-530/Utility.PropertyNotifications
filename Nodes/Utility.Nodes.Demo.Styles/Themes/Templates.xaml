@@ -53,6 +53,34 @@
     </DataTemplate>
 
 
+    <DataTemplate DataType="{x:Type model:CollectionModel}">
+
+        <ItemsControl ItemsSource="{Binding  Converter={StaticResource PropertyNamesConverter}, ConverterParameter={x:Static conv:PropertyType.TopLevelAndGenericArgument1}}">
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <DataTemplate.Resources>
+
+                        <Style TargetType="{x:Type TextBlock}">
+                            <!--<Setter Property="Width" Value="100"/>-->
+                            <Setter Property="FontWeight" Value="DemiBold"/>
+                            <Setter Property="FontSize" Value="8"></Setter>
+                            <Setter Property="MaxWidth" Value="200"/>
+                            <Setter Property="Margin" Value="4,0,8,0"/>
+                        </Style>
+                    </DataTemplate.Resources>
+                    <TextBlock Text="{Binding }" ></TextBlock>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="1"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </DataTemplate>
+
+
     <DataTemplate DataType="{x:Type inf:IndexModel}">
         <xc:IntegerUpDown   Value="{Binding Value}"></xc:IntegerUpDown>
     </DataTemplate>
@@ -175,34 +203,23 @@
     </DataTemplate>
 
 
-    <DataTemplate DataType="{x:Type inf:DirtyNodesModel}">
+
+    <DataTemplate DataType="{x:Type inf:DirtyModel}">
         <DataTemplate.Resources>
             <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="Width" Value="100"/>
-                <Setter Property="FontWeight" Value="DemiBold"/>
+                <Setter Property="FontSize" Value="8"></Setter>
+                <Setter Property="MaxWidth" Value="60"/>
+                <Setter Property="Margin" Value="4,0,4,0"/>
             </Style>
         </DataTemplate.Resources>
-        <WrapPanel >
-
-            <TextBlock Text="SourceKey" />
-            <TextBlock Text="PropertyName"  />
-            <TextBlock Text="NewValue" />
-        </WrapPanel>
-    </DataTemplate>
-
-
-
-    <DataTemplate DataType="{x:Type inf:DirtyNodeModel}">
-        <DataTemplate.Resources>
-            <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="Width" Value="100"/>
-            </Style>
-        </DataTemplate.Resources>
-        <WrapPanel>
-            <TextBlock Text="{Binding Path=SourceKey}"  />
+        <UniformGrid Rows="1">
+    
+             <TextBlock Text="{Binding Path=SourceKey}"  />
+                   
             <TextBlock Text="{Binding Path=PropertyName}"  />
+            <TextBlock Text="{Binding Path=OldValue}"  />
             <TextBlock Text="{Binding Path=NewValue}"  />
-        </WrapPanel>
+        </UniformGrid>
 
     </DataTemplate>
 

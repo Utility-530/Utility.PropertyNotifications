@@ -2,20 +2,24 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
                     xmlns:local="clr-namespace:Utility.Nodes.Demo.Styles" 
                     xmlns:conv="http://schemas.utility.com/converters" 
-                    xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks">
+                    xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                    xmlns:mvvm="http://hexinnovation.com/math" 
+                    >
 
 
-    
-    <local:SelectedNodeChangeConverter x:Key="SelectedNodeChangeConverter"></local:SelectedNodeChangeConverter>
+
+    <local:SelectedNodeChangeConverter x:Key="SelectedNodeChangeConverter"/>
     <conv:TypeNameConverter x:Key="TypeNameConverter"/>
     <local:ChildrenSelector x:Key="ChildrenSelector"/>
     <local:ChildrenSelectorConverter x:Key="ChildrenSelectorConverter"/>
     <conv:ObjectDumperConverter x:Key="ObjectDumperConverter"/>
     <conv:InverseNullToBooleanConverter x:Key="InverseNullToBooleanConverter"/>
     <icons:PackIconIonicons x:Key="Icon" x:Shared="false" Kind="AddMD" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"/>
-    <local:NewObjectConverter x:Key="NewObjectConverter"></local:NewObjectConverter>
-    <local:FinishEditConverter x:Key="FinishEditConverter"></local:FinishEditConverter>
+    <local:NewObjectConverter x:Key="NewObjectConverter"/>
+    <local:FinishEditConverter x:Key="FinishEditConverter"/>
+    <conv:PropertyNamesConverter x:Key="PropertyNamesConverter"/>
+    <mvvm:MathConverter x:Key="Math"/>
 
 
-    
+
 </ResourceDictionary>
