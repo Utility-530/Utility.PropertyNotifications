@@ -14,12 +14,9 @@ namespace Utility.PropertyNotifications
     {
         bool flag;
 
-
         protected NotifyPropertyClass() : base()
         {
         }
-
-
 
         public event PropertyChangingEventHandler? PropertyChanging;
 
@@ -52,12 +49,17 @@ namespace Utility.PropertyNotifications
             if (value?.Equals(previousValue) == true)
                 return;
 
-            var handler = PropertyChanged;
             var _previousValue = previousValue;
             previousValue = value;
+            RaisePropertyChanged(_previousValue, value, propertyName);
+        }
+        public virtual void RaisePropertyChanged<T>(T previousValue, T value, [CallerMemberName] string? propertyName = null)
+        {
+            var handler = PropertyChanged;
+
             if (handler != null)
             {
-                var e = new PropertyChangedExEventArgs(propertyName, value, _previousValue);
+                var e = new PropertyChangedExEventArgs(propertyName, value, previousValue);
                 handler(this, e);
             }
         }

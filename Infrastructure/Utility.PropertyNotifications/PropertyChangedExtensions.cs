@@ -2,11 +2,35 @@
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Utility.PropertyNotifications
 {
     public static class PropertyChangedExtensions
     {
+
+        public static void RaisePropertyChanged<T, P>(this T sender, Expression<Func<T, P>> propertyExpression) where T : INotifyPropertyChanged
+        {
+            Raise(typeof(T), sender, (propertyExpression.Body as MemberExpression).Member.Name);
+        }
+
+        public static void RaisePropertyChanged(this INotifyPropertyChanged sender, [CallerMemberName] string prop = null)
+        {
+            Raise(sender.GetType(), sender, prop);
+        }
+
+        private static void Raise(Type targetType, INotifyPropertyChanged sender, string propName)
+        {
+            ((PropertyChangedEventHandler?)field(targetType).GetValue(sender))?.Invoke(sender, new PropertyChangedEventArgs(propName));
+
+            static FieldInfo field(Type type)
+            {
+                return type.GetField(nameof(INotifyPropertyChanged.PropertyChanged), BindingFlags.Instance | BindingFlags.NonPublic) ??
+                    field(type.BaseType ?? throw new Exception("ubn 43"));
+            }
+        }
+
+
         private class PropertyObservable<T> : IObservable<T>
         {
             private readonly INotifyPropertyChanged _target;
@@ -96,5 +120,6 @@ namespace Utility.PropertyNotifications
 
             return new PropertyObservable<TRes>(model, null, includeNulls, includeInitialValue);
         }
+
     }
 }
