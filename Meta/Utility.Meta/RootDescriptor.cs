@@ -17,7 +17,7 @@ namespace Utility.Meta
 
         public override Type ComponentType { get; }
 
-        public override bool IsReadOnly => true;
+        public override bool IsReadOnly { get; } = false;
 
         public override Type PropertyType { get; }
 
