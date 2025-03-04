@@ -352,7 +352,7 @@ namespace Utility.Trees
         }
 
         public int Count => m_items.Count;
-        public bool IsReadOnly => false;
+        public virtual bool IsReadOnly { get; set; } 
 
         public void RemoveAt(int index)
         {
