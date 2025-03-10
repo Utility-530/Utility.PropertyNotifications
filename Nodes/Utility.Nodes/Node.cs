@@ -68,10 +68,8 @@ namespace Utility.Nodes
                 if (data == value)
                 {
                     throw new Exception("vdfs 3332222kjj");
-                }
-                var previousValue = data;
-                data = value;            
-                RaisePropertyChanged(ref previousValue, value);
+                }    
+                RaisePropertyChanged(ref data, value);
             }
         }
 

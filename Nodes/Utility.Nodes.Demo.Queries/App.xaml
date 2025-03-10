@@ -129,8 +129,16 @@
 
                         <GridSplitter Grid.Column="3" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
 
+                        <Grid Grid.Column="4" >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                   
 
-                        <ct:CustomTreeView Grid.Column="4" ItemsSource="{Binding Nodes}" >
+                        <TextBlock Text="{Binding Filter.Key}"></TextBlock>
+
+                        <ct:CustomTreeView ItemsSource="{Binding Nodes}" Grid.Row="1">
                             <TreeView.Resources>
                                 <ResourceDictionary>
                                     <ResourceDictionary.MergedDictionaries>
@@ -179,6 +187,7 @@
                                 </bc:ItemContainerStyleSelector>
                             </ct:CustomTreeView.ItemContainerStyleSelector>
                         </ct:CustomTreeView>
+                        </Grid>
                     </Grid>
                 </DockPanel>
 

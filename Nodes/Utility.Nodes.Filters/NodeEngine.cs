@@ -227,6 +227,8 @@ namespace Utility.Nodes.Filters
                                     {
                                         if (a.Value != null)
                                         {
+                                            if (call.Target.TryGetFieldValue(call.Name.ToLower()).Equals(a.Value) == true)
+                                                return;
                                             call.Target.TrySetValue(call.Name, a.Value);
                                             if (call.Target is INotifyPropertyChanged changed)
                                                 changed.RaisePropertyChanged(call.Name);
@@ -264,9 +266,7 @@ namespace Utility.Nodes.Filters
                                     if (data is IYieldChildren ychildren)
                                         _children(node, ychildren, (GuidKey)node.Key).Subscribe(a =>
                                         {
-
                                             node.Add(a);
-                                            //this.nodes.Add(a);
                                         });
 
 
@@ -338,7 +338,10 @@ namespace Utility.Nodes.Filters
             {
                 return repository.Value.Get(Guid.Parse(node.Key)).Subscribe(_d =>
                 {
-                    if (_d.Value != null && setdictionary.Value.TryGetValue(_d.Name, out Setter value))
+                    if (_d.Name == null)
+                    {
+                    }
+                    else if (_d.Value != null && setdictionary.Value.TryGetValue(_d.Name, out Setter value))
                         value.Set(node, _d.Value);
                 }, () =>
                 {

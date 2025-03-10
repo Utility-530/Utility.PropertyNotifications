@@ -10,7 +10,7 @@ using Utility.Trees;
 namespace Utility.Nodes
 {
 
-    public class ViewModelTree : Tree, /*IGuid,*/ /*IName, */IIsEditable, IIsExpanded, IIsPersistable, IIsVisible, IRemoved //, INode, 
+    public class ViewModelTree : Tree, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible, IRemoved, IIsReadOnly
     {
 
         private bool? isHighlighted;
