@@ -7,11 +7,10 @@ using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Repos;
 using Utility.Structs.Repos;
-using System.Text.RegularExpressions;
 
 namespace Utility.Nodes.Demo.Queries
 {
-    public class Repository : ITreeRepository
+    public class JsonRepository : ITreeRepository
     {
         Lazy<IMainViewModel> mainViewmModel = new(() => Locator.Current.GetService<IMainViewModel>());
 
@@ -29,32 +28,44 @@ namespace Utility.Nodes.Demo.Queries
 
         public IObservable<Key?> Find(Guid parentGuid, string? name = null, Guid? guid = null, Type? type = null, int? index = null)
         {
-            if (name == null)
-                return Observable.Empty<Key?>();
-            else
+            if (mainViewmModel.Value.Filter is FilterEntity { Body: { } body } entity)
             {
-                if (mainViewmModel.Value.Filter is FilterEntity { Body: { } body } entity)
+                JObject jObject = JObject.Parse(body);
+                // find the node
+                var token = jObject.DescendantsAndSelf().SingleOrDefault(a => a.SelectToken("Key")?.Value<string>() == parentGuid.ToString());
+                if (token != null)
                 {
-                    JObject jObject = JObject.Parse(body);
-                    // find the node
-                    var token = jObject.DescendantsAndSelf().SingleOrDefault(a => a.SelectToken("Key")?.Value<string>() == parentGuid.ToString());
-                    if (token != null)
+
+                    if (name != null)
                     {
                         var _token = token.SelectTokens("Items[*].Data.Name").ToArray().SingleOrDefault(a => a.Value<string>() == name)?.Parent.Parent;
                         if (_token != null)
                         {
-                            return Observable.Return<Key?>(new Key { Guid = Guid.Parse(token["Key"].Value<string>()), Name =name, ParentGuid = parentGuid, Type = Type.GetType(token["$type"].Value<string>()) });
+                            return Observable.Return<Key?>(new Key { Guid = Guid.Parse(token["Key"].Value<string>()), Name = name, ParentGuid = parentGuid, Type = Type.GetType(token["$type"].Value<string>()) });
                         }
                         else
                         {
+
                             return Observable.Return<Key?>(new Key(Guid.NewGuid(), parentGuid, type, name, index, null));
                         }
+
+                    }
+                    else
+                    {
+                        return Observable.Empty<Key?>();
+                        //return token
+                        //    .SelectToken("Items")
+                        //    .Select(a => new Key(Guid.Parse(a["Key"].Value<string>()), parentGuid, Type.GetType(a["Data"]["$type"].Value<string>()), a["Data"]["Name"].Value<string>(), null, null))
+                        //    .Cast<Key?>()
+                        //    .ToObservable();
                     }
                 }
-                var _guid = Guid.NewGuid();
-                guids.Add(_guid);
-                return Observable.Return<Key?>(new Key { Guid = _guid });
             }
+            if (name != null)
+            {
+                return Observable.Return<Key?>(new Key(Guid.NewGuid(), parentGuid, type, name, index, null));
+            }
+            return Observable.Return<Key?>(null);
         }
 
         public IObservable<Guid> InsertByParent(Guid parentGuid, string name, string? table_name = null, int? typeId = null, int? index = null)
@@ -132,40 +143,22 @@ namespace Utility.Nodes.Demo.Queries
             {
                 JObject jObject = JObject.Parse(body);
                 var token = jObject.DescendantsAndSelf().SingleOrDefault(a => a.SelectToken("Key")?.Value<string>() == guid.ToString());
+                if (token == null)
+                    return;
+                var _value = JToken.FromObject(value);
+                //var serialisedValue = JsonConvert.SerializeObject(value.ToString());
                 var innerToken = token.SelectToken(name);
-                var _value = JToken.FromObject(value).ToString();
-                var serialisedValue = JsonConvert.SerializeObject(value.ToString());
-                (innerToken as JValue).Value = value;
+
+                if (Utility.Helpers.TypeHelper.IsValueOrString(value.GetType()) == false)
+                {
+                    innerToken.Replace(_value);
+                }
+                else
+                {
+                    (innerToken as JValue).Value = value;
+                }
                 entity.Body = jObject.ToString();
-                //if (innerToken.Type == JTokenType.Object)
-                //{
-                //    if (innerToken.ToString() != _value)
-                //    {
-                //        token["Data"][name] = serialisedValue;
-                //        entity.Body = jObject.ToString();
-                //    }
-                //}
-                //else if (innerToken.Type == JTokenType.String)
-                //{
-                //    // need to escape the string
-                //    if (Regex.Unescape(innerToken.ToString()) != _value)
-                //    {
-                //        token["Data"][name] = serialisedValue;
-                //        entity.Body = jObject.ToString();
-                //    }
-                //}
-                //else if (innerToken.Type == JTokenType.Integer)
-                //{
-                //    if (innerToken.ToString() != _value)
-                //    {
-                //        (innerToken as JValue).Value = serialisedValue;
-                //        entity.Body = jObject.ToString();
-                //    }
-                //}
-                //else
-                //{
-                //    throw new Exception("333;;;f");
-                //}
+
             }
 
         }
