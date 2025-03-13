@@ -147,7 +147,7 @@
         <ContentControl 
             ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance}" Content="{Binding }">
             <i:Interaction.Behaviors>
-                <local:UpdateContentControlBehavior Value="{Binding Value}"/>
+                <local:UpdateContentControlBehavior Value="{Binding Value}" UpdateOnNull="True"/>
             </i:Interaction.Behaviors>
         </ContentControl>
     </DataTemplate>

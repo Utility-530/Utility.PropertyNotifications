@@ -12,11 +12,21 @@ namespace Utility.Nodes.Demo.Styles
     {
 
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(object), typeof(UpdateContentControlBehavior), new FrameworkPropertyMetadata(null, OnValueChanged));
+
+        public static readonly DependencyProperty UpdateOnNullProperty = DependencyProperty.Register("UpdateOnNull", typeof(bool), typeof(UpdateContentControlBehavior), new PropertyMetadata(false));
+
+
         public object Value
         {
             get => GetValue(ValueProperty);
             set => SetValue(ValueProperty, value);
         }
+        public bool UpdateOnNull
+        {
+            get { return (bool)GetValue(UpdateOnNullProperty); }
+            set { SetValue(UpdateOnNullProperty, value); }
+        }
+
         static void OnValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             if (sender is UpdateContentControlBehavior behavior /*&& e.NewValue.GetType() != behavior.Type*/)
@@ -33,7 +43,7 @@ namespace Utility.Nodes.Demo.Styles
 
         void Update()
         {
-            if (Value != null && AssociatedObject != null)
+            if (AssociatedObject != null && (UpdateOnNull || Value != null))
             {
                 var binding = BindingOperations.GetBinding(AssociatedObject, ContentPresenter.ContentProperty);
                 BindingOperations.ClearBinding(AssociatedObject, ContentPresenter.ContentProperty);
