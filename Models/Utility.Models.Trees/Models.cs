@@ -28,15 +28,7 @@ using Utility.Helpers.NonGeneric;
 
 namespace Utility.Models.Trees
 {
-    public interface IAndOr
-    {
-        AndOr Value { get; }
-    }
 
-    public interface IResolvable
-    {
-        bool IsEqual(object _value);
-    }
 
 
     public readonly record struct ValueChanged(PropertyInfo PropertyInfo, object Value);
@@ -61,10 +53,6 @@ namespace Utility.Models.Trees
         }
     }
 
-    public interface IValue
-    {
-        object Value { get; set; }
-    }
 
     public class NodePropertyRootModel : ResolvableModel
     {
@@ -74,7 +62,7 @@ namespace Utility.Models.Trees
         {
             Assemblies.InsertSpecial(0, typeof(INode).Assembly);
             Types.InsertSpecial(0, typeof(INode));
-            Properties.Changes().Subscribe(a => PropertyType = Properties.Last().PropertyType);
+            Properties.Changes().Subscribe(a => PropertyType = Properties.LastOrDefault()?.PropertyType);
         }
 
         public Type PropertyType
@@ -161,16 +149,6 @@ namespace Utility.Models.Trees
 
     public class AssemblyModel : Model, IBreadCrumb, IGetAssembly
     {
-        //public AssemblyModel(Assembly assembly):this(assembly.GetName().Name)
-        //{
-
-        //    Assembly = assembly;
-        //}
-
-        //private AssemblyModel(string name)
-        //{
-        //    Name = name;
-        //}
         public AssemblyModel()
         {
         }
@@ -263,7 +241,7 @@ namespace Utility.Models.Trees
 
         public override IEnumerable<Model> CreateChildren()
         {
-            if (Value.PropertyType == typeof(object))
+            if (Value?.PropertyType == typeof(object))
             {
                 yield return (new GlobalAssembliesModel { Name = "ass_root" });
             }
@@ -276,6 +254,8 @@ namespace Utility.Models.Trees
 
     public class ValueModel : ValueModel<object>
     {
+        public ValueModel(object value) : base(value) { }
+        public ValueModel(){ }
     }
 
 
@@ -662,26 +642,6 @@ namespace Utility.Models.Trees
     {
     }
 
-    public enum CustomStringComparison
-    {
-        EqualTo, NotEqualTo, Contains, DoesNotContain, StartsWith, EndsWith, IsNull, IsNotNull, IsNotNullOrWhiteSpace
-    }
-
-    public enum NumberComparison
-    {
-        EqualTo, NotEqualTo, GreaterThan, GreaterThanOrEqualTo, LessThan, LessThanOrEqualTo,
-    }
-
-    public enum BooleanComparison
-    {
-        EqualTo, NotEqualTo
-    }
-
-    public enum ComparisonType
-    {
-        String, Number, Boolean
-    }
-
     public class ComparisonModel : Model
     {
         private Enum _value;
@@ -699,18 +659,23 @@ namespace Utility.Models.Trees
                 type = value;
                 switch (value)
                 {
+                    case ComparisonType.Default:
+                        Value = null; break;
                     case ComparisonType.String:
                         Value = CustomStringComparison.EqualTo; break;
                     case ComparisonType.Number:
                         Value = NumberComparison.EqualTo; break;
                     case ComparisonType.Boolean:
                         Value = BooleanComparison.EqualTo; break;
+                    case ComparisonType.Type:
+                        Value = TypeComparison.EqualTo; break;
                 }
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(Value));
             }
         }
 
-        public Enum Value
+        public Enum? Value
         {
             get => _value; set
             {
@@ -1016,12 +981,6 @@ namespace Utility.Models.Trees
         }
     }
 
-
-    public interface ISelection
-    {
-
-    }
-
     public class DatabasesModel : Model, ISelection
     {
         [JsonIgnore]
@@ -1259,10 +1218,7 @@ namespace Utility.Models.Trees
     {
         const string res = nameof(res);
         const string b_ool = nameof(b_ool);
-        //const string type = nameof(type);
         const string _value = nameof(_value);
-
-        //private NodePropertyRootModel resolvableModel;
         private ResolvableModel resolvableModel;
         private ComparisonModel comparisonModel;
         private ValueModel valueModel;
@@ -1314,36 +1270,36 @@ namespace Utility.Models.Trees
                 case res:
                     ResolvableModel = a.Data as ResolvableModel;
                     ResolvableModel.Properties
-                        .Changes().Select(a => ResolvableModel.Properties.LastOrDefault()?.PropertyType).WhereIsNotNull()
+                        .Changes().StartWith(default(Change<PropertyInfo>)).Select(a => (ResolvableModel.Properties.LastOrDefault()?.PropertyType))
                         .CombineLatest(this.WithChangesTo(a => a.ValueModel))
                         .Subscribe(a =>
                         {
-                            if (ValueModel.Value == null)
+                            if (a.First != null)
                             {
                                 ValueModel.Value = ActivateAnything.Activate.New(a.First);
-                                ValueModel.RaisePropertyChanged(nameof(ValueModel.Value));
-                            }
-                        });
-                    ResolvableModel.Properties
-                        .Changes().Select(a => ResolvableModel.Properties.LastOrDefault()?.PropertyType).WhereIsNotNull()
-                        .CombineLatest(this.WithChangesTo(a => a.ComparisonModel))
-                        .Subscribe(a =>
-                        {
-                            if (a.First == typeof(string))
-                            {
-                                ComparisonModel.Type = ComparisonType.String;
-                            }
-                            else if (a.First == typeof(long) || a.First == typeof(int) || a.First == typeof(short) || a.First == typeof(byte)
-                            || (a.First == typeof(ulong) || a.First == typeof(uint) || a.First == typeof(ushort) || a.First == typeof(double) || a.First == typeof(float)))
-                            {
-                                ComparisonModel.Type = ComparisonType.Number;
                             }
                             else
-                            {
-                                ComparisonModel.Type = ComparisonType.Boolean;
-                            }
-                            ComparisonModel.RaisePropertyChanged(nameof(ComparisonModel.Value));
+                                ValueModel.Value = null;
+
+                            ValueModel.RaisePropertyChanged(nameof(ValueModel.Value));
+                            ComparisonModel.Type = toComparisonType(a.First);
+                            ComparisonModel.RaisePropertyChanged(nameof(ComparisonModel.Type));
+          
                         });
+
+
+                    ResolvableModel.Types
+                        .Changes().Select(a => ResolvableModel.Types.LastOrDefault()).WhereIsNotNull()
+                        .CombineLatest(ResolvableModel.Properties.Changes().StartWith(default(Change<PropertyInfo>)), this.WithChangesTo(a => a.ValueModel))
+                        .Where(a => ResolvableModel.Types.Count > ResolvableModel.Properties.Count)
+                        .Subscribe(a =>
+                        {
+                            ValueModel.Value = a.First;
+                            ComparisonModel.Type = ComparisonType.Type;
+                            ValueModel.RaisePropertyChanged(nameof(ValueModel.Value));
+
+                        });
+
                     break;
                 //ResolvableModel. break;
                 case b_ool:
@@ -1354,6 +1310,18 @@ namespace Utility.Models.Trees
                     ValueModel = a.Data as ValueModel; break;
             }
             base.Addition(value, a);
+
+            static ComparisonType toComparisonType(Type type)
+            {
+                if (type == null)                
+                    return ComparisonType.Default;                
+                else if (type == typeof(string))                
+                    return ComparisonType.String;                
+                else if (TypeHelper.IsNumericType(type))                
+                    return ComparisonType.Number;                
+                else
+                    return ComparisonType.Boolean;     
+            }    
         }
 
         public bool Get(object instance)
@@ -1364,11 +1332,6 @@ namespace Utility.Models.Trees
             }
             return false;
 
-        }
-
-        public override void SubtractDescendant(IReadOnlyTree node, int level)
-        {
-            //base.SubtractDescendant(node, level);
         }
     }
 
@@ -1388,20 +1351,12 @@ namespace Utility.Models.Trees
 
             List<INode> items = new();
             var child = topNode;
-            //child.IsExpanded = false;
             while (child.Current != null)
             {
                 items.Add(child = child.Current);
-                //Extract(child);
                 child.IsExpanded = false;
             }
-            //while (currentNode!= top)
-            //{
-            //    items.Add(currentNode as INode);
-            //    currentNode = currentNode.Parent;
-            //    (currentNode as INode).IsExpanded = false;
-            //}
-            //items.Reverse();
+
             int i = 0;
 
             lock (top.Items)
@@ -1464,10 +1419,6 @@ namespace Utility.Models.Trees
         [JsonIgnore]
         [Child("selections")]
         public SelectionsModel SelectionsModel { get; set; }
-
-
-
-
     }
 
     public class ResolvableModel : BreadCrumbModel, IRoot
@@ -1513,31 +1464,31 @@ namespace Utility.Models.Trees
             yield return new GlobalAssembliesModel { Name = "ass_root" };
         }
 
-        public override void AddDescendant(IReadOnlyTree change, int level)
+        public override void Addition(IReadOnlyTree value, IReadOnlyTree a)
         {
-            if (change is INode node)
-            {
-                var _level = node.Level(Node);
 
-                switch (node?.Data)
-                {
-                    case AssemblyModel { Assembly: { } assembly }:
-                        {
-                            assemblies.InsertSpecial(_level, assembly);
-                            break;
-                        }
-                    case TypeModel { Type: { } type }:
-                        {
-                            types.InsertSpecial(_level, type);
-                            break;
-                        }
-                    case PropertyModel { Value: { } pInfo }:
-                        {
-                            propertyInfos.InsertSpecial(_level, pInfo);
-                        }
+            var _level = a.Level(Node);
+
+            switch (a?.Data)
+            {
+                case AssemblyModel { Assembly: { } assembly }:
+                    {
+                        assemblies.InsertSpecial(_level, assembly);
                         break;
-                }
+                    }
+                case TypeModel { Type: { } type }:
+                    {
+                        types.InsertSpecial(_level, type);
+                        break;
+                    }
+                case PropertyModel { Value: { } pInfo }:
+                    {
+                        propertyInfos.InsertSpecial(_level, pInfo);
+                    }
+                    break;
             }
+            base.Addition(value, a);
+
         }
 
         public override void Subtraction(IReadOnlyTree node, IReadOnlyTree a)
@@ -1566,39 +1517,36 @@ namespace Utility.Models.Trees
                     break;
 
             }
+            base.Subtraction(node, a);
+
         }
 
-        public override void SubtractDescendant(IReadOnlyTree node, int level)
-        {
-            //var date = source.Remove(Guid.Parse(node.Key));
-            //if (node is IRemoved removed)
-            //{
-            //    removed.Removed = date;
-            //}
-        }
-
-        public override void ReplaceDescendant(IReadOnlyTree node, IReadOnlyTree old, int level)
+        public override void Replacement(IReadOnlyTree @new, IReadOnlyTree old)
         {
 
-            switch (node?.Data)
+            switch (@new?.Data)
             {
                 case AssemblyModel { Assembly: { } assembly }:
                     {
+                        var level = @new.Level(Node);
                         assemblies.ReplaceSpecial(level, assembly);
                         break;
                     }
                 case TypeModel { Type: { } type }:
                     {
+                        var level = @new.Level(Node);
                         types.ReplaceSpecial(level, type);
                         break;
                     }
                 case PropertyModel { Value: { } pInfo }:
                     {
+                        var level = @new.Level(Node);
                         propertyInfos.ReplaceSpecial(level, pInfo);
                     }
 
                     break;
             }
+            base.Replacement(@new, old);
         }
 
         public virtual bool TryGetValue(object instance, out object value)
@@ -1663,15 +1611,11 @@ namespace Utility.Models.Trees
         }
     }
 
-
-
     public class DirtyModel : Model, ICollectionItem
-    { 
+    {
         public string SourceKey { get; set; }
         public string PropertyName { get; set; }
-
         public object OldValue { get; set; }
-
         public object NewValue { get; set; }
     }
 }
