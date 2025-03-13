@@ -14,6 +14,7 @@ namespace Utility.Interfaces.Exs
         void Set(Guid guid, string name, object value, DateTime dateTime);
         void Add(INode node);
         IObservable<INode?> Single(string v);
+        IObservable<INode?> SingleAsync(string v);
         void Reset();
         void Save();
     }
