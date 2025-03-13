@@ -3,5 +3,5 @@
     public interface IAdd
     {
         void Add(object instance);  
-    }
+    }   
 }
