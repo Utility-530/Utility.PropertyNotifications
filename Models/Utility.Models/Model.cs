@@ -51,27 +51,14 @@ namespace Utility.Models
             {
                 node = value;
 
-                //node.WithChangesTo(a => a.Parent)
-                //    .Where(a => a != default)
-                //    //.Take(1)
-                //    .Subscribe(a =>
-                //    Initialise(a));
 
-                //node.WithChangesTo(a => a.Key)
-                //.StartWith(node.Key)
-                //.Where(a => a != default)
-                //.Take(1)
-                //.Subscribe(a =>
-                //{
-                //    source.Add(Node);
-                //});
-
-                node.WithChangesTo(a => a.Current)
-                    .Where(a => a != null)
+                node.WithChangesTo(a => a.Current, includeNulls: true)
+                    .Skip(1)
                     .Subscribe(a =>
                     {
-                        if (this.Node.Contains(a) == false)
-                            this.Node.Add(a);
+                        if (a != null)
+                            if (this.Node.Contains(a) == false)
+                                this.Node.Add(a);
 
                         Update(value, a);
                     });
@@ -81,6 +68,13 @@ namespace Utility.Models
                     .Subscribe(a =>
                     {
                         Addition(value, a);
+                    });
+
+                node.Items
+                    .Replacements<IReadOnlyTree>()
+                    .Subscribe(a =>
+                    {
+                        Replacement(a.@new, a.old);
                     });
 
                 node.Descendants()
@@ -227,6 +221,11 @@ namespace Utility.Models
 
                 //}
             }
+        }
+
+        public virtual void Replacement(IReadOnlyTree @new, IReadOnlyTree old)
+        {
+
         }
 
         public virtual void Subtraction(IReadOnlyTree value, IReadOnlyTree a)

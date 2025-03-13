@@ -7,6 +7,12 @@ namespace Utility.Models
     {
         private T value;
 
+        public ValueModel(T? value = default)
+        {
+            this.value = value;
+        }
+
+
         public virtual T? Value
         {
             get
