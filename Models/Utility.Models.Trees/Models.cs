@@ -255,7 +255,7 @@ namespace Utility.Models.Trees
     public class ValueModel : ValueModel<object>
     {
         public ValueModel(object value) : base(value) { }
-        public ValueModel(){ }
+        public ValueModel() { }
     }
 
 
@@ -660,15 +660,15 @@ namespace Utility.Models.Trees
                 switch (value)
                 {
                     case ComparisonType.Default:
-                        Value = null; break;
+                        _value = null; break;
                     case ComparisonType.String:
-                        Value = CustomStringComparison.EqualTo; break;
+                        _value = CustomStringComparison.EqualTo; break;
                     case ComparisonType.Number:
-                        Value = NumberComparison.EqualTo; break;
+                        _value = NumberComparison.EqualTo; break;
                     case ComparisonType.Boolean:
-                        Value = BooleanComparison.EqualTo; break;
+                        _value = BooleanComparison.EqualTo; break;
                     case ComparisonType.Type:
-                        Value = TypeComparison.EqualTo; break;
+                        _value = TypeComparison.EqualTo; break;
                 }
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(Value));
@@ -679,8 +679,6 @@ namespace Utility.Models.Trees
         {
             get => _value; set
             {
-                if (value == null)
-                    return;
                 RaisePropertyChanged(ref _value, value);
             }
         }
@@ -1269,43 +1267,38 @@ namespace Utility.Models.Trees
             {
                 case res:
                     ResolvableModel = a.Data as ResolvableModel;
-                    ResolvableModel.Properties
-                        .Changes().StartWith(default(Change<PropertyInfo>)).Select(a => (ResolvableModel.Properties.LastOrDefault()?.PropertyType))
-                        .CombineLatest(this.WithChangesTo(a => a.ValueModel))
+                    ResolvableModel.Types.Changes().StartWithDefault()
+                        .CombineLatest(ResolvableModel.Properties.Changes().StartWithDefault(), this.WithChangesTo(a => a.ValueModel))
                         .Subscribe(a =>
                         {
-                            if (a.First != null)
+                            var typesCount = ResolvableModel.Types.Count;
+                            var propertiesCount = ResolvableModel.Properties.Count;
+                            if (typesCount > propertiesCount)
                             {
-                                ValueModel.Value = ActivateAnything.Activate.New(a.First);
+                                ValueModel.Set(ResolvableModel.Types.Last());
+                                ComparisonModel.Type = a.First == null ? ComparisonType.Default : ComparisonType.Type;
+
                             }
+                            else if (typesCount == 0)
+                            {
+                                ValueModel.Set(null);
+                                ComparisonModel.Type = ComparisonType.Default;
+
+                            }
+                            else if (typesCount == propertiesCount)
+                            {
+                                var propertyType = ResolvableModel.Properties.Last().PropertyType;
+                                ValueModel.Set(ActivateAnything.Activate.New(propertyType));
+                                ComparisonModel.Type = toComparisonType(propertyType);
+
+                            }                 
                             else
-                                ValueModel.Value = null;
-
-                            ValueModel.RaisePropertyChanged(nameof(ValueModel.Value));
-                            ComparisonModel.Type = toComparisonType(a.First);
-                            ComparisonModel.RaisePropertyChanged(nameof(ComparisonModel.Type));
-          
-                        });
-
-
-                    ResolvableModel.Types
-                        .Changes().Select(a => ResolvableModel.Types.LastOrDefault()).WhereIsNotNull()
-                        .CombineLatest(ResolvableModel.Properties.Changes().StartWith(default(Change<PropertyInfo>)), this.WithChangesTo(a => a.ValueModel))
-                        .Where(a => ResolvableModel.Types.Count > ResolvableModel.Properties.Count)
-                        .Subscribe(a =>
-                        {
-                            ValueModel.Value = a.First;
-                            ComparisonModel.Type = ComparisonType.Type;
-                            ValueModel.RaisePropertyChanged(nameof(ValueModel.Value));
+                                throw new Exception("ee33 ffp[oe");
 
                         });
-
                     break;
-                //ResolvableModel. break;
                 case b_ool:
                     ComparisonModel = a.Data as ComparisonModel; break;
-                //case type:
-                //    TypeModel = a.Data as TypeModel; break;
                 case _value:
                     ValueModel = a.Data as ValueModel; break;
             }
@@ -1313,15 +1306,15 @@ namespace Utility.Models.Trees
 
             static ComparisonType toComparisonType(Type type)
             {
-                if (type == null)                
-                    return ComparisonType.Default;                
-                else if (type == typeof(string))                
-                    return ComparisonType.String;                
-                else if (TypeHelper.IsNumericType(type))                
-                    return ComparisonType.Number;                
+                if (type == null)
+                    return ComparisonType.Default;
+                else if (type == typeof(string))
+                    return ComparisonType.String;
+                else if (TypeHelper.IsNumericType(type))
+                    return ComparisonType.Number;
                 else
-                    return ComparisonType.Boolean;     
-            }    
+                    return ComparisonType.Boolean;
+            }
         }
 
         public bool Get(object instance)
