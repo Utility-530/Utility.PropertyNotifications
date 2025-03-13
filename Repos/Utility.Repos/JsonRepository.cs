@@ -157,12 +157,19 @@ namespace Utility.Nodes.Demo.Queries
                 var token = jObject.DescendantsAndSelf().SingleOrDefault(a => a.SelectToken("Key")?.Value<string>() == guid.ToString());
                 if (token == null)
                     return;
-                var _value = JToken.FromObject(value);
+
+
                 //var serialisedValue = JsonConvert.SerializeObject(value.ToString());
                 var innerToken = token.SelectToken(name);
 
-                if (Utility.Helpers.TypeHelper.IsValueOrString(value.GetType()) == false)
+                if(value==null)
                 {
+                    innerToken.Replace(null);
+
+                }
+                else if (Utility.Helpers.TypeHelper.IsValueOrString(value.GetType()) == false)
+                {
+                    var _value = JToken.FromObject(value);
                     innerToken.Replace(_value);
                 }
                 else
