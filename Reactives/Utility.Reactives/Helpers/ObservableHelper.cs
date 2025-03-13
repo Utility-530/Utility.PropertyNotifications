@@ -356,5 +356,11 @@ IScheduler? scheduler = null)
     public static IObservable<T> OfGenericType<T>(this IObservable<object> value, Type? type = null)
     {
         return value.Select(v => Utility.Helpers.TypeHelper.OfType<T>(v, type)).WhereNotDefault();
+    }    
+    
+    
+    public static IObservable<T> StartWithDefault<T>(this IObservable<T> value)
+    {
+        return value.StartWith(default(T));
     }
 }
