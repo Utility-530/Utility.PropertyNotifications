@@ -5,5 +5,6 @@
         int? this[int key] { get; }
 
         bool IsEmpty { get; }
+        int Last { get; }
     }
 }
