@@ -22,10 +22,17 @@ namespace Utility.Models
             }
             set
             {
-                this.value = value;
-                RaisePropertyReceived(value);
+                if (this.value?.Equals(value) != true)
+                {
+                    this.value = value;
+                    RaisePropertyReceived(value);
+                }
             }
         }
+
+        public T Get() => value;
+        public void Set(T value) => this.RaisePropertyChanged(ref this.value, value, nameof(Value));
+
 
         object IValue.Value => Value;
 
