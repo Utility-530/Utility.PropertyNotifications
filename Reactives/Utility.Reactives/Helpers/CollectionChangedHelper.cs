@@ -60,6 +60,17 @@ namespace Utility.Reactives
                 : O.Empty<T>();
         }
 
+        public static IObservable<(T @new, T old)> Replacements<T>(this IEnumerable collection)
+        {
+            return collection is INotifyCollectionChanged collectionChanged ?
+                collectionChanged
+                .Changes()
+                .Where(a => a.Action == NotifyCollectionChangedAction.Replace)
+                .SelectMany(x => x.NewItems?.Cast<T>().Join(x.OldItems?.Cast<T>(), a => true, b => true, (a, b) => (a, b)))
+                : O.Empty<(T @new, T old)>();
+
+        }
+
         public static IObservable<NotifyCollectionChangedAction> ToActionsObservable<T>(this INotifyCollectionChanged notifyCollectionChanged)
         {
             return notifyCollectionChanged
@@ -78,7 +89,7 @@ namespace Utility.Reactives
 
         public static IObservable<Set<T>> Changes<T>(this INotifyCollectionChanged collection)
         {
-            return Observable
+            return O
                 .FromEvent<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
                 handler => (sender, args) => handler(args),
                 handler => collection.CollectionChanged += handler,
@@ -89,12 +100,18 @@ namespace Utility.Reactives
                     {
                         NotifyCollectionChangedAction.Add => new Set<T>(a.NewItems.Cast<T>().Select(c => new Change<T>(c, Type.Add)).ToArray()),
                         NotifyCollectionChangedAction.Remove => new Set<T>(a.OldItems.Cast<T>().Select(c => new Change<T>(c, Type.Remove)).ToArray()),
-                        NotifyCollectionChangedAction.Replace => new Set<T>(a.OldItems.Cast<T>().Join(a.NewItems.Cast<T>(), a => a, a => a, (oldItem, newItem) => (oldItem, newItem)).Select(c => new Change<T>(c.newItem, c.oldItem, Type.Update)).ToArray()),  /* throw new ArgumentOutOfRangeException($"{a.Serialize()} f dfde33330"),*/
+                        NotifyCollectionChangedAction.Replace => new Set<T>(create<T>(a)),  /* throw new ArgumentOutOfRangeException($"{a.Serialize()} f dfde33330"),*/
                         NotifyCollectionChangedAction.Move => throw new ArgumentOutOfRangeException($"{a.Serialize()} f dfde33330"),
                         NotifyCollectionChangedAction.Reset => new Set<T>(new Change<T>(default, Type.Reset)),
                         _ => throw new ArgumentOutOfRangeException($"{a.Serialize()} f222 dfde33330"),
                     };
                 });
+
+            static Change<T>[] create<T>(NotifyCollectionChangedEventArgs a)
+            {
+                var x = a.OldItems.Cast<T>().Join(a.NewItems.Cast<T>(), a => true, a => true, (oldItem, newItem) => (oldItem, newItem)).Select(c => new Change<T>(c.newItem, c.oldItem, Type.Update)).ToArray();
+                return x;
+            }
         }
 
         public static IObservable<Set<T>> AndChanges<T>(this IEnumerable collection)

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Text;
@@ -13,18 +14,19 @@ namespace Utility.Reactives
     public static class ObservableFactory
     {
 
-        public static IObservable<T> ToObservable<T>(this Task<T> enumerable)
+
+        public static IObservable<T> ToObservable<T>(this Task<T> task)
         {
-            return Observable.Create<T>(observer =>
+            if (task.IsCompleted)
+                return Observable.Return(task.Result);
+            return Observable.Create<T>((Func<IObserver<T>, Task>)(observer =>
             {
-                var task = enumerable.ContinueWith(a =>
+                return (Task)task.ContinueWith((Action<Task<T>>)(a =>
                 {
                     observer.OnNext(a.Result);
-                });
-                return task;
-            });
+                }));
+            }));
         }
-
 
         public static IObservable<T> ToObservable<T>(this IEnumerable<T> enumerable, TimeSpan ts, IScheduler scheduler = null)
         {
@@ -39,6 +41,20 @@ namespace Utility.Reactives
             };
 
             return Build(fca, ts, scheduler, x);
+        }
+
+        public static IObservable<Unit> ToObservable(this Task enumerable)
+        {
+            if (enumerable.IsCompleted)
+                return Observable.Return(Unit.Default);
+            return Observable.Create<Unit>(observer =>
+            {
+                var task = enumerable.ContinueWith(a =>
+                {
+                    observer.OnNext(Unit.Default);
+                });
+                return task;
+            });
         }
 
         public static IObservable<T> ToObservable<T>(this IEnumerable<T> enumerable, TimeSpan minTimeSpan, TimeSpan maxTimeSpan, IScheduler scheduler = null, Random random = null)
