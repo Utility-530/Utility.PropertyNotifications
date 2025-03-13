@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Splat;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -24,12 +25,11 @@ namespace Utility.Nodes.Filters
         {
             (instance as Node).WithChangesTo(a => a.Key).Subscribe(a =>
             {
-                NodeSource.Instance
-                .FindNodeAsync(Guid.Parse(a), Guid.Parse(value.ToString()))
-                .Subscribe(a =>
-                {
-                    (instance as INode).Current = a;
-                });
+                Locator.Current.GetService<INodeSource>().SingleAsync(a/*, Guid.Parse(value.ToString())*/)
+                                .Subscribe(a =>
+                                {
+                                    (instance as INode).Current = a;
+                                });
             });
         }
     }

@@ -76,7 +76,7 @@ namespace Utility.Nodes.Filters
                 }
                 else
                 {
-                    return Observable.Empty<INode>();
+                    return Observable.Return<INode>(null);
                 }
             }
             return Observable.Create<INode>(obs =>
