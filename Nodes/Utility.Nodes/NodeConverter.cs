@@ -26,6 +26,12 @@ namespace Utility.Nodes
             writer.WritePropertyName("IsExpanded");
             writer.WriteValue(value.IsExpanded);
 
+            if (value.Current != null)
+            {
+                writer.WritePropertyName("Current");
+                writer.WriteValue(value.Current.Key);
+            }
+
             writer.WritePropertyName("Data");
             var jObject = JToken.FromObject(value.Data, serializer);
             jObject.WriteTo(writer);
@@ -33,7 +39,7 @@ namespace Utility.Nodes
             if (value.Items.Any() && value.Data is not IBreadCrumb)
             {
                 writer.WritePropertyName("Items");
-                JArray jArray = new JArray();  // Create a JArray to hold the items
+                JArray jArray = [];  // Create a JArray to hold the items
 
                 int index = 0;
                 foreach (var item in value.Items)
@@ -72,19 +78,27 @@ namespace Utility.Nodes
             var type = Type.GetType(jObject["Data"]["$type"].ToString());
             var data = jObject["Data"].ToObject(type, serializer);
 
-            var node = new Node(data);
+            var node = new Node(data)
+            {
+                Key = new GuidKey(Guid.Parse(jObject["Key"].ToString()))
+            };
 
-            node.Key = new GuidKey(Guid.Parse(jObject["Key"].ToString()));
-
-            var items = jObject["Items"] as JArray;
-            if (items != null)
+            if (jObject["Items"] is JArray items)
                 foreach (var item in items)
                 {
                     var _node = item.ToObject<Node>(serializer);
                     node.Add(_node);
                     //NodeEngine.Instance.Add(_node);
                 }
+            if (jObject.ContainsKey("Current"))
+            {
+                var key = new GuidKey(Guid.Parse(jObject["Current"].ToString()));
+                Locator.Current.GetService<INodeSource>().SingleAsync(key).Subscribe(a =>
+                {
+                    node.Current = a;
+                });
 
+            }
             return node;
         }
     }

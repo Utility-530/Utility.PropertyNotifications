@@ -80,7 +80,7 @@ namespace Utility.Nodes
         // relates to the ability to modify the value
         public override bool IsReadOnly
         {
-            get => isReadOnly; 
+            get => isReadOnly;
             set
             {
                 RaisePropertyChanged(ref isReadOnly, value);
@@ -190,7 +190,8 @@ namespace Utility.Nodes
                     var previousValue = currentNode;
                     if (currentNode != null)
                         currentNode.IsPersistable = false;
-                    value.IsPersistable = true;
+                    if (value != null)
+                        value.IsPersistable = true;
                     currentNode = value;
                     RaisePropertyChanged(ref previousValue, value);
                 }
