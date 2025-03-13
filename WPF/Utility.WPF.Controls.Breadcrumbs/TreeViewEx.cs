@@ -64,7 +64,7 @@ namespace Utility.WPF.Controls.Breadcrumbs
 
         private static bool flag;
         static Dictionary<TreeViewItem, TreeView> treeViews = [];
-
+        
         private static void OnCurrentItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is TreeView _treeView)
@@ -73,9 +73,14 @@ namespace Utility.WPF.Controls.Breadcrumbs
             }
             else if (d is TreeViewItem treeViewItem && TreeViewEx.treeViews.ContainsKey(treeViewItem) == false)
             {
+
                 var treeView = treeViewItem.FindParent<TreeView>();
                 treeViews.Add(treeViewItem, treeView);
                 treeView.SelectedItemChanged += (s, e) => SelectedItemChanged(treeViewItem, treeView, e);
+            }
+            else if (d is TreeViewItem tvi && e.NewValue == null)
+            {
+                SetSelectedItem(tvi, null);
             }
         }
 
@@ -85,7 +90,7 @@ namespace Utility.WPF.Controls.Breadcrumbs
                 return;
 
 
-            if (sender.DataContext.Equals(e.NewValue)==false)
+            if (sender.DataContext.Equals(e.NewValue) == false)
             {
                 if (sender.FindRecursive<TreeViewItem>(e.NewValue) is not TreeViewItem find)
                 {
@@ -121,17 +126,17 @@ namespace Utility.WPF.Controls.Breadcrumbs
                 {
 
                 }
-                    //foreach (var item in (sender).Items.Cast<object>().ToArray())
-                    //{
-                    //    if (item is TreeViewItem citem)
-                    //    {
-                    //        citem.IsExpanded = false;
-                    //    }
-                    //    else if ((sender).ItemContainerGenerator.ContainerFromItem(item) is TreeViewItem _item)
-                    //    {
-                    //        _item.IsExpanded = false;
-                    //    }
-                    //}
+                //foreach (var item in (sender).Items.Cast<object>().ToArray())
+                //{
+                //    if (item is TreeViewItem citem)
+                //    {
+                //        citem.IsExpanded = false;
+                //    }
+                //    else if ((sender).ItemContainerGenerator.ContainerFromItem(item) is TreeViewItem _item)
+                //    {
+                //        _item.IsExpanded = false;
+                //    }
+                //}
             }
             finally
             {

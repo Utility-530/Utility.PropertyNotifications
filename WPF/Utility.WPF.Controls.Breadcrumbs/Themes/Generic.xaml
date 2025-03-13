@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Utility.WPF.Controls.Breadcrumbs"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     >
 
 
@@ -188,6 +189,7 @@
                   IsChecked="{Binding Path=IsExpanded,
                               RelativeSource={RelativeSource TemplatedParent}}"
                   ClickMode="Press"/>-->
+                        
                         <Border Name="Bd"
               Grid.Column="1"
               Background="{TemplateBinding Background}"
@@ -202,6 +204,7 @@
                   Grid.Row="1"
                   Grid.Column="1"
                   Grid.ColumnSpan="2"/>-->
+                     
                     </Grid>
                     <ControlTemplate.Triggers>
                         <!--<Trigger Property="IsExpanded"
@@ -320,8 +323,18 @@
                                     <ContentPresenter x:Name="PART_Header"
                                                       ContentSource="Header"
                                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+
+                       
                                 </Border>
                             </ToggleButton>
+                            <Button Height="8" Width="8" HorizontalAlignment="Right" VerticalAlignment="Top">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <!--<i:ChangePropertyAction Binding="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}"  Value="{x:Null}" />-->
+                                        <local:ChangeSelectedItemAction TargetObject="{Binding RelativeSource={RelativeSource TemplatedParent}}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </Button>
                         </Grid>
 
                         <ItemsPresenter x:Name="ItemsHost"
