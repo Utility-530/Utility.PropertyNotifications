@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Windows;
 
@@ -21,7 +22,22 @@ namespace Utility.WPF.Reactives
             .Select(a => Unit.Default);
 
             return obs;
+        }      
+        
+        public static IDisposable OnLoaded<T>(this T element, Action<T> action) where T: FrameworkElement
+        {
+            if (element.IsLoaded)
+            {
+                action(element);
+                return Disposable.Empty;
+            }
+
+            return Observable
+            .FromEventPattern<RoutedEventHandler, RoutedEventArgs>
+            (a => element.Loaded += a, a => element.Loaded -= a)
+            .Subscribe(a=>action(element));
         }
+
         public static IObservable<RoutedEventArgs> VisibleChanges(this FrameworkElement combo) =>
             Observable
             .FromEventPattern<DependencyPropertyChangedEventHandler, RoutedEventArgs>
