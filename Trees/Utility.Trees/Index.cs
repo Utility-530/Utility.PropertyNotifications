@@ -1,7 +1,5 @@
 ﻿using System.Text;
 
-//
-
 namespace Utility.Trees
 {
     public record Index : IIndex
@@ -20,6 +18,8 @@ namespace Utility.Trees
         }
 
         public bool IsEmpty => collection.Any() == false;
+
+        public int Local => collection.Last();
 
         public override string ToString()
         {

@@ -121,6 +121,10 @@ namespace Utility.Trees.Extensions.Async
                         {
                             observer.OnNext(TreeChange<IReadOnlyTree>.Remove(_o.Value, 1));
                         }
+                        else if (_o.Type == Type.Update)
+                        {
+                            observer.OnNext(TreeChange<IReadOnlyTree>.Replace(_o.Value, _o.OldValue, 1));
+                        }
                     }
                 }).DisposeWith(disposables);
 
