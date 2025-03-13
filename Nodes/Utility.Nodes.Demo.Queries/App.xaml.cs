@@ -1,14 +1,17 @@
 ﻿using Jonnidip;
 using Newtonsoft.Json;
 using Splat;
+
 using System.Windows;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Models.Trees;
+using Utility.Models.Trees.Converters;
+using Utility.Nodes.Demo.Queries.Infrastructure;
 using Utility.Nodes.Filters;
 using Utility.Repos;
-using Utility.ViewModels;
 
 namespace Utility.Nodes.Demo.Queries
 {
@@ -25,9 +28,11 @@ namespace Utility.Nodes.Demo.Queries
         protected override void OnStartup(StartupEventArgs e)
         {
             Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeEngine.Instance);
-            Locator.CurrentMutable.RegisterConstant<ITreeRepository>(new Repository());
+            Locator.CurrentMutable.RegisterConstant<IContext>(new Context());
+            Locator.CurrentMutable.RegisterConstant<ITreeRepository>(new JsonRepository());
             Locator.CurrentMutable.RegisterConstant<IMainViewModel>(new MainViewModel());
-            Locator.CurrentMutable.Register<ILiteRepository>(() => new LiteDBRepository(new LiteDBRepository.DatabaseSettings("../../../Data/lite.db", typeof(FilterEntity))));
+            Locator.CurrentMutable.RegisterLazySingleton<ILiteRepository>(() => new LiteDBRepository(new LiteDBRepository.DatabaseSettings("../../../Data/lite.db", typeof(FilterEntity))));
+            Locator.CurrentMutable.RegisterLazySingleton<IJObjectService>(() => new JObjectService());
 
             var name = typeof(User).Assembly.GetName().Name;
             GlobalModelFilter.Instance.AssemblyPredicate = (a) => a.GetName().Name == name;
@@ -72,58 +77,13 @@ namespace Utility.Nodes.Demo.Queries
                 new AttributeCollectionConverter(),
                 new DescriptorConverter(),
                 new StringTypeEnumConverter(),
+                //new TypeConverter(),
+                new ValueModelConverter(),
                 new NodeConverter(),
                 new NonGenericPropertyInfoJsonConverter()
                     ]
         };
 
-    }
-
-
-
-
-    public class FilterEntity : NotifyPropertyChangedBase
-    {
-        private string groupKey;
-        private string key;
-        private string body;
-
-        public FilterEntity()
-        {
-
-        }
-
-        public Guid Id { get; set; } = Guid.NewGuid();
-
-        public string Key
-        {
-            get => key; set
-            {
-                if (value == key) return;
-                key = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string GroupKey
-        {
-            get => groupKey; set
-            {
-                if(value == groupKey) return;
-                groupKey = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public string Body
-        {
-            get => body; set
-            {
-                if (value == body) return;
-                body = value;
-                RaisePropertyChanged();
-            }
-        }
     }
 
 }

@@ -83,8 +83,7 @@ namespace Utility.Nodes.Demo.Queries
                     {
                         nodes = [a];
                         RaisePropertyChanged(nameof(Nodes));
-                    });
-
+                    });                
             }
         }
 
