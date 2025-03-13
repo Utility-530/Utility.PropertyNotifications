@@ -14,6 +14,7 @@ using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Ex;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
@@ -25,7 +26,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         private static void TypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is TypeSelectorBehavior { AssociatedObject.ItemsSource: IReadOnlyTree tree } typeSelector )
+            if (d is TypeSelectorBehavior { AssociatedObject.ItemsSource: IReadOnlyTree tree } typeSelector)
             {
                 if (e.NewValue is Type type)
                     typeSelector.ChangeType(tree, type);
@@ -69,16 +70,21 @@ namespace Utility.WPF.Controls.ComboBoxes
             if (Assemblies != null)
                 Set(this, Assemblies);
 
-            if (Type is Type type && AssociatedObject.TreeView != null && this.AssociatedObject.ItemsSource is IReadOnlyTree tree)
+            AssociatedObject.OnLoaded(a =>
             {
-                ChangeType(tree, type);
-            }
+                if (Type is Type type && AssociatedObject.TreeView != null && this.AssociatedObject.ItemsSource is IReadOnlyTree tree)
+                {
+                    ChangeType(tree, type);
+                }
+            });
+
 
             base.OnAttached();
         }
+
         void ChangeType(IReadOnlyTree tree, Type _type)
         {
-            if (tree.Descendant(a => (a.tree.Data is Type type && type == _type) ||(a.tree.Data is IType itype && itype.Type == _type)) is IReadOnlyTree { } innerTree)
+            if (tree.Descendant(a => (a.tree.Data is Type type && type == _type) || (a.tree.Data is IType itype && itype.Type == _type)) is IReadOnlyTree { } innerTree)
             {
                 AssociatedObject.IsError = false;
                 AssociatedObject.UpdateSelectedItems(innerTree);
