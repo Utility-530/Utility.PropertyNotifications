@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Splat;
+using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Utility.Interfaces.Exs;
@@ -10,9 +11,18 @@ using Utility.Structs.Repos;
 
 namespace Utility.Nodes.Demo.Queries
 {
+    public interface IJObjectService
+    {
+        public JObject? Get();
+        public void Set(JObject jObject);
+    }
+
     public class JsonRepository : ITreeRepository
     {
-        Lazy<IMainViewModel> mainViewmModel = new(() => Locator.Current.GetService<IMainViewModel>());
+        public readonly record struct JsonKey(Guid ParentGuid, string Name);
+        Dictionary<JsonKey, Guid> keys = new();
+
+        Lazy<IJObjectService> jObjectService = new(() => Locator.Current.GetService<IJObjectService>());
 
         List<Guid> guids = new();
 
@@ -28,43 +38,52 @@ namespace Utility.Nodes.Demo.Queries
 
         public IObservable<Key?> Find(Guid parentGuid, string? name = null, Guid? guid = null, Type? type = null, int? index = null)
         {
-            if (mainViewmModel.Value.Filter is FilterEntity { Body: { } body } entity)
-            {
-                JObject jObject = JObject.Parse(body);
-                // find the node
-                var token = jObject.DescendantsAndSelf().SingleOrDefault(a => a.SelectToken("Key")?.Value<string>() == parentGuid.ToString());
-                if (token != null)
-                {
 
-                    if (name != null)
+            if (name != null)
+            {
+                if (jObjectService.Value.Get() is JObject jObject)
+                {
+                    var token = jObject.DescendantsAndSelf().SingleOrDefault(a => a.SelectToken("Key")?.Value<string>() == parentGuid.ToString());
+
+                    if (token != null)
                     {
-                        var _token = token.SelectTokens("Items[*].Data.Name").ToArray().SingleOrDefault(a => a.Value<string>() == name)?.Parent.Parent;
-                        if (_token != null)
+                        //var _token = token.SelectTokens("Items[*].Data.Name").ToArray().SingleOrDefault(a => a.Value<string>() == name)?.Parent.Parent;
+                        var names = jObject.DescendantsAndSelf().Where(a => a.SelectToken("Name")?.Value<string>() == name).ToArray();
+                        if (names.Length > 0)
                         {
-                            return Observable.Return<Key?>(new Key { Guid = Guid.Parse(token["Key"].Value<string>()), Name = name, ParentGuid = parentGuid, Type = Type.GetType(token["$type"].Value<string>()) });
+                            //return Observable.Return<Key?>(new Key { Guid = Guid.Parse(__token.Parent.Parent["Key"].Value<string>()), Name = name, ParentGuid = parentGuid, Type = Type.GetType(__token.Parent.First["$type"].Value<string>()) });
+                            return Observable.Empty<Key?>();
                         }
                         else
                         {
-
-                            return Observable.Return<Key?>(new Key(Guid.NewGuid(), parentGuid, type, name, index, null));
                         }
-
-                    }
-                    else
-                    {
-                        return Observable.Empty<Key?>();
-                        //return token
-                        //    .SelectToken("Items")
-                        //    .Select(a => new Key(Guid.Parse(a["Key"].Value<string>()), parentGuid, Type.GetType(a["Data"]["$type"].Value<string>()), a["Data"]["Name"].Value<string>(), null, null))
-                        //    .Cast<Key?>()
-                        //    .ToObservable();
+                        //else
+                        //{
+                        //    //return Observable.Return<Key?>(new Key { Guid = Guid.Parse(token["Key"].Value<string>()), Name = name, ParentGuid = parentGuid, Type = Type.GetType(token["$type"].Value<string>()) });
+                        //}
                     }
                 }
+
+                JsonKey key = new(parentGuid, name);
+
+                if (!keys.ContainsKey(key))
+                {
+                    keys[key] = Guid.NewGuid();
+                    return Observable.Return<Key?>(new Key(keys[key], parentGuid, type, name, index, null));
+                }
+                return Observable.Empty<Key?>();
             }
-            if (name != null)
-            {
-                return Observable.Return<Key?>(new Key(Guid.NewGuid(), parentGuid, type, name, index, null));
-            }
+
+            //else
+            //{
+            //    return Observable.Return<Key?>(null);
+            //    //return token
+            //    //    .SelectToken("Items")
+            //    //    .Select(a => new Key(Guid.Parse(a["Key"].Value<string>()), parentGuid, Type.GetType(a["Data"]["$type"].Value<string>()), a["Data"]["Name"].Value<string>(), null, null))
+            //    //    .Cast<Key?>()
+            //    //    .ToObservable();
+            //}
+
             return Observable.Return<Key?>(null);
         }
 
@@ -75,7 +94,7 @@ namespace Utility.Nodes.Demo.Queries
 
         public IObservable<Key?> InsertRoot(Guid guid, string name, Type type)
         {
-            return Observable.Empty<Key?>();
+            return Observable.Return<Key?>(new Key(guid, default, type, name, 0, null));
         }
 
         public int? MaxIndex(Guid parentGuid, string? name = null)
@@ -105,31 +124,25 @@ namespace Utility.Nodes.Demo.Queries
 
             return Observable.Create<DateValue>(observer =>
             {
-                if (mainViewmModel.Value.Filter is FilterEntity { Body: { } body } entity)
+                if (jObjectService.Value.Get() is JObject jObject)
                 {
-                    JObject jObject = JObject.Parse(body);
-                    // find the node
                     var token = jObject.DescendantsAndSelf().SingleOrDefault(a => a.SelectToken("Key")?.Value<string>() == guid.ToString());
                     if (token == null)
                     {
-                        observer.OnCompleted();
                     }
                     else
                     {
                         var data = token["Data"];
-                        // serialise
                         if (data.ToObject(Type.GetType(data["$type"].Value<string>())) is IValue model)
                         {
-                            // get the value
                             observer.OnNext(new DateValue { Value = model.Value });
-                            observer.OnCompleted();
                         }
                         else
                         {
-                            observer.OnCompleted();
                         }
                     }
                 }
+                observer.OnCompleted();
                 return Disposable.Empty;
             });
         }
@@ -139,9 +152,8 @@ namespace Utility.Nodes.Demo.Queries
             if (guids.Contains(guid))
                 return;
 
-            if (mainViewmModel.Value.Filter is FilterEntity { Body: { } body } entity)
+            if (jObjectService.Value.Get() is JObject jObject)
             {
-                JObject jObject = JObject.Parse(body);
                 var token = jObject.DescendantsAndSelf().SingleOrDefault(a => a.SelectToken("Key")?.Value<string>() == guid.ToString());
                 if (token == null)
                     return;
@@ -157,10 +169,13 @@ namespace Utility.Nodes.Demo.Queries
                 {
                     (innerToken as JValue).Value = value;
                 }
-                entity.Body = jObject.ToString();
+                //entity.Body = jObject.ToString();
+                jObjectService.Value.Set(jObject);
 
             }
 
         }
+
+        public static JsonRepository Instance { get; } = new();
     }
 }
