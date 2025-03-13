@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Reflection;
+using System.Windows;
 namespace Tonic.UI
 {
     /// <summary>
@@ -94,7 +95,7 @@ namespace Tonic.UI
             else
             {
                 if (value == null)
-                    return null;
+                    return DependencyProperty.UnsetValue;
                 else
                     return StringToEnum(value.ToString(), targetType);
             }
