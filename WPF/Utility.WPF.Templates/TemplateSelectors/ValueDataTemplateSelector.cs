@@ -23,7 +23,7 @@ namespace Utility.WPF.Templates
             }
             if (get() is Type type)
             {
-                return FromType(this, type);
+                return FromType(this, type) ?? Templates["Missing"] as DataTemplate ?? throw new Exception("d3091111111");
             }
 
             if (item is DataTemplate dataTemplate)
@@ -45,7 +45,6 @@ namespace Utility.WPF.Templates
                 return null;
             }
         }
-
 
         public Type[] Types
         {
@@ -82,6 +81,11 @@ namespace Utility.WPF.Templates
             {
                 return template.Templates["Object"] as DataTemplate;
             }
+            if (type.ToString() is "System.RuntimeType")
+            {
+                return template.Templates[new DataTemplateKey(typeof(Type))] as DataTemplate;
+            }
+
 
             if (template.Templates.Contains(new DataTemplateKey(type)))
                 return template.Templates[new DataTemplateKey(type)] as DataTemplate;

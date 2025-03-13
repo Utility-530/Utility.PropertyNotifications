@@ -19,7 +19,7 @@
                     xmlns:cbx="http://schemas.utility.com/cboxes"
                     xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
                     xmlns:hc="https://handyorg.github.io/handycontrol"       
-                    xmlns:wpf="http://schemas.utility.com/utilitywpf"
+                    xmlns:wpf="http://schemas.utility.com/utilitywpf"                  
                     xmlns:dotNetKitControls="http://wpfcontrols.com/">
 
     <conv:IntToEnumConverter x:Key="IntToEnumConverter" Enum="{x:Type materialDesign:PackIconKind}"/>
@@ -114,7 +114,7 @@
             </i:Interaction.Behaviors>
         </cbx:ComboBoxTreeView>
     </DataTemplate>
-
+    
     <DataTemplate DataType="{x:Type sys:Enum}">
         <ComboBox >
             <i:Interaction.Behaviors>
