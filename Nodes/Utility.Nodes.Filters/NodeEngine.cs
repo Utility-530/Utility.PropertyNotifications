@@ -263,7 +263,6 @@ namespace Utility.Nodes.Filters
                             if (data is INotifyPropertyReceived received)
                             {
                                 received.WhenReceived()
-                                .Where(a => a.Value != null)
                                 .Subscribe(reception =>
                                 {
                                     repository.Value.Set((GuidKey)node.Key, nameof(Node.Data) + "." + reception.Name, reception.Value, DateTime.Now);
