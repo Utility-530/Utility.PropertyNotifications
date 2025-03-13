@@ -4,13 +4,13 @@ using Newtonsoft.Json;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Reactive.Disposables;
-using System.Reactive.Threading.Tasks;
 using static System.Environment;
 using Utility.Structs.Repos;
 using Utility.Helpers;
 using Utility.Interfaces.Exs;
 using System;
 using System.ComponentModel;
+using Utility.Reactives;
 
 namespace Utility.Repos
 {
@@ -53,7 +53,7 @@ namespace Utility.Repos
             public string? Assembly { get; set; }
             public string? Namespace { get; set; }
             public string Name { get; set; }
-            public string? GenricTypeNames { get; set; }
+            public string? GenericTypeNames { get; set; }
         }
 
         public record String
@@ -81,7 +81,7 @@ namespace Utility.Repos
         {
             if (IsInitialised == false)
             {
-                return Task.Run(() =>
+                var task = new Task(() =>
                 {
                     foreach (var relationship in connection.Table<Relationships>().ToList())
                     {
@@ -93,6 +93,8 @@ namespace Utility.Repos
                     }
                     IsInitialised = true;
                 });
+                task.Start(TaskScheduler.FromCurrentSynchronizationContext());
+                return task;
             }
             return Task.CompletedTask;
         }
@@ -604,7 +606,7 @@ namespace Utility.Repos
 
             string assemblyQualifiedName = Assembly.CreateQualifiedName(type.Assembly, $"{type.Namespace}.{type.Name}");
             var baseType = System.Type.GetType(assemblyQualifiedName);
-            var typeArguments = type.GenricTypeNames?.Split('|').Select(a => System.Type.GetType(a)).ToArray();
+            var typeArguments = type.GenericTypeNames?.Split('|').Select(a => System.Type.GetType(a)).ToArray();
             System.Type constructedType = typeArguments == null ? baseType : baseType.MakeGenericType(typeArguments);
             if (constructedType == null)
                 throw new Exception($"Type, {assemblyQualifiedName},  does not exist");
@@ -623,13 +625,13 @@ namespace Utility.Repos
             var str = type.GenericTypeArguments.Any() ? string.Join('|', type.GenericTypeArguments.Select(TypeHelper.AsString)) : null;
             connection.RunInTransaction(() =>
             {
-                connection.Insert(new Type { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name, GenricTypeNames = str });
-                var types = connection.Query<Type>($"SELECT * FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' AND {nameof(Type.GenricTypeNames)} {ToComparisonAndValue(str)}");
+                connection.Insert(new Type { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name, GenericTypeNames = str });
+                var types = connection.Query<Type>($"SELECT * FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' AND {nameof(Type.GenericTypeNames)} {ToComparisonAndValue(str)}");
                 if (types.Count > 1)
                     throw new Exception("fds ");
             });
 
-            typeId = connection.ExecuteScalar<int>($"SELECT Id FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' AND {nameof(Type.GenricTypeNames)} {ToComparisonAndValue(str)}");
+            typeId = connection.ExecuteScalar<int>($"SELECT Id FROM '{nameof(Type)}' WHERE Assembly = '{type.Assembly.FullName}' AND Namespace = '{type.Namespace}' AND Name = '{type.Name}' AND {nameof(Type.GenericTypeNames)} {ToComparisonAndValue(str)}");
             this.types[typeId] = type;
             return typeId;
         }
