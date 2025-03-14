@@ -1290,7 +1290,7 @@ namespace Utility.Models.Trees
                             else if (typesCount == propertiesCount)
                             {
                                 var propertyType = ResolvableModel.Properties.Last().PropertyType;
-                                if (ValueModel.Value.GetType() != propertyType)
+                                if (ValueModel.Value?.GetType() != propertyType)
                                 {
                                     ValueModel.Set(ActivateAnything.Activate.New(propertyType));
                                     ComparisonModel.Type = toComparisonType(propertyType);
