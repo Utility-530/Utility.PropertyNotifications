@@ -16,10 +16,6 @@ namespace Utility.Trees.Abstractions
     {
         bool HasItems { get; }
 
-        Task<ITree> Add();
-
-        Task<ITree> Remove();
-
         IIndex Index { get; }
 
         ITree? this[int index] { get; set; }
