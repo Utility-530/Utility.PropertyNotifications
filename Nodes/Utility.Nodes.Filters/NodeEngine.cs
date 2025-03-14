@@ -237,7 +237,7 @@ namespace Utility.Nodes.Filters
                     .Take(1)
                     .Subscribe(data =>
                     {
-                        load(node).Subscribe(a =>
+                        loadProperties(node).Subscribe(a =>
                         {
                             node.PropertyChanged += node_PropertyChanged;
                             if (data is INotifyPropertyCalled called)
@@ -310,15 +310,18 @@ namespace Utility.Nodes.Filters
                                     .Subscribe(async d =>
                                     {
                                         var _new = (INode)await node.ToTree(d);
-                                        if (d is IIsReadOnly readOnly)
-                                        {
-                                            (_new as ISetIsReadOnly).IsReadOnly = readOnly.IsReadOnly;
-                                        }
+
                                         repository
                                         .Value
                                         .Find((GuidKey)node.Key, _new.Name(), type: d.GetType())
-                                        .Subscribe(_key =>
+                                        .Subscribe(async _key =>
                                         {
+                                    
+                                            if (d is IIsReadOnly readOnly)
+                                            {
+                                                (_new as ISetIsReadOnly).IsReadOnly = readOnly.IsReadOnly;
+                                            }
+
                                             if (_key.HasValue == false)
                                             {
                                                 throw new Exception("dde33443 21");
@@ -350,7 +353,7 @@ namespace Utility.Nodes.Filters
         }
 
 
-        IObservable<INode> load(INode node)
+        IObservable<INode> loadProperties(INode node)
         {
             return Observable.Create<INode>(observer =>
             {
