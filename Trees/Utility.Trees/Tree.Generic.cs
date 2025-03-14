@@ -129,14 +129,14 @@ namespace Utility.Trees
         }
 
 
-        public override Task<ITree> Add()
-        {
-            var data = this.Data.Clone();
-            ITree tree = new Tree<T>(data);
-            this.m_items.Add(tree);
-            tree.Parent = this;
-            return Task.FromResult(tree);
-        }
+        //public override void Add()
+        //{
+        //    var data = this.Data.Clone();
+        //    ITree tree = new Tree<T>(data);
+        //    this.m_items.Add(tree);
+        //    tree.Parent = this;
+        //    //return Task.FromResult(tree);
+        //}
 
         public void Remove(T data)
         {

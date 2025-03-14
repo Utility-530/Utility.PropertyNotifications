@@ -167,7 +167,6 @@ namespace Utility.Trees
         }
 
 
-
         public virtual async Task<Tree> AsyncClone()
         {
             object clone = Data;
@@ -185,19 +184,19 @@ namespace Utility.Trees
             return cloneTree;
         }
 
-        public virtual async Task<ITree> Add()
-        {
-            object clone = Data;
-            if (Data is IClone cln)
-            {
-                clone = cln.Clone();
-            }
+        //public virtual async Task<ITree> Add()
+        //{
+        //    object clone = Data;
+        //    if (Data is IClone cln)
+        //    {
+        //        clone = cln.Clone();
+        //    }
 
-            var tree = await ToTree(clone);
-            this.items.Add(tree);
-            tree.Parent = this;
-            return tree as ITree;
-        }
+        //    var tree = await ToTree(clone);
+        //    this.items.Add(tree);
+        //    tree.Parent = this;
+        //    return tree as ITree;
+        //}
 
         public virtual Task<ITree> Remove()
         {
@@ -266,7 +265,6 @@ namespace Utility.Trees
             }
         }
 
-
         public virtual Task<bool> HasMoreChildren() => Task.FromResult(false);
 
         IReadOnlyTree IParent<IReadOnlyTree>.Parent { get => Parent; set => Parent = value as ITree; }
@@ -274,8 +272,6 @@ namespace Utility.Trees
         object IValue.Value => Data;
 
         Type IType.Type => Data?.GetType();
-
-
 
         private void ResetOnCollectionChangedEvent()
         {
@@ -377,8 +373,8 @@ namespace Utility.Trees
         }
 
         void ICollection<ITree>.Add(ITree item)
-        {    
-            m_items.Add(item);
+        {
+            this.Add(item);
         }
 
         async Task<object> IAsyncClone.AsyncClone()
