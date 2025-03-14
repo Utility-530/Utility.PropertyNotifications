@@ -144,12 +144,12 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:ValueModel}">
-        <ContentControl 
+        <ContentPresenter 
             ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance}" Content="{Binding }">
             <i:Interaction.Behaviors>
-                <local:UpdateContentControlBehavior Value="{Binding Value}" UpdateOnNull="True"/>
+                <local:UpdateContentPresenterBehavior Value="{Binding Value}" UpdateOnNull="True"/>
             </i:Interaction.Behaviors>
-        </ContentControl>
+        </ContentPresenter>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:ComparisonModel}">

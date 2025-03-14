@@ -8,12 +8,12 @@ namespace Utility.Nodes.Demo.Styles
     /// <summary>
     /// <a href="https://stackoverflow.com/questions/8715315/how-to-trigger-datatemplateselector-when-property-changes"></a>
     /// </summary>
-    public class UpdateContentControlBehavior : Behavior<ContentControl>
+    public class UpdateContentPresenterBehavior : Behavior<ContentPresenter>
     {
 
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(object), typeof(UpdateContentControlBehavior), new FrameworkPropertyMetadata(null, OnValueChanged));
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(object), typeof(UpdateContentPresenterBehavior), new FrameworkPropertyMetadata(null, OnValueChanged));
 
-        public static readonly DependencyProperty UpdateOnNullProperty = DependencyProperty.Register("UpdateOnNull", typeof(bool), typeof(UpdateContentControlBehavior), new PropertyMetadata(false));
+        public static readonly DependencyProperty UpdateOnNullProperty = DependencyProperty.Register("UpdateOnNull", typeof(bool), typeof(UpdateContentPresenterBehavior), new PropertyMetadata(false));
 
 
         public object Value
@@ -29,11 +29,11 @@ namespace Utility.Nodes.Demo.Styles
 
         static void OnValueChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            if (sender is UpdateContentControlBehavior behavior /*&& e.NewValue.GetType() != behavior.Type*/)
+            if (sender is UpdateContentPresenterBehavior behavior /*&& e.NewValue.GetType() != behavior.Type*/)
                 behavior.Update();
         }
 
-        public UpdateContentControlBehavior() : base() { }
+        public UpdateContentPresenterBehavior() : base() { }
 
         protected override void OnAttached()
         {
@@ -51,5 +51,5 @@ namespace Utility.Nodes.Demo.Styles
                 BindingOperations.SetBinding(AssociatedObject, ContentPresenter.ContentProperty, binding);
             }
         }
-    }
+    }  
 }
