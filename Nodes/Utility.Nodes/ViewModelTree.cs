@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Reactive.Linq;
+using System.Reflection;
 using Utility.Collections;
 using Utility.Enums;
 using Utility.Helpers.NonGeneric;
@@ -12,7 +13,6 @@ namespace Utility.Nodes
 
     public class ViewModelTree : Tree, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible, IRemoved, IIsReadOnly
     {
-
         private bool? isHighlighted;
         private bool isExpanded = false;
         private Arrangement arrangement;
@@ -23,7 +23,7 @@ namespace Utility.Nodes
         private bool? isValid = null;
         private bool isReadOnly;
         private bool isEditable;
-        private INode currentNode;
+        private INode current;
         private bool isClicked;
         private bool isSelected;
         private DateTime? removed;
@@ -46,8 +46,7 @@ namespace Utility.Nodes
             return collection;
         }
 
-
-        //public string Name { get; set; }
+        public static string Field(string propertyName) => propertyName switch { nameof(Current) => nameof(current), _ => throw new NotImplementedException("vc3333") };
 
         public int? LocalIndex { get; set; }
 
@@ -182,17 +181,17 @@ namespace Utility.Nodes
 
         public INode Current
         {
-            get => currentNode;
+            get => current;
             set
             {
-                if (currentNode != value)
+                if (current != value)
                 {
-                    var previousValue = currentNode;
-                    if (currentNode != null)
-                        currentNode.IsPersistable = false;
+                    var previousValue = current;
+                    if (current != null)
+                        current.IsPersistable = false;
                     if (value != null)
                         value.IsPersistable = true;
-                    currentNode = value;
+                    current = value;
                     RaisePropertyChanged(ref previousValue, value);
                 }
             }

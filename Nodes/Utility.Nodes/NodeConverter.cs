@@ -6,11 +6,13 @@ using Utility.Keys;
 using Splat;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
+using System.Reflection;
 
 namespace Utility.Nodes
 {
     public class NodeConverter : JsonConverter<Node>
     {
+        private FieldInfo fieldInfo;
 
         public override void WriteJson(JsonWriter writer, Node value, JsonSerializer serializer)
         {
@@ -93,9 +95,10 @@ namespace Utility.Nodes
             if (jObject.ContainsKey("Current"))
             {
                 var key = new GuidKey(Guid.Parse(jObject["Current"].ToString()));
-                Locator.Current.GetService<INodeSource>().SingleAsync(key).Subscribe(a =>
+                Locator.Current.GetService<INodeSource>().SingleAsync(key).Subscribe(current =>
                 {
-                    node.Current = a;
+                    //node.Current = current;
+                    node.SetFieldValue(ViewModelTree.Field(nameof(ViewModelTree.Current)), current, ref fieldInfo);
                 });
 
             }
