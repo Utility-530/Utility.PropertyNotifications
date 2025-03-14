@@ -22,9 +22,10 @@ using Utility.WPF;
 
 namespace Utility.Nodes.Demo.Queries
 {
-    public interface IMainViewModel: INotifyPropertyChanged
+    public interface IMainViewModel : INotifyPropertyChanged
     {
         public FilterEntity Filter { get; set; }
+        public void Save();
     }
 
     internal class MainViewModel : NotifyPropertyChangedBase, IMainViewModel
@@ -83,7 +84,7 @@ namespace Utility.Nodes.Demo.Queries
                     {
                         nodes = [a];
                         RaisePropertyChanged(nameof(Nodes));
-                    });                
+                    });
             }
         }
 
@@ -116,8 +117,7 @@ namespace Utility.Nodes.Demo.Queries
             {
                 return refreshCommand ??= new Command(() =>
                 {
-                    //Users = users.Value.Where(Filter.ToObject<TreeFilter>()).ToArray();
-                    //this.RaisePropertyChanged(nameof(Users));
+                    SelectorController.Instance.Value++;
                 });
             }
         }
@@ -126,7 +126,9 @@ namespace Utility.Nodes.Demo.Queries
         {
             if (filterEntity != null)
             {
-                repo.Value.Update(new FilterEntity { Id = filterEntity.Id, Body = JsonConvert.SerializeObject(nodes[0]) , GroupKey = filterEntity.GroupKey, Key = filterEntity.Key});
+                var body = JsonConvert.SerializeObject(nodes[0]);
+                if (Filter.Body != body)
+                    repo.Value.Update(new FilterEntity { Id = filterEntity.Id, Body = body, GroupKey = filterEntity.GroupKey, Key = filterEntity.Key });
             }
         }
 

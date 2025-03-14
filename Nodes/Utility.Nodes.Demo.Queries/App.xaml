@@ -13,6 +13,10 @@
 
     <Application.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Utility.WPF.Controls.Lists;component/CustomSelector.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="/Dictionary1.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
             <ObjectDataProvider x:Key="SchemaFromFile"
                 ObjectType="{x:Type local:SchemaLoader}"
                 MethodName="LoadSchema" >
@@ -25,9 +29,21 @@
             </CollectionViewSource>
 
 
-            <DataTemplate DataType="{x:Type local:User}">
+            <HierarchicalDataTemplate DataType="{x:Type local:User}" ItemsSource="{Binding Cars}">
                 <obj:JsonControl Object="{Binding Converter={StaticResource ObjectToTokenConverter}}"></obj:JsonControl>
+            </HierarchicalDataTemplate>
+
+            <DataTemplate x:Key="One">
+                <Ellipse Fill="Red" Height="40" Width="40"></Ellipse>
             </DataTemplate>
+
+            <ControlTemplate x:Key="TemplateOne" TargetType="{x:Type TreeViewItem}">
+                <Grid>
+                    <ContentPresenter x:Name="PART_Header" ContentSource="Header"/>
+                    <Rectangle Fill="Blue" Height="40" Width="40"></Rectangle>
+
+                </Grid>
+            </ControlTemplate>
 
             <DataTemplate DataType="{x:Type local:Car}">
                 <obj:JsonControl Object="{Binding Converter={StaticResource ObjectToTokenConverter}}"></obj:JsonControl>
@@ -47,12 +63,10 @@
                             <ColumnDefinition Width="5"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <TreeView x:Name="MyTreeView" ItemsSource="{Binding Users}">
-                            <TreeView.ItemTemplate>
-                                <HierarchicalDataTemplate  ItemsSource="{Binding Cars}">
-                                    <ContentPresenter Content="{Binding }"/>
-                                </HierarchicalDataTemplate>
-                            </TreeView.ItemTemplate>
+                        <TreeView x:Name="MyTreeView" 
+                                  ItemsSource="{Binding Users}"        
+                                  ItemTemplateSelector="{x:Static local:CustomDataTemplateSelector.Instance}"
+                                  ItemContainerStyleSelector="{x:Static local:CustomStyleSelector.Instance}" >
                             <i:Interaction.Behaviors>
                                 <local:HighlightItems x:Name="a" Items="{Binding Filtered}"/>
                             </i:Interaction.Behaviors>
@@ -134,67 +148,64 @@
                                 <RowDefinition Height="30"></RowDefinition>
                                 <RowDefinition Height="*"></RowDefinition>
                             </Grid.RowDefinitions>
-                   
 
-                        <TextBlock Text="{Binding Filter.Key}"></TextBlock>
 
-                        <ct:CustomTreeView ItemsSource="{Binding Nodes}" Grid.Row="1">
-                            <TreeView.Resources>
-                                <ResourceDictionary>
-                                    <ResourceDictionary.MergedDictionaries>
-                                        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
-                                        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Generic.xaml"/>
-                                        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Templates.xaml"/>
-                                        <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItem.xaml"/>
-                                        <ResourceDictionary Source="/Utility.WPF.Controls.Breadcrumbs;component/Themes/Generic.xaml"/>
-                                    </ResourceDictionary.MergedDictionaries>
-                                    <Style x:Key="MyDefaultContentStyle" TargetType="{x:Type ct:CustomTreeViewItem}">
-                                        <Setter Property="NodeTemplate">
-                                            <Setter.Value>
-                                                <DataTemplate>
-                                                    <ContentControl Content="{Binding Converter={StaticResource TypeNameConverter}}"></ContentControl>
-                                                </DataTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
-                                        <Setter Property="Background" Value="White"></Setter>
-                                        <Setter Property="Orientation" Value="Horizontal"></Setter>
-                                        <Setter Property="BorderThickness" Value="2"></Setter>
-                                        <Setter Property="ItemsPanel">
-                                            <Setter.Value>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel/>
-                                                </ItemsPanelTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                        <Setter Property="NodeItemsSource">
-                                            <Setter.Value>
-                                                <MultiBinding  Converter="{StaticResource ChildrenSelectorConverter}" >
-                                                    <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=Self}"/>
-                                                    <!--<Binding Path="ChildrenSelector"  RelativeSource="{RelativeSource Mode=Self}"/>-->
-                                                </MultiBinding>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </ResourceDictionary>
-                            </TreeView.Resources>
-                            <ct:CustomTreeView.ItemContainerStyleSelector>
-                                <bc:ItemContainerStyleSelector
+                            <TextBlock Text="{Binding Filter.Key}"></TextBlock>
+
+                            <ct:CustomTreeView ItemsSource="{Binding Nodes}" Grid.Row="1">
+                                <TreeView.Resources>
+                                    <ResourceDictionary>
+                                        <ResourceDictionary.MergedDictionaries>
+                                            <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
+                                            <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Generic.xaml"/>
+                                            <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Templates.xaml"/>
+                                            <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItem.xaml"/>
+                                            <ResourceDictionary Source="/Utility.WPF.Controls.Breadcrumbs;component/Themes/Generic.xaml"/>
+                                        </ResourceDictionary.MergedDictionaries>
+                                        <Style x:Key="MyDefaultContentStyle" TargetType="{x:Type ct:CustomTreeViewItem}">
+                                            <Setter Property="NodeTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <ContentControl Content="{Binding Converter={StaticResource TypeNameConverter}}"></ContentControl>
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
+                                            <Setter Property="Background" Value="White"></Setter>
+                                            <Setter Property="Orientation" Value="Horizontal"></Setter>
+                                            <Setter Property="BorderThickness" Value="2"></Setter>
+                                            <Setter Property="ItemsPanel">
+                                                <Setter.Value>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel/>
+                                                    </ItemsPanelTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="NodeItemsSource">
+                                                <Setter.Value>
+                                                    <MultiBinding  Converter="{StaticResource ChildrenSelectorConverter}" >
+                                                        <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=Self}"/>
+                                                        <!--<Binding Path="ChildrenSelector"  RelativeSource="{RelativeSource Mode=Self}"/>-->
+                                                    </MultiBinding>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ResourceDictionary>
+                                </TreeView.Resources>
+                                <ct:CustomTreeView.ItemContainerStyleSelector>
+                                    <bc:ItemContainerStyleSelector
                                     DefaultStyle="{StaticResource MyDefaultContentStyle}" 
                                     SelectableStyle="{StaticResource SelectedTreeViewItem}" 
                                     BreadcrumbStyle="{StaticResource BreachCrumb}" 
                                     BreadcrumbRootStyle ="{StaticResource BreadCrumbRootTreeViewItem}">
-                                </bc:ItemContainerStyleSelector>
-                            </ct:CustomTreeView.ItemContainerStyleSelector>
-                        </ct:CustomTreeView>
+                                    </bc:ItemContainerStyleSelector>
+                                </ct:CustomTreeView.ItemContainerStyleSelector>
+                            </ct:CustomTreeView>
                         </Grid>
                     </Grid>
                 </DockPanel>
 
             </DataTemplate>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Utility.WPF.Controls.Lists;component/CustomSelector.xaml"></ResourceDictionary>
-            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -1,8 +1,10 @@
-﻿namespace Utility.Nodes.Demo.Queries
+﻿using Utility.Interfaces.NonGeneric.Data;
+
+namespace Utility.Nodes.Demo.Queries
 {
-    public class User
+    public class User : IId
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public string Name { get; set; }
         public int Age { get; set; }
         public IEnumerable<Car> Cars { get; set; }
