@@ -140,9 +140,8 @@ namespace Utility.Reactives
         {
             return Observable.Create<T>(observer =>
             {
-                if (collection.Any())
-                    foreach (var x in collection.Cast<T>().ToArray())
-                        observer.OnNext(x);
+                foreach (var x in collection.Cast<T>().ToArray())
+                    observer.OnNext(x);
 
                 if (collection is INotifyCollectionChanged notifyCollection)
                     return Additions<T>(notifyCollection).Subscribe(observer);
