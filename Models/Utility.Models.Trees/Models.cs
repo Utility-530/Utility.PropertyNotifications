@@ -443,10 +443,10 @@ namespace Utility.Models.Trees
     public class AndOrModel : ValueModel<AndOr>, IAndOr, IObservable<Unit>
     {
         protected AndOr value = 0;
-        List<IObserver<Unit>> observers = new List<IObserver<Unit>>();
-        List<AndOrModel> list = new List<AndOrModel>();
-        List<FilterModel> filters = new List<FilterModel>();
-        Dictionary<Model, IDisposable> dictionary = new();
+        List<IObserver<Unit>> observers = [];
+        List<AndOrModel> list = [];
+        List<FilterModel> filters = [];
+        Dictionary<Model, IDisposable> dictionary = [];
 
         public AndOrModel()
         {
@@ -710,7 +710,11 @@ namespace Utility.Models.Trees
                     switch ((NumberComparison)Value)
                     {
                         case NumberComparison.GreaterThanOrEqualTo:
-                            return int.Parse(value1.ToString()) >= int.Parse(value2.ToString());
+                            return int.Parse(value1.ToString()) >= int.Parse(value2.ToString());          
+                        case NumberComparison.GreaterThan:
+                            return int.Parse(value1.ToString()) > int.Parse(value2.ToString());     
+                        case NumberComparison.LessThan:
+                            return int.Parse(value1.ToString()) < int.Parse(value2.ToString());
                         case NumberComparison.EqualTo:
                             return int.Parse(value1.ToString()) == int.Parse(value2.ToString());
                         case NumberComparison.NotEqualTo:
@@ -1267,8 +1271,8 @@ namespace Utility.Models.Trees
             {
                 case res:
                     ResolvableModel = a.Data as ResolvableModel;
-                    ResolvableModel.Types.Changes().StartWithDefault()
-                        .CombineLatest(ResolvableModel.Properties.Changes().StartWithDefault(), this.WithChangesTo(a => a.ValueModel))
+                    ResolvableModel.Types.Changes()
+                        .CombineLatest(ResolvableModel.Properties.Changes(), this.WithChangesTo(a => a.ValueModel))
                         .Subscribe(a =>
                         {
                             var typesCount = ResolvableModel.Types.Count;
@@ -1277,24 +1281,23 @@ namespace Utility.Models.Trees
                             {
                                 ValueModel.Set(ResolvableModel.Types.Last());
                                 ComparisonModel.Type = a.First == null ? ComparisonType.Default : ComparisonType.Type;
-
                             }
                             else if (typesCount == 0)
                             {
                                 ValueModel.Set(null);
                                 ComparisonModel.Type = ComparisonType.Default;
-
                             }
                             else if (typesCount == propertiesCount)
                             {
                                 var propertyType = ResolvableModel.Properties.Last().PropertyType;
-                                ValueModel.Set(ActivateAnything.Activate.New(propertyType));
-                                ComparisonModel.Type = toComparisonType(propertyType);
-
+                                if (ValueModel.Value.GetType() != propertyType)
+                                {
+                                    ValueModel.Set(ActivateAnything.Activate.New(propertyType));
+                                    ComparisonModel.Type = toComparisonType(propertyType);
+                                }
                             }                 
                             else
                                 throw new Exception("ee33 ffp[oe");
-
                         });
                     break;
                 case b_ool:
