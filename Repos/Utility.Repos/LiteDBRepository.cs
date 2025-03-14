@@ -16,6 +16,7 @@ namespace Utility.Repos
         Task Update(object value);
 
         Task Remove(object value);
+        Task<object[]> FindBy(string name, string value);
 
         Task<object[]> All();
     }
@@ -58,13 +59,27 @@ namespace Utility.Repos
                 return Task.FromResult(objects.ToArray());
             }
         }
-        
-        public Task Remove(object item)
-        {     
+
+        public Task<object[]> FindBy(string name, string value)
+        {
+            List<object> objects = new();
             using (GetCollection(out var collection))
             {
-                var x = _mapper.Serialize(settings.Type, item); 
-                var result = collection.Delete(x["_id"]);                  
+                foreach (var item in collection.Find(a => a[name] == value))
+                {
+                    var deserialised = _mapper.Deserialize(settings.Type, item);
+                    objects.Add(deserialised);
+                }
+                return Task.FromResult(objects.ToArray());
+            }
+        }
+
+        public Task Remove(object item)
+        {
+            using (GetCollection(out var collection))
+            {
+                var x = _mapper.Serialize(settings.Type, item);
+                var result = collection.Delete(x["_id"]);
                 return Task.CompletedTask;
             }
         }
