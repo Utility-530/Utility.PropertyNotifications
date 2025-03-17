@@ -134,6 +134,13 @@
             </TextBox>
         </Grid>
 
+    </DataTemplate>  
+    
+    <DataTemplate DataType="{x:Type inf:StringRootModel}">
+        <Grid>
+            <TextBlock Text="{Binding Name}" Background="AliceBlue">
+            </TextBlock>
+        </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:FileModel}">
