@@ -97,6 +97,8 @@ namespace Utility.Nodes.Filters
 
         public void Add(INode node)
         {
+            if (node.Data is IIgnore)
+                return;
             if (node.Key is null)
             {
                 var index = node.Parent.Items.Count(a => ((INode)a).Name() == node.Name());
