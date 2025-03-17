@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using static Utility.WPF.Helpers.HitTestHelper;
 
 namespace Utility.WPF.Reactives
 {
@@ -76,27 +77,6 @@ namespace Utility.WPF.Reactives
                 { 
                     return (GetSelectedItem<T>(evt.EventArgs.OriginalSource as UIElement, control), evt.EventArgs);
                 });
-        }
-
-
-        public static T? GetSelectedItem<T>(UIElement? sender, UIElement objTreeViewControl) where T : DependencyObject
-        {
-            Point? point = sender?.TranslatePoint(new Point(0, 0), objTreeViewControl);
-            if (point.HasValue)
-            {
-                var hit = objTreeViewControl.InputHitTest(point.Value) as DependencyObject;
-                while (hit is not null and not T)
-                {
-                    hit = VisualTreeHelper.GetParent(hit);
-                    if(objTreeViewControl==hit)
-                    {
-                        hit = null;
-                        break;
-                    }
-                }
-                return (T?)hit;
-            }
-            return null;
         }
     }
 }
