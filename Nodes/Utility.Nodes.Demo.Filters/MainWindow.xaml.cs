@@ -1,18 +1,26 @@
-﻿using Splat;
+﻿using Microsoft.Xaml.Behaviors;
+using Newtonsoft.Json;
+using Splat;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Reactive.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Utility.Pipes;
-using Utility.Trees.Demo.Filters;
-using Utility.Trees.Demo.Filters.Infrastructure;
-//using Utility.Trees.WPF;
+using Utility.Interfaces.Exs;
+using Utility.Interfaces.NonGeneric;
+using Utility.Keys;
+using Utility.Models.Trees;
+using Utility.Nodes;
+using Utility.PropertyNotifications;
+using Utility.Reactives;
+using Utility.Trees.Abstractions;
+using Utility.WPF.Behaviors;
+using Utility.WPF.Controls.Trees;
+using Utility.WPF.Helpers;
 
 namespace Utility.Trees.Demo.Filters
 {
@@ -24,33 +32,174 @@ namespace Utility.Trees.Demo.Filters
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new MainViewModel();
-        }
-
-        void UpdateView(object data)
-        {
-            //treeViewer = DataTreeViewer(data);
-            //scrollviewer.Content = treeViewer;
-            //MainView.Instance.pipe_view.Content = Locator.Current.GetService<PipeController>();
-            //MainView.Instance.queue_view.Content = Pipe.Instance;
-
-
-
-            //filtertree.Content = treeViewer;
-            //filtertree.ContentTemplate = this.Resources["TVF"] as DataTemplate;
-            //datatemplatetree.Content = treeViewer;
-            //datatemplatetree.ContentTemplate = this.Resources["DTS"] as DataTemplate;
-            //styletree.Content = treeViewer;
-            //styletree.ContentTemplate = this.Resources["SS"] as DataTemplate;
-
-
-
-
-            //pipe_repository_tree.Content = Locator.Current.GetService<PipeRepository>();
-            //pipe_repository_tree.ContentTemplate = this.Resources["Pipe_Repository_Template"] as DataTemplate;
-            //repo_view.Content = Locator.Current.GetService<PipeRepository>();
-
-
         }
     }
+
+    public class StringRootModel : StringModel, IRoot
+    {
+        public StringRootModel()
+        {
+        }
+    }
+
+    public class CustomStyleSelector : StyleSelector
+    {
+        public override Style SelectStyle(object item, DependencyObject container)
+        {
+            if (item is INode { Data: IRoot data })
+            {
+                return RootStyle;
+
+            }
+            return DefaultStyle;
+        }
+
+        public Style DefaultStyle { get; set; }
+        public Style RootStyle { get; set; }
+    }
+
+
+    public class TreeConverter : IValueConverter
+    {
+        static HashSet<INode> nodes = new();
+
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is string s)
+            {
+                return new[] { JsonConvert.DeserializeObject<Node>(s) };
+            }
+            else if (value is null)
+            {
+                var coll = new ObservableCollection<INode>();
+                var model = new AndOrModel() { Name = "and_or" };
+                var andOr = new Node(model);
+                coll.Add(andOr as INode);
+                change(andOr);
+                return coll;
+            }
+            throw new Exception("44656767 44");
+        }
+
+        private static void change(INode _node)
+        {
+            //_node.Key = new GuidKey();
+            if (nodes.Add(_node) == false)
+                return;
+            _node.Key = new GuidKey();
+
+            if (_node is INode { Data: ISetNode setNode })
+            {
+                setNode.SetNode(_node);
+
+            }
+
+            _node.Items.AndChanges<INode>().Subscribe(set =>
+            {
+                foreach (var change in set)
+                {
+                    if (change.Type == Changes.Type.Add)
+                    {
+
+                        TreeConverter.change(change.Value);
+                    }
+                }
+            });
+            if (_node.Data is IYieldChildren children)
+            {
+                _node.WithChangesTo(a => a.IsExpanded)
+                    .Where(a => a)
+                    .Take(1)
+                    .Subscribe(a =>
+                    {
+                        children
+                            .Children
+                            .AndAdditions()
+                            .Subscribe(async d =>
+                            {
+                                var _new = (INode)await _node.ToTree(d);
+                                _node.Add(_new);
+                            });
+                    });
+            }
+
+
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is IEnumerable<INode> nodes)
+            {
+                return JsonConvert.SerializeObject(nodes.First());
+            }
+
+            else
+                throw new Exception("sadS 434");
+        }
+    }
+
+    public class AddObjectAction : TriggerAction<FrameworkElement>
+    {
+
+        protected override void Invoke(object parameter)
+        {
+            if (parameter is Utility.WPF.NewObjectRoutedEventArgs { IsAccepted: true, NewObject: { } instance } value)
+            {
+                var x = AssociatedObject;
+                ;
+                if (x.DataContext is ITree { Data: StringModel descriptor } tree)
+                {
+                    tree.Add(tree.ToTree(instance).Result);
+                }
+            }
+        }
+    }
+
+
+    public class CancelSelectionItemChange : TriggerAction<FrameworkElement>
+    {
+
+        protected override void Invoke(object parameter)
+        {
+            if (parameter is RoutedPropertyChangedEventArgs<object> eventArgs)
+            {
+                eventArgs.Handled = true;
+            }
+        }
+    }
+
+    public class CustomUpdateSourceBindingAction : UpdateSourceBindingAction
+    {
+
+        protected override void Invoke(object parameter)
+        {
+
+            if (parameter is MouseEventArgs { OriginalSource: UIElement originalSource, Source: TreeView source } mouseEventArgs)
+            {
+    
+                // establish that the mouse click has taken place in the top level treeview i.e source 
+                var x = HitTestHelper.GetSelectedItem<TreeViewItem>(originalSource, source);
+                if (x is TreeViewItem { Header: INode { Data: AndOrModel } })
+                    return;
+                // and not in the bottom-level treeview
+                var y = HitTestHelper.GetSelectedItem<TreeViewItem>(originalSource, AssociatedObject);
+                // because the former indicates a selecteditemchanged event is about to occur 
+                if (x != null && y == null)
+                    base.Invoke(parameter);
+            }
+        }
+
+    }
+
+
+    public class FooterDataTemplateSelector : DataTemplateSelector
+    {
+        public override DataTemplate SelectTemplate(object item, DependencyObject container)
+        {
+            return Template;
+        }
+
+        public DataTemplate Template { get; set; }
+    }
+
 }

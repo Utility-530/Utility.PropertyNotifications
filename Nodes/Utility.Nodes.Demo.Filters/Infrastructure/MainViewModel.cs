@@ -1,16 +1,8 @@
-﻿using Bogus.Bson;
-using Jonnidip;
+﻿using Jonnidip;
 using Newtonsoft.Json;
 using Splat;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using UnitsNet;
 using Utility.Commands;
-using Utility.Conversions.Json.Newtonsoft;
 using Utility.Helpers;
 using Utility.Interfaces.Exs;
 using Utility.Nodes;
@@ -28,44 +20,36 @@ namespace Utility.Trees.Demo.Filters.Infrastructure
         {
             TypeNameHandling = TypeNameHandling.All,
             Converters = [
-                        new StringTypeEnumConverter(),
-                        new NodeConverter(),
-
-                    ]
+                            new StringTypeEnumConverter(),
+                            new NodeConverter()
+                        ]
         };
 
         public MainViewModel()
         {
-            var dir = System.IO.Directory.CreateDirectory("../../../Data");
-            var file = DirectoryHelper.And(dir, "data.json");
 
             SaveCommand = new Command(() =>
             {
-                var json = JsonConvert.SerializeObject(filters[0], Formatting.Indented, settings);
-                file.OverWrite(json);
+
             });
 
-            if (file.Exists)
-            {
-                var json = file.Read();
-                filters = [JsonConvert.DeserializeObject<Node>(json, settings)];
-            }
+
 
         }
 
         public ICommand SaveCommand { get; }
+        public ICommand FinishEdit { get; }
 
-        public IReadOnlyTree[] Filters
+        public IReadOnlyTree[] Nodes
         {
             get
             {
                 if (filters == null)
-                    source.Value.Single(nameof(Factory.BuildAndOrRoot))
+                    source.Value.Single(nameof(Factory.BuildCollectionRoot))
                         .Subscribe(a =>
                         {
-                            source.Value.Add(a);
                             filters = [(Node)a];
-                            RaisePropertyChanged(nameof(Filters));
+                            RaisePropertyChanged(nameof(Nodes));
                         });
                 return filters;
             }
