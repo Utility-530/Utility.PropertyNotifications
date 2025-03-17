@@ -22,10 +22,10 @@ namespace Utility.WPF.Converters
             {
                 var flags = EnumHelper.GetFlags(propertyType);
                 if (flags.Contains(PropertyType.GenericArgument1))
-                    type = type.GetGenericArguments().First();
+                    type = type.GetGenericArguments().FirstOrDefault() is Type gtype ? gtype : type;
 
                 else if (flags.Contains(PropertyType.GenericArgument2))
-                    type = type.GetGenericArguments().Skip(1).First();
+                    type = type.GetGenericArguments().Skip(1).FirstOrDefault() is Type gtype ? gtype : type;
 
 
                 if (flags.Contains(PropertyType.TopLevel))
