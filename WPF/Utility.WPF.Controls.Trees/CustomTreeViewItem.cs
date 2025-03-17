@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Collections;
+using Utility.WPF.Attached;
 
 namespace Utility.WPF.Controls.Trees
 {
@@ -10,6 +11,14 @@ namespace Utility.WPF.Controls.Trees
         protected override DependencyObject GetContainerForItemOverride()
         {
             return new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector, ItemContainerStyle = ItemContainerStyle};
+        }
+
+
+        protected override void PrepareContainerForItemOverride(DependencyObject element, object item)        {
+
+            TreeEx.SetIsRootNode(element, true);
+            base.PrepareContainerForItemOverride(element, item);
+
         }
     }
 
@@ -180,5 +189,7 @@ namespace Utility.WPF.Controls.Trees
         {
 
         }
+
+    
     }
 }

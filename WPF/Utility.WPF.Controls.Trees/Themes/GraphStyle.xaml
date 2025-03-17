@@ -2,8 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Utility.WPF.Controls.Trees">
 
-    <local:HorzLineConv x:Key="horzLineConv"/>
-    <local:VertLineConv x:Key="vertLineConv"/>
+    <local:HorizontalLineConverter x:Key="HorizontalLineConverter"/>
+    <local:VerticalLineConverter x:Key="VerticalLineConverter"/>
 
     <Style TargetType="TreeViewItem" x:Key="TopDown_GraphStyle">
         <Setter Property="Template">
@@ -32,7 +32,7 @@
                           Stroke="Black" SnapsToDevicePixels="true">
                                 <Rectangle.Height>
                                     <Binding  Mode="OneWay"
-                            Converter="{StaticResource horzLineConv}"
+                            Converter="{StaticResource HorizontalLineConverter}"
                             ConverterParameter="left" 
                             RelativeSource="{RelativeSource
                                 AncestorLevel=1,
@@ -46,7 +46,7 @@
                          SnapsToDevicePixels="true">
                                 <Rectangle.Height>
                                     <Binding Mode="OneWay" 
-                    Converter="{StaticResource horzLineConv}" 
+                    Converter="{StaticResource HorizontalLineConverter}" 
                     ConverterParameter="right" 
                     RelativeSource="{RelativeSource 
                       AncestorLevel=1, 
@@ -71,7 +71,7 @@
                          Height="10" Stroke="Black" SnapsToDevicePixels="true">
                                 <Rectangle.Width>
                                     <Binding Mode="OneWay" 
-                    Converter="{StaticResource vertLineConv}" 
+                    Converter="{StaticResource VerticalLineConverter}" 
                     ConverterParameter="top" 
                     RelativeSource=
                       "{RelativeSource AncestorLevel=1, 
@@ -88,7 +88,7 @@
                 SnapsToDevicePixels="true">
                                 <Rectangle.Width>
                                     <Binding Mode="OneWay" 
-                    Converter="{StaticResource vertLineConv}" 
+                    Converter="{StaticResource VerticalLineConverter}" 
                     ConverterParameter="bottom" 
                     RelativeSource=
                       "{RelativeSource  AncestorLevel=1, 
@@ -147,7 +147,7 @@
                           Stroke="Black" SnapsToDevicePixels="true">
                                 <Rectangle.Width>
                                     <Binding  Mode="OneWay"
-                            Converter="{StaticResource horzLineConv}"
+                            Converter="{StaticResource HorizontalLineConverter}"
                             ConverterParameter="left" 
                             RelativeSource="{RelativeSource
                                 AncestorLevel=1,
@@ -161,7 +161,7 @@
                          SnapsToDevicePixels="true">
                                 <Rectangle.Width>
                                     <Binding Mode="OneWay" 
-                    Converter="{StaticResource horzLineConv}" 
+                    Converter="{StaticResource HorizontalLineConverter}" 
                     ConverterParameter="right" 
                     RelativeSource="{RelativeSource 
                       AncestorLevel=1, 
@@ -186,7 +186,7 @@
                          Width="10" Stroke="Black" SnapsToDevicePixels="true">
                                 <Rectangle.Height>
                                     <Binding Mode="OneWay" 
-                    Converter="{StaticResource vertLineConv}" 
+                    Converter="{StaticResource VerticalLineConverter}" 
                     ConverterParameter="top" 
                     RelativeSource=
                       "{RelativeSource AncestorLevel=1, 
@@ -203,7 +203,7 @@
                 SnapsToDevicePixels="true">
                                 <Rectangle.Height>
                                     <Binding Mode="OneWay" 
-                    Converter="{StaticResource vertLineConv}" 
+                    Converter="{StaticResource VerticalLineConverter}" 
                     ConverterParameter="bottom" 
                     RelativeSource=
                       "{RelativeSource  AncestorLevel=1, 

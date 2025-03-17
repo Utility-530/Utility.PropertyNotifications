@@ -103,7 +103,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <att:InteractivitySetter>
+        <att:InteractivitySetter Property="att:InteractivityItems.Template">
             <Setter.Value>
                 <att:InteractivityTemplate>
                     <att:InteractivityItems>

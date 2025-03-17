@@ -118,6 +118,7 @@ namespace Utility.WPF.Controls.Trees
                 EditTemplate ??= dataTemplate;
             this.onApplyAnimatedTemplate();
             base.OnApplyTemplate();
+            this.apply_template();
         }
 
         private void DeclineComboTreeViewItem_Click(object sender, RoutedEventArgs e)

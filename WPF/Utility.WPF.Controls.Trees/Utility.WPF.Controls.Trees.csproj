@@ -7,10 +7,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-
-		<Compile Update="Deprecated\MyTreeView.cs">
-			<DependentUpon>MyTreeView.xaml</DependentUpon>
-		</Compile>
 		<Compile Update="TreeListView.cs">
 			<DependentUpon>TreeListView.xaml</DependentUpon>
 		</Compile>

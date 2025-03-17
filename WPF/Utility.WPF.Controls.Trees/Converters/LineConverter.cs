@@ -8,7 +8,7 @@ using System.Windows.Data;
 
 namespace Utility.WPF.Controls.Trees
 {
-    public class HorzLineConv : IValueConverter
+    public class HorizontalLineConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
@@ -38,7 +38,7 @@ namespace Utility.WPF.Controls.Trees
         }
     }
 
-    public class VertLineConv : IValueConverter
+    public class VerticalLineConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
