@@ -1,5 +1,4 @@
 ﻿using Evan.Wpf;
-using NetFabric.Hyperlinq;
 using System;
 using System.Collections;
 using System.Collections.Generic;

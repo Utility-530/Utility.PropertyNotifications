@@ -1,5 +1,4 @@
 ﻿using Evan.Wpf;
-using NetFabric.Hyperlinq;
 using ReactiveUI;
 using System;
 using System.Linq;
