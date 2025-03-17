@@ -19,12 +19,12 @@ namespace Utility.Reactives
         {
             if (task.IsCompleted)
                 return Observable.Return(task.Result);
-            return Observable.Create<T>((Func<IObserver<T>, Task>)(observer =>
+            return Observable.Create<T>((observer =>
             {
-                return (Task)task.ContinueWith((Action<Task<T>>)(a =>
+                return task.ContinueWith(a =>
                 {
                     observer.OnNext(a.Result);
-                }));
+                }, TaskContinuationOptions.ExecuteSynchronously);
             }));
         }
 
@@ -52,7 +52,7 @@ namespace Utility.Reactives
                 var task = enumerable.ContinueWith(a =>
                 {
                     observer.OnNext(Unit.Default);
-                });
+                }, TaskContinuationOptions.ExecuteSynchronously);
                 return task;
             });
         }
