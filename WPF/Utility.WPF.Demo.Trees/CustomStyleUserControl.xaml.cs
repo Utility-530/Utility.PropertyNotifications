@@ -1,6 +1,5 @@
 ﻿using Jellyfish;
 using MintPlayer.ObservableCollection;
-using NetFabric.Hyperlinq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -76,7 +75,7 @@ namespace Utility.WPF.Demo.Trees
                             TreeItemContainerStyleSelector.Instance.Current = style.Value;
                             MyTreeView.ItemContainerStyleSelector = TreeItemContainerStyleSelector.Instance;
 
-                            foreach (var item in _collection)
+                            foreach (var item in _collection.ToArray())
                             {
                                 item.ItemContainerStyleSelector = null;
                                 item.ItemContainerStyleSelector = TreeItemContainerStyleSelector.Instance;

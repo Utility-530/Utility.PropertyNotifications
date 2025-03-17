@@ -18,7 +18,7 @@
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock VerticalAlignment="Center" FontSize="18" Text="{Binding Name}" Margin="2,0,0,0"></TextBlock>
+                            <TextBox VerticalAlignment="Center" FontSize="18" Text="{Binding Name}" Margin="2,0,0,0"></TextBox>
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
