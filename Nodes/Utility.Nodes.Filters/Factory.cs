@@ -28,6 +28,7 @@ namespace Utility.Nodes.Filters
         public const string html = nameof(html);
         public const string _html = nameof(_html);
         public const string dirty = nameof(dirty);
+        public const string collection = nameof(collection);
 
         //static readonly Guid assGuid = Guid.Parse("10126895-6855-45ab-97af-21ed90c02fe8");
         //static readonly Guid relGuid = Guid.Parse("5c90fcd6-2324-4f88-bffb-73b8f9fbcf6b");
@@ -45,6 +46,7 @@ namespace Utility.Nodes.Filters
         static readonly Guid controlsGuid = Guid.Parse("f4565c31-c35b-4cbf-911a-26a841d3bc04");
         private static readonly Guid guid = Guid.Parse("d7bccfe8-2818-4e64-b399-f6230b087a86");
         private static readonly Guid dirtyGuid = Guid.Parse("6c9ee869-9d3b-4745-b6de-6de4a8f011f1");
+        private static readonly Guid collectionGuid = Guid.Parse("d6fa45af-e543-4ac9-bec4-fcbd3a800097");
 
         public const string Refresh = nameof(Refresh);
         public const string Save = nameof(Save);
@@ -109,6 +111,15 @@ namespace Utility.Nodes.Filters
                 s => new AndOrModel { Name = s });
         }
 
+             
+        public static IObservable<INode> BuildCollectionRoot()
+        {
+            return create(collection,
+                collectionGuid,
+                s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Vertical },
+                s => new StringRootModel { Name = s });
+        }
+
 
         public static IObservable<INode> BuildHtmlRoot()
         {
@@ -131,7 +142,7 @@ namespace Utility.Nodes.Filters
             return create(dirty,
                 dirtyGuid,
                 s => new Node(s),
-                s => new CollectionModel<DirtyModel> { Name = s });
+                s => new DirtyModels { Name = s });
         }
 
         public static IObservable<INode> BuildContentRoot()
