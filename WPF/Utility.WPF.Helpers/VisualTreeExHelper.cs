@@ -110,43 +110,40 @@ namespace Utility.WPF.Helpers
         /// <param name="parent"></param>
         /// <param name="childName"></param>
         /// <returns></returns>
-        public static T? FindChild<T>(this DependencyObject? parent, string? childName = null) where T : DependencyObject
+        public static T? FindChild<T>(this DependencyObject? parent, string childName) where T : FrameworkElement
+        {
+            return FindChild<T>(parent, a => a.Name == childName);
+        }
+
+
+
+        public static T? FindChild<T>(this DependencyObject? parent, Predicate<T>? predicate = null) where T : DependencyObject
         {
             // Confirm parent and childName are valid.
-            if (parent == null) return null;
+            if (parent == null) 
+                throw new ArgumentNullException(nameof(parent));
 
-            T? foundChild = null;
+            foreach(var child in parent.ChildrenOfType<T>())
+            {
+                if (child is T t && predicate?.Invoke(t) != false)
+                {
+                    return t;
+                }            
+            }
 
+            return null;
+
+        }
+
+
+        public static void ForEachChild<T>(this DependencyObject parent, Action<T> action) where T : DependencyObject
+        {
             int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
             for (int i = 0; i < childrenCount; i++)
             {
-                var child = VisualTreeHelper.GetChild(parent, i);
-                // If the child is not of the request child type child
-                if (!(child is T t))
-                {
-                    // recursively drill down the tree
-                    foundChild = FindChild<T>(child, childName);
+                action(VisualTreeHelper.GetChild(parent, i) as T);
 
-                    // If the child is found, break so we do not overwrite the found child.
-                    if (foundChild != null) break;
-                }
-                else if (!string.IsNullOrEmpty(childName))
-                {
-                    // If the child's name is set for search
-                    if (!(child is FrameworkElement frameworkElement) || frameworkElement.Name != childName) continue;
-                    // if the child's name is of the request name
-                    foundChild = t;
-                    break;
-                }
-                else
-                {
-                    // child element found.
-                    foundChild = t;
-                    break;
-                }
             }
-
-            return foundChild;
         }
 
         /// <summary>
@@ -166,7 +163,7 @@ namespace Utility.WPF.Helpers
                     yield return childType;
                 }
 
-                foreach (var other in FindChildren<T>(child))
+                foreach (var other in ChildrenOfType<T>(child))
                 {
                     yield return other;
                 }
@@ -179,7 +176,7 @@ namespace Utility.WPF.Helpers
         /// <typeparam name="T"></typeparam>
         /// <param name="parent"></param>
         /// <returns></returns>
-        [Obsolete]
+        [Obsolete($"Use {nameof(ChildrenOfType)}")]
         public static IEnumerable<T> FindChildren<T>(this DependencyObject parent) where T : DependencyObject
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
