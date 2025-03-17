@@ -232,7 +232,7 @@ namespace Utility.Models
             //a.Parent = null;
         }
 
-        public override string ToString()
+        public sealed override string ToString()
         {
             return Name;
         }

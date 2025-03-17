@@ -1,6 +1,7 @@
 ﻿using Utility.Trees.Abstractions;
 using System.Collections.ObjectModel;
 using System.Collections;
+using Utility.Interfaces.Exs;
 
 namespace Utility.Models
 {
@@ -13,13 +14,13 @@ namespace Utility.Models
     {
     }
 
-    public abstract class CollectionModel : Model, IChildCollection
+    public abstract class BaseCollectionModel : Model, IChildCollection
     {
         public virtual IEnumerable Collection { get; } 
 
     }
 
-    public class CollectionModel<T> : CollectionModel
+    public class CollectionModel<T> : BaseCollectionModel
     {
         public override ObservableCollection<T> Collection { get; } = [];
 
@@ -28,5 +29,21 @@ namespace Utility.Models
             Collection.Add((T)a.Data);
             base.Addition(value, a);
         }
+
+        public override void SetNode(INode node)
+        {
+            node.IsEditable = true; 
+            base.SetNode(node);
+        }
+    }    
+    
+    public class CollectionModel : CollectionModel<Model>
+    {
+
+    }  
+    
+    public class CollectionRootModel : CollectionModel
+    {
+
     }
 }
