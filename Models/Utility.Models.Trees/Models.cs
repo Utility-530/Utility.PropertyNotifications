@@ -385,27 +385,20 @@ namespace Utility.Models.Trees
             get => value;
             set => base.RaisePropertyChanged(ref this.value, value);
         }
-
-        public override string ToString()
-        {
-            return value.ToString();
-        }
     }
 
-    public class StringModel : Model
+    public class StringModel : ValueModel<string>
     {
-        protected string value;
 
-        public string Value
-        {
-            get => value;
-            set => base.RaisePropertyChanged(ref this.value, value);
-        }
+        //public override string ToString()
+        //{
+        //    return value?.ToString() ?? "_unknown_";
+        //}
+    }
 
-        public override string ToString()
-        {
-            return value?.ToString() ?? "_unknown_";
-        }
+
+    public class StringRootModel : StringModel, IRoot
+    {
     }
 
     public class HtmlModel : Model
@@ -418,10 +411,10 @@ namespace Utility.Models.Trees
             set => base.RaisePropertyChanged(ref this.value, value);
         }
 
-        public override string ToString()
-        {
-            return value?.ToString() ?? "_unknown_";
-        }
+        //public override string ToString()
+        //{
+        //    return value?.ToString() ?? "_unknown_";
+        //}
     }
 
     public class GuidModel : Model
@@ -434,10 +427,6 @@ namespace Utility.Models.Trees
             set => base.RaisePropertyChanged(ref this.value, value);
         }
 
-        public override string ToString()
-        {
-            return value.ToString();
-        }
     }
 
     public class AndOrModel : ValueModel<AndOr>, IAndOr, IObservable<Unit>
@@ -710,9 +699,9 @@ namespace Utility.Models.Trees
                     switch ((NumberComparison)Value)
                     {
                         case NumberComparison.GreaterThanOrEqualTo:
-                            return int.Parse(value1.ToString()) >= int.Parse(value2.ToString());          
+                            return int.Parse(value1.ToString()) >= int.Parse(value2.ToString());
                         case NumberComparison.GreaterThan:
-                            return int.Parse(value1.ToString()) > int.Parse(value2.ToString());     
+                            return int.Parse(value1.ToString()) > int.Parse(value2.ToString());
                         case NumberComparison.LessThan:
                             return int.Parse(value1.ToString()) < int.Parse(value2.ToString());
                         case NumberComparison.EqualTo:
@@ -1295,7 +1284,7 @@ namespace Utility.Models.Trees
                                     ValueModel.Set(ActivateAnything.Activate.New(propertyType));
                                     ComparisonModel.Type = toComparisonType(propertyType);
                                 }
-                            }                 
+                            }
                             else
                                 throw new Exception("ee33 ffp[oe");
                         });
@@ -1607,11 +1596,21 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class DirtyModel : Model, ICollectionItem
+    public class DirtyModel : Model, ICollectionItem, IIgnore
     {
         public string SourceKey { get; set; }
         public string PropertyName { get; set; }
         public object OldValue { get; set; }
         public object NewValue { get; set; }
+    }
+
+    public class DirtyModels : CollectionModel<DirtyModel>, IIgnore
+    {
+
+    }
+
+
+    public interface IIgnore
+    {
     }
 }
