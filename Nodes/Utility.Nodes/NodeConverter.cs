@@ -82,7 +82,9 @@ namespace Utility.Nodes
 
             var node = new Node(data)
             {
-                Key = new GuidKey(Guid.Parse(jObject["Key"].ToString()))
+                Key = new GuidKey(Guid.Parse(jObject["Key"].ToString())),
+           
+                IsExpanded = bool.Parse(jObject["IsExpanded"].ToString())
             };
 
             if (jObject["Items"] is JArray items)
