@@ -349,31 +349,6 @@ namespace Utility.Repos
             });
         }
 
-
-        //public Guid? InsertByParent(Guid parentGuid, string name, string table_name, int? typeId = null, int? index = null)
-        //{
-        //    var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' AND Name = '{name}' AND _Index {ToComparisonAndValue(index)} AND TypeId {ToComparisonAndValue(typeId)}");
-        //    if (tables.Count != 0)
-        //        return null;
-        //    var guid = Guid.NewGuid();
-        //    tablelookup[guid] = table_name;
-        //    //var i = connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
-        //    var query = $"INSERT INTO {table_name} (Guid, Name, _Index, Parent, Added, TypeId) VALUES('{guid}', '{name}', {ToValue(index)}, '{parentGuid}', '{DateTime.Now}', {ToValue(typeId)});";
-        //    var i = connection.Execute(query);
-        //    return guid;
-        //}
-
-        //public int Insert(Guid guid, string name, System.Type type, Guid parentGuid, int? index = null)
-        //{
-        //    var table_name = tablelookup[parentGuid];
-        //    var typeId = (int)TypeId(type);
-        //    var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Name = '{name}' AND Guid = '{guid}' AND TypeId = '{typeId}' AND Parent {ToComparisonAndValue(parentGuid)} AND _Index {ToComparisonAndValue(index)}");
-        //    if (tables.Count != 0)
-        //        return 0;
-        //    return connection.Insert(new Relationships { Guid = guid, Name = name, _Index = index, Parent = parentGuid, Added = DateTime.Now, TypeId = typeId });
-        //}
-
-
         public IObservable<Key?> InsertRoot(Guid guid, string name, System.Type type)
         {
             return Observable.Create<Key?>(observer =>
@@ -483,23 +458,6 @@ namespace Utility.Repos
                 values.GetValueOrNew(guid)[name] = new(guid, name, dateTime, value);
             }
         }
-
-        //public System.Type GetType(Guid guid)
-        //{
-        //    if (values.ContainsKey(guid))
-        //        return values[guid][name].Value.GetType();
-
-        //    var table = connection.Find<Values>(guid);
-        //    if (table is Values { Value: { } text, Added: { } added, TypeId: { } typeId })
-        //    {
-        //        System.Type? type = ToType(typeId);
-        //        if (type == null)
-        //            throw new Exception("sd s389989898");
-        //        return type;
-        //    }
-
-        //    return null;
-        //}
 
         public System.Type? GetType(Guid guid, string tableName)
         {

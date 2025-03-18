@@ -6,10 +6,9 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
-using Utility.Repos;
 using Utility.Structs.Repos;
 
-namespace Utility.Nodes.Demo.Queries
+namespace Utility.Repos
 {
     public interface IJObjectService
     {
@@ -162,12 +161,12 @@ namespace Utility.Nodes.Demo.Queries
                 //var serialisedValue = JsonConvert.SerializeObject(value.ToString());
                 var innerToken = token.SelectToken(name);
 
-                if(value==null)
+                if (value == null)
                 {
                     innerToken.Replace(null);
 
                 }
-                else if (Utility.Helpers.TypeHelper.IsValueOrString(value.GetType()) == false)
+                else if (Helpers.TypeHelper.IsValueOrString(value.GetType()) == false)
                 {
                     var _value = JToken.FromObject(value);
                     innerToken.Replace(_value);
