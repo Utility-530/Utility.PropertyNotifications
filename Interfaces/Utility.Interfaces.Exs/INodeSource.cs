@@ -15,7 +15,8 @@ namespace Utility.Interfaces.Exs
         void Add(INode node);
         IObservable<INode?> Single(string v);
         IObservable<INode?> SingleAsync(string v);
-        void Reset();
+ 
         void Save();
+        IObservable<INode> Create(string name, Guid guid, Func<string, INode> nodeFactory, Func<string, object> modelFactory);
     }
 }
