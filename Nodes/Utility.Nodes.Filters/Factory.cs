@@ -7,13 +7,14 @@ using Utility.Interfaces.Exs;
 using Utility.Keys;
 using Utility.Models;
 using Utility.Models.Trees;
-using Utility.Repos;
-using Observable = System.Reactive.Linq.Observable;
 
 namespace Utility.Nodes.Filters
 {
     public class Factory
     {
+
+        static Lazy<INodeSource> nodeSource = new(() => Locator.Current.GetService<INodeSource>());
+
         //public const string tableName = "TableName";
         public const string content_root = nameof(content_root);
         public const string filter_root = nameof(filter_root);
@@ -62,17 +63,17 @@ namespace Utility.Nodes.Filters
 
         public static IObservable<INode> BuildRoot()
         {
-            return create(root, guid, s => new Node(s), s => new Model() { Name = s });
+            return nodeSource.Value.Create(root, guid, s => new Node(s), s => new Model() { Name = s });
         }
 
         public static IObservable<INode> BreadcrumbRoot()
         {
-            return create(breadcrumb, breadcrumbGuid, s => new Node(s) { }, s => new NodePropertyRootModel { Name = s });
+            return nodeSource.Value.Create(breadcrumb, breadcrumbGuid, s => new Node(s) { }, s => new NodePropertyRootModel { Name = s });
         }
 
         public static IObservable<INode> BuildControlRoot()
         {
-            return create(controls,
+            return nodeSource.Value.Create(controls,
                 controlsGuid,
                 s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Horizontal },
                 s => new Model(() => [new CommandModel { Name = Save }]) { Name = s });
@@ -80,7 +81,7 @@ namespace Utility.Nodes.Filters
 
         public static IObservable<INode> BuildComboRoot()
         {
-            return create(combo,
+            return nodeSource.Value.Create(combo,
                 subGuid,
                 s => new Node(s) { },
                 s => new DatabasesModel { Name = s });
@@ -88,7 +89,7 @@ namespace Utility.Nodes.Filters
 
         public static IObservable<INode> BuildTransformersRoot()
         {
-            return create(transformers,
+            return nodeSource.Value.Create(transformers,
                 transformerGuid,
                 s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Vertical },
                 s => new TransformersModel { Name = s });
@@ -96,7 +97,7 @@ namespace Utility.Nodes.Filters
 
         public static IObservable<INode> BuildFiltersRoot()
         {
-            return create(filters,
+            return nodeSource.Value.Create(filters,
                 filterGuid,
                 s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Vertical },
                 s => new FiltersModel { Name = s });
@@ -105,16 +106,16 @@ namespace Utility.Nodes.Filters
 
         public static IObservable<INode> BuildAndOrRoot()
         {
-            return create(and_or,
+            return nodeSource.Value.Create(and_or,
                 and_orGuid,
                 s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Vertical },
                 s => new AndOrModel { Name = s });
         }
 
-             
+
         public static IObservable<INode> BuildCollectionRoot()
         {
-            return create(collection,
+            return nodeSource.Value.Create(collection,
                 collectionGuid,
                 s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Vertical },
                 s => new StringRootModel { Name = s });
@@ -123,7 +124,7 @@ namespace Utility.Nodes.Filters
 
         public static IObservable<INode> BuildHtmlRoot()
         {
-            return create(html,
+            return nodeSource.Value.Create(html,
                 htmlGuid,
                 s => new Node(s),
                 s => new StringModel { Name = s });
@@ -131,23 +132,23 @@ namespace Utility.Nodes.Filters
 
         public static IObservable<INode> BuildHtmlRenderRoot()
         {
-            return create(_html,
+            return nodeSource.Value.Create(_html,
                 htmlRenderGuid,
                 s => new Node(s),
                 s => new HtmlModel { Name = s });
         }
-        
-        public static IObservable<INode> BuildDirty()
+
+        public static INode BuildDirty()
         {
-            return create(dirty,
-                dirtyGuid,
-                s => new Node(s),
-                s => new DirtyModels { Name = s });
+            var data = new DirtyModels { Name = dirty };
+            var node = new Node(data);
+            node.Key = new GuidKey(guid);
+            return node;
         }
 
         public static IObservable<INode> BuildContentRoot()
         {
-            return create("Groups", contentGuid, (s) => new Node(s), s => build(s));
+            return nodeSource.Value.Create("Groups", contentGuid, (s) => new Node(s), s => build(s));
 
             static Model build(string s)
             {
@@ -177,29 +178,6 @@ namespace Utility.Nodes.Filters
                 })
                 { Name = s };
             };
-        }
-
-        private static IObservable<INode> create(string name, Guid guid, Func<string, Node> nodeFactory, Func<string, Model> modelFactory)
-        {
-            return Observable.Create<INode>(observer =>
-            {
-                var data = modelFactory(name);
-                return Locator.Current.GetService<ITreeRepository>()
-                .InsertRoot(guid, name, data.GetType())
-                .Subscribe(a =>
-                {
-                    var node = nodeFactory(name);
-                    if (a.HasValue)
-                    {
-                        node.Data = data;
-                    }
-                    node.Key = new GuidKey(guid);
-                    if (a.HasValue && node.Data == null)
-                        node.Data = DataActivator.Activate(a);
-                    Locator.Current.GetService<INodeSource>().Add(node);
-                    observer.OnNext(node);
-                });
-            });
         }
     }
 }

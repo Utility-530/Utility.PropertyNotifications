@@ -24,7 +24,7 @@ using Utility.Trees.Abstractions;
 using Utility.Models;
 using Fasterflect;
 using System.ComponentModel;
-
+using ReactiveUI;
 
 namespace Utility.Nodes.Filters
 {
@@ -34,10 +34,10 @@ namespace Utility.Nodes.Filters
         public static string New = "new";
         public static readonly string Key = nameof(NodeEngine);
 
-        Lazy<IFilter> filter = new(() => Locator.Current.GetService<IFilter>());
-        Lazy<IExpander> expander = new(() => Locator.Current.GetService<IExpander>());
-        Lazy<IContext> context = new(() => Locator.Current.GetService<IContext>());
-        Lazy<ITreeRepository> repository = new(() => Locator.Current.GetService<ITreeRepository>());
+        Lazy<IFilter> filter;
+        Lazy<IExpander> expander;
+        Lazy<IContext> context;
+        Lazy<ITreeRepository> repository;
 
         private Lazy<Dictionary<string, Setter>> setdictionary = new(() => typeof(Node)
                                                     .GetProperties(BindingFlags.Instance | BindingFlags.Public)
@@ -48,6 +48,10 @@ namespace Utility.Nodes.Filters
 
         private NodeEngine()
         {
+            filter = new(() => Locator.Current.GetService<IFilter>());
+            expander = new(() => Locator.Current.GetService<IExpander>());
+            context = new(() => Locator.Current.GetService<IContext>());
+            repository = new(() => Locator.Current.GetService<ITreeRepository>());
         }
 
         public IReadOnlyCollection<INode> Nodes => nodes;
@@ -146,12 +150,6 @@ namespace Utility.Nodes.Filters
                 {
                     node.IsExpanded = true;
                 }
-
-                node.Items.AndChanges<INode>().Subscribe(a =>
-                {
-                    foreach (var x in a)
-                        change(x);
-                });
 
                 void node_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
                 {
@@ -287,7 +285,7 @@ namespace Utility.Nodes.Filters
                                 .Subscribe(a =>
                                 {
                                     if (data is IYieldChildren ychildren)
-                                        _children(node, ychildren, (GuidKey)node.Key).Subscribe(a =>
+                                        _children(node, ychildren).Subscribe(a =>
                                         {
                                             node.Add(a);
                                         });
@@ -296,43 +294,43 @@ namespace Utility.Nodes.Filters
                     });
 
 
-                IObservable<INode> _children(INode node, IYieldChildren children, Guid guid)
+                IObservable<INode> _children(INode node, IYieldChildren children)
                 {
                     return Observable.Create<INode>(observer =>
                     {
-                        return repository.Value.Find(guid)
+                        return repository.Value.Find((GuidKey)node.Key)
                             .Subscribe(async key =>
                             {
 
                                 if (key.HasValue == false)
                                 {
-                                    children
-                                    .Children
+                                children
+                                .Children
                                     .AndAdditions()
                                     .Subscribe(async d =>
-                                    {
+                        {
                                         var _new = (INode)await node.ToTree(d);
 
-                                        repository
-                                        .Value
+                            repository
+                            .Value
                                         .Find((GuidKey)node.Key, _new.Name(), type: d.GetType())
-                                        .Subscribe(async _key =>
-                                        {
-                                    
-                                            if (d is IIsReadOnly readOnly)
-                                            {
-                                                (_new as ISetIsReadOnly).IsReadOnly = readOnly.IsReadOnly;
-                                            }
+                            .Subscribe(async _key =>
+                            {
 
-                                            if (_key.HasValue == false)
-                                            {
-                                                throw new Exception("dde33443 21");
-                                            }
-                                            _new.Key = new GuidKey(_key.Value.Guid);
-                                            observer.OnNext(_new);
-                                        });
-                                    });
+                                if (d is IIsReadOnly readOnly)
+                                {
+                                    (_new as ISetIsReadOnly).IsReadOnly = readOnly.IsReadOnly;
                                 }
+
+                                if (_key.HasValue == false)
+                                {
+                                    throw new Exception("dde33443 21");
+                                }
+                                _new.Key = new GuidKey(_key.Value.Guid);
+                                observer.OnNext(_new);
+                            });
+                                    });
+                        }
                                 else
                                 {
                                     if (Nodes.SingleOrDefault(a => a.Key == new GuidKey(key.Value.Guid)) is not Node _node)
@@ -341,13 +339,13 @@ namespace Utility.Nodes.Filters
                                         _new.Key = new GuidKey(key.Value.Guid);
                                         _new.Removed = key.Value.Removed;
                                         observer.OnNext(_new);
-                                    }
+                    }
                                     else
                                     {
                                         throw new Exception("u 333333312");
                                     }
 
-                                }
+                }
                             }, () => observer.OnCompleted());
                     });
                 }
@@ -457,6 +455,29 @@ namespace Utility.Nodes.Filters
                 });
 
 
+            });
+        }
+
+        public IObservable<INode> Create(string name, Guid guid, Func<string, INode> nodeFactory, Func<string, object> modelFactory)
+        {
+            return Observable.Create<INode>(observer =>
+            {
+                var data = modelFactory(name);
+                return repository.Value
+                .InsertRoot(guid, name, data.GetType())
+                .Subscribe(a =>
+                {
+                    var node = nodeFactory(name);
+                    if (a.HasValue)
+                    {
+                        node.Data = data;
+                    }
+                    node.Key = new GuidKey(guid);
+                    if (a.HasValue && node.Data == null)
+                        node.Data = DataActivator.Activate(a);
+                    Add(node);
+                    observer.OnNext(node);
+                });
             });
         }
 
