@@ -389,13 +389,7 @@ namespace Utility.Models.Trees
 
     public class StringModel : ValueModel<string>
     {
-
-        //public override string ToString()
-        //{
-        //    return value?.ToString() ?? "_unknown_";
-        //}
     }
-
 
     public class StringRootModel : StringModel, IRoot
     {
@@ -410,11 +404,6 @@ namespace Utility.Models.Trees
             get => value;
             set => base.RaisePropertyChanged(ref this.value, value);
         }
-
-        //public override string ToString()
-        //{
-        //    return value?.ToString() ?? "_unknown_";
-        //}
     }
 
     public class GuidModel : Model
@@ -1606,9 +1595,7 @@ namespace Utility.Models.Trees
 
     public class DirtyModels : CollectionModel<DirtyModel>, IIgnore
     {
-
     }
-
 
     public interface IIgnore
     {
