@@ -16,7 +16,6 @@
         
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Dictionary1.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/GraphStyle.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/HorizontalStyle.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/LinesStyle.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/SelectedHorizontalStyle.xaml"/>
