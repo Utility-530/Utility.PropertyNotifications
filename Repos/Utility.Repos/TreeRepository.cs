@@ -380,36 +380,51 @@ namespace Utility.Repos
             {
                 return initialisationTask.ToObservable().Subscribe(a =>
                 {
-                    // create table if not exists
-                    if (connection.Query<String>($"SELECT sql as Name FROM sqlite_schema WHERE type ='table' AND name LIKE '{name}'").Any() == false)
+                    var typeId = TypeId(type);
+
+                    var notTables = connection.Query<Relationships>($"SELECT * FROM '{nameof(Relationships)}' WHERE Name = '{name}' AND Guid <> '{guid}'  AND TypeId = '{typeId}'");
+                    var tables = connection.Query<Relationships>($"SELECT * FROM '{nameof(Relationships)}' WHERE Name = '{name}' AND Guid = '{guid}' AND TypeId = '{typeId}'");
+                    //var tables3 = connection.Query<Relationships>($"SELECT * FROM '{nameof(Relationships)}' WHERE Name = '{name}' And _Index {ToComparisonAndValue(index)} AND TypeId = '{typeId}'");
+                    int? index = tables.SingleOrDefault()?._Index;
+                    if (notTables.Count > 0 && tables.Count == 0)
                     {
-                        var statement = connection.FindWithQuery<String>($"SELECT sql as Name FROM sqlite_schema WHERE type ='table' AND name LIKE '{nameof(Relationships)}'");
-                        var newStatement = statement.Name.Replace($"{nameof(Relationships)}", name);
-                        connection.Execute(newStatement);
+                        if (index != null)
+                            throw new Exception("F 44433222");
+                        index = notTables.Count;
                     }
 
-                    var typeId = TypeId(type);
-                    var tables = connection.Query<Relationships>($"SELECT * FROM '{nameof(Relationships)}' WHERE Name = '{name}' AND Guid = '{guid}' AND TypeId = '{typeId}'");
+                    var name_index = name + (index.HasValue ? "_" + index.ToString() : string.Empty);
 
-                    setName(guid, name);
+                    setName(guid, name_index);
 
-                    //this.name = name;
                     if (tables.Count > 1)
                         throw new Exception("dsf 33p[p[");
                     else if (tables.Count == 0)
                     {
-                        connection.Insert(new Relationships { Guid = guid, Name = name, TypeId = typeId, Added = DateTime.Now });
-                        observer.OnNext(new Key(guid, default, type, name, 0, null));
+
+                        // create table if not exists
+                        if (connection.Query<String>($"SELECT sql as Name FROM sqlite_schema WHERE type ='table' AND name LIKE '{name_index}'").Any() == false)
+                        {
+                            var statement = connection.FindWithQuery<String>($"SELECT sql as Name FROM sqlite_schema WHERE type ='table' AND name LIKE '{nameof(Relationships)}'");
+
+                            var newStatement = statement.Name.Replace($"{nameof(Relationships)}", name_index);
+                            connection.Execute(newStatement);
+                        }
+
+                        connection.Insert(new Relationships { Guid = guid, Name = name, TypeId = typeId, Added = DateTime.Now, _Index = index });
+
+                        observer.OnNext(new Key(guid, default, type, name, index, null));
                     }
                     else
                     {
-                        var all = connection.Query<Relationships>($"SELECT * FROM '{name}'");
+
+                        var all = connection.Query<Relationships>($"SELECT * FROM '{name_index}'");
                         foreach (var item in all)
                         {
                             setName(item.Guid, name);
                         }
                         //return Observable.Return<Key?>(null);
-                        observer.OnNext(new Key(guid, default, type, name, 0, null));
+                        observer.OnNext(new Key(guid, default, type, name, notTables.Count == 0 ? null : notTables.Count - 1, null));
                     }
                 });
             });
