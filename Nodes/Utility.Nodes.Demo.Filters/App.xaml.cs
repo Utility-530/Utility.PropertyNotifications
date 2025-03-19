@@ -38,7 +38,7 @@ namespace Utility.Trees.Demo.Filters
             TypeNameHandling = TypeNameHandling.All,
             //Formatting = Formatting.Indented,
             Converters = [
-        new AssemblyJsonConverter(),
+                new AssemblyJsonConverter(),
                 new PropertyInfoJsonConverter(),
                 new MethodInfoJsonConverter(),
                 new ParameterInfoJsonConverter(),

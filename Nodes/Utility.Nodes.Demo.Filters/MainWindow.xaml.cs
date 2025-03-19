@@ -1,25 +1,18 @@
 ﻿using Microsoft.Xaml.Behaviors;
 using Newtonsoft.Json;
-using Splat;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
-using Utility.Keys;
 using Utility.Models.Trees;
 using Utility.Nodes;
-using Utility.PropertyNotifications;
-using Utility.Reactives;
+using Utility.Nodes.Demo.Filters.Infrastructure;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Behaviors;
-using Utility.WPF.Controls.Trees;
 using Utility.WPF.Helpers;
 
 namespace Utility.Trees.Demo.Filters
@@ -32,13 +25,6 @@ namespace Utility.Trees.Demo.Filters
         public MainWindow()
         {
             InitializeComponent();
-        }
-    }
-
-    public class StringRootModel : StringModel, IRoot
-    {
-        public StringRootModel()
-        {
         }
     }
 
@@ -67,65 +53,24 @@ namespace Utility.Trees.Demo.Filters
         {
             if (value is string s)
             {
-                return new[] { JsonConvert.DeserializeObject<Node>(s) };
+                var node = JsonConvert.DeserializeObject<Node>(s);
+                TempNodeEngine.Instance.Add(node);
+                return new[] {node };
             }
             else if (value is null)
             {
-                var coll = new ObservableCollection<INode>();
+                //var coll = new ObservableCollection<INode>();
                 var model = new AndOrModel() { Name = "and_or" };
                 var andOr = new Node(model);
-                coll.Add(andOr as INode);
-                change(andOr);
-                return coll;
+
+                TempNodeEngine.Instance.Add(andOr);
+                //coll.Add(andOr as INode);
+                return new[] { andOr };
             }
             throw new Exception("44656767 44");
         }
 
-        private static void change(INode _node)
-        {
-            //_node.Key = new GuidKey();
-            if (nodes.Add(_node) == false)
-                return;
-            _node.Key = new GuidKey();
-
-            if (_node is INode { Data: ISetNode setNode })
-            {
-                setNode.SetNode(_node);
-
-            }
-
-            _node.Items.AndChanges<INode>().Subscribe(set =>
-            {
-                foreach (var change in set)
-                {
-                    if (change.Type == Changes.Type.Add)
-                    {
-
-                        TreeConverter.change(change.Value);
-                    }
-                }
-            });
-            if (_node.Data is IYieldChildren children)
-            {
-                _node.WithChangesTo(a => a.IsExpanded)
-                    .Where(a => a)
-                    .Take(1)
-                    .Subscribe(a =>
-                    {
-                        children
-                            .Children
-                            .AndAdditions()
-                            .Subscribe(async d =>
-                            {
-                                var _new = (INode)await _node.ToTree(d);
-                                _node.Add(_new);
-                            });
-                    });
-            }
-
-
-        }
-
+    
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is IEnumerable<INode> nodes)
@@ -145,6 +90,7 @@ namespace Utility.Trees.Demo.Filters
         {
             if (parameter is Utility.WPF.NewObjectRoutedEventArgs { IsAccepted: true, NewObject: { } instance } value)
             {
+                value.Handled = true;
                 var x = AssociatedObject;
                 ;
                 if (x.DataContext is ITree { Data: StringModel descriptor } tree)
@@ -179,7 +125,9 @@ namespace Utility.Trees.Demo.Filters
     
                 // establish that the mouse click has taken place in the top level treeview i.e source 
                 var x = HitTestHelper.GetSelectedItem<TreeViewItem>(originalSource, source);
-                if (x is TreeViewItem { Header: INode { Data: AndOrModel } })
+                //if (x is TreeViewItem { Header: INode { Data: AndOrModel } })
+                //    return;
+                if (x is TreeViewItem { Header: INode { Data: IRoot } })
                     return;
                 // and not in the bottom-level treeview
                 var y = HitTestHelper.GetSelectedItem<TreeViewItem>(originalSource, AssociatedObject);

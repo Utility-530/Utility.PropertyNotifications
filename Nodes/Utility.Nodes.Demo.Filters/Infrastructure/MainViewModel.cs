@@ -27,14 +27,10 @@ namespace Utility.Trees.Demo.Filters.Infrastructure
 
         public MainViewModel()
         {
-
             SaveCommand = new Command(() =>
             {
 
             });
-
-
-
         }
 
         public ICommand SaveCommand { get; }

@@ -40,10 +40,10 @@
     </FrameworkElement.Resources>
 
     <DockPanel>
-        <WrapPanel DockPanel.Dock="Top">
+        <!--<WrapPanel DockPanel.Dock="Top">
             <Button Width="100" Margin="2" Command="{Binding SaveCommand}" >save</Button>
 
-        </WrapPanel>
+        </WrapPanel>-->
 
         <Grid>
             <Grid.ColumnDefinitions>
