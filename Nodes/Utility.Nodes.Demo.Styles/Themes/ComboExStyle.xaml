@@ -17,7 +17,7 @@
 
     
     <Style x:Key="ComboExStyle" TargetType="{x:Type ct:CustomTreeViewItem}" BasedOn="{StaticResource ComboTreeViewItem}">
-        <Setter Property="NewObject" Value="{Binding Data, Converter={StaticResource NewObjectConverter}}"></Setter>
+        <Setter Property="Edit" Value="{Binding Data, Converter={StaticResource NewObjectConverter}}"></Setter>
         <Setter Property="EditTemplate">
             <Setter.Value >
                 <DataTemplate>

@@ -34,7 +34,7 @@ namespace Utility.Nodes.Demo.Styles
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is NewObjectRoutedEventArgs { IsAccepted: true, NewObject: { } nObject } args)
+            if (value is EditRoutedEventArgs { IsAccepted: true, Edit: { } nObject } args)
             {
                 return nObject;
             }
