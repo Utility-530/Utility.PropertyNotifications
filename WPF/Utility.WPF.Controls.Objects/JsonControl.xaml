@@ -120,7 +120,7 @@
             </Setter.Value>
         </Setter>
         <Setter Property="IsExpanded" Value="True" />
-        <att:InteractivitySetter>
+        <att:InteractivitySetter Property="{x:Static att:InteractivityItems.TemplateProperty}">
             <Setter.Value>
                 <att:InteractivityTemplate>
                     <att:InteractivityItems>
