@@ -88,12 +88,15 @@ namespace Utility.Nodes
             };
 
             if (jObject["Items"] is JArray items)
+            {
                 foreach (var item in items)
                 {
                     var _node = item.ToObject<Node>(serializer);
+                    _node.Parent = node;
                     node.Add(_node);
-                    //NodeEngine.Instance.Add(_node);
-                }
+                }       
+            }
+
             if (jObject.ContainsKey("Current"))
             {
                 var key = new GuidKey(Guid.Parse(jObject["Current"].ToString()));
