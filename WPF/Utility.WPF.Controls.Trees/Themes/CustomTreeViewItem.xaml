@@ -207,10 +207,8 @@
                         
                                     <ContentPresenter 
                                         Grid.Column="1"
-                                        ContentTemplate="{TemplateBinding EditTemplate}"
-                                        ContentTemplateSelector="{TemplateBinding EditTemplateSelector}"
                                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                        ContentSource="Header"                            />
+                                        ContentSource="Edit"                            />
                                 <ToggleButton x:Name="Edit2Button"   Grid.Column="3" IsChecked="{Binding IsEditing, Converter={StaticResource InverseConverter}, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                                         <icons:PackIconFeatherIcons Kind="Edit2" />
                                 </ToggleButton>

@@ -331,7 +331,7 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <ContentControl x:Name="content_control" 
-                                                    Content="{TemplateBinding NewObject}"       
+                                                    Content="{TemplateBinding Edit}"       
                                                     ContentTemplate="{TemplateBinding EditTemplate}"
                                                     ContentTemplateSelector="{TemplateBinding EditTemplateSelector}">
                                         <FrameworkElement.Style>

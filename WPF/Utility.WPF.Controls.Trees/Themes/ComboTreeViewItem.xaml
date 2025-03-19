@@ -169,12 +169,11 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
 
-                                        <ContentControl x:Name="content_control" 
-                                                                Content="{TemplateBinding NewObject}"                                                      
-                                                                ContentTemplate="{TemplateBinding EditTemplate}"
-                                                                ContentTemplateSelector="{TemplateBinding EditTemplateSelector}">
+                                        <ContentPresenter x:Name="content_control" 
+                                                                ContentSource="Edit"                                                    
+                                                            >
                                             <FrameworkElement.Style>
-                                                <Style TargetType="{x:Type ContentControl}">
+                                                <Style TargetType="{x:Type ContentPresenter}">
                                                     <Setter Property="Opacity" Value="0"></Setter>
                                                     <Style.Triggers>
                                                         <!--<DataTrigger Binding="{Binding ElementName=PlusButton, Path=IsChecked}" Value="False">
@@ -200,7 +199,7 @@
                                                     </Style.Triggers>
                                                 </Style>
                                             </FrameworkElement.Style>
-                                        </ContentControl>
+                                        </ContentPresenter>
 
                                         <btns:GeometryToggleButton x:Name="PlusButton"                                   
                                            Data="M0,1 H2 M1,0 V2"
@@ -367,12 +366,10 @@
                                     <ScrollViewer>
 
 
-                                        <ContentControl x:Name="content_control" 
-                                                                Content="{TemplateBinding NewObject}"                                                      
-                                                                ContentTemplate="{TemplateBinding EditTemplate}"
-                                                                ContentTemplateSelector="{TemplateBinding EditTemplateSelector}">
+                                        <ContentPresenter x:Name="content_control" 
+                                                                ContentSource="Edit">
                                             <FrameworkElement.Style>
-                                                <Style TargetType="{x:Type ContentControl}">
+                                                <Style TargetType="{x:Type ContentPresenter}">
                                                     <Setter Property="Opacity" Value="0"></Setter>
                                                     <Style.Triggers>
                                                         <!--<DataTrigger Binding="{Binding ElementName=PlusButton, Path=IsChecked}" Value="False">
@@ -398,7 +395,7 @@
                                                     </Style.Triggers>
                                                 </Style>
                                             </FrameworkElement.Style>
-                                        </ContentControl>
+                                        </ContentPresenter>
                                     </ScrollViewer>
 
                                     <Grid MinHeight="24">

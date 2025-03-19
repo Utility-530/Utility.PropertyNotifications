@@ -36,7 +36,7 @@ namespace Utility.WPF.Demo.Trees
             this.Content = treeView;
         }
 
-        private void Parent_Add(object sender, NewObjectRoutedEventArgs e)
+        private void Parent_Add(object sender, EditRoutedEventArgs e)
         {
             MessageBox.Show($"{e.IsAccepted}");
         }

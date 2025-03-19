@@ -33,14 +33,14 @@ namespace Utility.WPF.Demo.Trees
             InitializeComponent();
         }
 
-        private void tree_FinishEdit(object sender, NewObjectRoutedEventArgs e)
+        private void tree_FinishEdit(object sender, EditRoutedEventArgs e)
         {
-            MessageBox.Show((e.NewObject as StringModel).Name);
+            MessageBox.Show((e.Edit as StringModel).Name);
         }
     }
 
 
-    public class NewObjectConverter : IValueConverter
+    public class EditConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

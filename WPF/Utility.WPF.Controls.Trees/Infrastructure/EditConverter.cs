@@ -11,7 +11,7 @@ using Utility.Helpers;
 
 namespace Utility.WPF.Controls.Trees
 {
-    //public class MultiNewObjectConverter : IMultiValueConverter
+    //public class MultiEditConverter : IMultiValueConverter
     //{
     //    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     //    {
@@ -33,7 +33,7 @@ namespace Utility.WPF.Controls.Trees
     //    }
     //}
 
-    public class NewObjectConverter : IValueConverter
+    public class EditConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

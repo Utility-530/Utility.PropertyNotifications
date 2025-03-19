@@ -83,8 +83,8 @@
                                     </att:InteractivityTemplate>
                                 </Setter.Value>
                             </att:InteractivitySetter>
-                            <!--<Setter Property="NewObject" Value="{Binding Converter={StaticResource NewObjectConverter}}"></Setter>-->
-                            <Setter Property="NewObject">
+                            <!--<Setter Property="Edit" Value="{Binding Converter={StaticResource EditConverter}}"></Setter>-->
+                            <Setter Property="Edit">
                                 <Setter.Value>
                                     <mt:StringModel Name="New"></mt:StringModel>
                                 </Setter.Value>
@@ -134,7 +134,7 @@
                                     </att:InteractivityTemplate>
                                 </Setter.Value>
                             </att:InteractivitySetter>
-                            <Setter Property="NewObject">
+                            <Setter Property="Edit">
                                 <Setter.Value>
                                     <mt:StringModel Name="New"></mt:StringModel>
                                 </Setter.Value>

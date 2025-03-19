@@ -8,7 +8,7 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.WPF
 {
-    public class NewObjectConverter : IValueConverter
+    public class EditConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -31,7 +31,7 @@ namespace Utility.Nodes.WPF
 
         protected override void Invoke(object parameter)
         {
-            if(parameter is Utility.WPF.NewObjectRoutedEventArgs { IsAccepted:true, NewObject:{ } instance } value)
+            if(parameter is Utility.WPF.EditRoutedEventArgs { IsAccepted:true, Edit:{ } instance } value)
             {
                 var x = AssociatedObject;
                 ;

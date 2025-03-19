@@ -77,7 +77,7 @@ namespace Utility.WPF.Controls.Trees
                 new PropertyChangedCallback(OnIsDropDownOpenChanged),
                 new CoerceValueCallback(CoerceIsDropDownOpen)));
 
-        public static readonly DependencyProperty NewObjectProperty = DependencyProperty.Register("NewObject", typeof(object), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty EditProperty = DependencyProperty.Register("Edit", typeof(object), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty MaxDropDownHeightProperty = ComboBox.MaxDropDownHeightProperty.AddOwner(typeof(CustomTreeViewItem));
         public static readonly DependencyProperty SelectionProperty = DependencyProperty.Register("Selection", typeof(object), typeof(CustomTreeViewItem), new PropertyMetadata(_selectionChanged));
         public static readonly DependencyProperty SelectionBoxTemplateSelectorProperty = DependencyProperty.Register("SelectionBoxTemplateSelector", typeof(DataTemplateSelector), typeof(CustomTreeViewItem), new PropertyMetadata());
@@ -138,10 +138,10 @@ namespace Utility.WPF.Controls.Trees
 
         void RaiseCustomRoutedEvent(bool isAccepted)
         {
-            NewObjectRoutedEventArgs routedEventArgs = new(isAccepted, NewObject, FinishEditEvent, this);
+            EditRoutedEventArgs routedEventArgs = new(isAccepted, Edit, FinishEditEvent, this);
             RaiseEvent(routedEventArgs);
             {
-                this.GetBindingExpression(CustomTreeViewItem.NewObjectProperty)?
+                this.GetBindingExpression(CustomTreeViewItem.EditProperty)?
                                   .UpdateTarget();
             }
 
@@ -170,10 +170,10 @@ namespace Utility.WPF.Controls.Trees
 
         #region properties
 
-        public object NewObject
+        public object Edit
         {
-            get { return (object)GetValue(NewObjectProperty); }
-            set { SetValue(NewObjectProperty, value); }
+            get { return (object)GetValue(EditProperty); }
+            set { SetValue(EditProperty, value); }
         }
 
         public double MaxDropDownHeight

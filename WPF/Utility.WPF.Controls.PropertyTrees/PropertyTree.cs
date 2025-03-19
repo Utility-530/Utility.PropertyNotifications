@@ -96,7 +96,7 @@ namespace Utility.WPF.Controls.PropertyTrees
             if(element is CustomTreeViewItem treeViewItem && item is Node{ Data: ICollectionDescriptor collectionDescriptor })
             {
                 var innerType = collectionDescriptor.ElementType;
-                treeViewItem.NewObject = ActivateAnything.Activate.New(innerType);
+                treeViewItem.Edit = ActivateAnything.Activate.New(innerType);
             }
 
             base.PrepareContainerForItemOverride(element, item);

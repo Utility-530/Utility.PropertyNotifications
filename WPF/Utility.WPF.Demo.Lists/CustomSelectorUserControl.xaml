@@ -24,7 +24,7 @@
                                CheckedPropertyName="IsRhPositive"                               
                                d:ItemsSource="{StaticResource Characters}" 
                                ItemsSource="{Binding Items}" >
-            <!--NewObject="{Binding NewObject,Mode=TwoWay}">-->
+            <!--Edit="{Binding Edit,Mode=TwoWay}">-->
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="FinishEdit">
                     <i:InvokeCommandAction Command="{Binding FinishEdit}"  PassEventArgsToCommand="True"></i:InvokeCommandAction>

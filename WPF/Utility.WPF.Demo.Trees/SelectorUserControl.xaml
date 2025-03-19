@@ -17,14 +17,14 @@
     <FrameworkElement.Resources>
         <ResourceDictionary>
 
-            <local:NewObjectConverter x:Key="NewObjectConverter"></local:NewObjectConverter>
+            <local:EditConverter x:Key="EditConverter"></local:EditConverter>
 
             <Style x:Key="Style" TargetType="{x:Type tree:CustomTreeViewItem}" BasedOn="{StaticResource SelectedHorizontalStyle}">
-                <Setter Property="NewObject" Value="{Binding Converter={StaticResource NewObjectConverter}}"></Setter>
+                <Setter Property="Edit" Value="{Binding Converter={StaticResource EditConverter}}"></Setter>
             </Style>      
             
             <Style x:Key="RootStyle" TargetType="{x:Type tree:CustomTreeViewItem}" BasedOn="{StaticResource RootSelectedHorizontalStyle}">
-                <Setter Property="NewObject" Value="{Binding Converter={StaticResource NewObjectConverter}}"></Setter>
+                <Setter Property="Edit" Value="{Binding Converter={StaticResource EditConverter}}"></Setter>
                 <Setter Property="FooterTemplate" >
                     <Setter.Value>
                         <DataTemplate>

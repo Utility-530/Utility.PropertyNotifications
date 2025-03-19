@@ -26,9 +26,9 @@ namespace Utility.WPF.Demo.Lists
         {
             FinishEdit = new Command<object>(o =>
             {
-                if (o is NewObjectRoutedEventArgs args)
+                if (o is EditRoutedEventArgs args)
                 {
-                    Items.Add(args.NewObject as Character);
+                    Items.Add(args.Edit as Character);
                 }
             });
 
@@ -40,7 +40,7 @@ namespace Utility.WPF.Demo.Lists
         public ICommand FinishEdit { get; }
 
         public ObservableCollection<Character> Items { get; }
-        public Character NewObject
+        public Character Edit
         {
             get => newObject; set
             {

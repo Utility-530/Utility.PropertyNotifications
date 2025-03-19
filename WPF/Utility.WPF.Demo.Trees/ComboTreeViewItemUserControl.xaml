@@ -289,7 +289,7 @@
                                                     <RowDefinition Height="Auto"/>
                                                 </Grid.RowDefinitions>
                                                 <ContentControl x:Name="content_control" 
-                                                                Content="{TemplateBinding NewObject}"
+                                                                Content="{TemplateBinding Edit}"
                                                        
                                                         ContentTemplate="{TemplateBinding EditTemplate}">
                                                     <!--<ContentControl.OpacityMask>

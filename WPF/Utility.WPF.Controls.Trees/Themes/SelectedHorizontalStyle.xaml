@@ -11,22 +11,25 @@
         <res:GeometryResourceDictionary/>
     </ResourceDictionary.MergedDictionaries>
 
-
     <SolidColorBrush x:Key="HighlightBrush" Color="DodgerBlue" />
     <SolidColorBrush x:Key="TagBackgroundColor" Color="#01FFFFFF" />
     <SolidColorBrush x:Key="TagForegroundColor" Color="Black" />
 
     <LinearGradientBrush x:Key="ItemAreaBrush" StartPoint="0.5, 0" EndPoint="0.5, 1">
-        <GradientStop Color="#66000000" Offset="0" />
+        <GradientStop Color="Transparent" Offset="0" />
         <GradientStop Color="#22000000" Offset="1" />
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="SelectedItemAreaBrush" StartPoint="0.5, 0" EndPoint="0.5, 1">
         <GradientStop Color="Orange" Offset="0" />
-        <GradientStop Color="OrangeRed" Offset="1" />
+        <GradientStop Color="LightCoral"  Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="SelectedItemAreaBrush2" StartPoint="0.5, 0" EndPoint="0.5, 1">
+        <GradientStop Color="LightSalmon" Offset="0" />
+        <GradientStop Color="DarkOrange"  Offset="1" />
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="ItemBorderBrush" StartPoint="0.5, 0" EndPoint="0.5, 1">
-        <GradientStop Color="LightGray" Offset="0" />
-        <GradientStop Color="Gray" Offset="1" />
+        <GradientStop Color="Transparent" Offset="0" />
+        <GradientStop Color="LightGray" Offset="1" />
     </LinearGradientBrush>
     <LinearGradientBrush x:Key="SelectedItemBorderBrush" StartPoint="0.5, 0" EndPoint="0.5, 1">
         <GradientStop Color="Yellow" Offset="0" />
@@ -55,7 +58,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate  TargetType="{x:Type local:CustomTreeViewItem}">
-                    <Grid Margin="2" HorizontalAlignment="Stretch">
+                    <Grid Margin="{TemplateBinding Padding}" HorizontalAlignment="Stretch">
                         <Grid.RowDefinitions>
                             <!--The top row contains the item's content.-->
                             <RowDefinition Height="Auto" />
@@ -69,24 +72,26 @@
                                 BorderBrush="{TemplateBinding Foreground}"
                                 HorizontalAlignment="Stretch"
                             BorderThickness="0.6" 
+                    
                                 CornerRadius="8"
-                                Padding="6">
+                               >
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
 
-                                <ContentPresenter Name="PART_Header"                  
+                                <ContentPresenter Name="PART_Header"  
+                                                              Margin="4"
                 ContentSource="Header"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Center" />
 
                                 <Button x:Name="PART_DeleteTagButton"
                                                 Grid.Column="1"
-                                                Command="{Binding RemoveCommand,RelativeSource={RelativeSource AncestorType={x:Type local:CustomTreeViewItem}, AncestorLevel=2} }"
+                                                Command="{Binding RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTreeViewItem}, AncestorLevel=2} }"
                                         CommandParameter="{TemplateBinding Header}"
-                                                Margin="3,0"
+                                                Margin="0,0"
                                                 HorizontalAlignment="Right"
                                                 VerticalAlignment="Center"
                                                 Visibility="Hidden">
@@ -149,10 +154,9 @@
                             </Button>
 
 
-                            <ContentControl  x:Name="EditPresenter"  Visibility="Collapsed" VerticalAlignment="Center"
-                                               Content="{TemplateBinding NewObject}"   
-                                            ContentTemplateSelector="{Binding Mode=OneWay, Path=EditTemplateSelector, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTreeViewItem}}}"
-                                            ContentTemplate="{Binding Mode=OneWay,Path=EditTemplate, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTreeViewItem}}}" ></ContentControl>
+                            <ContentPresenter
+                                            x:Name="EditPresenter"  Visibility="Collapsed" VerticalAlignment="Center"
+                                            ContentSource="Edit"/>
 
                         </WrapPanel>
                     </Grid>
@@ -182,16 +186,16 @@
                 Property="TextElement.Foreground"                   
                 Value="{DynamicResource 
                   {x:Static SystemColors.HighlightTextBrushKey}}" />
-                            <Setter
+                            <!--<Setter
                 TargetName="Bd"
                 Property="Border.BitmapEffect"                  
-                Value="{StaticResource DropShadowEffect}" />
+                Value="{StaticResource DropShadowEffect}" />-->
                         </Trigger>
                         <Trigger Property="att:TreeEx.IsChildSelected" Value="True">
                             <Setter
                 TargetName="Bd"
                 Property="Panel.Background"                     
-                Value="{StaticResource SelectedItemAreaBrush}" />
+                Value="{StaticResource SelectedItemAreaBrush2}" />
                             <Setter
                 TargetName="Bd"
                 Property="Border.BorderBrush"                     
@@ -201,10 +205,10 @@
                 Property="TextElement.Foreground"                   
                 Value="{DynamicResource 
                   {x:Static SystemColors.HighlightTextBrushKey}}" />
-                            <Setter
+                            <!--<Setter
                 TargetName="Bd"
                 Property="Border.BitmapEffect"                  
-                Value="{StaticResource DropShadowEffect}" />
+                Value="{StaticResource DropShadowEffect}" />-->
                         </Trigger>
                         <Trigger Property="IsExpanded" Value="True">
                             <Setter TargetName="WrapPanel" Property="Visibility" Value="Visible">
@@ -298,11 +302,11 @@
                                                           Background="#01FFFFFF">
                                             <Path ClipToBounds="True"
                                                   x:Name="AddButton"
-                                                              Data="{StaticResource Plus}"
-                                                              Stretch="Uniform"
-                                                                        Visibility="Visible"
-                                                              Stroke="{TemplateBinding Foreground}"
-                                                              StrokeThickness="2" />
+                                                  Data="{StaticResource Plus}"
+                                                  Stretch="Uniform"
+                                                  Visibility="Visible"
+                                                  Stroke="{TemplateBinding Foreground}"
+                                                  StrokeThickness="2" />
                                         </Grid>
 
                                         <ControlTemplate.Triggers>
@@ -325,7 +329,7 @@
 
 
                             <ContentControl  x:Name="EditPresenter"  Visibility="Collapsed" VerticalAlignment="Center"
-                                               Content="{TemplateBinding NewObject}"   
+                                               Content="{TemplateBinding Edit}"   
                                             ContentTemplateSelector="{Binding Mode=OneWay, Path=EditTemplateSelector, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTreeViewItem}}}"
                                             ContentTemplate="{Binding Mode=OneWay,Path=EditTemplate, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTreeViewItem}}}" ></ContentControl>
 
@@ -343,9 +347,8 @@
                            
                                 </Grid.ColumnDefinitions>-->
 
-                                <ContentPresenter Name="PART_Footer"   
-                                      
-                                 ContentSource="Footer"
+                                <ContentPresenter Name="PART_Footer"                                         
+                                                  ContentSource="Footer"
                                                   HorizontalAlignment="Center"
                                                   VerticalAlignment="Center" />
 

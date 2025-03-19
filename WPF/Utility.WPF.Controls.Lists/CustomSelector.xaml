@@ -17,10 +17,10 @@
     </ResourceDictionary.MergedDictionaries>
 
     <!--<local:CheckedEventArgsConverter x:Key="CheckedEventArgsConverter"/>-->
-    <obj:ObjectToTokenConverter x:Key="ObjectToTokenConverter"></i:ObjectToTokenConverter>
-    <local:ItemsSourceConverter x:Key="ItemsSourceConverter"></local:ItemsSourceConverter>
-    <local:ObjectWrapperConverter x:Key="ObjectWrapperConverter"></local:ObjectWrapperConverter>
-    
+    <obj:ObjectToTokenConverter x:Key="ObjectToTokenConverter"/>
+    <local:ItemsSourceConverter x:Key="ItemsSourceConverter"/>
+    <local:ObjectWrapperConverter x:Key="ObjectWrapperConverter"/>
+
     <Style x:Key="ButtonFocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -287,7 +287,7 @@
         </Style.Resources>
         <Setter Property="EditTemplate" Value="{StaticResource JsonTemplate}"></Setter>
         <Setter Property="ItemTemplateSelector" Value="{StaticResource ItemTemplateSelector}"></Setter>
-        <Setter Property="NewObject" Value="{Binding ItemsSource, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource ItemsSourceConverter}}"></Setter>
+        <Setter Property="Edit" Value="{Binding ItemsSource, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource ItemsSourceConverter}}"></Setter>
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
@@ -383,12 +383,10 @@
                                         <RowDefinition x:Name="row1" Height="*"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <ContentControl x:Name="content_control" 
-                                                    Content="{TemplateBinding NewObject}"       
-                                                    ContentTemplate="{TemplateBinding EditTemplate}"
-                                                    ContentTemplateSelector="{TemplateBinding EditTemplateSelector}">
+                                    <ContentPresenter x:Name="content_control" 
+                                                    ContentSource="Edit">
                                         <FrameworkElement.Style>
-                                            <Style TargetType="{x:Type ContentControl}">
+                                            <Style TargetType="{x:Type ContentPresenter}">
                                                 <Setter Property="Opacity" Value="0"></Setter>
                                                 <Style.Triggers>
                                                     <!--<DataTrigger Binding="{Binding ElementName=PlusButton, Path=IsChecked}" Value="False">
@@ -414,7 +412,7 @@
                                                 </Style.Triggers>
                                             </Style>
                                         </FrameworkElement.Style>
-                                    </ContentControl>
+                                    </ContentPresenter>
 
                                     <btns:GeometryToggleButton x:Name="PlusButton"                                   
                                             Data="{StaticResource Plus}"

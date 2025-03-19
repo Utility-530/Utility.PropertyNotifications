@@ -21,7 +21,7 @@ namespace Utility.WPF.Controls.Trees
             DependencyProperty.Register("CheckedPropertyName", typeof(string), typeof(CustomTreeViewItem), new PropertyMetadata("IsChecked", isCheckedChanged));
         public static readonly DependencyProperty FinishEditCommandProperty =
             DependencyProperty.Register("FinishEditCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
-        public static readonly DependencyProperty NewObjectConverterProperty = DependencyProperty.Register("NewObjectConverter", typeof(IValueConverter), typeof(CustomTreeViewItem), new PropertyMetadata(new NewObjectConverter()));
+        public static readonly DependencyProperty EditConverterProperty = DependencyProperty.Register("EditConverter", typeof(IValueConverter), typeof(CustomTreeViewItem), new PropertyMetadata(new EditConverter()));
 
         public static readonly DependencyProperty MaxHeightOfEditBoxProperty = DependencyProperty.Register("MaxHeightOfEditBox", typeof(double), typeof(CustomTreeViewItem), new PropertyMetadata(300.0));
 
@@ -105,10 +105,10 @@ namespace Utility.WPF.Controls.Trees
             set { SetValue(MaxHeightOfEditBoxProperty, value); }
         }
 
-        public IValueConverter NewObjectConverter
+        public IValueConverter EditConverter
         {
-            get { return (IValueConverter)GetValue(NewObjectConverterProperty); }
-            set { SetValue(NewObjectConverterProperty, value); }
+            get { return (IValueConverter)GetValue(EditConverterProperty); }
+            set { SetValue(EditConverterProperty, value); }
         }
 
         public ICommand CheckedCommand

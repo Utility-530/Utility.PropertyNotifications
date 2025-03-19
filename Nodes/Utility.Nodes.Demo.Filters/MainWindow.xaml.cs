@@ -88,7 +88,7 @@ namespace Utility.Trees.Demo.Filters
 
         protected override void Invoke(object parameter)
         {
-            if (parameter is Utility.WPF.NewObjectRoutedEventArgs { IsAccepted: true, NewObject: { } instance } value)
+            if (parameter is Utility.WPF.EditRoutedEventArgs { IsAccepted: true, Edit: { } instance } value)
             {
                 value.Handled = true;
                 var x = AssociatedObject;

@@ -17,7 +17,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <conv:InverseNullToBooleanConverter x:Key="InverseNullToBooleanConverter"/>
-    <local:NewObjectConverter x:Key="NewObjectConverter"></local:NewObjectConverter>
+    <local:EditConverter x:Key="EditConverter"></local:EditConverter>
     <local:ItemsPanelConverter x:Key="ItemsPanelConverter"></local:ItemsPanelConverter>
     <Style x:Key="DefaultStyle" TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource GenericTreeViewItem}">
         <Setter Property="ItemsPanel" Value="{Binding Converter={StaticResource ItemsPanelConverter}}" />
@@ -86,7 +86,7 @@
 
     <Style TargetType="{x:Type trees:CustomTreeViewItem}" x:Key="LineStyle" BasedOn="{StaticResource PlusTreeViewItem}">
         <!--<Setter Property="Width" Value="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=TreeViewItem, AncestorLevel=2}}"></Setter>-->
-        <Setter Property="NewObject" Value="{Binding Data, Converter={StaticResource NewObjectConverter}}"></Setter>
+        <Setter Property="Edit" Value="{Binding Data, Converter={StaticResource EditConverter}}"></Setter>
         <Setter Property="EditTemplate">
             <Setter.Value >
                 <DataTemplate>
