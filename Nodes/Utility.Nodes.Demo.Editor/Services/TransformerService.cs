@@ -11,11 +11,11 @@ using Utility.Extensions;
 using Utility.Trees.Extensions.Async;
 using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
-using NetFabric.Hyperlinq;
 using Utility.Nodes.Demo.Filters.Services;
 using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Interfaces.Exs;
+using Splat;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -36,7 +36,7 @@ namespace Utility.Nodes.Demo.Filters.Services
             int i = 0;
             Observable.Create<Exception>(observer =>
             {
-                return NodeSource.Instance
+                return Locator.Current.GetService<INodeSource>()
                 .Single(nameof(Factory.BuildTransformersRoot))
                 .Subscribe(c_node =>
                 {
@@ -63,7 +63,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                                 .Take(1)
                                 .Subscribe(_a =>
                                 {
-                                    NodeSource.Instance.Single(nameof(Factory.BuildContentRoot))
+                                    Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildContentRoot))
                                         .Subscribe(model =>
                                             {
                                                 _a.Node.Clear();

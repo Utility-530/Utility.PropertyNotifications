@@ -11,6 +11,8 @@ using Utility.PropertyNotifications;
 using Utility.PropertyDescriptors;
 using Utility.Models.Trees;
 using Utility.Nodes.WPF;
+using Splat;
+using Utility.Interfaces.Exs;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -18,15 +20,15 @@ namespace Utility.Nodes.Demo.Filters.Services
     {
         public ParserService()
         {
-            NodeSource.Instance.Single(nameof(Factory.BuildContentRoot))
+            Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildContentRoot))
                 .Subscribe(node =>
                 {
-                    NodeSource.Instance.Single(nameof(Factory.BuildHtmlRoot))
+                    Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildHtmlRoot))
                     .Subscribe(htmlNode =>
                     {
                         if (htmlNode.Data is StringModel stringModel)
                         {
-                            NodeSource.Instance.Single(nameof(Factory.BuildHtmlRenderRoot))
+                            Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildHtmlRenderRoot))
                             .Subscribe(_node =>
                             {
                                 if (_node.Data is HtmlModel _stringModel)

@@ -17,11 +17,11 @@ namespace Utility.Nodes.Demo.Filters.Services
 
         public ControlsService()
         {
-            NodeSource.Instance
-                .Many(nameof(Factory.BuildRoot))
+            Locator.Current.GetService<INodeSource>()
+                .Single(nameof(Factory.BuildRoot))
                 .Subscribe(root =>
                 {
-                    NodeSource.Instance.Single(nameof(Factory.BuildControlRoot))
+                    Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildControlRoot))
                     .Subscribe(_n =>
                     {
                         _n.Descendants()
