@@ -269,6 +269,11 @@ namespace Utility.Nodes.Filters
                                 });
                             }
 
+                            node.Items.AndChanges<INode>().Subscribe(a =>
+                            {
+                                foreach (var item in a)
+                                    change(item);
+                            });
 
                             if (data is ISetNode iSetNode)
                             {
@@ -304,33 +309,33 @@ namespace Utility.Nodes.Filters
 
                                 if (key.HasValue == false)
                                 {
-                                children
-                                .Children
-                                    .AndAdditions()
-                                    .Subscribe(async d =>
-                        {
-                                        var _new = (INode)await node.ToTree(d);
+                                    children
+                                    .Children
+                                        .AndAdditions()
+                                        .Subscribe(async d =>
+                                        {
+                                            var _new = (INode)await node.ToTree(d);
 
-                            repository
-                            .Value
-                                        .Find((GuidKey)node.Key, _new.Name(), type: d.GetType())
-                            .Subscribe(async _key =>
-                            {
+                                            repository
+                                            .Value
+                                                        .Find((GuidKey)node.Key, _new.Name(), type: d.GetType())
+                                            .Subscribe(async _key =>
+                                            {
 
-                                if (d is IIsReadOnly readOnly)
-                                {
-                                    (_new as ISetIsReadOnly).IsReadOnly = readOnly.IsReadOnly;
+                                                if (d is IIsReadOnly readOnly)
+                                                {
+                                                    (_new as ISetIsReadOnly).IsReadOnly = readOnly.IsReadOnly;
+                                                }
+
+                                                if (_key.HasValue == false)
+                                                {
+                                                    throw new Exception("dde33443 21");
+                                                }
+                                                _new.Key = new GuidKey(_key.Value.Guid);
+                                                observer.OnNext(_new);
+                                            });
+                                        });
                                 }
-
-                                if (_key.HasValue == false)
-                                {
-                                    throw new Exception("dde33443 21");
-                                }
-                                _new.Key = new GuidKey(_key.Value.Guid);
-                                observer.OnNext(_new);
-                            });
-                                    });
-                        }
                                 else
                                 {
                                     if (Nodes.SingleOrDefault(a => a.Key == new GuidKey(key.Value.Guid)) is not Node _node)
@@ -339,13 +344,13 @@ namespace Utility.Nodes.Filters
                                         _new.Key = new GuidKey(key.Value.Guid);
                                         _new.Removed = key.Value.Removed;
                                         observer.OnNext(_new);
-                    }
+                                    }
                                     else
                                     {
                                         throw new Exception("u 333333312");
                                     }
 
-                }
+                                }
                             }, () => observer.OnCompleted());
                     });
                 }
