@@ -43,7 +43,7 @@ public class CustomElementsGrid : MasterDetailGrid
                 Binding binding = new()
                 {
                     Path = new PropertyPath(nameof(KeyValue.Key)),
-                    Converter = DefaultConverter.Instance,
+                    //Converter = DefaultConverter.Instance,
                     Mode = BindingMode.OneTime
                 };
                 textBlock.SetBinding(TextBlock.TextProperty, binding);
@@ -62,10 +62,6 @@ public class UserControlsGrid : CustomElementsGrid
     public UserControlsGrid(Assembly? assembly = null) :
         base((assembly ?? Assembly.GetEntryAssembly()).ViewTypes().ToArray())
     {
-
-
-
-
     }
 }
 
