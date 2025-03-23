@@ -70,6 +70,9 @@
         Fill="White"
         Stretch="UniformToFill" />
 
+    <Geometry x:Key="Edit"
+        >M320 112L368 64 448 144 400 192 320 112ZM128 304L288 144 368 224 208 384 128 304ZM96 336L176 416 64 448 96 336Z
+    </Geometry>
 
     <GeometryGroup x:Key="Null">
         <EllipseGeometry Center="10,10" RadiusX="7.5" RadiusY="7.5" />
