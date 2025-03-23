@@ -15,19 +15,8 @@ namespace Utility.Models
 
         public virtual T? Value
         {
-            get
-            {
-                RaisePropertyCalled(value);
-                return value;
-            }
-            set
-            {
-                if (this.value?.Equals(value) != true)
-                {
-                    this.value = value;
-                    RaisePropertyReceived(value);
-                }
-            }
+            get => RaisePropertyCalled(value);
+            set => this.RaisePropertyReceived(ref this.value, value);
         }
 
         public T Get() => value;
