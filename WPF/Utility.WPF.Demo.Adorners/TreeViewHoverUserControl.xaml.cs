@@ -1,6 +1,5 @@
 ﻿using Jellyfish.Annotations;
 using Microsoft.Xaml.Behaviors;
-using NetFabric.Hyperlinq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
