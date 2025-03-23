@@ -37,8 +37,8 @@ namespace Utility.WPF.Attached
                             tvi.IsSelected = true;
                         else if(e.OldValue is not null)
                         {
-                            var container = treeView.ItemContainerGenerator.ContainerFromItemRecursive(e.OldValue);
-                            container.IsSelected = true;
+                            if(treeView.ItemContainerGenerator.ContainerFromItemRecursive(e.OldValue) is TreeViewItem _tvi)
+                                _tvi.IsSelected = true;
 
                         }
                         return;
