@@ -18,6 +18,9 @@
     <Compile Update="CompareSliderUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="EditTextUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="FilterUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -29,6 +32,9 @@
   <ItemGroup>
     <Page Update="CompareSliderUserControl.xaml">
       <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="EditTextUserControl.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="FilterUserControl.xaml">

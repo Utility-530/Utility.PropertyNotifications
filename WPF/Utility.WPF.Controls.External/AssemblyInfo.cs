@@ -21,3 +21,4 @@ using System.Windows.Markup;
 [assembly: XmlnsDefinition("http://schemas.utility.com/external", "DraggAnimatedPanel")] 
 [assembly: XmlnsDefinition("http://schemas.utility.com/external", "AR.WPF.Behaviors")] 
 [assembly: XmlnsDefinition("http://schemas.utility.com/external", "CurrencyTextBox")] 
+[assembly: XmlnsDefinition("http://schemas.utility.com/external", "Custom.Controls")] 

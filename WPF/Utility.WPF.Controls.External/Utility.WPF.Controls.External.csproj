@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Utility.WPF.Geometry\Utility.WPF.Geometries.csproj" />
     <ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
     <ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
   </ItemGroup>
@@ -36,6 +37,13 @@
 	  <Compile Update="TimeBar.cs">
       <DependentUpon>TimeBar.xaml</DependentUpon>
     </Compile>
+	  <Compile Update="EditableTextBlock.cs">
+		  <DependentUpon>EditableTextBlock.xaml</DependentUpon>	
+	  </Compile>	
+	  
+	  <Compile Update="EditableTextBoxAutomationPeer.cs">
+		  <DependentUpon>EditableTextBlock.xaml</DependentUpon>	
+	  </Compile>
   </ItemGroup>
 
   <ItemGroup>
