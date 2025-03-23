@@ -16,6 +16,7 @@ namespace Utility.Interfaces.Exs
         DateTime Remove(Guid guid);
         IObservable<IReadOnlyCollection<Key>> SelectKeys(Guid? parentGuid = null, string? name = null, string? table_name = null);
         void Set(Guid guid, string name, object value, DateTime dateTime);
+        void UpdateName(Guid parentGuid, Guid guid, string name, string newName);
 
         void Reset();
     }
