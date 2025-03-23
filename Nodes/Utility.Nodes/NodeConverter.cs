@@ -100,7 +100,7 @@ namespace Utility.Nodes
             if (jObject.ContainsKey("Current"))
             {
                 var key = new GuidKey(Guid.Parse(jObject["Current"].ToString()));
-                Locator.Current.GetService<INodeSource>().SingleAsync(key).Subscribe(current =>
+                Locator.Current.GetService<INodeSource>().Single(key).Subscribe(current =>
                 {
                     //node.Current = current;
                     node.SetFieldValue(ViewModelTree.Field(nameof(ViewModelTree.Current)), current, ref fieldInfo);
