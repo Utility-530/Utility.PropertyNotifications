@@ -27,7 +27,7 @@ namespace Utility.Nodes.Filters
         {
             if (Contains(key) == false)
             {
-                var output = MethodCache.Instance.Invoke(key);
+                object output = Invoke(key);
                 if (output is Node node)
                 {
                     dictionary[key].Nodes.Add(node);

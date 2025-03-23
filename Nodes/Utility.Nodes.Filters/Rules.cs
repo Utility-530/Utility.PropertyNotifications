@@ -25,7 +25,7 @@ namespace Utility.Nodes.Filters
         {
             (instance as Node).WithChangesTo(a => a.Key).Subscribe(a =>
             {
-                Locator.Current.GetService<INodeSource>().SingleAsync(a/*, Guid.Parse(value.ToString())*/)
+                Locator.Current.GetService<INodeSource>().Single(a/*, Guid.Parse(value.ToString())*/)
                                 .Subscribe(a =>
                                 {
                                     (instance as INode).Current = a;

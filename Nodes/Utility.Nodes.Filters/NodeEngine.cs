@@ -24,7 +24,6 @@ using Utility.Trees.Abstractions;
 using Utility.Models;
 using Fasterflect;
 using System.ComponentModel;
-using ReactiveUI;
 
 namespace Utility.Nodes.Filters
 {
@@ -124,18 +123,7 @@ namespace Utility.Nodes.Filters
             }
             else
             {
-                if (Nodes.Any(a => a.Key == node.Key) == false)
-                {
-                    context.Value.UI.Post(a =>
-                    {
-                        nodes.Add(node);
-                    }, null);
-                    configure(node);
-                }
-                else
-                {
-
-                }
+                configure(node);
             }
 
 
@@ -245,6 +233,10 @@ namespace Utility.Nodes.Filters
                                 called.WhenCalled()
                                 .Subscribe(call =>
                                 {
+                                    if (call.Name == nameof(Model.Name))
+                                    {
+                                        return;
+                                    }
                                     repository.Value
                                     .Get((GuidKey)node.Key, nameof(Node.Data) + "." + call.Name)
                                     .Subscribe(a =>
@@ -265,7 +257,13 @@ namespace Utility.Nodes.Filters
                                 received.WhenReceived()
                                 .Subscribe(reception =>
                                 {
-                                    repository.Value.Set((GuidKey)node.Key, nameof(Node.Data) + "." + reception.Name, reception.Value, DateTime.Now);
+                                    if (reception.Name == nameof(Model.Name))
+                                    {
+                                        (reception.Target as INotifyPropertyChanged).RaisePropertyChanged(reception.Name);
+                                        repository.Value.UpdateName((GuidKey)node.Parent.Key, (GuidKey)node.Key, (string)reception.OldValue, (string)reception.Value);
+                                    }
+                                    else
+                                        repository.Value.Set((GuidKey)node.Key, nameof(Node.Data) + "." + reception.Name, reception.Value, DateTime.Now);
                                 });
                             }
 
@@ -404,67 +402,48 @@ namespace Utility.Nodes.Filters
 
         public IObservable<INode> Many(string key)
         {
-            if (Nodes.ToArray().SingleOrDefault(a => a.Key.Equals(key)) is Node node)
-            {
-                return Observable.Return(node);
-            }
             return Observable.Create<INode>(observer =>
             {
-                return MethodCache.Instance.Get(key).Subscribe(a =>
-                {
-                    if (a != null)
+                if (Guid.TryParse(key, out var _key))
+                    return Nodes
+                    .AndAdditions<INode>()
+                    .Subscribe(ax =>
                     {
-                        observer.OnNext(a);
-                    }
-                    observer.OnCompleted();
-                });
-            });
-        }
-
-
-        public IObservable<INode> SingleAsync(string key)
-        {
-            return ManyAsync(key).Take(1);
-        }
-
-        public IObservable<INode> ManyAsync(string key)
-        {
-            if (Nodes.ToArray().SingleOrDefault(a => a.Key.Equals(key)) is Node node)
-            {
-                return Observable.Return(node);
-            }
-            return Observable.Create<INode>(observer =>
-            {
-                return MethodCache.Instance
-                .Get(key)
-                .Subscribe(a =>
-                {
-                    if (a == null)
-                    {
-                        Nodes
-                        .AndAdditions<INode>()
-                        .Subscribe(ax =>
+                        if (ax.Key.Equals(_key))
                         {
-                            if (ax.Key.Equals(key))
-                            {
-                                observer.OnNext(ax);
-                                observer.OnCompleted();
-                            }
-                        });
-                    }
-                    else
+                            observer.OnNext(ax);
+                            observer.OnCompleted();
+                        }
+                    });
+                else
+                    return MethodCache.Instance
+                    .Get(key)
+                    .Subscribe(a =>
                     {
                         observer.OnNext(a);
                         observer.OnCompleted();
-                    }
-                });
-
-
+                    });
             });
         }
 
+        Dictionary<string, GuidKey> keyValues = new();
+
+
         public IObservable<INode> Create(string name, Guid guid, Func<string, INode> nodeFactory, Func<string, object> modelFactory)
         {
+            INode node;
+            if (Nodes.SingleOrDefault(a => (GuidKey)a.Key == guid) is { } _node)
+            {
+                lock (nodes)
+                    return Observable.Return(_node);
+            }
+            else
+            {
+                node = nodeFactory(name);
+                node.Key = new GuidKey(guid);
+                nodes.Add(node);
+            }
+
             return Observable.Create<INode>(observer =>
             {
                 var data = modelFactory(name);
@@ -472,12 +451,11 @@ namespace Utility.Nodes.Filters
                 .InsertRoot(guid, name, data.GetType())
                 .Subscribe(a =>
                 {
-                    var node = nodeFactory(name);
+
                     if (a.HasValue)
                     {
                         node.Data = data;
                     }
-                    node.Key = new GuidKey(guid);
                     if (a.HasValue && node.Data == null)
                         node.Data = DataActivator.Activate(a);
                     Add(node);
