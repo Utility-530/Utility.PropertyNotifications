@@ -899,19 +899,11 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class FileModel : Model
+    public class FileModel : StringModel
     {
         public FileModel()
         {
             Value = "C:\\";
-        }
-
-        protected string value;
-
-        public string Value
-        {
-            get => value;
-            set => base.RaisePropertyChanged(ref this.value, value);
         }
     }
 
@@ -943,9 +935,10 @@ namespace Utility.Models.Trees
         {
             switch (a.Data)
             {
+                case FileModel fileModel: FilePath = fileModel; break;
                 case StringModel stringModel: Alias = stringModel; break;
                 //case _guid: Guid = a.Data as GuidModel; break;
-                case FileModel fileModel: FilePath = fileModel; break;
+
                 //case converter: Converter = a.Data as ConverterModel; break;
                 default: throw new ArgumentOutOfRangeException("ds 33` 33kfl.. ");
             }
