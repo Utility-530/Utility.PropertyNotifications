@@ -5,7 +5,7 @@ using System.Collections;
 using System.Reactive.Linq;
 using System.Windows.Controls;
 using Utility.Commands;
-using Utility.Descriptors;
+using Utility.PropertyDescriptors;
 using Utility.Interfaces;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
@@ -51,15 +51,15 @@ namespace Utility.Nodes.Demo.MVVM
                             var table = (Table)Activator.CreateInstance(typeof(Table));
                             var root = DescriptorFactory.CreateRoot(table, _guid.Value.Guid, "table_add").Take(1).Wait();
                             var reflectionNode = new DescriptorNode(root) { Parent = (ITree)instance };
-                            item.NewObject = DataTreeViewer(reflectionNode);
+                            item.Edit = DataTreeViewer(reflectionNode);
                             item.FinishEdit += Item_FinishEdit;
                         });
-                        void Item_FinishEdit(object sender, NewObjectRoutedEventArgs e)
+                        void Item_FinishEdit(object sender, EditRoutedEventArgs e)
                         {
                             if(e.IsAccepted)
                             {
-                                var newObject = (e.NewObject as TreeViewer).ViewModel as DescriptorNode;
-                                var root= newObject.Data as IValueDescriptor;
+                                var Edit = (e.Edit as TreeViewer).ViewModel as DescriptorNode;
+                                var root= Edit.Data as IValueDescriptor;
                                 var inst = root.Get();
                                 if(instance is IReadOnlyTree tree)
                                 {

@@ -50,9 +50,9 @@ namespace Utility.Nodes.Demo.Queries
         {
             FinishEdit = new Command<object>(o =>
             {
-                if (o is NewObjectRoutedEventArgs { IsAccepted: true } args)
+                if (o is EditRoutedEventArgs { IsAccepted: true } args)
                 {
-                    filters.Add(args.NewObject as FilterEntity);
+                    filters.Add(args.Edit as FilterEntity);
                 }
             });
 

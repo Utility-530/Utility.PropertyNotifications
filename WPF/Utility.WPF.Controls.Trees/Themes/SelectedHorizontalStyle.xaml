@@ -71,10 +71,8 @@
                                 Background="{StaticResource ItemAreaBrush}"
                                 BorderBrush="{TemplateBinding Foreground}"
                                 HorizontalAlignment="Stretch"
-                            BorderThickness="0.6" 
-                    
-                                CornerRadius="8"
-                               >
+                                BorderThickness="0.6" 
+                                CornerRadius="8">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -82,11 +80,10 @@
                                 </Grid.ColumnDefinitions>
 
                                 <ContentPresenter Name="PART_Header"  
-                                                              Margin="4"
-                ContentSource="Header"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Center" />
-
+                                                  Margin="4"
+                                                  ContentSource="Header"
+                                                  HorizontalAlignment="Stretch"
+                                                  VerticalAlignment="Center" />
                                 <Button x:Name="PART_DeleteTagButton"
                                                 Grid.Column="1"
                                                 Command="{Binding RemoveCommand, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTreeViewItem}, AncestorLevel=2} }"
@@ -117,9 +114,7 @@
                             <Button 
                                 x:Name="PART_CreateTagButton"
                                 Margin="2,0,0,0"
-                                VerticalAlignment="Center"
-                     >
-
+                                VerticalAlignment="Center">
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
 
@@ -128,11 +123,11 @@
                                                           Background="#01FFFFFF">
                                             <Path ClipToBounds="True"
                                                   x:Name="AddButton"
-                                                              Data="{StaticResource Plus}"
-                                                              Stretch="Uniform"
-                                                                        Visibility="Visible"
-                                                              Stroke="{StaticResource HighlightBrush}"
-                                                              StrokeThickness="2" />
+                                                  Data="{StaticResource Plus}"
+                                                  Stretch="Uniform"
+                                                  Visibility="Visible"
+                                                  Stroke="{StaticResource HighlightBrush}"
+                                                  StrokeThickness="2" />
                                         </Grid>
 
                                         <ControlTemplate.Triggers>
@@ -140,7 +135,6 @@
                                                 <Setter Property="Cursor" Value="Hand" />
                                                 <Setter Property="Foreground" Value="CadetBlue" />
                                             </Trigger>
-
                                         </ControlTemplate.Triggers>
                                     </ControlTemplate>
                                 </Button.Template>
@@ -327,32 +321,21 @@
                                 </i:Interaction.Triggers>
                             </Button>
 
-
-                            <ContentControl  x:Name="EditPresenter"  Visibility="Collapsed" VerticalAlignment="Center"
-                                               Content="{TemplateBinding Edit}"   
-                                            ContentTemplateSelector="{Binding Mode=OneWay, Path=EditTemplateSelector, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTreeViewItem}}}"
-                                            ContentTemplate="{Binding Mode=OneWay,Path=EditTemplate, RelativeSource={RelativeSource AncestorType={x:Type local:CustomTreeViewItem}}}" ></ContentControl>
-
+                            <ContentPresenter
+                                            x:Name="EditPresenter"  Visibility="Collapsed" VerticalAlignment="Center"
+                                            ContentSource="Edit"/>
                         </WrapPanel>
                         <Border Name="Bd2" 
                                 Grid.Row="2"                         
                                 BorderBrush="{TemplateBinding Foreground}"
-                            BorderThickness="0.6" 
-                                CornerRadius="8"
-                             
+                                BorderThickness="0.6" 
+                                CornerRadius="8"                             
                                 Padding="6">
                             <Grid>
-                                <!--<Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                           
-                                </Grid.ColumnDefinitions>-->
-
                                 <ContentPresenter Name="PART_Footer"                                         
                                                   ContentSource="Footer"
                                                   HorizontalAlignment="Center"
                                                   VerticalAlignment="Center" />
-
-
                             </Grid>
                         </Border>
                     </Grid>
@@ -363,9 +346,9 @@
                             <Setter Property="Visibility" TargetName="EditPresenter" Value="Visible"></Setter>
                             <Setter Property="Visibility" TargetName="PART_CreateTagButton" Value="Collapsed"></Setter>
                             <Setter Property="Foreground" Value="Green"></Setter>
-             
+
                         </Trigger>
-                   
+
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

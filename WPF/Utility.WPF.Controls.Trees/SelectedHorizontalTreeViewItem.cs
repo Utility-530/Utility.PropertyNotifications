@@ -55,7 +55,7 @@ namespace Utility.WPF.Controls.Trees
 
 
 
-            var acb = this.GetTemplateChild("EditPresenter") as ContentControl;
+            var acb = this.GetTemplateChild("EditPresenter") as ContentPresenter;
             if (acb == null)
                 return;
 
