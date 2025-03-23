@@ -100,8 +100,9 @@ public abstract record ValueMemberDescriptor(Descriptor Descriptor) : MemberDesc
         }
         set
         {
+            var _value = value;
             Set(value);
-            RaisePropertyReceived(value);
+            RaisePropertyReceived(value, _value);
         }
     }
 
