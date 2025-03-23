@@ -50,21 +50,28 @@ namespace Utility.Nodes.Ex
         /// </summary>
         /// <param name="tree"></param>
         /// <returns></returns>
-        public static INode Abstract(this INode tree)
+        public static INode Abstract(this INode tree, out IDisposable disposables)
         {
             var _name = tree.Data is IGetName { Name: { } name } ? name : tree.Data.ToString();
             var clone = new Node(new Abstract { Name = _name }) { Key = tree.Key, AddCommand = tree.AddCommand, RemoveCommand = tree.RemoveCommand, Removed = tree.Removed };
-            tree.WithChangesTo(a => a.Removed).Subscribe(a => clone.Removed = a);
-            tree.WithChangesTo(a => a.IsExpanded).Subscribe(a => clone.IsExpanded = a);
-            clone.WithChangesTo(a => a.IsExpanded).Subscribe(a => tree.IsExpanded = a);
+            var c_disposables = new CompositeDisposable();
+
+            tree.WithChangesTo(a => a.Removed).Subscribe(a => clone.Removed = a).DisposeWith(c_disposables);
+            tree.WithChangesTo(a => a.IsExpanded).Subscribe(a => clone.IsExpanded = a).DisposeWith(c_disposables);
+            clone.WithChangesTo(a => a.IsExpanded).Subscribe(a => tree.IsExpanded = a).DisposeWith(c_disposables);
+
 
             CompositeDisposable disposables = new();
             tree.Items.AndAdditions<Node>().Subscribe(async item =>
             {
-                var childClone = (ITree)item.Abstract();
+                var childClone = (ITree)item.Abstract(out var _disposables);
+                (c_disposables).Add(_disposables);
                 childClone.Parent = clone;
                 clone.Add(childClone);
-            });
+            }).DisposeWith(c_disposables);
+
+            disposables = c_disposables;
+            //list.Add(disposables);
             return clone;
         }
     }

@@ -18,44 +18,6 @@ namespace Utility.Nodes.Demo.Filters.Services
 {
     internal class ParserService
     {
-        public ParserService()
-        {
-            Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildContentRoot))
-                .Subscribe(node =>
-                {
-                    Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildHtmlRoot))
-                    .Subscribe(htmlNode =>
-                    {
-                        if (htmlNode.Data is StringModel stringModel)
-                        {
-                            Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildHtmlRenderRoot))
-                            .Subscribe(_node =>
-                            {
-                                if (_node.Data is HtmlModel _stringModel)
-                                {
-                                    stringModel
-                                    .WithChangesTo(a => a.Value)
-                                    .Subscribe(a =>
-                                    {
-                                        _stringModel.Value = a;
-                                    });
-
-                                }
-                            });
-
-                            AddElementByPositionAsync(node)
-                                .Subscribe(html =>
-                                {
-                                    stringModel.Value = html;
-                                });
-
-                        }
-
-                    });
-                });
-
-        }
-
         const string htmlContent = @"
 <!DOCTYPE html>
 <html>
@@ -69,6 +31,53 @@ namespace Utility.Nodes.Demo.Filters.Services
 
 </body>
 </html>";
+
+        public ParserService()
+        {
+            Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildContentRoot))
+                .Subscribe(node =>
+                {
+                    Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildHtmlRoot))
+                    .Subscribe(htmlNode =>
+                    {
+                        htmlNode.WithChangesTo(a => a.Data)
+                        .Subscribe(data =>
+                        {
+                            if (data is StringModel stringModel)
+                            {
+                                Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildHtmlRenderRoot))
+                                .Subscribe(_node =>
+                                {
+                                    _node.WithChangesTo(a => a.Data)
+                                    .Subscribe(_data =>
+                                    {
+                                        if (_data is HtmlModel _stringModel)
+                                        {
+                                            stringModel
+                                                .WithChangesTo(a => a.Value)
+                                                .Subscribe(a =>
+                                                {
+                                                    _stringModel.Value = a;
+                                                });
+
+                                        }
+                                    });
+
+                                    AddElementByPositionAsync(node)
+                                            .Subscribe(html =>
+                                            {
+                                                stringModel.Value = html;
+                                            });
+
+                                });
+
+                            }
+                        });
+                    });
+                });
+
+        }
+
 
         public static IObservable<string> AddElementByPositionAsync(IReadOnlyTree node)
         {

@@ -45,7 +45,9 @@ namespace Utility.Nodes.Demo.Editor
             {
                 if (content == null)
                     source.Value.Single(nameof(Factory.BuildContentRoot))
-                        .Subscribe(a => { content = [a]; RaisePropertyChanged(nameof(Content)); });
+                        .Subscribe(a => { 
+                            content = [a];
+                            RaisePropertyChanged(nameof(Content)); });
                 return content;
             }
         }
@@ -58,7 +60,7 @@ namespace Utility.Nodes.Demo.Editor
                     source.Value.Single(nameof(Factory.BuildContentRoot))
                         .Subscribe(a =>
                         {
-                            clones = [a.Abstract()];
+                            clones = [a.Abstract(out var disposables)];
                             RaisePropertyChanged(nameof(Clones));
                         });
 

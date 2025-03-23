@@ -201,26 +201,7 @@
                             </Grid>
 
 
-                            <GridSplitter Grid.Row="3"   HorizontalAlignment="Stretch"
-                                          VerticalAlignment="Center"
-                                          ShowsPreview="True"
-                                          Height="5" />
 
-                            <!--<ct:CustomTreeView Grid.Row="4" ItemsSource="{Binding Transformers}" >
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="SelectedItemChanged">
-                                        <beh:SetSelectedItemAction PropertyName="Content" TargetObject="{Binding ElementName=TreeContent}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                                <ct:CustomTreeView.ItemContainerStyleSelector>
-                                    <bc:ItemContainerStyleSelector
-                                    DefaultStyle="{StaticResource DefaultStyle}" 
-                                    SelectableStyle="{StaticResource SelectedTreeViewItem}" 
-                                    BreadcrumbStyle="{StaticResource BreachCrumb}" 
-                                    BreadcrumbRootStyle ="{StaticResource BreadCrumbRootTreeViewItem}">
-                                    </bc:ItemContainerStyleSelector>
-                                </ct:CustomTreeView.ItemContainerStyleSelector>
-                            </ct:CustomTreeView>-->
                         </Grid>
 
                         <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
@@ -237,6 +218,89 @@
                         </ContentControl>
                     </Grid>
                 </DockPanel>
+
+            </DataTemplate>
+
+
+            <DataTemplate x:Key="Alt" DataType="{x:Type local:MainViewModel}">
+
+                <ct:CustomTreeView ItemContainerStyleSelector="{StaticResource MasterStyleSelector}">
+                    <TreeView.ItemsPanel>
+                        <ItemsPanelTemplate>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition ></ColumnDefinition>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                    <ColumnDefinition ></ColumnDefinition>
+                                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                    <ColumnDefinition ></ColumnDefinition>
+                                    <!--<ColumnDefinition Width="0.5*"></ColumnDefinition>-->
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+                        </ItemsPanelTemplate>
+                    </TreeView.ItemsPanel>
+
+
+
+                    <Grid  Grid.Column="0">
+                        <ct:CustomTreeView ItemsSource="{Binding Content}" ItemContainerStyleSelector="{StaticResource StyleSelector }" >
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                                    <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
+                                        <ContentControl Content="{Binding Path=.}" ContentTemplateSelector="{x:Static filters:DataTemplateSelector.Instance}"/>
+                                    </Border>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectedItemChanged">
+                                    <beh:SetSelectedItemAction PropertyName="Content" TargetObject="{Binding ElementName=TreeContent}" />
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </ct:CustomTreeView>
+
+                    </Grid>
+
+                    <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch"               ShowsPreview="True"/>
+
+                    <TreeView Grid.Column="2" ItemsSource="{Binding Html}">
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <Setter Property="Header" Value="{Binding Data}"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <avalonedit:TextEditor 
+                                            x:Name="textHtml" 
+                                            local:TextEdit.Text="{Binding Value, Mode=TwoWay}" 
+                                            SyntaxHighlighting="HTML" 
+                                            ShowLineNumbers="True" />
+                                <!--<TextBox Text="{Binding Value, Mode=TwoWay}" ></TextBox>-->
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </TreeView>
+
+                    <GridSplitter Grid.Column="3" Width="5" VerticalAlignment="Stretch"               ShowsPreview="True"/>
+
+
+                    <TreeView Grid.Column="4" ItemsSource="{Binding Html_Render}">
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <Setter Property="Header" Value="{Binding Data}"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <abel:WpfHtmlControlBase Html="{Binding Value, Mode=OneWay}"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </TreeView>
+
+                </ct:CustomTreeView>
+
+
 
             </DataTemplate>
         </ResourceDictionary>
