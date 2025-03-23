@@ -99,13 +99,13 @@ namespace Utility.PropertyNotifications
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        public virtual void RaisePropertyReceived(object value, [CallerMemberName] string? propertyName = null)
+        public virtual void RaisePropertyReceived(object? value, object? oldValue, [CallerMemberName] string? propertyName = null)
         {
             var handler = PropertyReceived;
             if (handler != null)
             {
                 flag = true;
-                var e = new PropertyReceivedEventArgs(propertyName, value);
+                var e = new PropertyReceivedEventArgs(propertyName, value, oldValue);
                 handler(this, e);
                 flag = false;
             }

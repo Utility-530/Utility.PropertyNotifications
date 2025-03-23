@@ -4,8 +4,6 @@ using Utility.Interfaces;
 
 namespace Utility.PropertyNotifications
 {
-
-
     /// <summary>
     /// Base class for all ViewModel classes in the application.
     /// It provides support for property change notifications.
@@ -78,9 +76,14 @@ namespace Utility.PropertyNotifications
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
+        public virtual T? RaisePropertyCalled<T>(T? value, [CallerMemberName] string? propertyName = null)
+        {
+            RaisePropertyCalled((object?)value, propertyName);
+            return value;
+        }
+
         public virtual void RaisePropertyCalled(object? value, [CallerMemberName] string? propertyName = null)
         {
-
             if (flag == false)
                 PropertyCalled?.Invoke(this, PropertyCalledArgs(propertyName, value));
         }
@@ -105,17 +108,29 @@ namespace Utility.PropertyNotifications
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        public virtual void RaisePropertyReceived(object value, [CallerMemberName] string? propertyName = null)
+        public virtual void RaisePropertyReceived(object oldValue, object value, [CallerMemberName] string? propertyName = null)
         {
             var handler = PropertyReceived;
             if (handler != null)
             {
 
                 flag = true;
-                var e = new PropertyReceivedEventArgs(propertyName, value);
+                var e = new PropertyReceivedEventArgs(propertyName, value, oldValue);
                 handler(this, e);
                 flag = false;
             }
+        }
+
+        public virtual void RaisePropertyReceived<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (value == null && previousValue == null)
+                return;
+            if (value?.Equals(previousValue) == true)
+                return;
+
+            var _previousValue = previousValue;
+            previousValue = value;
+            RaisePropertyReceived(_previousValue, value, propertyName);
         }
 
         #endregion INotifyPropertyReceived Members
