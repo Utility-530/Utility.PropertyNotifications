@@ -19,7 +19,8 @@ namespace Utility.Trees.Demo.Filters.Infrastructure
         JsonSerializerSettings settings = new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.All,
-            Converters = [
+            Converters = 
+                        [
                             new StringTypeEnumConverter(),
                             new NodeConverter()
                         ]

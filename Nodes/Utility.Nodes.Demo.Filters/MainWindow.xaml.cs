@@ -47,14 +47,19 @@ namespace Utility.Trees.Demo.Filters
 
     public class TreeConverter : IValueConverter
     {
-        static HashSet<INode> nodes = new();
+        string _value = null;
+        Node node = null;
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is string s)
             {
-                var node = JsonConvert.DeserializeObject<Node>(s);
-                TempNodeEngine.Instance.Add(node);
+                if (s != _value)
+                {
+                    _value = s;
+                    node = JsonConvert.DeserializeObject<Node>(s);
+                    TempNodeEngine.Instance.Add(node);
+                }
                 return new[] {node };
             }
             else if (value is null)

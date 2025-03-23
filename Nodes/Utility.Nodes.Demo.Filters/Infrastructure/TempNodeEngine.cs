@@ -122,11 +122,6 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
             throw new NotImplementedException();
         }
 
-        public IObservable<INode?> SingleAsync(string v)
-        {
-            throw new NotImplementedException();
-        }
-
         public static TempNodeEngine Instance { get; } = new TempNodeEngine();
     }
 }

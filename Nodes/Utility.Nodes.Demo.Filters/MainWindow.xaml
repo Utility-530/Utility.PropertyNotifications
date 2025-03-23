@@ -14,7 +14,7 @@
         xmlns:infrastructure="clr-namespace:Utility.Trees.Demo.Filters.Infrastructure"
         xmlns:m="clr-namespace:Utility.Models;assembly=Utility.Models"
         xmlns:b="http://schemas.utility.com/behaviors"
-        xmlns:conv="http://schemas.utility.com/converters"
+        xmlns:conv="http://schemas.utility.com/converters" xmlns:ex="http://schemas.utility.com/external"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <FrameworkElement.DataContext>
@@ -33,9 +33,7 @@
                 <TextBlock Text="{Binding Name}"/>
             </DataTemplate>
 
-            <local:TreeConverter x:Key="TreeConverter">
 
-            </local:TreeConverter>
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
@@ -75,9 +73,7 @@
                                             <att:InteractivityItems.Triggers>
                                                 <i:EventTrigger EventName="FinishEdit">
                                                     <local:AddObjectAction />
-
                                                 </i:EventTrigger>
-
                                             </att:InteractivityItems.Triggers>
                                         </att:InteractivityItems>
                                     </att:InteractivityTemplate>
@@ -86,7 +82,7 @@
                             <!--<Setter Property="Edit" Value="{Binding Converter={StaticResource EditConverter}}"></Setter>-->
                             <Setter Property="Edit">
                                 <Setter.Value>
-                                    <mt:StringModel Name="New"></mt:StringModel>
+                                    <mt:StringModel Name="_New"></mt:StringModel>
                                 </Setter.Value>
                             </Setter>
                         </Style>
@@ -143,25 +139,44 @@
                                 <Setter.Value>
                                     <local:FooterDataTemplateSelector>
                                         <local:FooterDataTemplateSelector.Template>
-                                            <DataTemplate>
-                                                <tree:CustomTreeView ItemsSource="{Binding Data.Value, Mode=TwoWay, Converter={StaticResource TreeConverter}}" >
-                                                    <i:Interaction.Triggers>
-                                                        <i:EventTrigger SourceObject="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeView}, AncestorLevel=2}}"  
-                                                                EventName="PreviewMouseDown">
-                                                            <local:CustomUpdateSourceBindingAction Property="{x:Static tree:CustomTreeViewItem.ItemsSourceProperty}" 
-                                                                                            />
-                                                        </i:EventTrigger>
-                                                    </i:Interaction.Triggers>
-                                                    <tree:CustomTreeView.ItemContainerStyleSelector>
-                                                        <bc:ItemContainerStyleSelector
-                                                        DefaultStyle="{StaticResource MyDefaultContentStyle}" 
-                                                        SelectableStyle="{StaticResource SelectedTreeViewItem}" 
-                                                        BreadcrumbStyle="{StaticResource BreachCrumb}" 
-                                                        BreadcrumbRootStyle ="{StaticResource BreadCrumbRootTreeViewItem}">
-                                                        </bc:ItemContainerStyleSelector>
-                                                    </tree:CustomTreeView.ItemContainerStyleSelector>
-                                                </tree:CustomTreeView>
+                                            <DataTemplate >
+                                                <ContentPresenter Content="{Binding Data}">
+                                                    <ContentPresenter.ContentTemplate>
+                                                        <DataTemplate DataType="{x:Type mt:SelectionModel}">
+                                                            <DataTemplate.Resources>
+                                                                <local:TreeConverter x:Key="TreeConverter"/>
+                                                            </DataTemplate.Resources>
+                                                            <Grid>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="Auto"/>
+                                                                    <RowDefinition Height="*"/>
+                                                                </Grid.RowDefinitions>
+
+                                                                <TextBox Text="{Binding Name }"/>
+                                                                <tree:CustomTreeView 
+                                                                    Grid.Row="1"
+                                                                    ItemsSource="{Binding Value, Mode=TwoWay, Converter={StaticResource TreeConverter}}" >
+                                                                    <i:Interaction.Triggers>
+                                                                        <i:EventTrigger SourceObject="{Binding RelativeSource={RelativeSource AncestorType={x:Type TreeView}, AncestorLevel=2}}"  
+                                                                                        EventName="PreviewMouseDown">
+                                                                            <local:CustomUpdateSourceBindingAction Property="{x:Static tree:CustomTreeViewItem.ItemsSourceProperty}"                                                                                             />
+                                                                        </i:EventTrigger>
+                                                                    </i:Interaction.Triggers>
+                                                                    <tree:CustomTreeView.ItemContainerStyleSelector>
+                                                                        <bc:ItemContainerStyleSelector
+                                                                            DefaultStyle="{StaticResource MyDefaultContentStyle}" 
+                                                                            SelectableStyle="{StaticResource SelectedTreeViewItem}"
+                                                                            BreadcrumbStyle="{StaticResource BreachCrumb}" 
+                                                                            BreadcrumbRootStyle ="{StaticResource BreadCrumbRootTreeViewItem}">
+                                                                        </bc:ItemContainerStyleSelector>
+                                                                    </tree:CustomTreeView.ItemContainerStyleSelector>
+                                                                </tree:CustomTreeView>
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </ContentPresenter.ContentTemplate>
+                                                </ContentPresenter>
                                             </DataTemplate>
+                                        
                                         </local:FooterDataTemplateSelector.Template>
                                     </local:FooterDataTemplateSelector>
                                 </Setter.Value>
@@ -173,14 +188,14 @@
                         </local:CustomStyleSelector>
 
                         <DataTemplate DataType="{x:Type mt:StringModel}">
-                            <TextBlock Text="{Binding Name}"/>
+                            <StackPanel>
+                                <ex:EditableTextBlock x:Name="t1" Text="{Binding Name, Converter={x:Static conv:DefaultConverter.Instance}}"/>
+                            </StackPanel>
                         </DataTemplate>
                     </ResourceDictionary>
                 </FrameworkElement.Resources>
 
-                <tree:CustomTreeView Grid.Row="4" ItemsSource="{Binding Nodes}" ItemContainerStyleSelector="{StaticResource StyleSelector}">
-
-                </tree:CustomTreeView>
+                <tree:CustomTreeView Grid.Row="4" ItemsSource="{Binding Nodes}" ItemContainerStyleSelector="{StaticResource StyleSelector}"/>
             </Grid>
         </Grid>
     </DockPanel>

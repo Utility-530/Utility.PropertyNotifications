@@ -163,6 +163,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Trees", "..\WPF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.Lists", "..\WPF\Utility.WPF.Controls.Lists\Utility.WPF.Controls.Lists.csproj", "{951F983E-7CE4-4D56-B796-2EDCC1821DB6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.External", "..\WPF\Utility.WPF.Controls.External\Utility.WPF.Controls.External.csproj", "{B75EB3A9-136A-41A7-AC33-C3012BB4E864}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -473,6 +475,10 @@ Global
 		{951F983E-7CE4-4D56-B796-2EDCC1821DB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{951F983E-7CE4-4D56-B796-2EDCC1821DB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{951F983E-7CE4-4D56-B796-2EDCC1821DB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B75EB3A9-136A-41A7-AC33-C3012BB4E864}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B75EB3A9-136A-41A7-AC33-C3012BB4E864}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B75EB3A9-136A-41A7-AC33-C3012BB4E864}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B75EB3A9-136A-41A7-AC33-C3012BB4E864}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -546,6 +552,7 @@ Global
 		{CF8DA54F-74C3-46B8-9D6B-B0EB0982C1DE} = {C0A380CA-EF00-4F4C-946B-31BBB8FFD58E}
 		{4D2153D4-C665-46DE-9336-C87E486C5DF0} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{951F983E-7CE4-4D56-B796-2EDCC1821DB6} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{B75EB3A9-136A-41A7-AC33-C3012BB4E864} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1F5991F-9180-4F40-A959-E24A6DDA6C5C}
