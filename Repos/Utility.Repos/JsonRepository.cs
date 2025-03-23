@@ -182,6 +182,11 @@ namespace Utility.Repos
 
         }
 
+        public void UpdateName(Guid parentGuid, Guid guid, string name, string newName)
+        {
+            throw new NotImplementedException();
+        }
+
         public static JsonRepository Instance { get; } = new();
     }
 }

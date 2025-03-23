@@ -636,6 +636,13 @@ namespace Utility.Repos
 
         }
 
+        public void UpdateName(Guid parentGuid, Guid guid, string name, string newName)
+        {
+            var table_name = getName(parentGuid);
+            connection.Execute($"UPDATE {table_name} SET {nameof(Relationships.Name)} = '{newName}' WHERE Guid = '{guid}'");
+            //setName(guid, newName);
+        }
+
         public const string Utility = nameof(Utility);
 
         public static readonly string ProgramData = GetFolderPath(SpecialFolder.CommonApplicationData);

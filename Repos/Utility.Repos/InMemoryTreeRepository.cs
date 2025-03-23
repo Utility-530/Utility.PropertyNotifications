@@ -339,6 +339,11 @@ namespace Utility.Repos
             names.Clear();
             _values.Clear();
         }
+
+        public void UpdateName(Guid parentGuid, Guid guid, string name, string newName)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
