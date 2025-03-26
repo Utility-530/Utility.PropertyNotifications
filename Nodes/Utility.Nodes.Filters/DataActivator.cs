@@ -1,15 +1,15 @@
 ﻿using System.Reflection;
 using Utility.Interfaces.NonGeneric;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Utility.Nodes.Filters
 {
     internal static class DataActivator
     {
-
         public static object Activate(Structs.Repos.Key? a)
         {
-            if (a.Value.Type.GetConstructors().SingleOrDefault(a => a.GetParameters().SingleOrDefault(a => a.ParameterType == typeof(string)) is not null) is ConstructorInfo constructorInfo)
+            if (infos().SingleOrDefault() is { } constructorInfo)         
             {
                 return constructorInfo.Invoke([a.Value.Name]);
             }
@@ -21,6 +21,11 @@ namespace Utility.Nodes.Filters
                 sname.Name = a.Value.Name;
             }
             return _data;
+
+            IEnumerable<ConstructorInfo> infos() => from x in a.Value.Type.GetConstructors()
+                                                    let p = x.GetParameters()
+                                                    where p.Length == 1 && p[0].ParameterType ==typeof(string)
+                                                    select x;
         }
     }
 }
