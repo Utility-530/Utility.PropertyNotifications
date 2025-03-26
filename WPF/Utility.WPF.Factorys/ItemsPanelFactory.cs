@@ -14,22 +14,22 @@ namespace Utility.WPF.Factorys
     {
         public static ItemsPanelTemplate Template(int? rows, int? columns, Orientation? orientation, Arrangement? arrangement, Action<FrameworkElementFactory>? postAction =null)
         {
-            if(rows==1 && orientation==Orientation.Horizontal && arrangement == Arrangement.Uniform)
-            {
-                return CreateItemsPanelTemplate<UniformStackPanel>(factory =>
-                {
-                    factory.SetValue(UniformStackPanel.OrientationProperty, Orientation.Horizontal);
-                    postAction?.Invoke(factory);
-                });
-            }
-            if (columns == 1 && orientation == Orientation.Vertical && arrangement == Arrangement.Uniform)
-            {
-                return CreateItemsPanelTemplate<UniformStackPanel>(factory =>
-                {
-                    factory.SetValue(UniformStackPanel.OrientationProperty, Orientation.Vertical);
-                    postAction?.Invoke(factory);
-                });
-            }
+            //if(rows==1 && orientation==Orientation.Horizontal && arrangement == Arrangement.Uniform)
+            //{
+            //    return CreateItemsPanelTemplate<UniformStackPanel>(factory =>
+            //    {
+            //        factory.SetValue(UniformStackPanel.OrientationProperty, Orientation.Horizontal);
+            //        postAction?.Invoke(factory);
+            //    });
+            //}
+            //if (columns == 1 && orientation == Orientation.Vertical && arrangement == Arrangement.Uniform)
+            //{
+            //    return CreateItemsPanelTemplate<UniformStackPanel>(factory =>
+            //    {
+            //        factory.SetValue(UniformStackPanel.OrientationProperty, Orientation.Vertical);
+            //        postAction?.Invoke(factory);
+            //    });
+            //}
             return (arrangement, orientation) switch
             {
 
