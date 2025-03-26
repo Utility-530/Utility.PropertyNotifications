@@ -1,4 +1,5 @@
-﻿using Utility.Interfaces.Generic;
+﻿using Utility.Interfaces;
+using Utility.Interfaces.Generic;
 using Utility.Meta;
 
 namespace Utility.PropertyDescriptors;
@@ -38,7 +39,7 @@ internal abstract record NullableValueDescriptor<T>(Descriptor Descriptor, objec
 
 }
 
-internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValuePropertyDescriptor(Descriptor, Instance)
+internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueMemberDescriptor(Descriptor), IRaisePropertyChanged, IInstance
 {
     public override IEnumerable<object> Children => Array.Empty<object>();
 
@@ -57,34 +58,11 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
         }
     }
 
-    public override void Initialise(object? item = null)
+    public void RaisePropertyChanged(ref object previousValue, object value, string? propertyName = null)
     {
-        //Get();
-        //if (value == null)
-        //{
-        //    value = Descriptor.GetValue(Instance);
-        //    repo.Set(Guid, value, DateTime.Now);
-        //}
-        //if (Descriptor.IsReadOnly == false)
-        //{
-        //    (dateValue ??= repo.Get(Guid))
-        //        .Subscribe(a =>
-        //    {
-        //        if (a is { Value: { } _value } x)
-        //        {
-        //            RaisePropertyChanged(_value);
-        //        }
-        //    });
-        //}
-    }
-
-    public override void Finalise(object? item = null)
-    {
-        //var value = Descriptor.GetValue(Instance);
-        //if (value != null)
-        //    repo.Set(Guid, nameof(Value), value, DateTime.Now);
+        if (Descriptor.IsReadOnly == true)
+            return;
+        base.RaisePropertyChanged(ref previousValue, value);
     }
 }
-
-
 

@@ -5,7 +5,7 @@ namespace Utility.PropertyDescriptors
 {
     public class DescriptorFactory //: IValueConverter
     {
-        public static IValueDescriptor CreateRoot(Type type, string? name = null)
+        public static IDescriptor CreateRoot(Type type, string? name = null)
         {
             var instance = Activator.CreateInstance(type);
             var rootDescriptor = new RootDescriptor(type, name: name);
@@ -15,25 +15,11 @@ namespace Utility.PropertyDescriptors
             return root;
         }
 
-        public static IValueDescriptor CreateRoot(object instance, string? name = null)
+        public static IDescriptor CreateRoot(object instance, string? name = null)
         {
             var rootDescriptor = new RootDescriptor(instance.GetType(), name: name);
             rootDescriptor.SetValue(null, instance);
             return DescriptorConverter.ToDescriptor(instance, rootDescriptor);
-        }
-
-        public static IDescriptor CreateItem(object item, int index, Type type, Type parentType)
-        {
-            MemberDescriptor descriptor;
-            if (type.IsValueOrString())
-            {
-                descriptor = new CollectionItemDescriptor(item, index, parentType);
-            }
-            else
-            {
-                descriptor = new CollectionItemReferenceDescriptor(item, index, parentType);
-            }
-            return descriptor;
         }
 
         public static IDescriptor CreateMethodItem(object item, MethodInfo methodInfo, Type type)
@@ -45,9 +31,9 @@ namespace Utility.PropertyDescriptors
 
     public class DescriptorConverter
     {
-        public static ValuePropertyDescriptor ToDescriptor(object? value, Descriptor descriptor)
+        public static MemberDescriptor ToDescriptor(object? value, Descriptor descriptor)
         {
-            ValuePropertyDescriptor _descriptor = descriptor.PropertyType switch
+            MemberDescriptor _descriptor = descriptor.PropertyType switch
             {
                 Type t when t == typeof(string) => new StringValue(descriptor, value),
                 Type t when t.BaseType == typeof(Enum) => new EnumValue(descriptor, value),
@@ -75,7 +61,7 @@ namespace Utility.PropertyDescriptors
                 Type t when t.IsValueType => new StructValue(descriptor, value),
 
 
-                Type t when t.IsDerivedFrom<object>() => new ReferenceDescriptor(descriptor, value),
+                Type t when t.IsDerivedFrom<object>() => new ReferenceDescriptor(descriptor, descriptor.GetValue(value)),
 
                 _ => new NullValue(descriptor, value),
 

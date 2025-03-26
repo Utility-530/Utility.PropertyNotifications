@@ -66,7 +66,15 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
 
 }
 
-internal record HeaderDescriptor : ChildlessMemberDescriptor, IHeaderDescriptor
+internal record HeaderDescriptor<T, TR>(string Name) : ReferenceDescriptor(new RootDescriptor(typeof(T), typeof(TR), Name), null)
+{
+}
+
+internal record HeaderDescriptor<T>(string Name) : ReferenceDescriptor(new RootDescriptor(typeof(T), null, Name), null)
+{
+}
+
+internal record HeaderDescriptor : ChildlessMemberDescriptor, IHeaderDescriptor, IGetType
 {
     public HeaderDescriptor(Type type, Type parentType, string name) : base(new RootDescriptor(type, parentType, name))
     {
@@ -82,118 +90,20 @@ internal record HeaderDescriptor : ChildlessMemberDescriptor, IHeaderDescriptor
     public override void Finalise(object? item = null)
     {
     }
-}
 
-internal partial record CollectionItemDescriptor : ValueDescriptor, ICollectionItemDescriptor, IEquatable, IItem
-{
-
-    internal CollectionItemDescriptor(object item, int index, Type componentType) : base(new RootDescriptor(item.GetType(), componentType, item.GetType().Name) { }, item)
+    public new Type GetType()
     {
-        Item = item;
-
-        if (index == 0)
+        if (ParentType == null)
         {
-            throw new Exception("Index 0 reserved for header!");
+            Type[] typeArguments = { Type };
+            Type genericType = typeof(ReferenceDescriptor<>).MakeGenericType(typeArguments);
+            return genericType;
         }
-        Index = index;
-    }
-
-    public object Item { get; set; }
-
-    public int Index { get; }
-
-    public override object Get()
-    {
-        return Item;
-    }
-
-    public override void Set(object? value)
-    {
-        if (Item is IList collection)
+        else
         {
-            collection[Index] = value;
-            Item = value;
-
-        }
-        throw new NotImplementedException();
-    }
-
-    public static int ToIndex(string name) => int.Parse(MyRegex().Matches(name).First().Groups[1].Value);
-    public static string FromIndex(string name, int index) => name + $" [{index}]";
-
-    public bool Equals(IEquatable? other)
-    {
-        if (other is CollectionItemDescriptor collectionItemDescriptor)
-            return Item.Equals(collectionItemDescriptor.Item) && Index.Equals(collectionItemDescriptor.Index);
-        return false;
-    }
-
-    [GeneratedRegex("\\[(\\d*)\\]")]
-    private static partial Regex MyRegex();
-}
-
-
-internal partial record CollectionItemReferenceDescriptor : ReferenceDescriptor, ICollectionItemReferenceDescriptor
-{
-    private int count = 0;
-    List<IDescriptor> _descriptors = [];
-    public CollectionItemReferenceDescriptor(object item, int index, Type componentType) : base(new RootDescriptor(item.GetType(), componentType) { }, item)
-    {
-        Item = item;
-
-        if (index == 0)
-        {
-            throw new Exception("Index 0 reserved for header!");
-        }
-        Index = index;
-    }
-
-    public object Item { get; set; }
-
-    public int Index { get; }
-
-    public int Count => count;
-
-    public override string? Name => Type.Name + $" [{Index}]";
-
-    public static int ToIndex(string name) => int.Parse(MyRegex().Matches(name).First().Groups[1].Value);
-
-    public static string FromIndex(string name, int index) => name + $" [{index}]";
-
-
-    public override IEnumerable Children
-    {
-        get
-        {
-            if (_descriptors.IsEmpty())
-            {
-                var descriptors = TypeDescriptor.GetProperties(Instance);
-                foreach (Descriptor descriptor in descriptors)
-                {
-                    var d = DescriptorConverter.ToDescriptor(Instance, descriptor);
-                    _descriptors.Add(d);
-                    count++;
-                    yield return d;
-                }
-            }
-            else
-            {
-                foreach (IDescriptor descriptor in _descriptors)
-                {
-                    //DescriptorFactory.ToValue(Instance, descriptor)
-                    yield return descriptor;
-                }
-            }
+            Type[] typeArguments = { Type, ParentType };
+            Type genericType = typeof(ReferenceDescriptor<,>).MakeGenericType(typeArguments);
+            return genericType;
         }
     }
-
-    public bool Equals(IEquatable? other)
-    {
-        if (other is CollectionItemReferenceDescriptor collectionItemDescriptor)
-            return Item.Equals(collectionItemDescriptor.Item) && Index.Equals(collectionItemDescriptor.Index);
-        return false;
-    }
-
-    [GeneratedRegex("\\[(\\d*)\\]")]
-    private static partial Regex MyRegex();
 }

@@ -2,11 +2,15 @@
 
 namespace Utility.PropertyDescriptors;
 
-internal abstract record ReferenceDescriptor<T, TR>(string name) : ReferenceDescriptor(new RootDescriptor(typeof(T), typeof(TR), name), null)
+internal record ReferenceDescriptor<T, TR>(string Name) : ReferenceDescriptor(new RootDescriptor(typeof(T), typeof(TR), Name), null)
 {
 }
 
-internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : ValuePropertyDescriptor(Descriptor, Instance), IReferenceDescriptor
+internal record ReferenceDescriptor<T>(string Name) : ReferenceDescriptor(new RootDescriptor(typeof(T), null, Name), null)
+{
+}
+
+internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor), IReferenceDescriptor, IGetType
 {
     private PropertiesDescriptor? propertiesDescriptor;
 
@@ -14,12 +18,11 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
     {
         get
         {
-
-            if (Value is null)
-            {
+            if (Instance is null)
+            {         
                 int i = 0;
 
-                if (Descriptor.PropertyType.IsAssignableTo(typeof(IEnumerable)) && Descriptor.PropertyType.IsAssignableTo(typeof(string)) == false && Descriptor.PropertyType.GetCollectionElementType() is Type _elementType)
+                if (Descriptor.PropertyType.IsAssignableTo(typeof(IEnumerable)) && Descriptor.PropertyType.IsAssignableTo(typeof(string)) == false && this.CollectionItemPropertyType is Type _elementType)
                 {
                     var enumerable = (IEnumerable?)Activator.CreateInstance(Descriptor.PropertyType);
                     var collectionDescriptor = new CollectionDescriptor(Descriptor, _elementType, enumerable);
@@ -36,17 +39,34 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                     yield return propertiesDescriptor;
                 }
             }
-            if (Value is object obj)
+            if (Instance is object obj)
             {
-                yield return new PropertiesDescriptor(Descriptor, Value);
+                yield return new PropertiesDescriptor(Descriptor, Instance);
             }
-            if (Value is IEnumerable _enumerable && Value is not string s && Value.GetType() is Type _type && _type.GetCollectionElementType() is Type elementType)
+            if (Instance is IEnumerable _enumerable && Instance is not string s && Instance.GetType() is Type _type && _type.ElementType() is Type elementType)
             {
                 int i = 0;
                 yield return new CollectionDescriptor(Descriptor, elementType, _enumerable);
 
             }
+        }
+    }
 
+    public int Count => TypeDescriptor.GetProperties(Instance).Count;
+
+    public new Type GetType()
+    {
+        if (ParentType == null)
+        {
+            Type[] typeArguments = { Type };
+            Type genericType = typeof(ReferenceDescriptor<>).MakeGenericType(typeArguments);
+            return genericType;
+        }
+        else
+        {
+            Type[] typeArguments = { Type, ParentType };
+            Type genericType = typeof(ReferenceDescriptor<,>).MakeGenericType(typeArguments);
+            return genericType;
         }
     }
 }

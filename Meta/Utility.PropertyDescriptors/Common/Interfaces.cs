@@ -1,16 +1,5 @@
 ﻿namespace Utility.PropertyDescriptors
 {
-    public interface ICollectionItemDescriptor : IDescriptor, IItem
-    {
-        int Index { get; }  
-    }   
-       
-    public interface ICollectionItemReferenceDescriptor : IReferenceDescriptor, ICollectionItemDescriptor, IEquatable, IItem, IGetIndex, ICount
-    {
-   
-    }   
-    
-
     public interface ICollectionDescriptor : IDescriptor, ICount, IObserver<RefreshEventArgs>
     {
         IEnumerable Collection { get; }
@@ -19,7 +8,7 @@
 
     }
 
-    public interface ICollectionHeadersDescriptor : ICollectionItemDescriptor, ICount
+    public interface ICollectionHeadersDescriptor : IDescriptor, ICount
     {
     }
 
@@ -41,7 +30,7 @@
     public interface IPropertiesDescriptor : IDescriptor
     {
     }
-    public interface IReferenceDescriptor : IDescriptor
+    public interface IReferenceDescriptor : IDescriptor, ICount
     {
         object Instance { get; }
     }

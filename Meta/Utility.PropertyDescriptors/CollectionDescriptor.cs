@@ -1,5 +1,7 @@
-﻿using System.Reactive;
+﻿using System.Collections.ObjectModel;
+using System.Reactive;
 using Utility.Helpers.NonGeneric;
+using Utility.Meta;
 
 namespace Utility.PropertyDescriptors
 {
@@ -8,12 +10,26 @@ namespace Utility.PropertyDescriptors
         IEnumerable Collection { get; }
     }
 
+    internal record CollectionDescriptor<T, TR>(string name) : CollectionDescriptor<T>(new RootDescriptor(typeof(T), typeof(TR), name), (IEnumerable)Activator.CreateInstance(typeof(T)))
+    {
+    }
+
+    internal record CollectionDescriptor<T>(Descriptor PropertyDescriptor, IEnumerable Collection) : CollectionDescriptor(PropertyDescriptor, typeof(T).ElementType(), Collection), IGetType
+    {
+        public CollectionDescriptor(string name) : this(new RootDescriptor(typeof(T), null, name), new ObservableCollection<T>())
+        {
+        }
+    }
+
     internal record CollectionDescriptor(Descriptor PropertyDescriptor, Type ElementType, IEnumerable Collection) : BasePropertyDescriptor(PropertyDescriptor, Collection),
         ICollectionDescriptor,
         IValueCollection,
-        IRefresh
+        IRefresh,
+        IGetType
     {
-        List<ICollectionItemDescriptor> descriptors = new();
+        Dictionary<IDescriptor, (object Item, int Index)> descriptors = new();
+
+        ObservableCollection<IDescriptor>? children;
 
         public static string _Name => "Collection";
 
@@ -23,21 +39,10 @@ namespace Utility.PropertyDescriptors
         {
             get
             {
-                yield return new CollectionHeadersDescriptor(ElementType, Instance.GetType());
-
-                foreach (var x in AddFromInstance())
-                {
-                    yield return x;
-                }
+                return children ??= new ObservableCollection<IDescriptor>(new[] { new CollectionHeadersDescriptor(ElementType, Instance.GetType()) }.Concat(AddFromInstance()));
             }
         }
 
-
-
-        public void Refresh()
-        {
-            //AddFromInstance(replaySubject);
-        }
 
         // collection
         public virtual int Count => Instance is IEnumerable enumerable ? enumerable.Count() : 0;
@@ -57,9 +62,9 @@ namespace Utility.PropertyDescriptors
         {
             foreach (var item in Collection)
             {
-                if (descriptors.Any(a => a.Item == item) == false)
+                if (descriptors.Any(a => a.Value.Item == item) == false)
                 {
-                    int i = (descriptors.LastOrDefault()?.Index ?? 0) + 1;
+                    int i = (descriptors.LastOrDefault().Value.Index) + 1;
                     yield return Next(item, item.GetType(), Type, Changes.Type.Add, i);
                 }
                 else
@@ -71,9 +76,9 @@ namespace Utility.PropertyDescriptors
             foreach (var descriptor in descriptors.ToArray())
             {
                 //i++;
-                if (Contains(Collection, descriptor.Item) == false)
+                if (Contains(Collection, descriptor.Value.Item) == false)
                 {
-                    yield return descriptor;
+                    yield return descriptor.Key;
                 }
             }
 
@@ -88,11 +93,10 @@ namespace Utility.PropertyDescriptors
             }
         }
 
-
         IDescriptor Next(object item, Type type, Type parentType, Changes.Type changeType, int i, bool refresh = false, DateTime? removed = null)
         {
-            var descriptor = DescriptorFactory.CreateItem(item, i, type, parentType) as ICollectionItemDescriptor;
-            descriptors.Add(descriptor);
+            var descriptor = DescriptorConverter.ToDescriptor(item, new RootDescriptor(type, parentType, type.Name + $" [{i}]"));
+            descriptors.Add(descriptor, (item, i));
             if (refresh)
                 descriptor.Initialise();
             return descriptor;
@@ -110,7 +114,29 @@ namespace Utility.PropertyDescriptors
 
         public void OnNext(RefreshEventArgs value)
         {
-            throw new NotImplementedException();
+            foreach (var item in AddFromInstance())
+                children.Add(item);
+        }
+        public void Refresh()
+        {
+            foreach (var item in AddFromInstance())
+                children.Add(item);
+        }
+
+        public new Type GetType()
+        {
+            if (ParentType == null)
+            {
+                Type[] typeArguments = { Type };
+                Type genericType = typeof(CollectionDescriptor<>).MakeGenericType(typeArguments);
+                return genericType;
+            }
+            else
+            {
+                Type[] typeArguments = { Type, ParentType };
+                Type genericType = typeof(CollectionDescriptor<,>).MakeGenericType(typeArguments);
+                return genericType;
+            }
         }
     }
 }
