@@ -53,10 +53,10 @@ namespace Utility.Nodes.WPF
                             {
                                 new TrueDecisionTree(new Decision<IDescriptor>(item => item.Type.IsAssignableTo(typeof(IEnumerable))),  a=> false)
                             },
-                            new TrueDecisionTree(new Decision<IDescriptor>(item => item as ICollectionItemDescriptor!=null))
-                            {
-                                //new TrueDecisionTree(new Decision<IDescriptor>(item => (item as ICollectionItemDescriptor).Removed != null ),  a=> false)
-                            },
+                            //new TrueDecisionTree(new Decision<IDescriptor>(item => item as ICollectionItemDescriptor!=null))
+                            //{
+                            //    //new TrueDecisionTree(new Decision<IDescriptor>(item => (item as ICollectionItemDescriptor).Removed != null ),  a=> false)
+                            //},
                             new TrueDecisionTree<IDescriptor>(new Decision<IDescriptor>(item => item.ParentType.Name == "BitmapImage"), item =>false),
                             new TrueDecisionTree<IDescriptor>(new Decision<IDescriptor>(item => item.Name == "DependencyObjectType"), item =>false),
                             new TrueDecisionTree<IDescriptor>(new Decision<IDescriptor>(item => item.Type.Name == "ImageSource"), item =>false),

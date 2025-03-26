@@ -82,15 +82,18 @@
         </Setter>
     </Style>
 
-    <!--<Style TargetType="{x:Type trees:CustomTreeViewItem}" x:Key="LineStyle" BasedOn="{StaticResource EditTreeViewItemStyle}">-->
-
     <Style TargetType="{x:Type trees:CustomTreeViewItem}" x:Key="LineStyle" BasedOn="{StaticResource PlusTreeViewItem}">
         <!--<Setter Property="Width" Value="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=TreeViewItem, AncestorLevel=2}}"></Setter>-->
         <Setter Property="Edit" Value="{Binding Data, Converter={StaticResource EditConverter}}"></Setter>
         <Setter Property="EditTemplate">
             <Setter.Value >
                 <DataTemplate>
-                    <TextBox Text="{Binding Name, Mode=OneWay}"></TextBox>
+                    <Border BorderBrush="Green" BorderThickness="2">
+                        <Grid>
+                            <TextBox Text="{Binding Value, Mode=TwoWay}"></TextBox>
+                            <TextBlock Text="edit" FontSize="6" HorizontalAlignment="Left" VerticalAlignment="Top"></TextBlock>
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -145,9 +148,14 @@
                                        StrokeThickness="1"
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Stretch" Width="8" Height="8"  Margin="0,0"/>
-
-                            <ItemsPresenter  Grid.Column="1" Grid.Row="1"/>
-
+                            <!--<ContentPresenter x:Name="PART_Header"
+                                      Grid.Column="1"
+                                      ContentSource="Header"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>-->
+                        
+                                <ItemsPresenter  Grid.Column="1" Grid.Row="1" Grid.RowSpan="1" VerticalAlignment="Stretch" />
+                         
+                            
                             <UniformGrid Rows="1" Grid.Column="2" Grid.RowSpan="2">
                                 <btns:PlusGeometryButton x:Name="PlusButton"  Width="16" Height="16"   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />
                                 <btns:MinusGeometryButton x:Name="MinusButton"  Width="16" Height="16"    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />

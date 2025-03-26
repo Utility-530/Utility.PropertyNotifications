@@ -71,7 +71,7 @@ namespace Utility.Nodes.WPF
                     new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionDescriptor != null){  }, md=>"LineStyle"),
                     new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionHeadersDescriptor != null){  }, md=>"ItemsStyle"),
                     new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IPropertiesDescriptor != null){  }, md=>"ItemsStyle"),
-                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionItemReferenceDescriptor != null){  }, md =>"ThinLineStyle"),
+                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Parent !=null && item.Parent.Data is ICollectionDescriptor){  }, md =>"ThinLineStyle"),
 
                     //new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Parent!=null){  })
                     //{

@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 using Utility.Enums;
+using Utility.Interfaces;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
@@ -18,16 +19,20 @@ namespace Utility.Nodes.WPF
             {
                 return ItemsPanelFactory.Template(default, default, O.Vertical, Arrangement.Stacked);
             }
-            if (value is IReadOnlyTree { Data: ICollectionItemReferenceDescriptor { Count: var count } descriptor })
+            //if (value is IReadOnlyTree { Data: IReferenceDescriptor { Type: { } type, Count: int count }, Parent.Data: ICollectionDescriptor { } descriptor } && typeof(IEnumerable).IsAssignableFrom(type))
+            //{
+            //    return ItemsPanelFactory.Template(1, 1, O.Horizontal, Arrangement.Uniform);
+            //}
+            if (value is IReadOnlyTree { Data: IReferenceDescriptor { Count: int _count }, Parent.Data: ICollectionDescriptor { } })
             {
-                return ItemsPanelFactory.Template(1, count, O.Horizontal, Arrangement.Uniform);
+                return ItemsPanelFactory.Template(1, Math.Max(_count, 1), O.Horizontal, Arrangement.Uniform);
             }
-            if (value is IReadOnlyTree { Data: ICollectionHeadersDescriptor { Count: var _count } })
+            if (value is IReadOnlyTree { Data: ICollectionHeadersDescriptor { Count: var __count } })
             {
-                return ItemsPanelFactory.Template(1, _count, O.Horizontal, Arrangement.Uniform);
+                return ItemsPanelFactory.Template(1, __count, O.Horizontal, Arrangement.Uniform);
             }
             {
-                if (tree.Data is PropertyDescriptor { } _descriptor)
+                if (tree.Data is IPropertyDescriptor { } _descriptor)
                     return ItemsPanelFactory.Template(1, default, O.Horizontal, Arrangement.Stacked);
             }
             //{

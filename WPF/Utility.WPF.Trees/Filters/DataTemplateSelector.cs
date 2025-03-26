@@ -40,7 +40,7 @@ namespace Utility.Nodes.WPF
                     //new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionItemDescriptor!=null){  }, md=>MakeLineTemplate()),
                     new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Parent!=null){  })
                     {
-                        new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => (item.Parent .Data as ICollectionItemDescriptor!=null)){  }, md=>() => MakeTemplate(md)),
+                        new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => true){  }, md=>() => MakeTemplate(md)),
                         //new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => ((item.Parent ).Parent!=null)){  })
                         //{
                         //    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => (((item.Parent ).Parent).Data as ICollectionItemDescriptor!=null)){  }, md=> MakeTemplate(md)),
