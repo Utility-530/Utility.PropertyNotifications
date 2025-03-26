@@ -23,7 +23,6 @@ namespace Utility.Reactives
               .Changes()
               .Where(a => a.Action == NotifyCollectionChangedAction.Add)
               .SelectMany(x => x.NewItems?.Cast<T>() ?? []);
-
         }
 
         public static IObservable<T> Additions<T>(this INotifyCollectionChanged notifyCollectionChanged)
@@ -39,6 +38,19 @@ namespace Utility.Reactives
                         observer.OnNext(t);
                 });
             });
+        }
+
+        public static IObservable<T> Additions<T>(this IEnumerable enumerable)
+        {
+            if (enumerable is INotifyCollectionChanged changed)
+                return changed.Additions<T>();
+            else
+                return Observable.Empty<T>();
+        }
+
+        public static IObservable<object> Additions(this IEnumerable enumerable)
+        {
+            return Additions<object>(enumerable);
         }
 
         public static IObservable<T> ToOldItemsObservable<T>(this INotifyCollectionChanged notifyCollectionChanged)
@@ -158,7 +170,7 @@ namespace Utility.Reactives
                 foreach (var x in collection)
                     observer.OnNext(x);
 
-                return Additions<TR>(collection).Subscribe(observer);
+                return Additions<TR>((INotifyCollectionChanged)collection).Subscribe(observer);
             });
         }
 
