@@ -60,8 +60,6 @@ namespace Utility.Nodes.Ex
             tree.WithChangesTo(a => a.IsExpanded).Subscribe(a => clone.IsExpanded = a).DisposeWith(c_disposables);
             clone.WithChangesTo(a => a.IsExpanded).Subscribe(a => tree.IsExpanded = a).DisposeWith(c_disposables);
 
-
-            CompositeDisposable disposables = new();
             tree.Items.AndAdditions<Node>().Subscribe(async item =>
             {
                 var childClone = (ITree)item.Abstract(out var _disposables);
