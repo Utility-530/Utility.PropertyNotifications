@@ -88,14 +88,8 @@ namespace Utility.Nodes.Demo.Filters.Services
             {
                 Dictionary<IReadOnlyTree, IElement> dictionary = new();
 
-
-
                 // Ensure we have a root element (usually the <html> element).
                 IElement body = document.Body;
-
-
-                // Add a new element (e.g., <div>) to the body, at the target index.
-                //newElement.TextContent = $"New {tagNameToAdd} at position {targetIndex}"; // Set content for the new element
 
                 // Get all child elements of the body.
                 var childElements = body.Children;
@@ -138,15 +132,15 @@ namespace Utility.Nodes.Demo.Filters.Services
                         newElement.TextContent = headerDescriptor.Name;
 
                     }
-                    else if (n.Data is ICollectionItemDescriptor collectionItemDescriptor)
+                    else if (n.Parent?.Data is ICollectionDescriptor collectionItemDescriptor)
                     {
-                        newElement = document.CreateElement<IHtmlTableRowElement>();
-
+                        if (n.Data is IReferenceDescriptor)
+                            newElement = document.CreateElement<IHtmlTableRowElement>();
+                        else   
+                            newElement = document.CreateElement<IHtmlTableDataCellElement>();
+                        
                     }
-                    else if (n.Parent?.Data is ICollectionItemDescriptor)
-                    {
-                        newElement = document.CreateElement<IHtmlTableDataCellElement>();
-                    }
+          
                     else
                     {
                         newElement = document.CreateElement<IHtmlDivElement>(); // Create a new element
@@ -161,15 +155,15 @@ namespace Utility.Nodes.Demo.Filters.Services
                     {
                         var key = StyleSelector.Instance.SelectKey(n);
 
-                        if (descriptor is ICollectionItemReferenceDescriptor)
-                        {
-
-                        }
-                        //else if (n.Parent?.Data is ICollectionItemReferenceDescriptor)
+                        //if (descriptor is ICollectionItemReferenceDescriptor)
                         //{
 
-                        //}
-                        else if (descriptor is IReferenceDescriptor iRef && n.Parent.Data is not ICollectionItemReferenceDescriptor)
+                            //}
+                            //else if (n.Parent?.Data is ICollectionItemReferenceDescriptor)
+                            //{
+
+                            //}
+                        if (descriptor is IReferenceDescriptor iRef /*&& n.Parent.Data is not ICollectionItemReferenceDescriptor*/)
                         {
                             var p = document.CreateElement<IHtmlParagraphElement>();
                             p.TextContent = iRef.Name;
