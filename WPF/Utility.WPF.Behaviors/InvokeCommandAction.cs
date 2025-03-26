@@ -209,6 +209,8 @@ namespace Utility.WPF.Behaviors
                 if (obj == null && EventArgsConverter != null)
                 {
                     obj = EventArgsConverter.Convert(parameter, typeof(object), EventArgsConverterParameter, CultureInfo.CurrentCulture);
+                    if (obj == DependencyProperty.UnsetValue)
+                        return;
                 }
 
                 if (obj == null && PassEventArgsToCommand)
