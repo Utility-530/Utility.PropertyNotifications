@@ -716,11 +716,6 @@ namespace Utility.Models.Trees
         }
     }
 
-    public interface ISet
-    {
-        void Set(object instance, object v);
-    }
-
     public class SetModel : ResolvableModel, /*ISet,*/ IValue, IObservable<ValueChanged>
     {
         private object value;

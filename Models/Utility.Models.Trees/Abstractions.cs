@@ -38,12 +38,6 @@ namespace Utility.Models.Trees
         bool IsEqual(object _value);
     }
 
-
-    public interface IValue
-    {
-        object Value { get; set; }
-    }
-
     public interface ISelection
     {
 
