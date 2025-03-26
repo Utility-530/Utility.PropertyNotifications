@@ -161,7 +161,7 @@
 
                                 </Grid>
 
-                                <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch"               ShowsPreview="True"/>
+                                <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" ShowsPreview="True"/>
 
                                 <TreeView Grid.Column="2" ItemsSource="{Binding Html}">
                                     <ItemsControl.ItemContainerStyle>
@@ -181,7 +181,7 @@
                                     </ItemsControl.ItemTemplate>
                                 </TreeView>
 
-                                <GridSplitter Grid.Column="3" Width="5" VerticalAlignment="Stretch"               ShowsPreview="True"/>
+                                <GridSplitter Grid.Column="3" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" ShowsPreview="True"/>
 
 
                                 <TreeView Grid.Column="4" ItemsSource="{Binding Html_Render}">
