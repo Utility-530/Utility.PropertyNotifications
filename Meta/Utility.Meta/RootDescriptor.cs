@@ -35,10 +35,17 @@ namespace Utility.Meta
             }
             else
             {
-                return this.component ??= Activator.CreateInstance(PropertyType);
+                return this.component ??= instance(PropertyType);
+            }
+            object instance(Type type)
+            {
+                if (type == typeof(string))
+                {
+                    return string.Empty;
+                }
+                return Activator.CreateInstance(type);
             }
         }
-
         public override void ResetValue(object component)
         {
             throw new NotImplementedException();
