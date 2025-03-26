@@ -55,8 +55,8 @@ namespace Utility.Nodes.Demo.Styles
             {
                 if (parameter is IKey { Key: string key } && Guid.TryParse(key, out var guid))
                 {
-                    var xx = CreateRoot(type, guid);       
-                    return xx;
+                    var root = CreateRoot(type, guid);       
+                    return root;
                 }
             }
             else if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: IReadOnlyTree { Data: AssemblyModel { Assembly: Assembly ass } } })
@@ -71,7 +71,7 @@ namespace Utility.Nodes.Demo.Styles
             throw new NotImplementedException();
         }
 
-        public static ValuePropertyDescriptor CreateRoot(Type type, Guid guid)
+        public static IDescriptor CreateRoot(Type type, Guid guid)
         {
             //var instance = Activator.CreateInstance(type);
             var instance = ActivateAnything.Activate.New(type);
@@ -80,7 +80,7 @@ namespace Utility.Nodes.Demo.Styles
             var root = CreateRoot(rootDescriptor);
             return root;
 
-            ValuePropertyDescriptor CreateRoot(System.ComponentModel.PropertyDescriptor descriptor)
+            IDescriptor CreateRoot(System.ComponentModel.PropertyDescriptor descriptor)
             {
                 var _descriptor = DescriptorConverter.ToDescriptor(instance, descriptor);
                 return _descriptor;
