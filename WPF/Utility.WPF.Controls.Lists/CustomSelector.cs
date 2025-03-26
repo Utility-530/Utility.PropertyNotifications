@@ -27,14 +27,16 @@ namespace Utility.WPF.Controls.Lists
             })));
         public static readonly DependencyProperty RemoveCommandProperty =
             DependencyProperty.Register("RemoveCommand", typeof(ICommand), typeof(CustomSelector), new PropertyMetadata());
-        public static readonly DependencyProperty NewObjectProperty =
-            DependencyProperty.Register("NewObject", typeof(object), typeof(CustomSelector), new PropertyMetadata());
-        public static readonly DependencyProperty SwapCommandProperty =
-            DependencyProperty.Register("SwapCommand", typeof(ICommand), typeof(CustomSelector), new PropertyMetadata());
+     
+        public static readonly DependencyProperty EditProperty =
+            DependencyProperty.Register("Edit", typeof(object), typeof(CustomSelector), new PropertyMetadata());
         public static readonly DependencyProperty EditTemplateSelectorProperty =
             DependencyProperty.Register("EditTemplateSelector", typeof(DataTemplateSelector), typeof(CustomSelector), new PropertyMetadata());
         public static readonly DependencyProperty EditTemplateProperty =
             DependencyProperty.Register("EditTemplate", typeof(DataTemplate), typeof(CustomSelector), new PropertyMetadata());
+
+        public static readonly DependencyProperty SwapCommandProperty =
+            DependencyProperty.Register("SwapCommand", typeof(ICommand), typeof(CustomSelector), new PropertyMetadata());
         //public static readonly DependencyProperty UnCheckedCommandProperty =
         //    DependencyProperty.Register("UnCheckedCommand", typeof(ICommand), typeof(CustomSelector), new PropertyMetadata());
         public static readonly DependencyProperty CheckedPropertyNameProperty =
@@ -93,19 +95,19 @@ namespace Utility.WPF.Controls.Lists
 
         void RaiseCustomRoutedEvent(bool isAccepted)
         {
-            NewObjectRoutedEventArgs routedEventArgs;
+            EditRoutedEventArgs routedEventArgs;
 
-            if (NewObject is ObjectWrapper { Object: { } _object } wrapper)
+            if (Edit is ObjectWrapper { Object: { } _object } wrapper)
             {
                 routedEventArgs = new(isAccepted, _object, FinishEditEvent, this);
             }
             else
             {
-                routedEventArgs = new(isAccepted, NewObject, FinishEditEvent, this);
+                routedEventArgs = new(isAccepted, Edit, FinishEditEvent, this);
             }
             RaiseEvent(routedEventArgs);
             {
-                this.GetBindingExpression(CustomSelector.NewObjectProperty)
+                this.GetBindingExpression(CustomSelector.EditProperty)
                                   .UpdateTarget();
             }
         }
@@ -119,10 +121,7 @@ namespace Utility.WPF.Controls.Lists
                         swap(indexes, collection);
                     else if (this.ItemsSource is ICollectionView { SourceCollection: IList sourceCollection } collectionView)
                         swap(indexes, sourceCollection);
-
                 });
-
-
 
             RemoveCommand = new Command<object>((a) =>
             {
@@ -249,10 +248,10 @@ namespace Utility.WPF.Controls.Lists
             set { SetValue(RemoveCommandProperty, value); }
         }
 
-        public object NewObject
+        public object Edit
         {
-            get { return (object)GetValue(NewObjectProperty); }
-            set { SetValue(NewObjectProperty, value); }
+            get { return (object)GetValue(EditProperty); }
+            set { SetValue(EditProperty, value); }
         }
 
         public DataTemplate EditTemplate
