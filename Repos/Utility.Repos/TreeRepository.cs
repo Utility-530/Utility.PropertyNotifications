@@ -579,7 +579,7 @@ namespace Utility.Repos
 
             string assemblyQualifiedName = Assembly.CreateQualifiedName(type.Assembly, $"{type.Namespace}.{type.Name}");
             var baseType = System.Type.GetType(assemblyQualifiedName);
-            var typeArguments = type.GenericTypeNames?.Split('|').Select(a => System.Type.GetType(a)).ToArray();
+            var typeArguments = type.GenericTypeNames?.Split('|').Select(a => new TypeSerialization.TypeDeserializer().Deserialize(a)).ToArray();
             System.Type constructedType = typeArguments == null ? baseType : baseType.MakeGenericType(typeArguments);
             if (constructedType == null)
                 throw new Exception($"Type, {assemblyQualifiedName},  does not exist");
@@ -595,7 +595,7 @@ namespace Utility.Repos
 
             }
             int typeId = 0;
-            var str = type.GenericTypeArguments.Any() ? string.Join('|', type.GenericTypeArguments.Select(TypeHelper.AsString)) : null;
+            var str = type.GenericTypeArguments.Any() ? string.Join('|', type.GenericTypeArguments.Select(a => TypeSerialization.TypeSerializer.Serialize(a))) : null;
             connection.RunInTransaction(() =>
             {
                 connection.Insert(new Type { Assembly = type.Assembly.FullName, Namespace = type.Namespace, Name = type.Name, GenericTypeNames = str });

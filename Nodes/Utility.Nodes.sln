@@ -165,6 +165,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.Lists"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.External", "..\WPF\Utility.WPF.Controls.External\Utility.WPF.Controls.External.csproj", "{B75EB3A9-136A-41A7-AC33-C3012BB4E864}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TypeSerialization", "..\..\Projects\Serialisation\TypeSerialization\TypeSerialization\TypeSerialization.csproj", "{6319AF12-5B0E-44B5-8175-C7251A3FFAB0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -479,6 +481,10 @@ Global
 		{B75EB3A9-136A-41A7-AC33-C3012BB4E864}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B75EB3A9-136A-41A7-AC33-C3012BB4E864}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B75EB3A9-136A-41A7-AC33-C3012BB4E864}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6319AF12-5B0E-44B5-8175-C7251A3FFAB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6319AF12-5B0E-44B5-8175-C7251A3FFAB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6319AF12-5B0E-44B5-8175-C7251A3FFAB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6319AF12-5B0E-44B5-8175-C7251A3FFAB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -553,6 +559,7 @@ Global
 		{4D2153D4-C665-46DE-9336-C87E486C5DF0} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{951F983E-7CE4-4D56-B796-2EDCC1821DB6} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{B75EB3A9-136A-41A7-AC33-C3012BB4E864} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{6319AF12-5B0E-44B5-8175-C7251A3FFAB0} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1F5991F-9180-4F40-A959-E24A6DDA6C5C}
