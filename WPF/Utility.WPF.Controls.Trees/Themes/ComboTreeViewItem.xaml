@@ -294,13 +294,8 @@
           Value="20" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type trees:CustomTreeViewItem}">
-                    <Grid>
+                <ControlTemplate TargetType="{x:Type trees:CustomTreeViewItem}">                
 
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <!--<RowDefinition Height="*"></RowDefinition>-->
-                        </Grid.RowDefinitions>
                         <!--<ToggleButton x:Name="ToggleButton"
                         Template="{StaticResource ComboBoxToggleButton}"
                         Grid.Column="2"
@@ -320,11 +315,10 @@
                                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>-->
 
 
-
                         <Grid x:Name="DropDown" Grid.Row="0" VerticalAlignment="Top"
-                  SnapsToDevicePixels="True"
-                  MinWidth="{Binding ActualWidth}"
-                  MaxHeight="{StaticResource MaxDropDownHeight}">
+                              SnapsToDevicePixels="True"                        
+                              MinWidth="{Binding ActualWidth}"
+                              MaxHeight="{StaticResource MaxDropDownHeight}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"></RowDefinition>
                                 <RowDefinition Height="Auto"></RowDefinition>
@@ -462,8 +456,7 @@
                                     </Grid>
                                 </Grid>
                             </Border>
-                        </Grid>
-                    </Grid>
+                        </Grid>                
                     <ControlTemplate.Triggers>
                         <DataTrigger Binding="{Binding Path=IsChecked, ElementName=PlusButton}" Value="False">
                             <Setter TargetName="content_control" Property="Height" Value="0" />
