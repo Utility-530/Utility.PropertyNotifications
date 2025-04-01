@@ -4,6 +4,7 @@
                     xmlns:test="clr-namespace:TextBoxEx;assembly=TextBoxEx"
                     xmlns:ui="http://toniccomputing.com/patterns/ui" 
                     xmlns:local="clr-namespace:Utility.Nodes.Demo.Styles"
+                    xmlns:local2="clr-namespace:Utility.Nodes.WPF.Styles"
                     xmlns:e="clr-namespace:Utility.Enums;assembly=Utility.Enums"
                     xmlns:inf="clr-namespace:Utility.Models.Trees;assembly=Utility.Models.Trees"
                     xmlns:model="clr-namespace:Utility.Models;assembly=Utility.Models"
@@ -15,7 +16,9 @@
                     xmlns:templates="http://schemas.utility.com/templates" 
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:conv="http://schemas.utility.com/converters" 
-                    xmlns:res="http://schemas.utility.com/resourcedictionary" xmlns:controls="http://schemas.utility.com">
+                    xmlns:res="http://schemas.utility.com/resourcedictionary" 
+                    xmlns:html="http://schemas.utility.com/html"
+                    xmlns:controls="http://schemas.utility.com">
 
 
     <ResourceDictionary.MergedDictionaries>
@@ -186,17 +189,9 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:HtmlModel}">
-        <avalonedit:TextEditor x:Name="textHtml" 
-                    Text="{Binding Value, Mode=OneWay}" 
-                    SyntaxHighlighting="HTML" 
-                    ShowLineNumbers="True" />
+        <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, Converter={x:Static conv:DefaultConverter.Instance}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
+        <html:TinyHtmlEditorControl Html="{Binding Value, Mode=OneWay, Converter={x:Static conv:DefaultConverter.Instance}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:TinyHtmlEditorControl>
     </DataTemplate>
-
-    <!--<DataTemplate DataType="{x:Type inf:HtmlModel}">
-        <abel:WpfHtmlControlBase  
-                      Html="{Binding Value, Mode=OneWay}"/>
-    </DataTemplate>-->
-
 
     <DataTemplate DataType="{x:Type des:MemberDescriptor}">
         <Expander Header="{Binding Converter={StaticResource TypeNameConverter}}" Content="{Binding }" >
@@ -206,7 +201,6 @@
                 </DataTemplate>
             </Expander.ContentTemplate>
         </Expander>
-        <!--<HeaderedContentControl Header="{Binding Converter={StaticResource TypeNameConverter}}"></HeaderedContentControl>-->
     </DataTemplate>
 
 
