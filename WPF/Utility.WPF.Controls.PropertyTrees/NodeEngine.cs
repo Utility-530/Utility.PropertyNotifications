@@ -9,7 +9,6 @@ using Utility.Interfaces.Exs;
 using Utility.Changes;
 using Utility.Interfaces;
 using Utility.Helpers;
-using NetFabric.Hyperlinq;
 using Utility.Helpers.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
@@ -138,7 +137,7 @@ namespace Utility.WPF.Controls.PropertyTrees
 
             void configure(INode node)
             {
-                if (node.Data is ICollectionItemReferenceDescriptor d)
+                if (node.Parent?.Data is ICollectionDescriptor d)
                 {
 
                 }
@@ -147,7 +146,7 @@ namespace Utility.WPF.Controls.PropertyTrees
                 .Take(1)
                 .Subscribe(data =>
                 {
-                    if (node.Data is ICollectionItemReferenceDescriptor d)
+                    if (node.Parent?.Data is ICollectionDescriptor d)
                     {
 
                     }
@@ -225,6 +224,11 @@ namespace Utility.WPF.Controls.PropertyTrees
         }
 
         public void Reset()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IObservable<INode> Create(string name, Guid guid, Func<string, INode> nodeFactory, Func<string, object> modelFactory)
         {
             throw new NotImplementedException();
         }
