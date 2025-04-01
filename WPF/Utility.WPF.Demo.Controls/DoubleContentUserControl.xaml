@@ -47,21 +47,21 @@
         </WrapPanel>
 
         <UniformGrid>
-            <utl:DoubleContentControl Orientation="{Binding ElementName=ToggleButton1, Path=Content}">
-                <utl:DoubleContentControl.Header>
+            <utl:SplitControl Orientation="{Binding ElementName=ToggleButton1, Path=Content}">
+                <utl:SplitControl.Header>
                     <Grid Background="GreenYellow">
                         <Rectangle Fill="PaleVioletRed" ></Rectangle>
                         <TextBlock Text="Header" FontSize="30"  VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                     </Grid>
-                </utl:DoubleContentControl.Header>
-            </utl:DoubleContentControl>
+                </utl:SplitControl.Header>
+            </utl:SplitControl>
 
-            <utl:DoubleContentControl  Orientation="{Binding ElementName=ToggleButton1, Path=Content}" x:Name="DoubleContentControl2">
-                <Grid Background="GreenYellow" HorizontalAlignment="Stretch" Width="{Binding ElementName=DoubleContentControl2, Path=ActualWidth}">
+            <utl:SplitControl  Orientation="{Binding ElementName=ToggleButton1, Path=Content}" x:Name="SplitControl2">
+                <Grid Background="GreenYellow" HorizontalAlignment="Stretch" Width="{Binding ElementName=SplitControl2, Path=ActualWidth}">
                     <Rectangle Fill="RoyalBlue" ></Rectangle>
                     <TextBlock Text="Content" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
                 </Grid>
-            </utl:DoubleContentControl>
+            </utl:SplitControl>
 
             <utl:LayOutListBox x:Name="LayOutListBox1" SelectedIndex="0" Orientation="{Binding ElementName=ToggleButton1, Path=Content}">
                 <FrameworkElement.Resources>
@@ -76,7 +76,7 @@
                     <StaticResource ResourceKey="Array"></StaticResource>
                 </ItemsControl.ItemsSource>
             </utl:LayOutListBox>
-            <utl:DoubleContentControl Position="{Binding ElementName=EnumItemsControl, Path=Output, Mode=OneWay}" 
+            <utl:SplitControl Position="{Binding ElementName=EnumItemsControl, Path=Output, Mode=OneWay}" 
                                        Orientation="{Binding ElementName=ToggleButton1, Path=Content}"
                                        Header="{Binding ElementName=LayOutListBox2, Path=SelectedItem}">
                 <utl:LayOutListBox  SelectedIndex="{Binding ElementName=LayOutListBox2, Path=SelectedIndex}">
@@ -90,7 +90,7 @@
                     </ItemsControl.ItemsSource>
                 </utl:LayOutListBox>
              
-            </utl:DoubleContentControl>
+            </utl:SplitControl>
         </UniformGrid>
     </DockPanel>
 </UserControl>
