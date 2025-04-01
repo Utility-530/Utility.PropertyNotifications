@@ -1,0 +1,114 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="samples\00.Intro.htm" />
+    <None Remove="samples\01.History.htm" />
+    <None Remove="samples\02.Text.htm" />
+    <None Remove="samples\03.Tables.htm" />
+    <None Remove="samples\04.Links.htm" />
+    <None Remove="samples\05.Images.htm" />
+    <None Remove="samples\06.Embeded video.htm" />
+    <None Remove="samples\07.Additional features.htm" />
+    <None Remove="samples\08.Tooltip.htm" />
+    <None Remove="samples\09.Using the library.htm" />
+    <None Remove="samples\10.HtmlPanel.htm" />
+    <None Remove="samples\11.HtmlLabel.htm" />
+    <None Remove="samples\12.HtmlToolTip.htm" />
+    <None Remove="samples\13.HtmlRender.htm" />
+    <None Remove="samples\14.HtmlContainer.htm" />
+    <None Remove="samples\20.About.htm" />
+    <None Remove="testsamples\01.Header.htm" />
+    <None Remove="testsamples\02.Line break.htm" />
+    <None Remove="testsamples\03.Paragraphs.htm" />
+    <None Remove="testsamples\04.Blockquotes.htm" />
+    <None Remove="testsamples\05.Images.htm" />
+    <None Remove="testsamples\06.External Image.htm" />
+    <None Remove="testsamples\07.Background Image.htm" />
+    <None Remove="testsamples\08.White-space.htm" />
+    <None Remove="testsamples\09.Inline.htm" />
+    <None Remove="testsamples\10.BlockInInline.htm" />
+    <None Remove="testsamples\11.LineHeight.htm" />
+    <None Remove="testsamples\12.Text.htm" />
+    <None Remove="testsamples\13.Tables.htm" />
+    <None Remove="testsamples\14.Iframes.htm" />
+    <None Remove="testsamples\15.MaxWidth.htm" />
+    <None Remove="testsamples\16.Borders.htm" />
+    <None Remove="testsamples\17.Languages.htm" />
+    <None Remove="testsamples\18.Anchors.htm" />
+    <None Remove="testsamples\19.Many images.htm" />
+    <None Remove="testsamples\20.Fonts decorations.htm" />
+    <None Remove="testsamples\21.Bullets.htm" />
+    <None Remove="testsamples\22.RTL.htm" />
+    <None Remove="testsamples\30.Misc.htm" />
+    <None Remove="testsamples\31.ACID 1.htm" />
+    <None Remove="testsamples\32.Image in css content.htm" />
+    <None Remove="testsamples\33.Fixed position.htm" />
+    <None Remove="testsamples\34.Breaking pages 1 - Paragraphs.htm" />
+    <None Remove="testsamples\35.Breaking pages 2 - Tables.htm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="samples\00.Intro.htm" />
+    <EmbeddedResource Include="samples\01.History.htm" />
+    <EmbeddedResource Include="samples\02.Text.htm" />
+    <EmbeddedResource Include="samples\03.Tables.htm" />
+    <EmbeddedResource Include="samples\04.Links.htm" />
+    <EmbeddedResource Include="samples\05.Images.htm" />
+    <EmbeddedResource Include="samples\06.Embeded video.htm" />
+    <EmbeddedResource Include="samples\07.Additional features.htm" />
+    <EmbeddedResource Include="samples\08.Tooltip.htm" />
+    <EmbeddedResource Include="samples\09.Using the library.htm" />
+    <EmbeddedResource Include="samples\10.HtmlPanel.htm" />
+    <EmbeddedResource Include="samples\11.HtmlLabel.htm" />
+    <EmbeddedResource Include="samples\12.HtmlToolTip.htm" />
+    <EmbeddedResource Include="samples\13.HtmlRender.htm" />
+    <EmbeddedResource Include="samples\14.HtmlContainer.htm" />
+    <EmbeddedResource Include="samples\20.About.htm" />
+    <EmbeddedResource Include="testsamples\01.Header.htm" />
+    <EmbeddedResource Include="testsamples\02.Line break.htm" />
+    <EmbeddedResource Include="testsamples\03.Paragraphs.htm" />
+    <EmbeddedResource Include="testsamples\04.Blockquotes.htm" />
+    <EmbeddedResource Include="testsamples\05.Images.htm" />
+    <EmbeddedResource Include="testsamples\06.External Image.htm" />
+    <EmbeddedResource Include="testsamples\07.Background Image.htm" />
+    <EmbeddedResource Include="testsamples\08.White-space.htm" />
+    <EmbeddedResource Include="testsamples\09.Inline.htm" />
+    <EmbeddedResource Include="testsamples\10.BlockInInline.htm" />
+    <EmbeddedResource Include="testsamples\11.LineHeight.htm" />
+    <EmbeddedResource Include="testsamples\12.Text.htm" />
+    <EmbeddedResource Include="testsamples\13.Tables.htm" />
+    <EmbeddedResource Include="testsamples\14.Iframes.htm" />
+    <EmbeddedResource Include="testsamples\15.MaxWidth.htm" />
+    <EmbeddedResource Include="testsamples\16.Borders.htm" />
+    <EmbeddedResource Include="testsamples\17.Languages.htm" />
+    <EmbeddedResource Include="testsamples\18.Anchors.htm" />
+    <EmbeddedResource Include="testsamples\19.Many images.htm" />
+    <EmbeddedResource Include="testsamples\20.Fonts decorations.htm" />
+    <EmbeddedResource Include="testsamples\21.Bullets.htm" />
+    <EmbeddedResource Include="testsamples\22.RTL.htm" />
+    <EmbeddedResource Include="testsamples\30.Misc.htm" />
+    <EmbeddedResource Include="testsamples\31.ACID 1.htm" />
+    <EmbeddedResource Include="testsamples\32.Image in css content.htm" />
+    <EmbeddedResource Include="testsamples\33.Fixed position.htm" />
+    <EmbeddedResource Include="testsamples\34.Breaking pages 1 - Paragraphs.htm" />
+    <EmbeddedResource Include="testsamples\35.Breaking pages 2 - Tables.htm" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25104.5739" />
+    <PackageReference Include="HtmlRenderer.WPF" Version="1.5.1-beta1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Utility.WPF.Controls.Html\Utility.WPF.Controls.Html.csproj" />
+  </ItemGroup>
+
+</Project>
