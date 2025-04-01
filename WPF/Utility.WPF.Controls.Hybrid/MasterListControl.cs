@@ -22,7 +22,7 @@ namespace Utility.WPF.Controls.Hybrid
 
         public MasterListControl()
         {
-            Position = Dock.Bottom;
+            Movement = Enums.XYMovement.TopToBottom;
             RemoveOrder = RemoveOrder.Selected;
             ButtonTypes = ButtonType.Add | ButtonType.Remove;
 

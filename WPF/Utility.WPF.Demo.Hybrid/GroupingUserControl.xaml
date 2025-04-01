@@ -15,7 +15,7 @@
 
     <DockPanel>
         <ToolBar DockPanel.Dock="Top">
-            <mas:MasterControl ButtonTypes="Enable,Disable" Position="Right" Change="{utl:Command Command}">
+            <mas:MasterControl ButtonTypes="Enable,Disable" Movement="RightToLeft" Change="{utl:Command Command}">
                 <ComboBox Width="200" ItemsSource="{Binding CollectionViewModel.Properties}"
                           SelectedItem="{Binding Selected}">
                     <ComboBox.ItemTemplate>

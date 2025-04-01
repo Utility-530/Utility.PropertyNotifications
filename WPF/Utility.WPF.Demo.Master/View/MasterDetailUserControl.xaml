@@ -50,7 +50,7 @@
     <DockPanel>
         <TabControl>
             <TabItem Header="With Detail">
-                <view2:MasterDetail  Orientation="Horizontal" UseDataContext="True">
+                <view2:MasterDetail  Movement="LeftToRight" UseDataContext="True">
                     <view2:MasterControl Width="200"
                         ItemsSource="{Binding Data, Mode=OneWay}"
                                          Change="{util:Command ChangeCommand, ConversionType=Default}"

@@ -79,7 +79,7 @@
                     </Border.BorderBrush>
 
                     <UniformGrid Rows="1" x:Name="UniformGrid">
-                        <view:ReadOnlyMasterDetail Position="Right">
+                        <view:ReadOnlyMasterDetail Movement="LeftToRight">
                             <view:MasterControl  Height="{Binding ElementName=UniformGrid, Path=ActualHeight, Converter={StaticResource math}, ConverterParameter='x/2'}"
                                             x:Name="MasterControlWithDetail"
                                             Change="{util:Command ChangeCommand, ConversionType=Default}"
@@ -87,7 +87,7 @@
                                             CommandParameter="{Binding NewItem}"
                                             RemoveOrder="Last"
                                             ButtonTypes="Add,Remove"
-                                            Position="Bottom">
+                                            Movement="BottomToTop">
 
                                 <view1:DragablzVerticalItemsControl x:Name="DragablzItemsControl" Width="300"
                                                                 VerticalAlignment="Center"
@@ -99,7 +99,7 @@
                                 <TextBlock Text="fdssdfsdsdfsdfsdfsdfsdfdsf" Width="200"></TextBlock>
                             </HeaderedContentControl.Header>
                         </view:ReadOnlyMasterDetail>
-                        <view:ReadOnlyMasterDetail Position="Right">
+                        <view:ReadOnlyMasterDetail Movement="LeftToRight">
                             <view:MasterControl Width="200"
                                                 x:Name="MasterControlWithDetail2"
                                                 Change="{util:Command ChangeCommand, ConversionType=Default}"
@@ -107,7 +107,7 @@
                                                 CommandParameter="{Binding NewItem}"
                                                 RemoveOrder="Last"
                                                 ButtonTypes="Add,Remove"
-                                                Position="Right">
+                                                >
                                 <ListBox x:Name="DragablzItemsControl2" Width="200"
                                                                     VerticalAlignment="Center"
                                                                     MouseDown="DragablzItemsControl_MouseDown">
@@ -127,7 +127,7 @@
                                     CommandParameter="{Binding NewItem}"
                                     RemoveOrder="Last"
                                     ButtonTypes="Add,Remove"
-                                    Position="Top">
+                                    Movement="TopToBottom">
                     <view1:DragablzVerticalItemsControl x:Name="DragablzItemsControl22"
                                                         VerticalAlignment="Center"
                                                         ItemContainerStyle="{StaticResource VerticalItemStyle}"

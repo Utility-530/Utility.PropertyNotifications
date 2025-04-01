@@ -69,16 +69,16 @@ namespace Utility.WPF.Controls.Master
                     SetDetail(Content, content);
                 });
 
-            _ = this.WhenAnyValue(a => a.Orientation)
-                .CombineLatest(this.WhenAnyValue(a => a.Selector))
-                .Subscribe(combined =>
-                {
-                    var (first, second) = combined;
-                    if (second is IOrientation orientation)
-                    {
-                        orientation.Orientation = (Orientation)(((int)first + 1) % ((int)Orientation.Vertical + 1));
-                    }
-                });
+            //_ = this.WhenAnyValue(a => a.Orientation)
+            //    .CombineLatest(this.WhenAnyValue(a => a.Selector))
+            //    .Subscribe(combined =>
+            //    {
+            //        var (first, second) = combined;
+            //        if (second is IOrientation orientation)
+            //        {
+            //            orientation.Orientation = (Orientation)(((int)first + 1) % ((int)Orientation.Vertical + 1));
+            //        }
+                //});
         }
 
         public override event SelectionChangedEventHandler SelectionChanged
@@ -255,10 +255,10 @@ namespace Utility.WPF.Controls.Master
             {
                 Header = Extract(uiElement);
             }
-            else if (headerPresenter != null)
-            {
-                headerPresenter.Content = masterObject;
-            }
+            //else if (headerPresenter != null)
+            //{
+            //    headerPresenter.Content = masterObject;
+            //}
             else
             {
                 //throw new Exception("dgsf33 gggdsfsd");

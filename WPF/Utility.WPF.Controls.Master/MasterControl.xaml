@@ -8,7 +8,7 @@
     xmlns:wpf1="clr-namespace:PropertyTools.Wpf;assembly=Utility.WPF.Controls.Base">
 
     <!--<ResourceDictionary.MergedDictionaries>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Master;component/DoubleContentControl.xaml"></utilitywpf:SharedResourceDictionary>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Master;component/SplitControl.xaml"></utilitywpf:SharedResourceDictionary>
     </ResourceDictionary.MergedDictionaries>-->
 
     <conv:CountToBooleanConverter x:Key="CountToBoolean" />
@@ -17,72 +17,65 @@
     <conv:IsLastItemSelectedConverter x:Key="IsLastItemSelected" Invert="True" />
 
     <Style TargetType="{x:Type local:MasterControl}"
-           BasedOn="{StaticResource {x:Type utl:DoubleContentControl}}">
-        <Setter Property="Template">
+           BasedOn="{StaticResource {x:Type utl:SplitControl}}">
+
+        <Setter Property="HeaderTemplate">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type local:MasterControl}">
-                    <DockPanel x:Name="PART_DockPanel" Background="{Binding Background, Source=TemplatedParent}">
-                        <ContentPresenter x:Name="PART_HeaderPresenter">
-                            <ContentPresenter.Content>
-                                <WrapPanel x:Name="PART_WrapPanel" MinHeight="40" MinWidth="40">
-                                    <Button x:Name="ButtonMinus"
+                <DataTemplate>
+
+
+                    <WrapPanel x:Name="PART_WrapPanel" MinHeight="40" MinWidth="40">
+                        <Button x:Name="ButtonMinus"
                                             Margin="2"
                                             IsEnabled="{Binding Count, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource CountToBoolean}, ConverterParameter='>0'}"
                                             Style="{DynamicResource MaterialDesignIconButton}">
-                                        <materialDesign:PackIcon Kind="Minus" />
-                                    </Button>
-                                    <Button x:Name="ButtonPlus"
+                            <materialDesign:PackIcon Kind="Minus" />
+                        </Button>
+                        <Button x:Name="ButtonPlus"
                                 Margin="2"
                                 Style="{DynamicResource MaterialDesignIconButton}">
-                                        <materialDesign:PackIcon Kind="Add" />
-                                    </Button>
-                                    <Button x:Name="ButtonMoveUp"
+                            <materialDesign:PackIcon Kind="Add" />
+                        </Button>
+                        <Button x:Name="ButtonMoveUp"
                                 Margin="2"
                                 Style="{DynamicResource MaterialDesignIconButton}">
-                                        <Button.IsEnabled>
-                                            <MultiBinding Converter="{StaticResource IsFirstItemSelected}">
-                                                <Binding Path="Content" RelativeSource="{RelativeSource TemplatedParent}" />
-                                                <Binding Path="Content.SelectedIndex" RelativeSource="{RelativeSource TemplatedParent}" />
-                                            </MultiBinding>
-                                        </Button.IsEnabled>
-                                        <materialDesign:PackIcon Kind="ArrowUp" />
-                                    </Button>
-                                    <Button x:Name="ButtonMoveDown"
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource IsFirstItemSelected}">
+                                    <Binding Path="Content" RelativeSource="{RelativeSource TemplatedParent}" />
+                                    <Binding Path="Content.SelectedIndex" RelativeSource="{RelativeSource TemplatedParent}" />
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                            <materialDesign:PackIcon Kind="ArrowUp" />
+                        </Button>
+                        <Button x:Name="ButtonMoveDown"
                                             Margin="2"
                                             Style="{DynamicResource MaterialDesignIconButton}">
-                                        <Button.IsEnabled>
-                                            <MultiBinding Converter="{StaticResource IsLastItemSelected}">
-                                                <Binding Path="Content" RelativeSource="{RelativeSource TemplatedParent}" />
-                                                <Binding Path="Content.SelectedIndex" RelativeSource="{RelativeSource TemplatedParent}" />
-                                            </MultiBinding>
-                                        </Button.IsEnabled>
-                                        <materialDesign:PackIcon Kind="ArrowDown" />
-                                    </Button>
-                                    <Button x:Name="ButtonEnable"
+                            <Button.IsEnabled>
+                                <MultiBinding Converter="{StaticResource IsLastItemSelected}">
+                                    <Binding Path="Content" RelativeSource="{RelativeSource TemplatedParent}" />
+                                    <Binding Path="Content.SelectedIndex" RelativeSource="{RelativeSource TemplatedParent}" />
+                                </MultiBinding>
+                            </Button.IsEnabled>
+                            <materialDesign:PackIcon Kind="ArrowDown" />
+                        </Button>
+                        <Button x:Name="ButtonEnable"
                                             Margin="2"
                                             Style="{DynamicResource MaterialDesignIconButton}">
-                                        <Button.IsEnabled>
-                                            <Binding Path="Content.IsEnabled" ElementName="PART_ContentPresenter"
+                            <Button.IsEnabled>
+                                <Binding Path="Content.IsEnabled" RelativeSource="{RelativeSource Mode=TemplatedParent}"
                                                      Mode="OneWay"
                                                      Converter="{StaticResource InverseBooleanConverter}" />
-                                        </Button.IsEnabled>
-                                        <materialDesign:PackIcon Kind="Check" />
-                                    </Button>
-                                    <Button x:Name="ButtonDisable"
+                            </Button.IsEnabled>
+                            <materialDesign:PackIcon Kind="Check" />
+                        </Button>
+                        <Button x:Name="ButtonDisable"
                                             Margin="2"
-                                            IsEnabled="{Binding ElementName=PART_ContentPresenter, Path=IsEnabled, Mode=OneWay}"
+                                            IsEnabled="{Binding Content.IsEnabled, Mode=OneWay, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                             Style="{DynamicResource MaterialDesignIconButton}">
-                                        <materialDesign:PackIcon Kind="BlockHelper" />
-                                    </Button>
-                                </WrapPanel>
-                            </ContentPresenter.Content>
-                        </ContentPresenter>
-                        <wpf1:DockPanelSplitter x:Name="PART_DockPanelSplitter"
-                                               BorderThickness="2"
-                                               BorderBrush="WhiteSmoke"></wpf1:DockPanelSplitter>
-                        <ContentPresenter x:Name="PART_ContentPresenter" />
-                    </DockPanel>
-                </ControlTemplate>
+                            <materialDesign:PackIcon Kind="BlockHelper" />
+                        </Button>
+                    </WrapPanel>
+                </DataTemplate>
             </Setter.Value>
         </Setter>
     </Style>

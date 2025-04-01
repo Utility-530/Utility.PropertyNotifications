@@ -8,10 +8,10 @@
                     xmlns:wpf="http://propertytools.org/wpf">
 
     <!--<ResourceDictionary.MergedDictionaries>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Master;component/DoubleContentControl.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Master;component/SplitControl.xaml" />
     </ResourceDictionary.MergedDictionaries>-->
 
-    <Style TargetType="{x:Type local:MeasurementsControl}" BasedOn="{StaticResource {x:Type utl:DoubleContentControl}}">
+    <Style TargetType="{x:Type local:MeasurementsControl}" BasedOn="{StaticResource {x:Type utl:SplitControl}}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:MeasurementsControl}">

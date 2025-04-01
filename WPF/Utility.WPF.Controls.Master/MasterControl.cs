@@ -100,34 +100,36 @@ namespace Utility.WPF.Controls.Master
             base.OnApplyTemplate();
             if (Header is not Panel header)
             {
-                header = (GetTemplateChild("PART_HeaderPresenter") as ContentPresenter)?.Content as Panel ??
-                         throw new Exception("sd ffffff8");
+                header = (GetTemplateChild("PART_HeaderPresenter") as ContentPresenter)?.Content as Panel;
             }
 
-            var buttons = header.Children.OfType<Button>().ToArray();
-            var buttonAdd = buttons.Single(a => a.Name == "ButtonPlus");
-            var buttonRemove = buttons.Single(a => a.Name == "ButtonMinus");
-            var buttonMoveUp = buttons.Single(a => a.Name == "ButtonMoveUp");
-            var buttonMoveDown = buttons.Single(a => a.Name == "ButtonMoveDown");
-            buttonEnable = buttons.Single(a => a.Name == "ButtonEnable");
-            buttonDisable = buttons.Single(a => a.Name == "ButtonDisable");
+            if (header != null)
+            {
+                var buttons = header.Children.OfType<Button>().ToArray();
+                var buttonAdd = buttons.Single(a => a.Name == "ButtonPlus");
+                var buttonRemove = buttons.Single(a => a.Name == "ButtonMinus");
+                var buttonMoveUp = buttons.Single(a => a.Name == "ButtonMoveUp");
+                var buttonMoveDown = buttons.Single(a => a.Name == "ButtonMoveDown");
+                buttonEnable = buttons.Single(a => a.Name == "ButtonEnable");
+                buttonDisable = buttons.Single(a => a.Name == "ButtonDisable");
 
-            this.WhenAnyValue(a => a.ButtonTypes).Subscribe(buttonType =>
-             {
-                 buttonAdd.Visibility = buttonType.HasFlag(ButtonType.Add) ? Visibility.Visible : Visibility.Collapsed;
-                 buttonRemove.Visibility = buttonType.HasFlag(ButtonType.Remove) ? Visibility.Visible : Visibility.Collapsed;
-                 buttonMoveUp.Visibility = buttonType.HasFlag(ButtonType.MoveUp) ? Visibility.Visible : Visibility.Collapsed;
-                 buttonMoveDown.Visibility = buttonType.HasFlag(ButtonType.MoveDown) ? Visibility.Visible : Visibility.Collapsed;
-                 buttonEnable.Visibility = buttonType.HasFlag(ButtonType.Enable) ? Visibility.Visible : Visibility.Collapsed;
-                 buttonDisable.Visibility = buttonType.HasFlag(ButtonType.Disable) ? Visibility.Visible : Visibility.Collapsed;
-             });
+                this.WhenAnyValue(a => a.ButtonTypes).Subscribe(buttonType =>
+                 {
+                     buttonAdd.Visibility = buttonType.HasFlag(ButtonType.Add) ? Visibility.Visible : Visibility.Collapsed;
+                     buttonRemove.Visibility = buttonType.HasFlag(ButtonType.Remove) ? Visibility.Visible : Visibility.Collapsed;
+                     buttonMoveUp.Visibility = buttonType.HasFlag(ButtonType.MoveUp) ? Visibility.Visible : Visibility.Collapsed;
+                     buttonMoveDown.Visibility = buttonType.HasFlag(ButtonType.MoveDown) ? Visibility.Visible : Visibility.Collapsed;
+                     buttonEnable.Visibility = buttonType.HasFlag(ButtonType.Enable) ? Visibility.Visible : Visibility.Collapsed;
+                     buttonDisable.Visibility = buttonType.HasFlag(ButtonType.Disable) ? Visibility.Visible : Visibility.Collapsed;
+                 });
 
-            buttonAdd.Click += (_, _) => ExecuteAdd();
-            buttonRemove.Click += (_, _) => ExecuteRemove();
-            buttonMoveUp.Click += (_, _) => ExecuteMoveUp();
-            buttonMoveDown.Click += (_, _) => ExecuteMoveDown();
-            buttonEnable.Click += (_, _) => ExecuteEnable(true);
-            buttonDisable.Click += (_, _) => ExecuteEnable(false);
+                buttonAdd.Click += (_, _) => ExecuteAdd();
+                buttonRemove.Click += (_, _) => ExecuteRemove();
+                buttonMoveUp.Click += (_, _) => ExecuteMoveUp();
+                buttonMoveDown.Click += (_, _) => ExecuteMoveDown();
+                buttonEnable.Click += (_, _) => ExecuteEnable(true);
+                buttonDisable.Click += (_, _) => ExecuteEnable(false);
+            }
             ExecuteEnable(true);
         }
 
@@ -210,9 +212,9 @@ namespace Utility.WPF.Controls.Master
 
         protected virtual void ExecuteEnable(bool v)
         {
-            if (contentPresenter == null)
-                throw new Exception("sfd3 vdfgdf");
-            buttonEnable.IsEnabled = !(buttonDisable.IsEnabled = contentPresenter.IsEnabled = v);
+            //if (contentPresenter == null)
+            //    throw new Exception("sfd3 vdfgdf");
+            //buttonEnable.IsEnabled = !(buttonDisable.IsEnabled = contentPresenter.IsEnabled = v);
 
             RaiseEvent(new CollectionItemChangedEventArgs(ItemsSource, default, v ? EventType.Enable : EventType.Disable, default, default, ChangeEvent));
         }

@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Reactives\Utility.Reactives\Utility.Reactives.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
   </ItemGroup>
 

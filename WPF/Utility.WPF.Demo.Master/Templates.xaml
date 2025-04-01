@@ -16,7 +16,7 @@
     <DataTemplate DataType="{x:Type vm:RowBaseViewModel}">
         <view111:MasterControl
                              CommandParameter="{Binding NewItem}"
-                             Position="Right" RemoveOrder="Last"
+                             Movement="RightToLeft" RemoveOrder="Last"
                              ButtonTypes="Add,Remove"
                              Height="200">
             <i:Interaction.Triggers>

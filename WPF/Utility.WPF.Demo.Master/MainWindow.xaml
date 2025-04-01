@@ -38,7 +38,7 @@
             <view:ReadOnlyMasterDetailUserControl />
         </TabItem>
         <TabItem Header="Simple-Master-Detail">
-            <view2:MasterDetail Orientation="Horizontal">
+            <view2:MasterDetail>
                 <ListBox ItemsSource="{StaticResource Characters}" ></ListBox>
             </view2:MasterDetail>
         </TabItem>

@@ -13,7 +13,7 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:conv="clr-namespace:Utility.WPF.Converters"
              xmlns:viewModel="clr-namespace:Utility.WPF.Demo.Master.ViewModels"
-             xmlns:view="clr-namespace:Utility.WPF.Demo.Master.View"
+             xmlns:view="clr-namespace:Utility.WPF.Demo.Master.View" xmlns:btns="http://schemas.utility.com/buttons"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
@@ -41,17 +41,18 @@
     <DockPanel>
 
         <ToolBar DockPanel.Dock="Top">
-            <ToggleButton x:Name="OrientationToggleButton" Content="{x:Static Orientation.Vertical}">
+            <!--<ToggleButton x:Name="OrientationToggleButton" Content="{x:Static Orientation.Vertical}">
                 <i:Interaction.Behaviors>
                     <b:ToggleButtonContentBehavior UnCheckedContent="{x:Static Orientation.Horizontal}" />
                 </i:Interaction.Behaviors>
-            </ToggleButton>
+            </ToggleButton>-->
+            <btns:DirectionButton x:Name="OrientationToggleButton"/>
         </ToolBar>
 
         <TabControl>
             <TabItem Header="First">
                 <view2:ReadOnlyMasterDetail Converter="{x:Static view:CollectionConverter.Instance}"
-                                            Orientation="{Binding ElementName=OrientationToggleButton, Path=Content}"
+                                            Movement="{Binding ElementName=OrientationToggleButton, Path=Movement}"
                                             UseDataContext="True">
                     <util:LayOutListBox SelectedIndex="3" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                         VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch">
@@ -105,7 +106,7 @@
                         </Grid>
                     </ListBox>
                     <view2:ReadOnlyMasterDetail
-                        Orientation="{Binding ElementName=OrientationToggleButton, Path=Content}">
+                        Movement="{Binding ElementName=OrientationToggleButton, Path=Movement}">
                         <util:LayOutListBox SelectedIndex="{Binding ElementName=LayOutListBox1, Path=SelectedIndex}" MinWidth="50" MinHeight="50">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
@@ -138,7 +139,7 @@
                 </UniformGrid>
             </TabItem>
             <TabItem Header="Third">
-                <view2:ReadOnlyMasterDetail Orientation="{Binding ElementName=OrientationToggleButton, Path=Content}">
+                <view2:ReadOnlyMasterDetail Movement="{Binding ElementName=OrientationToggleButton, Path=Movement}">
                     <FrameworkElement.Resources>
                         <Style TargetType="{x:Type HeaderedContentControl}">
                             <Setter Property="FontSize" Value="18"></Setter>

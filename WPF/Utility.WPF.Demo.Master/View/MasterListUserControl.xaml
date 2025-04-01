@@ -20,7 +20,7 @@
         <local2:MainViewModel />
     </UserControl.DataContext>
 
-    <local1:AddRowControl CommandParameter="{Binding {x:Null}}" Position="Bottom" RemoveOrder="Selected" VerticalContentAlignment="Center"
+    <local1:AddRowControl CommandParameter="{Binding {x:Null}}" Movement="BottomToTop" RemoveOrder="Selected" VerticalContentAlignment="Center"
                             ButtonTypes="Remove,MoveDown,MoveUp">
         <i:Interaction.Triggers>
             <i:EventTrigger  EventName="Change">
@@ -31,7 +31,7 @@
         <ListBox x:Name="MainListBox" ItemsSource="{Binding Rows}" SelectedIndex="0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <view:MasterControl CommandParameter="{Binding NewItem}" Position="Right" RemoveOrder="Last" ButtonTypes="Add,Remove">
+                    <view:MasterControl CommandParameter="{Binding NewItem}" Movement="RightToLeft" RemoveOrder="Last" ButtonTypes="Add,Remove">
                         <i:Interaction.Triggers>
                             <i:EventTrigger  EventName="Change">
                                 <i:InvokeCommandAction Command="{Binding ChangeCommand}" PassEventArgsToCommand="True"
