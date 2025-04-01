@@ -7,7 +7,8 @@
         Model,
         Assembly,
         Type,
-        Object
+        Object,
+        Html
         //Property
     }
 }

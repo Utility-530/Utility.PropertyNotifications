@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AngleSharp;
+using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
@@ -44,6 +45,7 @@ namespace Utility.Nodes.Demo
                     NodeType.Assembly => new AssemblyNode(),
                     NodeType.Type => new TypeNode(),
                     NodeType.Object => create(),
+                    NodeType.Html => createHtml(),
                     _ => new ExceptionNode(new Exception("Out of range"))
                     //_ => throw new Exception("r 4333"),
                 };
@@ -55,6 +57,15 @@ namespace Utility.Nodes.Demo
                 var root = DescriptorFactory.CreateRoot(table, "table_add");
                 var reflectionNode = new DescriptorNode(root) { Parent = (ITree)this };
                 return reflectionNode;
+            }
+
+            HtmlNode createHtml()
+            {
+                string htmlContent = "<!DOCTYPE html>\r\n<html>\r\n<head>\r\n<title>Page Title</title>\r\n</head>\r\n<body>\r\n\r\n<h1>My First Heading</h1>\r\n<p>My first paragraph.</p>\r\n\r\n</body>\r\n</html>";
+                var context = BrowsingContext.New();
+                var document = context.OpenAsync(req => req.Content(htmlContent)).Result;
+                var x = new HtmlNode(document.DocumentElement);
+                return x;
             }
         }
 

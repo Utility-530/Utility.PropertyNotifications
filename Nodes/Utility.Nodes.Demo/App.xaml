@@ -8,6 +8,7 @@
              xmlns:wpf="clr-namespace:Utility.Nodes.WPF;assembly=Utility.Nodes.WPF"
              xmlns:io="clr-namespace:System.IO;assembly=mscorlib"        
              xmlns:local="clr-namespace:Utility.Nodes.Demo"
+             xmlns:as="clr-namespace:AngleSharp.Dom;assembly=AngleSharp"
              xmlns:ui="http://schemas.modernwpf.com/2019">
     <Application.Resources>
         <ResourceDictionary>
@@ -17,6 +18,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <conv:FilenameToIconConverter x:Key="iconConverter" />
+
 
             <DataTemplate DataType="{x:Type infra:ViewModel}">
                 <st:AutoGrid Columns="*,*" Rows="*" Height="24">
@@ -87,6 +89,18 @@
             <DataTemplate DataType="{x:Type local:DemoRootNode}">
                 <TreeView ItemsSource="{Binding Items}" ItemTemplateSelector="{StaticResource selector}" ItemContainerStyleSelector="{StaticResource styleSelector}"/>
             </DataTemplate>
+
+
+            <DataTemplate DataType="{x:Type as:Element}" >
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding TagName}"></TextBlock>
+                    <TextBlock Text="{Binding NodeValue}"></TextBlock>
+                    <TextBlock Text="{Binding ClassName}"></TextBlock>
+                    <TextBox Text="{Binding TextContent}"></TextBox>
+                </StackPanel>
+            </DataTemplate>
+
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
