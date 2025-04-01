@@ -8,6 +8,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Utility.WPF.Abstract\Utility.WPF.Abstract.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Geometry\Utility.WPF.Geometries.csproj" />
 		<ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Panels\Utility.WPF.Panels.csproj" />
@@ -15,13 +16,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Update="DoubleContentControl.cs">
-			<DependentUpon>DoubleContentControl.xaml</DependentUpon>
+		<Compile Update="SplitControl.cs">
+			<DependentUpon>SplitControl.xaml</DependentUpon>
+		</Compile>	
+		<Compile Update="SplitItemsControl.cs">
+			<DependentUpon>SplitItemsControl.xaml</DependentUpon>
 		</Compile>
 	</ItemGroup>
 
 	<ItemGroup>
-		<Page Update="DoubleContentControl.xaml">
+		<Page Update="SplitControl.xaml">
 			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 			<SubType>Designer</SubType>
 		</Page>

@@ -13,7 +13,7 @@ namespace Utility.WPF.Controls.Base
     /// <summary>
     /// A ContentControl for content deriving from ItemsControl
     /// </summary>
-    public class SelectorAndContentControl : DoubleContentControl, ISelector
+    public class SelectorAndContentControl : SplitControl, ISelector
     {
         public static readonly DependencyProperty ItemsSourceProperty = ItemsControl.ItemsSourceProperty.AddOwner(typeof(SelectorAndContentControl));
         public static readonly DependencyProperty CountProperty = DependencyHelper.Register<int>();
