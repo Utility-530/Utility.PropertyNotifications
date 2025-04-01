@@ -76,7 +76,7 @@ namespace Utility.Nodes.Filters
             return nodeSource.Value.Create(controls,
                 controlsGuid,
                 s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Horizontal },
-                s => new Model(() => [new CommandModel { Name = Save }]) { Name = s });
+                s => new Model(() => [new CommandModel { Name = Save }, new CommandModel { Name = Refresh }]) { Name = s });
         }
 
         public static IObservable<INode> BuildComboRoot()
@@ -127,7 +127,7 @@ namespace Utility.Nodes.Filters
             return nodeSource.Value.Create(html,
                 htmlGuid,
                 s => new Node(s),
-                s => new StringModel { Name = s });
+                s => new HtmlModel { Name = s });
         }
 
         public static IObservable<INode> BuildHtmlRenderRoot()
