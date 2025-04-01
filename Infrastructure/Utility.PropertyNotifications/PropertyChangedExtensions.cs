@@ -37,7 +37,7 @@ namespace Utility.PropertyNotifications
             private readonly PropertyInfo? _info;
             private readonly bool _includeNulls;
             private readonly bool includeInitialValue;
-
+            private const string constructor = ".ctor";
             public PropertyObservable(INotifyPropertyChanged target, PropertyInfo? info = null, bool includeNulls = false, bool includeInitialValue = true)
             {
                 _target = target;
@@ -69,12 +69,19 @@ namespace Utility.PropertyNotifications
                 {
                     if (_info == null && e.PropertyName is string pName)
                     {
-                        if (dictionary.ContainsKey(pName) == false)
+                        if (pName == constructor)
                         {
-                            dictionary[pName] = _target.GetType().GetProperty(pName);
+                            _observer.OnNext(default);
+                        }   
+                        else
+                        {
+                            if (dictionary.ContainsKey(pName) == false)
+                            {
+                                dictionary[pName] = _target.GetType().GetProperty(pName);
+                            }
+                            var value = (T)dictionary[pName].GetValue(_target);
+                            _observer.OnNext(value);
                         }
-                        var value = (T?)dictionary[pName].GetValue(_target);
-                        _observer.OnNext(value);
                     }
                     else if (e.PropertyName == _info.Name)
                         raiseChange();
