@@ -206,9 +206,6 @@
 			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 			<SubType>Designer</SubType>
 		</Page>
-		<Page Update="CollectionEditor.xaml">
-			<SubType>Designer</SubType>
-		</Page>
 		<Page Update="CriteriaItem.xaml">
 			<SubType>Designer</SubType>
 		</Page>
