@@ -103,27 +103,27 @@ namespace Utility.Trees.Extensions.Async
             return Observable.Create<TreeChange<IReadOnlyTree>>(observer =>
             {
                 CompositeDisposable disposables = [];
-                tree.Items.AndChanges<ITree>()
-                .Subscribe(item =>
+                tree.Items
+                .AndChanges<ITree>()
+                .Subscribe(set =>
                 {
-                    foreach (var _o in item)
+                    foreach (var item in set)
                     {
-                        if (_o.Type == Type.Add)
+                        if (item.Type == Type.Add)
                         {
-                            SelfAndDescendants(_o.Value, action, 1)
+                            SelfAndDescendants(item.Value, action, 1)
                             .Subscribe(x =>
                             {
                                 observer.OnNext(x);
                             }).DisposeWith(disposables);
-                            observer.OnNext(TreeChange<IReadOnlyTree>.Add(_o.Value, 1));
                         }
-                        else if (_o.Type == Type.Remove)
+                        else if (item.Type == Type.Remove)
                         {
-                            observer.OnNext(TreeChange<IReadOnlyTree>.Remove(_o.Value, 1));
+                            observer.OnNext(TreeChange<IReadOnlyTree>.Remove(item.Value, 1));
                         }
-                        else if (_o.Type == Type.Update)
+                        else if (item.Type == Type.Update)
                         {
-                            observer.OnNext(TreeChange<IReadOnlyTree>.Replace(_o.Value, _o.OldValue, 1));
+                            observer.OnNext(TreeChange<IReadOnlyTree>.Replace(item.Value, item.OldValue, 1));
                         }
                     }
                 }).DisposeWith(disposables);
