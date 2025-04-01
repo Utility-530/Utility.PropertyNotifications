@@ -66,11 +66,11 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
 
 }
 
-internal record HeaderDescriptor<T, TR>(string Name) : ReferenceDescriptor(new RootDescriptor(typeof(T), typeof(TR), Name), null)
+internal record HeaderDescriptor<T, TR>(string Name) : HeaderDescriptor(new RootDescriptor(typeof(T), typeof(TR), Name))
 {
 }
 
-internal record HeaderDescriptor<T>(string Name) : ReferenceDescriptor(new RootDescriptor(typeof(T), null, Name), null)
+internal record HeaderDescriptor<T>(string Name) : HeaderDescriptor(new RootDescriptor(typeof(T), null, Name))
 {
 }
 
@@ -79,7 +79,9 @@ internal record HeaderDescriptor : ChildlessMemberDescriptor, IHeaderDescriptor,
     public HeaderDescriptor(Type type, Type parentType, string name) : base(new RootDescriptor(type, parentType, name))
     {
     }
-
+    public HeaderDescriptor(PropertyDescriptor descriptor) : base(descriptor)
+    {
+    }
 
     public override bool IsReadOnly => true;
 
@@ -96,13 +98,13 @@ internal record HeaderDescriptor : ChildlessMemberDescriptor, IHeaderDescriptor,
         if (ParentType == null)
         {
             Type[] typeArguments = { Type };
-            Type genericType = typeof(ReferenceDescriptor<>).MakeGenericType(typeArguments);
+            Type genericType = typeof(HeaderDescriptor<>).MakeGenericType(typeArguments);
             return genericType;
         }
         else
         {
             Type[] typeArguments = { Type, ParentType };
-            Type genericType = typeof(ReferenceDescriptor<,>).MakeGenericType(typeArguments);
+            Type genericType = typeof(HeaderDescriptor<,>).MakeGenericType(typeArguments);
             return genericType;
         }
     }

@@ -1,8 +1,6 @@
 ﻿
 using System.Diagnostics;
-using System.Security.AccessControl;
 using Utility.Interfaces;
-using Utility.Meta;
 
 namespace Utility.PropertyDescriptors;
 
@@ -84,8 +82,12 @@ public abstract record MemberDescriptor(Descriptor Descriptor) : NotifyProperty,
     {
         return Task.FromResult<object>(this with { });
     }
-}
 
+    public sealed override string ToString()
+    {
+        return Name;
+    }
+}
 
 public abstract record ValueMemberDescriptor(Descriptor Descriptor) : MemberDescriptor(Descriptor), IValueDescriptor
 {
