@@ -16,12 +16,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Data\entireframework.min.css" />
-    <EmbeddedResource Include="Data\master.css">
+    <EmbeddedResource Include="CSS\entireframework.min.css" />
+    <EmbeddedResource Include="CSS\master.css">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </EmbeddedResource>
-    <EmbeddedResource Include="Data\pico.classless.blue.css" />
-    <EmbeddedResource Include="Data\pico.min.css" />
+    <EmbeddedResource Include="CSS\pico.classless.blue.css" />
+    <EmbeddedResource Include="CSS\pico.min.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +42,7 @@
     <PackageReference Include="AngleSharp" Version="1.2.0" />
     <PackageReference Include="AngleSharp.Css" Version="1.0.0-beta.144" />
     <PackageReference Include="AngleSharp.Diffing" Version="1.0.0" />
+    <PackageReference Include="HtmlRenderer.WPF" Version="1.5.1-beta1" />
 
     <PackageReference Include="TinyHtml.Wpf" Version="1.2.2" />
   </ItemGroup>

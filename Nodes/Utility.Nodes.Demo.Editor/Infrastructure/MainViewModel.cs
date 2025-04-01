@@ -91,16 +91,16 @@ namespace Utility.Nodes.Demo.Editor
         }
 
 
-        public IReadOnlyTree[] Html_Render
-        {
-            get
-            {
-                if (html_render == null)
-                    source.Value.Single(nameof(Factory.BuildHtmlRenderRoot))
-                        .Subscribe(a => { html_render = [a]; RaisePropertyChanged(nameof(Html_Render)); });
-                return html_render;
-            }
-        }
+        //public IReadOnlyTree[] Html_Render
+        //{
+        //    get
+        //    {
+        //        if (html_render == null)
+        //            source.Value.Single(nameof(Factory.BuildHtmlRenderRoot))
+        //                .Subscribe(a => { html_render = [a]; RaisePropertyChanged(nameof(Html_Render)); });
+        //        return html_render;
+        //    }
+        //}
 
         public IReadOnlyTree[] Dirty
         {

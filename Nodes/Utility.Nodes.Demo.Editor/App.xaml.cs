@@ -1,12 +1,6 @@
-﻿using AutoMapper;
-using LiteDB;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Splat;
-using System.Data;
-using System.IO;
 using System.Windows;
-using System.Windows.Markup;
-using TinyHtml.Wpf;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
@@ -43,14 +37,13 @@ namespace Utility.Nodes.Demo.Editor
 
             JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
 
-            TransformerService service = new();
-            ControlsService _service = new();
+            //TransformerService service = new();
+            ControlsService _service = ControlsService.Instance;
             ParserService parserService = new();
 
 
             var mainViewModel = Locator.Current.GetService<MainViewModel>();
-            //WpfHtmlControlBase.SetMasterStylesheet(combine());
-            combine();
+
             var window = new Window() { Content = mainViewModel };
 
             window.Show();
@@ -61,32 +54,6 @@ namespace Utility.Nodes.Demo.Editor
 
         }
 
-        void combine()
-        {
-            string cssFile = "master.css";
-            //string cssFile = "pico.min.css";
-            // string cssFile = "entireframework.min.css";
-            //string cssFile = "pico.classless.blue.css";
-
-            string name = typeof(App).Assembly.GetManifestResourceNames().Where(a => a.Contains(cssFile)).First();
-
-            using (var s = typeof(App).Assembly.GetManifestResourceStream(name))
-            {
-                WpfHtmlControlBase.SetMasterStylesheet(new StreamReader(s).ReadToEnd());
-            }
-            //StringBuilder result = new StringBuilder();
-            //foreach (var filename in System.IO.Directory.EnumerateFiles("../../../bootstrap-5.3.3-dist/css"))
-            //{
-            //    using (StreamReader reader = new StreamReader(filename))
-            //    {
-            //        if (filename.Contains(".css"))
-            //        {
-            //            result.Append(reader.ReadToEnd());
-            //            result.AppendLine();
-            //        }                     
-            //    }
-            //}
-            //return result.ToString();            
-        }
+     
     }
 }

@@ -1,65 +1,90 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
-using DynamicData;
-using DynamicData.Binding;
 using Utility.Nodes.Filters;
 using Utility.Models;
 using Utility.Interfaces.Exs;
 using Utility.Trees.Extensions.Async;
 using Splat;
+using System.Reactive.Subjects;
+using Utility.Helpers;
+using Utility.PropertyNotifications;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
-    public class ControlsService
+    public enum ControlEventType
+    {
+        None, Save, Refresh
+    }
+    public readonly record struct ControlEvent(ControlEventType ControlEventType, int Count);
+
+    public class ControlsService : IObservable<ControlEvent>
     {
         Dictionary<Guid, IDisposable> disposables = new();
+        ReplaySubject<ControlEvent> replaySubject = new(1);
 
-        public ControlsService()
+        private ControlsService()
         {
-            Locator.Current.GetService<INodeSource>()
-                .Single(nameof(Factory.BuildRoot))
-                .Subscribe(root =>
+            Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildControlRoot))
+            .Subscribe(_n =>
+            {
+                _n.Descendants()
+                .Subscribe(node =>
                 {
-                    Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildControlRoot))
-                    .Subscribe(_n =>
+                    if (node.NewItem is INode { Data: Model { Name: string name } model })
                     {
-                        _n.Descendants()
-                        .Subscribe(node =>
+                        model.WithChanges(includeInitialValue: false).Subscribe(_ =>
                         {
-                            if (node.NewItem is INode { Data: Model { Name: string name } model })
-                            {
-                                model.WhenAnyPropertyChanged().Subscribe(_ =>
-                                {
-                                    var contentRoot = root.Descendant(a => a.tree.Data.ToString() == Factory.content_root);
-                                    Switch(name, model, contentRoot as INode);
-                                });
-                            }
-                        });                 
-                    });
+                            //
+                            Switch(name, model);
+                        });
+                    }
                 });
+            });
         }
 
-        private void Switch(string name, Model model, INode? contentRoot)
+        Dictionary<ControlEventType, int> dict = new();
+
+        private void Switch(string name, Model model)
         {
+
             switch (name)
             {
                 case Factory.Save:
-                    Save(contentRoot);
+                    var _ = Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildRoot)).Subscribe(root =>
+                    {
+                        root.Descendant(a => a.tree.Data.ToString() == Factory.content_root).Subscribe(contentRoot =>
+                        {
+                            Save((INode)contentRoot.NewItem);
+                            dict[ControlEventType.Save] = dict.Get(ControlEventType.Save) + 1;
+                            replaySubject.OnNext(new ControlEvent(ControlEventType.Save, dict.Get(ControlEventType.Save)));
+                        });
+                    });
+
                     break;
 
                 case Factory.Refresh:
+                    dict[ControlEventType.Refresh] = dict.Get(ControlEventType.Refresh) + 1;
                     //Refresh(contentRoot);
+                    replaySubject.OnNext(new ControlEvent(ControlEventType.Refresh, dict.Get(ControlEventType.Refresh)));
+
                     break;
             }
         }
 
-   
+
         public void Save(INode node)
         {
             Locator.Current.GetService<INodeSource>().Save();
-       
+
         }
+
+        public IDisposable Subscribe(IObserver<ControlEvent> observer)
+        {
+            return replaySubject.Subscribe(observer);
+        }
+
+        public static ControlsService Instance { get; } = new ControlsService();
 
     }
 

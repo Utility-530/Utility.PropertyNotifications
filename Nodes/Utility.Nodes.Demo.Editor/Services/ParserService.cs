@@ -13,6 +13,8 @@ using Utility.Models.Trees;
 using Utility.Nodes.WPF;
 using Splat;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.NonGeneric;
+using Utility.Interfaces;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -26,8 +28,6 @@ namespace Utility.Nodes.Demo.Filters.Services
 </head>
 <body>
 
-<!--<h1>This is a Heading</h1>
-<p>This is a paragraph.</p>-->
 
 </body>
 </html>";
@@ -35,66 +35,53 @@ namespace Utility.Nodes.Demo.Filters.Services
         public ParserService()
         {
             Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildContentRoot))
-                .Subscribe(node =>
+                .CombineLatest(Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildHtmlRoot)))
+                .Subscribe(nodes =>
                 {
-                    Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildHtmlRoot))
-                    .Subscribe(htmlNode =>
+                    var (node, htmlNode) = nodes;
+
+                    ControlsService.Instance.Where(a => a.ControlEventType == ControlEventType.Refresh)
+                    .Subscribe(a =>
                     {
                         htmlNode.WithChangesTo(a => a.Data)
                         .Subscribe(data =>
                         {
-                            if (data is StringModel stringModel)
+                            if (data is HtmlModel stringModel)
                             {
-                                Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildHtmlRenderRoot))
-                                .Subscribe(_node =>
-                                {
-                                    _node.WithChangesTo(a => a.Data)
-                                    .Subscribe(_data =>
-                                    {
-                                        if (_data is HtmlModel _stringModel)
-                                        {
-                                            stringModel
-                                                .WithChangesTo(a => a.Value)
-                                                .Subscribe(a =>
-                                                {
-                                                    _stringModel.Value = a;
-                                                });
-
-                                        }
-                                    });
-
-                                    AddElementByPositionAsync(node)
-                                            .Subscribe(html =>
-                                            {
-                                                stringModel.Value = html;
-                                            });
-
-                                });
+                                AddElementByPositionAsync(node)
+                                 .Subscribe(html =>
+                                 {
+                                     stringModel.Value = html;
+                                 });
 
                             }
                         });
                     });
                 });
-
         }
 
 
         public static IObservable<string> AddElementByPositionAsync(IReadOnlyTree node)
         {
-            var context = BrowsingContext.New(Configuration.Default);
+            var context = BrowsingContext.New(Configuration.Default.WithCss());
             var document = context.OpenAsync(req => req.Content(htmlContent)).Result;
+
+            if (true)
+                addStyle();
+
+
+            //note: using LINQPad here; you may want to store the style somewhere
+            //document.DefaultView.GetComputedStyle(document.QuerySelector("#styleme")).Dump();
+
 
             return Observable.Create<string>(obs =>
             {
                 Dictionary<IReadOnlyTree, IElement> dictionary = new();
 
-                // Ensure we have a root element (usually the <html> element).
                 IElement body = document.Body;
 
-                // Get all child elements of the body.
                 var childElements = body.Children;
 
-                // Check if the target index is within range.
                 return node.SelfAndDescendants()
                     .Where(c => c.Type == Changes.Type.Add)
                     .Select(c => c.NewItem)
@@ -136,11 +123,20 @@ namespace Utility.Nodes.Demo.Filters.Services
                     {
                         if (n.Data is IReferenceDescriptor)
                             newElement = document.CreateElement<IHtmlTableRowElement>();
-                        else   
-                            newElement = document.CreateElement<IHtmlTableDataCellElement>();
-                        
+                        else
+                            throw new Exception(" s33 sdsd");
+                        //newElement = document.CreateElement<IHtmlTableDataCellElement>();
                     }
-          
+                    else if (n.Data is IPropertiesDescriptor prsdescriptor)
+                    {
+                        dictionary[n] = dictionary[n.Parent];
+                        return;
+                    }
+                    else if (n.Parent?.Data is IPropertiesDescriptor _prsdescriptor && n.Data is IValueDescriptor descriptor1)
+                    {
+                        newElement = document.CreateElement<IHtmlTableDataCellElement>();
+                        newElement.TextContent = (descriptor1 as IValue).Value.ToString();
+                    }
                     else
                     {
                         newElement = document.CreateElement<IHtmlDivElement>(); // Create a new element
@@ -151,39 +147,12 @@ namespace Utility.Nodes.Demo.Filters.Services
                     //    newElement = document.CreateElement<IHtmlTableDataCellElement>();
 
                     //}
-                    if (n.Data is Utility.Interfaces.NonGeneric.IValue { Value: var value } descriptor)
-                    {
-                        var key = StyleSelector.Instance.SelectKey(n);
 
-                        //if (descriptor is ICollectionItemReferenceDescriptor)
-                        //{
 
-                            //}
-                            //else if (n.Parent?.Data is ICollectionItemReferenceDescriptor)
-                            //{
 
-                            //}
-                        if (descriptor is IReferenceDescriptor iRef /*&& n.Parent.Data is not ICollectionItemReferenceDescriptor*/)
-                        {
-                            var p = document.CreateElement<IHtmlParagraphElement>();
-                            p.TextContent = iRef.Name;
-                            newElement.AppendChild(p);
-                        }
-                        else
-                        {
-                            var innerElement = create(value);
-                            newElement.AppendChild(innerElement);
-                        }
-                    }
-                    //else if(n.Data is IHeaderDescriptor header)
-                    //{
-                    //    var p = document.CreateElement<IHtmlParagraphElement>();
-                    //    newElement.AppendChild();
-                    //}
-                    else
-                    {
+                    newElement.ClassName = n.Data.ToString();
+                    dictionary[n] = newElement;
 
-                    }
 
 
                     if (n.Parent == null)
@@ -196,16 +165,73 @@ namespace Utility.Nodes.Demo.Filters.Services
                     }
                     else
                     {
-                        body.AppendChild(newElement);
+                        throw new Exception("r g4344");
+                        //body.AppendChild(newElement);
                     }
-                    newElement.ClassName = n.Data.ToString();
-                    dictionary[n] = newElement;
 
-                    var sw = new StringWriter();
-                    document.ToHtml(sw, new PrettyMarkupFormatter());
+                    if (n.Data is Utility.Interfaces.NonGeneric.IDescriptor descriptor)
+                    {
+                        var key = StyleSelector.Instance.SelectKey(n);
 
-                    var HTML_prettified = sw.ToString();
-                    obs.OnNext(HTML_prettified);
+                        //if (descriptor is ICollectionItemReferenceDescriptor)
+                        //{
+                        //}
+                        //else if (n.Parent?.Data is ICollectionItemReferenceDescriptor)
+                        //{
+                        //}
+
+                        if (n.Parent?.Data is IPropertiesDescriptor _prsdescriptor && n.Data is IValueDescriptor descriptor1)
+                        {
+
+                        }
+                        else if (descriptor is Utility.Interfaces.NonGeneric.IValue { Value: var value })
+                        {
+                            var innerElement = create(value);
+                            newElement.AppendChild(innerElement);
+                        }
+                        else if (n.Parent.Data is ICollectionHeadersDescriptor headersDescriptor)
+                        {
+
+                        }
+                        //else if(n.Data is IHeaderDescriptor header)
+                        //{
+                        //    var p = document.CreateElement<IHtmlParagraphElement>();
+                        //    newElement.AppendChild();
+                        //}
+                        else if (descriptor is IReferenceDescriptor iRef && n.Parent.Data is not ICollectionDescriptor)
+                        {
+                            //var index = (n as IIndex).Index.Local.ToString();
+                            var x = (n as ITree).Index.ToString().Split('.').Length;
+                            var p = document.CreateElement("h" + x.ToString());
+
+                            p.TextContent = iRef.Name;
+                            newElement.AppendChild(p);
+                        }
+                        else if (descriptor is IPropertiesDescriptor prd && n.Parent.Data is not ICollectionDescriptor)
+                        {
+                            //var p = document.CreateElement<IHtmlParagraphElement>();
+                            //p.TextContent = iRef.Name;
+                            //newElement.AppendChild(p);
+                        }
+
+                        else
+                        {
+
+                            //var p = document.CreateElement<IHtmlParagraphElement>();
+                            //p.TextContent = n.Data.ToString();
+                            //newElement.AppendChild(p);
+                            //body.AppendChild(newElement);
+                        }
+
+
+
+
+                        var sw = new StringWriter();
+                        document.ToHtml(sw, new PrettyMarkupFormatter());
+
+                        var HTML_prettified = sw.ToString();
+                        obs.OnNext(HTML_prettified);
+                    }
                 });
             });
 
@@ -228,6 +254,15 @@ namespace Utility.Nodes.Demo.Filters.Services
 
                 return document.CreateElement<IHtmlParagraphElement>();
                 //throw new NotImplementedException("erew33111");
+            }
+
+            void addStyle()
+            {
+                var style = document.CreateElement<IHtmlStyleElement>();
+                // note: if you have the CSS from a URL; choose IHtmlLinkElement instead
+                style.TextContent = File.ReadAllText("../../../CSS/sakura.css");
+                // @"#styleme { color:blue; background-color: gray; }";
+                document.Head.AppendChild(style);
             }
         }
     }
