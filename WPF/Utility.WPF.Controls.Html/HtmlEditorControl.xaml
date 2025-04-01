@@ -1,0 +1,30 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Utility.WPF.Controls.Html"           
+                    xmlns:base="clr-namespace:Utility.WPF.Controls.Base;assembly=Utility.WPF.Controls.Base"      
+                    xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                    xmlns:conv="http://schemas.utility.com/converters">
+
+
+    <Style TargetType="{x:Type local:HtmlEditorControl}" BasedOn="{StaticResource {x:Type base:SplitControl}}">
+        <Setter Property="Movement" Value="TopToBottom"></Setter>
+        <Setter Property="Content">
+            <Setter.Value>
+                <local:TinyHtmlControl Html="{Binding Html, RelativeSource={RelativeSource AncestorType=local:HtmlEditorControl}}"/>
+                <!--<local:HtmlControl Html="{Binding Html, RelativeSource={RelativeSource AncestorType=local:HtmlEditorControl}}"/>-->
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Header">
+            <Setter.Value>
+                <avalonedit:TextEditor x:Name="_htmlEditor" 
+                                       VerticalScrollBarVisibility="Visible" 
+                                       local:TextEdit.Text="{Binding Html, RelativeSource={RelativeSource AncestorType=local:HtmlEditorControl}}"
+                                       BorderThickness="0"     
+                                       SyntaxHighlighting="HTML" 
+                                       ShowLineNumbers="True" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+</ResourceDictionary>

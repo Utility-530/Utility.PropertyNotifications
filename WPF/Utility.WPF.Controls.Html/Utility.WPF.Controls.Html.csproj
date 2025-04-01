@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="CSS\sakura.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="CSS\sakura.css" />
+    <EmbeddedResource Include="resources\browser.png" />
+    <EmbeddedResource Include="resources\chrome.png" />
+    <EmbeddedResource Include="resources\code.png" />
+    <EmbeddedResource Include="resources\comment16.gif" />
+    <EmbeddedResource Include="resources\CustomFont.ttf" />
+    <EmbeddedResource Include="resources\delete16.gif" />
+    <EmbeddedResource Include="resources\delete32.gif" />
+    <EmbeddedResource Include="resources\Event16.png" />
+    <EmbeddedResource Include="resources\favorites32.png" />
+    <EmbeddedResource Include="resources\font32.png" />
+    <EmbeddedResource Include="resources\form.png" />
+    <EmbeddedResource Include="resources\formula32.png" />
+    <EmbeddedResource Include="resources\html32.png" />
+    <EmbeddedResource Include="resources\image.png" />
+    <EmbeddedResource Include="resources\image32.png" />
+    <EmbeddedResource Include="resources\method16.gif" />
+    <EmbeddedResource Include="resources\pdf.png" />
+    <EmbeddedResource Include="resources\property16.gif" />
+    <EmbeddedResource Include="resources\stopwatch.png" />
+    <EmbeddedResource Include="resources\Tooltip.html" />
+    <EmbeddedResource Include="resources\web_pallete.gif" />
+    <EmbeddedResource Include="Tooltip.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="HtmlView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AvalonEditB" Version="2.4.0" />
+		<PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25104.5739" />
+		<PackageReference Include="HtmlRenderer.WPF" Version="1.5.1-beta1" />
+		<PackageReference Include="TinyHtml.Wpf" Version="1.2.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Controls.Base\Utility.WPF.Controls.Base.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Geometry\Utility.WPF.Geometries.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
+		<ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
+	</ItemGroup>
+
+
+
+</Project>
