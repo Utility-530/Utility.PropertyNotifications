@@ -11,15 +11,15 @@ using Observable = System.Reactive.Linq.Observable;
 
 namespace Utility.Nodes.Filters
 {
-    public class MethodCache
+    public class MethodCache 
     {
         private Dictionary<string, MethodValue> dictionary;
         private Dictionary<string, string> dictionaryMethodNameKeys = [];
-
-        private MethodCache()
+        Factory factory = new Factory();
+        public MethodCache()
         {
             dictionary ??= typeof(Factory)
-                .GetMethods(BindingFlags.Static | BindingFlags.Public)
+                .GetMethods(BindingFlags.Instance | BindingFlags.Public)
                 .ToDictionary(a => a.Name, a => new MethodValue { Method = a });
         }
 
@@ -86,7 +86,7 @@ namespace Utility.Nodes.Filters
                     //Add(x);
                     obs.OnNext(x);
                 }
-                return Disposable.Empty;
+                return System.Reactive.Disposables.Disposable.Empty;
             });
         }
 
@@ -100,7 +100,7 @@ namespace Utility.Nodes.Filters
         public object? Invoke(string key)
         {
             if (dictionary.ContainsKey(key))
-                return dictionary[key].Method.Invoke(null, Array.Empty<object>());
+                return dictionary[key].Method.Invoke(factory, Array.Empty<object>());
             return null;
         }
     }

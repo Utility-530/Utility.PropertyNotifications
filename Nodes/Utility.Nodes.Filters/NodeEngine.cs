@@ -24,6 +24,8 @@ using Utility.Trees.Abstractions;
 using Utility.Models;
 using Fasterflect;
 using System.ComponentModel;
+using System.Reactive.Disposables;
+using CompositeDisposable = Utility.Observables.CompositeDisposable;
 
 namespace Utility.Nodes.Filters
 {
@@ -37,21 +39,28 @@ namespace Utility.Nodes.Filters
         Lazy<IExpander> expander;
         Lazy<IContext> context;
         Lazy<ITreeRepository> repository;
+        Lazy<MethodCache> methodCache;
+
+        CompositeDisposable compositeDisposable = new();
 
         private Lazy<Dictionary<string, Setter>> setdictionary = new(() => typeof(Node)
                                                     .GetProperties(BindingFlags.Instance | BindingFlags.Public)
                                                     .Where(a => a.Name != nameof(IReadOnlyTree.Parent))
                                                     .ToDictionary(a => a.Name, a => Rules.Decide(a)));
-
+        private bool _disposed;
         private readonly ObservableCollection<INode> nodes = [];
 
-        private NodeEngine()
+        public NodeEngine()
         {
             filter = new(() => Locator.Current.GetService<IFilter>());
             expander = new(() => Locator.Current.GetService<IExpander>());
             context = new(() => Locator.Current.GetService<IContext>());
-            repository = new(() => Locator.Current.GetService<ITreeRepository>());
+            var repdository = Locator.Current.GetService<ITreeRepository>();
+            repository = new(() => repdository);
+            methodCache = new(() => Locator.Current.GetService<MethodCache>());
         }
+
+        public Guid Guid { get; } = Guid.NewGuid();
 
         public IReadOnlyCollection<INode> Nodes => nodes;
 
@@ -59,43 +68,10 @@ namespace Utility.Nodes.Filters
 
         string INodeSource.New => New;
 
-        public IObservable<INode> SingleByNameAsync(string name)
-        {
-            return nodes.SelfAndAdditions().Where(a => a.Data.ToString() == name).Take(1);
-        }
-
-
-        public DateTime Remove(Guid guid)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int? MaxIndex(Guid guid, string v)
-        {
-            //return repository.MaxIndex(guid, v);
-            throw new NotImplementedException();
-        }
 
         public void Remove(INode node)
         {
             nodes.Remove(node);
-        }
-
-        public IObservable<Structs.Repos.Key?> Find(Guid parentGuid, string name, Guid? guid = null, System.Type type = null, int? localIndex = null)
-        {
-            throw new NotImplementedException();
-
-            // return repository.Find(parentGuid, name, guid, type, localIndex);
-        }
-
-        public IObservable<DateValue> Get(Guid guid, string name)
-        {
-            return repository.Value.Get(guid, name);
-        }
-
-        public void Set(Guid guid, string name, object value, DateTime dateTime)
-        {
-            repository.Value.Set(guid, name, value, dateTime);
         }
 
         public void Add(INode node)
@@ -147,15 +123,15 @@ namespace Utility.Nodes.Filters
                                     {
                                         node.Add(a);
                                     });
-                            });
-                        });
-                    });
+                            }).DisposeWith(compositeDisposable);
+                        }).DisposeWith(compositeDisposable);
+                    }).DisposeWith(compositeDisposable);
 
                 node.Items.AndChanges<INode>().Subscribe(a =>
                 {
                     foreach (var item in a)
                         change(item);
-                });
+                }).DisposeWith(compositeDisposable);
             }
 
 
@@ -170,14 +146,16 @@ namespace Utility.Nodes.Filters
                 {
                     node.IsExpanded = true;
                 }
-                node.PropertyChanged += node_PropertyChanged;
-
-                void node_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+                string[] names = [nameof(Node.IsSelected), (nameof(Node.IsExpanded))];
+                node.WithChanges().Subscribe(e =>
                 {
-                    if (sender is INode node)
+                    if (e is PropertyChangedExEventArgs { PreviousValue: var previousValue, PropertyName: string name, Value: var value })
                     {
-                        if (e is PropertyChangedExEventArgs { PreviousValue: var previousValue, PropertyName: string name, Value: var value })
+                        if (names.Contains(name))
                         {
+                            repository.Value.Set((GuidKey)node.Key, name, value, DateTime.Now);
+                        }
+                        else
                             context.Value.UI(() =>
                             {
                                 Single(nameof(Factory.BuildDirty))
@@ -187,20 +165,18 @@ namespace Utility.Nodes.Filters
                                         throw new Exception("775 333");
                                     else
                                         _node.Add(await _node.ToTree(new DirtyModel { Name = name + node.Items.Count(), SourceKey = node.Key, PropertyName = name, NewValue = value }));
-                                });
+                                }).DisposeWith(compositeDisposable);
                             });
-                        }
-                        else
-                            throw new Exception("ss FGre333333333");
                     }
                     else
-                        throw new Exception("dfd 4222243");
-                }
+                        throw new Exception("ss FGre333333333");
+                });
             }
 
 
             void initialiseData(object data)
             {
+
 
                 if (data is INotifyPropertyCalled called)
                 {
@@ -217,28 +193,35 @@ namespace Utility.Nodes.Filters
                         {
                             if (a.Value != null)
                             {
-                                if (call.Target.TryGetPrivateFieldValue(call.Name.ToLower(), out var output, out var fieldInfo) == false)
+                                object output = null;
+                                FieldInfo fieldInfo = null;
+
+                                if (call.Target is IGet get)
                                 {
-                                    if (call.Target is IGet get)
-                                    {
-                                        output = get.Get();
-                                    }
-                                    else
-                                    {
-                                        throw new Exception($"no field for property, {call.Name}");
-                                    }
+                                    output = get.Get();
                                 }
+                                else if (call.Target.TryGetPrivateFieldValue(call.Name.ToLower(), out var _output, out var _fieldInfo) == false)
+                                {
+                                    output = _output;
+                                    fieldInfo = _fieldInfo;
+                                }
+                                else
+                                {
+                                    throw new Exception($"no field for property, {call.Name}");
+                                }
+
+
                                 if (output?.Equals(a.Value) == true)
                                     return;
                                 else
                                 {
-                                    if (fieldInfo != null)
+                                    if (call.Target is ISet set)
+                                    {
+                                        set.Set(a.Value);
+                                    }
+                                    else if (fieldInfo != null)
                                     {
                                         fieldInfo.SetValue(call.Target, a.Value);
-                                    }
-                                    else if (call.Target is ISet get)
-                                    {
-                                        get.Set(a.Value);
                                     }
                                     else
                                     {
@@ -248,8 +231,8 @@ namespace Utility.Nodes.Filters
                                         changed.RaisePropertyChanged(call.Name);
                                 }
                             }
-                        });
-                    });
+                        }).DisposeWith(compositeDisposable);
+                    }).DisposeWith(compositeDisposable);
                 }
                 if (data is INotifyPropertyReceived received)
                 {
@@ -263,7 +246,7 @@ namespace Utility.Nodes.Filters
                         }
                         else
                             repository.Value.Set((GuidKey)node.Key, nameof(Node.Data) + "." + reception.Name, reception.Value, DateTime.Now);
-                    });
+                    }).DisposeWith(compositeDisposable);
                 }
 
 
@@ -275,6 +258,11 @@ namespace Utility.Nodes.Filters
                 {
                     //throw new Exception("R333 ");
                 }
+
+
+                if (data is IValue value && value.Value != null)
+                    repository.Value.Set((GuidKey)node.Key, nameof(Node.Data) + "." + nameof(IValue.Value), value.Value, DateTime.Now);
+
             }
 
             IObservable<INode> loadProperties(INode node)
@@ -365,7 +353,7 @@ namespace Utility.Nodes.Filters
                                 .Children
                                     .ForEach(async d =>
                                     {
-                                        await NewMethod(node, observer, d, ++i);
+                                        NewMethod(node, observer, d, ++i).DisposeWith(compositeDisposable);
                                     });
                             }
                             else
@@ -393,40 +381,41 @@ namespace Utility.Nodes.Filters
                             children
                             .Children
                              .Additions()
-                             .Subscribe(async d =>
+                             .Subscribe(d =>
                              {
-                                 await NewMethod(node, observer, d, ++i);
-                             });
+                                 NewMethod(node, observer, d, ++i).DisposeWith(compositeDisposable);
+
+                             }).DisposeWith(compositeDisposable);
 
                         }
                             /*,() => observer.OnCompleted()*/);
                 });
 
-                async Task NewMethod(INode node, IObserver<INode> observer, object d, int i)
+                IDisposable NewMethod(INode node, IObserver<INode> observer, object d, int i)
                 {
-                    var _new = (INode)await node.ToTree(d);
-
-                    repository
-                    .Value
-                    .Find((GuidKey)node.Key, _new.Name(), type: toType(d), index: ++i)
-                    .Subscribe(_key =>
+                    return node.ToTree(d).ToObservable().Cast<INode>().Subscribe(_new =>
                     {
-
-                        if (d is IIsReadOnly readOnly)
+                        repository
+                        .Value
+                        .Find((GuidKey)node.Key, _new.Name(), type: toType(d), index: ++i)
+                        .Subscribe(_key =>
                         {
-                            (_new as ISetIsReadOnly).IsReadOnly = readOnly.IsReadOnly;
-                        }
 
-                        if (_key.HasValue == false)
-                        {
-                            throw new Exception("dde33443 21");
-                        }
-                        _new.Key = new GuidKey(_key.Value.Guid);
+                            if (d is IIsReadOnly readOnly)
+                            {
+                                (_new as ISetIsReadOnly).IsReadOnly = readOnly.IsReadOnly;
+                            }
 
-                        if (d is IValue value && value.Value != null)
-                            repository.Value.Set((GuidKey)_new.Key, nameof(Node.Data) + "." + nameof(IValue.Value), value.Value, DateTime.Now);
-                        observer.OnNext(_new);
+                            if (_key.HasValue == false)
+                            {
+                                throw new Exception("dde33443 21");
+                            }
+                            _new.Key = new GuidKey(_key.Value.Guid);
+
+                            observer.OnNext(_new);
+                        });
                     });
+
                 }
             }
         }
@@ -448,12 +437,12 @@ namespace Utility.Nodes.Filters
                             await Task.Delay(200);
                         }
                     }
-                });
+                }).DisposeWith(compositeDisposable);
         }
 
         public IObservable<INode> Single(string key)
         {
-            return Many(key).Take(1);
+            return Many(key).SelectMany(a => a.WithChangesTo(n => n.Data).Where(x => x is not string).Select(ax => a));
         }
 
         public IObservable<INode> Many(string key)
@@ -472,42 +461,44 @@ namespace Utility.Nodes.Filters
                         }
                     });
                 else
-                    return MethodCache.Instance
+                    return methodCache.Value
                     .Get(key)
                     .Subscribe(a =>
                     {
                         observer.OnNext(a);
+                        //observer.OnCompleted();
+                    }, () =>
+                    {
                         observer.OnCompleted();
                     });
             });
         }
 
-        Dictionary<string, GuidKey> keyValues = new();
-
-
         public IObservable<INode> Create(string name, Guid guid, Func<string, INode> nodeFactory, Func<string, object> modelFactory)
         {
-            INode node;
-            if (Nodes.SingleOrDefault(a => (GuidKey)a.Key == guid) is { } _node)
-            {
-                lock (nodes)
-                    return Observable.Return(_node);
-            }
-            else
-            {
-                node = nodeFactory(name);
-                node.Key = new GuidKey(guid);
-                nodes.Add(node);
-            }
-
             return Observable.Create<INode>(observer =>
             {
+                INode node;
+                if (Nodes.SingleOrDefault(a => (GuidKey)a.Key == guid) is { } _node)
+                {
+                    lock (nodes)
+                        observer.OnNext(_node);
+                    observer.OnCompleted();
+                    return Disposable.Empty;
+                }
+                else
+                {
+                    node = nodeFactory(name);
+                    node.Key = new GuidKey(guid);
+                }
+                observer.OnNext(node);
+
                 var data = modelFactory(name);
-                return repository.Value
+
+                var disposable = repository.Value
                 .InsertRoot(guid, name, toType(data))
                 .Subscribe(a =>
                 {
-
                     if (a.HasValue)
                     {
                         node.Data = data;
@@ -515,19 +506,51 @@ namespace Utility.Nodes.Filters
                     if (a.HasValue && node.Data == null)
                         node.Data = DataActivator.Activate(a);
                     Add(node);
-                    observer.OnNext(node);
+                    observer.OnCompleted();
                 });
+
+                return disposable;
             });
         }
 
-        public void Reset()
-        {
-            throw new NotImplementedException();
-        }
+
 
         System.Type toType(object data)
         {
             return data is IGetType { } getType ? getType.GetType() : data.GetType();
+        }
+
+        public void Dispose()
+        {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
+        }
+        //The Dispose method performs all object cleanup, so the garbage collector no longer needs to call the objects' Object.Finalize override. Therefore, the call to the SuppressFinalize method prevents the garbage collector from running the finalizer. If the type has no finalizer, the call to GC.SuppressFinalize has no effect. The actual cleanup is performed by the Dispose(bool) method overload.
+
+        //In the overload, the disposing parameter is a Boolean that indicates whether the method call comes from a Dispose method(its value is true) or from a finalizer(its value is false).
+
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                // Dispose managed state (managed objects).
+                // ...
+                compositeDisposable.Dispose();
+                nodes.Clear();
+            }
+
+            // Free unmanaged resources.
+            // ...
+
+            _disposed = true;
         }
     }
 
