@@ -2,10 +2,13 @@
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using TheArtOfDev.HtmlRenderer.Demo.Common;
 using TheArtOfDev.HtmlRenderer.Demo.WPF;
 using TheArtOfDev.HtmlRenderer.WPF;
+using Utility.WPF.Controls.Base;
+using Utility.WPF.Controls.Buttons;
 using Utility.WPF.Controls.Html;
 
 namespace Utility.WPF.Demo.Html
@@ -22,13 +25,18 @@ namespace Utility.WPF.Demo.Html
             SamplesLoader.Init("WPF", typeof(HtmlRender).Assembly.GetName().Version.ToString());
 
             var grid = new Grid();
-            grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(160) });
-            grid.ColumnDefinitions.Add(new ColumnDefinition());
             var treeSel = new TreeSelectionView();
-            //var mainView = new HtmlView();
-            //var mainView = new Controls.Html.HtmlEditorControl();
-            var mainView = new Controls.Html.TinyHtmlEditorControl();
-            Grid.SetColumn(mainView, 1);
+            var mainView = new TinyHtmlEditorControl();
+            var splitControl = new SplitControl()
+            {
+
+                Content = mainView,
+                Header = treeSel
+            };
+
+            var button = new DirectionButton() { Movement = Enums.XYMovement.RightToLeft, HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Top };
+            splitControl.SetBinding(SplitControl.MovementProperty, new Binding(nameof(DirectionButton.Movement)) { Source = button });
+
             treeSel.LoadSamples();
             treeSel.SelectionChanged += (s, e) =>
             {
@@ -48,8 +56,8 @@ namespace Utility.WPF.Demo.Html
 
                 mainView.Html = e.Data.Sample.Html;
             };
-            grid.Children.Add(treeSel);
-            grid.Children.Add(mainView);
+            grid.Children.Add(splitControl);
+            grid.Children.Add(button);
             var window = new Window { Content = grid };
             window.Show();
             base.OnStartup(e);

@@ -108,6 +108,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Html\Utility.WPF.Controls.Html.csproj" />
   </ItemGroup>
 
