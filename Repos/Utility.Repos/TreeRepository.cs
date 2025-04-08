@@ -64,11 +64,19 @@ namespace Utility.Repos
         private readonly SQLiteConnection connection;
         private readonly Task initialisationTask;
 
-        protected TreeRepository(string? dbDirectory = default)
+        public TreeRepository(string? dbDirectory = default)
         {
-            if (dbDirectory != default)
-                Directory.CreateDirectory(dbDirectory);
-            connection = new SQLiteConnection(Path.Combine(dbDirectory ?? string.Empty, "data" + "." + "sqlite"), false) { };
+            if (dbDirectory == null)
+                connection = new SQLiteConnection("data" + "." + "sqlite", false);
+            else
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(dbDirectory));
+                if (string.IsNullOrEmpty(System.IO.Path.GetExtension(dbDirectory)) == false)
+                    connection = new SQLiteConnection(dbDirectory, false);
+                else
+                    connection = new SQLiteConnection(Path.Combine(dbDirectory, "data" + "." + "sqlite"), false);
+            }
+
             connection.CreateTable<Relationships>();
             connection.CreateTable<Values>();
             connection.CreateTable<Type>();
@@ -446,17 +454,19 @@ namespace Utility.Repos
             string text;
             if (values.ContainsKey(guid) && values[guid].ContainsKey(name) && values[guid][name].Value.Equals(value))
                 return;
-            //if (value is not string str)
+  
             text = JsonConvert.SerializeObject(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-            //else
-            //    text = value?.ToString();
             var query = $"SELECT * FROM '{nameof(Values)}' WHERE Guid = '{guid}' AND Name = '{name}' AND Value = '{text}'";
+            var typeId = TypeId(value.GetType());
             if (connection.Query<Values>(query).Any() == false)
-            {
-                var typeId = TypeId(value.GetType());
+            {             
                 connection.Insert(new Values { Guid = guid, Value = text, Name = name, Added = dateTime, TypeId = typeId });
-                values.GetValueOrNew(guid)[name] = new(guid, name, dateTime, value);
             }
+            else
+            {
+                connection.Execute($"UPDATE '{nameof(Values)}' SET Added = '{date()}' WHERE Guid = '{guid}' AND Name = '{name}' AND Value = '{text}'");
+            }
+            values.GetValueOrNew(guid)[name] = new(guid, name, dateTime, value);
         }
 
         public System.Type? GetType(Guid guid, string tableName)
