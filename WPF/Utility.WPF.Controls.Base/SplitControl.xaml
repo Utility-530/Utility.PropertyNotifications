@@ -5,7 +5,8 @@
     xmlns:local="clr-namespace:Utility.WPF.Controls.Base" 
     xmlns:enms="clr-namespace:Utility.Enums;assembly=Utility.Enums"
     xmlns:att="http://schemas.utility.com/attached"
-    xmlns:res="http://schemas.utility.com/resourcedictionary">
+    xmlns:res="http://schemas.utility.com/resourcedictionary"
+    xmlns:conv="converter">
     <!--<ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml"/>
     </ResourceDictionary.MergedDictionaries>-->
@@ -47,7 +48,7 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <ContentPresenter ContentSource="Content"/>
+            <ContentPresenter ContentSource="Content" x:Name="PART_ContentPresenter"/>
 
             <ToggleButton x:Name="hider"  
                           Style="{StaticResource ArrowToggleButton}" 
@@ -61,14 +62,47 @@
             <Grid Grid.Column="1"   Visibility="{Binding Path=(att:Ex.IsChecked), Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type HeaderedContentControl}}}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
-                    <ColumnDefinition Width="100" MinWidth="10" />
+                    <ColumnDefinition Width="{Binding Path=(att:Ex.Indent), RelativeSource={RelativeSource Mode=TemplatedParent}}" MinWidth="10" />
                 </Grid.ColumnDefinitions>
                 <GridSplitter x:Name="_splitter" Grid.Column="0" Width="4" VerticalAlignment="Stretch" HorizontalAlignment="Center" Background="#BFDBFF"  ResizeBehavior="CurrentAndNext"     />
-                <ContentPresenter ContentSource="Header" Grid.Column="1" x:Name="PART_HeaderPresenter" />
+                <ContentPresenter  ContentSource="Header" Grid.Column="1" x:Name="PART_HeaderPresenter" />
             </Grid>
         </Grid>
 
         <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=(att:Ex.Reverse), RelativeSource={RelativeSource Mode=Self} }" Value="True">
+                <Setter TargetName="PART_ContentPresenter" Property="Content" >
+                    <Setter.Value>
+                        <Binding Path="Header" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="PART_ContentPresenter" Property="ContentTemplate" >
+                    <Setter.Value>
+                        <Binding Path="HeaderTemplate" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="PART_ContentPresenter" Property="ContentTemplateSelector" >
+                    <Setter.Value>
+                        <Binding Path="HeaderTemplateSelector" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                    </Setter.Value>
+                </Setter>
+
+                <Setter TargetName="PART_HeaderPresenter" Property="Content" >
+                    <Setter.Value>
+                        <Binding Path="Content" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="PART_HeaderPresenter" Property="ContentTemplate" >
+                    <Setter.Value>
+                        <Binding Path="ContentTemplate" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="PART_HeaderPresenter" Property="ContentTemplate" >
+                    <Setter.Value>
+                        <Binding Path="ContentTemplateSelector" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
             <DataTrigger Binding="{Binding IsChecked, ElementName=hider}" Value="False">
                 <Setter Property="att:Ex.IsChecked" Value="True" />
                 <DataTrigger.EnterActions>
@@ -104,7 +138,7 @@
 
             <Grid Grid.Column="0"   Visibility="{Binding Path=(att:Ex.IsChecked), Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type HeaderedContentControl}}}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100" MinWidth="10" />
+                    <ColumnDefinition Width="{Binding Path=(att:Ex.Indent), RelativeSource={RelativeSource Mode=TemplatedParent}}" MinWidth="10" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <ContentPresenter ContentSource="Header" Grid.Column="0" x:Name="PART_HeaderPresenter" />
@@ -112,7 +146,7 @@
                     ResizeBehavior="PreviousAndCurrent"     />
             </Grid>
 
-            <ContentPresenter ContentSource="Content" Grid.Column="1"/>
+            <ContentPresenter ContentSource="Content" Grid.Column="1" x:Name="PART_ContentPresenter"/>
             <ToggleButton x:Name="hider"  
                           Grid.Column="1"
                           Style="{StaticResource ArrowToggleButton}"                         
@@ -126,6 +160,39 @@
         </Grid>
 
         <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=(att:Ex.Reverse), RelativeSource={RelativeSource Mode=Self} }" Value="True">
+                <Setter TargetName="PART_ContentPresenter" Property="Content" >
+                    <Setter.Value>
+                        <Binding Path="Header" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="PART_ContentPresenter" Property="ContentTemplate" >
+                    <Setter.Value>
+                        <Binding Path="HeaderTemplate" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="PART_ContentPresenter" Property="ContentTemplateSelector" >
+                    <Setter.Value>
+                        <Binding Path="HeaderTemplateSelector" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                    </Setter.Value>
+                </Setter>
+
+                <Setter TargetName="PART_HeaderPresenter" Property="Content" >
+                    <Setter.Value>
+                        <Binding Path="Content" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="PART_HeaderPresenter" Property="ContentTemplate" >
+                    <Setter.Value>
+                        <Binding Path="ContentTemplate" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                    </Setter.Value>
+                </Setter>
+                <Setter TargetName="PART_HeaderPresenter" Property="ContentTemplate" >
+                    <Setter.Value>
+                        <Binding Path="ContentTemplateSelector" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
             <DataTrigger Binding="{Binding IsChecked, ElementName=hider}" Value="False">
                 <Setter Property="att:Ex.IsChecked" Value="True" />
                 <DataTrigger.EnterActions>
@@ -172,7 +239,7 @@
 
                 <Grid.RowDefinitions>
                     <RowDefinition />
-                    <RowDefinition Height="100" MinHeight="10" />
+                    <RowDefinition Height="{Binding Path=(att:Ex.Indent), RelativeSource={RelativeSource Mode=TemplatedParent}}" MinHeight="10" />
                 </Grid.RowDefinitions>
                 <GridSplitter x:Name="_splitter" Grid.Row="0" Height="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="#BFDBFF" ResizeBehavior="CurrentAndNext"    />
                 <ContentPresenter ContentSource="Header" Grid.Row="1" x:Name="PART_HeaderPresenter"                                    />
@@ -217,7 +284,7 @@
             <Grid Grid.Row="0"   Visibility="{Binding Path=(att:Ex.IsChecked), Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type HeaderedContentControl}}}">
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100" MinHeight="10" />
+                    <RowDefinition Height="{Binding Path=(att:Ex.Indent), RelativeSource={RelativeSource Mode=TemplatedParent}}" MinHeight="10" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
@@ -268,6 +335,7 @@
 
     <Style TargetType="{x:Type local:SplitControl}" BasedOn="{StaticResource {x:Type HeaderedContentControl}}">
         <Setter Property="att:Ex.IsChecked" Value="False"/>
+        <Setter Property="att:Ex.Indent" Value="150"/>
         <Setter Property="Background" Value="Transparent"></Setter>
         <Setter Property="Template">
             <Setter.Value>
