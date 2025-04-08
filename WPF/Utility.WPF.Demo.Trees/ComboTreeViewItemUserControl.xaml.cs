@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using Utility.WPF.Controls.Trees;
 using Utility.WPF.Demo.Data.Model;
 
@@ -14,13 +15,16 @@ namespace Utility.WPF.Demo.Trees
         public ComboTreeViewItemUserControl()
         {
             InitializeComponent();
-            var parent = new ComboTreeViewItem() {
+            var parent = new ComboTreeViewItem()
+            {
                 Width = 200,
-                Height = 30, 
+                Height = 30,
                 ItemTemplate = this.Resources[new DataTemplateKey(typeof(Character))] as DataTemplate,
                 //Style= this.Resources["Demo"] as Style, 
                 EditTemplate = this.Resources["EditTemplate"] as DataTemplate,
+                ItemContainerStyle = this.Resources["CustomTreeViewItem"] as Style,
                 ItemsSource = this.Resources["Characters"] as IEnumerable,
+                Selection = new Binding { Path = new PropertyPath("Data") }
             };
             parent.FinishEdit += Parent_Add;
             //var treeViewItemA = Make("A");
@@ -50,10 +54,10 @@ namespace Utility.WPF.Demo.Trees
         TreeViewItem Make(string header)
         {
             return new TreeViewItem
-            { 
-                Header = header, 
+            {
+                Header = header,
                 HeaderTemplate = this.Resources["ItemTemplate"] as DataTemplate,
-                Style = this.Resources["GenericTreeViewItem"] as Style 
+                Style = this.Resources["GenericTreeViewItem"] as Style
             };
 
         }

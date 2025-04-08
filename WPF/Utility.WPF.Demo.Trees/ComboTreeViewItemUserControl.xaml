@@ -9,7 +9,11 @@
              xmlns:btns="http://schemas.utility.com/buttons"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:c="http://schemas.utility.com/colours"
-             xmlns:data="clr-namespace:Utility.WPF.Demo.Data.Model;assembly=Utility.WPF.Demo.Data"            
+             xmlns:data="clr-namespace:Utility.WPF.Demo.Data.Model;assembly=Utility.WPF.Demo.Data"
+             xmlns:sb="http://schemas.utility.com/splitbuttons" 
+             xmlns:h="clr-namespace:Utility.WPF.Helpers;assembly=Utility.WPF.Helpers"
+             xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks" 
+             xmlns:b="http://schemas.utility.com/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
@@ -18,6 +22,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml"/>
                 <ResourceDictionary Source="/Utility.WPF.Demo.Data;component/DataTemplate/Character.xaml" />
+                <ResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
 
@@ -110,44 +115,545 @@
             <sys:Double x:Key="MaxDropDownHeight" >400.0</sys:Double>
 
 
-            <PathGeometry x:Key="Tick_Rounded">
-                <PathGeometry.Figures>
-                    <PathFigureCollection>
-                        <PathFigure IsClosed="False"  StartPoint="4,2">
-                            <PathFigure.Segments>
-                                <PathSegmentCollection>
-                                    <LineSegment Point="8,6" />
-                                    <LineSegment Point="17,-6" />
-                                </PathSegmentCollection>
-                            </PathFigure.Segments>
-                        </PathFigure>
-                    </PathFigureCollection>
-                </PathGeometry.Figures>
-            </PathGeometry>
 
 
-            <PathGeometry x:Key="Cancel_Rounded">
-                <PathGeometry.Figures>
-                    <PathFigureCollection>
-                        <PathFigure IsClosed="False"  StartPoint="9,9">
-                            <PathFigure.Segments>
-                                <PathSegmentCollection>
-                                    <LineSegment Point="21,21" />
-                                </PathSegmentCollection>
-                            </PathFigure.Segments>
-                        </PathFigure>
+            <!--<trees:ItemsPanelConverter x:Key="ItemsPanelConverter"/>-->
+            <trees:MultiItemsPanelConverter x:Key="MultiItemsPanelConverter"/>
+            <trees:VisibilityConverter x:Key="VisibilityConverter"/>
+            <trees:InverseConverter x:Key="InverseConverter"/>
+            <!--<trees:ItemContainerStyleSelector x:Key="ItemContainerStyleSelector"/>-->
 
-                        <PathFigure IsClosed="False"  StartPoint="9,21">
-                            <PathFigure.Segments>
-                                <PathSegmentCollection>
-                                    <LineSegment Point="21,9" />
-                                </PathSegmentCollection>
-                            </PathFigure.Segments>
-                        </PathFigure>
 
-                    </PathFigureCollection>
-                </PathGeometry.Figures>
-            </PathGeometry>
+            <SineEase x:Key="Ease" EasingMode="EaseInOut" />
+
+            <Storyboard x:Key="Enter">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ScaleTransform" Storyboard.TargetProperty="ScaleX">
+                    <EasingDoubleKeyFrame
+                EasingFunction="{StaticResource Ease}"
+                KeyTime="0:0:0.3"
+                Value="1.02" />
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ScaleTransform" Storyboard.TargetProperty="ScaleY">
+                    <EasingDoubleKeyFrame
+                EasingFunction="{StaticResource Ease}"
+                KeyTime="0:0:0.3"
+                Value="1.02" />
+                </DoubleAnimationUsingKeyFrames>
+
+                <ThicknessAnimation Storyboard.TargetProperty="BorderThickness" To="3" Storyboard.TargetName="TertiaryBorder" Duration="0:0:0.3">
+                </ThicknessAnimation>
+                <Storyboard>
+                    <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="TertiaryBorder" Duration="0:0:0.3">
+                        <ColorAnimation.To>
+                            <Color A="90" R="40" G="40" B="10" />
+                        </ColorAnimation.To>
+                    </ColorAnimation>
+                </Storyboard>
+            </Storyboard>
+
+            <Storyboard x:Key="Exit">
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ScaleTransform" Storyboard.TargetProperty="ScaleX">
+                    <EasingDoubleKeyFrame
+                EasingFunction="{StaticResource Ease}"
+                KeyTime="0:0:0.3"
+                Value="1" />
+                </DoubleAnimationUsingKeyFrames>
+                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ScaleTransform" Storyboard.TargetProperty="ScaleY">
+                    <EasingDoubleKeyFrame
+                EasingFunction="{StaticResource Ease}"
+                KeyTime="0:0:0.3"
+                Value="1" />
+                </DoubleAnimationUsingKeyFrames>
+                <ThicknessAnimation Storyboard.TargetProperty="BorderThickness" To="0" Storyboard.TargetName="TertiaryBorder" Duration="0:0:0.3" />
+                <Storyboard>
+                    <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="TertiaryBorder" Duration="0:0:0.3">
+                        <ColorAnimation.To>
+                            <Color A="00" R="40" G="40" B="10" />
+                        </ColorAnimation.To>
+                    </ColorAnimation>
+                </Storyboard>
+            </Storyboard>
+
+
+
+            <SolidColorBrush x:Key="ARGB">
+                <SolidColorBrush.Color>
+                    <Color A="5" R="10" G="10" B="10" />
+                </SolidColorBrush.Color>
+            </SolidColorBrush>
+
+
+            <Style x:Key="CustomTreeViewItem" TargetType="{x:Type trees:CustomTreeViewItem}">
+                <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
+                <Setter Property="IsValid" Value="{Binding Path=IsValid, Mode=TwoWay}" />
+                <Setter Property="IsEditable" Value="{Binding Path=IsEditable, Mode=TwoWay}" />
+                <!--<Setter Property="ItemContainerStyleSelector" Value="{StaticResource ItemContainerStyleSelector}"></Setter>-->
+                <Setter Property="AddCommand" Value="{Binding Path=AddCommand}" />
+                <Setter Property="RemoveCommand" Value="{Binding Path=RemoveCommand}" />
+                <!--<Setter Property="EditCommand" Value="{Binding Path=EditCommand}" />-->
+                <Setter Property="AddParentCommand" Value="{Binding Path=AddParentCommand}" />
+                <Setter Property="IsHighlighted" Value="{Binding Path=IsHighlighted}" />
+                <Setter Property="Visibility" Value="{Binding Path=IsVisible,Converter={StaticResource VisibilityConverter}}" />
+                <Setter Property="Background"
+          Value="Transparent" />
+                <Setter Property="HorizontalContentAlignment"
+          Value="{Binding Path=HorizontalContentAlignment,
+    RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+                <Setter Property="VerticalContentAlignment"
+          Value="{Binding Path=VerticalContentAlignment,
+    RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+                <Setter Property="Padding"
+          Value="1,0,0,0" />
+                <Setter Property="Foreground"
+          Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                <Setter Property="FocusVisualStyle"
+          Value="{StaticResource TreeViewItemFocusVisual}" />
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <MultiBinding Converter="{StaticResource MultiItemsPanelConverter}">
+                            <Binding Path="Arrangement"/>
+                            <Binding Path="Rows" />
+                            <Binding Path="Columns" />
+                            <Binding Path="Orientation" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type trees:CustomTreeViewItem}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition MinWidth="19"
+                              Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="SelectionStates">
+                                        <VisualState x:Name="Selected">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd"
+                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                                    <EasingColorKeyFrame KeyTime="0:0:0.3"
+                                         Value="{StaticResource SelectedBackgroundColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+
+
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Unselected" />
+                                        <VisualState x:Name="SelectedInactive">
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd"
+                                                Storyboard.TargetProperty="(Panel.Background).
+                    (SolidColorBrush.Color)">
+                                                    <EasingColorKeyFrame KeyTime="0"
+                                         Value="{StaticResource SelectedUnfocusedColor}" />
+                                                </ColorAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                    <VisualStateGroup x:Name="ExpansionStates">
+                                        <VisualState x:Name="Expanded">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
+                                                 Storyboard.TargetName="ItemsHost">
+                                                    <DiscreteObjectKeyFrame KeyTime="0"
+                                            Value="{x:Static Visibility.Visible}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Collapsed" />
+                                        <VisualState x:Name="MouseOver" >
+                                            <Storyboard>
+                                                <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd"
+                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                                    <EasingColorKeyFrame KeyTime="0:0:0.3"
+                                         Value="{c:Blue 2}" />
+                                                </ColorAnimationUsingKeyFrames>
+
+
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                <ToggleButton x:Name="Expander"
+                                      Opacity="0.2"
+                        Style="{StaticResource ExpandCollapseToggleStyle}"
+                        ClickMode="Press"
+                        IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                <Border x:Name="Bd"                              
+                  Grid.Column="1"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  Padding="{TemplateBinding Padding}">
+                                    <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"  >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="8"></ColumnDefinition>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            <ColumnDefinition Width="24"></ColumnDefinition>
+                                            <ColumnDefinition Width="auto"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition></RowDefinition>
+                                            <RowDefinition Height="auto"></RowDefinition>
+                                        </Grid.RowDefinitions>
+                                        <Border
+                                              Grid.Column="1" 
+                                            Background="Transparent"
+                                    x:Name="MainBorder" RenderTransformOrigin=".5, .5" HorizontalAlignment="Stretch" 
+                                            BorderThickness="2" 
+                                            CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                                            <Border.RenderTransform>
+                                                <ScaleTransform x:Name="ScaleTransform" ScaleX="1" ScaleY="1" />
+                                            </Border.RenderTransform>
+                                            <Border x:Name="TertiaryBorder" HorizontalAlignment="Stretch" BorderThickness="2" CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                                                <Border x:Name="SecondaryBorder" HorizontalAlignment="Stretch" BorderThickness="2" CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                                                    <ContentPresenter x:Name="PART_Header"                                         
+                                                  HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                  ContentSource="Header"/>
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Style.Setters>
+                                                                <Setter Property="BorderBrush" Value="Transparent"/>
+                                                            </Style.Setters>
+                                                        </Style>
+                                                    </Border.Style>
+                                                </Border>
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Style.Setters>
+                                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                                        </Style.Setters>
+                                                    </Style>
+                                                </Border.Style>
+                                            </Border>
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Style.Setters>
+                                                        <Setter Property="BorderBrush" Value="Transparent"/>
+
+
+                                                    </Style.Setters>
+                                                </Style>
+                                            </Border.Style>
+                                        </Border>
+
+
+
+                                        <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="4" Grid.Row="1" x:Name="WrapPanel1" Opacity="1" IsEnabled="{TemplateBinding IsShowing}" 
+                                           Visibility="{TemplateBinding IsEditable, Converter={StaticResource VisibilityConverter}}"
+                                           Width="80" >
+
+                                            <sb:SplitButton                  
+                                        x:Name="SplitButton"
+                                        Style="{TemplateBinding SplitButtonStyle}"
+                                        ItemContainerStyleSelector="{TemplateBinding NodeContainerStyleSelector}"
+                                        ItemContainerStyle="{TemplateBinding NodeContainerStyle}"
+                                        ItemTemplateSelector="{TemplateBinding NodeTemplateSelector}"
+                                        ItemsSource="{TemplateBinding NodeItemsSource}"
+                                        ItemTemplate="{TemplateBinding NodeTemplate}">
+
+
+                                                <!--<local:ChildrenSelectorConverter x:Key="ChildrenSelectorConverter"/>-->
+
+                                                <!--<sb:SplitButton.ItemsSource>
+                                            <MultiBinding Converter="{StaticResource ChildrenSelectorConverter}">
+                                                -->
+                                                <!-- first binding ensures refresh every time combo-box opened -->
+                                                <!--
+                                                <Binding Path="SelectedIndex"  ElementName="SplitButton"/>
+                                                <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                                                <Binding Path="NodeModels" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                                                <Binding Path="ChildrenSelector"  RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                                            </MultiBinding>
+                                        </sb:SplitButton.ItemsSource>-->
+                                                <sb:SplitButton.Content>
+                                                    <icons:PackIconIonicons Kind="AddMD" />
+                                                </sb:SplitButton.Content>
+                                                <i:Interaction.Behaviors>
+                                                    <!-- requies reset otherwise selected item feature doesn't work -->
+                                                    <b:ResetComboBoxOnOpenedBehavior/>
+                                                </i:Interaction.Behaviors>
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="SelectionChanged">
+                                                        <i:CallMethodAction MethodName="AcceptComboTreeViewItem_Click" TargetObject="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                                        <b:InvokeCommandAction Command="{Binding AddCommand, RelativeSource={RelativeSource Mode=TemplatedParent}}" IgnoreNulls="True"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                            </sb:SplitButton>
+
+                                            <Button x:Name="RemoveButton"  Command="{TemplateBinding RemoveCommand}">
+                                                <icons:PackIconIonicons Kind="RemoveiOS" />
+                                            </Button>
+                                            <!--<Button x:Name="AddParentButton" Command="{TemplateBinding AddParentCommand}">
+                                        <icons:PackIconPixelartIcons Kind="AddBoxMultiple" />
+                                    </Button>-->
+                                            <ToggleButton x:Name="EditButton"  IsChecked="{Binding IsEditing, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                                                <icons:PackIconFeatherIcons Kind="Edit2" />
+                                            </ToggleButton>
+                                        </WrapPanel>
+                                    </Grid>
+                                </Border>
+                                <Border x:Name="EditBd"                              
+                  Grid.Column="1"
+                                Visibility="Collapsed"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}"
+                  Padding="{TemplateBinding Padding}">
+                                    <Grid HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"  >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="8"></ColumnDefinition>
+                                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                                            <ColumnDefinition Width="24"></ColumnDefinition>
+                                            <ColumnDefinition Width="*"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+
+                                        <ContentPresenter 
+                                        Grid.Column="1"
+                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        ContentSource="Edit"                            />
+                                        <ToggleButton x:Name="Edit2Button"   Grid.Column="3" IsChecked="{Binding IsEditing, Converter={StaticResource InverseConverter}, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                                            <icons:PackIconFeatherIcons Kind="Edit2" />
+                                        </ToggleButton>
+                                    </Grid>
+                                </Border>
+
+                                <ItemsPresenter x:Name="ItemsHost"
+                          Grid.Row="1"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="2"
+                          Visibility="{TemplateBinding ItemsPresenterVisibility}" />
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="HasItems"
+                   Value="false">
+                                    <Setter TargetName="Expander"
+                    Property="Visibility"
+                    Value="Hidden" />
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="HasHeader"
+                         Value="false" />
+                                        <Condition Property="Width"
+                         Value="Auto" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="PART_Header"
+                    Property="MinWidth"
+                    Value="75" />
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="HasHeader"
+                         Value="false" />
+                                        <Condition Property="Height"
+                         Value="Auto" />
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="PART_Header"
+                    Property="MinHeight"
+                    Value="19" />
+                                </MultiTrigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="h:MyTreeViewHelper.IsMouseDirectlyOverItem"  Value="True" />
+                                    </MultiTrigger.Conditions>
+
+                                    <MultiTrigger.Setters>
+                                        <Setter Property="IsShowing" Value="True"></Setter>
+                                    </MultiTrigger.Setters>
+                                </MultiTrigger>
+
+                                <!--<MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="wpf:MyTreeViewHelper.IsMouseDirectlyOverItem"  Value="true" />
+                                <Condition Property="IsEditable" Value="true" />                           
+                            </MultiTrigger.Conditions>
+                        
+                            <MultiTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard TargetName="WrapPanel1">
+                                        <DoubleAnimation To="1" Storyboard.TargetProperty="Opacity" Duration="0:0:0.2" />
+                                        -->
+                                <!--<ObjectAnimationUsingKeyFrames  Duration="0:0:0" Storyboard.TargetProperty="Visibility" >
+                                            <ObjectAnimationUsingKeyFrames.KeyFrames>
+                                                <DiscreteObjectKeyFrame Value="{x:Static Visibility.Visible}"></DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames.KeyFrames>
+                                        </ObjectAnimationUsingKeyFrames>-->
+                                <!--
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.EnterActions>
+                            <MultiTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard TargetName="WrapPanel1">
+                                        <DoubleAnimation BeginTime="0:0:0" Storyboard.TargetProperty="Opacity"  To="0.5" Duration="0:0:0.1" />
+                                        -->
+                                <!--<ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetProperty="Visibility" BeginTime="0:0:0.1" >
+                                            <ObjectAnimationUsingKeyFrames.KeyFrames>
+                                                <DiscreteObjectKeyFrame Value="{x:Static Visibility.Collapsed}"></DiscreteObjectKeyFrame>
+                                            </ObjectAnimationUsingKeyFrames.KeyFrames>
+                                        </ObjectAnimationUsingKeyFrames>-->
+                                <!--
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </MultiTrigger.ExitActions>
+                        </MultiTrigger>-->
+                                <Trigger Property="IsEditing" Value="True" >
+                                    <Setter Property="Visibility" TargetName="EditBd" Value="Visible" />
+                                    <Setter Property="Visibility" TargetName="Bd" Value="Collapsed" />
+                                </Trigger>
+                                <Trigger Property="IsHighlighted" Value="False">
+                                    <Setter Property="Opacity"  TargetName="PART_Header" Value="0.3" />
+                                </Trigger>
+                                <Trigger Property="IsHighlighted" Value="{x:Null}">
+                                    <Setter Property="Opacity"  TargetName="PART_Header" Value="0.8" />
+                                </Trigger>
+                                <Trigger Property="IsHighlighted" Value="True">
+                                    <Setter Property="Opacity" TargetName="PART_Header" Value="1" />
+                                </Trigger>
+
+                                <Trigger Property="IsValid" Value="True" >
+                                    <Setter Property="BorderBrush" TargetName="Bd" Value="Green" />
+                                    <Setter Property="BorderThickness" TargetName="Bd" Value="2" />
+                                </Trigger>
+                                <Trigger Property="IsValid" Value="{x:Null}" >
+
+                                    <Setter Property="BorderThickness" TargetName="Bd" Value="0" />
+                                </Trigger>
+                                <Trigger Property="IsValid" Value="False" >
+                                    <Setter Property="BorderBrush" TargetName="Bd" Value="Red" />
+                                    <Setter Property="BorderThickness" TargetName="Bd" Value="2" />
+                                </Trigger>
+
+                                <!--<Trigger Property="IsDragging" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource Enter}" />
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource Exit}" />
+                                </Trigger.ExitActions>
+                            </Trigger>-->
+                                <!--<Trigger Property="IsSelected" Value="True">
+                                    <Trigger.EnterActions>
+
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="MainBorder" Duration="0:0:0.3">
+                                                    <ColorAnimation.To>
+                                                        <Color A="120" R="10" G="10" B="10" />
+                                                    </ColorAnimation.To>
+                                                </ColorAnimation>
+
+                                                --><!--<ThicknessAnimation Storyboard.TargetProperty="BorderThickness" To="2" Storyboard.TargetName="MainBorder" Duration="0:0:0.3">
+                                        </ThicknessAnimation>
+                                        <ThicknessAnimation Storyboard.TargetProperty="BorderThickness" To="1" Storyboard.TargetName="SecondaryBorder" Duration="0:0:0.3">
+                                        </ThicknessAnimation>--><!--
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                --><!--<ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="MainBorder" Duration="0:0:0.3">
+                                            <ColorAnimation.To>
+                                                <Color A="0" R="10" G="10" B="10" />
+                                            </ColorAnimation.To>
+                                        </ColorAnimation>-->
+                                                <!--<ThicknessAnimation Storyboard.TargetProperty="BorderThickness" To="1" Storyboard.TargetName="MainBorder" Duration="0:0:0.3">
+                                        </ThicknessAnimation>
+                                        <ThicknessAnimation Storyboard.TargetProperty="BorderThickness" To="1" Storyboard.TargetName="SecondaryBorder" Duration="0:0:0.3">
+                                        </ThicknessAnimation>--><!--
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>-->
+
+
+
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="MainBorder" Duration="0:0:0.3">
+                                                    <ColorAnimation.To>
+                                                        <Color A="60" R="40" G="10" B="10" />
+                                                    </ColorAnimation.To>
+                                                </ColorAnimation>
+                                                <ColorAnimation     Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" Storyboard.TargetName="MainBorder" Duration="0:0:0.3">
+                                                    <ColorAnimation.To>
+                                                        <Color A="20" R="40" G="30" B="80" />
+                                                    </ColorAnimation.To>
+                                                </ColorAnimation>
+                     
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Trigger.ExitActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="MainBorder" Duration="0:0:0.3"  To="Transparent">                         
+                                                </ColorAnimation>
+                                                <ColorAnimation     Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" Storyboard.TargetName="MainBorder" Duration="0:0:0.3" To="Transparent">
+                                                </ColorAnimation>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.ExitActions>
+                                </Trigger>
+
+                                <!--<Trigger Property="IsSelectable" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="SecondaryBorder" Duration="0:0:0.3">
+                                                <ColorAnimation.To>
+                                                    <Color A="50" R="20" G="10" B="10" />
+                                                </ColorAnimation.To>
+                                            </ColorAnimation>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="SecondaryBorder" Duration="0:0:0.3">
+                                                <ColorAnimation.To>
+                                                    <Color A="0" R="10" G="10" B="10" />
+                                                </ColorAnimation.To>
+                                            </ColorAnimation>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>-->
+
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <!--<Style.Triggers>
+            <MultiDataTrigger>
+                <MultiDataTrigger.Conditions>
+                    <Condition    Binding="{Binding Path=IsExpanded, 
+                             RelativeSource={RelativeSource 
+                             Mode=FindAncestor, 
+                             AncestorType={x:Type TreeViewItem}, 
+                             AncestorLevel=2}}" 
+                    Value="False"/>
+                  
+                </MultiDataTrigger.Conditions>
+                <Setter Property="IsShowing"  Value="False" />
+            </MultiDataTrigger>
+        </Style.Triggers>-->
+            </Style>
+
+
 
 
 
@@ -216,7 +722,7 @@
                                 <!--<ContentPresenter x:Name="ContentSite"
                             IsHitTestVisible="False"
                             Content="{TemplateBinding Selection}"
-                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                            ContentTemplate="{TemplateBinding SelectionTemplate}"
                             ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                             Margin="3,3,23,3"
                             VerticalAlignment="Stretch"
@@ -225,6 +731,7 @@
                                 <ContentPresenter x:Name="PART_Header"
                                       IsHitTestVisible="False"
                                       Width="200"
+                                                  Height="600"
                                       Margin="3,3,23,3"
                                       Content="{Binding Selection, RelativeSource={RelativeSource Mode=TemplatedParent}}"
                                       VerticalAlignment="Stretch"
@@ -266,8 +773,7 @@
                                             <RowDefinition Height="*"></RowDefinition>
                                             <RowDefinition Height="Auto"></RowDefinition>
                                         </Grid.RowDefinitions>
-                                        <Border x:Name="DropDownBorder"
-                      BorderThickness="1">
+                                        <Border x:Name="DropDownBorder" BorderThickness="1">
                                             <Border.BorderBrush>
                                                 <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
                                             </Border.BorderBrush>
@@ -275,14 +781,10 @@
                                                 <SolidColorBrush Color="{DynamicResource ControlLightColor}" />
                                             </Border.Background>
                                         </Border>
-                                        <ScrollViewer Margin="4,6,4,6"
-                            SnapsToDevicePixels="True">
-                                            <ItemsPresenter
-                            KeyboardNavigation.DirectionalNavigation="Contained" />
+                                        <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                            <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" />
                                         </ScrollViewer>
-
                                         <Border  Grid.Row="1" Background="LightGray" Margin="4">
-
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="*"/>
