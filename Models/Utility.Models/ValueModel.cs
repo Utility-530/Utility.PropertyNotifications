@@ -3,7 +3,7 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Models
 {
-    public class ValueModel<T> : Model, IValue<T?>, ISetValue
+    public class ValueModel<T> : Model, IValue<T?>, ISetValue, IGet, ISet, IGet<T>, Utility.Interfaces.Generic.ISet<T>
     {
         private T value;
 
@@ -19,9 +19,12 @@ namespace Utility.Models
             set => this.RaisePropertyReceived(ref this.value, value);
         }
 
-        public T Get() => value;
-        public void Set(T value) => this.RaisePropertyChanged(ref this.value, value, nameof(Value));
+        public virtual T Get() => value;
+        public virtual void Set(T value) => this.RaisePropertyChanged(ref this.value, value, nameof(Value));
 
+        object? IGet.Get() => this.value;
+
+        void ISet.Set(object value) => Set((T)value);
 
         object IValue.Value => Value;
 

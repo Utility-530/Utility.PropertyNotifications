@@ -28,9 +28,6 @@ using Utility.Helpers.NonGeneric;
 
 namespace Utility.Models.Trees
 {
-
-
-
     public readonly record struct ValueChanged(PropertyInfo PropertyInfo, object Value);
 
     public class TypeModel : Model, IBreadCrumb, IType
@@ -376,15 +373,8 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class IndexModel : Model
+    public class IndexModel : ValueModel<int>
     {
-        protected int value = 0;
-
-        public int Value
-        {
-            get => value;
-            set => base.RaisePropertyChanged(ref this.value, value);
-        }
     }
 
     public class StringModel : ValueModel<string>
@@ -395,27 +385,12 @@ namespace Utility.Models.Trees
     {
     }
 
-    public class HtmlModel : Model
+    public class HtmlModel : StringModel
     {
-        protected string value;
-
-        public string Value
-        {
-            get => value;
-            set => base.RaisePropertyChanged(ref this.value, value);
-        }
     }
 
-    public class GuidModel : Model
+    public class GuidModel : ValueModel<Guid>
     {
-        protected Guid value;
-
-        public Guid Value
-        {
-            get => value;
-            set => base.RaisePropertyChanged(ref this.value, value);
-        }
-
     }
 
     public class AndOrModel : ValueModel<AndOr>, IAndOr, IObservable<Unit>
@@ -900,44 +875,59 @@ namespace Utility.Models.Trees
         {
             Value = "C:\\";
         }
+
+
     }
 
-    public class DatabaseModel : Model
+    public class AliasFileModel : Model
     {
-        public const string _string = nameof(_string);
-        //public const string _guid = nameof(_guid);
-        public const string _filePath = nameof(_filePath);
-
-        private StringModel name;
-        //private GuidModel guid;
-        private FileModel filePath;
-
-        [JsonIgnore]
-        public StringModel Alias { get => name; set => name = value; }
-
-        [JsonIgnore]
-        public FileModel FilePath { get => filePath; set => filePath = value; }
-
-
-        public override IEnumerable<Model> CreateChildren()
+        public AliasFileModel()
         {
-            yield return new StringModel { Name = _string };
-            //yield return new Node(_guid, new GuidModel { Name = _guid }) { IsExpanded = true };
-            yield return new FileModel { Name = _filePath };
         }
 
-        public override void Addition(IReadOnlyTree value, IReadOnlyTree a)
-        {
-            switch (a.Data)
-            {
-                case FileModel fileModel: FilePath = fileModel; break;
-                case StringModel stringModel: Alias = stringModel; break;
-                //case _guid: Guid = a.Data as GuidModel; break;
+        public StringModel Alias { get; set; }
 
-                //case converter: Converter = a.Data as ConverterModel; break;
-                default: throw new ArgumentOutOfRangeException("ds 33` 33kfl.. ");
+        public FileModel File { get; set; }
+
+    }
+
+    public class DataFileModel : ValueModel<DataFileModel>
+    {
+        private string alias;
+        private string filePath;
+        bool isInitialised;
+
+        public DataFileModel()
+        {
+        }
+
+        [JsonIgnore]
+        public override DataFileModel? Value
+        {
+            get => RaisePropertyCalled(this);
+            set
+            {
+                this.alias = value.Alias;
+                this.filePath = value.FilePath;
             }
-            base.Addition(value, a);
+        }
+
+        public override void Set(DataFileModel value)
+        {
+            this.Value = value;
+        }
+
+
+        public virtual string Alias
+        {
+            get => alias;
+            set { this.alias = value; this.RaisePropertyReceived(null, this, nameof(Value)); }
+        }
+
+        public virtual string FilePath
+        {
+            get => filePath;
+            set { this.filePath = value; this.RaisePropertyReceived(null, this, nameof(Value)); }
         }
 
         public override void SetNode(INode node)
@@ -949,10 +939,10 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class DatabasesModel : Model, ISelection
+    public class DataFilesModel : Model, ISelectable
     {
         [JsonIgnore]
-        public ObservableCollection<DatabaseModel> Collection { get; } = new();
+        public ObservableCollection<DataFileModel> Collection { get; } = new();
 
         public override void SetNode(INode node)
         {
@@ -960,13 +950,18 @@ namespace Utility.Models.Trees
             node.IsExpanded = true;
             node.IsEditable = true;
             node.IsPersistable = true;
-            node.Items.AndAdditions<INode>().Subscribe(a => Collection.Add(a.Data as DatabaseModel));
+            node.Items.AndAdditions<INode>().Subscribe(a => Collection.Add(a.Data as DataFileModel));
             base.SetNode(node);
         }
 
         public override IEnumerable Proliferation()
         {
-            yield return new DatabaseModel { Name = "db", Alias = new StringModel { Name = "new", Value = "New" } };
+            yield return new DataFileModel { Name = "db", FilePath = "c:\\", Alias = "New" };
+        }
+
+        public override void Update(IReadOnlyTree node, IReadOnlyTree current)
+        {
+            
         }
     }
 

@@ -46,14 +46,19 @@ namespace Utility.Models
             {
                 node = value;
 
-
                 node.WithChangesTo(a => a.Current, includeNulls: true)
                     .Skip(1)
                     .Subscribe(a =>
                     {
                         if (a != null)
                             if (this.Node.Contains(a) == false)
+                            {
+                                if (this.Node == a)
+                                {
+                                    throw new Exception("SD 333333c");
+                                }
                                 this.Node.Add(a);
+                            }
 
                         Update(value, a);
                     });

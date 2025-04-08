@@ -38,7 +38,7 @@ namespace Utility.Models.Trees
         bool IsEqual(object _value);
     }
 
-    public interface ISelection
+    public interface ISelectable
     {
 
     }
