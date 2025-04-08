@@ -152,5 +152,20 @@ namespace Utility.WPF.Attached
 
         public static IObservable<bool> Checked(Predicate<DependencyObject> predicateObject) =>
             Observable<bool>(predicateObject, a => a == IsCheckedProperty);
+
+
+
+        public const string Reverse = "Reverse";
+        public static readonly DependencyProperty ReverseProperty = DependencyProperty.RegisterAttached(Reverse, typeof(bool), typeof(Ex), new PropertyMetadata(false, PropertyChanged));
+
+        public static bool GetReverse(DependencyObject d)
+        {
+            return (bool)d.GetValue(ReverseProperty);
+        }
+
+        public static void SetReverse(DependencyObject d, object value)
+        {
+            d.SetValue(ReverseProperty, (bool)value);
+        }
     }
 }

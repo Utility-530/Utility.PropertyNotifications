@@ -29,6 +29,8 @@ namespace Utility.WPF.Attached
             {
                 treeView.SelectedItemChanged += (s, e) =>
                 {
+                    if (treeView.SelectedItem == null)
+                        return;
                     var selectedContainer = treeView.ItemContainerGenerator.ContainerFromItemRecursive(treeView.SelectedItem);
                     if (TreeEx.GetIsRootNode(selectedContainer ))
                     {
