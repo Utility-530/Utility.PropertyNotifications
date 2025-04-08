@@ -10,20 +10,18 @@
         <Setter Property="Movement" Value="TopToBottom"></Setter>
         <Setter Property="Content">
             <Setter.Value>
-                <!--<local:TinyHtmlControl Html="{Binding Html, RelativeSource={RelativeSource AncestorType=local:HtmlEditorControl}}"/>-->
                 <tiny:WpfHtmlControl Html="{Binding Html, RelativeSource={RelativeSource AncestorType=local:TinyHtmlEditorControl}}"/>
             </Setter.Value>
         </Setter>
-        <Setter Property="Header">
+        <!--<Setter Property="Header">
             <Setter.Value>
                 <avalonedit:TextEditor x:Name="_htmlEditor" 
-                                       VerticalScrollBarVisibility="Visible" 
-                                       local:TextEdit.Text="{Binding Html, RelativeSource={RelativeSource AncestorType=local:TinyHtmlEditorControl}}"
+                                       VerticalScrollBarVisibility="Visible"                                    
                                        BorderThickness="0"     
                                        SyntaxHighlighting="HTML" 
                                        ShowLineNumbers="True" />
             </Setter.Value>
-        </Setter>
+        </Setter>-->
     </Style>
 
 

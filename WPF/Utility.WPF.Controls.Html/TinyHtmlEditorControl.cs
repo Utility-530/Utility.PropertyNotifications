@@ -1,7 +1,9 @@
 ﻿using AvalonEditB;
+using AvalonEditB.Highlighting;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using TheArtOfDev.HtmlRenderer.Demo.WPF;
 using TinyHtml.Wpf;
@@ -17,6 +19,10 @@ namespace Utility.WPF.Controls.Html
 
         private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+            if (d is TinyHtmlEditorControl { _textEditor: { } cntr } c && e.NewValue is string s)
+            {
+                cntr.Text = s;
+            }
         }
 
         static TinyHtmlEditorControl()
@@ -27,6 +33,18 @@ namespace Utility.WPF.Controls.Html
         public TinyHtmlEditorControl()
         {
             this.Loaded += TinyHtmlEditorControl_Loaded;
+            this.Unloaded += TinyHtmlEditorControl_Unloaded;
+        }
+
+        private void TinyHtmlEditorControl_Unloaded(object sender, RoutedEventArgs e)
+        {
+            this.RemoveLogicalChild(this.Content);    
+            this.Content = null;
+            _htmlControl = null;
+
+            this.RemoveLogicalChild(this.Header);   
+            this.Header = null;
+            _textEditor = null;
         }
 
         private void TinyHtmlEditorControl_Loaded(object sender, RoutedEventArgs e)
@@ -46,8 +64,22 @@ namespace Utility.WPF.Controls.Html
         {
             //this.Movement = Enums.XYMovement.TopToBottom;
             _htmlControl = this.Content as WpfHtmlControl;
+            _htmlControl.Html = Html;
+            //_htmlControl.Html = Html;
+            // its necessary to set the header in code-behind because of the difficulty detaching the TextEditor 
+            // when control is unloaded
+            this.Header ??= new TextEditor()
+            {
+                VerticalScrollBarVisibility = ScrollBarVisibility.Visible,
+                Text = Html,
+                BorderThickness = new Thickness(),
+                SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("HTML"),
+                ShowLineNumbers = true
+            };
             _textEditor = this.Header as TextEditor;
-            _textEditor.TextChanged += _textEditor_TextChanged;
+            if (_textEditor != null)
+
+                _textEditor.TextChanged += _textEditor_TextChanged;
             base.OnApplyTemplate();
         }
 
@@ -93,7 +125,7 @@ namespace Utility.WPF.Controls.Html
         string GetHtmlEditorText()
         {
             //return new TextRange(_htmlEditor.Document.ContentStart, _htmlEditor.Document.ContentEnd).Text;
-            return _textEditor.Document.Text;
+            return _textEditor?.Document.Text ?? string.Empty;
         }
 
         void combine()
