@@ -15,6 +15,7 @@ using Utility.Enums;
 using System.Collections;
 using System.Collections.Generic;
 using Utility.WPF.ResourceDictionarys;
+using Utility.WPF.Attached;
 
 namespace Utility.WPF.Controls.Meta
 {
@@ -33,7 +34,9 @@ namespace Utility.WPF.Controls.Meta
 
         public ViewsMasterDetail()
         {
-            Orientation = System.Windows.Controls.Orientation.Horizontal;
+            Movement = XYMovement.RightToLeft;
+            this.SetValue(Ex.ReverseProperty, true);
+            this.SetValue(Ex.IndentProperty, new GridLength(250));
             var listBox = new ViewTypeItemListBox();
 
             Content = listBox;
