@@ -4,22 +4,21 @@ using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Controls.Breadcrumbs
 {
-
     public class TreeViewEx
     {
         public static readonly DependencyProperty SelectedItemProperty =
-    DependencyProperty.RegisterAttached(
-    "SelectedItem",
-    typeof(object),
-    typeof(TreeViewEx),
-    new UIPropertyMetadata(new object(), OnCurrentItemChanged));
+            DependencyProperty.RegisterAttached(
+                "SelectedItem",
+                typeof(object),
+                typeof(TreeViewEx),
+                new UIPropertyMetadata(new object(), OnCurrentItemChanged));
 
         public static readonly DependencyProperty CurrentItemProperty =
-    DependencyProperty.RegisterAttached(
-    "CurrentItem",
-    typeof(object),
-    typeof(TreeViewEx),
-    new UIPropertyMetadata(new object(), OnCurrentItemChanged));
+            DependencyProperty.RegisterAttached(
+                "CurrentItem",
+                typeof(object),
+                typeof(TreeViewEx),
+                new UIPropertyMetadata(new object(), OnCurrentItemChanged));
 
         public static readonly DependencyProperty IsCollapseOnSelectionProperty =
             DependencyProperty.RegisterAttached(
@@ -64,7 +63,7 @@ namespace Utility.WPF.Controls.Breadcrumbs
 
         private static bool flag;
         static Dictionary<TreeViewItem, TreeView> treeViews = [];
-        
+
         private static void OnCurrentItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is TreeView _treeView)
@@ -73,14 +72,29 @@ namespace Utility.WPF.Controls.Breadcrumbs
             }
             else if (d is TreeViewItem treeViewItem && TreeViewEx.treeViews.ContainsKey(treeViewItem) == false)
             {
-
-                var treeView = treeViewItem.FindParent<TreeView>();
-                treeViews.Add(treeViewItem, treeView);
-                treeView.SelectedItemChanged += (s, e) => SelectedItemChanged(treeViewItem, treeView, e);
+                if (_toTreeView(treeViewItem) is TreeView treeView)
+                {
+                    treeView.SelectedItemChanged += (s, e) => SelectedItemChanged(treeViewItem, treeView, e);
+                }
+                else
+                {
+                    // view has potentially changed
+                }
             }
             else if (d is TreeViewItem tvi && e.NewValue == null)
             {
                 SetSelectedItem(tvi, null);
+            }
+
+            static TreeView? _toTreeView(TreeViewItem treeViewItem)
+            {
+                if (!treeViews.TryGetValue(treeViewItem, out TreeView? treeView))
+                {
+                    treeView = treeViewItem.FindParent<TreeView>();
+                    treeViews[treeViewItem] = treeView;
+                }
+
+                return treeView;
             }
         }
 
@@ -100,7 +114,8 @@ namespace Utility.WPF.Controls.Breadcrumbs
                 {
                     TreeViewItem child = find;
 
-                    while (child.FindParent<TreeViewItem>() != sender)
+
+                    while (child != null && child.FindParent<TreeViewItem>() != sender)
                     {
 
                         child = child.FindParent<TreeViewItem>();
@@ -110,11 +125,14 @@ namespace Utility.WPF.Controls.Breadcrumbs
                     {
                         SetSelectedItem(sender, child.DataContext);
                     }
+                    else
+                    {
+                        //SetSelectedItem(sender, find.DataContext);
+                    }
                 }
+
+                SetCurrentItem(sender, e.NewValue);
             }
-
-
-            SetCurrentItem(sender, e.NewValue);
 
             flag = true;
 
