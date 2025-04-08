@@ -20,6 +20,10 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
     {
         private static HashSet<INode> nodes = new();
 
+        public TempNodeEngine()
+        {
+        }
+
         public string New { get; }
 
         public void Add(INode node)
@@ -118,6 +122,11 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
         }
 
         public IObservable<INode?> Single(string v)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
         {
             throw new NotImplementedException();
         }

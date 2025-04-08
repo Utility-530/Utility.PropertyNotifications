@@ -3,8 +3,7 @@
                     xmlns:bc="Breadcrumbs.WPF" 
                     xmlns:test="clr-namespace:TextBoxEx;assembly=TextBoxEx"
                     xmlns:ui="http://toniccomputing.com/patterns/ui" 
-                    xmlns:local="clr-namespace:Utility.Nodes.Demo.Styles"
-                    xmlns:local2="clr-namespace:Utility.Nodes.WPF.Styles"
+                    xmlns:local="clr-namespace:Utility.Nodes.Demo.Styles"     
                     xmlns:e="clr-namespace:Utility.Enums;assembly=Utility.Enums"
                     xmlns:inf="clr-namespace:Utility.Models.Trees;assembly=Utility.Models.Trees"
                     xmlns:model="clr-namespace:Utility.Models;assembly=Utility.Models"
@@ -173,7 +172,7 @@
     </DataTemplate>
 
 
-    <DataTemplate DataType="{x:Type inf:DatabaseModel}">
+    <DataTemplate DataType="{x:Type inf:DataFileModel}">
         <Ellipse Height="5" Width="5" Fill="Aqua"></Ellipse>
     </DataTemplate>
 
@@ -189,8 +188,8 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:HtmlModel}">
-        <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, Converter={x:Static conv:DefaultConverter.Instance}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
-        <html:TinyHtmlEditorControl Html="{Binding Value, Mode=OneWay, Converter={x:Static conv:DefaultConverter.Instance}}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:TinyHtmlEditorControl>
+        <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
+        <html:TinyHtmlEditorControl Html="{Binding Value, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type des:MemberDescriptor}">
@@ -223,5 +222,117 @@
         </UniformGrid>
 
     </DataTemplate>
+
+
+    <Style x:Key="inlineText" TargetType="{x:Type TextBlock}">
+        <Setter Property="Margin" Value="10,5,10,0"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+    <Style x:Key="titleText" TargetType="{x:Type TextBlock}">
+        <Setter Property="DockPanel.Dock" Value="Top"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="10,5,10,0"/>
+    </Style>
+    <Style TargetType="{x:Type Button}">
+        <Setter Property="Margin" Value="10,5,10,0"/>
+        <Setter Property="Width" Value="60"/>
+    </Style>
+    
+    <DataTemplate x:Key="ItemTemplate" DataType="{x:Type inf:DataFileModel}">
+        <Grid Background="#DCDCDC" Name="rootElement">
+            <Grid.Resources>
+
+
+          
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Margin" Value="10,5,10,0"/>
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
+
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+
+
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0"
+        Grid.Row="1"
+        Style="{StaticResource inlineText}"
+        Name="aliasLabel">Alias</TextBlock>
+            <TextBlock Grid.Column="0"
+        Grid.Row="2"
+        Style="{StaticResource inlineText}"
+        Name="nameLabel">File Path</TextBlock>
+
+            <TextBlock Grid.Column="1" Width="100"
+        Grid.Row="1"
+        Grid.ColumnSpan="3"
+                                        HorizontalAlignment="Left"
+                       VerticalAlignment="Bottom"
+                       Text="{Binding Alias}"
+        Name="txtName"/>
+            <TextBlock Grid.Column="1" Width="600"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Bottom"
+        Grid.Row="2"
+        Grid.ColumnSpan="3"
+                             Text="{Binding FilePath}"
+        Name="txtAddress"/>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="EditTemplate" DataType="{x:Type inf:DataFileModel}">
+        <Grid Background="#DCDCDC" Name="rootElement">
+            <Grid.Resources>             
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Margin" Value="10,5,10,0"/>
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0"
+        Grid.Row="1"
+        Style="{StaticResource inlineText}"
+        Name="aliasLabel">Alias</TextBlock>
+            <TextBlock Grid.Column="0"
+        Grid.Row="2"
+        Style="{StaticResource inlineText}"
+        Name="nameLabel">File Path</TextBlock>
+
+            <TextBox Grid.Column="1"
+        Grid.Row="1"
+        Grid.ColumnSpan="3"
+        Text="{Binding Alias, Mode=TwoWay}"
+        Name="txtName"/>
+
+
+            <TextBox Grid.Column="1"
+        Grid.Row="2"
+        Grid.ColumnSpan="3"
+        Text="{Binding FilePath, Mode=TwoWay}"
+        Name="txtAddress"/>
+        </Grid>
+    </DataTemplate>
+
 
 </ResourceDictionary>

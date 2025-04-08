@@ -189,7 +189,7 @@
 
                         <DataTemplate DataType="{x:Type mt:StringModel}">
                             <StackPanel>
-                                <ex:EditableTextBlock x:Name="t1" Text="{Binding Name, Converter={x:Static conv:DefaultConverter.Instance}}"/>
+                                <ex:EditableTextBlock x:Name="t1" Text="{Binding Name}"/>
                             </StackPanel>
                         </DataTemplate>
                     </ResourceDictionary>

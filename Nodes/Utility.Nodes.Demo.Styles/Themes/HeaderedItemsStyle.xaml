@@ -19,8 +19,7 @@
                     BorderBrush="{TemplateBinding BorderBrush}"
                    BorderThickness="1"
                     Padding="{TemplateBinding Padding}">
-
-                        <!--<Grid Tag="{TemplateBinding  Converter={x:Static conv:DefaultConverter.Instance} }">-->
+             
                         <Grid HorizontalAlignment="Stretch" >
                             <Grid.Width>
                                 <!-- ensures that contentpresenter and itemspresenter are same size are either the next treeviewitem up or the treeview -->
