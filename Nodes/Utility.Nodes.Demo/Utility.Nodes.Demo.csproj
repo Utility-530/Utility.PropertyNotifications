@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Utility.ViewModels\Utility.ViewModels.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
     <ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />

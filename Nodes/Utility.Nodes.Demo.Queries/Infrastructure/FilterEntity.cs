@@ -1,8 +1,9 @@
-﻿using Utility.ViewModels;
+﻿using Utility.PropertyNotifications;
+using Utility.ViewModels;
 
 namespace Utility.Nodes.Demo.Queries
 {
-    public class FilterEntity : NotifyPropertyChangedBase
+    public class FilterEntity : NotifyPropertyClass
     {
         private string groupKey;
         private string key;

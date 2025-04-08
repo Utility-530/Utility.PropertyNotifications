@@ -9,10 +9,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Utility.Common.Helper;
 using Utility.Trees.Extensions;
-using Utility.Infrastructure;
 using Utility.Persists;
 using Utility.Trees;
-using Utility.ViewModels.Base;
+using Utility.PropertyNotifications;
 
 namespace Utility.WPF.Demo.Trees
 {
@@ -368,7 +367,7 @@ namespace Utility.WPF.Demo.Trees
         public bool IsPersisted { get; set; }
     }
 
-    public class LineViewModel : BaseViewModel
+    public class LineViewModel : NotifyPropertyClass
     {
         private Point _startPoint;
 
@@ -380,7 +379,7 @@ namespace Utility.WPF.Demo.Trees
             set
             {
                 _startPoint = value;
-                this.OnPropertyChanged();
+                this.RaisePropertyChanged();
             }
         }
 
@@ -391,7 +390,7 @@ namespace Utility.WPF.Demo.Trees
             set
             {
                 _endPoint = value;
-                this.OnPropertyChanged();
+                this.RaisePropertyChanged();
             }
         }
     }

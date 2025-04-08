@@ -72,7 +72,7 @@ namespace Utility.Infrastructure
         protected virtual void SetValue(IEquatable name, object value)
         {
             Store.Instance[name] = value;
-            OnPropertyChanged((name as Key)?.Name);
+            RaisePropertyChanged((name as Key)?.Name);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]

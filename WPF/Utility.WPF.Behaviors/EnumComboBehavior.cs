@@ -15,7 +15,7 @@ using System.Windows.Input;
 using Utility.Helpers;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
-using Utility.ViewModels.Base;
+using Utility.PropertyNotifications;
 
 namespace Utility.WPF.Behaviors
 {
@@ -169,7 +169,7 @@ namespace Utility.WPF.Behaviors
 
         #endregion properties
 
-        public class EnumItem : ReadOnlyViewModel, IValue<Enum>
+        public class EnumItem : NotifyPropertyClass, IValue<Enum>, IIsReadOnly
         {
             private bool isChecked;
 
@@ -177,7 +177,7 @@ namespace Utility.WPF.Behaviors
             {
                 Value = @enum;
                 Command = command;
-                IsReadOnly = isReadOnly;
+                //IsReadOnly = isReadOnly;
             }
 
             public Enum Value { get; }
@@ -189,9 +189,11 @@ namespace Utility.WPF.Behaviors
                 get => isChecked; set
                 {
                     isChecked = value;
-                    this.OnPropertyChanged();
+                    this.RaisePropertyChanged();
                 }
             }
+
+            public bool IsReadOnly { get; set; }
 
             object IValue.Value => Value;
 
@@ -210,7 +212,7 @@ namespace Utility.WPF.Behaviors
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item is not ReadOnlyViewModel { IsReadOnly: bool isReadonly })
+            if (item is not IIsReadOnly { IsReadOnly: bool isReadonly })
             {
                 //throw new ArgumentException($"Unexpected type. Expected {nameof(EnumItemsControl.EnumItem)}");
                 throw new ArgumentException($"Unexpected type");

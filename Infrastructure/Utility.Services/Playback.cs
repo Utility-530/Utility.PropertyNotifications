@@ -4,7 +4,7 @@ using Utility.Commands;
 using Utility.Enums;
 using Utility.Infrastructure;
 using Utility.Models;
-using Utility.ViewModels.Base;
+using Utility.PropertyNotifications;
 
 namespace Utility.Services;
 
@@ -89,7 +89,7 @@ public class Playback : BaseObject
     }
 }
 
-public class PlaybackViewModel : BaseViewModel
+public class PlaybackViewModel : NotifyPropertyClass
 {
     private Step enabled;
 
@@ -99,6 +99,6 @@ public class PlaybackViewModel : BaseViewModel
 
     public ICommand Command { get; set; }
 
-    public Step Enabled { get => enabled; set => Set(ref enabled, value); }
+    public Step Enabled { get => enabled; set => this.RaisePropertyChanged(ref enabled, value); }
 }
 

@@ -27,7 +27,7 @@ namespace Utility.Nodes.Demo.Queries
         public void Save();
     }
 
-    internal class MainViewModel : NotifyPropertyChangedBase, IMainViewModel
+    internal class MainViewModel : NotifyPropertyClass, IMainViewModel
     {
         //private const string test = "../../../Data/test.json";
         private bool isInitialised = false;

@@ -6,8 +6,8 @@ using h = Utility.Enums.History;
 using System.Reactive.Disposables;
 using static System.Reactive.Linq.Observable;
 using Utility.Infrastructure;
-using Utility.ViewModels.Base;
 using Utility.Entities.Comms;
+using Utility.PropertyNotifications;
 
 namespace Utility.Services
 {
@@ -92,7 +92,7 @@ namespace Utility.Services
     }
 
 
-    public class HistoryViewModel : BaseViewModel
+    public class HistoryViewModel : NotifyPropertyClass
     {
         public HistoryViewModel()
         {

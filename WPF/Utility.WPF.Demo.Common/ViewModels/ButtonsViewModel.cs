@@ -3,12 +3,12 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Utility.Common;
 using Utility.Helpers.Ex;
-using Utility.ViewModels.Base;
+using Utility.PropertyNotifications;
 using Utility.WPF.Demo.Common.Meta;
 
 namespace Utility.WPF.Demo.Common.ViewModels
 {
-    public class ButtonViewModel : BaseViewModel
+    public class ButtonViewModel : NotifyPropertyClass
     {
         public ButtonViewModel(string header, ICommand command)
         {

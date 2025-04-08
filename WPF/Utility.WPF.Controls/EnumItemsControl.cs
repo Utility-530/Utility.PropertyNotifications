@@ -15,7 +15,8 @@ using System.Windows.Input;
 using MintPlayer.ObservableCollection;
 using Utility.WPF.Helpers;
 using System.Windows.Controls;
-using Utility.ViewModels.Base;
+using Utility.PropertyNotifications;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.WPF.Controls
 {
@@ -149,7 +150,7 @@ namespace Utility.WPF.Controls
 
         #endregion properties
 
-        public class EnumItem : ReadOnlyViewModel
+        public class EnumItem : NotifyPropertyClass, IIsReadOnly
         {
             private bool isChecked;
 
@@ -163,13 +164,14 @@ namespace Utility.WPF.Controls
             public Enum Enum { get; }
 
             public ReactiveCommand<Unit, Enum> Command { get; }
-     
+            public bool IsReadOnly { get; set; }
+
             public bool IsChecked
             {
                 get => isChecked; set
                 {
                     isChecked = value;
-                    this.OnPropertyChanged();
+                    this.RaisePropertyChanged();
                 }
             }
         }
@@ -183,7 +185,7 @@ namespace Utility.WPF.Controls
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item is not ReadOnlyViewModel { IsReadOnly: bool isReadonly })
+            if (item is not IIsReadOnly { IsReadOnly: bool isReadonly })
             {
                 throw new ArgumentException($"Unexpected type. Expected {nameof(EnumItemsControl.EnumItem)}");
             }

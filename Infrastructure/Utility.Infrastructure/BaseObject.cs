@@ -10,7 +10,7 @@ using LanguageExt;
 using Utility.Helpers;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
-using Utility.ViewModels.Base;
+using Utility.PropertyNotifications;
 
 namespace Utility.Infrastructure
 {
@@ -41,7 +41,7 @@ namespace Utility.Infrastructure
 
     public record SubjectKey(Guid Source, Guid Target, Guid Node);
 
-    public abstract class BaseObject : BaseViewModel, IKey<Key> 
+    public abstract class BaseObject : NotifyPropertyClass, IKey<Key> 
     {
         public static IResolver Resolver { get; set; }
 

@@ -7,12 +7,13 @@ using Utility.Helpers;
 using Utility.Interfaces.Exs;
 using Utility.Nodes;
 using Utility.Nodes.Filters;
+using Utility.PropertyNotifications;
 using Utility.Trees.Abstractions;
 using Utility.ViewModels;
 
 namespace Utility.Trees.Demo.Filters.Infrastructure
 {
-    internal class MainViewModel : NotifyPropertyChangedBase
+    internal class MainViewModel : NotifyPropertyClass
     {
         private Node[] filters;
         Lazy<INodeSource> source = new(() => Locator.Current.GetService<INodeSource>());

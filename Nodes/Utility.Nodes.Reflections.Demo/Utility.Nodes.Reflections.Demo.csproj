@@ -16,7 +16,6 @@
 		<ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
 		<ProjectReference Include="..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
 		<ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
-		<ProjectReference Include="..\..\Infrastructure\Utility.ViewModels\Utility.ViewModels.csproj" />
 		<ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.Descriptors.csproj" />
 		<ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
 		<ProjectReference Include="..\..\Nodify\Utility.Nodify.Demo\Utility.Nodify.Demo.csproj" />

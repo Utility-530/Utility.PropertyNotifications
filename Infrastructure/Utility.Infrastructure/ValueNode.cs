@@ -106,7 +106,7 @@ namespace Utility.Nodes
                 if (child is ValueNode { Key: Key { Name: var name } } valueNode)
                     if (e.PropertyName == name)
                     {
-                        valueNode.OnPropertyChanged(nameof(ValueNode.Value));
+                        valueNode.RaisePropertyChanged(nameof(ValueNode.Value));
                     }
             }
         }

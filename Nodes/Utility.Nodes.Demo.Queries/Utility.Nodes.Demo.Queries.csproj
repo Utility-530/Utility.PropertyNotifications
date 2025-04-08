@@ -26,7 +26,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\External\QueryDesignerCore\QueryDesignerCore.csproj" />
-		<ProjectReference Include="..\..\Infrastructure\Utility.ViewModels\Utility.ViewModels.csproj" />
 		<ProjectReference Include="..\..\Repos\Utility.Repos\Utility.Repos.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Breadcrumbs\Utility.WPF.Controls.Breadcrumbs.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Lists\Utility.WPF.Controls.Lists.csproj" />

@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
-    <ProjectReference Include="..\..\WPF\Utility.ViewModels.Base\Utility.ViewModels.Base.csproj" />
     <ProjectReference Include="..\Utility.Pipes\Utility.Pipes.csproj" />
     <ProjectReference Include="..\Utility.Trees\Utility.Trees.csproj" />
   </ItemGroup>

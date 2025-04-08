@@ -2,11 +2,11 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Controls;
-using Utility.ViewModels.Base;
+using Utility.PropertyNotifications;
 
 namespace Utility.WPF.Demo.Common.ViewModels
 {
-    public class RegionsViewModel : BaseViewModel
+    public class RegionsViewModel : NotifyPropertyClass
     {
         private Region _selectedRegion;
         private ObservableCollection<Region> _regions = new();
@@ -18,7 +18,7 @@ namespace Utility.WPF.Demo.Common.ViewModels
         public Region SelectedRegion
         {
             get => _selectedRegion;
-            set => this.Set(ref _selectedRegion, value);
+            set => this.RaisePropertyChanged(ref _selectedRegion, value);
         }
 
         public ObservableCollection<Region> Regions => _regions;

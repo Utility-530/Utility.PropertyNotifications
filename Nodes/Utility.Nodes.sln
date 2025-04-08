@@ -37,8 +37,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Reactives", "..\Rea
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Interfaces", "..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj", "{459D7307-B0A1-4A59-B1B4-C2728CDA9916}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.ViewModels", "..\Infrastructure\Utility.ViewModels\Utility.ViewModels.csproj", "{DF7CB969-4182-457D-BE0E-40DE922BB3F8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Helpers", "..\Helpers\Utility.Helpers\Utility.Helpers.csproj", "{6E089C08-6C87-4225-9975-2907F7884777}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Solutions", "..\Meta\Utility.ProjectStructure\Utility.Solutions.csproj", "{39FFB63A-E5FC-41E4-A0E4-DBECC4645C16}"
