@@ -375,6 +375,13 @@ namespace Utility.Nodes.Demo.Filters.Services
         //        yield return map(x);
         //    }
         //}
+        public static IEnumerable<T> Select<T>(this ArrayList list, Func<object, T> map)
+        {
+            foreach (var x in list)
+            {
+                yield return map(x);
+            }
+        }
 
         public static HashSet<T> ToHashSet<T>(Collection<T> collection)
         {

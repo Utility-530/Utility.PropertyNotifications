@@ -22,6 +22,7 @@ namespace Utility.Nodes.Demo.Filters.Services
     {
         Dictionary<Guid, IDisposable> disposables = new();
         ReplaySubject<ControlEvent> replaySubject = new(1);
+        Dictionary<ControlEventType, int> dict = new();
 
         private ControlsService()
         {
@@ -33,17 +34,14 @@ namespace Utility.Nodes.Demo.Filters.Services
                 {
                     if (node.NewItem is INode { Data: Model { Name: string name } model })
                     {
-                        model.WithChanges(includeInitialValue: false).Subscribe(_ =>
+                        model.WithChanges().Where(a => a.PropertyName == ".ctor").Subscribe(_ =>
                         {
-                            //
                             Switch(name, model);
                         });
                     }
                 });
-            });
+            });     
         }
-
-        Dictionary<ControlEventType, int> dict = new();
 
         private void Switch(string name, Model model)
         {
@@ -53,9 +51,11 @@ namespace Utility.Nodes.Demo.Filters.Services
                 case Factory.Save:
                     var _ = Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildRoot)).Subscribe(root =>
                     {
-                        root.Descendant(a => a.tree.Data.ToString() == Factory.content_root).Subscribe(contentRoot =>
+                        root
+                        .Descendant(a => a.tree.Data.ToString() == Factory.content_root)
+                        .Subscribe(contentRoot =>
                         {
-                            Save((INode)contentRoot.NewItem);
+                            Locator.Current.GetService<INodeSource>().Save(); //((INode)contentRoot.NewItem);
                             dict[ControlEventType.Save] = dict.Get(ControlEventType.Save) + 1;
                             replaySubject.OnNext(new ControlEvent(ControlEventType.Save, dict.Get(ControlEventType.Save)));
                         });
@@ -72,13 +72,6 @@ namespace Utility.Nodes.Demo.Filters.Services
             }
         }
 
-
-        public void Save(INode node)
-        {
-            Locator.Current.GetService<INodeSource>().Save();
-
-        }
-
         public IDisposable Subscribe(IObserver<ControlEvent> observer)
         {
             return replaySubject.Subscribe(observer);
@@ -88,19 +81,4 @@ namespace Utility.Nodes.Demo.Filters.Services
 
     }
 
-    public static class Helpers
-    {
-        public static IEnumerable<T> Select<T>(this ArrayList list, Func<object, T> map)
-        {
-            foreach (var x in list)
-            {
-                yield return map(x);
-            }
-        }
-
-        public static HashSet<T> ToHashSet<T>(Collection<T> collection)
-        {
-            return new HashSet<T>(collection);
-        }
-    }
 }

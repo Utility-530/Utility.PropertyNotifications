@@ -41,6 +41,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                     var (node, htmlNode) = nodes;
 
                     ControlsService.Instance.Where(a => a.ControlEventType == ControlEventType.Refresh)
+                    .StartWith(default(ControlEvent))
                     .Subscribe(a =>
                     {
                         htmlNode.WithChangesTo(a => a.Data)
@@ -48,6 +49,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                         {
                             if (data is HtmlModel stringModel)
                             {
+
                                 AddElementByPositionAsync(node)
                                  .Subscribe(html =>
                                  {
@@ -222,16 +224,16 @@ namespace Utility.Nodes.Demo.Filters.Services
                             //newElement.AppendChild(p);
                             //body.AppendChild(newElement);
                         }
-
-
-
-
-                        var sw = new StringWriter();
-                        document.ToHtml(sw, new PrettyMarkupFormatter());
-
-                        var HTML_prettified = sw.ToString();
-                        obs.OnNext(HTML_prettified);
                     }
+
+
+
+                    var sw = new StringWriter();
+                    document.ToHtml(sw, new PrettyMarkupFormatter());
+
+                    var HTML_prettified = sw.ToString();
+                    obs.OnNext(HTML_prettified);
+
                 });
             });
 

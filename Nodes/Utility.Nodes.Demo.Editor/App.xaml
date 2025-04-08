@@ -24,139 +24,17 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItem.xaml"/>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Breadcrumbs;component/Themes/Generic.xaml"/>
-                <!--                <ResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/ButtonComboBoxTreeViewStyle.xaml"/>-->
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml"/>
                 <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Generic.xaml"/>
+                <res:SharedResourceDictionary Source="/Themes/Slave.xaml"/>
+                <res:SharedResourceDictionary Source="/Themes/Master.xaml"/>
+                <res:SharedResourceDictionary Source="/Themes/Container.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
 
-            <filters:StyleSelector x:Key="StyleSelector" DefaultStyle="ViewContentStyle"></filters:StyleSelector>
-            <local:CollectionStyleSelector x:Key="CollectionStyleSelector"
-                                           CollectionStyle="{StaticResource HeaderedItemsStyle}"
-                                           ItemStyle="{StaticResource ContentStyle}"/>
-            <local:ComboContainerStyleSelector x:Key="ComboContainerStyleSelector"
-                                    DefaultStyle="{StaticResource DefaultStyle}" 
-                                    ComboStyle="{StaticResource ComboExStyle}">
-            </local:ComboContainerStyleSelector>
-            <local:DirtyConverter x:Key="DirtyConverter"/>
 
-
-            <DataTemplate DataType="{x:Type local:MainViewModel}">
-                <DockPanel>
-                    <ct:ComboTreeView  DockPanel.Dock="Top" ItemsSource="{Binding Selection}" ItemContainerStyleSelector="{StaticResource ComboContainerStyleSelector}"/>
-
-                    <Grid DockPanel.Dock="Left">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="3*"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <ct:CustomTreeView ItemsSource="{Binding Clones}" ItemContainerStyle="{StaticResource DefaultContentStyle}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectedItemChanged">
-                                    <beh:SetSelectedItemAction PropertyName="DataContext" TargetObject="{Binding ElementName=splitcontrol, Path=Header}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </ct:CustomTreeView>
-
-                        <TreeView Grid.Row="1" ItemsSource="{Binding Dirty}" Width="300" ItemContainerStyleSelector="{StaticResource CollectionStyleSelector}">
-                            <i:Interaction.Triggers>
-                                <i:EventTrigger EventName="SelectedItemChanged">
-                                    <beh:SetSelectedItemAction PropertyName="DataContext" Converter="{StaticResource DirtyConverter}"  TargetObject="{Binding ElementName=splitcontrol, Path=Header}" />
-                                </i:EventTrigger>
-                            </i:Interaction.Triggers>
-                        </TreeView>
-                    </Grid>
-
-
-                    <utl:SplitControl x:Name="splitcontrol"  Movement="{Binding ElementName=ToggleButton2, Path=Movement}">
-                        <utl:SplitControl.Content>
-
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="0.07*"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="0.0*"/>
-                                </Grid.RowDefinitions>
-
-                                <Viewbox Grid.Row="0" HorizontalAlignment="Left">
-                                    <ct:CustomTreeView  ItemsSource="{Binding Controls}" ItemContainerStyle="{StaticResource DefaultStyle}"/>
-                                </Viewbox>
-
-                                <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"              ShowsPreview="True" />
-
-                                <Grid  Grid.Row="2">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition ></ColumnDefinition>
-                                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                        <ColumnDefinition ></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-
-                                    <Grid  Grid.Column="0">
-                                        <ct:CustomTreeView ItemsSource="{Binding Content}" ItemContainerStyleSelector="{StaticResource StyleSelector }" >
-                                            <TreeView.ItemTemplate>
-                                                <HierarchicalDataTemplate ItemsSource="{Binding Items}">
-                                                    <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
-                                                        <ContentControl Content="{Binding Path=.}" ContentTemplateSelector="{x:Static filters:DataTemplateSelector.Instance}"/>
-                                                    </Border>
-                                                </HierarchicalDataTemplate>
-                                            </TreeView.ItemTemplate>
-
-                                            <i:Interaction.Triggers>
-                                                <i:EventTrigger EventName="SelectedItemChanged">
-                                                    <beh:SetSelectedItemAction PropertyName="DataContext" TargetObject="{Binding ElementName=splitcontrol, Path=Header}" />
-                                                </i:EventTrigger>
-                                            </i:Interaction.Triggers>
-                                        </ct:CustomTreeView>
-
-                                    </Grid>
-
-                                    <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" ShowsPreview="True"/>
-
-                                    <TreeView Grid.Column="2" ItemsSource="{Binding Html}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
-                                        <ItemsControl.ItemContainerStyle>
-                                            <Style TargetType="{x:Type TreeViewItem}">
-                                                <Setter Property="Header" Value="{Binding Data}"/>
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate TargetType="{x:Type TreeViewItem}">
-                                                            <ContentPresenter ContentSource="Header" ></ContentPresenter>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </ItemsControl.ItemContainerStyle>
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <Grid/>
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-
-                                    </TreeView>
-                                </Grid>
-
-                                <btns:DirectionButton x:Name="ToggleButton2" Movement="LeftToRight" HorizontalAlignment="Right" Margin="0,0"></btns:DirectionButton>
-                            </Grid>
-                        </utl:SplitControl.Content>
-                        <utl:SplitControl.Header>
-                            <UniformGrid Columns="1">
-                                <FrameworkElement.Resources>
-                                    <ResourceDictionary>
-                                        <ResourceDictionary.MergedDictionaries>
-                                            <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
-                                            <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
-                                        </ResourceDictionary.MergedDictionaries>
-                                    </ResourceDictionary>
-                                </FrameworkElement.Resources>
-                                <hc:PropertyGrid SelectedObject="{Binding }"/>
-                                <hc:PropertyGrid SelectedObject="{Binding Data}"/>
-                            </UniformGrid>
-                        </utl:SplitControl.Header>
-                    </utl:SplitControl>
-                </DockPanel>
-            </DataTemplate>
+            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

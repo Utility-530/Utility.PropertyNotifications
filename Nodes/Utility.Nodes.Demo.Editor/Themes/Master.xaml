@@ -1,0 +1,51 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:t="http://schemas.utility.com/trees"
+                    xmlns:local="clr-namespace:Utility.Nodes.Demo.Editor"
+                    xmlns:conv="http://schemas.utility.com/converters"
+                    xmlns:bc="http://schemas.utility.com/Breadcrumbs">
+
+
+
+    <Style x:Key="ComboEx2Style" TargetType="{x:Type t:CustomTreeViewItem}" BasedOn="{StaticResource ComboExStyle}">
+        <Setter Property="bc:TreeViewEx.CurrentItem" Value="{Binding Current, Mode=TwoWay}"/>
+        <Setter Property="Selection" Value="{Binding Path=SelectionItem.Data, RelativeSource={RelativeSource Mode=Self}}"/>
+        <!--<Setter Property="Selection" Value="{Binding Path=(att:TreeEx.SelectedItem), RelativeSource={RelativeSource Mode=Self}}"></Setter>-->
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <StaticResource ResourceKey="ItemTemplate"/>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="EditTemplate">
+            <Setter.Value >
+                <StaticResource ResourceKey="EditTemplate"/>
+            </Setter.Value>
+        </Setter>
+        <!--<Setter Property="Selection" Value="{Binding Current, Mode=TwoWay}"></Setter>-->
+    </Style>
+
+    <local:ComboContainerStyleSelector x:Key="ComboContainerStyleSelector"
+                                    DefaultStyle="{StaticResource DefaultStyle}" 
+                                    ComboStyle="{StaticResource ComboEx2Style}">
+    </local:ComboContainerStyleSelector>
+
+
+    <DataTemplate DataType="{x:Type local:MasterViewModel}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition  Height="Auto"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <t:CustomTreeView   
+                ItemsSource="{Binding Selection, Mode=OneWay}"    
+                ItemContainerStyleSelector="{StaticResource ComboContainerStyleSelector}">
+            </t:CustomTreeView>
+
+            <Viewbox Grid.Row="1" HorizontalAlignment="Left">
+                <t:CustomTreeView  ItemsSource="{Binding Controls}" ItemContainerStyle="{StaticResource DefaultStyle}"/>
+            </Viewbox>
+        </Grid>
+    </DataTemplate>
+
+</ResourceDictionary>

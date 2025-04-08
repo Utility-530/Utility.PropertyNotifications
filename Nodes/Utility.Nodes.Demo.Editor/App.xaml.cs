@@ -23,13 +23,16 @@ namespace Utility.Nodes.Demo.Editor
         {
             SQLitePCL.Batteries.Init();
 
-            Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
+            Locator.CurrentMutable.Register<ITreeRepository>(()=> new TreeRepository("../../../Data"));
             //Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeSource.Instance);
-            Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeEngine.Instance);
+            Locator.CurrentMutable.RegisterLazySingleton<INodeSource>(()=>new NodeEngine());
             Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
-            Locator.CurrentMutable.RegisterConstant<IExpander>(Expander.Instance);
+            Locator.CurrentMutable.RegisterConstant<IExpander>(WPF.Expander.Instance);
             Locator.CurrentMutable.RegisterConstant<IContext>(Context.Instance);
-            Splat.Locator.CurrentMutable.RegisterLazySingleton<MainViewModel>(() => new MainViewModel());
+       
+            Splat.Locator.CurrentMutable.Register<MethodCache>(() => new MethodCache());
+            Splat.Locator.CurrentMutable.RegisterLazySingleton<MasterViewModel>(() => new MasterViewModel());
+            Splat.Locator.CurrentMutable.RegisterLazySingleton<ContainerViewModel>(() => new ContainerViewModel());
             Splat.Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
 
 
@@ -39,21 +42,16 @@ namespace Utility.Nodes.Demo.Editor
 
             //TransformerService service = new();
             ControlsService _service = ControlsService.Instance;
-            ParserService parserService = new();
 
+            ComboService comboService = new ();
 
-            var mainViewModel = Locator.Current.GetService<MainViewModel>();
-
-            var window = new Window() { Content = mainViewModel };
+            var window = new Window() { Content = Locator.Current.GetService<ContainerViewModel>() };
 
             window.Show();
-
-
 
             base.OnStartup(e);
 
         }
 
-     
     }
 }
