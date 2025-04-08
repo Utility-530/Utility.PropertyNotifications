@@ -8,6 +8,8 @@
                     xmlns:b="http://schemas.utility.com/behaviors"
                     xmlns:h="clr-namespace:Utility.WPF.Helpers;assembly=Utility.WPF.Helpers"                   
                     xmlns:sb="http://schemas.utility.com/splitbuttons"
+                    xmlns:conv="http://schemas.utility.com/converters"
+                    xmlns:c="http://schemas.utility.com/colours"
                     xmlns:res="http://schemas.utility.com/resourcedictionary">
 
     <ResourceDictionary.MergedDictionaries>
@@ -22,6 +24,55 @@
     <!--<local:ItemContainerStyleSelector x:Key="ItemContainerStyleSelector"/>-->
 
 
+    <SineEase x:Key="Ease" EasingMode="EaseInOut" />
+
+    <Storyboard x:Key="Enter">
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ScaleTransform" Storyboard.TargetProperty="ScaleX">
+            <EasingDoubleKeyFrame
+                EasingFunction="{StaticResource Ease}"
+                KeyTime="0:0:0.3"
+                Value="1.02" />
+        </DoubleAnimationUsingKeyFrames>
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ScaleTransform" Storyboard.TargetProperty="ScaleY">
+            <EasingDoubleKeyFrame
+                EasingFunction="{StaticResource Ease}"
+                KeyTime="0:0:0.3"
+                Value="1.02" />
+        </DoubleAnimationUsingKeyFrames>
+
+        <ThicknessAnimation Storyboard.TargetProperty="BorderThickness" To="3" Storyboard.TargetName="TertiaryBorder" Duration="0:0:0.3">
+        </ThicknessAnimation>
+        <Storyboard>
+            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="TertiaryBorder" Duration="0:0:0.3">
+                <ColorAnimation.To>
+                    <Color A="90" R="40" G="40" B="10" />
+                </ColorAnimation.To>
+            </ColorAnimation>
+        </Storyboard>
+    </Storyboard>
+
+    <Storyboard x:Key="Exit">
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ScaleTransform" Storyboard.TargetProperty="ScaleX">
+            <EasingDoubleKeyFrame
+                EasingFunction="{StaticResource Ease}"
+                KeyTime="0:0:0.3"
+                Value="1" />
+        </DoubleAnimationUsingKeyFrames>
+        <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ScaleTransform" Storyboard.TargetProperty="ScaleY">
+            <EasingDoubleKeyFrame
+                EasingFunction="{StaticResource Ease}"
+                KeyTime="0:0:0.3"
+                Value="1" />
+        </DoubleAnimationUsingKeyFrames>
+        <ThicknessAnimation Storyboard.TargetProperty="BorderThickness" To="0" Storyboard.TargetName="TertiaryBorder" Duration="0:0:0.3" />
+        <Storyboard>
+            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="TertiaryBorder" Duration="0:0:0.3">
+                <ColorAnimation.To>
+                    <Color A="00" R="40" G="40" B="10" />
+                </ColorAnimation.To>
+            </ColorAnimation>
+        </Storyboard>
+    </Storyboard>
 
 
 
@@ -30,6 +81,7 @@
         <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
         <Setter Property="IsValid" Value="{Binding Path=IsValid, Mode=TwoWay}" />
         <Setter Property="IsEditable" Value="{Binding Path=IsEditable, Mode=TwoWay}" />
+        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
         <!--<Setter Property="ItemContainerStyleSelector" Value="{StaticResource ItemContainerStyleSelector}"></Setter>-->
         <Setter Property="AddCommand" Value="{Binding Path=AddCommand}" />
         <Setter Property="RemoveCommand" Value="{Binding Path=RemoveCommand}" />
@@ -81,9 +133,11 @@
                                     <Storyboard>
                                         <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd"
                                                 Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0"
+                                            <EasingColorKeyFrame KeyTime="0:0:0.3"
                                          Value="{StaticResource SelectedBackgroundColor}" />
                                         </ColorAnimationUsingKeyFrames>
+                                        
+                                        
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Unselected" />
@@ -109,6 +163,17 @@
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Collapsed" />
+                                <VisualState x:Name="MouseOver" >
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd"
+                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
+                                            <EasingColorKeyFrame KeyTime="0:0:0.3"
+                                         Value="{c:Blue 2}" />
+                                        </ColorAnimationUsingKeyFrames>
+
+
+                                    </Storyboard>
+                                </VisualState>
                             </VisualStateGroup>
                         </VisualStateManager.VisualStateGroups>
                         <ToggleButton x:Name="Expander"
@@ -133,15 +198,34 @@
                                     <RowDefinition></RowDefinition>
                                     <RowDefinition Height="auto"></RowDefinition>
                                 </Grid.RowDefinitions>
-                                <ContentPresenter x:Name="PART_Header" 
-                                                  Grid.Column="1" 
+                                <Border x:Name="MainBorder"
+                                        Background="Transparent"
+                                        BorderBrush="Transparent"
+                                    Grid.Column="1" 
+                                    RenderTransformOrigin=".5, .5" HorizontalAlignment="Stretch" BorderThickness="2" CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                                    <Border.RenderTransform>
+                                        <ScaleTransform x:Name="ScaleTransform" ScaleX="1" ScaleY="1" />
+                                    </Border.RenderTransform>
+                                    <Border x:Name="TertiaryBorder"          Background="Transparent"
+                                        BorderBrush="Transparent" HorizontalAlignment="Stretch" BorderThickness="2" CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                                        <Border x:Name="SecondaryBorder"          Background="Transparent"
+                                        BorderBrush="Transparent"
+                                                HorizontalAlignment="Stretch" BorderThickness="2" CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+
+                                            <ContentPresenter x:Name="PART_Header" 
+                                        
                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                   ContentSource="Header"/>
+
+                                        </Border>
+                                    </Border>
+                                </Border>
+
 
                                 <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="4" Grid.Row="1" x:Name="WrapPanel1" Opacity="1" IsEnabled="{TemplateBinding IsShowing}" 
                                            Visibility="{TemplateBinding IsEditable, Converter={StaticResource VisibilityConverter}}"
                                            Width="80" >
-          
+
                                     <sb:SplitButton                  
                                         x:Name="SplitButton"
                                         Style="{TemplateBinding SplitButtonStyle}"
@@ -156,7 +240,9 @@
 
                                         <!--<sb:SplitButton.ItemsSource>
                                             <MultiBinding Converter="{StaticResource ChildrenSelectorConverter}">
-                                                --><!-- first binding ensures refresh every time combo-box opened --><!--
+                                                -->
+                                        <!-- first binding ensures refresh every time combo-box opened -->
+                                        <!--
                                                 <Binding Path="SelectedIndex"  ElementName="SplitButton"/>
                                                 <Binding Path="DataContext" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
                                                 <Binding Path="NodeModels" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
@@ -165,7 +251,7 @@
                                         </sb:SplitButton.ItemsSource>-->
                                         <sb:SplitButton.Content>
                                             <icons:PackIconIonicons Kind="AddMD" />
-                                        </sb:SplitButton.Content>                     
+                                        </sb:SplitButton.Content>
                                         <i:Interaction.Behaviors>
                                             <!-- requies reset otherwise selected item feature doesn't work -->
                                             <b:ResetComboBoxOnOpenedBehavior/>
@@ -177,7 +263,7 @@
                                             </i:EventTrigger>
                                         </i:Interaction.Triggers>
                                     </sb:SplitButton>
-                                    
+
                                     <Button x:Name="RemoveButton"  Command="{TemplateBinding RemoveCommand}">
                                         <icons:PackIconIonicons Kind="RemoveiOS" />
                                     </Button>
@@ -188,7 +274,7 @@
                                         <icons:PackIconFeatherIcons Kind="Edit2" />
                                     </ToggleButton>
                                 </WrapPanel>
-                            </Grid>             
+                            </Grid>
                         </Border>
                         <Border x:Name="EditBd"                              
                   Grid.Column="1"
@@ -204,13 +290,13 @@
                                     <ColumnDefinition Width="24"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                        
-                                    <ContentPresenter 
+
+                                <ContentPresenter 
                                         Grid.Column="1"
                                         HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                         ContentSource="Edit"                            />
                                 <ToggleButton x:Name="Edit2Button"   Grid.Column="3" IsChecked="{Binding IsEditing, Converter={StaticResource InverseConverter}, RelativeSource={RelativeSource Mode=TemplatedParent}}">
-                                        <icons:PackIconFeatherIcons Kind="Edit2" />
+                                    <icons:PackIconFeatherIcons Kind="Edit2" />
                                 </ToggleButton>
                             </Grid>
                         </Border>
@@ -252,14 +338,14 @@
                         </MultiTrigger>
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="h:MyTreeViewHelper.IsMouseDirectlyOverItem"  Value="True" />                  
+                                <Condition Property="h:MyTreeViewHelper.IsMouseDirectlyOverItem"  Value="True" />
                             </MultiTrigger.Conditions>
 
                             <MultiTrigger.Setters>
                                 <Setter Property="IsShowing" Value="True"></Setter>
                             </MultiTrigger.Setters>
                         </MultiTrigger>
-                
+
                         <!--<MultiTrigger>
                             <MultiTrigger.Conditions>
                                 <Condition Property="wpf:MyTreeViewHelper.IsMouseDirectlyOverItem"  Value="true" />
@@ -270,11 +356,13 @@
                                 <BeginStoryboard>
                                     <Storyboard TargetName="WrapPanel1">
                                         <DoubleAnimation To="1" Storyboard.TargetProperty="Opacity" Duration="0:0:0.2" />
-                                        --><!--<ObjectAnimationUsingKeyFrames  Duration="0:0:0" Storyboard.TargetProperty="Visibility" >
+                                        -->
+                        <!--<ObjectAnimationUsingKeyFrames  Duration="0:0:0" Storyboard.TargetProperty="Visibility" >
                                             <ObjectAnimationUsingKeyFrames.KeyFrames>
                                                 <DiscreteObjectKeyFrame Value="{x:Static Visibility.Visible}"></DiscreteObjectKeyFrame>
                                             </ObjectAnimationUsingKeyFrames.KeyFrames>
-                                        </ObjectAnimationUsingKeyFrames>--><!--
+                                        </ObjectAnimationUsingKeyFrames>-->
+                        <!--
                                     </Storyboard>
                                 </BeginStoryboard>
                             </MultiTrigger.EnterActions>
@@ -282,16 +370,18 @@
                                 <BeginStoryboard>
                                     <Storyboard TargetName="WrapPanel1">
                                         <DoubleAnimation BeginTime="0:0:0" Storyboard.TargetProperty="Opacity"  To="0.5" Duration="0:0:0.1" />
-                                        --><!--<ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetProperty="Visibility" BeginTime="0:0:0.1" >
+                                        -->
+                        <!--<ObjectAnimationUsingKeyFrames Duration="0:0:0" Storyboard.TargetProperty="Visibility" BeginTime="0:0:0.1" >
                                             <ObjectAnimationUsingKeyFrames.KeyFrames>
                                                 <DiscreteObjectKeyFrame Value="{x:Static Visibility.Collapsed}"></DiscreteObjectKeyFrame>
                                             </ObjectAnimationUsingKeyFrames.KeyFrames>
-                                        </ObjectAnimationUsingKeyFrames>--><!--
+                                        </ObjectAnimationUsingKeyFrames>-->
+                        <!--
                                     </Storyboard>
                                 </BeginStoryboard>
                             </MultiTrigger.ExitActions>
                         </MultiTrigger>-->
-          
+
                         <Trigger Property="IsEditing" Value="True" >
                             <Setter Property="Visibility" TargetName="EditBd" Value="Visible" />
                             <Setter Property="Visibility" TargetName="Bd" Value="Collapsed" />
@@ -306,18 +396,118 @@
                             <Setter Property="Opacity" TargetName="PART_Header" Value="1" />
                         </Trigger>
 
-                        <Trigger Property="IsValid" Value="True" >                       
+                        <Trigger Property="IsValid" Value="True" >
                             <Setter Property="BorderBrush" TargetName="Bd" Value="Green" />
                             <Setter Property="BorderThickness" TargetName="Bd" Value="2" />
                         </Trigger>
-                        <Trigger Property="IsValid" Value="{x:Null}" >                      
-                         
+                        <Trigger Property="IsValid" Value="{x:Null}" >
+
                             <Setter Property="BorderThickness" TargetName="Bd" Value="0" />
-                        </Trigger>     
-                        <Trigger Property="IsValid" Value="False" >                       
+                        </Trigger>
+                        <Trigger Property="IsValid" Value="False" >
                             <Setter Property="BorderBrush" TargetName="Bd" Value="Red" />
                             <Setter Property="BorderThickness" TargetName="Bd" Value="2" />
                         </Trigger>
+
+                        <!--<Trigger Property="IsDragging" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard Storyboard="{StaticResource Enter}" />
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+                                    <BeginStoryboard Storyboard="{StaticResource Exit}" />
+                                </Trigger.ExitActions>
+                            </Trigger>-->
+                        <!--<Trigger Property="IsSelected" Value="True">
+                            <Trigger.EnterActions>
+
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="MainBorder" Duration="0:0:0.3">
+                                            <ColorAnimation.To>
+                                                <Color A="120" R="10" G="10" B="10" />
+                                            </ColorAnimation.To>
+                                        </ColorAnimation>
+
+                                        <ThicknessAnimation Storyboard.TargetProperty="BorderThickness" To="2" Storyboard.TargetName="MainBorder" Duration="0:0:0.3">
+                                        </ThicknessAnimation>
+                                        <ThicknessAnimation Storyboard.TargetProperty="BorderThickness" To="1" Storyboard.TargetName="SecondaryBorder" Duration="0:0:0.3">
+                                        </ThicknessAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="MainBorder" Duration="0:0:0.3">
+                                            <ColorAnimation.To>
+                                                <Color A="0" R="10" G="10" B="10" />
+                                            </ColorAnimation.To>
+                                        </ColorAnimation>
+                                        <ThicknessAnimation Storyboard.TargetProperty="BorderThickness" To="1" Storyboard.TargetName="MainBorder" Duration="0:0:0.3">
+                                        </ThicknessAnimation>
+                                        <ThicknessAnimation Storyboard.TargetProperty="BorderThickness" To="1" Storyboard.TargetName="SecondaryBorder" Duration="0:0:0.3">
+                                        </ThicknessAnimation>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>-->
+
+
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Trigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="MainBorder" Duration="0:0:0.3">
+                                            <ColorAnimation.To>
+                                                <Color A="60" R="40" G="10" B="10" />
+                                            </ColorAnimation.To>
+                                        </ColorAnimation>
+                                        <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" Storyboard.TargetName="MainBorder" Duration="0:0:0.3">
+                                            <ColorAnimation.To>
+                                                <Color A="20" R="40" G="30" B="80" />
+                                            </ColorAnimation.To>
+                                        </ColorAnimation>
+
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.EnterActions>
+                            <Trigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="MainBorder" Duration="0:0:0.3"  To="Transparent"/>
+                                        <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" Storyboard.TargetName="MainBorder" Duration="0:0:0.3" To="Transparent"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </Trigger.ExitActions>
+                        </Trigger>
+
+                        <!--<Trigger Property="IsSelectable" Value="True">
+                                <Trigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="SecondaryBorder" Duration="0:0:0.3">
+                                                <ColorAnimation.To>
+                                                    <Color A="50" R="20" G="10" B="10" />
+                                                </ColorAnimation.To>
+                                            </ColorAnimation>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.EnterActions>
+                                <Trigger.ExitActions>
+
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="SecondaryBorder" Duration="0:0:0.3">
+                                                <ColorAnimation.To>
+                                                    <Color A="0" R="10" G="10" B="10" />
+                                                </ColorAnimation.To>
+                                            </ColorAnimation>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </Trigger.ExitActions>
+                            </Trigger>-->
+
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

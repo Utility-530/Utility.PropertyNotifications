@@ -277,15 +277,7 @@
                         IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, 
               RelativeSource={RelativeSource TemplatedParent}}"/>-->
 
-                        <!--<ContentPresenter x:Name="PART_Header"
-                                      IsHitTestVisible="False"
-                                      Width="200"
-                                      Margin="3,3,23,3"
-                                      Content="{TemplateBinding Selection}"
-                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                      ContentTemplateSelector="{TemplateBinding SelectionBoxTemplateSelector}"
-                                      VerticalAlignment="Stretch"
-                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>-->
+ 
 
 
 

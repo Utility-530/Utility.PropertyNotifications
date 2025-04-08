@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Utility.Commands;
+using Utility.Interfaces.NonGeneric;
 using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Controls.Trees
@@ -83,7 +84,11 @@ namespace Utility.WPF.Controls.Trees
 
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
-            if (element is ListBoxItem lbi)
+            if (item is IIsSelected { IsSelected: true })
+            {
+
+            }
+            else if (element is ListBoxItem lbi)
             {
                 lbi.Loaded += Lbi_Loaded;
             }
