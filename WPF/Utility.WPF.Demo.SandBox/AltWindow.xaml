@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:conv="http://schemas.utility.com/converters"
         xmlns:att="http://schemas.utility.com/attached"
         xmlns:local="clr-namespace:Utility.WPF.SandBox"
         mc:Ignorable="d"
@@ -14,11 +15,13 @@
             </ResourceDictionary.MergedDictionaries>
 
 
+
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
- 
-            
+
+
             <Style x:Key="Horizontal" TargetType="{x:Type HeaderedContentControl}">
                 <Setter Property="att:Ex.IsChecked" Value="False"/>
+                <Setter Property="att:Ex.Reverse" Value="True"/>
                 <Setter Property="Template">
                     <Setter.Value >
                         <ControlTemplate TargetType="{x:Type HeaderedContentControl}">
@@ -29,7 +32,7 @@
                                     <ColumnDefinition Width="Auto" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
-                                <ContentPresenter ContentSource="Content"></ContentPresenter>
+                                <ContentPresenter x:Name="_Content"  ContentSource="Content"></ContentPresenter>
                                 <!--<wpf1:HtmlPanel x:Name="_htmlPanel" Grid.Column="0" Grid.ColumnSpan="3" Margin="1,0,-1,0">
                                 <wpf1:HtmlPanel.ToolTip>
                                     <ToolTip BorderBrush="Transparent" Padding="0">
@@ -40,16 +43,54 @@
                                 <GridSplitter x:Name="_splitter" Grid.Column="1" Width="4" VerticalAlignment="Stretch" HorizontalAlignment="Center" Background="#BFDBFF"
                                     Visibility="{Binding Path=(att:Ex.IsChecked), Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type HeaderedContentControl}}}" />
 
-                                <ContentPresenter ContentSource="Header" Grid.Column="2"
+                                <ContentPresenter x:Name="_Header" ContentSource="Header" Grid.Column="2"
                                                     Visibility="{Binding Path=(att:Ex.IsChecked), Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type HeaderedContentControl}}}" />
 
-                                    <!--<WebBrowser x:Name="_webBrowser" Grid.Column="2" 
+                                <!--<WebBrowser x:Name="_webBrowser" Grid.Column="2" 
                                     Visibility="{Binding Path=(att:Ex.IsChecked), Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type local:HtmlControl}}}" />-->
                                 <ToggleButton x:Name="hider" VerticalAlignment="Top" HorizontalAlignment="Right" Width="16" Grid.ColumnSpan="3" Background="Transparent" BorderThickness="0"/>
                             </Grid>
 
                             <ControlTemplate.Triggers>
+
+                                <!--<DataTrigger  Binding="{Binding Path=(att:Ex.Reverse), RelativeSource={RelativeSource AncestorType=HeaderedContentControl}}" Value="True">-->
+                                <DataTrigger Binding="{Binding Path=(att:Ex.Reverse), RelativeSource={RelativeSource Mode=Self}}" Value="True">
+
+                                    <Setter TargetName="_Content" Property="Content" >
+                                        <Setter.Value>
+                                            <Binding Path="Header" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter TargetName="_Content" Property="ContentTemplate" >
+                                        <Setter.Value>
+                                            <Binding Path="HeaderTemplate" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter TargetName="_Content" Property="ContentTemplateSelector" >
+                                        <Setter.Value>
+                                            <Binding Path="HeaderTemplateSelector" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                                        </Setter.Value>
+                                    </Setter>
+
+                                    <Setter TargetName="_Header" Property="Content" >
+                                        <Setter.Value>
+                                            <Binding Path="Content" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter TargetName="_Header" Property="ContentTemplate" >
+                                        <Setter.Value>
+                                            <Binding Path="ContentTemplate" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter TargetName="_Header" Property="ContentTemplate" >
+                                        <Setter.Value>
+                                            <Binding Path="ContentTemplateSelector" RelativeSource="{RelativeSource AncestorType=HeaderedContentControl}"></Binding>
+                                        </Setter.Value>
+                                    </Setter>
+                                </DataTrigger>
                                 <DataTrigger Binding="{Binding IsChecked, ElementName=hider}" Value="True">
+
+                                    <!--<Setter TargetName="_Content" Property="ContentSource" Value="Header" />-->
                                     <Setter Property="att:Ex.IsChecked" Value="False" />
                                     <Setter TargetName="hider" Property="Content"  >
                                         <Setter.Value>
@@ -127,25 +168,25 @@
                 </Setter>
             </Style>
         </ResourceDictionary>
-     
+
     </FrameworkElement.Resources>
     <UniformGrid Columns="1">
 
         <HeaderedContentControl Style="{StaticResource Horizontal}">
             <HeaderedContentControl.Header>
                 <Ellipse Fill="Red" Height="20" Width="20"></Ellipse>
-       
-            </HeaderedContentControl.Header>
-            <Ellipse Fill="Blue" Height="20" Width="20"></Ellipse>
-        </HeaderedContentControl>  
-        
-        <HeaderedContentControl Style="{StaticResource Vertical}">
-            <HeaderedContentControl.Header>
-                <Ellipse Fill="Red" Height="20" Width="20"></Ellipse>
-       
+
             </HeaderedContentControl.Header>
             <Ellipse Fill="Blue" Height="20" Width="20"></Ellipse>
         </HeaderedContentControl>
-        
+
+        <HeaderedContentControl Style="{StaticResource Vertical}">
+            <HeaderedContentControl.Header>
+                <Ellipse Fill="Red" Height="20" Width="20"></Ellipse>
+
+            </HeaderedContentControl.Header>
+            <Ellipse Fill="Blue" Height="20" Width="20"></Ellipse>
+        </HeaderedContentControl>
+
     </UniformGrid>
 </Window>
