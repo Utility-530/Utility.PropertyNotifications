@@ -52,8 +52,7 @@
                                 <VisualState x:Name="SelectedInactive">
                                     <Storyboard>
                                         <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd"
-                                                Storyboard.TargetProperty="(Panel.Background).
-                    (SolidColorBrush.Color)">
+                                                Storyboard.TargetProperty="(Panel.Background).(SolidColorBrush.Color)">
                                             <EasingColorKeyFrame KeyTime="0"
                                          Value="{StaticResource SelectedUnfocusedColor}" />
                                         </ColorAnimationUsingKeyFrames>
@@ -103,9 +102,10 @@
                                     x:Name="WrapPanel1"
                                     Orientation="Horizontal" Grid.ColumnSpan="4" Grid.Row="1" Opacity="1" IsEnabled="{TemplateBinding IsShowing}" 
                                     Visibility="{TemplateBinding IsEditable, Converter={StaticResource VisibilityConverter}}"
-                                    Width="80" >
+                                    MinWidth="80" >
 
-                                    <local:ComboBoxTreeView                  
+                                    <local:ComboBoxTreeView     
+                                        VerticalAlignment="Bottom"
                                         x:Name="SplitButton"
                                         Style="{TemplateBinding SplitButtonStyle}"
                                         ItemContainerStyleSelector="{TemplateBinding NodeContainerStyleSelector}"
@@ -125,7 +125,7 @@
                                         </i:Interaction.Triggers>
                                     </local:ComboBoxTreeView>
                                     
-                                    <Button x:Name="RemoveButton"  Command="{TemplateBinding RemoveCommand}">
+                                    <Button x:Name="RemoveButton"  Command="{TemplateBinding RemoveCommand}" Width="20" Height="20" Margin="0,0,4,0">
                                         <icons:PackIconIonicons Kind="RemoveiOS" />
                                     </Button>
                                     <!--<Button x:Name="AddParentButton" Command="{TemplateBinding AddParentCommand}">
