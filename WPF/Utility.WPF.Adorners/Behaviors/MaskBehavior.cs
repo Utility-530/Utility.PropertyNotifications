@@ -1,5 +1,4 @@
-﻿using Jellyfish;
-using Microsoft.Xaml.Behaviors;
+﻿using Microsoft.Xaml.Behaviors;
 using System;
 using System.Windows;
 using System.Windows.Documents;
@@ -109,7 +108,7 @@ namespace Utility.WPF.Adorners
             {
                 adornerLayer.Clear(AssociatedObject);
                 AdornerLayer? adLayer = AdornerLayer.GetAdornerLayer(AssociatedObject);
-                RelayCommand relayCommand = new((e) =>
+                Command<object> relayCommand = new((e) =>
                 {
                     CancelCommand?.Execute(null);
                     ShowCancel = false;

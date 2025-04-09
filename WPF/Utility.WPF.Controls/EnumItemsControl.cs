@@ -9,7 +9,6 @@ using Utility.WPF.Attached;
 using Utility.Enums;
 using Utility.WPF.Controls.Base;
 using Evan.Wpf;
-using Jellyfish;
 using Utility.Helpers;
 using System.Windows.Input;
 using MintPlayer.ObservableCollection;
@@ -17,6 +16,7 @@ using Utility.WPF.Helpers;
 using System.Windows.Controls;
 using Utility.PropertyNotifications;
 using Utility.Interfaces.NonGeneric;
+using Utility.Commands;
 
 namespace Utility.WPF.Controls
 {
@@ -51,7 +51,7 @@ namespace Utility.WPF.Controls
             this.SetValue(ItemsControlEx.ArrangementProperty, Utility.Enums.Arrangement.Wrapped);
             CompositeDisposable? disposable = null;
 
-            ClearCommand = new RelayCommand(a =>
+            ClearCommand = new Command<object>(a =>
             {
                 Value = (Enum)System.Enum.ToObject(Value?.GetType() ?? Enum, 0);
             });

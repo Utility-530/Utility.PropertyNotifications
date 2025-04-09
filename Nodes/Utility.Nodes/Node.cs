@@ -1,6 +1,6 @@
-﻿using Jellyfish;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.Windows.Input;
+using Utility.Commands;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
@@ -19,25 +19,25 @@ namespace Utility.Nodes
         public Node()
         {
             //IsExpanded = true;
-            AddCommand = new RelayCommand(async a =>
+            AddCommand = new Command<object>(async a =>
             {
                 var node = await ToTree(a);
                 Add(node);
                 this.IsExpanded = true;
             });
 
-            RemoveCommand = new RelayCommand(a =>
+            RemoveCommand = new Command<object>(a =>
             {
                 Parent.Remove(this);
             });
 
-            EditCommand = new RelayCommand(a =>
+            EditCommand = new Command<object>(a =>
             {
                 if (a != null)
                     this.Data = a;
             });
 
-            AddParentCommand = new RelayCommand(async a =>
+            AddParentCommand = new Command<object>(async a =>
             {
                 Node node = (Node)(await ToTree(a));
                 node.Add(this);

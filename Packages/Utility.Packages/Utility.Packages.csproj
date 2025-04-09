@@ -21,7 +21,6 @@
 		<PackageReference Include="DryIoc.dll" Version="5.4.1" />
 		<PackageReference Include="GenericBackgroundWorker" Version="2.0.0" />
 		<PackageReference Include="GuiLabs.Undo" Version="1.0.2" />
-		<PackageReference Include="Jellyfish" Version="1.0.42" />
 		<PackageReference Include="LanguageExt.Core" Version="4.2.7" />
 		<PackageReference Include="LinqToRegex" Version="2.5.0" />
 		<PackageReference Include="MintPlayer.ObservableCollection" Version="1.5.0" />

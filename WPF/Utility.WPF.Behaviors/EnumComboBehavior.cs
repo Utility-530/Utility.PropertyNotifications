@@ -1,6 +1,5 @@
 ﻿using DynamicData;
 using Evan.Wpf;
-using Jellyfish;
 using Microsoft.Xaml.Behaviors;
 using ReactiveUI;
 using System;
@@ -12,6 +11,7 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Utility.Commands;
 using Utility.Helpers;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
@@ -46,7 +46,7 @@ namespace Utility.WPF.Behaviors
 
             CompositeDisposable? disposable = null;
 
-            ClearCommand = new RelayCommand(a =>
+            ClearCommand = new Command<object>(a =>
             {
                 Value = (Enum)System.Enum.ToObject(Value?.GetType() ?? Enum as Type, 0);
             });
