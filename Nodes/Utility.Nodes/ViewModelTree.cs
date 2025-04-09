@@ -27,6 +27,8 @@ namespace Utility.Nodes
         private bool isClicked;
         private bool isSelected;
         private DateTime? removed;
+        private bool isReplicable;
+        private bool isRemovable;
 
         public ViewModelTree(/*string name,*/ object data) : this()
         {
@@ -174,6 +176,22 @@ namespace Utility.Nodes
             set
             {
                 RaisePropertyChanged(ref isVisible, value);
+            }
+        }
+
+        public bool IsReplicable {
+            get => isReplicable;
+            set
+            {
+                RaisePropertyChanged(ref isReplicable, value);
+            }
+        }
+
+        public bool IsRemovable {
+            get => isRemovable;
+            set
+            {
+                RaisePropertyChanged(ref isRemovable, value);
             }
         }
 
