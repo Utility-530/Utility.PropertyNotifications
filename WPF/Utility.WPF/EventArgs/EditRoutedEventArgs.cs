@@ -8,7 +8,7 @@ using System.Windows;
 namespace Utility.WPF
 {
 
-        public class EditRoutedEventArgs : RoutedEventArgs
+    public class EditRoutedEventArgs : RoutedEventArgs
         {
             public EditRoutedEventArgs(bool isAccepted, object newObject, RoutedEvent routedEvent, object source) : base(routedEvent, source)
             {
@@ -22,6 +22,4 @@ namespace Utility.WPF
 
         public delegate void FinishEditRoutedEventHandler(object sender, EditRoutedEventArgs e);
 
-
-    
 }
