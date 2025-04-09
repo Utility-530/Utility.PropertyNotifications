@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -23,6 +24,7 @@ namespace Utility.WPF.Demo.Trees
                 //Style= this.Resources["Demo"] as Style, 
                 EditTemplate = this.Resources["EditTemplate"] as DataTemplate,
                 ItemContainerStyle = this.Resources["CustomTreeViewItem"] as Style,
+               
                 ItemsSource = this.Resources["Characters"] as IEnumerable,
                 Selection = new Binding { Path = new PropertyPath("Data") }
             };
@@ -36,8 +38,14 @@ namespace Utility.WPF.Demo.Trees
             //Add(parent, treeViewItemC);
             //Add(parent, treeViewItemD);
             var treeView = new TreeView();
+            treeView.AddHandler(CustomTreeViewItem.ChangeEvent, new RoutedEventHandler(change));
             treeView.Items.Add(parent);
             this.Content = treeView;
+        }
+
+        private void change(object sender, RoutedEventArgs e)
+        {
+         
         }
 
         private void Parent_Add(object sender, EditRoutedEventArgs e)

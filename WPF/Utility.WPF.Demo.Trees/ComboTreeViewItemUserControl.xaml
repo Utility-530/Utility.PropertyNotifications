@@ -21,6 +21,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml"/>
+                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/AddRemoveButtons.xaml"/>
                 <ResourceDictionary Source="/Utility.WPF.Demo.Data;component/DataTemplate/Character.xaml" />
                 <ResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml" />
             </ResourceDictionary.MergedDictionaries>
@@ -182,7 +183,7 @@
                 </SolidColorBrush.Color>
             </SolidColorBrush>
 
-
+            
             <Style x:Key="CustomTreeViewItem" TargetType="{x:Type trees:CustomTreeViewItem}">
                 <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
                 <Setter Property="IsValid" Value="{Binding Path=IsValid, Mode=TwoWay}" />
@@ -430,6 +431,10 @@
                           Grid.Column="1"
                           Grid.ColumnSpan="2"
                           Visibility="{TemplateBinding ItemsPresenterVisibility}" />
+
+
+                                <btns:PlusGeometryButton x:Name="PlusButton"  Grid.Column="7" Width="16" Height="16"   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />
+                                <btns:MinusGeometryButton x:Name="MinusButton"  Grid.Column="8" Width="16" Height="16"    HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" />
                             </Grid>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="HasItems"
