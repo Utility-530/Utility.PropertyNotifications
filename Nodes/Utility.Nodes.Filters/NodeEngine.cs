@@ -72,6 +72,7 @@ namespace Utility.Nodes.Filters
         public void Remove(INode node)
         {
             nodes.Remove(node);
+            repository.Value.Remove((GuidKey)node.Key);
         }
 
         public void Add(INode node)
@@ -299,6 +300,10 @@ namespace Utility.Nodes.Filters
                 }
                 else if (a is Change { Type: Changes.Type.Remove, Value: { } _value })
                 {
+                    if(_value is not INode node)
+                    {
+                        throw new Exception("  333 sdsdf");
+                    }
                     nodes.RemoveBy<INode>(c =>
 
                     {
@@ -316,6 +321,8 @@ namespace Utility.Nodes.Filters
                         throw new Exception("44c dd");
 
                     });
+
+                    repository.Value.Remove((GuidKey)node.Key);
                 }
                 else if (a is Change { Type: Changes.Type.Update, Value: INode newValue, OldValue: INode oldValue })
                 {
