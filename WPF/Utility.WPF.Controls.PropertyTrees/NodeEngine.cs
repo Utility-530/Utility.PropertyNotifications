@@ -13,11 +13,12 @@ using Utility.Helpers.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
 using Utility.PropertyDescriptors;
+using Utility.Observables;
 
 namespace Utility.WPF.Controls.PropertyTrees
 {
     public readonly record struct DirtyNode(string Property, INode Node);
-    public class NodeEngine : INodeSource
+    public class NodeEngine : Disposable, INodeSource
     {
         public static string New = "new";
         public static readonly string Key = nameof(NodeEngine);
