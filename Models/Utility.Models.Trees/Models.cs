@@ -895,7 +895,6 @@ namespace Utility.Models.Trees
     {
         private string alias;
         private string filePath;
-        bool isInitialised;
 
         public DataFileModel()
         {
@@ -935,7 +934,14 @@ namespace Utility.Models.Trees
             node.IsPersistable = true;
             node.IsExpanded = true;
             node.IsEditable = false;
+            node.IsRemovable = true;
+            node.IsReplicable = true;
             base.SetNode(node);
+        }
+
+        public override object Clone()
+        {
+            return new DataFileModel { Name = Name, Alias = Alias, FilePath = FilePath };
         }
     }
 

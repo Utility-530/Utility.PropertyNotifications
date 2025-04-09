@@ -238,7 +238,7 @@ namespace Utility.Models
             return Name;
         }
 
-        public object Clone()
+        public virtual object Clone()
         {
             var instance = ActivateAnything.Activate.New(this.GetType()) as Model;
             instance.Name = Name;
