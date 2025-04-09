@@ -6,7 +6,7 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Observables
 {
-    public class Disposable : IObservableCollection<IDisposable>, ICollection<IDisposable>
+    public class Disposable : IObservableCollection<IDisposable>, ICollection<IDisposable>, IDisposable
     {
         private bool disposed;
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
@@ -32,6 +32,13 @@ namespace Utility.Observables
 
         public IEnumerable<IObserver<NotifyCollectionChangedEventArgs>> Observers => observers;
 
+        public void Dispose()
+        {
+            // Dispose of unmanaged resources.
+            Dispose(true);
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
+        }
 
         public void Dispose(bool disposing)
         {
