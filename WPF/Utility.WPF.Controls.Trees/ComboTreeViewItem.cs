@@ -58,6 +58,13 @@ namespace Utility.WPF.Controls.Trees
             handlerType: typeof(FinishEditRoutedEventHandler),
             ownerType: typeof(CustomTreeViewItem));
 
+
+          public static readonly RoutedEvent ChangeEvent = EventManager.RegisterRoutedEvent(
+            name: "Change",
+            routingStrategy: RoutingStrategy.Bubble,
+            handlerType: typeof(ChangeRoutedEventHandler),
+            ownerType: typeof(CustomTreeViewItem));
+
         public static readonly RoutedEvent SelectionChangedEvent = EventManager.RegisterRoutedEvent(
             name: "SelectionChanged",
         routingStrategy: RoutingStrategy.Bubble,
@@ -118,6 +125,14 @@ namespace Utility.WPF.Controls.Trees
                 button.Click += AcceptComboTreeViewItem_Click;
             if (this.GetTemplateChild("Decline_Button") is Button _button)
                 _button.Click += DeclineComboTreeViewItem_Click;
+
+
+            if (this.GetTemplateChild("PlusButton") is Button pbutton)
+                pbutton.Click += AddComboTreeViewItem_Click;
+            if (this.GetTemplateChild("MinusButton") is Button mbutton)
+                mbutton.Click += RemoveComboTreeViewItem_Click;
+
+
             //if (Style?.Resources["EditTemplate"] is DataTemplate dataTemplate)
             //    EditTemplate ??= dataTemplate;
 
@@ -137,6 +152,15 @@ namespace Utility.WPF.Controls.Trees
         {
             RaiseCustomRoutedEvent(true);
         }
+        private void AddComboTreeViewItem_Click(object sender, RoutedEventArgs e)
+        {
+            RaiseCustomRoutedEvent(Utility.Changes.Type.Add);
+        }
+
+        public void RemoveComboTreeViewItem_Click(object sender, RoutedEventArgs e)
+        {
+            RaiseCustomRoutedEvent(Utility.Changes.Type.Remove);
+        }
 
 
         void RaiseCustomRoutedEvent(bool isAccepted)
@@ -151,6 +175,13 @@ namespace Utility.WPF.Controls.Trees
             FinishEditCommand?.Execute(routedEventArgs);
         }
 
+        void RaiseCustomRoutedEvent(Utility.Changes.Type isAccepted)
+        {
+            ChangeRoutedEventArgs routedEventArgs = new(isAccepted, this.DataContext, ChangeEvent, this);
+            RaiseEvent(routedEventArgs);
+        }
+
+
 
 
 
@@ -160,6 +191,12 @@ namespace Utility.WPF.Controls.Trees
         {
             add { AddHandler(FinishEditEvent, value); }
             remove { RemoveHandler(FinishEditEvent, value); }
+        }
+
+        public event ChangeRoutedEventHandler Change
+        {
+            add { AddHandler(ChangeEvent, value); }
+            remove { RemoveHandler(ChangeEvent, value); }
         }
 
         public event System.Windows.Controls.SelectionChangedEventHandler SelectionChanged

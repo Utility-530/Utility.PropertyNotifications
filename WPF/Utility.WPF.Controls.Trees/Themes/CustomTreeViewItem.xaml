@@ -10,19 +10,12 @@
                     xmlns:sb="http://schemas.utility.com/splitbuttons"
                     xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:c="http://schemas.utility.com/colours"
-                    xmlns:res="http://schemas.utility.com/resourcedictionary">
+                    xmlns:res="http://schemas.utility.com/resourcedictionary" 
+                    xmlns:btns="http://schemas.utility.com/buttons">
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-
-
-    <!--<local:ItemsPanelConverter x:Key="ItemsPanelConverter"/>-->
-    <local:MultiItemsPanelConverter x:Key="MultiItemsPanelConverter"/>
-    <local:VisibilityConverter x:Key="VisibilityConverter"/>
-    <local:InverseConverter x:Key="InverseConverter"/>
-    <!--<local:ItemContainerStyleSelector x:Key="ItemContainerStyleSelector"/>-->
-
 
     <SineEase x:Key="Ease" EasingMode="EaseInOut" />
 
@@ -82,8 +75,11 @@
         <Setter Property="IsValid" Value="{Binding Path=IsValid, Mode=TwoWay}" />
         <Setter Property="IsEditable" Value="{Binding Path=IsEditable, Mode=TwoWay}" />
         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+        <Setter Property="IsReplicable" Value="{Binding IsReplicable, Mode=TwoWay}"/>
+        <Setter Property="IsRemovable" Value="{Binding IsRemovable, Mode=TwoWay}"/>
         <!--<Setter Property="ItemContainerStyleSelector" Value="{StaticResource ItemContainerStyleSelector}"></Setter>-->
-        <Setter Property="AddCommand" Value="{Binding Path=AddCommand}" />
+        <Setter Property="AddCommand" Value="{Binding Path=AddCommand}" />    
+        <Setter Property="CornerRadius" Value="5" />
         <Setter Property="RemoveCommand" Value="{Binding Path=RemoveCommand}" />
         <!--<Setter Property="EditCommand" Value="{Binding Path=EditCommand}" />-->
         <Setter Property="AddParentCommand" Value="{Binding Path=AddParentCommand}" />
@@ -273,7 +269,7 @@
                                     <ToggleButton x:Name="EditButton"  IsChecked="{Binding IsEditing, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                                         <icons:PackIconFeatherIcons Kind="Edit2" />
                                     </ToggleButton>
-                                </WrapPanel>
+                                </WrapPanel>                          
                             </Grid>
                         </Border>
                         <Border x:Name="EditBd"                              
@@ -306,6 +302,19 @@
                           Grid.Column="1"
                           Grid.ColumnSpan="2"
                           Visibility="{TemplateBinding ItemsPresenterVisibility}" />
+
+                        <btns:DuplicateGeometryButton 
+                            x:Name="PlusButton"                
+                            Grid.ColumnSpan="4"
+                            Visibility="{TemplateBinding IsReplicable, Converter={StaticResource VisibilityConverter}}"
+                            Height="{Binding ElementName=Bd, Path=ActualHeight, ConverterParameter=x/2, Converter={StaticResource MathConverter}}" 
+                            VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,12,0" />
+                        <btns:XGeometryButton 
+                            x:Name="MinusButton"                   
+                            Grid.ColumnSpan="4"
+                            Visibility="{TemplateBinding IsRemovable, Converter={StaticResource VisibilityConverter}}"
+                            Height="{Binding ElementName=Bd, Path=ActualHeight, ConverterParameter=x/3, Converter={StaticResource MathConverter}}" 
+                            VerticalAlignment="Top" HorizontalAlignment="Right" />
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasItems"
@@ -408,7 +417,7 @@
                             <Setter Property="BorderBrush" TargetName="Bd" Value="Red" />
                             <Setter Property="BorderThickness" TargetName="Bd" Value="2" />
                         </Trigger>
-
+                        
                         <!--<Trigger Property="IsDragging" Value="True">
                                 <Trigger.EnterActions>
                                     <BeginStoryboard Storyboard="{StaticResource Enter}" />
@@ -458,15 +467,11 @@
                             <Trigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="MainBorder" Duration="0:0:0.3">
-                                            <ColorAnimation.To>
-                                                <Color A="60" R="40" G="10" B="10" />
-                                            </ColorAnimation.To>
+                                        <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="MainBorder" Duration="0:0:0.3" To="CadetBlue">
+                        
                                         </ColorAnimation>
-                                        <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" Storyboard.TargetName="MainBorder" Duration="0:0:0.3">
-                                            <ColorAnimation.To>
-                                                <Color A="20" R="40" G="30" B="80" />
-                                            </ColorAnimation.To>
+                                        <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" Storyboard.TargetName="MainBorder" Duration="0:0:0.3" To="LemonChiffon">
+                             
                                         </ColorAnimation>
 
                                     </Storyboard>
@@ -480,7 +485,7 @@
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
-                        </Trigger>
+                        </Trigger>                      
 
                         <!--<Trigger Property="IsSelectable" Value="True">
                                 <Trigger.EnterActions>
@@ -512,8 +517,8 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <!--<Style.Triggers>
-            <MultiDataTrigger>
+        <!--<Style.Triggers>     
+           <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition    Binding="{Binding Path=IsExpanded, 
                              RelativeSource={RelativeSource 

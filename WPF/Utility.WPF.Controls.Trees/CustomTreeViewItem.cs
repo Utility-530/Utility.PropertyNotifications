@@ -45,6 +45,16 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty NodeContainerStyleProperty = DependencyProperty.Register("NodeContainerStyle", typeof(Style), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty ItemsPresenterVisibilityProperty = DependencyProperty.Register("ItemsPresenterVisibility", typeof(Visibility), typeof(CustomTreeViewItem), new PropertyMetadata(Visibility.Collapsed));
         public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(CustomTreeViewItem), new PropertyMetadata(Orientation.Vertical));
+        public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register("CornerRadius", typeof(double), typeof(CustomTreeViewItem), new PropertyMetadata(0d));
+        public static readonly DependencyProperty IsReplicableProperty =       DependencyProperty.Register("IsReplicable", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty IsRemovableProperty =      DependencyProperty.Register("IsRemovable", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata());
+
+
+
+        // Using a DependencyProperty as the backing store for IsRemovable.  This enables animation, styling, binding, etc...
+  
+
+
 
         //static CustomTreeViewItem()
         //{
@@ -182,6 +192,28 @@ namespace Utility.WPF.Controls.Trees
             get { return (Orientation)GetValue(OrientationProperty); }
             set { SetValue(OrientationProperty, value); }
         }
+
+        public double CornerRadius
+        {
+            get { return (double)GetValue(CornerRadiusProperty); }
+            set { SetValue(CornerRadiusProperty, value); }
+        }
+
+
+        public bool IsReplicable
+        {
+            get { return (bool)GetValue(IsReplicableProperty); }
+            set { SetValue(IsReplicableProperty, value); }
+        }
+
+
+
+        public bool IsRemovable
+        {
+            get { return (bool)GetValue(IsRemovableProperty); }
+            set { SetValue(IsRemovableProperty, value); }
+        }
+
 
         #endregion Properties
 
