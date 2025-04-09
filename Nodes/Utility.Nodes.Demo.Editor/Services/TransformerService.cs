@@ -36,7 +36,8 @@ namespace Utility.Nodes.Demo.Filters.Services
             int i = 0;
             Observable.Create<Exception>(observer =>
             {
-                return Locator.Current.GetService<INodeSource>()
+                return Locator.Current
+                .GetService<INodeSource>()
                 .Single(nameof(Factory.BuildTransformersRoot))
                 .Subscribe(c_node =>
                 {

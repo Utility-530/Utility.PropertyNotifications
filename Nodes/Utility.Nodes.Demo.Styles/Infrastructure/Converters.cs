@@ -12,6 +12,9 @@ using Utility.Models.Trees;
 using Utility.Trees.Abstractions;
 using Utility.WPF;
 using Utility.WPF.Controls.ComboBoxes;
+using Utility.Interfaces.Exs;
+using System.Text.RegularExpressions;
+using System.IO;
 
 namespace Utility.Nodes.Demo.Styles
 {
@@ -47,6 +50,56 @@ namespace Utility.Nodes.Demo.Styles
         }
     }
 
+    public class AddDataFileConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is ChangeRoutedEventArgs { Type: Changes.Type.Add, Instance: INode nObject } args)
+            {
+                args.Handled = true;
+                if (nObject.Data is DataFileModel model)
+                {
+                    string alias;
+                    if (Regex.Match(model.Name, "_(\\d)$") is { Success: true, Groups: { } groups })
+                    {
+                        var number = int.Parse(groups[1].Value) + 1;
+                        alias = Regex.Replace(model.Alias, "_(\\d)$", "_" + number);
+                    }
+                    else
+                        alias = model.Alias + "_1";
+
+                    var filePath = Utility.Helpers.PathHelper.ChangeFilename(model.FilePath, alias);
+                    return new DataFileModel { Name = alias, Alias = alias, FilePath = filePath };
+                }
+                throw new NotImplementedException("V FDF$3");
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class RemoveConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is ChangeRoutedEventArgs { Type: Changes.Type.Remove, Instance: { } nObject } args)
+            {
+                args.Handled = true;
+                return nObject;
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     public class SelectedNodeChangeConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -55,7 +108,7 @@ namespace Utility.Nodes.Demo.Styles
             {
                 if (parameter is IKey { Key: string key } && Guid.TryParse(key, out var guid))
                 {
-                    var root = CreateRoot(type, guid);       
+                    var root = CreateRoot(type, guid);
                     return root;
                 }
             }

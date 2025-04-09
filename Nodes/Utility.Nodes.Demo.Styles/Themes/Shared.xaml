@@ -17,6 +17,8 @@
     <icons:PackIconIonicons x:Key="Icon" x:Shared="false" Kind="AddMD" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"/>
     <local:NewObjectConverter x:Key="NewObjectConverter"/>
     <local:FinishEditConverter x:Key="FinishEditConverter"/>
+    <local:AddDataFileConverter x:Key="AddDataFileConverter"/>
+    <local:RemoveConverter x:Key="RemoveConverter"/>
     <conv:PropertyNamesConverter x:Key="PropertyNamesConverter"/>
     <mvvm:MathConverter x:Key="Math"/>
 

@@ -3,7 +3,9 @@
                     xmlns:t="http://schemas.utility.com/trees"
                     xmlns:local="clr-namespace:Utility.Nodes.Demo.Editor"
                     xmlns:conv="http://schemas.utility.com/converters"
-                    xmlns:bc="http://schemas.utility.com/Breadcrumbs">
+                    xmlns:bc="http://schemas.utility.com/Breadcrumbs" xmlns:att="http://schemas.utility.com/attached" 
+                    xmlns:beh="http://schemas.utility.com/behaviors" 
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
 
 
 
@@ -21,6 +23,19 @@
                 <StaticResource ResourceKey="EditTemplate"/>
             </Setter.Value>
         </Setter>
+        <att:InteractivitySetter Property="att:InteractivityItems.Template">
+            <Setter.Value>
+                <att:InteractivityTemplate>
+                    <att:InteractivityItems>
+                        <att:InteractivityItems.Triggers>
+                            <i:EventTrigger EventName="Change">
+                                <beh:InvokeCommandAction Command="{Binding AddCommand}" EventArgsConverter="{StaticResource AddDataFileConverter}"/>
+                            </i:EventTrigger>
+                        </att:InteractivityItems.Triggers>
+                    </att:InteractivityItems>
+                </att:InteractivityTemplate>
+            </Setter.Value>
+        </att:InteractivitySetter>
         <!--<Setter Property="Selection" Value="{Binding Current, Mode=TwoWay}"></Setter>-->
     </Style>
 

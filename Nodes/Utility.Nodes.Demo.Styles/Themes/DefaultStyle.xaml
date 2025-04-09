@@ -45,6 +45,20 @@
                 </local:EditTemplateSelector>
             </Setter.Value>
         </Setter>
+        <att:InteractivitySetter Property="att:InteractivityItems.Template">
+            <Setter.Value>
+                <att:InteractivityTemplate>
+                    <att:InteractivityItems>
+                        <att:InteractivityItems.Triggers>
+                            <i:EventTrigger EventName="Change">
+                                <!--<beh:InvokeCommandAction Command="{Binding AddCommand}" EventArgsConverter="{StaticResource AddConverter}"/>-->
+                                <beh:InvokeCommandAction Command="{Binding RemoveCommand}" EventArgsConverter="{StaticResource RemoveConverter}"/>
+                            </i:EventTrigger>
+                        </att:InteractivityItems.Triggers>
+                    </att:InteractivityItems>
+                </att:InteractivityTemplate>
+            </Setter.Value>
+        </att:InteractivitySetter>
         <Setter Property="NodeTemplate">
             <Setter.Value>
                 <DataTemplate>
@@ -52,6 +66,20 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Removed, Converter={StaticResource InverseNullToBooleanConverter}}" Value="True" >
+                <Setter Property="IsEnabled" Value="False"></Setter>
+                <Setter Property="Height" Value="2"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type trees:CustomTreeViewItem}">
+                            <Grid Background="LightGray">
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>    
     </Style>
     
 </ResourceDictionary>

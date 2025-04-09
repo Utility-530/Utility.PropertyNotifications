@@ -212,13 +212,11 @@
                 <Setter Property="Margin" Value="4,0,4,0"/>
             </Style>
         </DataTemplate.Resources>
-        <UniformGrid Rows="1">
-    
-             <TextBlock Text="{Binding Path=SourceKey}"  />
-                   
-            <TextBlock Text="{Binding Path=PropertyName}"  />
-            <TextBlock Text="{Binding Path=OldValue}"  />
-            <TextBlock Text="{Binding Path=NewValue}"  />
+        <UniformGrid Rows="1">    
+            <TextBlock Text="{Binding Path=SourceKey}"/>                   
+            <TextBlock Text="{Binding Path=PropertyName}"/>
+            <TextBlock Text="{Binding Path=OldValue}"/>
+            <TextBlock Text="{Binding Path=NewValue}"/>
         </UniformGrid>
 
     </DataTemplate>

@@ -40,8 +40,12 @@ namespace Utility.Nodes.Demo.Filters.Services
                            Locator.CurrentMutable.UnregisterAll<INodeSource>();
                            Locator.CurrentMutable.RegisterLazySingleton<INodeSource>(() => new NodeEngine());
 
-                           ParserService parserService = new();
-
+                           if (Locator.Current.GetService<ParserService>() is { } parserService)
+                           {
+                               parserService.Dispose();
+                               Locator.CurrentMutable.UnregisterAll<ParserService>();            
+                           }
+                           Locator.CurrentMutable.RegisterConstant(new ParserService());
                            Locator.Current.GetService<ContainerViewModel>().RaisePropertyChanged(nameof(ContainerViewModel.Slave));
                        }
                    });
