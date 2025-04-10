@@ -15,9 +15,6 @@ using Splat;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Interfaces;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
-using System.Collections.Generic;
-using System.Reflection.Metadata;
 using Chronic;
 using Utility.Observables;
 using Utility.Observables.Generic;
@@ -25,7 +22,7 @@ using Utility.Observables.Generic;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
-    internal class ParserService: Disposable
+    internal class ParserService : Disposable
     {
         const string htmlContent = @"
 <!DOCTYPE html>
@@ -68,11 +65,7 @@ namespace Utility.Nodes.Demo.Filters.Services
 
         public static string AddElementByPosition(IReadOnlyTree node)
         {
-            var context = BrowsingContext.New(Configuration.Default.WithCss());
-            var document = context.OpenAsync(req => req.Content(htmlContent)).Result;
-
-            if (true)
-                addStyle(document);
+            IDocument document = createDocument();
 
             Dictionary<IReadOnlyTree, IElement> dictionary = new();
 
@@ -81,43 +74,44 @@ namespace Utility.Nodes.Demo.Filters.Services
                 {
                     document = create(dictionary, node, n, document);
                 });
-
-            var sw = new StringWriter();
-            document.ToHtml(sw, new PrettyMarkupFormatter());
-            var HTML_prettified = sw.ToString();
-            return HTML_prettified;
+            return ToString(document);
         }
 
+
         public static IObservable<string> AddElementByPositionAsync(IReadOnlyTree node)
+        {
+            IDocument document = createDocument();
+            Dictionary<IReadOnlyTree, IElement> dictionary = new();
+
+            return Observable.Create<string>(obs =>
+            {
+                return node.SelfAndDescendants()
+                    .Where(c => c.Type == Changes.Type.Add)
+                    .Select(c => c.NewItem)
+                    .Subscribe(n =>
+                {
+                    document = create(dictionary, node, n, document);
+                    obs.OnNext(ToString(document));
+                });
+            });
+        }
+
+        private static IDocument createDocument()
         {
             var context = BrowsingContext.New(Configuration.Default.WithCss());
             var document = context.OpenAsync(req => req.Content(htmlContent)).Result;
 
             if (true)
                 addStyle(document);
+            return document;
+        }
 
-            return Observable.Create<string>(obs =>
-            {
-                Dictionary<IReadOnlyTree, IElement> dictionary = new();
-
-
-                return node.SelfAndDescendants()
-                    .Where(c => c.Type == Changes.Type.Add)
-                    .Select(c => c.NewItem)
-                    .Subscribe(n =>
-                {
-
-                    document = create(dictionary, node, n, document);
-
-
-                    var sw = new StringWriter();
-                    document.ToHtml(sw, new PrettyMarkupFormatter());
-
-                    var HTML_prettified = sw.ToString();
-                    obs.OnNext(HTML_prettified);
-
-                });
-            });
+        private static string ToString(IDocument document)
+        {
+            var sw = new StringWriter();
+            document.ToHtml(sw, new PrettyMarkupFormatter());
+            var HTML_prettified = sw.ToString();
+            return HTML_prettified;
         }
 
 

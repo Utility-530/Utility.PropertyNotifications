@@ -141,41 +141,44 @@ namespace Utility.Nodes.Filters
         public INode BuildDirty()
         {
             var data = new DirtyModels { Name = dirty };
-            var node = new Node(data);
-            node.Key = new GuidKey(guid);
+            var node = new Node(data)
+            {
+                Key = new GuidKey(guid)
+            };
             return node;
         }
 
         public IObservable<INode> BuildContentRoot()
         {
-            return nodeSource.Create("Groups", contentGuid, (s) => new Node(s), s => build(s));
+            return nodeSource.Create("Root", contentGuid, (s) => new Node(s), s => build(s));
 
             Model build(string s)
             {
-                return new Model(() =>
-                {
-                    return [
-                        new Model(() =>
-                        {
-                            return new List<string> { "test 1", "test 2", "test 3" }.Select(a => new Model { Name = a });
-                        })
-                        { Name = "Group 1" },
-                        new Model(() =>
-                        {
-                            return [
-                             new IndexModel { Name="index 1", Value = 5 },
-                             new Model(()=> [new Model { Name = "lower" }]) { Name = "test 5" }
-                             ];
-                    }){ Name = "Group 2"},
-                    new Model(() =>
-                    {
-                        return [
-                            new Model { Name = "test 6" } ,
-                            new IndexModel { Name="index 2", Value = 8 },
-                       ];
-                    }){ Name = "Group 3"}
-                    ];
-                })
+                //return new Model(() =>
+                //{
+                //    return [
+                //        new Model(() =>
+                //        {
+                //            return new List<string> { "test 1", "test 2", "test 3" }.Select(a => new Model { Name = a });
+                //        })
+                //        { Name = "Group 1" },
+                //        new Model(() =>
+                //        {
+                //            return [
+                //             new IndexModel { Name="index 1", Value = 5 },
+                //             new Model(()=> [new Model { Name = "lower" }]) { Name = "test 5" }
+                //             ];
+                //    }){ Name = "Group 2"},
+                //    new Model(() =>
+                //    {
+                //        return [
+                //            new Model { Name = "test 6" } ,
+                //            new IndexModel { Name="index 2", Value = 8 },
+                //       ];
+                //    }){ Name = "Group 3"}
+                //    ];
+                //})
+                return new Model()
                 { Name = s };
             };
         }

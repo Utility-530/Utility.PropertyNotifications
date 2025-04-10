@@ -57,16 +57,9 @@ namespace Utility.Nodes.Demo.Styles
             if (value is ChangeRoutedEventArgs { Type: Changes.Type.Add, Instance: INode nObject } args)
             {
                 args.Handled = true;
-                if (nObject.Data is DataFileModel model)
+                if (nObject is { Data: DataFileModel model, Parent.Data: DataFilesModel { Collection: { } collection } dModels })
                 {
-                    string alias;
-                    if (Regex.Match(model.Name, "_(\\d)$") is { Success: true, Groups: { } groups })
-                    {
-                        var number = int.Parse(groups[1].Value) + 1;
-                        alias = Regex.Replace(model.Alias, "_(\\d)$", "_" + number);
-                    }
-                    else
-                        alias = model.Alias + "_1";
+                    var alias = toFileName(dModels, model);
 
                     var filePath = Utility.Helpers.PathHelper.ChangeFilename(model.FilePath, alias);
                     return new DataFileModel { Name = alias, Alias = alias, FilePath = filePath };
@@ -74,7 +67,33 @@ namespace Utility.Nodes.Demo.Styles
                 throw new NotImplementedException("V FDF$3");
             }
             return DependencyProperty.UnsetValue;
+
+            static string toFileName(DataFilesModel dataFilesModel, DataFileModel dataFileModel)
+            {
+                var match = Regex.Match(dataFileModel.Alias, "(.*)_(\\d)$");
+                return match.Success ?
+                    name(match.Groups[1].Value, dataFilesModel.Collection) :
+                    name(dataFileModel.Alias, dataFilesModel.Collection);
+
+                static string name(string name, IEnumerable<DataFileModel> dataFilesModel)
+                {
+                    if (_match(name, dataFilesModel) is { } match)
+                    {
+                        return name + "_" + (int.Parse(match.Groups[1].Value) + 1);
+                    }
+                    return name + "_1";
+                    static Match? _match(string x, IEnumerable<DataFileModel> dataFilesModel)
+                    {
+                        return dataFilesModel.Select(a => Regex.Match(a.Name, $"{x}_(\\d)$")).Where(a => a.Success).OrderBy(a => a.Groups[2]).LastOrDefault();
+                    }
+                }
+
+
+            }
         }
+
+
+
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
