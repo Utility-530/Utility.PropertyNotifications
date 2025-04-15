@@ -36,8 +36,7 @@ namespace Utility.WPF.Demo.SandBox
                 }
             });
 
-            var res = new Utility.WPF.Demo.Data.Resources();
-            Items = new (res["Characters"] as Character[]);
+            Items = new (Utility.WPF.Demo.Data.Resources.Instance["Characters"] as Character[]);
 
             MainGrid.DataContext = this;
         }

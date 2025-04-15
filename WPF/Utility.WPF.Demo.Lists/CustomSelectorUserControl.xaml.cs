@@ -32,8 +32,7 @@ namespace Utility.WPF.Demo.Lists
                 }
             });
 
-            var res = new Utility.WPF.Demo.Data.Resources();
-            Items = new(res["Characters"] as Character[]);
+            Items = new(Data.Resources.Instance["Characters"] as Character[]);
 
         }
 
