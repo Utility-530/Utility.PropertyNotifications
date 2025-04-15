@@ -14,7 +14,7 @@
         
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItem.xaml"/>
         
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Dictionary1.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/TreeViewItemStyle.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/GraphStyle.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/LinesStyle.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml"/>

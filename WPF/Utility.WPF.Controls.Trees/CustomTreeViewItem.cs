@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Collections;
 using Utility.WPF.Attached;
+using System;
 
 namespace Utility.WPF.Controls.Trees
 {
@@ -10,11 +11,12 @@ namespace Utility.WPF.Controls.Trees
     {
         protected override DependencyObject GetContainerForItemOverride()
         {
-            return new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector, ItemContainerStyle = ItemContainerStyle};
+            return new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector, ItemContainerStyle = ItemContainerStyle };
         }
 
 
-        protected override void PrepareContainerForItemOverride(DependencyObject element, object item)        {
+        protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
+        {
 
             TreeEx.SetIsRootNode(element, true);
             base.PrepareContainerForItemOverride(element, item);
@@ -46,24 +48,16 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty ItemsPresenterVisibilityProperty = DependencyProperty.Register("ItemsPresenterVisibility", typeof(Visibility), typeof(CustomTreeViewItem), new PropertyMetadata(Visibility.Collapsed));
         public static readonly DependencyProperty OrientationProperty = DependencyProperty.Register("Orientation", typeof(Orientation), typeof(CustomTreeViewItem), new PropertyMetadata(Orientation.Vertical));
         public static readonly DependencyProperty CornerRadiusProperty = DependencyProperty.Register("CornerRadius", typeof(double), typeof(CustomTreeViewItem), new PropertyMetadata(0d));
-        public static readonly DependencyProperty IsReplicableProperty =       DependencyProperty.Register("IsReplicable", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata());
-        public static readonly DependencyProperty IsRemovableProperty =      DependencyProperty.Register("IsRemovable", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty IsReplicableProperty = DependencyProperty.Register("IsReplicable", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty IsRemovableProperty = DependencyProperty.Register("IsRemovable", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty ArrangementProperty = DependencyProperty.Register("Arrangement", typeof(Utility.Enums.Arrangement), typeof(CustomTreeViewItem), new PropertyMetadata(_changed));
+        public static readonly DependencyProperty RowsProperty = DependencyProperty.Register("Rows", typeof(int), typeof(CustomTreeViewItem), new PropertyMetadata(0));
+        public static readonly DependencyProperty ColumnsProperty = DependencyProperty.Register("Columns", typeof(int), typeof(CustomTreeViewItem), new PropertyMetadata(0));
 
+        private static void _changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
 
-
-        // Using a DependencyProperty as the backing store for IsRemovable.  This enables animation, styling, binding, etc...
-  
-
-
-
-        //static CustomTreeViewItem()
-        //{
-        //    DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomTreeViewItem), new FrameworkPropertyMetadata(typeof(CustomTreeViewItem)));
-        //}
-        //protected override DependencyObject GetContainerForItemOverride()
-        //{
-        //    return new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector, ItemContainerStyle = ItemContainerStyle };
-        //}
+        }
 
         #region Properties
         public Visibility ItemsPresenterVisibility
@@ -187,11 +181,6 @@ namespace Utility.WPF.Controls.Trees
             set { SetValue(NodeItemsSourceProperty, value); }
         }
 
-        public Orientation Orientation
-        {
-            get { return (Orientation)GetValue(OrientationProperty); }
-            set { SetValue(OrientationProperty, value); }
-        }
 
         public double CornerRadius
         {
@@ -215,13 +204,38 @@ namespace Utility.WPF.Controls.Trees
         }
 
 
+
+        public Orientation Orientation
+        {
+            get { return (Orientation)GetValue(OrientationProperty); }
+            set { SetValue(OrientationProperty, value); }
+        }
+
+
+        public int Rows
+        {
+            get { return (int)GetValue(RowsProperty); }
+            set { SetValue(RowsProperty, value); }
+        }
+
+        public int Columns
+        {
+            get { return (int)GetValue(ColumnsProperty); }
+            set { SetValue(ColumnsProperty, value); }
+        }
+
+        public Utility.Enums.Arrangement Arrangement
+        {
+            get { return (Utility.Enums.Arrangement)GetValue(ArrangementProperty); }
+            set { SetValue(ArrangementProperty, value); }
+        }
+
+
         #endregion Properties
 
         private static void IsEditingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
 
         }
-
-    
     }
 }

@@ -45,20 +45,30 @@ namespace Utility.WPF.Controls.Trees
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values is object[] { } array &&
-                array[0] is Arrangement arrangement &&
-                array[1] is var rows &&
-                array[2] is var columns &&
-                array[3] is Orientation orientation)
+            if (values is object[] { } array)
             {
-                var template = ItemsPanelFactory.Template(
-                    (int?)rows,
-                    (int?)columns,
-                    Enum.TryParse(typeof(O), orientation.ToString(), out var obj)? (O)obj: O.Horizontal,
-                    (A)Enum.Parse(typeof(A), arrangement.ToString()));
-                return template;
+                O o;
+                if (array[3] is Orientation orientation)
+                {
+                    o = Enum.TryParse(typeof(O), orientation.ToString(), out var obj) ? (O)obj : O.Horizontal;
+                }
+                else
+                {
+                    o = (O)array[3];
+                }
+                if (
+                    array[0] is Arrangement arrangement &&
+                    array[1] is var rows &&
+                    array[2] is var columns)
+                {
+                    var template = ItemsPanelFactory.Template(
+                        (int?)rows,
+                        (int?)columns,
+                        o,
+                        (A)Enum.Parse(typeof(A), arrangement.ToString()));
+                    return template;
+                }
             }
-
             return DependencyProperty.UnsetValue;
         }
 

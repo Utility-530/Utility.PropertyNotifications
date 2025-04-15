@@ -67,7 +67,7 @@
         </Storyboard>
     </Storyboard>
 
-
+    <conv:OrientationConverter x:Key="OrientationConverter"/>
 
 
     <Style x:Key="{x:Type local:CustomTreeViewItem}" TargetType="{x:Type local:CustomTreeViewItem}">
@@ -85,6 +85,7 @@
         <Setter Property="AddParentCommand" Value="{Binding Path=AddParentCommand}" />
         <Setter Property="IsHighlighted" Value="{Binding Path=IsHighlighted}" />
         <Setter Property="Visibility" Value="{Binding Path=IsVisible,Converter={StaticResource VisibilityConverter}}" />
+        <Setter Property="Orientation" Value="{Binding Orientation, Converter={StaticResource OrientationConverter}}"></Setter>
         <Setter Property="Background"
           Value="Transparent" />
         <Setter Property="HorizontalContentAlignment"
@@ -102,10 +103,10 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <MultiBinding Converter="{StaticResource MultiItemsPanelConverter}">
-                    <Binding Path="Arrangement"/>
-                    <Binding Path="Rows" />
-                    <Binding Path="Columns" />
-                    <Binding Path="Orientation" />
+                    <Binding Path="Arrangement" RelativeSource="{RelativeSource Mode=Self}"/>
+                    <Binding Path="Rows" RelativeSource="{RelativeSource Mode=Self}"/>
+                    <Binding Path="Columns" RelativeSource="{RelativeSource Mode=Self}"/>
+                    <Binding Path="Orientation" RelativeSource="{RelativeSource Mode=Self}"/>
                 </MultiBinding>
             </Setter.Value>
         </Setter>
