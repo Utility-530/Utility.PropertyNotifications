@@ -67,22 +67,22 @@ namespace Utility.WPF.Factorys
         /// <summary>
         /// Creates a items-panel-template
         /// </summary>
-        public static ItemsPanelTemplate CreateItemsPanelTemplate<TFrameworkElement>(Action<FrameworkElementFactory> action)
+        public static ItemsPanelTemplate CreateItemsPanelTemplate<TFrameworkElement>(Action<FrameworkElementFactory>? action = null)
             where TFrameworkElement : FrameworkElement
         {
-            return CreateItemsPanelTemplate(action, typeof(TFrameworkElement));
+            return CreateItemsPanelTemplate(typeof(TFrameworkElement), action);
         }
 
         /// <summary>
         /// Creates a items-panel-template
         /// </summary>
-        public static ItemsPanelTemplate CreateItemsPanelTemplate(Action<FrameworkElementFactory> action, Type type)
+        public static ItemsPanelTemplate CreateItemsPanelTemplate(Type type, Action<FrameworkElementFactory>? action = null)
         {
             ItemsPanelTemplate itemsPanelTemplate = new()
             {
                 VisualTree = new FrameworkElementFactory(type)
             };
-            action(itemsPanelTemplate.VisualTree);
+            action?.Invoke(itemsPanelTemplate.VisualTree);
             return itemsPanelTemplate;
         }
 
