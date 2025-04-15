@@ -166,7 +166,7 @@ namespace Utility.Nodes.Demo.Filters.Services
             else if (n.Parent?.Data is IPropertiesDescriptor _prsdescriptor && n.Data is IValueDescriptor descriptor1)
             {
                 newElement = document.CreateElement<IHtmlTableDataCellElement>();
-                newElement.TextContent = (descriptor1 as IValue).Value.ToString();
+                newElement.TextContent = (descriptor1 as IValue).Value?.ToString();
             }
             else
             {

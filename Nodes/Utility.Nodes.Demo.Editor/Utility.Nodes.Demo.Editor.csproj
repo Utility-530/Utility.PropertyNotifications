@@ -6,6 +6,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
+    <ApplicationIcon>Icons\editor2.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +16,10 @@
     <None Remove="Data\master.css" />
     <None Remove="Data\pico.classless.blue.css" />
     <None Remove="Data\pico.min.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Icons\editor2.ico" />
   </ItemGroup>
 
   <ItemGroup>
