@@ -26,6 +26,7 @@
 		<PackageReference Include="MaterialDesignThemes" Version="4.9.0" />
 		<PackageReference Include="MaterialDesignExtensions" Version="4.0.0-a02" />
 		<PackageReference Include="HandyControl" Version="3.4.0" />
+		<PackageReference Include="PixelLab.BOT" Version="6.0.2" />
 		<PackageReference Include="SpicyTaco.AutoGrid" Version="1.2.29" />
 		<PackageReference Include="Tiny.Toolkits.Wpf" Version="4.5.1" />
 		<PackageReference Include="WpfScreenHelper" Version="2.1.0" />
