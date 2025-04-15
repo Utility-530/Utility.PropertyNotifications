@@ -1,17 +1,18 @@
 ﻿using System.Collections;
+using System.Collections.ObjectModel;
 using System.Reactive.Linq;
-using System.Reflection;
 using Utility.Collections;
 using Utility.Enums;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
+using Utility.Structs;
 using Utility.Trees;
 
 namespace Utility.Nodes
 {
 
-    public class ViewModelTree : Tree, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible, IRemoved, IIsReadOnly
+    public class ViewModelTree : Tree, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible, IRemoved, IIsReadOnly, ISortOrder, ISort
     {
         private bool? isHighlighted;
         private bool isExpanded = false;
@@ -29,6 +30,8 @@ namespace Utility.Nodes
         private DateTime? removed;
         private bool isReplicable;
         private bool isRemovable;
+        private int order;
+        private Collection collection;
 
         public ViewModelTree(/*string name,*/ object data) : this()
         {
@@ -43,8 +46,9 @@ namespace Utility.Nodes
 
         protected override IList CreateChildren()
         {
-            var collection = new Collection();
+            collection = new Collection();
             collection.CollectionChanged += ItemsOnCollectionChanged;
+            collection.Comparer = new Comparer();
             return collection;
         }
 
@@ -72,9 +76,7 @@ namespace Utility.Nodes
         {
             get => isValid; set
             {
-
                 RaisePropertyChanged(ref isValid, value);
-
             }
         }
 
@@ -152,6 +154,10 @@ namespace Utility.Nodes
             }
         }
 
+        public ObservableCollection<Dimension> ColumnWidths { get; set; }
+
+        public ObservableCollection<Dimension> RowHeights { get; set; }
+
         public int Rows
         {
             get => rows;
@@ -170,6 +176,16 @@ namespace Utility.Nodes
             }
         }
 
+        public int Order
+        {
+            get => order;
+            set
+            {
+                RaisePropertyChanged(ref order, value);
+            }
+        }
+
+
         public bool? IsVisible
         {
             get => isVisible;
@@ -179,7 +195,8 @@ namespace Utility.Nodes
             }
         }
 
-        public bool IsReplicable {
+        public bool IsReplicable
+        {
             get => isReplicable;
             set
             {
@@ -187,7 +204,8 @@ namespace Utility.Nodes
             }
         }
 
-        public bool IsRemovable {
+        public bool IsRemovable
+        {
             get => isRemovable;
             set
             {
@@ -215,10 +233,24 @@ namespace Utility.Nodes
             }
         }
 
+        public bool Sort(object? o = null)
+        {
+            collection.Sort();
+            return true;
+        }
 
         public override string ToString()
         {
             return Data?.ToString();
+        }
+    }
+
+
+    public class Comparer : IComparer<object>
+    {
+        public int Compare(object? x, object? y)
+        {
+            return (x as ViewModelTree)?.Order.CompareTo((y as ViewModelTree)?.Order) ?? 0;
         }
     }
 }

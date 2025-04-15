@@ -147,11 +147,15 @@ namespace Utility.Nodes.Filters
                 {
                     node.IsExpanded = true;
                 }
-                string[] names = [nameof(Node.IsSelected), (nameof(Node.IsExpanded))];
+                string[] names = [nameof(Node.IsSelected), nameof(Node.IsExpanded), nameof(Node.Orientation), nameof(Node.Order)];
                 node.WithChanges().Subscribe(e =>
                 {
                     if (e is PropertyChangedExEventArgs { PreviousValue: var previousValue, PropertyName: string name, Value: var value })
                     {
+                        if (name == nameof(ViewModelTree.Order))
+                        {
+                            ((value as ITree).Parent as INode).Sort(null);
+                        }
                         if (names.Contains(name))
                         {
                             repository.Value.Set((GuidKey)node.Key, name, value, DateTime.Now);
@@ -300,7 +304,7 @@ namespace Utility.Nodes.Filters
                 }
                 else if (a is Change { Type: Changes.Type.Remove, Value: { } _value })
                 {
-                    if(_value is not INode node)
+                    if (_value is not INode node)
                     {
                         throw new Exception("  333 sdsdf");
                     }
