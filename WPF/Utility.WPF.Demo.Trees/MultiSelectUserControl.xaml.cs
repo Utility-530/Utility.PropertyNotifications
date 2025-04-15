@@ -1,19 +1,7 @@
-﻿using Jellyfish;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Utility.PropertyNotifications;
 
 namespace Utility.WPF.Demo.Trees
 {
@@ -52,7 +40,7 @@ namespace Utility.WPF.Demo.Trees
     }
 
 
-    public class FolderViewModel : ViewModel
+    public class FolderViewModel : NotifyPropertyClass
     {
         public IList<FolderViewModel> Children { get; private set; }
 
@@ -66,7 +54,7 @@ namespace Utility.WPF.Demo.Trees
         public bool IsExpanded
         {
             get { return _isExpanded; }
-            set { Set(ref _isExpanded, value); }
+            set { this.RaisePropertyChanged(ref _isExpanded, value); }
         }
 
         public FolderViewModel(string name)

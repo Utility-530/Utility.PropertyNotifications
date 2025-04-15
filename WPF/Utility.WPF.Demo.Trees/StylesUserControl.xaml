@@ -4,7 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:trees="http://schemas.utility.com/trees"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Utility.WPF.Demo.Trees"
+             xmlns:local="clr-namespace:Utility.WPF.Demo.Trees" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:b="http://schemas.utility.com/behaviors"
+             xmlns:enms="clr-namespace:Utility.Enums;assembly=Utility.Enums" 
+             xmlns:controls="http://schemas.utility.com"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.Resources>
@@ -13,41 +17,71 @@
                 <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Generic.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <DataTemplate DataType="{x:Type local:_Node}">
-                <CheckBox IsChecked="{Binding IsEditable}"></CheckBox>
-            </DataTemplate>
+            <HierarchicalDataTemplate DataType="{x:Type local:_Node}" ItemsSource="{Binding Items}">
+                <StackPanel>
+                    <CheckBox IsChecked="{Binding IsEditable}"></CheckBox>
+                    <TextBlock Text="{Binding Position}"></TextBlock>
+                </StackPanel>
+            </HierarchicalDataTemplate>
+
+            <RelativeSource x:Key="Source" AncestorType="{x:Type local:StylesUserControl}"/>
+
+            <Style TargetType="{x:Type trees:CustomTreeViewItem}">
+                <Setter Property="Header" Value="{Binding }"></Setter>
+                <Setter Property="Orientation" Value="{Binding Settings.Orientation, RelativeSource={RelativeSource AncestorType={x:Type local:StylesUserControl}}}"></Setter>
+                <Setter Property="Arrangement" Value="{Binding Settings.Arrangement, RelativeSource={RelativeSource AncestorType={x:Type local:StylesUserControl}}}"></Setter>
+                <Setter Property="Rows" Value="{Binding Settings.Rows, RelativeSource={RelativeSource AncestorType={x:Type local:StylesUserControl}}}"></Setter>
+                <Setter Property="Columns" Value="{Binding Settings.Columns, RelativeSource={RelativeSource AncestorType={x:Type local:StylesUserControl}}}"></Setter>
+            </Style>
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
-    <DockPanel>
+    <DockPanel >
 
-        <ItemsControl x:Name="ItemsControl">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Button Command="{Binding Command}" Content="{Binding Header}"></Button>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <StackPanel DataContext="{Binding Settings, RelativeSource={RelativeSource AncestorType={x:Type local:StylesUserControl}}}">
+            <ItemsControl x:Name="ItemsControl" ItemsSource="{Binding Buttons}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Command="{Binding Command}" Content="{Binding Header}"></Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <ComboBox >
+                <i:Interaction.Behaviors>
+                    <b:EnumSelectorBehavior EnumType="{x:Type Orientation }" SelectedEnum="{Binding Orientation}"></b:EnumSelectorBehavior>
+                </i:Interaction.Behaviors>
+            </ComboBox>
+            <ComboBox >
+                <i:Interaction.Behaviors>
+                    <b:EnumSelectorBehavior EnumType="{x:Type enms:Arrangement }" SelectedEnum="{Binding Arrangement}"></b:EnumSelectorBehavior>
+                </i:Interaction.Behaviors>
+            </ComboBox>
+            <controls:SpinnerControl  Height="26" Value="{Binding Rows}"></controls:SpinnerControl>
+            <controls:SpinnerControl Height="26" Value="{Binding Columns}"></controls:SpinnerControl>
+        </StackPanel>
 
-        <TreeView x:Name="MyTreeView" AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}"  >
-            <trees:CustomTreeViewItem Header="{Binding }" DataContext="{Binding Item2, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}">
-                <trees:CustomTreeViewItem Header="{Binding }" DataContext="{Binding SubItem1, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
-                <trees:CustomTreeViewItem Header="{Binding }" DataContext="{Binding SubItem2, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
+        <trees:CustomTreeView x:Name="MyTreeView" AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}"  
+                  ItemsSource="{Binding Items, RelativeSource={RelativeSource  AncestorType={x:Type local:StylesUserControl}}}">
+        </trees:CustomTreeView>
+        <!--<TreeView x:Name="MyTreeView" AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}"  >
+            <trees:CustomTreeViewItem DataContext="{Binding Item2, RelativeSource={RelativeSource AncestorType={x:Type local:StylesUserControl}}}">
+                <trees:CustomTreeViewItem  DataContext="{Binding SubItem1, RelativeSource={RelativeSource AncestorType={x:Type local:StylesUserControl}}}"/>
+                <trees:CustomTreeViewItem  DataContext="{Binding SubItem2, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
             </trees:CustomTreeViewItem>
-            <trees:CustomTreeViewItem Header="{Binding }" DataContext="{Binding Item3, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}">
-                <trees:CustomTreeViewItem Header="{Binding }" DataContext="{Binding SubItem3, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
-                <trees:CustomTreeViewItem Header="{Binding }" DataContext="{Binding SubItem4, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
-                <trees:CustomTreeViewItem Header="{Binding }" DataContext="{Binding SubItem5, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
-                <trees:CustomTreeViewItem Header="{Binding }" DataContext="{Binding SubItem6, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
-                <trees:CustomTreeViewItem Header="{Binding }" DataContext="{Binding SubItem7, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
-                <trees:CustomTreeViewItem Header="{Binding }" DataContext="{Binding SubItem8, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}">
-                    <trees:CustomTreeViewItem Header="{Binding }" DataContext="{Binding SubSubItem1, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
-                    <trees:CustomTreeViewItem Header="{Binding }" DataContext="{Binding SubSubItem2, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
-                    <trees:CustomTreeViewItem Header="{Binding }" DataContext="{Binding SubSubItem3, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
-                    <trees:CustomTreeViewItem Header="{Binding }" DataContext="{Binding SubSubItem4, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
+            <trees:CustomTreeViewItem  DataContext="{Binding Item3, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}">
+                <trees:CustomTreeViewItem  DataContext="{Binding SubItem3, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
+                <trees:CustomTreeViewItem  DataContext="{Binding SubItem4, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
+                <trees:CustomTreeViewItem  DataContext="{Binding SubItem5, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
+                <trees:CustomTreeViewItem  DataContext="{Binding SubItem6, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
+                <trees:CustomTreeViewItem  DataContext="{Binding SubItem7, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
+                <trees:CustomTreeViewItem  DataContext="{Binding SubItem8, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}">
+                    <trees:CustomTreeViewItem DataContext="{Binding SubSubItem1, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
+                    <trees:CustomTreeViewItem DataContext="{Binding SubSubItem2, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
+                    <trees:CustomTreeViewItem  DataContext="{Binding SubSubItem3, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
+                    <trees:CustomTreeViewItem  DataContext="{Binding SubSubItem4, RelativeSource={RelativeSource AncestorType=local:StylesUserControl}}"/>
                 </trees:CustomTreeViewItem>
             </trees:CustomTreeViewItem>
-        </TreeView>
+        </TreeView>-->
     </DockPanel>
 
 </UserControl>

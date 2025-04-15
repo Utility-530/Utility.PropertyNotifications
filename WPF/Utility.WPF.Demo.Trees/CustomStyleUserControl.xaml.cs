@@ -1,5 +1,4 @@
-﻿using Jellyfish;
-using MintPlayer.ObservableCollection;
+﻿using MintPlayer.ObservableCollection;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
+using Utility.Commands;
 using Utility.Extensions;
 using Utility.Helpers.Ex;
 using Utility.WPF.Demo.Common.ViewModels;
@@ -69,7 +69,7 @@ namespace Utility.WPF.Demo.Trees
                     collection.Add(new ButtonViewModel
                     {
                         Header = style.Key,
-                        Command = new RelayCommand((a) =>
+                        Command = new Command(() =>
                         {
                             MyTreeView.ItemContainerStyleSelector = null;
                             TreeItemContainerStyleSelector.Instance.Current = style.Value;
