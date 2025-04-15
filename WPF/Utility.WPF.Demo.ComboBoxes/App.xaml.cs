@@ -15,10 +15,6 @@ namespace Utility.WPF.Demo.ComboBoxes
     {
         public App()
         {
-            var builder = new ContainerBuilder();
-            Resolver.Instance.AutoRegister();
-            builder.UseAutofacDependencyResolver();
-
             new Window
             {
                 WindowState = WindowState.Maximized,
