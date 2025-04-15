@@ -12,6 +12,7 @@
     <ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
     <ProjectReference Include="..\..\Factorys\Utility.Factorys\Utility.Factorys.csproj" />
     <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
+    <ProjectReference Include="..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
     <ProjectReference Include="..\Utility.WPF.Panels\Utility.WPF.Panels.csproj" />
   </ItemGroup>
 

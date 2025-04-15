@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using Utility.Enums;
 using Utility.WPF.Panels;
+using PixelLab.Wpf;
 
 namespace Utility.WPF.Factorys
 {
@@ -46,9 +47,9 @@ namespace Utility.WPF.Factorys
                 //    if (orientation.HasValue)
                 //        factory.SetValue(AutoGrid.OrientationProperty, orientation.Value);
                 //}),
-                (Arrangement.Stacked, _) =>
+                (Arrangement.Stack, _) =>
                 CreateItemsPanelTemplate<StackPanel>(SetStackPanelOrientation),
-                (Arrangement.Wrapped, _) =>
+                (Arrangement.Wrap, _) =>
                 CreateItemsPanelTemplate<WrapPanel>(SetWrapPanelOrientation),
                 //(Arrangement.Horizotal, _) =>
                 //CreateItemsPanelTemplate<UniformGrid>(factory =>
@@ -87,7 +88,7 @@ namespace Utility.WPF.Factorys
 
                 }),
 
-                //(Arrangement.TreeMap, _) => CreateItemsPanelTemplate<TreeMapPanel>(),
+                (Arrangement.TreeMap, _) => CreateItemsPanelTemplate<TreeMapPanel>(),
                 //(Arrangement.TreeStack, _) => CreateItemsPanelTemplate<TreeStackPanel>(),
 
                 _ => throw new Exception("WGE vgfd vvf")

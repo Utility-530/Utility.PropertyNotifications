@@ -9,7 +9,7 @@
             {
                 return convert(new ItemsPanel
                 {
-                    Type = Arrangement.Stacked,
+                    Type = Arrangement.Stack,
                     Orientation = Orientation.Horizontal,
                 });
             }
@@ -17,7 +17,7 @@
             {
                 return convert(new ItemsPanel
                 {
-                    Type = Arrangement.Stacked,
+                    Type = Arrangement.Stack,
                     Orientation = Orientation.Horizontal,
                 });
 
@@ -28,7 +28,7 @@
                 {
                     return convert(new ItemsPanel
                     {
-                        Type = Arrangement.Stacked,
+                        Type = Arrangement.Stack,
                         Orientation = Orientation.Horizontal,
                     });
 
@@ -39,7 +39,7 @@
                     }
                     return convert(new ItemsPanel
                     {
-                        Type = Arrangement.Stacked,
+                        Type = Arrangement.Stack,
                         Orientation = Orientation.Vertical,
                     });
                 }
@@ -48,7 +48,7 @@
                 {
                     return convert(new ItemsPanel
                     {
-                        Type = Arrangement.Stacked,
+                        Type = Arrangement.Stack,
                         Orientation = System.Windows.Controls.Orientation.Horizontal,
                     });
                 }

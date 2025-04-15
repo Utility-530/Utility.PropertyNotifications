@@ -2,11 +2,14 @@
 {
     public enum Arrangement
     {
-        Stacked, 
-        Wrapped, 
+        Grid,
+        AutoGrid,
+        Stack, 
+        Wrap, 
         Uniform, 
         Custom, 
-        UniformStacked, 
-        Docked
+        UniformStack, 
+        Dock,
+        TreeMap
     }
 }

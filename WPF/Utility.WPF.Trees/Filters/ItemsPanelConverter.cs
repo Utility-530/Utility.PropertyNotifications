@@ -17,7 +17,7 @@ namespace Utility.Nodes.WPF
         {
             if (value is not IReadOnlyTree tree)
             {
-                return ItemsPanelFactory.Template(default, default, O.Vertical, Arrangement.Stacked);
+                return ItemsPanelFactory.Template(default, default, O.Vertical, Arrangement.Stack);
             }
             //if (value is IReadOnlyTree { Data: IReferenceDescriptor { Type: { } type, Count: int count }, Parent.Data: ICollectionDescriptor { } descriptor } && typeof(IEnumerable).IsAssignableFrom(type))
             //{
@@ -33,7 +33,7 @@ namespace Utility.Nodes.WPF
             }
             {
                 if (tree.Data is IPropertyDescriptor { } _descriptor)
-                    return ItemsPanelFactory.Template(1, default, O.Horizontal, Arrangement.Stacked);
+                    return ItemsPanelFactory.Template(1, default, O.Horizontal, Arrangement.Stack);
             }
             //{
             //    if (tree.Data is ICollectionHeadersDescriptor { } _descriptor)
@@ -44,7 +44,7 @@ namespace Utility.Nodes.WPF
             //        return ItemsPanelFactory.Template(default, default, O.Horizontal, Arrangement.Stacked);
             //}
 
-            return ItemsPanelFactory.Template(default, 1, O.Vertical, Arrangement.Stacked);
+            return ItemsPanelFactory.Template(default, 1, O.Vertical, Arrangement.Stack);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
