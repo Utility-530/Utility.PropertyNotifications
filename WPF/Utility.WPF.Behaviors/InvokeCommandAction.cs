@@ -218,7 +218,7 @@ namespace Utility.WPF.Behaviors
                     obj = parameter;
                 }
 
-                if (parameter is SelectionChangedEventArgs { AddedItems: { } addedItems } args)
+                if (obj == null && parameter is SelectionChangedEventArgs { AddedItems: { } addedItems } args)
                 {
                     obj = addedItems.Cast<object>().SingleOrDefault();
                 }
