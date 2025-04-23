@@ -49,6 +49,7 @@
 		<PackageReference Include="CompareNETObjects" Version="4.77.0" />
 		<PackageReference Include="deniszykov.TypeConversion" Version="3.0.6" />
 		<PackageReference Include="Endless" Version="0.7.0-alpha1" />
+		<PackageReference Include="ValueInjecter" Version="3.2.0" />
 		<PackageReference Include="YetAnotherStringMatcher" Version="1.0.3" />
 		<PackageReference Include="Moq.AutoMock" Version="3.3.0" />
 		<PackageReference Include="AutoBogus" Version="2.13.1" />
