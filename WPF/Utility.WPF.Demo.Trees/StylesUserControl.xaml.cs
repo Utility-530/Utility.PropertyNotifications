@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,17 +8,16 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Threading;
-using Utility.Collections;
 using Utility.Commands;
+using Utility.Conversions.Json.Newtonsoft;
 using Utility.Extensions;
 using Utility.Helpers.Ex;
+using Utility.Nodes;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.WPF.Controls.Trees;
 using Utility.WPF.Demo.Common.ViewModels;
-using Arrangement = Utility.Enums.Arrangement;
-using Orientation = Utility.Enums.Orientation;
+using Newtonsoft.Json.Converters;
 
 namespace Utility.WPF.Demo.Trees
 {
@@ -50,43 +50,41 @@ namespace Utility.WPF.Demo.Trees
 
         public IEnumerable Items { get; set; }
 
-        public class TreeCollection : Collection
-        {
-            public TreeCollection()
-            {
-                Comparer = new Comparer();
-                this.CollectionChanged += TreeCollection_CollectionChanged;
-            }
-
-            private void TreeCollection_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-            {
-                foreach(var x in e.NewItems)
-                {
-                    if(x is _Node node)
-                    {
-                        node.WithChangesTo(a => a.Position).Subscribe(a =>
-                        {
-                            Sort();
-                        });
-                    }
-                }
-            }
-        }
 
         public StylesUserControl()
         {
             InitializeComponent();
             this.Loaded += CustomStyleUserControl_Loaded;
 
-            Items = new[] { new _Node { Items = new TreeCollection { new _Node(), new _Node() { Items = new TreeCollection { new _Node(), new _Node() } }, new _Node { Items = new TreeCollection { new _Node() } } } } };
+            Items = new[] { Node.Create(null, [Node.Create(null, []), Node.Create(null, [Node.Create(null, []), Node.Create(null, [])]), Node.Create(null, [Node.Create(null, [])])]) };
+
+            JsonConvert.DefaultSettings = () => settings;
+
 
         }
+
+        public JsonSerializerSettings settings = new()
+        {
+            TypeNameHandling = TypeNameHandling.All,
+            //Formatting = Formatting.Indented,
+            Converters = [
+
+                new StringEnumConverter(),
+                //new TypeConverter(),
+      
+                new NodeConverter(),
+                new MetadataConverter()
+                    ]
+        };
+
+
+
 
         public class Comparer : IComparer<object>
         {
             public int Compare(object? x, object? y)
             {
-                return (x as _Node)?.Position.CompareTo((y as _Node)?.Position) ?? 0;
+                return (x as Node)?.Order.CompareTo((y as Node)?.Order) ?? 0;
             }
 
         }
@@ -146,51 +144,11 @@ namespace Utility.WPF.Demo.Trees
         }
     }
 
-    public class _Node : NotifyPropertyClass
-    {
-        private bool isEditable = true;
-
-        static Random random { get; } = new();
-
-        public _Node()
-        {
-            DispatcherTimer d = new() { Interval = new TimeSpan(0,0,5) };
-            //d.Start();
-            d.Tick += D_Tick;
-        }
-
-        private void D_Tick(object? sender, EventArgs e)
-        {
-            Position = Utility.Helpers.RandomHelper.NextInteger(random, 0, 3);
-            RaisePropertyChanged(nameof(Position));
-        }
-
-        public bool IsEditable
-        {
-            get => isEditable; set
-            {
-                isEditable = value;
-                RaisePropertyChanged(nameof(IsEditable));
-            }
-        }
-        public int Position { get; set; } = Utility.Helpers.RandomHelper.NextInteger(random, 0, 3);
-
-        public IEnumerable Items { get; set; }
-
-    }
+   
 
 
     public class SettingsViewModel : NotifyPropertyClass
     {
-        private int rows;
-        private int columns;
-        private Orientation orientation;
-        private Arrangement arrangement;
-
-        public int Rows { get => rows; set => this.RaisePropertyChanged(ref rows, value); }
-        public int Columns { get => columns; set => this.RaisePropertyChanged(ref columns, value); }
-        public Orientation Orientation { get => orientation; set => this.RaisePropertyChanged(ref orientation, value); }
-        public Arrangement Arrangement { get => arrangement; set => this.RaisePropertyChanged(ref arrangement, value); }
 
         public IEnumerable Buttons { get; set; }
     }
