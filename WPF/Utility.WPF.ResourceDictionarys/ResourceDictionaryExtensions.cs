@@ -254,23 +254,29 @@ namespace Utility.WPF.ResourceDictionarys
             return foundDictionary != null;
         }
 
+        public static object FindResource(this ResourceDictionary resourceDictionary, object rk) => FindResource<object>(resourceDictionary, rk);
+
         /// <summary>
         /// The find resource.
         /// </summary>
-        public static object? FindResource(this ResourceDictionary resourceDictionary, object resourceKey)
+        public static T? FindResource<T>(this ResourceDictionary resourceDictionary, object resourceKey)
         {
             // Try and find the resource in the root dictionary first
             var value = resourceDictionary[resourceKey];
-            if (value != null)
+            if (value is T t)
             {
-                return value;
+                return t;
             }
 
-            // Then try the merged dictionaries
-            var foundResource = resourceDictionary.MergedDictionaries
-                                    .Select(mergedDictionary => mergedDictionary.FindResource(resourceKey))
-                                    .FirstOrDefault(resource => resource != null);
-            return foundResource;
+            return FindResource<T>(resourceDictionary.MergedDictionaries, resourceKey);
+           
+        }     
+        
+        public static T? FindResource<T>(this IEnumerable<ResourceDictionary> resourceDictionaries, object resourceKey)
+        {
+             return resourceDictionaries
+                                    .Select(dic => dic.FindResource<T>(resourceKey))
+                                    .FirstOrDefault(resource => resource is T);
         }
 
         #region Private Methods
