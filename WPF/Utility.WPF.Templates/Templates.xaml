@@ -83,11 +83,11 @@
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type draw:Color}">
-        <Rectangle Fill="{Binding Path=Value, Mode=OneTime, Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"></Rectangle>
+        <Rectangle Fill="{Binding Mode=OneTime, Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"></Rectangle>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type Color}">
-        <Rectangle Fill="{Binding Path=Value,  Mode=OneTime,Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"></Rectangle>
+        <Rectangle Fill="{Binding Mode=OneTime,Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"></Rectangle>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type sys:Boolean}">
@@ -135,7 +135,7 @@
 
         <DataTemplate x:Key="Nullable`1[Int32]">
             <StackPanel>
-            <TextBlock Text="{Binding Path=Value, Mode=OneTime, StringFormat={}{0:N0}}">
+            <TextBlock Text="{Binding Mode=OneTime, StringFormat={}{0:N0}}">
                 <i:Interaction.Behaviors>
                     <ad:NullBehavior ShowCancel="{Binding HasValue, Mode=OneTime}" DefaultValue="0.0"></ad:NullBehavior>
                 </i:Interaction.Behaviors>
@@ -143,14 +143,14 @@
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="Nullable`1[Enum]">
+        <!--<DataTemplate x:Key="Nullable`1[Enum]">
             <ComboBox IsEnabled="false">
                 <i:Interaction.Behaviors>
                 <bhvrs:EnumComboBehavior Enum="{Binding Value, Mode=OneTime}" Value="{Binding Value.Value, Mode=OneWay}"/>
                 <ad:NullBehavior ShowCancel="{Binding HasValue, Mode=OneTime}"></ad:NullBehavior>
                 </i:Interaction.Behaviors>
             </ComboBox>
-        </DataTemplate>
+        </DataTemplate>-->
 
 
         <DataTemplate x:Key="Nullable`1[Boolean]">
@@ -163,7 +163,7 @@
 
 
         <DataTemplate x:Key="Nullable`1[Double]">
-        <TextBlock Text="{Binding Path=Value, Mode=OneTime, StringFormat={}{0:N0}}">
+        <TextBlock Text="{Binding Mode=OneTime, StringFormat={}{0:N0}}">
             <i:Interaction.Behaviors>
                 <ad:NullBehavior ShowCancel="{Binding HasValue, Mode=OneWay}" DefaultValue="0.0"></ad:NullBehavior>
             </i:Interaction.Behaviors>
