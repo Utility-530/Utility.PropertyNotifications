@@ -12,9 +12,6 @@ namespace Utility.WPF.Demo.Master
     {
         public App()
         {
-            var builder = new ContainerBuilder();
-            Resolver.Instance.AutoRegister();
-            builder.UseAutofacDependencyResolver();
         }
     }
 }

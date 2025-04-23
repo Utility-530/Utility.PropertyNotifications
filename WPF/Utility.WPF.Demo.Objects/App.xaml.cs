@@ -1,9 +1,5 @@
-﻿using Autofac;
-using Splat.Autofac;
-using System.Windows;
-using Utility.Common;
+﻿using System.Windows;
 using Utility.WPF.Controls.Meta;
-using Utility.WPF.Controls.Objects;
 
 
 namespace Utility.WPF.Demo.Objects
@@ -15,16 +11,10 @@ namespace Utility.WPF.Demo.Objects
     {
         public App()
         {
-            var builder = new ContainerBuilder();
-            var d = typeof(Utility.WPF.Demo.Common.ViewModels.Tick);
-            Resolver.Instance.AutoRegister();
-            builder.UseAutofacDependencyResolver();
-
             new Window
             {
                 WindowState = WindowState.Maximized,
                 Content = new AssemblyViewControl(typeof(JsonObjectUserControl).Assembly)
-                //Content = new ResourceDictionariesGrid()
             }.Show();
         }
     }

@@ -17,17 +17,13 @@
         <conv:ColorConverter x:Key="ColorConverter"></conv:ColorConverter>
 
         <DataTemplate x:Key="Ellipse">
-            <ContentControl Style="{DynamicResource LabelValueContent}">
-                <Rectangle Fill="{Binding Value.Value, Converter={StaticResource ColorConverter}}"></Rectangle>
-            </ContentControl>
+            <Rectangle Fill="{Binding Value, Converter={StaticResource ColorConverter}}"></Rectangle>
         </DataTemplate>
 
 
 
         <DataTemplate x:Key="MessageTemplate">
-            <ContentControl Style="{DynamicResource LabelValueContent}">
-                <TextBlock FontSize="16" FontStyle="Italic" Text="{Binding Value}"></TextBlock>
-            </ContentControl>
+            <TextBlock FontSize="16" FontStyle="Italic" Text="{Binding Value}"></TextBlock>
         </DataTemplate>        
         
 
@@ -69,20 +65,20 @@
                     </Button>
                     <view:JsonControl x:Name="JsonControl" />
                 </DockPanel>
-                <Grid>
-                    <Grid.Resources>
-                        <!--  DataTemplate for Published Date column defined in Grid.Resources.  PublishDate is a property on the ItemsSource of type DateTime  -->
+                  <Grid>
+                    <Grid.Resources> 
+                          <!--DataTemplate for Published Date column defined in Grid.Resources.  PublishDate is a property on the ItemsSource of type DateTime-->  
                         <DataTemplate x:Key="DateTemplate">
                             <view:JsonControl Object="{Binding Converter={StaticResource ObjectToTokenConverter}}" />
                         </DataTemplate>
-                        <!--  DataTemplate for the Published Date column when in edit mode.  -->
+                          <!--DataTemplate for the Published Date column when in edit mode.-->  
                         <DataTemplate x:Key="EditingDateTemplate">
                             <DatePicker />
                         </DataTemplate>
                     </Grid.Resources>
                     <DataGrid AutoGenerateColumns="False" ItemsSource="{StaticResource Characters}">
                         <DataGrid.Columns>
-                            <!--  Custom column that shows the published date  -->
+                              <!--Custom column that shows the published date-->  
                             <DataGridTemplateColumn
                                 CellEditingTemplate="{StaticResource EditingDateTemplate}"
                                 CellTemplate="{StaticResource DateTemplate}"
