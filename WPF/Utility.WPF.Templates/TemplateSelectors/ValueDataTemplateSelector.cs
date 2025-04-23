@@ -23,7 +23,7 @@ namespace Utility.WPF.Templates
             }
             if (get() is Type type)
             {
-                return FromType(this, type) ?? Templates["Missing"] as DataTemplate ?? throw new Exception("d3091111111");
+                return this.FromType(type) ?? Templates["Missing"] as DataTemplate ?? throw new Exception("d3091111111");
             }
 
             if (item is DataTemplate dataTemplate)
@@ -62,7 +62,28 @@ namespace Utility.WPF.Templates
         }
 
 
-        public static DataTemplate FromType(ITemplates template, Type type)
+
+
+        public override ResourceDictionary Templates
+        {
+            get
+            {
+                if (valueTemplates == null)
+                {
+                    valueTemplates = new ValueTemplates();
+                    valueTemplates.InitializeComponent();
+                }
+                return valueTemplates;
+            }
+        }
+
+
+        public static ValueDataTemplateSelector Instance => new();
+    }
+
+    public static class TemplateTypeHelper
+    {
+        public static DataTemplate FromType(this ITemplates template, Type type)
         {
             if (Nullable.GetUnderlyingType(type) != null)
             {
@@ -92,21 +113,5 @@ namespace Utility.WPF.Templates
 
             return null;
         }
-
-        public override ResourceDictionary Templates
-        {
-            get
-            {
-                if (valueTemplates == null)
-                {
-                    valueTemplates = new ValueTemplates();
-                    valueTemplates.InitializeComponent();
-                }
-                return valueTemplates;
-            }
-        }
-
-
-        public static ValueDataTemplateSelector Instance => new();
     }
 }
