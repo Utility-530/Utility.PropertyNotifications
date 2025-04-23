@@ -38,9 +38,8 @@ namespace Utility.Structs
 #endif
     struct Dimension : IEquatable<Dimension>
     {
-        private readonly DimensionUnitType _type;
-
-        private readonly double _value;
+        private DimensionUnitType _type;
+        private double _value;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Dimension"/> struct.
@@ -87,7 +86,7 @@ namespace Utility.Structs
         /// <summary>
         /// Gets the unit of the <see cref="Dimension"/>.
         /// </summary>
-        public DimensionUnitType GridUnitType => _type;
+        public DimensionUnitType GridUnitType { get => _type; set { _type = value; } }
 
         /// <summary>
         /// Gets a value that indicates whether the <see cref="Dimension"/> has a <see cref="GridUnitType"/> of Pixel.
@@ -107,7 +106,7 @@ namespace Utility.Structs
         /// <summary>
         /// Gets the length.
         /// </summary>
-        public double Value => _value;
+        public double Value { get => _value; set => _value = value; }
 
         /// <summary>
         /// Compares two Dimension structures for equality.
@@ -218,7 +217,7 @@ namespace Utility.Structs
         /// <returns>The <see cref="Dimension"/>.</returns>
         public static IEnumerable<Dimension> ParseLengths(string s)
         {
-            return s.Split(',').Select(s=> Parse(s));
+            return s.Split(',').Select(s => Parse(s));
         }
     }
 }
