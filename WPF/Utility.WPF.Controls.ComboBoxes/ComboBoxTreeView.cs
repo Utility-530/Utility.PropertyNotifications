@@ -17,16 +17,15 @@ namespace Utility.WPF.Controls.ComboBoxes
         public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register("SelectedItems", typeof(IEnumerable), typeof(ComboBoxTreeView), new PropertyMetadata(null));
         public static readonly DependencyProperty ParentPathProperty = DependencyProperty.Register("ParentPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty SelectedNodeProperty = DependencyProperty.Register("SelectedNode", typeof(object), typeof(ComboBoxTreeView), new FrameworkPropertyMetadata(default));
-        public static readonly DependencyProperty IsCheckedPathProperty = DependencyProperty.Register("IsCheckedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata());
-        public static readonly DependencyProperty IsExpandedPathProperty = DependencyProperty.Register("IsExpandedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata("IsExpanded"));
-        public static readonly DependencyProperty IsSelectedPathProperty = DependencyProperty.Register("IsSelectedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata("IsSelected"));
+        //public static readonly DependencyProperty IsCheckedPathProperty = DependencyProperty.Register("IsCheckedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata());
+        //public static readonly DependencyProperty IsExpandedPathProperty = DependencyProperty.Register("IsExpandedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata("IsExpanded"));
+        //public static readonly DependencyProperty IsSelectedPathProperty = DependencyProperty.Register("IsSelectedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata("IsSelected"));
         public static readonly DependencyProperty SelectedItemTemplateProperty = DependencyProperty.Register("SelectedItemTemplate", typeof(DataTemplate), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty SelectedItemTemplateSelectorProperty = DependencyProperty.Register("SelectedItemTemplateSelector", typeof(DataTemplateSelector), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty IsErrorProperty = DependencyProperty.Register("IsError", typeof(bool), typeof(ComboBoxTreeView), new PropertyMetadata(false));
         public static readonly RoutedEvent SelectedNodeChangedEvent = EventManager.RegisterRoutedEvent("SelectedNodeChanged", RoutingStrategy.Bubble, typeof(SelectedNodeEventHandler), typeof(ComboBoxTreeView));
         public static readonly DependencyProperty ToggleButtonContentProperty = DependencyProperty.Register("ToggleButtonContent", typeof(object), typeof(ComboBoxTreeView), new PropertyMetadata());
-
-
+        public static readonly DependencyProperty TreeItemContainerStyleProperty = DependencyProperty.Register("TreeItemContainerStyle", typeof(Style), typeof(ComboBoxTreeView), new PropertyMetadata());
 
         public delegate void SelectedNodeEventHandler(object sender, SelectedNodeEventArgs e);
 
@@ -67,7 +66,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         {
         }
 
-        public ExtendedTreeView TreeView { get; set; }
+        public CustomTreeView TreeView { get; set; }
         public ToggleButton ToggleButton { get; set; }
         public Popup Popup { get; set; }
 
@@ -94,10 +93,10 @@ namespace Utility.WPF.Controls.ComboBoxes
             //Popup.MouseLeave += (s, e) => e.Handled = true;
 
 
-            TreeView = (ExtendedTreeView)GetTemplateChild("treeView");
+            TreeView = (CustomTreeView)GetTemplateChild("treeView");
             TreeView.SelectedItemChanged += TreeView_SelectedItemChanged;
-            TreeView.OnHierarchyMouseUp += new MouseEventHandler(OnTreeViewHierarchyMouseUp);
-            TreeView.OnChecked += _treeView_OnChecked;
+            TreeView.HierarchyMouseUp += (s, e) => OnTreeViewHierarchyMouseUp(s, e);
+            TreeView.Checked += _treeView_OnChecked;
             if (TreeView.SelectedItem != null)
                 UpdateSelectedItems(TreeView.SelectedItem);
             base.OnApplyTemplate();
@@ -130,7 +129,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         private void _treeView_OnChecked(object sender, RoutedEventArgs e)
         {
-            if (sender is CheckableTreeViewItem { IsChecked: bool isChecked } item)
+            if (sender is CustomTreeViewItem { IsChecked: bool isChecked } item)
             {
                 if (isChecked)
                 {
@@ -161,7 +160,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         /// <summary>
         /// Handles clicks on any item in the tree view
         /// </summary>
-        private void OnTreeViewHierarchyMouseUp(object sender, MouseEventArgs e)
+        private void OnTreeViewHierarchyMouseUp(object sender, RoutedEventArgs e)
         {
             if (TreeView.SelectedItem != null)
             {
@@ -184,22 +183,28 @@ namespace Utility.WPF.Controls.ComboBoxes
             set { SetValue(SelectedItemTemplateProperty, value); }
         }
 
-        public string IsExpandedPath
-        {
-            get { return (string)GetValue(IsExpandedPathProperty); }
-            set { SetValue(IsExpandedPathProperty, value); }
-        }
+        //public string IsExpandedPath
+        //{
+        //    get { return (string)GetValue(IsExpandedPathProperty); }
+        //    set { SetValue(IsExpandedPathProperty, value); }
+        //}
 
-        public string IsSelectedPath
-        {
-            get { return (string)GetValue(IsSelectedPathProperty); }
-            set { SetValue(IsSelectedPathProperty, value); }
-        }
+        //public string IsSelectedPath
+        //{
+        //    get { return (string)GetValue(IsSelectedPathProperty); }
+        //    set { SetValue(IsSelectedPathProperty, value); }
+        //}
 
-        public string IsCheckedPath
+        //public string IsCheckedPath
+        //{
+        //    get { return (string)GetValue(IsCheckedPathProperty); }
+        //    set { SetValue(IsCheckedPathProperty, value); }
+        //}
+
+        public Style TreeItemContainerStyle
         {
-            get { return (string)GetValue(IsCheckedPathProperty); }
-            set { SetValue(IsCheckedPathProperty, value); }
+            get { return (Style)GetValue(TreeItemContainerStyleProperty); }
+            set { SetValue(TreeItemContainerStyleProperty, value); }
         }
 
         public string ParentPath

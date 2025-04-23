@@ -8,6 +8,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboBoxToggleButton.xaml"/>
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml"/>
+        <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CheckableTreeViewItem.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
 
@@ -46,6 +47,7 @@
 
 
     <Style x:Key="ButtonComboBoxTreeViewStyle" TargetType="{x:Type cb:ComboBoxTreeView}" >
+        <Setter Property="TreeItemContainerStyle" Value="{StaticResource CheckableTreeViewItemStyle}"></Setter>
         <!--<Setter Property="SnapsToDevicePixels"
           Value="true" />-->
         <!--<Setter Property="OverridesDefaultStyle"
@@ -121,10 +123,8 @@
                                                 BorderThickness="1">                 
                                             <ScrollViewer Margin="4,6,4,6"
                                                     SnapsToDevicePixels="True">
-                                                <trees:ExtendedTreeView x:Name="treeView"                                                                   
-                                                                    IsCheckedPath="{TemplateBinding IsCheckedPath}"
-                                                                    IsExpandedPath="{TemplateBinding IsExpandedPath}"
-                                                                    IsSelectedPath="{TemplateBinding IsSelectedPath}"
+                                                <trees:CustomTreeView x:Name="treeView"                                                                   
+                                                                    ItemContainerStyle="{TemplateBinding TreeItemContainerStyle}"
                                                                     ItemsSource="{TemplateBinding ItemsSource}" 
                                                                     ItemTemplate="{TemplateBinding ItemTemplate}"
                                                                     ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"/>

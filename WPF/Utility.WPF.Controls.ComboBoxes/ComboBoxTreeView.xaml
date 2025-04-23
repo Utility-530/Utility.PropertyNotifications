@@ -7,6 +7,7 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboBoxToggleButton.xaml"/>
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml"/>
+        <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CheckableTreeViewItem.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
 
@@ -21,147 +22,13 @@
 
 
 
-    <Style TargetType="{x:Type trees:CheckableTreeViewItem}">
-        <Setter Property="Background"
-          Value="Transparent" />
-        <Setter Property="HorizontalContentAlignment"
-          Value="{Binding Path=HorizontalContentAlignment,
-    RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
-        <Setter Property="VerticalContentAlignment"
-          Value="{Binding Path=VerticalContentAlignment,
-    RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
-        <Setter Property="Padding"
-          Value="1,0,0,0" />
-        <Setter Property="Foreground"
-          Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
-        <Setter Property="FocusVisualStyle"
-          Value="{StaticResource TreeViewItemFocusVisual}" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type trees:CheckableTreeViewItem}">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition MinWidth="19"
-                              Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-                        <VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="SelectionStates">
-                                <VisualState x:Name="Selected">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd"
-                                                Storyboard.TargetProperty="(Panel.Background).
-                    (SolidColorBrush.Color)"
-                                                >
-                                            <EasingColorKeyFrame KeyTime="0"
-                                         Value="{StaticResource SelectedBackgroundColor}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Unselected" />
-                                <VisualState x:Name="SelectedInactive">
-                                    <Storyboard>
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="Bd"
-                                                Storyboard.TargetProperty="(Panel.Background).
-                    (SolidColorBrush.Color)">
-                                            <EasingColorKeyFrame KeyTime="0"
-                                         Value="{StaticResource SelectedUnfocusedColor}" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                            <VisualStateGroup x:Name="ExpansionStates">
-                                <VisualState x:Name="Expanded">
-                                    <Storyboard>
-                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)"
-                                                 Storyboard.TargetName="ItemsHost">
-                                            <DiscreteObjectKeyFrame KeyTime="0"
-                                            Value="{x:Static Visibility.Visible}" />
-                                        </ObjectAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                                <VisualState x:Name="Collapsed" />
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>
-                        <ToggleButton x:Name="Expander"
-                          Template="{StaticResource ComboBoxToggleButton}"
-                        ClickMode="Press"
-                        IsChecked="{Binding IsExpanded, 
-            RelativeSource={RelativeSource TemplatedParent}}"/>
-                        <Grid       Grid.Column="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition></ColumnDefinition>
-                                <ColumnDefinition></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Border x:Name="Bd"           
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Padding="{TemplateBinding Padding}">
-                                <ContentPresenter x:Name="PART_Header"
-                                                ContentSource="Header"
-                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
-                            </Border>
-
-                            <CheckBox Grid.Column="1" 
-                                      x:Name="PART_CheckBox"
-                                      IsChecked="{Binding IsChecked, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
-
-                        </Grid>
-
-                        <ItemsPresenter x:Name="ItemsHost"
-                          Grid.Row="1"
-                          Grid.Column="1"
-                          Grid.ColumnSpan="2"
-                          Visibility="Collapsed" />
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="HasItems"
-                   Value="false">
-                            <Setter TargetName="Expander"
-                    Property="Visibility"
-                    Value="Hidden" />
-                        </Trigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="HasHeader"
-                         Value="false" />
-                                <Condition Property="Width"
-                         Value="Auto" />
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="PART_Header"
-                    Property="MinWidth"
-                    Value="75" />
-                        </MultiTrigger>
-                        <MultiTrigger>
-                            <MultiTrigger.Conditions>
-                                <Condition Property="HasHeader"
-                         Value="false" />
-                                <Condition Property="Height"
-                         Value="Auto" />
-                            </MultiTrigger.Conditions>
-                            <Setter TargetName="PART_Header"
-                    Property="MinHeight"
-                    Value="19" />
-                        </MultiTrigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
 
     <Style TargetType="{x:Type local:ComboBoxTreeView}" >
         <!--<Setter Property="SnapsToDevicePixels"
           Value="true" />-->
         <!--<Setter Property="OverridesDefaultStyle"
           Value="true" />-->
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
+         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
           Value="Auto" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
           Value="Auto" />
@@ -293,10 +160,8 @@
                                         </Border>
                                         <ScrollViewer Margin="4,6,4,6"
                                                       SnapsToDevicePixels="True">
-                                            <trees:ExtendedTreeView x:Name="treeView" 
-                                                                    IsCheckedPath="{TemplateBinding IsCheckedPath}"
-                                                                    IsExpandedPath="{TemplateBinding IsExpandedPath}"
-                                                                    IsSelectedPath="{TemplateBinding IsSelectedPath}"
+                                            <trees:CustomTreeView x:Name="treeView" 
+                                                                    ItemContainerStyle="{TemplateBinding TreeItemContainerStyle }"
                                                                     ItemsSource="{TemplateBinding ItemsSource}" 
                                                                     ItemTemplate="{TemplateBinding ItemTemplate}"
                                                                     ItemTemplateSelector="{TemplateBinding ItemTemplateSelector}"/>
