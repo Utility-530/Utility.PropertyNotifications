@@ -6,7 +6,8 @@
                              Type="{x:Type local:ObjectControl}">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/Utility.WPF.Controls.Objects;component/ObjectControl.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Objects;component/ObjectControl.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Objects;component/Themes/Dictionary1.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!--<DataTemplate DataType="{x:Type infra:PropertyData}">

@@ -61,8 +61,10 @@ namespace Utility.WPF.Controls.Objects
             ownerType: typeof(CustomTreeViewItem));
 
         private static void Change2(DependencyObject d, DependencyPropertyChangedEventArgs e) { }
-        private static void Change(DependencyObject d, DependencyPropertyChangedEventArgs e) {
-        
+
+        private static void Change(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+
         }
 
         static JsonControl()
@@ -71,6 +73,12 @@ namespace Utility.WPF.Controls.Objects
             CommandManager.RegisterClassCommandBinding(typeof(UIElement), new CommandBinding(Commands.FooCommand, OnFoo, OnCanFoo));
             CommandManager.RegisterClassCommandBinding(typeof(UIElement), new CommandBinding(Commands.UnFooCommand, OnUnFoo, OnCanUnFoo));
         }
+
+        protected override DependencyObject GetContainerForItemOverride()
+        {
+            return new TreeListViewItem();
+        }
+
 
         public JsonControl()
         {
@@ -88,7 +96,7 @@ namespace Utility.WPF.Controls.Objects
 
         private static void OnUnFoo(object sender, ExecutedRoutedEventArgs e)
         {
-            if (((sender as Control).DataContext as JObject).Parent is JArray jArray)
+            if (((sender as Control).DataContext as JObject)?.Parent is JArray jArray)
             {
                 jArray.Remove(((sender as Control).DataContext as JObject));
             }
@@ -105,38 +113,71 @@ namespace Utility.WPF.Controls.Objects
         {
             foreach (var x in jObject.Properties())
             {
-                switch (((x.Value) as JValue).Type)
+                if (x.Value is JValue jValue)
+                    switch (jValue.Type)
+                    {
+                        case JTokenType.String:
+                            x.Value = string.Empty;
+                            break;
+                        case JTokenType.Integer:
+                            x.Value = 0;
+                            break;
+                        case JTokenType.TimeSpan:
+                            x.Value = TimeSpan.Zero;
+                            break;
+                    }
+                else if (x.Value is JToken token)
                 {
-                    case JTokenType.String:
-                        x.Value = string.Empty;
-                        break;
-                    case JTokenType.Integer:
-                        x.Value = 0;
-                        break;
-                    case JTokenType.TimeSpan:
-                        x.Value = TimeSpan.Zero;
-                        break;
+
+                }
+                else
+                {
+                    throw new Exception("EF 343");
                 }
             }
         }
+
         static void OnFoo(object sender, RoutedEventArgs e)
         {
-
             var jArray = (sender as Control).DataContext as JArray;
 
-            if (((sender as TreeView).SelectedItem as TreeViewItem)?.DataContext is JObject jObject)
+            JToken jToken = null;
+
+            //var x = new JPropertyNewValue(value, );
+
+            if (sender is TreeView { SelectedItem: TreeViewItem { DataContext: JObject jObject } })
             {
+                jToken = jObject;
                 jArray.Add(jObject);
+                clear((jArray.Last as JObject));
+            }
+            else if (jArray.Count > 0)
+            {
+                jArray.Add(jArray[0]);
+                jToken = jArray.Last;
+                clear((jArray.Last as JObject));
             }
             else
             {
-                jArray.Add(jArray[0]);
+                JToken token = jArray;
+                while (token.Type != JTokenType.Object)
+                {
+                    token = token.Parent;
+                }
+
+                if (token["$type"] is { } type)
+                {
+                    var _type = Type.GetType(type.ToString());
+                    var elementType = TypeHelper.GetElementType(_type);
+                    var instance = ActivateAnything.Activate.New(elementType);
+                    var _token = JToken.FromObject(instance);
+                    jToken = _token;
+                    jArray.Add(_token);
+                }
             }
 
-            clear((jArray.Last as JObject));
             e.Handled = true;
-            // here I need to have the instance of MyCustomControl so that I can call myCustCtrl.Foo();
-            // Foo(); // <--- problem! can't access this
+            (sender as UIElement).RaiseEvent(new ValueChangedRoutedEventArgs(new JPropertyNewValue(e, jToken), ValueChangedEvent, sender));
 
             static object GetDefault(Type type)
             {
@@ -150,7 +191,7 @@ namespace Utility.WPF.Controls.Objects
 
         static void OnCanFoo(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = (sender as Control).DataContext is JArray { Count: > 0 };
+            e.CanExecute = (sender as Control).DataContext is JArray { Count: >= 0 };
             e.Handled = true;
         }
 
@@ -210,7 +251,7 @@ namespace Utility.WPF.Controls.Objects
                 {
                     return JToken.Parse(json);
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     return JToken.FromObject(ex);
                 }
@@ -222,7 +263,7 @@ namespace Utility.WPF.Controls.Objects
         private void Load(JToken jToken, TreeView jsonTreeView)
         {
             jsonTreeView.ItemsSource = null;
-            jsonTreeView.Items.Clear();
+            //jsonTreeView.Items.Clear();
 
             try
             {
@@ -260,11 +301,6 @@ namespace Utility.WPF.Controls.Objects
 
             var jsonControl = container.FindParent<JsonControl>();
 
-            //if (presenter.FindParent<TreeView>() is JsonControl jsonControl)
-            //{
-            //    Schema = jsonControl.Schema;
-            //}
-
             if (container is FrameworkElement frameworkElement)
             {
                 if (item is JObject { Type: { } type } jObject)
@@ -281,12 +317,41 @@ namespace Utility.WPF.Controls.Objects
                     if (property.Name == "$type")
                     {
                         return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
-                    }
-                    if (property.Name == "$values")
+                    }         
+                    if (property.Name == "$isenum")
+                    {
+                        return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
+                    }      
+                    if (property.Name == "$isreadonly")
                     {
                         return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
                     }
-                    if (findProperty(property.Name, parent, jsonControl.Schema, out SchemaProperty schemaProperty))
+                    if (property.Name == "$values")
+                    {
+                        return frameworkElement.FindResource("Array2PropertyTemplate") as DataTemplate;
+                    }
+                    return frameworkElement.FindResource("PropertyTemplate") as DataTemplate;
+                }
+                else if (item is JValue { Parent: JProperty { Parent: { } _jObject, Name: { } propertyName } _parent, Type: { } jtype } jValue)
+                {
+
+                    if (_jObject["$isreadonly"]?.Last?.Last is IEnumerable e)
+                    {
+                        foreach (JValue x in e)
+                        {
+                            if (x.Value == propertyName)
+                                return frameworkElement.FindResource("ReadOnlyTemplate") as DataTemplate;
+                        }
+                    }
+                    if (_jObject["$isenum"]?.Last?.Last is IEnumerable _e)
+                    {
+                        foreach (JValue x in _e)
+                        {
+                            if (x.Value == propertyName)
+                                return frameworkElement.FindResource("EnumTemplate") as DataTemplate;
+                        }
+                    }
+                    if (findProperty(propertyName, _jObject, jsonControl.Schema, out SchemaProperty schemaProperty))
                     {
                         if (schemaProperty.EnumType != null)
                         {
@@ -301,9 +366,10 @@ namespace Utility.WPF.Controls.Objects
                             return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
                         }
                     }
-
-                    return frameworkElement.FindResource(convert(_type)) as DataTemplate;
+                    return frameworkElement.FindResource(convert(jtype)) as DataTemplate;
                 }
+
+
             }
 
             if (item is JObject)
@@ -370,6 +436,7 @@ namespace Utility.WPF.Controls.Objects
                     JTokenType.Array => "ArrayPropertyTemplate",
                     JTokenType.Object => "ObjectPropertyTemplate",
                     JTokenType.Guid => "GuidTemplate",
+                    JTokenType.Float => "NumberTemplate",
                     _ => throw new Exception("Nsdf33 dd")
                 };
             }
@@ -379,51 +446,13 @@ namespace Utility.WPF.Controls.Objects
 
         public DataTemplate MissingTemplate { get; set; }
         public JSchema Schema { get; private set; }
+
+        public static JsonObjectTypeTemplateSelector Instance { get; } = new();
     }
 
 
     public class Extensions
     {
-        public static string ChooseString(Type type)
-        {
-            return type switch
-            {
-                Type.DateTime => "DateTimeTemplate",
-                Type.Date => "DateTemplate",
-                Type.Time => "TimeTemplate",
-                Type.Enum => "EnumTemplate",
-                Type.String => "StringTemplate",
-                Type.Integer => "IntegerTemplate",
-                Type.Number => "NumberTemplate",
-                Type.Boolean => "BooleanTemplate",
-                Type.Object => "ObjectTemplate",
-                Type.Array => "ArrayTemplate",
-                Type.Null | Type.Enum => "EnumNullTemplate",
-                Type.Null | Type.Integer => "IntegerNullTemplate",
-                _ => throw new Exception("Nsdf33 dd")
-            };
-        }
-
-        public static Type Choose(object instance)
-        {
-            if (instance is string)
-                return Type.String;
-            else if (instance is DateTime)
-                return Type.DateTime;
-            else if (instance is Enum)
-                return Type.Enum;
-            else if (instance is int)
-                return Type.Integer;
-            else if (instance is bool)
-                return Type.Boolean;
-            else if (instance is IEnumerable)
-                return Type.Array;
-            else if (instance is object)
-                return Type.Object;
-            else
-                throw new Exception("Nsdf33 dd");
-        }
-
         public enum Type
         {
             None = 0x0,
@@ -472,7 +501,7 @@ namespace Utility.WPF.Controls.Objects
     #region converters
 
 
-    public record JPropertyNewValue(object EventArgs, JProperty JProperty);
+    public record JPropertyNewValue(object EventArgs, JToken JProperty, Type? EnumType = null);
 
 
     public class EventArgsConverter : IValueConverter
@@ -487,6 +516,40 @@ namespace Utility.WPF.Controls.Objects
             throw new NotImplementedException();
         }
     }
+
+    public class SelectionEventArgsConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (parameter is EnumViewModel { Property: { } property, Type: { } type })
+                return new JPropertyNewValue(value, property, type);
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class BooleanEventArgsConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is RoutedEventArgs { OriginalSource: CheckBox { IsChecked: { } isChecked } } && parameter is JValue { Parent: JProperty jProperty } jValue)
+            {
+                jProperty.Value = isChecked;
+                return new JPropertyNewValue(value, jProperty);
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 
     public class ComplexPropertyMethodValueConverter : IValueConverter
     {
@@ -503,6 +566,22 @@ namespace Utility.WPF.Controls.Objects
         public static ComplexPropertyMethodValueConverter Instance { get; } = new();
     }
 
+
+    public class ComplexProperty2MethodValueConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return Converters.MethodToValueConverter.Convert(value, null, parameter, culture);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static ComplexProperty2MethodValueConverter Instance { get; } = new();
+    }
+
     internal static class Converters
     {
         private static readonly Lazy<Dictionary<int, Color>> NiceColors = new Lazy<Dictionary<int, Color>>(() =>
@@ -512,11 +591,11 @@ namespace Utility.WPF.Controls.Objects
 
         public static IValueConverter JTokenTypeToColorConverter { get; } = Create<JTokenType, Color>(a => NiceColors.Value[(byte)a.Value]);
 
-        public static IValueConverter MethodToValueConverter { get; } = Create<object, JEnumerable<JToken>?, string>(a =>
+        public static IValueConverter MethodToValueConverter { get; } = Create<object, IEnumerable<JToken>?, string>(a =>
                       {
                           if (a.Parameter != null && a.Value?.GetType().GetMethod(a.Parameter, Array.Empty<Type>()) is MethodInfo methodInfo)
-                              return (JEnumerable<JToken>?)methodInfo.Invoke(a.Value, Array.Empty<object>());
-                          return new JEnumerable<JToken>();
+                              return (IEnumerable<JToken>?)methodInfo.Invoke(a.Value, Array.Empty<object>());
+                          return Array.Empty<JToken>();
                       });
 
         public static IValueConverter JArrayConverter { get; } = GetJArrayConverter();
@@ -604,9 +683,10 @@ namespace Utility.WPF.Controls.Objects
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values.SingleOrDefault(a => a is Schema) is Schema schema && values.SingleOrDefault(a => a is JProperty) is JProperty s)
+
+            if (values.SingleOrDefault(a => a is JValue) is JValue s)
             {
-                return new EnumViewModel(schema, s);
+                return new EnumViewModel(values.SingleOrDefault(a => a is Schema) as Schema, s);
             }
 
             return DependencyProperty.UnsetValue;
@@ -621,29 +701,41 @@ namespace Utility.WPF.Controls.Objects
     public class EnumViewModel : Utility.PropertyNotifications.NotifyPropertyClass
     {
         private readonly Schema schema;
-        private readonly JProperty jProperty;
+        private readonly JValue jValue;
+        private Type? type;
         private Enum value;
 
-        public EnumViewModel(Schema schema, JProperty jProperty)
+        public EnumViewModel(Schema? schema, JValue jValue)
         {
-            //var value = s.Value;
-            if (schema.Properties.SingleOrDefault(a => a.Name == jProperty.Name) is SchemaProperty prop)
+            if (schema?.Properties.SingleOrDefault(a => a.Name == (jValue.Parent as JProperty)?.Name) is SchemaProperty prop)
             {
-                var type = Type.GetType(prop.EnumType);
-                value = (Enum)Enum.Parse(type, jProperty.Value.Value<string>());
-                this.RaisePropertyChanged(nameof(Value));
+                type = Type.GetType(prop.EnumType);
             }
-
+            else if (jValue.Parent?.Parent is JObject jObject && jObject["$type"] is { } _type)
+            {
+                var oType = Type.GetType(_type.ToString());
+                type = oType.GetProperty((jValue.Parent as JProperty).Name).PropertyType; 
+            }
+            else
+            {
+                throw new Exception("33e4");
+            }
+            value = (Enum)Enum.Parse(type, jValue.Value<string>());
+            this.RaisePropertyChanged(nameof(Value));
             this.schema = schema;
-            this.jProperty = jProperty;
+            this.jValue = jValue;
         }
+
+        public JProperty? Property => jValue.Parent as JProperty;
+
+        public Type? Type => type;
 
         public Enum Value
         {
             get => value; set
             {
                 this.value = value;
-                jProperty.Value = JContainer.FromObject(value.ToString());
+                jValue.Value = value.ToString();
             }
         }
     }

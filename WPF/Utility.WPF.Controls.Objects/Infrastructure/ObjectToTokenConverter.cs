@@ -4,6 +4,9 @@ using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Collections.Generic;
+using Utility.Common.Meta;
+using Omu.ValueInjecter;
 
 namespace Utility.WPF.Controls.Objects
 {
@@ -12,6 +15,7 @@ namespace Utility.WPF.Controls.Objects
         private JsonConverter[] converters = [
             new Newtonsoft.Json.Converters.StringEnumConverter()];
 
+        Dictionary<object, object> properties = new Dictionary<object, object>();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -19,6 +23,10 @@ namespace Utility.WPF.Controls.Objects
                 return DependencyProperty.UnsetValue;
 
             var serialiser = JsonSerializer.CreateDefault(new JsonSerializerSettings { Converters = converters, TypeNameHandling = TypeNameHandling.All });
+            if(parameter is not null)
+            {
+                properties[value.GetType().GetProperty(parameter.ToString()).GetValue(value).ToString()] = value;
+            }
             return JToken.FromObject(value, serialiser);
         }
 
@@ -27,6 +35,13 @@ namespace Utility.WPF.Controls.Objects
             if (value is JToken token)
             {
                 var type = Type.GetType(token["$type"].Value<string>());
+                if (parameter is not null)
+                {
+                    var xx = token[parameter.ToString()].Value<object>().ToString();
+                    var x = token.ToObject(type);
+                    properties[xx].InjectFrom(x);
+                    return properties[parameter];
+                }
                 return token.ToObject(type);
             }
             throw new NotImplementedException();
