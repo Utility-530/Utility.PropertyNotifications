@@ -59,11 +59,11 @@ namespace Utility.WPF.Controls.Trees
             ownerType: typeof(CustomTreeViewItem));
 
 
-          public static readonly RoutedEvent ChangeEvent = EventManager.RegisterRoutedEvent(
-            name: "Change",
-            routingStrategy: RoutingStrategy.Bubble,
-            handlerType: typeof(ChangeRoutedEventHandler),
-            ownerType: typeof(CustomTreeViewItem));
+        public static readonly RoutedEvent ChangeEvent = EventManager.RegisterRoutedEvent(
+          name: "Change",
+          routingStrategy: RoutingStrategy.Bubble,
+          handlerType: typeof(ChangeRoutedEventHandler),
+          ownerType: typeof(CustomTreeViewItem));
 
         public static readonly RoutedEvent SelectionChangedEvent = EventManager.RegisterRoutedEvent(
             name: "SelectionChanged",
@@ -141,6 +141,7 @@ namespace Utility.WPF.Controls.Trees
             this.onApplyAnimatedTemplate();
             base.OnApplyTemplate();
             this.apply_template();
+            this._OnApplyTemplate();
         }
 
         private void DeclineComboTreeViewItem_Click(object sender, RoutedEventArgs e)
@@ -281,7 +282,20 @@ namespace Utility.WPF.Controls.Trees
             {
 
             });
+
+            item.MouseLeftButtonUp += (s,e)=>OnMouseLeftButtonUp(e);
+            item.Checked += ChildItem_IsCheckedHandler;
+            item.HierarchyMouseUp += (s, e) => OnMouseLeftButtonUp(e);
             return item;
+
+            //void OnChildItemMouseLeftButtonUp(object sender, EventArgs e)
+            //{
+            //    if (HierarchyMouseUp != null)
+            //    {
+            //        HierarchyMouseUp(this, e);
+            //        e.Handled = true;
+            //    }
+            //}
         }
 
         private static void _selectionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

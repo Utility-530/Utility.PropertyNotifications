@@ -214,7 +214,7 @@
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
 
                             <Button Style="{StaticResource ButtonClose}" HorizontalAlignment="Right" Height="20" Width="20"  VerticalAlignment="Top" />
-                            <CheckBox Style="{StaticResource CheckBoxPingUnPing}" HorizontalAlignment="Right"  VerticalAlignment="Bottom"/>
+                            <CheckBox x:Name="PART_CheckBox" Style="{StaticResource CheckBoxPingUnPing}" HorizontalAlignment="Right"  VerticalAlignment="Bottom"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>

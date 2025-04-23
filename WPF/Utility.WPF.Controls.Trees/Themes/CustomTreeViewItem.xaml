@@ -84,6 +84,7 @@
         <!--<Setter Property="EditCommand" Value="{Binding Path=EditCommand}" />-->
         <Setter Property="AddParentCommand" Value="{Binding Path=AddParentCommand}" />
         <Setter Property="IsHighlighted" Value="{Binding Path=IsHighlighted}" />
+        <Setter Property="Arrangement" Value="{Binding Path=Arrangement}" />
         <Setter Property="Visibility" Value="{Binding Path=IsVisible,Converter={StaticResource VisibilityConverter}}" />
         <Setter Property="Orientation" Value="{Binding Orientation, Converter={StaticResource OrientationConverter}}"></Setter>
         <Setter Property="Background"

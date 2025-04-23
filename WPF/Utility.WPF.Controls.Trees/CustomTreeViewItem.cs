@@ -2,27 +2,12 @@
 using System.Windows;
 using System.Windows.Input;
 using System.Collections;
-using Utility.WPF.Attached;
 using System;
 
 namespace Utility.WPF.Controls.Trees
 {
-    public class CustomTreeView : TreeView
-    {
-        protected override DependencyObject GetContainerForItemOverride()
-        {
-            return new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector, ItemContainerStyle = ItemContainerStyle };
-        }
 
 
-        protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
-        {
-
-            TreeEx.SetIsRootNode(element, true);
-            base.PrepareContainerForItemOverride(element, item);
-
-        }
-    }
 
     public partial class CustomTreeViewItem : TreeViewItem
     {

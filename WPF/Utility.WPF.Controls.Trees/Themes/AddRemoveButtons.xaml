@@ -7,7 +7,7 @@
 
     <tree:IndentConverter x:Key="IndentConverter" />
 
-    <ControlTemplate x:Key="TreeViewItemControlTemplate" TargetType="{x:Type TreeViewItem}">
+    <ControlTemplate x:Key="TreeViewItemControlTemplate" TargetType="{x:Type tree:CustomTreeViewItem}">
         <Grid x:Name="tvGrid">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -121,7 +121,7 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-    <Style x:Key="ButtonsAddRemoveStyle"  TargetType="TreeViewItem">
+    <Style x:Key="ButtonsAddRemoveStyle"  TargetType="{x:Type tree:CustomTreeViewItem}">
         <Setter Property="Template" Value="{StaticResource TreeViewItemControlTemplate}" />
         <Setter Property="IsExpanded" Value="True" />
     </Style>

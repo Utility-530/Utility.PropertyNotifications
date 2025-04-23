@@ -47,12 +47,12 @@ namespace Utility.WPF.Controls.Trees
         {
             if (values is object[] { } array)
             {
-                O o;
+                O? o = default;
                 if (array[3] is Orientation orientation)
                 {
                     o = Enum.TryParse(typeof(O), orientation.ToString(), out var obj) ? (O)obj : O.Horizontal;
                 }
-                else
+                else if (array[3] != DependencyProperty.UnsetValue)
                 {
                     o = (O)array[3];
                 }
