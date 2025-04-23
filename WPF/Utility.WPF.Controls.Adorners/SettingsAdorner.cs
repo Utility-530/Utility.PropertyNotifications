@@ -81,13 +81,13 @@ namespace Utility.WPF.Controls.Adorners
                            });
 
             var dis2 = Observable
-                .FromEventPattern<CheckedRoutedEventHandler, CheckedEventArgs>(a => settingsControl.Checked += a, a => settingsControl.Checked -= a)
+                .FromEventPattern<SettingsControl.CheckedRoutedEventHandler, SettingsControl.CheckedEventArgs>(a => settingsControl.Checked += a, a => settingsControl.Checked -= a)
                 .Select(a => a.EventArgs)
                 .Subscribe(SettingsControl_Checked);
 
             return new CompositeDisposable(disposable, dis2);
 
-            void SettingsControl_Checked(CheckedEventArgs e)
+            void SettingsControl_Checked(SettingsControl.CheckedEventArgs e)
             {
                 //AdornedElement.SetValue(Type.IsRecursiveProperty, e.IsChecked);
 
