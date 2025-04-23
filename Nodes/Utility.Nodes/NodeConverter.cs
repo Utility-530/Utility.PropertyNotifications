@@ -7,6 +7,9 @@ using Splat;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using System.Reflection;
+using Utility.Structs;
+using Utility.Enums;
+using LanguageExt;
 
 namespace Utility.Nodes
 {
@@ -28,16 +31,36 @@ namespace Utility.Nodes
             writer.WritePropertyName("IsExpanded");
             writer.WriteValue(value.IsExpanded);
 
+            writer.WritePropertyName("Rows");
+            JToken.FromObject(value.Rows).WriteTo(writer);         
+            
+            writer.WritePropertyName("Columns");
+            JToken.FromObject(value.Columns).WriteTo(writer);
+
+            writer.WritePropertyName("Row");
+            writer.WriteValue(value.Row);
+
+            writer.WritePropertyName("Column");
+            writer.WriteValue(value.Column);
+            
+            writer.WritePropertyName("Arrangement");
+            writer.WriteValue(value.Arrangement);
+
+            writer.WritePropertyName("Orientation");
+            writer.WriteValue(value.Orientation);
+
             if (value.Current != null)
             {
                 writer.WritePropertyName("Current");
                 writer.WriteValue(value.Current.Key);
             }
 
-            writer.WritePropertyName("Data");
-            var jObject = JToken.FromObject(value.Data, serializer);
-            jObject.WriteTo(writer);
-
+            if (value.Data != null)
+            {
+                writer.WritePropertyName("Data");
+                var jObject = JToken.FromObject(value.Data, serializer);
+                jObject.WriteTo(writer);
+            }
             if (value.Items.Any() && value.Data is not IBreadCrumb)
             {
                 writer.WritePropertyName("Items");
@@ -63,6 +86,9 @@ namespace Utility.Nodes
                 //jObjectkey.WriteTo(writer);
             }
 
+            writer.WritePropertyName($"$isenum");
+            serializer.Serialize(writer, new[] { nameof(Node.Arrangement), nameof(Node.Orientation)});
+
             writer.WriteEndObject();
         }
 
@@ -76,16 +102,47 @@ namespace Utility.Nodes
 
             JObject jObject = JObject.Load(reader);
 
-
-            var type = Type.GetType(jObject["Data"]["$type"].ToString());
-            var data = jObject["Data"].ToObject(type, serializer);
-
-            var node = new Node(data)
+            Node node = null;
+            if (jObject.TryGetValue("Data", StringComparison.InvariantCultureIgnoreCase, out var data))
             {
-                Key = new GuidKey(Guid.Parse(jObject["Key"].ToString())),
-           
-                IsExpanded = bool.Parse(jObject["IsExpanded"].ToString())
-            };
+                var type = Type.GetType(data["$type"].ToString());
+                var _data = data.ToObject(type, serializer);
+                node = new Node(_data);
+            }
+            else
+            {
+                node = new Node();
+            }
+
+            node.Key = new GuidKey(Guid.Parse(jObject["Key"].ToString()));
+
+            node.IsExpanded = bool.Parse(jObject["IsExpanded"].ToString());
+
+            node.Row = int.Parse(jObject["Row"].ToString());
+
+            node.Column = int.Parse(jObject["Column"].ToString());
+
+            node.Arrangement = Enum.Parse<Arrangement>(jObject["Arrangement"].ToString());
+
+            node.Orientation = Enum.Parse<Orientation>(jObject["Orientation"].ToString());
+
+            if (jObject["Rows"] is JArray rows)
+            {
+                foreach (var item in rows)
+                {
+                    var dimension = item.ToObject<Dimension>(serializer);
+                    node.Rows.Add(dimension);
+                }
+            }
+            
+            if (jObject["Columns"] is JArray columns)
+            {
+                foreach (var item in columns)
+                {
+                    var dimension = item.ToObject<Dimension>(serializer);
+                    node.Columns.Add(dimension);
+                }
+            }
 
             if (jObject["Items"] is JArray items)
             {
@@ -94,7 +151,7 @@ namespace Utility.Nodes
                     var _node = item.ToObject<Node>(serializer);
                     _node.Parent = node;
                     node.Add(_node);
-                }       
+                }
             }
 
             if (jObject.ContainsKey("Current"))
@@ -105,7 +162,6 @@ namespace Utility.Nodes
                     //node.Current = current;
                     node.SetFieldValue(ViewModelTree.Field(nameof(ViewModelTree.Current)), current, ref fieldInfo);
                 });
-
             }
             return node;
         }

@@ -17,8 +17,8 @@ namespace Utility.Nodes
         private bool? isHighlighted;
         private bool isExpanded = false;
         private Arrangement arrangement;
-        private int columns;
-        private int rows;
+        private int column;
+        private int row;
         private Orientation orientation;
         private bool? isVisible = true;
         private bool? isValid = null;
@@ -154,25 +154,25 @@ namespace Utility.Nodes
             }
         }
 
-        public ObservableCollection<Dimension> ColumnWidths { get; set; }
+        public ObservableCollection<Dimension> Columns { get; set; } = new();
 
-        public ObservableCollection<Dimension> RowHeights { get; set; }
+        public ObservableCollection<Dimension> Rows { get; set; } = new();
 
-        public int Rows
+        public int Row
         {
-            get => rows;
+            get => row;
             set
             {
-                RaisePropertyChanged(ref rows, value);
+                RaisePropertyChanged(ref row, value);
             }
         }
 
-        public int Columns
+        public int Column
         {
-            get => columns;
+            get => column;
             set
             {
-                RaisePropertyChanged(ref columns, value);
+                RaisePropertyChanged(ref column, value);
             }
         }
 

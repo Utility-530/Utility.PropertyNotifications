@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Utility.Commands;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
+using Utility.Keys;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
@@ -65,10 +66,10 @@ namespace Utility.Nodes
             get => data;
             set
             {
-                if (data == value)
+                if (data == value && SuppressExceptions == false)
                 {
                     throw new Exception("vdfs 3332222kjj");
-                }    
+                }
                 RaisePropertyChanged(ref data, value);
             }
         }
@@ -77,7 +78,7 @@ namespace Utility.Nodes
         {
             get => base.Key; set
             {
-                if (Key != null)
+                if (Key != null && SuppressExceptions == false)
                 {
                     throw new Exception($"Key {Key} not null!");
                 }
@@ -92,6 +93,22 @@ namespace Utility.Nodes
             {
                 RaisePropertyChanged(ref parent, value);
             }
+        }
+
+        public bool SuppressExceptions { get; set; }    
+
+        public static Node Create(object? data, object[] items, string? key = null)
+        {
+            Node node = null;
+
+            if (data != null)
+                node = new Node(data) { Key = key ?? new GuidKey() };
+            else
+                node = new Node() { Key = key ?? new GuidKey() };
+            node.SuppressExceptions = true;
+            if (items.Any())
+                node.Add(items);
+            return node;
         }
 
         protected override void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
