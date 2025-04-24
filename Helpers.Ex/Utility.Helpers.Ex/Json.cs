@@ -5,12 +5,14 @@ using Newtonsoft.Json.Linq;
 using NodaTime;
 using NodaTime.Serialization.JsonNet;
 using System;
+using System.Collections;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Utility.Helpers.Ex
 {
-    public class JsonHelper
+    public static class JsonHelper
     {
         /// <summary>
         /// Deserialize JSON data into an T object
@@ -109,6 +111,67 @@ namespace Utility.Helpers.Ex
             }
         }
 
+
+        public static void Reset(this JObject jObject)
+        {
+            foreach (var x in jObject.Properties())
+            {
+                if (x.Name == "$type")
+                {
+                    // do nothing
+                }
+                else if (IsEnum(x))
+                {
+                    x.Value = AsDefaultEnum(x).ToString();
+                }
+
+                else if (x.Value is JValue jValue)
+                    switch (jValue.Type)
+                    {
+                        case JTokenType.String:
+                            x.Value = string.Empty;
+                            break;
+                        case JTokenType.Float:
+                            x.Value = 0.0;
+                            break;
+                        case JTokenType.Integer:
+                            x.Value = 0;
+                            break;
+                        case JTokenType.TimeSpan:
+                            x.Value = TimeSpan.Zero;
+                            break;
+                    }
+                else if (x.Value is JToken token)
+                {
+
+                }
+                else
+                {
+                    throw new Exception("EF 343");
+                }
+            }
+        }
+
+        public static bool IsEnum(this JProperty jProperty)
+        {
+            if (jProperty.Parent["$isenum"]?.Last?.Last is IEnumerable _e)
+            {
+                foreach (JValue x in _e)
+                {
+                    if (x.Value == jProperty.Name)
+                        return true;
+                }
+            }
+            return false;
+        }
+        public static Enum AsDefaultEnum(this JProperty jProperty)
+        {
+
+            var type = Type.GetType(jProperty.Parent["$type"].Value<string>());
+            var prop = type.GetProperty(jProperty.Name);
+            return Enum.GetValues(prop.PropertyType).Cast<Enum>().First();
+
+        }
     }
 
     public class FileSystemInfoConverter : JsonConverter
