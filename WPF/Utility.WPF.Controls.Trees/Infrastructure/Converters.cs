@@ -7,38 +7,11 @@ using A = Utility.Enums.Arrangement;
 using Arrangement = Utility.Enums.Arrangement;
 using System;
 using Utility.WPF.Factorys;
+using Utility.Structs;
+using System.Collections.Generic;
 
 namespace Utility.WPF.Controls.Trees
 {
-    //public class ItemsPanelConverter : System.Windows.Data.IValueConverter
-    //{
-    //    public static ItemsPanelConverter Instance { get; } = new();
-
-    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        if (value is IPanelArranger { Arrangement: { } arrangement, Rows: var rows, Columns: var columns, Orientation: var orientation })
-    //        {
-    //            if (orientation == Orientation.Vertical)
-    //            {
-
-    //            }
-    //            var template = ItemsPanelFactory.Template(
-    //                rows,
-    //                columns,
-    //                (O)Enum.Parse(typeof(O), orientation.ToString()),
-    //                (A)Enum.Parse(typeof(A), arrangement.ToString()));
-    //            return template;
-    //        }
-
-    //        return DependencyProperty.UnsetValue;
-    //    }
-
-    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-    //    {
-    //        throw new NotImplementedException();
-    //    }
-    //}
-
     public class MultiItemsPanelConverter : System.Windows.Data.IMultiValueConverter
     {
         public static MultiItemsPanelConverter Instance { get; } = new();
@@ -62,8 +35,8 @@ namespace Utility.WPF.Controls.Trees
                     array[2] is var columns)
                 {
                     var template = ItemsPanelFactory.Template(
-                        (int?)rows,
-                        (int?)columns,
+                        (IReadOnlyCollection<Dimension>?)rows,
+                        (IReadOnlyCollection<Dimension>?)columns,
                         o,
                         (A)Enum.Parse(typeof(A), arrangement.ToString()));
                     return template;

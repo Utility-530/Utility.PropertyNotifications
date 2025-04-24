@@ -36,8 +36,8 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty IsReplicableProperty = DependencyProperty.Register("IsReplicable", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty IsRemovableProperty = DependencyProperty.Register("IsRemovable", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty ArrangementProperty = DependencyProperty.Register("Arrangement", typeof(Utility.Enums.Arrangement), typeof(CustomTreeViewItem), new PropertyMetadata(_changed));
-        public static readonly DependencyProperty RowsProperty = DependencyProperty.Register("Rows", typeof(int), typeof(CustomTreeViewItem), new PropertyMetadata(0));
-        public static readonly DependencyProperty ColumnsProperty = DependencyProperty.Register("Columns", typeof(int), typeof(CustomTreeViewItem), new PropertyMetadata(0));
+        public static readonly DependencyProperty RowsProperty = DependencyProperty.Register("Rows", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty ColumnsProperty = DependencyProperty.Register("Columns", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
 
         private static void _changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
