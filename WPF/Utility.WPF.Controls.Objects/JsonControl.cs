@@ -19,6 +19,7 @@ using Utility.Commands;
 using Utility.Helpers;
 using Utility.Models;
 using Utility.WPF.Controls.Trees;
+using Utility.Helpers.Ex;
 using static LambdaConverters.ValueConverter;
 
 namespace Utility.WPF.Controls.Objects
@@ -102,40 +103,13 @@ namespace Utility.WPF.Controls.Objects
             }
             else if ((sender as Control).DataContext is JObject jObject)
             {
-                clear(jObject);
+                jObject.Reset();
             }
 
             e.Handled = true;
         }
 
 
-        static void clear(JObject jObject)
-        {
-            foreach (var x in jObject.Properties())
-            {
-                if (x.Value is JValue jValue)
-                    switch (jValue.Type)
-                    {
-                        case JTokenType.String:
-                            x.Value = string.Empty;
-                            break;
-                        case JTokenType.Integer:
-                            x.Value = 0;
-                            break;
-                        case JTokenType.TimeSpan:
-                            x.Value = TimeSpan.Zero;
-                            break;
-                    }
-                else if (x.Value is JToken token)
-                {
-
-                }
-                else
-                {
-                    throw new Exception("EF 343");
-                }
-            }
-        }
 
         static void OnFoo(object sender, RoutedEventArgs e)
         {
@@ -143,19 +117,18 @@ namespace Utility.WPF.Controls.Objects
 
             JToken jToken = null;
 
-            //var x = new JPropertyNewValue(value, );
 
             if (sender is TreeView { SelectedItem: TreeViewItem { DataContext: JObject jObject } })
             {
                 jToken = jObject;
                 jArray.Add(jObject);
-                clear((jArray.Last as JObject));
+                (jArray.Last as JObject).Reset();
             }
             else if (jArray.Count > 0)
             {
                 jArray.Add(jArray[0]);
                 jToken = jArray.Last;
-                clear((jArray.Last as JObject));
+                (jArray.Last as JObject).Reset();
             }
             else
             {
@@ -317,11 +290,11 @@ namespace Utility.WPF.Controls.Objects
                     if (property.Name == "$type")
                     {
                         return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
-                    }         
+                    }
                     if (property.Name == "$isenum")
                     {
                         return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
-                    }      
+                    }
                     if (property.Name == "$isreadonly")
                     {
                         return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
@@ -508,7 +481,7 @@ namespace Utility.WPF.Controls.Objects
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return new JPropertyNewValue(value, parameter as JProperty);
+            return new JPropertyNewValue(value, parameter as JToken);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -538,7 +511,25 @@ namespace Utility.WPF.Controls.Objects
         {
             if (value is RoutedEventArgs { OriginalSource: CheckBox { IsChecked: { } isChecked } } && parameter is JValue { Parent: JProperty jProperty } jValue)
             {
-                jProperty.Value = isChecked;
+                jValue.Value = isChecked;
+                return new JPropertyNewValue(value, jProperty);
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class DoubleEventArgsConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is RoutedPropertyChangedEventArgs<double> { NewValue:{ } newValue } && parameter is JValue { Parent: JProperty jProperty } jValue)
+            {
+                jValue.Value = newValue;
                 return new JPropertyNewValue(value, jProperty);
             }
             return DependencyProperty.UnsetValue;
@@ -714,7 +705,7 @@ namespace Utility.WPF.Controls.Objects
             else if (jValue.Parent?.Parent is JObject jObject && jObject["$type"] is { } _type)
             {
                 var oType = Type.GetType(_type.ToString());
-                type = oType.GetProperty((jValue.Parent as JProperty).Name).PropertyType; 
+                type = oType.GetProperty((jValue.Parent as JProperty).Name).PropertyType;
             }
             else
             {
@@ -940,41 +931,6 @@ namespace Utility.WPF.Controls.Objects
         }
     }
 
-    public class NumberConverter : IValueConverter
-    {
-
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return value != null ? value.ToString() : null;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (targetType == typeof(decimal))
-            {
-                try
-                {
-                    return decimal.Parse(value.ToString());
-                }
-                catch
-                {
-                    return default(decimal);
-                }
-            }
-            else
-            {
-                try
-                {
-                    return double.Parse(value.ToString());
-                }
-                catch
-                {
-                    return default(double);
-                }
-            }
-        }
-    }
 
     public class GuidConverter : IValueConverter
     {

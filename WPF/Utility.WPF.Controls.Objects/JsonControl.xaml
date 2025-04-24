@@ -9,6 +9,7 @@
     xmlns:conv="http://schemas.utility.com/converters"
     xmlns:local="clr-namespace:Utility.WPF.Controls.Objects"
     xmlns:c="http://schemas.utility.com"
+    xmlns:d="clr-namespace:NumericUpDownLib;assembly=NumericUpDownLib"
     xmlns:res="http://schemas.utility.com/resourcedictionary" 
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:att="http://schemas.utility.com/attached">
@@ -246,7 +247,7 @@
             </HierarchicalDataTemplate>
 
             <!--<VisibilityConverter x:Key="VisibilityConverter" />-->
-            <controls:NumberConverter x:Key="NumberConverter" />
+            <controls:DoubleEventArgsConverter x:Key="DoubleEventArgsConverter" />
             <controls:GuidConverter x:Key="GuidConverter" />
             <!--<controls:IntegerConverter x:Key="IntegerConverter" />-->
             <controls:IndexConverter x:Key="IndexConverter" />
@@ -322,25 +323,28 @@
                     </i:Interaction.Triggers>
                 </xctk:DateTimePicker>
             </DataTemplate>
+            
             <DataTemplate x:Key="TimeTemplate">
                 <xctk:TimePicker Margin="0,0,0,8" HorizontalAlignment="Stretch" 
                                      Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeConverter}}" />
             </DataTemplate>
+            
             <DataTemplate x:Key="NumberTemplate">
-                <xctk:DoubleUpDown Margin="0,0,0,8" TextAlignment="Left" Value="{Binding Value, Converter={StaticResource NumberConverter}}">
+                <d:DoubleUpDown Margin="0,0,0,8" Value="{Binding Value, Mode=TwoWay}">
                     <i:Interaction.Triggers>
-                        <i:PropertyChangedTrigger Binding="{Binding Path=Value, Mode=OneWayToSource}">
-                            <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource EventArgsConverter}" 
+                        <i:EventTrigger EventName="ValueChanged">
+                            <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource DoubleEventArgsConverter}" 
                                                            EventArgsConverterParameter="{Binding }" 
                                                            Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
-                        </i:PropertyChangedTrigger>
+                        </i:EventTrigger>
                     </i:Interaction.Triggers>
-                </xctk:DoubleUpDown>
+                </d:DoubleUpDown>
             </DataTemplate>
+            
             <DataTemplate x:Key="IntegerTemplate">
                 <WrapPanel>
                     <xctk:IntegerUpDown Margin="0,0,0,8" TextAlignment="Left" HorizontalAlignment="Stretch"  x:Name="IntegerUpDown"               
-                                        Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                        Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                         <i:Interaction.Triggers>
                             <i:PropertyChangedTrigger Binding="{Binding ElementName=IntegerUpDown, Path=Value}">
                                 <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource EventArgsConverter}" 

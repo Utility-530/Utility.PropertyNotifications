@@ -17,9 +17,6 @@ namespace Utility.WPF.Controls.Objects
 
         static ObjectBehavior()
         {
-            //serialiser = JsonSerializer.CreateDefault(new JsonSerializerSettings { Converters = converters, TypeNameHandling = TypeNameHandling.All });
-            //serialiser = JsonSerializer.CreateDefault();
-
         }
 
         private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -52,19 +49,14 @@ namespace Utility.WPF.Controls.Objects
             {
                 if (e.JPropertyNewValue is { EnumType: { } type, JProperty: JProperty _jProperty })
                     return Enum.Parse(type, _jProperty.Value.Value<string>());
-                else if (e.JPropertyNewValue.JProperty is JProperty jProperty)
-                    switch (jProperty.Value.Type)
-                    {
-                        case JTokenType.Boolean:
-                            return jProperty.Value.Value<bool>();
-                        case JTokenType.String:
-                            return jProperty.Value.Value<string>();
-                    }
+                else if (e.JPropertyNewValue.JProperty is JValue jValue)
+                    return jValue.Value;
+                else if (e.JPropertyNewValue.JProperty is JProperty { Value: JValue value })
+                    return value.Value;
                 else if (e.JPropertyNewValue.JProperty is JToken jToken)
                 {
                     return ObjectConverter.ToObject(jToken);
                 }
-
 
                 throw new Exception("2 44");
             }
