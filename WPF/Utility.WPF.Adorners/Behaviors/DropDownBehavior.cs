@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using Utility.Helpers.NonGeneric;
+using Utility.Structs;
 using Utility.WPF.Adorners.Infrastructure;
 using Utility.WPF.Controls;
 using Utility.WPF.Reactives;
@@ -97,7 +98,7 @@ namespace Utility.WPF.Adorners.Behaviors
             {
                 ItemsSource = itemsSource,
                 //Background = new SolidColorBrush { Opacity = 0.5, Color = Colors.White },
-                ItemsPanel = Utility.WPF.Factorys.ItemsPanelFactory.Template(1, itemsSource.Count(), Orientation.Horizontal, Enums.Arrangement.Uniform),
+                ItemsPanel = Utility.WPF.Factorys.ItemsPanelFactory.Template([new Dimension()], Enumerable.Repeat(new Dimension(), itemsSource.Count()).ToArray(), Orientation.Horizontal, Enums.Arrangement.Uniform),
                 VerticalContentAlignment = VerticalAlignment.Center,
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Right,
