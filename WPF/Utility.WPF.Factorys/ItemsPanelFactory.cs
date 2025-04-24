@@ -5,6 +5,9 @@ using System.Windows.Controls.Primitives;
 using Utility.Enums;
 using Utility.WPF.Panels;
 using PixelLab.Wpf;
+using System.Collections.Generic;
+using Utility.Structs;
+using System.Linq;
 
 namespace Utility.WPF.Factorys
 {
@@ -13,84 +16,49 @@ namespace Utility.WPF.Factorys
 
     public static class ItemsPanelFactory
     {
-        public static ItemsPanelTemplate Template(int? rows, int? columns, Orientation? orientation, Arrangement? arrangement, Action<FrameworkElementFactory>? postAction =null)
-        {
-            //if(rows==1 && orientation==Orientation.Horizontal && arrangement == Arrangement.Uniform)
-            //{
-            //    return CreateItemsPanelTemplate<UniformStackPanel>(factory =>
-            //    {
-            //        factory.SetValue(UniformStackPanel.OrientationProperty, Orientation.Horizontal);
-            //        postAction?.Invoke(factory);
-            //    });
-            //}
-            //if (columns == 1 && orientation == Orientation.Vertical && arrangement == Arrangement.Uniform)
-            //{
-            //    return CreateItemsPanelTemplate<UniformStackPanel>(factory =>
-            //    {
-            //        factory.SetValue(UniformStackPanel.OrientationProperty, Orientation.Vertical);
-            //        postAction?.Invoke(factory);
-            //    });
-            //}
+        public static ItemsPanelTemplate Template(IReadOnlyCollection<Dimension>? rows, IReadOnlyCollection<Dimension>? columns, Orientation? orientation, Arrangement? arrangement, Action<FrameworkElementFactory>? postAction = null)
+        { 
             return (arrangement, orientation) switch
             {
 
-                //(Arrangement.Grid, _) => CreateItemsPanelTemplate<AutoGrid>(factory =>
-                //{
-                //    if (rows.HasValue)
-                //    {
-                //        factory.SetValue(AutoGrid.RowsCountProperty, rows.Value);
-                //    }
-                //    if (columns.HasValue)
-                //    {
-                //        factory.SetValue(AutoGrid.ColumnsCountProperty, columns.Value);
-                //    }
-                //    if (orientation.HasValue)
-                //        factory.SetValue(AutoGrid.OrientationProperty, orientation.Value);
-                //}),
+                (Arrangement.Grid, _) =>
+                                CreateItemsPanelTemplate<GridEx>(factory =>
+                                {
+                                    factory.SetValue(GridEx.RowHeightsProperty, rows);
+                                    factory.SetValue(GridEx.ColumnWidthsProperty, columns);
+                                    postAction?.Invoke(factory);
+                                }),
+
                 (Arrangement.Stack, _) =>
                 CreateItemsPanelTemplate<StackPanel>(SetStackPanelOrientation),
                 (Arrangement.Wrap, _) =>
                 CreateItemsPanelTemplate<WrapPanel>(SetWrapPanelOrientation),
-                //(Arrangement.Horizotal, _) =>
-                //CreateItemsPanelTemplate<UniformGrid>(factory =>
-                //{
-                //    factory.SetValue(UniformGrid.ColumnsProperty, columns ?? 2);
-                //    factory.SetValue(UniformGrid.RowsProperty, rows ?? 1);
-                //}),
-                //(Arrangement.Vertical, _) =>
-                //CreateItemsPanelTemplate<UniformGrid>(factory =>
-                //{
-                //    factory.SetValue(UniformGrid.ColumnsProperty, columns ?? 1);
-                //    factory.SetValue(UniformGrid.RowsProperty, rows ?? 2);
-                //}),
-
-                (_, Orientation.Vertical) =>
-                CreateItemsPanelTemplate<UniformGrid>(factory =>
-                {
-                    factory.SetValue(UniformGrid.ColumnsProperty, columns ?? 1);
-                    factory.SetValue(UniformGrid.RowsProperty, rows ?? 2);
-                    postAction?.Invoke(factory);
-                }),
-
-                (_, Orientation.Horizontal) =>
-                CreateItemsPanelTemplate<UniformGrid>(factory =>
-                {
-                    factory.SetValue(UniformGrid.ColumnsProperty, columns ?? 2);
-                    factory.SetValue(UniformGrid.RowsProperty, rows ?? 1);
-                    postAction?.Invoke(factory);
-                }),
                 (Arrangement.Uniform, _) =>
                 CreateItemsPanelTemplate<UniformGrid>(factory =>
                 {
-                    factory.SetValue(UniformGrid.RowsProperty, rows ?? 2);
-                    factory.SetValue(UniformGrid.ColumnsProperty, columns ?? 2);
+                    factory.SetValue(UniformGrid.RowsProperty, rows?.Count ?? 2);
+                    factory.SetValue(UniformGrid.ColumnsProperty, columns?.Count ?? 2);
                     postAction?.Invoke(factory);
 
                 }),
 
                 (Arrangement.TreeMap, _) => CreateItemsPanelTemplate<TreeMapPanel>(),
                 //(Arrangement.TreeStack, _) => CreateItemsPanelTemplate<TreeStackPanel>(),
+                (_, Orientation.Vertical) =>
+                CreateItemsPanelTemplate<UniformGrid>(factory =>
+                {
+                    factory.SetValue(UniformGrid.ColumnsProperty, columns?.Count ?? 1);
+                    factory.SetValue(UniformGrid.RowsProperty, rows?.Count ?? 2);
+                    postAction?.Invoke(factory);
+                }),
 
+                (_, Orientation.Horizontal) =>
+                CreateItemsPanelTemplate<UniformGrid>(factory =>
+                {
+                    factory.SetValue(UniformGrid.ColumnsProperty, columns?.Count ?? 2);
+                    factory.SetValue(UniformGrid.RowsProperty, rows?.Count ?? 1);
+                    postAction?.Invoke(factory);
+                }),
                 _ => throw new Exception("WGE vgfd vvf")
             };
 
@@ -107,14 +75,6 @@ namespace Utility.WPF.Factorys
                 postAction?.Invoke(factory);
 
             }
-            //void SetTreeMapOrientation(FrameworkElementFactory factory)
-            //{
-            //    factory.SetValue(WrapPanel.OrientationProperty, orientation);
-            //}
-            //void SetTreeStackOrientation(FrameworkElementFactory factory)
-            //{
-            //    factory.SetValue(WrapPanel.OrientationProperty, orientation);
-            //}
         }
     }
 }
