@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
     <ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
+    <ProjectReference Include="..\..\Structs\Utility.Structs\Utility.Structs.csproj" />
   </ItemGroup>
 
 </Project>
