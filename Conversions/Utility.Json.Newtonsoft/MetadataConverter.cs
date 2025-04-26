@@ -12,7 +12,7 @@ namespace Utility.Conversions.Json.Newtonsoft
     {
         public override bool CanConvert(Type objectType)
         {
-            return Utility.Helpers.PropertyHelper.ValueTypes.Contains(objectType) == false && objectType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(objectType) == false;
+            return objectType is not Type && Utility.Helpers.PropertyHelper.ValueTypes.Contains(objectType) == false && objectType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(objectType) == false;
         }
 
 
@@ -29,14 +29,7 @@ namespace Utility.Conversions.Json.Newtonsoft
 
             var type = value.GetType();
 
-            //if (typeof(IEnumerable).IsAssignableFrom(type))
-            //{
-            //    if (value is IList { IsFixedSize: { } isFixedSize })
-            //    {
-
-            //    }
-            //}
-            var properties = value.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
 
             writer.WritePropertyName("$type");

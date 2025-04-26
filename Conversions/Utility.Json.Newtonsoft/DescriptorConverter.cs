@@ -21,7 +21,7 @@ namespace Utility.Conversions.Json.Newtonsoft
             writer.WriteValue(value.ComponentType?.AssemblyQualifiedName);
 
             writer.WritePropertyName("PropertyType");
-            writer.WriteValue(value.PropertyType.AssemblyQualifiedName);
+            writer.WriteValue(value.PropertyType?.AssemblyQualifiedName);
 
             writer.WritePropertyName("Name");
             writer.WriteValue(value.Name ?? string.Empty);
