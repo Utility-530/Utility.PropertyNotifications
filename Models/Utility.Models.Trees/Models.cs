@@ -264,7 +264,7 @@ namespace Utility.Models.Trees
 
         public override IEnumerable<Model> CreateChildren()
         {
-            foreach (var p in MethodInfo.GetParameters())
+            foreach (var p in MethodInfo?.GetParameters() ?? Array.Empty<ParameterInfo>())
                 yield return
                     new ParameterModel { Name = p.Name, Parameter = p };
         }
@@ -342,6 +342,7 @@ namespace Utility.Models.Trees
         public override void SetNode(INode node)
         {
             node.IsPersistable = true;
+            node.IsExpanded = true;
             base.SetNode(node);
 
 
@@ -967,7 +968,7 @@ namespace Utility.Models.Trees
 
         public override void Update(IReadOnlyTree node, IReadOnlyTree current)
         {
-            
+
         }
     }
 
@@ -1056,20 +1057,42 @@ namespace Utility.Models.Trees
             base.Addition(value, a);
         }
 
+        public override void SetNode(INode node)
+        {
+            node.IsExpanded = true;
+            base.SetNode(node);
+        }
+
     }
 
-    public class InputsModel : Model
+    public class InputsModel : CollectionModel<ThroughPutModel>
     {
-
-        [JsonIgnore]
-        public ObservableCollection<ThroughPutModel> Models { get; } = new();
 
 
         public override void SetNode(INode node)
         {
-            //node.IsEditable = true;
+            node.IsExpanded = true;
             node.Orientation = Orientation.Vertical;
-            node.Items.AndAdditions<INode>().Subscribe(a => Models.Add(a.Data as ThroughPutModel));
+            base.SetNode(node);
+        }
+    }
+
+    public class ExpandedModel : Model
+    {
+
+        public ExpandedModel(Func<IEnumerable<Model>> func) : base(func)
+        {
+        }
+
+        public ExpandedModel() : base()
+        {
+        }
+
+        public override void SetNode(INode node)
+        {
+            //node.IsEditable = true;
+            node.IsExpanded = true;
+            node.Arrangement = Arrangement.Stack;
             base.SetNode(node);
         }
     }

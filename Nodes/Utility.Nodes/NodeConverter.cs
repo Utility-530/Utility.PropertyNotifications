@@ -32,8 +32,8 @@ namespace Utility.Nodes
             writer.WriteValue(value.IsExpanded);
 
             writer.WritePropertyName("Rows");
-            JToken.FromObject(value.Rows).WriteTo(writer);         
-            
+            JToken.FromObject(value.Rows).WriteTo(writer);
+
             writer.WritePropertyName("Columns");
             JToken.FromObject(value.Columns).WriteTo(writer);
 
@@ -42,7 +42,7 @@ namespace Utility.Nodes
 
             writer.WritePropertyName("Column");
             writer.WriteValue(value.Column);
-            
+
             writer.WritePropertyName("Arrangement");
             writer.WriteValue(value.Arrangement);
 
@@ -87,7 +87,7 @@ namespace Utility.Nodes
             }
 
             writer.WritePropertyName($"$isenum");
-            serializer.Serialize(writer, new[] { nameof(Node.Arrangement), nameof(Node.Orientation)});
+            serializer.Serialize(writer, new[] { nameof(Node.Arrangement), nameof(Node.Orientation) });
 
             writer.WriteEndObject();
         }
@@ -118,13 +118,17 @@ namespace Utility.Nodes
 
             node.IsExpanded = bool.Parse(jObject["IsExpanded"].ToString());
 
-            node.Row = int.Parse(jObject["Row"].ToString());
+            if (jObject["Row"] is JToken rToken)
+                node.Row = int.Parse(rToken.ToString());
 
-            node.Column = int.Parse(jObject["Column"].ToString());
+            if (jObject["Column"] is JToken cToken)
+                node.Column = int.Parse(cToken.ToString());
 
-            node.Arrangement = Enum.Parse<Arrangement>(jObject["Arrangement"].ToString());
+            if (jObject["Arrangement"] is JToken aToken)
+                node.Arrangement = Enum.Parse<Arrangement>(aToken.ToString());
 
-            node.Orientation = Enum.Parse<Orientation>(jObject["Orientation"].ToString());
+            if (jObject["Orientation"] is JToken oToken)
+                node.Orientation = Enum.Parse<Orientation>(jObject["Orientation"].ToString());
 
             if (jObject["Rows"] is JArray rows)
             {
@@ -134,7 +138,7 @@ namespace Utility.Nodes
                     node.Rows.Add(dimension);
                 }
             }
-            
+
             if (jObject["Columns"] is JArray columns)
             {
                 foreach (var item in columns)
