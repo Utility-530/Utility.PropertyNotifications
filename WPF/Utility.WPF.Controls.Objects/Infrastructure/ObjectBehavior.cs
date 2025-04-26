@@ -1,9 +1,11 @@
 ﻿using Microsoft.Xaml.Behaviors;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Pather.CSharp;
 using Pather.CSharp.PathElements;
 using System;
 using System.Collections.Generic;
+using System.Reactive.Subjects;
 using System.Windows;
 
 
@@ -11,6 +13,7 @@ namespace Utility.WPF.Controls.Objects
 {
     public class ObjectBehavior : Behavior<JsonControl>
     {
+        ReplaySubject<JsonControl> _playSubject = new(1);
         public static readonly DependencyProperty ObjectProperty = DependencyProperty.Register("Object", typeof(object), typeof(ObjectBehavior), new PropertyMetadata(null, changed));
 
         private ResolverFactory.Resolver resolver;
@@ -19,17 +22,37 @@ namespace Utility.WPF.Controls.Objects
         {
         }
 
+
+
+        public JsonSerializer JsonSerializer
+        {
+            get { return (JsonSerializer)GetValue(JsonSerializerProperty); }
+            set { SetValue(JsonSerializerProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for JsonSerializer.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty JsonSerializerProperty =
+            DependencyProperty.Register("JsonSerializer", typeof(JsonSerializer), typeof(ObjectBehavior), new PropertyMetadata());
+
+
         private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is ObjectBehavior b && e.NewValue is { } obj)
             {
-                b.AssociatedObject.Object = JToken.FromObject(obj);
+                b._playSubject.Subscribe(a =>
+                {
+                    if (b.JsonSerializer != null)
+                        a.Object = JToken.FromObject(obj, b.JsonSerializer);
+                    else
+                        a.Object = JToken.FromObject(obj);
+                });
             }
         }
 
         protected override void OnAttached()
         {
             AssociatedObject.ValueChanged += AssociatedObject_ValueChanged;
+            _playSubject.OnNext(AssociatedObject);
             base.OnAttached();
         }
 
