@@ -13,7 +13,7 @@ namespace Utility.WPF.Controls.Html
 {
     public class TinyHtmlEditorControl : SplitControl
     {
-        private WpfHtmlControl? _htmlControl;
+        private HtmlControl? _htmlControl;
         private TextEditor? _textEditor;
         public static readonly DependencyProperty HtmlProperty = DependencyProperty.Register("Html", typeof(string), typeof(TinyHtmlEditorControl), new PropertyMetadata(changed));
 
@@ -63,7 +63,8 @@ namespace Utility.WPF.Controls.Html
         public override void OnApplyTemplate()
         {
             //this.Movement = Enums.XYMovement.TopToBottom;
-            _htmlControl = this.Content as WpfHtmlControl;
+            //_htmlControl = this.Content as WpfHtmlControl;
+            _htmlControl = this.Content as HtmlControl;
             _htmlControl.Html = Html;
             //_htmlControl.Html = Html;
             // its necessary to set the header in code-behind because of the difficulty detaching the TextEditor 
@@ -92,32 +93,32 @@ namespace Utility.WPF.Controls.Html
         {
             var html = GetHtmlEditorText();
 
-            html = Regex.Replace(html, @"src=\""(\w.*?)\""", match =>
-            {
-                var img = HtmlRenderingHelper.TryLoadResourceImage(match.Groups[1].Value);
-                if (img != null)
-                {
-                    var tmpFile = Path.GetTempFileName();
-                    var encoder = new PngBitmapEncoder();
-                    encoder.Frames.Add(BitmapFrame.Create(img));
-                    using (FileStream stream = new FileStream(tmpFile, FileMode.Create))
-                        encoder.Save(stream);
-                    return string.Format("src=\"{0}\"", tmpFile);
-                }
-                return match.Value;
-            }, RegexOptions.IgnoreCase);
+            //html = Regex.Replace(html, @"src=\""(\w.*?)\""", match =>
+            //{
+            //    var img = HtmlRenderingHelper.TryLoadResourceImage(match.Groups[1].Value);
+            //    if (img != null)
+            //    {
+            //        var tmpFile = Path.GetTempFileName();
+            //        var encoder = new PngBitmapEncoder();
+            //        encoder.Frames.Add(BitmapFrame.Create(img));
+            //        using (FileStream stream = new FileStream(tmpFile, FileMode.Create))
+            //            encoder.Save(stream);
+            //        return string.Format("src=\"{0}\"", tmpFile);
+            //    }
+            //    return match.Value;
+            //}, RegexOptions.IgnoreCase);
 
-            html = Regex.Replace(html, @"href=\""(\w.*?)\""", match =>
-            {
-                var stylesheet = DemoUtils.GetStylesheet(match.Groups[1].Value);
-                if (stylesheet != null)
-                {
-                    var tmpFile = Path.GetTempFileName();
-                    File.WriteAllText(tmpFile, stylesheet);
-                    return string.Format("href=\"{0}\"", tmpFile);
-                }
-                return match.Value;
-            }, RegexOptions.IgnoreCase);
+            //html = Regex.Replace(html, @"href=\""(\w.*?)\""", match =>
+            //{
+            //    var stylesheet = DemoUtils.GetStylesheet(match.Groups[1].Value);
+            //    if (stylesheet != null)
+            //    {
+            //        var tmpFile = Path.GetTempFileName();
+            //        File.WriteAllText(tmpFile, stylesheet);
+            //        return string.Format("href=\"{0}\"", tmpFile);
+            //    }
+            //    return match.Value;
+            //}, RegexOptions.IgnoreCase);
 
             return html;
         }

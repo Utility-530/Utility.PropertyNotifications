@@ -21,6 +21,8 @@ namespace Utility.WPF.Controls.Html
         private bool _updateLock;
         private HtmlPanel? _htmlPanel;
         private System.Windows.Controls.WebBrowser _webBrowser;
+        bool applyFlag = false;
+        bool update = false;
 
         public static readonly DependencyProperty HtmlProperty = DependencyProperty.Register("Html", typeof(string), typeof(HtmlControl), new PropertyMetadata(changed));
 
@@ -51,11 +53,18 @@ namespace Utility.WPF.Controls.Html
             //this.Movement = Enums.XYMovement.TopToBottom;
             _htmlPanel = this.Content as HtmlPanel;
             _webBrowser = this.Header as WebBrowser;
+            applyFlag = true;
+            if (update == true)
+                Update(Html);
             base.OnApplyTemplate();
         }
 
         private void Update(string s)
         {
+            update = true;
+            if (applyFlag == false)
+                return;
+
             if (_updateLock == true)
                 return;
             _updateLock = true;

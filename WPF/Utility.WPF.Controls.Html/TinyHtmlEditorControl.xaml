@@ -10,7 +10,8 @@
         <Setter Property="Movement" Value="TopToBottom"></Setter>
         <Setter Property="Content">
             <Setter.Value>
-                <tiny:WpfHtmlControl Html="{Binding Html, RelativeSource={RelativeSource AncestorType=local:TinyHtmlEditorControl}}"/>
+                <!--<tiny:WpfHtmlControl Html="{Binding Html, RelativeSource={RelativeSource AncestorType=local:TinyHtmlEditorControl}}"/>-->
+                <local:HtmlControl Html="{Binding Html, RelativeSource={RelativeSource AncestorType=local:TinyHtmlEditorControl}}"/>
             </Setter.Value>
         </Setter>
         <!--<Setter Property="Header">
