@@ -147,7 +147,7 @@ namespace Utility.Nodes.Filters
                 {
                     node.IsExpanded = true;
                 }
-                string[] names = [nameof(Node.IsSelected), nameof(Node.IsExpanded), nameof(Node.Orientation), nameof(Node.Order)];
+                string[] names = [nameof(Node.IsSelected), nameof(Node.IsExpanded), nameof(Node.Orientation), nameof(Node.Order), nameof(Node.Arrangement), nameof(Node.Order)];
                 node.WithChanges().Subscribe(e =>
                 {
                     if (e is PropertyChangedExEventArgs { PreviousValue: var previousValue, PropertyName: string name, Value: var value })

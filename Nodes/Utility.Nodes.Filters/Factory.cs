@@ -30,6 +30,7 @@ namespace Utility.Nodes.Filters
         public const string _html = nameof(_html);
         public const string dirty = nameof(dirty);
         public const string collection = nameof(collection);
+        public const string demo_content = nameof(demo_content);
 
         // readonly Guid assGuid = Guid.Parse("10126895-6855-45ab-97af-21ed90c02fe8");
         // readonly Guid relGuid = Guid.Parse("5c90fcd6-2324-4f88-bffb-73b8f9fbcf6b");
@@ -42,6 +43,7 @@ namespace Utility.Nodes.Filters
         readonly Guid transformerGuid = Guid.Parse("76ae564a-fda0-419c-9b88-dee3ac7430c1");
         readonly Guid filterGuid = Guid.Parse("2db6ac81-590e-4f94-98b9-215a1cd880bb");
         readonly Guid contentGuid = Guid.Parse("004cf888-a762-4149-a3b9-7a0911cdf1a9");
+        readonly Guid demoContentGuid = Guid.Parse("8beee93e-fede-4c73-912f-1f3fea885c8e");
         readonly Guid htmlGuid = Guid.Parse("d44f1125-66ac-4b2e-8330-b2bdfb4797cb");
         readonly Guid htmlRenderGuid = Guid.Parse("48e723e9-5e67-4381-940d-e1f240d31ea6");
         readonly Guid controlsGuid = Guid.Parse("f4565c31-c35b-4cbf-911a-26a841d3bc04");
@@ -154,32 +156,44 @@ namespace Utility.Nodes.Filters
 
             Model build(string s)
             {
-                //return new Model(() =>
-                //{
-                //    return [
-                //        new Model(() =>
-                //        {
-                //            return new List<string> { "test 1", "test 2", "test 3" }.Select(a => new Model { Name = a });
-                //        })
-                //        { Name = "Group 1" },
-                //        new Model(() =>
-                //        {
-                //            return [
-                //             new IndexModel { Name="index 1", Value = 5 },
-                //             new Model(()=> [new Model { Name = "lower" }]) { Name = "test 5" }
-                //             ];
-                //    }){ Name = "Group 2"},
-                //    new Model(() =>
-                //    {
-                //        return [
-                //            new Model { Name = "test 6" } ,
-                //            new IndexModel { Name="index 2", Value = 8 },
-                //       ];
-                //    }){ Name = "Group 3"}
-                //    ];
-                //})
                 return new Model()
                 { Name = s };
+            };
+        }
+
+        public IObservable<INode> BuildDemoContentRoot()
+        {
+            return nodeSource.Create(demo_content, demoContentGuid, (s) => new Node(s), s => build(s));
+
+            Model build(string s)
+            {
+                return new ExpandedModel(() =>
+                {
+                    return [
+                        new ExpandedModel(() =>
+                        {
+                            return new List<string> { "test 1", "test 2", "test 3" }.Select(a => new Model { Name = a });
+                        })
+                        { Name = "Group 1" },
+                        new ExpandedModel(() =>
+                        {
+                            return [
+                             new IndexModel { Name="index 1", Value = 5 },
+                             new ExpandedModel(()=> [new ExpandedModel { Name = "lower" }]) { Name = "test 5" }
+                             ];
+                    }){ Name = "Group 2"},
+                    new ExpandedModel(() =>
+                    {
+                        return [
+                            new ExpandedModel { Name = "test 6" } ,
+                            new IndexModel { Name="index 2", Value = 8 },
+                       ];
+                    }){ Name = "Group 3"}
+                    ];
+                })
+                { Name = s }; 
+      
+          
             };
         }
     }
