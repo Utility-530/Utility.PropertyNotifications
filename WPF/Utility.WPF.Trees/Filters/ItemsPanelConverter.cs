@@ -4,6 +4,7 @@ using System.Windows.Data;
 using Utility.Enums;
 using Utility.Interfaces;
 using Utility.PropertyDescriptors;
+using Utility.Structs;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
 using O = System.Windows.Controls.Orientation;
@@ -25,15 +26,15 @@ namespace Utility.Nodes.WPF
             //}
             if (value is IReadOnlyTree { Data: IReferenceDescriptor { Count: int _count }, Parent.Data: ICollectionDescriptor { } })
             {
-                return ItemsPanelFactory.Template(1, Math.Max(_count, 1), O.Horizontal, Arrangement.Uniform);
+                return ItemsPanelFactory.Template([new Dimension()] , Enumerable.Repeat(new Dimension(), Math.Max(_count, 1)).ToArray(), O.Horizontal, Arrangement.Uniform);
             }
             if (value is IReadOnlyTree { Data: ICollectionHeadersDescriptor { Count: var __count } })
             {
-                return ItemsPanelFactory.Template(1, __count, O.Horizontal, Arrangement.Uniform);
+                return ItemsPanelFactory.Template([new Dimension()], Enumerable.Repeat(new Dimension(), Math.Max(__count, 1)).ToArray(), O.Horizontal, Arrangement.Uniform);
             }
             {
                 if (tree.Data is IPropertyDescriptor { } _descriptor)
-                    return ItemsPanelFactory.Template(1, default, O.Horizontal, Arrangement.Stack);
+                    return ItemsPanelFactory.Template([new Dimension()], default, O.Horizontal, Arrangement.Stack);
             }
             //{
             //    if (tree.Data is ICollectionHeadersDescriptor { } _descriptor)
@@ -44,7 +45,7 @@ namespace Utility.Nodes.WPF
             //        return ItemsPanelFactory.Template(default, default, O.Horizontal, Arrangement.Stacked);
             //}
 
-            return ItemsPanelFactory.Template(default, 1, O.Vertical, Arrangement.Stack);
+            return ItemsPanelFactory.Template(default, [new Dimension()], O.Vertical, Arrangement.Stack);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

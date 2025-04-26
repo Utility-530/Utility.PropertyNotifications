@@ -19,8 +19,8 @@
     <conv:InverseNullToBooleanConverter x:Key="InverseNullToBooleanConverter"/>
     <local:EditConverter x:Key="EditConverter"></local:EditConverter>
     <local:ItemsPanelConverter x:Key="ItemsPanelConverter"></local:ItemsPanelConverter>
-    <Style x:Key="DefaultStyle" TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource GenericTreeViewItem}">
-        <Setter Property="ItemsPanel" Value="{Binding Converter={StaticResource ItemsPanelConverter}}" />
+    <Style x:Key="DefaultStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
+        <!--<Setter Property="ItemsPanel" Value="{Binding Converter={StaticResource ItemsPanelConverter}}" />-->
         <!--<Setter Property="Header" Value="{Binding Path=Data}"></Setter>-->
         <Style.Triggers>
             <DataTrigger Binding="{Binding Removed, Converter={StaticResource InverseNullToBooleanConverter}}" Value="True" >
@@ -29,29 +29,29 @@
         </Style.Triggers>
     </Style>
 
-    <Style TargetType="{x:Type TreeViewItem}" x:Key="CollapsedTreeViewItem" BasedOn="{StaticResource DefaultStyle}">
+    <Style TargetType="{x:Type trees:CustomTreeViewItem}" x:Key="CollapsedTreeViewItem" BasedOn="{StaticResource DefaultStyle}">
         <Setter Property="IsExpanded" Value="False"></Setter>
         <Setter Property="BorderThickness" Value="2"></Setter>
     </Style>
 
-    <Style TargetType="{x:Type TreeViewItem}" x:Key="ExpandedTreeViewItem" BasedOn="{StaticResource DefaultStyle}">
+    <Style TargetType="{x:Type trees:CustomTreeViewItem}" x:Key="ExpandedTreeViewItem" BasedOn="{StaticResource DefaultStyle}">
         <Setter Property="IsExpanded" Value="True"></Setter>
         <Setter Property="BorderThickness" Value="2"></Setter>
     </Style>
 
-    <Style TargetType="{x:Type TreeViewItem}" x:Key="TableItem" BasedOn="{StaticResource DefaultStyle}">
+    <Style TargetType="{x:Type trees:CustomTreeViewItem}" x:Key="TableItem" BasedOn="{StaticResource DefaultStyle}">
         <Setter Property="Width"  Value="200"></Setter>
     </Style>
 
-    <Style TargetType="{x:Type TreeViewItem}" x:Key="HeaderItem" BasedOn="{StaticResource DefaultStyle}">
+    <Style TargetType="{x:Type trees:CustomTreeViewItem}" x:Key="HeaderItem" BasedOn="{StaticResource DefaultStyle}">
         <Setter Property="Width"  Value="200"></Setter>
     </Style>
 
-    <Style TargetType="{x:Type TreeViewItem}" x:Key="CollapsedTableItem" BasedOn="{StaticResource TableItem}">
+    <Style TargetType="{x:Type trees:CustomTreeViewItem}" x:Key="CollapsedTableItem" BasedOn="{StaticResource TableItem}">
         <Setter Property="IsExpanded" Value="False"></Setter>
     </Style>
 
-    <Style TargetType="{x:Type TreeViewItem}" x:Key="ExpandedTableItem" BasedOn="{StaticResource TableItem}">
+    <Style TargetType="{x:Type trees:CustomTreeViewItem}" x:Key="ExpandedTableItem" BasedOn="{StaticResource TableItem}">
         <Setter Property="IsExpanded" Value="True"></Setter>
         <Setter Property="Template">
             <Setter.Value>
@@ -117,7 +117,7 @@
     </Style>
 
 
-    <Style TargetType="{x:Type TreeViewItem}" x:Key="ThinLineStyle" BasedOn="{StaticResource DefaultStyle}">
+    <Style TargetType="{x:Type trees:CustomTreeViewItem}" x:Key="ThinLineStyle" BasedOn="{StaticResource DefaultStyle}">
         <Setter Property="Template" >
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TreeViewItem}">
@@ -179,7 +179,7 @@
     </Style>
 
 
-    <Style TargetType="{x:Type TreeViewItem}" x:Key="ItemsStyle" BasedOn="{StaticResource DefaultStyle}">
+    <Style TargetType="{x:Type trees:CustomTreeViewItem}" x:Key="ItemsStyle" BasedOn="{StaticResource DefaultStyle}">
         <!--<Setter Property="Width" Value="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType=TreeView}}"></Setter>-->
         <Setter Property="IsExpanded" Value="true"></Setter>
         <Setter Property="Template" >
