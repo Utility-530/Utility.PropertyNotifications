@@ -15,6 +15,7 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
 
     public override bool IsReadOnly => true;
 
+    [JsonIgnore]
     public override IEnumerable<object> Children
     {
         get
