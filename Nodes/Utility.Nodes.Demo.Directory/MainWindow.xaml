@@ -10,7 +10,7 @@
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:m="clr-namespace:Utility.Models.Trees;assembly=Utility.Models.Trees"
         xmlns:c="http://schemas.utility.com/colours"
-        xmlns:styles="clr-namespace:Utility.Nodes.Demo.Styles;assembly=Utility.Nodes.WPF.Styles"
+        xmlns:styles="clr-namespace:Utility.Nodes.WPF;assembly=Utility.Nodes.WPF"
         xmlns:conv="http://schemas.utility.com/converters"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">

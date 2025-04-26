@@ -7,7 +7,7 @@ using Utility.Meta;
 using Utility.Nodes.Ex;
 using Utility.WPF.Controls.Trees;
 
-namespace Utility.Nodes.Demo.Styles
+namespace Utility.Nodes.WPF
 {
     public class ChildrenSelector : IChildrenSelector
     {

@@ -157,8 +157,8 @@
                                     <ResourceDictionary>
                                         <ResourceDictionary.MergedDictionaries>
                                             <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
-                                            <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Generic.xaml"/>
-                                            <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Templates.xaml"/>
+                                            <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Generic.xaml"/>
+                                            <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Templates.xaml"/>
                                             <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItem.xaml"/>
                                             <ResourceDictionary Source="/Utility.WPF.Controls.Breadcrumbs;component/Themes/Generic.xaml"/>
                                         </ResourceDictionary.MergedDictionaries>

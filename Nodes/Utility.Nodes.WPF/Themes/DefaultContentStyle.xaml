@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                              xmlns:customtrees="CustomTrees"
                     xmlns:trees="http://schemas.utility.com/trees"
-                    xmlns:local="clr-namespace:Utility.Nodes.Demo.Styles" 
+                    xmlns:local="clr-namespace:Utility.Nodes.WPF" 
                     xmlns:conv="http://schemas.utility.com/converters" 
                     xmlns:att="http://schemas.utility.com/attached" 
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
@@ -13,7 +13,7 @@
                     xmlns:res="http://schemas.utility.com/resourcedictionary">
 
     <ResourceDictionary.MergedDictionaries>
-        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Shared.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml"/>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 

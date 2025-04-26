@@ -16,7 +16,7 @@ using Utility.Interfaces.Exs;
 using System.Text.RegularExpressions;
 using System.IO;
 
-namespace Utility.Nodes.Demo.Styles
+namespace Utility.Nodes.WPF
 {
     public class NewObjectConverter : IValueConverter
     {

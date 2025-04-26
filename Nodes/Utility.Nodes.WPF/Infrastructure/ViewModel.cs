@@ -1,8 +1,10 @@
 ﻿using Splat;
 using Utility.Interfaces.Exs;
 using Utility.PropertyNotifications;
+using Utility.Trees.Abstractions;
+using Utility.Helpers;
 
-namespace Utility.Nodes.Demo.Editor
+namespace Utility.Nodes.WPF
 {
     public class ViewModel : NotifyPropertyClass, IDisposable
     {
@@ -10,6 +12,14 @@ namespace Utility.Nodes.Demo.Editor
         protected Lazy<INodeSource> source = new(() => Locator.Current.GetService<INodeSource>());
         private bool _disposed;
 
+        Dictionary<string, IReadOnlyTree[]> dictionary = new();
+
+        protected IReadOnlyTree[] get(string name, string propertyName)
+        {
+            if (dictionary.TryGetValue(propertyName, out var value)==false)
+                source.Value.Single(name).Subscribe(a => { dictionary[propertyName] = [a]; RaisePropertyChanged(propertyName); });
+            return value;
+        }
 
         public void Dispose()
         {

@@ -7,7 +7,6 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Nodes.Demo.Filters.Services;
 using Utility.Nodes.Filters;
-using Utility.Nodes.WPF;
 using Utility.Repos;
 using Utility.WPF.Templates;
 

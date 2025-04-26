@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0-windows</TargetFramework>
@@ -8,17 +8,23 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
-		<ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
-		<ProjectReference Include="..\..\Meta\Utility.Descriptors\Utility.Descriptors.csproj" />
+		<ProjectReference Include="..\..\Conversions\Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj" />
+		<ProjectReference Include="..\..\External\EnumSourceConverter\EnumSourceConverter.csproj" />
+		<ProjectReference Include="..\..\External\TextBoxEx\TextBoxEx.csproj" />
+		<ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Behaviors\Utility.WPF.Behaviors.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Breadcrumbs\Utility.WPF.Controls.Breadcrumbs.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.ComboBoxes\Utility.WPF.Controls.ComboBoxes.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Html\Utility.WPF.Controls.Html.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
-		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls\Utility.WPF.Controls.csproj" />
-		<ProjectReference Include="..\..\WPF\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
-		<ProjectReference Include="..\..\WPF\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
-		<ProjectReference Include="..\..\Trees\Utility.Trees.Decisions\Utility.Trees.Decisions.csproj" />
-		<ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
-		<ProjectReference Include="..\..\WPF\Utility.WPF\Utility.WPF.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
+		<ProjectReference Include="..\Models\Models.csproj" />
 	</ItemGroup>
 
-	
+	<ItemGroup>
+		<PackageReference Include="AvalonEditB" Version="2.4.0" />
+		<PackageReference Include="ICSharpCode.WpfDesigner" Version="8.1.56" />
+	</ItemGroup>
 </Project>

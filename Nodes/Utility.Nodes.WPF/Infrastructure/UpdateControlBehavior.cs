@@ -3,7 +3,7 @@ using System.Windows;
 using Microsoft.Xaml.Behaviors;
 using System.Windows.Threading;
 
-namespace Utility.Nodes.Demo.Styles
+namespace Utility.Nodes.WPF
 {
     public class UpdateControlBehavior : Behavior<Control>
     {

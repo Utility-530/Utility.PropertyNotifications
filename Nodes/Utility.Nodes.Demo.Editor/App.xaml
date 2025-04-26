@@ -26,7 +26,7 @@
                 <ResourceDictionary Source="/Utility.WPF.Controls.Breadcrumbs;component/Themes/Generic.xaml"/>
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml"/>
-                <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Generic.xaml"/>
+                <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Generic.xaml"/>
                 <res:SharedResourceDictionary Source="/Themes/Slave.xaml"/>
                 <res:SharedResourceDictionary Source="/Themes/Master.xaml"/>
                 <res:SharedResourceDictionary Source="/Themes/Container.xaml"/>

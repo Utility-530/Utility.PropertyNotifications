@@ -3,7 +3,7 @@
                     xmlns:bc="Breadcrumbs.WPF" 
                     xmlns:test="clr-namespace:TextBoxEx;assembly=TextBoxEx"
                     xmlns:ui="http://toniccomputing.com/patterns/ui" 
-                    xmlns:local="clr-namespace:Utility.Nodes.Demo.Styles"     
+                    xmlns:local="clr-namespace:Utility.Nodes.WPF"     
                     xmlns:e="clr-namespace:Utility.Enums;assembly=Utility.Enums"
                     xmlns:inf="clr-namespace:Utility.Models.Trees;assembly=Utility.Models.Trees"
                     xmlns:model="clr-namespace:Utility.Models;assembly=Utility.Models"
@@ -21,7 +21,7 @@
 
 
     <ResourceDictionary.MergedDictionaries>
-        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Shared.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <HierarchicalDataTemplate DataType="{x:Type nodes:Node}" ItemsSource="{Binding Items}">

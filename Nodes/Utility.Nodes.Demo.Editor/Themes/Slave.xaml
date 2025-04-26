@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Utility.Nodes.Demo.Editor"
+             xmlns:wpf="clr-namespace:Utility.Nodes.WPF;assembly=Utility.Nodes.WPF"
              xmlns:bc="http://schemas.utility.com/Breadcrumbs"
              xmlns:ct="http://schemas.utility.com/trees"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
@@ -16,7 +17,8 @@
              xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020" 
              xmlns:res="http://schemas.utility.com/resourcedictionary" 
              xmlns:utl="http://schemas.utility.com/utilitywpf" 
-             xmlns:btns="http://schemas.utility.com/buttons">
+             xmlns:btns="http://schemas.utility.com/buttons" 
+             xmlns:obj="http://schemas.utility.com/objects">
 
 
 
@@ -30,8 +32,9 @@
   
 
     <local:DirtyConverter x:Key="DirtyConverter"/>
-    
-    
+
+    <wpf:SerialiserSource x:Key="SerialiserSource"/>
+
     <DataTemplate DataType="{x:Type local:SlaveViewModel}">
         <DockPanel>
             <Grid DockPanel.Dock="Left">
@@ -100,7 +103,7 @@
 
                             <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" ShowsPreview="True"/>
 
-                            <TreeView Grid.Column="2" ItemsSource="{Binding Html}" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                            <TreeView Grid.Column="2" ItemsSource="{Binding Html}" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                 <ItemsControl.ItemContainerStyle>
                                     <Style TargetType="{x:Type TreeViewItem}">
                                         <Setter Property="Header" Value="{Binding Data}"/>
@@ -127,16 +130,26 @@
                 </utl:SplitControl.Content>
                 <utl:SplitControl.Header>
                     <UniformGrid Columns="1">
-                        <FrameworkElement.Resources>
+                        <!--<FrameworkElement.Resources>
                             <ResourceDictionary>
                                 <ResourceDictionary.MergedDictionaries>
                                     <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
                                     <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
                                 </ResourceDictionary.MergedDictionaries>
                             </ResourceDictionary>
-                        </FrameworkElement.Resources>
-                        <hc:PropertyGrid SelectedObject="{Binding }"/>
-                        <hc:PropertyGrid SelectedObject="{Binding Data}"/>
+                        </FrameworkElement.Resources>-->
+              
+                        <obj:JsonControl>
+                            <i:Interaction.Behaviors>
+                                <obj:ObjectBehavior  Object="{Binding }" JsonSerializer="{Binding Path=Serialiser, Source={StaticResource SerialiserSource}}"/>
+                            </i:Interaction.Behaviors>
+                        </obj:JsonControl>
+
+                        <obj:JsonControl>
+                            <i:Interaction.Behaviors>
+                                <obj:ObjectBehavior  Object="{Binding Data}" />
+                            </i:Interaction.Behaviors>
+                        </obj:JsonControl>
                     </UniformGrid>
                 </utl:SplitControl.Header>
             </utl:SplitControl>

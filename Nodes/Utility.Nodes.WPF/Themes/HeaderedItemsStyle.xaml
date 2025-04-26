@@ -3,7 +3,7 @@
                     xmlns:conv="http://schemas.utility.com/converters" 
                     xmlns:res="http://schemas.utility.com/resourcedictionary">
     <ResourceDictionary.MergedDictionaries>
-        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Shared.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
 

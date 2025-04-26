@@ -20,7 +20,7 @@
     <ProjectReference Include="..\..\Trees\Utility.Trees.Decisions\Utility.Trees.Decisions.csproj" />
     <ProjectReference Include="..\..\Trees\Utility.Trees.WPF\Utility.Trees.WPF.csproj" />
     <ProjectReference Include="..\..\Trees\Utility.Trees\Utility.Trees.csproj" />
-    <ProjectReference Include="..\Utility.Nodes.Demo.Styles\Utility.Nodes.WPF.Styles.csproj" />
+    <ProjectReference Include="..\Utility.Nodes.WPF\Utility.Nodes.WPF.csproj" />
     <ProjectReference Include="..\Utility.Nodes.Filters\Utility.Nodes.Filters.csproj" />
   </ItemGroup>
 

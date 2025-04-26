@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Utility.Models.Trees;
 
-namespace Utility.Nodes.Demo.Styles
+namespace Utility.Nodes.WPF
 {
     public class EditTemplateSelector : DataTemplateSelector
     {

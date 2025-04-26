@@ -12,7 +12,7 @@
                     xmlns:res="http://schemas.utility.com/resourcedictionary">
 
     <ResourceDictionary.MergedDictionaries>
-        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Styles;component/Themes/Shared.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="ViewContentStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
