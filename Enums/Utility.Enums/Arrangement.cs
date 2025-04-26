@@ -2,9 +2,9 @@
 {
     public enum Arrangement
     {
+        Stack,
         Grid,
         AutoGrid,
-        Stack, 
         Wrap, 
         Uniform, 
         Custom, 
