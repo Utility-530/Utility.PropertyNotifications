@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace Utility.Meta
 {
@@ -21,6 +22,8 @@ namespace Utility.Meta
 
         public override Type PropertyType { get; }
 
+        [JsonIgnore]
+        public override TypeConverter Converter => base.Converter;
 
         public override bool CanResetValue(object component)
         {
