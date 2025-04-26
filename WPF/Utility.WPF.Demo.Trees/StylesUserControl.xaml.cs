@@ -63,7 +63,7 @@ namespace Utility.WPF.Demo.Trees
 
         }
 
-        public JsonSerializerSettings settings = new()
+        JsonSerializerSettings settings = new()
         {
             TypeNameHandling = TypeNameHandling.All,
             //Formatting = Formatting.Indented,
