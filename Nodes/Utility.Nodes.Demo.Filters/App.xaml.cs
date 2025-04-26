@@ -25,6 +25,7 @@ namespace Utility.Trees.Demo.Filters
             Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
             Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeEngine.Instance);
             Locator.CurrentMutable.RegisterConstant<IContext>(Context.Instance);
+            Locator.CurrentMutable.RegisterConstant<MethodCache>(MethodCache.Instance);
             //Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
             //Splat.Locator.CurrentMutable.RegisterLazySingleton<MainViewModel>(() => new MainViewModel());
 
