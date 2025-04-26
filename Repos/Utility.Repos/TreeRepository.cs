@@ -70,11 +70,19 @@ namespace Utility.Repos
                 connection = new SQLiteConnection("data" + "." + "sqlite", false);
             else
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(dbDirectory));
+
+                //if file name
                 if (string.IsNullOrEmpty(System.IO.Path.GetExtension(dbDirectory)) == false)
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(dbDirectory));
                     connection = new SQLiteConnection(dbDirectory, false);
+                }
+                // if directory name
                 else
+                {
+                    Directory.CreateDirectory(dbDirectory);
                     connection = new SQLiteConnection(Path.Combine(dbDirectory, "data" + "." + "sqlite"), false);
+                }
             }
 
             connection.CreateTable<Relationships>();
@@ -454,12 +462,12 @@ namespace Utility.Repos
             string text;
             if (values.ContainsKey(guid) && values[guid].ContainsKey(name) && values[guid][name].Value.Equals(value))
                 return;
-  
+
             text = JsonConvert.SerializeObject(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
             var query = $"SELECT * FROM '{nameof(Values)}' WHERE Guid = '{guid}' AND Name = '{name}' AND Value = '{text}'";
             var typeId = TypeId(value.GetType());
             if (connection.Query<Values>(query).Any() == false)
-            {             
+            {
                 connection.Insert(new Values { Guid = guid, Value = text, Name = name, Added = dateTime, TypeId = typeId });
             }
             else
