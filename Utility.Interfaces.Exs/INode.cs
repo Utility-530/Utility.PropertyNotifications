@@ -6,7 +6,9 @@ using System.Windows.Input;
 
 namespace Utility.Interfaces.Exs
 {
-    public interface INode : ITree, IIsExpanded, ICurrent<INode>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation, IRemoved, IIsVisible, IAddCommand, IRemoveCommand, IIsSelected, ISetIsSelected, IIsRemovable, IIsReplicable, ISort, ISortOrder
+    public interface INode : ITree, IIsExpanded, ICurrent<INode>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation, IRemoved, IIsVisible, IAddCommand, IRemoveCommand, IIsSelected, ISetIsSelected, 
+        IIsRemovable, IIsReplicable, ISort, ISortOrder,
+        IArrangement
     {
     }
 
@@ -34,6 +36,10 @@ namespace Utility.Interfaces.Exs
     public interface IOrientation
     {
         Orientation Orientation { get; set; }
+    }
+    public interface IArrangement
+    {
+        Arrangement Arrangement { get; set; }
     }
         
     public interface IProliferation
