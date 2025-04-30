@@ -27,10 +27,15 @@ namespace Utility.Conversions.Json.Newtonsoft
             writer.WritePropertyName("MethodName");
             writer.WriteValue(value.Member.Name ?? string.Empty);
 
-            // Write each property to JSON
-            writer.WritePropertyName("ParameterName");
-            writer.WriteValue(value.Name ?? string.Empty);
+            bool isReturn = value.Name == null && (value.Position == -1 || value.IsRetval);
+            writer.WritePropertyName("IsReturn");
+            writer.WriteValue(isReturn);
 
+            if (isReturn ==false)
+            {
+                writer.WritePropertyName("ParameterName");
+                writer.WriteValue(value.Name);
+            }
             // End object
             writer.WriteEndObject();
         }
@@ -64,21 +69,28 @@ namespace Utility.Conversions.Json.Newtonsoft
                 throw new JsonSerializationException("Method name is missing or invalid.");
             }
 
+            var method = type.GetMethod(methodName);
 
-            // Try to get the property from the resolved type
-            var parameterName = jObject["ParameterName"]?.ToString();
-            if (string.IsNullOrEmpty(parameterName))
+            if (jObject["IsReturn"].Value<bool>())
             {
-                throw new JsonSerializationException("Parameter name is missing or invalid.");
+                return method?.ReturnParameter;
             }
-
-            var parameterInfo = type.GetMethod(methodName)?.GetParameters().Single(a => a.Name == parameterName);
-            if (parameterInfo == null)
+            else
             {
-                throw new JsonSerializationException($"Parameter '{parameterName}' not found on type '{type.FullName}' of method {methodName}.");
-            }
-
-            return parameterInfo;
+                // Try to get the property from the resolved type
+                var parameterName = jObject["ParameterName"]?.ToString();
+                if (string.IsNullOrEmpty(parameterName))
+                {
+                    throw new JsonSerializationException("Parameter name is missing or invalid.");
+                }
+                var parameters = method?.GetParameters();
+                var parameterInfo = parameters.Single(a => a.Name == parameterName);
+                if (parameterInfo == null)
+                {
+                    throw new JsonSerializationException($"Parameter '{parameterName}' not found on type '{type.FullName}' of method {methodName}.");
+                }
+                return parameterInfo;
+            }  
         }
     }
 }
