@@ -10,6 +10,7 @@ namespace Utility.Nodes.Demo.Transformers
     {     
 
         public IReadOnlyTree[] Content => get(nameof(Factory.BuildDemoContentRoot), nameof(Content));
+        public IReadOnlyTree[] Controls => get(nameof(Factory.BuildControlRoot), nameof(Controls));
         public IReadOnlyTree[] Transformers => get(nameof(Factory.BuildTransformersRoot), nameof(Transformers));
 
     }

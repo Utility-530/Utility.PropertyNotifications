@@ -6,8 +6,7 @@
              xmlns:node="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
              xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              xmlns:inf="clr-namespace:Utility.Nodes.Filters;assembly=Utility.Nodes.Filters"
-             xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"   
-                    
+             xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"                       
              xmlns:conv="http://schemas.utility.com/converters"
              xmlns:bc="http://schemas.utility.com/Breadcrumbs"
              xmlns:ct="http://schemas.utility.com/trees"
@@ -26,6 +25,8 @@
         <!--<res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml"/>-->
         <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Templates.xaml"/>
     </ResourceDictionary.MergedDictionaries>
+
+    <conv:InverseNullToBooleanConverter x:Key="InverseNullToBooleanConverter"/>
 
     <Style x:Key="MyDefaultContentStyle" TargetType="{x:Type ct:CustomTreeViewItem}">
         <Setter Property="NodeTemplate">
@@ -54,6 +55,23 @@
                 </MultiBinding>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Removed, Converter={StaticResource InverseNullToBooleanConverter}}" Value="True" >
+                <Setter Property="Template" >
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ct:CustomTreeViewItem}">
+                            <Border Background="GhostWhite" HorizontalAlignment="Stretch" >                                
+                                    <TextBlock FontSize="6">
+                                        <Run Text="Removed"/>     
+                                        <Run  Text="---"/>       
+                                        <Run  Text="{Binding Removed}"/>
+                                    </TextBlock>                            
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
 
@@ -68,7 +86,7 @@
 
         <Setter Property="BorderThickness" Value="2"></Setter>
         <Setter Property="Header" Value="{Binding Data}"></Setter>
-        <Setter Property="ItemsPresenterVisibility" Value="Visible"></Setter>
+        <!--<Setter Property="ItemsPresenterVisibility" Value="Visible"></Setter>-->
     </Style>
 
     <DataTemplate DataType="{x:Type local:MainViewModel}">
@@ -79,13 +97,16 @@
 
                     <Grid>
                         <Grid.RowDefinitions>
-
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="0.1*"/>
+                            <RowDefinition Height="*"/>                          
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <Grid  Grid.Row="0">
+                        <Viewbox HorizontalAlignment="Left">
+                            <ct:CustomTreeView  ItemsSource="{Binding Controls}" ItemContainerStyle="{StaticResource ExpandedTreeViewItem}"/>
+                        </Viewbox>
+
+                        <Grid  Grid.Row="1">
 
 
                             <ct:CustomTreeView ItemsSource="{Binding Content}" ItemContainerStyle="{StaticResource ExpandedTreeViewItem }" >
