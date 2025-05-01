@@ -35,7 +35,7 @@
     <DataTemplate x:Key="Number">
         <TextBlock Text="{Binding Path=Value, Mode=OneWay, StringFormat={}{0:N0}}"></TextBlock>
     </DataTemplate>
-
+    
     <DataTemplate DataType="{x:Type draw:Color}">
         <Rectangle Fill="{Binding Path=Value, Mode=OneWay, Converter={x:Static conv:ColorConverter.Instance}}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MinHeight="20" MinWidth="20" Margin="2"></Rectangle>
     </DataTemplate>

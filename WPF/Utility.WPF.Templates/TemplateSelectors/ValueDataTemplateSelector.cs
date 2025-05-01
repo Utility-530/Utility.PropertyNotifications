@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.WPF.Templates
@@ -20,6 +21,10 @@ namespace Utility.WPF.Templates
             if (item is not IValue { Value: var value })
             {
                 throw new Exception($"Unexpected type for item {item.GetType().Name}");
+            }
+            if(item is IAutoList { AutoList:{ } list } autoList)
+            {
+                return this.Templates["Combo"] as DataTemplate;
             }
             if (get() is Type type)
             {
