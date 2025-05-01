@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Constants", "Utilit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Entities.Comms", "Utility.Entities.Comms\Utility.Entities.Comms.csproj", "{90B30003-87C0-44C7-AC6F-74D0D54CA63A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Exceptions", "Utility.Exceptions\Utility.Exceptions.csproj", "{058CEC5C-DC43-437E-9491-C6714FF8596F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -149,6 +151,10 @@ Global
 		{90B30003-87C0-44C7-AC6F-74D0D54CA63A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90B30003-87C0-44C7-AC6F-74D0D54CA63A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90B30003-87C0-44C7-AC6F-74D0D54CA63A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{058CEC5C-DC43-437E-9491-C6714FF8596F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{058CEC5C-DC43-437E-9491-C6714FF8596F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{058CEC5C-DC43-437E-9491-C6714FF8596F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{058CEC5C-DC43-437E-9491-C6714FF8596F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
