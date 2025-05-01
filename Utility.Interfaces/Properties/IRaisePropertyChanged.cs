@@ -11,7 +11,7 @@ namespace Utility.Interfaces
 
     public interface IRaiseExPropertyChanged
     {
-        public void RaisePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null) where T : struct;
+        public void RaisePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null);
 
     }
 }
