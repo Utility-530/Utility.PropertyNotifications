@@ -261,86 +261,113 @@ namespace Utility.Repos
             });
         }
 
-
         public virtual IObservable<Key?> Find(Guid parentGuid, string? name = null, Guid? guid = null, System.Type? type = null, int? index = null)
         {
-
-            if (parentGuid == default)
-                throw new Exception($"{nameof(parentGuid)} is default");
             return Observable.Create<Key?>(observer =>
             {
-                return initialisationTask.ToObservable()
-                    .Subscribe(a =>
+                var typeId = type != null ? (int?)TypeId(type) : null;
+
+                if (parentGuid == default)
+                    if (guid.HasValue)
+                        if (findAll(observer, guid.Value, name, typeId, index))
+                            return Disposable.Empty;
+                        else
+                            throw new Exception($"{nameof(guid)} is default");
+                    else
+                        throw new Exception($"{nameof(parentGuid)} is default");
+
+                return
+                initialisationTask.ToObservable()
+                .Subscribe(a =>
+                {
+                    var table_name = getName(parentGuid);
+
+                    if (parentGuid == Guid.Empty)
                     {
-                        var table_name = getName(parentGuid);
 
-                        if (parentGuid == Guid.Empty)
+                    }
+                    var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' {includeClause($"AND Guid {ToComparisonAndValue(guid)}", guid)} {includeClause($"AND Name {ToComparisonAndValue(name)}", name)}  {includeClause($"AND _Index {ToComparisonAndValue(index)}", index)}  {includeClause($"AND TypeId {ToComparisonAndValue(typeId)}", type)}");
+                    if (tables.Count == 0)
+                    {
+                        if (string.IsNullOrEmpty(name))
                         {
-
+                            observer.OnNext(null);
+                            observer.OnCompleted();
+                            return;
                         }
-                        var typeId = type != null ? (int?)TypeId(type) : null;
-                        var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}' {includeClause($"AND Guid {ToComparisonAndValue(guid)}", guid)} {includeClause($"AND Name {ToComparisonAndValue(name)}", name)}  {includeClause($"AND _Index {ToComparisonAndValue(index)}", index)}  {includeClause($"AND TypeId {ToComparisonAndValue(typeId)}", type)}");
-                        if (tables.Count == 0)
+                        InsertByParent(parentGuid, name, table_name, typeId, index)
+                        .Subscribe(a =>
                         {
-                            if (string.IsNullOrEmpty(name))
+                            if (a is Guid guid)
                             {
-                                observer.OnNext(null);
-                                observer.OnCompleted();
-                                return;
+                                setName(guid, table_name);
+                                observer.OnNext(new Key(guid, parentGuid, type, name, index, default));
                             }
-                            InsertByParent(parentGuid, name, table_name, typeId, index)
-                            .Subscribe(a =>
-                            {
-                                if (a is Guid guid)
-                                {
-                                    setName(guid, table_name);
-                                    observer.OnNext(new Key(guid, parentGuid, type, name, index, default));
-                                }
-                                else
-                                    throw new Exception("* 44 fd3323");
-                                observer.OnCompleted();
-                            });
-                        }
-                        else if (tables.Count == 1)
+                            else
+                                throw new Exception("* 44 fd3323");
+                            observer.OnCompleted();
+                        });
+                    }
+                    else if (tables.Count == 1)
+                    {
+                        var table = tables.Single();
+                        setName(table.Guid, table_name);
+                        observer.OnNext(new Key(table.Guid, parentGuid, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
+                        observer.OnCompleted();
+                    }
+                    else if (name == null)
+                    {
+                        foreach (var table in tables)
                         {
-                            var table = tables.Single();
                             setName(table.Guid, table_name);
                             observer.OnNext(new Key(table.Guid, parentGuid, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
-                            observer.OnCompleted();
                         }
-                        else if (name == null)
+                        observer.OnCompleted();
+                    }
+                    else if (name != null)
+                    {
+                        var table = tables.SingleOrDefault(a => a.Name == name) ?? throw new Exception("FD £££££");
                         {
-                            foreach (var table in tables)
-                            {
-                                setName(table.Guid, table_name);
-                                observer.OnNext(new Key(table.Guid, parentGuid, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
-                            }
-                            observer.OnCompleted();
+                            setName(table.Guid, table_name);
+                            observer.OnNext(new Key(table.Guid, parentGuid, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
                         }
-                        else if (name != null)
+                        observer.OnCompleted();
+                    }
+                    else if (guid.HasValue)
+                    {
+                        var table = tables.SingleOrDefault(a => a.Guid == guid.Value) ?? throw new Exception("3FD £2ui£££44£");
                         {
-                            var table = tables.SingleOrDefault(a => a.Name == name) ?? throw new Exception("FD £££££");
-                            {
-                                setName(table.Guid, table_name);
-                                observer.OnNext(new Key(table.Guid, parentGuid, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
-                            }
-                            observer.OnCompleted();
+                            setName(guid.Value, table_name);
+                            observer.OnNext(new Key(table.Guid, parentGuid, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
                         }
-                        else if (guid.HasValue)
-                        {
-                            var table = tables.SingleOrDefault(a => a.Guid == guid.Value) ?? throw new Exception("3FD £2ui£££44£");
-                            {
-                                setName(guid.Value, table_name);
-                                observer.OnNext(new Key(table.Guid, parentGuid, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
-                            }
-                            observer.OnCompleted();
-                        }
-                        else
-                        {
-                            throw new Exception("3e909re 4323");
-                        }
-                    });
+                        observer.OnCompleted();
+                    }
+                    else
+                    {
+                        throw new Exception("3e909re 4323");
+                    }
+                });
             });
+
+            bool findAll(IObserver<Key?> observer, Guid guid, string? name = null, int? typeId = null, int? index = null)
+            {
+                var sql = "SELECT name FROM sqlite_master WHERE type ='table' AND sql LIKE '%Removed%' AND tbl_name != 'Relationships'";
+                foreach (var table_name in connection.Query<String>(sql))
+                {
+                    var tables = connection.Query<Relationships>($"SELECT * FROM '{table_name}' {includeClause($"AND Guid {ToComparisonAndValue(guid)}", guid)} {includeClause($"AND Name {ToComparisonAndValue(name)}", name)}  {includeClause($"AND _Index {ToComparisonAndValue(index)}", index)}  {includeClause($"AND TypeId {ToComparisonAndValue(typeId)}", type)}");
+
+                    if (tables.Count == 0)
+                        continue;
+
+                    var table = tables.Single();
+
+                    setName(table.Guid, table_name.Name);
+                    observer.OnNext(new Key(table.Guid, table.Parent, table.TypeId.HasValue ? ToType(table.TypeId.Value) : null, table.Name, index, table.Removed));
+                    observer.OnCompleted();
+                    return true;
+                }
+                return false;
+            }
         }
 
         private string includeClause<T>(string clause, T? ss = default)
@@ -460,12 +487,12 @@ namespace Utility.Repos
         public virtual void Set(Guid guid, string name, object value, DateTime dateTime)
         {
             string text;
-            if (values.ContainsKey(guid) && values[guid].ContainsKey(name) && values[guid][name].Value.Equals(value))
+            if (values.ContainsKey(guid) && values[guid].ContainsKey(name) && values[guid][name].Value?.Equals(value) == true)
                 return;
 
             text = JsonConvert.SerializeObject(value, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
             var query = $"SELECT * FROM '{nameof(Values)}' WHERE Guid = '{guid}' AND Name = '{name}' AND Value = '{text}'";
-            var typeId = TypeId(value.GetType());
+            var typeId = TypeId(value?.GetType());
             if (connection.Query<Values>(query).Any() == false)
             {
                 connection.Insert(new Values { Guid = guid, Value = text, Name = name, Added = dateTime, TypeId = typeId });
@@ -604,8 +631,10 @@ namespace Utility.Repos
             return constructedType;
         }
 
-        public int TypeId(System.Type type)
+        public int TypeId(System.Type? type)
         {
+            if (type == null)
+                return -1;
             if (this.types.ToArray().FirstOrDefault(x => x.Value == type) is { Key: { } key, Value: { } value })
                 return key;
             if (type.GenericTypeArguments.Any())
