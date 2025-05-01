@@ -54,6 +54,12 @@ namespace Utility.Models
             Collection.Add((T)a.Data);
             base.Addition(value, a);
         }
+             
+        public override void Subtraction(IReadOnlyTree value, IReadOnlyTree a)
+        {
+            Collection.Remove((T)a.Data);
+            base.Subtraction(value, a);
+        }
 
         public override void SetNode(INode node)
         {

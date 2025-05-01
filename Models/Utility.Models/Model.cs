@@ -256,19 +256,4 @@ namespace Utility.Models
         public string Name { get; } = Name;
         public System.Type? Type { get; } = Type;
     }
-
-    public class NamedModel : Model
-    {
-        private static Random random;
-
-        static NamedModel()
-        {
-            random = new Random();
-        }
-        public NamedModel()
-        {
-            Name = RandomHelper.NextEnum<Enums.Name.Female>(random).ToString();
-        }
-    }
-
 }
