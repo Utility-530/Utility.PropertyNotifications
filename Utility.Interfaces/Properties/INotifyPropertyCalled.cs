@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace Utility.Interfaces
@@ -6,6 +7,8 @@ namespace Utility.Interfaces
     public interface INotifyPropertyCalled
     {
         event PropertyCalledEventHandler PropertyCalled;
+
+        IEnumerable<PropertyCalledEventArgs> MissedCalls { get; }
     }
 
     public delegate void PropertyCalledEventHandler(object sender, PropertyCalledEventArgs e);
@@ -18,6 +21,6 @@ namespace Utility.Interfaces
         }
 
         public object? Value { get; }
-    }    
+    }
 
 }
