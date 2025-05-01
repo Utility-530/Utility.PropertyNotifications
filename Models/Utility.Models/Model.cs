@@ -44,6 +44,7 @@ namespace Utility.Models
 
             set
             {
+                var previous = node;
                 node = value;
 
                 node.WithChangesTo(a => a.Current, includeNulls: true)
@@ -96,7 +97,7 @@ namespace Utility.Models
                     {
                         Subtraction(value, a);
                     });
-                RaisePropertyChanged();
+                RaisePropertyChanged(previous, value);
             }
         }
 
@@ -255,4 +256,19 @@ namespace Utility.Models
         public string Name { get; } = Name;
         public System.Type? Type { get; } = Type;
     }
+
+    public class NamedModel : Model
+    {
+        private static Random random;
+
+        static NamedModel()
+        {
+            random = new Random();
+        }
+        public NamedModel()
+        {
+            Name = RandomHelper.NextEnum<Enums.Name.Female>(random).ToString();
+        }
+    }
+
 }

@@ -1,4 +1,5 @@
-﻿using Utility.Interfaces.Generic;
+﻿using System.Xml.Linq;
+using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Models
@@ -20,13 +21,24 @@ namespace Utility.Models
         }
 
         public virtual T Get() => value;
-        public virtual void Set(T value) => this.RaisePropertyChanged(ref this.value, value, nameof(Value));
+        public virtual void Set(T value)
+        {
+            if (value?.Equals(this.value) == false || this.value?.Equals(value) == false)
+            {
+                var previous = this.value;
+                this.value = value;
+                this.RaisePropertyChanged(previous, value, nameof(Value));
+            }
+            else
+            {
+            }
+        }
 
         object? IGet.Get() => this.value;
 
         void ISet.Set(object value) => Set((T)value);
 
-        object IValue.Value => Value;
+        object IValue.Value => value;
 
         object ISetValue.Value { set => Value = (T)value; }
     }
