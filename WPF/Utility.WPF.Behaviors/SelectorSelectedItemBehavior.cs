@@ -1,12 +1,12 @@
 ﻿using Microsoft.Xaml.Behaviors;
-using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 
 namespace Utility.WPF.Behaviors
 {
-    public class BindableSelectedItemBehavior : Behavior<TreeView>
+    public class SelectorSelectedItemBehavior : Behavior<Selector>
     {
         #region SelectedItem Property
 
@@ -20,7 +20,7 @@ namespace Utility.WPF.Behaviors
             DependencyProperty.Register(
               nameof(SelectedItem),
               typeof(object),
-              typeof(BindableSelectedItemBehavior),
+              typeof(SelectorSelectedItemBehavior),
               new FrameworkPropertyMetadata(null,
                 FrameworkPropertyMetadataOptions.BindsTwoWayByDefault,
                 OnSelectedItemChanged));
@@ -28,10 +28,10 @@ namespace Utility.WPF.Behaviors
         private static void OnSelectedItemChanged(DependencyObject sender,
           DependencyPropertyChangedEventArgs e)
         {
-            var behavior = (BindableSelectedItemBehavior)sender;
-            var generator = behavior.AssociatedObject.ItemContainerGenerator;
-            if (generator.ContainerFromItem(e.NewValue) is TreeViewItem item)
-                item.SetValue(TreeViewItem.IsSelectedProperty, true);
+            if (sender is SelectorSelectedItemBehavior { AssociatedObject: { } obj } b)
+            {
+                obj.SelectedItem = obj.ItemsSource.Cast<object>().First(a => a.Equals(e.NewValue));
+            }
         }
 
         #endregion SelectedItem Property
@@ -39,20 +39,25 @@ namespace Utility.WPF.Behaviors
         protected override void OnAttached()
         {
             base.OnAttached();
+            if (SelectedItem is { } item)
+                AssociatedObject.SelectedItem = AssociatedObject.ItemsSource.Cast<object>().First(a => a == item || a.Equals(item));
 
-            AssociatedObject.SelectedItemChanged += OnTreeViewSelectedItemChanged;
+            AssociatedObject.SelectionChanged += OnSelectorSelectedItemChanged;
         }
+
+
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
 
             if (AssociatedObject != null)
-                AssociatedObject.SelectedItemChanged -= OnTreeViewSelectedItemChanged;
+                AssociatedObject.SelectionChanged -= OnSelectorSelectedItemChanged;
         }
 
-        private void OnTreeViewSelectedItemChanged(object sender,
-            RoutedPropertyChangedEventArgs<object> e) =>
-          SelectedItem = AssociatedObject.ItemsSource.Cast<object>().First(a => a==e.NewValue || a.Equals(e.NewValue));
+        private void OnSelectorSelectedItemChanged(object sender, SelectionChangedEventArgs e)
+        {
+            this.SelectedItem = AssociatedObject.SelectedItem;
+        }
     }
 }
