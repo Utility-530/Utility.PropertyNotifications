@@ -125,12 +125,14 @@ namespace Utility.Reactives
             }
         }
 
-        public static IObservable<Set<T>> AndChanges<T>(this IEnumerable collection)
+        public static IObservable<Set<T>> AndChanges<T>(this IEnumerable collection, bool includeInitial = true)
         {
             return Observable.Create<Set<T>>(observer =>
             {
                 if (collection.Any())
                     observer.OnNext(new Set<T>(collection.Cast<T>().Select(c => new Change<T>(c, Type.Add)).ToArray()));
+                else if (includeInitial)
+                    observer.OnNext(new Set<T>([Change<T>.None]));
 
                 if (collection is INotifyCollectionChanged notifyCollection)
                     return Changes<T>(notifyCollection).Subscribe(observer);
@@ -201,7 +203,8 @@ namespace Utility.Reactives
         {
             return collection.Replacements<T, TR>().Select(a => Change<TR>.Update(a.@new, a.old))
                             .Merge(collection.Subtractions<T, TR>().Select(Change<TR>.Remove)
-                            .Merge(collection.SelfAndAdditions<T, TR>().Select(Change<TR>.Add)));
+                            .Merge(collection.SelfAndAdditions<T, TR>().Select(Change<TR>.Add)))
+                            .StartWith(Change<TR>.None);
         }
 
 
