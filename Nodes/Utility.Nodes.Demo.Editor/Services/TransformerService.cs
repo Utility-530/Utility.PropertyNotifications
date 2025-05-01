@@ -16,6 +16,7 @@ using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Interfaces.Exs;
 using Splat;
+using Utility.PropertyNotifications;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -57,17 +58,15 @@ namespace Utility.Nodes.Demo.Filters.Services
                             changes(transformer)
                             .Subscribe(a =>
                             {
-                                transformer
-                                .WhenPropertyChanged(a => a.Exceptions)
-                                .Where(a => a.Value != null)
-                                .Select(a => a.Value)
+                                transformer.Node
+                                .WithChangesTo(a => a.Errors)
                                 .Take(1)
                                 .Subscribe(_a =>
                                 {
                                     Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildContentRoot))
                                         .Subscribe(model =>
                                             {
-                                                _a.Node.Clear();
+                                                _a.Clear();
 
                                                 if (transformer.Inputs == null)
                                                 {
@@ -105,7 +104,7 @@ namespace Utility.Nodes.Demo.Filters.Services
 
 
                                                 //ArrayList results = new();
-                                                var dict = transformer.Inputs.Models.ToDictionary(a => a, a => new ArrayList());
+                                                var dict = transformer.Inputs.Collection.ToDictionary(a => a, a => new ArrayList());
 
                                                 model
                                                 .Descendants((a) =>
@@ -116,7 +115,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                                                 })
                                                 .ForEach(a =>
                                                 {
-                                                    foreach (var input in transformer.Inputs.Models)
+                                                    foreach (var input in transformer.Inputs.Collection)
                                                     {
                                                         if (input.Filter == null)
                                                         {
@@ -129,7 +128,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                                                             //    results.Add(value);
 
                                                             var list = new List<object>();
-                                                            foreach (var source in input.Element.Models)
+                                                            foreach (var source in input.Element.Collection)
                                                             {
                                                                 if (source.TryGetValue(a, out var value))
                                                                     list.Add(value);
@@ -241,7 +240,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                                                             if (output is IEnumerable enumerable)
                                                             {
                                                                 var mr = enumerable.GetEnumerator();
-                                                                var ee = transformer.Output.Element.Models.GetEnumerator();
+                                                                var ee = transformer.Output.Element.Collection.GetEnumerator();
                                                                 while (mr.MoveNext() && ee.MoveNext())
                                                                 {
                                                                     if (ee.Current.Types.Count != ee.Current.Properties.Count)
@@ -257,7 +256,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                                                             }
                                                             else
                                                             {
-                                                                foreach (var target in transformer.Output.Element.Models)
+                                                                foreach (var target in transformer.Output.Element.Collection)
                                                                 {
                                                                     if (target.Types.Count != target.Properties.Count)
                                                                     {
@@ -295,7 +294,7 @@ namespace Utility.Nodes.Demo.Filters.Services
 
                 if (a is TransformerException { TransformerModel: { } transformer } ex)
                 {
-                    transformer.Exceptions.Node.Add(new Node(ExceptionModel.Create(ex)));
+                    transformer.Node.Errors.Add(ex);
                 }
             });
         }
@@ -308,7 +307,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 transformer.WhenPropertyChanged(a => a.Inputs)
                 .Subscribe(a =>
                 {
-                    a.Value?.Models.Changes().Subscribe(change =>
+                    a.Value?.Collection.Changes().Subscribe(change =>
                     {
                         if (change.Type == Changes.Type.Add)
                         {
@@ -316,7 +315,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                             .WhenPropertyChanged(a => a.Element)
                             .Subscribe(a =>
                             {
-                                a.Value?.Models.Changes()
+                                a.Value?.Collection.Changes()
                                 .Subscribe(a =>
                                 {
                                     a.Value.Types.Changes().Subscribe(a => observer.OnNext(Unit.Default));
@@ -347,7 +346,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                     change.Value?.WhenPropertyChanged(a => a.Element)
                     .Subscribe(a =>
                     {
-                        a.Value?.Models.Changes().Subscribe(a =>
+                        a.Value?.Collection.Changes().Subscribe(a =>
                         {
                             a.Value.Types.Changes().Subscribe(a => observer.OnNext(Unit.Default));
                             a.Value.Properties.Changes().Subscribe(a => observer.OnNext(Unit.Default));

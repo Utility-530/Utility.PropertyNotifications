@@ -34,7 +34,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 {
                     if (node.NewItem is INode { Data: Model { Name: string name } model })
                     {
-                        model.WithChanges().Where(a => a.PropertyName == ".ctor").Subscribe(_ =>
+                        model.WhenChanged().Where(a => a.PropertyName == ".ctor").Subscribe(_ =>
                         {
                             Switch(name, model);
                         });

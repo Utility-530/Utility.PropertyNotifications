@@ -131,6 +131,13 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
             throw new NotImplementedException();
         }
 
+        public IObservable<INode> FindChild(INode node, Guid guid)
+        {
+            throw new NotImplementedException();
+        }
+
         public static TempNodeEngine Instance { get; } = new TempNodeEngine();
+        public IReadOnlyCollection<INode> Nodes { get; }
+        public IObservable<INode> Selections { get; }
     }
 }

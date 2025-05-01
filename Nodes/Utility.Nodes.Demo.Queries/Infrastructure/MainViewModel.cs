@@ -213,7 +213,7 @@ namespace Utility.Nodes.Demo.Queries
                     {
                         foreach (FilterEntity entity in r)
                         {
-                            entity.WithChanges().Subscribe(a =>
+                            entity.WhenChanged().Subscribe(a =>
                             {
                                 repo.Value.Update(entity);
                             });
