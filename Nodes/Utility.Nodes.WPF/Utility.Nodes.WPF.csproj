@@ -18,6 +18,7 @@
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.ComboBoxes\Utility.WPF.Controls.ComboBoxes.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Html\Utility.WPF.Controls.Html.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Geometry\Utility.WPF.Geometries.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
 		<ProjectReference Include="..\Models\Models.csproj" />

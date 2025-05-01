@@ -17,11 +17,15 @@
                     xmlns:conv="http://schemas.utility.com/converters" 
                     xmlns:res="http://schemas.utility.com/resourcedictionary" 
                     xmlns:html="http://schemas.utility.com/html"
-                    xmlns:controls="http://schemas.utility.com">
+                    xmlns:controls="http://schemas.utility.com"
+                    xmlns:att="http://schemas.utility.com/attached"
+                    xmlns:c="http://schemas.utility.com/colours"
+                    xmlns:btns="http://schemas.utility.com/buttons">
 
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <HierarchicalDataTemplate DataType="{x:Type nodes:Node}" ItemsSource="{Binding Items}">
@@ -153,12 +157,24 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:ValueModel}">
-        <ContentPresenter 
+        <WrapPanel>
+            <ContentPresenter 
+            att:Base.Enumerable="{Binding List}"
             ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance}" Content="{Binding }">
-            <i:Interaction.Behaviors>
-                <local:UpdateContentPresenterBehavior Value="{Binding Value}" UpdateOnNull="True"/>
-            </i:Interaction.Behaviors>
-        </ContentPresenter>
+                <i:Interaction.Behaviors>
+                    <local:UpdateContentPresenterBehavior Value="{Binding Value}" UpdateOnNull="True"/>
+                </i:Interaction.Behaviors>
+            </ContentPresenter>
+            <btns:GeometryToggleButton  
+                IsChecked="{Binding IsListening}"
+                    Fill="Black"
+                    StrokeThickness="1"
+                    PressedForegroundBrush="{c:Red}"
+                    Height="20"
+                    Data="{StaticResource TargetGeometry}"
+                    HoverForegroundBrush="{c:Blue}" />
+        </WrapPanel>
+
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:ComparisonModel}">
@@ -173,7 +189,7 @@
 
 
     <DataTemplate DataType="{x:Type inf:DataFileModel}">
-        <Ellipse Height="5" Width="5" Fill="Aqua"></Ellipse>
+        <Ellipse Height="5" Width="5" Fill="{c:Orange}"></Ellipse>
     </DataTemplate>
 
 
@@ -183,7 +199,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:ExceptionModel}">
-        <TextBlock Text="{Binding Exception.Message}" Foreground="Red" MinHeight="25" MinWidth="180" Background="GhostWhite">
+        <TextBlock Text="{Binding Exception.Message}" Foreground="{c:Red}" MinHeight="25" MinWidth="180" Background="GhostWhite">
         </TextBlock>
     </DataTemplate>
 
