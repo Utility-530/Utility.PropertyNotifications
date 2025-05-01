@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using Utility.WPF.Controls.Meta;
 
 
@@ -17,5 +18,23 @@ namespace Utility.WPF.Demo.Objects
                 Content = new AssemblyViewControl(typeof(JsonObjectUserControl).Assembly)
             }.Show();
         }
+    }
+
+    public class ExceptionOne : Exception
+    {
+        public ExceptionOne() : base("On9j99999999999999 9  9 9ije")
+        {
+            Data.Add("One", "1");
+        }
+        public int One { get; set; }
+    }
+
+    public class ExceptionTwo : Exception
+    {
+        public ExceptionTwo() : base("Two")
+        {
+            Data.Add("Two", "2");
+        }
+        public int Two { get; set; }
     }
 }
