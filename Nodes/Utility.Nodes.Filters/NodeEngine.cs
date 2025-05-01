@@ -26,15 +26,23 @@ using Fasterflect;
 using System.ComponentModel;
 using System.Reactive.Disposables;
 using CompositeDisposable = Utility.Observables.CompositeDisposable;
+using System.Reactive.Subjects;
+using Castle.Components.DictionaryAdapter;
+using Utility.Helpers.Reflection;
 
 namespace Utility.Nodes.Filters
 {
     public readonly record struct DirtyNode(string Property, INode Node);
     public class NodeEngine : INodeSource
     {
+        ReplaySubject<INode> selections = new(1);
+        string[] names = [nameof(Node.IsSelected), nameof(Node.IsExpanded), nameof(Node.Orientation), nameof(Node.Order), nameof(Node.Arrangement), nameof(Node.Order), nameof(Node.Current)];
+        Dictionary<string, Func<object, object>> getters = new();
+
         public static string New = "new";
         public static readonly string Key = nameof(NodeEngine);
 
+        Lazy<NodeInterface> nodeInterface = new(() => new NodeInterface());
         Lazy<IFilter> filter;
         Lazy<IExpander> expander;
         Lazy<IContext> context;
@@ -43,10 +51,7 @@ namespace Utility.Nodes.Filters
 
         CompositeDisposable compositeDisposable = new();
 
-        private Lazy<Dictionary<string, Setter>> setdictionary = new(() => typeof(Node)
-                                                    .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                                    .Where(a => a.Name != nameof(IReadOnlyTree.Parent))
-                                                    .ToDictionary(a => a.Name, a => Rules.Decide(a)));
+
         private bool _disposed;
         private readonly ObservableCollection<INode> nodes = [];
 
@@ -68,6 +73,8 @@ namespace Utility.Nodes.Filters
 
         string INodeSource.New => New;
 
+
+        public IObservable<INode> Selections => selections;
 
         public void Remove(INode node)
         {
@@ -98,8 +105,13 @@ namespace Utility.Nodes.Filters
                     });
                 return;
             }
+            else if (nodes.Any(a => a.Key == node.Key))
+            {
+
+            }
             else
             {
+
                 nodes.Add(node);
                 configure(node);
 
@@ -109,10 +121,17 @@ namespace Utility.Nodes.Filters
                     .Take(1)
                     .Subscribe(data =>
                     {
-                        loadProperties(node).Subscribe(a =>
+                        loadProperties(node)
+                        .Subscribe(a =>
                         {
                             initialiseData(a.Data);
 
+                            node.Items.AndChanges<INode>().Subscribe(a =>
+                            {
+                                if (node.Data is not IRoot root || node.Count <= 1)
+                                    foreach (var item in a)
+                                        change(item);
+                            }).DisposeWith(compositeDisposable);
 
                             node.WithChangesTo(a => a.IsExpanded)
                             .Where(a => a == true)
@@ -128,11 +147,7 @@ namespace Utility.Nodes.Filters
                         }).DisposeWith(compositeDisposable);
                     }).DisposeWith(compositeDisposable);
 
-                node.Items.AndChanges<INode>().Subscribe(a =>
-                {
-                    foreach (var item in a)
-                        change(item);
-                }).DisposeWith(compositeDisposable);
+
             }
 
 
@@ -147,8 +162,8 @@ namespace Utility.Nodes.Filters
                 {
                     node.IsExpanded = true;
                 }
-                string[] names = [nameof(Node.IsSelected), nameof(Node.IsExpanded), nameof(Node.Orientation), nameof(Node.Order), nameof(Node.Arrangement), nameof(Node.Order)];
-                node.WithChanges().Subscribe(e =>
+
+                node.WhenChanged().Subscribe(e =>
                 {
                     if (e is PropertyChangedExEventArgs { PreviousValue: var previousValue, PropertyName: string name, Value: var value })
                     {
@@ -156,9 +171,14 @@ namespace Utility.Nodes.Filters
                         {
                             ((value as ITree).Parent as INode).Sort(null);
                         }
+                        if (name == nameof(ViewModelTree.IsSelected) && value is true)
+                        {
+                            selections.OnNext(node);
+                        }
                         if (names.Contains(name))
                         {
-                            repository.Value.Set((GuidKey)node.Key, name, value, DateTime.Now);
+                            if (nodeInterface.Value.Getter(name)?.Get(node) is { } _value)
+                                repository.Value.Set((GuidKey)node.Key, name, _value, DateTime.Now);
                         }
                         else
                             context.Value.UI(() =>
@@ -181,8 +201,10 @@ namespace Utility.Nodes.Filters
 
             void initialiseData(object data)
             {
+                if (node.Key == "5b672a24-2269-4c3b-861b-eb6d529ab41a")
+                {
 
-
+                }
                 if (data is INotifyPropertyCalled called)
                 {
                     called.WhenCalled()
@@ -191,6 +213,9 @@ namespace Utility.Nodes.Filters
                         if (call.Name == nameof(Model.Name))
                         {
                             return;
+                        }
+                        if (call.Name == nameof(ValueModel.Value))
+                        {
                         }
                         repository.Value
                         .Get((GuidKey)node.Key, nameof(Node.Data) + "." + call.Name)
@@ -227,13 +252,13 @@ namespace Utility.Nodes.Filters
                                     else if (fieldInfo != null)
                                     {
                                         fieldInfo.SetValue(call.Target, a.Value);
+                                        if (call.Target is INotifyPropertyChanged changed)
+                                            changed.RaisePropertyChanged(call.Name);
                                     }
                                     else
                                     {
                                         throw new Exception($"no field for property, {call.Name}");
                                     }
-                                    if (call.Target is INotifyPropertyChanged changed)
-                                        changed.RaisePropertyChanged(call.Name);
                                 }
                             }
                         }).DisposeWith(compositeDisposable);
@@ -253,7 +278,30 @@ namespace Utility.Nodes.Filters
                             repository.Value.Set((GuidKey)node.Key, nameof(Node.Data) + "." + reception.Name, reception.Value, DateTime.Now);
                     }).DisposeWith(compositeDisposable);
                 }
+                if (data is INotifyPropertyChanged changed)
+                {
+                    changed.WhenChanged()
+                    .Subscribe(reception =>
+                    {
+                        object value;
+                        if (reception.PropertyName != nameof(ValueModel.Value))
+                        {
+                            return;
+                        }
+                        else if (reception is PropertyChangedEventArgsEx ex)
+                        {
+                            value = ex.NewValue;
+                        }
+                        else
+                        {
+                            value = getters
+                                        .Get(reception.PropertyName, a => node.Data.GetType().GetProperty(reception.PropertyName).ToGetter<object>())
+                                        .Invoke(node.Data);
+                        }
+                        repository.Value.Set((GuidKey)node.Key, nameof(Node.Data) + "." + reception.PropertyName, value, DateTime.Now);
 
+                    }).DisposeWith(compositeDisposable);
+                }
 
                 if (data is ISetNode iSetNode)
                 {
@@ -279,8 +327,8 @@ namespace Utility.Nodes.Filters
                         if (_d.Name == null)
                         {
                         }
-                        else if (_d.Value != null && setdictionary.Value.TryGetValue(_d.Name, out Setter value))
-                            value.Set(node, _d.Value);
+                        else if (_d.Value != null)
+                            nodeInterface.Value.Setter(_d.Name)?.Set(node, _d.Value);
                     }, () =>
                     {
                         observer.OnNext(node);
@@ -361,23 +409,25 @@ namespace Utility.Nodes.Filters
                             if (key.HasValue == false)
                             {
                                 children
-                                .Children
-                                    .ForEach(async d =>
-                                    {
-                                        NewMethod(node, observer, d, ++i).DisposeWith(compositeDisposable);
-                                    });
+                                    .Children
+                                        .ForEach(async d =>
+                                        {
+                                            createChild(node, observer, d, ++i).DisposeWith(compositeDisposable);
+                                        });
                             }
                             else
                             {
                                 i++;
-                                if (Nodes.SingleOrDefault(a => a.Key == new GuidKey(key.Value.Guid)) is not Node _node)
+                                var nodes = Nodes.Where(a => a.Key == new GuidKey(key.Value.Guid)).ToArray();
+                                if (nodes.Length > 1)
                                 {
-                                    var _new = (INode)await node.ToTree(DataActivator.Activate(key));
-                                    _new.Key = new GuidKey(key.Value.Guid);
-                                    _new.Removed = key.Value.Removed;
-                                    observer.OnNext(_new);
+                                    throw new Exception("33 44");
                                 }
-                                else
+                                else if (nodes.Length == 0)
+                                {
+                                    activate(node, key).Subscribe(observer);
+                                }
+                                else if (nodes.Length == 1)
                                 {
                                     // child node expanded before parent
                                     return;
@@ -385,50 +435,111 @@ namespace Utility.Nodes.Filters
                                 }
 
                             }
-
-                        }, () =>
-                        {
-
-                            children
-                            .Children
-                             .Additions()
-                             .Subscribe(d =>
-                             {
-                                 NewMethod(node, observer, d, ++i).DisposeWith(compositeDisposable);
-
-                             }).DisposeWith(compositeDisposable);
-
                         }
-                            /*,() => observer.OnCompleted()*/);
+                        , () =>
+                            {
+
+                                children
+                                .Children
+                                 .Additions()
+                                 .Subscribe(d =>
+                                 {
+                                     createChild(node, observer, d, ++i).DisposeWith(compositeDisposable);
+
+                                 }).DisposeWith(compositeDisposable);
+
+                            }
+
+                                /*,() => observer.OnCompleted()*/);
+                });
+            }
+        }
+
+        public IObservable<INode> FindChild(INode node, Guid guid)
+        {
+            return Observable.Create<INode>(observer =>
+            {
+                if (Nodes.SingleOrDefault(a => a.Key == guid.ToString()) is INode cnode)
+                    observer.OnNext(cnode);
+
+                repository
+                .Value
+                .Find((GuidKey)node.Key, guid: guid)
+                .Subscribe(_key =>
+                {
+                    activate(node, _key).Subscribe(a =>
+                    {
+                        node.Add(a);
+
+                    });
                 });
 
-                IDisposable NewMethod(INode node, IObserver<INode> observer, object d, int i)
+                return Nodes
+                .AndAdditions<INode>()
+                .Subscribe(ax =>
                 {
-                    return node.ToTree(d).ToObservable().Cast<INode>().Subscribe(_new =>
+                    if (ax.Key.Equals(guid.ToString()))
                     {
-                        repository
-                        .Value
-                        .Find((GuidKey)node.Key, _new.Name(), type: toType(d), index: ++i)
-                        .Subscribe(_key =>
+                        observer.OnNext(ax);
+
+                    }
+                });
+            });
+        }
+
+
+        IObservable<INode> activate(INode node, Structs.Repos.Key? _key)
+        {
+            return Observable.Create<INode>(observer =>
+            {
+                return node.ToTree(DataActivator.Activate(_key)).ToObservable()
+                     .Cast<INode>()
+                     .Subscribe(_new =>
+                     {
+                         _new.Key = new GuidKey(_key.Value.Guid);
+                         _new.Removed = _key.Value.Removed;
+
+                         //if (d is IIsReadOnly readOnly)
+                         //{
+                         //    (_new as ISetIsReadOnly).IsReadOnly = readOnly.IsReadOnly;
+                         //}
+
+                         if (_key.HasValue == false)
+                         {
+                             throw new Exception("dde33443 21");
+                         }
+
+                         observer.OnNext(_new);
+                     });
+            });
+        }
+
+        IDisposable createChild(INode node, IObserver<INode> observer, object d, int i)
+        {
+            return node.ToTree(d).ToObservable().Cast<INode>()
+                .Subscribe(_new =>
+                {
+                    repository
+                    .Value
+                    .Find((GuidKey)node.Key, _new.Name(), type: toType(d), index: ++i)
+                    .Subscribe(_key =>
+                    {
+
+                        if (d is IIsReadOnly readOnly)
                         {
+                            (_new as ISetIsReadOnly).IsReadOnly = readOnly.IsReadOnly;
+                        }
 
-                            if (d is IIsReadOnly readOnly)
-                            {
-                                (_new as ISetIsReadOnly).IsReadOnly = readOnly.IsReadOnly;
-                            }
+                        if (_key.HasValue == false)
+                        {
+                            throw new Exception("dde33443 21");
+                        }
+                        _new.Key = new GuidKey(_key.Value.Guid);
 
-                            if (_key.HasValue == false)
-                            {
-                                throw new Exception("dde33443 21");
-                            }
-                            _new.Key = new GuidKey(_key.Value.Guid);
-
-                            observer.OnNext(_new);
-                        });
+                        observer.OnNext(_new);
                     });
+                });
 
-                }
-            }
         }
 
         public void Save()
@@ -461,16 +572,18 @@ namespace Utility.Nodes.Filters
             return Observable.Create<INode>(observer =>
             {
                 if (Guid.TryParse(key, out var _key))
+                {
                     return Nodes
                     .AndAdditions<INode>()
                     .Subscribe(ax =>
                     {
-                        if (ax.Key.Equals(_key))
+                        if (ax.Key.Equals(key))
                         {
                             observer.OnNext(ax);
                             observer.OnCompleted();
                         }
                     });
+                }
                 else
                     return methodCache.Value
                     .Get(key)

@@ -6,15 +6,55 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Utility.Interfaces.Exs;
+using Utility.Keys;
+using Utility.Models.Trees;
 using Utility.PropertyNotifications;
+using Utility.Trees.Abstractions;
+using Utility.Helpers.Reflection;
 
 namespace Utility.Nodes.Filters
 {
+
+
+
+    public class NodeInterface
+    {
+
+        private Lazy<Dictionary<string, PropertyInterface>> setdictionary = new(() =>
+        {
+            var dict  = typeof(Node)
+                                               .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                                               .Where(a => a.Name != nameof(IReadOnlyTree.Parent))
+                                               .ToDictionary(a => a.Name, a => Rules.Decide(a));
+            return dict;
+        });
+
+        public Getter Getter(string name) => setdictionary.Value.TryGetValue(name, out var @interface) ? @interface.Getter : null;
+        public Setter Setter(string name) => setdictionary.Value.TryGetValue(name, out var @interface) ? @interface.Setter : null;
+    }
+
+
+
+    public class PropertyInterface
+    {
+        public string Name { get; set; }
+        public Getter Getter { get; set; }
+        public Setter Setter { get; set; }
+    }
+
+
     public abstract class Setter
     {
         public virtual string Name { get; }
 
         public abstract void Set(object instance, object value);
+    }
+    
+    public abstract class Getter
+    {
+        public virtual string Name { get; }
+
+        public abstract object Get(object instance);
     }
 
     public class CurrentSetter : Setter
@@ -23,9 +63,10 @@ namespace Utility.Nodes.Filters
 
         public override void Set(object instance, object value)
         {
-            (instance as Node).WithChangesTo(a => a.Key).Subscribe(a =>
+            if(instance is INode node && Guid.TryParse(value.ToString(), out Guid guid))
+                node.WithChangesTo(a => a.Key).Subscribe(a =>
             {
-                Locator.Current.GetService<INodeSource>().Single(a/*, Guid.Parse(value.ToString())*/)
+                Locator.Current.GetService<INodeSource>().FindChild(node, guid)
                                 .Subscribe(a =>
                                 {
                                     (instance as INode).Current = a;
@@ -34,34 +75,69 @@ namespace Utility.Nodes.Filters
         }
     }
 
+    public class CurrentGetter : Getter
+    {
+        public override string Name => nameof(Node.Current);
+
+        public override object Get(object instance)
+        {
+            return (instance as INode).Current.Key;
+        }
+    }
+
     public class GenericSetter : Setter
     {
-        private readonly PropertyInfo prop;
+        private readonly Action<object, object> func;
 
         public GenericSetter(PropertyInfo prop)
         {
+            Name = prop.Name;
+            this.func = prop.ToSetter<object>();
+        }
+
+        public override string Name { get; }
+
+        public override void Set(object instance, object value)
+        {
+            func.Invoke(instance, value);
+        }
+    }
+
+    
+    public class GenericGetter : Getter
+    {
+        private readonly PropertyInfo prop;
+        private readonly Func<object, object> func;
+
+        public GenericGetter(PropertyInfo prop)
+        {
             this.prop = prop;
+            this.func = prop.ToGetter<object>();
         }
 
         public override string Name { get => prop.Name; }
 
-        public override void Set(object instance, object value)
+        public override object Get(object instance)
         {
-            prop.SetValue(instance, value);
+            return func.Invoke(instance);
         }
     }
 
     public static class Rules
     {
-        public static Setter Decide(PropertyInfo propertyInfo)
+        public static PropertyInterface Decide(PropertyInfo propertyInfo)
         {
             if (propertyInfo.Name == nameof(INode.Current))
             {
-                return new CurrentSetter();
+                return new PropertyInterface{ Name = propertyInfo.Name, Setter = new CurrentSetter(), Getter = new CurrentGetter() };
+            }     
+            if (propertyInfo.Name == nameof(ValueModel.Value))
+            {
+                return new PropertyInterface{ Name = propertyInfo.Name, Setter = new GenericSetter(propertyInfo), Getter = new GenericGetter(propertyInfo) };
             }
             else
             {
-                return new GenericSetter(propertyInfo);
+                return new PropertyInterface{ Name = propertyInfo.Name, Setter = new GenericSetter(propertyInfo), Getter = new GenericGetter(propertyInfo) };
             }
         }
     }

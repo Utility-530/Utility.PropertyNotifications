@@ -52,6 +52,7 @@ namespace Utility.Nodes.Filters
         private readonly Guid collectionGuid = Guid.Parse("d6fa45af-e543-4ac9-bec4-fcbd3a800097");
 
         public const string Refresh = nameof(Refresh);
+        public const string Run = nameof(Run);
         public const string Save = nameof(Save);
         public const string Save_Filters = nameof(Save_Filters);
         public const string Clear = nameof(Clear);
@@ -78,7 +79,7 @@ namespace Utility.Nodes.Filters
             return nodeSource.Create(controls,
                 controlsGuid,
                 s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Horizontal },
-                s => new Model(() => [new CommandModel { Name = Save }, new CommandModel { Name = Refresh }]) { Name = s });
+                s => new Model(() => [new CommandModel { Name = Save }, new CommandModel { Name = Refresh }, new CommandModel { Name = Run }]) { Name = s });
         }
 
         public IObservable<INode> BuildComboRoot()
