@@ -258,6 +258,7 @@
     <Style x:Key="RootStyle" TargetType="{x:Type local:TreeListViewItem}">
         <Setter Property="ItemContainerStyleSelector" Value="{StaticResource JsonContainerStyle2Selector}"/>
         <Setter Property="Template" Value="{StaticResource RootControlTemplate}"/>
+        <Setter Property="Schema" Value="{Binding Schema, RelativeSource={RelativeSource AncestorType={x:Type local:JsonControl}}}"></Setter>
     </Style>
 </ResourceDictionary>
     

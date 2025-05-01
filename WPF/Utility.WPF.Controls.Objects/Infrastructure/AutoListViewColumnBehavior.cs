@@ -13,8 +13,6 @@ using AutoGenListView.Attributes;
 using System.Windows.Shapes;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using Utility.WPF.Templates;
-using conv = Utility.WPF.Converters;
 
 namespace Utility.WPF.Controls.Objects
 {
@@ -137,7 +135,7 @@ namespace Utility.WPF.Controls.Objects
                 };
 
                 // create the column, and add it to the gridview
-                GridViewColumn column = new GridViewColumn()
+                GridViewColumn column = new GridViewColumn() 
                 {
                     Header = new GridViewColumnHeader { Content = displayName, Width = width },
                     //DisplayMemberBinding = binding,

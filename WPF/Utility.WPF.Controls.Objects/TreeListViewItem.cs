@@ -1,5 +1,9 @@
 ﻿using System.Windows.Controls;
 using System.Windows;
+using Utility.Models;
+using System.Linq;
+using Utility.Structs;
+using System.Collections.Generic;
 
 namespace Utility.WPF.Controls.Objects
 {
@@ -7,6 +11,38 @@ namespace Utility.WPF.Controls.Objects
     {
         public static readonly DependencyProperty ColumnsProperty = DependencyProperty.Register("Columns", typeof(GridViewColumnCollection), typeof(TreeListViewItem));
         public static readonly DependencyProperty AllowsColumnReorderProperty = DependencyProperty.Register("AllowsColumnReorder", typeof(bool), typeof(TreeListViewItem));
+        public static readonly DependencyProperty SchemaProperty = DependencyProperty.Register("Schema", typeof(Schema), typeof(TreeListViewItem), new PropertyMetadata(changed));
+
+        private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            Dictionary<GridViewColumn, Dimension> widths = new();
+            if (d is TreeListViewItem x && e.NewValue is Schema schema)
+            {
+                foreach (var column in x.Columns.ToArray())
+                {
+                    if (x.template(schema, column) is DataTemplate template)
+                        column.CellTemplate = template;
+       
+                    if (x.exclude(schema, column))
+                    {
+                        x.Columns.Remove(column);
+                        continue;
+                    }
+                    if (x.width(schema, column) is Dimension dim)
+                        widths.Add(column, dim);
+                }
+
+                if(widths.Any())
+                {
+                    var total = widths.Sum(a => a.Value.Value);
+                    foreach(var c in widths)
+                    {
+                        c.Key.Width = c.Value.Value;
+                    }
+                }
+            }
+        }
+
 
         static TreeListViewItem()
         {
@@ -33,12 +69,50 @@ namespace Utility.WPF.Controls.Objects
 
                 var columns = AutoListViewColumnBehavior.CreateColumns(this);
                 foreach (var col in columns)
-                    Columns.Add(col);
+                {
+                    if (template(Schema, col) is { } t)
+                        col.CellTemplate = t;
+                    if (exclude(Schema, col))
+                    {
+                    }
+                    else
+                        Columns.Add(col);
+                }
             }
         }
 
+        bool exclude(Schema schema, GridViewColumn column)
+        {
+            return schema?.Properties.SingleOrDefault(a => a.Name.Equals((column.Header as ContentControl)?.Content)) is SchemaProperty { IsVisible: false };
+
+        }
+
+        DataTemplate? template(Schema schema, GridViewColumn column)
+        {
+            var str = (column.Header as ContentControl)?.Content;
+            if (schema?.Properties.SingleOrDefault(a => a.Name.Equals(str)) is SchemaProperty { Template: { } template })
+                return Application.Current.Resources[template] as DataTemplate;
+            return null;
+
+        }
+        
+        Dimension? width(Schema schema, GridViewColumn column)
+        {
+            var str = (column.Header as ContentControl)?.Content;
+            if (schema?.Properties.SingleOrDefault(a => a.Name.Equals(str)) is SchemaProperty { ColumnWidth: { } width })
+                return width;
+            return null;
+
+        }
 
         #region Properties
+
+        public Schema Schema
+        {
+            get { return (Schema)GetValue(SchemaProperty); }
+            set { SetValue(SchemaProperty, value); }
+        }
+
 
         /// <summary>
         /// Gets or sets the collection of System.Windows.Controls.GridViewColumn

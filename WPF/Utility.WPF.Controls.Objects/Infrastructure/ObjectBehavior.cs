@@ -41,10 +41,17 @@ namespace Utility.WPF.Controls.Objects
             {
                 b._playSubject.Subscribe(a =>
                 {
-                    if (b.JsonSerializer != null)
-                        a.Object = JToken.FromObject(obj, b.JsonSerializer);
-                    else
-                        a.Object = JToken.FromObject(obj);
+                    try
+                    {
+                        if (b.JsonSerializer != null)
+                            a.Object = JToken.FromObject(obj, b.JsonSerializer);
+                        else
+                            a.Object = JToken.FromObject(obj);
+                    }
+                    catch(Exception ex)
+                    {
+                        a.Object = JToken.FromObject(ex);
+                    }
                 });
             }
         }

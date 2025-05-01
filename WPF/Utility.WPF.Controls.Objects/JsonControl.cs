@@ -21,6 +21,7 @@ using Utility.Models;
 using Utility.WPF.Controls.Trees;
 using Utility.Helpers.Ex;
 using static LambdaConverters.ValueConverter;
+using DryIoc;
 
 namespace Utility.WPF.Controls.Objects
 {
@@ -383,7 +384,7 @@ namespace Utility.WPF.Controls.Objects
                             return true;
                         }
                     }
-                    var propertyType = _type.GetProperty(name).PropertyType;
+                    var propertyType = _type.GetPropertyOrNull(name)?.PropertyType;
                     if (propertyType == typeof(string))
                     {
                         property = new SchemaProperty { Template = "StringTemplate" };
