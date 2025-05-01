@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Utility.Interfaces;
 
@@ -25,15 +26,20 @@ namespace Utility.PropertyNotifications
         /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        public virtual void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
+        /// <summary>
+        /// Raises this object's PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">The property that has a new value.</param>
+        public virtual void RaiseValuePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null) where T : struct
         {
+            if (value.Equals(default) && previousValue.Equals(default))
+                return;
+            if (value.Equals(previousValue) == true)
+                return;
 
-            var handler = PropertyChanged;
-            if (handler != null)
-            {
-                var e = new PropertyChangedEventArgs(propertyName);
-                handler(this, e);
-            }
+            var _previousValue = previousValue;
+            previousValue = value;
+            RaisePropertyChanged(_previousValue, value, propertyName);
         }
 
         /// <summary>
@@ -42,7 +48,7 @@ namespace Utility.PropertyNotifications
         /// <param name="propertyName">The property that has a new value.</param>
         public virtual void RaisePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null)
         {
-            if (value == null && previousValue == null)
+            if (value?.Equals(default) == true && previousValue?.Equals(default) == true)
                 return;
             if (value?.Equals(previousValue) == true)
                 return;
@@ -51,14 +57,38 @@ namespace Utility.PropertyNotifications
             previousValue = value;
             RaisePropertyChanged(_previousValue, value, propertyName);
         }
+
+        /// <summary>
+        /// Raises this object's PropertyChanged event.
+        /// </summary>
+        /// <param name="propertyName">The property that has a new value.</param>
+        public virtual void RaisePropertyChanged<T>(ref T? previousValue, T? value, [CallerMemberName] string? propertyName = null) where T : struct
+        {
+            if (value.Equals(default) && previousValue.Equals(default))
+                return;
+            if (value.Equals(previousValue) == true)
+                return;
+
+            var _previousValue = previousValue;
+            previousValue = value;
+            RaisePropertyChanged(_previousValue, value, propertyName);
+        }
+
         public virtual void RaisePropertyChanged<T>(T previousValue, T value, [CallerMemberName] string? propertyName = null)
         {
-            var handler = PropertyChanged;
-
-            if (handler != null)
+            if (PropertyChanged != null)
             {
                 var e = new PropertyChangedExEventArgs(propertyName, value, previousValue);
-                handler(this, e);
+                PropertyChanged(this, e);
+            }
+        }
+
+        public virtual void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            if (PropertyChanged != null)
+            {
+                var e = new PropertyChangedEventArgs(propertyName);
+                PropertyChanged(this, e);
             }
         }
 
@@ -66,6 +96,9 @@ namespace Utility.PropertyNotifications
 
         #region INotifyPropertyCalled Members
 
+        private ObservableCollection<PropertyCalledEventArgs> missedCalls = [];
+
+        public IEnumerable<PropertyCalledEventArgs> MissedCalls => missedCalls;
 
         /// <summary>
         /// Raised when a property on this object has a new value.
@@ -85,7 +118,13 @@ namespace Utility.PropertyNotifications
         public virtual void RaisePropertyCalled(object? value, [CallerMemberName] string? propertyName = null)
         {
             if (flag == false)
-                PropertyCalled?.Invoke(this, PropertyCalledArgs(propertyName, value));
+            {
+                var args = PropertyCalledArgs(propertyName, value);
+                if (PropertyCalled is PropertyCalledEventHandler handler)
+                    handler.Invoke(this, args);
+                else
+                    missedCalls.Add(args);
+            }
         }
 
         private PropertyCalledEventArgs PropertyCalledArgs(string? propertyName, object? value)

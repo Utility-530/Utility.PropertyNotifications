@@ -15,7 +15,7 @@ namespace Utility.PropertyNotifications
 
             public PropertyObservable(INotifyPropertyCalled target)
             {
-                _target = target;    
+                _target = target;
             }
 
             private class Subscription : IDisposable
@@ -27,7 +27,18 @@ namespace Utility.PropertyNotifications
                 {
                     _target = target;
                     _observer = observer;
+
+                    foreach (var item in _target.MissedCalls.ToArray())
+                    {
+                        onPropertyCalled(target, item);
+                    }
+
                     _target.PropertyCalled += onPropertyCalled;
+
+                    if (_target.MissedCalls is IList<PropertyCall> missedCalls)
+                    {
+                        missedCalls.Clear();
+                    }
                 }
 
                 private void onPropertyCalled(object sender, PropertyCalledEventArgs e)
