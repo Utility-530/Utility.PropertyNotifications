@@ -11,7 +11,6 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using System.Xml.Linq;
-using Utility.Changes;
 using Utility.Enums;
 using Utility.Trees.Extensions;
 using Utility.Helpers;
@@ -20,11 +19,12 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Observables;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
-using Utility.Models;
 using Utility.Trees.Abstractions;
 using Type = System.Type;
 using Utility.Collections;
 using Utility.Helpers.NonGeneric;
+using Splat;
+using Utility.Helpers.Reflection;
 
 namespace Utility.Models.Trees
 {
@@ -53,28 +53,18 @@ namespace Utility.Models.Trees
 
     public class NodePropertyRootModel : ResolvableModel
     {
-        private Type type;
 
         public NodePropertyRootModel()
         {
-            Assemblies.InsertSpecial(0, typeof(INode).Assembly);
-            Types.InsertSpecial(0, typeof(INode));
-            Properties.Changes().Subscribe(a => PropertyType = Properties.LastOrDefault()?.PropertyType);
+            var type = Locator.Current.GetService<Type>();
+            Assemblies.InsertSpecial(0, type.Assembly);
+            Types.InsertSpecial(0, type);
         }
-
-        public Type PropertyType
-        {
-            get => type;
-            set => this.RaisePropertyChanged(ref type, value);
-        }
-
         public override IEnumerable<Model> CreateChildren()
         {
             yield return new NodeModel { Name = "_node_" };
         }
     }
-
-
 
     public class NodeModel : Model, IBreadCrumb
     {
@@ -132,7 +122,14 @@ namespace Utility.Models.Trees
 
         public override IEnumerable<Model> CreateChildren()
         {
-            foreach (var prop in typeof(INode).PublicInstanceProperties().Where(a => types.Any(x => a.PropertyType.Equals(x))))
+            var ancestor = this.Node.Ancestor(a => a.tree.Data is ThroughPutModel { Parameter: { } });
+            Type[] _types = types;
+            if (ancestor != null)
+            {
+                _types = [(ancestor.Data as ThroughPutModel).Parameter.ParameterType, typeof(object)];
+            }
+
+            foreach (var prop in Locator.Current.GetService<INodePropertyFactory>().Properties(_types))
             {
                 var pnode = new PropertyModel { Name = prop.Name, Value = prop };
                 yield return pnode;
@@ -203,6 +200,12 @@ namespace Utility.Models.Trees
     {
         public override IEnumerable<Model> CreateChildren()
         {
+            foreach (var prop in Locator.Current.GetService<IPropertyFactory>().Properties)
+            {
+                yield return new AssemblyTypePropertyModel { Name = prop.PropertyType.Name + "." + prop.Name, Value = prop };
+            }
+            //yield return new PropertyModel { Name = prop.PropertyType.Name + "." + prop.Name, Value = prop };
+
             foreach (Assembly ass in AssemblyHelper.GetNonSystemAssembliesInCurrentDomain().Where(GlobalModelFilter.Instance.AssemblyPredicate.Invoke))
             {
                 var _node = AssemblyModel.Create(ass);
@@ -213,6 +216,19 @@ namespace Utility.Models.Trees
         {
         }
     }
+
+    public class AssemblyTypePropertyModel : ValueModel<PropertyInfo>, IBreadCrumb
+    {
+        public AssemblyTypePropertyModel()
+        {
+        }
+
+        public Assembly Assembly => Type?.Assembly;
+
+        public Type Type => Value?.DeclaringType;
+    }
+
+
 
     public class RelationModel : Model
     {
@@ -249,22 +265,29 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class ValueModel : ValueModel<object>
+    public class ValueModel : ValueModel<object>, IAutoList
     {
+        private bool isListening;
+
         public ValueModel(object value) : base(value) { }
         public ValueModel() { }
+
+        public IEnumerable AutoList { get; set; }
+
+        public bool IsListening { get => isListening; set => RaisePropertyChanged(ref isListening, value); }
     }
 
 
-
-    public class MethodModel : Model, IBreadCrumb
+    public class MethodModel : ValueModel<MethodInfo>, IBreadCrumb
     {
-        public MethodInfo MethodInfo { get; set; }
+        public MethodModel()
+        {
 
+        }
 
         public override IEnumerable<Model> CreateChildren()
         {
-            foreach (var p in MethodInfo?.GetParameters() ?? Array.Empty<ParameterInfo>())
+            foreach (var p in Value?.GetParameters() ?? Array.Empty<ParameterInfo>())
                 yield return
                     new ParameterModel { Name = p.Name, Parameter = p };
         }
@@ -280,10 +303,8 @@ namespace Utility.Models.Trees
     {
         public override IEnumerable<Model> CreateChildren()
         {
-            foreach (var m in typeof(Methods).StaticMethods())
-                yield return
-                    new MethodModel { Name = m.Item1, MethodInfo = m.Item2 }
-                    ;
+            foreach (var m in Locator.Current.GetService<IMethodFactory>().Methods)
+                yield return new MethodModel { Name = m.GetDescription(), Value = m };
         }
     }
 
@@ -310,11 +331,21 @@ namespace Utility.Models.Trees
         private object output;
         private MethodInfo method;
 
+        public ConverterModel()
+        {
+
+        }
+
         public MethodInfo Method
         {
             get => method; set
             {
-                RaisePropertyChanged(ref method, value);
+                if (method != value)
+                {
+                    var _previous = method;
+                    method = value;
+                    RaisePropertyChanged(_previous, value);
+                }
 
             }
         }
@@ -334,7 +365,11 @@ namespace Utility.Models.Trees
                     {
                         if (a.Data is MethodModel _m)
                         {
-                            Method = _m.MethodInfo;
+                            _m.WithChangesTo(a => a.Value).Update(this, a => a.Method);
+                            //.Subscribe(a =>
+                            //{
+                            //    Method = _m.Value;
+                            //});
                         }
                     });
         }
@@ -344,8 +379,6 @@ namespace Utility.Models.Trees
             node.IsPersistable = true;
             node.IsExpanded = true;
             base.SetNode(node);
-
-
         }
     }
 
@@ -370,7 +403,15 @@ namespace Utility.Models.Trees
         public string SearchText
         {
             get => searchText;
-            set => this.RaisePropertyChanged(ref searchText, value);
+            set
+            {
+                if (searchText != value)
+                {
+                    var _previous = searchText;
+                    searchText = value;
+                    this.RaisePropertyChanged(_previous, value);
+                }
+            }
         }
     }
 
@@ -491,7 +532,7 @@ namespace Utility.Models.Trees
         {
             node.IsPersistable = true;
             node.IsExpanded = true;
-            node.IsEditable = true;
+            node.IsAugmentable = true;
             base.SetNode(node);
         }
 
@@ -633,7 +674,12 @@ namespace Utility.Models.Trees
         {
             get => _value; set
             {
-                RaisePropertyChanged(ref _value, value);
+                if (_value != value)
+                {
+                    var _previous = _value;
+                    _value = value;
+                    RaisePropertyChanged(_previous, value);
+                }
             }
         }
 
@@ -795,7 +841,9 @@ namespace Utility.Models.Trees
         public override void SetNode(INode node)
         {
             node.Orientation = Orientation.Vertical;
-            node.IsEditable = true;
+            node.IsEditable = false;
+            node.IsRemovable = false;
+            node.IsAugmentable = true;
             node.IsExpanded = true;
             node.IsPersistable = true;
             node.Items.AndAdditions<INode>().Subscribe(a => Transformers.Add(a.Data as TransformerModel));
@@ -816,7 +864,7 @@ namespace Utility.Models.Trees
         public override void SetNode(INode node)
         {
             node.Orientation = Orientation.Vertical;
-            node.IsEditable = true;
+            node.IsAugmentable = true;
             node.IsExpanded = true;
             node.IsPersistable = true;
             node.Items.AndAdditions<INode>().Subscribe(a => Filters.Add(a.Data as FilterModel));
@@ -865,7 +913,6 @@ namespace Utility.Models.Trees
         {
             node.IsPersistable = true;
             node.IsExpanded = true;
-            node.IsEditable = false;
             base.SetNode(node);
         }
     }
@@ -934,7 +981,6 @@ namespace Utility.Models.Trees
         {
             node.IsPersistable = true;
             node.IsExpanded = true;
-            node.IsEditable = false;
             node.IsRemovable = true;
             node.IsReplicable = true;
             base.SetNode(node);
@@ -955,7 +1001,7 @@ namespace Utility.Models.Trees
         {
             node.Orientation = Orientation.Vertical;
             node.IsExpanded = true;
-            node.IsEditable = true;
+            node.IsAugmentable = true;
             node.IsPersistable = true;
             node.Items.AndAdditions<INode>().Subscribe(a => Collection.Add(a.Data as DataFileModel));
             base.SetNode(node);
@@ -981,7 +1027,7 @@ namespace Utility.Models.Trees
         {
             node.Orientation = Orientation.Vertical;
             node.IsExpanded = true;
-            node.IsEditable = true;
+            node.IsAugmentable = true;
             node.IsPersistable = true;
             node.Items.AndAdditions<INode>().Subscribe(a => Collection.Add(a.Data as SelectionModel));
             base.SetNode(node);
@@ -993,26 +1039,25 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class NodePropertyRootsModel : Model
+    public class NodePropertyRootsModel : CollectionModel<NodePropertyRootModel>
     {
-        [JsonIgnore]
-        public ObservableCollection<NodePropertyRootModel> Models { get; } = new();
+        public NodePropertyRootsModel()
+        {
+            Limit = 1;
+        }
 
         public override void SetNode(INode node)
         {
-            node.IsEditable = true;
             node.Orientation = Orientation.Vertical;
-            node.Items.AndAdditions<INode>().Subscribe(a => Models.Add(a.Data as NodePropertyRootModel));
             base.SetNode(node);
         }
-
         public override IEnumerable Proliferation()
         {
             yield return new NodePropertyRootModel { Name = "npr" };
         }
     }
 
-    public class ThroughPutModel : Model
+    public class ThroughPutModel : ValueModel<string>
     {
         const string element = nameof(element);
         const string filter = nameof(filter);
@@ -1025,21 +1070,34 @@ namespace Utility.Models.Trees
         public AndOrModel Filter
         {
             get => _filter;
-            set => base.RaisePropertyChanged(ref this._filter, value);
+            set
+            {
+                if (_filter != value)
+                {
+                    var _previous = _filter;
+                    _filter = value;
+                    this.RaisePropertyChanged(_previous, value);
+                }
+            }
         }
 
         [JsonIgnore]
         public NodePropertyRootsModel Element
         {
             get => _element;
-            set => base.RaisePropertyChanged(ref this._element, value);
+            set
+            {
+                if (_element != value)
+                {
+                    var _previous = _element;
+                    _element = value;
+                    this.RaisePropertyChanged(_previous, value);
+                }
+            }
         }
-
-        public ParameterInfo Parameter { get; set; }
 
         public override IEnumerable<Model> CreateChildren()
         {
-
             yield return new NodePropertyRootsModel { Name = element };
             yield return new AndOrModel { Name = filter };
         }
@@ -1060,20 +1118,56 @@ namespace Utility.Models.Trees
         public override void SetNode(INode node)
         {
             node.IsExpanded = true;
+            node.IsRemovable = true;
             base.SetNode(node);
+        }
+
+        public ParameterInfo Parameter
+        {
+            get { return this.Value is string s ? JsonConvert.DeserializeObject<ParameterInfo>(s) : null; }
+            set
+            {
+                if (value != null)
+                    this.Value = JsonConvert.SerializeObject(value);
+            }
         }
 
     }
 
     public class InputsModel : CollectionModel<ThroughPutModel>
     {
+        private ParameterInfo[] parameters;
 
+        public ParameterInfo[] Parameters
+        {
+            get => parameters; set
+            {
+                parameters = value;
+                Limit = value.Count();
+                RaisePropertyChanged();
+            }
+        }
 
         public override void SetNode(INode node)
         {
             node.IsExpanded = true;
             node.Orientation = Orientation.Vertical;
             base.SetNode(node);
+        }
+
+        public override IEnumerable Proliferation()
+        {
+            var oc = new ObservableCollection<ThroughPutModel>();
+            this.WithChangesTo(a => a.Parameters)
+                .Subscribe(x =>
+                {
+                    oc.Clear();
+                    foreach (var param in Parameters.Where(a => this.Collection.All(ac => ac.Parameter != a)))
+                    {
+                        oc.Add(new ThroughPutModel() { Name = param.Name, Parameter = param });
+                    }
+                });
+            return oc;
         }
     }
 
@@ -1102,11 +1196,9 @@ namespace Utility.Models.Trees
     {
         const string inputs = nameof(inputs);
         const string output = nameof(output);
-        const string exceptions = nameof(exceptions);
         const string converter = nameof(converter);
 
         private InputsModel _inputs;
-        private ExceptionsModel _exceptions;
         private ThroughPutModel _output;
         private ConverterModel converterModel;
         IDisposable disposable;
@@ -1115,14 +1207,30 @@ namespace Utility.Models.Trees
         public InputsModel Inputs
         {
             get => _inputs;
-            set => base.RaisePropertyChanged(ref this._inputs, value);
+            set
+            {
+                if (_inputs != value)
+                {
+                    var _previous = _inputs;
+                    _inputs = value;
+                    this.RaisePropertyChanged(_previous, value);
+                }
+            }
         }
 
         [JsonIgnore]
         public ThroughPutModel Output
         {
             get => _output;
-            set => base.RaisePropertyChanged(ref this._output, value);
+            set
+            {
+                if (_output != value)
+                {
+                    var _previous = _output;
+                    _output = value;
+                    this.RaisePropertyChanged(_previous, value);
+                }
+            }
         }
 
         [JsonIgnore]
@@ -1136,7 +1244,7 @@ namespace Utility.Models.Trees
                 disposable?.Dispose();
                 disposable = value.WithChangesTo(a => a.Method)
                     .Where(a => a != null)
-                    .Subscribe(a =>
+                    .Subscribe(method =>
                     {
                         this.WithChangesTo(a => a.Output)
                         .Where(a => a != null)
@@ -1146,36 +1254,25 @@ namespace Utility.Models.Trees
                         });
 
                         this.WithChangesTo(a => a.Inputs)
-                        .Where(a => a != null)
-                        .Subscribe(a =>
+                        .Where(i => i != null)
+                        .Subscribe(async i =>
                         {
-                            a.Node.Clear();
-                            foreach (var param in value.Method.GetParameters())
-                            {
-                                a.Node.Add(new ThroughPutModel() { Name = param.Name, Parameter = param });
-                            }
+                            i.Parameters = value.Method.GetParameters();
+  
                         });
 
                     });
 
-                RaisePropertyChanged(ref previous, value);
+                RaisePropertyChanged(previous, value);
             }
         }
 
-
-        [JsonIgnore]
-        public ExceptionsModel Exceptions
-        {
-            get => _exceptions;
-            set => base.RaisePropertyChanged(ref this._exceptions, value);
-        }
 
         public override IEnumerable<Model> CreateChildren()
         {
             yield return new ConverterModel { Name = converter };
             yield return new InputsModel { Name = inputs };
             yield return new ThroughPutModel { Name = output };
-            yield return new ExceptionsModel { Name = exceptions };
         }
 
         public override void Addition(IReadOnlyTree value, IReadOnlyTree a)
@@ -1185,7 +1282,6 @@ namespace Utility.Models.Trees
                 case inputs: Inputs = a.Data as InputsModel; break;
                 case output: Output = a.Data as ThroughPutModel; break;
                 case converter: Converter = a.Data as ConverterModel; break;
-                case exceptions: Exceptions = a.Data as ExceptionsModel; break;
                 default: throw new ArgumentOutOfRangeException("ds 33` 33kfl.. ");
             }
             base.Addition(value, a);
@@ -1196,7 +1292,11 @@ namespace Utility.Models.Trees
             node.WithChangesTo(a => a.Parent).Subscribe(a =>
             {
                 node.LocalIndex = a.Items.Count();
-                node.IsEditable = false;
+                node.Arrangement = Arrangement.Uniform;
+                node.Columns.Add(new Structs.Dimension());
+                node.Columns.Add(new Structs.Dimension());
+                node.Columns.Add(new Structs.Dimension());
+                node.Rows.Add(new Structs.Dimension());
                 node.IsExpanded = true;
                 node.IsPersistable = true;
                 base.SetNode(node);
@@ -1235,7 +1335,15 @@ namespace Utility.Models.Trees
         public ResolvableModel ResolvableModel
         {
             get => resolvableModel;
-            set => base.RaisePropertyChanged(ref this.resolvableModel, value);
+            set
+            {
+                if (resolvableModel != value)
+                {
+                    var previous = resolvableModel;
+                    resolvableModel = value;
+                    this.RaisePropertyChanged(previous, value);
+                }
+            }
         }
 
         [JsonIgnore]
@@ -1244,7 +1352,16 @@ namespace Utility.Models.Trees
         public ComparisonModel ComparisonModel
         {
             get => comparisonModel;
-            set => base.RaisePropertyChanged(ref this.comparisonModel, value);
+            set
+            {
+                if (comparisonModel != value)
+                {
+                    var previous = comparisonModel;
+                    comparisonModel = value;
+                    this.RaisePropertyChanged(previous, value);
+                }
+
+            }
         }
 
         [JsonIgnore]
@@ -1252,7 +1369,15 @@ namespace Utility.Models.Trees
         public ValueModel ValueModel
         {
             get => valueModel;
-            set => base.RaisePropertyChanged(ref this.valueModel, value);
+            set
+            {
+                if (valueModel != value)
+                {
+                    var previous = valueModel;
+                    valueModel = value;
+                    this.RaisePropertyChanged(previous, value);
+                }
+            }
         }
 
         public override void Addition(IReadOnlyTree value, IReadOnlyTree a)
@@ -1267,6 +1392,17 @@ namespace Utility.Models.Trees
                         {
                             var typesCount = ResolvableModel.Types.Count;
                             var propertiesCount = ResolvableModel.Properties.Count;
+                            ObservableCollection<object> list = new();
+                            source.Nodes.AndChanges<INode>().Subscribe(a =>
+                            {
+                                foreach (var item in a)
+                                    if (item.Type == Changes.Type.Add)
+                                        if (ResolvableModel.TryGetValue(item.Value, out var x))
+                                        {
+                                            list.Add(x);
+                                        }
+                            });
+
                             if (typesCount > propertiesCount)
                             {
                                 ValueModel.Set(ResolvableModel.Types.Last());
@@ -1280,9 +1416,10 @@ namespace Utility.Models.Trees
                             else if (typesCount == propertiesCount)
                             {
                                 var propertyType = ResolvableModel.Properties.Last().PropertyType;
+                                ValueModel.AutoList = list;
                                 if (ValueModel.Value?.GetType() != propertyType)
                                 {
-                                    ValueModel.Set(ActivateAnything.Activate.New(propertyType));
+                                    ValueModel.Set(_value ?? ActivateAnything.Activate.New(propertyType));
                                     ComparisonModel.Type = toComparisonType(propertyType);
                                 }
                             }
@@ -1293,7 +1430,20 @@ namespace Utility.Models.Trees
                 case b_ool:
                     ComparisonModel = a.Data as ComparisonModel; break;
                 case _value:
-                    ValueModel = a.Data as ValueModel; break;
+                    ValueModel = a.Data as ValueModel;
+                    ValueModel.WithChangesTo(a => a.IsListening)
+                        .CombineLatest(source.Selections)
+                        .Where(a => a.First)
+                        .Select(a => a.Second)
+                        .Subscribe(selected =>
+                        {
+                            if (ResolvableModel.TryGetValue(selected, out var _value))
+                            {
+                                //ValueModel.Value = _value;
+                                ValueModel.Set(_value);
+                            }
+                        });
+                    break;
             }
             base.Addition(value, a);
 
@@ -1410,7 +1560,7 @@ namespace Utility.Models.Trees
     public class ResolvableModel : BreadCrumbModel, IRoot
     {
         private CustomCollection<Type> types = new();
-        private CustomCollection<PropertyInfo> propertyInfos = new();
+        private CustomCollection<PropertyInfo> properties = new();
         private CustomCollection<Assembly> assemblies = [];
 
         public ResolvableModel()
@@ -1439,9 +1589,9 @@ namespace Utility.Models.Trees
         [JsonIgnore]
         public CustomCollection<PropertyInfo> Properties
         {
-            get => propertyInfos; set
+            get => properties; set
             {
-                propertyInfos = value;
+                properties = value;
             }
         }
 
@@ -1450,13 +1600,29 @@ namespace Utility.Models.Trees
             yield return new GlobalAssembliesModel { Name = "ass_root" };
         }
 
-        public override void Addition(IReadOnlyTree value, IReadOnlyTree a)
+        public override void Addition(IReadOnlyTree value, IReadOnlyTree add)
         {
+            var _level = add.Level(Node);
 
-            var _level = a.Level(Node);
-
-            switch (a?.Data)
+            switch (add?.Data)
             {
+                case AssemblyTypePropertyModel { Assembly: { } _assembly, Type: { } _type, Value: { } _property }:
+                    {
+                        assemblies.InsertSpecial(_level, _assembly);
+                        types.InsertSpecial(_level, _type);
+                        properties.InsertSpecial(_level, _property);
+                        break;
+                    }
+                case AssemblyTypePropertyModel am:
+                    {
+                        am.WithChangesTo(a => a.Value).Subscribe(a =>
+                        {
+                            assemblies.InsertSpecial(_level, am.Assembly);
+                            types.InsertSpecial(_level, am.Type);
+                            properties.InsertSpecial(_level, am.Value);
+                        });
+                        break;
+                    }
                 case AssemblyModel { Assembly: { } assembly }:
                     {
                         assemblies.InsertSpecial(_level, assembly);
@@ -1469,41 +1635,55 @@ namespace Utility.Models.Trees
                     }
                 case PropertyModel { Value: { } pInfo }:
                     {
-                        propertyInfos.InsertSpecial(_level, pInfo);
+                        properties.InsertSpecial(_level, pInfo);
+                    }
+                    break;
+                case PropertyModel {  } pm:
+                    {
+                        pm.WithChangesTo(a => a.Value).Subscribe(x =>
+                        {
+                            properties.InsertSpecial(_level, x);
+                        });
                     }
                     break;
             }
-            base.Addition(value, a);
-
+            base.Addition(value, add);
         }
 
-        public override void Subtraction(IReadOnlyTree node, IReadOnlyTree a)
+        public override void Subtraction(IReadOnlyTree node, IReadOnlyTree subtract)
         {
 
-            switch (a?.Data)
+            switch (subtract?.Data)
             {
+                case AssemblyTypePropertyModel { Assembly: { } _assembly, Type: { } _type, Value: { } _property }:
+                    {
+                        var level = subtract.Level(node);
+                        assemblies.RemoveAtSpecial(level);
+                        types.RemoveAtSpecial(level);
+                        properties.RemoveAtSpecial(level);
+                        break;
+                    }
                 case AssemblyModel { Assembly: { } assembly }:
                     {
-                        var level = a.Level(node);
+                        var level = subtract.Level(node);
                         assemblies.RemoveAtSpecial(level);
                         break;
                     }
                 case TypeModel { Type: { } type }:
                     {
-                        var level = a.Level(node);
+                        var level = subtract.Level(node);
                         types.RemoveAtSpecial(level);
                         break;
                     }
                 case PropertyModel { Value: { } pInfo }:
                     {
-                        var level = a.Level(node);
-                        propertyInfos.RemoveAtSpecial(level);
+                        var level = subtract.Level(node);
+                        properties.RemoveAtSpecial(level);
                     }
-
                     break;
 
             }
-            base.Subtraction(node, a);
+            base.Subtraction(node, subtract);
 
         }
 
@@ -1527,10 +1707,13 @@ namespace Utility.Models.Trees
                 case PropertyModel { Value: { } pInfo }:
                     {
                         var level = @new.Level(Node);
-                        propertyInfos.ReplaceSpecial(level, pInfo);
+                        properties.ReplaceSpecial(level, pInfo);
+                        break;
+
                     }
 
-                    break;
+                default:
+                    throw new Exception("uiyi 333");
             }
             base.Replacement(@new, old);
         }
@@ -1540,7 +1723,7 @@ namespace Utility.Models.Trees
             value = instance;
 
             int i = 0;
-            while (Assemblies.Count > i)
+            while (Properties.Count > i)
             {
                 if (Assemblies[i] != value.GetType().Assembly)
                     return false;
@@ -1566,7 +1749,7 @@ namespace Utility.Models.Trees
             if (Types.Any() == false)
                 return true;
             int i = 0;
-            while (Assemblies.Count > i + 1)
+            while (Properties.Count > i + 1)
             {
                 if (Assemblies[i] != instance.GetType().Assembly)
                     return false;
