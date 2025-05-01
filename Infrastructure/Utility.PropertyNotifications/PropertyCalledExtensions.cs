@@ -12,10 +12,12 @@ namespace Utility.PropertyNotifications
         private class PropertyObservable : IObservable<PropertyCall>
         {
             private readonly INotifyPropertyCalled _target;
+            private readonly bool includeNonInitial;
 
-            public PropertyObservable(INotifyPropertyCalled target)
+            public PropertyObservable(INotifyPropertyCalled target, bool includeNonInitial)
             {
                 _target = target;
+                this.includeNonInitial = includeNonInitial;
             }
 
             private class Subscription : IDisposable
@@ -23,15 +25,16 @@ namespace Utility.PropertyNotifications
                 private readonly INotifyPropertyCalled _target;
                 private readonly IObserver<PropertyCall> _observer;
 
-                public Subscription(INotifyPropertyCalled target, IObserver<PropertyCall> observer)
+                public Subscription(INotifyPropertyCalled target, IObserver<PropertyCall> observer, bool includeNonInitial)
                 {
                     _target = target;
                     _observer = observer;
 
-                    foreach (var item in _target.MissedCalls.ToArray())
-                    {
-                        onPropertyCalled(target, item);
-                    }
+                    if (includeNonInitial)
+                        foreach (var item in _target.MissedCalls.ToArray())
+                        {
+                            onPropertyCalled(target, item);
+                        }
 
                     _target.PropertyCalled += onPropertyCalled;
 
@@ -55,14 +58,14 @@ namespace Utility.PropertyNotifications
 
             public IDisposable Subscribe(IObserver<PropertyCall> observer)
             {
-                return new Subscription(_target, observer);
+                return new Subscription(_target, observer, includeNonInitial);
             }
         }
 
         public static IObservable<PropertyCall> WhenCalled<TModel>(this TModel model,
            bool includeNonInitial = true) where TModel : INotifyPropertyCalled
         {
-            return new PropertyObservable(model);
+            return new PropertyObservable(model, includeNonInitial);
         }
     }
 }

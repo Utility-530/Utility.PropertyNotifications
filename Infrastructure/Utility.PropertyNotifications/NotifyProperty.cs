@@ -31,9 +31,25 @@ namespace Utility.PropertyNotifications
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        public virtual void RaisePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null) where T : struct
+        public virtual void RaiseValuePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null) where T : struct
         {
             if (value.Equals(previousValue) == true)
+                return;
+
+            var handler = PropertyChanged;
+            var _previousValue = previousValue;
+            previousValue = value;
+
+            if (handler != null)
+            {
+                var e = new PropertyChangedExEventArgs(propertyName, value, _previousValue);
+                handler(this, e);
+            }
+        }
+            
+        public virtual void RaisePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null) 
+        {
+            if (value?.Equals(previousValue) == true)
                 return;
 
             var handler = PropertyChanged;

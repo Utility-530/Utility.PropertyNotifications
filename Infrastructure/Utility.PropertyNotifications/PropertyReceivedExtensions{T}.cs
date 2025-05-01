@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 using Utility.Interfaces;
+using Utility.Helpers.Reflection;
 
 namespace Utility.PropertyNotifications
 {
@@ -26,6 +27,7 @@ namespace Utility.PropertyNotifications
             {
                 private readonly INotifyPropertyReceived _target;
                 private readonly PropertyInfo _info;
+                private readonly Func<object, T> _getter;
                 private readonly IObserver<T> _observer;
                 private readonly bool includeNulls;
 
@@ -33,13 +35,14 @@ namespace Utility.PropertyNotifications
                 {
                     _target = target;
                     _info = info;
+                    _getter = info.ToGetter<T>();
                     _observer = observer;
                     this.includeNulls = includeNulls;
                     _target.PropertyReceived += onPropertyReceived;
 
                     if (includeInitial)
                     {
-                        var value = (T?)_info.GetValue(_target);
+                        var value = _getter.Invoke(_target);
                         if (includeNulls || value != null)
                             _observer.OnNext(value);
 
@@ -50,7 +53,7 @@ namespace Utility.PropertyNotifications
                 {
                     if (e.PropertyName == _info.Name)
                     {
-                        var value = (T?)_info.GetValue(e.Source ?? _target);
+                        var value = _getter.Invoke(e.Source ?? _target);
                         if (includeNulls || value != null)
                         {
                             _observer.OnNext(value);

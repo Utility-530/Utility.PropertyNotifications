@@ -3,11 +3,16 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Utility.Interfaces.NonGeneric;
+using Utility.Helpers.Reflection;
+using Utility.Helpers;
 
 namespace Utility.PropertyNotifications
 {
     public static class PropertyChangedExtensions
     {
+        static Dictionary<Type, Func<object, PropertyChangedEventHandler>> dictionary = new();
+
         public static void RaisePropertyChanged<T, P>(this T sender, Expression<Func<T, P>> propertyExpression) where T : INotifyPropertyChanged
         {
             Raise(typeof(T), sender, (propertyExpression.Body as MemberExpression).Member.Name);
@@ -18,10 +23,15 @@ namespace Utility.PropertyNotifications
             Raise(sender.GetType(), sender, prop);
         }
 
-        private static void Raise(Type targetType, INotifyPropertyChanged sender, string propName)
+        private static void Raise(Type targetType, INotifyPropertyChanged sender, string propName, bool cache = true)
         {
-            ((PropertyChangedEventHandler?)field(targetType).GetValue(sender))?.Invoke(sender, new PropertyChangedEventArgs(propName));
+            PropertyChangedEventHandler? handler = null;
+            if (cache == false)
+                handler = ((PropertyChangedEventHandler?)field(targetType).GetValue(sender));
+            else
+                handler = dictionary.Get(targetType, t => field(targetType).ToGetter<PropertyChangedEventHandler>()).Invoke(sender);
 
+            handler.Invoke(sender, new PropertyChangedEventArgs(propName));
             static FieldInfo field(Type type)
             {
                 return type.GetField(nameof(INotifyPropertyChanged.PropertyChanged), BindingFlags.Instance | BindingFlags.NonPublic) ??
@@ -30,14 +40,14 @@ namespace Utility.PropertyNotifications
         }
 
 
-        private class PropertyObservable<T> : IObservable<T>
+        private class PropertyObservable<TModel, T> : IObservable<T> where TModel : INotifyPropertyChanged
         {
-            private readonly INotifyPropertyChanged _target;
+            private readonly TModel _target;
             private readonly PropertyInfo? _info;
             private readonly bool _includeNulls;
             private readonly bool includeInitialValue;
             private const string constructor = ".ctor";
-            public PropertyObservable(INotifyPropertyChanged target, PropertyInfo? info = null, bool includeNulls = false, bool includeInitialValue = true)
+            public PropertyObservable(TModel target, PropertyInfo? info = null, bool includeNulls = false, bool includeInitialValue = true)
             {
                 _target = target;
                 _info = info;
@@ -47,16 +57,18 @@ namespace Utility.PropertyNotifications
 
             private class Subscription : IDisposable
             {
-                private readonly INotifyPropertyChanged _target;
+                private readonly TModel _target;
+                private readonly Func<TModel, T> func;
                 private readonly PropertyInfo _info;
                 private readonly IObserver<T> _observer;
                 private readonly bool _includeNulls;
-                private Dictionary<string, PropertyInfo> dictionary = new();
+                private Dictionary<string, Func<object, T>> dictionary = new();
 
-                public Subscription(INotifyPropertyChanged target, PropertyInfo info, IObserver<T> observer, bool includeNulls, bool includeInitialValue)
+                public Subscription(TModel target, PropertyInfo info, IObserver<T> observer, bool includeNulls, bool includeInitialValue)
                 {
                     _target = target;
                     _info = info;
+                    this.func = info?.ToGetter<TModel, T>();
                     _observer = observer;
                     _includeNulls = includeNulls;
                     _target.PropertyChanged += OnPropertyChanged;
@@ -76,10 +88,15 @@ namespace Utility.PropertyNotifications
                         {
                             if (dictionary.ContainsKey(pName) == false)
                             {
-                                dictionary[pName] = _target.GetType().GetProperty(pName);
+                                var property = _target.GetType().GetProperty(pName);
+                                if (property.PropertyType == typeof(T))
+                                    dictionary[pName] = property.ToGetter<T>();
                             }
-                            var value = (T)dictionary[pName].GetValue(_target);
-                            _observer.OnNext(value);
+                            if (dictionary.ContainsKey(pName))
+                            {
+                                var value = dictionary[pName].Invoke(_target);
+                                _observer.OnNext(value);
+                            }
                         }
                     }
                     else if (e.PropertyName == _info.Name)
@@ -94,7 +111,7 @@ namespace Utility.PropertyNotifications
 
                 private void raiseChange()
                 {
-                    var value = (T?)_info?.GetValue(_target);
+                    var value = func.Invoke(_target);
                     if (value != null || _includeNulls)
                         _observer.OnNext(value);
                 }
@@ -147,8 +164,6 @@ namespace Utility.PropertyNotifications
                     _target.PropertyChanged -= OnPropertyChanged;
                     _observer.OnCompleted();
                 }
-
-
             }
 
             public IDisposable Subscribe(IObserver<PropertyChangedEventArgs> observer)
@@ -158,30 +173,58 @@ namespace Utility.PropertyNotifications
         }
 
         public static IObservable<TRes> WithChangesTo<TModel, TRes>(this TModel model,
-            Expression<Func<TModel, TRes>> expr, bool includeNulls = false, bool includeInitialValue = true) where TModel : INotifyPropertyChanged
+            Expression<Func<TModel, TRes>>? expr = null, bool includeNulls = false, bool includeInitialValue = true) where TModel : INotifyPropertyChanged
         {
             var l = (LambdaExpression)expr;
             var ma = (MemberExpression)l.Body;
             var prop = (PropertyInfo)ma.Member;
-            return new PropertyObservable<TRes>(model, prop, includeNulls, includeInitialValue);
+            return new PropertyObservable<TModel, TRes>(model, prop, includeNulls, includeInitialValue);
         }
 
-        public static IObservable<TRes> WithChangesTo<TModel, TRes>(this TModel model, bool includeNulls = false, bool includeInitialValue = true) where TModel : INotifyPropertyChanged
-        {
-            return new PropertyObservable<TRes>(model, null, includeNulls, includeInitialValue);
-        }
-
-        public static IObservable<PropertyChangedEventArgs> WithChanges<TModel>(this TModel model, Expression<Func<TModel, object>> expr) where TModel : INotifyPropertyChanged
+        public static IObservable<PropertyChangedEventArgs> WhenChanged<TModel>(this TModel model, Expression<Func<TModel, object>>? expr = null) where TModel : INotifyPropertyChanged
         {
             var l = (LambdaExpression)expr;
-            var ma = (MemberExpression)l.Body;
-            var prop = (PropertyInfo)ma.Member;
+            var ma = (MemberExpression?)l?.Body;
+            var prop = (PropertyInfo?)ma?.Member;
             return new PropertyObservable(model, prop);
         }
 
-        public static IObservable<PropertyChangedEventArgs> WithChanges<TModel>(this TModel model) where TModel : INotifyPropertyChanged
+        public class Observer<TM, T> : IObserver<T>
         {
-            return new PropertyObservable(model, null);
+            private readonly TM instance;
+            private PropertyInfo prop;
+            private readonly Action<TM, T> setter;
+
+            public Observer(TM instance, Expression<Func<TM, T>> expr)
+            {
+                var l = (LambdaExpression)expr;
+                var ma = (MemberExpression)l.Body;
+                prop = (PropertyInfo)ma.Member;
+                setter = prop.ToSetter<TM, T>();
+                this.instance = instance;
+            }
+
+            public void OnCompleted()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void OnError(Exception error)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void OnNext(T value)
+            {
+                setter.Invoke(instance, value);
+
+            }
+        }
+
+        public static IDisposable Update<TModel2, TRes>(this IObservable<TRes> propertyObservable, TModel2 model2, Expression<Func<TModel2, TRes>> setExpr)
+        {
+            return propertyObservable
+                .Subscribe(new Observer<TModel2, TRes>(model2, setExpr));
         }
     }
 }

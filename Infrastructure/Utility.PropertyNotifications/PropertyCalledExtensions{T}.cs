@@ -2,6 +2,7 @@
 using System.Linq.Expressions;
 using System.Reflection;
 using Utility.Interfaces;
+using Utility.Helpers.Reflection;
 
 namespace Utility.PropertyNotifications
 {
@@ -23,13 +24,15 @@ namespace Utility.PropertyNotifications
             {
                 private readonly INotifyPropertyCalled _target;
                 private readonly PropertyInfo _info;
+                private readonly Func<object, T> _getter;
                 private readonly IObserver<T> _observer;
-      
+
 
                 public Subscription(INotifyPropertyCalled target, PropertyInfo info, IObserver<T> observer)
                 {
                     _target = target;
                     _info = info;
+                    _getter = info.ToGetter<T>();
                     _observer = observer;
                     _target.PropertyCalled += onPropertyCalled;
                 }
@@ -38,10 +41,8 @@ namespace Utility.PropertyNotifications
                 {
                     if (e.PropertyName == _info.Name)
                     {
-              
-                            var value = (T)_info.GetValue(_target);
-                            _observer.OnNext(value);
-                        
+                        var value = _getter.Invoke(_target);
+                        _observer.OnNext(value);
                     }
                 }
 
