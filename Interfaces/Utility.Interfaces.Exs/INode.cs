@@ -3,13 +3,32 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Enums;
 using System.Collections;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
+using Utility.Structs;
+using System;
 
 namespace Utility.Interfaces.Exs
 {
-    public interface INode : ITree, IIsExpanded, ICurrent<INode>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation, IRemoved, IIsVisible, IAddCommand, IRemoveCommand, IIsSelected, ISetIsSelected, 
+    public interface INode : ITree, IIsExpanded, ICurrent<INode>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation, IRemoved, IIsVisible, IAddCommand, IRemoveCommand, IIsSelected, ISetIsSelected,
         IIsRemovable, IIsReplicable, ISort, ISortOrder,
-        IArrangement
+        IArrangement, IRows, IColumns, IIsAugmentable, IErrors
     {
+
+    }
+
+    public interface IErrors
+    {
+        ObservableCollection<Exception> Errors { get; }
+    }
+
+    public interface IColumns
+    {
+        ObservableCollection<Dimension> Columns { get; }
+    }
+     
+    public interface IRows
+    {
+        ObservableCollection<Dimension> Rows { get; }
     }
 
     public interface IRemoveCommand
@@ -50,6 +69,12 @@ namespace Utility.Interfaces.Exs
     public interface ISetNode
     {
         void SetNode(INode node);
+
+    }
+
+    public interface IIsAugmentable
+    {
+        bool IsAugmentable { get; set; }
 
     }
 }
