@@ -32,6 +32,7 @@ namespace Utility.Nodes
         private bool isRemovable;
         private int order;
         private Collection collection;
+        private bool isAugmentable;
 
         public ViewModelTree(/*string name,*/ object data) : this()
         {
@@ -99,6 +100,13 @@ namespace Utility.Nodes
             }
         }
 
+        public bool IsAugmentable
+        {
+            get => isAugmentable; set
+            {
+                RaisePropertyChanged(ref isAugmentable, value);
+            }
+        }
 
         public bool? IsHighlighted
         {
@@ -215,6 +223,8 @@ namespace Utility.Nodes
 
         public bool IsPersistable { get; set; }
 
+        public ObservableCollection<Exception> Errors { get; set; } = new();
+
         public INode Current
         {
             get => current;
@@ -228,7 +238,7 @@ namespace Utility.Nodes
                     if (value != null)
                         value.IsPersistable = true;
                     current = value;
-                    RaisePropertyChanged(ref previousValue, value);
+                    RaisePropertyChanged(previousValue, value);                        
                 }
             }
         }

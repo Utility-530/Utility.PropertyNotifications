@@ -70,7 +70,12 @@ namespace Utility.Nodes
                 {
                     throw new Exception("vdfs 3332222kjj");
                 }
-                RaisePropertyChanged(ref data, value);
+                if (data != value)
+                {
+                    var previous = data;
+                    data = value;
+                    RaisePropertyChanged(previous, value);
+                }
             }
         }
 
@@ -91,7 +96,12 @@ namespace Utility.Nodes
             get => parent;
             set
             {
-                RaisePropertyChanged(ref parent, value);
+                if (parent != value)
+                {
+                    var previous = parent;
+                    parent = value;
+                    RaisePropertyChanged(previous, value);
+                }
             }
         }
 

@@ -21,7 +21,7 @@ namespace Utility.Nodes
             this.IsExpanded = isExpanded;
 
             this.WithChangesTo(a => a.IsExpanded)
-                .CombineLatest(this.WithChangesTo(a => a.Data).Where(a => a != null))
+                .CombineLatest(this.WithChangesTo(a => a.Data))
                 .Subscribe(value =>
                 {
                     if (value.First)
