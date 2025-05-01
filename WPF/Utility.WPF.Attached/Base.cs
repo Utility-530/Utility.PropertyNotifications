@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -63,6 +64,23 @@ namespace Utility.WPF.Attached
         }
 
         public static double GetDouble(DependencyObject dep) => (double)dep.GetValue(DoubleProperty);
+
+
+
+        public static readonly DependencyProperty EnumerableProperty = DependencyProperty.RegisterAttached(
+        "Enumerable",
+        typeof(IEnumerable),
+        typeof(Base),
+        new FrameworkPropertyMetadata(Array.Empty<object>()));
+
+        public static void SetEnumerable(DependencyObject dep, double value)
+        {
+            dep.SetValue(EnumerableProperty, value);
+        }
+
+        public static IEnumerable GetEnumerable(DependencyObject dep) => (IEnumerable)dep.GetValue(EnumerableProperty);
+
+
 
     }
 }
