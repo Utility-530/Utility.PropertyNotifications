@@ -28,6 +28,11 @@
             </Path>
 
 
+            <Geometry  x:Key="TargetGeometry">
+                M17.020 8h-2.045c-0.245-3.194-2.806-5.745-6.004-5.977v-2.062h-1v2.065c-3.172 0.258-5.702 2.799-5.946 5.974h-2.045v1h2.045c0.244 3.175 2.774 5.716 5.945 5.974v2.026h1v-2.023c3.198-0.231 5.759-2.782 6.004-5.977h2.045v-1zM8.971 13.977v-1.977h-1v1.974c-2.621-0.252-4.708-2.35-4.946-4.974h1.955v-1h-1.955c0.238-2.624 2.325-4.722 4.946-4.974v1.935h1v-1.938c2.647 0.227 4.764 2.333 5.004 4.977h-1.955v1h1.955c-0.24 2.644-2.357 4.75-5.004 4.977z
+            </Geometry>
+
+
             <CombinedGeometry x:Key="CombinedGeometry"  GeometryCombineMode="Xor">
                 <CombinedGeometry.Geometry2>
                     <EllipseGeometry RadiusX="100" RadiusY="100" Center="50,50"  />
@@ -39,7 +44,7 @@
             </CombinedGeometry>
 
 
-      
+
             <GeometryGroup x:Key="GroupGeometry" FillRule="EvenOdd">
                 <StaticResource ResourceKey="CombinedGeometry"/>
                 <Geometry >M0,50 H100 M50,0 V100</Geometry>
@@ -47,50 +52,50 @@
 
             <Geometry x:Key="ChevronGeometry1">M10 7L15 12L10 17</Geometry>
             <Geometry x:Key="ChevronGeometry2">M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z</Geometry>
-    
-     
 
-   
-                    <PathGeometry x:Key="Tick_Rounded">
-                        <PathGeometry.Figures>
-                            <PathFigureCollection>
-                                <PathFigure IsClosed="False"  StartPoint="4,2">
-                                    <PathFigure.Segments>
-                                        <PathSegmentCollection>
-                                            <LineSegment Point="8,6" />
-                                            <LineSegment Point="17,-6" />
-                                        </PathSegmentCollection>
-                                    </PathFigure.Segments>
-                                </PathFigure>
-                            </PathFigureCollection>
-                        </PathGeometry.Figures>
-                    </PathGeometry>
-          
 
-         
-                    <PathGeometry x:Key="Cancel_Rounded">
-                        <PathGeometry.Figures>
-                            <PathFigureCollection>
-                                <PathFigure IsClosed="False"  StartPoint="9,9">
-                                    <PathFigure.Segments>
-                                        <PathSegmentCollection>
-                                            <LineSegment Point="21,21" />
-                                        </PathSegmentCollection>
-                                    </PathFigure.Segments>
-                                </PathFigure>
 
-                                <PathFigure IsClosed="False"  StartPoint="9,21">
-                                    <PathFigure.Segments>
-                                        <PathSegmentCollection>
-                                            <LineSegment Point="21,9" />
-                                        </PathSegmentCollection>
-                                    </PathFigure.Segments>
-                                </PathFigure>
 
-                            </PathFigureCollection>
-                        </PathGeometry.Figures>
-                    </PathGeometry>
-          
+            <PathGeometry x:Key="Tick_Rounded">
+                <PathGeometry.Figures>
+                    <PathFigureCollection>
+                        <PathFigure IsClosed="False"  StartPoint="4,2">
+                            <PathFigure.Segments>
+                                <PathSegmentCollection>
+                                    <LineSegment Point="8,6" />
+                                    <LineSegment Point="17,-6" />
+                                </PathSegmentCollection>
+                            </PathFigure.Segments>
+                        </PathFigure>
+                    </PathFigureCollection>
+                </PathGeometry.Figures>
+            </PathGeometry>
+
+
+
+            <PathGeometry x:Key="Cancel_Rounded">
+                <PathGeometry.Figures>
+                    <PathFigureCollection>
+                        <PathFigure IsClosed="False"  StartPoint="9,9">
+                            <PathFigure.Segments>
+                                <PathSegmentCollection>
+                                    <LineSegment Point="21,21" />
+                                </PathSegmentCollection>
+                            </PathFigure.Segments>
+                        </PathFigure>
+
+                        <PathFigure IsClosed="False"  StartPoint="9,21">
+                            <PathFigure.Segments>
+                                <PathSegmentCollection>
+                                    <LineSegment Point="21,9" />
+                                </PathSegmentCollection>
+                            </PathFigure.Segments>
+                        </PathFigure>
+
+                    </PathFigureCollection>
+                </PathGeometry.Figures>
+            </PathGeometry>
+
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Utility.WPF.Controls.Buttons;component/Themes/Button.xaml"></ResourceDictionary>
@@ -128,8 +133,8 @@
                 </Path>
             </Grid>
         </Viewbox>
-        
-        
+
+
         <view:GeometryButton
                    ab:Header.Text="minus"
                     Height="70"
@@ -145,13 +150,14 @@
                     Data="{StaticResource PlusGeometry}"
                     HoverBackgroundBrush="BurlyWood" />
 
-        <view:GeometryButton
-            StrokeThickness="6"
+        <view:GeometryToggleButton  
+                    Fill="Black"
+                    PressedForegroundBrush="{c:Red}"
                     Height="70"
-                    Data="{StaticResource CombinedGeometry}"
-                    HoverBackgroundBrush="BurlyWood" /> 
-        
-  
+                    Data="{StaticResource TargetGeometry}"
+                    HoverForegroundBrush="{c:Blue}" />
+
+
         <view:GeometryButton
                     Height="70"
                     Data="{StaticResource GroupGeometry}"

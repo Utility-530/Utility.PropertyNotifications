@@ -8,6 +8,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using Utility.Factorys;
 using Utility.Helpers;
+using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Factorys
 {

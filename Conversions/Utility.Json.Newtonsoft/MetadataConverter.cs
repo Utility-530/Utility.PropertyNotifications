@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Utility.Helpers;
+using Utility.Helpers.Reflection;
 
 namespace Utility.Conversions.Json.Newtonsoft
 {
@@ -12,7 +13,7 @@ namespace Utility.Conversions.Json.Newtonsoft
     {
         public override bool CanConvert(Type objectType)
         {
-            return objectType is not Type && Utility.Helpers.PropertyHelper.ValueTypes.Contains(objectType) == false && objectType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(objectType) == false;
+            return objectType is not Type && PropertyHelper.ValueTypes.Contains(objectType) == false && objectType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(objectType) == false;
         }
 
 

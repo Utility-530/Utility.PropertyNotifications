@@ -8,11 +8,11 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
 using Orientation = System.Windows.Controls.Orientation;
 using Arrangement = Utility.Enums.Arrangement;
 using Utility.WPF.Factorys;
+using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Attached
 {
@@ -120,14 +120,16 @@ namespace Utility.WPF.Attached
 
         private static void ItemsSourceExChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            ItemsControl? control = d as ItemsControl;
-            IEnumerable? arg = (IEnumerable?)e.NewValue;
-            // ReSharper disable once PossibleMultipleEnumeration
-            if (arg?.Count() > 0)
-                Application.Current.Dispatcher.InvokeAsync(() =>
-                (control ?? throw new Exception("sd3 443 ")).SetValue(ItemsSourceProperty, arg.GetPropertyRefValues<object>((string)control.GetValue(VariableProperty)).Cast<IEnumerable<object>>().SelectMany(_s => _s)),
-                    System.Windows.Threading.DispatcherPriority.Background, default);
-            ;
+            if (d is ItemsControl control)
+            {
+                IEnumerable? arg = (IEnumerable?)e.NewValue;
+                // ReSharper disable once PossibleMultipleEnumeration
+                if (arg?.Count() > 0)
+                    Application.Current.Dispatcher.InvokeAsync(() =>
+                    (control ?? throw new Exception("sd3 443 ")).SetValue(ItemsSourceProperty, arg.GetPropertyRefValues<object>((string)control.GetValue(VariableProperty)).Cast<IEnumerable<object>>().SelectMany(_s => _s)),
+                        System.Windows.Threading.DispatcherPriority.Background, default);
+                ;
+            }
         }
 
         #endregion ItemsSourcEx

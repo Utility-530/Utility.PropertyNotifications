@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 using Utility.Helpers;
+using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Converters
 {
@@ -29,11 +30,11 @@ namespace Utility.WPF.Converters
 
 
                 if (flags.Contains(PropertyType.TopLevel))
-                    return Utility.Helpers.PropertyHelper.TopLevelPublicInstanceProperties(type).Select(a => a.Name).ToArray();
+                    return PropertyHelper.TopLevelPublicInstanceProperties(type).Select(a => a.Name).ToArray();
                 else
-                    return Utility.Helpers.PropertyHelper.PublicInstanceProperties(type).Select(a => a.Name);
+                    return PropertyHelper.PublicInstanceProperties(type).Select(a => a.Name);
             }
-            return Utility.Helpers.PropertyHelper.PublicInstanceProperties(type).Select(a => a.Name);
+            return PropertyHelper.PublicInstanceProperties(type).Select(a => a.Name);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

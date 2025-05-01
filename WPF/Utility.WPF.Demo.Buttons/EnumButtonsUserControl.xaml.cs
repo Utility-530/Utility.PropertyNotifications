@@ -1,6 +1,6 @@
-﻿using Jellyfish;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using Utility.Commands;
 using Utility.WPF.Controls.Buttons;
 using Utility.WPF.Helpers;
 
@@ -20,7 +20,7 @@ namespace Utility.WPF.Demo.Buttons
 
         private void EnumButtonsUserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            var command = new RelayCommand((a) => OutputListBox.Items.Add(new ListBoxItem { Content = a.ToString() }));
+            var command = new Command<object>((a) => OutputListBox.Items.Add(new ListBoxItem { Content = a.ToString() }));
             foreach (var child in this.ChildrenOfType<EnumButtons>())
                 child.Command = command;
         }

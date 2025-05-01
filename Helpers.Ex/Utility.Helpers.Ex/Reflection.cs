@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Reflection;
 using System.Threading.Tasks;
-using Utility.Helpers;
 
 namespace Utility.Helpers.Ex
 {
@@ -17,7 +16,7 @@ namespace Utility.Helpers.Ex
             return Observable.Create<Assembly>(obs =>
             {
                 var dis1 = ReflectionHelper.LoadedAssemblies().Subscribe(obs);
-                var dis2 = Task.Run(() => Utility.Helpers.ReflectionHelper.GetAssemblies())
+                var dis2 = Task.Run(() => Reflection.ReflectionHelper.GetAssemblies())
                 .ToObservable()
                 .Subscribe(asses =>
                 {

@@ -15,10 +15,11 @@ using System.Windows.Threading;
 using Utility.Common;
 using Utility.Helpers.NonGeneric;
 using Utility.WPF.Controls.Base;
+using Utility.Helpers.Reflection;
+using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls
 {
-    using Utility.WPF.Reactives;
     using static DependencyPropertyFactory<SliderItemsControl>;
 
     public class SliderItemsControl : Controlx
@@ -168,7 +169,7 @@ namespace Utility.WPF.Controls
         private Task<IEnumerable<KeyRange>> GetItems(IEnumerable data, string key, string value, string? min, string? max) => Task.Run(() =>
              {
                  var type = data.First().GetType().GetProperties().ToDictionary(a => a.Name, a => a);
-                 var keys = Utility.Helpers.PropertyHelper.GetPropertyValues<string>(data, type[key]);
+                 var keys = PropertyHelper.GetPropertyValues<string>(data, type[key]);
                  var values = data.Cast<object>().Select(_ =>
                  type[value].GetValue(_)).ToList().Select(Convert.ToDouble);
                  var mins = min != null ? (type.TryGetValue(min, out PropertyInfo? outmin) ?
