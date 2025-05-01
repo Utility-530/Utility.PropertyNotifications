@@ -106,7 +106,6 @@ namespace Utility.WPF.Controls.Trees
 
         public CustomTreeViewItem()
         {
-            initialiseCommands();
         }
 
         private static void OnMouseButtonDown(object sender, MouseButtonEventArgs e)
@@ -142,6 +141,7 @@ namespace Utility.WPF.Controls.Trees
             base.OnApplyTemplate();
             this.apply_template();
             this._OnApplyTemplate();
+            initialiseCommands();
         }
 
         private void DeclineComboTreeViewItem_Click(object sender, RoutedEventArgs e)
@@ -161,6 +161,7 @@ namespace Utility.WPF.Controls.Trees
         public void RemoveComboTreeViewItem_Click(object sender, RoutedEventArgs e)
         {
             RaiseCustomRoutedEvent(Utility.Changes.Type.Remove);
+            RemoveCommand?.Execute(this);
         }
 
 

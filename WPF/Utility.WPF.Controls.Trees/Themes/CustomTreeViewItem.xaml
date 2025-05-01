@@ -11,7 +11,8 @@
                     xmlns:conv="http://schemas.utility.com/converters"
                     xmlns:c="http://schemas.utility.com/colours"
                     xmlns:res="http://schemas.utility.com/resourcedictionary" 
-                    xmlns:btns="http://schemas.utility.com/buttons">
+                    xmlns:btns="http://schemas.utility.com/buttons"
+                    xmlns:enums="clr-namespace:Utility.Enums;assembly=Utility.Enums" xmlns:pnls="http://schemas.utility.com/panels">
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml"/>
@@ -68,16 +69,21 @@
     </Storyboard>
 
     <conv:OrientationConverter x:Key="OrientationConverter"/>
-
+    <conv:IfConverter x:Key="IfConverter"></conv:IfConverter>
+    <conv:CountToBooleanConverter x:Key="ItemsToVisibilityConverter" 
+                                  Comparison=">"
+                                  TrueValue="{x:Static Visibility.Visible}" 
+                                  FalseValue="{x:Static Visibility.Collapsed}"/>
 
     <Style x:Key="{x:Type local:CustomTreeViewItem}" TargetType="{x:Type local:CustomTreeViewItem}">
         <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}" />
         <Setter Property="IsValid" Value="{Binding Path=IsValid, Mode=TwoWay}" />
         <Setter Property="IsEditable" Value="{Binding Path=IsEditable, Mode=TwoWay}" />
+        <Setter Property="IsAugmentable" Value="{Binding Path=IsAugmentable, Mode=TwoWay}" />
         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
         <Setter Property="IsReplicable" Value="{Binding IsReplicable, Mode=TwoWay}"/>
         <Setter Property="IsRemovable" Value="{Binding IsRemovable, Mode=TwoWay}"/>
-        <Setter Property="AddCommand" Value="{Binding Path=AddCommand}" />    
+        <Setter Property="AddCommand" Value="{Binding Path=AddCommand}" />
         <Setter Property="CornerRadius" Value="5" />
         <Setter Property="RemoveCommand" Value="{Binding Path=RemoveCommand}" />
         <Setter Property="AddParentCommand" Value="{Binding Path=AddParentCommand}" />
@@ -96,6 +102,7 @@
         <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>
         <Setter Property="Rows" Value="{Binding Rows}"/>
         <Setter Property="Columns" Value="{Binding Columns}"/>
+        <Setter Property="Errors" Value="{Binding Errors}"></Setter>
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <MultiBinding Converter="{StaticResource MultiItemsPanelConverter}">
@@ -129,8 +136,8 @@
                                             <EasingColorKeyFrame KeyTime="0:0:0.3"
                                          Value="{StaticResource SelectedBackgroundColor}" />
                                         </ColorAnimationUsingKeyFrames>
-                                        
-                                        
+
+
                                     </Storyboard>
                                 </VisualState>
                                 <VisualState x:Name="Unselected" />
@@ -190,6 +197,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition></RowDefinition>
                                     <RowDefinition Height="auto"></RowDefinition>
+                                    <RowDefinition Height="auto"></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <Border x:Name="MainBorder"
                                         Background="Transparent"
@@ -215,19 +223,27 @@
                                 </Border>
 
 
-                                <WrapPanel Orientation="Horizontal" Grid.ColumnSpan="4" Grid.Row="1" x:Name="WrapPanel1" Opacity="1" IsEnabled="{TemplateBinding IsShowing}" 
-                                           Visibility="{TemplateBinding IsEditable, Converter={StaticResource VisibilityConverter}}"
-                                           Width="80" >
+                                <pnls:UniformStackPanel Orientation="Horizontal"  Grid.ColumnSpan="4" Grid.Row="1" x:Name="WrapPanel1" Opacity="1" IsEnabled="{TemplateBinding IsShowing}">
+                                    <pnls:UniformStackPanel.Visibility>
+                                        <MultiBinding Converter="{StaticResource IfConverter}" >
+                                            <Binding Source="{StaticResource VisibilityConverter}" />
+                                            <Binding Source="{x:Static enums:Quantifier.Any}" />
+                                            <Binding Path="IsAugmentable" RelativeSource="{RelativeSource Mode=TemplatedParent}"></Binding>
+                                            <Binding Path="IsRemovable" RelativeSource="{RelativeSource Mode=TemplatedParent}"></Binding>
+                                            <Binding Path="IsEditing" RelativeSource="{RelativeSource Mode=TemplatedParent}"></Binding>
+                                        </MultiBinding>
+                                    </pnls:UniformStackPanel.Visibility>
 
-                                    <sb:SplitButton                  
+                                    <sb:SplitButton            
+                                   
                                         x:Name="SplitButton"
                                         Style="{TemplateBinding SplitButtonStyle}"
                                         ItemContainerStyleSelector="{TemplateBinding NodeContainerStyleSelector}"
                                         ItemContainerStyle="{TemplateBinding NodeContainerStyle}"
                                         ItemTemplateSelector="{TemplateBinding NodeTemplateSelector}"
                                         ItemsSource="{TemplateBinding NodeItemsSource}"
-                                        ItemTemplate="{TemplateBinding NodeTemplate}">
-
+                                        ItemTemplate="{TemplateBinding NodeTemplate}"
+                                        Visibility="{TemplateBinding IsAugmentable, Converter={StaticResource VisibilityConverter}}">
 
                                         <!--<local:ChildrenSelectorConverter x:Key="ChildrenSelectorConverter"/>-->
 
@@ -257,16 +273,76 @@
                                         </i:Interaction.Triggers>
                                     </sb:SplitButton>
 
-                                    <Button x:Name="RemoveButton"  Command="{TemplateBinding RemoveCommand}">
+                                    <!--<Button x:Name="RemoveButton"  Command="{TemplateBinding RemoveCommand}"  Width="24"
+                                            Visibility="{TemplateBinding IsRemovable, Converter={StaticResource VisibilityConverter}}">
                                         <icons:PackIconIonicons Kind="RemoveiOS" />
-                                    </Button>
+                                    </Button>-->
                                     <!--<Button x:Name="AddParentButton" Command="{TemplateBinding AddParentCommand}">
                                         <icons:PackIconPixelartIcons Kind="AddBoxMultiple" />
                                     </Button>-->
-                                    <ToggleButton x:Name="EditButton"  IsChecked="{Binding IsEditing, RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                                    <ToggleButton x:Name="EditButton"  Width="24"
+                                                  Visibility="{TemplateBinding IsEditable, Converter={StaticResource VisibilityConverter}, ConverterParameter=ss}"
+                                                  IsChecked="{Binding IsEditing, RelativeSource={RelativeSource Mode=TemplatedParent}}">
                                         <icons:PackIconFeatherIcons Kind="Edit2" />
                                     </ToggleButton>
-                                </WrapPanel>                          
+                                </pnls:UniformStackPanel>
+
+                                <Grid DataContext="{TemplateBinding Errors}"  Grid.ColumnSpan="4" Grid.Row="1"  >
+                                    <ListView ItemsSource="{Binding }" Visibility="{Binding Count, ConverterParameter=0, Converter={StaticResource ItemsToVisibilityConverter}}">
+                                        <FrameworkElement.Resources>
+                                            <DataTemplate x:Key="MessageTemplate">
+                                                <TextBlock FontSize="10"  Text="{Binding Message}" Foreground="Red" FontWeight="DemiBold"/>
+                                            </DataTemplate>
+
+                                            <DataTemplate x:Key="DataTemplate">
+                                                <Expander>
+                                                    <ItemsControl ItemsSource="{Binding Data}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <UniformGrid Rows="1">
+                                                                    <!--<Ellipse Fill="Red" Height="20" Width="20"></Ellipse>-->
+                                                                    <TextBlock Text="{Binding Key }" Background="Azure"></TextBlock>
+                                                                    <TextBlock Text="{Binding Value}" FontSize="16"></TextBlock>
+                                                                </UniformGrid>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </Expander>
+                                            </DataTemplate>
+
+                                        </FrameworkElement.Resources>
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <pnls:UniformStackPanel >
+
+                                                </pnls:UniformStackPanel>
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+
+                                        <ListView.View>
+                                            <GridView >
+                                                <GridViewColumn CellTemplate="{StaticResource MessageTemplate}" Width="300" Header="Message"/>
+                                                <GridViewColumn CellTemplate="{StaticResource DataTemplate}" Width="200">
+                                                    <GridViewColumnHeader>Data
+                                                        <GridViewColumnHeader.ContextMenu>
+                                                            <ContextMenu Name="LastNameCM">
+                                                                <MenuItem Header="Ascending" />
+                                                                <MenuItem Header="Descending" />
+                                                            </ContextMenu>
+                                                        </GridViewColumnHeader.ContextMenu>
+                                                    </GridViewColumnHeader>
+                                                </GridViewColumn>
+                                                <GridViewColumn>
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Button>fix</Button>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </Grid>
                             </Grid>
                         </Border>
                         <Border x:Name="EditBd"                              
@@ -309,6 +385,7 @@
                         <btns:XGeometryButton 
                             x:Name="MinusButton"                   
                             Grid.ColumnSpan="4"
+                            Command="{TemplateBinding RemoveCommand}"
                             Visibility="{TemplateBinding IsRemovable, Converter={StaticResource VisibilityConverter}}"
                             Height="{Binding ElementName=Bd, Path=ActualHeight, ConverterParameter=x/3, Converter={StaticResource MathConverter}}" 
                             VerticalAlignment="Top" HorizontalAlignment="Right" />
@@ -392,6 +469,7 @@
                             <Setter Property="Visibility" TargetName="EditBd" Value="Visible" />
                             <Setter Property="Visibility" TargetName="Bd" Value="Collapsed" />
                         </Trigger>
+
                         <Trigger Property="IsHighlighted" Value="False">
                             <Setter Property="Opacity"  TargetName="PART_Header" Value="0.3" />
                         </Trigger>
@@ -414,7 +492,7 @@
                             <Setter Property="BorderBrush" TargetName="Bd" Value="Red" />
                             <Setter Property="BorderThickness" TargetName="Bd" Value="2" />
                         </Trigger>
-                        
+
                         <!--<Trigger Property="IsDragging" Value="True">
                                 <Trigger.EnterActions>
                                     <BeginStoryboard Storyboard="{StaticResource Enter}" />
@@ -465,10 +543,10 @@
                                 <BeginStoryboard>
                                     <Storyboard>
                                         <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="MainBorder" Duration="0:0:0.3" To="CadetBlue">
-                        
+
                                         </ColorAnimation>
                                         <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" Storyboard.TargetName="MainBorder" Duration="0:0:0.3" To="LemonChiffon">
-                             
+
                                         </ColorAnimation>
 
                                     </Storyboard>
@@ -482,7 +560,7 @@
                                     </Storyboard>
                                 </BeginStoryboard>
                             </Trigger.ExitActions>
-                        </Trigger>                      
+                        </Trigger>
 
                         <!--<Trigger Property="IsSelectable" Value="True">
                                 <Trigger.EnterActions>

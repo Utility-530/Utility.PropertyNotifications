@@ -36,7 +36,7 @@ namespace Utility.WPF.Controls.Trees
 
         private void initialiseCommands()
         {
-            SwapCommand = new Command<int[]>(
+            SwapCommand ??= new Command<int[]>(
                 (indexes) =>
                 {
                     if (this.ItemsSource is IList collection)
@@ -51,7 +51,7 @@ namespace Utility.WPF.Controls.Trees
                     }
                 });
 
-            RemoveCommand = new Command<object>((a) =>
+            RemoveCommand ??= new Command<object>((a) =>
             {
 
                 int i = 0;
@@ -67,7 +67,7 @@ namespace Utility.WPF.Controls.Trees
                     }
             });
 
-            CheckedCommand = new Command<object>((a) =>
+            CheckedCommand ??= new Command<object>((a) =>
             {
 
                 if (string.IsNullOrEmpty(CheckedPropertyName) == false)
@@ -75,7 +75,7 @@ namespace Utility.WPF.Controls.Trees
 
             });
 
-            UnCheckedCommand = new Command<object>((a) =>
+            UnCheckedCommand ??= new Command<object>((a) =>
             {
                 if (string.IsNullOrEmpty(CheckedPropertyName) == false)
                     a.TrySetPropertyValue(CheckedPropertyName, false);

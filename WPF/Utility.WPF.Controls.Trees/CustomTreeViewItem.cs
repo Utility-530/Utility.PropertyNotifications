@@ -12,7 +12,13 @@ namespace Utility.WPF.Controls.Trees
     public partial class CustomTreeViewItem : TreeViewItem
     {
         public static readonly DependencyProperty AddCommandProperty = DependencyProperty.Register("AddCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
-        public static readonly DependencyProperty RemoveCommandProperty = DependencyProperty.Register("RemoveCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty RemoveCommandProperty = DependencyProperty.Register("RemoveCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata(_removeChanged));
+
+        private static void _removeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            
+        }
+
         public static readonly DependencyProperty AddParentCommandProperty = DependencyProperty.Register("AddParentCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty EditCommandProperty = DependencyProperty.Register("EditCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty IsHighlightedProperty = DependencyProperty.Register("IsHighlighted", typeof(bool?), typeof(CustomTreeViewItem), new PropertyMetadata(null));
@@ -38,6 +44,8 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty ArrangementProperty = DependencyProperty.Register("Arrangement", typeof(Utility.Enums.Arrangement), typeof(CustomTreeViewItem), new PropertyMetadata(_changed));
         public static readonly DependencyProperty RowsProperty = DependencyProperty.Register("Rows", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty ColumnsProperty = DependencyProperty.Register("Columns", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty IsAugmentableProperty =  DependencyProperty.Register("IsAugmentable", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty ErrorsProperty = DependencyProperty.Register("Errors", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
 
         private static void _changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -45,6 +53,19 @@ namespace Utility.WPF.Controls.Trees
         }
 
         #region Properties
+
+        public IEnumerable Errors
+        {
+            get { return (IEnumerable)GetValue(ErrorsProperty); }
+            set { SetValue(ErrorsProperty, value); }
+        }
+
+        public bool IsAugmentable
+        {
+            get { return (bool)GetValue(IsAugmentableProperty); }
+            set { SetValue(IsAugmentableProperty, value); }
+        }
+
         public Visibility ItemsPresenterVisibility
         {
             get { return (Visibility)GetValue(ItemsPresenterVisibilityProperty); }
@@ -166,13 +187,11 @@ namespace Utility.WPF.Controls.Trees
             set { SetValue(NodeItemsSourceProperty, value); }
         }
 
-
         public double CornerRadius
         {
             get { return (double)GetValue(CornerRadiusProperty); }
             set { SetValue(CornerRadiusProperty, value); }
         }
-
 
         public bool IsReplicable
         {
@@ -180,23 +199,18 @@ namespace Utility.WPF.Controls.Trees
             set { SetValue(IsReplicableProperty, value); }
         }
 
-
-
         public bool IsRemovable
         {
             get { return (bool)GetValue(IsRemovableProperty); }
             set { SetValue(IsRemovableProperty, value); }
         }
 
-
-
         public Orientation Orientation
         {
             get { return (Orientation)GetValue(OrientationProperty); }
             set { SetValue(OrientationProperty, value); }
         }
-
-
+                
         public int Rows
         {
             get { return (int)GetValue(RowsProperty); }
@@ -208,7 +222,7 @@ namespace Utility.WPF.Controls.Trees
             get { return (int)GetValue(ColumnsProperty); }
             set { SetValue(ColumnsProperty, value); }
         }
-
+        
         public Utility.Enums.Arrangement Arrangement
         {
             get { return (Utility.Enums.Arrangement)GetValue(ArrangementProperty); }
