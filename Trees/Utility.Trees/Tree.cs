@@ -30,7 +30,7 @@ namespace Utility.Trees
                 if (flag == false)
                 {
                     items = CreateChildren();
-                    if(items is INotifyCollectionChanged cc)
+                    if (items is INotifyCollectionChanged cc)
                     {
                         cc.CollectionChanged += ItemsOnCollectionChanged;
                     }
@@ -54,7 +54,13 @@ namespace Utility.Trees
         {
             get => key; set
             {
-                RaisePropertyChanged(ref key, value);
+                if (key != value)
+                {
+                    var previous = this.key;
+                    key = value;
+                    this.RaisePropertyChanged(previous, value);
+                }
+
             }
         }
 
@@ -174,7 +180,7 @@ namespace Utility.Trees
             {
                 clone = cln.Clone();
             }
-            if(Data is IAsyncClone asyncClone)
+            if (Data is IAsyncClone asyncClone)
             {
                 clone = await asyncClone.AsyncClone();
             }
@@ -348,7 +354,7 @@ namespace Utility.Trees
         }
 
         public int Count => m_items.Count;
-        public virtual bool IsReadOnly { get; set; } 
+        public virtual bool IsReadOnly { get; set; }
 
         public void RemoveAt(int index)
         {
