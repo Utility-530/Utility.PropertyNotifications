@@ -80,7 +80,7 @@
         </Setter>
     </Style>
 
-    <conv:TypeToNameConverter x:Key="TypeNameConverter"></conv:TypeToNameConverter>
+    <conv:TypeNameConverter x:Key="TypeNameConverter"></conv:TypeNameConverter>
     <conv:FirstItemConverter x:Key="FirstItemConverter"></conv:FirstItemConverter>
     <conv:LastItemConverter x:Key="LastItemConverter"></conv:LastItemConverter>
 

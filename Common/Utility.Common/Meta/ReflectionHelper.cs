@@ -46,7 +46,7 @@ namespace Utility.Common
             public static IEnumerable<Assembly> LoadedSolutionAssemblies(Predicate<AssemblyName> predicate)
             {
                 var x = new Store();
-                foreach (var assembly in Utility.Helpers.ReflectionHelper.GetAssemblies(predicate))
+                foreach (var assembly in Utility.Helpers.Reflection.ReflectionHelper.GetAssemblies(predicate))
                 {
                     Recursive(assembly, predicate, ref x);
                 }

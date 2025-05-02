@@ -218,9 +218,9 @@ namespace Utility.Trees.Demo.Connections
                 });
             }
 
-            viewModel.Connections.Additions<ConnectionModel>().Subscribe(Initialise);
+            viewModel.Connections.AndAdditions<ConnectionModel>().Subscribe(Initialise);
 
-            viewModel.Lines.Additions<LineViewModel>().Subscribe(InitialiseLine);
+            viewModel.Lines.AndAdditions<LineViewModel>().Subscribe(InitialiseLine);
 
 
             void Initialise(ConnectionModel item)
@@ -383,7 +383,7 @@ namespace Utility.Trees.Demo.Connections
             {
                 //if (viewModel.Tree is INotifyCollectionChanged oTree)
                 //{
-                    return viewModel.Tree.Descendant(new((a) => (a.tree.Data as IName).Name == connectionViewModel.ViewModelName))
+                    return viewModel.Tree.Descendant(new((a) => (a.tree.Data as IGetName).Name == connectionViewModel.ViewModelName))
                         .Subscribe(a =>
                         {
                             MatchTree(a.NewItem).Subscribe(observer);
@@ -426,7 +426,7 @@ namespace Utility.Trees.Demo.Connections
                     foreach (var x in viewModel.ServiceModel)
                     {
                         var data = x as IName;
-                        if (connectionViewModel.ServiceName == (x as IName).Name)
+                        if (connectionViewModel.ServiceName == (x as IGetName).Name)
                         {
                             service = data;
                             break;
@@ -482,7 +482,7 @@ namespace Utility.Trees.Demo.Connections
                 return null;
             }
 
-            if ((hitResult.DataContext as Tree).Data is IName { Name: { } name })
+            if ((hitResult.DataContext as Tree).Data is IGetName { Name: { } name })
             {
                 hitResult2 = null;
                 VisualTreeHelper.HitTest(Container, new HitTestFilterCallback(MyHitTestFilter2), new HitTestResultCallback(MyHitTestResult2), new PointHitTestParameters(new Point(lineViewModel.EndPoint.X + 5, lineViewModel.EndPoint.Y)));

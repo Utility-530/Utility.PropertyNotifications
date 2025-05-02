@@ -7,29 +7,31 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
+using Utility.PropertyNotifications;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Trees.Demo.Infrastructure
 {
-    public class ConnectionsViewModel : Jellyfish.ViewModel
+    public class ConnectionsViewModel : NotifyPropertyClass
     {
         private bool isLine;
         private Point? point0;
         private Point? point1;
         private LineViewModel last;
 
-        public bool IsLine { get => isLine; set => this.Set(ref isLine, value); }
+        public bool IsLine { get => isLine; set => this.RaisePropertyChanged(ref isLine, value); }
         public ObservableCollection<LineViewModel> Lines { get; } = new();
         public ObservableCollection<ConnectionModel> Connections { get; } = new();
         public ITree ViewModel { get; set; }
 
         public List<Service> ServiceModel { get; set; }
 
-        public Point? Point0 { get => point0; set => Set(ref point0, value); }
-        public Point? Point1 { get => point1; set => Set(ref point1, value); }
+        public Point? Point0 { get => point0; set => RaisePropertyChanged(ref point0, value); }
+        public Point? Point1 { get => point1; set => RaisePropertyChanged(ref point1, value); }
 
-        public LineViewModel Last { get => last; set => Set(ref last, value); }
+        public LineViewModel Last { get => last; set => RaisePropertyChanged(ref last, value); }
 
     }
 
@@ -38,7 +40,7 @@ namespace Utility.Trees.Demo.Infrastructure
         public bool IsPersisted { get; set; }
     }
 
-    public class LineViewModel : Jellyfish.ViewModel
+    public class LineViewModel : NotifyPropertyClass
     {
         private Point _startPoint;
 
@@ -49,8 +51,7 @@ namespace Utility.Trees.Demo.Infrastructure
             get { return _startPoint; }
             set
             {
-                _startPoint = value;
-                this.OnPropertyChanged();
+                this.RaisePropertyChanged(ref _startPoint, value);
             }
         }
 
@@ -61,7 +62,8 @@ namespace Utility.Trees.Demo.Infrastructure
             set
             {
                 _endPoint = value;
-                this.OnPropertyChanged();
+                this.RaisePropertyChanged(ref _endPoint, value);
+
             }
         }
     }

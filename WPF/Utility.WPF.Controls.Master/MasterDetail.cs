@@ -335,12 +335,12 @@ namespace Utility.WPF.Controls.Master
         {
             public static object? Convert(object selected, string key)
             {
-                return Utility.Helpers.PropertyHelper.GetPropertyRefValue<object>(selected, key);
+                return Utility.Helpers.Reflection.PropertyHelper.GetPropertyRefValue<object>(selected, key);
             }
 
             public static object ConvertBack(object selected, string k, object selectedValueOld)
             {
-                Utility.Helpers.PropertyHelper.SetValue(selected, k, selectedValueOld);
+                Utility.Helpers.Reflection.PropertyHelper.SetValue(selected, k, selectedValueOld);
                 return selectedValueOld;
             }
         }

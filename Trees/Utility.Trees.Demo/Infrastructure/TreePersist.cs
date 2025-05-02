@@ -1,15 +1,8 @@
-﻿using Dapper.FastCrud;
-using FreeSql;
+﻿using FreeSql;
 using FreeSql.DataAnnotations;
-using Jellyfish.DependencyInjection;
-using NetFabric.Hyperlinq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Utility.Extensions;
-using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Persists;

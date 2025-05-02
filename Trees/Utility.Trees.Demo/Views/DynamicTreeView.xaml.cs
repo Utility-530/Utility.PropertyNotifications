@@ -1,16 +1,14 @@
-﻿using Jellyfish;
-using NetFabric.Hyperlinq;
-using ReactiveUI;
+﻿using ReactiveUI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Reactive.Disposables;
-
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Utility.Commands;
 using Utility.Enums;
 using Utility.Helpers;
 using Utility.Trees.Abstractions;
@@ -30,7 +28,7 @@ namespace Utility.Trees.Demo
         {
             InitializeComponent();
 
-            DirectionButtons.Command = new RelayCommand<Direction>((direction) =>
+            DirectionButtons.Command = new Command<Direction>((direction) =>
             {
                 switch (direction)
                 {
@@ -50,7 +48,7 @@ namespace Utility.Trees.Demo
                 }
             });
 
-            EditCollectionButtons.Command = new RelayCommand<AddRemove>((addRemove) =>
+            EditCollectionButtons.Command = new Command<AddRemove>((addRemove) =>
             {
                 switch (addRemove)
                 {
@@ -63,7 +61,7 @@ namespace Utility.Trees.Demo
                 }
             });
 
-            PersistenceButtons.Command = new RelayCommand<Persistence>((loadSave) =>
+            PersistenceButtons.Command = new Command<Persistence>((loadSave) =>
             {
                 switch (loadSave)
                 {

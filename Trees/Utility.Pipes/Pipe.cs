@@ -18,8 +18,9 @@ namespace Utility.Pipes
         {
             get => selectedCompletedItem; set
             {
+                var previous = selectedCompletedItem;
                 selectedCompletedItem = value;
-                RaisePropertyReceived(value);
+                RaisePropertyReceived(value, previous);
             }
         }
 

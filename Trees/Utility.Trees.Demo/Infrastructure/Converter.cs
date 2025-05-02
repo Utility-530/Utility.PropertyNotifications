@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using Utility.Extensions;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Demo.Infrastructure;
 using Svc = Utility.Trees.Demo.Infrastructure.Service;

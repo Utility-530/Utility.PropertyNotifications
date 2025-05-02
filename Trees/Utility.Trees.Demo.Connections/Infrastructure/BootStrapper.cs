@@ -48,8 +48,9 @@ namespace Utility.Trees.Demo.Connections
             }
             set
             {
+                var previous = this.value;
                 this.value = value;
-                this.RaisePropertyReceived(value);
+                this.RaisePropertyReceived(value, previous);
             }
         }
     }
