@@ -1,0 +1,107 @@
+﻿<UserControl x:Class="Leepfrog.WpfFramework.Controls.Calendar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:leep="clr-namespace:Leepfrog.WpfFramework"
+             xmlns:conv="clr-namespace:Leepfrog.WpfFramework.Converters"
+             xmlns:trig="clr-namespace:Leepfrog.WpfFramework.Triggers"
+             xmlns:controls="clr-namespace:Leepfrog.WpfFramework.Controls"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:ei="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:_="http://ignore.me" 
+             mc:Ignorable="d _" 
+             d:DesignHeight="810" d:DesignWidth="900"              
+             Background="{x:Null}" 
+             x:Name="root" 
+             FontFamily="Brezel Grotesk"
+             Foreground="#800000"
+             >
+
+    <Border Background="#FFFFFF" CornerRadius="14" DataContext="{leep:BindTo #root}" d:DataContext="{d:DesignInstance controls:CalendarData,IsDesignTimeCreatable=True}" >
+        <DockPanel Margin="20" x:Name="temp">
+            <Grid DockPanel.Dock="Top">
+                <TextBlock Text="{leep:BindTo #temp..DisplayMonth,Format={}{0:MMMM yyyy}}" HorizontalAlignment="Center" FontSize="32" FontWeight="Bold" Margin="0,42" Foreground="{leep:BindTo #root.Foreground}" />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                    <Grid Background="Transparent" Height="80" Margin="10">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{leep:BindTo #root.ChangeMonthCommand}" CommandParameter="-1"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Path Width="80" Data="M13,31 l24,-24 a5,5 0,0,1 6,0 l24,24 a2,2 0,0,1 -4,4 l-23,-23 l-23,23 a2,2 0,0,1 -4,-4" Fill="{leep:BindTo #root.Foreground}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    </Grid>
+                    <Grid Background="Transparent" Height="80" Margin="10">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseLeftButtonDown">
+                                <i:InvokeCommandAction Command="{leep:BindTo #root.ChangeMonthCommand}" CommandParameter="1"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Path Width="80" Data="M13,11 l24,24 a5,5 0,0,0 6,0 l24,-24 a2,2 0,0,0 -4,-4 l-23,23 l-23,-23 a2,2 0,0,0 -4,4" Fill="{leep:BindTo #root.Foreground}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    </Grid>
+                </StackPanel>
+            </Grid>
+            <ItemsControl DockPanel.Dock="Top" ItemsSource="{leep:BindTo #temp..DaysOfWeek}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="7" Rows="1" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="5" >
+                            <TextBlock Text="{Binding}" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#80000000" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <!-- WEEKS GOING DOWN -->
+            <Grid ClipToBounds="True" x:Name="grdContainer" >
+                <ScrollViewer VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Disabled" x:Name="ctlScroller" PreviewMouseLeftButtonDown="ItemsControl_MouseLeftButtonDown" PreviewMouseLeftButtonUp="ItemsControl_MouseLeftButtonUp" PreviewMouseMove="ItemsControl_MouseMove" >
+                    <ItemsControl ItemsSource="{leep:BindTo #temp..WeekCommencingDates}" x:Name="ctlWeeks">
+                        <ItemsControl.RenderTransform>
+                            <TransformGroup>
+                                <TranslateTransform Y="0" x:Name="transAnimation"/>
+                                <TranslateTransform Y="0" x:Name="transOffset"/>
+                            </TransformGroup>
+                        </ItemsControl.RenderTransform>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <!-- DAYS GOING ACROSS -->
+                                <ItemsControl x:Name="wc" ItemsSource="{leep:BindTo #temp..DayOffsets}" >
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <UniformGrid Columns="7" Rows="1" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="5" DataContext="{leep:AddTimeBinding {leep:BindTo #wc.DataContext},{leep:BindTo},Days}" x:Name="grdDay" Height="{leep:BindTo this.ActualWidth}" Opacity="{leep:IfBinding {leep:BindTo #temp..DisplayMonth.Month},{leep:BindTo this..Month },1,0.3}">
+                                                <Ellipse x:Name="outline" StrokeThickness="3" Stroke="{leep:BindTo #root.Foreground}"  />
+                                                <Ellipse Margin="6" Fill="#FF30C0" Visibility="{leep:IfBinding {Binding},{leep:BindTo #temp..SelectedDateOnly},Visible,Collapsed}"/>
+                                                <Ellipse StrokeThickness="3" Margin="-5" Stroke="#FF0000" Visibility="{leep:IfBinding {Binding},{x:Static sys:DateTime.Today},Visible,Collapsed}" StrokeDashArray="0,2" StrokeDashCap="Round" />
+                                                <TextBlock Text="{Binding Day}" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10" 
+                                                           Foreground="{leep:IfBinding {Binding},{leep:BindTo #temp..SelectedDateOnly},#FFFFFF,{leep:BindTo #root.Foreground}}"/>
+                                                <Path StrokeThickness="3" Stroke="#80000000" Data="M0,0 M0.3,1.7 L1.7,0.3 M2,2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Stretch="Fill" Visibility="Collapsed">
+                                                    <i:Interaction.Triggers>
+                                                        <trig:DataTrigger Binding="{Binding FallbackValue=1/1/2017,TargetNullValue=1/1/2017}" Comparison="LessThan" Value="{x:Static sys:DateTime.Today}">
+                                                            <ei:ChangePropertyAction PropertyName="Visibility" Value="Visible" />
+                                                        </trig:DataTrigger>
+                                                        <trig:DataTrigger Binding="{Binding FallbackValue=1/1/2017,TargetNullValue=1/1/2017}" Comparison="GreaterThanOrEqual" Value="{x:Static sys:DateTime.Today}">
+                                                            <ei:ChangePropertyAction PropertyName="Visibility" Value="Collapsed" />
+                                                        </trig:DataTrigger>
+                                                    </i:Interaction.Triggers>
+                                                </Path>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </DockPanel>
+    </Border>
+</UserControl>
