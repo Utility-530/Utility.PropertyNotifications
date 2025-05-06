@@ -9,6 +9,8 @@ using Utility.Helpers;
 
 namespace Utility.PropertyNotifications
 {
+    public record PropertyChange(object Source, object Value, string Name);
+
     public static class PropertyChangedExtensions
     {
         static Dictionary<Type, Func<object, PropertyChangedEventHandler>> dictionary = new();
@@ -123,7 +125,7 @@ namespace Utility.PropertyNotifications
             }
         }
 
-        private class PropertyObservable : IObservable<PropertyChangedEventArgs>
+        private class PropertyObservable : IObservable<PropertyChange>
         {
             private readonly INotifyPropertyChanged _target;
             private readonly PropertyInfo? _info;
@@ -137,13 +139,17 @@ namespace Utility.PropertyNotifications
             private class Subscription : IDisposable
             {
                 private readonly INotifyPropertyChanged _target;
-                private readonly PropertyInfo _info;
-                private readonly IObserver<PropertyChangedEventArgs> _observer;
+                private readonly PropertyInfo? _info;
+                private readonly Func<object, object>? getter;
+                private readonly IObserver<PropertyChange> _observer;
+                private Dictionary<string, Func<object, object>> dictionary = new();
+                private const string constructor = ".ctor";
 
-                public Subscription(INotifyPropertyChanged target, PropertyInfo info, IObserver<PropertyChangedEventArgs> observer)
+                public Subscription(INotifyPropertyChanged target, PropertyInfo? info, IObserver<PropertyChange> observer)
                 {
                     _target = target;
                     _info = info;
+                    getter = info?.ToGetter<object>();
                     _observer = observer;
                     _target.PropertyChanged += OnPropertyChanged;
 
@@ -153,10 +159,28 @@ namespace Utility.PropertyNotifications
                 {
                     if (_info == null && e.PropertyName is string pName)
                     {
-                        _observer.OnNext(e);
+                        if (pName == constructor)
+                        {
+                            _observer.OnNext(default);
+                        }
+                        if (dictionary.ContainsKey(pName) == false)
+                        {
+                            var property = _target.GetType().GetProperty(pName);          
+                            dictionary[pName] = property.ToGetter<object>();
+                        }
+                        if (dictionary.ContainsKey(pName))
+                        {
+                            var value = dictionary[pName].Invoke(_target);
+                            _observer.OnNext(new PropertyChange(_target, value, pName));
+                        }
+                        else
+                        {
+                            throw new Exception("!!!!D");
+                        }
+
                     }
-                    else if (e.PropertyName == _info.Name)
-                        _observer.OnNext(e);
+                    else if (e.PropertyName == _info?.Name)
+                        _observer.OnNext(new PropertyChange(_target, getter.Invoke(_target), e.PropertyName));
                 }
 
                 public void Dispose()
@@ -166,7 +190,7 @@ namespace Utility.PropertyNotifications
                 }
             }
 
-            public IDisposable Subscribe(IObserver<PropertyChangedEventArgs> observer)
+            public IDisposable Subscribe(IObserver<PropertyChange> observer)
             {
                 return new Subscription(_target, _info, observer);
             }
@@ -181,7 +205,7 @@ namespace Utility.PropertyNotifications
             return new PropertyObservable<TModel, TRes>(model, prop, includeNulls, includeInitialValue);
         }
 
-        public static IObservable<PropertyChangedEventArgs> WhenChanged<TModel>(this TModel model, Expression<Func<TModel, object>>? expr = null) where TModel : INotifyPropertyChanged
+        public static IObservable<PropertyChange> WhenChanged<TModel>(this TModel model, Expression<Func<TModel, object>>? expr = null) where TModel : INotifyPropertyChanged
         {
             var l = (LambdaExpression)expr;
             var ma = (MemberExpression?)l?.Body;

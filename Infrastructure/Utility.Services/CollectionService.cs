@@ -11,6 +11,7 @@ using Utility.Common.Helper;
 using Utility.Helpers.Ex;
 using Utility.Common.Collection;
 using Utility.Common.Collections;
+using Utility.PropertyNotifications;
 
 namespace Utility.Services
 {
@@ -102,7 +103,7 @@ namespace Utility.Services
                             foreach (var change in objectsArray.OfType<INotifyPropertyChanged>())
                             {
                                 change
-                                .Changes()
+                                .WhenChanged()
                                 .Subscribe(x =>
                                 {
                                     observer.AddOrUpdate(x.Source);

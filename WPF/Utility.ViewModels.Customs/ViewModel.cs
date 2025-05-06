@@ -16,6 +16,7 @@ using Utility.Helpers;
 using Utility.Helpers.Ex;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+using Utility.PropertyNotifications;
 
 namespace Utility.ViewModels
 {
@@ -254,8 +255,8 @@ namespace Utility.ViewModels
         public IDisposable Subscribe(IObserver<Message> observer)
         {
             return
-                this.Changes()
-                .Select(a => new PropertyChangeMessage(this.Key, new[] { new PropertyChange(a.PropertyName, a.NewValue) }))
+                this.WhenChanged()
+                .Select(a => new PropertyChangeMessage(this.Key, new[] { new PropertyChange(a.Name, a.Value) }))
                 .Merge(childMessages)
                 .Merge(parentMessages)
                 .Subscribe(observer);
