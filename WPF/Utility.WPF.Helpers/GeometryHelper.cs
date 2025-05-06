@@ -84,5 +84,10 @@ namespace Utility.WPF.Helpers
         {
             return Math.Sqrt(Math.Pow(p1.X - p2.X, 2) + Math.Pow(p1.Y - p2.Y, 2));
         }
+
+        public static Point Centre(this Rect rect)
+        {
+            return new Point(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2);
+        }
     }
 }

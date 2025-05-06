@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+using Utility.Enums;
+
+namespace Utility.WPF.TreeView.Connectors
+{
+    internal class StraightPathFinder
+    {
+
+        public static List<Point> GetConnectionLine(Point source, Point sinkPoint, Position2D preferredOrientation)
+        {
+            List<Point> linePoints = [source, sinkPoint];
+            return linePoints;
+        }
+
+    }
+}
