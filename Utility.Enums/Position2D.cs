@@ -10,8 +10,8 @@
         None = 0,
         Left = 1,
         Right = 2,
-        Top = 16,
-        Bottom = 32,
+        Top = 4,
+        Bottom = 8,
         All = Left | Right | Top | Bottom
     }
 }
