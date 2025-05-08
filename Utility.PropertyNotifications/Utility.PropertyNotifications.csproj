@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Utility.Help-ers" Version="1.0.0" />
+    <PackageReference Include="Utility.Interfaces" Version="1.0.0" />
+  </ItemGroup>
+</Project>
