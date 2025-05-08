@@ -1,7 +1,17 @@
 ﻿namespace Utility.Interfaces.NonGeneric
 {
-    public interface IKey
+    public interface IGetKey
     {
         string Key { get; }
+    }   
+    
+    public interface ISetKey
+    {
+        string Key { set; }
+    }
+
+    public interface IKey
+    {
+        string Key { get; set; }
     }
 }

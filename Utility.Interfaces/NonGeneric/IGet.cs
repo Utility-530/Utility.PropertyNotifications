@@ -1,7 +1,7 @@
 ﻿namespace Utility.Interfaces.NonGeneric
 {
-    public interface ISave
+    public interface IGet
     {
-        bool Save(object o);
+        public object? Get();
     }  
 }

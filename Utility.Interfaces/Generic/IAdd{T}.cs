@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Utility.Interfaces.Generic
 {
-
-    public interface IPredicate<T>
+    public interface IAdd<T>
     {
-        bool Evaluate(T value);
+        void Add(T item);
     }
-
 }

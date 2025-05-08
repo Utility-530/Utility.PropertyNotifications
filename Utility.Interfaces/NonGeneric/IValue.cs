@@ -10,8 +10,8 @@ namespace Utility.Interfaces.NonGeneric
     public interface IIntValue
     {
         int Value { get; }
-    }   
-    
+    }
+
     public interface IBooleanValue
     {
         bool Value { get; }
@@ -40,10 +40,15 @@ namespace Utility.Interfaces.NonGeneric
     public interface IStringValue
     {
         string Value { get; }
-    }   
-    
+    }
+
     public interface IValue
     {
         object Value { get; }
+    }
+
+    public interface ISetValue
+    {
+        object Value { set; }
     }
 }

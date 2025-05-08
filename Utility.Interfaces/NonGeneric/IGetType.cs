@@ -2,8 +2,9 @@
 
 namespace Utility.Interfaces.NonGeneric
 {
-    public interface IType
+    public interface IGetType
     {
-        Type Type { get; }
-    }  
+        Type GetType();
+    }
+
 }
