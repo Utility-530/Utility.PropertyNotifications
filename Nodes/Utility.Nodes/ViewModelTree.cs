@@ -33,6 +33,8 @@ namespace Utility.Nodes
         private int order;
         private Collection collection;
         private bool isAugmentable;
+        private bool? isContentVisible = true;
+        private Position2D connectorPosition = Position2D.None;
 
         public ViewModelTree(/*string name,*/ object data) : this()
         {
@@ -162,6 +164,15 @@ namespace Utility.Nodes
             }
         }
 
+        public Position2D ConnectorPosition
+        {
+            get => connectorPosition;
+            set
+            {
+                RaisePropertyChanged(ref connectorPosition, value);
+            }
+        }
+
         public ObservableCollection<Dimension> Columns { get; set; } = new();
 
         public ObservableCollection<Dimension> Rows { get; set; } = new();
@@ -200,6 +211,15 @@ namespace Utility.Nodes
             set
             {
                 RaisePropertyChanged(ref isVisible, value);
+            }
+        }
+             
+        public bool? IsContentVisible
+        {
+            get => isContentVisible;
+            set
+            {
+                RaisePropertyChanged(ref isContentVisible, value);
             }
         }
 
