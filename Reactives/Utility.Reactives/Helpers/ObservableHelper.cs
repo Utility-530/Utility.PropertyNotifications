@@ -88,10 +88,6 @@ public static partial class ObservableHelper
     //    return observable.Where(a => a != null);
     //}
 
-    public static IObservable<IEnumerable<T>> WhereAny<T>(this IObservable<IEnumerable<T>> observable)
-    {
-        return observable.Where(a => a.Any());
-    }
 
     public static IObservable<T> TakeLastItem<T>(this IObservable<IEnumerable<T>> observable)
     {
@@ -288,25 +284,12 @@ IScheduler? scheduler = null)
         });
     }
 
-    public static IObservable<T> WhereNotDefault<T>(this IObservable<T> observable)
-    {
-        return observable.Where(a => !(a?.Equals(default(T)) ?? false));
-    }
-
-    public static IObservable<T> WhereIsNotNull<T>(this IObservable<T> observable) where T : class
-    {
-        return observable.Where(a => a != null);
-    }
 
     public static IObservable<T> BufferTakeLast<T>(this IObservable<T> observable, TimeSpan buffer)
     {
         return observable.Buffer(buffer).WhereAny().TakeLastItem();
     }
 
-    public static IObservable<IEnumerable<T>> WhereEmpty<T>(this IObservable<IEnumerable<T>> observable)
-    {
-        return observable.Where(a => a.Any() == false);
-    }
 
     public static IObservable<(T, R)> Combine<T, R>(this IObservable<T> observable, R observed)
     {
