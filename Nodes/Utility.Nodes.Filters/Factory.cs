@@ -31,6 +31,8 @@ namespace Utility.Nodes.Filters
         public const string dirty = nameof(dirty);
         public const string collection = nameof(collection);
         public const string demo_content = nameof(demo_content);
+        public const string input_control = nameof(input_control);
+        public const string input_node = nameof(input_node);
 
         // readonly Guid assGuid = Guid.Parse("10126895-6855-45ab-97af-21ed90c02fe8");
         // readonly Guid relGuid = Guid.Parse("5c90fcd6-2324-4f88-bffb-73b8f9fbcf6b");
@@ -50,6 +52,8 @@ namespace Utility.Nodes.Filters
         private readonly Guid guid = Guid.Parse("d7bccfe8-2818-4e64-b399-f6230b087a86");
         private readonly Guid dirtyGuid = Guid.Parse("6c9ee869-9d3b-4745-b6de-6de4a8f011f1");
         private readonly Guid collectionGuid = Guid.Parse("d6fa45af-e543-4ac9-bec4-fcbd3a800097");
+        private readonly Guid input_controlGuid = Guid.Parse("d31ca5b1-0de0-41cb-8c7d-e83a4f0c8237");
+        private readonly Guid input_nodeGuid = Guid.Parse("3dded14d-0f46-4ab8-bce3-50ac339e6d97");
 
         public const string Refresh = nameof(Refresh);
         public const string Run = nameof(Run);
@@ -62,6 +66,8 @@ namespace Utility.Nodes.Filters
         public const string Search = nameof(Search);
         public const string Next = nameof(Next);
         public const string Load = nameof(Load);
+        public const string Select = nameof(Select);
+        public const string Cancel = nameof(Cancel);
 
 
         public IObservable<INode> BuildRoot()
@@ -80,6 +86,22 @@ namespace Utility.Nodes.Filters
                 controlsGuid,
                 s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Horizontal },
                 s => new Model(() => [new CommandModel { Name = Save }, new CommandModel { Name = Refresh }, new CommandModel { Name = Run }]) { Name = s });
+        }
+
+        public IObservable<INode> BuildInputControlRoot()
+        {
+            return nodeSource.Create(input_control,
+                input_controlGuid,
+                s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Horizontal, IsContentVisible = false },
+                s => new Model(() => [new CommandModel { Name = Select }, new CommandModel { Name = Cancel }]) { Name = s });
+        }
+        
+        public IObservable<INode> BuildInputNodeRoot()
+        {
+            return nodeSource.Create(input_node,
+                input_nodeGuid,
+                s => new Node(s) { IsExpanded = true },
+                s => new Model(() => [new NodePropertyRootModel { Name = "npm" }]) { Name = s });
         }
 
         public IObservable<INode> BuildComboRoot()

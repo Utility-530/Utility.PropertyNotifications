@@ -88,18 +88,19 @@ namespace Utility.Nodes.Filters
     public class GenericSetter : Setter
     {
         private readonly Action<object, object> func;
+        private readonly PropertyInfo prop;
 
         public GenericSetter(PropertyInfo prop)
         {
             Name = prop.Name;
-            this.func = prop.ToSetter<object>();
+            this.prop = prop;
         }
 
         public override string Name { get; }
 
         public override void Set(object instance, object value)
         {
-            func.Invoke(instance, value);
+            prop.SetValue(instance, value);
         }
     }
 
@@ -107,19 +108,17 @@ namespace Utility.Nodes.Filters
     public class GenericGetter : Getter
     {
         private readonly PropertyInfo prop;
-        private readonly Func<object, object> func;
 
         public GenericGetter(PropertyInfo prop)
         {
             this.prop = prop;
-            this.func = prop.ToGetter<object>();
         }
 
         public override string Name { get => prop.Name; }
 
         public override object Get(object instance)
         {
-            return func.Invoke(instance);
+            return prop.GetValue(instance);
         }
     }
 

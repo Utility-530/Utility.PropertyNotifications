@@ -165,7 +165,7 @@ namespace Utility.Nodes.Filters
 
                 node.WhenChanged().Subscribe(e =>
                 {
-                    if (e is PropertyChangedExEventArgs { PreviousValue: var previousValue, PropertyName: string name, Value: var value })
+                    if (e is PropertyChange { Name: string name, Value: var value })
                     {
                         if (name == nameof(ViewModelTree.Order))
                         {
@@ -281,24 +281,25 @@ namespace Utility.Nodes.Filters
                 if (data is INotifyPropertyChanged changed)
                 {
                     changed.WhenChanged()
+                        .WhereIsNotNull()
                     .Subscribe(reception =>
                     {
                         object value;
-                        if (reception.PropertyName != nameof(ValueModel.Value))
+                        if (reception.Name != nameof(ValueModel.Value))
                         {
                             return;
                         }
-                        else if (reception is PropertyChangedEventArgsEx ex)
+                        else if (reception is PropertyChange ex)
                         {
-                            value = ex.NewValue;
+                            value = ex.Value;
                         }
                         else
                         {
                             value = getters
-                                        .Get(reception.PropertyName, a => node.Data.GetType().GetProperty(reception.PropertyName).ToGetter<object>())
+                                        .Get(reception.Name, a => node.Data.GetType().GetProperty(reception.Name).ToGetter<object>())
                                         .Invoke(node.Data);
                         }
-                        repository.Value.Set((GuidKey)node.Key, nameof(Node.Data) + "." + reception.PropertyName, value, DateTime.Now);
+                        repository.Value.Set((GuidKey)node.Key, nameof(Node.Data) + "." + reception.Name, value, DateTime.Now);
 
                     }).DisposeWith(compositeDisposable);
                 }
