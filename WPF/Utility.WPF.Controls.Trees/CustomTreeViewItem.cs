@@ -3,6 +3,8 @@ using System.Windows;
 using System.Windows.Input;
 using System.Collections;
 using System;
+using Position2D = Utility.Enums.Position2D;
+
 
 namespace Utility.WPF.Controls.Trees
 {
@@ -46,6 +48,9 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty ColumnsProperty = DependencyProperty.Register("Columns", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty IsAugmentableProperty =  DependencyProperty.Register("IsAugmentable", typeof(bool), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty ErrorsProperty = DependencyProperty.Register("Errors", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
+        public static readonly DependencyProperty ContentVisibilityProperty = DependencyProperty.Register("ContentVisibility", typeof(System.Windows.Visibility), typeof(CustomTreeViewItem), new PropertyMetadata(Visibility.Visible));
+        public static readonly DependencyProperty ConnectorPositionProperty = DependencyProperty.Register("ConnectorPosition", typeof(Position2D), typeof(CustomTreeViewItem), new PropertyMetadata(Position2D.None));
+
 
         private static void _changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -53,6 +58,13 @@ namespace Utility.WPF.Controls.Trees
         }
 
         #region Properties
+
+        public Position2D ConnectorPosition
+        {
+            get { return (Position2D)GetValue(ConnectorPositionProperty); }
+            set { SetValue(ConnectorPositionProperty, value); }
+        }
+
 
         public IEnumerable Errors
         {
@@ -227,6 +239,12 @@ namespace Utility.WPF.Controls.Trees
         {
             get { return (Utility.Enums.Arrangement)GetValue(ArrangementProperty); }
             set { SetValue(ArrangementProperty, value); }
+        }
+
+        public Visibility ContentVisibility
+        {
+            get { return (Visibility)GetValue(ContentVisibilityProperty); }
+            set { SetValue(ContentVisibilityProperty, value); }
         }
 
 

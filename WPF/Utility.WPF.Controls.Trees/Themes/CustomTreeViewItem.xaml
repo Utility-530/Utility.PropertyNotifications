@@ -12,7 +12,9 @@
                     xmlns:c="http://schemas.utility.com/colours"
                     xmlns:res="http://schemas.utility.com/resourcedictionary" 
                     xmlns:btns="http://schemas.utility.com/buttons"
-                    xmlns:enums="clr-namespace:Utility.Enums;assembly=Utility.Enums" xmlns:pnls="http://schemas.utility.com/panels">
+                    xmlns:enums="clr-namespace:Utility.Enums;assembly=Utility.Enums" 
+                    xmlns:WPF.Connectors="clr-namespace:Utility.WPF.Trees.Connectors;assembly=Utility.WPF.Trees.Connectors"
+                    xmlns:pnls="http://schemas.utility.com/panels">
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml"/>
@@ -85,11 +87,13 @@
         <Setter Property="IsRemovable" Value="{Binding IsRemovable, Mode=TwoWay}"/>
         <Setter Property="AddCommand" Value="{Binding Path=AddCommand}" />
         <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="ConnectorPosition" Value="{Binding ConnectorPosition}" />
         <Setter Property="RemoveCommand" Value="{Binding Path=RemoveCommand}" />
         <Setter Property="AddParentCommand" Value="{Binding Path=AddParentCommand}" />
         <Setter Property="IsHighlighted" Value="{Binding Path=IsHighlighted}" />
         <Setter Property="Arrangement" Value="{Binding Path=Arrangement}" />
         <Setter Property="Visibility" Value="{Binding Path=IsVisible,Converter={StaticResource VisibilityConverter}}"/>
+        <Setter Property="ContentVisibility" Value="{Binding Path=IsContentVisible,Converter={StaticResource VisibilityConverter}}"/>
         <Setter Property="Orientation" Value="{Binding Orientation, Converter={StaticResource OrientationConverter}}"/>
         <Setter Property="Grid.Row" Value="{Binding Row}"></Setter>
         <Setter Property="Grid.Column" Value="{Binding Column}"></Setter>
@@ -200,6 +204,7 @@
                                     <RowDefinition Height="auto"></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <Border x:Name="MainBorder"
+                                        Visibility="{TemplateBinding ContentVisibility}"
                                         Background="Transparent"
                                         BorderBrush="Transparent"
                                     Grid.Column="1" 
@@ -214,7 +219,7 @@
                                                 HorizontalAlignment="Stretch" BorderThickness="2" CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource Mode=TemplatedParent}}">
 
                                             <ContentPresenter x:Name="PART_Header" 
-                                        
+                                                  WPF.Connectors:Ex.Position="{TemplateBinding ConnectorPosition}"
                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                   ContentSource="Header"/>
 

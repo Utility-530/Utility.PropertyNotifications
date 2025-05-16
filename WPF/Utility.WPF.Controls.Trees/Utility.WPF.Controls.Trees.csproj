@@ -23,6 +23,7 @@
 		<ProjectReference Include="..\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
 		<ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
+		<ProjectReference Include="..\Utility.WPF.Trees.Connectors\Utility.WPF.Trees.Connectors.csproj" />
 	</ItemGroup>
 
 </Project>
