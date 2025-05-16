@@ -131,7 +131,14 @@ namespace Utility.Trees
             }
             if (data is not null)
             {
-                Add(await ToTree((object)data));
+                if (this.All(a => a.Data.Equals(data)==false || a.Data != data))
+                {
+                    Add(await ToTree(data));
+                }
+                else
+                {
+
+                }
                 return;
             }
 
