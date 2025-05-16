@@ -10,7 +10,7 @@ namespace Utility.Trees.Extensions
 
         public static IReadOnlyTree? Ancestor(this IReadOnlyTree tree, Predicate<(IReadOnlyTree tree, int level)>? action = null)
         {
-            return SelfAndAncestors(tree, action).Single();
+            return SelfAndAncestors(tree, action).SingleOrDefault();
         }
 
 
