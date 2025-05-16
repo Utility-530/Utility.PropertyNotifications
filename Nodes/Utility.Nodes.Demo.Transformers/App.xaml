@@ -13,6 +13,7 @@
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml"/>
                 <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Generic.xaml"/>
                 <res:SharedResourceDictionary Source="/Themes/Master.xaml"/>
+                <res:SharedResourceDictionary Source="/Themes/InputSelection.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

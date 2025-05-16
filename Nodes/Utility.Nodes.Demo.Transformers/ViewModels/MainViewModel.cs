@@ -9,9 +9,9 @@ namespace Utility.Nodes.Demo.Transformers
     public class MainViewModel : ViewModel
     {     
 
-        public IReadOnlyTree[] Content => get(nameof(Factory.BuildDemoContentRoot), nameof(Content));
-        public IReadOnlyTree[] Controls => get(nameof(Factory.BuildControlRoot), nameof(Controls));
-        public IReadOnlyTree[] Transformers => get(nameof(Factory.BuildTransformersRoot), nameof(Transformers));
+        public IEnumerable<IReadOnlyTree> Content => get(nameof(Factory.BuildDemoContentRoot));
+        public IEnumerable<IReadOnlyTree> Controls => get(nameof(Factory.BuildControlRoot));
+        public IEnumerable<IReadOnlyTree> Transformers => get(nameof(Factory.BuildTransformersRoot));
 
     }
 }

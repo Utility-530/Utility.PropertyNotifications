@@ -39,6 +39,7 @@ namespace Utility.Nodes.Demo.Transformers
 
             Splat.Locator.CurrentMutable.Register<MethodCache>(() => new MethodCache());
             Splat.Locator.CurrentMutable.RegisterLazySingleton<MainViewModel>(() => new MainViewModel());
+            Splat.Locator.CurrentMutable.Register<InputSelectionViewModel>(() => new InputSelectionViewModel());
             Splat.Locator.CurrentMutable.RegisterLazySingleton<INodePropertyFactory>(() => new NodePropertyFactory());
             Splat.Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
 
@@ -47,11 +48,8 @@ namespace Utility.Nodes.Demo.Transformers
 
             JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
 
-
-            TransformerService service = new();
-            ControlsService _service = new ControlsService() { Name = "ControlsService" };
-
-            //ComboService comboService = new();
+            Splat.Locator.CurrentMutable.RegisterConstant<ControlsService>(new() { Name = "ControlsService" });
+            Splat.Locator.CurrentMutable.RegisterConstant<IObservable<ControlEvent>>(new InputControlsService() { Name = "ControlsService" });
 
             var window = new Window() { Content = Locator.Current.GetService<MainViewModel>() };
 

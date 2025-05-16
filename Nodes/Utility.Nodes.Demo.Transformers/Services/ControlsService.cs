@@ -19,7 +19,9 @@ namespace Utility.Nodes.Demo.Filters.Services
 {
     public enum ControlEventType
     {
-        None, Save, Refresh
+        None, Save, Refresh,
+        Select,
+        Cancel
     }
     public readonly record struct ControlEvent(ControlEventType ControlEventType, int Count);
 
@@ -29,10 +31,10 @@ namespace Utility.Nodes.Demo.Filters.Services
         ReplaySubject<ControlEvent> replaySubject = new(1);
         Dictionary<ControlEventType, int> dict = new();
 
-
         public ControlsService()
         {
-            Locator.Current.GetService<INodeSource>()
+            Locator.Current
+                .GetService<INodeSource>()
                 .Single(nameof(Factory.BuildControlRoot))
                 .Subscribe(_n =>
                 {
@@ -41,7 +43,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                     {
                         if (node.NewItem is INode { Data: Model { Name: string name } model })
                         {
-                            model.WhenChanged().Where(a => a.PropertyName == ".ctor").Subscribe(_ =>
+                            model.WhenChanged().Where(a => a.Name == ".ctor").Subscribe(_ =>
                             {
                                 Switch(name, model);
                             });
@@ -65,7 +67,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                                 {
                                     Origin.Content().Subscribe(c =>
                                     {
-                                        foreach (var t in ts.Transformers)
+                                        foreach (var t in ts.Collection)
                                         {
                                             NodesSource.nodes(c).Subscribe(x =>
                                             {
@@ -265,7 +267,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                             //observer.OnNext(new TransformerException(transformer, "filter is null"));
                             return;
                         }
-                        if (input.Filter.Get(a))
+                        if (input.Filter.Evaluate(a))
                         {
                             //if (transformer.Source.TryGetValue(a, out var value))
                             //    results.Add(value);
@@ -398,7 +400,7 @@ namespace Utility.Nodes.Demo.Filters.Services
             bool any = false;
             trees.ForEach(a =>
             {
-                if (transformer.Output.Filter.Get(a))
+                if (transformer.Output.Filter.Evaluate(a))
                 {
                     try
                     {
