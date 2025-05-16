@@ -253,9 +253,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pather.CSharp", "..\Externa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Exceptions", "..\Infrastructure\Utility.Exceptions\Utility.Exceptions.csproj", "{064F97F3-1E59-438D-AA50-45F1D477A20A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.TreeView.Connectors", "Utility.WPF.TreeView.Connectors\Utility.WPF.TreeView.Connectors.csproj", "{15105BF3-54B7-4033-BDA6-5797845994FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Trees.Connectors", "Utility.WPF.Trees.Connectors\Utility.WPF.Trees.Connectors.csproj", "{15105BF3-54B7-4033-BDA6-5797845994FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.TreeView.Connectors.Demo", "Utility.WPF.TreeView.Connectors.Demo\Utility.WPF.TreeView.Connectors.Demo.csproj", "{4F0803F0-EE4A-4E94-AB75-B638AB8CA0C5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Trees.Connectors.Demo", "Utility.WPF.Trees.Connectors.Demo\Utility.WPF.Trees.Connectors.Demo.csproj", "{4F0803F0-EE4A-4E94-AB75-B638AB8CA0C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
