@@ -50,7 +50,6 @@ namespace Utility.Models.Trees
         }
     }
 
-
     public class NodePropertyRootModel : ResolvableModel
     {
 
@@ -60,9 +59,12 @@ namespace Utility.Models.Trees
             Assemblies.InsertSpecial(0, type.Assembly);
             Types.InsertSpecial(0, type);
         }
+
+        public NodeModel NodeModel { get; set; }
+
         public override IEnumerable<Model> CreateChildren()
         {
-            yield return new NodeModel { Name = "_node_" };
+            yield return NodeModel ??= new NodeModel { Name = "_node_" };
         }
     }
 
@@ -74,9 +76,11 @@ namespace Utility.Models.Trees
 
         }
 
+        public NodePropertiesModel Model { get; set; }
+
         public override IEnumerable<Model> CreateChildren()
         {
-            yield return new NodePropertiesModel() { Name = "npm" };
+            yield return Model ??= new NodePropertiesModel() { Name = "npm" };
         }
 
         public override void SubtractDescendant(IReadOnlyTree node, int level)
@@ -117,14 +121,25 @@ namespace Utility.Models.Trees
                 typeof(short), typeof(byte), typeof(char), typeof(bool)};
         public NodePropertiesModel()
         {
+        }
 
+        public NodePropertiesModel(Func<IEnumerable<Model>> func) : base(func)
+        {
         }
 
         public override IEnumerable<Model> CreateChildren()
         {
-            var ancestor = this.Node.Ancestor(a => a.tree.Data is ThroughPutModel { Parameter: { } });
+            if (func != null)
+            {
+                foreach (var item in func.Invoke())
+                {
+                    yield return item;
+                }
+                yield break;
+            }
             Type[] _types = types;
-            if (ancestor != null)
+
+            if (this.Node.Ancestor(a => a.tree.Data is ThroughPutModel { Parameter: { } }) is { } ancestor)
             {
                 _types = [(ancestor.Data as ThroughPutModel).Parameter.ParameterType, typeof(object)];
             }
@@ -134,6 +149,7 @@ namespace Utility.Models.Trees
                 var pnode = new PropertyModel { Name = prop.Name, Value = prop };
                 yield return pnode;
             }
+
         }
 
         public override void SubtractDescendant(IReadOnlyTree node, int level)
@@ -198,8 +214,26 @@ namespace Utility.Models.Trees
     /// </summary>
     public class GlobalAssembliesModel : Model, IBreadCrumb
     {
+
+        public GlobalAssembliesModel(Func<IEnumerable<Model>> predicate) : base(predicate)
+        {
+
+        }
+
+        public GlobalAssembliesModel() : base()
+        {
+
+        }
+
         public override IEnumerable<Model> CreateChildren()
         {
+            if (func != null)
+            {
+                foreach (var x in func.Invoke())
+                    yield return x;
+                yield break;
+            }
+
             foreach (var prop in Locator.Current.GetService<IPropertyFactory>().Properties)
             {
                 yield return new AssemblyTypePropertyModel { Name = prop.PropertyType.Name + "." + prop.Name, Value = prop };
@@ -211,9 +245,6 @@ namespace Utility.Models.Trees
                 var _node = AssemblyModel.Create(ass);
                 yield return _node;
             }
-        }
-        public override void SubtractDescendant(IReadOnlyTree node, int level)
-        {
         }
     }
 
@@ -310,12 +341,6 @@ namespace Utility.Models.Trees
 
     public class ExceptionModel(Exception Exception) : Model
     {
-
-        //public ExceptionModel(string name) : this((Exception)null)
-        //{
-        //    Name = name;
-        //}
-
         public Exception Exception { get; } = Exception;
 
         public static ExceptionModel Create(Exception ex) => new ExceptionModel(ex) { Name = ex.Message };
@@ -435,27 +460,29 @@ namespace Utility.Models.Trees
     {
     }
 
-    public class AndOrModel : ValueModel<AndOr>, IAndOr, IObservable<Unit>
+
+
+
+
+    public class AndOrModel : ValueModel<AndOr, IPredicate>, IAndOr, IObservable<Unit>, IPredicate
     {
         protected AndOr value = 0;
         List<IObserver<Unit>> observers = [];
-        List<AndOrModel> list = [];
-        List<FilterModel> filters = [];
         Dictionary<Model, IDisposable> dictionary = [];
 
         public AndOrModel()
         {
         }
 
-        public bool Get(object data)
+        public bool Evaluate(object data)
         {
             if (Value == AndOr.And)
             {
-                return list.All(x => x.Get(data)) && filters.All(a => a.Get(data));
+                return Collection.All(x => x.Evaluate(data));
             }
             else if (Value == AndOr.Or)
             {
-                return list.Any(x => x.Get(data)) || filters.Any(a => a.Get(data));
+                return Collection.Any(x => x.Evaluate(data));
             }
             else
                 throw new ArgumentOutOfRangeException("sd 3433 33 x");
@@ -467,7 +494,7 @@ namespace Utility.Models.Trees
         {
             if (a.Data is AndOrModel aoModel)
             {
-                list.Add(aoModel);
+                Collection.Add(aoModel);
                 {
                     var dis = aoModel.Subscribe(_ => onNext());
                     dictionary[aoModel] = dis;
@@ -475,7 +502,7 @@ namespace Utility.Models.Trees
             }
             else if (a.Data is FilterModel filterModel)
             {
-                filters.Add(filterModel);
+                Collection.Add(filterModel);
                 {
                     System.Reactive.Disposables.CompositeDisposable composite = new();
                     filterModel
@@ -517,12 +544,12 @@ namespace Utility.Models.Trees
             if (a.Data is AndOrModel aoModel)
             {
                 dictionary[aoModel].Dispose();
-                list.Remove(aoModel);
+                Collection.Remove(aoModel);
             }
             else if (a.Data is FilterModel filterModel)
             {
                 dictionary[filterModel]?.Dispose();
-                filters.Remove(filterModel);
+                Collection.Remove(filterModel);
             }
             else
                 throw new Exception("877 hhj9099   ");
@@ -833,41 +860,33 @@ namespace Utility.Models.Trees
     }
 
 
-    public class TransformersModel : Model
+    public class TransformersModel : CollectionModel<TransformerModel>
     {
-        [JsonIgnore]
-        public ObservableCollection<TransformerModel> Transformers { get; } = new();
-
+        public const string transformer = nameof(transformer);
         public override void SetNode(INode node)
         {
             node.Orientation = Orientation.Vertical;
             node.IsEditable = false;
             node.IsRemovable = false;
-            node.IsAugmentable = true;
             node.IsExpanded = true;
             node.IsPersistable = true;
-            node.Items.AndAdditions<INode>().Subscribe(a => Transformers.Add(a.Data as TransformerModel));
             base.SetNode(node);
         }
 
         public override IEnumerable Proliferation()
         {
-            yield return new TransformerModel { Name = "transformer" };
+            yield return new TransformerModel { Name = transformer };
         }
     }
 
-    public class FiltersModel : Model
+    public class FiltersModel : CollectionModel<FilterModel>
     {
-        [JsonIgnore]
-        public ObservableCollection<FilterModel> Filters { get; } = new();
 
         public override void SetNode(INode node)
         {
             node.Orientation = Orientation.Vertical;
-            node.IsAugmentable = true;
             node.IsExpanded = true;
             node.IsPersistable = true;
-            node.Items.AndAdditions<INode>().Subscribe(a => Filters.Add(a.Data as FilterModel));
             base.SetNode(node);
         }
         public override IEnumerable Proliferation()
@@ -1018,18 +1037,13 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class SelectionsModel : Model
+    public class SelectionsModel : CollectionModel<SelectionModel>
     {
-        [JsonIgnore]
-        public ObservableCollection<SelectionModel> Collection { get; } = new();
-
         public override void SetNode(INode node)
         {
             node.Orientation = Orientation.Vertical;
             node.IsExpanded = true;
-            node.IsAugmentable = true;
             node.IsPersistable = true;
-            node.Items.AndAdditions<INode>().Subscribe(a => Collection.Add(a.Data as SelectionModel));
             base.SetNode(node);
         }
 
@@ -1173,9 +1187,11 @@ namespace Utility.Models.Trees
 
     public class ExpandedModel : Model
     {
+        private readonly Action<INode> action;
 
-        public ExpandedModel(Func<IEnumerable<Model>> func) : base(func)
+        public ExpandedModel(Func<IEnumerable<Model>> func, Action<INode> action = null) : base(func)
         {
+            this.action = action;
         }
 
         public ExpandedModel() : base()
@@ -1184,6 +1200,8 @@ namespace Utility.Models.Trees
 
         public override void SetNode(INode node)
         {
+            action?.Invoke(node);
+            node.ConnectorPosition = Position2D.Right;
             //node.IsEditable = true;
             node.IsExpanded = true;
             node.Arrangement = Arrangement.Stack;
@@ -1194,13 +1212,13 @@ namespace Utility.Models.Trees
 
     public class TransformerModel : Model
     {
-        const string inputs = nameof(inputs);
-        const string output = nameof(output);
-        const string converter = nameof(converter);
+        public const string inputs = nameof(inputs);
+        public const string output = nameof(output);
+        public const string converter = nameof(converter);
 
         private InputsModel _inputs;
         private ThroughPutModel _output;
-        private ConverterModel converterModel;
+        private ConverterModel _converter;
         IDisposable disposable;
 
         [JsonIgnore]
@@ -1236,11 +1254,11 @@ namespace Utility.Models.Trees
         [JsonIgnore]
         public ConverterModel Converter
         {
-            get => converterModel;
+            get => _converter;
             set
             {
-                var previous = converterModel;
-                converterModel = value;
+                var previous = _converter;
+                _converter = value;
                 disposable?.Dispose();
                 disposable = value.WithChangesTo(a => a.Method)
                     .Where(a => a != null)
@@ -1258,7 +1276,7 @@ namespace Utility.Models.Trees
                         .Subscribe(async i =>
                         {
                             i.Parameters = value.Method.GetParameters();
-  
+
                         });
 
                     });
@@ -1270,9 +1288,9 @@ namespace Utility.Models.Trees
 
         public override IEnumerable<Model> CreateChildren()
         {
-            yield return new ConverterModel { Name = converter };
-            yield return new InputsModel { Name = inputs };
-            yield return new ThroughPutModel { Name = output };
+            yield return _converter ??= new ConverterModel { Name = converter };
+            yield return _inputs ??= new InputsModel { Name = inputs };
+            yield return _output ??= new ThroughPutModel { Name = output };
         }
 
         public override void Addition(IReadOnlyTree value, IReadOnlyTree a)
@@ -1306,7 +1324,7 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class FilterModel : Model
+    public class FilterModel : Model, IPredicate
     {
         const string res = nameof(res);
         const string b_ool = nameof(b_ool);
@@ -1460,7 +1478,7 @@ namespace Utility.Models.Trees
             }
         }
 
-        public bool Get(object instance)
+        public bool Evaluate(object instance)
         {
             if (ResolvableModel.TryGetValue(instance, out var value))
             {
@@ -1562,6 +1580,7 @@ namespace Utility.Models.Trees
         private CustomCollection<Type> types = new();
         private CustomCollection<PropertyInfo> properties = new();
         private CustomCollection<Assembly> assemblies = [];
+        private GlobalAssembliesModel globalAssembliesModel;
 
         public ResolvableModel()
         {
@@ -1595,9 +1614,21 @@ namespace Utility.Models.Trees
             }
         }
 
+
+        [JsonIgnore]
+        public GlobalAssembliesModel GlobalAssembliesModel
+        {
+            get => globalAssembliesModel; set
+            {
+                globalAssembliesModel = value;
+            }
+        }
+
+
+
         public override IEnumerable<Model> CreateChildren()
         {
-            yield return new GlobalAssembliesModel { Name = "ass_root" };
+            yield return globalAssembliesModel ??= new GlobalAssembliesModel { Name = "ass_root" };
         }
 
         public override void Addition(IReadOnlyTree value, IReadOnlyTree add)
@@ -1638,7 +1669,7 @@ namespace Utility.Models.Trees
                         properties.InsertSpecial(_level, pInfo);
                     }
                     break;
-                case PropertyModel {  } pm:
+                case PropertyModel { } pm:
                     {
                         pm.WithChangesTo(a => a.Value).Subscribe(x =>
                         {

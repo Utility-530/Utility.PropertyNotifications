@@ -17,7 +17,7 @@ namespace Utility.Models
         protected string m_name = "unknown";
         private INode node;
         int i = 0;
-        private readonly Func<IEnumerable<Model>> func;
+        protected readonly Func<IEnumerable<Model>> func;
 
         protected INodeSource source = Locator.Current.GetService<INodeSource>();
         protected Lazy<IContext> context = new(() => Locator.Current.GetService<IContext>());

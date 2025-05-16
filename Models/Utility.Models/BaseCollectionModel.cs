@@ -47,14 +47,22 @@ namespace Utility.Models
                             Node.Errors.Add(new LimitExceededException(a.First, count - a.First));
                     });
                 });
+
+            Collection
+                .AndAdditions()
+                .Subscribe(e =>
+                {
+                    Node.Add(e);
+                });
         }
 
         public override void Addition(IReadOnlyTree value, IReadOnlyTree a)
         {
-            Collection.Add((T)a.Data);
+            if (Collection.Contains((T)a.Data) == false)
+                Collection.Add((T)a.Data);
             base.Addition(value, a);
         }
-             
+
         public override void Subtraction(IReadOnlyTree value, IReadOnlyTree a)
         {
             Collection.Remove((T)a.Data);

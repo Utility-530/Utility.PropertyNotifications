@@ -4,7 +4,15 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Models
 {
-    public class ValueModel<T> : Model, IValue<T?>, ISetValue, IGet, ISet, IGet<T>, Utility.Interfaces.Generic.ISet<T>
+    public class ValueModel<T> : ValueModel<T, Model>
+    {
+        public ValueModel(T? value = default):base(value) 
+        {
+        }
+
+    }
+
+    public class ValueModel<T, TModel> : CollectionModel<TModel>, IValue<T?>, ISetValue, IGet, ISet, IGet<T>, Utility.Interfaces.Generic.ISet<T>
     {
         private T value;
 
