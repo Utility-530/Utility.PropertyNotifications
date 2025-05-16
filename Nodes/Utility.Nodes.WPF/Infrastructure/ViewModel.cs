@@ -1,4 +1,6 @@
 ﻿using Splat;
+using System.Collections.ObjectModel;
+using System.Runtime.CompilerServices;
 using Utility.Interfaces.Exs;
 using Utility.PropertyNotifications;
 using Utility.Trees.Abstractions;
@@ -8,18 +10,32 @@ namespace Utility.Nodes.WPF
 {
     public class ViewModel : NotifyPropertyClass, IDisposable
     {
-        protected System.Reactive.Disposables.CompositeDisposable disposables = new();
         protected Lazy<INodeSource> source = new(() => Locator.Current.GetService<INodeSource>());
-        private bool _disposed;
+        private readonly Dictionary<string, ObservableCollection<IReadOnlyTree>> dictionary = [];
+        private ObservableCollection<IReadOnlyTree> this[string key] => dictionary.GetValueOrNew(key);
 
-        Dictionary<string, IReadOnlyTree[]> dictionary = new();
 
-        protected IReadOnlyTree[] get(string name, string propertyName)
+        protected IEnumerable<IReadOnlyTree> get(string name, [CallerMemberName] string? propertyName = default)
         {
-            if (dictionary.TryGetValue(propertyName, out var value)==false)
-                source.Value.Single(name).Subscribe(a => { dictionary[propertyName] = [a]; RaisePropertyChanged(propertyName); });
-            return value;
+            if (propertyName == null)
+                throw new Exception("sd78__22");
+            if (dictionary.TryGetValue(propertyName, out var value) == false)
+            {
+                source
+                    .Value
+                    .Single(name)
+                    .Subscribe(a =>
+                    {
+                        this[propertyName].Add(a);
+                    }).DisposeWith(disposables);
+            }
+            return this[propertyName];
         }
+
+        #region dispose
+
+        protected System.Reactive.Disposables.CompositeDisposable disposables = new();
+        private bool _disposed;
 
         public void Dispose()
         {
@@ -42,14 +58,12 @@ namespace Utility.Nodes.WPF
             if (disposing)
             {
                 // Dispose managed state (managed objects).
-                // ...
                 disposables.Dispose();
             }
 
             // Free unmanaged resources.
-            // ...
-
             _disposed = true;
         }
+        #endregion
     }
 }
