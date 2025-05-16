@@ -8,11 +8,11 @@ using System.Globalization;
 using System.Reflection;
 using System.Windows.Data;
 using System.Windows.Media;
-using System.Windows.Interactivity;
 using AutoGenListView.Attributes;
 using System.Windows.Shapes;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using Microsoft.Xaml.Behaviors;
 
 namespace Utility.WPF.Controls.Objects
 {
