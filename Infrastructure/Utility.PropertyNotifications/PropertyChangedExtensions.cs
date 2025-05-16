@@ -125,7 +125,7 @@ namespace Utility.PropertyNotifications
             }
         }
 
-        private class PropertyObservable : IObservable<PropertyChange>
+        private class PropertyObservable : IObservable<PropertyChange?>
         {
             private readonly INotifyPropertyChanged _target;
             private readonly PropertyInfo? _info;
@@ -141,11 +141,11 @@ namespace Utility.PropertyNotifications
                 private readonly INotifyPropertyChanged _target;
                 private readonly PropertyInfo? _info;
                 private readonly Func<object, object>? getter;
-                private readonly IObserver<PropertyChange> _observer;
+                private readonly IObserver<PropertyChange?> _observer;
                 private Dictionary<string, Func<object, object>> dictionary = new();
                 private const string constructor = ".ctor";
 
-                public Subscription(INotifyPropertyChanged target, PropertyInfo? info, IObserver<PropertyChange> observer)
+                public Subscription(INotifyPropertyChanged target, PropertyInfo? info, IObserver<PropertyChange?> observer)
                 {
                     _target = target;
                     _info = info;
@@ -161,14 +161,14 @@ namespace Utility.PropertyNotifications
                     {
                         if (pName == constructor)
                         {
-                            _observer.OnNext(default);
+                            _observer.OnNext(null);
                         }
-                        if (dictionary.ContainsKey(pName) == false)
+                        else if (dictionary.ContainsKey(pName) == false)
                         {
                             var property = _target.GetType().GetProperty(pName);          
                             dictionary[pName] = property.ToGetter<object>();
                         }
-                        if (dictionary.ContainsKey(pName))
+                        else if (dictionary.ContainsKey(pName))
                         {
                             var value = dictionary[pName].Invoke(_target);
                             _observer.OnNext(new PropertyChange(_target, value, pName));
@@ -190,7 +190,7 @@ namespace Utility.PropertyNotifications
                 }
             }
 
-            public IDisposable Subscribe(IObserver<PropertyChange> observer)
+            public IDisposable Subscribe(IObserver<PropertyChange?> observer)
             {
                 return new Subscription(_target, _info, observer);
             }
