@@ -11,7 +11,7 @@ namespace Utility.Interfaces.Exs
 {
     public interface INode : ITree, IIsExpanded, ICurrent<INode>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation, IRemoved, IIsVisible, IAddCommand, IRemoveCommand, IIsSelected, ISetIsSelected,
         IIsRemovable, IIsReplicable, ISort, ISortOrder,
-        IArrangement, IRows, IColumns, IIsAugmentable, IErrors
+        IArrangement, IRows, IColumns, IIsAugmentable, IErrors, IConnectorPosition
     {
 
     }
@@ -69,12 +69,15 @@ namespace Utility.Interfaces.Exs
     public interface ISetNode
     {
         void SetNode(INode node);
-
     }
 
     public interface IIsAugmentable
     {
         bool IsAugmentable { get; set; }
+    }
 
+    public interface IConnectorPosition
+    {
+        Position2D ConnectorPosition { get; set; }
     }
 }
