@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Utility.Enums;
 
-namespace Utility.WPF.TreeView.Connectors
+namespace Utility.WPF.Trees.Connectors
 {
     internal class StraightPathFinder
     {

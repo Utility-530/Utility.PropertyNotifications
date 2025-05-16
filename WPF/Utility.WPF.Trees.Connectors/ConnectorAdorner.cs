@@ -4,57 +4,81 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
+using Utility.Enums;
 using Utility.Helpers;
-using Utility.WPF.TreeView.Connectors;
-
 
 [assembly: XmlnsDefinition("urn:diagram-designer-ns", "WPF.Connectors")]
-
-namespace Utility.WPF.TreeView.Connectors
+namespace Utility.WPF.Trees.Connectors
 {
+//    public class ConnectionEventArgs(FrameworkElement frameworkElement, Connector connector, RoutedEvent routedEvent) : RoutedEventArgs(routedEvent)
+//    {
+//        public FrameworkElement FrameworkElement { get; } = frameworkElement;
+//        public Connector Connector { get; } = connector;
+//    }
+
 
     public class ConnectorAdorner : Adorner
     {
-        // drag start point, relative to the DesignerCanvas
         private Point? dragStartPoint = null;
-        private Canvas _element;
-        private Position? _position;
-        private Connector x;
+        private FrameworkElement _element;
+        private Position2D? _position;
+        public Connector connector;
+        private readonly FrameworkElement context;
+        public static readonly RoutedEvent ConnectionEvent = EventManager.RegisterRoutedEvent(name: "Connection", routingStrategy: RoutingStrategy.Bubble, handlerType: typeof(RoutedEventHandler), ownerType: typeof(ConnectorAdorner));
 
-
-        public ConnectorAdorner(UIElement adornedElement, Position? position = default) : base(adornedElement)
+        public ConnectorAdorner(UIElement adornedElement, FrameworkElement context, Position2D? position = default) : base(adornedElement)
         {
             this.Width = Connector.width; this.Height = Connector.height;
-            this._position = position.HasValue ? position : Position.All;
+            this._position = position.HasValue ? position : Position2D.All;
 
 
             // fired when layout changes
             adornedElement.LayoutUpdated += Connector_LayoutUpdated;
+            this.context = context;
         }
 
+
+        public event RoutedEventHandler Connection
+        {
+            add { AddHandler(ConnectionEvent, value); }
+            remove { RemoveHandler(ConnectionEvent, value); }
+        }
 
         void Connector_LayoutUpdated(object sender, EventArgs e)
         {
             InvalidateVisual();
         }
 
-        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        protected override void OnPreviewMouseLeftButtonUp(MouseButtonEventArgs e)
         {
-            base.OnMouseLeftButtonDown(e);
-            Canvas canvas = GetDesignerCanvas(this.AdornedElement);
-            if (canvas != null)
+            base.OnPreviewMouseLeftButtonUp(e);
+        //}
+
+        //protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        //{
+        //    base.OnMouseLeftButtonDown(e);
+ 
+            if (context != null)
             {
-                this.dragStartPoint = new Point?(e.GetPosition(canvas));
+                this.dragStartPoint = new Point?(e.GetPosition(context));
 
                 if (AdornedElement is FrameworkElement frameworkElement && dragStartPoint is Point point)
                 {
-                    x = Match(frameworkElement, canvas, point);
+                    
+                    connector = Match(frameworkElement, context, point);
+                    if (connector == null)
+                        throw new InvalidOperationException();
+              
+
+                    //else
+                    //    Ex.Connector
                 }
-                e.Handled = true;
+                
+                //e.Handled = true;
             }
         }
 
-        public Connector Match(FrameworkElement frameworkElement, Canvas canvas, Point point)
+        public Connector Match(FrameworkElement frameworkElement, FrameworkElement canvas, Point point)
         {
 
             foreach (var x in rects(frameworkElement))
@@ -80,23 +104,22 @@ namespace Utility.WPF.TreeView.Connectors
             // but if mouse button is pressed and start point value is set we do have one
             if (this.dragStartPoint.HasValue)
             {
-                Canvas canvas = GetDesignerCanvas(this.AdornedElement);
-                if (canvas != null)
-                {
+                this.RaiseEvent(new ConnectionEventArgs(ConnectionEvent, context, e.GetPosition(context), connector, null));
+                //var canvas = GetTreeView(this.AdornedElement);
+                //if (canvas != null)
+                //{
 
-                    AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(canvas);
-                    if (adornerLayer != null)
-                    {
-
-                        var connector = Match(AdornedElement as FrameworkElement, canvas, dragStartPoint.Value);
-                        ConnectionAdorner adorner = new ConnectionAdorner(canvas, connector, this);
-                        if (adorner != null)
-                        {
-                            adornerLayer.Add(adorner);
-                            e.Handled = true;
-                        }
-                    }
-                }
+                //    AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(canvas);
+                //    if (adornerLayer != null)
+                //    {
+                //        //ConnectionAdorner adorner = new (canvas, connector, this);
+                //        //if (adorner != null)
+                //        //{
+                //        //    adornerLayer.Add(adorner);
+                //        //    e.Handled = true;
+                //        //}
+                //    }
+                //}
             }
         }
 
@@ -118,29 +141,20 @@ namespace Utility.WPF.TreeView.Connectors
             {
                 switch (x)
                 {
-                    case Position.Top:
+                    case Position2D.Top:
                         yield return new TopConnector(frameworkElement);
                         break;
-                    case Position.Right:
+                    case Position2D.Right:
                         yield return new RightConnector(frameworkElement);
                         break;
-                    case Position.Bottom:
+                    case Position2D.Bottom:
                         yield return new BottomConnector(frameworkElement);
                         break;
-                    case Position.Left:
+                    case Position2D.Left:
                         yield return new LeftConnector(frameworkElement);
                         break;
                 }
             }
-        }
-        private Canvas GetDesignerCanvas(DependencyObject element)
-        {
-            if (_element != null)
-                return _element;
-            while (element != null && !(element is Canvas))
-                element = VisualTreeHelper.GetParent(element);
-
-            return _element = element as Canvas;
         }
 
 

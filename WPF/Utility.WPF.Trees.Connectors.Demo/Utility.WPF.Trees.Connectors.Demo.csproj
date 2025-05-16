@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Utility.WPF.TreeView.Connectors\Utility.WPF.TreeView.Connectors.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Trees.Connectors\Utility.WPF.Trees.Connectors.csproj" />
   </ItemGroup>
 
 </Project>

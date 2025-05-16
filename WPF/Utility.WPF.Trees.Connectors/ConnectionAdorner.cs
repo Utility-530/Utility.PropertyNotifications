@@ -12,30 +12,82 @@ using System;
 using System.Diagnostics;
 using Utility.WPF.Helpers;
 using Utility.Enums;
+using Utility.Interfaces.NonGeneric;
 
-namespace Utility.WPF.TreeView.Connectors
+namespace Utility.WPF.Trees.Connectors
 {
+    public class HitEventArgs(FrameworkElement frameworkElement, RoutedEvent routedEvent, Position2D? position = null) : RoutedEventArgs(routedEvent)
+    {
+        public FrameworkElement FrameworkElement { get; } = frameworkElement;
+        public Position2D? Position { get; } = position;
+    }
+
+    public class ConnectionEventArgs : RoutedEventArgs, INotifyPropertyChanged
+    {
+        public ConnectionEventArgs(RoutedEvent routedEvent, FrameworkElement context, Point pos, Connector sourceConnector, Connector sinkConnector, bool isComplete = false) : base(routedEvent)
+        {
+            Context = context;
+            Location = pos;
+            SourceConnector = sourceConnector;
+            SinkConnector = sinkConnector;
+            IsComplete = isComplete;
+        }
+
+        public FrameworkElement Context { get; }
+        public Point Location { get; }
+        public Connector SourceConnector { get; }
+        public Connector SinkConnector { get; }
+        public bool IsComplete { get; }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public void Handle(bool accept)
+        {
+            Handled = accept;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Handled)));
+        }
+    }
+
+
     public class ConnectionAdorner : Adorner
     {
+        public static readonly RoutedEvent HitEvent = EventManager.RegisterRoutedEvent(name: "Hit", routingStrategy: RoutingStrategy.Bubble, handlerType: typeof(RoutedEventHandler), ownerType: typeof(ConnectionAdorner));
+        public static readonly RoutedEvent ConnectionMadeEvent = EventManager.RegisterRoutedEvent(name: "ConnectionMade", routingStrategy: RoutingStrategy.Bubble, handlerType: typeof(RoutedEventHandler), ownerType: typeof(ConnectionAdorner));
+
         private PathGeometry pathGeometry;
-        private Canvas designerCanvas;
+        private FrameworkElement treeView;
         private readonly ConnectorAdorner sourceConnectorAdorner;
         private Pen drawingPen;
-
-        FrameworkElement hitItem = null;
+        private FrameworkElement hitItem = null;
         private bool isComplete;
         private Connector sourceConnector, sinkConnector;
 
-        public ConnectionAdorner(Canvas designer, Connector sourceConnector, ConnectorAdorner sourceConnectorAdorner)
-            : base(designer)
+
+        public ConnectionAdorner(FrameworkElement treeView, Connector sourceConnector, ConnectorAdorner sourceConnectorAdorner)
+            : base(treeView)
         {
-            //this.IsHitTestVisible = false;
-            designerCanvas = designer;
+            this.treeView = treeView;
             this.sourceConnector = sourceConnector;
             this.sourceConnectorAdorner = sourceConnectorAdorner;
             drawingPen = new Pen(Brushes.LightSlateGray, 1);
             drawingPen.LineJoin = PenLineJoin.Round;
             Cursor = Cursors.Cross;
+        }
+
+        public ConnectionEventArgs Args { get; set; }
+
+
+        public event RoutedEventHandler Hit
+        {
+            add { AddHandler(HitEvent, value); }
+            remove { RemoveHandler(HitEvent, value); }
+        }
+
+
+        public event RoutedEventHandler ConnectionMade
+        {
+            add { AddHandler(ConnectionMadeEvent, value); }
+            remove { RemoveHandler(ConnectionMadeEvent, value); }
         }
 
         protected override void OnMouseUp(MouseButtonEventArgs e)
@@ -57,7 +109,16 @@ namespace Utility.WPF.TreeView.Connectors
                             {
                                 //_tuple = connAdorner.Match(this.hitItem, designerCanvas, hitPoint);
                                 var hitConnector = connAdorner;
-                                sinkConnector = hitConnector.Match(hitItem, designerCanvas, hitPoint);
+
+                                sinkConnector = hitConnector.Match(hitItem, treeView, hitPoint);
+                                if (sinkConnector is not null)
+                                {
+                                    var pos = hitItem.TransformToAncestor(treeView).Transform(sinkConnector.Rect().Centre());
+                                    //Ex.ConnectionMade(treeView, pos, sourceConnector, sinkConnector);
+                                    Args = new ConnectionEventArgs(ConnectionMadeEvent, treeView, pos, sourceConnector, sinkConnector, true);
+                                    RaiseEvent(Args);
+                                }
+
                             }
                         }
                     }
@@ -97,7 +158,7 @@ namespace Utility.WPF.TreeView.Connectors
             }
             else
             {
-                AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(designerCanvas);
+                AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(treeView);
                 if (adornerLayer != null)
                 {
                     adornerLayer.Remove(this);
@@ -121,30 +182,30 @@ namespace Utility.WPF.TreeView.Connectors
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                if (!IsMouseCaptured)
-                    CaptureMouse();
+            //if (e.LeftButton == MouseButtonState.Pressed)
+            //{
+            if (!IsMouseCaptured)
+                CaptureMouse();
 
-                var sinkCentre = e.GetPosition(this);
-                HitTesting(sinkCentre);
-                pathGeometry = GetPathGeometry(sourceCentre(), sinkCentre);
-                InvalidateVisual();
-            }
-            else
-            {
-                if (IsMouseCaptured) ReleaseMouseCapture();
-            }
+            var sinkCentre = e.GetPosition(this);
+            HitTesting(sinkCentre);
+            pathGeometry = GetPathGeometry(sourceCentre(), sinkCentre);
+            InvalidateVisual();
+            //}
+            //else
+            //{
+            //    if (IsMouseCaptured) ReleaseMouseCapture();
+            //}
         }
 
         private Point sourceCentre()
         {
-            return sourceConnector.element.TransformToAncestor(designerCanvas).Transform(sourceConnector.Rect().Centre());
+            return sourceConnector.element.TransformToAncestor(treeView).Transform(sourceConnector.Rect().Centre());
         }
 
         private Point sinkCentre()
         {
-            return sinkConnector.element.TransformToAncestor(designerCanvas).Transform(sinkConnector.Rect().Centre());
+            return sinkConnector.element.TransformToAncestor(treeView).Transform(sinkConnector.Rect().Centre());
         }
 
         protected override void OnRender(DrawingContext dc)
@@ -161,6 +222,7 @@ namespace Utility.WPF.TreeView.Connectors
             if (sourceConnector != null)
                 dc.DrawEllipse(Brushes.Pink, new Pen(Brushes.Black, 1), sourceCentre(), 2, 2);
 
+
             // without a background the OnMouseMove event would not be fired
             // Alternative: implement a Canvas as a child of this adorner, like
             // the ConnectionAdorner does.
@@ -169,9 +231,10 @@ namespace Utility.WPF.TreeView.Connectors
 
         }
 
+
         private PathGeometry GetPathGeometry(Point sourcePosition, Point sinkPosition)
         {
-            PathGeometry geometry = new PathGeometry();
+            PathGeometry geometry = new();
 
             Position2D targetOrientation;
             if (sinkConnector != null)
@@ -198,7 +261,7 @@ namespace Utility.WPF.TreeView.Connectors
 
         private void HitTesting(Point hitPoint)
         {
-            DependencyObject hitObject = designerCanvas.InputHitTest(hitPoint) as DependencyObject;
+            DependencyObject hitObject = treeView.InputHitTest(hitPoint) as DependencyObject;
             while (hitObject != null &&
                    hitObject != sourceConnectorAdorner.AdornedElement &&
                    hitObject.GetType() != typeof(Canvas))
@@ -226,12 +289,14 @@ namespace Utility.WPF.TreeView.Connectors
                 {
                     if (item.GetValue(Ex.IsConnectableProperty) is true)
                     {
-                        var pos = (Position?)item.GetValue(Ex.PositionProperty);
+                        var pos = (Position2D)item.GetValue(Ex.PositionProperty);
 
                         if (hitItem != null)
-                            Ex.Remove(hitItem);
+                            this.RaiseEvent(new HitEventArgs(hitItem, HitEvent));
+                        //Ex.Remove(hitItem);
                         hitItem = item;
-                        Ex.Add(item, pos);
+                        this.RaiseEvent(new HitEventArgs(item, HitEvent, pos));
+                        //Ex.Add(item, pos);
                         return;
                     }
 
@@ -241,35 +306,10 @@ namespace Utility.WPF.TreeView.Connectors
             }
             if (hitItem != null)
             {
-
-                Ex.Remove(hitItem);
+                this.RaiseEvent(new HitEventArgs(hitItem, HitEvent));
+                //Ex.Remove(hitItem);
                 hitItem = null;
             }
         }
-
-        //public void add(FrameworkElement element, Position? pos = null)
-        //{
-        //    AdornerLayer adornerLayer = AdornerLayer.GetAdornerLayer(element);
-        //    if (adornerLayer != null)
-        //    {
-
-        //        if (adornerLayer.GetAdorners(this.hitItem) is Adorner[] adornersOfStackPanel)
-        //        {
-
-
-        //            foreach (var _adorner in adornersOfStackPanel)
-        //            {
-        //                if (_adorner is ConnectorAdorner connAdorner)
-        //                {
-        //                    adornerLayer.Remove(_adorner);
-        //                }
-        //            }
-        //        }
-        //        //remove();
-        //        var adorner = new ConnectorAdorner(element, pos);
-        //        adornerLayer.Add(adorner);
-        //        //e.Handled = true;
-        //    }
-        //}
     }
 }

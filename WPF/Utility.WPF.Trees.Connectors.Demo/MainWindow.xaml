@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Utility.WPF.TreeView.Connectors.Demo"
-                xmlns:WPF.Connectors="clr-namespace:Utility.WPF.TreeView.Connectors;assembly=Utility.WPF.TreeView.Connectors"
+        xmlns:WPF.Connectors="clr-namespace:Utility.WPF.Trees.Connectors;assembly=Utility.WPF.Trees.Connectors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.Resources>

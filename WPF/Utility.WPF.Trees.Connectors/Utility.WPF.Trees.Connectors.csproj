@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
     <ProjectReference Include="..\Utility.WPF.Reactives\Utility.WPF.Reactives.csproj" />
   </ItemGroup>
 

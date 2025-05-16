@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using Utility.Enums;
 
-namespace Utility.WPF.TreeView.Connectors
+namespace Utility.WPF.Trees.Connectors
 {
     public abstract class Connector(FrameworkElement element, Position2D orientation)
     {
