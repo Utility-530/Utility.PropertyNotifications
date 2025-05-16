@@ -72,7 +72,7 @@ namespace Utility.Nodes.Demo.Queries
 
                                         if (node.Data is AndOrModel { } andOrModel)
                                         {
-                                            if (andOrModel.Get(item))
+                                            if (andOrModel.Evaluate(item))
                                             {
                                                 var template = Application.Current.TryFindResource(filter.Key) as ControlTemplate;
                                                 Application.Current.Resources[id.Id] = template;

@@ -68,7 +68,7 @@ namespace Utility.Nodes.Demo.Queries
 
                                 if (node.Data is AndOrModel { } andOrModel)
                                 {
-                                    if (andOrModel.Get(item))
+                                    if (andOrModel.Evaluate(item))
                                     {
                                         var dataTemplate = Application.Current.TryFindResource(filter.Key) as DataTemplate;
                                         dataTemplates[item] = dataTemplate;

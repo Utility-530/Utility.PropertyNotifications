@@ -53,7 +53,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                             return;
                         }
                         observer.OnNext(null);
-                        transformersModel.Transformers.SelfAndAdditions().Subscribe(transformer =>
+                        transformersModel.Collection.SelfAndAdditions().Subscribe(transformer =>
                         {
                             changes(transformer)
                             .Subscribe(a =>
@@ -122,7 +122,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                                                             observer.OnNext(new TransformerException(transformer, "filter is null"));
                                                             return;
                                                         }
-                                                        if (input.Filter.Get(a))
+                                                        if (input.Filter.Evaluate(a))
                                                         {
                                                             //if (transformer.Source.TryGetValue(a, out var value))
                                                             //    results.Add(value);
@@ -230,7 +230,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                                                 }).ForEach(a =>
                                                 {
 
-                                                    if (transformer.Output.Filter.Get(a))
+                                                    if (transformer.Output.Filter.Evaluate(a))
                                                     {
                                                         try
                                                         {

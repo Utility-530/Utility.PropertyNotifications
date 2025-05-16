@@ -146,7 +146,7 @@ namespace Utility.Nodes.Demo.Queries
                         {
                             if (a.Data is AndOrModel andOrModel)
                             {
-                                if (andOrModel.Get(user))
+                                if (andOrModel.Evaluate(user))
                                 {
                                     filteredUsers.Add(user);
                                 }
