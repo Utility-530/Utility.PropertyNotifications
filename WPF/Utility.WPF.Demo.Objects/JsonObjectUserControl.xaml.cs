@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +21,7 @@ namespace Utility.WPF.Demo.Objects
         {
             JsonConvert.DefaultSettings = () => Combined;
             InitializeComponent();
+            this.Resources.Add("exceptions", new List<Exception> { new ExceptionOne(), new ExceptionTwo(), new Exception() });
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

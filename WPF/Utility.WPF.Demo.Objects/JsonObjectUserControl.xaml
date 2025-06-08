@@ -9,18 +9,13 @@
     xmlns:view="http://schemas.utility.com/objects"
     xmlns:model="clr-namespace:Utility.Models;assembly=Utility.Models"
     xmlns:conv="http://schemas.utility.com/converters"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <UserControl.Resources>
         <sys:Exception x:Key="exception" />
-
-        <x:Array x:Key="exceptions" Type="{x:Type sys:Exception}">
-            <local:ExceptionOne ></local:ExceptionOne>
-            <local:ExceptionTwo ></local:ExceptionTwo>
-            <sys:Exception ></sys:Exception>
-        </x:Array>
-
+        <local:ExceptionOne x:Key="ExceptionOne" ></local:ExceptionOne>
         <conv:ColorConverter x:Key="ColorConverter"></conv:ColorConverter>
 
         <DataTemplate x:Key="Ellipse">
@@ -40,7 +35,7 @@
         </ObjectDataProvider>
 
         <view:ObjectToTokenConverter x:Key="ObjectToTokenConverter"/>
-        
+
     </UserControl.Resources>
     <DockPanel Name="DockPanel" Visibility="Visible">
         <StackPanel DockPanel.Dock="Top">
@@ -57,8 +52,12 @@
         <Grid>
             <UniformGrid>
                 <view:JsonControl Object="{Binding Source={StaticResource Characters}, Converter={StaticResource ObjectToTokenConverter}}" Schema="{StaticResource CharacterSchema}"/>
-                <view:JsonControl Object="{Binding Source={StaticResource exception}, Converter={StaticResource ObjectToTokenConverter}}" Schema="{Binding Source={StaticResource SchemaFromFile}}"/>
-                <view:JsonControl Object="{Binding Source={StaticResource exceptions}, Converter={StaticResource ObjectToTokenConverter}}" Schema="{Binding Source={StaticResource SchemaFromFile}}"/>
+                <view:JsonControl Object="{Binding Source={StaticResource ExceptionOne}, Converter={StaticResource ObjectToTokenConverter}}" Schema="{Binding Source={StaticResource SchemaFromFile}}"/>
+                <view:JsonControl>
+                    <i:Interaction.Behaviors>
+                        <view:ObjectBehavior Object="{DynamicResource exceptions}"/>
+                    </i:Interaction.Behaviors>
+                </view:JsonControl>
                 <DockPanel>
                     <Button DockPanel.Dock="Top" 
                         Click="Button_Click"
@@ -67,20 +66,20 @@
                     </Button>
                     <view:JsonControl x:Name="JsonControl" />
                 </DockPanel>
-                  <Grid>
-                    <Grid.Resources> 
-                          <!--DataTemplate for Published Date column defined in Grid.Resources.  PublishDate is a property on the ItemsSource of type DateTime-->  
+                <Grid>
+                    <Grid.Resources>
+                        <!--DataTemplate for Published Date column defined in Grid.Resources.  PublishDate is a property on the ItemsSource of type DateTime-->
                         <DataTemplate x:Key="DateTemplate">
                             <view:JsonControl Object="{Binding Converter={StaticResource ObjectToTokenConverter}}" />
                         </DataTemplate>
-                          <!--DataTemplate for the Published Date column when in edit mode.-->  
+                        <!--DataTemplate for the Published Date column when in edit mode.-->
                         <DataTemplate x:Key="EditingDateTemplate">
                             <DatePicker />
                         </DataTemplate>
                     </Grid.Resources>
                     <DataGrid AutoGenerateColumns="False" ItemsSource="{StaticResource Characters}">
                         <DataGrid.Columns>
-                              <!--Custom column that shows the published date-->  
+                            <!--Custom column that shows the published date-->
                             <DataGridTemplateColumn
                                 CellEditingTemplate="{StaticResource EditingDateTemplate}"
                                 CellTemplate="{StaticResource DateTemplate}"
