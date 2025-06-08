@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Conversions\Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Objects\Utility.WPF.Controls.Objects.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Trees\Utility.WPF.Trees.csproj" />
+		<ProjectReference Include="..\Utility.Nodes.Demo.Filters\Utility.Nodes.Demo.Filters.csproj" />
+		<ProjectReference Include="..\Utility.Nodes.WPF\Utility.Nodes.WPF.csproj" />
+		<ProjectReference Include="..\Utility.Nodes.Filters\Utility.Nodes.Filters.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Data\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Dragablz" Version="0.0.3.234" />
+	  <PackageReference Include="MaterialDesignThemes" Version="5.2.2-ci998" />
+	</ItemGroup>
+</Project>

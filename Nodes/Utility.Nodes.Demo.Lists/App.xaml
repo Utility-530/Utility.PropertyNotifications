@@ -1,0 +1,41 @@
+﻿<Application x:Class="Utility.Nodes.Demo.Lists.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Utility.Nodes.Demo.Lists"
+             xmlns:bc="http://schemas.utility.com/Breadcrumbs"
+             xmlns:ct="http://schemas.utility.com/trees"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             xmlns:inf="clr-namespace:Utility.Nodes.Filters;assembly=Utility.Nodes.Filters"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:beh="http://schemas.utility.com/behaviors"
+             xmlns:att="http://schemas.utility.com/attached"
+             xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
+             xmlns:filters="clr-namespace:Utility.Nodes.WPF;assembly=Utility.WPF.Trees" 
+             xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit" 
+             xmlns:node="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
+             xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020" 
+             xmlns:res="http://schemas.utility.com/resourcedictionary" 
+             xmlns:utl="http://schemas.utility.com/utilitywpf" 
+             xmlns:btns="http://schemas.utility.com/buttons">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItem.xaml"/>
+                <ResourceDictionary Source="/Utility.WPF.Controls.Breadcrumbs;component/Themes/Generic.xaml"/>
+                <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
+                <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml"/>
+                <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Generic.xaml"/>
+                <res:SharedResourceDictionary Source="/Themes/Slave.xaml"/>
+                <res:SharedResourceDictionary Source="/Themes/Master.xaml"/>
+                <res:SharedResourceDictionary Source="/Themes/Container.xaml"/>
+                <res:SharedResourceDictionary Source="/Themes/Child.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+
+
+            
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
