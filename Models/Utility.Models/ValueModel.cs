@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 
@@ -21,10 +22,13 @@ namespace Utility.Models
             this.value = value;
         }
 
+        public override void Initialise()
+        {
+        }
 
         public virtual T? Value
         {
-            get => RaisePropertyCalled(value);
+            get { RaisePropertyCalled(value); return value; }
             set => this.RaisePropertyReceived(ref this.value, value);
         }
 
@@ -40,6 +44,11 @@ namespace Utility.Models
             else
             {
             }
+        }
+
+        public override void SetNode(INode node)
+        {
+            Node = node;
         }
 
         object? IGet.Get() => this.value;

@@ -34,19 +34,24 @@ namespace Utility.Models
 
         public CollectionModel()
         {
+            Initialise();
+        }
+
+        public virtual void Initialise()
+        {
             this.WithChangesTo(a => a.Limit)
-                .CombineLatest(this.WithChangesTo(a => a.Node, includeNulls: false))
-                .Subscribe(a =>
-                {
-                    a.Second.Items.AndChanges<IReadOnlyTree>().Subscribe(c =>
-                    {
-                        Helpers.Generic.LinqEx.RemoveTypeOf<LimitExceededException, Exception>(Node.Errors);
-                        var count = a.Second.Count(a => a is IRemoved { Removed: null });
-                        a.Second.IsAugmentable = count < a.First;
-                        if (count > a.First)
-                            Node.Errors.Add(new LimitExceededException(a.First, count - a.First));
-                    });
-                });
+        .CombineLatest(this.WithChangesTo(a => a.Node, includeNulls: false))
+        .Subscribe(a =>
+        {
+            a.Second.Items.AndChanges<IReadOnlyTree>().Subscribe(c =>
+            {
+                Helpers.Generic.LinqEx.RemoveTypeOf<LimitExceededException, Exception>(Node.Errors);
+                var count = a.Second.Count(a => a is IRemoved { Removed: null });
+                a.Second.IsAugmentable = count < a.First;
+                if (count > a.First)
+                    Node.Errors.Add(new LimitExceededException(a.First, count - a.First));
+            });
+        });
 
             Collection
                 .AndAdditions()
