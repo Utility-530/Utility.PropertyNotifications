@@ -6,9 +6,10 @@ namespace Utility.WPF.Converters
 {
     public class DefaultConverter : IValueConverter
     {
+        object value;
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value;
+            return this.value = value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
