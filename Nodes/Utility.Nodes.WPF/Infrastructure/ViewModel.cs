@@ -14,7 +14,15 @@ namespace Utility.Nodes.WPF
         private readonly Dictionary<string, ObservableCollection<IReadOnlyTree>> dictionary = [];
         private ObservableCollection<IReadOnlyTree> this[string key] => dictionary.GetValueOrNew(key);
 
+        public virtual string Name
+        {
+            get
+            {
+                return this.GetType().Name;
+            }
+        }
 
+        public bool IsSelected { get => isSelected; set => RaisePropertyChanged(ref isSelected, value); }
         protected IEnumerable<IReadOnlyTree> get(string name, [CallerMemberName] string? propertyName = default)
         {
             if (propertyName == null)
@@ -36,6 +44,7 @@ namespace Utility.Nodes.WPF
 
         protected System.Reactive.Disposables.CompositeDisposable disposables = new();
         private bool _disposed;
+        private bool isSelected;
 
         public void Dispose()
         {

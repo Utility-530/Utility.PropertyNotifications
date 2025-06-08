@@ -85,8 +85,7 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>
     </DataTemplate>
-
-
+    
     <DataTemplate DataType="{x:Type inf:IndexModel}">
         <xc:IntegerUpDown   Value="{Binding Value}"></xc:IntegerUpDown>
     </DataTemplate>
@@ -345,6 +344,44 @@
         Grid.ColumnSpan="3"
         Text="{Binding FilePath, Mode=TwoWay}"
         Name="txtAddress"/>
+        </Grid>
+    </DataTemplate>
+
+
+
+    <DataTemplate DataType="{x:Type inf:ModelTypeModel}">
+        <Grid
+                            Margin="0,4,4,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+
+            <ContentControl Content="{Binding Value, Mode=OneWay, Converter={x:Static conv:DefaultConverter.Instance}}">
+                <ContentControl.ContentTemplate>
+                    <DataTemplate>
+                        <Grid Background="{c:Amber}" 
+                                x:Name="tile"
+                                Grid.Column="0"
+                                Width="85"
+                                Height="85"
+                                Margin="5"
+                                >
+
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    FontSize="14"
+                                    FontWeight="Normal"
+                                    Text="{Binding Alias}"
+                                    TextWrapping="WrapWithOverflow" />
+                        </Grid>
+                    </DataTemplate>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+        
         </Grid>
     </DataTemplate>
 
