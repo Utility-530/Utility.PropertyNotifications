@@ -11,14 +11,7 @@ namespace Utility.WPF.Panels
     /// </summary>
     public class AnimatedWrapPanel : Panel
     {
-        private static readonly TimeSpan _animationLength = TimeSpan.FromMilliseconds(250);
-        public static readonly DependencyProperty AnimationTimeProperty = DependencyProperty.Register("AnimationTime", typeof(TimeSpan), typeof(AnimatedWrapPanel), new PropertyMetadata(_animationLength));
-
-        public TimeSpan AnimationTime
-        {
-            get { return (TimeSpan)GetValue(AnimationTimeProperty); }
-            set { SetValue(AnimationTimeProperty, value); }
-        }
+        private readonly TimeSpan _animationLength = TimeSpan.FromMilliseconds(250);
 
         protected override Size MeasureOverride(Size availableSize)
         {
@@ -57,13 +50,19 @@ namespace Utility.WPF.Panels
 
         protected override Size ArrangeOverride(Size finalSize)
         {
-            if (this.Children == null || this.Children.Count == 0)
+            if (Children == null || Children.Count == 0)
                 return finalSize;
 
             double curX = 0, curY = 0, curLineHeight = 0;
 
             foreach (UIElement child in Children)
             {
+                if(child.RenderTransform is not TranslateTransform trans)
+                {
+                    child.RenderTransformOrigin = new Point(0, 0);
+                    child.RenderTransform = new TranslateTransform(); 
+                }
+
                 if (curX + child.DesiredSize.Width > finalSize.Width)
                 { //Wrap to next line
                     curY += curLineHeight;
@@ -71,11 +70,13 @@ namespace Utility.WPF.Panels
                     curLineHeight = 0;
                 }
 
-                child.Arrange(new Rect(0, 0, child.DesiredSize.Width, child.DesiredSize.Height));
+                child.Arrange(new Rect(0, 0, child.DesiredSize.Width,
+                    child.DesiredSize.Height));
 
-                AnimationHelper.AnimatePosition(child, curX, curY, AnimationTime);
+                child.RenderTransform.BeginAnimation(TranslateTransform.XProperty, new DoubleAnimation(curX, _animationLength), HandoffBehavior.Compose);
+                child.RenderTransform.BeginAnimation(TranslateTransform.YProperty, new DoubleAnimation(curY, _animationLength), HandoffBehavior.Compose);
 
-                                curX += child.DesiredSize.Width;
+                curX += child.DesiredSize.Width;
                 if (child.DesiredSize.Height > curLineHeight)
                     curLineHeight = child.DesiredSize.Height;
             }
