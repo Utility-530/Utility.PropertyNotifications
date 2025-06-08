@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Collections;
 using System.Reflection;
 using Utility.Helpers;
+using Utility.Helpers.Reflection;
 
 namespace Utility.Conversions.Json.Newtonsoft
 {

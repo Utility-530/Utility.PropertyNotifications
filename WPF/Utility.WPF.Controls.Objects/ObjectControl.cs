@@ -17,6 +17,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Controls.Objects
 {

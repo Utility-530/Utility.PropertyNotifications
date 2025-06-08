@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows.Data;
 using System.Windows.Markup;
 using Utility.Helpers;
+using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Converters
 {

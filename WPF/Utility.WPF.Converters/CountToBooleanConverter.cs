@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Helpers;
+using Utility.Helpers.Reflection;
 using Utility.Helpers.NonGeneric;
 using Utility.WPF.Helpers;
 

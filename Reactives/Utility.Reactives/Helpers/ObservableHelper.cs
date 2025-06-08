@@ -10,6 +10,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Reactive.Threading.Tasks;
 using System.Threading.Tasks;
+using Utility.Helpers.Reflection;
 
 namespace Utility.Reactives;
 
@@ -338,7 +339,7 @@ IScheduler? scheduler = null)
 
     public static IObservable<T> OfGenericType<T>(this IObservable<object> value, Type? type = null)
     {
-        return value.Select(v => Utility.Helpers.TypeHelper.OfType<T>(v, type)).WhereNotDefault();
+        return value.Select(v => TypeHelper.OfType<T>(v, type)).WhereNotDefault();
     }    
     
     

@@ -29,15 +29,6 @@ namespace Utility.Helpers.Ex
             });
         }
 
-        public static IEnumerable<(string, Func<T?>)> GetStaticMethods<T>(this Type t, params object[] parameters)
-        {
-            var typename = typeof(T).Name;
-            return t
-                    .GetMethods(BindingFlags.Public | BindingFlags.Static)
-                       // filter by return type
-                       .Where(a => a.ReturnType.Name == typename)
-                        .Select(m => (m.GetDescription(), new Func<T?>(() => (T?)m.Invoke(null, parameters))));
-        }
         public static IObservable<Assembly> LoadedAssemblies()
         {
             return Observable

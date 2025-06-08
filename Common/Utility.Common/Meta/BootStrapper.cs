@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Utility.Helpers;
+using Utility.Helpers.Reflection;
 
 namespace Utility.Common
 {
