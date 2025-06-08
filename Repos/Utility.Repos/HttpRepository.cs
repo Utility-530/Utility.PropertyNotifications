@@ -1,8 +1,7 @@
-﻿using System.Text.Json;
-using System.Web;
-using Utility.Interfaces.NonGeneric;
+﻿using System.Web;
 using Utility.Models;
 using _Key = Utility.Models.Key;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 namespace Utility.Repos
 {
     public class HttpRepository : IRepository

@@ -1,11 +1,7 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using Splat;
-using System;
 using System.Reactive.Disposables;
-using System.Reactive.Linq;
 using Utility.Interfaces.Exs;
-using Utility.Interfaces.NonGeneric;
 using Utility.Structs.Repos;
 
 namespace Utility.Repos
@@ -166,7 +162,7 @@ namespace Utility.Repos
                     innerToken.Replace(null);
 
                 }
-                else if (Helpers.TypeHelper.IsValueOrString(value.GetType()) == false)
+                else if (TypeHelper.IsValueOrString(value.GetType()) == false)
                 {
                     var _value = JToken.FromObject(value);
                     innerToken.Replace(_value);
