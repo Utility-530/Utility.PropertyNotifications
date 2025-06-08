@@ -81,7 +81,7 @@ namespace Utility.Nodes.Filters
 
         public override object Get(object instance)
         {
-            return (instance as INode).Current.Key;
+            return (instance as INode).Current?.Key;
         }
     }
 

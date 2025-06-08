@@ -314,7 +314,7 @@ namespace Utility.Nodes.Filters
                 }
 
 
-                if (data is IValue value && value.Value != null)
+                if (data is IValue value && Helpers.Reflection.Comparison.IsDefaultValue(value.Value) == false)
                     repository.Value.Set((GuidKey)node.Key, nameof(Node.Data) + "." + nameof(IValue.Value), value.Value, DateTime.Now);
 
             }

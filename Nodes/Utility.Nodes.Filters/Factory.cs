@@ -33,6 +33,7 @@ namespace Utility.Nodes.Filters
         public const string demo_content = nameof(demo_content);
         public const string input_control = nameof(input_control);
         public const string input_node = nameof(input_node);
+        public const string list = nameof(list);
 
         // readonly Guid assGuid = Guid.Parse("10126895-6855-45ab-97af-21ed90c02fe8");
         // readonly Guid relGuid = Guid.Parse("5c90fcd6-2324-4f88-bffb-73b8f9fbcf6b");
@@ -54,6 +55,7 @@ namespace Utility.Nodes.Filters
         private readonly Guid collectionGuid = Guid.Parse("d6fa45af-e543-4ac9-bec4-fcbd3a800097");
         private readonly Guid input_controlGuid = Guid.Parse("d31ca5b1-0de0-41cb-8c7d-e83a4f0c8237");
         private readonly Guid input_nodeGuid = Guid.Parse("3dded14d-0f46-4ab8-bce3-50ac339e6d97");
+        private readonly Guid list_Guid = Guid.Parse("2dbf056e-f32e-4c21-aa72-1599cb783d6a");
 
         public const string Refresh = nameof(Refresh);
         public const string Run = nameof(Run);
@@ -68,7 +70,6 @@ namespace Utility.Nodes.Filters
         public const string Load = nameof(Load);
         public const string Select = nameof(Select);
         public const string Cancel = nameof(Cancel);
-
 
         public IObservable<INode> BuildRoot()
         {
@@ -110,6 +111,13 @@ namespace Utility.Nodes.Filters
                 subGuid,
                 s => new Node(s) { },
                 s => new DataFilesModel { Name = s });
+        }
+        public IObservable<INode> BuildListRoot()
+        {
+            return nodeSource.Create(list,
+                list_Guid,
+                s => new Node(s) { },
+                s => new ModelTypesModel { Name = s });
         }
 
         public IObservable<INode> BuildTransformersRoot()
