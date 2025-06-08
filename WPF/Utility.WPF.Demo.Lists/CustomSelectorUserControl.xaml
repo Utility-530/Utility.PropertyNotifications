@@ -19,8 +19,12 @@
         <local:CustomSelectorViewModel/>
     </FrameworkElement.DataContext>
 
-    <Grid>
+    <DockPanel>
+        <WrapPanel DockPanel.Dock="Top">
+            <ToggleButton x:Name="ToggleButton1">     Is Grid    </ToggleButton>
+        </WrapPanel>
         <view:CustomSelector ItemsWidth="300" ItemsHeight="500"
+                             IsGrid="{Binding ElementName=ToggleButton1, Path=IsChecked}"
                                CheckedPropertyName="IsRhPositive"                               
                                d:ItemsSource="{StaticResource Characters}" 
                                ItemsSource="{Binding Items}" >
@@ -31,5 +35,5 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </view:CustomSelector>
-    </Grid>
+    </DockPanel>
 </UserControl>

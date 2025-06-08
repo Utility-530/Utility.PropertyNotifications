@@ -12,12 +12,12 @@
     xmlns:infra1="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common"
     xmlns:demoApp="clr-namespace:Utility.WPF.Demo.Lists.Infrastructure"
     xmlns:utl1="http://schemas.utility.com/utilitywpf"
-    xmlns:enum="clr-namespace:Utility.Enums;assembly=Utility.Enums"
+    xmlns:enum="clr-namespace:Utility.Enums;assembly=Utility.Enums" xmlns:rd="http://schemas.utility.com/resourcedictionary" xmlns:b1="http://schemas.utility.com/behaviors"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    <!--<FrameworkElement.Resources>
+    <FrameworkElement.Resources>
         <utl:BooleanToOrientationConverter x:Key="BooleanToOrientationConverter" />
     </FrameworkElement.Resources>
 
@@ -28,7 +28,7 @@
         </btns:ToggleButton>
         <ComboBox x:Name="ComboBox" DockPanel.Dock="Top" Width="100" Margin="10">
             <i:Interaction.Behaviors>
-                <utl1:EnumSelectorBehavior EnumType="{x:Type enum:Arrangement}" 
+                <b1:EnumSelectorBehavior EnumType="{x:Type enum:Arrangement}" 
                                           SelectedEnum="{x:Static enum:Arrangement.Uniform}"/>
             </i:Interaction.Behaviors>
         </ComboBox>
@@ -59,14 +59,14 @@
                 </GroupBox>
                 <GroupBox>
                     <DockPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                        --><!--<FrameworkElement.Resources>
-                <utl:SharedResourceDictionary Source="/Utility.WPF.Demo.Common;component/Themes/Material.xaml" />
-            </FrameworkElement.Resources>--><!--
+                        <FrameworkElement.Resources>
+                            <rd:SharedResourceDictionary Source="/Utility.WPF.Demo.Common;component/Themes/Material.xaml" />
+            </FrameworkElement.Resources>
 
                         <view:ButtonsControl x:Name="ButtonsControl"
                                   Orientation="{Binding ElementName=ToggleButton, Path=IsChecked, Converter={StaticResource BooleanToOrientationConverter}}">
                             <i:Interaction.Behaviors>
-                                <utl1:EnumSelectorBehavior EnumType="{x:Type Visibility}"></utl1:EnumSelectorBehavior>
+                                <b1:EnumSelectorBehavior EnumType="{x:Type Visibility}"></b1:EnumSelectorBehavior>
                             </i:Interaction.Behaviors>
                         </view:ButtonsControl>
 
@@ -91,7 +91,7 @@
                                 </DataTemplate>
                             </FrameworkElement.Resources>
                             <i:Interaction.Behaviors>
-                                <utl1:DataTemplateSelectorBehavior Type="{x:Type infra1:ButtonViewModel}" />
+                                <b1:DataTemplateSelectorBehavior Type="{x:Type infra1:ButtonViewModel}" />
                             </i:Interaction.Behaviors>
                         </view:ButtonsControl>
                         <ContentControl ContentTemplate="{Binding ElementName=Buttons2Control, Path=Output}">
@@ -114,5 +114,5 @@
                 </GroupBox>
             </ItemsControl>
         </ScrollViewer>
-    </DockPanel>-->
+    </DockPanel>
 </UserControl>

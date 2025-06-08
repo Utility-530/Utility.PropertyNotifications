@@ -21,6 +21,7 @@
 
     <FrameworkElement.Resources>
         <utl:BooleanToOrientationConverter x:Key="BooleanToOrientationConverter" />
+        <infra:CommandConverter x:Key="CommandConverter" />
     </FrameworkElement.Resources>
 
     <UniformGrid>        
@@ -116,7 +117,7 @@
                     DataContext="{Binding FilterCollectionViewModel}"
                     DockPanel.Dock="Top"
                     SelectedValuePath="Header"
-                    OutputChange="{utl1:Command Command, ConversionType=Default}"
+                    OutputChange="{utl1:Command Command, ConversionType=Default, Converter={StaticResource CommandConverter}}"
                     ItemsSource="{Binding Collection}"
                     IsCheckedPath="IsChecked"                  
                     Orientation="{Binding ElementName=ToggleButton, Path=Content}">
