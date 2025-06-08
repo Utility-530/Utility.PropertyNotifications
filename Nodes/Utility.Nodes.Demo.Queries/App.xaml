@@ -71,34 +71,10 @@
                                 <local:HighlightItems x:Name="a" Items="{Binding Filtered}"/>
                             </i:Interaction.Behaviors>
                         </TreeView>
-                        <!--<TreeView x:Name="MyTreeView"            
-                        AlternationCount="{Binding RelativeSource={RelativeSource Self}, Path=Items.Count}" >
-
-                        <TreeViewItem Header="Item2" >
-                            <TreeViewItem Header="SubItem1"/>
-                            <TreeViewItem Header="SubItem2" />
-                        </TreeViewItem>
-                        <TreeViewItem Header="Item3" >
-                            <TreeViewItem Header="SubItem3" />
-                            <TreeViewItem Header="SubItem4" />
-                            <TreeViewItem Header="SubItem5" />
-                            <TreeViewItem Header="SubItem6" />
-                            <TreeViewItem Header="SubItem7" />
-                            <TreeViewItem Header="SubItem8" >
-                                <TreeViewItem Header="SubSubItem1" />
-                                <TreeViewItem Header="SubSubItem2" />
-                                <TreeViewItem Header="SubSubItem3" />
-                                <TreeViewItem Header="SubSubItem4" />
-                            </TreeViewItem>
-                        </TreeViewItem>
-                    </TreeView>-->
-
-                        <!--<DataGrid x:Name="DataGrid" ItemsSource="{Binding Users}"/>-->
 
                         <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
 
-                        <DockPanel Grid.Column="2">
-                            <lsts:CustomSelector x:Name="ListBox" ItemsSource="{Binding Filters}"
+                            <lsts:CustomSelector  Grid.Column="2" x:Name="ListBox" ItemsSource="{Binding Filters}"
                                                  SelectedItem="{Binding Filter, Mode=TwoWay}" 
                                                  CheckedCommand="{Binding CheckedCommand}" 
                                                  ItemsWidth="560"
@@ -117,8 +93,8 @@
                                                         <ControlTemplate>
                                                             <Grid>
                                                                 <Grid.RowDefinitions>
-                                                                    <RowDefinition Height="*"/>
-                                                                    <RowDefinition Height="*"/>
+                                                                    <RowDefinition Height="Auto"/>
+                                                                    <RowDefinition Height="Auto"/>
                                                                 </Grid.RowDefinitions>
                                                                 <TextBlock FontSize="24" Padding="0" Text="{Binding Name}" HorizontalAlignment="Center"/>
                                                                 <ItemsPresenter Grid.Row="1"/>
@@ -130,16 +106,21 @@
                                         </GroupStyle.ContainerStyle>
                                     </GroupStyle>
                                 </ListBox.GroupStyle>
-                                <ItemsControl.ItemContainerStyle>
+                                <!--<ItemsControl.ItemContainerStyle>
                                     <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource ListBoxItemStyle1}"/>
-                                </ItemsControl.ItemContainerStyle>
+                                </ItemsControl.ItemContainerStyle>-->
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="1"></UniformGrid>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger EventName="FinishEdit">
                                         <i:InvokeCommandAction Command="{Binding FinishEdit}"  PassEventArgsToCommand="True"></i:InvokeCommandAction>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                             </lsts:CustomSelector>
-                        </DockPanel>
+                 
 
                         <GridSplitter Grid.Column="3" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
 

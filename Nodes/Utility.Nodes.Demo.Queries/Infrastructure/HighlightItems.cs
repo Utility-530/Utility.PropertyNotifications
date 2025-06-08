@@ -35,42 +35,41 @@ namespace Utility.Nodes.Demo.Queries
 
         private void update(IEnumerable enumerable)
         {
-
-
-            enumerable.AndChanges<object>().Subscribe(a =>
-            {
-                foreach (var item in a)
+            if (AssociatedObject != null)
+                enumerable.AndChanges<object>().Subscribe(a =>
                 {
-                    TreeViewItem tvi = null;
-                    layer ??= AdornerLayer.GetAdornerLayer(AssociatedObject);
-
-                    if (item is Change { Type: { } type, Value: var _value } _tiv)
+                    foreach (var item in a)
                     {
-                        if (_value is TreeViewItem value)
+                        TreeViewItem tvi = null;
+                        layer ??= AdornerLayer.GetAdornerLayer(AssociatedObject);
 
-                            tvi = value;
+                        if (item is Change { Type: { } type, Value: var _value } _tiv)
+                        {
+                            if (_value is TreeViewItem value)
 
-                        else
-                            tvi = (TreeViewItem)AssociatedObject.ItemContainerGenerator.ContainerFromItem(_value);
-                        if (type == Changes.Type.Add)
-                        {
-                            dictionary[tvi] = new DropTargetHintAdorner(tvi, new Ellipse { Fill = Brushes.Red, Height = 20, Width = 20 });
-                            layer.Add(dictionary[tvi]);
+                                tvi = value;
+
+                            else
+                                tvi = (TreeViewItem)AssociatedObject.ItemContainerGenerator.ContainerFromItem(_value);
+                            if (type == Changes.Type.Add)
+                            {
+                                dictionary[tvi] = new DropTargetHintAdorner(tvi, new Ellipse { Fill = Brushes.Red, Height = 20, Width = 20 });
+                                layer.Add(dictionary[tvi]);
+                            }
+                            else if (type == Changes.Type.Remove)
+                            {
+                                layer.Remove(dictionary[tvi]);
+                                dictionary.Remove(tvi);
+                            }
+                            else if (type == Changes.Type.Reset)
+                            {
+                                layer.RemoveAdorners();
+                                dictionary.Clear();
+                            }
                         }
-                        else if (type == Changes.Type.Remove)
-                        {
-                            layer.Remove(dictionary[tvi]);
-                            dictionary.Remove(tvi);
-                        }
-                        else if (type == Changes.Type.Reset)
-                        {
-                            layer.RemoveAdorners();
-                            dictionary.Clear();
-                        }
+
                     }
-
-                }
-            });
+                });
         }
 
         public IEnumerable Items
@@ -82,6 +81,8 @@ namespace Utility.Nodes.Demo.Queries
 
         protected override void OnAttached()
         {
+            if (Items != null)
+                update(Items);
             base.OnAttached();
         }
     }
