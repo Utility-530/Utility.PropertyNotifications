@@ -123,7 +123,8 @@ namespace Utility.ViewModels
             //        if (a.Action == NotifyCollectionChangedAction.Add)
             //            this.notes.AddRange(a.NewItems.OfType<NoteViewModel>().ToArray());
             //    });
-
+            if (childCollection == null)
+                return;
             for (int i = this.childCollection.Count - 1; i >= 0; i--)
             {
                 //await Task.Delay(50);
@@ -137,8 +138,9 @@ namespace Utility.ViewModels
 
             for (int i = 0; i < replacements.Count; i++)
             {
-                messages.OnNext(new ChildMessage(this.Key,
-                  new IChangeSet<ViewModel, string>[] {
+                if (childCollection.Count > i)
+                    messages.OnNext(new ChildMessage(this.Key,
+                      new IChangeSet<ViewModel, string>[] {
                         new ChangeSet<ViewModel, string>(new[] {
                         new Change<ViewModel, string>(ChangeReason.Add, replacements[i].Key, childCollection[i]) }) }));
             }
