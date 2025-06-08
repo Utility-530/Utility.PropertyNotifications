@@ -79,6 +79,23 @@ namespace Utility.WPF.Controls.Lists
         }
     }
 
+    public class NullTo40Converter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is null)
+            {
+                return new Thickness(0);
+            }
+            return new Thickness(0, 0, 40, 0);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     /// <summary>
     /// Necessary for XAML binding which require a property
     /// </summary>

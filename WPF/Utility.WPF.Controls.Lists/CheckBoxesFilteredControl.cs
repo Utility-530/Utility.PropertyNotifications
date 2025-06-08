@@ -115,9 +115,9 @@ namespace Utility.WPF.Controls.Lists
             }
             else
             {
-                throw new System.Exception($"Expected either {nameof(SelectedValuePath)} or " +
-                    $"{nameof(DisplayMemberPath)} " +
-                    $"to be not null.");
+                //throw new System.Exception($"Expected either {nameof(SelectedValuePath)} or " +
+                //    $"{nameof(DisplayMemberPath)} " +
+                //    $"to be not null.");
             }
         }
 

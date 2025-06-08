@@ -50,9 +50,9 @@ namespace Utility.WPF.Controls.Lists.Infrastructure
             }
             else
             {
-                throw new Exception($"Expected " +
-                     $"{nameof(Selector.DisplayMemberPath)} " +
-                     $"not to be null.");
+                //throw new Exception($"Expected " +
+                //     $"{nameof(Selector.DisplayMemberPath)} " +
+                //     $"not to be null.");
             }
         }
 

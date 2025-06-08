@@ -10,6 +10,7 @@
                     xmlns:beh="http://schemas.utility.com/behaviors" 
                     xmlns:obj="http://schemas.utility.com/objects" 
                     xmlns:local="clr-namespace:Utility.WPF.Controls.Lists"
+                    xmlns:conv="http://schemas.utility.com/converters"
                     >
 
     <ResourceDictionary.MergedDictionaries>
@@ -20,6 +21,10 @@
     <obj:ObjectToTokenConverter x:Key="ObjectToTokenConverter"/>
     <local:ItemsSourceConverter x:Key="ItemsSourceConverter"/>
     <local:ObjectWrapperConverter x:Key="ObjectWrapperConverter"/>
+    <local:NullTo40Converter x:Key="NullTo40Converter"/>
+    <conv:NullToInverseVisibilityConverter x:Key="NullToInverseVisibilityConverter"/>
+    <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+
 
     <Style x:Key="ButtonFocusVisual">
         <Setter Property="Control.Template">
@@ -182,7 +187,6 @@
 
 
 
-
     <Style x:Key="ListBoxItemStyle1" TargetType="ListBoxItem">
         <!--<Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}"/>-->
         <Setter Property="Background" Value="Transparent"/>
@@ -212,10 +216,16 @@
                                           RecognizesAccessKey="True"
                                           Margin="{TemplateBinding Padding}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              Visibility="{Binding ElementName=GridViewRowPresenter, Path=Columns, Converter={StaticResource NullToVisibilityConverter}}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                           Panel.ZIndex="2"/>
 
-                        <Button Style="{StaticResource ButtonClose}"  Panel.ZIndex="3" HorizontalAlignment="Right" Height="20" Width="20"  VerticalAlignment="Top" />
+                        <GridViewRowPresenter Content="{TemplateBinding Content}" 
+                                              x:Name="GridViewRowPresenter"
+                                              Visibility="{Binding ElementName=GridViewRowPresenter, Path=Columns, Converter={StaticResource NullToInverseVisibilityConverter}}"
+                                              Columns="{Binding Columns, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CustomSelector}}}"                        >
+                        </GridViewRowPresenter>
+                        <Button Style="{StaticResource ButtonClose}"  Panel.ZIndex="3" HorizontalAlignment="Right" Height="20" Margin="{Binding ElementName=GridViewRowPresenter, Path=Columns, Converter={StaticResource NullTo40Converter} }" Width="20"  VerticalAlignment="Top" />
                         <CheckBox Style="{StaticResource CheckBoxPingUnPing}"  Panel.ZIndex="4" HorizontalAlignment="Right"  VerticalAlignment="Bottom"/>
                     </Grid>
                 </ControlTemplate>
@@ -253,6 +263,22 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="GridViewColumnHeaderStyle"  TargetType="{x:Type GridViewColumnHeader}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                    <Border BorderThickness="0,0,0,0" BorderBrush="Black" Background="Transparent">
+                        <TextBlock x:Name="ContentHeader" Text="{TemplateBinding Content}" Padding="5,5,5,0" Width="{TemplateBinding Width}" TextAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        <Setter Property="FontSize" Value="12" />
+    </Style>
+
     <Style TargetType="{x:Type local:CustomSelector}" >
         <Style.Resources>
             <DataTemplate x:Key="JsonTemplate">
@@ -286,11 +312,14 @@
             <local:ItemTemplateSelector x:Key="ItemTemplateSelector"  DefaultTemplate="{StaticResource ItemTemplate}"/>
         </Style.Resources>
         <Setter Property="EditTemplate" Value="{StaticResource JsonTemplate}"></Setter>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource ListBoxItemStyle1}"/>
+        <!--<Setter Property="ItemContainerStyleSelector" Value="{StaticResource CustomContainerStyleSelector}"></Setter>-->
         <Setter Property="ItemTemplateSelector" Value="{StaticResource ItemTemplateSelector}"></Setter>
         <Setter Property="Edit" Value="{Binding ItemsSource, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource ItemsSourceConverter}}"></Setter>
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
+         
                     <ext:DraggAnimatedPanel ItemSeparation="2" ItemsHeight="{Binding ItemsHeight, RelativeSource={RelativeSource AncestorType={x:Type local:CustomSelector}}}" 
                                             ItemsWidth="{Binding ItemsWidth, RelativeSource={RelativeSource AncestorType={x:Type local:CustomSelector}}}"
                                             Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType={x:Type local:CustomSelector}}}" 
@@ -312,7 +341,7 @@
           Value="120" />
         <Setter Property="MinHeight"
           Value="20" />
-        <Setter Property="ItemContainerStyle" Value="{StaticResource ListBoxItemStyle1}"/>
+  
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:CustomSelector}">
@@ -320,28 +349,8 @@
 
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
-                            <!--<RowDefinition Height="*"></RowDefinition>-->
                         </Grid.RowDefinitions>
-                        <!--<ToggleButton x:Name="ToggleButton"
-                        Template="{StaticResource ComboBoxToggleButton}"
-                        Grid.Column="2"
-                        Focusable="false"
-                        ClickMode="Press"
-                        IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, 
-              RelativeSource={RelativeSource TemplatedParent}}"/>-->
-
-                        <!--<ContentPresenter x:Name="PART_Header"
-                                      IsHitTestVisible="False"
-                                      Width="200"
-                                      Margin="3,3,23,3"
-                                      Content="{TemplateBinding Selection}"
-                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                      ContentTemplateSelector="{TemplateBinding SelectionBoxTemplateSelector}"
-                                      VerticalAlignment="Stretch"
-                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>-->
-
-
-
+                   
                         <Grid x:Name="DropDown" 
                               Grid.Row="1" 
                               VerticalAlignment="Top"
@@ -349,35 +358,36 @@
                               MinWidth="{Binding ActualWidth}"
                               >
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="30"></RowDefinition>
                                 <RowDefinition Height="*"></RowDefinition>
                                 <RowDefinition Height="Auto"></RowDefinition>
                             </Grid.RowDefinitions>
 
-                            <!--<Border x:Name="DropDownBorder"
-                      BorderThickness="1">
-                                <Border.BorderBrush>
-                                    <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
-                                </Border.BorderBrush>
-                                <Border.Background>
-                                    <SolidColorBrush Color="{DynamicResource ControlLightColor}" />
-                                </Border.Background>
-                            </Border>-->
-
-                            <!--<ScrollViewer Margin="4,6,4,6" VerticalScrollBarVisibility="Visible"
-                                          SnapsToDevicePixels="True">
-                                <ItemsPresenter x:Name="ItemsHost"
-                                                KeyboardNavigation.DirectionalNavigation="Contained" />
-                            </ScrollViewer>-->
+                            <Border x:Name="HeaderBorder" Background="Transparent" Visibility="{TemplateBinding Columns, Converter={StaticResource NullToInverseVisibilityConverter}}">
+                                <!--GridViewRowPrsenter containing the current information.-->
+                                <GridViewHeaderRowPresenter
+                                                            ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}"
+                                    AllowsColumnReorder="{TemplateBinding AllowsColumnReorder}" 
+                                    Columns="{TemplateBinding Columns}" />
+                                
+                            </Border>
+                            
                             <ext:AnimatedScrollViewer
 								x:Name="PART_AnimatedScrollViewer"
 								CanKeyboardScroll="False"                                
 								Padding="{TemplateBinding Padding}"
 								Focusable="false"
+                                Grid.Row="1"
 								ScrollingSpline="0,0.50,0.50,1">
                                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                             </ext:AnimatedScrollViewer>
+                            <Grid DataContext="{TemplateBinding Columns}">
+                                <TextBlock Grid.Row="1" Text="{Binding Length}" FontSize="100"></TextBlock>
+                                <TextBlock Grid.Row="1" Text="{Binding Count}" FontSize="100"></TextBlock>
 
-                            <Border x:Name="Border" Grid.Row="1" Background="LightGray" Margin="4">
+                            </Grid>
+
+                            <Border x:Name="Border" Grid.Row="2" Background="LightGray" Margin="4">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition x:Name="row1" Height="*"/>
@@ -482,10 +492,23 @@
                         <DataTrigger Binding="{Binding Path=IsChecked, ElementName=PlusButton}" Value="False">
                             <Setter TargetName="content_control" Property="Height" Value="0" />
                         </DataTrigger>
+            
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsGrid" Value="True">
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <StackPanel></StackPanel>
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>     
     </Style>
 
 

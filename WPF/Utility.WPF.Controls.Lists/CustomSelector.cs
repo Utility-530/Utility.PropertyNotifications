@@ -8,7 +8,9 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using Utility.Commands;
+using Utility.WPF.Controls.Objects;
 using Utility.WPF.Helpers;
+using Utility.Helpers;
 
 namespace Utility.WPF.Controls.Lists
 {
@@ -17,17 +19,17 @@ namespace Utility.WPF.Controls.Lists
         public static readonly DependencyProperty CheckedCommandProperty =
             DependencyProperty.Register("CheckedCommand", typeof(ICommand), typeof(CustomSelector), new PropertyMetadata(new Command<object>((a) =>
             {
-                if (a is RoutedEventArgs { OriginalSource: ToggleButton { IsChecked:{ } isChecked } control })
+                if (a is RoutedEventArgs { OriginalSource: ToggleButton { IsChecked: { } isChecked } control })
                 {
-                    if(control.FindParent<CustomSelector>() is CustomSelector cs)
-                    if (string.IsNullOrEmpty(cs.CheckedPropertyName) != isChecked)
-                        a.TrySetPropertyValue(cs.CheckedPropertyName, isChecked);
+                    if (control.FindParent<CustomSelector>() is CustomSelector cs)
+                        if (string.IsNullOrEmpty(cs.CheckedPropertyName) != isChecked)
+                            a.TrySetPropertyValue(cs.CheckedPropertyName, isChecked);
                 }
 
             })));
         public static readonly DependencyProperty RemoveCommandProperty =
             DependencyProperty.Register("RemoveCommand", typeof(ICommand), typeof(CustomSelector), new PropertyMetadata());
-     
+
         public static readonly DependencyProperty EditProperty =
             DependencyProperty.Register("Edit", typeof(object), typeof(CustomSelector), new PropertyMetadata());
         public static readonly DependencyProperty EditTemplateSelectorProperty =
@@ -47,6 +49,91 @@ namespace Utility.WPF.Controls.Lists
             DependencyProperty.Register("ItemsHeight", typeof(double), typeof(CustomSelector), new PropertyMetadata(40.0));
 
 
+
+        public object Header
+        {
+            get { return (object)GetValue(HeaderProperty); }
+            set { SetValue(HeaderProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Header.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty HeaderProperty =
+            DependencyProperty.Register("Header", typeof(object), typeof(CustomSelector), new PropertyMetadata());
+
+
+
+        public GridViewColumnCollection Columns
+        {
+            get { return (GridViewColumnCollection)GetValue(ColumnsProperty); }
+            set { SetValue(ColumnsProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Columns.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ColumnsProperty =
+            DependencyProperty.Register("Columns", typeof(GridViewColumnCollection), typeof(CustomSelector), new PropertyMetadata());
+
+
+
+
+        public bool IsGrid
+        {
+            get { return (bool)GetValue(IsGridProperty); }
+            set { SetValue(IsGridProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsGrid.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsGridProperty =
+            DependencyProperty.Register("IsGrid", typeof(bool), typeof(CustomSelector), new PropertyMetadata());
+
+
+
+        public bool AllowsColumnReorder
+        {
+            get { return (bool)GetValue(AllowsColumnReorderProperty); }
+            set { SetValue(AllowsColumnReorderProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for AllowsColumnReorder.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty AllowsColumnReorderProperty =
+            DependencyProperty.Register("AllowsColumnReorder", typeof(bool), typeof(CustomSelector), new PropertyMetadata(true));
+
+
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.Property == ItemsSourceProperty)
+            {
+                if (e.NewValue is not null && this.IsGrid)
+                {
+                    updateColumns(this.IsGrid, (IEnumerable)e.NewValue);
+                }
+                else
+                {
+                    Columns = null;
+                }
+            }
+            if (e.Property == IsGridProperty)
+            {
+                if (e.NewValue is true && ItemsSource != null)
+                {
+                    updateColumns(true, ItemsSource);
+                }
+                else
+                {
+                    Columns = null;
+                }
+            }
+
+            void updateColumns(bool b, IEnumerable enumerable)
+            {
+                var type = enumerable.GetType().GetMethod("get_Item").ReturnType;
+                Columns ??= [];
+                AutoListViewColumnHelpers.CreateColumns2(this, type).ForEach(c => Columns.Add(c));
+                var ex = enumerable.GetEnumerator();
+                if (ex.MoveNext())
+                    Header = ex.Current;
+            }
+            base.OnPropertyChanged(e);
+        }
         private static void isCheckedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is CustomSelector sel && e.NewValue is string str)
@@ -148,23 +235,23 @@ namespace Utility.WPF.Controls.Lists
 
             void swap(int[] indexes, IList collection)
             {
-                    int fromS = indexes[0];
-                    int to = indexes[1];
-                    var elementSource = collection[to];
-                    var dragged = collection[fromS];
-                    //if (fromS > to)
-                    //{
-                    //    collection.Remove(dragged);
-                    //    collection.Insert(to, dragged);
-                    //}
-                    //else
-                    //{
-                    //collection.Remove(dragged);
-                    collection[to] = dragged;
-                    collection[fromS] = elementSource;
-                    //}
-                    //}
-                
+                int fromS = indexes[0];
+                int to = indexes[1];
+                var elementSource = collection[to];
+                var dragged = collection[fromS];
+                //if (fromS > to)
+                //{
+                //    collection.Remove(dragged);
+                //    collection.Insert(to, dragged);
+                //}
+                //else
+                //{
+                //collection.Remove(dragged);
+                collection[to] = dragged;
+                collection[fromS] = elementSource;
+                //}
+                //}
+
             }
 
             void remove(object a, IList collection)
@@ -199,7 +286,7 @@ namespace Utility.WPF.Controls.Lists
                     }
                     else
                     {
-                        throw new System.Exception("£333444");
+                        //throw new System.Exception("£333444");
                     }
                 }, System.Windows.Threading.DispatcherPriority.Background);
 
