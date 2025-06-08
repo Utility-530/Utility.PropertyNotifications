@@ -180,7 +180,7 @@ namespace Utility.PropertyNotifications
 
                     }
                     else if (e.PropertyName == _info?.Name)
-                        _observer.OnNext(new PropertyChange(_target, getter.Invoke(_target), e.PropertyName));
+                        _observer.OnNext(new PropertyChange(_target, getter?.Invoke(_target), e.PropertyName));
                 }
 
                 public void Dispose()

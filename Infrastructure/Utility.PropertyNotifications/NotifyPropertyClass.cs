@@ -106,7 +106,8 @@ namespace Utility.PropertyNotifications
         public event PropertyCalledEventHandler? PropertyCalled;
 
         /// <summary>
-        /// Raises this object's PropertyChanged event.
+        /// Raises this object's PropertyChanged event
+        /// !Dangerous 'value' can change before method finished executing!
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
         //public virtual T? RaisePropertyCalled<T>(T? value, [CallerMemberName] string? propertyName = null)
