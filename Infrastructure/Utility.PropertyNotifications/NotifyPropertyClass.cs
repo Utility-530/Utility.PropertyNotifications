@@ -109,11 +109,11 @@ namespace Utility.PropertyNotifications
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        public virtual T? RaisePropertyCalled<T>(T? value, [CallerMemberName] string? propertyName = null)
-        {
-            RaisePropertyCalled((object?)value, propertyName);
-            return value;
-        }
+        //public virtual T? RaisePropertyCalled<T>(T? value, [CallerMemberName] string? propertyName = null)
+        //{
+        //    RaisePropertyCalled((object?)value, propertyName);
+        //    return value;
+        //}
 
         public virtual void RaisePropertyCalled(object? value, [CallerMemberName] string? propertyName = null)
         {

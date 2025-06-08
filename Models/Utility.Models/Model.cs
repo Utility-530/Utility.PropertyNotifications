@@ -25,7 +25,7 @@ namespace Utility.Models
         public virtual Version Version { get; set; } = new();
         public virtual required string Name
         {
-            get => RaisePropertyCalled(m_name);
+            get { RaisePropertyCalled(m_name); return m_name; }
             set => this.RaisePropertyReceived(ref this.m_name, value);
         }
 
