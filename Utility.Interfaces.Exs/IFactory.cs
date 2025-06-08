@@ -20,4 +20,9 @@ namespace Utility.Interfaces.Exs
         IEnumerable<PropertyInfo> Properties(IEnumerable<Type> types);
     }
 
+    public interface IModelTypesFactory
+    {
+        IEnumerable<Type> Types();
+    }
+
 }
