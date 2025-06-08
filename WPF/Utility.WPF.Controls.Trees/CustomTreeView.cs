@@ -21,6 +21,10 @@ namespace Utility.WPF.Controls.Trees
                 treeviewitem.Checked += (s, e) => RaiseEvent(new CheckedEventArgs(e.IsChecked, CheckedEvent, s));
                 treeviewitem.HierarchyMouseUp += (s, e) => RaiseEvent(new HierarchyMouseUpEventArgs(HierarchyMouseUpEvent, this));
             }
+            else            
+            {
+
+            }
             base.PrepareContainerForItemOverride(element, item);
 
         }

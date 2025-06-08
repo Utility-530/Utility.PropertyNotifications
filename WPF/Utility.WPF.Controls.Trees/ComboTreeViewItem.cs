@@ -136,11 +136,11 @@ namespace Utility.WPF.Controls.Trees
             //    EditTemplate ??= dataTemplate;
 
             SelectionTemplate ??= ItemTemplate;
-
+ 
             this.onApplyAnimatedTemplate();
-            base.OnApplyTemplate();
             this.apply_template();
             this._OnApplyTemplate();
+            base.OnApplyTemplate();
             initialiseCommands();
         }
 
@@ -284,7 +284,7 @@ namespace Utility.WPF.Controls.Trees
 
             });
 
-            item.MouseLeftButtonUp += (s,e)=>OnMouseLeftButtonUp(e);
+            item.MouseLeftButtonUp += (s, e) => OnMouseLeftButtonUp(e);
             item.Checked += ChildItem_IsCheckedHandler;
             item.HierarchyMouseUp += (s, e) => OnMouseLeftButtonUp(e);
             return item;
@@ -307,12 +307,11 @@ namespace Utility.WPF.Controls.Trees
                 //combo.RaiseEvent(new SelectionChangedEventArgs(SelectionChangedEvent, new[] { e.OldValue }, new[] { e.NewValue }));
                 //combo.Focus();
                 combo.ReleaseMouseCapture();
+                combo.Selection = e.NewValue;
             }
-        }
-        protected void TreeViewItem_Selected(object sender, RoutedEventArgs e)
-        {
 
         }
+
 
         private static object CoerceIsDropDownOpen(DependencyObject d, object value)
         {

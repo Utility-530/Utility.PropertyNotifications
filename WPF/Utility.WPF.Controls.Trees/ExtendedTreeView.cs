@@ -18,7 +18,6 @@ namespace Utility.WPF.Controls.Trees
                 checkBox.Checked += CheckBox_Checked;
                 checkBox.Unchecked += CheckBox_Unchecked;
             }
-            base.OnApplyTemplate();
         }
 
         void OnMouseLeftButtonUp(object sender)

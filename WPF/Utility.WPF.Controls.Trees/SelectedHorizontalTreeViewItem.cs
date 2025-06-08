@@ -50,11 +50,6 @@ namespace Utility.WPF.Controls.Trees
         void apply_template()
         {
 
-
-
-
-
-
             var acb = this.GetTemplateChild("EditPresenter") as ContentPresenter;
             if (acb == null)
                 return;
