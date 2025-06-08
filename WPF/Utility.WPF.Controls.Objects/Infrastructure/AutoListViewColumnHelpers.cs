@@ -13,6 +13,7 @@ using System.Windows.Shapes;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using Microsoft.Xaml.Behaviors;
+using System.Collections;
 
 namespace Utility.WPF.Controls.Objects
 {
@@ -21,7 +22,7 @@ namespace Utility.WPF.Controls.Objects
 
 
 
-    public class AutoListViewColumnBehavior : Behavior<Control>
+    public static class AutoListViewColumnHelpers
     {
         // Allows the list view to repopulate when the ItemsSource property value changes
 
@@ -51,16 +52,17 @@ namespace Utility.WPF.Controls.Objects
         //                                                         "</Grid>",
         //                                                         "</DataTemplate>");
 
-        public static List<GridViewColumn> CreateColumns2(ItemsControl lv)
+        public static IEnumerable<GridViewColumn> CreateColumns2(ItemsControl lv, Type? type = null)
         {
-            Type dataType = lv.ItemsSource.GetType().GetMethod("get_Item").ReturnType;
+            Type dataType = type ?? lv.ItemsSource.GetType().GetMethod("get_Item").ReturnType;
             // create the gridview
 
             var columns = new List<GridViewColumn>();
-            PropertyInfo[] properties = dataType.GetProperties()
-                                                .Where(x => x.GetCustomAttributes(true)
-                                                .FirstOrDefault(y => y is ColVisibleAttribute) != null)
-                                                .ToArray();
+            PropertyInfo[] properties = dataType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy).ToArray();
+            
+                                    //dataType.GetProperties()
+                                    //            .Where(x => x.GetCustomAttributes(true).FirstOrDefault(y => y is ColVisibleAttribute) != null)
+                                    //            .ToArray();
             // For each appropriately decorated property in the item "type", makea column and bind 
             // the propertty to it
             foreach (PropertyInfo info in properties)
@@ -71,6 +73,17 @@ namespace Utility.WPF.Controls.Objects
                 string displayName = (dna == null) ? info.Name : dna.DisplayName;
 
                 DataTemplate cellTemplate = BuildCellTemplateFromAttribute(info);
+                //    ?? Utility.WPF.Factorys.TemplateGenerator.CreateDataTemplate(() =>
+                //{
+                //    var x = new ContentControl() {  };
+                //    x.SetBinding(ContentControl.ContentProperty, new Binding()
+                //    {
+                //        Path = new PropertyPath("."),
+                //        Mode = BindingMode.OneWay
+                //    });
+                //    return x;
+                //});
+
                 double width = GetWidthFromAttribute(lv, info, displayName);
 
                 // if the cellTemplate is null, create a typical binding object for display 
@@ -78,18 +91,17 @@ namespace Utility.WPF.Controls.Objects
                 Binding binding = (cellTemplate != null) ? null : new Binding() { Path = new PropertyPath(info.Name), Mode = BindingMode.OneWay };
 
                 // create the column, and add it to the gridview
-                GridViewColumn column = new GridViewColumn()
+                GridViewColumn column = new()
                 {
                     Header = displayName,
+      
                     //DisplayMemberBinding = (cellTemplate == null) ? binding : null,
                     DisplayMemberBinding = binding,
                     CellTemplate = cellTemplate,
                     Width = width,
                 };
-                columns.Add(column);
+                yield return column;
             }
-            return columns;
-
 
         }
         /// <summary>
@@ -108,7 +120,7 @@ namespace Utility.WPF.Controls.Objects
 
             if (dataType is null)
                 return new List<GridViewColumn>();
-            var elementType = Utility.Helpers.TypeHelper.GetElementType(dataType);
+            var elementType = Utility.Helpers.Reflection.TypeHelper.GetElementType(dataType);
 
 
             var columns = new List<GridViewColumn>();
@@ -130,12 +142,12 @@ namespace Utility.WPF.Controls.Objects
                 // member binding
                 Binding binding = new Binding()
                 {
-                    Path = new PropertyPath($"[{info.Name}]"), 
+                    Path = new PropertyPath($"[{info.Name}]"),
                     Mode = BindingMode.OneWay
                 };
 
                 // create the column, and add it to the gridview
-                GridViewColumn column = new GridViewColumn() 
+                GridViewColumn column = new GridViewColumn()
                 {
                     Header = new GridViewColumnHeader { Content = displayName, Width = width },
                     //DisplayMemberBinding = binding,

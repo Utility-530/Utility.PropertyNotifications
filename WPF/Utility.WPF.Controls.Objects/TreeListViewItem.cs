@@ -42,11 +42,9 @@ namespace Utility.WPF.Controls.Objects
                 }
             }
         }
-
-
+        
         static TreeListViewItem()
         {
-            //DefaultStyleKeyProperty.OverrideMetadata(typeof(TreeListViewItem), new FrameworkPropertyMetadata(typeof(TreeListViewItem)));
         }
 
         public TreeListViewItem()
@@ -62,12 +60,12 @@ namespace Utility.WPF.Controls.Objects
                 && e.OldValue != e.NewValue
                 && e.NewValue != null)
             {
-                GridView gridView = new GridView()
-                {
-                    AllowsColumnReorder = true
-                };
+                //GridView gridView = new GridView()
+                //{
+                //    AllowsColumnReorder = true
+                //};
 
-                var columns = AutoListViewColumnBehavior.CreateColumns(this);
+                var columns = AutoListViewColumnHelpers.CreateColumns(this);
                 foreach (var col in columns)
                 {
                     if (template(Schema, col) is { } t)
