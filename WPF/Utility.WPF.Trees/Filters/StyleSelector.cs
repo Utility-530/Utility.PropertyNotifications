@@ -14,6 +14,8 @@ namespace Utility.Nodes.WPF
         public override Style SelectStyle(object item, DependencyObject container)
         {
             //return base.SelectStyle(item, container);//
+            if (container.GetType() == typeof(TreeViewItem))
+                return base.SelectStyle(item, container);
 
             object input = null;
             if (item is TreeViewItem _item)
