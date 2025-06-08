@@ -2,6 +2,7 @@
 global using System.Reactive.Linq;
 global using Utility.Changes;
 global using Utility.Helpers;
+global using Utility.Helpers.Reflection;
 global using Utility.Interfaces.NonGeneric;
 global using Type = System.Type;
 global using System.Collections;

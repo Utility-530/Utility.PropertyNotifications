@@ -1,5 +1,4 @@
-﻿using Utility.Interfaces;
-using Utility.Meta;
+﻿using Utility.Meta;
 
 namespace Utility.PropertyDescriptors
 {

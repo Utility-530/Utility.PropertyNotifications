@@ -1,10 +1,7 @@
-﻿
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Utility.Interfaces;
 
 namespace Utility.PropertyDescriptors;
-
-
 
 public interface ICollectionDetailsDescriptor
 {
