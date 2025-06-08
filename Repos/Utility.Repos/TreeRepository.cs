@@ -118,54 +118,60 @@ namespace Utility.Repos
 
         public virtual IObservable<IReadOnlyCollection<Key>> SelectKeys(Guid? parentGuid = null, string? name = null, string? table_name = default)
         {
-            List<Relationships> tables;
-
-            if (table_name != default)
+            return Observable.Create<IReadOnlyCollection<Key>>(observer =>
             {
-                string query = $"SELECT * FROM '{table_name}'";
-                tables = connection.Query<Relationships>(query);
-            }
-            else if (parentGuid.HasValue)
-            {
-                table_name = getName(parentGuid.Value);
-                string query = $"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}'" +
-                                (name == null ? string.Empty : $" AND Name = '{name}'") +
-                                $" ORDER BY {nameof(Relationships._Index)}";
-                tables = connection.Query<Relationships>(query);
-            }
-            else
-            {
-                tables = connection.Table<Relationships>().ToList();
-                int i = 0;
-                foreach (var table in tables)
+                return initialisationTask.ToObservable().Subscribe(a =>
                 {
-                    table._Index = i++;
-                }
-            }
-            List<Key> selections = new();
-            foreach (var table in tables)
-            {
-                //if (table.TypeId.HasValue == false)
-                //    throw new Exception("ds 332344");
-                //var type = ToType(table.TypeId.Value);
+                    List<Relationships> tables;
 
-                System.Type type = null;
-                if (table.TypeId.HasValue)
-                    type = ToType(table.TypeId.Value);
+                    if (table_name != default)
+                    {
+                        string query = $"SELECT * FROM '{table_name}'";
+                        tables = connection.Query<Relationships>(query);
+                    }
+                    else if (parentGuid.HasValue)
+                    {
+                        table_name = getName(parentGuid.Value);
+                        string query = $"SELECT * FROM '{table_name}' WHERE Parent = '{parentGuid}'" +
+                                        (name == null ? string.Empty : $" AND Name = '{name}'") +
+                                        $" ORDER BY {nameof(Relationships._Index)}";
+                        tables = connection.Query<Relationships>(query);
+                    }
+                    else
+                    {
+                        tables = connection.Table<Relationships>().ToList();
+                        int i = 0;
+                        foreach (var table in tables)
+                        {
+                            table._Index = i++;
+                        }
+                    }
+                    List<Key> selections = new();
+                    foreach (var table in tables)
+                    {
+                        //if (table.TypeId.HasValue == false)
+                        //    throw new Exception("ds 332344");
+                        //var type = ToType(table.TypeId.Value);
 
-                object item = null;
-                if (type?.ContainsGenericParameters != false)
-                {
-                    throw new Exception("dgfsd..lll");
-                }
-                else
-                {
-                    if (table_name != null)
-                        setName(table.Guid, table_name);
-                    selections.Add(new(table.Guid, table.Parent, type, table.Name, table._Index, table.Removed));
-                }
-            }
-            return Observable.Return((IReadOnlyCollection<Key>)selections);
+                        System.Type type = null;
+                        if (table.TypeId.HasValue)
+                            type = ToType(table.TypeId.Value);
+
+                        object item = null;
+                        if (type?.ContainsGenericParameters != false)
+                        {
+                            throw new Exception("dgfsd..lll");
+                        }
+                        else
+                        {
+                            if (table_name != null)
+                                setName(table.Guid, table_name);
+                            selections.Add(new(table.Guid, table.Parent, type, table.Name, table._Index, table.Removed));
+                        }
+                    }
+                    observer.OnNext((IReadOnlyCollection<Key>)selections);
+                });
+            });
         }
 
         public bool ValueExists(Guid guid)
