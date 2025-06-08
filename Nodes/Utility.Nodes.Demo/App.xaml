@@ -5,11 +5,11 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:conv="http://schemas.utility.com/converters"
              xmlns:infra="clr-namespace:Utility.Nodes.Demo.Infrastructure" 
-             xmlns:wpf="clr-namespace:Utility.Nodes.WPF;assembly=Utility.Nodes.WPF"
              xmlns:io="clr-namespace:System.IO;assembly=mscorlib"        
              xmlns:local="clr-namespace:Utility.Nodes.Demo"
              xmlns:as="clr-namespace:AngleSharp.Dom;assembly=AngleSharp"
-             xmlns:ui="http://schemas.modernwpf.com/2019">
+             xmlns:ui="http://schemas.modernwpf.com/2019" 
+             xmlns:tree="http://schemas.utility.com/trees">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -87,7 +87,9 @@
             <local:StyleSelector x:Key="styleSelector"></local:StyleSelector>
 
             <DataTemplate DataType="{x:Type local:DemoRootNode}">
-                <TreeView ItemsSource="{Binding Items}" ItemTemplateSelector="{StaticResource selector}" ItemContainerStyleSelector="{StaticResource styleSelector}"/>
+                <TreeView ItemsSource="{Binding Items}" 
+                                     ItemTemplateSelector="{StaticResource selector}"
+                                     ItemContainerStyleSelector="{StaticResource styleSelector}"/>
             </DataTemplate>
 
 
