@@ -24,36 +24,48 @@ namespace Utility.Nodes.Database
         {
             InitializeComponent();
             SQLitePCL.Batteries.Init();
-            var rootKeys = TreeRepository.Instance.SelectKeys().GetAwaiter().GetResult();
 
-            ComboBox.ItemsSource = rootKeys;
-            ComboBox.DisplayMemberPath = nameof(Key.Name);
-            ComboBox.SelectedIndex = 0;
+            this.Loaded += MainWindow_Loaded;
+        }
 
-            ComboBox.Events().SelectionChanged
-                .SelectMany(a => a.AddedItems.Cast<Key>())
-                .WhereNotNull()
-                .Subscribe(a =>
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            _ = TreeRepository.Instance.SelectKeys()
+                .Subscribe(rootKeys =>
                 {
+                    ComboBox.ItemsSource = rootKeys;
+                    ComboBox.DisplayMemberPath = nameof(Key.Name);
+                    ComboBox.SelectedIndex = 0;
 
-                    var name = a.Name;
-                    var keys = TreeRepository.Instance.SelectKeys(table_name: name).GetAwaiter().GetResult();
-
-
-                    var tree = keys.ToObservable().ToTree(a => a.Guid, a => a.ParentGuid, a.Guid, func: a =>
-                    {
-                        var _tree = (ITree<Key>)new Tree<Key>(a);
-                        var get = TreeRepository.Instance.Get(a.Guid).Subscribe(a =>
+                    ComboBox.Events().SelectionChanged
+                        .SelectMany(a => a.AddedItems.Cast<Key>())
+                        .StartWith((Key)ComboBox.SelectedItem)
+                        .WhereNotNull()
+                        .Subscribe(a =>
                         {
-                            if (a.Value is { }  x)
-                                _tree.Add(new Tree<Key>(new Key(default, default, x.GetType(), default, default, default)));
+
+                            var name = a.Name;
+                            _  = TreeRepository.Instance.SelectKeys(table_name: name).Subscribe(keys =>
+                            {
+                                var tree = keys.ToObservable().ToTree(a => a.Guid, a => a.ParentGuid, a.Guid, func: a =>
+                                {
+                                    var _tree = (ITree<Key>)new Tree<Key>(a);
+                                    var get = TreeRepository.Instance.Get(a.Guid).Subscribe(a =>
+                                    {
+                                        if (a.Value is { } x)
+                                            _tree.Add(new Tree<Key>(new Key(default, default, x.GetType(), default, default, default)));
+                                    });
+
+                                    return _tree;
+                                });
+                                TreeView.ItemsSource = tree.ToObservableCollection();
+
+                            });
+
+
+               
                         });
-
-                        return _tree;
-                    });
-                    TreeView.ItemsSource = tree.ToObservableCollection();
                 });
-
         }
     }
 }
