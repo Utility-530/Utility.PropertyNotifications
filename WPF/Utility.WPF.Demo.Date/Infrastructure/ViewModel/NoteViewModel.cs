@@ -37,7 +37,7 @@ public class NoteViewModel : ViewModel, IEquatable<NoteViewModel>, IComparable<N
 
     public bool Equals(NoteViewModel? other)
     {
-        return this.Model.Equals(other?.Model);
+        return this.Model?.Equals(other?.Model) == true;
     }
 
     public override bool Equals(object obj)
@@ -52,7 +52,8 @@ public class NoteViewModel : ViewModel, IEquatable<NoteViewModel>, IComparable<N
             return false;
         }
 
-        throw new NotImplementedException();
+        return false;
+        //throw new NotImplementedException();
     }
 
     public override int GetHashCode()
