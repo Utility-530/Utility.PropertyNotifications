@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using DynamicData;
+using Newtonsoft.Json;
+using Splat;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,20 +13,19 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using System.Xml.Linq;
+using Utility.Collections;
 using Utility.Enums;
-using Utility.Trees.Extensions;
 using Utility.Helpers;
+using Utility.Helpers.NonGeneric;
+using Utility.Helpers.Reflection;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Observables;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.Trees.Abstractions;
+using Utility.Trees.Extensions;
 using Type = System.Type;
-using Utility.Collections;
-using Utility.Helpers.NonGeneric;
-using Splat;
-using Utility.Helpers.Reflection;
 
 namespace Utility.Models.Trees
 {
@@ -734,21 +735,25 @@ namespace Utility.Models.Trees
                     }
                     break;
                 case ComparisonType.Number:
-                    switch ((NumberComparison)Value)
-                    {
-                        case NumberComparison.GreaterThanOrEqualTo:
-                            return int.Parse(value1.ToString()) >= int.Parse(value2.ToString());
-                        case NumberComparison.GreaterThan:
-                            return int.Parse(value1.ToString()) > int.Parse(value2.ToString());
-                        case NumberComparison.LessThan:
-                            return int.Parse(value1.ToString()) < int.Parse(value2.ToString());
-                        case NumberComparison.EqualTo:
-                            return int.Parse(value1.ToString()) == int.Parse(value2.ToString());
-                        case NumberComparison.NotEqualTo:
-                            return int.Parse(value1.ToString()) != int.Parse(value2.ToString());
-                        case NumberComparison.LessThanOrEqualTo:
-                            return int.Parse(value1.ToString()) <= int.Parse(value2.ToString());
-                    }
+                    bool success1 = int.TryParse(value1.ToString(), out int int1);
+                    bool success2 = int.TryParse(value1.ToString(), out int int2);
+                    if (success1 && success2)
+                        switch ((NumberComparison)Value)
+                        {
+                            case NumberComparison.GreaterThanOrEqualTo:
+                                return int1 >= int2;
+                            case NumberComparison.GreaterThan:
+                                return int1 > int2;
+                            case NumberComparison.LessThan:
+                                return int1 < int2;
+                            case NumberComparison.EqualTo:
+                                return int1 == int2;
+                            case NumberComparison.NotEqualTo:
+                                return int1 != int2;
+                            case NumberComparison.LessThanOrEqualTo:
+                                return int1 <= int2;
+                        }
+                    return false;
                     break;
                 case ComparisonType.Boolean:
                     switch ((BooleanComparison)Value)
@@ -958,42 +963,26 @@ namespace Utility.Models.Trees
 
     }
 
-    public class DataFileModel : ValueModel<DataFileModel>
+    public readonly record struct DataFile(string Alias, string FilePath);
+
+
+    public class DataFileModel : ValueModel<DataFile>
     {
-        private string alias;
-        private string filePath;
 
         public DataFileModel()
         {
         }
 
-        [JsonIgnore]
-        public override DataFileModel? Value
-        {
-            get => RaisePropertyCalled(this);
-            set
-            {
-                this.alias = value.Alias;
-                this.filePath = value.FilePath;
-            }
-        }
-
-        public override void Set(DataFileModel value)
-        {
-            this.Value = value;
-        }
-
-
         public virtual string Alias
         {
-            get => alias;
-            set { this.alias = value; this.RaisePropertyReceived(null, this, nameof(Value)); }
+            get => this.Value.Alias;
+            set { this.Value = Value with { Alias = value }; }
         }
 
         public virtual string FilePath
         {
-            get => filePath;
-            set { this.filePath = value; this.RaisePropertyReceived(null, this, nameof(Value)); }
+            get => this.Value.FilePath;
+            set { this.Value = Value with { FilePath = value }; }
         }
 
         public override void SetNode(INode node)
@@ -1007,7 +996,7 @@ namespace Utility.Models.Trees
 
         public override object Clone()
         {
-            return new DataFileModel { Name = Name, Alias = Alias, FilePath = FilePath };
+            return new DataFileModel { Name = Name, Value = Value };
         }
     }
 
@@ -1564,6 +1553,40 @@ namespace Utility.Models.Trees
                 (value as INode).Current = a as INode;
             }
             base.Addition(value, a);
+        }
+    }
+
+    public readonly record struct ModelType(string Alias, string Type);
+
+    public class ModelTypeModel : ValueModel<ModelType>
+    {
+        public override void SetNode(INode node)
+        {
+            node.IsPersistable = true;
+            node.IsExpanded = true;
+            base.SetNode(node);
+        }
+    }
+
+    public class ModelTypesModel : CollectionModel<ModelTypeModel>
+    {
+        public override void SetNode(INode node)
+        {
+            node.IsExpanded = true;
+            Node = node;
+        }
+
+        public override void Initialise()
+        {
+        }
+
+        public override IEnumerable<Model> CreateChildren()
+        {
+            foreach (var type in Locator.Current.GetService<IModelTypesFactory>().Types())
+            {
+                var pnode = new ModelTypeModel { Name = type.Name, Value = new(type.Name, type.AsString()) };
+                yield return pnode;
+            }
         }
     }
 
