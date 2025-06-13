@@ -35,13 +35,14 @@
     <PackageReference Include="BitmapTools.Wpf" Version="1.1.0" />
     <PackageReference Include="Csv" Version="2.0.84" />
     <PackageReference Include="LambdaConverters" Version="4.0.0" />
-    <PackageReference Include="MaterialDesignThemes" Version="4.6.0-ci211" />
     <PackageReference Include="PropertyTools.Wpf" Version="3.1.0" />
   </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\..\Models\Utility.Models.Filters\Utility.Models.Filters.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Common\Utility.WPF.Demo.Common.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Markup\Utility.WPF.Markup.csproj" />
   </ItemGroup>
   
   <ItemGroup>

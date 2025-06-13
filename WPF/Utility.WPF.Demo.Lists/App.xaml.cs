@@ -18,7 +18,7 @@ namespace Utility.WPF.Demo.Lists
             var d = typeof(Utility.WPF.Demo.Common.ViewModels.Tick);
             Resolver.Instance.AutoRegister();
             //builder.UseAutofacDependencyResolver();
-
+            SQLitePCL.Batteries.Init();
             new Window
             {
                 WindowState = WindowState.Maximized,

@@ -21,7 +21,7 @@
 
     <DockPanel>
         <WrapPanel DockPanel.Dock="Top">
-            <ToggleButton x:Name="ToggleButton1">     Is Grid    </ToggleButton>
+            <ToggleButton x:Name="ToggleButton1" Width="72" Height="28">Is Grid</ToggleButton>
         </WrapPanel>
         <view:CustomSelector ItemsWidth="300" ItemsHeight="500"
                              IsGrid="{Binding ElementName=ToggleButton1, Path=IsChecked}"

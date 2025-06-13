@@ -1,3 +1,4 @@
+using SQLite;
 using System;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -5,6 +6,8 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Utility.Interfaces.Generic.Data;
+using Utility.Interfaces.NonGeneric.Data;
 
 namespace Utility.WPF.Demo.Data.Model
 {
@@ -15,7 +18,7 @@ namespace Utility.WPF.Demo.Data.Model
         Unknown
     }
 
-    public class Character : INotifyPropertyChanged, IEquatable<Character>
+    public class Character : INotifyPropertyChanged, IEquatable<Character>, IId<Guid>
     {
         private string _first = string.Empty;
         private string _last = string.Empty;
@@ -23,8 +26,10 @@ namespace Utility.WPF.Demo.Data.Model
         private int _age = 0;
         private Gender _gender = Gender.Unknown;
         private Point _location = new Point();
-        private Color color;
+        private Color? color;
         private bool isRhPositive;
+
+        public Guid Id { get; set; }
 
         public string First
         {
@@ -55,6 +60,7 @@ namespace Utility.WPF.Demo.Data.Model
             }
         }
 
+        [Ignore]
         public BitmapImage Image { get => _image; set => _image = value; }
 
         public int Age
@@ -78,6 +84,7 @@ namespace Utility.WPF.Demo.Data.Model
             }
         }
 
+        [Ignore]
         public Point Location
         {
             get { return _location; }
@@ -87,10 +94,10 @@ namespace Utility.WPF.Demo.Data.Model
                 RaisePropertyChanged();
             }
         }
-
+        [Ignore]
         public Color Color
         {
-            get { return color; }
+            get { return color ?? Colors.Black; }
             set
             {
                 color = value;
@@ -108,6 +115,8 @@ namespace Utility.WPF.Demo.Data.Model
         }
 
         public TimeSpan TimeSpan => TimeSpan.FromMinutes(Math.Pow(Age, 3));
+
+
 
         public override string ToString()
         {

@@ -4,6 +4,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Utility.Commands;
 using Utility.WPF.Demo.Data.Model;
+using Utility.Persists;
 
 namespace Utility.WPF.Demo.Lists
 {
@@ -33,7 +34,7 @@ namespace Utility.WPF.Demo.Lists
             });
 
             Items = new(Data.Resources.Instance["Characters"] as Character[]);
-
+            Items.ToManager(a => (a as Character).Id);
         }
 
         public ICommand FinishEdit { get; }

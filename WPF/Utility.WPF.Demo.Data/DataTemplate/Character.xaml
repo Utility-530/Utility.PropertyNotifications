@@ -4,9 +4,13 @@
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:local="clr-namespace:Utility.WPF.Demo.Data.Model">
+    xmlns:local="clr-namespace:Utility.WPF.Demo.Data.Model"
+    
+    xmlns:conv="http://schemas.utility.com/converters"
+    xmlns:mu="http://schemas.utility.com/markup">
 
     <local:Character
+        Id="{mu:GuidExtension 1fa85f64-5717-4562-b3fc-2c963f66afa6}"
         x:Key="Bart"
         Age="10"
         First="Bart"
@@ -33,6 +37,7 @@
         Type="{x:Type local:Character}">
         <StaticResource ResourceKey="Bart" />
         <local:Character
+            Id="{mu:GuidExtension 2fa85f64-5717-4562-b3fc-2c963f66afa6}"
             Age="38"
             First="Homer"
             Gender="Male"
@@ -41,6 +46,7 @@
             UriString="pack://application:,,,/Utility.WPF.Demo.Data;component/Simpsons/homer.png"
             Color="DarkSalmon" />
         <local:Character
+              Id="{mu:GuidExtension 3fa85f64-5717-4562-b3fc-2c963f66afa6}"
             Age="8"
             First="Lisa"
             Gender="Female"
@@ -49,6 +55,7 @@
             UriString="pack://application:,,,/Utility.WPF.Demo.Data;component/Simpsons/lisa.png"
             Color="ForestGreen" />
         <local:Character
+              Id="{mu:GuidExtension 4fa85f64-5717-4562-b3fc-2c963f66afa6}"
             Age="0"
             First="Maggie"
             Gender="Female"
@@ -57,6 +64,7 @@
             UriString="pack://application:,,,/Utility.WPF.Demo.Data;component/Simpsons/maggie.png"
             Color="DarkBlue" />
         <local:Character
+              Id="{mu:GuidExtension 5fa85f64-5717-4562-b3fc-2c963f66afa6}"
             Age="38"
             First="Marge"
             Gender="Female"
@@ -75,7 +83,7 @@
             </Grid.RowDefinitions>
             <TextBlock
                 FontWeight="Bold"
-                Text="{Binding First}"
+                Text="{Binding First}"         
                 TextAlignment="Center">
                 <TextBlock.Foreground>
                     <SolidColorBrush Color="{Binding Color}" />
@@ -84,7 +92,7 @@
             <TextBlock
                 Grid.Row="1"
                 FontWeight="Bold"
-                Text="{Binding Last}"
+                Text="{Binding Last}"       
                 TextAlignment="Center">
                 <TextBlock.Foreground>
                     <SolidColorBrush Color="{Binding Color}" />
