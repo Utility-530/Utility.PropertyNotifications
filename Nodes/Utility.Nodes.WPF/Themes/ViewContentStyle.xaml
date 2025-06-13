@@ -20,7 +20,6 @@
         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"></Setter>
         <Setter Property="IsEditable" Value="False"></Setter>
         <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
-        <Setter Property="Header" Value="{Binding Path=.}" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding Removed, Converter={StaticResource InverseNullToBooleanConverter}}" Value="True" >
                 <Setter Property="Visibility" Value="Collapsed"></Setter>

@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:bc="Breadcrumbs.WPF" 
+                    xmlns:beh="http://schemas.utility.com/behaviors"
                     xmlns:test="clr-namespace:TextBoxEx;assembly=TextBoxEx"
                     xmlns:ui="http://toniccomputing.com/patterns/ui" 
                     xmlns:local="clr-namespace:Utility.Nodes.WPF"     
@@ -20,7 +21,10 @@
                     xmlns:controls="http://schemas.utility.com"
                     xmlns:att="http://schemas.utility.com/attached"
                     xmlns:c="http://schemas.utility.com/colours"
-                    xmlns:btns="http://schemas.utility.com/buttons">
+                    xmlns:btns="http://schemas.utility.com/buttons" 
+                    xmlns:cefsharpwpf="clr-namespace:CefSharp.Wpf.HwndHost;assembly=CefSharp.Wpf"
+                    xmlns:obj="http://schemas.utility.com/objects"
+                    xmlns:wpf1="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF">
 
 
     <ResourceDictionary.MergedDictionaries>
@@ -135,10 +139,18 @@
 
     <DataTemplate DataType="{x:Type inf:StringModel}">
         <Grid>
-            <TextBox Text="{Binding Value}" Background="AliceBlue">
+            <TextBox Text="{Binding Value}" MinWidth="60" Background="AliceBlue">
             </TextBox>
         </Grid>
 
+    </DataTemplate>  
+    
+    <DataTemplate DataType="{x:Type inf:EditModel}">
+        <obj:JsonControl>
+            <i:Interaction.Behaviors>
+                <obj:ObjectBehavior Object="{Binding Value, Mode=OneTime}"/>
+            </i:Interaction.Behaviors>
+        </obj:JsonControl>
     </DataTemplate>  
     
     <DataTemplate DataType="{x:Type inf:StringRootModel}">
@@ -193,18 +205,72 @@
 
 
     <DataTemplate DataType="{x:Type inf:GuidModel}">
-        <TextBox Text="{Binding Value}">
-        </TextBox>
+        <TextBox Text="{Binding Value}"/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:ExceptionModel}">
-        <TextBlock Text="{Binding Exception.Message}" Foreground="{c:Red}" MinHeight="25" MinWidth="180" Background="GhostWhite">
-        </TextBlock>
+        <TextBlock Text="{Binding Exception.Message}" Foreground="{c:Red}" MinHeight="25" MinWidth="180" Background="GhostWhite"/>
     </DataTemplate>
 
+
+
+
+    <DataTemplate x:Key="HtmlEditor" DataType="{x:Type inf:StringModel}">
+        <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
+
+        <avalonedit:TextEditor x:Name="_htmlEditor" 
+                           
+                                       VerticalScrollBarVisibility="Visible"                                    
+                                       BorderThickness="0"    
+                                       SyntaxHighlighting="HTML" 
+                                       ShowLineNumbers="True" >
+            <i:Interaction.Behaviors>
+                <html:TextEditorTextBehavior Html="{Binding Value}"/>
+            </i:Interaction.Behaviors>
+        </avalonedit:TextEditor>
+    </DataTemplate>
+    
+    
+
+    <DataTemplate x:Key="HtmlWebViewer" DataType="{x:Type inf:StringModel}">
+        <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
+        <WebBrowser >
+            <i:Interaction.Behaviors>
+                <beh:WebBrowserNavigationBehavior Html="{Binding Value, Mode=OneWay, Converter={x:Static conv:DefaultConverter.Instance}}"/>
+            </i:Interaction.Behaviors>
+        </WebBrowser>
+    </DataTemplate>
+    
+    
+    
     <DataTemplate DataType="{x:Type inf:HtmlModel}">
         <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
-        <html:TinyHtmlEditorControl Html="{Binding Value, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <!--<html:TinyHtmlEditorControl Html="{Binding Value, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>-->
+        <!--<wpf1:HtmlPanel Text="{Binding Value, Mode=OneWay,Converter={x:Static conv:DefaultConverter.Instance}}"></wpf1:HtmlPanel>-->
+        <!--<avalonedit:TextEditor x:Name="_htmlEditor" 
+                           
+                                       VerticalScrollBarVisibility="Visible"                                    
+                                       BorderThickness="0"    
+                                       SyntaxHighlighting="HTML" 
+                                       ShowLineNumbers="True" >
+            <i:Interaction.Behaviors>
+                <html:TextEditorTextBehavior Html="{Binding Value}"/>
+            </i:Interaction.Behaviors>
+        </avalonedit:TextEditor>-->
+    </DataTemplate>
+
+    <DataTemplate x:Key="ChromiumOutput" DataType="{x:Type inf:HtmlAddressModel}">
+        <!--<Border BorderThickness="1" BorderBrush="Blue">
+            <cefsharpwpf:ChromiumWebBrowser
+                    Address="{Binding Mode=OneWay, Path=Address}"
+                    Name="Browser">
+                -->
+        <!--<i:Interaction.Behaviors>
+                    <behavior:ChromiumWebBrowserBehavior/>
+                </i:Interaction.Behaviors>-->
+        <!--
+            </cefsharpwpf:ChromiumWebBrowser>
+        </Border>-->
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type des:MemberDescriptor}">
@@ -256,9 +322,6 @@
     <DataTemplate x:Key="ItemTemplate" DataType="{x:Type inf:DataFileModel}">
         <Grid Background="#DCDCDC" Name="rootElement">
             <Grid.Resources>
-
-
-          
                 <Style TargetType="{x:Type TextBox}">
                     <Setter Property="Margin" Value="10,5,10,0"/>
                 </Style>
@@ -267,15 +330,11 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto"/>
-
             </Grid.ColumnDefinitions>
-
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
-
-
             </Grid.RowDefinitions>
 
             <TextBlock Grid.Column="0"
@@ -361,10 +420,10 @@
             </Grid.ColumnDefinitions>
 
 
-            <ContentControl Content="{Binding Value, Mode=OneWay, Converter={x:Static conv:DefaultConverter.Instance}}">
+            <ContentControl Content="{Binding Value, Mode=OneWay}">
                 <ContentControl.ContentTemplate>
                     <DataTemplate>
-                        <Grid Background="{c:Amber}" 
+                        <Grid Background="Transparent" 
                                 x:Name="tile"
                                 Grid.Column="0"
                                 Width="85"
@@ -384,6 +443,5 @@
         
         </Grid>
     </DataTemplate>
-
 
 </ResourceDictionary>
