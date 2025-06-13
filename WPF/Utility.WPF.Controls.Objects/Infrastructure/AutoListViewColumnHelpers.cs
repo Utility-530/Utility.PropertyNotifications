@@ -14,63 +14,33 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using Microsoft.Xaml.Behaviors;
 using System.Collections;
+using Humanizer;
+using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Controls.Objects
 {
-
-
-
-
-
     public static class AutoListViewColumnHelpers
     {
-        // Allows the list view to repopulate when the ItemsSource property value changes
-
-
-
-
-        #region column rendering
-
-        // This string represents the CellTemplate value if the ColFontAttribute is specified on a 
-        // property.
-        //private readonly string _CELL_TEMPLATE_ = string.Concat("<DataTemplate xmlns=\"http://schemas.microsoft.com/winfx/2006/xaml/presentation\" ",
-        //                                                         "xmlns:x=\"http://schemas.microsoft.com/winfx/2006/xaml\" ",
-        //                                                         "x:Key=\"nonPropTemplate\">",
-        //                                                         "<Grid>",
-        //                                                         "<Rectangle Fill=\"{6}\" Opacity=\"0.6\"/>",
-        //                                                         "<TextBlock ",
-        //                                                         "FontFamily=\"{1}\" ",
-        //                                                         "FontSize=\"{2}\" ",
-        //                                                         "FontWeight=\"{3}\" ",
-        //                                                         "FontStyle=\"{4}\" ",
-        //                                                         "Foreground=\"{5}\" ",
-        //                                                         "HorizontalAlignment=\"{7}\" ",
-        //                                                         "VerticalAlignment=\"{8}\" ",
-        //                                                         ">",
-        //                                                         "<TextBlock.Text><Binding Path=\"{0}\" Mode=\"OneWay\" /></TextBlock.Text> ",
-        //                                                         "</TextBlock>",
-        //                                                         "</Grid>",
-        //                                                         "</DataTemplate>");
-
         public static IEnumerable<GridViewColumn> CreateColumns2(ItemsControl lv, Type? type = null)
         {
             Type dataType = type ?? lv.ItemsSource.GetType().GetMethod("get_Item").ReturnType;
             // create the gridview
 
             var columns = new List<GridViewColumn>();
-            PropertyInfo[] properties = dataType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy).ToArray();
-            
-                                    //dataType.GetProperties()
-                                    //            .Where(x => x.GetCustomAttributes(true).FirstOrDefault(y => y is ColVisibleAttribute) != null)
-                                    //            .ToArray();
+            PropertyInfo[] properties = [.. dataType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)];
+
+            //dataType.GetProperties()
+            //            .Where(x => x.GetCustomAttributes(true).FirstOrDefault(y => y is ColVisibleAttribute) != null)
+            //            .ToArray();
             // For each appropriately decorated property in the item "type", makea column and bind 
             // the propertty to it
             foreach (PropertyInfo info in properties)
             {
+                if (info.HasAttribute<Utility.Attributes.IgnoreAttribute>())
+                    continue;
                 // If the property is being renamed with the DisplayName attribute, use the new name. 
                 // Otherwise use the property's actual name
-                DisplayNameAttribute dna = (DisplayNameAttribute)(info.GetCustomAttributes(true).FirstOrDefault(x => x is DisplayNameAttribute));
-                string displayName = (dna == null) ? info.Name : dna.DisplayName;
+                string displayName = info.TryGetAttribute<DisplayNameAttribute>(out var dna) ? dna!.DisplayName : info.Name.Humanize();
 
                 DataTemplate cellTemplate = BuildCellTemplateFromAttribute(info);
                 //    ?? Utility.WPF.Factorys.TemplateGenerator.CreateDataTemplate(() =>
@@ -94,7 +64,7 @@ namespace Utility.WPF.Controls.Objects
                 GridViewColumn column = new()
                 {
                     Header = displayName,
-      
+
                     //DisplayMemberBinding = (cellTemplate == null) ? binding : null,
                     DisplayMemberBinding = binding,
                     CellTemplate = cellTemplate,
@@ -133,7 +103,7 @@ namespace Utility.WPF.Controls.Objects
                 // If the property is being renamed with the DisplayName attribute, use the new name. 
                 // Otherwise use the property's actual name
                 DisplayNameAttribute dna = (DisplayNameAttribute)(info.GetCustomAttributes(true).FirstOrDefault(x => x is DisplayNameAttribute));
-                string displayName = (dna == null) ? info.Name : dna.DisplayName;
+                string displayName = (dna == null) ? info.Name.Humanize() : dna.DisplayName;
 
                 //DataTemplate cellTemplate = BuildCellTemplateFromAttribute(info);
                 double width = GetWidthFromAttribute(lv, info, displayName);
@@ -249,11 +219,6 @@ namespace Utility.WPF.Controls.Objects
 
             return formattedText.WidthIncludingTrailingWhitespace;
         }
-
-
-        #endregion column rendering
-
-
     }
 }
 

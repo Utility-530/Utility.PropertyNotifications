@@ -287,8 +287,16 @@ namespace Utility.WPF.Controls.Objects
                 {
                     return frameworkElement.FindResource("ArrayPropertyTemplate") as DataTemplate;
                 }
-                else if (item is JProperty { Value: { Type: { } _type } _value, Parent: var parent } property)
+                else if (item is JProperty { Value: { Type: { } _type } _value, Parent: var parent, Name: { } name } property)
                 {
+                    var hasSchema = findProperty(property.Name, (JContainer)property.Parent, jsonControl.Schema, out SchemaProperty schemaProperty);
+                    if (hasSchema == true)
+                    {
+                        if (schemaProperty.IsVisible == false)
+                        {
+                            return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
+                        }
+                    }
                     if (property.Name == "$type")
                     {
                         return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
@@ -376,9 +384,9 @@ namespace Utility.WPF.Controls.Objects
                         return true;
                     }
                 }
-                else if (parent?.First?.Values<string>().First() is string stype && Type.GetType(stype) is Type _type)
+                else if (parent?.First?.HasValues == true && parent?.First?.Values<string>().First() is string stype && Type.GetType(stype) is Type _type)
                 {
-                    if (SchemaStore.Instance.Schemas.TryGetValue(_type, out var _schema))
+                    if (SchemaStore.Instance.TryGetValue(_type, out var _schema))
                     {
                         if (findProperty(name, parent, _schema, out property))
                         {
@@ -939,20 +947,17 @@ namespace Utility.WPF.Controls.Objects
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is JValue { Value: var _value })
-            {
-                if (Guid.TryParse(_value.ToString(), out Guid guid))
-                {
-                    return guid;
-                }
+            {     
+                return _value.ToString();                
             }
-            return DependencyProperty.UnsetValue;
+            return value.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             try
             {
-                return new JValue(value);
+                return value;
             }
             catch
             {
