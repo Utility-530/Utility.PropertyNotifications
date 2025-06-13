@@ -63,15 +63,15 @@ namespace Utility.Nodes.Filters
 
         public override void Set(object instance, object value)
         {
-            if(instance is INode node && Guid.TryParse(value.ToString(), out Guid guid))
-                node.WithChangesTo(a => a.Key).Subscribe(a =>
-            {
-                Locator.Current.GetService<INodeSource>().FindChild(node, guid)
-                                .Subscribe(a =>
-                                {
-                                    (instance as INode).Current = a;
-                                });
-            });
+            //if(instance is INode node && Guid.TryParse(value.ToString(), out Guid guid))
+            //    node.WithChangesTo(a => a.Key).Subscribe(a =>
+            //{
+            //    Locator.Current.GetService<INodeSource>().FindChild(node, guid)
+            //                    .Subscribe(a =>
+            //                    {
+            //                        (instance as INode).Current = a;
+            //                    });
+            //});
         }
     }
 

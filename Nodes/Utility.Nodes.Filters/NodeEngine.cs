@@ -36,6 +36,7 @@ namespace Utility.Nodes.Filters
     public class NodeEngine : INodeSource
     {
         ReplaySubject<INode> selections = new(1);
+        ReplaySubject<DirtyModel> dirty = new(1);
         string[] names = [nameof(Node.IsSelected), nameof(Node.IsExpanded), nameof(Node.Orientation), nameof(Node.Order), nameof(Node.Arrangement), nameof(Node.Order), nameof(Node.Current)];
         Dictionary<string, Func<object, object>> getters = new();
 
@@ -47,7 +48,6 @@ namespace Utility.Nodes.Filters
         Lazy<IExpander> expander;
         Lazy<IContext> context;
         Lazy<ITreeRepository> repository;
-        Lazy<MethodCache> methodCache;
 
         CompositeDisposable compositeDisposable = new();
 
@@ -62,7 +62,6 @@ namespace Utility.Nodes.Filters
             context = new(() => Locator.Current.GetService<IContext>());
             var repdository = Locator.Current.GetService<ITreeRepository>();
             repository = new(() => repdository);
-            methodCache = new(() => Locator.Current.GetService<MethodCache>());
         }
 
         public Guid Guid { get; } = Guid.NewGuid();
@@ -75,6 +74,8 @@ namespace Utility.Nodes.Filters
 
 
         public IObservable<INode> Selections => selections;
+
+        public IObservable<DirtyModel> Dirty => dirty;
 
         public void Remove(INode node)
         {
@@ -183,14 +184,9 @@ namespace Utility.Nodes.Filters
                         else
                             context.Value.UI(() =>
                             {
-                                Single(nameof(Factory.BuildDirty))
-                                .Subscribe(async _node =>
-                                {
-                                    if (_node.Data is not CollectionModel<DirtyModel> { Collection: { } collection } exceptionsModel)
-                                        throw new Exception("775 333");
-                                    else
-                                        _node.Add(await _node.ToTree(new DirtyModel { Name = name + node.Items.Count(), SourceKey = node.Key, PropertyName = name, NewValue = value }));
-                                }).DisposeWith(compositeDisposable);
+
+                                dirty.OnNext(new DirtyModel { Name = name + node.Items.Count(), SourceKey = node.Key, PropertyName = name, NewValue = value });
+
                             });
                     }
                     else
@@ -403,12 +399,13 @@ namespace Utility.Nodes.Filters
                 return Observable.Create<INode>(observer =>
                 {
                     int i = 0;
-
+                    bool flag = false;
                     return repository.Value.Find((GuidKey)node.Key)
                         .Subscribe(async key =>
                         {
                             if (key.HasValue == false)
                             {
+                                flag = true;
                                 children
                                     .Children
                                         .ForEach(async d =>
@@ -416,7 +413,7 @@ namespace Utility.Nodes.Filters
                                             createChild(node, observer, d, ++i).DisposeWith(compositeDisposable);
                                         });
                             }
-                            else
+                            else if (children is IChildCollection)
                             {
                                 i++;
                                 var nodes = Nodes.Where(a => a.Key == new GuidKey(key.Value.Guid)).ToArray();
@@ -439,6 +436,14 @@ namespace Utility.Nodes.Filters
                         }
                         , () =>
                             {
+
+                                if (children is not IChildCollection && flag == false)
+                                    children
+                                    .Children
+                                    .ForEach(d =>
+                                    {
+                                        createChild(node, observer, d, ++i).DisposeWith(compositeDisposable);
+                                    });
 
                                 children
                                 .Children
@@ -545,7 +550,7 @@ namespace Utility.Nodes.Filters
 
         public void Save()
         {
-            Single(nameof(Factory.BuildDirty))
+            Single(nameof(NodeMethodFactory.BuildDirty))
                 .Subscribe(async tree =>
                 {
                     if (tree.Data is not CollectionModel<DirtyModel> model)
@@ -586,16 +591,7 @@ namespace Utility.Nodes.Filters
                     });
                 }
                 else
-                    return methodCache.Value
-                    .Get(key)
-                    .Subscribe(a =>
-                    {
-                        observer.OnNext(a);
-                        //observer.OnCompleted();
-                    }, () =>
-                    {
-                        observer.OnCompleted();
-                    });
+                    throw new Exception("sd ddsdfdfsd");
             });
         }
 
@@ -681,10 +677,13 @@ namespace Utility.Nodes.Filters
 
     public class MethodValue
     {
+
+        public bool IsAccessed => Task != null || Nodes != null;
+        public object Instance { get; set; }
         public MethodInfo Method { get; set; }
 
         public Task Task { get; set; }
 
-        public IList<INode> Nodes { get; set; } = [];
+        public IList<INode> Nodes { get; set; }
     }
 }

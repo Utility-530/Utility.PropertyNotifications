@@ -1,45 +1,93 @@
-﻿using System;
+﻿using ActivateAnything;
+using Splat;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
-using System.Reflection;
 using System.Threading.Tasks;
 using Utility.Interfaces.Exs;
 using Observable = System.Reactive.Linq.Observable;
+using Utility.Helpers;
+using System.Reflection;
 
 namespace Utility.Nodes.Filters
 {
-    public class MethodCache 
+    public class MethodsValue(object instance, MethodInfo methodInfo)
     {
-        private Dictionary<string, MethodValue> dictionary;
-        private Dictionary<string, string> dictionaryMethodNameKeys = [];
-        Factory factory = new Factory();
-        public MethodCache()
+        Dictionary<Guid, MethodValue> pairs = new();
+
+        public MethodValue this[Guid guid]
         {
-            dictionary ??= typeof(Factory)
-                .GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                .ToDictionary(a => a.Name, a => new MethodValue { Method = a });
+            get
+            {
+                return pairs.Get(guid, a => new MethodValue() { Instance = instance, Method = methodInfo });
+            }
+        }
+    }
+
+    public class IOP
+    {
+        Dictionary<string, MethodsValue> _methods = new();
+
+        public void Add(string key, object instance, MethodInfo value)
+        {
+            _methods.Add(key, new(instance, value));
         }
 
-        public IObservable<INode> Get(string key)
+        public MethodValue this[(string key, Guid? guid) yt] => _methods[yt.key][yt.guid ?? default];
+
+        public object Invoke(string key, Guid? guid, object[]? objects = null)
         {
-            if (Contains(key) == false)
+            if (_methods.ContainsKey(key))
+                return this[(key, guid)].Method.Invoke(this[(key, guid)].Instance, (guid.HasValue ? [guid.Value] : Array.Empty<object>()).Concat(objects != null? objects: Array.Empty<object>()).ToArray());
+            throw new Exception("eeee 0ff0s");
+        }
+    }
+
+    public class MethodCache
+    {
+        private Lazy<IOP> dict = new(() =>
+        {
+            var iop = new IOP();
+            var factories = Locator.Current.GetServices<INodeMethodFactory>();
+            factories.ForEach(t => t.Methods.ForEach(m => iop.Add(m.Name, t, m)));
+            return iop;
+        });
+
+        public MethodCache()
+        {
+
+        }
+
+        private MethodValue this[(string key, Guid? guid) x]
+        {
+            get
             {
-                object output = Invoke(key);
+                return dict.Value[x];
+            }
+        }
+
+
+        public IObservable<INode> Get(string key, Guid? guid = default, object?[] objects = null)
+        {
+            if (Contains(key, guid) == false)
+            {
+                this[(key, guid)].Nodes ??= [];
+                object output = dict.Value.Invoke(key, guid, objects);
                 if (output is Node node)
                 {
-                    dictionary[key].Nodes.Add(node);
-                    dictionaryMethodNameKeys[key] = node.Data.ToString();
+                    this[(key, guid)].Nodes.Add(node);
+
                     //node.Name = key;
                 }
                 else if (output is IEnumerable<INode> nodes)
                 {
                     foreach (var _node in nodes)
                     {
-                        dictionary[key].Nodes.Add(_node);
-                        dictionaryMethodNameKeys[key] = _node.Data.ToString();
+                        this[(key, guid)].Nodes.Add(_node);
+
                         //_node.Name = key;
                     }
                 }
@@ -49,8 +97,8 @@ namespace Utility.Nodes.Filters
                     {
                         return nodeObservable.Subscribe(_node =>
                         {
-                            dictionary[key].Nodes.Add(_node);
-                            dictionaryMethodNameKeys[key] = _node.Data.ToString(); ;
+                            this[(key, guid)].Nodes.Add(_node);
+
                             //_node.Name = key;
                             //Add(_node);
                             obs.OnNext(_node);
@@ -59,16 +107,16 @@ namespace Utility.Nodes.Filters
                 }
                 else if (output is Task task)
                 {
-                    if (dictionary[key].Task == null)
+                    if (this[(key, guid)].Task == null)
                     {
-                        dictionary[key].Task = task;
+                        this[(key, guid)].Task = task;
                     }
                     return Observable.Create<Node>(o =>
                     {
-                        return dictionary[key].Task.ToObservable().Subscribe(a =>
+                        return this[(key, guid)].Task.ToObservable().Subscribe(a =>
                         {
-                            var result = (Node)dictionary[key].Task.GetType().GetProperty("Result").GetValue(dictionary[key].Task);
-                            dictionary[key].Nodes.Add(result);
+                            var result = (Node)this[(key, guid)].Task.GetType().GetProperty("Result").GetValue(this[(key, guid)].Task);
+                            this[(key, guid)].Nodes.Add(result);
                             //Add(result);
                             o.OnNext(result);
                         });
@@ -81,7 +129,7 @@ namespace Utility.Nodes.Filters
             }
             return Observable.Create<INode>(obs =>
             {
-                foreach (var x in dictionary[key].Nodes)
+                foreach (var x in this[(key, guid)].Nodes)
                 {
                     //Add(x);
                     obs.OnNext(x);
@@ -90,18 +138,10 @@ namespace Utility.Nodes.Filters
             });
         }
 
-        public bool Contains(string key)
+        public bool Contains(string key, Guid? guid)
         {
-            return dictionaryMethodNameKeys.ContainsKey(key);
+            return this[(key, guid)].IsAccessed;
         }
 
-        public static MethodCache Instance { get; } = new();
-
-        public object? Invoke(string key)
-        {
-            if (dictionary.ContainsKey(key))
-                return dictionary[key].Method.Invoke(factory, Array.Empty<object>());
-            return null;
-        }
     }
 }

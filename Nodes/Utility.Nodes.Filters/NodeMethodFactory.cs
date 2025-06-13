@@ -3,14 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Reflection;
 using Utility.Interfaces.Exs;
 using Utility.Keys;
 using Utility.Models;
 using Utility.Models.Trees;
+using Utility.Helpers.Reflection;
 
 namespace Utility.Nodes.Filters
 {
-    public class Factory
+    public class NodeMethodFactory : INodeMethodFactory
     {
 
         INodeSource nodeSource = Locator.Current.GetService<INodeSource>();
@@ -71,6 +73,8 @@ namespace Utility.Nodes.Filters
         public const string Select = nameof(Select);
         public const string Cancel = nameof(Cancel);
 
+        public IEnumerable<MethodInfo> Methods => this.GetType().InstantMethods();
+
         public IObservable<INode> BuildRoot()
         {
             return nodeSource.Create(root, guid, s => new Node(s), s => new Model() { Name = s });
@@ -96,7 +100,7 @@ namespace Utility.Nodes.Filters
                 s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Horizontal, IsContentVisible = false },
                 s => new Model(() => [new CommandModel { Name = Select }, new CommandModel { Name = Cancel }]) { Name = s });
         }
-        
+
         public IObservable<INode> BuildInputNodeRoot()
         {
             return nodeSource.Create(input_node,
@@ -189,7 +193,8 @@ namespace Utility.Nodes.Filters
             {
                 return new Model()
                 { Name = s };
-            };
+            }
+            ;
         }
 
         public IObservable<INode> BuildDemoContentRoot()
@@ -222,10 +227,11 @@ namespace Utility.Nodes.Filters
                     }){ Name = "Group 3"}
                     ];
                 })
-                { Name = s }; 
-      
-          
-            };
+                { Name = s };
+
+
+            }
+            ;
         }
     }
 }
