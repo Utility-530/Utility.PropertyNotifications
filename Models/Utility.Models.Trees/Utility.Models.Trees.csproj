@@ -2,6 +2,7 @@
 
   <PropertyGroup>
 	  <TargetFramework>net8.0</TargetFramework>
+	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -14,6 +15,7 @@
     <ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
     <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Changes\Utility.Changes.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.Entities\Utility.Entities.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Keys\Utility.Keys.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
     <ProjectReference Include="..\..\Interfaces\Utility.Interfaces.Exs\Utility.Interfaces.Exs.csproj" />
