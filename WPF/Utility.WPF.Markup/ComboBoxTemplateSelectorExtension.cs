@@ -8,7 +8,7 @@ using System.Windows.Markup;
 using System.Windows;
 using System.Windows.Media;
 
-namespace WPF.Infrastructures
+namespace Utility.WPF.Markup
 {
     public class ComboBoxTemplateSelectorExtension : MarkupExtension
     {
