@@ -7,10 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="RazorEngine.NetCore.nixFix" Version="1.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\Collections\Utility.Collections\Utility.Collections.csproj" />
     <ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
     <ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
+    <ProjectReference Include="..\Utility.Entities\Utility.Entities.csproj" />
+    <ProjectReference Include="..\Utility.Globals\Utility.Globals.csproj" />
     <ProjectReference Include="..\Utility.Guids\Utility.Guids.csproj" />
   </ItemGroup>
 
