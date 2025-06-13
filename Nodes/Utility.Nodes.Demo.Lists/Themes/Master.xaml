@@ -8,69 +8,65 @@
                     xmlns:beh="http://schemas.utility.com/behaviors" 
                     xmlns:panels="http://schemas.utility.com/panels"
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                 >
+                    xmlns:c="http://schemas.utility.com/colours">
 
-
-
-    <!--<Style x:Key="ComboEx2Style" TargetType="{x:Type t:CustomTreeViewItem}" BasedOn="{StaticResource ComboExStyle}">
-        <Setter Property="bc:TreeViewEx.CurrentItem" Value="{Binding Current, Mode=TwoWay}"/>
-        <Setter Property="Selection" Value="{Binding Path=SelectionItem.Data, RelativeSource={RelativeSource Mode=Self}}"/>
-        --><!--<Setter Property="Selection" Value="{Binding Path=(att:TreeEx.SelectedItem), RelativeSource={RelativeSource Mode=Self}}"></Setter>--><!--
-        <Setter Property="ItemTemplate">
+    <Style x:Key="DefaultChildCustomStyle" TargetType="{x:Type t:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type t:CustomTreeViewItem}}">
+        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"></Setter>
+        <Setter Property="SelectionItem" Value="{Binding Current, Mode=TwoWay}"/>
+        <!--<Setter Property="Background" Value="{c:Amber}"></Setter>-->
+        <Setter Property="Template">
             <Setter.Value>
-                <StaticResource ResourceKey="ItemTemplate"/>
+                <ControlTemplate TargetType="{x:Type t:CustomTreeViewItem}">
+                    <Grid>
+                        <ToggleButton x:Name="Toggle" Style="{StaticResource CustomToggleStyle}" Width="100" Height="100" Margin="12"                                     
+                                      IsChecked="{Binding IsSelected, Mode=OneWayToSource,RelativeSource={RelativeSource Mode=TemplatedParent}}">
+                            <i:Interaction.Triggers >
+                                <i:DataTrigger Value="True" Binding="{Binding ElementName=Toggle, Path=IsChecked}">
+                                    <i:ChangePropertyAction PropertyName="IsChecked" Value="false" />
+                                </i:DataTrigger>
+                            </i:Interaction.Triggers>
+                            <ContentPresenter Content="{TemplateBinding Header}"></ContentPresenter>
+                        </ToggleButton>
+                        <!--<Ellipse x:Name="Ellipse" Fill="{TemplateBinding Background}" Height="20" Width="20"></Ellipse>-->
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger SourceName="Toggle" Property="IsChecked" Value="True">
+                            <Setter TargetName="Toggle" Property="Background" Value="Chocolate" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="EditTemplate">
-            <Setter.Value >
-                <StaticResource ResourceKey="EditTemplate"/>
-            </Setter.Value>
-        </Setter>
-        <att:InteractivitySetter Property="att:InteractivityItems.Template">
-            <Setter.Value>
-                <att:InteractivityTemplate>
-                    <att:InteractivityItems>
-                        <att:InteractivityItems.Triggers>
-                            <i:EventTrigger EventName="Change">
-                                <beh:InvokeCommandAction Command="{Binding AddCommand}" EventArgsConverter="{StaticResource AddDataFileConverter}"/>
-                            </i:EventTrigger>
-                        </att:InteractivityItems.Triggers>
-                    </att:InteractivityItems>
-                </att:InteractivityTemplate>
-            </Setter.Value>
-        </att:InteractivitySetter>
-        --><!--<Setter Property="Selection" Value="{Binding Current, Mode=TwoWay}"></Setter>
-    </Style>-->
+    </Style>
+
 
     <Style x:Key="DefaultCustomStyle" TargetType="{x:Type t:CustomTreeViewItem}">
-        <Setter Property="SelectedIndex" Value="-1"></Setter>
-        <Setter Property="SelectionItem" Value="{Binding Current, Mode=TwoWay}"></Setter>
-        <!--<i:Interaction.Triggers>
-            <i:EventTrigger EventName="SelectedItemChanged">
-                <beh:SetSelectedItemAction PropertyName="DataContext" TargetObject="{Binding ElementName=splitcontrol, Path=Header}" />
-            </i:EventTrigger>
-        </i:Interaction.Triggers>-->
-        <att:InteractivitySetter Property="att:InteractivityItems.Template">
+        <Setter Property="SelectedIndex" Value="-1"/>
+        <Setter Property="SelectionItem" Value="{Binding Current, Mode=TwoWay}"/>
+        <!--<att:InteractivitySetter Property="att:InteractivityItems.Template">
             <Setter.Value>
                 <att:InteractivityTemplate>
                     <att:InteractivityItems>
                         <att:InteractivityItems.Triggers>
                             <i:EventTrigger EventName="Loaded">
                                 <beh:SetterAction TargetObject="{Binding }" PropertyName="Current" Value="{x:Null}"></beh:SetterAction>
+                                <beh:SetterAction PropertyName="SelectedIndex" Value="-1"></beh:SetterAction>
                             </i:EventTrigger>
                             <i:EventTrigger EventName="SelectionChanged">
                                 <beh:SetterAction TargetObject="{Binding }" PropertyName="Current" Value="{x:Null}"></beh:SetterAction>
+                                <beh:SetterAction PropertyName="SelectedIndex" Value="-1"></beh:SetterAction>
                             </i:EventTrigger>
                         </att:InteractivityItems.Triggers>
                     </att:InteractivityItems>
                 </att:InteractivityTemplate>
             </Setter.Value>
-        </att:InteractivitySetter>
+        </att:InteractivitySetter>-->
     </Style>
+    
     <local:ComboContainerStyleSelector x:Key="ComboContainerStyleSelector"
+                                       ComboStyle="{StaticResource DefaultChildCustomStyle}"
                                     DefaultStyle="{StaticResource DefaultCustomStyle}" 
                                   >
-   
     </local:ComboContainerStyleSelector>
 
 
@@ -84,7 +80,7 @@
             <Viewbox  HorizontalAlignment="Left">
                 <t:CustomTreeView  ItemsSource="{Binding Controls}" ItemContainerStyle="{StaticResource DefaultStyle}"/>
             </Viewbox>
-            
+
             <t:CustomTreeView   
                 Grid.Row="1"
                 ItemsSource="{Binding Selection, Mode=OneWay}" ItemContainerStyleSelector="{StaticResource ComboContainerStyleSelector}" >
@@ -94,8 +90,6 @@
                     </ItemsPanelTemplate>
                 </t:CustomTreeView.ItemsPanel>
             </t:CustomTreeView>
-
-   
         </Grid>
     </DataTemplate>
 

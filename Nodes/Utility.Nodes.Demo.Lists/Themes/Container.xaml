@@ -28,7 +28,7 @@
                 x:Name="InitialTabablzControl"                
                 ItemContainerStyleSelector="{StaticResource StyleSelector}"
                 ClosingItemCallback="{Binding ClosingTabItemHandler}"
-                ItemsSource="{Binding Views}"
+                ItemsSource="{Binding Children}"
                 SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ShowDefaultCloseButton="True">
                 <dragablz:TabablzControl.InterTabController>

@@ -1,4 +1,5 @@
-﻿using System.Reactive.Disposables;
+﻿using Splat;
+using System.Reactive.Disposables;
 using Utility.Nodes.Ex;
 using Utility.Nodes.Filters;
 using Utility.Nodes.WPF;
@@ -15,8 +16,9 @@ namespace Utility.Nodes.Demo.Lists
             get
             {
                 if (content == null)
-                    source.Value.Single(nameof(Factory.BuildContentRoot))
-                        .Subscribe(a => { content = [a]; RaisePropertyChanged(nameof(Content)); }).DisposeWith(disposables); ;
+                    Locator.Current.GetService<MethodCache>().Get(nameof(NodeMethodFactory.BuildContentRoot))
+                        .Subscribe(a => { content = [a]; RaisePropertyChanged(nameof(Content)); })
+                        .DisposeWith(disposables); ;
                 return content;
             }
         }        

@@ -8,8 +8,10 @@ using Utility.Nodes.WPF;
 
 namespace Utility.Nodes.Demo.Lists
 {
-    public class ChildViewModel : ViewModel
+    public class ChildViewModel(string name) : ViewModel
     {
+        public override string Name => name;
+
         public ModelTypeModel Data { get; set; }
     }
 }

@@ -1,9 +1,7 @@
 ﻿using Splat;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Utility.Interfaces.Exs;
 using Utility.Models.Trees;
-using Utility.Nodes.Demo.Lists;
 using Utility.Nodes.Filters;
 using Utility.Nodes.WPF;
 using Utility.PropertyNotifications;
@@ -16,8 +14,8 @@ namespace Utility.Nodes.Demo.Lists.Services
         public ComboService()
         {
 
-            Locator.Current.GetService<INodeSource>()
-                .Single(nameof(Factory.BuildListRoot))
+            Locator.Current.GetService<MethodCache>()
+                .Get(nameof(Utility.Nodes.Filters.NodeMethodFactory.BuildListRoot))
                 .Subscribe(node =>
                 {
                     node
@@ -26,7 +24,7 @@ namespace Utility.Nodes.Demo.Lists.Services
                     {
                         if (a.Data is ModelTypeModel { Value.Type: { } type } data)
                         {
-                            var x = new ChildViewModel() { Data = data };
+                            var x = new ChildViewModel(data.Value.Alias) { Data = data };
                             viewModels.OnNext(x);
                         }
                     });

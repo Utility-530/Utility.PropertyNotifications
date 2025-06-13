@@ -1,4 +1,5 @@
-﻿using System.Reactive.Disposables;
+﻿using Splat;
+using System.Reactive.Disposables;
 using Utility.Nodes.Filters;
 using Utility.Nodes.WPF;
 using Utility.Trees.Abstractions;
@@ -15,8 +16,12 @@ namespace Utility.Nodes.Demo.Lists
             get
             {
                 if (selection == null)
-                    source.Value.Single(nameof(Factory.BuildListRoot))
-                        .Subscribe(a => { selection = [a]; RaisePropertyChanged(nameof(Selection)); }).DisposeWith(disposables);
+                    Locator.Current.GetService<MethodCache>().Get(nameof(NodeMethodFactory.BuildListRoot))
+                        .Subscribe(a => 
+                        {
+                            selection = [a]; RaisePropertyChanged(nameof(Selection));
+                        })
+                        .DisposeWith(disposables);
                 return selection;
             }
         }
@@ -26,7 +31,7 @@ namespace Utility.Nodes.Demo.Lists
             get
             {
                 if (control == null)
-                    source.Value.Single(nameof(Factory.BuildControlRoot))
+                    Locator.Current.GetService<MethodCache>().Get(nameof(NodeMethodFactory.BuildControlRoot))
                         .Subscribe(a =>
                         {
                             control = [a]; base.RaisePropertyChanged(nameof(Controls));
@@ -35,4 +40,6 @@ namespace Utility.Nodes.Demo.Lists
             }
         }
     }
+
+
 }
