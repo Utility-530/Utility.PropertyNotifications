@@ -13,14 +13,18 @@ namespace Utility.PropertyNotifications
     {
         bool flag;
 
-        protected NotifyPropertyClass() : base()
+        protected NotifyPropertyClass(bool raisePropertyCalled = true, bool raisePropertyReceived = true, bool raisePropertyChanged = true) : base()
         {
+            this.raisePropertyCalled = raisePropertyCalled;
+            this.raisePropertyReceived = raisePropertyReceived;
+            this.raisePropertyChanged = raisePropertyChanged;
         }
 
         public event PropertyChangingEventHandler? PropertyChanging;
 
         #region INotifyPropertyChanged Members
 
+        bool raisePropertyChanged;
         /// <summary>
         /// Raised when a property on this object has a new value.
         /// </summary>
@@ -76,7 +80,7 @@ namespace Utility.PropertyNotifications
 
         public virtual void RaisePropertyChanged<T>(T previousValue, T value, [CallerMemberName] string? propertyName = null)
         {
-            if (PropertyChanged != null)
+            if (PropertyChanged != null && raisePropertyChanged)
             {
                 var e = new PropertyChangedExEventArgs(propertyName, value, previousValue);
                 PropertyChanged(this, e);
@@ -97,6 +101,8 @@ namespace Utility.PropertyNotifications
         #region INotifyPropertyCalled Members
 
         private ObservableCollection<PropertyCalledEventArgs> missedCalls = [];
+        private readonly bool raisePropertyCalled;
+
 
         public IEnumerable<PropertyCalledEventArgs> MissedCalls => missedCalls;
 
@@ -121,7 +127,7 @@ namespace Utility.PropertyNotifications
             if (flag == false)
             {
                 var args = PropertyCalledArgs(propertyName, value);
-                if (PropertyCalled is PropertyCalledEventHandler handler)
+                if (raisePropertyCalled && PropertyCalled is PropertyCalledEventHandler handler)
                     handler.Invoke(this, args);
                 else
                     missedCalls.Add(args);
@@ -137,6 +143,7 @@ namespace Utility.PropertyNotifications
 
         #region INotifyPropertyReceived Members
 
+        private readonly bool raisePropertyReceived;
         /// <summary>
         /// Raised when a property on this object has a new value.
         /// </summary>
@@ -170,7 +177,8 @@ namespace Utility.PropertyNotifications
 
             var _previousValue = previousValue;
             previousValue = value;
-            RaisePropertyReceived(_previousValue, value, propertyName);
+            if (raisePropertyReceived)
+                RaisePropertyReceived(_previousValue, value, propertyName);
         }
 
         #endregion INotifyPropertyReceived Members

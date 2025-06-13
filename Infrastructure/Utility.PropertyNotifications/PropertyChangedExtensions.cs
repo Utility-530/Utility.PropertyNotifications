@@ -66,7 +66,7 @@ namespace Utility.PropertyNotifications
                 private readonly bool _includeNulls;
                 private Dictionary<string, Func<object, T>> dictionary = new();
 
-                public Subscription(TModel target, PropertyInfo info, IObserver<T> observer, bool includeNulls, bool includeInitialValue)
+                public Subscription(TModel target, PropertyInfo? info, IObserver<T> observer, bool includeNulls, bool includeInitialValue)
                 {
                     _target = target;
                     _info = info;
@@ -163,25 +163,18 @@ namespace Utility.PropertyNotifications
                         {
                             _observer.OnNext(null);
                         }
-                        else if (dictionary.ContainsKey(pName) == false)
-                        {
-                            var property = _target.GetType().GetProperty(pName);          
-                            dictionary[pName] = property.ToGetter<object>();
-                        }
-                        else if (dictionary.ContainsKey(pName))
-                        {
-                            var value = dictionary[pName].Invoke(_target);
-                            _observer.OnNext(new PropertyChange(_target, value, pName));
-                        }
                         else
                         {
-                            throw new Exception("!!!!D");
+                            var getter = dictionary.Get(pName, a => _target.GetType().GetProperty(pName).ToGetter<object>());
+                            {
+                                var value = getter.Invoke(_target);
+                                _observer.OnNext(new PropertyChange(_target, value, pName));
+                            }
                         }
-
                     }
                     else if (e.PropertyName == _info?.Name)
                         _observer.OnNext(new PropertyChange(_target, getter?.Invoke(_target), e.PropertyName));
-                }
+                    }
 
                 public void Dispose()
                 {
