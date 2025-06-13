@@ -19,7 +19,7 @@ namespace Utility.Nodes.Demo.Directory
             get
             {
                 if (selection == null)
-                    source.Value.Single(nameof(Factory.BuildComboRoot))
+                    source.Value.Single(nameof(NodeMethodFactory.BuildComboRoot))
                         .Subscribe(a => { selection = a;
                             RaisePropertyChanged(nameof(Selection)); });
                 return selection ?? new Tree();

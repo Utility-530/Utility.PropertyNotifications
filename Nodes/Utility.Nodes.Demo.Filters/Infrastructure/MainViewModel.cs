@@ -43,7 +43,7 @@ namespace Utility.Trees.Demo.Filters.Infrastructure
             get
             {
                 if (filters == null)
-                    source.Value.Single(nameof(Factory.BuildCollectionRoot))
+                    source.Value.Single(nameof(NodeMethodFactory.BuildCollectionRoot))
                         .Subscribe(a =>
                         {
                             filters = [(Node)a];

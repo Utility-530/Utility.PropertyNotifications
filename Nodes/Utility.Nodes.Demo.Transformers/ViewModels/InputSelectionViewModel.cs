@@ -8,8 +8,8 @@ namespace Utility.Nodes.Demo.Transformers
 {
     public class InputSelectionViewModel : ViewModel
     {
-        public IEnumerable<IReadOnlyTree> Content =>  get(nameof(Factory.BuildInputNodeRoot));
-        public IEnumerable<IReadOnlyTree> Controls => get(nameof(Factory.BuildInputControlRoot));
+        public IEnumerable<IReadOnlyTree> Content =>  get(nameof(NodeMethodFactory.BuildInputNodeRoot));
+        public IEnumerable<IReadOnlyTree> Controls => get(nameof(NodeMethodFactory.BuildInputControlRoot));
 
     }
 }

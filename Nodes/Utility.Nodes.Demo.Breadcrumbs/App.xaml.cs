@@ -52,7 +52,7 @@ namespace Utility.Nodes.Breadcrumbs
             if (Locator.Current.GetService<IJObjectService>().Get() is not JObject jObject)
             {
                 Locator.Current.GetService<INodeSource>()
-                   .Single(nameof(Factory.BreadcrumbRoot))
+                   .Single(nameof(NodeMethodFactory.BreadcrumbRoot))
                    .Subscribe(node =>
                    {
                        this.node = node;

@@ -39,11 +39,11 @@ namespace Utility.Nodes.Demo.Filters.Services
             {
                 return Locator.Current
                 .GetService<INodeSource>()
-                .Single(nameof(Factory.BuildTransformersRoot))
+                .Single(nameof(NodeMethodFactory.BuildTransformersRoot))
                 .Subscribe(c_node =>
                 {
                     c_node
-                    .Descendant(a => (a.Item1 as INode).Data.ToString() == Factory.content_root)
+                    .Descendant(a => (a.Item1 as INode).Data.ToString() == NodeMethodFactory.content_root)
                     .Subscribe(a =>
                     {
                         var transformersModel = a.NewItem.Data as TransformersModel;
@@ -63,7 +63,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                                 .Take(1)
                                 .Subscribe(_a =>
                                 {
-                                    Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildContentRoot))
+                                    Locator.Current.GetService<INodeSource>().Single(nameof(NodeMethodFactory.BuildContentRoot))
                                         .Subscribe(model =>
                                             {
                                                 _a.Clear();

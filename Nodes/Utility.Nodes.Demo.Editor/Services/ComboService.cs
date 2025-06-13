@@ -16,7 +16,7 @@ namespace Utility.Nodes.Demo.Filters.Services
         public ComboService()
         {
 
-            Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildComboRoot))
+            Locator.Current.GetService<INodeSource>().Single(nameof(NodeMethodFactory.BuildComboRoot))
                 .Subscribe(node =>
                 {
                     node.WithChangesTo(a => a.Current)

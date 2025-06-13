@@ -26,7 +26,7 @@ namespace Utility.Nodes.Demo.Filters.Services
 
         private ControlsService()
         {
-            Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildControlRoot))
+            Locator.Current.GetService<INodeSource>().Single(nameof(NodeMethodFactory.BuildControlRoot))
             .Subscribe(_n =>
             {
                 _n.Descendants()
@@ -48,11 +48,11 @@ namespace Utility.Nodes.Demo.Filters.Services
 
             switch (name)
             {
-                case Factory.Save:
-                    var _ = Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildRoot)).Subscribe(root =>
+                case NodeMethodFactory.Save:
+                    var _ = Locator.Current.GetService<INodeSource>().Single(nameof(NodeMethodFactory.BuildRoot)).Subscribe(root =>
                     {
                         root
-                        .Descendant(a => a.tree.Data.ToString() == Factory.content_root)
+                        .Descendant(a => a.tree.Data.ToString() == NodeMethodFactory.content_root)
                         .Subscribe(contentRoot =>
                         {
                             Locator.Current.GetService<INodeSource>().Save(); //((INode)contentRoot.NewItem);
@@ -63,7 +63,7 @@ namespace Utility.Nodes.Demo.Filters.Services
 
                     break;
 
-                case Factory.Refresh:
+                case NodeMethodFactory.Refresh:
                     dict[ControlEventType.Refresh] = dict.Get(ControlEventType.Refresh) + 1;
                     //Refresh(contentRoot);
                     replaySubject.OnNext(new ControlEvent(ControlEventType.Refresh, dict.Get(ControlEventType.Refresh)));

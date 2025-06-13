@@ -14,7 +14,7 @@ namespace Utility.Nodes.Demo.Editor
             get
             {
                 if (content == null)
-                    source.Value.Single(nameof(Factory.BuildContentRoot))
+                    source.Value.Single(nameof(NodeMethodFactory.BuildContentRoot))
                         .Subscribe(a => { content = [a]; RaisePropertyChanged(nameof(Content)); }).DisposeWith(disposables); ;
                 return content;
             }
@@ -25,7 +25,7 @@ namespace Utility.Nodes.Demo.Editor
             get
             {
                 if (clones == null)
-                    source.Value.Single(nameof(Factory.BuildContentRoot))
+                    source.Value.Single(nameof(NodeMethodFactory.BuildContentRoot))
                         .Subscribe(a =>
                         {
                             clones = [a.Abstract(out var disposables)]; RaisePropertyChanged(nameof(Clones));
@@ -39,7 +39,7 @@ namespace Utility.Nodes.Demo.Editor
             get
             {
                 if (html == null)
-                    source.Value.Single(nameof(Factory.BuildHtmlRoot))
+                    source.Value.Single(nameof(NodeMethodFactory.BuildHtmlRoot))
                         .Subscribe(a => { html = [a]; RaisePropertyChanged(nameof(Html)); }).DisposeWith(disposables); ;
                 return html;
             }
@@ -49,7 +49,7 @@ namespace Utility.Nodes.Demo.Editor
             get
             {
                 if (dirty == null)
-                    source.Value.Single(nameof(Factory.BuildDirty))
+                    source.Value.Single(nameof(NodeMethodFactory.BuildDirty))
                         .Subscribe(a => { dirty = [a]; RaisePropertyChanged(nameof(Dirty)); }).DisposeWith(disposables); ;
                 return dirty;
             }

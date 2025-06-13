@@ -35,8 +35,8 @@ namespace Utility.Nodes.Demo.Filters.Services
 
         public ParserService()
         {
-            Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildContentRoot))
-                .CombineLatest(Locator.Current.GetService<INodeSource>().Single(nameof(Factory.BuildHtmlRoot)))
+            Locator.Current.GetService<INodeSource>().Single(nameof(NodeMethodFactory.BuildContentRoot))
+                .CombineLatest(Locator.Current.GetService<INodeSource>().Single(nameof(NodeMethodFactory.BuildHtmlRoot)))
                 .Subscribe(nodes =>
                 {
                     var (node, htmlNode) = nodes;

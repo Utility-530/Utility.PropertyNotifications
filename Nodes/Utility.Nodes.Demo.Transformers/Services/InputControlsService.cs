@@ -20,7 +20,7 @@ namespace Utility.Nodes.Demo.Filters.Services
         public InputControlsService()
         {
             Locator.Current.GetService<INodeSource>()
-                .Single(nameof(Factory.BuildInputControlRoot))
+                .Single(nameof(NodeMethodFactory.BuildInputControlRoot))
                 .Subscribe(_n =>
                 {
                     Utility.Trees.Extensions.Async.Match.Descendants(_n)
@@ -41,12 +41,12 @@ namespace Utility.Nodes.Demo.Filters.Services
         {
             switch (name)
             {
-                case Factory.Select:
+                case NodeMethodFactory.Select:
                     {
                         replaySubject.OnNext(new ControlEvent(ControlEventType.Select, default));
                     }
                     break;
-                case Factory.Cancel:
+                case NodeMethodFactory.Cancel:
                     {
                         replaySubject.OnNext(new ControlEvent(ControlEventType.Cancel, default));
                     }

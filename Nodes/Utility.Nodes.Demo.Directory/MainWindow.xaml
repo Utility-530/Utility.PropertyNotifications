@@ -173,14 +173,14 @@
                     <TextBox Grid.Column="1"
         Grid.Row="1"
         Grid.ColumnSpan="3"
-                             Text="{Binding Alias, Mode=TwoWay, Converter={x:Static conv:DefaultConverter.Instance}}"
+                             Text="{Binding Alias, Mode=TwoWay}"
         Name="txtName"/>
 
             
                     <TextBox Grid.Column="1"
         Grid.Row="2"
         Grid.ColumnSpan="3"
-                             Text="{Binding FilePath, Mode=TwoWay, Converter={x:Static conv:DefaultConverter.Instance}}"
+                             Text="{Binding FilePath, Mode=TwoWay}"
         Name="txtAddress"/>
 
 

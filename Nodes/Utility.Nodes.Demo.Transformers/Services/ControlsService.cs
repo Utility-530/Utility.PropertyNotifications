@@ -35,7 +35,7 @@ namespace Utility.Nodes.Demo.Filters.Services
         {
             Locator.Current
                 .GetService<INodeSource>()
-                .Single(nameof(Factory.BuildControlRoot))
+                .Single(nameof(NodeMethodFactory.BuildControlRoot))
                 .Subscribe(_n =>
                 {
                     Utility.Trees.Extensions.Async.Match.Descendants(_n)
@@ -56,11 +56,11 @@ namespace Utility.Nodes.Demo.Filters.Services
         {
             switch (name)
             {
-                case Factory.Run:
+                case NodeMethodFactory.Run:
                     {
                         Locator.Current
                             .GetService<INodeSource>()
-                            .Single(nameof(Factory.BuildTransformersRoot))
+                            .Single(nameof(NodeMethodFactory.BuildTransformersRoot))
                             .Subscribe(c_node =>
                             {
                                 if (c_node is { Data: TransformersModel ts })
@@ -213,7 +213,7 @@ namespace Utility.Nodes.Demo.Filters.Services
             public void Connect()
             {
                 Locator.Current.GetService<INodeSource>()
-                    .Single(nameof(Factory.BuildDemoContentRoot))
+                    .Single(nameof(NodeMethodFactory.BuildDemoContentRoot))
                     .Subscribe(source =>
                     {
                         source
@@ -388,7 +388,7 @@ namespace Utility.Nodes.Demo.Filters.Services
         public static IObservable<IReadOnlyTree> Content()
         {
             return Locator.Current.GetService<INodeSource>()
-              .Single(nameof(Factory.BuildDemoContentRoot));
+              .Single(nameof(NodeMethodFactory.BuildDemoContentRoot));
         }
 
     }
