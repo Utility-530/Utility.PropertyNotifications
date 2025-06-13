@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Controls.Logs\Utility.WPF.Controls.Logs.csproj" />
+  </ItemGroup>
+
+</Project>
