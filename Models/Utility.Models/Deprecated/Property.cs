@@ -1,66 +1,53 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.ComponentModel;
-//using System.Linq;
+﻿//using System.ComponentModel;
 //using System.Runtime.CompilerServices;
-//using System.Text;
-//using System.Threading.Tasks;
 
 //namespace Utility.Models
 //{
-//    public class Property<T> : Property, INotifyPropertyChanged
+//    public class Property : INotifyPropertyChanged
 //    {
-//        private readonly IEqualityComparer<T>? equalityComparer;
-//        //private readonly ReplaySubject<T> subject = new ReplaySubject<T>(1);
-//        private T value = default!;
+//        private object _value;
+
+//        public int GridRow { get; set; }
+//        public int GridColumn { get; set; }
+//        public int GridColumnSpan { get; set; }
+//        public int GridRowSpan { get; set; }
+
+//        public Property(object? value = null) => _value = value;
+
+//        public object Value
+//        {
+//            get => _value;
+//            set
+//            {
+//                if (_value?.Equals(value) != true)
+//                {
+//                    _value = value;
+//                    OnPropertyChanged();
+//                }
+//            }
+//        }
+
+//        #region propertyChanged
 
 //        public event PropertyChangedEventHandler? PropertyChanged;
 
+//        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+//        {
+//            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+//        }
+
+//        #endregion propertyChanged
+//    }
+
+//    public class Property<T> : Property
+//    {
+//        public Property(T value) => Value = value;
+
 //        public Property()
-//        {
-//        }
+//        { }
 
-//        public Property(T value)
-//        {
-//            Value = value;
-//        }
+//        public T GetValue() => (T)Value;
 
-//        public virtual T Value
-//        {
-//            get => value;
-//            set => throw new Exception("Unable to set readonly property");
-//        }
-
-//        public void RaisePropertyChanged([CallerMemberName] string? callerMemberName = null)
-//        {
-//            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(callerMemberName));
-//        }
-
-//        public IDisposable Subscribe(IObserver<T> observer)
-//        {
-//            throw new NotImplementedException();
-//            //return subject.Subscribe(observer);
-//        }
+//        public void SetValue(T value) => Value = value;
 //    }
-
-//    public class Property
-//    {
-//    }
-
-//    public class StringProperty : Property
-//    {
-//        public StringProperty(string value) => Value = value;
-//        public string Value { get; set; }
-
-//        public static implicit operator string(StringProperty stringProperty)
-//        {
-//            return stringProperty.Value;
-//        }
-
-//        public static implicit operator StringProperty(string stringValue)
-//        {
-//            return new StringProperty(stringValue);
-//        }
-//    }
-
 //}

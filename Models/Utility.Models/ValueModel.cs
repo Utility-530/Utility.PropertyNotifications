@@ -2,33 +2,33 @@
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
+using Utility.PropertyNotifications;
 
 namespace Utility.Models
 {
-    public class ValueModel<T> : ValueModel<T, Model>
-    {
-        public ValueModel(T? value = default):base(value) 
-        {
-        }
 
-    }
-
-    public class ValueModel<T, TModel> : CollectionModel<TModel>, IValue<T?>, ISetValue, IGet, ISet, IGet<T>, Utility.Interfaces.Generic.ISet<T>
+    public class ValueModel<T> : NotifyPropertyClass, IValue<T?>, ISetValue, IGet, ISet, IGet<T>, Utility.Interfaces.Generic.ISet<T>, IModel
     {
         private T value;
+        private readonly bool raisePropertyCalled;
+        private readonly bool raisePropertyReceived;
+        protected string m_name = "unknown";
 
-        public ValueModel(T? value = default)
+        public ValueModel(T? value = default, bool raisePropertyCalled = true, bool raisePropertyReceived = true):base(raisePropertyCalled, raisePropertyReceived)
         {
             this.value = value;
         }
 
-        public override void Initialise()
+        public virtual required string Name
         {
+            get { RaisePropertyCalled(m_name); return m_name; }
+            set => this.RaisePropertyReceived(ref this.m_name, value);
         }
+
 
         public virtual T? Value
         {
-            get { RaisePropertyCalled(value); return value; }
+            get {  RaisePropertyCalled(value); return value; }
             set => this.RaisePropertyReceived(ref this.value, value);
         }
 
@@ -43,12 +43,8 @@ namespace Utility.Models
             }
             else
             {
+                //this.RaisePropertyChanged(nameof(Value));
             }
-        }
-
-        public override void SetNode(INode node)
-        {
-            Node = node;
         }
 
         object? IGet.Get() => this.value;

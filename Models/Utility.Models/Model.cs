@@ -13,29 +13,44 @@ using Utility.Helpers.Reflection;
 
 namespace Utility.Models
 {
-    public class Model : NotifyPropertyClass, ISetNode, IProliferation, IClone, IYieldChildren, IKey, IName
+    public class ReadOnlyModel : Model
     {
-        protected string m_name = "unknown";
-        private INode node;
-        int i = 0;
-        protected readonly Func<IEnumerable<Model>> func;
-
-        protected INodeSource source = Locator.Current.GetService<INodeSource>();
-        protected Lazy<IContext> context = new(() => Locator.Current.GetService<IContext>());
-        public virtual Version Version { get; set; } = new();
-        public virtual required string Name
+        public ReadOnlyModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null) : base(func, nodeAction, addition, false, false)
         {
-            get { RaisePropertyCalled(m_name); return m_name; }
-            set => this.RaisePropertyReceived(ref this.m_name, value);
-        }
 
+        }
+    }
+
+
+    public class Model : Model<object>
+    {
         public Model()
         {
         }
 
-        public Model(Func<IEnumerable<Model>> func) : this()
+        public Model(Func<IEnumerable<IModel>> func, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(func, nodeAction, addition, raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
+        {
+
+        }
+    }
+
+    public class Model<T> : ValueModel<T>, ISetNode, IGetNode, IProliferation, IClone, IYieldChildren, IKey, IName
+    {
+        private INode node;
+        int i = 0;
+        protected readonly Func<IEnumerable<IModel>>? func;
+        private readonly Action<INode>? nodeAction;
+        private readonly Action<IReadOnlyTree, IReadOnlyTree>? addition;
+        protected INodeSource source = Locator.Current.GetService<INodeSource>();
+        protected Lazy<IContext> context = new(() => Locator.Current.GetService<IContext>());
+        public virtual Version Version { get; set; } = new();
+
+
+        public Model(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
         {
             this.func = func;
+            this.nodeAction = nodeAction;
+            this.addition = addition;
         }
 
         [JsonIgnore]
@@ -102,7 +117,7 @@ namespace Utility.Models
             }
         }
 
-        public bool IsInitialising { get; set; }
+        //public bool IsInitialising { get; set; }
 
         [JsonIgnore]
         public IEnumerable Children => CreateChildren();
@@ -112,6 +127,7 @@ namespace Utility.Models
         public virtual void SetNode(INode node)
         {
             Node = node;
+            nodeAction?.Invoke(node);
             node.IsPersistable = true;
         }
 
@@ -158,32 +174,32 @@ namespace Utility.Models
         {
         }
 
-        public virtual IEnumerable<Model> CreateChildren()
+        public virtual IEnumerable<IModel> CreateChildren()
         {
             if (func != null)
                 return func.Invoke();
             else
                 return nodesFromProperties();
 
-            IEnumerable<Model> nodesFromProperties()
+            IEnumerable<IModel> nodesFromProperties()
             {
                 foreach (var x in GetType().GetProperties().Select(a => (a.PropertyType, Attribute: a.GetAttributeSafe<ChildAttribute>())).Where(a => a.Attribute.success))
                 {
-                    Model instance = null;
+                    IModel instance = null;
 
                     if (x.PropertyType.IsAssignableTo(typeof(Model)))
                     {
-                        instance = (Model)Activator.CreateInstance(x.PropertyType);
+                        instance = (IModel)Activator.CreateInstance(x.PropertyType);
                     }
                     else if (x.Attribute.attribute.Type.IsAssignableTo(typeof(Model)))
                     {
-                        instance = (Model)Activator.CreateInstance(x.Attribute.attribute.Type);
+                        instance = (IModel)Activator.CreateInstance(x.Attribute.attribute.Type);
                     }
                     else
                     {
                         throw new NotSupportedException();
                     }
-                    instance.Name = x.Attribute.attribute.Name;
+                    (instance as ISetName).Name = x.Attribute.attribute.Name;
 
                     yield return instance;
 
@@ -223,6 +239,7 @@ namespace Utility.Models
 
                 //}
             }
+            addition?.Invoke(value, a);
         }
 
         public virtual void Replacement(IReadOnlyTree @new, IReadOnlyTree old)

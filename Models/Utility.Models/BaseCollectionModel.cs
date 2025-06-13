@@ -20,13 +20,13 @@ namespace Utility.Models
     {
     }
 
-    public abstract class BaseCollectionModel : Model, IChildCollection
+    public abstract class BaseCollectionModel<TValue> : Model<TValue>, IChildCollection
     {
         public virtual IEnumerable Collection { get; }
 
     }
 
-    public class CollectionModel<T> : BaseCollectionModel
+    public class CollectionModel<TValue, T> : BaseCollectionModel<TValue>
     {
         private int limit = int.MaxValue;
 
@@ -34,24 +34,23 @@ namespace Utility.Models
 
         public CollectionModel()
         {
-            Initialise();
         }
 
         public virtual void Initialise()
         {
             this.WithChangesTo(a => a.Limit)
-        .CombineLatest(this.WithChangesTo(a => a.Node, includeNulls: false))
-        .Subscribe(a =>
-        {
-            a.Second.Items.AndChanges<IReadOnlyTree>().Subscribe(c =>
-            {
-                Helpers.Generic.LinqEx.RemoveTypeOf<LimitExceededException, Exception>(Node.Errors);
-                var count = a.Second.Count(a => a is IRemoved { Removed: null });
-                a.Second.IsAugmentable = count < a.First;
-                if (count > a.First)
-                    Node.Errors.Add(new LimitExceededException(a.First, count - a.First));
-            });
-        });
+                .CombineLatest(this.WithChangesTo(a => a.Node, includeNulls: false))
+                .Subscribe(a =>
+                {
+                    a.Second.Items.AndChanges<IReadOnlyTree>().Subscribe(c =>
+                    {
+                        Helpers.Generic.LinqEx.RemoveTypeOf<LimitExceededException, Exception>(Node.Errors);
+                        var count = a.Second.Count(a => a is IRemoved { Removed: null });
+                        a.Second.IsAugmentable = count < a.First;
+                        if (count > a.First)
+                            Node.Errors.Add(new LimitExceededException(a.First, count - a.First));
+                    });
+                });
 
             Collection
                 .AndAdditions()
@@ -77,6 +76,7 @@ namespace Utility.Models
         public override void SetNode(INode node)
         {
             node.IsAugmentable = true;
+            Initialise();
             base.SetNode(node);
         }
 
@@ -85,6 +85,10 @@ namespace Utility.Models
     }
 
     public class CollectionModel : CollectionModel<Model>
+    {
+
+    }
+    public class CollectionModel<TModel> : CollectionModel<object, TModel>
     {
 
     }
