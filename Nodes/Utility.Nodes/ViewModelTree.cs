@@ -12,7 +12,7 @@ using Utility.Trees;
 namespace Utility.Nodes
 {
 
-    public class ViewModelTree : Tree, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible, IRemoved, IIsReadOnly, ISortOrder, ISort
+    public class ViewModelTree : Tree, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible, IRemoved, IIsReadOnly, ISortOrder, ISort, IDataTemplate
     {
         private bool? isHighlighted;
         private bool isExpanded = false;
@@ -35,6 +35,7 @@ namespace Utility.Nodes
         private bool isAugmentable;
         private bool? isContentVisible = true;
         private Position2D connectorPosition = Position2D.None;
+        private string dataTemplate;
 
         public ViewModelTree(/*string name,*/ object data) : this()
         {
@@ -238,6 +239,15 @@ namespace Utility.Nodes
             set
             {
                 RaisePropertyChanged(ref isRemovable, value);
+            }
+        }
+
+        public string DataTemplate
+        {
+            get => dataTemplate;
+            set
+            {
+                RaisePropertyChanged(ref dataTemplate, value);
             }
         }
 
