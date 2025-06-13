@@ -9,6 +9,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
+	  <ProjectReference Include="..\..\Observables\Utility.Observables\Utility.Observables.csproj" />
 	</ItemGroup>
 
 
