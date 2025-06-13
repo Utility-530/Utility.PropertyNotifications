@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Projects\Serialisation\TypeSerialization\TypeSerialization\TypeSerialization.csproj" />
+    <ProjectReference Include="..\..\External\TypeSerialization\TypeSerialization\TypeSerialization.csproj" />
     <ProjectReference Include="..\..\Conversions\Utility.Conversions\Utility.Conversions.csproj" />
     <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Constants\Utility.Constants.csproj" />
