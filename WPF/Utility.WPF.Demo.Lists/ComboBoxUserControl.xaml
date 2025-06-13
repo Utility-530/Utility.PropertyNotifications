@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:infra="clr-namespace:Utility.WPF.Demo.Lists.Infrastructure" 
              xmlns:view="http://schemas.utility.com/lists"
-             xmlns:utl="http://schemas.utility.com/utilitywpf"
+             xmlns:utl="http://schemas.utility.com/markup"
              xmlns:local="clr-namespace:Utility.WPF.Demo.Lists.Infrastructure"
              xmlns:viewModel="clr-namespace:Utility.ViewModels;assembly=Utility.ViewModels.Customs"
              xmlns:temp="http://schemas.utility.com/templates"

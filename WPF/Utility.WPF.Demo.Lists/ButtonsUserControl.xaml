@@ -11,7 +11,7 @@
     xmlns:att="http://schemas.utility.com/attached"
     xmlns:infra1="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common"
     xmlns:demoApp="clr-namespace:Utility.WPF.Demo.Lists.Infrastructure"
-    xmlns:utl1="http://schemas.utility.com/utilitywpf"
+    xmlns:utl1="http://schemas.utility.com/markup"
     xmlns:enum="clr-namespace:Utility.Enums;assembly=Utility.Enums" xmlns:rd="http://schemas.utility.com/resourcedictionary" xmlns:b1="http://schemas.utility.com/behaviors"
     d:DesignHeight="450"
     d:DesignWidth="800"

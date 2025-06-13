@@ -6,7 +6,7 @@
 
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:panels="http://schemas.utility.com/panels"
-             xmlns:utl="http://schemas.utility.com/utilitywpf"
+             xmlns:utl="http://schemas.utility.com/markup"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">

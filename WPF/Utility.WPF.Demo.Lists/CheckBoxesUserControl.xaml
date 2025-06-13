@@ -5,7 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:utl="http://schemas.utility.com/converters"
-    xmlns:utl1="http://schemas.utility.com/utilitywpf"
+    xmlns:utl1="http://schemas.utility.com/markup"
     xmlns:view="http://schemas.utility.com/lists"
     xmlns:controls="http://schemas.utility.com"
     xmlns:factory="clr-namespace:Utility.WPF.Demo.Data.Factory;assembly=Utility.WPF.Demo.Data"
