@@ -25,7 +25,7 @@ namespace Utility.Models
         }
 
         public Exception? Exception { get; }
-        
+
         public bool IsComplete { get; }
 
         public Progress Progress { get; }
@@ -41,7 +41,7 @@ namespace Utility.Models
 
         public static GuidBase OnProgress(Guid guid, int a, int b)
         {
-            return new GuidBase(guid, new Progress(a,b));
+            return new GuidBase(guid, new Progress(a, b));
         }
     }
 }

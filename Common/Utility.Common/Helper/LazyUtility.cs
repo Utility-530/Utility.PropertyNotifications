@@ -1,6 +1,8 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
-namespace Utility.Models
+namespace Utility.Common.Helper
 {
     /// <summary>
     /// <a href="https://www.codeproject.com/Articles/5274659/How-to-Use-the-Csharp-Await-Keyword-on-Anything"></a>
