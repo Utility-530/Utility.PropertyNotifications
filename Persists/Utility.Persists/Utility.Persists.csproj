@@ -17,6 +17,8 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
+	  <ProjectReference Include="..\..\External\TypeSerialization\TypeSerialization\TypeSerialization.csproj" />
+	  <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
 	</ItemGroup>
 
 </Project>
