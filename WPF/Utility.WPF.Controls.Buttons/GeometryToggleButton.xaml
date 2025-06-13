@@ -107,12 +107,12 @@
                                 <EasingColorKeyFrame KeyTime="0"
                                    Value="{StaticResource DisabledControlDarkColor}" />
                             </ColorAnimationUsingKeyFrames>-->
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).
+                            <!--<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).
                 (SolidColorBrush.Color)"
                                           Storyboard.TargetName="Arrow">
                                 <EasingColorKeyFrame KeyTime="0"
                                    Value="{StaticResource DisabledForegroundColor}" />
-                            </ColorAnimationUsingKeyFrames>
+                            </ColorAnimationUsingKeyFrames>-->
                             <!--<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Border.BorderBrush).
                 (GradientBrush.GradientStops)[1].(GradientStop.Color)"
                                           Storyboard.TargetName="Border">
