@@ -11,6 +11,7 @@ using Utility.Commands;
 using Utility.WPF.Controls.Objects;
 using Utility.WPF.Helpers;
 using Utility.Helpers;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.WPF.Controls.Lists
 {
@@ -47,8 +48,15 @@ namespace Utility.WPF.Controls.Lists
             DependencyProperty.Register("ItemsWidth", typeof(double), typeof(CustomSelector), new PropertyMetadata(150.0));
         public static readonly DependencyProperty ItemsHeightProperty =
             DependencyProperty.Register("ItemsHeight", typeof(double), typeof(CustomSelector), new PropertyMetadata(40.0));
+        public static readonly DependencyProperty DuplicateCommandProperty =
+            DependencyProperty.Register("DuplicateCommand", typeof(ICommand), typeof(CustomSelector), new PropertyMetadata());
 
 
+        public ICommand DuplicateCommand
+        {
+            get { return (ICommand)GetValue(DuplicateCommandProperty); }
+            set { SetValue(DuplicateCommandProperty, value); }
+        }
 
         public object Header
         {
@@ -194,8 +202,7 @@ namespace Utility.WPF.Controls.Lists
             }
             RaiseEvent(routedEventArgs);
             {
-                this.GetBindingExpression(CustomSelector.EditProperty)
-                                  .UpdateTarget();
+                this.GetBindingExpression(CustomSelector.EditProperty).UpdateTarget();
             }
         }
 
@@ -220,6 +227,14 @@ namespace Utility.WPF.Controls.Lists
                     remove(a, sourceCollection);
             });
 
+            DuplicateCommand = new Command<object>((a) =>
+            {
+                if (this.ItemsSource is IList collection)
+                    add(a, collection);
+                else if (this.ItemsSource is ICollectionView { SourceCollection: IList sourceCollection } collectionView)
+                    add(a, sourceCollection);
+            });
+
             //CheckedCommand = new Command<object>((a) =>
             //{
             //    if (string.IsNullOrEmpty(CheckedPropertyName) == false)
@@ -232,6 +247,13 @@ namespace Utility.WPF.Controls.Lists
             //    if (string.IsNullOrEmpty(CheckedPropertyName) == false)
             //        a.TrySetPropertyValue(CheckedPropertyName, false);
             //});
+            void add(object a, IList collection)
+            {
+                if (a is IClone clone)
+                    collection.Add(clone.Clone());
+                else
+                    MessageBox.Show($"Failed to clone. {a.GetType()} does not derive from {nameof(IClone)}");
+            }
 
             void swap(int[] indexes, IList collection)
             {
@@ -239,19 +261,8 @@ namespace Utility.WPF.Controls.Lists
                 int to = indexes[1];
                 var elementSource = collection[to];
                 var dragged = collection[fromS];
-                //if (fromS > to)
-                //{
-                //    collection.Remove(dragged);
-                //    collection.Insert(to, dragged);
-                //}
-                //else
-                //{
-                //collection.Remove(dragged);
                 collection[to] = dragged;
                 collection[fromS] = elementSource;
-                //}
-                //}
-
             }
 
             void remove(object a, IList collection)

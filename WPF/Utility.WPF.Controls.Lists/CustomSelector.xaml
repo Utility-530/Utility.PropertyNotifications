@@ -192,7 +192,7 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
         <!--<Setter Property="BorderThickness" Value="{DynamicResource {x:Static adonisUi:Dimensions.BorderThickness}}"/>-->
-        <!--<Setter Property="adonisExtensions:CornerRadiusExtension.CornerRadius" Value="{DynamicResource {x:Static adonisUi:Dimensions.CornerRadius}}"/>--> 
+        <!--<Setter Property="adonisExtensions:CornerRadiusExtension.CornerRadius" Value="{DynamicResource {x:Static adonisUi:Dimensions.CornerRadius}}"/>-->
         <Setter Property="Padding" Value="8,4"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="UseLayoutRounding" Value="True"/>
@@ -216,7 +216,8 @@
                                           RecognizesAccessKey="True"
                                           Margin="{TemplateBinding Padding}"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                              Visibility="{Binding ElementName=GridViewRowPresenter, Path=Columns, Converter={StaticResource NullToVisibilityConverter}}"
+                                          att:VisibilityAnimation.AnimationType="Fade"
+                                          Visibility="{Binding ElementName=GridViewRowPresenter, Path=Columns, Converter={StaticResource NullToVisibilityConverter}}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                           Panel.ZIndex="2"/>
 
@@ -225,6 +226,12 @@
                                               Visibility="{Binding ElementName=GridViewRowPresenter, Path=Columns, Converter={StaticResource NullToInverseVisibilityConverter}}"
                                               Columns="{Binding Columns, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CustomSelector}}}"                        >
                         </GridViewRowPresenter>
+                        <btns:DuplicateGeometryButton 
+                            x:Name="PlusButton"
+                            Height="20"
+                            Command="{Binding DuplicateCommand, RelativeSource={RelativeSource AncestorType={x:Type local:CustomSelector}, Mode=FindAncestor,AncestorLevel=1}}"
+                            CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                            VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,62,0" />
                         <Button Style="{StaticResource ButtonClose}"  Panel.ZIndex="3" HorizontalAlignment="Right" Height="20" Margin="{Binding ElementName=GridViewRowPresenter, Path=Columns, Converter={StaticResource NullTo40Converter} }" Width="20"  VerticalAlignment="Top" />
                         <CheckBox Style="{StaticResource CheckBoxPingUnPing}"  Panel.ZIndex="4" HorizontalAlignment="Right"  VerticalAlignment="Bottom"/>
                     </Grid>
@@ -284,14 +291,14 @@
             <DataTemplate x:Key="JsonTemplate">
                 <Grid Background="#DCDCDC" Name="rootElement">
                     <Border BorderBrush="Beige" BorderThickness="10">
-                        
-                    <obj:JsonControl Object="{Binding Path=Object, Mode=TwoWay, Converter={StaticResource ObjectToTokenConverter}}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="ValueChanged" >
-                                <beh:UpdateSourceBindingAction Property="{x:Static obj:JsonControl.ObjectProperty}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </obj:JsonControl>
+
+                        <obj:JsonControl Object="{Binding Path=Object, Mode=TwoWay, Converter={StaticResource ObjectToTokenConverter}}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="ValueChanged" >
+                                    <beh:UpdateSourceBindingAction Property="{x:Static obj:JsonControl.ObjectProperty}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </obj:JsonControl>
 
                     </Border>
                 </Grid>
@@ -319,7 +326,7 @@
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>
-         
+
                     <ext:DraggAnimatedPanel ItemSeparation="2" ItemsHeight="{Binding ItemsHeight, RelativeSource={RelativeSource AncestorType={x:Type local:CustomSelector}}}" 
                                             ItemsWidth="{Binding ItemsWidth, RelativeSource={RelativeSource AncestorType={x:Type local:CustomSelector}}}"
                                             Height="{Binding ActualHeight, RelativeSource={RelativeSource AncestorType={x:Type local:CustomSelector}}}" 
@@ -341,7 +348,7 @@
           Value="120" />
         <Setter Property="MinHeight"
           Value="20" />
-  
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:CustomSelector}">
@@ -350,7 +357,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
-                   
+
                         <Grid x:Name="DropDown" 
                               Grid.Row="1" 
                               VerticalAlignment="Top"
@@ -369,9 +376,9 @@
                                                             ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}"
                                     AllowsColumnReorder="{TemplateBinding AllowsColumnReorder}" 
                                     Columns="{TemplateBinding Columns}" />
-                                
+
                             </Border>
-                            
+
                             <ext:AnimatedScrollViewer
 								x:Name="PART_AnimatedScrollViewer"
 								CanKeyboardScroll="False"                                
@@ -492,7 +499,7 @@
                         <DataTrigger Binding="{Binding Path=IsChecked, ElementName=PlusButton}" Value="False">
                             <Setter TargetName="content_control" Property="Height" Value="0" />
                         </DataTrigger>
-            
+
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -508,7 +515,7 @@
                     </Setter.Value>
                 </Setter>
             </Trigger>
-        </Style.Triggers>     
+        </Style.Triggers>
     </Style>
 
 
