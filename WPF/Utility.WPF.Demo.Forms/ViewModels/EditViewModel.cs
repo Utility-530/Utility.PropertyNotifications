@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reactive.Linq;
 using Utility.Helpers.Ex;
 using Utility.Models;
+using Utility.PropertyNotifications;
 using Utility.ViewModels;
 
 namespace Utility.WPF.Demo.Forms.ViewModels
@@ -19,14 +20,12 @@ namespace Utility.WPF.Demo.Forms.ViewModels
 
     public class EditViewModel : ViewModel, ICollection<INotifyPropertyChanged>, IEquatable<EditViewModel>
     {
-        private Guid id;
-
         public EditViewModel() : base("Edit")
         {
             (this as ICollection<INotifyPropertyChanged>).WhenAnyValue(a => a.Collection)
                 .Select(a => a.ToObservable())
                 .Switch()
-                .SelectMany(a => a.Changes())
+                .SelectMany(a => a.WhenChanged())
                 .Subscribe(a => this.RaisePropertyChanged());
         }
 
@@ -49,7 +48,7 @@ namespace Utility.WPF.Demo.Forms.ViewModels
             return TitleViewModel.Title == other?.TitleViewModel.Title;
         }
 
-        public Guid Id { get => id; set => this.RaiseAndSetIfChanged(ref id, value); }
+        //public Guid Id { get => id; set => this.RaiseAndSetIfChanged(ref id, value); }
 
         public TitleViewModel TitleViewModel { get; private set; } = new();
 

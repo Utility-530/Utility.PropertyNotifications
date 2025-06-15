@@ -1,9 +1,11 @@
 ﻿//using LiteDB;
 
 using AutoMapper;
+using Fasterflect;
 using LiteDB;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Utility.Helpers.Ex;
@@ -35,12 +37,12 @@ namespace Utility.WPF.Demo.Forms.Infrastructure
         {
             return new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<EditViewModel, EditModel>().ReverseMap();
-                cfg.CreateMap<ImagesViewModel, ImagesModel>().ReverseMap();
+                cfg.CreateMap<EditViewModel, EditModel>().ForCtorParam(nameof(EditModel.Collection), opt => opt.MapFrom(src => src.Children)).ReverseMap();
+                cfg.CreateMap<ImagesViewModel, ImagesModel>().ForCtorParam(nameof(ImagesModel.Collection), opt => opt.MapFrom(src => src.Children)).ForCtorParam(nameof(ImagesModel.Header), opt => opt.MapFrom(src => src.Key)).ReverseMap();
                 cfg.CreateMap<ImageViewModel, ImageModel>().ReverseMap();
-                cfg.CreateMap<MeasurementsViewModel, MeasurementsModel>().ReverseMap();
+                cfg.CreateMap<MeasurementsViewModel, MeasurementsModel>().ForCtorParam(nameof(MeasurementsModel.Collection), opt => opt.MapFrom(src => src.Children)).ForCtorParam(nameof(MeasurementsModel.Header), opt => opt.MapFrom(src => src.Key)).ReverseMap();
                 cfg.CreateMap<MeasurementViewModel, MeasurementModel>().ReverseMap();
-                cfg.CreateMap<NotesViewModel, NotesModel>().ReverseMap();
+                cfg.CreateMap<NotesViewModel, NotesModel>().ForCtorParam(nameof(NotesModel.Collection), opt => opt.MapFrom(src => src.Children)).ForCtorParam(nameof(NotesModel.Header), opt => opt.MapFrom(src => src.Key)).ReverseMap();
                 cfg.CreateMap<NoteViewModel, NoteModel>().ReverseMap();
                 cfg.CreateMap<TitleViewModel, TitleModel>().ReverseMap();
                 cfg.CreateMap<INotifyPropertyChanged, HeaderModel>().ConstructUsing((a, b) =>

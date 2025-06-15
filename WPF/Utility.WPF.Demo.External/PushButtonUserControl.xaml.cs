@@ -1,8 +1,8 @@
-﻿using Jellyfish;
-using PropertyTools.Wpf;
+﻿using PropertyTools.Wpf;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Utility.Commands;
 
 namespace Utility.WPF.Demo.External
 {
@@ -19,11 +19,10 @@ namespace Utility.WPF.Demo.External
 
     public class ViewModel
     {
-        // Note: Prism MVVM is installed only to provide the DelegateCommand implementation of ICommand
         public ViewModel()
         {
             SayHello = new DelegateCommand(Hello);
-            SayHelloMe = new RelayCommand<string>(HelloMe);
+            SayHelloMe = new Command<string>(HelloMe);
         }
 
         public ICommand SayHello { get; }

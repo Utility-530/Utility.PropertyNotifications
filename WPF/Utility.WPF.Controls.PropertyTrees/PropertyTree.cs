@@ -71,7 +71,7 @@ namespace Utility.WPF.Controls.PropertyTrees
             }
             this._key = key;
        
-            Locator.CurrentMutable.RegisterConstant<IContext>(new Context());
+            //Locator.CurrentMutable.RegisterConstant<IContext>(new Context());
             Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
             Locator.CurrentMutable.RegisterConstant<IExpander>(Utility.Nodes.WPF.Expander.Instance);
             Locator.CurrentMutable.RegisterConstant<System.Windows.Controls.DataTemplateSelector>(CustomDataTemplateSelector.Instance);

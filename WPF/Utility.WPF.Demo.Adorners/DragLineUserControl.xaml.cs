@@ -89,7 +89,15 @@ namespace Utility.WPF.Demo.Adorners
         {
             position = e.GetPosition(grid);
 
-            _adornerLayer.Update(AdornedElement);
+            try
+            {
+                _adornerLayer.Update(AdornedElement);
+            }
+            catch(System.Exception ex)
+            {
+                grid.PreviewMouseMove -= Grid_PreviewMouseMove;
+                MessageBox.Show(ex.Message);
+            }
         }
 
 

@@ -10,6 +10,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.Entities\Utility.Entities.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.Globals\Utility.Globals.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Logs\Utility.WPF.Controls.Logs.csproj" />
   </ItemGroup>
 

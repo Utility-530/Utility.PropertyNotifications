@@ -5,13 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:drag="http://dragablz.net/winfx/xaml/dragablz"
              xmlns:res="http://schemas.utility.com/resourcedictionary"
-             xmlns:util="http://schemas.utility.com/utilitywpf"
+             xmlns:util="http://schemas.utility.com/markup"
              xmlns:conv="clr-namespace:Utility.WPF.Converters"
              xmlns:conv2="http://schemas.utility.com/converters"
              xmlns:cmn="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common"
              xmlns:view1="http://schemas.utility.com/dragablz"
              xmlns:view2="http://schemas.utility.com/master"
-             xmlns:viewModel="clr-namespace:Utility.WPF.Demo.Master.ViewModels"
+             xmlns:viewModel="clr-namespace:Utility.WPF.Demo.Master.ViewModels" 
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.DataContext>

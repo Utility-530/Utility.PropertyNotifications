@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Utility.WPF.Demo.Hybrid"
              xmlns:mas="http://schemas.utility.com/master"
              xmlns:ucom="clr-namespace:Utility.Common;assembly=Utility.Common"
-             xmlns:utl="http://schemas.utility.com/utilitywpf"
+             xmlns:utl="http://schemas.utility.com/markup"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.DataContext>

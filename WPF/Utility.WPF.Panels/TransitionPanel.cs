@@ -97,7 +97,7 @@ namespace Utility.WPF.Panels
                 {
                     value = __b;
                 }
-                else if (bool.TryParse(value.ToString(), out bool b))
+                else if (bool.TryParse(value?.ToString(), out bool b))
                 {
                     value = b;
                 }
@@ -105,7 +105,7 @@ namespace Utility.WPF.Panels
                 {
                     value = __int;
                 }
-                else if (int.TryParse(value.ToString(), out int _int))
+                else if (int.TryParse(value?.ToString(), out int _int))
                 {
                     value = _int;
                 }

@@ -8,16 +8,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UniformGrid>
-        <TextBlock x:Name="TextBlock1" Height="30" Width="100" Text="This is text" Background="AntiqueWhite">
-            <i:Interaction.Behaviors>
-                <ad:NullBehavior DefaultValue="hello"/>                
-            </i:Interaction.Behaviors>
-        </TextBlock>
-
-
         <TextBox x:Name="TextBox1" Height="30" Width="100" Text="This is text" Background="AntiqueWhite">
             <i:Interaction.Behaviors>
-                <ad:NullBehavior DefaultValue="hello"/>                
+                <ad:NullBehavior DefaultValue="hello2"/>                
             </i:Interaction.Behaviors>
         </TextBox>
 
@@ -53,7 +46,7 @@
         </TextBox>
         <TextBox Height="30" Width="100" Text="This is text" Background="AntiqueWhite">
             <i:Interaction.Behaviors>
-                <ad:HoverBehavior />
+                <ad:HoverBehavior HorizontalAdornerPlacement="Outside" />
                 <ad:ContextBehavior />
             </i:Interaction.Behaviors>
             <TextBox.ContextMenu>

@@ -9,7 +9,7 @@ using System.Windows.Input;
 using Utility.Common;
 using Utility.WPF.Attached;
 using Utility.WPF.Helpers;
-using Utility.Helpers;
+using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Controls.Dragablz
 {

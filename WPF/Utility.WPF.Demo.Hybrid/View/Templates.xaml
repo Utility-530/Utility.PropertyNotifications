@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:view11="http://schemas.utility.com/hybrid"
-                    xmlns:mk="http://schemas.utility.com/utilitywpf"
+                    xmlns:mk="http://schemas.utility.com/markup"
                     xmlns:vm="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common">
 
     <DataTemplate DataType="{x:Type vm:NotesViewModel}">

@@ -263,6 +263,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.Logs",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Demo.Logs", "Utility.WPF.Demo.Logs\Utility.WPF.Demo.Logs.csproj", "{9963469A-C4F0-43A3-A9CF-1AA69294E3B0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Globals", "..\Infrastructure\Utility.Globals\Utility.Globals.csproj", "{67E3548E-CDBA-EB38-03CB-11A8F222A24D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Converters.Json", "Utility.WPF.Converters.Json\Utility.WPF.Converters.Json.csproj", "{996FC271-05DE-44D3-A750-05DCD23B2E74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -765,6 +769,14 @@ Global
 		{9963469A-C4F0-43A3-A9CF-1AA69294E3B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9963469A-C4F0-43A3-A9CF-1AA69294E3B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9963469A-C4F0-43A3-A9CF-1AA69294E3B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67E3548E-CDBA-EB38-03CB-11A8F222A24D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67E3548E-CDBA-EB38-03CB-11A8F222A24D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67E3548E-CDBA-EB38-03CB-11A8F222A24D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67E3548E-CDBA-EB38-03CB-11A8F222A24D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{996FC271-05DE-44D3-A750-05DCD23B2E74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{996FC271-05DE-44D3-A750-05DCD23B2E74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{996FC271-05DE-44D3-A750-05DCD23B2E74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{996FC271-05DE-44D3-A750-05DCD23B2E74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -895,6 +907,8 @@ Global
 		{343E095D-3358-0944-2903-FEF2F90A941A} = {993A1800-4787-40F0-9536-057493541BBB}
 		{89EB52F8-0005-4CA8-B22A-6467872A790A} = {2ED92AB3-1BF8-4B9F-85BF-2739EDF1915C}
 		{9963469A-C4F0-43A3-A9CF-1AA69294E3B0} = {3E8F851B-BECA-4BAA-9275-2104CDEAEC3D}
+		{67E3548E-CDBA-EB38-03CB-11A8F222A24D} = {CF03926E-9E72-4A61-B447-2EF7E3C17461}
+		{996FC271-05DE-44D3-A750-05DCD23B2E74} = {392FD82C-ADC4-4230-8881-89BD4E2B84EE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D60CFCE-498F-4A6D-9B9B-5546561C117E}

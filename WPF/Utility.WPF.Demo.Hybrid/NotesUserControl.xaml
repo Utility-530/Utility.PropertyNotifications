@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:view="http://schemas.utility.com/master"
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-    xmlns:mk="http://schemas.utility.com/utilitywpf"
+    xmlns:mk="http://schemas.utility.com/markup"
     xmlns:view1="http://schemas.utility.com/dragablz"
     xmlns:view2="http://schemas.utility.com/hybrid"
     xmlns:vm21="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common"

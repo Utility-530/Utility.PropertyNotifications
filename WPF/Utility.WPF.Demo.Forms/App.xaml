@@ -5,7 +5,7 @@
             xmlns:p="http://propertytools.org/wpf"
             xmlns:un="clr-namespace:UnitsNet.Units;assembly=UnitsNet"
             xmlns:view2="http://schemas.utility.com/hybrid"
-            xmlns:util="http://schemas.utility.com/utilitywpf"
+            xmlns:util="http://schemas.utility.com/markup"
             xmlns:view11="clr-namespace:Utility.WPF.Demo.Forms.Controls"
             xmlns:system="clr-namespace:System;assembly=netstandard"
             xmlns:infra="clr-namespace:Utility.WPF.Demo.Forms.Infrastructure"
@@ -33,7 +33,7 @@
         <DataTemplate DataType="{x:Type vm:MeasurementsViewModel}">
             <view2:MeasurementsControl
             DisplayMemberPath="Value"
-            Position="Right"
+            Movement="RightToLeft"
             DisplayKeyPath="Header"
             ItemsSource="{Binding Collection}"
             SelectedUnit="{Binding Unit,Mode=TwoWay}"

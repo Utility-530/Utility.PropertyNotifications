@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:mk="http://schemas.utility.com/utilitywpf"
+    xmlns:mk="http://schemas.utility.com/markup"
     xmlns:view1="http://schemas.utility.com/hybrid"
     xmlns:localvm="clr-namespace:Utility.WPF.Demo.Hybrid.ViewModels"
     xmlns:vm2="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common"

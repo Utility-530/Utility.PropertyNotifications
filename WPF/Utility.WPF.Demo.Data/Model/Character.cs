@@ -1,3 +1,4 @@
+using AnyClone;
 using SQLite;
 using System;
 using System.ComponentModel;
@@ -7,7 +8,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Utility.Interfaces.Generic.Data;
-using Utility.Interfaces.NonGeneric.Data;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.WPF.Demo.Data.Model
 {
@@ -18,7 +19,7 @@ namespace Utility.WPF.Demo.Data.Model
         Unknown
     }
 
-    public class Character : INotifyPropertyChanged, IEquatable<Character>, IId<Guid>
+    public class Character : INotifyPropertyChanged, IEquatable<Character>, IId<Guid>, IClone
     {
         private string _first = string.Empty;
         private string _last = string.Empty;
@@ -147,6 +148,13 @@ namespace Utility.WPF.Demo.Data.Model
         public override int GetHashCode()
         {
             return First.GetHashCode() * Last.GetHashCode() * Age.GetHashCode();
+        }
+
+        public object Clone()
+        {
+            var clone = this.Clone<Character>();
+            clone.Id = Guid.NewGuid();
+            return clone;
         }
     }
 

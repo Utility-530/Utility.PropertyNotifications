@@ -1,5 +1,4 @@
-﻿using Jellyfish.Annotations;
-using Microsoft.Xaml.Behaviors;
+﻿using Microsoft.Xaml.Behaviors;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -81,6 +80,9 @@ namespace Utility.WPF.Demo.Adorners
                 foreach (var item in a)
                 {
                     TreeViewItem tvi = null;
+                    if (AssociatedObject == null)
+                        return;
+
                     layer ??= AdornerLayer.GetAdornerLayer(AssociatedObject);
 
                     if (item is Change { Type: { } type, Value: var _value } _tiv)
@@ -132,7 +134,6 @@ namespace Utility.WPF.Demo.Adorners
     public class DropTargetHintAdorner : Adorner
     {
         private readonly ContentPresenter presenter;
-        [CanBeNull]
         private readonly AdornerLayer adornerLayer;
 
         //public static readonly DependencyProperty objectProperty

@@ -10,13 +10,15 @@ namespace Utility.WPF.Demo.Objects
     /// </summary>
     public partial class App : Application
     {
-        public App()
+
+        protected override void OnStartup(StartupEventArgs e)
         {
             new Window
             {
                 WindowState = WindowState.Maximized,
                 Content = new AssemblyViewControl(typeof(JsonObjectUserControl).Assembly)
             }.Show();
+            base.OnStartup(e);
         }
     }
 
