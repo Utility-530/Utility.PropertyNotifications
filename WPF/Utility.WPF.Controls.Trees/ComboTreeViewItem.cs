@@ -304,7 +304,7 @@ namespace Utility.WPF.Controls.Trees
             if (d is CustomTreeViewItem combo)
             {
                 combo.SetValue(IsDropDownOpenProperty, BooleanBoxes.FalseBox);
-                //combo.RaiseEvent(new SelectionChangedEventArgs(SelectionChangedEvent, new[] { e.OldValue }, new[] { e.NewValue }));
+                combo.RaiseEvent(new SelectionChangedEventArgs(SelectionChangedEvent, new[] { e.OldValue }, new[] { e.NewValue }));
                 //combo.Focus();
                 combo.ReleaseMouseCapture();
                 combo.Selection = e.NewValue;
