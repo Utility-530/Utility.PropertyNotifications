@@ -43,15 +43,15 @@
     <Style x:Key="DefaultCustomStyle" TargetType="{x:Type t:CustomTreeViewItem}">
         <Setter Property="SelectedIndex" Value="-1"/>
         <Setter Property="SelectionItem" Value="{Binding Current, Mode=TwoWay}"/>
-        <!--<att:InteractivitySetter Property="att:InteractivityItems.Template">
+        <att:InteractivitySetter Property="att:InteractivityItems.Template">
             <Setter.Value>
                 <att:InteractivityTemplate>
                     <att:InteractivityItems>
                         <att:InteractivityItems.Triggers>
-                            <i:EventTrigger EventName="Loaded">
+                            <!--<i:EventTrigger EventName="Loaded">
                                 <beh:SetterAction TargetObject="{Binding }" PropertyName="Current" Value="{x:Null}"></beh:SetterAction>
                                 <beh:SetterAction PropertyName="SelectedIndex" Value="-1"></beh:SetterAction>
-                            </i:EventTrigger>
+                            </i:EventTrigger>-->
                             <i:EventTrigger EventName="SelectionChanged">
                                 <beh:SetterAction TargetObject="{Binding }" PropertyName="Current" Value="{x:Null}"></beh:SetterAction>
                                 <beh:SetterAction PropertyName="SelectedIndex" Value="-1"></beh:SetterAction>
@@ -60,7 +60,7 @@
                     </att:InteractivityItems>
                 </att:InteractivityTemplate>
             </Setter.Value>
-        </att:InteractivitySetter>-->
+        </att:InteractivitySetter>
     </Style>
     
     <local:ComboContainerStyleSelector x:Key="ComboContainerStyleSelector"

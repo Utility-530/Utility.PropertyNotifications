@@ -5,6 +5,7 @@
                     xmlns:att="http://schemas.utility.com/attached" 
                     xmlns:dockablz="http://dragablz.net/winfx/xaml/dockablz"
                     xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+                    xmlns:filters="clr-namespace:Utility.Nodes.WPF;assembly=Utility.WPF.Trees" 
                     xmlns:nwpf="clr-namespace:Utility.Nodes.WPF;assembly=Utility.Nodes.WPF"
                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
@@ -18,46 +19,72 @@
         <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/accent/materialdesigncolor.amber.xaml" />-->
 
 
+        <ResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml"/>
+
     </ResourceDictionary.MergedDictionaries>
+
+    <filters:StyleSelector x:Key="StyleSelector" DefaultStyle="ViewContentStyle"/>
+
+    <Style x:Key="SettingsToggleStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="IsChecked" Value="True"></Setter>
+        <Setter Property="BorderThickness" Value="0"></Setter>
+        <Setter Property="Content" >
+            <Setter.Value>
+                <Path Data="{StaticResource SettingsGeometry}" Fill="White"  Stroke="Gray" StrokeThickness="1"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />
 
     <DataTemplate DataType="{x:Type local:ContainerViewModel}">
-        <dockablz:Layout>
-            <dragablz:TabablzControl
+        <utl:SplitControl att:Ex.ToggleStyle="{StaticResource SettingsToggleStyle}" >
+            
+            <utl:SplitControl.Header>
+                <TextBlock Text="Settings">
+
+                </TextBlock>
+            </utl:SplitControl.Header>
+            <utl:SplitControl.Content>
+                <dockablz:Layout>
+                    <dragablz:TabablzControl
                 x:Name="InitialTabablzControl"                
                 ItemContainerStyleSelector="{StaticResource StyleSelector}"
                 ClosingItemCallback="{Binding ClosingTabItemHandler}"
                 ItemsSource="{Binding Children}"
                 SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ShowDefaultCloseButton="True">
-                <dragablz:TabablzControl.InterTabController>
-                    <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" />
-                </dragablz:TabablzControl.InterTabController>
-                <dragablz:TabablzControl.HeaderItemTemplate>
-                    <DataTemplate DataType="{x:Type nwpf:ViewModel}">
-                        <StackPanel>
+                        <dragablz:TabablzControl.InterTabController>
+                            <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" />
+                        </dragablz:TabablzControl.InterTabController>
+                        <dragablz:TabablzControl.HeaderItemTemplate>
+                            <DataTemplate DataType="{x:Type nwpf:ViewModel}">
+                                <StackPanel>
 
-                            <TextBlock Margin="8,0,0,0" Text="{Binding Name}" />
-                            <Rectangle x:Name="Rex" HorizontalAlignment="Stretch" Height="2"/>
-                        </StackPanel>
-                        <DataTemplate.Triggers>
-                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                <DataTrigger.Setters>
-                                    <Setter TargetName="Rex" Property="Fill" Value="Green"></Setter>
-                                </DataTrigger.Setters>
-                            </DataTrigger>
+                                    <TextBlock Margin="8,0,0,0" Text="{Binding Name}" />
+                                    <Rectangle x:Name="Rex" HorizontalAlignment="Stretch" Height="2"/>
+                                </StackPanel>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                        <DataTrigger.Setters>
+                                            <Setter TargetName="Rex" Property="Fill" Value="Green"></Setter>
+                                        </DataTrigger.Setters>
+                                    </DataTrigger>
 
-                        </DataTemplate.Triggers>
-                    </DataTemplate>
-                </dragablz:TabablzControl.HeaderItemTemplate>
-                <TabControl.ContentTemplate>
-                    <DataTemplate DataType="{x:Type nwpf:ViewModel}">
-                        <ContentControl Margin="4" Content="{Binding }" />
-                    </DataTemplate>
-                </TabControl.ContentTemplate>
-            </dragablz:TabablzControl>
-        </dockablz:Layout>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </dragablz:TabablzControl.HeaderItemTemplate>
+                        <TabControl.ContentTemplate>
+                            <DataTemplate DataType="{x:Type nwpf:ViewModel}">
+                                <ContentControl Margin="4" Content="{Binding }" />
+                            </DataTemplate>
+                        </TabControl.ContentTemplate>
+                    </dragablz:TabablzControl>
+                </dockablz:Layout>
+            </utl:SplitControl.Content>
+        </utl:SplitControl>
+
     </DataTemplate>
 
 </ResourceDictionary>

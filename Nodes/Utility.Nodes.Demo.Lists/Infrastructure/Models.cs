@@ -3,7 +3,10 @@ using Nito.Disposables.Internals;
 using SQLite;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.Json.Serialization;
+using Utility.Attributes;
 using Utility.Interfaces.Generic.Data;
+using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
 
 namespace Utility.Nodes.Demo.Lists.Infrastructure
@@ -17,7 +20,7 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
 
 
     [Model]
-    public class EbayModel : NotifyPropertyClass, IId<Guid>
+    public class EbayModel : NotifyPropertyClass, IId<Guid>, IClone
     {
         private string? indexPath;
         private string? title;
@@ -30,7 +33,7 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
         private double? sleeveLengthInCentimetres;
         private double? lengthInCentimetres;
         private double? pitToPitWidthInCentimetres;
-        private double? shouldertWidthInCentimetres;
+        private double? shoulderWidthInCentimetres;
         private bool hasShipping;
 
         public EbayModel()
@@ -40,6 +43,7 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
 
         [PrimaryKey]
         [Attributes.Ignore]
+        [JsonIgnore]
         public Guid Id { get; set; }
         public string? IndexPath { get => indexPath; set => RaisePropertyChanged(ref indexPath, value); }
         public string? Title { get => title; set => RaisePropertyChanged(ref title, value); }
@@ -52,35 +56,50 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
         public double? SleeveLengthInCentimetres { get => sleeveLengthInCentimetres; set => RaisePropertyChanged(ref lengthInCentimetres, value); }
         public double? LengthInCentimetres { get => lengthInCentimetres; set => RaisePropertyChanged(ref lengthInCentimetres, value); }
         public double? PitToPitWidthInCentimetres { get => pitToPitWidthInCentimetres; set => RaisePropertyChanged(ref pitToPitWidthInCentimetres, value); }
-        public double? ShouldertWidthInCentimetres { get => shouldertWidthInCentimetres; set => RaisePropertyChanged(ref shouldertWidthInCentimetres, value); }
+        public double? ShoulderWidthInCentimetres { get => shoulderWidthInCentimetres; set => RaisePropertyChanged(ref shoulderWidthInCentimetres, value); }
         public bool HasShipping
         {
             get => hasShipping; set => RaisePropertyChanged(ref hasShipping, value);
         }
 
         [Attributes.Ignore]
+        [JsonIgnore]
         [SQLite.Ignore]
         public bool HasTitle => Title != null;
         [Attributes.Ignore]
+        [JsonIgnore]
         [SQLite.Ignore]
-        public bool HasDescriptions => Descriptions.Any();
+        public bool HasDescriptions => Descriptions.Length != 0;
         [Attributes.Ignore]
+        [JsonIgnore]
         [SQLite.Ignore]
         public string[] Descriptions => [.. new string?[] { DescriptionOne, DescriptionTwo }.WhereNotNull()];
         [Attributes.Ignore]
+        [JsonIgnore]
         [SQLite.Ignore]
         public string[] ImagePaths => [.. new string?[] { ImagePathOne, ImagePathTwo }.WhereNotNull()];
         [Attributes.Ignore]
+        [JsonIgnore]
         [SQLite.Ignore]
-        public bool HasImagePaths => ImagePaths.Any();
+        public bool HasImagePaths => ImagePaths.Length != 0;
         [Attributes.Ignore]
+        [JsonIgnore]
         [SQLite.Ignore]
-        public bool HasMeasurements => SleeveLengthInCentimetres.HasValue || LengthInCentimetres.HasValue || PitToPitWidthInCentimetres.HasValue || ShouldertWidthInCentimetres.HasValue;
+        public bool HasMeasurements => SleeveLengthInCentimetres.HasValue || LengthInCentimetres.HasValue || PitToPitWidthInCentimetres.HasValue || ShoulderWidthInCentimetres.HasValue;
         [Attributes.Ignore]
+        [JsonIgnore]
         [SQLite.Ignore]
         public string[] Disclaimers => [.. new string?[] { DisclaimerOne }.WhereNotNull()];
         [Attributes.Ignore]
+        [JsonIgnore]
         [SQLite.Ignore]
-        public bool HasDisclaimers => Disclaimers.Any();
+        public bool HasDisclaimers => Disclaimers.Length != 0;
+
+        public object Clone()
+        {
+            var clone = AnyClone.CloneExtensions.Clone(this);
+            clone.Id = Guid.NewGuid();
+            return clone;
+        }
     }
 }
