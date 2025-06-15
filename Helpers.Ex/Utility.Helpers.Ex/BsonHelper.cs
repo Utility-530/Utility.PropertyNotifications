@@ -31,9 +31,6 @@ namespace Utility.Helpers.Ex
                 DateTimeKindHandling = DateTimeKind.Utc
             };
 
-            JsonSerializer serialiser = new();
-            var tst1A = serialiser.Deserialize(reader, type);
-
             return JsonConvert.DeserializeObject(str, type, new JsonSerializerSettings()
             {
                 //ContractResolver = new IgnorePropertiesResolver(Array.Empty<string>(), ignoreProperties),
