@@ -1,11 +1,5 @@
 ﻿using Microsoft.Xaml.Behaviors;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -19,6 +13,10 @@ namespace Utility.WPF.Adorners
 {
     public class ContextBehavior : Behavior<FrameworkElement>
     {
+        public static readonly DependencyProperty AdornerPlacementProperty =
+    DependencyProperty.Register("AdornerPlacement", typeof(AdornerPlacement), typeof(ContextBehavior), new PropertyMetadata());
+
+
         private DispatcherTimer closeAdornerTimer = new DispatcherTimer();
 
         public double CloseAdornerTimeOut { get; } = 2.0;
@@ -43,52 +41,37 @@ namespace Utility.WPF.Adorners
             var adorners = AssociatedObject.GetAdorners();
             var element = CreateElement();
             element.HorizontalAlignment = HorizontalAlignment.Right;
-            element.VerticalAlignment = VerticalAlignment.Top;
-            element.Margin = new Thickness(0, 0, 2, 0);
+            element.VerticalAlignment = VerticalAlignment.Bottom;
+            element.Margin = AdornerPlacement switch
+            {
+                AdornerPlacement.Outside => new Thickness(0, 0, -element.Width - 2, 0),
+                AdornerPlacement.Inside => new Thickness(0, 0, 2, 0),
+                _ => throw new Exception("35gbbb 3"),
+            };
             adorners.Add(element);
-
             AssociatedObject.Loaded += AssociatedObject_Loaded;
         }
 
         private void AssociatedObject_Loaded(object sender, RoutedEventArgs e)
         {
-            //if (AssociatedObject.ContextMenu != null)
-                //AssociatedObject.ContextMenu.Mouse += ContextMenu_MouseLeave;
-            //AssociatedObject.ContextMenu.IsMouseCapturedChanged += ContextMenu_IsMouseCapturedChanged; ;
 
-            //void ContextMenu_MouseLeave(object sender, MouseEventArgs e)
-            //{
-
-            //}
         }
 
-        //private void ContextMenu_IsMouseCapturedChanged(object sender, DependencyPropertyChangedEventArgs e)
-        //{
-        //    if(e.NewValue is false)
-        //    {
-        //        if (closeAdornerTimer.IsEnabled == true)
-        //            closeAdornerTimer.Stop();
-        //        closeAdornerTimer.Start();
-        //    }
-        //}
+        public AdornerPlacement AdornerPlacement
+        {
+            get { return (AdornerPlacement)GetValue(AdornerPlacementProperty); }
+            set { SetValue(AdornerPlacementProperty, value); }
+        }
 
-        //    var descriptor = DependencyPropertyDescriptor.FromProperty(AdornerEx.AdornerProperty, AssociatedObject.GetType());
-        //    descriptor.AddValueChanged(AssociatedObject, OnAdornerChanged);
-        //}
 
-        //private void OnAdornerChanged(object? sender, EventArgs e)
-        //{
-        //    var adorners = AssociatedObject.GetAdorners();
-        //    adorners.Add(CreateElement());
-        //}
 
         private FrameworkElement CreateElement()
         {
 
             //https://stackoverflow.com/questions/5664441/making-a-control-visible-to-hit-testing-but-transparent-to-dragdrop
-            Grid grid = new () { Height = 16, Width = 16, Background = Brushes.Transparent };
+            Grid grid = new() { Height = 16, Width = 16, Background = Brushes.Transparent };
 
-            Path path = new Path() { Stroke = new SolidColorBrush(Colors.Black), Fill = new SolidColorBrush(Colors.Black), Data= Shapes.Ellipse, StrokeThickness = 2, Stretch = Stretch.Uniform };
+            Path path = new() { Stroke = new SolidColorBrush(Colors.Black), Fill = new SolidColorBrush(Colors.Black), Data = Shapes.Ellipse, StrokeThickness = 2, Stretch = Stretch.Uniform };
             grid.Children.Add(path);
 
             grid.MouseEnter += Grid_MouseEnter;
@@ -116,7 +99,7 @@ namespace Utility.WPF.Adorners
                 AssociatedObject.ContextMenu.IsOpen = true;
         }
 
-      
+
 
     }
 }
