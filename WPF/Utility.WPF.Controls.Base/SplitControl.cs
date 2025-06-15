@@ -1,16 +1,6 @@
-﻿using Evan.Wpf;
-using PropertyTools.Wpf;
-using ReactiveUI;
-using System;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using Utility.Common.Helper;
 using Utility.Enums;
-using Utility.Reactives;
-using Utility.WPF.Abstract;
 
 namespace Utility.WPF.Controls.Base
 {

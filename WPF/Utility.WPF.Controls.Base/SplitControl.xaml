@@ -6,13 +6,11 @@
     xmlns:enms="clr-namespace:Utility.Enums;assembly=Utility.Enums"
     xmlns:att="http://schemas.utility.com/attached"
     xmlns:res="http://schemas.utility.com/resourcedictionary"
-    xmlns:conv="converter">
-    <!--<ResourceDictionary.MergedDictionaries>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml"/>
-    </ResourceDictionary.MergedDictionaries>-->
+    xmlns:conv="converter" 
+    xmlns:mvvm="http://hexinnovation.com/math">
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-
+    <mvvm:MathConverter x:Key="MathConverter"/>
 
     <Path x:Key="RightArrow" x:Shared="False"  StrokeEndLineCap="Round"  Stretch="Uniform" Stroke="Black" StrokeThickness="2" >
         <Path.Data>
@@ -32,14 +30,25 @@
         </Path.Data>
     </Path>
     
-    <Style x:Key="ArrowToggleButton" TargetType="{x:Type ToggleButton}">
-        <Setter Property="Margin" Value="0,2,2,0"></Setter>
-        <Setter Property="Height" Value="16"></Setter>
-        <Setter Property="Width" Value="16"></Setter>
-        <Setter Property="Background" Value="Transparent"></Setter>
-        <Setter Property="BorderThickness" Value="0"></Setter>
-        <Setter Property="Content" Value="{StaticResource RightArrow}"/>
-    </Style>
+    <Storyboard x:Key="Storyboard1">
+        <DoubleAnimation 
+                                    Storyboard.TargetName="Var_Animation_0to1"
+                                    Storyboard.TargetProperty="Width"
+                                Duration="0:0:1.5"
+                                    From="0.0" To="1.0" 
+                                    />
+    </Storyboard>
+
+    <Storyboard x:Key="Storyboard2">
+        <DoubleAnimation 
+                                    Storyboard.TargetName="Var_Animation_0to1"
+                                    Storyboard.TargetProperty="Width"
+                                Duration="0:0:1.5"
+                                    From="1.0" To="0.0" 
+                                    />
+    </Storyboard>
+    
+
 
     <ControlTemplate  x:Key="LeftToRight" TargetType="{x:Type HeaderedContentControl}">
         <Grid>
@@ -48,10 +57,21 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
+
+            <FrameworkElement x:Name="Var_Animation_0to1" Width="0">
+                <FrameworkElement.Height>
+                    <MultiBinding Converter="{StaticResource MathConverter}" ConverterParameter="x*y">
+                        <Binding ElementName="Var_Animation_0to1" Path="Width"/>
+                        <Binding Path="(att:Ex.Indent).Value" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                    </MultiBinding>
+                </FrameworkElement.Height>
+            </FrameworkElement>
+
+
             <ContentPresenter ContentSource="Content" x:Name="PART_ContentPresenter"/>
 
-            <ToggleButton x:Name="hider"  
-                          Style="{StaticResource ArrowToggleButton}" 
+            <ToggleButton x:Name="hider"                           
+                          Style="{Binding Path=(att:Ex.ToggleStyle), RelativeSource={RelativeSource Mode=TemplatedParent}}" 
                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
                 <ToggleButton.LayoutTransform>
@@ -59,10 +79,10 @@
                 </ToggleButton.LayoutTransform>
             </ToggleButton>
 
-            <Grid Grid.Column="1"   Visibility="{Binding Path=(att:Ex.IsChecked), Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type HeaderedContentControl}}}">
+            <Grid Grid.Column="1"  >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
-                    <ColumnDefinition Width="{Binding Path=(att:Ex.Indent), RelativeSource={RelativeSource Mode=TemplatedParent}}" MinWidth="10" />
+                    <ColumnDefinition Width="{Binding ElementName=Var_Animation_0to1, Path=Height}" MinWidth="10" />
                 </Grid.ColumnDefinitions>
                 <GridSplitter x:Name="_splitter" Grid.Column="0" Width="4" VerticalAlignment="Stretch" HorizontalAlignment="Center" Background="#BFDBFF"  ResizeBehavior="CurrentAndNext"     />
                 <ContentPresenter  ContentSource="Header" Grid.Column="1" x:Name="PART_HeaderPresenter" />
@@ -106,6 +126,7 @@
             <DataTrigger Binding="{Binding IsChecked, ElementName=hider}" Value="False">
                 <Setter Property="att:Ex.IsChecked" Value="True" />
                 <DataTrigger.EnterActions>
+                    <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
                     <BeginStoryboard>
                         <Storyboard Storyboard.TargetName="hider">
                             <DoubleAnimation Duration="0:0:0.5"
@@ -115,6 +136,7 @@
                     </BeginStoryboard>
                 </DataTrigger.EnterActions>
                 <DataTrigger.ExitActions>
+                    <BeginStoryboard Storyboard="{StaticResource Storyboard2}"/>
                     <BeginStoryboard>
                         <Storyboard>
                             <DoubleAnimation Storyboard.TargetName="hider"
@@ -136,9 +158,20 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="0"   Visibility="{Binding Path=(att:Ex.IsChecked), Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type HeaderedContentControl}}}">
+
+            <FrameworkElement x:Name="Var_Animation_0to1" Width="0">
+                <FrameworkElement.Height>
+                    <MultiBinding Converter="{StaticResource MathConverter}" ConverterParameter="x*y">
+                        <Binding ElementName="Var_Animation_0to1" Path="Width"/>
+                        <Binding Path="(att:Ex.Indent).Value" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                    </MultiBinding>
+                </FrameworkElement.Height>
+            </FrameworkElement>
+
+
+            <Grid Grid.Column="0" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding Path=(att:Ex.Indent), RelativeSource={RelativeSource Mode=TemplatedParent}}" MinWidth="10" />
+                    <ColumnDefinition Width="{Binding ElementName=Var_Animation_0to1, Path=Height}" MinWidth="10" />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
                 <ContentPresenter ContentSource="Header" Grid.Column="0" x:Name="PART_HeaderPresenter" />
@@ -149,7 +182,7 @@
             <ContentPresenter ContentSource="Content" Grid.Column="1" x:Name="PART_ContentPresenter"/>
             <ToggleButton x:Name="hider"  
                           Grid.Column="1"
-                          Style="{StaticResource ArrowToggleButton}"                         
+                           Style="{Binding Path=(att:Ex.ToggleStyle), RelativeSource={RelativeSource Mode=TemplatedParent}}"                    
                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
                 <ToggleButton.LayoutTransform>
@@ -196,7 +229,8 @@
             <DataTrigger Binding="{Binding IsChecked, ElementName=hider}" Value="False">
                 <Setter Property="att:Ex.IsChecked" Value="True" />
                 <DataTrigger.EnterActions>
-                    <BeginStoryboard>
+                    <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
+                    <BeginStoryboard>                
                         <Storyboard Storyboard.TargetName="hider">
                             <DoubleAnimation Duration="0:0:0.5"
                                                  To="180"
@@ -205,6 +239,7 @@
                     </BeginStoryboard>
                 </DataTrigger.EnterActions>
                 <DataTrigger.ExitActions>
+                    <BeginStoryboard Storyboard="{StaticResource Storyboard2}"/>
                     <BeginStoryboard>
                         <Storyboard  Storyboard.TargetName="hider">
                             <DoubleAnimation Duration="0:0:0.5"
@@ -220,14 +255,26 @@
 
     <ControlTemplate x:Key="TopToBottom" TargetType="{x:Type HeaderedContentControl}">
         <Grid>
+            
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+
+
+            <FrameworkElement x:Name="Var_Animation_0to1" Width="0">
+                <FrameworkElement.Height>
+                    <MultiBinding Converter="{StaticResource MathConverter}" ConverterParameter="x*y">
+                        <Binding ElementName="Var_Animation_0to1" Path="Width"/>
+                        <Binding Path="(att:Ex.Indent).Value" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                    </MultiBinding>
+                </FrameworkElement.Height>
+            </FrameworkElement>
+
             <ContentPresenter ContentSource="Content"/>
 
-            <ToggleButton x:Name="hider"  
-                          Style="{StaticResource ArrowToggleButton}" 
+            <ToggleButton x:Name="hider"                              
+                          Style="{Binding Path=(att:Ex.ToggleStyle), RelativeSource={RelativeSource Mode=TemplatedParent}}" 
                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
                 <ToggleButton.LayoutTransform>
@@ -235,11 +282,11 @@
                 </ToggleButton.LayoutTransform>
             </ToggleButton>
 
-            <Grid Grid.Row="1" Visibility="{Binding Path=(att:Ex.IsChecked), Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type HeaderedContentControl}}}">
+            <Grid Grid.Row="1" >
 
                 <Grid.RowDefinitions>
                     <RowDefinition />
-                    <RowDefinition Height="{Binding Path=(att:Ex.Indent), RelativeSource={RelativeSource Mode=TemplatedParent}}" MinHeight="10" />
+                    <RowDefinition Height="{Binding ElementName=Var_Animation_0to1, Path=Height}" MinHeight="10" />
                 </Grid.RowDefinitions>
                 <GridSplitter x:Name="_splitter" Grid.Row="0" Height="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="#BFDBFF" ResizeBehavior="CurrentAndNext"    />
                 <ContentPresenter ContentSource="Header" Grid.Row="1" x:Name="PART_HeaderPresenter"                                    />
@@ -250,6 +297,7 @@
             <DataTrigger Binding="{Binding IsChecked, ElementName=hider}" Value="False">
                 <Setter Property="att:Ex.IsChecked" Value="True" />
                 <DataTrigger.EnterActions>
+                    <BeginStoryboard Storyboard="{StaticResource Storyboard1}"/>
                     <BeginStoryboard>
                         <Storyboard  Storyboard.TargetName="hider">
                             <DoubleAnimation Duration="0:0:0.5"
@@ -259,6 +307,7 @@
                     </BeginStoryboard>
                 </DataTrigger.EnterActions>
                 <DataTrigger.ExitActions>
+                    <BeginStoryboard Storyboard="{StaticResource Storyboard2}"/>
                     <BeginStoryboard>
                         <Storyboard  Storyboard.TargetName="hider">
                             <DoubleAnimation Duration="0:0:0.5"
@@ -273,7 +322,6 @@
 
 
 
-
     <ControlTemplate x:Key="BottomToTop" TargetType="{x:Type HeaderedContentControl}">
         <Grid>
             <Grid.RowDefinitions>
@@ -281,22 +329,33 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0"   Visibility="{Binding Path=(att:Ex.IsChecked), Converter={StaticResource BooleanToVisibilityConverter}, RelativeSource={RelativeSource AncestorType={x:Type HeaderedContentControl}}}">
-
+            <FrameworkElement x:Name="Var_Animation_0to1" Width="0">
+                <FrameworkElement.Height>
+                    <MultiBinding Converter="{StaticResource MathConverter}" ConverterParameter="x*y">
+                        <Binding ElementName="Var_Animation_0to1" Path="Width"/>
+                        <Binding Path="(att:Ex.Indent).Value" RelativeSource="{RelativeSource Mode=TemplatedParent}"/>
+                    </MultiBinding>
+                </FrameworkElement.Height>
+            </FrameworkElement>
+            
+            <Grid Grid.Row="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="{Binding Path=(att:Ex.Indent), RelativeSource={RelativeSource Mode=TemplatedParent}}" MinHeight="10" />
+                    <RowDefinition Height="{Binding ElementName=Var_Animation_0to1, Path=Height}" />
                     <RowDefinition />
                 </Grid.RowDefinitions>
+                <ContentPresenter ContentSource="Header"
+                                  Grid.Row="0"
+                                  x:Name="PART_HeaderPresenter" 
+                                  />
 
-                <ContentPresenter ContentSource="Header" Grid.Row="0" x:Name="PART_HeaderPresenter"                                    />
                 <GridSplitter x:Name="_splitter" Grid.Row="1" Height="4" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="#BFDBFF"
-                          ResizeBehavior="PreviousAndCurrent"
-                                   />
+                          ResizeBehavior="PreviousAndCurrent"/>
             </Grid>
 
             <ContentPresenter ContentSource="Content" Grid.Row="1"/>
+            
             <ToggleButton x:Name="hider"  Grid.Row="1"
-                          Style="{StaticResource ArrowToggleButton}" 
+                          Style="{Binding Path=(att:Ex.ToggleStyle), RelativeSource={RelativeSource Mode=TemplatedParent}}" 
                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
                 <ToggleButton.LayoutTransform>
@@ -308,7 +367,12 @@
         <ControlTemplate.Triggers>
             <DataTrigger Binding="{Binding IsChecked, ElementName=hider}" Value="False">
                 <Setter Property="att:Ex.IsChecked" Value="True" />
+                
                 <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <StaticResource ResourceKey="Storyboard1"></StaticResource>
+                    </BeginStoryboard>
+                    
                     <BeginStoryboard>
                         <Storyboard  Storyboard.TargetName="hider">
                             <DoubleAnimation Duration="0:0:0.5"
@@ -318,6 +382,9 @@
                     </BeginStoryboard>
                 </DataTrigger.EnterActions>
                 <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <StaticResource ResourceKey="Storyboard2"></StaticResource>
+                    </BeginStoryboard>
                     <BeginStoryboard>
                         <Storyboard Storyboard.TargetName="hider">
                             <DoubleAnimation Duration="0:0:0.5"
@@ -331,11 +398,19 @@
     </ControlTemplate>
 
 
-
+    <Style x:Key="ArrowToggleButton" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Margin" Value="0,2,2,0"></Setter>
+        <Setter Property="Height" Value="16"></Setter>
+        <Setter Property="Width" Value="16"></Setter>
+        <Setter Property="Background" Value="Transparent"></Setter>
+        <Setter Property="BorderThickness" Value="0"></Setter>
+        <Setter Property="Content" Value="{StaticResource RightArrow}"/>
+    </Style>
 
     <Style TargetType="{x:Type local:SplitControl}" BasedOn="{StaticResource {x:Type HeaderedContentControl}}">
         <Setter Property="att:Ex.IsChecked" Value="False"/>
         <Setter Property="att:Ex.Indent" Value="150"/>
+        <Setter Property="att:Ex.ToggleStyle" Value="{StaticResource ArrowToggleButton}"/>
         <Setter Property="Background" Value="Transparent"></Setter>
         <Setter Property="Template">
             <Setter.Value>
@@ -354,7 +429,7 @@
             <Trigger Property="Movement" Value="{x:Static enms:XYMovement.BottomToTop}">
                 <Setter Property="Template"  Value="{StaticResource BottomToTop}"/>
                 <Setter Property="HorizontalContentAlignment" Value="Right"></Setter>
-                <Setter Property="VerticalContentAlignment" Value="Bottom"></Setter>
+                <Setter Property="VerticalContentAlignment" Value="Top"></Setter>
             </Trigger>
             <Trigger Property="Movement" Value="{x:Static enms:XYMovement.TopToBottom}">
                 <Setter Property="Template"  Value="{StaticResource TopToBottom}"/>

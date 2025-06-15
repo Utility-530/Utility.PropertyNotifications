@@ -167,5 +167,21 @@ namespace Utility.WPF.Attached
         {
             d.SetValue(ReverseProperty, (bool)value);
         }
+
+
+        public const string ToggleStyle = nameof(ToggleStyle);
+        public static readonly DependencyProperty ToggleStyleProperty = DependencyProperty.RegisterAttached(ToggleStyle, typeof(Style), typeof(Ex), new PropertyMetadata(null, PropertyChanged));
+
+        public static Style GetToggleStyle(DependencyObject d)
+        {
+            return (Style)d.GetValue(ToggleStyleProperty);
+        }
+
+        public static void SetToggleStyle(DependencyObject d, object value)
+        {
+            d.SetValue(ToggleStyleProperty, (Style)value);
+        }
+
+
     }
 }
