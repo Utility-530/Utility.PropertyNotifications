@@ -80,16 +80,15 @@ namespace Utility.WPF.Controls.Objects
         /// <param name="lv"></param>
         public static List<GridViewColumn> CreateColumns(ItemsControl lv)
         {
-
-            Type? dataType = null;
             if (lv.ItemsSource is not JArray enumerable)
                 return new List<GridViewColumn>();
 
-
-            dataType = Type.GetType(enumerable.Parent.Parent["$type"].Value<string>());
-
-            if (dataType is null)
+            if(enumerable.Parent?.Parent["$type"]?.Value<string>() is not string str)
                 return new List<GridViewColumn>();
+ 
+            if (Type.GetType(str) is not { } dataType)
+                return new List<GridViewColumn>();
+
             var elementType = Utility.Helpers.Reflection.TypeHelper.GetElementType(dataType);
 
 

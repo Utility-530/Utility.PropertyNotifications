@@ -12,7 +12,8 @@
     xmlns:d="clr-namespace:NumericUpDownLib;assembly=NumericUpDownLib"
     xmlns:res="http://schemas.utility.com/resourcedictionary" 
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:att="http://schemas.utility.com/attached">
+    xmlns:att="http://schemas.utility.com/attached" 
+    xmlns:ad="http://schemas.utility.com/adorners">
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary  Source="/Utility.WPF.Geometries;component/Resources.xaml" />
@@ -22,13 +23,15 @@
     <sys:Boolean x:Key="True">True</sys:Boolean>
     <sys:Boolean x:Key="False">False</sys:Boolean>
 
-
-
     <local:EnumConverter x:Key="EnumConverter"></local:EnumConverter>
     <local:ToolTipTemplateSelector x:Key="ToolTipTemplateSelector"></local:ToolTipTemplateSelector>
     <conv:TypeNameConverter x:Key="TypeNameConverter"></conv:TypeNameConverter>
     <local:ObjectVisibilityConverter x:Key="ObjectVisibilityConverter"></local:ObjectVisibilityConverter>
-
+    <controls:DoubleToNullConverter x:Key="DoubleToNullConverter" x:Shared="False"/>
+    <controls:BooleanToNullConverter x:Key="BooleanToNullConverter" x:Shared="False"/>
+    <local:LabelConverter x:Key="LabelConverter" />
+    <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    
     <ObjectDataProvider
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         x:Key="MyEnumValues"
@@ -164,7 +167,7 @@
                         <ItemsPanelTemplate>
                             <Grid  Margin="0,2,0,2"   HorizontalAlignment="Left">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"></ColumnDefinition>
+                                    <ColumnDefinition Width="200"></ColumnDefinition>
                                     <ColumnDefinition Width="10"></ColumnDefinition>
                                     <ColumnDefinition Width="*"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
@@ -180,7 +183,7 @@
                 <Setter Property="FontWeight" Value="DemiBold"></Setter>
                 <Setter Property="ToolTip" Value="{StaticResource TokenToolTip}"></Setter>
                 <Setter Property="ToolTipService.InitialShowDelay" Value="300"></Setter>
-                <Setter Property="Text" Value="{Binding Path=Name, Mode=OneWay}"></Setter>
+                <Setter Property="Text" Value="{Binding Path=Name, Mode=OneWay, Converter={StaticResource LabelConverter}}"></Setter>
                 <Setter Property="Foreground">
                     <Setter.Value>
                         <SolidColorBrush Color="{Binding Path=Value.Type, Converter={x:Static controls:Converters.JTokenTypeToColorConverter}}" />
@@ -195,7 +198,7 @@
                             <ItemsControl Style="{StaticResource LabelValue}" >
                                 <TextBlock Style="{StaticResource LabelStyle}" />
                                 <!--<TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4" Visibility="{Binding Schema.Description, Converter={StaticResource VisibilityConverter}}" />-->
-                                <ContentPresenter           Grid.Column="2">
+                                <ContentPresenter  Grid.Column="2">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseLeftButtonDown">
                                             <beh:InvokeCommandAction Command="{x:Static controls:Commands.FooCommand}" />
@@ -259,7 +262,8 @@
             <controls:EnumToNumberConverter x:Key="EnumToNumberConverter" />
             <controls:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
             <controls:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
-            <controls:BooleanToNullConverter x:Key="BooleanToNullConverter" />
+
+
             <controls:SchemaNullableToVisibilityConverter x:Key="SchemaNullableToVisibilityConverter" />
             <controls:SchemaNullableToBooleanConverter x:Key="SchemaNullableToBooleanConverter" />
             <controls:EventArgsConverter x:Key="EventArgsConverter" />
@@ -270,7 +274,7 @@
                 <c:BreadCrumbs ItemsSource="{Binding Value.Value, Converter={x:Static conv:TypeHierarchyConverter.Instance}}"/>
             </DataTemplate>
 
-            <DataTemplate x:Key="StringTemplate">            
+            <DataTemplate x:Key="StringTemplate">
                 <!--<TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4" Visibility="{Binding Schema.Description, Converter={StaticResource VisibilityConverter}}" />-->
                 <Border BorderThickness="0,0,0,1"
                             Grid.Column="2"
@@ -302,15 +306,15 @@
             <DataTemplate x:Key="ReadOnlyTemplate">
                 <TextBlock Text="{Binding Value, Mode=OneWay}" IsEnabled="False"></TextBlock>
             </DataTemplate>
-            
+
             <DataTemplate x:Key="DateTimeTemplate">
                 <xctk:DateTimePicker Margin="0,0,0,8" 
                                      TextAlignment="Left" 
                                      AutoCloseCalendar="True"
                                      Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DateTimeConverter}}" />
             </DataTemplate>
-            
-            <DataTemplate x:Key="DateTemplate">  
+
+            <DataTemplate x:Key="DateTemplate">
                 <xctk:DateTimePicker Margin="0,0,0,8" TextAlignment="Left" Format="LongDate" 
                                          TimePickerVisibility="Collapsed" TimeFormat="Custom" AutoCloseCalendar="True"
                                          Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DateConverter}}" >
@@ -323,12 +327,12 @@
                     </i:Interaction.Triggers>
                 </xctk:DateTimePicker>
             </DataTemplate>
-            
+
             <DataTemplate x:Key="TimeTemplate">
                 <xctk:TimePicker Margin="0,0,0,8" HorizontalAlignment="Stretch" 
                                      Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource TimeConverter}}" />
             </DataTemplate>
-            
+
             <DataTemplate x:Key="NumberTemplate">
                 <d:DoubleUpDown Margin="0,0,0,8" Value="{Binding Value, Mode=TwoWay}">
                     <i:Interaction.Triggers>
@@ -340,7 +344,52 @@
                     </i:Interaction.Triggers>
                 </d:DoubleUpDown>
             </DataTemplate>
-            
+
+            <DataTemplate x:Key="NumberNullTemplate">
+                <WrapPanel>
+                    <d:DoubleUpDown x:Name="DoubleUpDown" Margin="0,0,0,8" Value="{Binding Value, Mode=TwoWay}" 
+                                    Visibility="{Binding ElementName=ToggleButton, Path=IsChecked,Converter={StaticResource BoolToVisibility}}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="ValueChanged">
+                                <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource DoubleEventArgsConverter}" 
+                                                           EventArgsConverterParameter="{Binding }" 
+                                                           Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </d:DoubleUpDown>
+                    <ToggleButton x:Name="ToggleButton" Height="{Binding ElementName=DoubleUpDown, Path=ActualHeight}" VerticalAlignment="Top">
+                        <ToggleButton.Style>
+                            <Style TargetType="{x:Type ToggleButton}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="False">
+                                        <Setter Property="Content"  >
+                                            <Setter.Value>
+                                                <Path Stroke="Gray" StrokeThickness="2" Data="{StaticResource Null}"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="Content"  >
+                                            <Setter.Value>
+                                                <Path Stroke="Gray" StrokeThickness="2" Data="{StaticResource NotNull}"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                        <ToggleButton.IsChecked>
+                            <Binding Path="Value" Mode="TwoWay" >
+                                <Binding.Converter>
+                                    <StaticResource ResourceKey="DoubleToNullConverter"></StaticResource>
+                                </Binding.Converter>
+                            </Binding>
+                        </ToggleButton.IsChecked>
+
+                    </ToggleButton>
+                </WrapPanel>
+            </DataTemplate>
+
             <DataTemplate x:Key="IntegerTemplate">
                 <WrapPanel>
                     <xctk:IntegerUpDown Margin="0,0,0,8" TextAlignment="Left" HorizontalAlignment="Stretch"  x:Name="IntegerUpDown"               
@@ -369,6 +418,9 @@
                 <TextBox Text="{Binding Value, Mode=TwoWay, ValidatesOnExceptions=True, Converter={StaticResource GuidConverter}}" Style="{StaticResource textBoxInError}">
                     <i:Interaction.Behaviors>
                         <beh:GuidEditBehavior />
+                        <ad:HoverBehavior HorizontalAdornerPlacement="Outside" />
+                        <ad:ContextBehavior AdornerPlacement="Outside"/>
+                        <beh:GuidContextBehavior />
                     </i:Interaction.Behaviors>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="LostFocus">

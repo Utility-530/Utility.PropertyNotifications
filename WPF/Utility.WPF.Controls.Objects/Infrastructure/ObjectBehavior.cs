@@ -6,8 +6,8 @@ using Pather.CSharp.PathElements;
 using System;
 using System.Collections.Generic;
 using System.Reactive.Subjects;
+using System.Text.RegularExpressions;
 using System.Windows;
-
 
 namespace Utility.WPF.Controls.Objects
 {
@@ -15,14 +15,16 @@ namespace Utility.WPF.Controls.Objects
     {
         ReplaySubject<JsonControl> _playSubject = new(1);
         public static readonly DependencyProperty ObjectProperty = DependencyProperty.Register("Object", typeof(object), typeof(ObjectBehavior), new PropertyMetadata(null, changed));
+        public static readonly DependencyProperty JsonSerializerProperty = DependencyProperty.Register("JsonSerializer", typeof(JsonSerializer), typeof(ObjectBehavior), new PropertyMetadata());
 
         private ResolverFactory.Resolver resolver;
 
         static ObjectBehavior()
         {
+            serialiser = JsonSerializer.CreateDefault(new JsonSerializerSettings { Converters = Statics.converters, TypeNameHandling = TypeNameHandling.All });
         }
 
-
+        private static JsonSerializer serialiser;
 
         public JsonSerializer JsonSerializer
         {
@@ -30,13 +32,9 @@ namespace Utility.WPF.Controls.Objects
             set { SetValue(JsonSerializerProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for JsonSerializer.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty JsonSerializerProperty =
-            DependencyProperty.Register("JsonSerializer", typeof(JsonSerializer), typeof(ObjectBehavior), new PropertyMetadata());
-
-
         private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
+
             if (d is ObjectBehavior b && e.NewValue is { } obj)
             {
                 b._playSubject.Subscribe(a =>
@@ -46,9 +44,9 @@ namespace Utility.WPF.Controls.Objects
                         if (b.JsonSerializer != null)
                             a.Object = JToken.FromObject(obj, b.JsonSerializer);
                         else
-                            a.Object = JToken.FromObject(obj);
+                            a.Object = JToken.FromObject(obj, serialiser);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         a.Object = JToken.FromObject(ex);
                     }
@@ -73,7 +71,10 @@ namespace Utility.WPF.Controls.Objects
         {
             resolver ??= ResolverFactory.Create();
             var _value = value();
-            resolver.Set(Object, e.JPropertyNewValue.JProperty.Path, _value);
+            string pattern = @"\[\'";
+            string result = Regex.Replace(e.JPropertyNewValue.JProperty.Path, pattern, "");
+            var path = Regex.Match(result, JsonControl.LabelPattern).Groups[0].ToString();
+            resolver.Set(Object, path, _value);
 
             object value()
             {

@@ -1,4 +1,5 @@
 ﻿# nullable enable
+using Humanizer;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using ReactiveUI;
@@ -9,6 +10,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -16,13 +18,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Tiny.Toolkits;
 using Utility.Commands;
+using Utility.Conversions.Json.Newtonsoft;
 using Utility.Helpers;
-using Utility.Models;
-using Utility.WPF.Controls.Trees;
 using Utility.Helpers.Ex;
 using Utility.Helpers.Reflection;
+using Utility.Models;
+using Utility.WPF.Controls.Trees;
 using static LambdaConverters.ValueConverter;
-using DryIoc;
 
 namespace Utility.WPF.Controls.Objects
 {
@@ -50,11 +52,13 @@ namespace Utility.WPF.Controls.Objects
     /// </summary>
     public partial class JsonControl : TreeView
     {
+        public const string LabelPattern = "^([^$]+)";
+        public static string RemoveMetaData(string str) => Regex.Match(str, LabelPattern).Groups[0].ToString();
 
         public static readonly DependencyProperty JsonProperty = DependencyProperty.Register(nameof(Json), typeof(string), typeof(JsonControl), new PropertyMetadata(null, Change2));
         public static readonly DependencyProperty ObjectProperty = DependencyProperty.Register(nameof(Object), typeof(JToken), typeof(JsonControl), new PropertyMetadata(null, Change));
         public static readonly DependencyProperty ValidationSchemaProperty = DependencyProperty.Register(nameof(ValidationSchema), typeof(JSchema), typeof(JsonControl), new PropertyMetadata(null, Change));
-        public static readonly DependencyProperty SchemaProperty = DependencyProperty.Register(nameof(Schema), typeof(Schema), typeof(JsonControl), new PropertyMetadata());
+        //public static readonly DependencyProperty SchemaProperty = DependencyProperty.Register(nameof(Schema), typeof(Schema), typeof(JsonControl), new PropertyMetadata());
         public static readonly DependencyProperty ChangeValueCommandProperty = DependencyProperty.Register(nameof(ChangeValueCommand), typeof(ICommand), typeof(JsonControl), new PropertyMetadata());
 
         public static readonly RoutedEvent ValueChangedEvent = EventManager.RegisterRoutedEvent(
@@ -194,11 +198,6 @@ namespace Utility.WPF.Controls.Objects
             set { SetValue(ValidationSchemaProperty, value); }
         }
 
-        public Schema Schema
-        {
-            get { return (Schema)GetValue(SchemaProperty); }
-            set { SetValue(SchemaProperty, value); }
-        }
 
         public ICommand ChangeValueCommand
         {
@@ -268,7 +267,7 @@ namespace Utility.WPF.Controls.Objects
 
     public class JsonObjectTypeTemplateSelector : DataTemplateSelector
     {
-        Dictionary<string, SchemaProperty> properties = new();
+        //Dictionary<string, SchemaProperty> properties = new();
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -289,23 +288,12 @@ namespace Utility.WPF.Controls.Objects
                 }
                 else if (item is JProperty { Value: { Type: { } _type } _value, Parent: var parent, Name: { } name } property)
                 {
-                    var hasSchema = findProperty(property.Name, (JContainer)property.Parent, jsonControl.Schema, out SchemaProperty schemaProperty);
-                    if (hasSchema == true)
-                    {
-                        if (schemaProperty.IsVisible == false)
-                        {
-                            return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
-                        }
-                    }
-                    if (property.Name == "$type")
+                    if (property.Name == MetadataConverter.Type)
                     {
                         return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
                     }
-                    if (property.Name == "$isenum")
-                    {
-                        return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
-                    }
-                    if (property.Name == "$isreadonly")
+   
+                    if (property.Name.Contains(MetadataConverter.IsReadonly))
                     {
                         return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
                     }
@@ -318,36 +306,17 @@ namespace Utility.WPF.Controls.Objects
                 else if (item is JValue { Parent: JProperty { Parent: { } _jObject, Name: { } propertyName } _parent, Type: { } jtype } jValue)
                 {
 
-                    if (_jObject["$isreadonly"]?.Last?.Last is IEnumerable e)
+                    if (propertyName.Contains(MetadataConverter.IsReadonly))
                     {
-                        foreach (JValue x in e)
-                        {
-                            if (x.Value == propertyName)
-                                return frameworkElement.FindResource("ReadOnlyTemplate") as DataTemplate;
-                        }
+                        return frameworkElement.FindResource("ReadOnlyTemplate") as DataTemplate;
                     }
-                    if (_jObject["$isenum"]?.Last?.Last is IEnumerable _e)
+                    if (propertyName.Contains($"{MetadataConverter.Type}:Double"))
                     {
-                        foreach (JValue x in _e)
-                        {
-                            if (x.Value == propertyName)
-                                return frameworkElement.FindResource("EnumTemplate") as DataTemplate;
-                        }
+                        return frameworkElement.FindResource("NumberNullTemplate") as DataTemplate;
                     }
-                    if (findProperty(propertyName, _jObject, jsonControl.Schema, out SchemaProperty schemaProperty))
+                    if (propertyName.Contains(MetadataConverter.IsEnum))
                     {
-                        if (schemaProperty.EnumType != null)
-                        {
-                            return frameworkElement.FindResource("EnumTemplate") as DataTemplate;
-                        }
-                        if (schemaProperty.Template is { } template && frameworkElement.FindResource(template) is DataTemplate dataTemplate)
-                        {
-                            return dataTemplate;
-                        }
-                        if (schemaProperty.IsVisible == false)
-                        {
-                            return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
-                        }
+                        return frameworkElement.FindResource("EnumTemplate") as DataTemplate;
                     }
                     return frameworkElement.FindResource(convert(jtype)) as DataTemplate;
                 }
@@ -362,49 +331,6 @@ namespace Utility.WPF.Controls.Objects
                 return MissingTemplate;
 
             return container.GetResource<DataTemplate>("MissingTemplate");
-
-            bool findProperty(string name, JContainer? parent, Schema? schema, out SchemaProperty? property)
-            {
-                if (properties.TryGetValue(name, out SchemaProperty? schemaProp))
-                {
-                    property = schemaProp;
-                    return true;
-
-                }
-                else if (schema?.Properties.Where(a => a.Name == name).ToArray() is SchemaProperty[] properties)
-                {
-                    foreach (var prop in properties)
-                    {
-                        //if (x.Type != null)
-                        if (prop.Name != name)
-                        {
-                            continue;
-                        }
-                        property = this.properties[prop.Name] = prop;
-                        return true;
-                    }
-                }
-                else if (parent?.First?.HasValues == true && parent?.First?.Values<string>().First() is string stype && Type.GetType(stype) is Type _type)
-                {
-                    if (SchemaStore.Instance.TryGetValue(_type, out var _schema))
-                    {
-                        if (findProperty(name, parent, _schema, out property))
-                        {
-                            return true;
-                        }
-                    }
-                    var propertyType = _type.GetPropertyOrNull(name)?.PropertyType;
-                    if (propertyType == typeof(string))
-                    {
-                        property = new SchemaProperty { Template = "StringTemplate" };
-                        return true;
-                    }
-
-                }
-                property = null;
-                return false;
-
-            }
 
             static string convert(JTokenType _type)
             {
@@ -537,7 +463,7 @@ namespace Utility.WPF.Controls.Objects
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is RoutedPropertyChangedEventArgs<double> { NewValue:{ } newValue } && parameter is JValue { Parent: JProperty jProperty } jValue)
+            if (value is RoutedPropertyChangedEventArgs<double> { NewValue: { } newValue } && parameter is JValue { Parent: JProperty jProperty } jValue)
             {
                 jValue.Value = newValue;
                 return new JPropertyNewValue(value, jProperty);
@@ -715,7 +641,8 @@ namespace Utility.WPF.Controls.Objects
             else if (jValue.Parent?.Parent is JObject jObject && jObject["$type"] is { } _type)
             {
                 var oType = Type.GetType(_type.ToString());
-                type = oType.GetProperty((jValue.Parent as JProperty).Name).PropertyType;
+                var name = JsonControl.RemoveMetaData((jValue.Parent as JProperty).Name);
+                type = oType.GetProperty(name).PropertyType;
             }
             else
             {
@@ -745,21 +672,18 @@ namespace Utility.WPF.Controls.Objects
     internal class BooleanToNullConverter : IMultiValueConverter
     {
         //public Dictionary<string[], object[]> _value = new();
-        private JsonSchema jsonSchema;
-        private long value;
+        private object jsonSchema;
+        private object value;
 
         public object Convert(object[] value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value.Length == 2)
             {
-                if (value[1] is JsonSchema { Type: var type } schema)
-                {
-                    //return _value[targetType] = value;
-                    jsonSchema = schema;
-                    if (value[0] != null)
-                        this.value = (long)value[0];
-                    return value[0] != null;
-                }
+                jsonSchema = value[1];
+                if (value[0] != null)
+                    this.value = value[0];
+                return value[0] != null;
+
             }
             return DependencyProperty.UnsetValue;
         }
@@ -771,8 +695,50 @@ namespace Utility.WPF.Controls.Objects
                 return new[] { null, jsonSchema };
             }
             //return _value[targetType[0]];
-            return new object[] { this.value, jsonSchema };
+            return new object[] { 1.0, jsonSchema };
 
+        }
+    }
+
+    internal class LabelConverter : IValueConverter
+    {
+        private double? value;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return value is string str ? Regex.Match(str, JsonControl.LabelPattern).Groups[0].ToString().Humanize() : throw new Exception("sdf 332221``!");
+        }
+
+        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return this.value ??= 0.0;
+        }
+    }
+    internal class DoubleToNullConverter : IValueConverter
+    {
+        private double? value;
+        private bool isNotNull;
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (isNotNull)
+            {
+                this.value = (double?)value;
+            }
+            else
+            {
+            }
+            return isNotNull;
+        }
+
+        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is false)
+            {
+                isNotNull = false;
+                this.value = null;
+                return null;
+            }
+            isNotNull = true;
+            return this.value ??= 0.0;
         }
     }
 
@@ -947,8 +913,8 @@ namespace Utility.WPF.Controls.Objects
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is JValue { Value: var _value })
-            {     
-                return _value.ToString();                
+            {
+                return _value.ToString();
             }
             return value.ToString();
         }

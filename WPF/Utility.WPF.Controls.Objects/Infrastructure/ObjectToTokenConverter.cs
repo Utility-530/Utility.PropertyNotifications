@@ -5,24 +5,22 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Collections.Generic;
-using Utility.Common.Meta;
 using Omu.ValueInjecter;
 
 namespace Utility.WPF.Controls.Objects
 {
     public class ObjectToTokenConverter : IValueConverter
     {
-        private JsonConverter[] converters = [
-            new Newtonsoft.Json.Converters.StringEnumConverter()];
 
-        Dictionary<object, object> properties = new Dictionary<object, object>();
+
+        Dictionary<object, object> properties = new();
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is null)
                 return DependencyProperty.UnsetValue;
 
-            var serialiser = JsonSerializer.CreateDefault(new JsonSerializerSettings { Converters = converters, TypeNameHandling = TypeNameHandling.All });
+            var serialiser = JsonSerializer.CreateDefault(new JsonSerializerSettings { Converters = Statics.converters, TypeNameHandling = TypeNameHandling.All });
             if(parameter is not null)
             {
                 properties[value.GetType().GetProperty(parameter.ToString()).GetValue(value).ToString()] = value;

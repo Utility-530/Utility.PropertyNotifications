@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Utility.Helpers;
 using Utility.Helpers.Reflection;
 
@@ -11,11 +12,15 @@ namespace Utility.Conversions.Json.Newtonsoft
 {
     public class MetadataConverter : JsonConverter
     {
+
+        public const string IsEnum = "$isenum";
+        public const string IsReadonly = "$isreadonly";
+        public const string Type = "$type";
+
         public override bool CanConvert(Type objectType)
         {
-            return objectType is not Type && PropertyHelper.ValueTypes.Contains(objectType) == false && objectType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(objectType) == false;
+            return objectType != typeof(Type) && PropertyHelper.ValueTypes.Contains(objectType) == false && objectType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(objectType) == false;
         }
-
 
         public override bool CanRead => false;
 
@@ -32,43 +37,59 @@ namespace Utility.Conversions.Json.Newtonsoft
 
             var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-
-            writer.WritePropertyName("$type");
+            writer.WritePropertyName(Type);
             writer.WriteValue(type.AsString());
-            List<string> names = new List<string>();
-            List<string> eNames = new List<string>();
-
+            List<string> list = new();
             foreach (var prop in properties)
             {
+                StringBuilder stringBuilder = new();
+                var x = prop.GetCustomAttributes();
+                if (x.Any(a => a is JsonIgnoreAttribute))
+                {
+                    continue;
+                }
+                if(prop.CanRead ==false)
+                {
+                    continue;
+                }
                 var propName = prop.Name;
                 var propValue = prop.GetValue(value);
-
-                writer.WritePropertyName(propName);
-                if(prop.PropertyType.IsEnum)
+                stringBuilder.Append(propName);
+                if (propValue == null && prop.PropertyType.IsValueType)
                 {
-                    serializer.Serialize(writer, propValue);
-                    eNames.Add(prop.Name);
+                    var _type = Nullable.GetUnderlyingType(prop.PropertyType);
+                    stringBuilder.AppendLine($"{Type}:{_type.Name}");
                 }
-                else if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
-                    writer.WriteValue(propValue);
-                else
-                    serializer.Serialize(writer, propValue);
-
-
                 // Write metadata about whether the property is readonly (no setter or private setter)
                 bool isReadOnly = !prop.CanWrite || prop.SetMethod == null || !prop.SetMethod.IsPublic;
                 if (isReadOnly)
                 {
-                    names.Add(prop.Name);
+                    stringBuilder.AppendLine(IsReadonly);
+                }
+
+                if (prop.PropertyType.IsEnum)
+                {
+                    stringBuilder.AppendLine(IsEnum);
+                    writer.WritePropertyName(stringBuilder.ToString());
+                    serializer.Serialize(writer, propValue);
+
+                }
+                else if(prop.PropertyType.FullName== "System.Windows.Point" || prop.PropertyType.FullName == "System.Windows.Media.Color")
+                {
+                    writer.WritePropertyName(stringBuilder.ToString());
+                    serializer.Serialize(writer, propValue);
+                }
+                else if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
+                {
+                    writer.WritePropertyName(stringBuilder.ToString());
+                    writer.WriteValue(propValue);
+                }
+                else
+                {
+                    writer.WritePropertyName(stringBuilder.ToString());
+                    serializer.Serialize(writer, propValue);
                 }
             }
-
-            writer.WritePropertyName($"$isreadonly");
-            serializer.Serialize(writer, names);        
-            
-            writer.WritePropertyName($"$isenum");
-            serializer.Serialize(writer, eNames);
-
             writer.WriteEndObject();
         }
     }
