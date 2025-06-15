@@ -48,14 +48,14 @@ namespace Utility.WPF.Controls.Meta
                     {
                         return a.Second switch
                         {
-                            AssemblyType.UserControl => a.First.ViewTypes(),
-                            AssemblyType.ResourceDictionary => ResourceDictionaryKeyValue.ResourceViewTypes(a.First).Cast<WPF.Meta.KeyValue>(),
+                            AssemblyType.UserControl => (IEnumerable)a.First.ViewTypes().ToArray(),
+                            AssemblyType.ResourceDictionary => (IEnumerable)ResourceDictionaryKeyValue.ResourceViewTypes(a.First).ToArray(),
                             _ => throw new Exception("FDGS££Fff"),
                         };
                     })
                     .Subscribe(pairs =>
                     {
-                        listBox.ItemsSource = pairs.ToArray();
+                        listBox.ItemsSource = pairs;
                         listBox.SelectedIndex = 0;
                     });
 
