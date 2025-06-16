@@ -1575,17 +1575,13 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class ModelTypesModel : CollectionModel<ModelTypeModel>
+    public class ModelTypesModel : Model
     {
         public override void SetNode(INode node)
         {
             node.IsExpanded = true;
             node.IsAugmentable = false;
             Node = node;
-        }
-
-        public override void Initialise()
-        {
         }
 
         public override IEnumerable<IModel> CreateChildren()
