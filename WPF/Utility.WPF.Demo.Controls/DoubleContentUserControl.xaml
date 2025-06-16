@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:view="http://schemas.utility.com"
+             xmlns:enms="clr-namespace:Utility.Enums;assembly=Utility.Enums"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:utl="http://schemas.utility.com/utilitywpf"
              xmlns:beh="http://schemas.utility.com/behaviors"
@@ -42,12 +43,12 @@
             <view:EnumItemsControl
                 x:Name="EnumItemsControl"
                 Orientation="{Binding ElementName=ToggleButton1, Path=Content}"
-                Enum="{x:Type Dock}" />
-            <TextBlock Text="{Binding ElementName=EnumItemsControl, Path=Output, Mode=OneWay, Converter={x:Static conv:LambdaConverter.StringConverter}}" Margin="5" Background="AliceBlue" Height="30" />
+                Enum="{x:Type enms:XYMovement}" />
+            <TextBlock Text="{Binding ElementName=EnumItemsControl, Path=Value, Mode=OneWay, Converter={x:Static conv:LambdaConverter.StringConverter}}" Margin="5" Background="AliceBlue" Height="30" />
         </WrapPanel>
 
         <UniformGrid>
-            <utl:SplitControl Orientation="{Binding ElementName=ToggleButton1, Path=Content}">
+            <utl:SplitControl Movement="{Binding ElementName=ToggleButton1, Path=Content}">
                 <utl:SplitControl.Header>
                     <Grid Background="GreenYellow">
                         <Rectangle Fill="PaleVioletRed" ></Rectangle>
@@ -56,7 +57,7 @@
                 </utl:SplitControl.Header>
             </utl:SplitControl>
 
-            <utl:SplitControl  Orientation="{Binding ElementName=ToggleButton1, Path=Content}" x:Name="SplitControl2">
+            <utl:SplitControl  Movement="{Binding ElementName=ToggleButton1, Path=Content}" x:Name="SplitControl2">
                 <Grid Background="GreenYellow" HorizontalAlignment="Stretch" Width="{Binding ElementName=SplitControl2, Path=ActualWidth}">
                     <Rectangle Fill="RoyalBlue" ></Rectangle>
                     <TextBlock Text="Content" FontSize="30" VerticalAlignment="Center" HorizontalAlignment="Center"></TextBlock>
@@ -76,8 +77,8 @@
                     <StaticResource ResourceKey="Array"></StaticResource>
                 </ItemsControl.ItemsSource>
             </utl:LayOutListBox>
-            <utl:SplitControl Position="{Binding ElementName=EnumItemsControl, Path=Output, Mode=OneWay}" 
-                                       Orientation="{Binding ElementName=ToggleButton1, Path=Content}"
+            <utl:SplitControl Movement="{Binding ElementName=EnumItemsControl, Path=Value, Mode=OneWay}" 
+                                      
                                        Header="{Binding ElementName=LayOutListBox2, Path=SelectedItem}">
                 <utl:LayOutListBox  SelectedIndex="{Binding ElementName=LayOutListBox2, Path=SelectedIndex}">
                     <ItemsControl.ItemTemplate>
