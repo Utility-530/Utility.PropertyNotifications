@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Utility.Entities;
 using Utility.Helpers.Reflection;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Generic.Data;
 using Utility.Models;
 using Utility.Models.Trees;
 using Utility.PropertyNotifications;
@@ -72,5 +73,24 @@ namespace Utility.Nodes.Demo.Lists.Services
                 })
                 { Name = main });
         }
+
+        public IObservable<INode> BuildDefaultRoot(Guid guid, IId<Guid> value)
+        {
+            return nodeSource.Create(nameof(BuildDefaultRoot),
+                guid,
+                s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Horizontal },
+                s =>
+                new Model(() => [
+                    new EditModel { Name = edit, Value = value },
+
+                ],
+                (node) => { },
+                (parent, addition) =>
+                {
+               
+                })
+                { Name = main });
+        }
+
     }
 }

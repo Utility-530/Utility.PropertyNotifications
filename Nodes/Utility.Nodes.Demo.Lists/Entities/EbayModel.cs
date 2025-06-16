@@ -1,8 +1,5 @@
-﻿using CustomModels;
-using Nito.Disposables.Internals;
+﻿using Nito.Disposables.Internals;
 using SQLite;
-using System.ComponentModel;
-using System.Linq;
 using System.Text.Json.Serialization;
 using Utility.Attributes;
 using Utility.Interfaces.Generic.Data;
@@ -11,14 +8,6 @@ using Utility.PropertyNotifications;
 
 namespace Utility.Nodes.Demo.Lists.Infrastructure
 {
-
-    [Model]
-    public class Model
-    {
-        public int Id { get; set; }
-    }
-
-
     [Model]
     public class EbayModel : NotifyPropertyClass, IId<Guid>, IClone
     {

@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using Utility.Interfaces.Generic.Data;
 using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 
@@ -13,6 +14,7 @@ namespace Utility.Nodes.Demo.Lists
             return value switch
             {
                 EbayModel model => new TreeViewModel(nameof(NodeMethodFactory.BuildEbayRoot), model.Id, model),
+                IId<Guid> model => new TreeViewModel(nameof(NodeMethodFactory.BuildDefaultRoot), model.Id, model),
                 null => DependencyProperty.UnsetValue,
                 _ => throw new NotImplementedException(),
             };

@@ -50,7 +50,7 @@ namespace Utility.Nodes.Demo.Lists
             //TransformerService service = new();
             //ControlsService _service = ControlsService.Instance;
             //ComboService comboService = new ();
-            Utility.Models.SchemaStore.Instance.Add(typeof(EbayModel), SchemaFactory.EbaySchema);
+            //Utility.Models.SchemaStore.Instance.Add(typeof(EbayModel), SchemaFactory.EbaySchema);
             var window = new Window() { Content = Locator.Current.GetService<ContainerViewModel>() };
 
             window.Show();
