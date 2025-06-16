@@ -41,7 +41,7 @@ namespace Utility.Persists
         public static IDisposable ToManager<TCollection>(this TCollection observableCollection, Func<object, Guid> funcId, string? dbPath = null) where TCollection : IList, INotifyCollectionChanged
         {
             Directory.CreateDirectory("../../../Data/");
-            return new SqliteManager<TCollection>(dbPath ?? "../../../Data/data.sqlite", observableCollection, funcId).Subscribe(observableCollection.GetType().InnerType());
+            return new SqliteManager<TCollection>(dbPath ?? "../../../Data/models.sqlite", observableCollection, funcId).Subscribe(observableCollection.GetType().InnerType());
         }
     }
 
@@ -50,7 +50,7 @@ namespace Utility.Persists
         const string extantItems = "SELECT * FROM {0} AS t JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed = '0') AS m ON t.Id = m.Id";
         const string removedItems = "SELECT * FROM {0} AS t JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed != '0') AS m ON t.Id = m.Id";
 
-        List<DataType> types = new List<DataType>();
+        List<DataType> types = new();
 
         public IDisposable Subscribe(Type type)
         {
