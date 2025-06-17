@@ -308,15 +308,15 @@
             </DataTemplate>
 
             <DataTemplate x:Key="DateTimeTemplate">
-                <xctk:DateTimePicker Margin="0,0,0,8" 
+                <xctk:DateTimePicker Format="ShortDate" Margin="0,0,0,8" 
                                      TextAlignment="Left" 
                                      AutoCloseCalendar="True"
                                      Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DateTimeConverter}}" />
             </DataTemplate>
 
             <DataTemplate x:Key="DateTemplate">
-                <xctk:DateTimePicker Margin="0,0,0,8" TextAlignment="Left" Format="LongDate" 
-                                         TimePickerVisibility="Collapsed" TimeFormat="Custom" AutoCloseCalendar="True"
+                <xctk:DateTimePicker  Margin="0,0,0,8" TextAlignment="Left" Format="LongDate" 
+                                         TimePickerVisibility="Collapsed" AutoCloseCalendar="True"
                                          Value="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource DateConverter}}" >
                     <i:Interaction.Triggers>
                         <i:PropertyChangedTrigger Binding="{Binding Path=Value, Mode=OneWayToSource}">
