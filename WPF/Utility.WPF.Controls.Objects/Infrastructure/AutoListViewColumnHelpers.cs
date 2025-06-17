@@ -2,8 +2,6 @@
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows;
-using ReactiveUI;
-using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Windows.Data;
@@ -12,10 +10,12 @@ using AutoGenListView.Attributes;
 using System.Windows.Shapes;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
-using Microsoft.Xaml.Behaviors;
-using System.Collections;
 using Humanizer;
 using Utility.Helpers.Reflection;
+using Utility.Structs;
+using ColumnAttribute = Utility.Attributes.ColumnAttribute;
+using Itenso.Windows.Controls.ListViewLayout;
+
 
 namespace Utility.WPF.Controls.Objects
 {
@@ -27,6 +27,7 @@ namespace Utility.WPF.Controls.Objects
             // create the gridview
 
             var columns = new List<GridViewColumn>();
+
             PropertyInfo[] properties = [.. dataType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)];
 
             //dataType.GetProperties()
@@ -36,11 +37,18 @@ namespace Utility.WPF.Controls.Objects
             // the propertty to it
             foreach (PropertyInfo info in properties)
             {
-                if (info.HasAttribute<Utility.Attributes.IgnoreAttribute>())
+                (bool success, ColumnAttribute? dna) = info.GetAttributeSafe<ColumnAttribute>();
+
+                if (success && dna.Ignore == true)
                     continue;
+
+                string displayName = dna?.DisplayName ?? info.Name.Humanize(LetterCasing.Title);
+
+
+                double width = GetWidthFromAttribute(lv, info, displayName, dna?.Width);
                 // If the property is being renamed with the DisplayName attribute, use the new name. 
                 // Otherwise use the property's actual name
-                string displayName = info.TryGetAttribute<DisplayNameAttribute>(out var dna) ? dna!.DisplayName : info.Name.Humanize();
+                //string displayName = info.TryGetAttribute<DisplayNameAttribute>(out var dna) ? dna!.DisplayName : info.Name.Humanize(LetterCasing.Title);
 
                 DataTemplate cellTemplate = BuildCellTemplateFromAttribute(info);
                 //    ?? Utility.WPF.Factorys.TemplateGenerator.CreateDataTemplate(() =>
@@ -54,7 +62,7 @@ namespace Utility.WPF.Controls.Objects
                 //    return x;
                 //});
 
-                double width = GetWidthFromAttribute(lv, info, displayName);
+                //double width = GetWidthFromAttribute(lv, info, displayName);
 
                 // if the cellTemplate is null, create a typical binding object for display 
                 // member binding
@@ -70,8 +78,36 @@ namespace Utility.WPF.Controls.Objects
                     CellTemplate = cellTemplate,
                     Width = width,
                 };
+
+                //if (success)
+                //{
+                //    if (dna.MaxWidth != default || dna.MinWidth != default)
+                //    {
+                //        if (dna.MinWidth != default)
+                //            RangeColumn.SetMinWidth(column, dna.MinWidth);
+                //        if (dna.MaxWidth != default)
+                //            RangeColumn.SetMaxWidth(column, dna.MaxWidth);
+                //    }
+                //    else
+                //        switch (dna.UnitType)
+                //        {
+                //            case DimensionUnitType.Star:
+                //                ProportionalColumn.SetWidth(column, dna.Width);
+                //                break;
+                //            case DimensionUnitType.Pixel:
+                //                FixedColumn.SetWidth(column, dna.Width);
+                //                break;
+                //            default:
+                //                FixedColumn.SetWidth(column, GetWidthFromAttribute(lv, info, displayName));
+                //                break;
+
+
+                //        }
+                //}
+
                 yield return column;
             }
+
 
         }
         /// <summary>
@@ -83,13 +119,13 @@ namespace Utility.WPF.Controls.Objects
             if (lv.ItemsSource is not JArray enumerable)
                 return new List<GridViewColumn>();
 
-            if(enumerable.Parent?.Parent["$type"]?.Value<string>() is not string str)
+            if (enumerable.Parent?.Parent["$type"]?.Value<string>() is not string str)
                 return new List<GridViewColumn>();
- 
+
             if (Type.GetType(str) is not { } dataType)
                 return new List<GridViewColumn>();
 
-            var elementType = Utility.Helpers.Reflection.TypeHelper.GetElementType(dataType);
+            var elementType = TypeHelper.GetElementType(dataType);
 
 
             var columns = new List<GridViewColumn>();
@@ -101,22 +137,26 @@ namespace Utility.WPF.Controls.Objects
             {
                 // If the property is being renamed with the DisplayName attribute, use the new name. 
                 // Otherwise use the property's actual name
-                DisplayNameAttribute dna = (DisplayNameAttribute)(info.GetCustomAttributes(true).FirstOrDefault(x => x is DisplayNameAttribute));
-                string displayName = (dna == null) ? info.Name.Humanize() : dna.DisplayName;
+                (bool success, ColumnAttribute? dna) = info.GetAttributeSafe<ColumnAttribute>();
+
+                if (success && dna.Ignore == true)
+                    continue;
+
+                string displayName = success ? dna.DisplayName : info.Name.Humanize(LetterCasing.Title);
 
                 //DataTemplate cellTemplate = BuildCellTemplateFromAttribute(info);
-                double width = GetWidthFromAttribute(lv, info, displayName);
+                double width = GetWidthFromAttribute(lv, info, displayName, dna?.Width);
 
                 // if the cellTemplate is null, create a typical binding object for display 
                 // member binding
-                Binding binding = new Binding()
+                Binding binding = new()
                 {
                     Path = new PropertyPath($"[{info.Name}]"),
                     Mode = BindingMode.OneWay
                 };
 
                 // create the column, and add it to the gridview
-                GridViewColumn column = new GridViewColumn()
+                GridViewColumn column = new()
                 {
                     Header = new GridViewColumnHeader { Content = displayName, Width = width },
                     //DisplayMemberBinding = binding,
@@ -140,11 +180,11 @@ namespace Utility.WPF.Controls.Objects
         /// <param name="property"></param>
         /// <param name="displayName"></param>
         /// <returns></returns>
-        private static double GetWidthFromAttribute(Control listView, PropertyInfo property, string displayName)
+        private static double GetWidthFromAttribute(Control listView, PropertyInfo property, string displayName, double? dimension = default)
         {
             // Get the decorated width (if specified)
-            ColWidthAttribute widthAttrib = (ColWidthAttribute)(property.GetCustomAttributes(true).FirstOrDefault(x => x is ColWidthAttribute));
-            double width = (widthAttrib != null) ? widthAttrib.Width : 0d;
+            //ColWidthAttribute widthAttrib = (ColWidthAttribute)(property.GetCustomAttributes(true).FirstOrDefault(x => x is ColWidthAttribute));
+            double width = dimension.HasValue ? dimension.Value : 0d;
             // calc the actual width, and use the larger of the decorated/calculated widths
             width = Math.Max(CalcTextWidth(listView, displayName, listView.FontFamily, listView.FontSize) + 35, width);
             return width;

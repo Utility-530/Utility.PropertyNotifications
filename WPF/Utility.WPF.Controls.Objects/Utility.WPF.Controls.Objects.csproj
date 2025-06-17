@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
     <ProjectReference Include="..\..\Conversions\Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj" />
+    <ProjectReference Include="..\..\External\ListViewLayout\ListViewLayout.csproj" />
     <ProjectReference Include="..\..\External\Pather.CSharp\Pather.CSharp.csproj" />
     <ProjectReference Include="..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Attributes\Utility.Attributes.csproj" />

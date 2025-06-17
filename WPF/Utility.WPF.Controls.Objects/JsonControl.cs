@@ -705,7 +705,7 @@ namespace Utility.WPF.Controls.Objects
         private double? value;
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is string str ? Regex.Match(str, JsonControl.LabelPattern).Groups[0].ToString().Humanize() : throw new Exception("sdf 332221``!");
+            return value is string str ?  JsonControl.RemoveMetaData(str).Humanize(LetterCasing.Title) : throw new Exception("sdf 332221``!");
         }
 
         public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
