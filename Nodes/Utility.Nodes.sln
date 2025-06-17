@@ -209,6 +209,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Globals", "..\Infra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Converters.Json", "..\WPF\Utility.WPF.Converters.Json\Utility.WPF.Converters.Json.csproj", "{90B01879-1C06-23DF-B9A1-F3803116EF4C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ListViewLayout", "..\External\ListViewLayout\ListViewLayout.csproj", "{E1585162-54D9-B8FA-15E5-90F8B366CD94}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -607,6 +609,10 @@ Global
 		{90B01879-1C06-23DF-B9A1-F3803116EF4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90B01879-1C06-23DF-B9A1-F3803116EF4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90B01879-1C06-23DF-B9A1-F3803116EF4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1585162-54D9-B8FA-15E5-90F8B366CD94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1585162-54D9-B8FA-15E5-90F8B366CD94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1585162-54D9-B8FA-15E5-90F8B366CD94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1585162-54D9-B8FA-15E5-90F8B366CD94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -702,6 +708,7 @@ Global
 		{74FF7015-F0AC-D2F7-0284-A8FD67F7235E} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{67E3548E-CDBA-EB38-03CB-11A8F222A24D} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{90B01879-1C06-23DF-B9A1-F3803116EF4C} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{E1585162-54D9-B8FA-15E5-90F8B366CD94} = {CD19D46F-F1DB-461A-9814-C48D0161E7F1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1F5991F-9180-4F40-A959-E24A6DDA6C5C}
