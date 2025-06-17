@@ -75,38 +75,38 @@ namespace Utility.Structs
         /// Gets an instance of <see cref="Dimension"/> that indicates that a row or column should
         /// auto-size to fit its content.
         /// </summary>
-        public static Dimension Auto => new Dimension(0, DimensionUnitType.Auto);
+        public static Dimension Auto => new (0, DimensionUnitType.Auto);
 
         /// <summary>
         /// Gets an instance of <see cref="Dimension"/> that indicates that a row or column should
         /// fill its content.
         /// </summary>
-        public static Dimension Star => new Dimension(1, DimensionUnitType.Star);
+        public static Dimension Star => new (1, DimensionUnitType.Star);
 
         /// <summary>
         /// Gets the unit of the <see cref="Dimension"/>.
         /// </summary>
-        public DimensionUnitType GridUnitType { get => _type; set { _type = value; } }
+        public DimensionUnitType UnitType { readonly get => _type; set { _type = value; } }
 
         /// <summary>
-        /// Gets a value that indicates whether the <see cref="Dimension"/> has a <see cref="GridUnitType"/> of Pixel.
+        /// Gets a value that indicates whether the <see cref="Dimension"/> has a <see cref="UnitType"/> of Pixel.
         /// </summary>
-        public bool IsAbsolute => _type == DimensionUnitType.Pixel;
+        public readonly bool IsAbsolute => _type == DimensionUnitType.Pixel;
 
         /// <summary>
-        /// Gets a value that indicates whether the <see cref="Dimension"/> has a <see cref="GridUnitType"/> of Auto.
+        /// Gets a value that indicates whether the <see cref="Dimension"/> has a <see cref="UnitType"/> of Auto.
         /// </summary>
-        public bool IsAuto => _type == DimensionUnitType.Auto;
+        public readonly bool IsAuto => _type == DimensionUnitType.Auto;
 
         /// <summary>
-        /// Gets a value that indicates whether the <see cref="Dimension"/> has a <see cref="GridUnitType"/> of Star.
+        /// Gets a value that indicates whether the <see cref="Dimension"/> has a <see cref="UnitType"/> of Star.
         /// </summary>
-        public bool IsStar => _type == DimensionUnitType.Star;
+        public readonly bool IsStar => _type == DimensionUnitType.Star;
 
         /// <summary>
         /// Gets the length.
         /// </summary>
-        public double Value { get => _value; set => _value = value; }
+        public double Value { readonly get => _value; set => _value = value; }
 
         /// <summary>
         /// Compares two Dimension structures for equality.
@@ -135,19 +135,14 @@ namespace Utility.Structs
         /// </summary>
         /// <param name="o">The object with which to test equality.</param>
         /// <returns>True if the objects are equal, otherwise false.</returns>
-        public override bool Equals(object o)
+        public override readonly bool Equals(object o)
         {
-            if (o == null)
+            return o switch
             {
-                return false;
-            }
-
-            if (!(o is Dimension))
-            {
-                return false;
-            }
-
-            return this == (Dimension)o;
+                null => false,
+                not Dimension => false,
+                _ => this == (Dimension)o,
+            };
         }
 
         /// <summary>
@@ -155,10 +150,7 @@ namespace Utility.Structs
         /// </summary>
         /// <param name="Dimension">The structure with which to test equality.</param>
         /// <returns>True if the structures are equal, otherwise false.</returns>
-        public bool Equals(Dimension Dimension)
-        {
-            return this == Dimension;
-        }
+        public readonly bool Equals(Dimension Dimension) => this == Dimension;
 
         /// <summary>
         /// Gets a hash code for the Dimension.
@@ -209,6 +201,8 @@ namespace Utility.Structs
                 return new Dimension(value, DimensionUnitType.Pixel);
             }
         }
+
+        public static explicit operator Dimension(string d) => Parse(d);
 
         /// <summary>
         /// Parses a string to return a collection of <see cref="Dimension"/>s.
