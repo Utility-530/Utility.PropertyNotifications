@@ -1,5 +1,6 @@
 ﻿using AnimatedScrollViewer;
 using Fasterflect;
+using Itenso.Windows.Controls.ListViewLayout;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows;
@@ -8,10 +9,10 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using Utility.Commands;
-using Utility.WPF.Controls.Objects;
-using Utility.WPF.Helpers;
 using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
+using Utility.WPF.Controls.Objects;
+using Utility.WPF.Helpers;
 
 namespace Utility.WPF.Controls.Lists
 {
@@ -26,31 +27,46 @@ namespace Utility.WPF.Controls.Lists
                         if (string.IsNullOrEmpty(cs.CheckedPropertyName) != isChecked)
                             a.TrySetPropertyValue(cs.CheckedPropertyName, isChecked);
                 }
-
             })));
+
         public static readonly DependencyProperty RemoveCommandProperty =
             DependencyProperty.Register("RemoveCommand", typeof(ICommand), typeof(CustomSelector), new PropertyMetadata());
 
         public static readonly DependencyProperty EditProperty =
             DependencyProperty.Register("Edit", typeof(object), typeof(CustomSelector), new PropertyMetadata());
+
         public static readonly DependencyProperty EditTemplateSelectorProperty =
             DependencyProperty.Register("EditTemplateSelector", typeof(DataTemplateSelector), typeof(CustomSelector), new PropertyMetadata());
+
         public static readonly DependencyProperty EditTemplateProperty =
             DependencyProperty.Register("EditTemplate", typeof(DataTemplate), typeof(CustomSelector), new PropertyMetadata());
 
         public static readonly DependencyProperty SwapCommandProperty =
             DependencyProperty.Register("SwapCommand", typeof(ICommand), typeof(CustomSelector), new PropertyMetadata());
-        //public static readonly DependencyProperty UnCheckedCommandProperty =
-        //    DependencyProperty.Register("UnCheckedCommand", typeof(ICommand), typeof(CustomSelector), new PropertyMetadata());
+
         public static readonly DependencyProperty CheckedPropertyNameProperty =
-            DependencyProperty.Register("CheckedPropertyName", typeof(string), typeof(CustomSelector), new PropertyMetadata("IsChecked", isCheckedChanged));
+            DependencyProperty.Register("CheckedPropertyName", typeof(string), typeof(CustomSelector), new PropertyMetadata("IsChecked"));
+
         public static readonly DependencyProperty ItemsWidthProperty =
             DependencyProperty.Register("ItemsWidth", typeof(double), typeof(CustomSelector), new PropertyMetadata(150.0));
+
         public static readonly DependencyProperty ItemsHeightProperty =
             DependencyProperty.Register("ItemsHeight", typeof(double), typeof(CustomSelector), new PropertyMetadata(40.0));
+
         public static readonly DependencyProperty DuplicateCommandProperty =
             DependencyProperty.Register("DuplicateCommand", typeof(ICommand), typeof(CustomSelector), new PropertyMetadata());
 
+        public static readonly DependencyProperty HeaderProperty =
+            DependencyProperty.Register("Header", typeof(object), typeof(CustomSelector), new PropertyMetadata());
+
+        public static readonly DependencyProperty ColumnsProperty =
+            DependencyProperty.Register("Columns", typeof(GridViewColumnCollection), typeof(CustomSelector), new PropertyMetadata());
+
+        public static readonly DependencyProperty IsGridProperty =
+            DependencyProperty.Register("IsGrid", typeof(bool), typeof(CustomSelector), new PropertyMetadata());
+
+        public static readonly DependencyProperty AllowsColumnReorderProperty =
+            DependencyProperty.Register("AllowsColumnReorder", typeof(bool), typeof(CustomSelector), new PropertyMetadata(true));
 
         public ICommand DuplicateCommand
         {
@@ -64,24 +80,11 @@ namespace Utility.WPF.Controls.Lists
             set { SetValue(HeaderProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Header.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty HeaderProperty =
-            DependencyProperty.Register("Header", typeof(object), typeof(CustomSelector), new PropertyMetadata());
-
-
-
         public GridViewColumnCollection Columns
         {
             get { return (GridViewColumnCollection)GetValue(ColumnsProperty); }
             set { SetValue(ColumnsProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for Columns.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ColumnsProperty =
-            DependencyProperty.Register("Columns", typeof(GridViewColumnCollection), typeof(CustomSelector), new PropertyMetadata());
-
-
-
 
         public bool IsGrid
         {
@@ -89,22 +92,17 @@ namespace Utility.WPF.Controls.Lists
             set { SetValue(IsGridProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for IsGrid.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IsGridProperty =
-            DependencyProperty.Register("IsGrid", typeof(bool), typeof(CustomSelector), new PropertyMetadata());
-
-
-
         public bool AllowsColumnReorder
         {
             get { return (bool)GetValue(AllowsColumnReorderProperty); }
             set { SetValue(AllowsColumnReorderProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for AllowsColumnReorder.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty AllowsColumnReorderProperty =
-            DependencyProperty.Register("AllowsColumnReorder", typeof(bool), typeof(CustomSelector), new PropertyMetadata(true));
 
+        static CustomSelector()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomSelector), new FrameworkPropertyMetadata(typeof(CustomSelector)));
+        }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
@@ -119,7 +117,7 @@ namespace Utility.WPF.Controls.Lists
                     Columns = null;
                 }
             }
-            if (e.Property == IsGridProperty)
+            else if (e.Property == IsGridProperty)
             {
                 if (e.NewValue is true && ItemsSource != null)
                 {
@@ -130,25 +128,24 @@ namespace Utility.WPF.Controls.Lists
                     Columns = null;
                 }
             }
+            else if(e.Property == EditProperty)
+            {
+
+            }
 
             void updateColumns(bool b, IEnumerable enumerable)
             {
                 var type = enumerable.GetType().GetMethod("get_Item").ReturnType;
                 Columns ??= [];
                 AutoListViewColumnHelpers.CreateColumns2(this, type).ForEach(c => Columns.Add(c));
+                //var manager = new ListViewLayoutManager(this, Columns);
                 var ex = enumerable.GetEnumerator();
                 if (ex.MoveNext())
                     Header = ex.Current;
             }
             base.OnPropertyChanged(e);
         }
-        private static void isCheckedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            if (d is CustomSelector sel && e.NewValue is string str)
-            {
 
-            }
-        }
 
         public static readonly RoutedEvent FinishEditEvent = EventManager.RegisterRoutedEvent(
          name: "FinishEdit",
@@ -156,10 +153,6 @@ namespace Utility.WPF.Controls.Lists
          handlerType: typeof(FinishEditRoutedEventHandler),
          ownerType: typeof(CustomSelector));
 
-        static CustomSelector()
-        {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(CustomSelector), new FrameworkPropertyMetadata(typeof(CustomSelector)));
-        }
 
         public override void OnApplyTemplate()
         {
@@ -202,7 +195,7 @@ namespace Utility.WPF.Controls.Lists
             }
             RaiseEvent(routedEventArgs);
             {
-                this.GetBindingExpression(CustomSelector.EditProperty).UpdateTarget();
+                this.GetBindingExpression(CustomSelector.EditProperty)?.UpdateTarget();
             }
         }
 
