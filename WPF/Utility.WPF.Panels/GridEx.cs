@@ -32,7 +32,7 @@ namespace Utility.WPF.Panels
             {
                 foreach (var dimension in dimensions)
                 {
-                    g.RowDefinitions.Add(new RowDefinition { Height = new GridLength(dimension.Value, (GridUnitType)dimension.GridUnitType) });
+                    g.RowDefinitions.Add(new RowDefinition { Height = new GridLength(dimension.Value, (GridUnitType)dimension.UnitType) });
                 }
             }
         }
@@ -50,7 +50,7 @@ namespace Utility.WPF.Panels
             {
                 foreach (var dimension in dimensions)
                 {
-                    g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(dimension.Value, (GridUnitType)dimension.GridUnitType) });
+                    g.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(dimension.Value, (GridUnitType)dimension.UnitType) });
                 }
             }
         }
