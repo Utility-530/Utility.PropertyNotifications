@@ -208,24 +208,16 @@
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 Panel.ZIndex="0"/>
                         <Border x:Name="SpotlightLayer"    
-                                           CornerRadius="10"
+                                CornerRadius="10"
                                 BorderThickness="{TemplateBinding BorderThickness}"                    
                                 SnapsToDevicePixels="False"
-                                Panel.ZIndex="1"/>
-                        <ContentPresenter                              
-                                          RecognizesAccessKey="True"
-                                          Margin="{TemplateBinding Padding}"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          att:VisibilityAnimation.AnimationType="Fade"
-                                          Visibility="{Binding ElementName=GridViewRowPresenter, Path=Columns, Converter={StaticResource NullToVisibilityConverter}}"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Panel.ZIndex="2"/>
+                                Panel.ZIndex="1"/>          
 
                         <GridViewRowPresenter Content="{TemplateBinding Content}" 
-                                              x:Name="GridViewRowPresenter"
-                                              Visibility="{Binding ElementName=GridViewRowPresenter, Path=Columns, Converter={StaticResource NullToInverseVisibilityConverter}}"
-                                              Columns="{Binding Columns, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CustomSelector}}}"                        >
+                                x:Name="GridViewRowPresenter"
+                                Columns="{Binding Columns, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:CustomSelector}}}"                        >
                         </GridViewRowPresenter>
+                                                
                         <btns:DuplicateGeometryButton 
                             x:Name="PlusButton"
                             Height="20"
@@ -236,10 +228,50 @@
                         <CheckBox Style="{StaticResource CheckBoxPingUnPing}"  Panel.ZIndex="4" HorizontalAlignment="Right"  VerticalAlignment="Bottom"/>
                     </Grid>
                 </ControlTemplate>
+                
             </Setter.Value>
         </Setter>
 
         <Style.Triggers>
+            <DataTrigger Binding="{Binding Path=IsGrid, RelativeSource={RelativeSource Mode=FindAncestor,AncestorLevel=1, AncestorType={x:Type local:CustomSelector}}}" Value="False">
+                <Setter Property="Template" >
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                            <Grid>
+                                <Border x:Name="Border"
+                                CornerRadius="10"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Panel.ZIndex="0"/>
+                                <Border x:Name="SpotlightLayer"    
+                                           CornerRadius="10"
+                                BorderThickness="{TemplateBinding BorderThickness}"                    
+                                SnapsToDevicePixels="False"
+                                Panel.ZIndex="1"/>
+                                <ContentPresenter                              
+                                          RecognizesAccessKey="True"
+                                          Margin="{TemplateBinding Padding}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Panel.ZIndex="2">
+
+                                </ContentPresenter>
+
+
+                                <btns:DuplicateGeometryButton 
+                                    x:Name="PlusButton"
+                                    Height="20"
+                                    Command="{Binding DuplicateCommand, RelativeSource={RelativeSource AncestorType={x:Type local:CustomSelector}, Mode=FindAncestor,AncestorLevel=1}}"
+                                    CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                                    VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,62,0" />
+                                <Button Style="{StaticResource ButtonClose}"  Panel.ZIndex="3" HorizontalAlignment="Right" Height="20" Margin="{Binding ElementName=GridViewRowPresenter, Path=Columns, Converter={StaticResource NullTo40Converter} }" Width="20"  VerticalAlignment="Top" />
+                                <CheckBox Style="{StaticResource CheckBoxPingUnPing}"  Panel.ZIndex="4" HorizontalAlignment="Right"  VerticalAlignment="Bottom"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </DataTrigger>
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}" Value="True" />
@@ -267,6 +299,7 @@
                 </MultiTrigger.Conditions>
                 <Setter Property="Foreground" Value="{c:Pink 7}"/>
             </MultiTrigger>
+        
         </Style.Triggers>
     </Style>
 
@@ -381,18 +414,17 @@
 
                             <ext:AnimatedScrollViewer
 								x:Name="PART_AnimatedScrollViewer"
-								CanKeyboardScroll="False"                                
 								Padding="{TemplateBinding Padding}"
 								Focusable="false"
                                 Grid.Row="1"
 								ScrollingSpline="0,0.50,0.50,1">
                                 <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
                             </ext:AnimatedScrollViewer>
-                            <Grid DataContext="{TemplateBinding Columns}">
+                            <!--<Grid DataContext="{TemplateBinding Columns}">
                                 <TextBlock Grid.Row="1" Text="{Binding Length}" FontSize="100"></TextBlock>
                                 <TextBlock Grid.Row="1" Text="{Binding Count}" FontSize="100"></TextBlock>
 
-                            </Grid>
+                            </Grid>-->
 
                             <Border x:Name="Border" Grid.Row="2" Background="LightGray" Margin="4">
                                 <Grid>
