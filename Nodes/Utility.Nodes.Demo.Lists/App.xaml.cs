@@ -6,8 +6,11 @@ using Utility.Attributes;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Helpers.Reflection;
 using Utility.Interfaces.Exs;
+
+using Utility.Interfaces.Generic.Data;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+using Utility.Nodes.Demo.Lists.Entities;
 using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Filters;
@@ -44,6 +47,7 @@ namespace Utility.Nodes.Demo.Lists
             Locator.CurrentMutable.RegisterConstant(new ContainerService());
             Locator.CurrentMutable.RegisterConstant(new RazorService());
             Locator.CurrentMutable.RegisterLazySingleton<IModelTypesFactory>(() => new ModelTypesFactory());
+            Locator.CurrentMutable.RegisterLazySingleton<Utility.Interfaces.Generic.IFactory<IId<Guid>>>(() => new ModelFactory());
 
             JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
 
@@ -66,6 +70,32 @@ namespace Utility.Nodes.Demo.Lists
         public IEnumerable<Type> Types()
         {
             return typeof(ModelTypesFactory).Assembly.TypesByAttribute<ModelAttribute>();
+        }
+    }
+
+    //public class EbayModelFactory : IFactory<EbayModel>
+    //{
+    //    public Task<EbayModel> Create(object config)
+    //    {
+    //        return Task.FromResult(new EbayModel() { Id = Guid.NewGuid() });
+    //    }
+    //}
+    public class ModelFactory : Utility.Interfaces.Generic.IFactory<IId<Guid>>
+    {
+        public Task<IId<Guid>> Create(object config)
+        {
+            if (config is Type type)
+            {
+                if (type == typeof(UserProfileModel))
+                {
+                    return Task.FromResult((IId<Guid>)new UserProfileModel() { Id = Guid.NewGuid(), AddDate = DateTime.Now });
+                }
+                return Task.FromResult(Activator.CreateInstance(type) as IId<Guid>);
+            }
+            else
+            {
+                throw new Exception("545 fgfgddf");
+            }
         }
     }
 

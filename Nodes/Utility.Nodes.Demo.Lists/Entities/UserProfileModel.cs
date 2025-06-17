@@ -14,11 +14,15 @@ namespace Utility.Nodes.Demo.Lists.Entities
     public class UserProfileModel : NotifyPropertyClass, IId<Guid>
     {
         [PrimaryKey]
+        [Attributes.Column(ignore: true)]
         public Guid Id { get; set; }
         public string? Group { get; set; }
-        public string? Type { get; set; }
+        public string? Class { get; set; }
         public string? Name { get; set; }
+
+        [Attributes.Column(width:250)]
         public string? UserName { get; set; }
+        [Attributes.Column(width: 250)]
         public string? Password { get; set; }
         public string? OtherUserName { get; set; }
         public string? Pin { get; set; }

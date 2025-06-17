@@ -31,7 +31,7 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
         }
 
         [PrimaryKey]
-        [Attributes.Ignore]
+        [Attributes.Column(ignore: true)]
         [JsonIgnore]
         public Guid Id { get; set; }
         public string? IndexPath { get => indexPath; set => RaisePropertyChanged(ref indexPath, value); }
@@ -46,40 +46,37 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
         public double? LengthInCentimetres { get => lengthInCentimetres; set => RaisePropertyChanged(ref lengthInCentimetres, value); }
         public double? PitToPitWidthInCentimetres { get => pitToPitWidthInCentimetres; set => RaisePropertyChanged(ref pitToPitWidthInCentimetres, value); }
         public double? ShoulderWidthInCentimetres { get => shoulderWidthInCentimetres; set => RaisePropertyChanged(ref shoulderWidthInCentimetres, value); }
-        public bool HasShipping
-        {
-            get => hasShipping; set => RaisePropertyChanged(ref hasShipping, value);
-        }
+        public bool HasShipping { get => hasShipping; set => RaisePropertyChanged(ref hasShipping, value); }
 
-        [Attributes.Ignore]
+        [Attributes.Column(ignore: true)]
         [JsonIgnore]
         [SQLite.Ignore]
         public bool HasTitle => Title != null;
-        [Attributes.Ignore]
+        [Attributes.Column(ignore: true)]
         [JsonIgnore]
         [SQLite.Ignore]
         public bool HasDescriptions => Descriptions.Length != 0;
-        [Attributes.Ignore]
+        [Attributes.Column(ignore: true)]
         [JsonIgnore]
         [SQLite.Ignore]
         public string[] Descriptions => [.. new string?[] { DescriptionOne, DescriptionTwo }.WhereNotNull()];
-        [Attributes.Ignore]
+        [Attributes.Column(ignore: true)]
         [JsonIgnore]
         [SQLite.Ignore]
         public string[] ImagePaths => [.. new string?[] { ImagePathOne, ImagePathTwo }.WhereNotNull()];
-        [Attributes.Ignore]
+        [Attributes.Column(ignore: true)]
         [JsonIgnore]
         [SQLite.Ignore]
         public bool HasImagePaths => ImagePaths.Length != 0;
-        [Attributes.Ignore]
+        [Attributes.Column(ignore: true)]
         [JsonIgnore]
         [SQLite.Ignore]
         public bool HasMeasurements => SleeveLengthInCentimetres.HasValue || LengthInCentimetres.HasValue || PitToPitWidthInCentimetres.HasValue || ShoulderWidthInCentimetres.HasValue;
-        [Attributes.Ignore]
+        [Attributes.Column(ignore: true)]
         [JsonIgnore]
         [SQLite.Ignore]
         public string[] Disclaimers => [.. new string?[] { DisclaimerOne }.WhereNotNull()];
-        [Attributes.Ignore]
+        [Attributes.Column(ignore: true)]
         [JsonIgnore]
         [SQLite.Ignore]
         public bool HasDisclaimers => Disclaimers.Length != 0;
