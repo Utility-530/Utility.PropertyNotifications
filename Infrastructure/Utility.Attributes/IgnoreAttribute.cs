@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Utility.Attributes
 {
-    public class IgnoreAttribute:Attribute
+    [AttributeUsage(AttributeTargets.All)]
+    public class IgnoreAttribute : Attribute
     {
     }
 }
