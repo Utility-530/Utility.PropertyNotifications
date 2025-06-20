@@ -11,7 +11,7 @@ namespace Utility.Interfaces.Exs
 {
     public interface INode : ITree, IIsExpanded, ICurrent<INode>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation, IRemoved, IIsVisible, IAddCommand, IRemoveCommand, IIsSelected, ISetIsSelected,
         IIsRemovable, IIsReplicable, ISort, ISortOrder,
-        IArrangement, IRows, IColumns, IIsAugmentable, IErrors, IConnectorPosition, IDataTemplate
+        IArrangement, IRows, IColumns, IIsAugmentable, IErrors, IConnectorPosition, IDataTemplate, IItemsPanelTemplate
     {
 
     }
@@ -91,5 +91,10 @@ namespace Utility.Interfaces.Exs
     public interface IDataTemplate
     {
         string DataTemplate { get; set; }
+    }
+    
+    public interface IItemsPanelTemplate
+    {
+        string ItemsPanelTemplate { get; set; }
     }
 }
