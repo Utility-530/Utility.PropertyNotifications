@@ -4,18 +4,18 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Collections
 {
-
 
     /// <summary>
     /// <a href="https://gist.github.com/weitzhandler/"></a>
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class SortableObservableCollection<T> : RangeObservableCollection<T>
+    public class SortableObservableCollection<T> : RangeObservableCollection<T>, IPredicate_<T>
     {
-        Dictionary<int, VisibleItem> filteredItems = new();
+        Dictionary<int, VisibleItem> filteredItems;
 
         public SortableObservableCollection()
         {
@@ -27,12 +27,10 @@ namespace Utility.Collections
             IsDescending = descending;
         }
 
-        public SortableObservableCollection(IEnumerable<T> collection, IComparer<T>? comparer, bool descending = false) : base(collection)
+        public SortableObservableCollection(IEnumerable<T> collection, IComparer<T>? comparer = null, bool descending = false) : base(collection)
         {
-            Comparer = comparer ?? throw new ArgumentNullException(nameof(comparer));
             IsDescending = descending;
-
-            Sort();
+            Comparer = comparer; 
         }
 
         private IComparer<T>? _Comparer;
@@ -62,9 +60,20 @@ namespace Utility.Collections
         public void Refresh()
         {
             int index = 0;
+
+            if(filteredItems ==null)
+            {
+                filteredItems = new();
+                int i = 0;
+                foreach(var item in Items)
+                {
+                    filteredItems[i] = new(i, item, true);
+                    i++;
+                }
+            }
             for (int i = 0; i < Items.Count; i++)
             {
-                bool visible = (Filter != null) ? Filter(Items[i]) : true;
+                bool visible = Filter == null || Filter(Items[i]);
 
                 if (visible)
                 {
@@ -139,7 +148,7 @@ namespace Utility.Collections
                     return;
             }
 
-            Sort();
+            //Sort();
         }
 
         private bool _Reordering;
