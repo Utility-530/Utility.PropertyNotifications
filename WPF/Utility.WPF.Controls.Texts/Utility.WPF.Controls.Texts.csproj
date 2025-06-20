@@ -7,6 +7,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
 		<ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
 		<ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />
 	</ItemGroup>
@@ -14,6 +15,12 @@
 	<ItemGroup>
 		<Compile Update="EditableTextBlock.cs">
 			<DependentUpon>EditableTextBlock.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="SearchBox.cs">
+			<DependentUpon>SearchBox.xaml</DependentUpon>
 		</Compile>
 	</ItemGroup>
 </Project>
