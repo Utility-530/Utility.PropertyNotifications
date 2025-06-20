@@ -8,6 +8,7 @@
     using System.ComponentModel;
     using System.Reflection;
     using System.Windows;
+    using System.Windows.Data;
 
     /// <summary>
     /// Sets a specified property to a value when invoked.
@@ -40,6 +41,20 @@
             set => SetValue(ValueProperty, value);
         }
 
+
+
+        public IValueConverter Converter
+        {
+            get { return (IValueConverter)GetValue(ConverterProperty); }
+            set { SetValue(ConverterProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Converter.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ConverterProperty =
+            DependencyProperty.Register("Converter", typeof(IValueConverter), typeof(SetterAction), new PropertyMetadata());
+
+
+
         protected override void Invoke(object parameter)
         {
             var target = TargetObject ?? AssociatedObject;
@@ -55,7 +70,11 @@
 
             object? convertedValue;
 
-            if (Value == null)
+            if (Converter != null)
+            {
+                convertedValue = Converter.Convert(parameter, default, default, default);
+            }
+            else if (Value == null)
                 convertedValue = null;
             else
             {
