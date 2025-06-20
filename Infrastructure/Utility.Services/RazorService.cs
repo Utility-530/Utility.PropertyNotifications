@@ -1,21 +1,18 @@
 ﻿using RazorEngine.Templating;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Reactive.Threading.Tasks;
 using Utility.Entities;
 
 namespace Utility.Services
 { 
     public class RazorService : IObserver<FilePath>, IObserver<Instance>, IObservable<RazorEngineOutput>
     {
-        //public record ArticleDTO(string Title, string Description);
         public record ObjectDTO(object Value, string TemplateName, string Directory);
         public record RazorFileDTO(string Content, object Value, string Text);
 
         private readonly Subject<FilePath> filePaths = new();
         private readonly Subject<Instance> objects = new();
         private readonly Subject<RazorEngineOutput> razorFiles = new();
-        //private readonly EngineFactory factory = new();
 
         public RazorService()
         {
@@ -55,6 +52,7 @@ namespace Utility.Services
    
         }
 
+        #region boilerplate
         public void OnCompleted()
         {
             throw new NotImplementedException();
@@ -78,5 +76,6 @@ namespace Utility.Services
         {
             return razorFiles.Subscribe(observer);
         }
+        #endregion boilerplate
     }
 }

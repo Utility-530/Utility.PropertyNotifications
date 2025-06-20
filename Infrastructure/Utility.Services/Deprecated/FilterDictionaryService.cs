@@ -1,6 +1,6 @@
 ﻿using System.Reactive;
 
-namespace Utility.Services;
+namespace Utility.Services.Deprecated;
 
 public interface IFilterService<T> : IObservable<Func<T, bool>>
 {
@@ -11,12 +11,12 @@ public interface IRefreshObserver : IObserver<Unit>
 
 public class FilterDictionaryService<T> : IObserver<Dictionary<string, bool>>, IFilterService<T>
 {
-    private readonly FilterService<T> filterBaseService;
+    private readonly BaseFilterService<T> filterBaseService;
 
     public FilterDictionaryService(Func<T, string> keyFunc)
     {
         KeySelector = keyFunc;
-        filterBaseService = new FilterService<T>();
+        filterBaseService = new BaseFilterService<T>();
     }
 
     public Func<T, string> KeySelector { get; }

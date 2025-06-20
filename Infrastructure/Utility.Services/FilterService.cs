@@ -1,58 +1,53 @@
-﻿using System.Reactive;
+﻿using Splat;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using Utility.Entities;
+using Utility.Interfaces.NonGeneric;
 
-namespace Utility.Services;
-
-public class FilterService<T> : IObserver<Func<T, bool>>, IFilterService<T>, IRefreshObserver
+namespace Utility.Services
 {
-    protected readonly ReplaySubject<Unit> subject = new(1);
-    private Func<T, bool>? value;
-
-    public FilterService()
+    public class FilterService : IObserver<Filter>, IObserver<InList> , IObservable<FilterPredicate>
     {
-    }
 
-    protected virtual bool Execute(T profile)
-    {
-        if (value == null || value.Invoke(profile))
+        ReplaySubject<Filter> one = new(1);
+        ReplaySubject<InList> inlist = new(1);
+        ReplaySubject<FilterPredicate> outList = new();
+
+        public FilterService()
         {
-            return true;
-        }
-        return false;
-    }
-
-    public void OnCompleted()
-    {
-        //throw new NotImplementedException();
-    }
-
-    public void OnError(Exception error)
-    {
-        //throw new NotImplementedException();
-    }
-
-    public void OnNext(Func<T, bool> value)
-    {
-        this.value = value;
-        OnNext(Unit.Default);
-    }
-
-    public void OnNext(Unit value)
-    {
-        subject.OnNext(value);
-    }
-
-    public IDisposable Subscribe(IObserver<Func<T, bool>> observer)
-    {
-        return subject.Select(a => new Func<T, bool>(Execute)).Subscribe(observer.OnNext,
-            e =>
+            inlist.CombineLatest(one).Subscribe(a =>
             {
-
-            },
-            () =>
-            {
-
+                var predicate = new Predicate<object>((v) => Locator.Current.GetService<IFilter>().Filter(new FilterQuery(a.Second.Value, v)));
+                outList.OnNext(new FilterPredicate(predicate));
             });
+        }
+
+        #region boilerplate
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(Filter value)
+        {
+            one.OnNext(value);
+
+        }
+
+        public void OnNext(InList value)
+        {
+            inlist.OnNext(value);
+        }
+
+        public IDisposable Subscribe(IObserver<FilterPredicate> observer)
+        {
+            return outList.Subscribe(observer);
+        }
+        #endregion
     }
 }

@@ -4,6 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +16,7 @@
     <ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
     <ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Persists\Utility.Persists\Utility.Persists.csproj" />
     <ProjectReference Include="..\Utility.Entities\Utility.Entities.csproj" />
     <ProjectReference Include="..\Utility.Globals\Utility.Globals.csproj" />
     <ProjectReference Include="..\Utility.Guids\Utility.Guids.csproj" />

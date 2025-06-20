@@ -1,14 +1,14 @@
 ﻿using Utility.Interfaces.NonGeneric;
 
-namespace Utility.Services;
+namespace Utility.Services.Deprecated;
 
 public class FilterPredicateService<T> : IObserver<IPredicate>, IFilterService<T>
 {
-    private readonly FilterService<T> filterBaseService;
+    private readonly BaseFilterService<T> filterBaseService;
 
     public FilterPredicateService()
     {
-        filterBaseService = new FilterService<T>();
+        filterBaseService = new BaseFilterService<T>();
     }
 
     public void OnCompleted()

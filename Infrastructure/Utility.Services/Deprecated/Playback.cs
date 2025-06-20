@@ -6,7 +6,7 @@ using Utility.Infrastructure;
 using Utility.Models;
 using Utility.PropertyNotifications;
 
-namespace Utility.Services;
+namespace Utility.Services.Deprecated;
 
 public class Playback : BaseObject
 {
@@ -99,6 +99,6 @@ public class PlaybackViewModel : NotifyPropertyClass
 
     public ICommand Command { get; set; }
 
-    public Step Enabled { get => enabled; set => this.RaisePropertyChanged(ref enabled, value); }
+    public Step Enabled { get => enabled; set => RaisePropertyChanged(ref enabled, value); }
 }
 

@@ -9,7 +9,7 @@ using Utility.Infrastructure;
 using Utility.Entities.Comms;
 using Utility.PropertyNotifications;
 
-namespace Utility.Services
+namespace Utility.Services.Deprecated
 {
     public class History : BaseObject
     {

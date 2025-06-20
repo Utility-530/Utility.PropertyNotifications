@@ -4,7 +4,7 @@ using Utility.Common.Contract;
 using Utility.Common.Helper;
 using Utility.Helpers.NonGeneric;
 
-namespace Utility.Services
+namespace Utility.Services.Deprecated
 {
     public class ElementService<T> : IObserver<RepositoryMessage> where T : IEquatable<T>
     {
