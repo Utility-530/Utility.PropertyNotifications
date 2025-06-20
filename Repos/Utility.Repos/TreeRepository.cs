@@ -548,7 +548,14 @@ namespace Utility.Repos
                     {
                         if (table is Values { Value: { } text, Added: { } added, Name: { } _name, TypeId: { } typeId })
                         {
-                            System.Type? type = ToType(typeId) ?? throw new Exception("sd s389989898");
+                            System.Type? type = ToType(typeId);
+
+                            if (type == null)
+                            {
+                                observer.OnNext(new DateValue(guid, _name, added, null));
+                                continue;
+                            }
+
                             object? value = null;
 
                             try
@@ -596,6 +603,9 @@ namespace Utility.Repos
 
         public System.Type? ToType(int typeId)
         {
+            if (typeId == -1)
+                return null;
+
             if (types.ContainsKey(typeId))
                 return types[typeId];
 
