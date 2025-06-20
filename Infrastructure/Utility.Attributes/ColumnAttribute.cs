@@ -1,5 +1,4 @@
 ﻿using Utility.Enums;
-using Utility.Structs;
 
 namespace Utility.Attributes
 {

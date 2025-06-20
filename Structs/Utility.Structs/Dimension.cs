@@ -2,33 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Utility.Enums;
 
 
 namespace Utility.Structs
 {
-    /// <summary>
-    /// Defines the valid units for a <see cref="Dimension"/>.
-    /// </summary>
-#if !BUILDTASK
-    public
-#endif
-    enum DimensionUnitType
-    {
-        /// <summary>
-        /// The row or column is auto-sized to fit its content.
-        /// </summary>
-        Auto = 0,
-
-        /// <summary>
-        /// The row or column is sized in device independent pixels.
-        /// </summary>
-        Pixel = 1,
-
-        /// <summary>
-        /// The row or column is sized as a weighted proportion of available space.
-        /// </summary>
-        Star = 2,
-    }
 
     /// <summary>
     /// Holds the width or height of a <see cref="Grid"/>'s column and row definitions.

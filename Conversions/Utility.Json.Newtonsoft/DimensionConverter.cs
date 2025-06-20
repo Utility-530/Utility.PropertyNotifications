@@ -1,8 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Text;
+using Utility.Enums;
 using Utility.Structs;
 
 namespace Utility.Conversions.Json.Newtonsoft
@@ -24,7 +23,7 @@ namespace Utility.Conversions.Json.Newtonsoft
                 {
                     return new Dimension(xx);
                 }
-                else if (Enum.TryParse<DimensionUnitType>(s, out DimensionUnitType x))
+                else if (Enum.TryParse(s, out DimensionUnitType x))
                 {
                     return new Dimension(1, x);
                 }

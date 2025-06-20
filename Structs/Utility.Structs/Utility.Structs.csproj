@@ -39,6 +39,10 @@
 	  <PackageReference Include="System.Memory" Version="4.6.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
+	</ItemGroup>
+
 	<!--<Target Name="CopyFiles" AfterTargets="Build">
 		<Message Text="@(MySourceFiles)" Importance="high" />
 		<Copy SourceFiles="@(MySourceFiles)" DestinationFolder="$(DestinationFolder)" />
