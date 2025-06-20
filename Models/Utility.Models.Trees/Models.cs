@@ -19,7 +19,9 @@ using Utility.Enums;
 using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
 using Utility.Helpers.Reflection;
+using Utility.Interfaces;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Observables;
 using Utility.PropertyNotifications;
@@ -146,7 +148,7 @@ namespace Utility.Models.Trees
                 _types = [(ancestor.Data as ThroughPutModel).Parameter.ParameterType, typeof(object)];
             }
 
-            foreach (var prop in Locator.Current.GetService<INodePropertyFactory>().Properties(_types))
+            foreach (var prop in Locator.Current.GetService<IEnumerableFactory<PropertyInfo>>().Create(_types))
             {
                 var pnode = new PropertyModel { Name = prop.Name, Value = prop };
                 yield return pnode;
@@ -236,7 +238,7 @@ namespace Utility.Models.Trees
                 yield break;
             }
 
-            foreach (var prop in Locator.Current.GetService<IPropertyFactory>().Properties)
+            foreach (var prop in Locator.Current.GetService<IEnumerableFactory<PropertyInfo>>().Create(null))
             {
                 yield return new AssemblyTypePropertyModel { Name = prop.PropertyType.Name + "." + prop.Name, Value = prop };
             }
@@ -336,7 +338,7 @@ namespace Utility.Models.Trees
     {
         public override IEnumerable<IModel> CreateChildren()
         {
-            foreach (var m in Locator.Current.GetService<IMethodFactory>().Methods)
+            foreach (var m in Locator.Current.GetService<IEnumerableFactory<MethodInfo>>().Create(null))
                 yield return new MethodModel { Name = m.GetDescription(), Value = m };
         }
     }
@@ -423,32 +425,16 @@ namespace Utility.Models.Trees
         public ICommand Command { get; }
     }
 
-    public class SearchModel : Model
+    public class SearchModel(Func<IEnumerable<IModel>> ? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree> ? addition = null) : StringModel(func, nodeAction, addition)
     {
-        private string searchText;
 
-        public string SearchText
-        {
-            get => searchText;
-            set
-            {
-                if (searchText != value)
-                {
-                    var _previous = searchText;
-                    searchText = value;
-                    this.RaisePropertyChanged(_previous, value);
-                }
-            }
-        }
     }
 
     public class IndexModel : Model<int>
     {
     }
 
-    public class StringModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null) : Model<string>(func, nodeAction, addition)
-    {
-    }
+
 
     public class ReadOnlyStringModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null) : Model<string>(func, nodeAction, addition, false, false)
     {
@@ -470,14 +456,11 @@ namespace Utility.Models.Trees
     {
     }
 
-    public class GuidModel : Model<Guid>
-    {
-    }
 
-    public class AndOrModel : CollectionModel<AndOr, IPredicate>, IAndOr, IObservable<Unit>, IPredicate
+    public class AndOrModel : CollectionModel<AndOr, IPredicate>, IAndOr, System.IObservable<Unit>, IPredicate
     {
         protected AndOr value = 0;
-        List<IObserver<Unit>> observers = [];
+        List<System.IObserver<Unit>> observers = [];
         Dictionary<IModel, IDisposable> dictionary = [];
 
         public AndOrModel()
@@ -571,7 +554,7 @@ namespace Utility.Models.Trees
             base.SetNode(node);
         }
 
-        public IDisposable Subscribe(IObserver<Unit> observer)
+        public IDisposable Subscribe(System.IObserver<Unit> observer)
         {
             observers.Add(observer);
             return new ActionDisposable(() => observers.Remove(observer));
@@ -660,16 +643,13 @@ namespace Utility.Models.Trees
             //subject.OnNext(resolve(instance));
         }
 
-        List<IObserver<ValueChanged>> list = new();
+        List<System.IObserver<ValueChanged>> list = new();
 
-        public IDisposable Subscribe(IObserver<ValueChanged> observer)
+        public IDisposable Subscribe(System.IObserver<ValueChanged> observer)
         {
             list.Add(observer);
             return new ActionDisposable(() => list.Remove(observer));
         }
-    }
-    public class BooleanModel : Model<bool>
-    {
     }
 
     public class ComparisonModel : Model
@@ -777,10 +757,10 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class SetModel : ResolvableModel, /*ISet,*/ IValue, IObservable<ValueChanged>
+    public class SetModel : ResolvableModel, /*ISet,*/ IValue, System.IObservable<ValueChanged>
     {
         private object value;
-        List<IObserver<ValueChanged>> list = new();
+        List<System.IObserver<ValueChanged>> list = new();
         private List<ValueChanged> values = [];
 
 
@@ -860,7 +840,7 @@ namespace Utility.Models.Trees
 
 
 
-        public IDisposable Subscribe(IObserver<ValueChanged> observer)
+        public IDisposable Subscribe(System.IObserver<ValueChanged> observer)
         {
             foreach (var value in values)
             {
@@ -1586,7 +1566,7 @@ namespace Utility.Models.Trees
 
         public override IEnumerable<IModel> CreateChildren()
         {
-            foreach (var type in Locator.Current.GetService<IModelTypesFactory>().Types())
+            foreach (var type in Locator.Current.GetService<IEnumerableFactory<Type>>().Create(null))
             {
                 var pnode = new ModelTypeModel { Name = type.Name, Value = new(type.Name, type.AsString()) };
                 yield return pnode;
