@@ -20,7 +20,6 @@
     <!--<local:CheckedEventArgsConverter x:Key="CheckedEventArgsConverter"/>-->
     <obj:ObjectToTokenConverter x:Key="ObjectToTokenConverter"/>
     <local:ItemsSourceConverter x:Key="ItemsSourceConverter"/>
-    <local:ObjectWrapperConverter x:Key="ObjectWrapperConverter"/>
     <local:NullTo40Converter x:Key="NullTo40Converter"/>
     <conv:NullToInverseVisibilityConverter x:Key="NullToInverseVisibilityConverter"/>
     <conv:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
@@ -191,6 +190,13 @@
         <!--<Setter Property="Foreground" Value="{DynamicResource {x:Static adonisUi:Brushes.ForegroundBrush}}"/>-->
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="ContextMenu">
+            <Setter.Value>
+                <ContextMenu>
+                    <MenuItem Command="ApplicationCommands.Copy"></MenuItem>
+                </ContextMenu>
+            </Setter.Value>
+        </Setter>
         <!--<Setter Property="BorderThickness" Value="{DynamicResource {x:Static adonisUi:Dimensions.BorderThickness}}"/>-->
         <!--<Setter Property="adonisExtensions:CornerRadiusExtension.CornerRadius" Value="{DynamicResource {x:Static adonisUi:Dimensions.CornerRadius}}"/>-->
         <Setter Property="Padding" Value="8,4"/>
@@ -325,7 +331,10 @@
                 <Grid Background="#DCDCDC" Name="rootElement">
                     <Border BorderBrush="Beige" BorderThickness="10">
 
-                        <obj:JsonControl Object="{Binding Path=Object, Mode=TwoWay, Converter={StaticResource ObjectToTokenConverter}}">
+                        <obj:JsonControl>
+                            <i:Interaction.Behaviors>
+                                <obj:ObjectBehavior Object="{Binding}"></obj:ObjectBehavior>
+                            </i:Interaction.Behaviors>
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="ValueChanged" >
                                     <beh:UpdateSourceBindingAction Property="{x:Static obj:JsonControl.ObjectProperty}"/>
@@ -338,8 +347,11 @@
                 <!--<pt:PropertyTree Object="{Binding Path=.}"></pt:PropertyTree>-->
             </DataTemplate>
             <DataTemplate x:Key="ItemTemplate">
-                <Grid Background="#DCDCDC" Name="rootElement" DataContext="{Binding Converter={StaticResource ObjectWrapperConverter}}">
-                    <obj:JsonControl Object="{Binding Path=Object, Mode=TwoWay, Converter={StaticResource ObjectToTokenConverter}}">
+                <Grid Background="#DCDCDC" Name="rootElement">
+                    <obj:JsonControl>
+                        <i:Interaction.Behaviors>
+                            <obj:ObjectBehavior Object="{Binding}"></obj:ObjectBehavior>
+                        </i:Interaction.Behaviors>
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="ValueChanged" >
                                 <beh:UpdateSourceBindingAction Property="{x:Static obj:JsonControl.ObjectProperty}"/>
@@ -355,7 +367,14 @@
         <Setter Property="ItemContainerStyle" Value="{StaticResource ListBoxItemStyle1}"/>
         <!--<Setter Property="ItemContainerStyleSelector" Value="{StaticResource CustomContainerStyleSelector}"></Setter>-->
         <Setter Property="ItemTemplateSelector" Value="{StaticResource ItemTemplateSelector}"></Setter>
-        <Setter Property="Edit" Value="{Binding ItemsSource, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource ItemsSourceConverter}}"></Setter>
+        <Setter Property="Edit">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource ItemsSourceConverter}">
+                    <Binding Path="ItemsSource" RelativeSource="{RelativeSource Mode=Self}"></Binding>
+                    <Binding Path="Edit" RelativeSource="{RelativeSource Mode=Self}"></Binding>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>

@@ -13,11 +13,14 @@ using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Controls.Lists
 {
-    public class ItemsSourceConverter : IValueConverter
+    public class ItemsSourceConverter : IMultiValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is IEnumerable enumerable)
+            if (values.SingleOrDefault(a => a is not IEnumerable and not null) is { } x)
+                return x;
+
+            if (values.Single(a => a is IEnumerable) is IEnumerable enumerable)
             {
                 if (enumerable.Count() > 0)
                 {
@@ -27,7 +30,7 @@ namespace Utility.WPF.Controls.Lists
                 {
                     return _object;
                 }
-                else if (value is ICollectionView { SourceCollection: { } sourceCollection })
+                else if (enumerable is ICollectionView { SourceCollection: { } sourceCollection })
                 {
                     return convert(sourceCollection.GetType());
                 }
@@ -38,9 +41,9 @@ namespace Utility.WPF.Controls.Lists
             }
             return DependencyProperty.UnsetValue;
 
-            ObjectWrapper convert(Type type)
+            object convert(Type type)
             {
-                if (TypeHelper.GenericTypeArguments(type).SingleOrDefault() is Type _type)
+                if (TypeHelper.InnerType(type) is Type _type)
                 {
                     return create(_type);
                 }
@@ -48,32 +51,17 @@ namespace Utility.WPF.Controls.Lists
             }
         }
 
-        private static ObjectWrapper create(Type _type)
+        private static object create(Type _type)
         {
-            return new ObjectWrapper { Object = ActivateAnything.Activate.New(_type) };
+            return ActivateAnything.Activate.New(_type);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
-    }
 
-    /// <summary>
-    /// Unable to bind directly so have to to create a new object with property, Object, to bind to instead
-    /// </summary>
-    public class ObjectWrapperConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is { } enumerable)
-            {
-                return new ObjectWrapper { Object = value };///.InnerType();
-            }
-            return DependencyProperty.UnsetValue;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
@@ -96,38 +84,5 @@ namespace Utility.WPF.Controls.Lists
         }
     }
 
-    /// <summary>
-    /// Necessary for XAML binding which require a property
-    /// </summary>
-    public class ObjectWrapper
-    {
-        private object @object;
-        static readonly Dictionary<Type, IMapper> mappers = [];
-
-        public object Object
-        {
-            get => @object; set
-            {
-                if (@object == null)
-                {
-                    @object = value;
-                    return;
-                }
-
-                map(@object, value, @object.GetType());
-            }
-        }
-
-        static void map(object oldValue, object newValue, Type type)
-        {
-            mappers.Get(type, (a) =>
-            {
-                return new MapperConfiguration(cfg =>
-                {
-                    cfg.CreateMap(type, type);
-                }).CreateMapper();
-            }).Map(newValue, oldValue);
-        }
-    }
 }
 

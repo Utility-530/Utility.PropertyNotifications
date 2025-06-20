@@ -1,6 +1,7 @@
 ﻿using AnimatedScrollViewer;
 using Fasterflect;
 using Itenso.Windows.Controls.ListViewLayout;
+using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Windows;
@@ -128,16 +129,33 @@ namespace Utility.WPF.Controls.Lists
                     Columns = null;
                 }
             }
-            else if(e.Property == EditProperty)
+            else if (e.Property == EditProperty)
             {
 
             }
 
             void updateColumns(bool b, IEnumerable enumerable)
             {
-                var type = enumerable.GetType().GetMethod("get_Item").ReturnType;
                 Columns ??= [];
-                AutoListViewColumnHelpers.CreateColumns2(this, type).ForEach(c => Columns.Add(c));
+                if (enumerable is ListCollectionView view)
+                {
+                    var type = view.CurrentItem.GetType();
+
+                    if (type != null)
+                        AutoListViewColumnHelpers.CreateColumns2(this, type).ForEach(c => Columns.Add(c));
+                    else
+                        throw new System.Exception("Sfd 3333f cvxs");
+                }
+                else
+                {
+                    var type = enumerable.GetType().GetMethod("get_Item")?.ReturnType;
+
+                    if (type != null)
+                        AutoListViewColumnHelpers.CreateColumns2(this, type).ForEach(c => Columns.Add(c));
+                    else
+                        throw new System.Exception("Sfd 3333333f cvxs");
+                }
+
                 //var manager = new ListViewLayoutManager(this, Columns);
                 var ex = enumerable.GetEnumerator();
                 if (ex.MoveNext())
@@ -165,52 +183,17 @@ namespace Utility.WPF.Controls.Lists
 
             this.SelectionChanged += CustomSelector_SelectionChanged;
             base.OnApplyTemplate();
-        }
 
-        private void CustomSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-        }
+            SwapCommand ??= new Command<int[]>(
+             (indexes) =>
+             {
+                 if (this.ItemsSource is IList collection)
+                     swap(indexes, collection);
+                 else if (this.ItemsSource is ICollectionView { SourceCollection: IList sourceCollection } collectionView)
+                     swap(indexes, sourceCollection);
+             });
 
-        private void DeclineComboTreeViewItem_Click(object sender, RoutedEventArgs e)
-        {
-            RaiseCustomRoutedEvent(false);
-        }
-
-        public void AcceptComboTreeViewItem_Click(object sender, RoutedEventArgs e)
-        {
-            RaiseCustomRoutedEvent(true);
-        }
-
-        void RaiseCustomRoutedEvent(bool isAccepted)
-        {
-            EditRoutedEventArgs routedEventArgs;
-
-            if (Edit is ObjectWrapper { Object: { } _object } wrapper)
-            {
-                routedEventArgs = new(isAccepted, _object, FinishEditEvent, this);
-            }
-            else
-            {
-                routedEventArgs = new(isAccepted, Edit, FinishEditEvent, this);
-            }
-            RaiseEvent(routedEventArgs);
-            {
-                this.GetBindingExpression(CustomSelector.EditProperty)?.UpdateTarget();
-            }
-        }
-
-        public CustomSelector()
-        {
-            SwapCommand = new Command<int[]>(
-                (indexes) =>
-                {
-                    if (this.ItemsSource is IList collection)
-                        swap(indexes, collection);
-                    else if (this.ItemsSource is ICollectionView { SourceCollection: IList sourceCollection } collectionView)
-                        swap(indexes, sourceCollection);
-                });
-
-            RemoveCommand = new Command<object>((a) =>
+            RemoveCommand ??= new Command<object>((a) =>
             {
 
                 int i = 0;
@@ -220,7 +203,7 @@ namespace Utility.WPF.Controls.Lists
                     remove(a, sourceCollection);
             });
 
-            DuplicateCommand = new Command<object>((a) =>
+            DuplicateCommand ??= new Command<object>((a) =>
             {
                 if (this.ItemsSource is IList collection)
                     add(a, collection);
@@ -271,6 +254,65 @@ namespace Utility.WPF.Controls.Lists
                     }
                     i++;
                 }
+            }
+        }
+
+        private void CustomSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+        }
+
+        private void DeclineComboTreeViewItem_Click(object sender, RoutedEventArgs e)
+        {
+            RaiseCustomRoutedEvent(false);
+        }
+
+        public void AcceptComboTreeViewItem_Click(object sender, RoutedEventArgs e)
+        {
+            RaiseCustomRoutedEvent(true);
+        }
+
+        void RaiseCustomRoutedEvent(bool isAccepted)
+        {
+            EditRoutedEventArgs routedEventArgs;
+
+            if (Edit is { } _object)
+            {
+                routedEventArgs = new(isAccepted, _object, FinishEditEvent, this);
+            }
+            else
+            {
+                routedEventArgs = new(isAccepted, Edit, FinishEditEvent, this);
+            }
+            RaiseEvent(routedEventArgs);
+            {
+                this.GetBindingExpression(CustomSelector.EditProperty)?.UpdateTarget();
+            }
+        }
+
+        public CustomSelector()
+        {
+            CommandBindings.Add(new CommandBinding(ApplicationCommands.Copy, Copy_Executed, Copy_CanExecute));
+        }
+
+        private void Copy_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void Copy_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
+            if (e.OriginalSource is ListBoxItem { DataContext: ICopy context })
+            {
+                Clipboard.SetText(context.Copy());
+            }
+            else if (e.OriginalSource is ListBox { SelectedItem: FrameworkElement { DataContext: ICopy _context } })
+            {
+                Clipboard.SetText(_context.Copy());
+            }
+            else if (e.OriginalSource is ListBox { SelectedItem: ICopy __context } )
+            {
+                Clipboard.SetText(__context.Copy());
             }
         }
 
