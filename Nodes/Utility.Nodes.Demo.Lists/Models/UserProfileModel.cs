@@ -1,17 +1,13 @@
 ﻿using SQLite;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Utility.Attributes;
 using Utility.Interfaces.Generic.Data;
+using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
 
 namespace Utility.Nodes.Demo.Lists.Entities
 {
-    [Model]
-    public class UserProfileModel : NotifyPropertyClass, IId<Guid>
+    [Model("d17c5de2-7836-4c02-958c-eb1de974f474", nameof(Services.NodeMethodFactory.BuildUserProfileRoot))]
+    public class UserProfileModel : NotifyPropertyClass, IId<Guid>, IComparable, ICopy
     {
         [PrimaryKey]
         [Attributes.Column(ignore: true)]
@@ -31,6 +27,16 @@ namespace Utility.Nodes.Demo.Lists.Entities
         public string? MemorableWord { get; set; }
         public DateTime AddDate { get; set; }
 
+        public int CompareTo(object? obj)
+        {
+            if(obj is UserProfileModel m)
+            {
+                return m.AddDate.CompareTo(m.AddDate);
+            }
+            return 0;
+        }
+
+        public string Copy() => Password;
     }
 }
 

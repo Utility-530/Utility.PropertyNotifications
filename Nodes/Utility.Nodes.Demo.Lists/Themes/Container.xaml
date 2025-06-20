@@ -77,7 +77,9 @@
                         </dragablz:TabablzControl.HeaderItemTemplate>
                         <TabControl.ContentTemplate>
                             <DataTemplate DataType="{x:Type nwpf:ViewModel}">
-                                <ContentControl Margin="4" Content="{Binding }" />
+                     
+                                    <ContentControl Margin="4" Content="{Binding }" />
+                        
                             </DataTemplate>
                         </TabControl.ContentTemplate>
                     </dragablz:TabablzControl>

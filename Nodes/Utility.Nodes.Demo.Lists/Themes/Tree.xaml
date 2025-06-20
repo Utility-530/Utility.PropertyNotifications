@@ -10,7 +10,7 @@
     <!--BasedOn="{StaticResource {x:Type t:CustomTreeViewItem}}"-->
     <Style x:Key="DefaultCustomStyle" TargetType="{x:Type t:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type t:CustomTreeViewItem}}" >
         <Setter Property="Header" Value="{Binding Data, Mode=OneWay}"></Setter>
-        <Setter Property="HeaderTemplateSelector" Value="{StaticResource HeaderTemplateSelector}"></Setter>
+        <Setter Property="HeaderTemplateSelector" Value="{StaticResource HeaderTemplateSelector}"></Setter>   
         <!--<Setter Property="HeaderTemplate">
             <Setter.Value>
                 <DataTemplate>

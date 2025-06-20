@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using Utility.Interfaces.Exs;
-using Utility.Models;
 using Utility.WPF.ResourceDictionarys;
 
 namespace Utility.Nodes.Demo.Lists

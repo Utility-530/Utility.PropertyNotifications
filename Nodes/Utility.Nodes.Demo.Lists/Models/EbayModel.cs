@@ -8,7 +8,7 @@ using Utility.PropertyNotifications;
 
 namespace Utility.Nodes.Demo.Lists.Infrastructure
 {
-    [Model]
+    [Model("a223440a-a171-4989-91f3-a11fbea82546", nameof(Services.NodeMethodFactory.BuildEbayRoot))]
     public class EbayModel : NotifyPropertyClass, IId<Guid>, IClone
     {
         private string? indexPath;

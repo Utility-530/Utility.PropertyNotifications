@@ -1,20 +1,20 @@
 ﻿using Dragablz;
 using Newtonsoft.Json;
 using Splat;
+using System;
+using System.Reflection;
 using System.Windows;
 using Utility.Attributes;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Helpers.Reflection;
 using Utility.Interfaces.Exs;
-
+using Utility.Interfaces.Generic;
 using Utility.Interfaces.Generic.Data;
 using Utility.Interfaces.NonGeneric;
-using Utility.Models;
 using Utility.Nodes.Demo.Lists.Entities;
 using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Filters;
-using Utility.Nodes.WPF;
 using Utility.Repos;
 using Utility.Services;
 using Utility.WPF.Templates;
@@ -33,21 +33,31 @@ namespace Utility.Nodes.Demo.Lists
 
             Locator.CurrentMutable.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
             Locator.CurrentMutable.RegisterLazySingleton<INodeSource>(() => new NodeEngine());
-            Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
+  
             Locator.CurrentMutable.RegisterConstant<IExpander>(WPF.Expander.Instance);
             //Locator.CurrentMutable.RegisterConstant<IContext>(Globals);
             Locator.CurrentMutable.RegisterLazySingleton<MethodCache>(() => new MethodCache());
-            Locator.CurrentMutable.RegisterLazySingleton<INodeMethodFactory>(() => new Utility.Nodes.Demo.Lists.Services.NodeMethodFactory());
-            Locator.CurrentMutable.RegisterLazySingleton<INodeMethodFactory>(() => new Nodes.Filters.NodeMethodFactory());
+            Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<MethodInfo>>(() => new Services.NodeMethodFactory());
+            Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<MethodInfo>>(() => new Nodes.Filters.NodeMethodFactory());
             Locator.CurrentMutable.RegisterLazySingleton(() => new MasterViewModel());
             Locator.CurrentMutable.RegisterLazySingleton(() => new ContainerViewModel());
             Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
 
-            Locator.CurrentMutable.RegisterConstant<IObservable<ViewModel>>(new ComboService());
+            //Locator.CurrentMutable.RegisterConstant<System.IObservable<ViewModel>>(new ComboService());
             Locator.CurrentMutable.RegisterConstant(new ContainerService());
             Locator.CurrentMutable.RegisterConstant(new RazorService());
-            Locator.CurrentMutable.RegisterLazySingleton<IModelTypesFactory>(() => new ModelTypesFactory());
+            Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Type>>(() => new ModelTypesFactory());
             Locator.CurrentMutable.RegisterLazySingleton<Utility.Interfaces.Generic.IFactory<IId<Guid>>>(() => new ModelFactory());
+
+            Locator.CurrentMutable.RegisterLazySingleton<FilterService>(() => new FilterService());
+            Locator.CurrentMutable.RegisterLazySingleton<CollectionCreationService>(() => new CollectionCreationService());
+            Locator.CurrentMutable.RegisterLazySingleton<SelectionService>(() => new SelectionService());
+            Locator.CurrentMutable.RegisterLazySingleton<CollectionViewService>(() => new CollectionViewService());
+            Locator.CurrentMutable.RegisterConstant<IFilter>(new StringFilter());
+
+            Locator.Current.GetService<CollectionCreationService>().Subscribe(Locator.Current.GetService<FilterService>());
+            Locator.Current.GetService<FilterService>().Subscribe(Locator.Current.GetService<CollectionViewService>());
+            Locator.Current.GetService<CollectionCreationService>().Subscribe(Locator.Current.GetService<CollectionViewService>());
 
             JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
 
@@ -65,9 +75,9 @@ namespace Utility.Nodes.Demo.Lists
 
     }
 
-    public class ModelTypesFactory : IModelTypesFactory
+    public class ModelTypesFactory : IEnumerableFactory<Type>
     {
-        public IEnumerable<Type> Types()
+        public IEnumerable<Type> Create(object? o = null)
         {
             return typeof(ModelTypesFactory).Assembly.TypesByAttribute<ModelAttribute>();
         }
@@ -82,15 +92,24 @@ namespace Utility.Nodes.Demo.Lists
     //}
     public class ModelFactory : Utility.Interfaces.Generic.IFactory<IId<Guid>>
     {
-        public Task<IId<Guid>> Create(object config)
+        public IId<Guid> Create(object config)
         {
             if (config is Type type)
             {
                 if (type == typeof(UserProfileModel))
                 {
-                    return Task.FromResult((IId<Guid>)new UserProfileModel() { Id = Guid.NewGuid(), AddDate = DateTime.Now });
+                    return (IId<Guid>)new UserProfileModel() { Id = Guid.NewGuid(), AddDate = DateTime.Now };
                 }
-                return Task.FromResult(Activator.CreateInstance(type) as IId<Guid>);
+                if (Activator.CreateInstance(type) is IId<Guid> iid)
+                {
+                    if (iid is IIdSet<Guid> set)
+                        set.Id = Guid.NewGuid();
+                    return iid;
+                }
+                else
+                {
+                    throw new Exception("33889__e");
+                }
             }
             else
             {
@@ -102,8 +121,6 @@ namespace Utility.Nodes.Demo.Lists
 
     public class InterTabClient : IInterTabClient
     {
-
-
         public InterTabClient()
         {
         }
