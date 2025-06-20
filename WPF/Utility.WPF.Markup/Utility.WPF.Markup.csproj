@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup> 
+    <ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" /> 
     <ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" /> 
     <ProjectReference Include="..\Utility.WPF.Abstract\Utility.WPF.Abstract.csproj" />
   </ItemGroup>

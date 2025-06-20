@@ -9,7 +9,10 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
+using System.Xaml;
+using Utility.Commands;
 using Utility.WPF.Abstract;
+using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Markup
 {
@@ -53,6 +56,7 @@ namespace Utility.WPF.Markup
 
         public ConversionType ConversionType { get; init; } = ConversionType.Default;
 
+        object? value = null;
         /// <summary>
         /// Retrieves the context in which the markup extension is used, and (if used in the
         /// context of an event or a method) returns an event handler that executes the
@@ -64,8 +68,29 @@ namespace Utility.WPF.Markup
         {
             // Retrieve a reference to the InvokeCommand helper method declared below, using reflection
             if (GetType().GetMethod(nameof(InvokeCommand), BindingFlags.Instance | BindingFlags.NonPublic) is MethodInfo methodInfo &&
-                serviceProvider.GetService(typeof(IProvideValueTarget)) is IProvideValueTarget { TargetProperty: { } info })
+                serviceProvider.GetService(typeof(IProvideValueTarget)) is IProvideValueTarget { TargetProperty: { } info } targetService)
             {
+                if (info is DependencyProperty)
+                {
+                    if (targetService?.TargetObject is FrameworkElement element)
+                    {
+                        return new Command<object>(a =>
+                        {
+                            value = a;
+                            InvokeCommand(element, new MyEventArgs(a));
+                        });
+                    }
+                    else if (targetService.TargetObject.GetType().FullName.Contains("SharedDp"))
+                    {
+                        // Extension is being reused — can't access concrete FrameworkElement yet
+                        return this;
+                    }
+                    else
+                    {
+                        throw new Exception("2344f ddg");
+                    }
+                }
+
                 // Check if the current context is an event or a method call with two parameters
                 var type = info switch
                 {   // If the context is an event, simply return the helper method as delegate
@@ -108,10 +133,10 @@ namespace Utility.WPF.Markup
                     frameworkElement
                     .WhenAnyValue(a => a.DataContext)
                     .WhereNotNull()
-                    .Select(context => (context, context.GetType().GetProperty(commandName)?.GetValue(context)))
+                    .Select(context => (context, context.GetType().GetProperty(commandName)))
                     .Subscribe(a =>
                     {
-                        if (a.Item2 is ICommand command)
+                        if (a.Item2.GetValue(a.Item1) is ICommand command)
                         {
                             if (command.CanExecute(args))
                             {
@@ -124,6 +149,11 @@ namespace Utility.WPF.Markup
                                 };
                                 command.Execute(conversion);
                             }
+                            return;
+                        }
+                        else if (a.Item2.IsReadOnly() == false && args is MyEventArgs ma)
+                        {
+                            a.Item2.SetValue(a.Item1, ma.a);
                             return;
                         }
 
@@ -220,6 +250,15 @@ namespace Utility.WPF.Markup
 
                 default:
                     throw new Exception("s33333dfsdsd");
+            }
+        }
+        internal class MyEventArgs : EventArgs
+        {
+            public object? a;
+
+            public MyEventArgs(object? a)
+            {
+                this.a = a;
             }
         }
     }
