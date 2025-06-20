@@ -9,6 +9,8 @@ using System;
 using Utility.WPF.Factorys;
 using Utility.Structs;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
 
 namespace Utility.WPF.Controls.Trees
 {
@@ -20,19 +22,25 @@ namespace Utility.WPF.Controls.Trees
         {
             if (values is object[] { } array)
             {
+                if(array.SingleOrDefault(x=>x is string) is { } itemsPanelTemplate)
+                {
+                    if (Application.Current.Resources[itemsPanelTemplate] is ItemsPanelTemplate template)
+                        return template;
+                }
+
                 O? o = default;
-                if (array[3] is Orientation orientation)
+                if (array[4] is Orientation orientation)
                 {
                     o = Enum.TryParse(typeof(O), orientation.ToString(), out var obj) ? (O)obj : O.Horizontal;
                 }
-                else if (array[3] != DependencyProperty.UnsetValue)
+                else if (array[4] != DependencyProperty.UnsetValue)
                 {
-                    o = (O)array[3];
+                    o = (O)array[4];
                 }
                 if (
-                    array[0] is Arrangement arrangement &&
-                    array[1] is var rows &&
-                    array[2] is var columns)
+                    array[1] is Arrangement arrangement &&
+                    array[2] is var rows &&
+                    array[3] is var columns)
                 {
                     var template = ItemsPanelFactory.Template(
                         (IReadOnlyCollection<Dimension>?)rows,

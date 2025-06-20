@@ -36,6 +36,7 @@ namespace Utility.Nodes
         private bool? isContentVisible = true;
         private Position2D connectorPosition = Position2D.None;
         private string dataTemplate;
+        private string itemsPanelTemplate;
 
         public ViewModelTree(/*string name,*/ object data) : this()
         {
@@ -248,6 +249,15 @@ namespace Utility.Nodes
             set
             {
                 RaisePropertyChanged(ref dataTemplate, value);
+            }
+        }
+
+        public string ItemsPanelTemplate
+        {
+            get => itemsPanelTemplate;
+            set
+            {
+                RaisePropertyChanged(ref itemsPanelTemplate, value);
             }
         }
 

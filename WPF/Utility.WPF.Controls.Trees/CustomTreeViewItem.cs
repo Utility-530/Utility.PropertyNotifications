@@ -50,6 +50,7 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty ErrorsProperty = DependencyProperty.Register("Errors", typeof(IEnumerable), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty ContentVisibilityProperty = DependencyProperty.Register("ContentVisibility", typeof(System.Windows.Visibility), typeof(CustomTreeViewItem), new PropertyMetadata(Visibility.Visible));
         public static readonly DependencyProperty ConnectorPositionProperty = DependencyProperty.Register("ConnectorPosition", typeof(Position2D), typeof(CustomTreeViewItem), new PropertyMetadata(Position2D.None));
+        public static readonly DependencyProperty ItemsPanelTemplateProperty = DependencyProperty.Register("ItemsPanelTemplate", typeof(string), typeof(CustomTreeViewItem), new PropertyMetadata());
 
 
         private static void _changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -247,7 +248,11 @@ namespace Utility.WPF.Controls.Trees
             set { SetValue(ContentVisibilityProperty, value); }
         }
 
-
+        public string ItemsPanelTemplate
+        {
+            get { return (string)GetValue(ItemsPanelTemplateProperty); }
+            set { SetValue(ItemsPanelTemplateProperty, value); }
+        }
         #endregion Properties
 
         private static void IsEditingChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)

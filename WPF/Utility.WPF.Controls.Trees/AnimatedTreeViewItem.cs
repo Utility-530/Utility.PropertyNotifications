@@ -1,14 +1,10 @@
-﻿using AnimatedScrollViewer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows;
-using Utility.WPF.Controls.External;
-using System.Windows.Shapes;
-using Utility.WPF.Controls.Buttons;
 using System.Windows.Controls.Primitives;
 using Utility.Helpers.NonGeneric;
 

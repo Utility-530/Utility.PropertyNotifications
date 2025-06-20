@@ -103,12 +103,14 @@
         <Setter Property="Padding" Value="1,0,0,0"/>
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>
+        <Setter Property="ItemsPanelTemplate" Value="{Binding ItemsPanelTemplate}"/>
         <Setter Property="Rows" Value="{Binding Rows}"/>
         <Setter Property="Columns" Value="{Binding Columns}"/>
         <Setter Property="Errors" Value="{Binding Errors}"></Setter>
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <MultiBinding Converter="{StaticResource MultiItemsPanelConverter}">
+                    <Binding Path="ItemsPanelTemplate" RelativeSource="{RelativeSource Mode=Self}"/>
                     <Binding Path="Arrangement" RelativeSource="{RelativeSource Mode=Self}"/>
                     <Binding Path="Rows" RelativeSource="{RelativeSource Mode=Self}"/>
                     <Binding Path="Columns" RelativeSource="{RelativeSource Mode=Self}"/>

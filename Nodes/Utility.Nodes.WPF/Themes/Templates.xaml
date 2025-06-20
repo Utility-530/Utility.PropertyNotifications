@@ -22,7 +22,10 @@
                     xmlns:att="http://schemas.utility.com/attached"
                     xmlns:c="http://schemas.utility.com/colours"
                     xmlns:btns="http://schemas.utility.com/buttons" 
+                    xmlns:text="http://schemas.utility.com/texts"
                     xmlns:cefsharpwpf="clr-namespace:CefSharp.Wpf.HwndHost;assembly=CefSharp.Wpf"
+                    xmlns:markup="http://schemas.utility.com/markup"
+                    xmlns:list="http://schemas.utility.com/lists"
                     xmlns:obj="http://schemas.utility.com/objects"
                     xmlns:wpf1="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF">
 
@@ -110,17 +113,16 @@
                     />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type inf:BooleanModel}">
-        <CheckBox  IsChecked="{Binding Value}"></CheckBox>
-    </DataTemplate>
-
     <DataTemplate DataType="{x:Type inf:SearchModel}">
-        <UniformGrid Rows="1">
-            <TextBox Grid.Row="0"      
-                    Width="200"
-                    test:TextBoxHelper.IsClearButtonVisible="True"
-                    Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=250}"/>
-        </UniformGrid>
+        <text:SearchBox x:Name="Searchbox" Text="{Binding Value, Mode=TwoWay}" Height="25" MinWidth="200">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Search" >
+                    <beh:SetterAction TargetObject="{Binding ElementName=Searchbox, Path=DataContext}" 
+                                      PropertyName="Value" 
+                                      Value="{Binding ElementName=Searchbox, Path=Text}"></beh:SetterAction>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </text:SearchBox>
     </DataTemplate>
 
 
@@ -137,18 +139,10 @@
         </TextBlock>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type inf:StringModel}">
-        <Grid>
-            <TextBox Text="{Binding Value}" MinWidth="60" Background="AliceBlue">
-            </TextBox>
-        </Grid>
-
-    </DataTemplate>  
-    
     <DataTemplate DataType="{x:Type inf:EditModel}">
-        <obj:JsonControl>
+        <obj:JsonControl Width="500" Height="400">
             <i:Interaction.Behaviors>
-                <obj:ObjectBehavior Object="{Binding Value, Mode=OneTime}"/>
+                <obj:ObjectBehavior Object="{Binding Value, Mode=OneWay}"/>
             </i:Interaction.Behaviors>
         </obj:JsonControl>
     </DataTemplate>  
@@ -204,18 +198,50 @@
     </DataTemplate>
 
 
-    <DataTemplate DataType="{x:Type inf:GuidModel}">
-        <TextBox Text="{Binding Value}"/>
+    <DataTemplate DataType="{x:Type model:BooleanModel}">
+        <CheckBox  IsChecked="{Binding Value}"></CheckBox>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type model:GuidModel}">
+        <TextBox Text="{Binding Value}"/>
+    </DataTemplate>
+    
     <DataTemplate DataType="{x:Type inf:ExceptionModel}">
         <TextBlock Text="{Binding Exception.Message}" Foreground="{c:Red}" MinHeight="25" MinWidth="180" Background="GhostWhite"/>
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type inf:ListModel}">
+        <list:CustomSelector
+            SelectedItem="{Binding Value, Mode=TwoWay}"
+            x:Name="CustomSelector"
+            Height="500"
+            Width="1500"
+            ItemsWidth="300" ItemsHeight="500"
+            IsGrid="True"
+            RemoveCommand="{markup:Command Remove}"
+            CheckedPropertyName="IsRhPositive"    
+            Edit="{Binding New, Mode=OneWay}"
+            ItemsSource="{Binding Collection, Mode=OneWay}" >
+            <!--Edit="{Binding Edit,Mode=TwoWay}">-->
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="FinishEdit">
+                    <beh:SetterAction PropertyName="Add" TargetObject="{Binding }" Converter="{StaticResource FinishEditConverter}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>           
+        </list:CustomSelector>
+    </DataTemplate>
+
+
+    <DataTemplate DataType="{x:Type model:StringModel}">
+        <Grid>
+            <TextBox Text="{Binding Value}" MinWidth="60" Background="AliceBlue">
+            </TextBox>
+        </Grid>
+    </DataTemplate>
 
 
 
-    <DataTemplate x:Key="HtmlEditor" DataType="{x:Type inf:StringModel}">
+    <DataTemplate x:Key="HtmlEditor" DataType="{x:Type model:StringModel}">
         <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
 
         <avalonedit:TextEditor x:Name="_htmlEditor" 
@@ -229,10 +255,9 @@
             </i:Interaction.Behaviors>
         </avalonedit:TextEditor>
     </DataTemplate>
-    
-    
 
-    <DataTemplate x:Key="HtmlWebViewer" DataType="{x:Type inf:StringModel}">
+
+    <DataTemplate x:Key="HtmlWebViewer" DataType="{x:Type model:StringModel}">
         <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
         <WebBrowser >
             <i:Interaction.Behaviors>
@@ -240,9 +265,9 @@
             </i:Interaction.Behaviors>
         </WebBrowser>
     </DataTemplate>
-    
-    
-    
+
+
+
     <DataTemplate DataType="{x:Type inf:HtmlModel}">
         <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
         <!--<html:TinyHtmlEditorControl Html="{Binding Value, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>-->
@@ -430,12 +455,13 @@
                                 Height="85"
                                 Margin="5"
                                 >
-
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                            <Viewbox>
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
                                     FontSize="14"
                                     FontWeight="Normal"
                                     Text="{Binding Alias}"
                                     TextWrapping="WrapWithOverflow" />
+                            </Viewbox>
                         </Grid>
                     </DataTemplate>
                 </ContentControl.ContentTemplate>
@@ -443,5 +469,9 @@
         
         </Grid>
     </DataTemplate>
+
+    <ItemsPanelTemplate x:Key="Stack">
+        <StackPanel></StackPanel>
+    </ItemsPanelTemplate>
 
 </ResourceDictionary>
