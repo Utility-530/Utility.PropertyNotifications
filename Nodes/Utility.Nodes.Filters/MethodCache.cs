@@ -11,6 +11,7 @@ using Utility.Interfaces.Exs;
 using Observable = System.Reactive.Linq.Observable;
 using Utility.Helpers;
 using System.Reflection;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Nodes.Filters
 {
@@ -41,7 +42,7 @@ namespace Utility.Nodes.Filters
         public object Invoke(string key, Guid? guid, object[]? objects = null)
         {
             if (_methods.ContainsKey(key))
-                return this[(key, guid)].Method.Invoke(this[(key, guid)].Instance, (guid.HasValue ? [guid.Value] : Array.Empty<object>()).Concat(objects != null? objects: Array.Empty<object>()).ToArray());
+                return this[(key, guid)].Method.Invoke(this[(key, guid)].Instance, (guid.HasValue ? [guid.Value] : Array.Empty<object>()).Concat(objects != null ? objects : Array.Empty<object>()).ToArray());
             throw new Exception("eeee 0ff0s");
         }
     }
@@ -51,8 +52,8 @@ namespace Utility.Nodes.Filters
         private Lazy<IOP> dict = new(() =>
         {
             var iop = new IOP();
-            var factories = Locator.Current.GetServices<INodeMethodFactory>();
-            factories.ForEach(t => t.Methods.ForEach(m => iop.Add(m.Name, t, m)));
+            var factories = Locator.Current.GetServices<IEnumerableFactory<MethodInfo>>();
+            factories.ForEach(t => t.Create(null).ForEach(m => iop.Add(m.Name, t, m)));
             return iop;
         });
 
@@ -70,7 +71,7 @@ namespace Utility.Nodes.Filters
         }
 
 
-        public IObservable<INode> Get(string key, Guid? guid = default, object?[] objects = null)
+        public System.IObservable<INode> Get(string key, Guid? guid = default, object?[] objects = null)
         {
             if (Contains(key, guid) == false)
             {
@@ -91,7 +92,7 @@ namespace Utility.Nodes.Filters
                         //_node.Name = key;
                     }
                 }
-                else if (output is IObservable<INode> nodeObservable)
+                else if (output is System.IObservable<INode> nodeObservable)
                 {
                     return Observable.Create<INode>(obs =>
                     {

@@ -12,7 +12,7 @@ using Utility.Helpers.Reflection;
 
 namespace Utility.Nodes.Filters
 {
-    public class NodeMethodFactory : INodeMethodFactory
+    public class NodeMethodFactory : Utility.Interfaces.Generic.IEnumerableFactory<MethodInfo>
     {
 
         INodeSource nodeSource = Locator.Current.GetService<INodeSource>();
@@ -73,7 +73,7 @@ namespace Utility.Nodes.Filters
         public const string Select = nameof(Select);
         public const string Cancel = nameof(Cancel);
 
-        public IEnumerable<MethodInfo> Methods => this.GetType().InstantMethods();
+        public IEnumerable<MethodInfo> Create(object config) => this.GetType().InstantMethods().Where(a => a.Name != nameof(Create));
 
         public IObservable<INode> BuildRoot()
         {
