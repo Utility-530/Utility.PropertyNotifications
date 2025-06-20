@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using Utility.Interfaces.Exs;
+﻿using Utility.Interfaces;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
@@ -9,12 +8,12 @@ namespace Utility.Models
 
     public class ValueModel<T> : NotifyPropertyClass, IValue<T?>, ISetValue, IGet, ISet, IGet<T>, Utility.Interfaces.Generic.ISet<T>, IModel
     {
-        private T value;
+        private T? value;
         private readonly bool raisePropertyCalled;
         private readonly bool raisePropertyReceived;
         protected string m_name = "unknown";
 
-        public ValueModel(T? value = default, bool raisePropertyCalled = true, bool raisePropertyReceived = true):base(raisePropertyCalled, raisePropertyReceived)
+        public ValueModel(T? value = default, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(raisePropertyCalled, raisePropertyReceived)
         {
             this.value = value;
         }
@@ -28,7 +27,7 @@ namespace Utility.Models
 
         public virtual T? Value
         {
-            get {  RaisePropertyCalled(value); return value; }
+            get { RaisePropertyCalled(value); return value; }
             set => this.RaisePropertyReceived(ref this.value, value);
         }
 

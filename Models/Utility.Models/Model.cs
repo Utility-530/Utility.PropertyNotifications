@@ -10,6 +10,7 @@ using Splat;
 using Utility.Interfaces.Exs;
 using Utility.Trees.Extensions.Async;
 using Utility.Helpers.Reflection;
+using Utility.Interfaces;
 
 namespace Utility.Models
 {
@@ -34,7 +35,7 @@ namespace Utility.Models
         }
     }
 
-    public class Model<T> : ValueModel<T>, ISetNode, IGetNode, IProliferation, IClone, IYieldChildren, IKey, IName
+    public class Model<T> : ValueModel<T>, ISetNode, IGetNode, IProliferation, IClone, IYieldChildren, IKey, IName 
     {
         private INode node;
         int i = 0;
@@ -266,7 +267,21 @@ namespace Utility.Models
 
 
     }
+    public class StringModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null) : Model<string>(func, nodeAction, addition)
+    {
+        public StringModel() : this(null, null, null)
+        {
 
+        }
+    }
+
+    public class GuidModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null) : Model<Guid>(func, nodeAction, addition)
+    {
+    }
+
+    public class BooleanModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null) : Model<bool>(func, nodeAction, addition)
+    {
+    }
 
     [AttributeUsage(AttributeTargets.Property)]
     public class ChildAttribute(string Name, System.Type Type = null) : Attribute

@@ -20,21 +20,18 @@ namespace Utility.Models
     {
     }
 
-    public abstract class BaseCollectionModel<TValue> : Model<TValue>, IChildCollection
+    public abstract class BaseCollectionModel<TValue> : Model<TValue>, IChildCollection 
     {
         public virtual IEnumerable Collection { get; }
-
     }
 
-    public class CollectionModel<TValue, T> : BaseCollectionModel<TValue>
+    public class CollectionModel<TValue, T>(Func<T>? create = null) : BaseCollectionModel<TValue> 
     {
         private int limit = int.MaxValue;
+        private readonly Func<T>? create = create;
 
         public override ObservableCollection<T> Collection { get; } = [];
 
-        public CollectionModel()
-        {
-        }
 
         public virtual void Initialise()
         {
@@ -58,6 +55,16 @@ namespace Utility.Models
                 {
                     Node.Add(e);
                 });
+        }
+
+        public virtual T New
+        {
+            get
+            {
+                if (this.create == default)
+                    throw new Exception("33 RGEg");
+                return create.Invoke();
+            }
         }
 
         public override void Addition(IReadOnlyTree value, IReadOnlyTree a)
@@ -84,11 +91,11 @@ namespace Utility.Models
         public int Limit { get => limit; set => RaisePropertyChanged(ref limit, value); }
     }
 
-    public class CollectionModel : CollectionModel<Model>
+    public class CollectionModel(Func<Model>? create = null) : CollectionModel<Model>(create)
     {
 
     }
-    public class CollectionModel<TModel> : CollectionModel<object, TModel>
+    public class CollectionModel<TModel>(Func<TModel>? create = null) : CollectionModel<object, TModel>(create) where TModel : class
     {
 
     }
