@@ -8,6 +8,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
+using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Nodes;
 using Utility.Nodes.Demo.Filters.Infrastructure;

@@ -10,6 +10,7 @@
         xmlns:res="http://schemas.utility.com/resourcedictionary" 
         xmlns:att="http://schemas.utility.com/attached" 
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+        xmlns:model="clr-namespace:Utility.Models;assembly=Utility.Models"
         xmlns:mt="clr-namespace:Utility.Models.Trees;assembly=Utility.Models.Trees"
         xmlns:infrastructure="clr-namespace:Utility.Trees.Demo.Filters.Infrastructure"
         xmlns:m="clr-namespace:Utility.Models;assembly=Utility.Models"
@@ -82,7 +83,7 @@
                             <!--<Setter Property="Edit" Value="{Binding Converter={StaticResource EditConverter}}"></Setter>-->
                             <Setter Property="Edit">
                                 <Setter.Value>
-                                    <mt:StringModel Name="_New"></mt:StringModel>
+                                    <model:StringModel Name="_New"/>
                                 </Setter.Value>
                             </Setter>
                         </Style>
@@ -132,7 +133,7 @@
                             </att:InteractivitySetter>
                             <Setter Property="Edit">
                                 <Setter.Value>
-                                    <mt:StringModel Name="New"></mt:StringModel>
+                                    <model:StringModel Name="New"></model:StringModel>
                                 </Setter.Value>
                             </Setter>
                             <Setter Property="FooterTemplateSelector" >
@@ -187,7 +188,7 @@
                                                        DefaultStyle="{StaticResource Style}">
                         </local:CustomStyleSelector>
 
-                        <DataTemplate DataType="{x:Type mt:StringModel}">
+                        <DataTemplate DataType="{x:Type model:StringModel}">
                             <StackPanel>
                                 <ex:EditableTextBlock x:Name="t1" Text="{Binding Name}"/>
                             </StackPanel>
