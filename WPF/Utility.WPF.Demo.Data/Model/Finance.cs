@@ -15,7 +15,7 @@ namespace Utility.WPF.Demo.Data.Model
         private const string StockTablePath = "/stocknet-dataset-master/StockTable.csv";
         private const string StockPricePath = "/stocknet-dataset-master/price/HL/ABB.csv";
 
-        private static IEnumerable<Sector> SelectSectors()
+        public static IEnumerable<Sector> SelectSectors()
         {
             var reader = new StreamReader(PathHelper.FindPath(typeof(Finance).Assembly.GetName().Name + StockTablePath));
 
@@ -29,6 +29,7 @@ namespace Utility.WPF.Demo.Data.Model
                            Key = line["Symbol"].Remove(0, 1),
                            Name = line["Company"],
                            Sector = g.Key,
+                           Index = line.Index
                        }).ToList()
                    };
         }
@@ -46,7 +47,7 @@ namespace Utility.WPF.Demo.Data.Model
                    };
         }
 
-        public static IEnumerable<Sector> Sectors => sectors.Cached();
+        public static IEnumerable<Sector> Sectors => sectors;
 
         public static IEnumerable<Stock> Stocks => Sectors.SelectMany(a => a.Stocks).Cached();
 
@@ -64,6 +65,8 @@ namespace Utility.WPF.Demo.Data.Model
         public string Sector { get; set; }
         public string Name { get; set; }
         public string Key { get; set; }
+
+        public int Index { get; set; }
     }
 
     //public class StockPropertyChanged : ReactiveObject

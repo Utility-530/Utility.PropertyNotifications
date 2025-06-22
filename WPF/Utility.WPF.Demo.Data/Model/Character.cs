@@ -1,4 +1,5 @@
 using AnyClone;
+using Newtonsoft.Json;
 using SQLite;
 using System;
 using System.ComponentModel;
@@ -62,6 +63,7 @@ namespace Utility.WPF.Demo.Data.Model
         }
 
         [Ignore]
+        [JsonIgnore]
         public BitmapImage Image { get => _image; set => _image = value; }
 
         public int Age

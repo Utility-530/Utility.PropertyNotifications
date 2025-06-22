@@ -13,3 +13,4 @@ using System.Windows.Markup;
 [assembly: XmlnsPrefix("http://schemas.utility.com/demo_data", "dd")]
 [assembly: XmlnsDefinition("http://schemas.utility.com/demo_data", "Utility.WPF.Demo.Data")]
 [assembly: XmlnsDefinition("http://schemas.utility.com/demo_data", "Utility.WPF.Demo.Data.Factory")]
+[assembly: XmlnsDefinition("http://schemas.utility.com/demo_data", "Utility.WPF.Demo.Data.Model")]
