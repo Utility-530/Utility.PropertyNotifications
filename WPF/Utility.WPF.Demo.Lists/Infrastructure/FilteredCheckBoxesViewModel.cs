@@ -11,6 +11,7 @@ using Utility.WPF.Demo.Data.Factory;
 using Utility.WPF.Demo.Data.Model;
 using Utility.Models.Filters;
 using Utility.Reactives;
+using Utility.Services.Deprecated;
 
 namespace Utility.WPF.Demo.Lists.Infrastructure
 {
@@ -38,7 +39,7 @@ namespace Utility.WPF.Demo.Lists.Infrastructure
 
     internal class FilteredCustomCheckBoxesViewModel : IDisposable
     {
-        private readonly FilterService<Profile> filterService = new();
+        private readonly BaseFilterService<Profile> filterService = new();
         private readonly Dictionary<Filter, IDisposable> dictionary = new();
 
         public FilteredCustomCheckBoxesViewModel()

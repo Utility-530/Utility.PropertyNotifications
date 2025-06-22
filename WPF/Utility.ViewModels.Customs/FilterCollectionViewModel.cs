@@ -12,6 +12,7 @@ using System.Windows.Input;
 using Utility.Services;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+using Utility.Services.Deprecated;
 
 namespace Utility.ViewModels;
 
@@ -95,7 +96,7 @@ public class CheckedCollectionCommandViewModel<T, TR> : FilterCheckContentCollec
 {
     private readonly ReactiveCommand<Dictionary<object, bool?>, Func<T, bool>> command;
 
-    public CheckedCollectionCommandViewModel(IObservable<IChangeSet<ViewModel<TR>>> changeSet, FilterService<T> filterService, Settings settings) : base(changeSet, settings)
+    public CheckedCollectionCommandViewModel(IObservable<IChangeSet<ViewModel<TR>>> changeSet, BaseFilterService<T> filterService, Settings settings) : base(changeSet, settings)
     {
         command = ReactiveCommand.Create<Dictionary<object, bool?>, Func<T, bool>>(dictionary =>
         {
@@ -113,7 +114,7 @@ public class CheckedCollectionCommandViewModel<T, TR> : FilterCheckContentCollec
 
 public class FilterCollectionViewModel<T, TR> : FilterCollectionKeyBaseViewModel<TR> where TR : IPredicate, IEquatable
 {
-    public FilterCollectionViewModel(IObservable<IChangeSet<TR>> changeSet, Func<T, bool> filter, FilterService<T> filterService, Settings settings) : base(changeSet, settings)
+    public FilterCollectionViewModel(IObservable<IChangeSet<TR>> changeSet, Func<T, bool> filter, BaseFilterService<T> filterService, Settings settings) : base(changeSet, settings)
     {
         Observable.Return(filter).Subscribe(filterService);
     }

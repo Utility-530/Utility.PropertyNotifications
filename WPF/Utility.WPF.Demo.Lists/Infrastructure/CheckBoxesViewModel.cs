@@ -12,6 +12,7 @@ using DynamicData;
 using System.Linq;
 using System.Reactive.Disposables;
 using Utility.Models.Filters;
+using Utility.Services.Deprecated;
 
 namespace Utility.WPF.Demo.Lists.Infrastructure
 {
@@ -35,7 +36,7 @@ namespace Utility.WPF.Demo.Lists.Infrastructure
             };
             var dataChangeSet = Data.ToObservable().ToObservableChangeSet();
 
-            var filterService = new FilterService<CheckViewModel>();
+            var filterService = new BaseFilterService<CheckViewModel>();
 
             foreach (var filter in filters)
             {

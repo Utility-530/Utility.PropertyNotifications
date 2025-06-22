@@ -7,12 +7,13 @@ using Utility.ViewModels;
 using System.Reactive.Disposables;
 using Utility.Reactives;
 using System.Reactive;
+using Utility.Services.Deprecated;
 
 namespace Utility.WPF.Controls.Meta.ViewModels
 {
     public class FilteredCustomCheckBoxesViewModel : IDisposable
     {
-        private readonly FilterService<ViewModelEntity> filterService = new();
+        private readonly BaseFilterService<ViewModelEntity> filterService = new();
         private readonly Dictionary<Filter, IDisposable> dictionary = new();
 
         public FilteredCustomCheckBoxesViewModel(

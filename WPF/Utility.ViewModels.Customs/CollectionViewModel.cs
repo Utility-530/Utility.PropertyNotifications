@@ -12,6 +12,7 @@ using System.Reactive.Subjects;
 using Utility.Common;
 using Utility.Models;
 using Utility.Services;
+using Utility.Services.Deprecated;
 
 namespace Utility.ViewModels;
 
