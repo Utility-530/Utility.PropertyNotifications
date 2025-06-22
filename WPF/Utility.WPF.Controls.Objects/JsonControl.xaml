@@ -28,10 +28,12 @@
     <conv:TypeNameConverter x:Key="TypeNameConverter"></conv:TypeNameConverter>
     <local:ObjectVisibilityConverter x:Key="ObjectVisibilityConverter"></local:ObjectVisibilityConverter>
     <controls:DoubleToNullConverter x:Key="DoubleToNullConverter" x:Shared="False"/>
-    <controls:BooleanToNullConverter x:Key="BooleanToNullConverter" x:Shared="False"/>
+    <controls:StringToNullConverter x:Key="StringToNullConverter" x:Shared="False"/>
+    <!--<controls:BooleanToNullConverter x:Key="BooleanToNullConverter" x:Shared="False"/>-->
     <local:LabelConverter x:Key="LabelConverter" />
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
-    
+    <conv:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
+
     <ObjectDataProvider
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         x:Key="MyEnumValues"
@@ -276,31 +278,66 @@
 
             <DataTemplate x:Key="StringTemplate">
                 <!--<TextBlock Text="{Binding Schema.Description}" Margin="0,0,0,4" Visibility="{Binding Schema.Description, Converter={StaticResource VisibilityConverter}}" />-->
-                <Border BorderThickness="0,0,0,1"
+                <Grid>
+
+                    <Border BorderThickness="0,0,0,1"
                             Grid.Column="2"
                             Background="White"
                             BorderBrush="Black"
                             HorizontalAlignment="Stretch"
                             SnapsToDevicePixels="True">
-                    <TextBox    
+
+                        <TextBox    
+                            MinWidth="40"
+                            Visibility="{Binding IsChecked, ElementName=ToggleButton, Converter={StaticResource BoolToVisibility}}"
                             x:Name="TextBox"
                             TextAlignment="Left"
                             HorizontalAlignment="Stretch"
                             Text="{Binding Value, Mode=TwoWay}"
                             TextWrapping="Wrap">
-                        <i:Interaction.Triggers>
-                            <!--<i:EventTrigger EventName="MouseLeftButtonDown">
-                                    <beh:InvokeCommandAction Command="{x:Static controls:Commands.FooCommand}" />
-                                </i:EventTrigger>-->
-                            <i:EventTrigger EventName="LostFocus">
-                                <beh:InvokeCommandAction PassEventArgsToCommand="True" 
-                                                       EventArgsConverter="{StaticResource EventArgsConverter}" 
-                                                           EventArgsConverterParameter="{Binding }" 
-                                                           Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                </Border>
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="LostFocus">
+                                    <beh:InvokeCommandAction PassEventArgsToCommand="True" 
+                                                             EventArgsConverter="{StaticResource EventArgsConverter}" 
+                                                             EventArgsConverterParameter="{Binding }" 
+                                                             Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                        </TextBox>
+
+                    </Border>
+
+                    <ToggleButton x:Name="ToggleButton" Height="{Binding ElementName=TextBox, Path=ActualHeight}" 
+                                      Visibility="{Binding IsChecked, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource InvertedBooleanToVisibilityConverter}}" VerticalAlignment="Top">
+                        <ToggleButton.Style>
+                            <Style TargetType="{x:Type ToggleButton}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsChecked" Value="False">
+                                        <Setter Property="Content"  >
+                                            <Setter.Value>
+                                                <Path Stroke="Gray" StrokeThickness="2" Data="{StaticResource Null}"  Stretch="Uniform"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter Property="Content"  >
+                                            <Setter.Value>
+                                                <Path Stroke="Gray" StrokeThickness="2" Data="{StaticResource NotNull}" Stretch="Uniform"/>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ToggleButton.Style>
+                        <ToggleButton.IsChecked>
+                            <Binding Path="Value" Mode="TwoWay" >
+                                <Binding.Converter>
+                                    <StaticResource ResourceKey="StringToNullConverter"></StaticResource>
+                                </Binding.Converter>
+                            </Binding>
+                        </ToggleButton.IsChecked>
+                    </ToggleButton>
+                </Grid>
             </DataTemplate>
 
             <DataTemplate x:Key="ReadOnlyTemplate">
@@ -347,7 +384,7 @@
 
             <DataTemplate x:Key="NumberNullTemplate">
                 <WrapPanel>
-                    <d:DoubleUpDown x:Name="DoubleUpDown" Margin="0,0,0,8" Value="{Binding Value, Mode=TwoWay}" 
+                    <d:DoubleUpDown x:Name="DoubleUpDown" Margin="0,0,0,0" Value="{Binding Value, Mode=TwoWay}"                                     
                                     Visibility="{Binding ElementName=ToggleButton, Path=IsChecked,Converter={StaticResource BoolToVisibility}}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="ValueChanged">
@@ -390,6 +427,8 @@
                 </WrapPanel>
             </DataTemplate>
 
+
+
             <DataTemplate x:Key="IntegerTemplate">
                 <WrapPanel>
                     <xctk:IntegerUpDown Margin="0,0,0,8" TextAlignment="Left" HorizontalAlignment="Stretch"  x:Name="IntegerUpDown"               
@@ -431,7 +470,7 @@
                     </i:Interaction.Triggers>
                 </TextBox>
             </DataTemplate>
-            <DataTemplate x:Key="IntegerNullTemplate">
+            <!--<DataTemplate x:Key="IntegerNullTemplate">
                 <WrapPanel>
                     <xctk:IntegerUpDown Margin="0,0,0,8" TextAlignment="Left" HorizontalAlignment="Stretch"                                   
                                         Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -448,7 +487,7 @@
                         </ToggleButton.IsChecked>
                     </ToggleButton>
                 </WrapPanel>
-            </DataTemplate>
+            </DataTemplate>-->
             <DataTemplate x:Key="EnumTemplate">
                 <ComboBox >
                     <ComboBox.DataContext>

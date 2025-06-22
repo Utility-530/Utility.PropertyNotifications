@@ -3,6 +3,7 @@ using Humanizer;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using ReactiveUI;
+using SourceChord.FluentWPF;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -292,7 +293,7 @@ namespace Utility.WPF.Controls.Objects
                     {
                         return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
                     }
-   
+
                     if (property.Name.Contains(MetadataConverter.IsReadonly))
                     {
                         return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
@@ -313,6 +314,10 @@ namespace Utility.WPF.Controls.Objects
                     if (propertyName.Contains($"{MetadataConverter.Type}:Double"))
                     {
                         return frameworkElement.FindResource("NumberNullTemplate") as DataTemplate;
+                    }
+                    if (propertyName.Contains($"{MetadataConverter.Type}:String"))
+                    {
+                        return frameworkElement.FindResource("StringTemplate") as DataTemplate;
                     }
                     if (propertyName.Contains(MetadataConverter.IsEnum))
                     {
@@ -668,44 +673,12 @@ namespace Utility.WPF.Controls.Objects
         }
     }
 
-
-    internal class BooleanToNullConverter : IMultiValueConverter
-    {
-        //public Dictionary<string[], object[]> _value = new();
-        private object jsonSchema;
-        private object value;
-
-        public object Convert(object[] value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value.Length == 2)
-            {
-                jsonSchema = value[1];
-                if (value[0] != null)
-                    this.value = value[0];
-                return value[0] != null;
-
-            }
-            return DependencyProperty.UnsetValue;
-        }
-
-        public object[] ConvertBack(object value, Type[] targetType, object parameter, CultureInfo culture)
-        {
-            if (value is false)
-            {
-                return new[] { null, jsonSchema };
-            }
-            //return _value[targetType[0]];
-            return new object[] { 1.0, jsonSchema };
-
-        }
-    }
-
     internal class LabelConverter : IValueConverter
     {
         private double? value;
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value is string str ?  JsonControl.RemoveMetaData(str).Humanize(LetterCasing.Title) : throw new Exception("sdf 332221``!");
+            return value is string str ? JsonControl.RemoveMetaData(str).Humanize(LetterCasing.Title) : throw new Exception("sdf 332221``!");
         }
 
         public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -713,20 +686,40 @@ namespace Utility.WPF.Controls.Objects
             return this.value ??= 0.0;
         }
     }
-    internal class DoubleToNullConverter : IValueConverter
+    internal class DoubleToNullConverter : ToNullConverter<double>
     {
-        private double? value;
-        private bool isNotNull;
+    }
+
+    internal class StringToNullConverter : ToNullConverter<string>
+    {
+        protected override string create()
+        {
+            return string.Empty;
+        }
+    }
+
+    internal class ToNullConverter<T> : IValueConverter
+    {
+        private T? value;
+        private bool? isNotNull;
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (isNotNull)
+            if (isNotNull.HasValue == false)
             {
-                this.value = (double?)value;
+                return value != default;
             }
             else
             {
+                if (isNotNull.Value)
+                {
+                    this.value = (T?)value;
+                }
+                else
+                {
+                }
+                return isNotNull;
             }
-            return isNotNull;
+
         }
 
         public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
@@ -734,11 +727,16 @@ namespace Utility.WPF.Controls.Objects
             if (value is false)
             {
                 isNotNull = false;
-                this.value = null;
+                this.value = default;
                 return null;
             }
             isNotNull = true;
-            return this.value ??= 0.0;
+            return this.value ??= create();
+        }
+
+        protected virtual T create()
+        {
+            return default;
         }
     }
 

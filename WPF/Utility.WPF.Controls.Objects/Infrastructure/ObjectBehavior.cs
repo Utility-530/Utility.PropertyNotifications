@@ -5,6 +5,7 @@ using Pather.CSharp;
 using Pather.CSharp.PathElements;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reactive.Subjects;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -13,11 +14,13 @@ namespace Utility.WPF.Controls.Objects
 {
     public class ObjectBehavior : Behavior<JsonControl>
     {
-        ReplaySubject<JsonControl> _playSubject = new(1);
+        private ResolverFactory.Resolver resolver;
+        private ReplaySubject<JsonControl> _playSubject = new(1);
         public static readonly DependencyProperty ObjectProperty = DependencyProperty.Register("Object", typeof(object), typeof(ObjectBehavior), new PropertyMetadata(null, changed));
         public static readonly DependencyProperty JsonSerializerProperty = DependencyProperty.Register("JsonSerializer", typeof(JsonSerializer), typeof(ObjectBehavior), new PropertyMetadata());
+        public static readonly DependencyProperty RaisePropertyChangedProperty = DependencyProperty.Register("RaisePropertyChanged", typeof(bool), typeof(ObjectBehavior), new PropertyMetadata());
 
-        private ResolverFactory.Resolver resolver;
+
 
         static ObjectBehavior()
         {
@@ -67,9 +70,15 @@ namespace Utility.WPF.Controls.Objects
             set { SetValue(ObjectProperty, value); }
         }
 
+        public bool RaisePropertyChanged
+        {
+            get { return (bool)GetValue(RaisePropertyChangedProperty); }
+            set { SetValue(RaisePropertyChangedProperty, value); }
+        }
+
         protected void AssociatedObject_ValueChanged(object sender, ValueChangedRoutedEventArgs e)
         {
-            resolver ??= ResolverFactory.Create();
+            resolver ??= ResolverFactory.Create(RaisePropertyChanged);
             var _value = value();
             string pattern = @"\[\'";
             string result = Regex.Replace(e.JPropertyNewValue.JProperty.Path, pattern, "");
@@ -109,22 +118,22 @@ namespace Utility.WPF.Controls.Objects
 
     public class ResolverFactory
     {
-        public static Resolver Create()
+        public static Resolver Create(bool raisePropertyChange = false)
         {
-            return new Resolver();
+            return new Resolver(raisePropertyChange);
         }
 
         public class Resolver : IResolver
         {
             private readonly PathElementSplitter pathSplitter;
 
-            public Resolver()
+            public Resolver(bool raisePropertyChange = false)
             {
                 pathSplitter = new PathElementSplitter
                 {
                     PathElementFactories = new List<IPathElementFactory>
                     {
-                        new PropertyFactory(),
+                        raisePropertyChange? new PropertyChangeFactory(): new PropertyFactory(),
                         new EnumerableFactory(),
                         new ValuesEnumerableFactory(),
                         new DictionaryFactory(),
@@ -141,6 +150,34 @@ namespace Utility.WPF.Controls.Objects
             {
                 pathSplitter.Modify(target, path, value);
             }
+        }
+    }
+
+    public class PropertyChangeFactory : PropertyFactory
+    {
+        public override IPathElement Create(string path, out string newPath)
+        {
+            string property = Regex.Matches(path, @"^\w+")[0].Value;
+            newPath = path.Remove(0, property.Length);
+            return new RaiseProperty(property);
+        }
+
+        public class RaiseProperty : Property
+        {
+            public RaiseProperty(string propertyName) : base(propertyName)
+            {
+            }
+
+            public override void Apply(object target, object value)
+            {
+                var p = get(target);
+                (p ?? throw new ArgumentException($"The property {property} could not be found.")).SetValue(target, value);
+                if (target is INotifyPropertyChanged c)
+                {
+                    Utility.PropertyNotifications.PropertyChangedExtensions.RaisePropertyChanged(c, p.Name);
+                }
+            }
+
         }
     }
 }

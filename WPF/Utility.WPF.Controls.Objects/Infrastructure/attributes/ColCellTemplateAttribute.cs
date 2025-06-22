@@ -22,12 +22,12 @@ namespace AutoGenListView.Attributes
 		public string  FontWeight { get; set; }
 		public string  Foreground { get; set; }
 		public string  Background { get; set; }
-		public string  HorzAlign  { get; set; }
-		public string  VertAlign  { get; set; }
+		public string  HorzAlign  { get; set; } 
+		public string  VertAlign  { get; set; } 
 
-		// Passing null (or invalid) values for any of the parameters will cause the attribute to 
-		// use whatever the default values are.
-		public ColCellTemplateAttribute(string name, string size, string style, string weight, string fore, string back, string horz, string vert)
+        // Passing null (or invalid) values for any of the parameters will cause the attribute to 
+        // use whatever the default values are.
+        public ColCellTemplateAttribute(string name, string size, string style, string weight, string fore, string back, string horz, string vert)
 		{
 			this.FontName   = (!string.IsNullOrEmpty(name))   ? this.Validate(FieldID.Name,       name  ) : string.Format(_DEFAULT_FORMAT_, "FontFamily");
 			this.FontSize   = (!string.IsNullOrEmpty(size))   ? this.Validate(FieldID.Size,       size  ) : string.Format(_DEFAULT_FORMAT_, "FontSize");
@@ -35,7 +35,7 @@ namespace AutoGenListView.Attributes
 			this.FontWeight = (!string.IsNullOrEmpty(weight)) ? this.Validate(FieldID.Weight,     weight) : string.Format(_DEFAULT_FORMAT_, "FontWeight");
 			this.Foreground = (!string.IsNullOrEmpty(fore))   ? this.Validate(FieldID.Foreground, fore  ) : string.Format(_DEFAULT_FORMAT_, "Foreground");
 			this.Background = (!string.IsNullOrEmpty(back))   ? this.Validate(FieldID.Background, back  ) : string.Format(_DEFAULT_FORMAT_, "Background");
-			this.HorzAlign  = (!string.IsNullOrEmpty(horz))   ? this.Validate(FieldID.HorzAlign,  horz  ) : "Left";
+			this.HorzAlign  = (!string.IsNullOrEmpty(horz))   ? this.Validate(FieldID.HorzAlign,  horz  ) : "Center";
 			this.VertAlign  = (!string.IsNullOrEmpty(vert))   ? this.Validate(FieldID.VertAlign,  vert  ) : "Center";
 		}
 
