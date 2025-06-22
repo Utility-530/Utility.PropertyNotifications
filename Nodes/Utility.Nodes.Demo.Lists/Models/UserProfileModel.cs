@@ -12,13 +12,17 @@ namespace Utility.Nodes.Demo.Lists.Entities
         [PrimaryKey]
         [Attributes.Column(ignore: true)]
         public Guid Id { get; set; }
+
+        [Attributes.Column(width: 120)]
         public string? Group { get; set; }
+        [Attributes.Column(width: 120)]
         public string? Class { get; set; }
+        [Attributes.Column(width: 120)]
         public string? Name { get; set; }
 
-        [Attributes.Column(width:250)]
+        [Attributes.Column(width:120)]
         public string? UserName { get; set; }
-        [Attributes.Column(width: 250)]
+        [Attributes.Column(width: 120)]
         public string? Password { get; set; }
         public string? OtherUserName { get; set; }
         public string? Pin { get; set; }

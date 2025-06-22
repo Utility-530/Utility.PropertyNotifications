@@ -48,18 +48,14 @@ namespace Utility.Conversions.Json.Newtonsoft
                 {
                     continue;
                 }
-                if(prop.CanRead ==false)
+                if (prop.CanRead == false)
                 {
                     continue;
                 }
                 var propName = prop.Name;
                 var propValue = prop.GetValue(value);
                 stringBuilder.Append(propName);
-                if (propValue == null && prop.PropertyType.IsValueType)
-                {
-                    var _type = Nullable.GetUnderlyingType(prop.PropertyType);
-                    stringBuilder.AppendLine($"{Type}:{_type.Name}");
-                }
+
                 // Write metadata about whether the property is readonly (no setter or private setter)
                 bool isReadOnly = !prop.CanWrite || prop.SetMethod == null || !prop.SetMethod.IsPublic;
                 if (isReadOnly)
@@ -74,13 +70,18 @@ namespace Utility.Conversions.Json.Newtonsoft
                     serializer.Serialize(writer, propValue);
 
                 }
-                else if(prop.PropertyType.FullName== "System.Windows.Point" || prop.PropertyType.FullName == "System.Windows.Media.Color")
+                else if (prop.PropertyType.FullName == "System.Windows.Point" || prop.PropertyType.FullName == "System.Windows.Media.Color")
                 {
                     writer.WritePropertyName(stringBuilder.ToString());
                     serializer.Serialize(writer, propValue);
                 }
                 else if (prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
                 {
+                    if (propValue == null)
+                    {
+                        var _type = Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType;
+                        stringBuilder.AppendLine($"{Type}:{_type.Name}");
+                    }
                     writer.WritePropertyName(stringBuilder.ToString());
                     writer.WriteValue(propValue);
                 }

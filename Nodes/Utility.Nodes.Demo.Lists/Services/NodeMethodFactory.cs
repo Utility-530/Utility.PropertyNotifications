@@ -110,6 +110,12 @@ namespace Utility.Nodes.Demo.Lists.Services
                         {
                             Locator.Current.GetService<FilterService>().OnNext(new Filter(a));
                         });
+                        stringModel
+                        .WithChangesTo(a => a.Value, includeNulls: false)
+                        .Subscribe(a =>
+                        {
+                            Locator.Current.GetService<FilterService>().OnNext(new Filter(a));
+                        });
                     }
 
                     if (addition.Data is ListModel { } listModel)

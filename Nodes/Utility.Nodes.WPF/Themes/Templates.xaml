@@ -142,7 +142,7 @@
     <DataTemplate DataType="{x:Type inf:EditModel}">
         <obj:JsonControl Width="500" Height="400">
             <i:Interaction.Behaviors>
-                <obj:ObjectBehavior Object="{Binding Value, Mode=OneWay}"/>
+                <obj:ObjectBehavior Object="{Binding Value, Mode=OneWay}" RaisePropertyChanged="True"/>
             </i:Interaction.Behaviors>
         </obj:JsonControl>
     </DataTemplate>  

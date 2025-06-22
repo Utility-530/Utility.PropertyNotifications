@@ -55,6 +55,8 @@ namespace Utility.WPF.Attached
             DependencyObject d,
             DependencyPropertyChangedEventArgs e)
         {
+            if (e.NewValue == null)
+                return;
             InteractivityTemplate dt = (InteractivityTemplate)e.NewValue;
 #if (!SILVERLIGHT)
             dt.Seal();
