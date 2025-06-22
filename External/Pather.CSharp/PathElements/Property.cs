@@ -9,30 +9,26 @@ namespace Pather.CSharp.PathElements
 {
     public class Property : Base
     {
-        private string property;
+        protected string property;
 
-        public Property(string property)
+        public Property(string propertyName)
         {
-            this.property = property;
+            this.property = propertyName;
         }
 
         public override object Apply(object target)
         {
-            PropertyInfo p = target.GetType().GetRuntimeProperty(property);
-            if (p == null)
-                throw new ArgumentException($"The property {property} could not be found.");
-
-            var result = p.GetValue(target);
-            return result;
+            return get(target)?.GetValue(target) ?? throw new ArgumentException($"The property {property} could not be found.");
         }
 
         public override void Apply(object target, object value)
         {
-            PropertyInfo p = target.GetType().GetRuntimeProperty(property);
-            if (p == null)
-                throw new ArgumentException($"The property {property} could not be found.");
+            (get(target) ?? throw new ArgumentException($"The property {property} could not be found.")).SetValue(target, value);
+        }
 
-            p.SetValue(target, value);
+        protected PropertyInfo get(object target)
+        {
+            return target.GetType().GetRuntimeProperty(property);
         }
     }
 }

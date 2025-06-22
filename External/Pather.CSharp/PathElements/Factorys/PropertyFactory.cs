@@ -8,7 +8,7 @@ namespace Pather.CSharp.PathElements
 {
     public class PropertyFactory : IPathElementFactory
     {
-        public IPathElement Create(string path, out string newPath)
+        public virtual IPathElement Create(string path, out string newPath)
         {
             string property = Regex.Matches(path, @"^\w+")[0].Value;
             newPath = path.Remove(0, property.Length);
