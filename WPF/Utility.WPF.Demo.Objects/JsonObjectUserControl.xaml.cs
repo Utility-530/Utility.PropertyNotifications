@@ -29,6 +29,10 @@ namespace Utility.WPF.Demo.Objects
             JsonConvert.DefaultSettings = () => Combined;
             InitializeComponent();
             this.Resources.Add("exceptions", new List<Exception> { new ExceptionOne(), new ExceptionTwo(), new Exception() });
+            (this.Resources["AuctionItem"] as AuctionItem).WithChangesTo(a => a.SubTitle).Subscribe(c =>
+            {
+
+            });
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -84,7 +88,7 @@ namespace Utility.WPF.Demo.Objects
         }
     }
 
-    [Model]
+    [Model("f65a5bcd-f725-4890-860d-ecd13ca6babb")]
     public class AuctionItem : NotifyPropertyClass, IId<Guid>
     {
         private string? indexPath;
@@ -111,7 +115,8 @@ namespace Utility.WPF.Demo.Objects
 
         [JsonIgnore]
         public string? Title { get => title; set => RaisePropertyChanged(ref title, value); }
-        //public string? SubTitle { get => subTitle; set => RaisePropertyChanged(ref subTitle, value); }
+
+        public string? SubTitle { get => subTitle; set => RaisePropertyChanged(ref subTitle, value); }
         //public string? DescriptionOne { get => descriptionOne; set => RaisePropertyChanged(ref descriptionOne, value); }
         //public string? DescriptionTwo { get => descriptionTwo; set => RaisePropertyChanged(ref descriptionTwo, value); }
         //public string? ImagePathOne { get => imagePathOne; set => RaisePropertyChanged(ref imagePathOne, value); }

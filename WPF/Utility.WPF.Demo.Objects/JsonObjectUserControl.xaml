@@ -13,6 +13,7 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
+    
     <UserControl.Resources>
         <sys:Exception x:Key="exception" />
         <local:ExceptionOne x:Key="ExceptionOne" ></local:ExceptionOne>
@@ -39,6 +40,7 @@
         <view:ObjectToTokenConverter x:Key="ObjectToTokenConverter"/>
 
     </UserControl.Resources>
+    
     <DockPanel Name="DockPanel" Visibility="Visible">
         <StackPanel DockPanel.Dock="Top">
 
@@ -55,7 +57,7 @@
             <UniformGrid>
                 <view:JsonControl>
                     <i:Interaction.Behaviors>
-                        <view:ObjectBehavior Object="{StaticResource AuctionItem}" />
+                        <view:ObjectBehavior Object="{StaticResource AuctionItem}" RaisePropertyChanged="True"/>
                     </i:Interaction.Behaviors>
                 </view:JsonControl>
                 <view:JsonControl Object="{Binding Source={StaticResource Characters}, Converter={StaticResource ObjectToTokenConverter}}" />
@@ -75,7 +77,7 @@
                 </DockPanel>
                 <Grid>
                     <Grid.Resources>
-                        <!--DataTemplate for Published Date column defined in Grid.Resources.  PublishDate is a property on the Items-->Source of type DateTime
+                        <!--DataTemplate for Published Date column defined in Grid.Resources.  PublishDate is a property on the ItemsSource of type DateTime-->
                         <DataTemplate x:Key="DateTemplate">
                             <view:JsonControl Object="{Binding Converter={StaticResource ObjectToTokenConverter}}" />
                         </DataTemplate>
