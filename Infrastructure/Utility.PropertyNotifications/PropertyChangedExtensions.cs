@@ -17,17 +17,18 @@ namespace Utility.PropertyNotifications
 
         public static void RaisePropertyChanged<T, P>(this T sender, Expression<Func<T, P>> propertyExpression) where T : INotifyPropertyChanged
         {
-            Raise(typeof(T), sender, (propertyExpression.Body as MemberExpression).Member.Name);
+            Raise(sender, (propertyExpression.Body as MemberExpression).Member.Name, typeof(T));
         }
 
-        public static void RaisePropertyChanged(this INotifyPropertyChanged sender, [CallerMemberName] string prop = null)
+        public static void RaisePropertyChanged(this INotifyPropertyChanged sender, [CallerMemberName] string? prop = null)
         {
-            Raise(sender.GetType(), sender, prop);
+            Raise(sender, prop);
         }
 
-        private static void Raise(Type targetType, INotifyPropertyChanged sender, string propName, bool cache = true)
+        private static void Raise(INotifyPropertyChanged sender, string propName, Type? targetType = null, bool cache = true)
         {
             PropertyChangedEventHandler? handler = null;
+            targetType ??= sender.GetType();
             if (cache == false)
                 handler = ((PropertyChangedEventHandler?)field(targetType).GetValue(sender));
             else
