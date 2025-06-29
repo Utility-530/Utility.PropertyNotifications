@@ -210,12 +210,11 @@
         <TextBlock Text="{Binding Exception.Message}" Foreground="{c:Red}" MinHeight="25" MinWidth="180" Background="GhostWhite"/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type inf:ListModel}">
+    <DataTemplate DataType="{x:Type inf:ListModel}">    
         <list:CustomSelector
+            Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
             SelectedItem="{Binding Value, Mode=TwoWay}"
-            x:Name="CustomSelector"
-            Height="500"
-            Width="1500"
+            x:Name="CustomSelector"                
             ItemsWidth="300" ItemsHeight="500"
             IsGrid="True"
             RemoveCommand="{markup:Command Remove}"
@@ -228,7 +227,7 @@
                     <beh:SetterAction PropertyName="Add" TargetObject="{Binding }" Converter="{StaticResource FinishEditConverter}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>           
-        </list:CustomSelector>
+        </list:CustomSelector>      
     </DataTemplate>
 
 
@@ -469,9 +468,5 @@
         
         </Grid>
     </DataTemplate>
-
-    <ItemsPanelTemplate x:Key="Stack">
-        <StackPanel></StackPanel>
-    </ItemsPanelTemplate>
 
 </ResourceDictionary>
