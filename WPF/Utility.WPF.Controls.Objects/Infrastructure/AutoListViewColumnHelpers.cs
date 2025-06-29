@@ -1,34 +1,35 @@
-﻿using System;
-using System.Linq;
-using System.Windows.Controls;
-using System.Windows;
-using System.Globalization;
-using System.Reflection;
-using System.Windows.Data;
-using System.Windows.Media;
-using AutoGenListView.Attributes;
-using System.Windows.Shapes;
-using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
+﻿using AutoGenListView.Attributes;
 using Humanizer;
+using Itenso.Windows.Controls.ListViewLayout;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Reflection;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shapes;
 using Utility.Helpers.Reflection;
 using Utility.Structs;
 using ColumnAttribute = Utility.Attributes.ColumnAttribute;
-using Itenso.Windows.Controls.ListViewLayout;
 
 
 namespace Utility.WPF.Controls.Objects
 {
     public static class AutoListViewColumnHelpers
     {
-        public static IEnumerable<GridViewColumn> CreateColumns2(ItemsControl lv, Type? type = null)
+        public static IEnumerable<GridViewColumn> CreateColumns2(ItemsControl lv, Type type)
         {
-            Type dataType = type ?? lv.ItemsSource.GetType().GetMethod("get_Item").ReturnType;
-            // create the gridview
+            //Type dataType = type ?? lv.ItemsSource.GetType().GetMethod("get_Item").ReturnType;
+            //// create the gridview
 
-            var columns = new List<GridViewColumn>();
+            //var columns = new List<GridViewColumn>();
 
-            PropertyInfo[] properties = [.. dataType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)];
+            PropertyInfo[] properties = [.. type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy)];
 
             //dataType.GetProperties()
             //            .Where(x => x.GetCustomAttributes(true).FirstOrDefault(y => y is ColVisibleAttribute) != null)
@@ -50,7 +51,7 @@ namespace Utility.WPF.Controls.Objects
                 // Otherwise use the property's actual name
                 //string displayName = info.TryGetAttribute<DisplayNameAttribute>(out var dna) ? dna!.DisplayName : info.Name.Humanize(LetterCasing.Title);
 
-                DataTemplate cellTemplate = BuildCellTemplateFromAttribute(info);
+                DataTemplate cellTemplate = createCellTemplate(info.Name, Brushes.Orchid) ?? BuildCellTemplateFromAttribute(info);
                 //    ?? Utility.WPF.Factorys.TemplateGenerator.CreateDataTemplate(() =>
                 //{
                 //    var x = new ContentControl() {  };
@@ -235,6 +236,48 @@ namespace Utility.WPF.Controls.Objects
                 });
             }
             return cellTemplate;
+        }
+
+        private static DataTemplate createCellTemplate(string bindingPath, Brush hoverColor)
+        {
+            var template = new DataTemplate();
+
+            var borderFactory = new FrameworkElementFactory(typeof(Border));
+    
+
+            // Define the style for hover effect
+            var borderStyle = new Style(typeof(Border));
+            borderStyle.Setters.Add(new Setter(Border.BackgroundProperty, Brushes.Transparent));
+
+            var trigger = new Trigger
+            {
+                Property = UIElement.IsMouseOverProperty,
+                Value = true
+            };
+            trigger.Setters.Add(new Setter(Border.BackgroundProperty, hoverColor));
+            borderStyle.Triggers.Add(trigger);
+
+            borderFactory.SetValue(Border.StyleProperty, borderStyle);
+
+            // TextBlock inside the border
+            var textBlockFactory = new FrameworkElementFactory(typeof(TextBlock));
+            textBlockFactory.SetBinding(TextBlock.TextProperty, new Binding(bindingPath));
+            textBlockFactory.SetValue(TextBlock.FontSizeProperty, 14.0);
+            //textBlockFactory.SetValue(TextBlock.PaddingProperty, new Thickness(5));
+            textBlockFactory.AddHandler(TextBlock.MouseLeftButtonDownEvent, new MouseButtonEventHandler(Cell_MouseLeftButtonDown));
+
+            // Nest TextBlock in Border
+            borderFactory.AppendChild(textBlockFactory);
+
+            template.VisualTree = borderFactory;
+            return template;
+            static void Cell_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+            {
+                if (sender is TextBlock tb && !string.IsNullOrEmpty(tb.Text))
+                {
+                    Clipboard.SetText(tb.Text);
+                }
+            }
         }
 
         /// <summary>
