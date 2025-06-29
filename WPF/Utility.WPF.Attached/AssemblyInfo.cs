@@ -11,3 +11,4 @@ using System.Windows.Markup;
 )]
 [assembly: XmlnsPrefix("http://schemas.utility.com/attached", "att")]
 [assembly: XmlnsDefinition("http://schemas.utility.com/attached", "Utility.WPF.Attached")]
+[assembly: XmlnsDefinition("http://schemas.utility.com/attached", "SoftwareArchitects.Windows.Controls")]

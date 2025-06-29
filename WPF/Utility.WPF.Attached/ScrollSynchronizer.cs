@@ -121,7 +121,7 @@ namespace SoftwareArchitects.Windows.Controls
             if (e.VerticalChange != 0 || e.HorizontalChange != 0)
             {
                 if (sender is ScrollViewer scrollViewer)
-                    Scroll(scrollViewer);
+                    Scroll(scrollViewer, e);
             }
         }
 
@@ -129,7 +129,7 @@ namespace SoftwareArchitects.Windows.Controls
         /// Scrolls all scroll viewers of a group to the position of the selected scroll viewer.
         /// </summary>
         /// <param name="changedScrollViewer">Scroll viewer, that specifies the current position of the group.</param>
-        private static void Scroll(ScrollViewer changedScrollViewer)
+        private static void Scroll(ScrollViewer changedScrollViewer, ScrollChangedEventArgs e)
         {
             var group = scrollViewers[changedScrollViewer];
             verticalScrollOffsets[group] = changedScrollViewer.VerticalOffset;
@@ -144,7 +144,8 @@ namespace SoftwareArchitects.Windows.Controls
 
                 if (Math.Abs(scrollViewer.Key.HorizontalOffset - changedScrollViewer.HorizontalOffset) > 0.001)
                 {
-                    scrollViewer.Key.ScrollToHorizontalOffset(changedScrollViewer.HorizontalOffset);
+                    //scrollViewer.Key.Width = e.ViewportWidth;
+                   scrollViewer.Key.ScrollToHorizontalOffset(changedScrollViewer.HorizontalOffset);
                 }
             }
         }
