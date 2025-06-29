@@ -32,7 +32,7 @@ namespace Utility.Nodes.Demo.Lists.Services
 
                          Locator.Current.GetService<CollectionCreationService>().OnNext(new TypeValue(type));
 
-                         var x = new TreeViewModel(transformMethod(type), att.Guid);
+                         var x = new TreeViewModel(transformMethod(type), att.Guid, type);
                          container.Selected = x;
                          container.Children.Add(x);
                      }
@@ -57,7 +57,7 @@ namespace Utility.Nodes.Demo.Lists.Services
                 return type.
                     TryGetAttribute<ModelAttribute>(out var att) ?
                     att.TransformMethod :
-                    nameof(NodeMethodFactory.BuildDefaultRoot);
+                    nameof(NodeMethodFactory.BuildUserProfileRoot);
             }
         }
 

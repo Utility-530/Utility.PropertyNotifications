@@ -1,5 +1,6 @@
 ﻿using Nito.Disposables.Internals;
 using SQLite;
+using System.IO;
 using System.Text.Json.Serialization;
 using Utility.Attributes;
 using Utility.Interfaces.Generic.Data;
@@ -34,19 +35,21 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
         [Attributes.Column(ignore: true)]
         [JsonIgnore]
         public Guid Id { get; set; }
-        public string? IndexPath { get => indexPath; set => RaisePropertyChanged(ref indexPath, value); }
-        public string? Title { get => title; set => RaisePropertyChanged(ref title, value); }
-        public string? SubTitle { get => subTitle; set => RaisePropertyChanged(ref subTitle, value); }
-        public string? DescriptionOne { get => descriptionOne; set => RaisePropertyChanged(ref descriptionOne, value); }
-        public string? DescriptionTwo { get => descriptionTwo; set => RaisePropertyChanged(ref descriptionTwo, value); }
-        public string? ImagePathOne { get => imagePathOne; set => RaisePropertyChanged(ref imagePathOne, value); }
-        public string? ImagePathTwo { get => imagePathTwo; set => RaisePropertyChanged(ref imagePathTwo, value); }
-        public string? DisclaimerOne { get => disclaimerOne; set => RaisePropertyChanged(ref disclaimerOne, value); }
-        public double? SleeveLengthInCentimetres { get => sleeveLengthInCentimetres; set => RaisePropertyChanged(ref lengthInCentimetres, value); }
-        public double? LengthInCentimetres { get => lengthInCentimetres; set => RaisePropertyChanged(ref lengthInCentimetres, value); }
-        public double? PitToPitWidthInCentimetres { get => pitToPitWidthInCentimetres; set => RaisePropertyChanged(ref pitToPitWidthInCentimetres, value); }
-        public double? ShoulderWidthInCentimetres { get => shoulderWidthInCentimetres; set => RaisePropertyChanged(ref shoulderWidthInCentimetres, value); }
-        public bool HasShipping { get => hasShipping; set => RaisePropertyChanged(ref hasShipping, value); }
+        public string? IndexPath { get; set; }
+        public string? Title { get; set; }
+        public string? SubTitle { get; set; }
+        public string? DescriptionOne { get; set; }
+        public string? DescriptionTwo { get; set; }
+        public string? ImagePathOne { get; set; }
+        public string? ImagePathTwo { get; set; }
+        public string? DisclaimerOne { get; set; }
+        public double? SleeveLengthInCentimetres { get; set; }
+        public double? LengthInCentimetres { get; set; }
+        public double? PitToPitWidthInCentimetres { get; set; }
+        public double? ShoulderWidthInCentimetres { get; set; }
+        public bool HasShipping { get; set; }
+
+        public DateTime AddDate { get; set; }
 
         [Attributes.Column(ignore: true)]
         [JsonIgnore]
@@ -87,5 +90,7 @@ namespace Utility.Nodes.Demo.Lists.Infrastructure
             clone.Id = Guid.NewGuid();
             return clone;
         }
+
+        public string Copy() => File.ReadAllText(IndexPath);
     }
 }

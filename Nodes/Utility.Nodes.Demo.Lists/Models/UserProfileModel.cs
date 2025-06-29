@@ -7,7 +7,7 @@ using Utility.PropertyNotifications;
 namespace Utility.Nodes.Demo.Lists.Entities
 {
     [Model("d17c5de2-7836-4c02-958c-eb1de974f474", nameof(Services.NodeMethodFactory.BuildUserProfileRoot))]
-    public class UserProfileModel : NotifyPropertyClass, IId<Guid>, IComparable, ICopy
+    public class UserProfileModel : NotifyPropertyClass, IId<Guid>, IIdSet<Guid>, IComparable, ICopy
     {
         [PrimaryKey]
         [Attributes.Column(ignore: true)]

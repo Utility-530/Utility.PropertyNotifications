@@ -4,6 +4,9 @@ using Splat;
 using System;
 using System.Reflection;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Utility.Attributes;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Helpers.Reflection;
@@ -17,6 +20,7 @@ using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Filters;
 using Utility.Repos;
 using Utility.Services;
+using Utility.WPF.Controls;
 using Utility.WPF.Templates;
 
 namespace Utility.Nodes.Demo.Lists
@@ -29,11 +33,12 @@ namespace Utility.Nodes.Demo.Lists
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            showSplashscreen();
             SQLitePCL.Batteries.Init();
 
             Locator.CurrentMutable.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
             Locator.CurrentMutable.RegisterLazySingleton<INodeSource>(() => new NodeEngine());
-  
+
             Locator.CurrentMutable.RegisterConstant<IExpander>(WPF.Expander.Instance);
             //Locator.CurrentMutable.RegisterConstant<IContext>(Globals);
             Locator.CurrentMutable.RegisterLazySingleton<MethodCache>(() => new MethodCache());
@@ -65,14 +70,28 @@ namespace Utility.Nodes.Demo.Lists
             //ControlsService _service = ControlsService.Instance;
             //ComboService comboService = new ();
             //Utility.Models.SchemaStore.Instance.Add(typeof(EbayModel), SchemaFactory.EbaySchema);
-            var window = new Window() { Content = Locator.Current.GetService<ContainerViewModel>() };
 
-            window.Show();
 
             base.OnStartup(e);
-
         }
 
+        private static void showSplashscreen()
+        {
+            BitmapImage bmi = new BitmapImage(new Uri("pack://application:,,,/Assets/shuttle.png"));
+            var x = new Splashscreen()
+            {
+                Content = new Image { Source = bmi, Stretch = Stretch.UniformToFill }
+            };
+            var sswindow = new Window();
+            x.Finished += (s, e) =>
+            {
+                var window = new Window() { Content = Locator.Current.GetService<ContainerViewModel>() };
+                sswindow.Close();
+                window.Show();
+            };
+            sswindow.Content = x;
+            sswindow.Show();
+        }
     }
 
     public class ModelTypesFactory : IEnumerableFactory<Type>
@@ -96,9 +115,17 @@ namespace Utility.Nodes.Demo.Lists
         {
             if (config is Type type)
             {
+                if (type.GetConstructors().SingleOrDefault(a => a.TryGetAttribute<FactoryAttribute>(out var x)) is { } x)
+                {
+                    return (IId<Guid>)x.Invoke(new[] {default(object)});
+                }
                 if (type == typeof(UserProfileModel))
                 {
-                    return (IId<Guid>)new UserProfileModel() { Id = Guid.NewGuid(), AddDate = DateTime.Now };
+                    return new UserProfileModel() { Id = Guid.NewGuid(), AddDate = DateTime.Now };
+                }
+                if (type == typeof(EbayModel))
+                {
+                    return new EbayModel { Id = Guid.NewGuid(), AddDate = DateTime.Now };
                 }
                 if (Activator.CreateInstance(type) is IId<Guid> iid)
                 {

@@ -9,6 +9,10 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Assets\shuttle.png" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\..\Conversions\Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Attributes\Utility.Attributes.csproj" />
@@ -27,5 +31,9 @@
 	  <PackageReference Include="Dragablz" Version="0.0.3.234" />
 	  <PackageReference Include="MaterialDesignThemes" Version="5.2.2-ci998" />
 	  <PackageReference Include="RazorLight" Version="2.3.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Assets\shuttle.png" />
 	</ItemGroup>
 </Project>

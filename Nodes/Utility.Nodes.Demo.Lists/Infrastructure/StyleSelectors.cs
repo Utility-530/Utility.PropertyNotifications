@@ -13,11 +13,11 @@ namespace Utility.Nodes.Demo.Lists
 
         public override Style SelectStyle(object item, DependencyObject container)
         {
-             var parent = (container as TreeViewItem).FindParent<TreeViewItem>();
+            var parent = (container as TreeViewItem).FindParent<TreeViewItem>();
 
             return item switch
             {
-                IData { Data: ISelectable } => ComboStyle,
+                IData { Data : ISelectable } => ComboStyle,
                 //IData { Data: IRoot } => BreadcrumbRootStyle,
                 //IData { Data: IBreadCrumb } when parent?.Style == BreadcrumbStyle => SelectableStyle,
                 //IData { Data: IBreadCrumb } => BreadcrumbStyle,
