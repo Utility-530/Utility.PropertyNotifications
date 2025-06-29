@@ -1,5 +1,6 @@
 ﻿# nullable enable
 using Humanizer;
+using Microsoft.Xaml.Behaviors;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using ReactiveUI;
@@ -611,6 +612,26 @@ namespace Utility.WPF.Controls.Objects
         }
     }
 
+    public class FocusBehavior : Behavior<TextBox>
+    {
+        public bool Value
+        {
+            get { return (bool)GetValue(ValueProperty); }
+            set { SetValue(ValueProperty, value); }
+        }
+
+        public static readonly DependencyProperty ValueProperty =
+            DependencyProperty.Register("Value", typeof(bool), typeof(FocusBehavior), new PropertyMetadata(changed));
+
+        private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is FocusBehavior b && b.AssociatedObject is { } o && e.NewValue is true)
+            {
+                o.Focus();
+            }
+        }
+    }
+
     public class EnumConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
@@ -684,6 +705,36 @@ namespace Utility.WPF.Controls.Objects
         public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             return this.value ??= 0.0;
+        }
+    }
+
+    internal class OneTimeConverter : IMultiValueConverter
+    {
+        double? value;
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values[0] is double d && values[1] is double d1)
+            {
+
+                if (this.value.HasValue)
+                {
+                }
+                else if (d != 0)
+                {
+                    this.value = d;
+                }
+                else
+                {
+                    return DependencyProperty.UnsetValue;
+                }
+                return this.value.Value * d1;
+            }
+            throw new NotImplementedException();
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
         }
     }
     internal class DoubleToNullConverter : ToNullConverter<double>
@@ -921,7 +972,7 @@ namespace Utility.WPF.Controls.Objects
         {
             try
             {
-                return value;
+                return Guid.Parse(value.ToString());
             }
             catch
             {

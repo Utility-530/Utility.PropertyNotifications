@@ -13,6 +13,7 @@
     xmlns:res="http://schemas.utility.com/resourcedictionary" 
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:att="http://schemas.utility.com/attached" 
+    xmlns:hex="http://hexinnovation.com/math"
     xmlns:ad="http://schemas.utility.com/adorners">
 
     <ResourceDictionary.MergedDictionaries>
@@ -31,8 +32,11 @@
     <controls:StringToNullConverter x:Key="StringToNullConverter" x:Shared="False"/>
     <!--<controls:BooleanToNullConverter x:Key="BooleanToNullConverter" x:Shared="False"/>-->
     <local:LabelConverter x:Key="LabelConverter" />
+    <local:OneTimeConverter x:Key="OneTimeConverter" />
     <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+    <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" Collapse="False"></conv:BooleanToVisibilityConverter>
     <conv:InvertedBooleanToVisibilityConverter x:Key="InvertedBooleanToVisibilityConverter" />
+    <hex:MathConverter x:Key="MathConverter"></hex:MathConverter>
 
     <ObjectDataProvider
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -289,7 +293,8 @@
 
                         <TextBox    
                             MinWidth="40"
-                            Visibility="{Binding IsChecked, ElementName=ToggleButton, Converter={StaticResource BoolToVisibility}}"
+                       
+                            Visibility="{Binding IsChecked, ElementName=ToggleButton, Converter={StaticResource BooleanToVisibilityConverter}}"
                             x:Name="TextBox"
                             TextAlignment="Left"
                             HorizontalAlignment="Stretch"
@@ -302,7 +307,12 @@
                                                              EventArgsConverterParameter="{Binding }" 
                                                              Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
                                 </i:EventTrigger>
+                                
                             </i:Interaction.Triggers>
+                            <i:Interaction.Behaviors>
+                                <local:FocusBehavior Value="{Binding IsChecked, ElementName=ToggleButton}"/>
+                            </i:Interaction.Behaviors>
+                             
                         </TextBox>
 
                     </Border>
@@ -384,16 +394,59 @@
 
             <DataTemplate x:Key="NumberNullTemplate">
                 <WrapPanel>
-                    <d:DoubleUpDown x:Name="DoubleUpDown" Margin="0,0,0,0" Value="{Binding Value, Mode=TwoWay}"                                     
-                                    Visibility="{Binding ElementName=ToggleButton, Path=IsChecked,Converter={StaticResource BoolToVisibility}}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="ValueChanged">
-                                <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource DoubleEventArgsConverter}" 
+
+                    <Grid>
+
+                        <FrameworkElement x:Name="One" >
+                            <FrameworkElement.Style>
+                                <Style TargetType="{x:Type FrameworkElement}">
+                                    <Setter Property="MinHeight" Value="0">
+                         
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding ElementName=ToggleButton, Path=IsChecked}" Value="True">
+                                            <DataTrigger.EnterActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetProperty="MinHeight"
+                                         To="1" Duration="0:0:0.3" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.EnterActions>
+                                            <DataTrigger.ExitActions>
+                                                <BeginStoryboard>
+                                                    <Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetProperty="MinHeight"
+                                         To="0" Duration="0:0:0.3" />
+                                                    </Storyboard>
+                                                </BeginStoryboard>
+                                            </DataTrigger.ExitActions>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </FrameworkElement.Style>                         
+                        </FrameworkElement>
+
+
+                        <StackPanel>
+                 
+                            <d:DoubleUpDown x:Name="DoubleUpDown" Margin="0,0,0,0" Value="{Binding Value, Mode=TwoWay}"             >
+                                <d:DoubleUpDown.Width>
+                                    <MultiBinding Converter="{StaticResource OneTimeConverter}" ConverterParameter="x*y">
+                                        <Binding ElementName="DoubleUpDown" Path="ActualWidth"></Binding>
+                                        <Binding ElementName="One" Path="MinHeight"></Binding>
+                                    </MultiBinding>
+                                </d:DoubleUpDown.Width>
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="ValueChanged">
+                                        <beh:InvokeCommandAction PassEventArgsToCommand="True" EventArgsConverter="{StaticResource DoubleEventArgsConverter}" 
                                                            EventArgsConverterParameter="{Binding }" 
                                                            Command="{Binding ChangeValueCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:JsonControl}}}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </d:DoubleUpDown>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </d:DoubleUpDown>
+                        </StackPanel>                      
+                    </Grid>
                     <ToggleButton x:Name="ToggleButton" Height="{Binding ElementName=DoubleUpDown, Path=ActualHeight}" VerticalAlignment="Top">
                         <ToggleButton.Style>
                             <Style TargetType="{x:Type ToggleButton}">
