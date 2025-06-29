@@ -153,6 +153,9 @@
 		<Compile Update="SpinnerControl.cs">
 			<DependentUpon>SpinnerControl.xaml</DependentUpon>
 		</Compile>
+		<Compile Update="Splashscreen.cs">
+			<DependentUpon>Splashscreen.xaml</DependentUpon>
+		</Compile>
 		<Compile Update="TimeSpanControl.cs">
 			<DependentUpon>TimeSpanControl.xaml</DependentUpon>
 		</Compile>
