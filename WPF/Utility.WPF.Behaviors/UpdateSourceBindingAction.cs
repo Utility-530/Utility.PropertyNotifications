@@ -17,7 +17,7 @@ namespace Utility.WPF.Behaviors
 
         protected override void Invoke(object parameter)
         { 
-            (Source ?? AssociatedObject).GetBindingExpression(Property).UpdateSource();
+            (Source ?? AssociatedObject).GetBindingExpression(Property)?.UpdateSource();
         }
 
     }

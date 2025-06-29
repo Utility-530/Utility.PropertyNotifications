@@ -96,6 +96,8 @@
                 }
             }
 
+            if (convertedValue == DependencyProperty.UnsetValue)
+                return;
             property.SetValue(target, convertedValue);
         }
     }

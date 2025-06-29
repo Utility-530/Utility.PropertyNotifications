@@ -17,7 +17,7 @@ namespace Utility.WPF.Behaviors
                 Command = new Command(() =>
                 {
                     AssociatedObject.Text = Guid.NewGuid().ToString();
-
+                    AssociatedObject.RaiseEvent(new RoutedEventArgs(UIElement.LostFocusEvent, AssociatedObject));
                 })
             };
             var menuItem2 = new MenuItem
