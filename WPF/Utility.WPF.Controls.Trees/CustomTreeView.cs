@@ -8,7 +8,12 @@ namespace Utility.WPF.Controls.Trees
     {
         protected override DependencyObject GetContainerForItemOverride()
         {
-            return new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector, ItemContainerStyle = ItemContainerStyle };
+            
+            return new CustomTreeViewItem() { 
+                ItemContainerStyleSelector = ItemContainerStyleSelector, 
+                ItemContainerStyle = ItemContainerStyle,
+                TreeView = this
+            };
         }
 
 

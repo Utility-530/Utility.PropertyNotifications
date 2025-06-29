@@ -36,7 +36,11 @@ namespace Utility.WPF.Controls.Trees
     {
         protected override DependencyObject GetContainerForItemOverride()
         {
-            return new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector, ItemContainerStyle = CustomHelper.Load<Style>(new Uri($"/{typeof(ComboTreeView).Assembly.GetName().Name};component/Themes/ComboTreeViewItem.xaml", UriKind.RelativeOrAbsolute), "ComboTreeViewItem") };
+            return new CustomTreeViewItem() {
+                ItemContainerStyleSelector = ItemContainerStyleSelector,
+                ItemContainerStyle = CustomHelper.Load<Style>(new Uri($"/{typeof(ComboTreeView).Assembly.GetName().Name};component/Themes/ComboTreeViewItem.xaml", UriKind.RelativeOrAbsolute), "ComboTreeViewItem"),
+                TreeView = this
+            };
         }
     }
 
@@ -106,6 +110,12 @@ namespace Utility.WPF.Controls.Trees
 
         public CustomTreeViewItem()
         {
+
+        }
+
+        private void TreeView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //this.Width = Math.Min(e.NewSize.Width, this.ActualWidth);
         }
 
         private static void OnMouseButtonDown(object sender, MouseButtonEventArgs e)
@@ -120,6 +130,7 @@ namespace Utility.WPF.Controls.Trees
 
         public override void OnApplyTemplate()
         {
+            TreeView.SizeChanged += TreeView_SizeChanged;
             if (this.GetTemplateChild("Accept_Button") is Button button)
                 button.Click += AcceptComboTreeViewItem_Click;
             if (this.GetTemplateChild("Decline_Button") is Button _button)
@@ -269,7 +280,7 @@ namespace Utility.WPF.Controls.Trees
 
         protected override DependencyObject GetContainerForItemOverride()
         {
-            var item = new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector, ItemContainerStyle = ItemContainerStyle };
+            var item = new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector, ItemContainerStyle = ItemContainerStyle, TreeView = this.TreeView };
             item.Selected += (s, e) =>
             {
                 SelectionItem = (s as FrameworkElement).DataContext;
@@ -577,6 +588,10 @@ namespace Utility.WPF.Controls.Trees
             //get { return _cacheValid[(int)CacheBits.HasMouseEnteredItemsHost]; }
             //set { _cacheValid[(int)CacheBits.HasMouseEnteredItemsHost] = value; }
         }
+
+
+
+
 
         //internal TextBox EditableTextBoxSite
         //{

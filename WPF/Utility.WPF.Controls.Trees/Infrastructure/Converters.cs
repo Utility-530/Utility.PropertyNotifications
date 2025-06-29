@@ -3,7 +3,6 @@ using System.Windows;
 //using static Controls.Infrastructure.ItemsPanelFactory;
 using Orientation = Utility.Enums.Orientation;
 using O = System.Windows.Controls.Orientation;
-using A = Utility.Enums.Arrangement;
 using Arrangement = Utility.Enums.Arrangement;
 using System;
 using Utility.WPF.Factorys;
@@ -22,11 +21,22 @@ namespace Utility.WPF.Controls.Trees
         {
             if (values is object[] { } array)
             {
-                if(array.SingleOrDefault(x=>x is string) is { } itemsPanelTemplate)
+                Arrangement? arrangement = default;
+                if (array.SingleOrDefault(x => x is string) is string itemsPanelTemplate)
                 {
-                    if (Application.Current.Resources[itemsPanelTemplate] is ItemsPanelTemplate template)
+                    if (Enum.TryParse<Arrangement>(itemsPanelTemplate, out var result))
+                    {
+                        arrangement = result;
+                    }
+                    else if (Application.Current.Resources[itemsPanelTemplate] is ItemsPanelTemplate template)
                         return template;
                 }
+
+                if (arrangement.HasValue == false && array.SingleOrDefault(x => x is Arrangement) is Arrangement arr)
+                {
+                    arrangement = arr;
+                }
+
 
                 O? o = default;
                 if (array[4] is Orientation orientation)
@@ -38,7 +48,7 @@ namespace Utility.WPF.Controls.Trees
                     o = (O)array[4];
                 }
                 if (
-                    array[1] is Arrangement arrangement &&
+                    arrangement.HasValue &&
                     array[2] is var rows &&
                     array[3] is var columns)
                 {
@@ -46,7 +56,7 @@ namespace Utility.WPF.Controls.Trees
                         (IReadOnlyCollection<Dimension>?)rows,
                         (IReadOnlyCollection<Dimension>?)columns,
                         o,
-                        (A)Enum.Parse(typeof(A), arrangement.ToString()));
+                        arrangement);
                     return template;
                 }
             }

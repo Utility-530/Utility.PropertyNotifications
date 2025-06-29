@@ -28,13 +28,13 @@ namespace Utility.WPF.Converters
             int param;
             if (value == null)
                 return FalseValue;
-            if (int.TryParse(parameter.ToString(), out param))
+            if (int.TryParse((parameter?? "0").ToString(), out param))
             {
                 if (GetInt(value) is int i)
                     return lazy.Value.Evaluate($"{i}{Comparison}{param}").Value == "1" != Invert ? TrueValue : FalseValue;
             }
 
-            if (ExpressionCharacters(parameter.ToString() ?? string.Empty).Any())
+            if (ExpressionCharacters(parameter?.ToString() ?? string.Empty).Any())
                 if (GetInt(value) is var i2)
                 {
                     var evaluate = lazy.Value.Evaluate($"{i2}{parameter}").Value;

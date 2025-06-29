@@ -121,7 +121,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:CustomTreeViewItem}">
-                    <Grid>
+                                   <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition MinWidth="19"
                               Width="Auto" />
@@ -294,7 +294,7 @@
                                 </pnls:UniformStackPanel>
 
                                 <Grid DataContext="{TemplateBinding Errors}"  Grid.ColumnSpan="4" Grid.Row="1"  >
-                                    <ListView ItemsSource="{Binding }" Visibility="{Binding Count, ConverterParameter=0, Converter={StaticResource ItemsToVisibilityConverter}}">
+                                    <ListView ItemsSource="{Binding }" Visibility="{Binding Converter={StaticResource ItemsToVisibilityConverter}}">
                                         <FrameworkElement.Resources>
                                             <DataTemplate x:Key="MessageTemplate">
                                                 <TextBlock FontSize="10"  Text="{Binding Message}" Foreground="Red" FontWeight="DemiBold"/>
@@ -374,15 +374,15 @@
                                     <icons:PackIconFeatherIcons Kind="Edit2" />
                                 </ToggleButton>
                             </Grid>
-                        </Border>
+                        </Border>                     
 
-                        <ItemsPresenter x:Name="ItemsHost"
-                          Grid.Row="1"
+                            <ItemsPresenter x:Name="ItemsHost" 
+                                            Grid.Row="1"
                           Grid.Column="1"
                           Grid.ColumnSpan="2"
                           Visibility="{TemplateBinding ItemsPresenterVisibility}" />
-
-                        <btns:DuplicateGeometryButton 
+         
+                    <btns:DuplicateGeometryButton 
                             x:Name="PlusButton"                
                             Grid.ColumnSpan="4"
                             Visibility="{TemplateBinding IsReplicable, Converter={StaticResource VisibilityConverter}}"
@@ -396,6 +396,7 @@
                             Height="{Binding ElementName=Bd, Path=ActualHeight, ConverterParameter=x/3, Converter={StaticResource MathConverter}}" 
                             VerticalAlignment="Top" HorizontalAlignment="Right" />
                     </Grid>
+        
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasItems"
                    Value="false">
@@ -487,7 +488,7 @@
                         </Trigger>
 
                         <Trigger Property="IsValid" Value="True" >
-                            <Setter Property="BorderBrush" TargetName="Bd" Value="Green" />
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{c:Green 10}" />
                             <Setter Property="BorderThickness" TargetName="Bd" Value="2" />
                         </Trigger>
                         <Trigger Property="IsValid" Value="{x:Null}" >
@@ -495,7 +496,7 @@
                             <Setter Property="BorderThickness" TargetName="Bd" Value="0" />
                         </Trigger>
                         <Trigger Property="IsValid" Value="False" >
-                            <Setter Property="BorderBrush" TargetName="Bd" Value="Red" />
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{c:Red 10}" />
                             <Setter Property="BorderThickness" TargetName="Bd" Value="2" />
                         </Trigger>
 
@@ -551,7 +552,7 @@
                                         <ColorAnimation Storyboard.TargetProperty="BorderBrush.Color" Storyboard.TargetName="MainBorder" Duration="0:0:0.3" To="CadetBlue">
 
                                         </ColorAnimation>
-                                        <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" Storyboard.TargetName="MainBorder" Duration="0:0:0.3" To="LemonChiffon">
+                                        <ColorAnimation Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" Storyboard.TargetName="MainBorder" Duration="0:0:0.3" To="GhostWhite">
 
                                         </ColorAnimation>
 

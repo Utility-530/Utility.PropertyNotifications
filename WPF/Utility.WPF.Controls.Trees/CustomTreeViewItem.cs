@@ -8,9 +8,6 @@ using Position2D = Utility.Enums.Position2D;
 
 namespace Utility.WPF.Controls.Trees
 {
-
-
-
     public partial class CustomTreeViewItem : TreeViewItem
     {
         public static readonly DependencyProperty AddCommandProperty = DependencyProperty.Register("AddCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
@@ -21,6 +18,7 @@ namespace Utility.WPF.Controls.Trees
             
         }
 
+        public static readonly DependencyProperty TreeViewProperty = DependencyProperty.Register("TreeView", typeof(TreeView), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty AddParentCommandProperty = DependencyProperty.Register("AddParentCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty EditCommandProperty = DependencyProperty.Register("EditCommand", typeof(ICommand), typeof(CustomTreeViewItem), new PropertyMetadata());
         public static readonly DependencyProperty IsHighlightedProperty = DependencyProperty.Register("IsHighlighted", typeof(bool?), typeof(CustomTreeViewItem), new PropertyMetadata(null));
@@ -59,7 +57,11 @@ namespace Utility.WPF.Controls.Trees
         }
 
         #region Properties
-
+        public TreeView TreeView
+        {
+            get { return (TreeView)GetValue(TreeViewProperty); }
+            set { SetValue(TreeViewProperty, value); }
+        }
         public Position2D ConnectorPosition
         {
             get { return (Position2D)GetValue(ConnectorPositionProperty); }
