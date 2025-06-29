@@ -16,6 +16,7 @@
     <None Remove="Images\Pause.png" />
     <None Remove="Images\Play.png" />
     <None Remove="Images\Settings.png" />
+    <None Remove="Images\shuttle.png" />
     <None Remove="Images\Stop.png" />
     <None Remove="ProfilePics\00_Wide.png" />
     <None Remove="ProfilePics\01_Paria.png" />
@@ -39,6 +40,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Utility.Attributes\Utility.Attributes.csproj" />
     <ProjectReference Include="..\..\Models\Utility.Models.Filters\Utility.Models.Filters.csproj" />
     <ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
     <ProjectReference Include="..\Utility.WPF.Demo.Common\Utility.WPF.Demo.Common.csproj" />
@@ -47,6 +49,7 @@
   
   <ItemGroup>
     <Resource Include="Images\bar-chart.png" />
+    <Resource Include="Images\shuttle.png" />
     <Resource Include="Simpsons\bart.png" />
     <Resource Include="Images\Cancel.png" />
     <Resource Include="Simpsons\homer.png" />

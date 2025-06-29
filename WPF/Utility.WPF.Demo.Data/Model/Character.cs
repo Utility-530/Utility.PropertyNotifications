@@ -64,6 +64,7 @@ namespace Utility.WPF.Demo.Data.Model
 
         [Ignore]
         [JsonIgnore]
+        [Utility.Attributes.ColumnAttribute("Image Uri", width: 500)]
         public BitmapImage Image { get => _image; set => _image = value; }
 
         public int Age
