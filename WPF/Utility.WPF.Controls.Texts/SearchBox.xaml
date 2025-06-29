@@ -99,8 +99,8 @@
                     <Border x:Name="Bd" Grid.ColumnSpan="2"  BorderThickness="2" CornerRadius="8" >
                         <Border.BorderBrush>
                             <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
-                                <GradientStop Color="DarkBlue" Offset="0.8"></GradientStop>
-                                <GradientStop Color="RoyalBlue" Offset="0.5"></GradientStop>
+                                <GradientStop Color="MediumTurquoise" Offset="0.5"></GradientStop>
+                                <GradientStop Color="CadetBlue" Offset="0.8"></GradientStop>
 
                             </LinearGradientBrush>
                         </Border.BorderBrush>
