@@ -66,7 +66,7 @@ namespace Utility.Infrastructure
             return (other as IKey<Key>)?.Equals(this.Key) ?? false;
         }
 
-        protected Utility.Interfaces.Generic.IObservable<TOutput> Observe<TOutput, TInput>(TInput tInput, [CallerMemberName] string? callerMemberName = null) where TInput : IGetGuid
+        protected Interfaces.Reactive.IObservable<TOutput> Observe<TOutput, TInput>(TInput tInput, [CallerMemberName] string? callerMemberName = null) where TInput : IGetGuid
         {
             return Resolver.Register<TInput, TOutput>(this.Key, tInput);
         }

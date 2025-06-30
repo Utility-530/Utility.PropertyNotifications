@@ -25,16 +25,16 @@ namespace Utility.Observables.Generic
 
     public record Progress(int Amount, int Total);
 
-    public class Subject<TInput, TOutput> : Subject, Interfaces.Generic.IObserver<TInput>, Interfaces.Generic.IObservable<TOutput>
+    public class Subject<TInput, TOutput> : Subject, Interfaces.Reactive.IObserver<TInput>, Interfaces.Reactive.IObservable<TOutput>
     {
         private Func<TInput, TOutput> onNext;
 
-        protected ObservableCollection<Interfaces.Generic.IObserver<TOutput>> _observers = new();
+        protected ObservableCollection<Interfaces.Reactive.IObserver<TOutput>> _observers = new();
 
         public override ObservableCollection<TOutput> Outputs { get; } = new();
 
         List<IDisposable> disposables = new();
-        public override ObservableCollection<Interfaces.Generic.IObserver<TOutput>> Observers => _observers;
+        public override ObservableCollection<Interfaces.Reactive.IObserver<TOutput>> Observers => _observers;
 
         public bool IsCompleted { get; set; }
 
@@ -51,7 +51,7 @@ namespace Utility.Observables.Generic
 
         public virtual Type OutType => typeof(TOutput);
 
-        IEnumerable<Interfaces.Generic.IObserver<TOutput>> Interfaces.Generic.IObservable<TOutput>.Observers => _observers;
+        IEnumerable<Interfaces.Reactive.IObserver<TOutput>> Interfaces.Reactive.IObservable<TOutput>.Observers => _observers;
 
         public virtual void OnNext(TInput value)
         {
@@ -105,7 +105,7 @@ namespace Utility.Observables.Generic
         }
 
 
-        public IDisposable Subscribe(Interfaces.Generic.IObserver<TOutput> observer)
+        public IDisposable Subscribe(Interfaces.Reactive.IObserver<TOutput> observer)
         {
             foreach (var output in Outputs)
             {
@@ -115,10 +115,10 @@ namespace Utility.Observables.Generic
             {
                 
             }
-            if (IsCompleted) { observer.OnCompleted(); return Disposer<Interfaces.Generic.IObserver<TOutput>>.Empty; }
+            if (IsCompleted) { observer.OnCompleted(); return Disposer<Interfaces.Reactive.IObserver<TOutput>>.Empty; }
             if (Exception != null) { observer.OnError(Exception); }
             if (Progress != null) { observer.OnProgress(Progress.Amount, Progress.Total);}
-            return new Disposer<Interfaces.Generic.IObserver<TOutput>, TOutput>(_observers, observer)
+            return new Disposer<Interfaces.Reactive.IObserver<TOutput>, TOutput>(_observers, observer)
                 .DisposeWith(new CompositeDisposable(disposables));
         }
 

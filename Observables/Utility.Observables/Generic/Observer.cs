@@ -3,7 +3,7 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Observables.Generic
 {
-    public class Observer<T> : Utility.Interfaces.Generic.IObserver<T>
+    public class Observer<T> : Interfaces.Reactive.IObserver<T>
     {
         private readonly Action<T> onNext;
         private readonly Action<Exception> onError;

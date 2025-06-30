@@ -6,7 +6,6 @@
 using System.ComponentModel;
 using System.Runtime.ExceptionServices;
 using System.Threading;
-using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Observables.Generic;
 
@@ -49,7 +48,7 @@ namespace Utility.Observables.Generic
         /// <param name="source">Observable sequence to subscribe to.</param>
         /// <returns><see cref="IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> is <c>null</c>.</exception>
-        public static IDisposable Subscribe<T>(this Interfaces.Generic.IObservable<T> source)
+        public static IDisposable Subscribe<T>(this Interfaces.Reactive.IObservable<T> source)
         {
             if (source == null)
             {
@@ -70,7 +69,7 @@ namespace Utility.Observables.Generic
         /// <param name="onNext">Action to invoke for each element in the observable sequence.</param>
         /// <returns><see cref="IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> is <c>null</c>.</exception>
-        public static IDisposable Subscribe<T>(this Interfaces.Generic.IObservable<T> source, Action<T> onNext)
+        public static IDisposable Subscribe<T>(this Interfaces.Reactive.IObservable<T> source, Action<T> onNext)
         {
             if (source == null)
             {
@@ -97,7 +96,7 @@ namespace Utility.Observables.Generic
         /// <param name="onError">Action to invoke upon exceptional termination of the observable sequence.</param>
         /// <returns><see cref="IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> is <c>null</c>.</exception>
-        public static IDisposable Subscribe<T>(this Interfaces.Generic.IObservable<T> source, Action<T> onNext, Action<Exception> onError)
+        public static IDisposable Subscribe<T>(this Interfaces.Reactive.IObservable<T> source, Action<T> onNext, Action<Exception> onError)
         {
             if (source == null)
             {
@@ -129,7 +128,7 @@ namespace Utility.Observables.Generic
         /// <param name="onCompleted">Action to invoke upon graceful termination of the observable sequence.</param>
         /// <returns><see cref="IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onCompleted"/> is <c>null</c>.</exception>
-        public static IDisposable Subscribe<T>(this Interfaces.Generic.IObservable<T> source, Action<T> onNext, Action onCompleted)
+        public static IDisposable Subscribe<T>(this Interfaces.Reactive.IObservable<T> source, Action<T> onNext, Action onCompleted)
         {
             if (source == null)
             {
@@ -162,7 +161,7 @@ namespace Utility.Observables.Generic
         /// <param name="onCompleted">Action to invoke upon graceful termination of the observable sequence.</param>
         /// <returns><see cref="IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> or <paramref name="onCompleted"/> is <c>null</c>.</exception>
-        public static IDisposable Subscribe<T>(this Interfaces.Generic.IObservable<T> source, Action<T> onNext, Action<Exception> onError, Action onCompleted)
+        public static IDisposable Subscribe<T>(this Interfaces.Reactive.IObservable<T> source, Action<T> onNext, Action<Exception> onError, Action onCompleted)
         {
             if (source == null)
             {
@@ -201,7 +200,7 @@ namespace Utility.Observables.Generic
         /// <param name="onCompleted">Action to invoke upon graceful termination of the observable sequence.</param>
         /// <returns><see cref="IDisposable"/> object used to unsubscribe from the observable sequence.</returns>
         /// <exception cref="ArgumentNullException"><paramref name="source"/> or <paramref name="onNext"/> or <paramref name="onError"/> or <paramref name="onCompleted"/> is <c>null</c>.</exception>
-        public static IDisposable Subscribe<T>(this Interfaces.Generic.IObservable<T> source, Action<T> onNext, Action<Exception> onError, Action onCompleted, Action<int, int> progress)
+        public static IDisposable Subscribe<T>(this Interfaces.Reactive.IObservable<T> source, Action<T> onNext, Action<Exception> onError, Action onCompleted, Action<int, int> progress)
         {
             if (source == null)
             {
@@ -237,7 +236,7 @@ namespace Utility.Observables.Generic
         #endregion Subscribe delegate-based overloads
 
 
-        public static Interfaces.Generic.IObservable<T> Create<T>(Func<Interfaces.Generic.IObserver<T>, IDisposable> subscribe)
+        public static Interfaces.Reactive.IObservable<T> Create<T>(Func<Interfaces.Reactive.IObserver<T>, IDisposable> subscribe)
         {
             var subject = new Subject<T>();
 
@@ -249,7 +248,7 @@ namespace Utility.Observables.Generic
         }
 
 
-        public static Interfaces.Generic.IObservable<T> Empty<T>()
+        public static Interfaces.Reactive.IObservable<T> Empty<T>()
         {
             var subject = new Subject<T>(); 
             subject.OnCompleted();
@@ -258,7 +257,7 @@ namespace Utility.Observables.Generic
 
 
 
-        public static Utility.Interfaces.Generic.IObservable<TOut> Select<TIn, TOut>(this Utility.Interfaces.Generic.IObservable<TIn> observable, Func<TIn, TOut> func)
+        public static Interfaces.Reactive.IObservable<TOut> Select<TIn, TOut>(this Interfaces.Reactive.IObservable<TIn> observable, Func<TIn, TOut> func)
         {
             var subject = new Subject<TIn, TOut>(func);
             var disposable = observable.Subscribe(subject);
@@ -266,7 +265,7 @@ namespace Utility.Observables.Generic
             return subject; 
         }
 
-        public static Utility.Interfaces.Generic.IObservable<TOutput> CastAs<TInput, TOutput>(this Utility.Interfaces.Generic.IObservable<TInput> observable) where TOutput : class
+        public static Interfaces.Reactive.IObservable<TOutput> CastAs<TInput, TOutput>(this Interfaces.Reactive.IObservable<TInput> observable) where TOutput : class
         {
             return observable.Select(a=>(a as TOutput ?? throw new Exception("dfs w2121")));
         }      
