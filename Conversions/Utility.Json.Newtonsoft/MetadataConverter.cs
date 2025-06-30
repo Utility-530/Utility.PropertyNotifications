@@ -19,7 +19,13 @@ namespace Utility.Conversions.Json.Newtonsoft
 
         public override bool CanConvert(Type objectType)
         {
-            return objectType != typeof(Type) && PropertyHelper.ValueTypes.Contains(objectType) == false && objectType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(objectType) == false;
+            return 
+                objectType != typeof(Type) && 
+                objectType.Name != "RuntimeType" && 
+                objectType.Name != "RuntimeMethodInfo" && 
+                PropertyHelper.ValueTypes.Contains(objectType) == false && 
+                objectType != typeof(string) && 
+                typeof(IEnumerable).IsAssignableFrom(objectType) == false;
         }
 
         public override bool CanRead => false;
