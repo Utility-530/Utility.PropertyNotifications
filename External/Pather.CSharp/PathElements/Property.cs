@@ -23,6 +23,10 @@ namespace Pather.CSharp.PathElements
 
         public override void Apply(object target, object value)
         {
+            if (get(target).GetValue(target) == value)
+            {
+                return;
+            }
             (get(target) ?? throw new ArgumentException($"The property {property} could not be found.")).SetValue(target, value);
         }
 
