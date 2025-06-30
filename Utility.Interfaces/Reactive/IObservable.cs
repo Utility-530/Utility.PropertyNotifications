@@ -2,13 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Utility.Interfaces.Generic
+namespace Utility.Interfaces.Reactive
 {
     public interface IObservable<T> : IEnumerable
     {
         IEnumerable<IObserver<T>> Observers { get; }
 
-        IDisposable Subscribe(Utility.Interfaces.Generic.IObserver<T> value);
+        IDisposable Subscribe(IObserver<T> value);
 
     }
 }

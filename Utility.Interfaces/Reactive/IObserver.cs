@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Utility.Interfaces.Generic
+namespace Utility.Interfaces.Reactive
 {
     public interface IObserver<T> : System.IObserver<T>
     {
