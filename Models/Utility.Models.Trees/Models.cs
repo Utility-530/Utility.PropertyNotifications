@@ -127,7 +127,7 @@ namespace Utility.Models.Trees
         {
         }
 
-        public NodePropertiesModel(Func<IEnumerable<Model>> func) : base(func)
+        public NodePropertiesModel(Func<IEnumerable<IModel>> func) : base(func)
         {
         }
 
@@ -219,7 +219,7 @@ namespace Utility.Models.Trees
     public class GlobalAssembliesModel : Model, IBreadCrumb
     {
 
-        public GlobalAssembliesModel(Func<IEnumerable<Model>> predicate) : base(predicate)
+        public GlobalAssembliesModel(Func<IEnumerable<IModel>> predicate) : base(predicate)
         {
 
         }
@@ -338,7 +338,7 @@ namespace Utility.Models.Trees
     {
         public override IEnumerable<IModel> CreateChildren()
         {
-            foreach (var m in Locator.Current.GetService<IEnumerableFactory<MethodInfo>>().Create(null))
+            foreach (var m in Locator.Current.GetService<IEnumerableFactory<MethodInfo>>().Create(nameof(MethodsModel)))
                 yield return new MethodModel { Name = m.GetDescription(), Value = m };
         }
     }
@@ -652,7 +652,7 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class ComparisonModel : Model
+    public class ComparisonModel : Model<Enum>
     {
         private Enum _value;
         private ComparisonType type;
@@ -682,19 +682,6 @@ namespace Utility.Models.Trees
                 }
                 RaisePropertyChanged();
                 RaisePropertyChanged(nameof(Value));
-            }
-        }
-
-        public Enum? Value
-        {
-            get => _value; set
-            {
-                if (_value != value)
-                {
-                    var _previous = _value;
-                    _value = value;
-                    RaisePropertyChanged(_previous, value);
-                }
             }
         }
 
@@ -987,18 +974,14 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class DataFilesModel : Model, ISelectable
+    public class DataFilesModel : CollectionModel<DataFileModel>, ISelectable
     {
-        [JsonIgnore]
-        public ObservableCollection<DataFileModel> Collection { get; } = new();
-
         public override void SetNode(INode node)
         {
             node.Orientation = Orientation.Vertical;
             node.IsExpanded = true;
             node.IsAugmentable = true;
             node.IsPersistable = true;
-            node.Items.AndAdditions<INode>().Subscribe(a => Collection.Add(a.Data as DataFileModel));
             base.SetNode(node);
         }
 
@@ -1365,10 +1348,10 @@ namespace Utility.Models.Trees
             get => model;
             set
             {
-                if (Model != value)
+                if (model != value)
                 {
-                    var previous = Model;
-                    Model = value;
+                    var previous = model;
+                    model = value;
                     this.RaisePropertyChanged(previous, value);
                 }
             }

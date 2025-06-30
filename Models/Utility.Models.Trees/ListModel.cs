@@ -19,8 +19,8 @@ namespace Utility.Models.Trees
             get
             {
 
-                var instance = Locator.Current.GetService<IFactory<IId<Guid>>>();
-                var c = instance.Create(type);
+                var factory = Locator.Current.GetService<IFactory<IId<Guid>>>();
+                var c = factory.Create(type);
                 return c;
 
             }
