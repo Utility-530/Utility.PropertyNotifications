@@ -188,11 +188,11 @@ namespace Utility.Models
                 {
                     IModel instance = null;
 
-                    if (x.PropertyType.IsAssignableTo(typeof(Model)))
+                    if (x.PropertyType.IsAssignableTo(typeof(IModel)))
                     {
                         instance = (IModel)Activator.CreateInstance(x.PropertyType);
                     }
-                    else if (x.Attribute.attribute.Type.IsAssignableTo(typeof(Model)))
+                    else if (x.Attribute.attribute.Type.IsAssignableTo(typeof(IModel)))
                     {
                         instance = (IModel)Activator.CreateInstance(x.Attribute.attribute.Type);
                     }

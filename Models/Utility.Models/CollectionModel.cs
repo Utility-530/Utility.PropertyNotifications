@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using Utility.Exceptions;
 using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
+using Newtonsoft.Json;
 
 namespace Utility.Models
 {
@@ -57,6 +58,7 @@ namespace Utility.Models
                 });
         }
 
+        [JsonIgnore]
         public virtual T New
         {
             get
