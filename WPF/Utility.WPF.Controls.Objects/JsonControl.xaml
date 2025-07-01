@@ -310,7 +310,14 @@
                                 
                             </i:Interaction.Triggers>
                             <i:Interaction.Behaviors>
-                                <local:FocusBehavior Value="{Binding IsChecked, ElementName=ToggleButton}"/>
+                                <local:FocusBehavior >
+                                    <local:FocusBehavior.Value>
+                                        <MultiBinding Converter="{x:Static conv:IfConverter.Instance}">
+                                            <Binding ElementName="ToggleButton" Path="IsFocused"></Binding>
+                                            <Binding ElementName="ToggleButton" Path="IsChecked"></Binding>
+                                        </MultiBinding>
+                                    </local:FocusBehavior.Value>
+                                </local:FocusBehavior>
                             </i:Interaction.Behaviors>
                              
                         </TextBox>
