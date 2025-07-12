@@ -27,14 +27,14 @@ namespace Utility.WPF.Converters
             Quantifier _quantifier = Quantifier.All;
             IValueConverter? _converter = null;
 
-            if (values.Single(a => a is Quantifier) is Quantifier quantifier)
+            if (values.SingleOrDefault(a => a is Quantifier) is Quantifier quantifier)
             {
                 iQ = values.IndexOf(quantifier);
                 _quantifier = quantifier;
 
             }
 
-            if (values.Single(a => a is IValueConverter) is IValueConverter converter)
+            if (values.SingleOrDefault(a => a is IValueConverter) is IValueConverter converter)
             {
                 cQ = values.IndexOf(converter);
                 _converter = converter;
@@ -115,5 +115,7 @@ namespace Utility.WPF.Converters
         {
             throw new NotImplementedException();
         }
+
+        public static IfConverter Instance { get; } = new();
     }
 }

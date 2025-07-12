@@ -53,6 +53,6 @@ namespace Utility.WPF.Behaviors
 
         private void OnTreeViewSelectedItemChanged(object sender,
             RoutedPropertyChangedEventArgs<object> e) =>
-          SelectedItem = AssociatedObject.ItemsSource.Cast<object>().First(a => a==e.NewValue || a.Equals(e.NewValue));
+          SelectedItem = AssociatedObject.ItemsSource.Cast<object>().FirstOrDefault(a => a==e.NewValue || a.Equals(e.NewValue));
     }
 }

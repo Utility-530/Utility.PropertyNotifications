@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using Utility.Commands;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
+using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Nodes;
 using Utility.Trees.Abstractions;

@@ -16,6 +16,7 @@ namespace Utility.WPF.Demo.Trees
         public ComboTreeViewItemUserControl()
         {
             InitializeComponent();
+            var treeView = new TreeView();
             var parent = new ComboTreeViewItem()
             {
                 Width = 200,
@@ -24,20 +25,13 @@ namespace Utility.WPF.Demo.Trees
                 //Style= this.Resources["Demo"] as Style, 
                 EditTemplate = this.Resources["EditTemplate"] as DataTemplate,
                 ItemContainerStyle = this.Resources["CustomTreeViewItem"] as Style,
-               
+                TreeView = treeView,
                 ItemsSource = this.Resources["Characters"] as IEnumerable,
                 Selection = new Binding { Path = new PropertyPath("Data") }
             };
             parent.FinishEdit += Parent_Add;
-            //var treeViewItemA = Make("A");
-            //var treeViewItemB = Make("B");
-            //var treeViewItemC = Make("C");
-            //var treeViewItemD = Make("D");
-            //Add(parent, treeViewItemA);
-            //Add(parent, treeViewItemB);
-            //Add(parent, treeViewItemC);
-            //Add(parent, treeViewItemD);
-            var treeView = new TreeView();
+
+
             treeView.AddHandler(CustomTreeViewItem.ChangeEvent, new RoutedEventHandler(change));
             treeView.Items.Add(parent);
             this.Content = treeView;
@@ -45,7 +39,7 @@ namespace Utility.WPF.Demo.Trees
 
         private void change(object sender, RoutedEventArgs e)
         {
-         
+
         }
 
         private void Parent_Add(object sender, EditRoutedEventArgs e)

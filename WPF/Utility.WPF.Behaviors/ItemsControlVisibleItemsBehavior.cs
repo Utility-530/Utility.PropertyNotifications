@@ -69,18 +69,25 @@ namespace Utility.WPF.Behaviors
                 // N.B this doesn't work well if VerticalScrollBar is used to scroll- works for mouse-wheel.
                 if (MouseFactor > 1)
                     scrollViewer.ScrollChanged += AssociatedObject_ScrollChanged;
-                scrollViewer
-                    .Changes()
-                         .Select(a => ScrollViewerOnScrollChanged(scrollViewer, AssociatedObject, a))
-                    .Where(a => a.HasValue)
-                    .Select(a => a!.Value)
-                    .Subscribe(a =>
-                {
-                    var (firstVisible, lastVisible) = a;
-                    FirstIndex = firstVisible;
-                    LastIndex = lastVisible;
-                    Size = lastVisible - firstVisible + 1;
-                });
+
+                if (VisualTreeExHelper.FindVisualChildren<ScrollBar>(scrollViewer).Single(s => s.Orientation == Orientation.Vertical) is ScrollBar verticalScrollBar)
+
+                    scrollViewer
+                        .Changes()
+
+                        .Select(a => ScrollViewerOnScrollChanged(verticalScrollBar, AssociatedObject, a))
+                        .Where(a => a.HasValue)
+                        .Select(a => a!.Value)
+                        .Subscribe(a =>
+                    {
+                        var (firstVisible, lastVisible) = a;
+                        FirstIndex = firstVisible;
+                        LastIndex = lastVisible; 
+
+                        Size = lastVisible - firstVisible + 1;
+                    });
+                else
+                    throw new Exception("fgl; 4gsdg");
             }
 
             void AssociatedObject_ScrollChanged(object sender, ScrollChangedEventArgs e)
@@ -95,19 +102,13 @@ namespace Utility.WPF.Behaviors
                     scrollViewer.ScrollToVerticalOffset(scrollPosition);
             }
 
-            static (int, int)? ScrollViewerOnScrollChanged(ScrollViewer scrollViewer, ItemsControl dataGrid, ScrollChangedEventArgs a)
+            static (int, int)? ScrollViewerOnScrollChanged(ScrollBar verticalScrollBar, ItemsControl dataGrid, ScrollChangedEventArgs a)
             {
-                //AssociatedObject_ScrollChanged();
+                int totalCount = dataGrid.Items.Count;
+                var firstVisible = verticalScrollBar.Value;
+                var lastVisible = firstVisible + totalCount - verticalScrollBar.Maximum;
 
-                if (VisualTreeExHelper.FindVisualChildren<ScrollBar>(scrollViewer).Single(s => s.Orientation == Orientation.Vertical) is ScrollBar verticalScrollBar)
-                {
-                    int totalCount = dataGrid.Items.Count;
-                    var firstVisible = verticalScrollBar.Value;
-                    var lastVisible = firstVisible + totalCount - verticalScrollBar.Maximum;
-
-                    return ((int)firstVisible, (int)lastVisible);
-                }
-                return null;
+                return ((int)firstVisible, (int)lastVisible);
             }
         }
     }

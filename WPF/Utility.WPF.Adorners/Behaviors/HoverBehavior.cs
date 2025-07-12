@@ -222,7 +222,7 @@ namespace Utility.WPF.Adorners
             ShowOrHideAdornerInternal();
             AssociatedObject.MouseEnter += AssociatedObject_MouseEnter;
             AssociatedObject.MouseLeave += AssociatedObject_MouseLeave;
-            //AssociatedObject.Focusable = false; // By default don't want 'AdornedControl' to be focusable.
+            AssociatedObject.Focusable = false; // By default don't want 'AdornedControl' to be focusable.
 
             AssociatedObject.DataContextChanged += new DependencyPropertyChangedEventHandler(AdornedControl_DataContextChanged);
 
@@ -798,6 +798,7 @@ namespace Utility.WPF.Adorners
             }
 
             closeAdornerTimer.Start();
+
         }
 
         /// <summary>
