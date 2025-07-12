@@ -1,40 +1,12 @@
-﻿using System.Reactive.Subjects;
-using Utility.Entities;
+﻿using Utility.Models;
 
 namespace Utility.Services
 {
-    public class SelectionService : IObserver<SelectionInput>, IObservable<SelectionOutput>
+    public record SelectionParam() : MethodParameter<SelectionService>(nameof(SelectionService.Select), "selection");
+    public record SelectionReturnParam() : MethodParameter<SelectionService>(nameof(SelectionService.Select));
+
+    public class SelectionService
     {
-        ReplaySubject<SelectionInput> one = new();
-        ReplaySubject<SelectionOutput> two = new();
-
-        public SelectionService()
-        {
-            one.Subscribe(a =>
-            {
-                two.OnNext(new SelectionOutput(a.Value));
-            });
-        }
-        #region boilerplate
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnNext(SelectionInput value)
-        {
-            one.OnNext(value);  
-        }
-
-        public IDisposable Subscribe(IObserver<SelectionOutput> observer)
-        {
-            return two.Subscribe(observer);
-        }
-        #endregion
+        public static object Select(object selection) => selection;
     }
 }
