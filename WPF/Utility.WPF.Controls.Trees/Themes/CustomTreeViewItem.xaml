@@ -20,7 +20,6 @@
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
-    <SineEase x:Key="Ease" EasingMode="EaseInOut" />
 
     <Storyboard x:Key="Enter">
         <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ScaleTransform" Storyboard.TargetProperty="ScaleX">
@@ -71,6 +70,7 @@
     </Storyboard>
 
     <conv:OrientationConverter x:Key="OrientationConverter"/>
+    <conv:NullToInverseVisibilityConverter x:Key="NullToInverseVisibilityConverter"/>
     <conv:IfConverter x:Key="IfConverter"></conv:IfConverter>
     <conv:CountToBooleanConverter x:Key="ItemsToVisibilityConverter" 
                                   Comparison=">"
@@ -107,21 +107,29 @@
         <Setter Property="Rows" Value="{Binding Rows}"/>
         <Setter Property="Columns" Value="{Binding Columns}"/>
         <Setter Property="Errors" Value="{Binding Errors}"></Setter>
+        <Setter Property="Title" Value="{Binding Title}"></Setter>
+        <Setter Property="Tag">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource RowColumnConverter}">
+                    <Binding Path="Rows" RelativeSource="{RelativeSource Mode=Self}"/>
+                    <Binding Path="Columns" RelativeSource="{RelativeSource Mode=Self}"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <MultiBinding Converter="{StaticResource MultiItemsPanelConverter}">
                     <Binding Path="ItemsPanelTemplate" RelativeSource="{RelativeSource Mode=Self}"/>
                     <Binding Path="Arrangement" RelativeSource="{RelativeSource Mode=Self}"/>
-                    <Binding Path="Rows" RelativeSource="{RelativeSource Mode=Self}"/>
-                    <Binding Path="Columns" RelativeSource="{RelativeSource Mode=Self}"/>
                     <Binding Path="Orientation" RelativeSource="{RelativeSource Mode=Self}"/>
+                    <Binding Path="Tag" RelativeSource="{RelativeSource Mode=Self}"/>        
                 </MultiBinding>
             </Setter.Value>
         </Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:CustomTreeViewItem}">
-                                   <Grid>
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition MinWidth="19"
                               Width="Auto" />
@@ -219,10 +227,19 @@
                                         BorderBrush="Transparent"
                                                 HorizontalAlignment="Stretch" BorderThickness="2" CornerRadius="{Binding CornerRadius, RelativeSource={RelativeSource Mode=TemplatedParent}}">
 
-                                            <ContentPresenter x:Name="PART_Header" 
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"></RowDefinition>
+                                                    <RowDefinition></RowDefinition>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="{TemplateBinding Title}" Visibility="{Binding Title, Converter={StaticResource  NullToInverseVisibilityConverter}}"></TextBlock>
+
+                                                <ContentPresenter x:Name="PART_Header" 
+                                                              Grid.Row="1"
                                                   WPF.Connectors:Ex.Position="{TemplateBinding ConnectorPosition}"
                                                   HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                                   ContentSource="Header"/>
+                                            </Grid>
 
                                         </Border>
                                     </Border>
@@ -374,15 +391,15 @@
                                     <icons:PackIconFeatherIcons Kind="Edit2" />
                                 </ToggleButton>
                             </Grid>
-                        </Border>                     
+                        </Border>
 
-                            <ItemsPresenter x:Name="ItemsHost" 
+                        <ItemsPresenter x:Name="ItemsHost" 
                                             Grid.Row="1"
                           Grid.Column="1"
                           Grid.ColumnSpan="2"
                           Visibility="{TemplateBinding ItemsPresenterVisibility}" />
-         
-                    <btns:DuplicateGeometryButton 
+
+                        <btns:DuplicateGeometryButton 
                             x:Name="PlusButton"                
                             Grid.ColumnSpan="4"
                             Visibility="{TemplateBinding IsReplicable, Converter={StaticResource VisibilityConverter}}"
@@ -396,7 +413,7 @@
                             Height="{Binding ElementName=Bd, Path=ActualHeight, ConverterParameter=x/3, Converter={StaticResource MathConverter}}" 
                             VerticalAlignment="Top" HorizontalAlignment="Right" />
                     </Grid>
-        
+
                     <ControlTemplate.Triggers>
                         <Trigger Property="HasItems"
                    Value="false">

@@ -49,7 +49,7 @@ namespace Utility.WPF.Controls.Trees
         public static readonly DependencyProperty ContentVisibilityProperty = DependencyProperty.Register("ContentVisibility", typeof(System.Windows.Visibility), typeof(CustomTreeViewItem), new PropertyMetadata(Visibility.Visible));
         public static readonly DependencyProperty ConnectorPositionProperty = DependencyProperty.Register("ConnectorPosition", typeof(Position2D), typeof(CustomTreeViewItem), new PropertyMetadata(Position2D.None));
         public static readonly DependencyProperty ItemsPanelTemplateProperty = DependencyProperty.Register("ItemsPanelTemplate", typeof(string), typeof(CustomTreeViewItem), new PropertyMetadata());
-
+        public static readonly DependencyProperty TitleProperty = DependencyProperty.Register("Title", typeof(string), typeof(CustomTreeViewItem), new PropertyMetadata());
 
         private static void _changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -57,6 +57,13 @@ namespace Utility.WPF.Controls.Trees
         }
 
         #region Properties
+
+        public string Title
+        {
+            get { return (string)GetValue(TitleProperty); }
+            set { SetValue(TitleProperty, value); }
+        }
+
         public TreeView TreeView
         {
             get { return (TreeView)GetValue(TreeViewProperty); }

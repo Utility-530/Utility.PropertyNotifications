@@ -5,10 +5,14 @@
 
     <math:MathConverter x:Key="MathConverter"></math:MathConverter>
     <local:MultiItemsPanelConverter x:Key="MultiItemsPanelConverter"/>
-    <local:VisibilityConverter x:Key="VisibilityConverter"/>
-    <local:InverseConverter x:Key="InverseConverter"/>
+    <local:RowColumnConverter x:Key="RowColumnConverter"  />
+    <conv:NullableBooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+    <conv:NullableBooleanToInverseConverter x:Key="InverseConverter"/>
     <conv:InverseNullToBooleanConverter x:Key="InverseNullToBooleanConverter"/>
-    
+
+    <SineEase x:Key="Ease" EasingMode="EaseInOut" />
+
+
     <Style x:Key="ExpandCollapseToggleStyle"
        TargetType="ToggleButton">
         <Setter Property="Focusable" Value="False" />

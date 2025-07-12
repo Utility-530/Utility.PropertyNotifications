@@ -10,6 +10,7 @@ using Utility.Structs;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace Utility.WPF.Controls.Trees
 {
@@ -22,43 +23,51 @@ namespace Utility.WPF.Controls.Trees
             if (values is object[] { } array)
             {
                 Arrangement? arrangement = default;
-                if (array.SingleOrDefault(x => x is string) is string itemsPanelTemplate)
+                O? orientation = default;
+                IReadOnlyCollection<Dimension>? rows = default;
+                IReadOnlyCollection<Dimension>? columns = default;
+
+                foreach (var x in array)
                 {
-                    if (Enum.TryParse<Arrangement>(itemsPanelTemplate, out var result))
+                    if (x is string s)
                     {
-                        arrangement = result;
+                        if (Enum.TryParse<Arrangement>(s, out var result))
+                        {
+                            arrangement = result;
+                        }
+                        else if (Enum.TryParse<O>(s, out var resulto))
+                        {
+                            orientation = resulto;
+                        }
+                        else if (Application.Current.Resources[x] is ItemsPanelTemplate template)
+                            return template;
                     }
-                    else if (Application.Current.Resources[itemsPanelTemplate] is ItemsPanelTemplate template)
-                        return template;
+                    else if (x is RowColumnConverter.RowColumns rc)
+                    {
+                        rows = rc.Rows;
+                        columns = rc.Columns;
+                    }
+                    else if (x is Arrangement arr)
+                    {
+                        arrangement = arr;
+                    }
+                    else if (x is Orientation _o)
+                    {
+                        orientation = Enum.Parse<O>(_o.ToString());
+                    }
+                    else if (x is O o)
+                    {
+                        orientation = o;
+                    }
                 }
 
-                if (arrangement.HasValue == false && array.SingleOrDefault(x => x is Arrangement) is Arrangement arr)
-                {
-                    arrangement = arr;
-                }
 
+                return ItemsPanelFactory.Template(
+                    rows,
+                    columns,
+                    orientation.HasValue ? orientation.Value : O.Vertical,
+                    arrangement);
 
-                O? o = default;
-                if (array[4] is Orientation orientation)
-                {
-                    o = Enum.TryParse(typeof(O), orientation.ToString(), out var obj) ? (O)obj : O.Horizontal;
-                }
-                else if (array[4] != DependencyProperty.UnsetValue)
-                {
-                    o = (O)array[4];
-                }
-                if (
-                    arrangement.HasValue &&
-                    array[2] is var rows &&
-                    array[3] is var columns)
-                {
-                    var template = ItemsPanelFactory.Template(
-                        (IReadOnlyCollection<Dimension>?)rows,
-                        (IReadOnlyCollection<Dimension>?)columns,
-                        o,
-                        arrangement);
-                    return template;
-                }
             }
             return DependencyProperty.UnsetValue;
         }
@@ -69,73 +78,19 @@ namespace Utility.WPF.Controls.Trees
         }
     }
 
-    public class VisibilityConverter : System.Windows.Data.IValueConverter
+    public class RowColumnConverter : IMultiValueConverter
     {
-        public static VisibilityConverter Instance { get; } = new();
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is bool?)
-            {
-                switch ((bool?)value)
-                {
-                    case null:
-                        return Visibility.Hidden;
-                    case false:
-                        return Visibility.Collapsed;
-                    case true:
-                        return Visibility.Visible;
-                }
-            }
-
-            return DependencyProperty.UnsetValue;
+            return new RowColumns(values[0] as IReadOnlyCollection<Dimension>, values[1] as IReadOnlyCollection<Dimension>);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
+
+        public record RowColumns(IReadOnlyCollection<Dimension> Rows, IReadOnlyCollection<Dimension> Columns);
     }
 
-    public class InverseConverter : System.Windows.Data.IValueConverter
-    {
-        public static InverseConverter Instance { get; } = new();
-
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is bool?)
-            {
-                switch ((bool?)value)
-                {
-                    case null:
-                        return null;
-                    case false:
-                        return true;
-                    case true:
-                        return false;
-                }
-            }
-
-            return DependencyProperty.UnsetValue;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is bool?)
-            {
-                switch ((bool?)value)
-                {
-                    case null:
-                        return null;
-                    case false:
-                        return true;
-                    case true:
-                        return false;
-                }
-            }
-
-            return DependencyProperty.UnsetValue;
-
-        }
-    }
 }
