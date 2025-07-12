@@ -5,6 +5,7 @@ using System.Windows.Media;
 using Utility.Commands;
 using Utility.WPF.Demo.Data.Model;
 using Utility.Persists;
+using System.Windows;
 
 namespace Utility.WPF.Demo.Lists
 {
@@ -27,9 +28,13 @@ namespace Utility.WPF.Demo.Lists
         {
             FinishEdit = new Command<object>(o =>
             {
-                if (o is EditRoutedEventArgs args)
+                if (o is EditRoutedEventArgs { IsAccepted: true } args)
                 {
                     Items.Add(args.Edit as Character);
+                }
+                else
+                {
+                    MessageBox.Show("Rejected");
                 }
             });
 

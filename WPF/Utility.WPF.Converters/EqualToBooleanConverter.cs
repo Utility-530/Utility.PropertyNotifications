@@ -33,4 +33,18 @@ namespace Utility.WPF.Converters
 
         public static EqualToVisibilityConverter Instance => new EqualToVisibilityConverter();
     }
+    public class InverseEqualToVisibilityConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value.Equals(parameter) == false ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static InverseEqualToVisibilityConverter Instance => new ();
+    }
 }

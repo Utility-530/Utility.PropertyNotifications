@@ -3,6 +3,7 @@ using Splat.Autofac;
 using System.Windows;
 using Utility.Common;
 using Utility.WPF;
+using Utility.WPF.Controls.Meta;
 using Utility.WPF.Meta;
 
 namespace Utility.WPF.Demo.Lists
@@ -22,7 +23,7 @@ namespace Utility.WPF.Demo.Lists
             new Window
             {
                 WindowState = WindowState.Maximized,
-                Content = new UserControlsGrid()
+                Content = new AssemblyViewControl(typeof(App).Assembly)
             }.Show();
         }
     }
