@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Disposables;
@@ -26,6 +27,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Observables;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
+using Utility.Structs;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Extensions;
 using Type = System.Type;
@@ -425,10 +427,6 @@ namespace Utility.Models.Trees
         public ICommand Command { get; }
     }
 
-    public class SearchModel(Func<IEnumerable<IModel>> ? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree> ? addition = null) : StringModel(func, nodeAction, addition)
-    {
-
-    }
 
     public class IndexModel : Model<int>
     {
@@ -439,9 +437,15 @@ namespace Utility.Models.Trees
     public class ReadOnlyStringModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null) : Model<string>(func, nodeAction, addition, false, false)
     {
     }
-    public class EditModel : Model
+
+    public class EditModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null) : Model(func, nodeAction, addition)
     {
+        public EditModel() : this(null, null, null)
+        {
+
+        }
         public override object Value { get; set; }
+
     }
 
     public class StringRootModel : StringModel, IRoot
@@ -915,14 +919,14 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class FileModel : StringModel
+    public class FileModel : ReadOnlyStringModel, IFileSystemInfo
     {
         public FileModel()
         {
             Value = "C:\\";
         }
 
-
+        public FileSystemInfo FileSystemInfo => new FileInfo(Value);
     }
 
     public class AliasFileModel : Model
@@ -1526,8 +1530,6 @@ namespace Utility.Models.Trees
         }
     }
 
-    public readonly record struct ModelType(string Alias, string Type);
-
     public class ModelTypeModel : Model<ModelType>, ISelectable
     {
         public override void SetNode(INode node)
@@ -1561,9 +1563,50 @@ namespace Utility.Models.Trees
     {
 
     }
-    public class DirectoryModel : StringModel
-    {
 
+
+
+    public class DirectoryModel : ReadOnlyStringModel, IBreadCrumb, IFileSystemInfo
+    {
+        public DirectoryModel(bool includeFiles = true)
+        {
+            IncludeFiles = includeFiles;
+        }
+
+        public FileSystemInfo FileSystemInfo { get => new DirectoryInfo(Value); set => Value = value.FullName; }
+
+        public override required string Name
+        {
+            get => FileSystemInfo?.FullName ?? m_name;
+            set
+            {
+                m_name = value;
+                if (FileSystemInfo == null)
+                {
+                    FileSystemInfo = new DirectoryInfo(value);
+                }
+            }
+        }
+
+        public bool IncludeFiles { get; }
+
+        public override IEnumerable<IModel> CreateChildren()
+        {
+            if (FileSystemInfo == null)
+                throw new Exception("d90222fs sd");
+
+            foreach (var d in Directory.EnumerateDirectories(FileSystemInfo.FullName).Select(item => new DirectoryModel(IncludeFiles) { Value = item, Name = item }))
+            {
+                yield return d;
+            }
+            if (IncludeFiles)
+                foreach (var d in Directory.EnumerateFiles(FileSystemInfo.FullName).Select(item => new FileModel() { Value = item, Name = item }))
+                {
+                    yield return d;
+                }
+        }
+
+        public static DirectoryModel Create(DirectoryInfo assembly, bool includeFiles = true) => new(includeFiles) { FileSystemInfo = assembly, Name = assembly.FullName };
     }
 
     public class FilePathModel : CollectionModel<Model>

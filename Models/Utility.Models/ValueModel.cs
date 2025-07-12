@@ -5,12 +5,9 @@ using Utility.PropertyNotifications;
 
 namespace Utility.Models
 {
-
-    public class ValueModel<T> : NotifyPropertyClass, IValue<T?>, ISetValue, IGet, ISet, IGet<T>, Utility.Interfaces.Generic.ISet<T>, IModel
+    public class ValueModel<T> : NotifyPropertyClass, IValue<T?>, IValueModel, IGet, ISet, IGet<T>, Utility.Interfaces.Generic.ISet<T>, IModel
     {
         private T? value;
-        private readonly bool raisePropertyCalled;
-        private readonly bool raisePropertyReceived;
         protected string m_name = "unknown";
 
         public ValueModel(T? value = default, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(raisePropertyCalled, raisePropertyReceived)
