@@ -4,6 +4,7 @@ using Itenso.Windows.Controls.ListViewLayout;
 using System;
 using System.Collections;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -139,10 +140,10 @@ namespace Utility.WPF.Controls.Lists
                 Columns ??= [];
                 if (enumerable is ListCollectionView view)
                 {
-                    var type = view.CurrentItem.GetType();
-
-                    if (type != null)
+                    if (view.CurrentItem?.GetType() is { } type)
                         AutoListViewColumnHelpers.CreateColumns2(this, type).ForEach(c => Columns.Add(c));
+                    else if (view.ItemProperties.FirstOrDefault() is ItemPropertyInfo { Descriptor: PropertyDescriptor { ComponentType: { } _type } })
+                        AutoListViewColumnHelpers.CreateColumns2(this, _type).ForEach(c => Columns.Add(c));
                     else
                         throw new System.Exception("Sfd 3333f cvxs");
                 }
@@ -310,7 +311,7 @@ namespace Utility.WPF.Controls.Lists
             {
                 Clipboard.SetText(_context.Copy());
             }
-            else if (e.OriginalSource is ListBox { SelectedItem: ICopy __context } )
+            else if (e.OriginalSource is ListBox { SelectedItem: ICopy __context })
             {
                 Clipboard.SetText(__context.Copy());
             }

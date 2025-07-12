@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
@@ -20,7 +21,7 @@ namespace Utility.WPF.Controls.Lists
             if (values.SingleOrDefault(a => a is not IEnumerable and not null) is { } x)
                 return x;
 
-            if (values.Single(a => a is IEnumerable) is IEnumerable enumerable)
+            if (values.SingleOrDefault(a => a is IEnumerable) is IEnumerable enumerable)
             {
                 if (enumerable.Count() > 0)
                 {
@@ -79,6 +80,33 @@ namespace Utility.WPF.Controls.Lists
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+    public class WidthConverter : IMultiValueConverter
+    {
+        //public object[] Convert(object value, Type[] targetType, object parameter, CultureInfo culture)
+        //{
+        //    if (value is ListBox frameworkElement)
+        //    {
+        //        var container = (ListBoxItem)frameworkElement.ItemContainerGenerator.ContainerFromItem(frameworkElement.Items.First());
+        //        return container.ActualWidth;// frameworkElement.ActualWidth;
+        //    }
+        //    return  40;
+        //}
+
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+
+            return values[0];// 500.0;
+        }
+
+
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
             throw new NotImplementedException();
         }
