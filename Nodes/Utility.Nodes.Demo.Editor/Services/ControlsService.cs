@@ -9,6 +9,7 @@ using Splat;
 using System.Reactive.Subjects;
 using Utility.Helpers;
 using Utility.PropertyNotifications;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -26,21 +27,22 @@ namespace Utility.Nodes.Demo.Filters.Services
 
         private ControlsService()
         {
-            Locator.Current.GetService<INodeSource>().Single(nameof(NodeMethodFactory.BuildControlRoot))
-            .Subscribe(_n =>
-            {
-                _n.Descendants()
-                .Subscribe(node =>
+            Locator.Current.GetService<IObservableIndex<INode>>()
+                [nameof(NodeMethodFactory.BuildControlRoot)]
+                .Subscribe(_n =>
                 {
-                    if (node.NewItem is INode { Data: Model { Name: string name } model })
+                    _n.Descendants()
+                    .Subscribe(node =>
                     {
-                        model.WhenChanged().Where(a => a.Name == ".ctor").Subscribe(_ =>
+                        if (node.NewItem is INode { Data: Model { Name: string name } model })
                         {
-                            Switch(name, model);
-                        });
-                    }
+                            model.WhenChanged().Where(a => a.Name == ".ctor").Subscribe(_ =>
+                            {
+                                Switch(name, model);
+                            });
+                        }
+                    });
                 });
-            });     
         }
 
         private void Switch(string name, Model model)
@@ -49,7 +51,7 @@ namespace Utility.Nodes.Demo.Filters.Services
             switch (name)
             {
                 case NodeMethodFactory.Save:
-                    var _ = Locator.Current.GetService<INodeSource>().Single(nameof(NodeMethodFactory.BuildRoot)).Subscribe(root =>
+                    var _ = Locator.Current.GetService<MethodCache>().Get(nameof(NodeMethodFactory.BuildRoot)).Subscribe(root =>
                     {
                         root
                         .Descendant(a => a.tree.Data.ToString() == NodeMethodFactory.content_root)

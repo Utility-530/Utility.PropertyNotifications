@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Splat;
 using System;
+using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,10 +15,13 @@ using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.Generic.Data;
 using Utility.Interfaces.NonGeneric;
+using Utility.Models;
+using Utility.Models.Trees;
 using Utility.Nodes.Demo.Lists.Entities;
 using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Filters;
+using Utility.PropertyNotifications;
 using Utility.Repos;
 using Utility.Services;
 using Utility.WPF.Controls;
@@ -36,61 +40,76 @@ namespace Utility.Nodes.Demo.Lists
             showSplashscreen();
             SQLitePCL.Batteries.Init();
 
-            Locator.CurrentMutable.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
-            Locator.CurrentMutable.RegisterLazySingleton<INodeSource>(() => new NodeEngine());
+            CurrentMutable.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
+            CurrentMutable.RegisterLazySingleton<INodeSource>(() => new NodeEngine());
 
-            Locator.CurrentMutable.RegisterConstant<IExpander>(WPF.Expander.Instance);
-            //Locator.CurrentMutable.RegisterConstant<IContext>(Globals);
-            Locator.CurrentMutable.RegisterLazySingleton<MethodCache>(() => new MethodCache());
-            Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<MethodInfo>>(() => new Services.NodeMethodFactory());
-            Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<MethodInfo>>(() => new Nodes.Filters.NodeMethodFactory());
-            Locator.CurrentMutable.RegisterLazySingleton(() => new MasterViewModel());
-            Locator.CurrentMutable.RegisterLazySingleton(() => new ContainerViewModel());
-            Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
+            CurrentMutable.RegisterConstant<IExpander>(WPF.Expander.Instance);
+            CurrentMutable.RegisterLazySingleton<IObservableIndex<INode>>(() => MethodCache.Instance);
+            CurrentMutable.RegisterLazySingleton<MethodCache>(() => MethodCache.Instance);
+            CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new Services.NodeMethodFactory());
+            CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => Nodes.Filters.NodeMethodFactory.Instance);
+            CurrentMutable.RegisterLazySingleton(() => new MasterViewModel());
+            CurrentMutable.RegisterLazySingleton(() => new ContainerViewModel());
+            CurrentMutable.RegisterLazySingleton<DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
 
             //Locator.CurrentMutable.RegisterConstant<System.IObservable<ViewModel>>(new ComboService());
-            Locator.CurrentMutable.RegisterConstant(new ContainerService());
-            Locator.CurrentMutable.RegisterConstant(new RazorService());
-            Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Type>>(() => new ModelTypesFactory());
-            Locator.CurrentMutable.RegisterLazySingleton<Utility.Interfaces.Generic.IFactory<IId<Guid>>>(() => new ModelFactory());
+            CurrentMutable.RegisterConstant(new ContainerService());
+            CurrentMutable.RegisterConstant(new ServiceResolver());
+            CurrentMutable.RegisterConstant(new RazorService());
+            CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Type>>(() => new ModelTypesFactory());
+            CurrentMutable.RegisterLazySingleton<IFactory<IId<Guid>>>(() => new ModelFactory());
 
-            Locator.CurrentMutable.RegisterLazySingleton<FilterService>(() => new FilterService());
-            Locator.CurrentMutable.RegisterLazySingleton<CollectionCreationService>(() => new CollectionCreationService());
-            Locator.CurrentMutable.RegisterLazySingleton<SelectionService>(() => new SelectionService());
-            Locator.CurrentMutable.RegisterLazySingleton<CollectionViewService>(() => new CollectionViewService());
-            Locator.CurrentMutable.RegisterConstant<IFilter>(new StringFilter());
+            CurrentMutable.RegisterLazySingleton<FilterService>(() => new FilterService());
+            CurrentMutable.RegisterLazySingleton<CollectionCreationService>(() => new CollectionCreationService());
+            CurrentMutable.RegisterLazySingleton<SelectionService>(() => new SelectionService());
+            CurrentMutable.RegisterLazySingleton<CollectionViewService>(() => new CollectionViewService());
+            CurrentMutable.RegisterConstant<IFilter>(new StringFilter());
 
-            Locator.Current.GetService<CollectionCreationService>().Subscribe(Locator.Current.GetService<FilterService>());
-            Locator.Current.GetService<FilterService>().Subscribe(Locator.Current.GetService<CollectionViewService>());
-            Locator.Current.GetService<CollectionCreationService>().Subscribe(Locator.Current.GetService<CollectionViewService>());
+
+            Locator.Current.GetService<ServiceResolver>().Connect<PredicateReturnParam, PredicateParam>();
+            Locator.Current.GetService<ServiceResolver>().Connect<PredicateParam, ListCollectionViewParam>();
 
             JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
-
-            //TransformerService service = new();
-            //ControlsService _service = ControlsService.Instance;
-            //ComboService comboService = new ();
-            //Utility.Models.SchemaStore.Instance.Add(typeof(EbayModel), SchemaFactory.EbaySchema);
-
-
+            subscribeToTypeChanges();
             base.OnStartup(e);
         }
 
         private static void showSplashscreen()
         {
-            BitmapImage bmi = new BitmapImage(new Uri("pack://application:,,,/Assets/shuttle.png"));
-            var x = new Splashscreen()
+            var sswindow = new Window();
+            sswindow.Show();
+            BitmapImage bmi = new(new Uri("pack://application:,,,/Assets/shuttle.png"));
+            var slashscreen = new Splashscreen()
             {
                 Content = new Image { Source = bmi, Stretch = Stretch.UniformToFill }
             };
-            var sswindow = new Window();
-            x.Finished += (s, e) =>
+            sswindow.Content = slashscreen;
+            var window = new Window() { Content = Locator.Current.GetService<ContainerViewModel>() };
+            slashscreen.Finished += (s, e) =>
             {
-                var window = new Window() { Content = Locator.Current.GetService<ContainerViewModel>() };
                 sswindow.Close();
                 window.Show();
             };
-            sswindow.Content = x;
-            sswindow.Show();
+        }
+
+        public void subscribeToTypeChanges()
+        {
+            Locator.Current.GetService<IObservableIndex<INode>>()[nameof(Utility.Nodes.Filters.NodeMethodFactory.BuildListRoot)]
+                .Subscribe(node =>
+                {
+                    node
+                    .WithChangesTo(a => a.Current)
+                    .Select(a =>
+                    {
+                        if (a.Data is ModelTypeModel { Value.Type: { } stype } data)
+                        {
+                            var type = Type.GetType(stype);
+                            return type;
+                        }
+                        throw new Exception("£D£");
+                    }).Observe<ChangeTypeParam, Type>()
+                    .Observe<InstanceTypeParam, Type>();
+                });
         }
     }
 
@@ -109,7 +128,7 @@ namespace Utility.Nodes.Demo.Lists
     //        return Task.FromResult(new EbayModel() { Id = Guid.NewGuid() });
     //    }
     //}
-    public class ModelFactory : Utility.Interfaces.Generic.IFactory<IId<Guid>>
+    public class ModelFactory : IFactory<IId<Guid>>
     {
         public IId<Guid> Create(object config)
         {
@@ -117,7 +136,7 @@ namespace Utility.Nodes.Demo.Lists
             {
                 if (type.GetConstructors().SingleOrDefault(a => a.TryGetAttribute<FactoryAttribute>(out var x)) is { } x)
                 {
-                    return (IId<Guid>)x.Invoke(new[] {default(object)});
+                    return (IId<Guid>)x.Invoke(new[] { default(object) });
                 }
                 if (type == typeof(UserProfileModel))
                 {
@@ -125,7 +144,7 @@ namespace Utility.Nodes.Demo.Lists
                 }
                 if (type == typeof(EbayModel))
                 {
-                    return new EbayModel { Id = Guid.NewGuid(), AddDate = DateTime.Now };
+                    return new EbayModel { Id = Guid.NewGuid() };
                 }
                 if (Activator.CreateInstance(type) is IId<Guid> iid)
                 {
@@ -166,4 +185,6 @@ namespace Utility.Nodes.Demo.Lists
             return TabEmptiedResponse.CloseWindowOrLayoutBranch;
         }
     }
+
+
 }

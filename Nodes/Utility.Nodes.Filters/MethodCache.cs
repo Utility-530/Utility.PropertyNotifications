@@ -12,10 +12,11 @@ using Observable = System.Reactive.Linq.Observable;
 using Utility.Helpers;
 using System.Reflection;
 using Utility.Interfaces.Generic;
+using Utility.Models;
 
 namespace Utility.Nodes.Filters
 {
-    public class MethodsValue(object instance, MethodInfo methodInfo)
+    public class MethodsValue(object instance, Method methodInfo)
     {
         Dictionary<Guid, MethodValue> pairs = new();
 
@@ -32,7 +33,7 @@ namespace Utility.Nodes.Filters
     {
         Dictionary<string, MethodsValue> _methods = new();
 
-        public void Add(string key, object instance, MethodInfo value)
+        public void Add(string key, object instance, Method value)
         {
             _methods.Add(key, new(instance, value));
         }
@@ -42,22 +43,22 @@ namespace Utility.Nodes.Filters
         public object Invoke(string key, Guid? guid, object[]? objects = null)
         {
             if (_methods.ContainsKey(key))
-                return this[(key, guid)].Method.Invoke(this[(key, guid)].Instance, (guid.HasValue ? [guid.Value] : Array.Empty<object>()).Concat(objects != null ? objects : Array.Empty<object>()).ToArray());
+                return this[(key, guid)].Method.Execute([.. (guid.HasValue ? [guid.Value] : Array.Empty<object>()), .. objects ?? Array.Empty<object>()]);
             throw new Exception("eeee 0ff0s");
         }
     }
 
-    public class MethodCache
+    public class MethodCache : IObservableIndex<INode>
     {
         private Lazy<IOP> dict = new(() =>
         {
             var iop = new IOP();
-            var factories = Locator.Current.GetServices<IEnumerableFactory<MethodInfo>>();
+            var factories = Locator.Current.GetServices<IEnumerableFactory<Method>>();
             factories.ForEach(t => t.Create(null).ForEach(m => iop.Add(m.Name, t, m)));
             return iop;
         });
 
-        public MethodCache()
+        private MethodCache()
         {
 
         }
@@ -70,6 +71,8 @@ namespace Utility.Nodes.Filters
             }
         }
 
+
+        public System.IObservable<INode> this[string key] => Get(key);
 
         public System.IObservable<INode> Get(string key, Guid? guid = default, object?[] objects = null)
         {
@@ -144,5 +147,7 @@ namespace Utility.Nodes.Filters
             return this[(key, guid)].IsAccessed;
         }
 
+
+        public static MethodCache Instance { get; } = new();
     }
 }

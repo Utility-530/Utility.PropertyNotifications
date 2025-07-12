@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
-using System.Reflection;
 using Utility.Interfaces.Exs;
 using Utility.Keys;
 using Utility.Models;
@@ -12,9 +11,16 @@ using Utility.Helpers.Reflection;
 
 namespace Utility.Nodes.Filters
 {
-    public class NodeMethodFactory : Utility.Interfaces.Generic.IEnumerableFactory<MethodInfo>
-    {
 
+    public class EnumerableMethodFactory: Utility.Interfaces.Generic.IEnumerableFactory<Method>
+    {
+        public IEnumerable<Method> Create(object config) => this.GetType().InstantMethods().Where(a => a.Name != nameof(Create)).Select(a => new Method(a, this));
+
+    }
+
+
+    public class NodeMethodFactory : EnumerableMethodFactory
+    {
         INodeSource nodeSource = Locator.Current.GetService<INodeSource>();
 
         //public const string tableName = "TableName";
@@ -73,7 +79,9 @@ namespace Utility.Nodes.Filters
         public const string Select = nameof(Select);
         public const string Cancel = nameof(Cancel);
 
-        public IEnumerable<MethodInfo> Create(object config) => this.GetType().InstantMethods().Where(a => a.Name != nameof(Create));
+        private NodeMethodFactory()
+        {
+        }
 
         public IObservable<INode> BuildRoot()
         {
@@ -233,5 +241,7 @@ namespace Utility.Nodes.Filters
             }
             ;
         }
+
+        public static NodeMethodFactory Instance { get; } = new();
     }
 }

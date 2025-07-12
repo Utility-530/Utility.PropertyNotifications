@@ -2,26 +2,24 @@
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Filters;
+using Utility.Nodes.WPF;
 using Utility.PropertyNotifications;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Demo.Directory
 {
-    public class MainViewModel : NotifyPropertyClass
+    public class MainViewModel : ViewModel
     {
-        Lazy<INodeSource> source = new(() => Locator.Current.GetService<INodeSource>());
 
-        private ITree selection;
+        private IReadOnlyTree selection;
 
-        public ITree Selection
+        public IReadOnlyTree Selection
         {
             get
             {
                 if (selection == null)
-                    source.Value.Single(nameof(NodeMethodFactory.BuildComboRoot))
-                        .Subscribe(a => { selection = a;
-                            RaisePropertyChanged(nameof(Selection)); });
+                    Subscribe(nameof(NodeMethodFactory.BuildComboRoot), a => selection = a);
                 return selection ?? new Tree();
             }
         }

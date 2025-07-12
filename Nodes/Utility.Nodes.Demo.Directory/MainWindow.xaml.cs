@@ -26,6 +26,7 @@ namespace Utility.Nodes.Demo.Directory
         public MainWindow()
         {
             InitializeComponent();
+            var treeView = new TreeView();
             var parent = new ComboTreeViewItem()
             {
                 Width = 200,
@@ -36,6 +37,7 @@ namespace Utility.Nodes.Demo.Directory
                 ItemContainerStyle= this.Resources["DefaultStyle"] as Style, 
                 EditTemplate = this.Resources["EditTemplate"] as DataTemplate,
                 SelectionTemplate = this.Resources["SelectionTemplate"] as DataTemplate,
+                TreeView = treeView
                 //Selection = new Binding("SelectionItem.Data") { RelativeSource= RelativeSource.Self, Converter= new DataConverter()  }
             };
 
@@ -43,7 +45,7 @@ namespace Utility.Nodes.Demo.Directory
 
             parent.FinishEdit += Parent_Add;
 
-            var treeView = new TreeView();
+
             treeView.SelectedItemChanged += (s, e) =>
             {
 

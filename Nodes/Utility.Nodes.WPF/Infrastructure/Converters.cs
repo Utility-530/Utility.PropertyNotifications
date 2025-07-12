@@ -22,7 +22,7 @@ namespace Utility.Nodes.WPF
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var x = (value as Model).Proliferation().FirstOrDefault();
+            var x = (value as IProliferation).Proliferation().FirstOrDefault();
             return x;
         }
 

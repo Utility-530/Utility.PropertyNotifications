@@ -5,22 +5,21 @@ using Utility.Interfaces.Exs;
 using Utility.PropertyNotifications;
 using Utility.Trees.Abstractions;
 using Utility.Helpers;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Nodes.WPF
 {
     public class ViewModel : NotifyPropertyClass, IDisposable
     {
-        protected Lazy<INodeSource> source = new(() => Locator.Current.GetService<INodeSource>());
+        private bool _disposed;
+        private bool isSelected;
+        protected Lazy<IObservableIndex<INode>> source = new(() => Locator.Current.GetService<IObservableIndex<INode>>());
         private readonly Dictionary<string, ObservableCollection<IReadOnlyTree>> dictionary = [];
-        private ObservableCollection<IReadOnlyTree> this[string key] => dictionary.GetValueOrNew(key);
 
-        public virtual string Name
-        {
-            get
-            {
-                return this.GetType().Name;
-            }
-        }
+        public virtual string Name => GetType().Name;
+        protected void Subscribe(string key, Action<IReadOnlyTree> field,[CallerMemberName] string? callerName = null) => 
+            
+            source.Value[key].Subscribe(a => { field(a); RaisePropertyChanged(callerName); }).DisposeWith(disposables);
 
         public bool IsSelected { get => isSelected; set => RaisePropertyChanged(ref isSelected, value); }
         protected IEnumerable<IReadOnlyTree> get(string name, [CallerMemberName] string? propertyName = default)
@@ -31,20 +30,20 @@ namespace Utility.Nodes.WPF
             {
                 source
                     .Value
-                    .Single(name)
+                    [name]
                     .Subscribe(a =>
                     {
-                        this[propertyName].Add(a);
+                        get(propertyName).Add(a);
                     }).DisposeWith(disposables);
             }
-            return this[propertyName];
+            return get(propertyName);
         }
 
         #region dispose
 
         protected System.Reactive.Disposables.CompositeDisposable disposables = new();
-        private bool _disposed;
-        private bool isSelected;
+
+        private ObservableCollection<IReadOnlyTree> get(string key) => dictionary.GetValueOrNew(key);
 
         public void Dispose()
         {

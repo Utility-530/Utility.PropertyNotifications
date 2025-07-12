@@ -24,6 +24,7 @@
                     xmlns:btns="http://schemas.utility.com/buttons" 
                     xmlns:text="http://schemas.utility.com/texts"
                     xmlns:cefsharpwpf="clr-namespace:CefSharp.Wpf.HwndHost;assembly=CefSharp.Wpf"
+                    xmlns:fs="http://schemas.utility.com/filesystem"
                     xmlns:markup="http://schemas.utility.com/markup"
                     xmlns:list="http://schemas.utility.com/lists"
                     xmlns:obj="http://schemas.utility.com/objects"
@@ -113,7 +114,7 @@
                     />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type inf:SearchModel}">
+    <DataTemplate x:Key="SearchEditor" DataType="{x:Type model:StringModel}">
         <text:SearchBox x:Name="Searchbox" Text="{Binding Value, Mode=TwoWay}" Height="25" MinWidth="200">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Search" >
@@ -144,6 +145,12 @@
             <i:Interaction.Behaviors>
                 <obj:ObjectBehavior Object="{Binding Value, Mode=OneWay}" RaisePropertyChanged="True"/>
             </i:Interaction.Behaviors>
+        </obj:JsonControl>
+    </DataTemplate>  
+    
+    <DataTemplate x:Key="Json" DataType="{x:Type model:Model}">
+        <obj:JsonControl Width="500" Height="400" Json="{Binding Value}">
+          
         </obj:JsonControl>
     </DataTemplate>  
     
@@ -191,12 +198,6 @@
             </i:Interaction.Behaviors>
         </ComboBox>
     </DataTemplate>
-
-
-    <DataTemplate DataType="{x:Type inf:DataFileModel}">
-        <Ellipse Height="5" Width="5" Fill="{c:Orange}"></Ellipse>
-    </DataTemplate>
-
 
     <DataTemplate DataType="{x:Type model:BooleanModel}">
         <CheckBox  IsChecked="{Binding Value}"></CheckBox>
@@ -343,7 +344,7 @@
         <Setter Property="Width" Value="60"/>
     </Style>
     
-    <DataTemplate x:Key="ItemTemplate" DataType="{x:Type inf:DataFileModel}">
+    <DataTemplate x:Key="ItemTemplate" DataType="{x:Type inf:DataFileModel}" x:Shared="false">
         <Grid Background="#DCDCDC" Name="rootElement">
             <Grid.Resources>
                 <Style TargetType="{x:Type TextBox}">
@@ -430,7 +431,21 @@
         </Grid>
     </DataTemplate>
 
+    <DataTemplate x:Key="DirectoryEditor" DataType="{x:Type model:StringModel}">
+        <fs:FolderComboBrowser Margin="8"
+                               MaxWidth="180"
+                    Path="{Binding Value, Mode=TwoWay}"
+                    x:Name="FolderComboBrowser"/>
+    </DataTemplate>    
 
+    <DataTemplate x:Key="FilePathEditor" DataType="{x:Type model:StringModel}">
+        <fs:FileComboBrowser Margin="8"
+                                 MaxWidth="180"
+                             Path="{Binding Value, Mode=TwoWay}"
+                             x:Name="FileComboBrowser"
+                       
+                    />
+    </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:ModelTypeModel}">
         <Grid

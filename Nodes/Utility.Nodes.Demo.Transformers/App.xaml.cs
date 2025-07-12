@@ -1,19 +1,21 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Splat;
+using System.Reflection;
 using System.Windows;
 using Utility.Conversions.Json.Newtonsoft;
+using Utility.Helpers.Reflection;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using Utility.Nodes.Demo.Transformers;
+using Utility.Models.Trees;
 using Utility.Nodes.Demo.Filters.Services;
+using Utility.Nodes.Demo.Transformers;
 using Utility.Nodes.Filters;
 using Utility.Nodes.WPF;
 using Utility.Repos;
 using Utility.WPF.Templates;
-using System.Reflection;
-using Utility.Helpers.Reflection;
 
 
 namespace Utility.Nodes.Demo.Transformers
@@ -28,64 +30,62 @@ namespace Utility.Nodes.Demo.Transformers
             SQLitePCL.Batteries.Init();
 
             Locator.CurrentMutable.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
-            //Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeSource.Instance);
             Locator.CurrentMutable.RegisterLazySingleton<INodeSource>(() => new NodeEngine());
             Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
             Locator.CurrentMutable.RegisterConstant<IExpander>(WPF.Expander.Instance);
-            Locator.CurrentMutable.RegisterConstant<IContext>(Context.Instance);
-            Locator.CurrentMutable.RegisterConstant<IMethodFactory>(MethodFactory.Instance);
-            Locator.CurrentMutable.RegisterConstant<IPropertyFactory>(PropertyFactory.Instance);
+
+            Locator.CurrentMutable.RegisterConstant<IEnumerableFactory<MethodInfo>>(MethodFactory.Instance);
+            Locator.CurrentMutable.RegisterConstant<IEnumerableFactory<PropertyInfo>>(PropertyFactory.Instance);
+
+
             Locator.CurrentMutable.RegisterConstant<Type>(typeof(Node));
 
-            Splat.Locator.CurrentMutable.Register<MethodCache>(() => new MethodCache());
-            Splat.Locator.CurrentMutable.RegisterLazySingleton<MainViewModel>(() => new MainViewModel());
-            Splat.Locator.CurrentMutable.Register<InputSelectionViewModel>(() => new InputSelectionViewModel());
-            Splat.Locator.CurrentMutable.RegisterLazySingleton<INodePropertyFactory>(() => new NodePropertyFactory());
-            Splat.Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
-
-
-            //var x = DataTemplateSelector.Instance;
+            Locator.CurrentMutable.Register<IObservableIndex<INode>>(() => MethodCache.Instance);
+            Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() =>  Nodes.Filters.NodeMethodFactory.Instance);
+            Locator.CurrentMutable.RegisterLazySingleton<MainViewModel>(() => new MainViewModel());
+            Locator.CurrentMutable.Register<InputSelectionViewModel>(() => new InputSelectionViewModel());
+            Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
 
             JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
 
-            Splat.Locator.CurrentMutable.RegisterConstant<ControlsService>(new() { Name = "ControlsService" });
-            Splat.Locator.CurrentMutable.RegisterConstant<IObservable<ControlEvent>>(new InputControlsService() { Name = "ControlsService" });
+            Locator.CurrentMutable.RegisterConstant<ControlsService>(new() { Name = "ControlsService" });
+            Locator.CurrentMutable.RegisterConstant<IObservable<ControlEvent>>(new InputControlsService() { Name = "ControlsService" });
 
             var window = new Window() { Content = Locator.Current.GetService<MainViewModel>() };
 
             window.Show();
 
             base.OnStartup(e);
-
         }
-
     }
 
-    public class MethodFactory : IMethodFactory
+    public class MethodFactory : IEnumerableFactory<MethodInfo>
     {
         Lazy<IEnumerable<MethodInfo>> _methods = new(() => typeof(Methods).StaticMethods().Select(a => a.Item2));
-        public IEnumerable<MethodInfo> Methods => _methods.Value;
 
         public static MethodFactory Instance { get; } = new();
+
+        public IEnumerable<MethodInfo> Create(object config)
+        {
+            if (config is nameof(MethodsModel))
+                return _methods.Value;
+            throw new Exception("ds 3333");
+
+        }
     }
 
 
-    public class PropertyFactory : IPropertyFactory
+    public class PropertyFactory : IEnumerableFactory<PropertyInfo>
     {
         Lazy<IEnumerable<PropertyInfo>> _properties = new(() => [typeof(Node).GetProperty(nameof(Node.Key)), typeof(Node).GetProperty(nameof(Node.Data))]);
-        public IEnumerable<PropertyInfo> Properties => _properties.Value;
 
         public static PropertyFactory Instance { get; } = new();
+
+        public IEnumerable<PropertyInfo> Create(object config)
+        {
+            if (config is IEnumerable<Type> types)
+                return _properties.Value.Where(a => types.Any(x => a.PropertyType.Equals(x)));
+            return _properties.Value;
+        }
     }
-
-
-    public class NodePropertyFactory : INodePropertyFactory
-    {
-        Lazy<IEnumerable<PropertyInfo>> _properties = new(() => typeof(Node).PublicInstanceProperties().ToArray());
-
-        public IEnumerable<PropertyInfo> Properties(IEnumerable<Type> types) => _properties.Value.Where(a => types.Any(x => a.PropertyType.Equals(x)));
-        public static PropertyFactory Instance { get; } = new();
-
-    }
-
 }

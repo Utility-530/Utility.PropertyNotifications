@@ -1,29 +1,24 @@
 ﻿using Jonnidip;
 using Newtonsoft.Json;
-using Splat;
 using System.Windows.Input;
 using Utility.Commands;
-using Utility.Helpers;
-using Utility.Interfaces.Exs;
 using Utility.Nodes;
 using Utility.Nodes.Filters;
-using Utility.PropertyNotifications;
+using Utility.Nodes.WPF;
 using Utility.Trees.Abstractions;
-using Utility.ViewModels;
 
 namespace Utility.Trees.Demo.Filters.Infrastructure
 {
-    internal class MainViewModel : NotifyPropertyClass
+    internal class MainViewModel : ViewModel
     {
         private Node[] filters;
-        Lazy<INodeSource> source = new(() => Locator.Current.GetService<INodeSource>());
         JsonSerializerSettings settings = new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.All,
             Converters = 
                         [
                             new StringTypeEnumConverter(),
-                            new NodeConverter()
+                            new Utility.Nodes.NodeConverter()
                         ]
         };
 
@@ -43,11 +38,10 @@ namespace Utility.Trees.Demo.Filters.Infrastructure
             get
             {
                 if (filters == null)
-                    source.Value.Single(nameof(NodeMethodFactory.BuildCollectionRoot))
-                        .Subscribe(a =>
+                    Subscribe(nameof(NodeMethodFactory.BuildCollectionRoot),
+                        a =>
                         {
                             filters = [(Node)a];
-                            RaisePropertyChanged(nameof(Nodes));
                         });
                 return filters;
             }

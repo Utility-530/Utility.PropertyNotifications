@@ -8,14 +8,12 @@ namespace Utility.Nodes.Demo.Editor
     {
         IReadOnlyTree[] selection, control;
 
-
         public IReadOnlyTree[] Selection
         {
             get
             {
                 if (selection == null)
-                    source.Value.Single(nameof(NodeMethodFactory.BuildComboRoot))
-                        .Subscribe(a => { selection = [a]; RaisePropertyChanged(nameof(Selection)); }).DisposeWith(disposables);
+                    Subscribe(nameof(NodeMethodFactory.BuildComboRoot), a => selection = [a]);
                 return selection;
             }
         }
@@ -25,11 +23,7 @@ namespace Utility.Nodes.Demo.Editor
             get
             {
                 if (control == null)
-                    source.Value.Single(nameof(NodeMethodFactory.BuildControlRoot))
-                        .Subscribe(a =>
-                        {
-                            control = [a]; base.RaisePropertyChanged(nameof(Controls));
-                        }).DisposeWith(disposables);
+                    Subscribe(nameof(NodeMethodFactory.BuildControlRoot), a => control = [a]);       
                 return control;
             }
         }

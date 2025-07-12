@@ -10,14 +10,14 @@ using System.IO;
 using Utility.PropertyNotifications;
 using Utility.PropertyDescriptors;
 using Utility.Models.Trees;
-using Utility.Nodes.WPF;
 using Splat;
-using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Interfaces;
 using Chronic;
 using Utility.Observables;
 using Utility.Observables.Generic;
+using Utility.Interfaces.Generic;
+using INode = Utility.Interfaces.Exs.INode;
 
 
 namespace Utility.Nodes.Demo.Filters.Services
@@ -35,8 +35,8 @@ namespace Utility.Nodes.Demo.Filters.Services
 
         public ParserService()
         {
-            Locator.Current.GetService<INodeSource>().Single(nameof(NodeMethodFactory.BuildContentRoot))
-                .CombineLatest(Locator.Current.GetService<INodeSource>().Single(nameof(NodeMethodFactory.BuildHtmlRoot)))
+            Locator.Current.GetService<IObservableIndex<INode>>()[nameof(NodeMethodFactory.BuildContentRoot)]
+                .CombineLatest(Locator.Current.GetService<IObservableIndex<INode>>()[nameof(NodeMethodFactory.BuildHtmlRoot)])
                 .Subscribe(nodes =>
                 {
                     var (node, htmlNode) = nodes;

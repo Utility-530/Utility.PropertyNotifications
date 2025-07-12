@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reactive.Linq;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
-using Utility.Nodes.Filters;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.Structs.Repos;

@@ -2,13 +2,9 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Splat;
-using System.Configuration;
-using System.Data;
 using System.Windows;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Interfaces.Exs;
-using Utility.Interfaces.NonGeneric;
-using Utility.Models;
 using Utility.Nodes.Demo.Queries.Infrastructure;
 using Utility.Nodes.Filters;
 using Utility.Repos;
@@ -27,7 +23,7 @@ namespace Utility.Nodes.Breadcrumbs
             SQLitePCL.Batteries.Init();
             Locator.CurrentMutable.RegisterLazySingleton<ITreeRepository>(() => JsonRepository.Instance);
             Locator.CurrentMutable.RegisterLazySingleton<INodeSource>(() => NodeEngine.Instance);
-            Locator.CurrentMutable.RegisterConstant<IContext>(Context.Instance);
+            Locator.CurrentMutable.RegisterLazySingleton<Type>(() => typeof(Node));
             Locator.CurrentMutable.RegisterLazySingleton<IJObjectService>(() => new JObjectService());
 
             JsonConvert.DefaultSettings = () => settings;

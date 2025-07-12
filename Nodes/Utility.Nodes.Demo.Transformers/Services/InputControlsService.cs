@@ -7,6 +7,7 @@ using System.Reactive.Subjects;
 using Utility.PropertyNotifications;
 using Utility.Models.Trees;
 using Utility.Reactives;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -19,8 +20,8 @@ namespace Utility.Nodes.Demo.Filters.Services
 
         public InputControlsService()
         {
-            Locator.Current.GetService<INodeSource>()
-                .Single(nameof(NodeMethodFactory.BuildInputControlRoot))
+            Locator.Current.GetService<IObservableIndex<INode>>()
+                [nameof(NodeMethodFactory.BuildInputControlRoot)]
                 .Subscribe(_n =>
                 {
                     Utility.Trees.Extensions.Async.Match.Descendants(_n)

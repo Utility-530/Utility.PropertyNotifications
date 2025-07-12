@@ -17,6 +17,7 @@ using Utility.Models.Trees;
 using Utility.Interfaces.Exs;
 using Splat;
 using Utility.PropertyNotifications;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -38,8 +39,8 @@ namespace Utility.Nodes.Demo.Filters.Services
             Observable.Create<Exception>(observer =>
             {
                 return Locator.Current
-                .GetService<INodeSource>()
-                .Single(nameof(NodeMethodFactory.BuildTransformersRoot))
+                .GetService<IObservableIndex<INode>>()
+                [nameof(NodeMethodFactory.BuildTransformersRoot)]
                 .Subscribe(c_node =>
                 {
                     c_node

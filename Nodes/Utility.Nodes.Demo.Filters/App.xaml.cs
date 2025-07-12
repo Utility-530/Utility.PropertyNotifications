@@ -4,7 +4,7 @@ using Splat;
 using System.Windows;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Interfaces.Exs;
-using Utility.Interfaces.NonGeneric;
+using Utility.Interfaces.Generic;
 using Utility.Models;
 using Utility.Models.Trees.Converters;
 using Utility.Nodes;
@@ -24,8 +24,10 @@ namespace Utility.Trees.Demo.Filters
 
             Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
             Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeEngine.Instance);
-            //Locator.CurrentMutable.RegisterConstant<IContext>(Context.Instance);
-            Locator.CurrentMutable.RegisterConstant<MethodCache>(new MethodCache());
+            Locator.CurrentMutable.RegisterConstant<IObservableIndex<INode>>(MethodCache.Instance);
+            Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => NodeMethodFactory.Instance);
+
+
             //Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
             //Splat.Locator.CurrentMutable.RegisterLazySingleton<MainViewModel>(() => new MainViewModel());
 

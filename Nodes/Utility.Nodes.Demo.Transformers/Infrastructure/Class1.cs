@@ -14,7 +14,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
-using Utility.Interfaces.Exs;
 using Utility.Models.Trees;
 using Utility.WPF.Trees.Connectors;
 using System.Reactive.Linq;
@@ -196,7 +195,7 @@ namespace Utility.Nodes.Demo.Transformers
                             Name = "",
                             ResolvableModel = new ResolvableModel { Name = "", GlobalAssembliesModel = new GlobalAssembliesModel(() => [new AssemblyTypePropertyModel { Name = "", Value = typeof(Node).GetProperty(nameof(Node.Key)) }]) { Name = "" } },
                             ComparisonModel = new ComparisonModel { Name = "", Type = Models.Trees.ComparisonType.String },
-                            ValueModel = new ValueModel { Name = "", Value = (_args.SourceConnector.element.DataContext as Node).Key }
+                            Model = new ValueModel { Name = "", Value = (_args.SourceConnector.element.DataContext as Node).Key }
                         });
 
 

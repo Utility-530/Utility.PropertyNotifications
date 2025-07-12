@@ -203,7 +203,7 @@ namespace Utility.Nodes.Filters
                 }
                 if (data is INotifyPropertyCalled called)
                 {
-                    called.WhenCalled()
+                    called.WhenCalled(true)
                     .Subscribe(call =>
                     {
                         if (call.Name == nameof(Model.Name))
@@ -612,18 +612,15 @@ namespace Utility.Nodes.Filters
                     node = nodeFactory(name);
                     node.Key = new GuidKey(guid);
                 }
-                observer.OnNext(node);
 
                 var data = modelFactory(name);
+                node.Data = data;
+                observer.OnNext(node);
 
                 var disposable = repository.Value
                 .InsertRoot(guid, name, toType(data))
                 .Subscribe(a =>
                 {
-                    if (a.HasValue)
-                    {
-                        node.Data = data;
-                    }
                     if (a.HasValue && node.Data == null)
                         node.Data = DataActivator.Activate(a);
                     Add(node);
@@ -680,7 +677,7 @@ namespace Utility.Nodes.Filters
 
         public bool IsAccessed => Task != null || Nodes != null;
         public object Instance { get; set; }
-        public MethodInfo Method { get; set; }
+        public Method Method { get; set; }
 
         public Task Task { get; set; }
 

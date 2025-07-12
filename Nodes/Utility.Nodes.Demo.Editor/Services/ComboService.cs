@@ -6,17 +6,15 @@ using Utility.PropertyNotifications;
 using Utility.Nodes.Demo.Editor;
 using Utility.Repos;
 using Utility.Models.Trees;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
-
-
     public class ComboService
     {
         public ComboService()
         {
-
-            Locator.Current.GetService<INodeSource>().Single(nameof(NodeMethodFactory.BuildComboRoot))
+            Locator.Current.GetService<IObservableIndex<INode>>()[nameof(NodeMethodFactory.BuildComboRoot)]
                 .Subscribe(node =>
                 {
                     node.WithChangesTo(a => a.Current)

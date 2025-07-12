@@ -13,7 +13,7 @@ using Utility.Models.Trees;
 using LanguageExt.Pipes;
 using Utility.Trees.Abstractions;
 using System.Reactive.Disposables;
-using System.Linq.Expressions;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -25,7 +25,7 @@ namespace Utility.Nodes.Demo.Filters.Services
     }
     public readonly record struct ControlEvent(ControlEventType ControlEventType, int Count);
 
-    public class ControlsService : Model, IObservable<ControlEvent>
+    public class ControlsService : Model, System.IObservable<ControlEvent>
     {
         Dictionary<Guid, IDisposable> disposables = new();
         ReplaySubject<ControlEvent> replaySubject = new(1);
@@ -34,8 +34,8 @@ namespace Utility.Nodes.Demo.Filters.Services
         public ControlsService()
         {
             Locator.Current
-                .GetService<INodeSource>()
-                .Single(nameof(NodeMethodFactory.BuildControlRoot))
+                .GetService<IObservableIndex<INode>>()
+                [nameof(NodeMethodFactory.BuildControlRoot)]
                 .Subscribe(_n =>
                 {
                     Utility.Trees.Extensions.Async.Match.Descendants(_n)
@@ -59,8 +59,8 @@ namespace Utility.Nodes.Demo.Filters.Services
                 case NodeMethodFactory.Run:
                     {
                         Locator.Current
-                            .GetService<INodeSource>()
-                            .Single(nameof(NodeMethodFactory.BuildTransformersRoot))
+                            .GetService<IObservableIndex<INode>>()
+                            [nameof(NodeMethodFactory.BuildTransformersRoot)]
                             .Subscribe(c_node =>
                             {
                                 if (c_node is { Data: TransformersModel ts })

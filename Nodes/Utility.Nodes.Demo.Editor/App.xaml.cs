@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Splat;
+using System.Reflection;
 using System.Windows;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Nodes.Demo.Filters.Services;
@@ -27,19 +29,18 @@ namespace Utility.Nodes.Demo.Editor
             Locator.CurrentMutable.RegisterLazySingleton<INodeSource>(()=>new NodeEngine());
             Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
             Locator.CurrentMutable.RegisterConstant<IExpander>(WPF.Expander.Instance);
-            Locator.CurrentMutable.RegisterConstant<IContext>(Context.Instance);
-       
-            Splat.Locator.CurrentMutable.Register<MethodCache>(() => new MethodCache());
-            Splat.Locator.CurrentMutable.RegisterLazySingleton<MasterViewModel>(() => new MasterViewModel());
-            Splat.Locator.CurrentMutable.RegisterLazySingleton<ContainerViewModel>(() => new ContainerViewModel());
-            Splat.Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
+            //Locator.CurrentMutable.RegisterConstant<IContext>(Context.Instance);
+            Locator.CurrentMutable.RegisterLazySingleton<MethodCache>(() => MethodCache.Instance);
+            Locator.CurrentMutable.RegisterLazySingleton<IObservableIndex<INode>>(() => MethodCache.Instance);
+            Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => NodeMethodFactory.Instance);
 
+            Locator.CurrentMutable.RegisterLazySingleton<MasterViewModel>(() => new MasterViewModel());
+            Locator.CurrentMutable.RegisterLazySingleton<ContainerViewModel>(() => new ContainerViewModel());
+            Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
 
-            //var x = DataTemplateSelector.Instance;
 
             JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
 
-            //TransformerService service = new();
             ControlsService _service = ControlsService.Instance;
 
             ComboService comboService = new ();
