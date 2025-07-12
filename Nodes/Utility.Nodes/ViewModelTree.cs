@@ -37,6 +37,7 @@ namespace Utility.Nodes
         private Position2D connectorPosition = Position2D.None;
         private string dataTemplate;
         private string itemsPanelTemplate;
+        private string title;
 
         public ViewModelTree(/*string name,*/ object data) : this()
         {
@@ -262,6 +263,15 @@ namespace Utility.Nodes
         }
 
         public bool IsPersistable { get; set; }
+
+        public string Title
+        {
+            get => title;
+            set
+            {
+                RaisePropertyChanged(ref title, value);
+            }
+        }
 
         public ObservableCollection<Exception> Errors { get; set; } = new();
 
