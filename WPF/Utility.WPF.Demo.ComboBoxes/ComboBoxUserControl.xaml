@@ -81,7 +81,6 @@
         <ContentControl Content="{Binding ElementName=Style2Selector, Path=SelectedStyle}"/>
         <ContentControl Content="{Binding ElementName=Style2Selector, Path=FullKey}"/>
 
-
         <controls:ComboBoxTreeView >
             <i:Interaction.Behaviors>
                 <controls:DataTemplateTreeSelectorBehavior x:Name="DataTemplate2Selector" Assemblies="{x:Static local:ComboBoxUserControl.Assemblies}"/>
@@ -111,6 +110,13 @@
         <controls:ComboBoxTreeView >
             <i:Interaction.Behaviors>
                 <controls:TypeSelectorBehavior x:Name="Type2Selector"/>
+            </i:Interaction.Behaviors>
+        </controls:ComboBoxTreeView>
+
+
+        <controls:ComboBoxTreeView >
+            <i:Interaction.Behaviors>
+                <controls:FileSelectorBehavior x:Name="FileSelector" />
             </i:Interaction.Behaviors>
         </controls:ComboBoxTreeView>
 

@@ -10,10 +10,10 @@ namespace Utility.WPF.Demo.FileSystem.Infrastructure
         public FileBrowser2()
         {
             TextBlockOne = new TextBlock { Width = 300, VerticalAlignment = System.Windows.VerticalAlignment.Center };
-            this.TextBoxContent = TextBlockOne;
+            this.EditContent = TextBlockOne;
         }
 
-        protected override void OnTextChange(string path, TextBlock textBox)
+        protected override void OnPathChange(string path, TextBlock textBox)
         {
             TextBlockOne.Text = path;
             TextBlockOne.Focus();

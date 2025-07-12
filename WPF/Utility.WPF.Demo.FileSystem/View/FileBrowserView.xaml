@@ -10,10 +10,17 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UniformGrid>
         <browser1:FileBrowser
+                Path="O:\\Users"
                 x:Name="FileBrowser"
                 Filter="SVG | *.svg"
                 Label="Test">
         </browser1:FileBrowser>
+        
+        <browser1:FileComboBrowser
+                x:Name="FileComboBrowser"
+                Filter="SVG | *.svg"
+                >
+        </browser1:FileComboBrowser>
 
         <browser1:MultiFileBrowser Background="Red"
                 x:Name="FileBrowser3"

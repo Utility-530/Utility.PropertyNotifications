@@ -1,12 +1,11 @@
-﻿using System.Reflection;
-using Utility.Trees.Abstractions;
-using Utility.Nodes;
-using Utility.Models.Trees;
-using Utility.Reactives;
-using System.Reactive.Disposables;
-using Utility.Interfaces.NonGeneric;
-using Utility.PropertyNotifications;
+﻿using System.Reactive.Disposables;
+using System.Reflection;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.NonGeneric;
+using Utility.Models.Trees;
+using Utility.PropertyNotifications;
+using Utility.Reactives;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Ex
 {
@@ -14,7 +13,7 @@ namespace Utility.Nodes.Ex
     {
         public static string Name(this INode node)
         {
-            if(node.Data is IGetName getName)
+            if (node.Data is IGetName getName)
             {
                 return getName.Name;
             }
@@ -40,6 +39,26 @@ namespace Utility.Nodes.Ex
                     };
                     tree.Add(_tree);
                 }
+                t_tree.Add(tree);
+            }
+            return t_tree;
+        }
+
+        public static ITree ToViewModelTree(this ReadOnlyStringModel[] models, Predicate<Type>? typePredicate = null, INode? t_tree = null)
+        {
+            t_tree ??= new Node("root");
+
+            foreach (var model in models)
+            {
+
+                Node tree = new(model) { HasItems = true };
+                model.Node = tree;
+                tree.WithChangesTo(a => a.IsExpanded).Subscribe(isExpanded =>
+                {
+                    if (isExpanded)
+                        ToViewModelTree([.. model.Children.OfType<ReadOnlyStringModel>()], t_tree: tree);
+                });
+
                 t_tree.Add(tree);
             }
             return t_tree;

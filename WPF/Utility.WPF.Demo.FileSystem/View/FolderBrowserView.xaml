@@ -21,6 +21,12 @@
                     Label="Test"
                     TextChange="FolderBrowser1_OnTextChange" />
 
+        <fs:FolderComboBrowser Margin="8"
+                    x:Name="FolderComboBrowser"
+                    Path="O:\\Users"
+                    Label="Test"
+                    TextChange="FolderBrowser1_OnTextChange" />
+
         <fs:FolderOpenControl Margin="20" />
     </StackPanel>
 </UserControl>

@@ -7,14 +7,14 @@ namespace Utility.WPF.Controls.FileSystem
     {
         public MultiFileBrowser()
         {
-            this.TextBoxContent = new ListBox();
+            this.EditContent = new ListBox();
             fileBrowserCommand.IsMultiSelect = true;
         }
 
-        protected override void OnTextChange(string path, ListBox sender)
+        protected override void OnPathChange(string path, ListBox sender)
         {
             ((ObservableCollection<string>)(sender.ItemsSource ??= new ObservableCollection<string>())).Add(path);
-            base.OnTextChange(path, sender);
+            base.OnPathChange(path, sender);
         }
     }
 }

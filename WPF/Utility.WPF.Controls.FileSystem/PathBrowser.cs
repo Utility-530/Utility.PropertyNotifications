@@ -19,54 +19,45 @@ namespace Utility.WPF.Controls.FileSystem
     /// </summary>
     public abstract class PathBrowser<T> : PathBrowser where T : FrameworkElement
     {
-        protected readonly ReplaySubject<T> textBoxContentChanges = new(1);
+        protected readonly ReplaySubject<T> contentChanges = new(1);
 
-        public static readonly DependencyProperty TextBoxContentProperty =
-            DependencyProperty.Register("TextBoxContent", typeof(object), typeof(PathBrowser<T>), new PropertyMetadata(null, TextBoxContentChanged));
+        public static readonly DependencyProperty EditContentProperty =
+            DependencyProperty.Register("EditContent", typeof(object), typeof(PathBrowser<T>), new PropertyMetadata(null, EditContentChanged));
 
         public PathBrowser()
         {
             applyTemplateSubject
-                .CombineLatest(textBoxContentChanges, (a, b) => b)
+                .CombineLatest(contentChanges, (a, b) => b)
                 .Subscribe(content =>
                 {
                     (ContentControlOne ?? throw new NullReferenceException("ContentControlOne is null")).Content = content;
-                    //(content as DependencyObject ?? throw new NullReferenceException("content is null"))
-                    //    .FindChildren<TextBox>()
-                    //    .ToObservable()
-                    //    .Merge(Observable.Return(content as TextBox).WhereNotNull())
-                    //    .Subscribe(textBoxSubject.OnNext);
                 });
 
-            SetPath = ReactiveCommand.Create<string>(textChanges.OnNext);
+            SetPath = ReactiveCommand.Create<string>(pathChanges.OnNext);
 
-            Command.TextChanged += Command_TextChanged;
 
-            textChanges
+            pathChanges
                 .WhereNotNull()
                 .DistinctUntilChanged()
                 .CombineLatest(applyTemplateSubject, (a, b) => a)
-                .WithLatestFrom(textBoxContentChanges)
+                .WithLatestFrom(contentChanges)
                 .SubscribeOnDispatcher()
                 .Subscribe(a =>
                 {
                     Dispatcher.Invoke(() =>
                     {
-                        var (path, textBox) = a;
-                        OnTextChange(path, textBox);
+                        var (path, element) = a;
+                        OnPathChange(path, element);
                     });
                 });
         }
 
-        protected virtual void OnTextChange(string path, T sender)
+        protected virtual void OnPathChange(string path, T sender)
         {
             RaiseTextChangeEvent(path);
+            Path = path;
         }
 
-        private void Command_TextChanged(string obj)
-        {
-            textChanges.OnNext(obj);
-        }
 
         public override void OnApplyTemplate()
         {
@@ -79,15 +70,15 @@ namespace Utility.WPF.Controls.FileSystem
             applyTemplateSubject.OnNext(Unit.Default);
         }
 
-        public object TextBoxContent
+        public object EditContent
         {
-            get => GetValue(TextBoxContentProperty);
-            set => SetValue(TextBoxContentProperty, value);
+            get => GetValue(EditContentProperty);
+            set => SetValue(EditContentProperty, value);
         }
 
-        private static void TextBoxContentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void EditContentChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            (d as PathBrowser<T> ?? throw new NullReferenceException("PathBrowser is null")).textBoxContentChanges.OnNext((T)e.NewValue);
+            (d as PathBrowser<T> ?? throw new NullReferenceException("PathBrowser is null")).contentChanges.OnNext((T)e.NewValue);
         }
     }
 
@@ -96,13 +87,26 @@ namespace Utility.WPF.Controls.FileSystem
     /// </summary>
     public abstract class PathBrowser : Control
     {
-        protected readonly ReplaySubject<string> textChanges = new(1);
+        protected readonly ReplaySubject<string> pathChanges = new(1);
         protected readonly ReplaySubject<Unit> applyTemplateSubject = new(1);
 
         protected Button ButtonOne;
         protected ContentControl ContentControlOne;
         protected Label LabelOne;
         protected TextBox TextBoxOne;
+
+
+
+
+        // Using a DependencyProperty as the backing store for Path.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty PathProperty =
+            DependencyProperty.Register("Path", typeof(string), typeof(PathBrowser), new PropertyMetadata(onPathChanged));
+
+        private static void onPathChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is PathBrowser pathBrowser && e.NewValue is string str)
+                pathBrowser.pathChanges.OnNext(str);
+        }
 
         public static readonly DependencyProperty SetPathProperty =
             DependencyProperty.Register("SetPath", typeof(ICommand), typeof(PathBrowser), new PropertyMetadata(null));
@@ -119,14 +123,14 @@ namespace Utility.WPF.Controls.FileSystem
 
         public PathBrowser()
         {
-            SetPath = ReactiveCommand.Create<string>(textChanges.OnNext);
-
+            SetPath = ReactiveCommand.Create<string>(pathChanges.OnNext);            
             Command.TextChanged += Command_TextChanged;
         }
 
-        private void Command_TextChanged(string obj)
+        private void Command_TextChanged(string path)
         {
-            textChanges.OnNext(obj);
+            pathChanges.OnNext(path);
+            Path = path;
         }
 
         public override void OnApplyTemplate()
@@ -141,6 +145,11 @@ namespace Utility.WPF.Controls.FileSystem
         }
 
         #region properties
+        public string Path
+        {
+            get { return (string)GetValue(PathProperty); }
+            set { SetValue(PathProperty, value); }
+        }
 
         public string Label
         {
@@ -174,7 +183,7 @@ namespace Utility.WPF.Controls.FileSystem
     {
         public static void OnTextChange(string path, TextBox textBox)
         {
-            //var textBox = sender ?? throw new NullReferenceException("TextBoxContent is null");
+            //var textBox = sender ?? throw new NullReferenceException("EditContent is null");
             textBox.Text = path;
             textBox.Focus();
             var length = System.IO.Path.GetFileName(path).Length;
@@ -184,7 +193,7 @@ namespace Utility.WPF.Controls.FileSystem
 
         public static void OnTextChange(string path, TextBlock textBox)
         {
-            //var textBox = sender ?? throw new NullReferenceException("TextBoxContent is null");
+            //var textBox = sender ?? throw new NullReferenceException("EditContent is null");
             textBox.Text = path;
             textBox.Focus();
             var length = System.IO.Path.GetFileName(path).Length;

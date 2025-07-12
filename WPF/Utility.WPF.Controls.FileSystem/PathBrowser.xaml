@@ -8,9 +8,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type browser:PathBrowser}">
-
                     <Grid x:Name="GridOne" Margin="2,2">
-
                         <FrameworkElement.Resources>
                             <ResourceDictionary>
                                 <TextBox
@@ -42,19 +40,27 @@
                             FontWeight="DemiBold"
                             Visibility="{Binding Path=Label, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static converter:NullToInverseVisibilityConverter.Instance}}" />
                         <ContentControl
-                            x:Name="ContentControlOne"
+                            x:Name="ContentControlOne" VerticalAlignment="Center"
+                            HorizontalAlignment="Stretch"
                             Grid.Column="1"
                             MinWidth="500" />
-                        <Button
-                            x:Name="ButtonOne"
-                            Grid.Column="2"
-                            Width="43"
-                            Height="30"
-                            Margin="4,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Content="..."
-                            FontSize="16" />
+                        <Viewbox   
+                            Grid.Column="2" 
+                            Height="{Binding ElementName=ContentControlOne, Path=ActualHeight}">
+                            <Button
+                                BorderBrush="Transparent"
+                                x:Name="ButtonOne"
+                                Content="..." >
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                                        <Setter Property="Background" Value="GhostWhite"></Setter>
+                                        <Setter Property="BorderBrush" Value="Transparent"></Setter>
+                                        <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                                        <Setter Property="FontSize" Value="24"></Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </Viewbox>       
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

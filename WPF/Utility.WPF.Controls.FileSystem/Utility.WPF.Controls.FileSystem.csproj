@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	<ProjectReference Include="..\Utility.WPF.Controls.ComboBoxes\Utility.WPF.Controls.ComboBoxes.csproj" />
 	<ProjectReference Include="..\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
 	<ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
 	<ProjectReference Include="..\Utility.WPF\Utility.WPF.csproj" />

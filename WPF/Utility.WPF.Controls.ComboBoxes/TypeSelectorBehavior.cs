@@ -45,7 +45,6 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         protected override void OnAttached()
         {
-
             this.AssociatedObject.SelectedItemTemplateSelector = CustomItemTemplateSelector.Instance;
 
             this.AssociatedObject.WhenAnyValue(a => a.SelectedNode)
@@ -59,9 +58,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                     {
                         Type = _type;
                     }
-
                 });
-
 
             if (UseEntryAssembly)
             {
@@ -77,7 +74,6 @@ namespace Utility.WPF.Controls.ComboBoxes
                     ChangeType(tree, type);
                 }
             });
-
 
             base.OnAttached();
         }
@@ -104,21 +100,6 @@ namespace Utility.WPF.Controls.ComboBoxes
             typeSelector.AssociatedObject.ItemsSource = assemblyTree;
         }
 
-
-        //public override void OnApplyTemplate()
-        //{
-
-        //    base.OnApplyTemplate();
-        //    if (Assemblies != null)
-        //        Set(this, Assemblies);
-
-        //    if (Type is Type type && AssociatedObject.TreeView != null && this.AssociatedObject.ItemsSource is IReadOnlyTree tree)
-        //    {
-        //        ChangeType(tree, type);
-        //    }
-        //}
-
-
         public Type Type
         {
             get { return (Type)GetValue(TypeProperty); }
@@ -138,7 +119,6 @@ namespace Utility.WPF.Controls.ComboBoxes
             set { SetValue(UseEntryAssemblyProperty, value); }
         }
 
-
         class CustomItemTemplateSelector : DataTemplateSelector
         {
             public override DataTemplate SelectTemplate(object item, DependencyObject container)
@@ -148,7 +128,6 @@ namespace Utility.WPF.Controls.ComboBoxes
                     if (data is Type || data is IType || data is Assembly || data is IGetAssembly)
                         return TemplateGenerator.CreateDataTemplate(() =>
                         {
-
                             var textBlock = new TextBlock { };
                             Binding binding = new() { Path = new PropertyPath(nameof(System.Type.Name)) };
                             Binding binding2 = new() { Path = new PropertyPath(nameof(IReadOnlyTree.Data)) };
@@ -156,15 +135,12 @@ namespace Utility.WPF.Controls.ComboBoxes
                             textBlock.SetBinding(TextBlock.DataContextProperty, binding2);
                             return textBlock;
                         });
-
                     return TemplateGenerator.CreateDataTemplate(() => new Ellipse { Fill = Brushes.Black, Height = 2, Width = 2, VerticalAlignment = VerticalAlignment.Bottom, ToolTip = new ContentControl { Content = data }, Margin = new Thickness(4, 0, 4, 0) });
-
                 }
                 throw new Exception("d ss!$sd");
             }
 
             public static CustomItemTemplateSelector Instance { get; } = new();
         }
-
     }
 }

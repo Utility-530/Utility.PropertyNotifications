@@ -16,10 +16,6 @@
         <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/ButtonComboBoxTreeViewStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
-    <trees:MultiItemsPanelConverter x:Key="MultiItemsPanelConverter"/>
-    <trees:VisibilityConverter x:Key="VisibilityConverter"/>
-    <trees:InverseConverter x:Key="InverseConverter"/>
-
     <Style  x:Key="CustomComboTreeViewItemStyle"
        TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
 

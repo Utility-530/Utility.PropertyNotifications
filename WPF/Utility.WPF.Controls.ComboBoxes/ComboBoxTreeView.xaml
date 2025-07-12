@@ -2,12 +2,16 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
                     xmlns:local="clr-namespace:Utility.WPF.Controls.ComboBoxes"
                     xmlns:base="clr-namespace:Utility.WPF.Controls.Base;assembly=Utility.WPF.Controls.Base"
-                    xmlns:trees="http://schemas.utility.com/trees">
+                    xmlns:conv="http://schemas.utility.com/converters"
+                    xmlns:trees="http://schemas.utility.com/trees"
+                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:att="http://schemas.utility.com/attached">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboBoxToggleButton.xaml"/>
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml"/>
         <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CheckableTreeViewItem.xaml"/>
+        <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomHasItemsStyle.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
 
@@ -28,6 +32,15 @@
           Value="true" />-->
         <!--<Setter Property="OverridesDefaultStyle"
           Value="true" />-->
+
+        <Setter Property="TreeItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource CustomHasItemsStyle}">
+                    <Setter Property="att:TreeEx.HasItems" Value="{Binding HasItems}">                
+                    </Setter>
+                </Style>
+            </Setter.Value>
+        </Setter>
          <Setter Property="ScrollViewer.HorizontalScrollBarVisibility"
           Value="Auto" />
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility"
@@ -91,7 +104,8 @@
                         IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, 
               RelativeSource={RelativeSource TemplatedParent}}"/>
                                 <Grid            IsHitTestVisible="False">
-                                    <base:CustomItemsControl x:Name="ContentSite"        
+                                    <base:CustomItemsControl x:Name="ContentSite"     
+                                                             AlternationCount="1000"
                                       VerticalAlignment="Center" VerticalContentAlignment="Center"
                                       HorizontalContentAlignment="Center"
                                       HorizontalAlignment="Left"
@@ -105,22 +119,79 @@
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemContainerStyle>
-                                            <Style>
+                                            <Style TargetType="{x:Type ContentControl}">
+                                                <Setter Property="Tag"                     Value="{Binding RelativeSource={RelativeSource Self},                                     Path=(ItemsControl.AlternationIndex)}"/>
                                                 <Setter Property="Control.Template">
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="ContentControl">
                                                             <StackPanel Orientation="Horizontal">
-                                                                <Path 
-                  x:Name="Arrow"
-                  Grid.Column="1"     
-                  Fill="Black"
-                         Margin="4,0,4,0" 
-                  HorizontalAlignment="Center"
-                  VerticalAlignment="Center"
-                  Data="M0,0 L2,0 L6,4 L2,8 L0,8 L4,4 z"
-                />
-                                                                <ContentPresenter />
-                                                           
+
+
+                                                                <Grid>
+
+                                                                    <Path 
+                                                                        x:Name="Arrow" 
+                                                                        Fill="#2e2c2a"         
+                                                                        Margin="4,0,4,-2" 
+                                                                        HorizontalAlignment="Center"
+                                                                        Stretch="Uniform"
+                                                                        Height="{Binding ElementName=Border, Path=ActualHeight}"
+                                                                        VerticalAlignment="Center"          
+                                                                        Visibility="{Binding ElementName=Border, Path=Visibility}"
+                                                                        Tag="{TemplateBinding Tag}">
+
+                                                                        <Path.Style>
+                                                                            <Style TargetType="{x:Type Path}">
+                                                                                <Setter Property="StrokeThickness" Value="2"></Setter>
+                                                                                <Setter Property="Data">
+                                                                                    <Setter.Value>
+                                                                                        M0,0 L2,0 L6,4 L2,8 L0,8 L4,4 z
+                                                                                    </Setter.Value>
+                                                                                </Setter>
+                                                                                <Style.Triggers>
+                                                                                    <Trigger Property="Tag">
+                                                                                        <Trigger.Value>
+                                                                                            <sys:Int32>1</sys:Int32>
+                                                                                        </Trigger.Value>
+                                                                                        <Trigger.Setters>
+                                                                                            <Setter Property="StrokeThickness">
+                                                                                                <Setter.Value>
+                                                                                                    4
+                                                                                                </Setter.Value>
+                                                                                            </Setter>
+                                                                                            <Setter Property="Data">
+                                                                                                <!--
+                                                                                                    M8.513 12.27L2.6 18.177a.244.244 0 0 1-.174.072l-.02-.001a.248.248 0 0 1-.178-.102 11.973 11.973 0 0 1-.889-1.452.247.247 0 0 1 .045-.287l5.638-5.628a9.403 9.403 0 0 0 2.776-6.694.245.245 0 0 1 .49 0v3.911a6 6 0 0 1-1.774 4.274zM18 .842a.242.242 0 0 0-.245 0 .246.246 0 0 0-.122.212v10.855a6 6 0 0 0 1.773 4.273l1.997 1.995a.246.246 0 0 0 .173.072l.021-.001a.256.256 0 0 0 .18-.102A11.902 11.902 0 0 0 24 11.21c0-4.255-2.298-8.228-6-10.367zM6.367 4.085V1.054A.244.244 0 0 0 6 .842C2.3 2.982 0 6.954 0 11.21c0 .34.018.705.056 1.115.01.094.072.174.161.208a.294.294 0 0 0 .084.014.245.245 0 0 0 .172-.071l4.123-4.118a5.999 5.999 0 0 0 1.771-4.273zm10.614 14.52a9.402 9.402 0 0 1-2.778-6.696V7.996a.245.245 0 1 0-.489 0 9.401 9.401 0 0 1-2.776 6.696l-5.915 5.905a.244.244 0 0 0-.071.193.243.243 0 0 0 .102.18A11.929 11.929 0 0 0 12 23.192a11.93 11.93 0 0 0 6.947-2.222.237.237 0 0 0 .1-.18.239.239 0 0 0-.068-.193l-1.998-1.992Z
+                                                                                                -->
+                                                                                                <Setter.Value>
+                                                                                                    M 9.7 3 L 9.5 3.3 L 6.5 11.4 L 5 8.3 L 4.8 8 L 3 8 L 3 9 L 4.2 9 L 6 12.7 L 6.1 13 L 6.9 13 L 7 12.7 L 10.3 4 L 13 4 L 13 3 Z
+
+                                                                                                </Setter.Value>
+                                                                                            </Setter>
+                                                                                        </Trigger.Setters>
+                                                                                    </Trigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </Path.Style>
+
+                                                                    </Path>
+
+                                                                </Grid>
+
+
+
+                                                                <Border   x:Name="Border"
+                                                                          >
+                                                                    <Border.Visibility>
+                                                                        <TemplateBinding Property="Tag" Converter="{x:Static conv:InverseEqualToVisibilityConverter.Instance}">
+                                                                            <TemplateBindingExtension.ConverterParameter>
+                                                                                <sys:Int32>0</sys:Int32>
+                                                                            </TemplateBindingExtension.ConverterParameter>
+                                                                        </TemplateBinding>
+                                                                    </Border.Visibility>
+
+                                                                    <ContentPresenter/>
+                                                                </Border>
                                                             </StackPanel>
                                                         </ControlTemplate>
                                                     </Setter.Value>
