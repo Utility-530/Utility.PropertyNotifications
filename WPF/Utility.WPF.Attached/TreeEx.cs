@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Xml.Linq;
@@ -13,6 +14,7 @@ namespace Utility.WPF.Attached
         public static readonly DependencyProperty SelectedContainerProperty = DependencyProperty.RegisterAttached("SelectedContainer", typeof(TreeViewItem), typeof(TreeEx), new PropertyMetadata());
         public static readonly DependencyProperty SelectedItemProperty = DependencyProperty.RegisterAttached("SelectedItem", typeof(object), typeof(TreeEx), new PropertyMetadata());
         public static readonly DependencyProperty IsRootNodeProperty = DependencyProperty.RegisterAttached("IsRootNode", typeof(bool), typeof(TreeEx), new UIPropertyMetadata(false));
+        public static readonly DependencyProperty HasItemsProperty = DependencyProperty.RegisterAttached("HasItems", typeof(bool), typeof(TreeEx), new PropertyMetadata(true, hasItemschanged));
 
         public static void SetIsChildSelected(DependencyObject element, bool value) => element.SetValue(IsChildSelectedProperty, value);
         public static bool GetIsChildSelected(DependencyObject element) => (bool)element.GetValue(IsChildSelectedProperty);
@@ -22,6 +24,8 @@ namespace Utility.WPF.Attached
         public static object GetSelectedItem(DependencyObject element) => element.GetValue(SelectedItemProperty);
         public static bool GetIsRootNode(DependencyObject obj) => (bool)obj.GetValue(IsRootNodeProperty);
         public static void SetIsRootNode(DependencyObject obj, bool value) => obj.SetValue(IsRootNodeProperty, value);
+        public static void SetHasItems(DependencyObject element, bool value) => element.SetValue(HasItemsProperty, value);
+        public static bool GetHasItems(DependencyObject element) => (bool)element.GetValue(HasItemsProperty);
 
         private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -52,6 +56,10 @@ namespace Utility.WPF.Attached
                     SetIsChildSelected(item, item.FindChild<TreeViewItem>(t => selectedContainer == t) is TreeViewItem);
                 };
             }
+        }
+
+        private static void hasItemschanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
         }
     }
 }

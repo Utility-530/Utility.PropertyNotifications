@@ -20,6 +20,7 @@ namespace Utility.Trees
         protected ITree? parent;
         private bool flag;
         private string key;
+        private bool? hasItems;
 
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
@@ -226,7 +227,7 @@ namespace Utility.Trees
 
         public virtual object Data { get; set; }
 
-        public virtual bool HasItems => Items != null && Items.Count() > 0;
+        public virtual bool HasItems { get => hasItems ?? Items != null && Items.Count() > 0; set => hasItems = value; }
 
         public virtual ITree? Parent { get => parent; set => parent = value; }
 
