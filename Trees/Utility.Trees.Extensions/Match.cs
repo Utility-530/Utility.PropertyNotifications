@@ -37,7 +37,11 @@ namespace Utility.Trees.Extensions
 
         public static IReadOnlyTree? Descendant(this IReadOnlyTree tree, Predicate<(IReadOnlyTree tree, int level)>? action = null)
         {
-            return SelfAndDescendants(tree, action).SingleOrDefault();
+            foreach (var x in SelfAndDescendants(tree, action))
+            {
+                return x;
+            }
+            return null;
         }
 
         public static IEnumerable<IReadOnlyTree> Descendants(this IReadOnlyTree tree, Predicate<(IReadOnlyTree tree, int level)>? action = null)
@@ -47,7 +51,8 @@ namespace Utility.Trees.Extensions
                 {
                     yield return d;
                 }
-        }    
+        }
+
         public static IEnumerable<IReadOnlyTree> SelfAndDescendants(this IReadOnlyTree tree, Predicate<(IReadOnlyTree, int)>? action = null, int level = 0)
         {
             action ??= n => true;
