@@ -7,7 +7,6 @@ using Utility.PropertyNotifications;
 
 namespace Utility.Nodes.Demo.Lists.Services
 {
-
     public class MethodNode : NotifyPropertyClass
     {
 
@@ -109,7 +108,7 @@ namespace Utility.Nodes.Demo.Lists.Services
                 {
                     if (get(methodParameter) is MethodNode cache)
                     {
-                        if (get(methodParameter) is MethodNode cache2)
+                        if (get(methodParameter2) is MethodNode cache2)
                         {
                             cache.WithChangesTo(a => a.OutValue)
                                 .Subscribe(a => cache2.InValues[methodParameter2.Name].Value = a);
@@ -147,11 +146,11 @@ namespace Utility.Nodes.Demo.Lists.Services
             return observable;
         }
 
-        public static void Observe<TParam>(this IValueModel tModel) where TParam:IMethodParameter => 
+        public static void Observe<TParam>(this IValueModel tModel) where TParam : IMethodParameter =>
             Locator.Current.GetService<ServiceResolver>().Observe<TParam>(tModel);
 
-        public static void ReactTo<TParam>(this IValueModel tModel,Func<object, object>? transformation = null, Action<object>? setAction = null) where TParam:IMethodParameter => 
-            Locator.Current.GetService<ServiceResolver>().ReactTo<TParam>(tModel);
+        public static void ReactTo<TParam>(this IValueModel tModel, Func<object, object>? transformation = null, Action<object>? setAction = null) where TParam : IMethodParameter =>
+            Locator.Current.GetService<ServiceResolver>().ReactTo<TParam>(tModel, transformation, setAction);
 
 
 

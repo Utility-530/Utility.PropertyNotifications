@@ -96,14 +96,14 @@ namespace Utility.Nodes.Demo.Lists.Services
                     else if (addition.Data is ListModel { } listModel)
                     {
         
-                        listModel.ReactTo<InstanceReturnParam>(setAction: (a)=> listModel.Collection = (IEnumerable)a);
+                        listModel.ReactTo<ListCollectionViewReturnParam>(setAction: (a)=> listModel.Collection = (IEnumerable)a);
 
                         listModel.WhenReceivedFrom(a => a.Add, includeNulls: false)
                         .Select(a => new Changes.Change(a, null, Changes.Type.Add))
                         .Observe<ChangeParam, Changes.Change>();
 
                         listModel.WhenReceivedFrom(a => a.Remove, includeNulls: false)
-                        .Select(a => new Changes.Change(a, null, Changes.Type.Add))
+                        .Select(a => new Changes.Change(a, null, Changes.Type.Remove))
                         .Observe<ChangeParam, Changes.Change>();
 
                         listModel.Observe<SelectionParam>();
@@ -151,14 +151,14 @@ namespace Utility.Nodes.Demo.Lists.Services
 
                     if (addition.Data is ListModel { } listModel)
                     {
-                        listModel.ReactTo<InstanceReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a);
+                        listModel.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a);
 
                         listModel.WhenReceivedFrom(a => a.Add, includeNulls: false)
                         .Select(a => new Changes.Change(a, null, Changes.Type.Add))
                         .Observe<ChangeParam, Changes.Change>();
 
                         listModel.WhenReceivedFrom(a => a.Remove, includeNulls: false)
-                        .Select(a => new Changes.Change(a, null, Changes.Type.Add))
+                        .Select(a => new Changes.Change(a, null, Changes.Type.Remove))
                         .Observe<ChangeParam, Changes.Change>();
 
                         listModel.Observe<SelectionParam>();

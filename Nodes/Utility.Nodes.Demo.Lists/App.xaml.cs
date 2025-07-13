@@ -37,6 +37,7 @@ namespace Utility.Nodes.Demo.Lists
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            CurrentMutable.RegisterLazySingleton(() => new ContainerViewModel());
             showSplashscreen();
             SQLitePCL.Batteries.Init();
 
@@ -49,7 +50,7 @@ namespace Utility.Nodes.Demo.Lists
             CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new Services.NodeMethodFactory());
             CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => Nodes.Filters.NodeMethodFactory.Instance);
             CurrentMutable.RegisterLazySingleton(() => new MasterViewModel());
-            CurrentMutable.RegisterLazySingleton(() => new ContainerViewModel());
+
             CurrentMutable.RegisterLazySingleton<DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
 
             //Locator.CurrentMutable.RegisterConstant<System.IObservable<ViewModel>>(new ComboService());
@@ -67,7 +68,9 @@ namespace Utility.Nodes.Demo.Lists
 
 
             Locator.Current.GetService<ServiceResolver>().Connect<PredicateReturnParam, PredicateParam>();
-            Locator.Current.GetService<ServiceResolver>().Connect<PredicateParam, ListCollectionViewParam>();
+            //Locator.Current.GetService<ServiceResolver>().Connect<ListCollectionViewReturnParam, ListCollectionViewParam>();
+            Locator.Current.GetService<ServiceResolver>().Connect<InstanceReturnParam, ListInParam>();
+            Locator.Current.GetService<ServiceResolver>().Connect<ListInParam, ListParam>();
 
             JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
             subscribeToTypeChanges();
@@ -87,8 +90,8 @@ namespace Utility.Nodes.Demo.Lists
             var window = new Window() { Content = Locator.Current.GetService<ContainerViewModel>() };
             slashscreen.Finished += (s, e) =>
             {
-                sswindow.Close();
                 window.Show();
+                sswindow.Close();
             };
         }
 
