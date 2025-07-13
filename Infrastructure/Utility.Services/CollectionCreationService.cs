@@ -17,8 +17,7 @@ namespace Utility.Services
     public class CollectionCreationService
     {
 
-        public static IList Instance(System.Type type)
-
+        public static IList Instance(System.Type type)            
         {
             var instance = createCollectionInstance(type);
             subscribe(instance);
