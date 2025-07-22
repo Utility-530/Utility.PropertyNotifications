@@ -63,7 +63,7 @@ namespace Utility.WPF.Controls
             this.SetValue(NextCommandProperty, nextCommand);
             this.SetValue(PreviousCommandProperty, previousCommand);
 
-            (nextCommand as ReactiveCommand<Unit, Unit>).Select(_ => Utility.Enums.Direction.Forward).Merge(previousCommand.Select(_ => Utility.Enums.Direction.Backward)).Subscribe(direction =>
+            (nextCommand as ReactiveCommand<Unit, Unit>).Select(_ => Utility.Enums.Direction.Front).Merge(previousCommand.Select(_ => Utility.Enums.Direction.Back)).Subscribe(direction =>
              {
                  this.Dispatcher.InvokeAsync(() => RaiseSkipEvent(direction), System.Windows.Threading.DispatcherPriority.Background, default(System.Threading.CancellationToken));
              });

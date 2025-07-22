@@ -9,7 +9,6 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
-using Utility.Common.Collection;
 using Utility.Common.Contract;
 using Utility.Common.Model;
 using Utility.Helpers;

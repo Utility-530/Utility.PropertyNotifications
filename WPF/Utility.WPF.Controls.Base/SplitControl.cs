@@ -7,7 +7,7 @@ namespace Utility.WPF.Controls.Base
     public class SplitControl : HeaderedContentControl
     {
         public static readonly DependencyProperty MovementProperty =
-            DependencyProperty.Register("Movement", typeof(XYMovement), typeof(SplitControl), new PropertyMetadata(XYMovement.LeftToRight));
+            DependencyProperty.Register("Movement", typeof(XYTraversal), typeof(SplitControl), new PropertyMetadata(XYTraversal.LeftToRight));
 
 
         static SplitControl()
@@ -23,9 +23,9 @@ namespace Utility.WPF.Controls.Base
         #region properties
 
 
-        public XYMovement Movement
+        public XYTraversal Movement
         {
-            get => (XYMovement)GetValue(MovementProperty);
+            get => (XYTraversal)GetValue(MovementProperty);
             set => SetValue(MovementProperty, value);
         }
 

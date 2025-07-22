@@ -12,7 +12,7 @@ namespace Utility.WPF.Controls.Base
     public class SplitItemsControl : HeaderedItemsControl
     {
         public static readonly DependencyProperty MovementProperty =
-            DependencyProperty.Register("Movement", typeof(XYMovement), typeof(SplitItemsControl), new PropertyMetadata(XYMovement.LeftToRight));
+            DependencyProperty.Register("Movement", typeof(XYMovement), typeof(SplitItemsControl), new PropertyMetadata(XYTraversal.LeftToRight));
 
 
         static SplitItemsControl()

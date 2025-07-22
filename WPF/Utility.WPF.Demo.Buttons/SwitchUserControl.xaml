@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Utility.WPF.Demo.Buttons" xmlns:view="http://schemas.utility.com/buttons"
+             xmlns:local="clr-namespace:Utility.WPF.Demo.Buttons" xmlns:view="http://schemas.utility.com/buttons" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.Resources>
@@ -101,5 +101,37 @@
                         HorizontalAlignment="Center"
                         Enum="{x:Type enum:Tense}" />
         </Viewbox>
+
+        <GroupBox Header="Interactivity">
+            <Grid Width="100" Height="60">
+                <Button x:Name="OptionsButton">
+                    Option
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <i:ChangePropertyAction PropertyName="Visibility" Value="Collapsed" />
+                            <i:ChangePropertyAction
+                                PropertyName="Visibility"
+                                TargetObject="{Binding ElementName=OptionsBackButton}"
+                                Value="Visible" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+
+                <Button x:Name="OptionsBackButton" Visibility="Collapsed">
+                    Back
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <i:ChangePropertyAction PropertyName="Visibility" Value="Collapsed" />
+                            <i:ChangePropertyAction
+                                PropertyName="Visibility"
+                                TargetObject="{Binding ElementName=OptionsButton}"
+                                Value="Visible" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </Grid>
+        </GroupBox>
+
+
     </UniformGrid>
 </UserControl>

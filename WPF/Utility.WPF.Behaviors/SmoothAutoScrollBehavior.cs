@@ -206,22 +206,7 @@ namespace Utility.WPF.Behaviors
         }
     }
 
-    public static class EnumerableHelper
-    {
 
-        public static int IndexOf(this IEnumerable source, object value)
-        {
-            int index = 0;
-            var comparer = EqualityComparer<object>.Default; // or pass in as a parameter
-            foreach (object item in source)
-            {
-                if (comparer.Equals(item, value)) return index;
-                index++;
-            }
-
-            return -1;
-        }
-    }
 
     /// <summary>
     ///   Based on the following link

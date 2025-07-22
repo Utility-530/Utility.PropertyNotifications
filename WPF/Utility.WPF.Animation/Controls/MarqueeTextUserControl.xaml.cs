@@ -12,7 +12,7 @@ namespace Utility.WPF.Animations
     public partial class MarqueeTextUserControl : UserControl
     {
         public static readonly DependencyProperty DurationProperty = DependencyProperty.Register("Duration", typeof(Duration), typeof(MarqueeTextUserControl), new PropertyMetadata(new Duration(TimeSpan.FromSeconds(2))));
-        public static readonly DependencyProperty MovementProperty = DependencyProperty.Register("Movement", typeof(XYMovement), typeof(MarqueeTextUserControl), new PropertyMetadata(XYMovement.RightToLeft, Changed));
+        public static readonly DependencyProperty MovementProperty = DependencyProperty.Register("Movement", typeof(XYTraversal), typeof(MarqueeTextUserControl), new PropertyMetadata(XYTraversal.RightToLeft, Changed));
         public static readonly DependencyProperty TextProperty = DependencyProperty.Register("Text", typeof(string), typeof(MarqueeTextUserControl), new PropertyMetadata(Changed2));
 
 
@@ -31,20 +31,20 @@ namespace Utility.WPF.Animations
 
         private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is MarqueeTextUserControl cntrl && e.NewValue is XYMovement movement)
+            if (d is MarqueeTextUserControl cntrl && e.NewValue is XYTraversal movement)
             {
                 switch (movement)
                 {
-                    case XYMovement.LeftToRight:
+                    case XYTraversal.LeftToRight:
                         cntrl.LeftToRightMarquee();
                         break;
-                    case XYMovement.RightToLeft:
+                    case XYTraversal.RightToLeft:
                         cntrl.RightToLeftMarquee();
                         break;
-                    case XYMovement.BottomToTop:
+                    case XYTraversal.BottomToTop:
                         cntrl.BottomToTopMarquee();
                         break;
-                    case XYMovement.TopToBottom:
+                    case XYTraversal.TopToBottom:
                         cntrl.TopToBottomMarquee();
                         break;
                 }
@@ -57,16 +57,16 @@ namespace Utility.WPF.Animations
             {
                 switch (cntrl.Movement)
                 {
-                    case XYMovement.LeftToRight:
+                    case XYTraversal.LeftToRight:
                         cntrl.LeftToRightMarquee();
                         break;
-                    case XYMovement.RightToLeft:
+                    case XYTraversal.RightToLeft:
                         cntrl.RightToLeftMarquee();
                         break;
-                    case XYMovement.BottomToTop:
+                    case XYTraversal.BottomToTop:
                         cntrl.BottomToTopMarquee();
                         break;
-                    case XYMovement.TopToBottom:
+                    case XYTraversal.TopToBottom:
                         cntrl.TopToBottomMarquee();
                         break;
                 }
@@ -83,16 +83,16 @@ namespace Utility.WPF.Animations
         {
             switch (Movement)
             {
-                case XYMovement.LeftToRight:
+                case XYTraversal.LeftToRight:
                     LeftToRightMarquee();
                     break;
-                case XYMovement.RightToLeft:
+                case XYTraversal.RightToLeft:
                     RightToLeftMarquee();
                     break;
-                case XYMovement.BottomToTop:
+                case XYTraversal.BottomToTop:
                     BottomToTopMarquee();
                     break;
-                case XYMovement.TopToBottom:
+                case XYTraversal.TopToBottom:
                     TopToBottomMarquee();
                     break;
             }
@@ -104,9 +104,9 @@ namespace Utility.WPF.Animations
             set { SetValue(DurationProperty, value); }
         }
 
-        public XYMovement Movement
+        public XYTraversal Movement
         {
-            get { return (XYMovement)GetValue(MovementProperty); }
+            get { return (XYTraversal)GetValue(MovementProperty); }
             set { SetValue(MovementProperty, value); }
         }
 

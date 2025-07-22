@@ -19,14 +19,14 @@
 		<Compile Update="DualButtonControl.cs">
 			<DependentUpon>DualButtonControl.xaml</DependentUpon>
 		</Compile>
-		<Compile Update="SwitchControl - Copy.cs">
-		  <DependentUpon>SwitchControl.xaml</DependentUpon>
-		</Compile>
 		<Compile Update="SwitchControl.cs">
 			<DependentUpon>SwitchControl.xaml</DependentUpon>
 		</Compile>
 		<Compile Update="EnumButtons.cs">
 			<DependentUpon>EnumButtons.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="DirectionButton.cs">
+			<DependentUpon>DirectionButton.xaml</DependentUpon>
 		</Compile>
 	</ItemGroup>
 

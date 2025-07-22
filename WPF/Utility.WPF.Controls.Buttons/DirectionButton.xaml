@@ -128,7 +128,7 @@
                                 <SkipStoryboardToFill BeginStoryboardName="uncheckedSB" />
                                 <SkipStoryboardToFill BeginStoryboardName="uncheckedSB2" />
                             </EventTrigger>-->
-                        <DataTrigger Binding="{Binding Movement, RelativeSource={RelativeSource Self}}" Value="{x:Static enms:XYMovement.RightToLeft}">
+                        <DataTrigger Binding="{Binding Movement, RelativeSource={RelativeSource Self}}" Value="{x:Static enms:XYTraversal.RightToLeft}">
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard x:Name="One">
                                     <Storyboard Storyboard.TargetProperty="Margin" Storyboard.TargetName="Border">
@@ -161,7 +161,7 @@
 
 
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Movement, RelativeSource={RelativeSource Self}}" Value="{x:Static enms:XYMovement.TopToBottom}">
+                        <DataTrigger Binding="{Binding Movement, RelativeSource={RelativeSource Self}}" Value="{x:Static enms:XYTraversal.TopToBottom}">
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard x:Name="Two" >
                                     <Storyboard  Storyboard.TargetProperty="Margin" Storyboard.TargetName="Border">
@@ -176,7 +176,7 @@
                             </DataTrigger.ExitActions>
 
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Movement, RelativeSource={RelativeSource Self}}" Value="{x:Static enms:XYMovement.LeftToRight}">
+                        <DataTrigger Binding="{Binding Movement, RelativeSource={RelativeSource Self}}" Value="{x:Static enms:XYTraversal.LeftToRight}">
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard x:Name="Three">
                                     <Storyboard Storyboard.TargetProperty="Margin" Storyboard.TargetName="Border">
@@ -191,7 +191,7 @@
                                 <StopStoryboard BeginStoryboardName="K3"/>
                             </DataTrigger.ExitActions>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Movement, RelativeSource={RelativeSource Self}}" Value="{x:Static enms:XYMovement.BottomToTop}">
+                        <DataTrigger Binding="{Binding Movement, RelativeSource={RelativeSource Self}}" Value="{x:Static enms:XYTraversal.BottomToTop}">
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard x:Name="Four">
                                     <Storyboard Storyboard.TargetProperty="Margin" Storyboard.TargetName="Border">

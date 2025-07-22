@@ -25,50 +25,7 @@
     </UserControl.Resources>
 
     <UniformGrid Columns="3">
-        <DataGrid
-                x:Name="dataGridTest"
-                ItemsSource="{Binding Profiles}"
-                VerticalScrollBarVisibility="Hidden">
-        </DataGrid>
-
-        <Grid x:Name="Grid1">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <UniformGrid Rows="1">
-                <TextBlock>Infinite Scroll</TextBlock>
-                <Slider
-                    x:Name="Slider1"
-                    IsSnapToTickEnabled="True"
-                    Maximum="5"
-                    Minimum="1"
-                    TickFrequency="1"
-                    Value="2.5" />
-            </UniformGrid>
-
-            <UniformGrid
-                Grid.Row="1"
-                Margin="20"
-                Rows="2">
-                <Label Content="First" />
-                <Label Content="Last" />
-                <Label Content="Size" />
-                <TextBlock x:Name="FirstIndexBox" />
-                <TextBlock x:Name="LastIndexBox" />
-                <TextBlock x:Name="SizeBox" />
-            </UniformGrid>
-            <DataGrid
-                x:Name="dataGrid1"
-                Grid.Row="2"
-                ItemsSource="{Binding Profiles}"
-                VerticalScrollBarVisibility="Hidden">
-                <i:Interaction.Behaviors>
-                    <behavior:ItemsControlVisibleItemsBehavior x:Name="Behavior1" MouseFactor="{Binding ElementName=Slider1, Path=Value}" />
-                </i:Interaction.Behaviors>
-            </DataGrid>
-        </Grid>
+  
 
         <Grid x:Name="Grid2">
             <Grid.RowDefinitions>

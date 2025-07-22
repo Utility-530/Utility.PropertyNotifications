@@ -86,7 +86,7 @@ public class NavigatorControl : Control
             {
                 this.Dispatcher.InvokeAsync(() =>
                 {
-                    Current += ((SkipControl.SkipRoutedEventArgs)_.EventArgs).Direction == Utility.Enums.Direction.Forward ? 1 : -1;
+                    Current += ((SkipControl.SkipRoutedEventArgs)_.EventArgs).Direction == Utility.Enums.Direction.Front ? 1 : -1;
                     RaiseSelectedIndexEvent(Current);
                     SkipControl.CanMoveToNext = Current < Size;
                     SkipControl.CanMoveToPrevious = Current > 1;

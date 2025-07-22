@@ -8,7 +8,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\Infrastructure\Utility.Services\Utility.Services.csproj" />
 		<ProjectReference Include="..\..\Meta\Utility.WPF.Meta\Utility.WPF.Meta.csproj" />
+		<ProjectReference Include="..\..\Nodes\Utility.Nodes\Utility.Nodes.csproj" />
 		<ProjectReference Include="..\Utility.ViewModels.Customs\Utility.ViewModels.Customs.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Adorners\Utility.WPF.Adorners.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Colours\Utility.WPF.Colours.csproj" />
@@ -18,10 +20,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Page Update="ButtonUserControl.xaml">
-			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
-			<SubType>Designer</SubType>
-		</Page>
 		<Page Update="DualButtonUserControl.xaml">
 			<XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
 			<SubType>Designer</SubType>

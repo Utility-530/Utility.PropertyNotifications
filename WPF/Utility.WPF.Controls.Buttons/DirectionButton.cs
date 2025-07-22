@@ -26,33 +26,33 @@ namespace Utility.WPF.Controls.Buttons
 
             };
 
-            static XYMovement convert(XYMovement movement)
+            static XYTraversal convert(XYTraversal movement)
             {
                 switch (movement)
                 {
-                    case (XYMovement.BottomToTop):
-                        return XYMovement.RightToLeft;
-                    case XYMovement.None:
-                        return XYMovement.LeftToRight;
-                    case XYMovement.LeftToRight:
-                        return XYMovement.BottomToTop;
-                    case XYMovement.RightToLeft:
-                        return XYMovement.TopToBottom;
-                    case XYMovement.TopToBottom:
-                        return XYMovement.LeftToRight;
+                    case (XYTraversal.BottomToTop):
+                        return XYTraversal.RightToLeft;
+                    case XYTraversal.None:
+                        return XYTraversal.LeftToRight;
+                    case XYTraversal.LeftToRight:
+                        return XYTraversal.BottomToTop;
+                    case XYTraversal.RightToLeft:
+                        return XYTraversal.TopToBottom;
+                    case XYTraversal.TopToBottom:
+                        return XYTraversal.LeftToRight;
                 }
                 throw new Exception(" 44 df");
             }
         }
 
-        public XYMovement Movement
+        public XYTraversal Movement
         {
-            get { return (XYMovement)GetValue(MovementProperty); }
+            get { return (XYTraversal)GetValue(MovementProperty); }
             set { SetValue(MovementProperty, value); }
         }
 
         public static readonly DependencyProperty MovementProperty =
-            DependencyProperty.Register("Movement", typeof(XYMovement), typeof(DirectionButton), new PropertyMetadata(XYMovement.TopToBottom));
+            DependencyProperty.Register("Movement", typeof(XYTraversal), typeof(DirectionButton), new PropertyMetadata(XYTraversal.TopToBottom));
 
 
     }

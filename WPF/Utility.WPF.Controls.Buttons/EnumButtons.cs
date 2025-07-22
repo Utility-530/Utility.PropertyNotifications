@@ -102,6 +102,76 @@ namespace Utility.WPF.Controls.Buttons
         }
     }
 
+    public class PlayBackButtons : EnumButtons<Playback>
+    {
+        private PlayPauseButton toggle;
+
+        static PlayBackButtons()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(PlayBackButtons), new FrameworkPropertyMetadata(typeof(PlayBackButtons)));
+        }
+
+        public override void OnApplyTemplate()
+        {
+            toggle = this.FindChildren<PlayPauseButton>().Single();
+            toggle.Checked += Toggle_Checked;
+            toggle.Unchecked += Toggle_Unchecked;
+            base.OnApplyTemplate();
+        }
+
+        protected override void LastChanged(Enum @enum)
+        {
+            if(@enum is Playback.Pause)
+            {
+                toggle.IsChecked = false;
+            }
+            else if(@enum is Playback.Play)
+            {
+                toggle.IsChecked = true;
+            }
+        }
+
+        protected override void EnableChanged(Enum @enum)
+        {
+            var xd = Utility.Helpers.EnumHelper.SeparateFlags((Playback)@enum).Cast<Playback>();
+            if (xd.Contains(Playback.Play) == false)
+            {
+                toggle.IsEnabled = false;
+                toggle.IsChecked = false;
+            }
+            else if (xd.Contains(Playback.Pause) == false)
+            {
+                toggle.IsEnabled = false;
+                toggle.IsChecked = true;
+            }
+            else
+            {
+                toggle.IsEnabled = true;
+            }
+           base.EnableChanged(@enum);
+        }
+
+
+        private void Toggle_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Value_Click(Playback.Pause);
+            foreach (var x in Map)
+            {
+                x.Value.IsEnabled = true;
+            }
+        }
+
+        private void Toggle_Checked(object sender, RoutedEventArgs e)
+        {
+            Value_Click(Playback.Play);
+            foreach (var x in Map)
+            {
+                x.Value.IsEnabled = false;
+            }
+
+        }
+    }
+
     public abstract class EnumButtons<TEnum> : EnumButtons where TEnum : struct, Enum
     {
         private Map<Enum, Button>? map;
@@ -114,40 +184,55 @@ namespace Utility.WPF.Controls.Buttons
 
         public override void OnApplyTemplate()
         {
-            map = new Map<Enum, Button>(this.FindChildren<Button>().ToDictionary(a => (Enum)Enum.Parse<TEnum>(a.Name), a => a));
+            map ??= new Map<Enum, Button>(this.FindChildren<Button>().ToDictionary(a => (Enum)Enum.Parse<TEnum>(a.Name), a => a));
+
             foreach (var m in map)
             {
-                m.Value.Click += Value_Click;
+                m.Value.Click += (s, e) => { Value_Click(Map[(Button)s]); e.Handled = true; };
             }
 
+            this.WhenAnyValue(a => a.Visible)
+                .WhereNotNull()
+                .Subscribe(LastChanged);
+
             this.WhenAnyValue(a => a.Enabled)
-                .Select(a => a == null ? null : GetIndividualFlags<TEnum>((TEnum)a).Cast<Enum>())
-                .Subscribe(a =>
-                {
-                    foreach (var x in Map)
-                    {
-                        x.Value.IsEnabled = a?.Contains(x.Key) != false;
-                    }
-                });
+                .WhereNotNull()
+                .Subscribe(EnableChanged);
 
             this.WhenAnyValue(a => a.Visible)
-                .Select(a => a == null ? null : GetIndividualFlags<TEnum>((TEnum)a).Cast<Enum>())
-                .Subscribe(a =>
-                {
-                    foreach (var x in Map)
-                    {
-                        x.Value.Visibility = a?.Contains(x.Key) != false ? Visibility.Visible : Visibility.Collapsed;
-                    }
-                });
+                .WhereNotNull()
+                .Subscribe(VisibleChanged);
 
             base.OnApplyTemplate();
         }
 
-        private void Value_Click(object sender, RoutedEventArgs e)
+        protected virtual void LastChanged(Enum @enum)
         {
-            var map = Map[(Button)sender];
+
+        }
+
+        protected virtual void EnableChanged(Enum @enum)
+        {
+            var xd = Utility.Helpers.EnumHelper.SeparateFlags<TEnum>((TEnum)@enum).Cast<Enum>();
+            foreach (var x in Map)
+            {
+                x.Value.IsEnabled = xd.Contains(x.Key) != false;
+            }
+        }
+
+        protected virtual void VisibleChanged(Enum @enum)
+        {
+            var xd = Utility.Helpers.EnumHelper.SeparateFlags<TEnum>((TEnum)@enum).Cast<Enum>();
+            foreach (var x in Map)
+            {
+                x.Value.Visibility = xd?.Contains(x.Key) != false ? Visibility.Visible : Visibility.Collapsed;
+            }
+        }
+
+        protected void Value_Click(Enum @enum)
+        {
+            Last = @enum;
             Command?.Execute(map);
-            e.Handled = true;
         }
 
         public static T GetAllBitsOn<T>() where T : Enum
@@ -169,6 +254,7 @@ namespace Utility.WPF.Controls.Buttons
             CommandProperty = Register(),
             EnabledProperty = Register(),
             VisibleProperty = Register(),
+            LastProperty = Register(),
             MarginsProperty = Register(new PropertyMetadata(new Thickness(8)));
 
         protected abstract Map<Enum, Button> Map { get; }
@@ -178,18 +264,18 @@ namespace Utility.WPF.Controls.Buttons
             //   addRemove = new() { { Direction.Left, LeftButton }, { Direction.Right, RightButton }, { Direction.Down, DownButton }, { Direction.Up, UpButton } };
         }
 
-        public static IEnumerable<T> GetIndividualFlags<T>(T flags) where T : Enum
-        {
-            // Get the underlying type of the enum
-            Type underlyingType = Enum.GetUnderlyingType(typeof(T));
+        //public static IEnumerable<T> GetIndividualFlags<T>(T flags) where T : Enum
+        //{
+        //    // Get the underlying type of the enum
+        //    Type underlyingType = Enum.GetUnderlyingType(typeof(T));
 
-            // Get the values of all the individual flags in the enum
-            var individualFlags = Enum.GetValues(typeof(T))
-                                      .Cast<T>()
-                                      .Where(f => flags.HasFlag(f));
+        //    // Get the values of all the individual flags in the enum
+        //    var individualFlags = Enum.GetValues(typeof(T))
+        //                              .Cast<T>()
+        //                              .Where(f => flags.HasFlag(f));
 
-            return individualFlags;
-        }
+        //    return individualFlags;
+        //}
 
         #region dependencyproperties
 
@@ -197,6 +283,11 @@ namespace Utility.WPF.Controls.Buttons
         {
             get { return (Enum)GetValue(EnabledProperty); }
             set { SetValue(EnabledProperty, value); }
+        }
+        public Enum Last
+        {
+            get { return (Enum)GetValue(LastProperty); }
+            set { SetValue(LastProperty, value); }
         }
 
         public Enum Visible

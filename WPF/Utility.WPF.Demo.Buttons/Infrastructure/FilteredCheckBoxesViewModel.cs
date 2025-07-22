@@ -4,12 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Utility.Services;
 using Utility.ViewModels;
 using Utility.Models.Filters;
 using Utility.WPF.Demo.Data.Factory;
 using Utility.WPF.Demo.Data.Model;
 using Utility.Models;
+using Utility.Services.Deprecated;
 
 namespace Utility.WPF.Demo.Buttons.Infrastructure
 {
@@ -41,7 +41,7 @@ namespace Utility.WPF.Demo.Buttons.Infrastructure
 
     internal class FilteredCustomCheckBoxesViewModel
     {
-        private readonly FilterService<Profile> filterService = new();
+        private readonly BaseFilterService<Profile> filterService = new();
 
         public FilteredCustomCheckBoxesViewModel()
         {

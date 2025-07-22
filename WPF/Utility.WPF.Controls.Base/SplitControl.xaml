@@ -426,22 +426,22 @@
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            <Trigger Property="Movement" Value="{x:Static enms:XYMovement.BottomToTop}">
+            <Trigger Property="Movement" Value="{x:Static enms:XYTraversal.BottomToTop}">
                 <Setter Property="Template"  Value="{StaticResource BottomToTop}"/>
                 <Setter Property="HorizontalContentAlignment" Value="Right"></Setter>
                 <Setter Property="VerticalContentAlignment" Value="Top"></Setter>
             </Trigger>
-            <Trigger Property="Movement" Value="{x:Static enms:XYMovement.TopToBottom}">
+            <Trigger Property="Movement" Value="{x:Static enms:XYTraversal.TopToBottom}">
                 <Setter Property="Template"  Value="{StaticResource TopToBottom}"/>
                 <Setter Property="HorizontalContentAlignment" Value="Left"></Setter>
                 <Setter Property="VerticalContentAlignment" Value="Bottom"></Setter>
             </Trigger>
-            <Trigger Property="Movement" Value="{x:Static enms:XYMovement.RightToLeft}">
+            <Trigger Property="Movement" Value="{x:Static enms:XYTraversal.RightToLeft}">
                 <Setter Property="Template"  Value="{StaticResource RightToLeft}"/>
                 <Setter Property="HorizontalContentAlignment" Value="Left"></Setter>
                 <Setter Property="VerticalContentAlignment" Value="Top"></Setter>
             </Trigger>
-            <Trigger Property="Movement" Value="{x:Static enms:XYMovement.LeftToRight}">
+            <Trigger Property="Movement" Value="{x:Static enms:XYTraversal.LeftToRight}">
                 <Setter Property="Template"  Value="{StaticResource LeftToRight}"/>
                 <Setter Property="HorizontalContentAlignment" Value="Right"></Setter>
                 <Setter Property="VerticalContentAlignment" Value="Top"></Setter>

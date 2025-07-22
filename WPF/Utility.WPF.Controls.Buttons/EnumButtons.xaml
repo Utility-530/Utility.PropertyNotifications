@@ -70,32 +70,58 @@
 
     <ControlTemplate x:Key="StepTemplate"  TargetType="{x:Type local:StepButtons}">
         <UniformGrid Rows="1">
-            <Button x:Name="Backward" Margin="{TemplateBinding Margins}">
+
+            <Button x:Name="In" Margin="{TemplateBinding Margins}">
+                <Viewbox>
+                    <materialDesign:PackIcon
+                                Kind="DebugStepInto" />
+                </Viewbox>
+            </Button>
+            <Button x:Name="Out" Margin="{TemplateBinding Margins}">
+                <Viewbox>
+                    <materialDesign:PackIcon
+                                Kind="DebugStepOut" />
+                </Viewbox>
+            </Button>
+            <Button x:Name="Over" Margin="{TemplateBinding Margins}">
+                <Viewbox>
+                    <materialDesign:PackIcon
+                                Kind="DebugStepOver" />
+                </Viewbox>
+            </Button>
+
+        </UniformGrid>
+    </ControlTemplate>
+
+
+    <ControlTemplate x:Key="PlayBackTemplate"  TargetType="{x:Type local:PlayBackButtons}">
+        <ControlTemplate.Resources>
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="Background" Value="Transparent"/>
+            </Style>
+        </ControlTemplate.Resources>        
+        <UniformGrid Rows="1">
+            <Button x:Name="Backward" Margin="{TemplateBinding Margins}" Height="{Binding ElementName=PlayPauseButton, Path=ActualHeight}">
                 <Viewbox>
                     <materialDesign:PackIcon
                                 Kind="StepBackward" />
                 </Viewbox>
             </Button>
-            <Button x:Name="Walk" Margin="{TemplateBinding Margins}">
-                <Viewbox>
-                    <materialDesign:PackIcon
-                                Kind="Play" />
-                </Viewbox>
-            </Button>
-            <Button x:Name="Wait" Margin="{TemplateBinding Margins}">
-                <Viewbox>
-                    <materialDesign:PackIcon
-                                Kind="Pause" />
-                </Viewbox>
-            </Button>
-            <Button x:Name="Forward" Margin="{TemplateBinding Margins}">
+
+            <local:PlayPauseButton x:Name="PlayPauseButton"/>
+
+            <Button x:Name="Forward" Margin="{TemplateBinding Margins}" Height="{Binding ElementName=PlayPauseButton, Path=ActualHeight}">
                 <Viewbox>
                     <materialDesign:PackIcon
                                 Kind="StepForward" />
                 </Viewbox>
             </Button>
+
         </UniformGrid>
     </ControlTemplate>
+
+
 
     <Style TargetType="{x:Type local:DirectionButtons}">
         <Setter Property="Template" Value="{StaticResource DirectionTemplate}" />
@@ -109,5 +135,9 @@
     </Style>
     <Style TargetType="{x:Type local:StepButtons}">
         <Setter Property="Template" Value="{StaticResource StepTemplate}" />
+    </Style>
+
+    <Style TargetType="{x:Type local:PlayBackButtons}">
+        <Setter Property="Template" Value="{StaticResource PlayBackTemplate}" />
     </Style>
 </ResourceDictionary>
