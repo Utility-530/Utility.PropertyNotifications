@@ -25,6 +25,7 @@ using Utility.PropertyNotifications;
 using Utility.Repos;
 using Utility.Services;
 using Utility.WPF.Controls;
+using Utility.WPF.Demo.Buttons;
 using Utility.WPF.Templates;
 
 namespace Utility.Nodes.Demo.Lists
@@ -38,7 +39,11 @@ namespace Utility.Nodes.Demo.Lists
         protected override void OnStartup(StartupEventArgs e)
         {
             CurrentMutable.RegisterLazySingleton(() => new ContainerViewModel());
-            showSplashscreen();
+            CurrentMutable.RegisterConstant<IPlaybackEngine>(new PlayBackViewModel());
+            CurrentMutable.RegisterLazySingleton<PlaybackService>(() => new PlaybackService());
+
+            showPlayback();
+            //showSplashscreen();
             SQLitePCL.Batteries.Init();
 
             CurrentMutable.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
@@ -67,14 +72,29 @@ namespace Utility.Nodes.Demo.Lists
             CurrentMutable.RegisterConstant<IFilter>(new StringFilter());
 
 
+
             Locator.Current.GetService<ServiceResolver>().Connect<PredicateReturnParam, PredicateParam>();
             //Locator.Current.GetService<ServiceResolver>().Connect<ListCollectionViewReturnParam, ListCollectionViewParam>();
-            Locator.Current.GetService<ServiceResolver>().Connect<InstanceReturnParam, ListInParam>();
-            Locator.Current.GetService<ServiceResolver>().Connect<ListInParam, ListParam>();
+            Locator.Current.GetService<ServiceResolver>().Connect<ListInstanceReturnParam, ListInParam>();
+            Locator.Current.GetService<ServiceResolver>().Connect<ListInstanceReturnParam, ListParam>();
 
             JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
             subscribeToTypeChanges();
             base.OnStartup(e);
+        }
+
+        private static void showPlayback()
+        {
+            var sswindow = new Window();
+            sswindow.Show();
+            var playBack = new PlayBackUserControl()
+            {
+            };
+            sswindow.Content = playBack;
+            var window = new Window() { Content = Locator.Current.GetService<ContainerViewModel>() };
+
+            window.Show();
+
         }
 
         private static void showSplashscreen()

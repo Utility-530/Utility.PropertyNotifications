@@ -20,7 +20,7 @@ namespace Utility.Nodes.Demo.Lists
             //});
         }
 
-        public ObservableCollection<ViewModel> Children { get; } = new ObservableCollection<ViewModel>();
+        public ObservableCollection<ViewModel> Children { get; } = [];
 
         public ItemActionCallback ClosingTabItemHandler => ClosingTabItemHandlerImpl;
 
@@ -40,9 +40,10 @@ namespace Utility.Nodes.Demo.Lists
             get => _selected;
             set
             {
+         
                 foreach (var v in Children)
                     v.IsSelected = false;
-                value.IsSelected = true;
+                value?.IsSelected = true;
                 RaisePropertyChanged(ref _selected, value);
             }
         }

@@ -3,11 +3,12 @@ using Utility.Attributes;
 using Utility.Enums;
 using Utility.Interfaces.Generic.Data;
 using Utility.Interfaces.NonGeneric;
+using Utility.Nodes.Demo.Lists.Factories;
 using Utility.PropertyNotifications;
 
 namespace Utility.Nodes.Demo.Lists.Models
 {
-    [Model("d17c5de2-7836-4c02-958c-eb1de974f474", nameof(Services.NodeMethodFactory.BuildUserProfileRoot))]
+    [Model("d17c5de2-7836-4c02-958c-eb1de974f474", nameof(NodeMethodFactory.BuildUserProfileRoot))]
     public class SubscriptionModel : NotifyPropertyClass, IId<Guid>, IClone, Interfaces.NonGeneric.IFactory
     {
         public SubscriptionModel() { }

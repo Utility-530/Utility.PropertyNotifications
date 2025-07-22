@@ -2,9 +2,10 @@
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Demo.Lists.Entities;
+using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Models;
 
-namespace Utility.Nodes.Demo.Lists.Infrastructure
+namespace Utility.Nodes.Demo.Lists.Services
 {
     public class StringFilter : IFilter
     {

@@ -23,18 +23,18 @@ namespace Utility.Nodes.Demo.Lists
             }
         }
 
-        public IReadOnlyTree[] Controls
-        {
-            get
-            {
-                if (control == null)
-                    Subscribe(nameof(NodeMethodFactory.BuildControlRoot), a =>
-                        {
-                            control = [a]; base.RaisePropertyChanged(nameof(Controls));
-                        });
-                return control;
-            }
-        }
+        //public IReadOnlyTree[] Controls
+        //{
+        //    get
+        //    {
+        //        if (control == null)
+        //            Subscribe(nameof(NodeMethodFactory.BuildControlRoot), a =>
+        //                {
+        //                    control = [a]; base.RaisePropertyChanged(nameof(Controls));
+        //                });
+        //        return control;
+        //    }
+        //}
     }
 
 

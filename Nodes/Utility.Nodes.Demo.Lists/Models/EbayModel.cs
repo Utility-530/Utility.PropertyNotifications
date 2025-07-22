@@ -5,11 +5,12 @@ using System.Text.Json.Serialization;
 using Utility.Attributes;
 using Utility.Interfaces.Generic.Data;
 using Utility.Interfaces.NonGeneric;
+using Utility.Nodes.Demo.Lists.Factories;
 using Utility.PropertyNotifications;
 
 namespace Utility.Nodes.Demo.Lists.Infrastructure
 {
-    [Model("a223440a-a171-4989-91f3-a11fbea82546", nameof(Services.NodeMethodFactory.BuildEbayRoot))]
+    [Model("a223440a-a171-4989-91f3-a11fbea82546", nameof(NodeMethodFactory.BuildEbayRoot))]
     public class EbayModel : NotifyPropertyClass, IId<Guid>, IIdSet<Guid>, IClone
     {
         //private string? indexPath;

@@ -11,11 +11,11 @@
 
     <ResourceDictionary.MergedDictionaries>
         <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />-->
-        <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="{x:Null}" SecondaryColor="Lime" />
+        <!--<materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="{x:Null}" SecondaryColor="Lime" />
 
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
 
-        <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/materialdesign.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/materialdesign.xaml"/>-->
         <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/accent/materialdesigncolor.amber.xaml" />-->
 
 
@@ -36,19 +36,18 @@
         </Setter>
     </Style>
 
-    <Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />
+    <!--<Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />-->
 
     <DataTemplate DataType="{x:Type local:ContainerViewModel}">
         <utl:SplitControl att:Ex.ToggleStyle="{StaticResource SettingsToggleStyle}" >
             
             <utl:SplitControl.Header>
-                <TextBlock Text="Settings">
-
-                </TextBlock>
+                <TextBlock Text="Settings"/>
             </utl:SplitControl.Header>
             <utl:SplitControl.Content>
                 <dockablz:Layout>
                     <dragablz:TabablzControl
+                        Style="{DynamicResource MaterialDesignTabablzControlStyle}"
                 x:Name="InitialTabablzControl"                
                 ItemContainerStyleSelector="{StaticResource StyleSelector}"
                 ClosingItemCallback="{Binding ClosingTabItemHandler}"
@@ -61,14 +60,14 @@
                         <dragablz:TabablzControl.HeaderItemTemplate>
                             <DataTemplate DataType="{x:Type nwpf:ViewModel}">
                                 <StackPanel>
-
-                                    <TextBlock Margin="8,0,0,0" Text="{Binding Name}" />
-                                    <Rectangle x:Name="Rex" HorizontalAlignment="Stretch" Height="2"/>
+                                    <Border CornerRadius="2" BorderThickness="1" x:Name="Rex">
+                                        <TextBlock Margin="0,0,0,0" HorizontalAlignment="Center" Text="{Binding Name}" />
+                                    </Border>     
                                 </StackPanel>
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding IsSelected}" Value="True">
                                         <DataTrigger.Setters>
-                                            <Setter TargetName="Rex" Property="Fill" Value="Green"></Setter>
+                                            <Setter TargetName="Rex" Property="BorderBrush" Value="CadetBlue"></Setter>
                                         </DataTrigger.Setters>
                                     </DataTrigger>
 
