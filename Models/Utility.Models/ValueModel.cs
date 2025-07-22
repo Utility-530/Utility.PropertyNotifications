@@ -1,5 +1,4 @@
-﻿using Utility.Interfaces;
-using Utility.Interfaces.Generic;
+﻿using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
 
@@ -50,5 +49,18 @@ namespace Utility.Models
         object IValue.Value => value;
 
         object ISetValue.Value { set => Value = (T)value; }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is ValueModel<T> mNode)
+                return this.Name.Equals(mNode.Name);
+            else
+                return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Name?.GetHashCode() ?? throw new Exception("Sd33 ds");
+        }
     }
 }
