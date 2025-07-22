@@ -217,6 +217,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Markup", "..\WP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.FileSystem", "..\WPF\Utility.WPF.Controls.FileSystem\Utility.WPF.Controls.FileSystem.csproj", "{CD1855BB-A630-577B-FCE8-6D92C9F9ADFA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.Base", "..\WPF\Utility.WPF.Controls.Base\Utility.WPF.Controls.Base.csproj", "{F48DBCBE-F481-0A93-A2EF-D0EF2D756E82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -631,6 +633,10 @@ Global
 		{CD1855BB-A630-577B-FCE8-6D92C9F9ADFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD1855BB-A630-577B-FCE8-6D92C9F9ADFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD1855BB-A630-577B-FCE8-6D92C9F9ADFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F48DBCBE-F481-0A93-A2EF-D0EF2D756E82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F48DBCBE-F481-0A93-A2EF-D0EF2D756E82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F48DBCBE-F481-0A93-A2EF-D0EF2D756E82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F48DBCBE-F481-0A93-A2EF-D0EF2D756E82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -730,6 +736,7 @@ Global
 		{38BDEE29-D887-E8C0-CF25-4E27DA51F277} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{4A89D256-009E-D230-B3E1-F0DF15E978F7} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{CD1855BB-A630-577B-FCE8-6D92C9F9ADFA} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{F48DBCBE-F481-0A93-A2EF-D0EF2D756E82} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1F5991F-9180-4F40-A959-E24A6DDA6C5C}
