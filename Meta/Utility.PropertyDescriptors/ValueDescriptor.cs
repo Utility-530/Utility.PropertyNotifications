@@ -58,11 +58,11 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueM
         }
     }
 
-    public void RaisePropertyChanged(object previousValue, object value, string? propertyName = null)
+    public bool RaisePropertyChanged(object previousValue, object value, string? propertyName = null)
     {
         if (Descriptor.IsReadOnly == true)
-            return;
-        base.RaisePropertyChanged();
+            return false;
+        return base.RaisePropertyChanged();
     }
 }
 

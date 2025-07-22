@@ -34,66 +34,73 @@ namespace Utility.PropertyNotifications
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        public virtual void RaiseValuePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null) where T : struct
+        public virtual bool RaiseValuePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null) where T : struct
         {
             if (value.Equals(default) && previousValue.Equals(default))
-                return;
+                return false;
             if (value.Equals(previousValue) == true)
-                return;
+                return false;
 
             var _previousValue = previousValue;
             previousValue = value;
             RaisePropertyChanged(_previousValue, value, propertyName);
+            return true;
         }
 
         /// <summary>
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        public virtual void RaisePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null)
+        public virtual bool RaisePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null)
         {
             if (value?.Equals(default) == true && previousValue?.Equals(default) == true)
-                return;
+                return false;
             if (value?.Equals(previousValue) == true)
-                return;
+                return false;
 
             var _previousValue = previousValue;
             previousValue = value;
             RaisePropertyChanged(_previousValue, value, propertyName);
+            return true;
         }
 
         /// <summary>
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        public virtual void RaisePropertyChanged<T>(ref T? previousValue, T? value, [CallerMemberName] string? propertyName = null) where T : struct
+        public virtual bool RaisePropertyChanged<T>(ref T? previousValue, T? value, [CallerMemberName] string? propertyName = null) where T : struct
         {
             if (value.Equals(default) && previousValue.Equals(default))
-                return;
+                return false;
             if (value.Equals(previousValue) == true)
-                return;
+                return false;
 
             var _previousValue = previousValue;
             previousValue = value;
             RaisePropertyChanged(_previousValue, value, propertyName);
+            return true;
         }
 
-        public virtual void RaisePropertyChanged<T>(T previousValue, T value, [CallerMemberName] string? propertyName = null)
+        public virtual bool RaisePropertyChanged<T>(T previousValue, T value, [CallerMemberName] string? propertyName = null)
         {
             if (PropertyChanged != null && raisePropertyChanged)
             {
                 var e = new PropertyChangedExEventArgs(propertyName, value, previousValue);
                 PropertyChanged(this, e);
+                return true;
             }
+            return false;
         }
 
-        public virtual void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
+        public virtual bool RaisePropertyChanged([CallerMemberName] string? propertyName = null)
         {
             if (PropertyChanged != null)
             {
                 var e = new PropertyChangedEventArgs(propertyName);
                 PropertyChanged(this, e);
+                return true;
             }
+            return false;
         }
 
         #endregion INotifyPropertyChanged Members
@@ -122,16 +129,20 @@ namespace Utility.PropertyNotifications
         //    return value;
         //}
 
-        public virtual void RaisePropertyCalled(object? value, [CallerMemberName] string? propertyName = null)
+        public virtual bool RaisePropertyCalled(object? value, [CallerMemberName] string? propertyName = null)
         {
             if (flag == false)
             {
                 var args = PropertyCalledArgs(propertyName, value);
                 if (raisePropertyCalled && PropertyCalled is PropertyCalledEventHandler handler)
+                {
                     handler.Invoke(this, args);
+                    return true;
+                }
                 else
                     missedCalls.Add(args);
             }
+            return false;
         }
 
         private PropertyCalledEventArgs PropertyCalledArgs(string? propertyName, object? value)
@@ -155,7 +166,7 @@ namespace Utility.PropertyNotifications
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        public virtual void RaisePropertyReceived(object oldValue, object value, [CallerMemberName] string? propertyName = null)
+        public virtual bool RaisePropertyReceived(object oldValue, object value, [CallerMemberName] string? propertyName = null)
         {
             var handler = PropertyReceived;
             if (handler != null)
@@ -165,20 +176,26 @@ namespace Utility.PropertyNotifications
                 var e = new PropertyReceivedEventArgs(propertyName, value, oldValue);
                 handler(this, e);
                 flag = false;
+                return true;
             }
+            return false;
         }
 
-        public virtual void RaisePropertyReceived<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null)
+        public virtual bool RaisePropertyReceived<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null)
         {
             if (value == null && previousValue == null)
-                return;
+                return false;
             if (value?.Equals(previousValue) == true)
-                return;
+                return false;
 
             var _previousValue = previousValue;
             previousValue = value;
             if (raisePropertyReceived)
+            {
                 RaisePropertyReceived(_previousValue, value, propertyName);
+                return true;
+            }
+            return false;
         }
 
         #endregion INotifyPropertyReceived Members

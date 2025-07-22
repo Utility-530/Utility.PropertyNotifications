@@ -31,10 +31,10 @@ namespace Utility.PropertyNotifications
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        public virtual void RaiseValuePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null) where T : struct
+        public virtual bool RaiseValuePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null) where T : struct
         {
             if (value.Equals(previousValue) == true)
-                return;
+                return false;
 
             var handler = PropertyChanged;
             var _previousValue = previousValue;
@@ -44,13 +44,15 @@ namespace Utility.PropertyNotifications
             {
                 var e = new PropertyChangedExEventArgs(propertyName, value, _previousValue);
                 handler(this, e);
+                return true;
             }
+            return false;
         }
             
-        public virtual void RaisePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null) 
+        public virtual bool RaisePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null) 
         {
             if (value?.Equals(previousValue) == true)
-                return;
+                return false;
 
             var handler = PropertyChanged;
             var _previousValue = previousValue;
@@ -60,21 +62,26 @@ namespace Utility.PropertyNotifications
             {
                 var e = new PropertyChangedExEventArgs(propertyName, value, _previousValue);
                 handler(this, e);
+                return true;
             }
+            return false;
+
         }
 
         /// <summary>
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        public virtual void RaisePropertyChanged([CallerMemberName] string? propertyName = null)
+        public virtual bool RaisePropertyChanged([CallerMemberName] string? propertyName = null)
         {
             var handler = PropertyChanged;
             if (handler != null)
             {
                 var e = new PropertyChangedEventArgs(propertyName);
                 handler(this, e);
+                return true;
             }
+            return false;
         }
 
         #endregion INotifyPropertyChanged Members
@@ -95,13 +102,17 @@ namespace Utility.PropertyNotifications
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        public virtual void RaisePropertyCalled(object? value, [CallerMemberName] string? propertyName = null)
+        public virtual bool RaisePropertyCalled(object? value, [CallerMemberName] string? propertyName = null)
         {
             if (flag == false)
                 if (PropertyCalled is { } called)
+                {
                     called.Invoke(this, PropertyCalledArgs(propertyName, value));
+                    return true;
+                }
                 else
                     missedCalls.Add(PropertyCalledArgs(propertyName, value));
+            return false;
         }
 
         private PropertyCalledEventArgs PropertyCalledArgs(string? propertyName, object? value)
@@ -124,7 +135,7 @@ namespace Utility.PropertyNotifications
         /// Raises this object's PropertyChanged event.
         /// </summary>
         /// <param name="propertyName">The property that has a new value.</param>
-        public virtual void RaisePropertyReceived(object? value, object? oldValue, [CallerMemberName] string? propertyName = null)
+        public virtual bool RaisePropertyReceived(object? value, object? oldValue, [CallerMemberName] string? propertyName = null)
         {
             var handler = PropertyReceived;
             if (handler != null)
@@ -134,6 +145,7 @@ namespace Utility.PropertyNotifications
                 handler(this, e);
                 flag = false;
             }
+            return true;
 
         }
         #endregion INotifyPropertyReceived Members
