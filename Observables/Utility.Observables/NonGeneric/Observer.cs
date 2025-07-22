@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Utility.Interfaces.NonGeneric;
+using Utility.Interfaces.Reactive.NonGeneric;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Utility.Observables.NonGeneric

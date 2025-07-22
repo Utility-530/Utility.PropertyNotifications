@@ -11,6 +11,8 @@ using Utility.Helpers;
 using System.Collections.ObjectModel;
 using System.Runtime.CompilerServices;
 using Utility.PropertyNotifications;
+using Utility.Reactives;
+using Utility.Interfaces.Reactive.NonGeneric;
 
 namespace Utility.Infrastructure
 {
@@ -66,7 +68,7 @@ namespace Utility.Infrastructure
             return (other as IKey<Key>)?.Equals(this.Key) ?? false;
         }
 
-        protected Interfaces.Reactive.IObservable<TOutput> Observe<TOutput, TInput>(TInput tInput, [CallerMemberName] string? callerMemberName = null) where TInput : IGetGuid
+        protected Interfaces.Reactive.Generic.IObservable<TOutput> Observe<TOutput, TInput>(TInput tInput, [CallerMemberName] string? callerMemberName = null) where TInput : IGetGuid
         {
             return Resolver.Register<TInput, TOutput>(this.Key, tInput);
         }
@@ -158,7 +160,7 @@ namespace Utility.Infrastructure
             if (arg != null)
             {
                 var observer = Activator.CreateInstance(
-                            typeof(Observer<>).MakeGenericType(arg), action, onError, onCompleted, onProgress);
+                            typeof(Observables.Generic.Observer<>).MakeGenericType(arg), action, onError, onCompleted, onProgress);
 
                 return (IDisposable?)single.Invoke(instance, new[] { observer });
             }

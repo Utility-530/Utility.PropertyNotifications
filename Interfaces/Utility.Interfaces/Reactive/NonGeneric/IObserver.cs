@@ -1,6 +1,7 @@
 ﻿using System;
+using Utility.Interfaces.NonGeneric;
 
-namespace Utility.Interfaces.NonGeneric
+namespace Utility.Interfaces.Reactive.NonGeneric
 {
     public interface IObserver : IEquatable
     {

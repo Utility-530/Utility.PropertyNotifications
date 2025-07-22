@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Reflection;
 using Utility.Interfaces.NonGeneric;
+using Utility.Interfaces.Reactive.NonGeneric;
 using Utility.Observables.NonGeneric;
 
 namespace Utility.Collections

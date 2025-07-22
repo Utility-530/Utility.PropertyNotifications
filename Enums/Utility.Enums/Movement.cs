@@ -3,40 +3,40 @@
     public enum Movement : byte
     {
         None,
-        InToOut = 1,
-        OutToIn = 2
+        In = 1,
+        Out = 2
     }
 
     public enum XMovement : byte
     {
         None,
-        LeftToRight = 1,
-        RightToLeft = 2
+        Left = 1,
+        Right = 2
     }  
     
     public enum YMovement : byte
     {
         None,
-        TopToBottom = 1,
-        BottomToTop = 2
+        Up = 1,
+        Down = 2
     }   
     
     public enum ZMovement : byte
     {
         None,
-        FrontToBack = 1,
-        BackToFront = 2
+        Forward = 1,
+        Backward = 2
     }
 
 
     public enum XYMovement : byte
     {
         None,
-        LeftToRight = 1,
-        RightToLeft = 2,
+        Left = 1,
+        Right = 2,
 
-        TopToBottom = 4,
-        BottomToTop = 8,
+        Up = 4,
+        Down = 8,
 
 
     }
@@ -45,31 +45,31 @@
     {
         None,
 
-        LeftToRight = 1,
-        RightToLeft = 2,
+        Left = 1,
+        Right = 2,
 
-        FrontToBack = 16,
-        BackToFront = 32,
+        Forward = 16,
+        Backward = 32,
     }
     public enum YZMovement : byte
     {
         None,
 
 
-        TopToBottom = 4,
-        BottomToTop = 8,
-        FrontToBack = 16,
-        BackToFront = 32,
+        Up = 4,
+        Down = 8,
+        Forward = 16,
+        Backward = 32,
     }
     public enum XYZMovement : byte
     {
         None,
 
-        LeftToRight = 1,
-        RightToLeft = 2,
-        TopToBottom = 4,
-        BottomToTop = 8,
-        FrontToBack = 16,
-        BackToFront = 32,
+        Left = 1,
+        Right = 2,
+        Up = 4,
+        Down = 8,
+        Forward = 16,
+        Backward = 32,
     }
 }

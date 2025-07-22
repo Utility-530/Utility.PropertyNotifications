@@ -6,7 +6,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.ExceptionServices;
 using System.Threading;
-using Utility.Interfaces.NonGeneric;
+using Utility.Interfaces.Reactive.NonGeneric;
 using Utility.Observables.Generic;
 
 namespace Utility.Observables.NonGeneric

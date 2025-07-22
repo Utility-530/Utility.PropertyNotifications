@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Utility.Collections;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
+using Utility.Interfaces.Reactive.NonGeneric;
 using Utility.Keys;
 using Utility.Observables;
 using Utility.Observables.NonGeneric;

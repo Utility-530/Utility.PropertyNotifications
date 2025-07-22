@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Utility.Interfaces.NonGeneric;
+using Utility.Interfaces.Reactive.NonGeneric;
 
 namespace Utility.Observables.NonGeneric
 {
