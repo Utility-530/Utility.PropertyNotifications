@@ -7,7 +7,7 @@ using System.Linq;
 using Utility.Common.Contract;
 using Utility.Interfaces.NonGeneric;
 
-namespace Utility.Common.Collection
+namespace Utility.Common.Collections
 {
     /// <summary>
     /// https://github.com/sorteper/ConcurrentObservableCollection/blob/master/ConcurrentObservableCollection.cs

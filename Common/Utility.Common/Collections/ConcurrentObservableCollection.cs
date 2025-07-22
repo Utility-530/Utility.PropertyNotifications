@@ -10,7 +10,7 @@ using System.Reactive.Concurrency;
 using System.Threading;
 using Utility.Common.Contract;
 
-namespace Utility.Common.Collection
+namespace Utility.Common.Collections
 {
     /// <summary>
     /// https://github.com/sorteper/ConcurrentObservableCollection/blob/master/ConcurrentObservableCollection.cs
@@ -29,9 +29,9 @@ namespace Utility.Common.Collection
         {
             list = new List<T>();
             if (scheduler == null)
-                this.Context = context ?? SynchronizationContext.Current;
+                Context = context ?? SynchronizationContext.Current;
             else
-                this.Scheduler = scheduler;
+                Scheduler = scheduler;
             SyncRoot = new object();
         }
 
