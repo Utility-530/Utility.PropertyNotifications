@@ -447,26 +447,14 @@ namespace Utility.Models.Trees
 
     }
 
-    public class StringRootModel : StringModel, IRoot
-    {
-    }
-
-    public class HtmlModel : StringModel
-    {
-    }
-
-    public class HtmlAddressModel : StringModel
-    {
-    }
-
-
     public class AndOrModel : CollectionModel<AndOr, IPredicate>, IAndOr, System.IObservable<Unit>, IPredicate
     {
         protected AndOr value = 0;
         List<System.IObserver<Unit>> observers = [];
         Dictionary<IModel, IDisposable> dictionary = [];
 
-        public AndOrModel()
+        public AndOrModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
+       base(null, func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
         {
         }
 
@@ -844,6 +832,11 @@ namespace Utility.Models.Trees
 
     public class TransformersModel : CollectionModel<TransformerModel>
     {
+        public TransformersModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
+        base(null, func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
+        {
+        }
+
         public const string transformer = nameof(transformer);
         public override void SetNode(INode node)
         {
@@ -863,7 +856,10 @@ namespace Utility.Models.Trees
 
     public class FiltersModel : CollectionModel<FilterModel>
     {
-
+        public FiltersModel(Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
+   base(null, null, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
+        {
+        }
         public override void SetNode(INode node)
         {
             node.Orientation = Orientation.Vertical;

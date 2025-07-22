@@ -23,13 +23,23 @@ namespace Utility.Models
 
     public abstract class BaseCollectionModel<TValue> : Model<TValue>, IChildCollection 
     {
+        public BaseCollectionModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
+            base(func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
+        {
+        }
         public virtual IEnumerable Collection { get; }
     }
 
-    public class CollectionModel<TValue, T>(Func<T>? create = null) : BaseCollectionModel<TValue> 
+    public class CollectionModel<TValue, T> : BaseCollectionModel<TValue> 
     {
         private int limit = int.MaxValue;
-        private readonly Func<T>? create = create;
+        private Func<T>? create;
+
+        public CollectionModel(Func<T>? create = null, Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
+        base(func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
+        {
+            this.create = create;
+        }
 
         public override ObservableCollection<T> Collection { get; } = [];
 
@@ -97,9 +107,12 @@ namespace Utility.Models
     {
 
     }
-    public class CollectionModel<TModel>(Func<TModel>? create = null) : CollectionModel<object, TModel>(create) where TModel : class
+    public class CollectionModel<TModel> : CollectionModel<object, TModel> where TModel : class
     {
-
+        public CollectionModel(Func<TModel>? create = null, Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
+    base(create, func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
+        {
+        }
     }
 
     public class CollectionRootModel : CollectionModel
