@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Utility.Interfaces.NonGeneric
+namespace Utility.Interfaces.Reactive.NonGeneric
 {
     public interface IObservable : IEnumerable
     {
