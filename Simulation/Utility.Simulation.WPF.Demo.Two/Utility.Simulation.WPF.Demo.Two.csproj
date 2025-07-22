@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
-		<ProjectReference Include="..\..\Nodify\Utility.Nodify.Core\Utility.Nodify.Core.csproj" />
+		<ProjectReference Include="..\..\Nodify\Utility.Nodify.Core\Utility.Nodify.ViewModels.csproj" />
 		<ProjectReference Include="..\..\Nodify\Utility.Nodify.Operations\Utility.Nodify.Operations.csproj" />
 		<ProjectReference Include="..\..\Nodify\Utility.Nodify.Engine\Utility.Nodify.Engine.csproj" />
 		<ProjectReference Include="..\..\Observables\Utility.Observables\Utility.Observables.csproj" />

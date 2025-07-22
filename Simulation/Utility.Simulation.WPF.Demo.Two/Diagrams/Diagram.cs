@@ -10,7 +10,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Helpers;
 using Utility.Observables.Generic;
 using Utility.Observables.NonGeneric;
-using NetFabric.Hyperlinq;
+using Utility.Nodify.ViewModels;
 
 namespace Utility.Nodify.Demo.Infrastructure
 {
