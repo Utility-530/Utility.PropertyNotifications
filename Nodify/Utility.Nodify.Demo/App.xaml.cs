@@ -1,20 +1,20 @@
 ﻿using DryIoc;
-using Utility.Nodify.Core;
-using System;
-using System.Windows;
-using Utility.Nodify.Operations.Infrastructure;
-using Utility.Nodify.Engine.ViewModels;
-using Utility.Repos;
 using Splat;
-using Utility.Nodify.Engine.Infrastructure;
-using IConverter = Utility.Nodify.Engine.Infrastructure.IConverter;
-using Utility.Descriptors;
-using Utility.Interfaces;
-using Utility.Extensions;
+using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
+using System.Windows;
 using Utility.Interfaces.Exs;
-using Utility.PropertyDescriptors;
+using Utility.Models;
+using Utility.Nodes.Demo.Lists.Services;
+using Utility.Nodify.Core;
+using Utility.Nodify.Engine.Infrastructure;
+using Utility.Nodify.ViewModels;
+using Utility.Nodify.Generator.Services;
+using Utility.Repos;
+using IConverter = Utility.Nodify.Engine.Infrastructure.IConverter;
+using INodeSource = Utility.Nodify.Operations.Infrastructure.INodeSource;
+using ServiceResolver = Utility.Services.ServiceResolver;
 
 namespace Utility.Nodify.Demo
 {
@@ -22,20 +22,20 @@ namespace Utility.Nodify.Demo
     public partial class App : Application
     {
         IContainer container;
-        IValueDescriptor rootDescriptor;
+        //IDescriptor rootDescriptor;
 
         Guid guid = Guid.Parse("25ee5731-11cf-4fc1-a925-50272fb99bba");
 
-        protected override async void OnStartup(StartupEventArgs e)
+        protected override void OnStartup(StartupEventArgs e)
         {
             SQLitePCL.Batteries.Init();
-
+            initialise();
             Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
 
-
-            rootDescriptor = await DescriptorFactory.CreateRoot(typeof(Diagram), guid, name: "diagram_test2").Take(1).ToTask();
-            var diagram = rootDescriptor.Get<Diagram>();
-            rootDescriptor.Initialise();
+            //rootDescriptor = DescriptorFactory.CreateRoot(typeof(Diagram), "diagram_test2");
+            //var diagram = rootDescriptor.Get<Diagram>();
+            //rootDescriptor.Initialise();
+            var diagram = new Diagram();
             base.OnStartup(e);
 
             container = new Container(DiConfiguration.SetRules);
@@ -46,7 +46,7 @@ namespace Utility.Nodify.Demo
             container.RegisterInstance<Diagram>(diagram);
             container.Register<IConverter, Converter>();
 
-            container.Resolve<Utility.Nodify.Operations.Resolver>();
+            container.Resolve<Operations.Resolver>();
 
             DockWindow dockWindow = new()
             {
@@ -56,6 +56,18 @@ namespace Utility.Nodify.Demo
             dockWindow.Show();
         }
 
+        private void initialise()
+        {
+            Locator.CurrentMutable.RegisterLazySingleton(() => new ServiceResolver());
+            Locator.CurrentMutable.RegisterLazySingleton(() => new CollectionViewService());
+
+            Locator.Current.GetService<ServiceResolver>().Connect<PredicateReturnParam, PredicateParam>();
+            //Locator.Current.GetService<ServiceResolver>().Connect<ListCollectionViewReturnParam, ListCollectionViewParam>();
+            Locator.Current.GetService<ServiceResolver>().Connect<ListInstanceReturnParam, ListInParam>();
+            Locator.Current.GetService<ServiceResolver>().Connect<ListInstanceReturnParam, ListParam>();
+            Locator.Current.GetService<ServiceResolver>().Observe<FilterParam>(new ValueModel<string>() { Name = "react_to_3", Value = "something" });
+            Locator.Current.GetService<ServiceResolver>().Observe<InstanceTypeParam>(new ValueModel<Type>() { Name = "react_to_4", Value = typeof(List<object>) });
+        }
 
         public static class DiConfiguration
         {
@@ -72,8 +84,8 @@ namespace Utility.Nodify.Demo
         {
             var diagramViewModel = container.Resolve<IDiagramViewModel>();
             var diagram = container.Resolve<IConverter>().ConvertBack(diagramViewModel);
-            rootDescriptor.Set(diagram);
-            rootDescriptor.Finalise();
+            //rootDescriptor.Set(diagram);
+            //rootDescriptor.Finalise();
             base.OnExit(e);
         }
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Utility.Structs;
 
-namespace Utility.Nodify.Core
+namespace Utility.Nodify.Entities
 {
     public class Node
     {

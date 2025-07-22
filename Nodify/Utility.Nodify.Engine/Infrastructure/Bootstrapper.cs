@@ -6,26 +6,20 @@ using System.Collections.Generic;
 using System.Reactive.Subjects;
 using System.Windows.Input;
 using OperationKeys = Utility.Nodify.Operations.Keys;
-using DemoKeys = Utility.Nodify.Demo.Keys;
+
 using DryIoc;
 using Utility.Commands;
 using System.Collections.ObjectModel;
-using Message = Utility.Nodify.Operations.Message;
-using Utility.Nodify.Engine.ViewModels;
-using Utility.Nodify.Demo;
+using Message = Utility.Nodify.Core.Message;
+using Utility.Nodify.ViewModels;
+using Utility.Nodify.Models;
 
 namespace Utility.Nodify.Engine.Infrastructure
 {
     public class Bootstrapper
     {
-
-
         public static IContainer Build(IContainer container)
         {
-
-
-            //RegisterOperations(builder);
-
             container.Register<Operations.Resolver>();
             container.Register<DiagramsViewModel>();
 
@@ -35,19 +29,18 @@ namespace Utility.Nodify.Engine.Infrastructure
             container.Register<IDiagramViewModel, ViewModels.DiagramViewModel>();
             container.RegisterInstanceMany<ISubject<object>>(new ReplaySubject<object>(1), serviceKey: OperationKeys.Next);
             container.RegisterInstanceMany<ISubject<object>>(new ReplaySubject<object>(1), serviceKey: OperationKeys.Previous);
-            container.RegisterDelegate<ICommand>(c => new Command(() => c.Resolve<IObserver<object>>(OperationKeys.Next).OnNext(default)), serviceKey: DemoKeys.NextCommand);
-            container.RegisterDelegate<ICommand>(c => new Command(() => c.Resolve<IObserver<object>>(OperationKeys.Previous).OnNext(default)), serviceKey: DemoKeys.PreviousCommand);
+            container.RegisterDelegate<ICommand>(c => new Command(() => c.Resolve<IObserver<object>>(OperationKeys.Next).OnNext(default)), serviceKey: OperationKeys.NextCommand);
+            container.RegisterDelegate<ICommand>(c => new Command(() => c.Resolve<IObserver<object>>(OperationKeys.Previous).OnNext(default)), serviceKey: OperationKeys.PreviousCommand);
             container.RegisterMany<Dictionary<string, FilterInfo>>();
-            container.Register<RangeObservableCollection<Diagram>>(serviceKey: DemoKeys.SelectedDiagram);
-            container.RegisterDelegate(c => c.Resolve<IEnumerable<Diagram>>(), serviceKey: DemoKeys.Diagrams);
+            container.Register<RangeObservableCollection<Diagram>>(serviceKey: OperationKeys.SelectedDiagram);
+            container.RegisterDelegate(c => c.Resolve<IEnumerable<Diagram>>(), serviceKey: OperationKeys.Diagrams);
             container.RegisterMany<Dictionary<Core.Key, NodeViewModel>>(serviceKey: OperationKeys.Nodes);
             container.RegisterMany<Dictionary<Core.Key, ConnectionViewModel>>(serviceKey: OperationKeys.Connections);
             container.RegisterDelegate<IDictionary<string, FilterInfo>>(() => new Dictionary<string, FilterInfo>(), serviceKey: OperationKeys.Filters);
             container.Register<RangeObservableCollection<Message>>(serviceKey: OperationKeys.Future);
             container.Register<RangeObservableCollection<Message>>(serviceKey: OperationKeys.Current);
             container.Register<RangeObservableCollection<Message>>(serviceKey: OperationKeys.Past);
-
-
+            container.Register<IDiagramFactory, DiagramFactory>();
 
             return container;
         }

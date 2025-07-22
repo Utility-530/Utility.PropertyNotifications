@@ -1,4 +1,4 @@
-﻿namespace Utility.Nodify.Core
+﻿namespace Utility.Nodify.Entities
 {
     public class Connector
     {

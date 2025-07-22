@@ -1,0 +1,211 @@
+﻿<Application x:Class="Utility.Nodify.Transitions.Demo.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Utility.Nodify.Transitions.Demo"
+             xmlns:vm="clr-namespace:Utility.Nodify.ViewModels;assembly=Utility.Nodify.ViewModels"
+             xmlns:nodify="https://miroiu.github.io/nodify"
+             xmlns:local1="clr-namespace:Nodify.StateMachine"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <Style x:Key="IconButton"
+           TargetType="{x:Type Button}"
+           BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Padding"
+                Value="1 2" />
+                <Setter Property="HorizontalAlignment"
+                Value="Left" />
+                <Setter Property="VerticalAlignment"
+                Value="Center" />
+                <Setter Property="Background"
+                Value="Transparent" />
+                <Setter Property="BorderBrush"
+                Value="{DynamicResource HighlightedBackgroundBrush}" />
+                <Setter Property="Foreground"
+                Value="{DynamicResource ForegroundBrush}" />
+                <Setter Property="FocusVisualStyle"
+                Value="{StaticResource {x:Static SystemParameters.FocusVisualStyleKey}}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Button}">
+                            <Border x:Name="PART_Border"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                                <ContentPresenter x:Name="contentPresenter"
+                                          Focusable="False"
+                                          Margin="{TemplateBinding Padding}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                 Value="True">
+                                    <Setter TargetName="PART_Border"
+                                    Property="Background"
+                                    Value="{Binding BorderBrush, RelativeSource={RelativeSource TemplatedParent}}" />
+                                </Trigger>
+                                <Trigger Property="IsPressed"
+                                 Value="True">
+                                    <Setter TargetName="PART_Border"
+                                    Property="Background"
+                                    Value="{Binding BorderBrush, RelativeSource={RelativeSource TemplatedParent}}" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled"
+                                 Value="False">
+                                    <Setter Property="Foreground"
+                                    Value="{DynamicResource DisabledForegroundBrush}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <DataTemplate DataType="{x:Type vm:ConnectorViewModel}">
+                <Button Style="{StaticResource IconButton}"
+                                                     Command="{x:Static nodify:EditorCommands.BringIntoView}"
+                                                                    CommandParameter="{Binding Location}"
+                                                                    CommandTarget="{Binding ElementName=Editor}"
+                                                                    Foreground="DodgerBlue">
+                    <TextBlock Text="{Binding Title}"
+                                       TextDecorations="Underline" >
+                        <TextBlock.Style>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="Foreground"
+                                                                    Value="{DynamicResource ForegroundBrush}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsActive}"
+                                                                             Value="True">
+                                        <Setter Property="Foreground"
+                                                                            Value="{DynamicResource ActiveStateBrush}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Button>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type vm:ConnectionViewModel}">
+
+                <ItemsControl>
+                    <ContentControl Content="{Binding Input}"></ContentControl>
+                    <Rectangle  Height="4" HorizontalAlignment="Stretch" MinWidth="4">
+                        <Rectangle.Style>
+
+                            <Style TargetType="{x:Type Rectangle}">
+                                <Setter Property="Fill"
+                                                                    Value="{DynamicResource ForegroundBrush}" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsActive}"
+                                                                             Value="True">
+                                        <Setter Property="Fill"
+                                                                            Value="{DynamicResource ActiveStateBrush}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Rectangle.Style>
+                    </Rectangle>
+                    <ContentControl Content="{Binding Output}"></ContentControl>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="1"></UniformGrid>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </DataTemplate>
+
+
+            <!--TOOLBAR-->
+            <DataTemplate DataType="{x:Type ProgressViewModel}">
+
+
+                <Border CornerRadius="2"
+                Background="{DynamicResource PanelBackgroundBrush}"
+                BorderThickness="0 0 0 1"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Margin="10 0"
+                Grid.Column="1">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Command="{Binding PauseCommand}">
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}"
+                               BasedOn="{StaticResource IconButton}">
+                                    <Setter Property="Content"
+                                    Value="{StaticResource PauseIcon}" />
+                                    <Setter Property="ToolTip"
+                                    Value="Pause" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Runner.State}"
+                                             Value="Stopped">
+                                            <Setter Property="Visibility"
+                                            Value="Collapsed" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Runner.State}"
+                                             Value="Paused">
+                                            <Setter Property="Content"
+                                            Value="{StaticResource UnpauseIcon}" />
+                                            <Setter Property="ToolTip"
+                                            Value="Continue" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <Button Command="{Binding RunCommand}"
+                        Style="{StaticResource IconButton}">
+                            <StackPanel Orientation="Horizontal">
+                                <ContentPresenter DataContext="{Binding}"
+                                          Margin="0 0 4 0">
+                                    <ContentPresenter.Style>
+                                        <Style TargetType="{x:Type ContentPresenter}">
+                                            <Setter Property="Content"
+                                            Value="{StaticResource StopIcon}" />
+                                            <Setter Property="ToolTip"
+                                            Value="Stop" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Runner.State}"
+                                                     Value="Stopped">
+                                                    <Setter Property="Content"
+                                                    Value="{StaticResource RunIcon}" />
+                                                    <Setter Property="ToolTip"
+                                                    Value="Run" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ContentPresenter.Style>
+                                </ContentPresenter>
+                                <TextBlock Text="{Binding Name}" />
+                            </StackPanel>
+                        </Button>
+
+                        <Separator Height="Auto"
+                           BorderThickness="0 0 1 0" />
+
+                        <Button Content="{StaticResource ZoomInIcon}"
+                        Command="{x:Static nodify:EditorCommands.ZoomIn}"
+                        CommandTarget="{Binding ElementName=Editor}"
+                        ToolTip="Zoom In"
+                        Style="{StaticResource IconButton}" />
+
+                        <Button Content="{StaticResource ZoomOutIcon}"
+                        Command="{x:Static nodify:EditorCommands.ZoomOut}"
+                        CommandTarget="{Binding ElementName=Editor}"
+                        ToolTip="Zoom Out"
+                        Style="{StaticResource IconButton}" />
+
+                        <Button Style="{StaticResource IconButton}"
+                        Content="{StaticResource ThemeIcon}"
+                        Command="{Binding Source={x:Static shared:ThemeManager.SetNextThemeCommand}}"
+                        ToolTip="Change theme" />
+                    </StackPanel>
+                </Border>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

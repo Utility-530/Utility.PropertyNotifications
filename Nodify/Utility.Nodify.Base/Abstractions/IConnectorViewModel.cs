@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Utility.Nodify.Enums;
 
 namespace Utility.Nodify.Core
 {
@@ -11,5 +12,8 @@ namespace Utility.Nodify.Core
         object Value { get; set; }
         bool IsInput { get; set; }
         INodeViewModel Node { get; set; }
+        IReadOnlyCollection<IConnectionViewModel> Connections { get; }
+        ConnectorFlow Flow { get; }
+        ConnectorShape Shape { get; }
     }
 }

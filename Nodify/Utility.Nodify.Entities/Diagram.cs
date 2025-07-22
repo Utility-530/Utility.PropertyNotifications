@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
+using Utility.Nodify.Entities;
 
 namespace Utility.Nodify.Core
 {

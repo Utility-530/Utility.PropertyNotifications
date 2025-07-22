@@ -1,5 +1,4 @@
-﻿using Utility.Nodify.Core;
-using System;
+﻿using System;
 using Utility.Nodify.Operations.Infrastructure;
 using System.Reactive.Linq;
 using System.Reflection;
@@ -8,6 +7,8 @@ using System.Collections.Generic;
 using Utility.Helpers;
 using Newtonsoft.Json;
 using Utility.Nodify.Base;
+using Utility.Helpers.Reflection;
+using Utility.Nodify.Entities;
 
 namespace Utility.Nodify.Demo
 {
@@ -15,7 +16,7 @@ namespace Utility.Nodify.Demo
     {
         Lazy<ICollection<Node>> items = new(() => ToNodes(typeof(Sample)).ToList());
         Random random = new();
-        static Dictionary<Guid, Node> cache = new();
+        static readonly Dictionary<Guid, Node> cache = new();
 
         public IEnumerable<MenuItem> Filter(bool? isInput, Type? type)
         {
@@ -62,13 +63,7 @@ namespace Utility.Nodify.Demo
             return cache[guid.Guid];
         }
 
-        static IEnumerable<Node> ToNodes(Type type)
-        {
-            foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.Static).Where(a => a.IsSpecialName == false))
-            {
-                yield return ToNode(method);
-            }
-        }
+
 
         public static Node ToNode(MethodInfo methodInfo)
         {
@@ -112,7 +107,13 @@ namespace Utility.Nodify.Demo
             return nodeViewModel;
         }
 
-
+        static IEnumerable<Node> ToNodes(Type type)
+        {
+            foreach (var method in type.GetMethods(BindingFlags.Public | BindingFlags.Static).Where(a => a.IsSpecialName == false))
+            {
+                yield return ToNode(method);
+            }
+        }
         //public static MenuItem ToMenuItem(MethodInfo methodInfo)
         //{
         //    var nodeViewModel = new MenuItem(methodInfo.Name, methodInfo.Serialise(), methodInfo.Parameters().Select(A => A.ParameterType).ToArray(), new Type[] { methodInfo.ReturnType });

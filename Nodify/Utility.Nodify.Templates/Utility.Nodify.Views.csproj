@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dirkster.AvalonDock" Version="4.72.1" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\Projects\Diagram\nodify\Nodify\Nodify.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Tabs\Utility.WPF.Controls.Tabs.csproj" />
+		<ProjectReference Include="..\..\WPF\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
+		<ProjectReference Include="..\Utility.Nodify.Infrastructure\Utility.Nodify.ViewModels.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="DockWindow.xaml.cs">
+	    <SubType>Code</SubType>
+	  </Compile>
+	</ItemGroup>
+</Project>

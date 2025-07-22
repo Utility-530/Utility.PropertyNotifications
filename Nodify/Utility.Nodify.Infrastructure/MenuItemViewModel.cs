@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using Utility.Commands;
 
-namespace Utility.Nodify.Core
+namespace Utility.Nodify.ViewModels
 {
 
 

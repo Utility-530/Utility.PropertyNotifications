@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	  <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Splat" Version="15.4.1" />
+    <PackageReference Include="Splat.Drawing" Version="15.4.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Utility.Changes\Utility.Changes.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.Services\Utility.Services.csproj" />
+    <ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
+    <ProjectReference Include="..\Utility.Nodify.Base\Utility.Nodify.Base.csproj" />
+    <ProjectReference Include="..\Utility.Nodify.Core\Utility.Nodify.Models.csproj" />
+    <ProjectReference Include="..\Utility.Nodify.Enums\Utility.Nodify.Enums.csproj" />
+    <ProjectReference Include="..\Utility.Nodify.Operations\Utility.Nodify.Operations.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <UseWPF>true</UseWPF>
    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
@@ -17,7 +16,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Conversions\Utility.Conversions\Utility.Conversions.csproj" />
     <ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
-    <ProjectReference Include="..\Utility.Nodify.Core\Utility.Nodify.ViewModels.csproj" />
+    <ProjectReference Include="..\Utility.Nodify.Base\Utility.Nodify.Base.csproj" />
+    <ProjectReference Include="..\Utility.Nodify.Core\Utility.Nodify.Models.csproj" />
+    <ProjectReference Include="..\Utility.Nodify.Entities\Utility.Nodify.Entities.csproj" />
   </ItemGroup>
 
 </Project>

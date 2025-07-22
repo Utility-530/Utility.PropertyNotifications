@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Windows.Input;
 using Utility.Commands;
-using Utility.ViewModels.Base;
+using Utility.PropertyNotifications;
 
-namespace Utility.Nodify.Core
+namespace Utility.Nodify.ViewModels
 {
-    public class TabViewModel : BaseViewModel
+    public class TabViewModel : NotifyPropertyClass
     {
         public event Action<TabViewModel, object>? OnOpenInnerCalculator;
         public event Action<TabViewModel>? Close;
@@ -36,14 +36,14 @@ namespace Utility.Nodify.Core
         public object Content 
         {
             get => _calculator;
-            set => Set(ref _calculator, value);
+            set => RaisePropertyChanged(ref _calculator, value);
         }
 
         private string? _name;
         public string? Name
         {
             get => _name;
-            set => Set(ref _name, value);
+            set => RaisePropertyChanged(ref _name, value);
         }
     }
 }

@@ -7,11 +7,12 @@ using System.Windows.Input;
 using Utility.Collections;
 using Utility.Commands;
 using Utility.Helpers.Generic;
-using Utility.ViewModels.Base;
+using Utility.PropertyNotifications;
 
-namespace Utility.Nodify.Core
+
+namespace Utility.Nodify.ViewModels
 {
-    public class TabsViewModel : BaseViewModel
+    public class TabsViewModel : NotifyPropertyClass
     {
         private TabViewModel? _selectedEditor;
         private bool _autoSelectNewEditor = true;
@@ -72,13 +73,13 @@ namespace Utility.Nodify.Core
         public TabViewModel? SelectedEditor
         {
             get => _selectedEditor;
-            set => Set(ref _selectedEditor, value);
+            set => RaisePropertyChanged(ref _selectedEditor, value);
         }
 
         public bool AutoSelectNewEditor
         {
             get => _autoSelectNewEditor;
-            set => Set(ref _autoSelectNewEditor, value);
+            set => RaisePropertyChanged(ref _autoSelectNewEditor, value);
         }
 
         private void OnOpenInnerCalculator(TabViewModel parentEditor, object calculator)

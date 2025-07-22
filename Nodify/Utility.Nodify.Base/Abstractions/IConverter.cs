@@ -1,4 +1,5 @@
 ﻿using Utility.Nodify.Core;
+using Utility.Nodify.Entities;
 
 namespace Utility.Nodify.Engine.Infrastructure
 {
