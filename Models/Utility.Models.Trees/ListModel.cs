@@ -1,12 +1,16 @@
 ﻿using Splat;
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.Generic.Data;
+using Utility.Interfaces.NonGeneric;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Models.Trees
 {
-    public class ListModel(Type type) : Model<IId<Guid>>
+    public class ListModel(Type type, Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : Model<IId<Guid>>(func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
     {
         private IEnumerable collection;
         private IId<Guid> add;

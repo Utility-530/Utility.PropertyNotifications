@@ -4,7 +4,7 @@ using Utility.PropertyNotifications;
 
 namespace Utility.Models
 {
-    public class ValueModel<T> : NotifyPropertyClass, IValue<T?>, IValueModel, IGet, ISet, IGet<T>, Utility.Interfaces.Generic.ISet<T>, IModel
+    public class ValueModel<T> : NotifyPropertyClass, IValue<T?>, IValueModel, IGet, IGet<T>, Utility.Interfaces.Generic.ISet<T>, IModel
     {
         private T? value;
         protected string m_name = "unknown";

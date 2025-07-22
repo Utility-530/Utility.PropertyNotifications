@@ -10,13 +10,13 @@ using Splat;
 using Utility.Interfaces.Exs;
 using Utility.Trees.Extensions.Async;
 using Utility.Helpers.Reflection;
-using Utility.Interfaces;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Models
 {
     public class ReadOnlyModel : Model
     {
-        public ReadOnlyModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null) : base(func, nodeAction, addition, false, false)
+        public ReadOnlyModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null) : base(func, nodeAction, addition, null, false, false)
         {
 
         }
@@ -29,29 +29,31 @@ namespace Utility.Models
         {
         }
 
-        public Model(Func<IEnumerable<IModel>> func, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(func, nodeAction, addition, raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
+        public Model(Func<IEnumerable<IModel>> func, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(func, nodeAction, addition, attach: attach, raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
         {
 
         }
     }
 
-    public class Model<T> : ValueModel<T>, ISetNode, IGetNode, IProliferation, IClone, IYieldChildren, IKey, IName 
+
+    public class Model<T> : ValueModel<T>, ISetNode, IGetNode, IProliferation, IClone, IYieldChildren, IKey, IName, Utility.Interfaces.Generic.IAttach<IValueModel>
     {
         private INode node;
         int i = 0;
         protected readonly Func<IEnumerable<IModel>>? func;
         private readonly Action<INode>? nodeAction;
         private readonly Action<IReadOnlyTree, IReadOnlyTree>? addition;
+        private readonly Action<IValueModel>? attach;
         protected INodeSource source = Locator.Current.GetService<INodeSource>();
         protected Lazy<IContext> context = new(() => Locator.Current.GetService<IContext>());
         public virtual Version Version { get; set; } = new();
 
-
-        public Model(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
+        public Model(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
         {
             this.func = func;
             this.nodeAction = nodeAction;
             this.addition = addition;
+            this.attach = attach;
         }
 
         [JsonIgnore]
@@ -240,6 +242,10 @@ namespace Utility.Models
 
                 //}
             }
+            if (a.Data is IAttach<IValueModel> attach and IValueModel model)
+            {
+                attach.Attach(model);
+            }
             addition?.Invoke(value, a);
         }
 
@@ -265,9 +271,12 @@ namespace Utility.Models
             return instance;
         }
 
-
+        public virtual void Attach(IValueModel value)
+        {
+            attach?.Invoke(value);
+        }
     }
-    public class StringModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null) : Model<string>(func, nodeAction, addition)
+    public class StringModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null) : Model<string>(func, nodeAction, addition, attach)
     {
         public StringModel() : this(null, null, null)
         {
