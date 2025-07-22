@@ -52,7 +52,7 @@ namespace Utility.Nodes.Demo.Lists
             CurrentMutable.RegisterConstant<IExpander>(WPF.Expander.Instance);
             CurrentMutable.RegisterLazySingleton<IObservableIndex<INode>>(() => MethodCache.Instance);
             CurrentMutable.RegisterLazySingleton<MethodCache>(() => MethodCache.Instance);
-            CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new Services.NodeMethodFactory());
+            CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new Factories.NodeMethodFactory());
             CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => Nodes.Filters.NodeMethodFactory.Instance);
             CurrentMutable.RegisterLazySingleton(() => new MasterViewModel());
 
