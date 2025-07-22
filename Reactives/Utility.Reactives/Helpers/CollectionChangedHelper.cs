@@ -140,10 +140,10 @@ namespace Utility.Reactives
             });
         }
 
-        public static IObservable<int> Counts(this IEnumerable collection)
+        public static IObservable<int> Counts(this IEnumerable collection, bool includeInitial = true)
         {
             return collection
-                  .AndChanges<object>()
+                  .AndChanges<object>(includeInitial)
                   .Select(x => collection.Count())
                   .StartWith(collection.Count())
                   .DistinctUntilChanged();
