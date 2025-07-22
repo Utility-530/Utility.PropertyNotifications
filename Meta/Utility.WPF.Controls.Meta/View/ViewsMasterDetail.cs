@@ -34,7 +34,7 @@ namespace Utility.WPF.Controls.Meta
 
         public ViewsMasterDetail()
         {
-            Movement = XYMovement.RightToLeft;
+            Movement = XYTraversal.RightToLeft;
             this.SetValue(Ex.ReverseProperty, true);
             this.SetValue(Ex.IndentProperty, new GridLength(250));
             var listBox = new ViewTypeItemListBox();

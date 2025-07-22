@@ -70,110 +70,75 @@ namespace Utility.Nodes
 
         public DateTime? Removed
         {
-            get => removed; set
-            {
-
-                RaisePropertyChanged(ref removed, value);
-
-            }
+            get => removed;
+            set => RaisePropertyChanged(ref removed, value);
         }
 
         public bool? IsValid
         {
-            get => isValid; set
-            {
-                RaisePropertyChanged(ref isValid, value);
-            }
+            get => isValid;
+            set => RaisePropertyChanged(ref isValid, value);
         }
 
         // relates to the ability to modify the value
         public override bool IsReadOnly
         {
-            get => isReadOnly;
-            set
-            {
-                RaisePropertyChanged(ref isReadOnly, value);
-            }
+            get => isReadOnly; set => RaisePropertyChanged(ref isReadOnly, value);
         }
 
         // relates to the ability to add/remove nodes 
         public bool IsEditable
         {
-            get => isEditable; set
-            {
-                RaisePropertyChanged(ref isEditable, value);
-            }
+            get => isEditable;
+            set => RaisePropertyChanged(ref isEditable, value);
         }
 
         public bool IsAugmentable
         {
-            get => isAugmentable; set
-            {
-                RaisePropertyChanged(ref isAugmentable, value);
-            }
+            get => isAugmentable;
+            set => RaisePropertyChanged(ref isAugmentable, value);
         }
 
         public bool? IsHighlighted
         {
             get => isHighlighted;
-            set
-            {
-
-                RaisePropertyChanged(ref isHighlighted, value);
-
-            }
+            set => RaisePropertyChanged(ref isHighlighted, value);
         }
 
         public bool IsClicked
         {
-            get => isClicked; set
-            {
-                RaisePropertyChanged(ref isClicked, value);
-            }
+            get => isClicked;
+            set => RaisePropertyChanged(ref isClicked, value);
         }
 
         public bool IsSelected
         {
-            get => isSelected; set
-            {
-                RaisePropertyChanged(ref isSelected, value);
-            }
+            get => isSelected;
+            set => RaisePropertyChanged(ref isSelected, value);
         }
 
         public bool IsExpanded
         {
             get => isExpanded;
-            set
-            {
-                RaisePropertyChanged(ref isExpanded, value);
-            }
+            set => RaisePropertyChanged(ref isExpanded, value);
         }
 
         public Arrangement Arrangement
         {
             get => arrangement;
-            set
-            {
-                RaisePropertyChanged(ref arrangement, value);
-            }
+            set => RaisePropertyChanged(ref arrangement, value);
         }
 
         public Orientation Orientation
         {
             get => orientation;
-            set
-            {
-                RaisePropertyChanged(ref orientation, value);
-            }
+            set => RaisePropertyChanged(ref orientation, value);
         }
 
         public Position2D ConnectorPosition
         {
             get => connectorPosition;
-            set
-            {
-                RaisePropertyChanged(ref connectorPosition, value);
-            }
+            set => RaisePropertyChanged(ref connectorPosition, value);
         }
 
         public ObservableCollection<Dimension> Columns { get; set; } = new();
@@ -183,94 +148,55 @@ namespace Utility.Nodes
         public int Row
         {
             get => row;
-            set
-            {
-                RaisePropertyChanged(ref row, value);
-            }
+            set => RaisePropertyChanged(ref row, value);
         }
 
         public int Column
         {
-            get => column;
-            set
-            {
-                RaisePropertyChanged(ref column, value);
-            }
+            get => column; set => RaisePropertyChanged(ref column, value);
         }
 
         public int Order
         {
-            get => order;
-            set
-            {
-                RaisePropertyChanged(ref order, value);
-            }
+            get => order; set => RaisePropertyChanged(ref order, value);
         }
 
 
         public bool? IsVisible
         {
-            get => isVisible;
-            set
-            {
-                RaisePropertyChanged(ref isVisible, value);
-            }
+            get => isVisible; set => RaisePropertyChanged(ref isVisible, value);
         }
-             
+
         public bool? IsContentVisible
         {
-            get => isContentVisible;
-            set
-            {
-                RaisePropertyChanged(ref isContentVisible, value);
-            }
+            get => isContentVisible; set => RaisePropertyChanged(ref isContentVisible, value);
         }
 
         public bool IsReplicable
         {
-            get => isReplicable;
-            set
-            {
-                RaisePropertyChanged(ref isReplicable, value);
-            }
+            get => isReplicable; set => RaisePropertyChanged(ref isReplicable, value);
         }
 
         public bool IsRemovable
         {
-            get => isRemovable;
-            set
-            {
-                RaisePropertyChanged(ref isRemovable, value);
-            }
+            get => isRemovable; set => RaisePropertyChanged(ref isRemovable, value);
         }
 
         public string DataTemplate
         {
-            get => dataTemplate;
-            set
-            {
-                RaisePropertyChanged(ref dataTemplate, value);
-            }
+            get => dataTemplate; set => RaisePropertyChanged(ref dataTemplate, value);
         }
 
         public string ItemsPanelTemplate
         {
-            get => itemsPanelTemplate;
-            set
-            {
-                RaisePropertyChanged(ref itemsPanelTemplate, value);
-            }
+            get => itemsPanelTemplate; set => RaisePropertyChanged(ref itemsPanelTemplate, value);
         }
 
         public bool IsPersistable { get; set; }
 
         public string Title
         {
-            get => title;
-            set
-            {
-                RaisePropertyChanged(ref title, value);
-            }
+            get => title; set => RaisePropertyChanged(ref title, value);
         }
 
         public ObservableCollection<Exception> Errors { get; set; } = new();
@@ -288,7 +214,7 @@ namespace Utility.Nodes
                     if (value != null)
                         value.IsPersistable = true;
                     current = value;
-                    RaisePropertyChanged(previousValue, value);                        
+                    RaisePropertyChanged(previousValue, value);
                 }
             }
         }

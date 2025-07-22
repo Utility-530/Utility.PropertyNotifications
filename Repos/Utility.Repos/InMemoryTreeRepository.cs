@@ -328,7 +328,7 @@ namespace Utility.Repos
                 var typeId = TypeId(value.GetType());
                 //connection.Insert();
                 _values.Add(new Values { Guid = guid, Value = text, Name = name, Added = dateTime, TypeId = typeId });
-                values.GetValueOrNew(guid)[name] = new(guid, name, dateTime, value);
+                values.Get(guid)[name] = new(guid, name, dateTime, value);
             }
         }
 

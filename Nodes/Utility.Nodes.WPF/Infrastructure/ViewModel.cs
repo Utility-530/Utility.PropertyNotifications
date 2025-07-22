@@ -43,7 +43,7 @@ namespace Utility.Nodes.WPF
 
         protected System.Reactive.Disposables.CompositeDisposable disposables = new();
 
-        private ObservableCollection<IReadOnlyTree> get(string key) => dictionary.GetValueOrNew(key);
+        private ObservableCollection<IReadOnlyTree> get(string key) => dictionary.Get(key);
 
         public void Dispose()
         {

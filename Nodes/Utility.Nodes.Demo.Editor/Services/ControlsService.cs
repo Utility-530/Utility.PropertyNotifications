@@ -51,17 +51,17 @@ namespace Utility.Nodes.Demo.Filters.Services
             switch (name)
             {
                 case NodeMethodFactory.Save:
-                    var _ = Locator.Current.GetService<MethodCache>().Get(nameof(NodeMethodFactory.BuildRoot)).Subscribe(root =>
+                    var _ = Locator.Current.GetService<MethodCache>().Get(nameof(NodeMethodFactory.BuildRoot)).Subscribe((Action<INode>)(root =>
                     {
                         root
                         .Descendant(a => a.tree.Data.ToString() == NodeMethodFactory.content_root)
                         .Subscribe(contentRoot =>
                         {
                             Locator.Current.GetService<INodeSource>().Save(); //((INode)contentRoot.NewItem);
-                            dict[ControlEventType.Save] = dict.Get(ControlEventType.Save) + 1;
-                            replaySubject.OnNext(new ControlEvent(ControlEventType.Save, dict.Get(ControlEventType.Save)));
+                            dict[ControlEventType.Save] = DictionaryHelper.Get(dict, ControlEventType.Save) + 1;
+                            replaySubject.OnNext(new ControlEvent(ControlEventType.Save, DictionaryHelper.Get<ControlEventType, int>(dict, ControlEventType.Save)));
                         });
-                    });
+                    }));
 
                     break;
 

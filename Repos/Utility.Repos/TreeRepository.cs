@@ -507,7 +507,7 @@ namespace Utility.Repos
             {
                 connection.Execute($"UPDATE '{nameof(Values)}' SET Added = '{date()}' WHERE Guid = '{guid}' AND Name = '{name}' AND Value = '{text}'");
             }
-            values.GetValueOrNew(guid)[name] = new(guid, name, dateTime, value);
+            values.Get(guid)[name] = new(guid, name, dateTime, value);
         }
 
         public System.Type? GetType(Guid guid, string tableName)
