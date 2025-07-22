@@ -35,10 +35,10 @@ public class Playback : BaseObject
                 case Step.Forward:
                     forward();
                     break;
-                case Step.Walk:
+                case Step.In:
                     play();
                     break;
-                case Step.Wait:
+                case Step.Out:
                     pause();
                     //OnNext(default);
                     break;
@@ -68,7 +68,7 @@ public class Playback : BaseObject
     {
         model.Timer.Start();
         //broadcast(new PlayPlaybackEvent());
-        model.Enabled = Step.Wait;
+        model.Enabled = Step.Out;
     }
 
     private void Timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)

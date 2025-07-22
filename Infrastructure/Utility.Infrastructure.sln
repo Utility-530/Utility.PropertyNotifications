@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Exceptions", "Utili
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Globals", "Utility.Globals\Utility.Globals.csproj", "{9FD97020-4B21-4EE4-92CE-767F49120B51}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Services.Deprecated", "Utility.Services.Deprecated\Utility.Services.Deprecated.csproj", "{A76CC88F-9932-440B-9B93-E4F6FBD865C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -161,6 +163,10 @@ Global
 		{9FD97020-4B21-4EE4-92CE-767F49120B51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FD97020-4B21-4EE4-92CE-767F49120B51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FD97020-4B21-4EE4-92CE-767F49120B51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A76CC88F-9932-440B-9B93-E4F6FBD865C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A76CC88F-9932-440B-9B93-E4F6FBD865C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A76CC88F-9932-440B-9B93-E4F6FBD865C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A76CC88F-9932-440B-9B93-E4F6FBD865C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

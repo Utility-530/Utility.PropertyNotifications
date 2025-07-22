@@ -8,6 +8,8 @@ using static System.Reactive.Linq.Observable;
 using Utility.Infrastructure;
 using Utility.Entities.Comms;
 using Utility.PropertyNotifications;
+using JulMar.Windows.Collections;
+using Collection = Utility.Collections.Collection;
 
 namespace Utility.Services.Deprecated
 {
@@ -151,7 +153,7 @@ namespace Utility.Services.Deprecated
     }
 
     public record PlaybackEvent(Enums.Playback Playback) : Event();
-    public record BackPlaybackEvent() : PlaybackEvent(Enums.Playback.Back);
+    public record BackPlaybackEvent() : PlaybackEvent(Enums.Playback.Backward);
     public record ForwardPlaybackEvent() : PlaybackEvent(Enums.Playback.Forward);
     public record PlayPlaybackEvent() : PlaybackEvent(Enums.Playback.Play);
     public record PausePlaybackEvent() : PlaybackEvent(Enums.Playback.Pause);

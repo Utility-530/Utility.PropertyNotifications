@@ -7,7 +7,7 @@ using Utility.Models;
 namespace Utility.Services
 {
     public record InstanceTypeParam() : MethodParameter<CollectionCreationService>(nameof(CollectionCreationService.Instance), "type");
-    public record InstanceReturnParam() : MethodParameter<CollectionCreationService>(nameof(CollectionCreationService.Instance));
+    public record ListInstanceReturnParam() : MethodParameter<CollectionCreationService>(nameof(CollectionCreationService.Instance));
    
     public record ChangeParam() : MethodParameter<CollectionCreationService>(nameof(CollectionCreationService.Change), "change");
     public record ListParam() : MethodParameter<CollectionCreationService>(nameof(CollectionCreationService.Change), "list");
