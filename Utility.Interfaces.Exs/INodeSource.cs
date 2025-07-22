@@ -16,7 +16,7 @@ namespace Utility.Interfaces.Exs
         IObservable<INode?> Single(string v);
 
         void Save();
-        IObservable<INode> Create(string name, Guid guid, Func<string, INode> nodeFactory, Func<string, object> modelFactory);
+        IObservable<INode> Create(string name, Guid guid, Func<string, object> modelFactory);
         IObservable<INode> FindChild(INode node, Guid guid);
         IObservable<INode> Selections { get; }
     }
