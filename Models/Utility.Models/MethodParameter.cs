@@ -18,7 +18,7 @@ namespace Utility.Models
             {
                 if (isStatic == false && Instance == null)
                 {
-                    Instance = Locator.Current.GetService(typeof(T)) ?? throw new Exception("£36566");
+                    Instance = Locator.Current.GetService(typeof(T)) ?? throw new Exception("£36566 {typeof(T).Name}");
                 }
                 return new Method(methodInfo, Instance);
             }

@@ -16,8 +16,7 @@ namespace Utility.Models
         }
 
         public object? Execute(Dictionary<string, object> objects)
-        {
-         
+        {         
             return MethodInfo.Invoke(Instance, [.. objects.OrderBy(kv => names.Value.IndexOf(kv.Key)).Select(a=>a.Value)]);
         }
 
