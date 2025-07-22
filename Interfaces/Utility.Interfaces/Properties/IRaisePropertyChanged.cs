@@ -5,13 +5,13 @@ namespace Utility.Interfaces
 {
     public interface IRaisePropertyChanged
     {
-        public void RaisePropertyChanged([CallerMemberName] string? propertyName = null);
+        public bool RaisePropertyChanged([CallerMemberName] string? propertyName = null);
 
     }
 
     public interface IRaiseExPropertyChanged
     {
-        public void RaisePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null);
+        public bool RaisePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null);
 
     }
 }
