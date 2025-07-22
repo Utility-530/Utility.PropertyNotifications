@@ -15,6 +15,7 @@ using Utility.Repos;
 using IConverter = Utility.Nodify.Engine.Infrastructure.IConverter;
 using INodeSource = Utility.Nodify.Operations.Infrastructure.INodeSource;
 using ServiceResolver = Utility.Services.ServiceResolver;
+using Utility.Nodify.Demo.Infrastructure;
 
 namespace Utility.Nodify.Demo
 {
@@ -30,7 +31,7 @@ namespace Utility.Nodify.Demo
         {
             SQLitePCL.Batteries.Init();
             initialise();
-            Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
+
 
             //rootDescriptor = DescriptorFactory.CreateRoot(typeof(Diagram), "diagram_test2");
             //var diagram = rootDescriptor.Get<Diagram>();
@@ -61,12 +62,16 @@ namespace Utility.Nodify.Demo
             Locator.CurrentMutable.RegisterLazySingleton(() => new ServiceResolver());
             Locator.CurrentMutable.RegisterLazySingleton(() => new CollectionViewService());
 
+            Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
+            Locator.CurrentMutable.RegisterConstant<IPlaybackEngine>(new PlaybackEngine());
+
             Locator.Current.GetService<ServiceResolver>().Connect<PredicateReturnParam, PredicateParam>();
             //Locator.Current.GetService<ServiceResolver>().Connect<ListCollectionViewReturnParam, ListCollectionViewParam>();
             Locator.Current.GetService<ServiceResolver>().Connect<ListInstanceReturnParam, ListInParam>();
             Locator.Current.GetService<ServiceResolver>().Connect<ListInstanceReturnParam, ListParam>();
-            Locator.Current.GetService<ServiceResolver>().Observe<FilterParam>(new ValueModel<string>() { Name = "react_to_3", Value = "something" });
             Locator.Current.GetService<ServiceResolver>().Observe<InstanceTypeParam>(new ValueModel<Type>() { Name = "react_to_4", Value = typeof(List<object>) });
+            Locator.Current.GetService<ServiceResolver>().Observe<FilterParam>(new ValueModel<string>() { Name = "react_to_3", Value = "something" });
+
         }
 
         public static class DiConfiguration
