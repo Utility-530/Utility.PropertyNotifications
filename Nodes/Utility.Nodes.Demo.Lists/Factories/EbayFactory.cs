@@ -1,10 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using AvalonEditB.Search;
+using Newtonsoft.Json;
 using Splat;
 using System.Collections;
 using System.IO;
 using System.Reactive.Linq;
+using System.Text.Json.Nodes;
 using Utility.Enums;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Nodes.Demo.Lists.Infrastructure;
@@ -32,40 +35,41 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     new Model(()=>
                     [
                         new CommandModel() { Name = refresh },
-                        new StringModel(nodeAction: node=> {node.DataTemplate = "SearchEditor"; node.Title = "Search"; }) { Name = search },
-                        new StringModel(nodeAction: node=> {node.DataTemplate = "DirectoryEditor"; node.Title = "Base Directory"; }) { Name = directory },
-                        new StringModel(nodeAction: node=> {node.DataTemplate = "FilePathEditor"; node.Title = "Index Path"; }) { Name = indexPath },
+                        new StringModel(nodeAction: node=> {node.DataTemplate = "SearchEditor"; node.Title = "Search"; }, attach: searchModel=>{
+
+                                  searchModel.Observe<FilterParam>();
+                        }) { Name = search },
+                        new StringModel(nodeAction: node=> {node.DataTemplate = "DirectoryEditor"; node.Title = "Base Directory"; }, attach: stringModel=>{
+                               stringModel.Observe<BasePathParam>();
+                        } ) { Name = directory },
+                        new StringModel(nodeAction: node=> {node.DataTemplate = "FilePathEditor"; node.Title = "Index Path"; }, attach: stringModel =>{
+                               stringModel.Observe<FilePathParam>();
+                        }) { Name = indexPath },
                     ],
                     node=> {node.IsExpanded = true;  node.Orientation = Orientation.Horizontal; },
                     (parent,addition)=>{
 
-                        if (addition.Data is StringModel { Name: directory } _stringModel)
-                        {
-                            _stringModel.Observe<BasePathParam>();
-                        }
-                        else if (addition.Data is StringModel { Name: search } searchModel)
-                        {
-                            searchModel.Observe<FilterParam>();
-                        }
-                        else if (addition.Data is StringModel { Name: indexPath } __stringModel)
-                        {
-                            __stringModel.WithChangesTo(a => a.Value).Observe<FilePathParam, string?>();
-                        }
 
                     }){ Name= controllerPath },
-                    new ListModel(type) { Name = list1 },
-                    new EditModel { Name = edit },
-                    new Model<string>(nodeAction: n => n.DataTemplate = "Json", raisePropertyCalled:false, raisePropertyReceived:false) { Name = details },
-                    new HtmlModel { Name = html },
-                    new ReadOnlyStringModel(nodeAction: node=> node.DataTemplate = "HtmlEditor") { Name = html1 },
-                    new ReadOnlyStringModel(nodeAction: node=> node.DataTemplate = "HtmlWebViewer") { Name = html2 },
-                ],
-                (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; },
-                (parent, addition) =>
-                {
-                    if (addition.Data is EditModel { } editModel)
-                    {
-                        editModel.WithChangesTo(a => a.Value)
+                    new ListModel(type, attach: model=>{
+
+                        if(model is not ListModel listModel)
+                            throw new Exception("dsdsdddd333");
+                        listModel.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a);
+
+                        listModel.WhenReceivedFrom(a => a.Add, includeNulls: false)
+                        .Select(a => new Changes.Change(a, null, Changes.Type.Add))
+                        .Observe<ChangeParam, Changes.Change>();
+
+                        listModel.WhenReceivedFrom(a => a.Remove, includeNulls: false)
+                        .Select(a => new Changes.Change(a, null, Changes.Type.Remove))
+                        .Observe<ChangeParam, Changes.Change>();
+
+                        listModel.Observe<SelectionParam>();
+
+                    }) { Name = list1 },
+                    new EditModel(attach: editModel=>{
+                            editModel.WithChangesTo(a => (a as IValue).Value)
                         .Subscribe(model =>
                         {
                             if (model is EbayModel eModel)
@@ -82,26 +86,12 @@ namespace Utility.Nodes.Demo.Lists.Factories
                             }
                         });
 
-                        editModel.ReactTo<SelectionReturnParam>(setAction: (a) => { editModel.Value = a; editModel.RaisePropertyChanged(nameof(EditModel.Value)); });
-                    }
-                    else if (addition.Data is ListModel { } listModel)
-                    {
+                        editModel.ReactTo<SelectionReturnParam>(setAction: (a) => { (editModel as ISetValue).Value = a; editModel.RaisePropertyChanged(nameof(EditModel.Value)); });
 
-                        listModel.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a);
+                    }) { Name = edit },
+                    new Model<string>(nodeAction: n => n.DataTemplate = "Json", attach: jsonModel=>{
 
-                        listModel.WhenReceivedFrom(a => a.Add, includeNulls: false)
-                        .Select(a => new Changes.Change(a, null, Changes.Type.Add))
-                        .Observe<ChangeParam, Changes.Change>();
-
-                        listModel.WhenReceivedFrom(a => a.Remove, includeNulls: false)
-                        .Select(a => new Changes.Change(a, null, Changes.Type.Remove))
-                        .Observe<ChangeParam, Changes.Change>();
-
-                        listModel.Observe<SelectionParam>();
-                    }
-                    else if (addition.Data is Model<string> { Name: details } jsonModel)
-                    {
-                        jsonModel.ReactTo<FullPathParam>(a =>
+                    jsonModel.ReactTo<FullPathParam>(a =>
                         {
                             var path = Path.Combine(a.ToString(), "data.json");
                             if (!File.Exists(path))
@@ -111,16 +101,19 @@ namespace Utility.Nodes.Demo.Lists.Factories
                             var text = File.ReadAllText(path);
                             return text;
                         }, a => jsonModel.Set(a.ToString()));
-                        return;
-                    }
-                    else if (addition.Data is StringModel { } stringModel)
-                    {
-                        stringModel.ReactTo<RazorFileReturnParam>(setAction: a => stringModel.Set((string)a));
-                    }
-                    else if (addition.Data is ReadOnlyStringModel { } rstringModel)
-                    {
-                        rstringModel.ReactTo<RazorFileReturnParam>(setAction: a => rstringModel.Set((string)a));
-                    }
+                        }, raisePropertyCalled:false, raisePropertyReceived:false) { Name = details },
+                    new HtmlModel { Name = html },
+                    new ReadOnlyStringModel(nodeAction: node=> node.DataTemplate = "HtmlEditor", attach: stringModel=>{
+                              stringModel.ReactTo<RazorFileReturnParam>(setAction: a => stringModel.Set((string)a));
+                    }) { Name = html1 },
+                    new ReadOnlyStringModel(nodeAction: node=> node.DataTemplate = "HtmlWebViewer", attach: rstringModel =>{
+                         rstringModel.ReactTo<RazorFileReturnParam>(setAction: a => rstringModel.Set((string)a));
+                    }) { Name = html2 },
+                ],
+                (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; },
+                (parent, addition) =>
+                {
+
                 })
                 { Name = main });
         }
