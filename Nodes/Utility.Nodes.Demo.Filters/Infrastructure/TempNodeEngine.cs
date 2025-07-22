@@ -69,7 +69,7 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
 
         }
 
-        public IObservable<INode> Create(string name, Guid guid, Func<string, INode> nodeFactory, Func<string, object> modelFactory)
+        public IObservable<INode> Create(string name, Guid guid, Func<string, object> modelFactory)
         {
             throw new NotImplementedException();
         }

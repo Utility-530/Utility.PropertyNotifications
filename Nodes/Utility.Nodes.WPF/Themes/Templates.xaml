@@ -154,7 +154,7 @@
         </obj:JsonControl>
     </DataTemplate>  
     
-    <DataTemplate DataType="{x:Type inf:StringRootModel}">
+    <DataTemplate x:Key="StringRoot">
         <Grid>
             <TextBlock Text="{Binding Name}" Background="AliceBlue">
             </TextBlock>
@@ -268,7 +268,8 @@
 
 
 
-    <DataTemplate DataType="{x:Type inf:HtmlModel}">
+    <DataTemplate x:Key="Html">
+        <TextBlock Text="Html"></TextBlock>
         <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
         <!--<html:TinyHtmlEditorControl Html="{Binding Value, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>-->
         <!--<wpf1:HtmlPanel Text="{Binding Value, Mode=OneWay,Converter={x:Static conv:DefaultConverter.Instance}}"></wpf1:HtmlPanel>-->
@@ -284,7 +285,7 @@
         </avalonedit:TextEditor>-->
     </DataTemplate>
 
-    <DataTemplate x:Key="ChromiumOutput" DataType="{x:Type inf:HtmlAddressModel}">
+    <DataTemplate x:Key="ChromiumOutput" >
         <!--<Border BorderThickness="1" BorderBrush="Blue">
             <cefsharpwpf:ChromiumWebBrowser
                     Address="{Binding Mode=OneWay, Path=Address}"
@@ -432,8 +433,8 @@
     </DataTemplate>
 
     <DataTemplate x:Key="DirectoryEditor" DataType="{x:Type model:StringModel}">
-        <fs:FolderComboBrowser Margin="8"
-                               MaxWidth="180"
+        <fs:FolderComboBrowser Margin="4"
+                               MaxWidth="220"
                     Path="{Binding Value, Mode=TwoWay}"
                     x:Name="FolderComboBrowser"/>
     </DataTemplate>    

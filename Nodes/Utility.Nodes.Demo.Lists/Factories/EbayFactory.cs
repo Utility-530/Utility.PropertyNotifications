@@ -18,8 +18,6 @@ using Utility.Services;
 
 namespace Utility.Nodes.Demo.Lists.Factories
 {
-
-
     internal partial class NodeMethodFactory : EnumerableMethodFactory
     {
 
@@ -27,10 +25,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
 
         public IObservable<INode> BuildEbayRoot(Guid guid, Type type)
         {
-            return nodeSource.Create(nameof(BuildEbayRoot),
-                guid,
-                s => new Node(s) { IsExpanded = true, Orientation = Orientation.Horizontal },
-                s =>
+            return nodeSource.Create(nameof(BuildEbayRoot), guid, (s) =>
                 new Model(() => [
                     new Model(()=>
                     [
@@ -102,7 +97,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                             return text;
                         }, a => jsonModel.Set(a.ToString()));
                         }, raisePropertyCalled:false, raisePropertyReceived:false) { Name = details },
-                    new HtmlModel { Name = html },
+                    new StringModel(nodeAction: n=> n.DataTemplate="Html") { Name = html },
                     new ReadOnlyStringModel(nodeAction: node=> node.DataTemplate = "HtmlEditor", attach: stringModel=>{
                               stringModel.ReactTo<RazorFileReturnParam>(setAction: a => stringModel.Set((string)a));
                     }) { Name = html1 },
@@ -114,8 +109,9 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 (parent, addition) =>
                 {
 
-                })
-                { Name = main });
+                }
+                )
+                { Name = s });
         }
     }
 }

@@ -18,6 +18,7 @@ using Utility.Observables;
 using Utility.Observables.Generic;
 using Utility.Interfaces.Generic;
 using INode = Utility.Interfaces.Exs.INode;
+using Utility.Models;
 
 
 namespace Utility.Nodes.Demo.Filters.Services
@@ -43,7 +44,7 @@ namespace Utility.Nodes.Demo.Filters.Services
 
                     htmlNode.WithChangesTo(a => a.Data).Subscribe(data =>
                     {
-                        if (data is HtmlModel stringModel)
+                        if (data is StringModel stringModel)
                         {
                             AddElementByPositionAsync(node)
                             .Subscribe(html =>

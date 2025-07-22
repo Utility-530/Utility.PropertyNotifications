@@ -21,14 +21,13 @@ namespace Utility.Nodes.Demo.Lists.Factories
         {
             return nodeSource.Create(nameof(BuildUserProfileRoot),
                 guid,
-                s => new Node(s) { IsExpanded = true, Orientation = Orientation.Horizontal },
                 s =>
                 new Model(() => [
                      new StringModel(nodeAction: node=>node.DataTemplate = "SearchEditor") { Name = search },
                      new ListModel(type) { Name = list },
                      new EditModel { Name = edit },
                 ],
-                (node) => { node.Orientation = Orientation.Vertical; },
+                (node) => { node.IsExpanded = true; node.Orientation = Orientation.Horizontal; },
                 (parent, addition) =>
                 {
                     if (addition.Data is EditModel { } editModel)

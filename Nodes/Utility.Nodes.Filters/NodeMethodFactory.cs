@@ -3,16 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using Utility.Enums;
+using Utility.Helpers.Reflection;
 using Utility.Interfaces.Exs;
 using Utility.Keys;
 using Utility.Models;
 using Utility.Models.Trees;
-using Utility.Helpers.Reflection;
 
 namespace Utility.Nodes.Filters
 {
 
-    public class EnumerableMethodFactory: Utility.Interfaces.Generic.IEnumerableFactory<Method>
+    public class EnumerableMethodFactory : Utility.Interfaces.Generic.IEnumerableFactory<Method>
     {
         public IEnumerable<Method> Create(object config) => this.GetType().InstantMethods().Where(a => a.Name != nameof(Create)).Select(a => new Method(a, this));
 
@@ -85,50 +86,51 @@ namespace Utility.Nodes.Filters
 
         public IObservable<INode> BuildRoot()
         {
-            return nodeSource.Create(root, guid, s => new Node(s), s => new Model() { Name = s });
+            return nodeSource.Create(root, guid, s => new Model() { Name = s });
         }
 
         public IObservable<INode> BreadcrumbRoot()
         {
-            return nodeSource.Create(breadcrumb, breadcrumbGuid, s => new Node(s) { }, s => new NodePropertyRootModel { Name = s });
+            return nodeSource.Create(breadcrumb, breadcrumbGuid, s => new NodePropertyRootModel { Name = s });
         }
 
         public IObservable<INode> BuildControlRoot()
         {
             return nodeSource.Create(controls,
                 controlsGuid,
-                s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Horizontal },
-                s => new Model(() => [new CommandModel { Name = Save }, new CommandModel { Name = Refresh }, new CommandModel { Name = Run }]) { Name = s });
+                s => new Model(() => [new CommandModel { Name = Save }, new CommandModel { Name = Refresh }, new CommandModel { Name = Run }],
+                n => { n.IsExpanded = true; n.Orientation = Enums.Orientation.Horizontal; })
+                { Name = s });
         }
 
         public IObservable<INode> BuildInputControlRoot()
         {
             return nodeSource.Create(input_control,
                 input_controlGuid,
-                s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Horizontal, IsContentVisible = false },
-                s => new Model(() => [new CommandModel { Name = Select }, new CommandModel { Name = Cancel }]) { Name = s });
+                s => new Model(() => [new CommandModel { Name = Select }, new CommandModel { Name = Cancel }], n =>
+                {
+                    n.IsExpanded = true; n.Orientation = Enums.Orientation.Horizontal; n.IsContentVisible = false;
+                })
+                { Name = s });
         }
 
         public IObservable<INode> BuildInputNodeRoot()
         {
             return nodeSource.Create(input_node,
                 input_nodeGuid,
-                s => new Node(s) { IsExpanded = true },
-                s => new Model(() => [new NodePropertyRootModel { Name = "npm" }]) { Name = s });
+                s => new Model(() => [new NodePropertyRootModel { Name = "npm" }], n => n.IsExpanded = true) { Name = s });
         }
 
         public IObservable<INode> BuildComboRoot()
         {
             return nodeSource.Create(combo,
                 subGuid,
-                s => new Node(s) { },
                 s => new DataFilesModel { Name = s });
         }
         public IObservable<INode> BuildListRoot()
         {
             return nodeSource.Create(list,
                 list_Guid,
-                s => new Node(s) { },
                 s => new ModelTypesModel { Name = s });
         }
 
@@ -136,16 +138,14 @@ namespace Utility.Nodes.Filters
         {
             return nodeSource.Create(transformers,
                 transformerGuid,
-                s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Vertical },
-                s => new TransformersModel { Name = s });
+                s => new TransformersModel(nodeAction: n => n.IsExpanded = true) { Name = s });
         }
 
         public IObservable<INode> BuildFiltersRoot()
         {
             return nodeSource.Create(filters,
                 filterGuid,
-                s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Vertical },
-                s => new FiltersModel { Name = s });
+                s => new FiltersModel(nodeAction: n => { n.IsExpanded = true; n.Orientation = Enums.Orientation.Vertical; }) { Name = s });
         }
 
 
@@ -153,8 +153,7 @@ namespace Utility.Nodes.Filters
         {
             return nodeSource.Create(and_or,
                 and_orGuid,
-                s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Vertical },
-                s => new AndOrModel { Name = s });
+                s => new AndOrModel(nodeAction: n => { n.IsExpanded = true; n.Orientation = Enums.Orientation.Vertical; }) { Name = s });
         }
 
 
@@ -162,25 +161,22 @@ namespace Utility.Nodes.Filters
         {
             return nodeSource.Create(collection,
                 collectionGuid,
-                s => new Node(s) { IsExpanded = true, Orientation = Enums.Orientation.Vertical },
-                s => new StringRootModel { Name = s });
+                s => new StringModel(nodeAction: n => { n.DataTemplate = "StringRoot"; n.IsExpanded = true; n.Orientation = Enums.Orientation.Vertical; }) { Name = s });
         }
-
 
         public IObservable<INode> BuildHtmlRoot()
         {
             return nodeSource.Create(html,
                 htmlGuid,
-                s => new Node(s),
-                s => new HtmlModel { Name = s });
+                s => new StringModel(nodeAction: n => n.DataTemplate = "Html") { Name = s });
         }
 
         public IObservable<INode> BuildHtmlRenderRoot()
         {
             return nodeSource.Create(_html,
                 htmlRenderGuid,
-                s => new Node(s),
-                s => new HtmlModel { Name = s });
+                s => new StringModel(nodeAction: n => n.DataTemplate = "Html") { Name = s });
+
         }
 
         public INode BuildDirty()
@@ -195,23 +191,15 @@ namespace Utility.Nodes.Filters
 
         public IObservable<INode> BuildContentRoot()
         {
-            return nodeSource.Create("Root", contentGuid, (s) => new Node(s), s => build(s));
+            return nodeSource.Create("Root", contentGuid, s => new Model() { Name = s });
 
-            Model build(string s)
-            {
-                return new Model()
-                { Name = s };
-            }
-            ;
+
         }
 
         public IObservable<INode> BuildDemoContentRoot()
         {
-            return nodeSource.Create(demo_content, demoContentGuid, (s) => new Node(s), s => build(s));
-
-            Model build(string s)
-            {
-                return new ExpandedModel(() =>
+            return nodeSource.Create(demo_content, demoContentGuid, s =>
+                new ExpandedModel(() =>
                 {
                     return [
                         new ExpandedModel(() =>
@@ -235,12 +223,13 @@ namespace Utility.Nodes.Filters
                     }){ Name = "Group 3"}
                     ];
                 })
-                { Name = s };
-
-
-            }
-            ;
+                { Name = s });
         }
+
+
+            
+            
+
 
         public static NodeMethodFactory Instance { get; } = new();
     }

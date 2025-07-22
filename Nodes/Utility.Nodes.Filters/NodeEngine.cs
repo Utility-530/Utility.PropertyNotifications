@@ -595,7 +595,7 @@ namespace Utility.Nodes.Filters
             });
         }
 
-        public IObservable<INode> Create(string name, Guid guid, Func<string, INode> nodeFactory, Func<string, object> modelFactory)
+        public IObservable<INode> Create(string name, Guid guid, Func<string, object> modelFactory)
         {
             return Observable.Create<INode>(observer =>
             {
@@ -609,8 +609,10 @@ namespace Utility.Nodes.Filters
                 }
                 else
                 {
-                    node = nodeFactory(name);
-                    node.Key = new GuidKey(guid);
+                    node = new Node
+                    {
+                        Key = new GuidKey(guid)
+                    };
                 }
 
                 var data = modelFactory(name);
