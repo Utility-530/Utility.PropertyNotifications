@@ -11,9 +11,14 @@ namespace Utility.Interfaces.Exs
 {
     public interface INode : ITree, IIsExpanded, ICurrent<INode>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation, IRemoved, IIsVisible, IAddCommand, IRemoveCommand, IIsSelected, ISetIsSelected,
         IIsRemovable, IIsReplicable, ISort, ISortOrder,
-        IArrangement, IRows, IColumns, IIsAugmentable, IErrors, IConnectorPosition, IDataTemplate, IItemsPanelTemplate, ITitle
+        IArrangement, IRows, IColumns, IIsAugmentable, IErrors, IConnectorPosition, IDataTemplate, IItemsPanelTemplate, ITitle, IIsContentVisible
     {
+     
+    }
 
+    public interface IIsContentVisible
+    {
+        bool? IsContentVisible { get; set; }
     }
 
     public interface IErrors
