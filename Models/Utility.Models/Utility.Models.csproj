@@ -14,7 +14,6 @@
 		<ProjectReference Include="..\..\Infrastructure\Utility.Keys\Utility.Keys.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
 		<ProjectReference Include="..\..\Interfaces\Utility.Interfaces.Exs\Utility.Interfaces.Exs.csproj" />
-		<ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
 		<ProjectReference Include="..\..\Observables\Utility.Observables\Utility.Observables.csproj" />
 		<ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
 		<ProjectReference Include="..\..\Reactives\Utility.Reactives\Utility.Reactives.csproj" />
