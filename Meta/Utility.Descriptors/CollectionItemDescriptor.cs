@@ -1,13 +1,14 @@
-﻿using Splat;
+﻿using Utility.ServiceLocation;
 using Utility.Interfaces.Exs;
 using Utility.Meta;
+using Utility.Helpers.Reflection;
 
 namespace Utility.Descriptors;
 
 internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeadersDescriptor, IEquatable
 {
     private DateTime? removed;
-    private static ITreeRepository repo => Locator.Current.GetService<ITreeRepository>();
+    private static ITreeRepository repo => Globals.Resolver.Resolve<ITreeRepository>();
 
     public CollectionHeadersDescriptor(Type propertyType, Type componentType) : base(propertyType)
     {

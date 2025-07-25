@@ -1,5 +1,5 @@
 ﻿
-using Splat;
+using Utility.ServiceLocation;
 using Utility.Interfaces.Exs;
 using Utility.Reactives;
 
@@ -54,7 +54,7 @@ internal record MethodDescriptor : MemberDescriptor, IMethodDescriptor
 
                 foreach (var paramDescriptor in descriptors)
                 {
-                    Locator.Current.GetService<ITreeRepository>().Find(this.Guid, paramDescriptor.Name, type: paramDescriptor.Type)
+                    Globals.Resolver.Resolve<ITreeRepository>().Find(this.Guid, paramDescriptor.Name, type: paramDescriptor.Type)
                     .Subscribe(c =>
                     {
                         paramDescriptor.Guid = c.Value.Guid;

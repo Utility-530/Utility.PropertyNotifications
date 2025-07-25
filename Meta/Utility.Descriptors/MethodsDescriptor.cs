@@ -1,4 +1,4 @@
-﻿using Splat;
+﻿using Utility.ServiceLocation;
 
 namespace Utility.Descriptors;
 

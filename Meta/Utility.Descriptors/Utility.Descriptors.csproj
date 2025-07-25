@@ -13,7 +13,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
 		<ProjectReference Include="..\..\Helpers.Ex\Utility.Helpers.Ex\Utility.Helpers.Ex.csproj" />
-		<ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Changes\Utility.Changes.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Constants\Utility.Constants.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />

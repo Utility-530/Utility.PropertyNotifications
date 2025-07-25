@@ -1,9 +1,9 @@
-﻿using Splat;
-using System.Reactive;
+﻿using System.Reactive;
 using System.Reactive.Subjects;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Exs;
 using Utility.Structs.Repos;
+using Utility.ServiceLocation;
 
 namespace Utility.Descriptors
 {
@@ -21,7 +21,7 @@ namespace Utility.Descriptors
         ReplaySubject<Change<IDescriptor>> replaySubject = new();
         List<ICollectionItemDescriptor> descriptors = new();
 
-        private static ITreeRepository repo => Locator.Current.GetService<ITreeRepository>();
+        private static ITreeRepository repo => Globals.Resolver.Resolve<ITreeRepository>();
 
         public static string _Name => "Collection";
 

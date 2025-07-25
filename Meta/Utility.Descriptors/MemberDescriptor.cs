@@ -4,6 +4,7 @@ using System.Reactive.Subjects;
 using Utility.Interfaces;
 using Utility.Interfaces.Exs;
 using Utility.Structs;
+using Utility.Helpers.Reflection;
 
 namespace Utility.Descriptors;
 
@@ -121,8 +122,9 @@ public abstract record ValueMemberDescriptor(Type Type) : MemberDescriptor(Type)
         }
         set
         {
+            var previousValue = Get();
             Set(value);
-            RaisePropertyReceived(value);
+            RaisePropertyReceived(value, previousValue);
         }
     }
 

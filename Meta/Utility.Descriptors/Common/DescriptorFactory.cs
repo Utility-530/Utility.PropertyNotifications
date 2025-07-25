@@ -1,14 +1,15 @@
-﻿using Splat;
-using Utility.Interfaces;
+﻿using Utility.Interfaces;
 using Utility.Interfaces.Exs;
 using Utility.Meta;
 using Utility.Reactives;
+using Utility.ServiceLocation;
+using Utility.Helpers.Reflection;
 
 namespace Utility.Descriptors
 {
     public class DescriptorFactory //: IValueConverter
     {
-        private static ITreeRepository repo => Locator.Current.GetService<ITreeRepository>();
+        private static ITreeRepository repo => Globals.Resolver.Resolve<ITreeRepository>();
 
         public static IObservable<ValuePropertyDescriptor> ToValue(object? value, Descriptor descriptor, Guid parentGuid)
         {

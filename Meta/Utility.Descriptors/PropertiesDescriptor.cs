@@ -1,12 +1,12 @@
 ﻿
-using Splat;
+using Utility.ServiceLocation;
 using Utility.Interfaces.Exs;
 
 namespace Utility.Descriptors
 {
     public record PropertiesDescriptor(Descriptor PropertyDescriptor, object Instance) : BasePropertyDescriptor(PropertyDescriptor, Instance), IPropertiesDescriptor
     {
-        private readonly ITreeRepository repo = Locator.Current.GetService<ITreeRepository>();
+        private readonly ITreeRepository repo = Globals.Resolver.Resolve<ITreeRepository>();
 
         public static string _Name => "Properties";
         public override string? Name => _Name;

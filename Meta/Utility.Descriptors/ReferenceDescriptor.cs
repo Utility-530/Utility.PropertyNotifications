@@ -1,11 +1,12 @@
-﻿using Splat;
+﻿using Utility.ServiceLocation;
 using Utility.Interfaces.Exs;
+using Utility.Helpers.Reflection;
 
 namespace Utility.Descriptors;
 
 internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : ValuePropertyDescriptor(Descriptor, Instance), IReferenceDescriptor
 {
-    private readonly ITreeRepository? repo = Locator.Current.GetService<ITreeRepository>();
+    private readonly ITreeRepository? repo = Globals.Resolver.Resolve<ITreeRepository>();
     private IObservable<Change<IDescriptor>>? observable;
     private PropertiesDescriptor? propertiesDescriptor;
 
@@ -24,7 +25,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                         {
                             int i = 0;
 
-                            if (Descriptor.PropertyType.IsAssignableTo(typeof(IEnumerable)) && Descriptor.PropertyType.IsAssignableTo(typeof(string)) == false && Descriptor.PropertyType.GetCollectionElementType() is Type _elementType)
+                            if (Descriptor.PropertyType.IsAssignableTo(typeof(IEnumerable)) && Descriptor.PropertyType.IsAssignableTo(typeof(string)) == false && Descriptor.PropertyType.ElementType() is Type _elementType)
                             {
                                 repo
                                 .Find(this.Guid, CollectionDescriptor._Name, type: Descriptor.PropertyType)
@@ -77,7 +78,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Va
                                 observer.OnNext(new(propertiesDescriptor with { Guid = p.Value.Guid }, Changes.Type.Add));
                             }).DisposeWith(disp);
                         }
-                        if (inst is IEnumerable enumerable && inst is not string s && inst.GetType() is Type _type && _type.GetCollectionElementType() is Type elementType)
+                        if (inst is IEnumerable enumerable && inst is not string s && inst.GetType() is Type _type && _type.ElementType() is Type elementType)
                         {
                             int i = 0;
                             var collectionDescriptor = new CollectionDescriptor(Descriptor, elementType, enumerable);

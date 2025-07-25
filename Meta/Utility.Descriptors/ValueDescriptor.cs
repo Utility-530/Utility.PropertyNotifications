@@ -1,8 +1,7 @@
 ﻿
-using Splat;
+using Utility.ServiceLocation;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
-using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Descriptors;
 
@@ -23,7 +22,7 @@ internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueP
     //public override string? Name => Descriptor.PropertyType.Name;
 
     private object? _value;
-    private readonly ITreeRepository repo = Locator.Current.GetService<ITreeRepository>();
+    private readonly ITreeRepository repo = Globals.Resolver.Resolve<ITreeRepository>();
     private IDisposable dateValue;
     private bool isInitialised = false;
     public override System.IObservable<object> Children => Observable.Empty<object>();
