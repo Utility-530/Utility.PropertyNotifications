@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Interfaces\Utility.Interfaces.Exs\Utility.Interfaces.Exs.csproj" />
     <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
 	  <ProjectReference Include="..\..\Trees\Utility.Trees.Decisions\Utility.Trees.Decisions.csproj" />
 	  <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />

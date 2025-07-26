@@ -1,0 +1,42 @@
+﻿<Application x:Class="Utility.WPF.Demo.Simulation.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Utility.WPF.Demo.Simulation" xmlns:models="clr-namespace:Utility.Models;assembly=Utility.Models">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Utility.WPF.Controls.Simulation;component/Themes/Generic.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+
+            <DataTemplate DataType="{x:Type models:MethodAction}">
+                <Ellipse Fill="Red" Height="20" Width="20"></Ellipse>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type local:CommandsViewModel}">
+                <Button Command="{Binding AddCommand}">Add</Button>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type local:ExampleViewModel}">
+                <ItemsControl ItemsSource="{Binding Collection}" >
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="{x:Type ContentPresenter}">
+                            <Setter Property="Grid.Row" Value="{Binding GridRow}"></Setter>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                </Grid.RowDefinitions>
+                            </Grid>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+
+            </DataTemplate>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

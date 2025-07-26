@@ -60,6 +60,8 @@ namespace Utility.ViewModels
         private ReplaySubject<Message> parentMessages;
         private int count;
         private readonly List<string> siblingKeys;
+        private ViewModel? selectedChild;
+        private int selectedIndex;
 
         public ViewModel(string key)
         {
@@ -99,8 +101,7 @@ namespace Utility.ViewModels
             }
         }
 
-        private ViewModel? selectedChild;
-        private int selectedIndex;
+
 
         public ViewModel? SelectedChild
         {
@@ -263,47 +264,8 @@ namespace Utility.ViewModels
                 .Subscribe(observer);
         }
 
-        //public PropertyChange ChildChange { get; set; }
 
-        //public bool IsReadOnly { get => isReadOnly; set => isReadOnly = value; }
 
-        //    public static IObservable<IChangeSet<GroupViewModel<T, TGroupKey>>> ConvertGroups<TGroup, T, TGroupKey>(this IObservable<IChangeSet<IGroup<TGroup, TGroupKey>>> groups)
-        //where TGroup : IGroupable<T>
-        //where T : class
-        //    {
-        //        return groups
-        //            .Transform(t => new GroupViewModel<T, TGroupKey>(new Group<T, TGroupKey>(t.GroupKey, t.List.Items.Select(a => a.Value))))
-        //            .ObserveOn(RxApp.MainThreadScheduler);
-        //    }
-
-        //public class GroupCollectionViewModel<T, TKey, TGroupKey> : GroupCollectionViewModel
-        //{
-        //    public GroupCollectionViewModel(IObservable<IGroupChangeSet<T, TKey, TGroupKey>> changeSet)
-        //    {
-        //        Collection = GroupHelper.ConvertGroups(changeSet, Create).ToCollection(CompositeDisposable);
-        //    }
-
-        //    public override IReadOnlyCollection<ClassProperty> Properties => typeof(T).GetProperties().Select(a => new ClassProperty(a.Name, typeof(T).Name)).ToArray();
-
-        //    public override ICollection Collection { get; }
-
-        //    public virtual GroupViewModel<T, TKey, TGroupKey> Create(IGroup<T, TKey, TGroupKey> group)
-        //    {
-        //        return new GroupViewModel<T, TKey, TGroupKey>(group);
-        //    }
-        //}
-
-        //public class CollectionViewModel<T, TKey, TGroupKey> : CollectionViewModel
-        //{
-        //    public CollectionViewModel(IObservable<IChangeSet<T, TKey>> changeSet, Func<T, TGroupKey> group)
-        //    {
-        //        Collection = changeSet
-        //                        .ToGroupViewModel(group)
-        //                        .Collection;
-        //    }
-
-        //    public override ICollection Collection { get; }
-        //}
 
         #region dispose
 
@@ -324,40 +286,4 @@ namespace Utility.ViewModels
         #endregion dispose
     }
 
-    //public class Disposer : ObservableCollection<IDisposable>
-    //{
-    //    //private readonly List<IDisposable> disposables = new();
-    //    private bool disposed;
-
-    //    public Disposer()
-    //    {
-    //        new System.Reactive.Disposables.CompositeDisposable();
-    //    }
-
-    //    public Disposer(IDisposable disposable)
-    //    {
-    //        Add(disposable);
-    //    }
-
-    //    //public void Add(IDisposable disposable)
-    //    //{
-    //    //    Insert(0, disposable);
-    //    //}
-
-    //    public void Dispose(bool disposing)
-    //    {
-    //        // Check to see if Dispose has already been called.
-    //        if (!this.disposed)
-    //        {
-    //            // If disposing equals true, dispose all managed and unmanaged resources.
-    //            if (disposing)
-    //            {
-    //                // Dispose managed resources.
-    //                foreach (var disposable in this)
-    //                    disposable.Dispose();
-    //            }
-    //        }
-    //        disposed = true;
-    //    }
-    //}
 }
