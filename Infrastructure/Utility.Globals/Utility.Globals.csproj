@@ -11,6 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Interfaces\Utility.Interfaces.Exs\Utility.Interfaces.Exs.csproj" />
+    <ProjectReference Include="..\..\Meta\Utility.ServiceLocation\Utility.ServiceLocation.csproj" />
     <ProjectReference Include="..\Utility.Entities\Utility.Entities.csproj" />
   </ItemGroup>
 

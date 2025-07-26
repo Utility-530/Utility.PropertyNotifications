@@ -1,12 +1,16 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Utility.Entities;
+using Utility.Interfaces.Exs;
+using Utility.Interfaces.NonGeneric.Dependencies;
+using Utility.ServiceLocation;
 
 namespace Utility
 {
     public class Globals
     {
         private static readonly SynchronizationContext ui;
+        private static Store store = new ();
 
         static Globals()
         {
@@ -32,6 +36,10 @@ namespace Utility
 
         public static IConnectableObservable<TimeSpan> Time { get; }
         public static IConnectableObservable<DateTime> Date { get; }
+
+
+        public static IResolver Resolver => store;
+        public static IRegister Register => store;
 
     }
 }
