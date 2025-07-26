@@ -9,7 +9,7 @@ using Utility.Helpers;
 
 namespace Utility.PropertyNotifications
 {
-    public record PropertyChange(object Source, object Value, string Name);
+    public record PropertyChange(object Source, object Value, object PreviousValue, string Name);
 
     public static class PropertyChangedExtensions
     {
@@ -142,6 +142,7 @@ namespace Utility.PropertyNotifications
                 private readonly INotifyPropertyChanged _target;
                 private readonly PropertyInfo? _info;
                 private readonly Func<object, object>? getter;
+                private object? value;
                 private readonly IObserver<PropertyChange?> _observer;
                 private Dictionary<string, Func<object, object>> dictionary = new();
                 private const string constructor = ".ctor";
@@ -151,6 +152,7 @@ namespace Utility.PropertyNotifications
                     _target = target;
                     _info = info;
                     getter = info?.ToGetter<object>();
+                    value = getter?.Invoke(_target);
                     _observer = observer;
                     _target.PropertyChanged += OnPropertyChanged;
 
@@ -168,14 +170,18 @@ namespace Utility.PropertyNotifications
                         {
                             var getter = dictionary.Get(pName, a => _target.GetType().GetProperty(pName).ToGetter<object>());
                             {
-                                var value = getter.Invoke(_target);
-                                _observer.OnNext(new PropertyChange(_target, value, pName));
+                                var previousValue = value;
+                                value = getter.Invoke(_target);
+                                _observer.OnNext(new PropertyChange(_target, value, previousValue, pName));
                             }
                         }
                     }
                     else if (e.PropertyName == _info?.Name)
-                        _observer.OnNext(new PropertyChange(_target, getter?.Invoke(_target), e.PropertyName));
+                    {
+                        var previousValue = value;
+                        _observer.OnNext(new PropertyChange(_target, value = getter?.Invoke(_target), previousValue, e.PropertyName));
                     }
+                }
 
                 public void Dispose()
                 {
@@ -202,9 +208,20 @@ namespace Utility.PropertyNotifications
         public static IObservable<PropertyChange> WhenChanged<TModel>(this TModel model, Expression<Func<TModel, object>>? expr = null) where TModel : INotifyPropertyChanged
         {
             var l = (LambdaExpression)expr;
-            var ma = (MemberExpression?)l?.Body;
-            var prop = (PropertyInfo?)ma?.Member;
-            return new PropertyObservable(model, prop);
+            var body = l?.Body;
+            if (body is UnaryExpression unary)
+            {
+                body = unary.Operand;
+            }
+            if (body is MemberExpression memberExpr && memberExpr.Member is PropertyInfo propInfo)
+            {
+                return new PropertyObservable(model, propInfo);
+            }
+            else
+            {
+                //throw new ArgumentException("Expression is not a property access", nameof(expr));
+                return new PropertyObservable(model);
+            }
         }
 
         public class Observer<TM, T> : IObserver<T>
