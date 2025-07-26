@@ -10,7 +10,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Helpers;
 using Utility.Observables.Generic;
 using Utility.Observables.NonGeneric;
-using Utility.Nodify.ViewModels;
+using Utility.Nodify.Models;
 
 namespace Utility.Nodify.Demo.Infrastructure
 {
