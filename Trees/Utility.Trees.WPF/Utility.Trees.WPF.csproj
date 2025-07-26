@@ -15,6 +15,7 @@
     <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Factorys\Utility.WPF.Factorys.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Helpers\Utility.WPF.Helpers.csproj" />
+    <ProjectReference Include="..\Utility.Trees.Extensions\Utility.Trees.Extensions.csproj" />
   </ItemGroup>
 
 </Project>

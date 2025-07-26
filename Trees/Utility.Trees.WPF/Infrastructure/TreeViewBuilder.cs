@@ -2,9 +2,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Data;
-using Utility.Trees.Extensions;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.NonGeneric;
+using Utility.Trees.Extensions;
 using Utility.Trees.WPF.Abstractions;
 
 namespace Views.Trees
