@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reactive.Subjects;
+using System.Runtime.CompilerServices;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Reactives
 {
-    public class ReactiveProperty : IReactiveProperty, ISetValue
+    public class ReactiveProperty : INotifyPropertyChanged, IReactiveProperty, ISetValue
     {
         private readonly IEqualityComparer<object> equalityComparer;
         private readonly ReplaySubject<object> subject = new(1);
@@ -42,6 +44,7 @@ namespace Utility.Reactives
             {
                 if (equalityComparer?.Equals(value, this.value) is { } b && b) return;
                 this.value = value;
+                OnPropertyChanged();
                 subject.OnNext(value);
             }
         }
@@ -66,9 +69,29 @@ namespace Utility.Reactives
             Value = value;
             onNext?.Invoke(value);
         }
+
+        #region propertyChanged
+        /// <inheritdoc />
+        /// <summary>
+        ///     The event on property changed
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        ///     Raise the <see cref="PropertyChanged" /> event
+        /// </summary>
+        /// <param name="propertyName">The caller member name of the property (auto-set)</param>
+        //[NotifyPropertyChangedInvocator]
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = default)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion propertyChanged
+
     }
 
-    public class ReactiveProperty<T> : IObservable<T>, IObserver<T>, IValue<T>, ISetValue<T>
+    public class ReactiveProperty<T> : INotifyPropertyChanged, IObservable<T>, IObserver<T>, IValue<T>, ISetValue<T>
     {
         private readonly IEqualityComparer<T> equalityComparer;
         private readonly ReplaySubject<T> subject = new(1);
@@ -92,6 +115,7 @@ namespace Utility.Reactives
             {
                 if (equalityComparer?.Equals(value, this.value) is { } b && b) return;
                 this.value = value;
+                OnPropertyChanged();
                 subject.OnNext(value);
             }
         }
@@ -118,6 +142,26 @@ namespace Utility.Reactives
         {
             Value = value;
         }
+
+        #region propertyChanged
+        /// <inheritdoc />
+        /// <summary>
+        ///     The event on property changed
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        ///     Raise the <see cref="PropertyChanged" /> event
+        /// </summary>
+        /// <param name="propertyName">The caller member name of the property (auto-set)</param>
+        //[NotifyPropertyChangedInvocator]
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = default)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion propertyChanged
+
     }
 
     public class ReactiveEquatableProperty<T> : IObservable<T> where T : IEquatable<T>
