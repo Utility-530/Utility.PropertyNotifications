@@ -36,7 +36,7 @@ namespace Utility.Models
     }
 
 
-    public class Model<T> : ValueModel<T>, ISetNode, IGetNode, IProliferation, IClone, IYieldChildren, IKey, IName, Utility.Interfaces.Generic.IAttach<IValueModel>
+    public class Model<T> : ValueModel<T>, ISetNode, IGetNode, IProliferation, IClone, IYieldChildren, IKey, IName, IAttach<IValueModel>
     {
         private INode node;
         int i = 0;

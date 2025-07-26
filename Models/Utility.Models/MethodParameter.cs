@@ -1,14 +1,9 @@
 ﻿using Splat;
 using System.Reflection;
+using Utility.Interfaces.Exs;
 
 namespace Utility.Models
 {
-    public interface IMethodParameter
-    {
-        Method Method { get; }
-        ParameterInfo Parameter { get; }
-        public string Name { get; }
-    }
 
     public record MethodParameter<T>(string InfoName, string Name = "", object? Instance = null) : IMethodParameter
     {
@@ -18,13 +13,13 @@ namespace Utility.Models
             {
                 if (isStatic == false && Instance == null)
                 {
-                    Instance = Locator.Current.GetService(typeof(T)) ?? throw new Exception("£36566 {typeof(T).Name}");
+                    Instance = Locator.Current.GetService(typeof(T)) ?? throw new Exception($"£36566 {typeof(T).Name}");
                 }
                 return new Method(methodInfo, Instance);
             }
             throw new Exception("ee3433333");
         });
-        public Method Method => info.Value;
+        public IMethod Method => info.Value;
         public ParameterInfo Parameter => info.Value.MethodInfo.GetParameters().Single(a => a.Name == Name);
     }
 }
