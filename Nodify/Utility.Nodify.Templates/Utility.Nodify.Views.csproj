@@ -13,6 +13,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\Projects\Diagram\nodify\Nodify\Nodify.csproj" />
+		<ProjectReference Include="..\..\Models\Utility.Models.Diagrams\Utility.Models.Diagrams.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Tabs\Utility.WPF.Controls.Tabs.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
 		<ProjectReference Include="..\Utility.Nodify.Infrastructure\Utility.Nodify.ViewModels.csproj" />

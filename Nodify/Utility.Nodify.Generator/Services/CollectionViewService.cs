@@ -3,7 +3,7 @@ using System.Collections;
 using System.Windows.Data;
 using Utility.Models;
 
-namespace Utility.Nodes.Demo.Lists.Services
+namespace Utility.Nodify.Generator.Services
 {
     //public record ListCollectionViewParam() : MethodParameter<CollectionViewService>(nameof(CollectionViewService.Set), "listCollectionView");
     public record PredicateParam() : MethodParameter<CollectionViewService>(nameof(CollectionViewService.Set), "predicate");

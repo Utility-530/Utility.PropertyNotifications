@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Projects\Diagram\nodify\Nodify\Nodify.csproj" />
     <ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
@@ -17,12 +18,6 @@
     <ProjectReference Include="..\Utility.Nodify.Engine\Utility.Nodify.Engine.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Generator\Utility.Nodify.Generator.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Templates\Utility.Nodify.Views.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Nodify">
-      <HintPath>..\..\..\Projects\Diagram\nodify\Nodify\bin\Debug\net8-windows\Nodify.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

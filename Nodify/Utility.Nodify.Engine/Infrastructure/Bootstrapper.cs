@@ -20,7 +20,6 @@ namespace Utility.Nodify.Engine.Infrastructure
     {
         public static IContainer Build(IContainer container)
         {
-            container.Register<Operations.Resolver>();
             container.Register<DiagramsViewModel>();
 
             container.Register<MainViewModel>();

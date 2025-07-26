@@ -10,6 +10,9 @@ namespace Utility.Nodify.Models
         private IConnectorViewModel _output = default!, _input = default!;
         private string _title = string.Empty;
 
+        public ConnectionViewModel()
+        {
+        }
 
         public Guid Id { get; } = Guid.NewGuid();
 
@@ -29,7 +32,6 @@ namespace Utility.Nodify.Models
             set => RaisePropertyChanged(ref _input, value)
                 .Then(() =>
                 {
-                    Input.PropertyChanged += Input_PropertyChanged;
                 });
         }
         public NodeState State { get; set; } = NodeState.None;
@@ -41,20 +43,9 @@ namespace Utility.Nodify.Models
                 .Then(() =>
                 {
                     
-                    Output.PropertyChanged += Output_PropertyChanged;
                 });
         }
+        public object Data { get; set; }
 
-        protected virtual void Output_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(ConnectorViewModel.Value))
-                State = NodeState.OutputValueChanged;
-        }
-        protected virtual void Input_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(ConnectorViewModel.Value))
-                State = NodeState.InputValueChanged;
-
-        }
     }
 }

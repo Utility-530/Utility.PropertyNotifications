@@ -1,13 +1,13 @@
 ﻿using MoreLinq;
-using Splat;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using Utility.Changes;
+using Utility.Interfaces.Exs;
 using Utility.Models;
+using Utility.Models.Diagrams;
 using Utility.Nodify.Enums;
 using Utility.Nodify.Models;
-using Utility.Nodify.Operations;
-using Utility.Services;
+using Utility.ServiceLocation;
 
 namespace Nodify.Playground
 {
@@ -72,7 +72,7 @@ namespace Nodify.Playground
         public ObservableCollection<T> GenerateNodes(NodesGeneratorSettings settings)
         {
             uint i = 0;
-            (Locator.Current.GetService<ServiceResolver>() as IObservable<Set<IResolvableNode>>)
+            (Utility.Globals.Resolver.Resolve<IServiceResolver>() as IObservable<Set<IResolvableNode>>)
                 .Subscribe(set =>
                 {
                     foreach (var item in set)
@@ -84,20 +84,20 @@ namespace Nodify.Playground
                             {
                                 Title = methodNode.Method.Name,
                                 Location = settings.NodeLocationGenerator(settings, ++i),
-                                Core = new MethodOperation(methodNode.Method.MethodInfo)
+                                Data = methodNode
                             };
 
                             nodes.Add(node);
 
                             methodNode.InValues.ForEach(a =>
                             {
-                                var input = new ConnectorViewModel { Shape = ConnectorShape.Circle, Title = a.Value.Key, Value = a.Value.Value };
+                                var input = new ConnectorViewModel { Shape = ConnectorShape.Circle, Title = a.Value.Key, Data = a.Value };
                                 connectors.Add(a.Value, input);
                                 node.Input.Add(input);
                                 input.Node = node;
                             });
 
-                            var output = new ConnectorViewModel { Shape = ConnectorShape.Circle, Title = methodNode.Method.Name + "." };
+                            var output = new ConnectorViewModel { Shape = ConnectorShape.Circle, Title = methodNode.Method.Name + ".", Data = methodNode.OutValue };
                             connectors.Add(methodNode.OutValue, output);
                             node.Output.Add(output);
                             output.Node = node;
@@ -110,7 +110,7 @@ namespace Nodify.Playground
                         {
                             var node = new T
                             {
-                                Title = rNode.Name,
+                                Data = rNode,
                                 Location = settings.NodeLocationGenerator(settings, ++i)
 
                             };
@@ -133,7 +133,7 @@ namespace Nodify.Playground
                         {
                             var node = new T
                             {
-                                Title = oNode.Name,
+                                Data = oNode,
                                 Location = settings.NodeLocationGenerator(settings, ++i)
                             };
 
@@ -160,7 +160,7 @@ namespace Nodify.Playground
         public ObservableCollection<ConnectionViewModel> GenerateConnections()
         {
             HashSet<NodeViewModel> visited = new HashSet<NodeViewModel>(nodes.Count);
-            (Locator.Current.GetService<ServiceResolver>() as IObservable<Set<IResolvableConnection>>).Subscribe(set =>
+            (Utility.Globals.Resolver.Resolve<IServiceResolver>() as IObservable<Set<IResolvableConnection>>).Subscribe(set =>
             {
                 foreach (var item in set)
                 {
@@ -171,7 +171,8 @@ namespace Nodify.Playground
                         var connection = new ConnectionViewModel
                         {
                             Input = input,
-                            Output = output
+                            Output = output,
+                            Data = mConn
                         };
 
 

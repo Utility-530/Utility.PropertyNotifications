@@ -10,8 +10,15 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Projects\Diagram\nodify\Nodify\Nodify.csproj" />
+    <ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.Services.Meta\Utility.Services.Meta.csproj" />
+    <ProjectReference Include="..\..\Meta\Utility.ServiceLocation\Utility.ServiceLocation.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Simulation\Utility.WPF.Controls.Simulation.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Core\Utility.Nodify.Models.csproj" />
+    <ProjectReference Include="..\Utility.Nodify.Engine\Utility.Nodify.Engine.csproj" />
+    <ProjectReference Include="..\Utility.Nodify.Generator\Utility.Nodify.Generator.csproj" />
+    <ProjectReference Include="..\Utility.Nodify.Templates\Utility.Nodify.Views.csproj" />
   </ItemGroup>
 
 </Project>

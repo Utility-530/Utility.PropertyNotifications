@@ -19,7 +19,7 @@ namespace Utility.Nodify.Models
         private INodeViewModel _node = default!;
 
         private string? _title;
-        private object _value;
+        private object data;
         private bool _isConnected;
         private bool _isInput;
         private PointF _anchor;
@@ -32,10 +32,10 @@ namespace Utility.Nodify.Models
             set => RaisePropertyChanged(ref _title, value);
         }
 
-        public object Value
+        public object Data
         {
-            get => _value;
-            set => RaisePropertyChanged(ref _value, value);
+            get => data;
+            set => RaisePropertyChanged(ref data, value);
         }
 
         public bool IsConnected

@@ -6,7 +6,6 @@ using System.Reactive.Linq;
 using System.Windows;
 using Utility.Interfaces.Exs;
 using Utility.Models;
-using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodify.Core;
 using Utility.Nodify.Engine.Infrastructure;
 using Utility.Nodify.ViewModels;
@@ -16,6 +15,8 @@ using IConverter = Utility.Nodify.Engine.Infrastructure.IConverter;
 using INodeSource = Utility.Nodify.Operations.Infrastructure.INodeSource;
 using ServiceResolver = Utility.Services.ServiceResolver;
 using Utility.Nodify.Demo.Infrastructure;
+using Utility.Extensions;
+using Utility.ServiceLocation;
 
 namespace Utility.Nodify.Demo
 {
@@ -32,10 +33,6 @@ namespace Utility.Nodify.Demo
             SQLitePCL.Batteries.Init();
             initialise();
 
-
-            //rootDescriptor = DescriptorFactory.CreateRoot(typeof(Diagram), "diagram_test2");
-            //var diagram = rootDescriptor.Get<Diagram>();
-            //rootDescriptor.Initialise();
             var diagram = new Diagram();
             base.OnStartup(e);
 
@@ -46,9 +43,6 @@ namespace Utility.Nodify.Demo
 
             container.RegisterInstance<Diagram>(diagram);
             container.Register<IConverter, Converter>();
-
-            container.Resolve<Operations.Resolver>();
-
             DockWindow dockWindow = new()
             {
                 DataContext = container.Resolve<MainViewModel>()
@@ -59,21 +53,19 @@ namespace Utility.Nodify.Demo
 
         private void initialise()
         {
-            Locator.CurrentMutable.RegisterLazySingleton(() => new ServiceResolver());
+            Utility.Globals.Register.Register< IServiceResolver>(() => new ServiceResolver());
             Locator.CurrentMutable.RegisterLazySingleton(() => new CollectionViewService());
 
-            Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
-            Locator.CurrentMutable.RegisterConstant<IPlaybackEngine>(new PlaybackEngine());
+            Utility.Globals.Register.Register<IPlaybackEngine>(new PlaybackEngine());
 
-            Locator.Current.GetService<ServiceResolver>().Connect<PredicateReturnParam, PredicateParam>();
-            //Locator.Current.GetService<ServiceResolver>().Connect<ListCollectionViewReturnParam, ListCollectionViewParam>();
-            Locator.Current.GetService<ServiceResolver>().Connect<ListInstanceReturnParam, ListInParam>();
-            Locator.Current.GetService<ServiceResolver>().Connect<ListInstanceReturnParam, ListParam>();
-            Locator.Current.GetService<ServiceResolver>().Observe<InstanceTypeParam>(new ValueModel<Type>() { Name = "react_to_4", Value = typeof(List<object>) });
-            Locator.Current.GetService<ServiceResolver>().Observe<FilterParam>(new ValueModel<string>() { Name = "react_to_3", Value = "something" });
+            var serviceResolver = Utility.Globals.Resolver.Resolve<IServiceResolver>();
+            serviceResolver.Connect<PredicateReturnParam, PredicateParam>();
+            serviceResolver.Connect<ListInstanceReturnParam, ListInParam>();
+            serviceResolver.Connect<ListInstanceReturnParam, ListParam>();
+            serviceResolver.Observe<InstanceTypeParam>(new ValueModel<Type>() { Name = "react_to_4", Value = typeof(List<object>) });
+            serviceResolver.Observe<FilterParam>(new ValueModel<string>() { Name = "react_to_3", Value = "something" });
 
         }
-
         public static class DiConfiguration
         {
             public static Rules SetRules(Rules rules)
@@ -87,8 +79,8 @@ namespace Utility.Nodify.Demo
 
         protected override void OnExit(ExitEventArgs e)
         {
-            var diagramViewModel = container.Resolve<IDiagramViewModel>();
-            var diagram = container.Resolve<IConverter>().ConvertBack(diagramViewModel);
+            //var diagramViewModel = container.Resolve<IDiagramViewModel>();
+            //var diagram = container.Resolve<IConverter>().ConvertBack(diagramViewModel);
             //rootDescriptor.Set(diagram);
             //rootDescriptor.Finalise();
             base.OnExit(e);

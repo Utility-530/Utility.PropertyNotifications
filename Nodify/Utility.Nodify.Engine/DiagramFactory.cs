@@ -17,9 +17,9 @@ namespace Utility.Nodify.Engine
                 diagram.Nodes.Add(node);
             });
 
-            ConnectNodes();
+            ConnectNodes(diagram);
         }
-        private void ConnectNodes()
+        private void ConnectNodes(IDiagramViewModel diagram)
         {
 
             var connections = gen.GenerateConnections();
@@ -27,7 +27,11 @@ namespace Utility.Nodify.Engine
                 for (int i = 0; i < connections.Count; i++)
                 {
                     var con = connections[i];
-                    schema.TryAddConnection(con.Input, con.Output);
+                    if (schema.TryAddConnection(con.Input, con.Output, out var connection))
+                    {
+                        connection.Data = con.Data;
+                        diagram.Connections.Add(connection);
+                    }
                 }
             }
         }

@@ -7,19 +7,21 @@
                     xmlns:inf="clr-namespace:Utility.Nodify.Engine.Infrastructure"
                     xmlns:nodify="https://miroiu.github.io/nodify"
                     xmlns:templates="http://schemas.utility.com/templates"
-                     xmlns:models="clr-namespace:Utility.Nodify.Models;assembly=Utility.Nodify.Models"
-                     mc:Ignorable="d">
+                    xmlns:models="clr-namespace:Utility.Nodify.Models;assembly=Utility.Nodify.Models" 
+                    xmlns:inf1="clr-namespace:Utility.Nodify.Views.Infrastructure" 
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    mc:Ignorable="d">
 
     <inf:PointConverter x:Key="PointConverter"/>
 
     <Style x:Key="ConnectionStyle"
                TargetType="{x:Type nodify:BaseConnection}"
                BasedOn="{StaticResource {x:Type nodify:BaseConnection}}">
-        <Setter Property="IsAnimatingDirectionalArrows" Value="True"></Setter>
+        <!--<Setter Property="IsAnimatingDirectionalArrows" Value="True"></Setter>-->
         <Setter Property="DirectionalArrowsAnimationDuration" Value="1"></Setter>
         <Setter Property="DirectionalArrowsCount" Value="1"></Setter>
     </Style>
-    
+
     <DataTemplate x:Key="ConnectionTemplate"
                     DataType="{x:Type models:ConnectionViewModel}">
         <nodify:CircuitConnection Source="{Binding Output.Anchor, Converter={StaticResource PointConverter}}"
@@ -27,7 +29,11 @@
                                     Style="{StaticResource ConnectionStyle}"
                                     SourceOffset="10 0"
                                     TargetOffset="20 0"
-                                    SourceOffsetMode="Circle" />
+                                    SourceOffsetMode="Circle" >
+            <i:Interaction.Behaviors>
+                <inf1:TransferBehavior ></inf1:TransferBehavior>
+            </i:Interaction.Behaviors>
+        </nodify:CircuitConnection>
     </DataTemplate>
 
     <DataTemplate x:Key="PendingConnectionTemplate"
@@ -37,7 +43,9 @@
                                     Target="{Binding Target, Mode=OneWayToSource}"
                                     TargetAnchor="{Binding TargetLocation, Mode=OneWayToSource, Converter={StaticResource PointConverter}}"
                                     StartedCommand="{Binding DataContext.StartConnectionCommand, RelativeSource={RelativeSource AncestorType={x:Type nodify:NodifyEditor}}}"
-                                    CompletedCommand="{Binding DataContext.CreateConnectionCommand, RelativeSource={RelativeSource AncestorType={x:Type nodify:NodifyEditor}}}" />
+                                    CompletedCommand="{Binding DataContext.CreateConnectionCommand, RelativeSource={RelativeSource AncestorType={x:Type nodify:NodifyEditor}}}" >
+       
+        </nodify:PendingConnection>
     </DataTemplate>
 
 
@@ -91,18 +99,18 @@
                                 x:Name="Editor">
                 <nodify:NodifyEditor.Resources>
 
-                
+
                     <Style TargetType="{x:Type nodify:NodeInput}"
                         BasedOn="{StaticResource {x:Type nodify:NodeInput}}">
                         <Setter Property="Header"
-                            Value="{Binding Title}" />
+                            Value="{Binding Data}" />
                         <Setter Property="IsConnected"
                             Value="{Binding IsConnected}" />
                         <Setter Property="Anchor"
                             Value="{Binding Anchor, Mode=OneWayToSource, Converter={StaticResource PointConverter}}" />
                         <Setter Property="ToolTip"
                             Value="{Binding Value}" />
-                        <Setter Property="HeaderTemplate">
+                        <!--<Setter Property="HeaderTemplate">
                             <Setter.Value>
                                 <DataTemplate>
                                     <Expander Header="{Binding Title}" IsExpanded="True">
@@ -112,18 +120,29 @@
                                     </Expander>
                                 </DataTemplate>
                             </Setter.Value>
-                        </Setter>
+                        </Setter>-->
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Data.IsExecuting}" Value="True">
+                                <Setter Property="Background" Value="Moccasin"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
                     </Style>
 
                     <Style TargetType="{x:Type nodify:NodeOutput}"
                         BasedOn="{StaticResource {x:Type nodify:NodeOutput}}">
                         <Setter Property="Header"
-                            Value="{Binding}" />
+                            Value="{Binding Data}" />
                         <Setter Property="IsConnected"
                             Value="{Binding IsConnected}" />
                         <Setter Property="Anchor"
                             Value="{Binding Anchor, Mode=OneWayToSource, Converter={StaticResource PointConverter}}" />
-                        <Setter Property="HeaderTemplate">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Data.IsActive}" Value="True">
+                                <Setter Property="Background" Value="LightCoral"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                        <!--<Setter Property="HeaderTemplate">
+                        
                             <Setter.Value>
                                 <DataTemplate >
                                     <Expander Header="{Binding Title}" IsExpanded="True">
@@ -132,25 +151,26 @@
                                         />
                                         </Viewbox>
                                     </Expander>
-                                    <!--<TextBox Text="{Binding Value}"
+                                    -->
+                        <!--<TextBox Text="{Binding Value}"
                                                 IsEnabled="False" />-->
+                        <!--
                                 </DataTemplate>
                             </Setter.Value>
-                        </Setter>
+                        </Setter>-->
                     </Style>
 
                     <DataTemplate DataType="{x:Type models:NodeViewModel}">
                         <nodify:Node 
                                     Input="{Binding Input}"
                                     Output="{Binding Output}"
-                                    Content="{Binding Title}"
-                                    ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance }"
+                                    Content="{Binding Data}"
                                     Padding="5 0 0 0" >
                             <nodify:Node.Style>
                                 <Style TargetType="{x:Type nodify:Node}"
                                     BasedOn="{StaticResource {x:Type nodify:Node}}">
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsActive}"
+                                        <DataTrigger Binding="{Binding Data.IsActive}"
                                                     Value="True">
                                             <Setter Property="ContentBrush"
                                                 Value="{DynamicResource ActiveStateBrush}" />
@@ -158,6 +178,7 @@
                                     </Style.Triggers>
                                 </Style>
                             </nodify:Node.Style>
+                            
                             <!--<nodify:Node.Content>
                                 <ContentControl Content="{Binding Core}"></ContentControl>
                                 -->

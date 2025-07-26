@@ -35,42 +35,42 @@ namespace Nodify.Playground
             return false;
         }
 
-        public bool TryAddConnection(IConnectorViewModel source, object? target)
+        public bool TryAddConnection(IConnectorViewModel source, object? target,out ConnectionViewModel? connection)
         {
             if (target != null && CanAddConnection(source, target))
             {
                 if (target is ConnectorViewModel connector)
                 {
-                    AddConnection(source, connector);
+                    connection = AddConnection(source, connector);
                     return true;
                 }
                 else if (target is NodeViewModel node)
                 {
-                    AddConnection(source, node);
+                    connection = AddConnection(source, node);
                     return true;
                 }
             }
-
+            connection = null;
             return false;
         }
 
-        private void AddConnection(IConnectorViewModel source, IConnectorViewModel target)
+        private ConnectionViewModel AddConnection(IConnectorViewModel source, IConnectorViewModel target)
         {
             var sourceIsInput = source.Flow == ConnectorFlow.Input;
 
-            source.Node.Graph.Connections.Add(new ConnectionViewModel
+            return new ConnectionViewModel
             {
                 Input = sourceIsInput ? source : target,
                 Output = sourceIsInput ? target : source
-            });
+            };
         }
 
-        private void AddConnection(IConnectorViewModel source, INodeViewModel target)
+        private ConnectionViewModel AddConnection(IConnectorViewModel source, INodeViewModel target)
         {
             var allConnectors = source.Flow == ConnectorFlow.Input ? target.Output : target.Input;
             var connector = allConnectors.First(c => (c as ConnectorViewModel)?.AllowsNewConnections() == true);
 
-            AddConnection(source, connector);
+            return AddConnection(source, connector);
         }
 
         #endregion

@@ -32,10 +32,6 @@ namespace Utility.Nodify.Models
                 _ = range.WhenAdded(x =>
                 {
                     Add(x);
-                })
-                .WhenRemoved(x =>
-                {
-                    x.PropertyChanged -= OnInputValueChanged;
                 });
         }
 
@@ -43,21 +39,14 @@ namespace Utility.Nodify.Models
         {
             x.Node = this;
             x.IsInput = true;
-            x.PropertyChanged += OnInputValueChanged;
-            if (x.Value != default)
-                OnInputValueChanged(x);
+
         }
 
-        private void OnInputValueChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(ConnectorViewModel.Value))
-            {
-                OnInputValueChanged(sender as ConnectorViewModel);
-            }
-        }
+
 
         public NodeState State { get; set; } = NodeState.None;
 
+        public object Data { get; set; }
 
         public ICollection<IConnectorViewModel> Input
         {
@@ -85,9 +74,5 @@ namespace Utility.Nodify.Models
         public IDiagramViewModel Graph { get; set; }
         public Orientation Orientation { get; set; }
 
-        public virtual void OnInputValueChanged(IConnectorViewModel connectorViewModel)
-        {
-            State = NodeState.InputValueChanged;
-        }
     }
 }
