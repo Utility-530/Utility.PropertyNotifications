@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Windows.Input;
-using Utility.Models;
 using Utility.Observables;
 
 namespace Utility.Commands
@@ -9,7 +8,6 @@ namespace Utility.Commands
     {
         private bool canExecute;
         private Func<IObserver<bool>, object> methodToExecute_;
-        //List<IObserver> observers  = new();
         List<IObserver<object>> observers = new();
         private object? id;
         private readonly Action<IObserver<bool>> methodToExecute;
@@ -38,8 +36,6 @@ namespace Utility.Commands
             remove => CommandManager.RequerySuggested -= value;
         }
 
-
-        //public IEnumerable<IObserver> Observers => observers;
         public IEnumerable<IObserver<object>> Observers => observers;
 
         public List<object?> Outputs { get; } = new();
@@ -74,13 +70,6 @@ namespace Utility.Commands
                 }
             }
         }
-
-        //public IDisposable Subscribe(IObserver observer)
-        //{
-        //    foreach (var output in Outputs)
-        //        observer.OnNext(output);
-        //    return new Disposer(observers, observer);
-        //}
 
         public void OnCompleted()
         {
