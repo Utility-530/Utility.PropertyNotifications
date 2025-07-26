@@ -29,6 +29,7 @@ using CompositeDisposable = Utility.Observables.CompositeDisposable;
 using System.Reactive.Subjects;
 using Castle.Components.DictionaryAdapter;
 using Utility.Helpers.Reflection;
+using Utility.ServiceLocation;
 
 namespace Utility.Nodes.Filters
 {
@@ -46,7 +47,7 @@ namespace Utility.Nodes.Filters
         Lazy<NodeInterface> nodeInterface = new(() => new NodeInterface());
         Lazy<IFilter> filter;
         Lazy<IExpander> expander;
-        Lazy<IContext> context;
+        //Lazy<IContext> context;
         Lazy<ITreeRepository> repository;
 
         CompositeDisposable compositeDisposable = new();
@@ -57,11 +58,11 @@ namespace Utility.Nodes.Filters
 
         public NodeEngine()
         {
-            filter = new(() => Locator.Current.GetService<IFilter>());
-            expander = new(() => Locator.Current.GetService<IExpander>());
-            context = new(() => Locator.Current.GetService<IContext>());
-            var repdository = Locator.Current.GetService<ITreeRepository>();
-            repository = new(() => repdository);
+            filter = new(() => Globals.Resolver.Resolve<IFilter>());
+            expander = new(() => Globals.Resolver.Resolve<IExpander>());
+            //context = new(() => Locator.Current.GetService<IContext>());
+            var repo = Globals.Resolver.Resolve<ITreeRepository>();
+            repository = new(() => repo);
         }
 
         public Guid Guid { get; } = Guid.NewGuid();
@@ -182,12 +183,11 @@ namespace Utility.Nodes.Filters
                                 repository.Value.Set((GuidKey)node.Key, name, _value, DateTime.Now);
                         }
                         else
-                            context.Value.UI(() =>
+                            Globals.UI.Post((a) =>
                             {
+                                dirty.OnNext((DirtyModel)a);
 
-                                dirty.OnNext(new DirtyModel { Name = name + node.Items.Count(), SourceKey = node.Key, PropertyName = name, NewValue = value });
-
-                            });
+                            }, new DirtyModel { Name = name + node.Items.Count(), SourceKey = node.Key, PropertyName = name, NewValue = value });
                     }
                     else
                         throw new Exception("ss FGre333333333");

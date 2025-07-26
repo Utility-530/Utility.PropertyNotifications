@@ -12,7 +12,7 @@ using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Filters;
 using Utility.PropertyNotifications;
 using Utility.Services;
-
+using Utility.Extensions;
 namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
@@ -27,7 +27,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                      new ListModel(type) { Name = list },
                      new EditModel { Name = edit },
                 ],
-                (node) => { node.IsExpanded = true; node.Orientation = Orientation.Horizontal; },
+                (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; },
                 (parent, addition) =>
                 {
                     if (addition.Data is EditModel { } editModel)

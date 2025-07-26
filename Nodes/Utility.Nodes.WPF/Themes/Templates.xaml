@@ -466,17 +466,16 @@
                         <Grid Background="Transparent" 
                                 x:Name="tile"
                                 Grid.Column="0"
-                                Width="85"
-                                Height="85"
                                 Margin="5"
                                 >
-                            <Viewbox>
+                          
                                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
-                                    FontSize="14"
-                                    FontWeight="Normal"
-                                    Text="{Binding Alias}"
+                                          
+                                    FontSize="24"
+                                    FontWeight="DemiBold"
+                                    Text="{Binding Alias, Converter={x:Static local:HumaniseConverter.Instance}}"
                                     TextWrapping="WrapWithOverflow" />
-                            </Viewbox>
+                       
                         </Grid>
                     </DataTemplate>
                 </ContentControl.ContentTemplate>

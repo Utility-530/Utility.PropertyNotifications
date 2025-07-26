@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Utility.Attributes;
 using Utility.Conversions.Json.Newtonsoft;
+using Utility.Extensions;
 using Utility.Helpers.Reflection;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
@@ -25,8 +26,9 @@ using Utility.PropertyNotifications;
 using Utility.Repos;
 using Utility.Services;
 using Utility.WPF.Controls;
-using Utility.WPF.Demo.Buttons;
 using Utility.WPF.Templates;
+using Utility.ServiceLocation;
+using Utility.Interfaces.NonGeneric.Dependencies;
 
 namespace Utility.Nodes.Demo.Lists
 {
@@ -39,61 +41,64 @@ namespace Utility.Nodes.Demo.Lists
         protected override void OnStartup(StartupEventArgs e)
         {
             CurrentMutable.RegisterLazySingleton(() => new ContainerViewModel());
-            CurrentMutable.RegisterConstant<IPlaybackEngine>(new PlayBackViewModel());
             CurrentMutable.RegisterLazySingleton<PlaybackService>(() => new PlaybackService());
-
             showPlayback();
-            //showSplashscreen();
             SQLitePCL.Batteries.Init();
-
-            CurrentMutable.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
-            CurrentMutable.RegisterLazySingleton<INodeSource>(() => new NodeEngine());
-
-            CurrentMutable.RegisterConstant<IExpander>(WPF.Expander.Instance);
-            CurrentMutable.RegisterLazySingleton<IObservableIndex<INode>>(() => MethodCache.Instance);
-            CurrentMutable.RegisterLazySingleton<MethodCache>(() => MethodCache.Instance);
-            CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new Factories.NodeMethodFactory());
-            CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => Nodes.Filters.NodeMethodFactory.Instance);
-            CurrentMutable.RegisterLazySingleton(() => new MasterViewModel());
-
-            CurrentMutable.RegisterLazySingleton<DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
-
-            //Locator.CurrentMutable.RegisterConstant<System.IObservable<ViewModel>>(new ComboService());
-            CurrentMutable.RegisterConstant(new ContainerService());
-            CurrentMutable.RegisterConstant(new ServiceResolver());
-            CurrentMutable.RegisterConstant(new RazorService());
-            CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Type>>(() => new ModelTypesFactory());
-            CurrentMutable.RegisterLazySingleton<IFactory<IId<Guid>>>(() => new ModelFactory());
-
-            CurrentMutable.RegisterLazySingleton<FilterService>(() => new FilterService());
-            CurrentMutable.RegisterLazySingleton<CollectionCreationService>(() => new CollectionCreationService());
-            CurrentMutable.RegisterLazySingleton<SelectionService>(() => new SelectionService());
-            CurrentMutable.RegisterLazySingleton<CollectionViewService>(() => new CollectionViewService());
-            CurrentMutable.RegisterConstant<IFilter>(new StringFilter());
-
-
-
-            Locator.Current.GetService<ServiceResolver>().Connect<PredicateReturnParam, PredicateParam>();
-            //Locator.Current.GetService<ServiceResolver>().Connect<ListCollectionViewReturnParam, ListCollectionViewParam>();
-            Locator.Current.GetService<ServiceResolver>().Connect<ListInstanceReturnParam, ListInParam>();
-            Locator.Current.GetService<ServiceResolver>().Connect<ListInstanceReturnParam, ListParam>();
-
+            initialise(CurrentMutable);
+            initialiseGlobals(Globals.Register);
+            showSplashscreen();
+            buildNetwork(Globals.Resolver.Resolve<IServiceResolver>());
             JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
             subscribeToTypeChanges();
             base.OnStartup(e);
         }
 
+        private static void initialise(IMutableDependencyResolver register)
+        {
+            register.RegisterConstant<IExpander>(WPF.Expander.Instance);
+            register.RegisterLazySingleton<IObservableIndex<INode>>(() => MethodCache.Instance);
+            register.RegisterLazySingleton<MethodCache>(() => MethodCache.Instance);
+            register.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new Factories.NodeMethodFactory());
+            register.RegisterLazySingleton<IEnumerableFactory<Method>>(() => Nodes.Filters.NodeMethodFactory.Instance);
+            register.RegisterLazySingleton(() => new MasterViewModel());
+            register.RegisterConstant(new ContainerService());
+ 
+            register.RegisterConstant(new RazorService());
+            register.RegisterLazySingleton<IEnumerableFactory<Type>>(() => new ModelTypesFactory());
+            register.RegisterLazySingleton<IFactory<IId<Guid>>>(() => new ModelFactory());
+            register.RegisterLazySingleton<FilterService>(() => new FilterService());
+            register.RegisterLazySingleton<CollectionCreationService>(() => new CollectionCreationService());
+            register.RegisterLazySingleton<SelectionService>(() => new SelectionService());
+            register.RegisterLazySingleton<CollectionViewService>(() => new CollectionViewService());
+            register.RegisterConstant<IFilter>(new StringFilter());
+        }
+
+        private static void initialiseGlobals(IRegister register)
+        {
+            register.Register<IServiceResolver>(() => new ServiceResolver());
+            register.Register<INodeSource>(() => new NodeEngine());
+            register.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
+            register.Register<IPlaybackEngine>(() => new PlaybackEngine());
+        }
+
+        private static void buildNetwork(IServiceResolver serviceResolver)
+        {
+            serviceResolver.Connect<PredicateReturnParam, PredicateParam>();
+            serviceResolver.Connect<ListInstanceReturnParam, ListInParam>();
+            serviceResolver.Connect<ListInstanceReturnParam, ListParam>();
+        }
+
         private static void showPlayback()
         {
-            var sswindow = new Window();
-            sswindow.Show();
-            var playBack = new PlayBackUserControl()
-            {
-            };
-            sswindow.Content = playBack;
-            var window = new Window() { Content = Locator.Current.GetService<ContainerViewModel>() };
+            //var sswindow = new Window();
+            //sswindow.Show();
+            //var playBack = new PlayBackUserControl()
+            //{
+            //};
+            //sswindow.Content = playBack;
+            //var window = new Window() { Content = Locator.Current.GetService<ContainerViewModel>() };
 
-            window.Show();
+            //window.Show();
 
         }
 
@@ -144,13 +149,6 @@ namespace Utility.Nodes.Demo.Lists
         }
     }
 
-    //public class EbayModelFactory : IFactory<EbayModel>
-    //{
-    //    public Task<EbayModel> Create(object config)
-    //    {
-    //        return Task.FromResult(new EbayModel() { Id = Guid.NewGuid() });
-    //    }
-    //}
     public class ModelFactory : IFactory<IId<Guid>>
     {
         public IId<Guid> Create(object config)
@@ -206,6 +204,27 @@ namespace Utility.Nodes.Demo.Lists
         public TabEmptiedResponse TabEmptiedHandler(TabablzControl tabControl, Window window)
         {
             return TabEmptiedResponse.CloseWindowOrLayoutBranch;
+        }
+    }
+
+
+
+
+    public class PlaybackEngine : IPlaybackEngine
+    {
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(IAction value)
+        {
+            value.Do();
         }
     }
 

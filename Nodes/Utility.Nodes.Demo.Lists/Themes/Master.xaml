@@ -13,12 +13,14 @@
     <Style x:Key="DefaultChildCustomStyle" TargetType="{x:Type t:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type t:CustomTreeViewItem}}">
         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"></Setter>
         <Setter Property="SelectionItem" Value="{Binding Current, Mode=TwoWay}"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <!--<Setter Property="Background" Value="{c:Amber}"></Setter>-->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type t:CustomTreeViewItem}">
-                    <Grid>
-                        <ToggleButton x:Name="Toggle" Style="{StaticResource CustomToggleStyle}" Width="100" Height="100" Margin="12"                                     
+                    <Grid  HorizontalAlignment="Stretch" >
+                        <ToggleButton x:Name="Toggle" Style="{StaticResource CustomToggleStyle}" HorizontalAlignment="Stretch" Height="100" Margin="12"                                     
                                       IsChecked="{Binding IsSelected, Mode=OneWayToSource,RelativeSource={RelativeSource Mode=TemplatedParent}}">
                             <i:Interaction.Triggers >
                                 <i:DataTrigger Value="True" Binding="{Binding ElementName=Toggle, Path=IsChecked}">
@@ -77,16 +79,17 @@
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <Viewbox  HorizontalAlignment="Left">
+            <!--<Viewbox  HorizontalAlignment="Left">
                 <t:CustomTreeView  ItemsSource="{Binding Controls}" ItemContainerStyle="{StaticResource DefaultStyle}"/>
-            </Viewbox>
+            </Viewbox>-->
 
             <t:CustomTreeView   
                 Grid.Row="1"
                 ItemsSource="{Binding Selection, Mode=OneWay}" ItemContainerStyleSelector="{StaticResource ComboContainerStyleSelector}" >
                 <t:CustomTreeView.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <panels:AnimatedWrapPanel/>
+                        <StackPanel></StackPanel>
+                        <!--<panels:AnimatedWrapPanel/>-->
                     </ItemsPanelTemplate>
                 </t:CustomTreeView.ItemsPanel>
             </t:CustomTreeView>

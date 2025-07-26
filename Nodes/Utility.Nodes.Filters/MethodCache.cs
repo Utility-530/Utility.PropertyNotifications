@@ -13,6 +13,7 @@ using Utility.Helpers;
 using System.Reflection;
 using Utility.Interfaces.Generic;
 using Utility.Models;
+using Utility.Extensions;
 
 namespace Utility.Nodes.Filters
 {
@@ -43,7 +44,7 @@ namespace Utility.Nodes.Filters
         public object Invoke(string key, Guid? guid, object[]? objects = null)
         {
             if (_methods.ContainsKey(key))
-                return this[(key, guid)].Method.Execute([.. (guid.HasValue ? [guid.Value] : Array.Empty<object>()), .. objects ?? Array.Empty<object>()]);
+                return this[(key, guid)].Method.ExecuteWithObjects([.. guid.HasValue ? [guid.Value] : Array.Empty<object>(), .. objects ?? []]);
             throw new Exception("eeee 0ff0s");
         }
     }

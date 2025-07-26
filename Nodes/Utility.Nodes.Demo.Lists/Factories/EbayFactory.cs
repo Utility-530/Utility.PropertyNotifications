@@ -1,10 +1,8 @@
-﻿using AvalonEditB.Search;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Splat;
 using System.Collections;
 using System.IO;
 using System.Reactive.Linq;
-using System.Text.Json.Nodes;
 using Utility.Enums;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
@@ -15,13 +13,12 @@ using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Filters;
 using Utility.PropertyNotifications;
 using Utility.Services;
+using Utility.Extensions;
 
 namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
     {
-
-        private readonly INodeSource nodeSource = Current.GetService<INodeSource>();
 
         public IObservable<INode> BuildEbayRoot(Guid guid, Type type)
         {
@@ -63,8 +60,9 @@ namespace Utility.Nodes.Demo.Lists.Factories
                         listModel.Observe<SelectionParam>();
 
                     }) { Name = list1 },
-                    new EditModel(attach: editModel=>{
-                            editModel.WithChangesTo(a => (a as IValue).Value)
+                    new EditModel(attach: editModel =>
+                    {
+                        editModel.WithChangesTo(a => (a as IValue).Value)
                         .Subscribe(model =>
                         {
                             if (model is EbayModel eModel)

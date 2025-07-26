@@ -9,12 +9,14 @@ using Utility.Interfaces.Exs;
 using Utility.Keys;
 using Utility.Models;
 using Utility.Models.Trees;
+using Utility.ServiceLocation;
 
 namespace Utility.Nodes.Filters
 {
 
     public class EnumerableMethodFactory : Utility.Interfaces.Generic.IEnumerableFactory<Method>
     {
+        protected INodeSource nodeSource = Globals.Resolver.Resolve<INodeSource>();
         public IEnumerable<Method> Create(object config) => this.GetType().InstantMethods().Where(a => a.Name != nameof(Create)).Select(a => new Method(a, this));
 
     }
@@ -22,7 +24,6 @@ namespace Utility.Nodes.Filters
 
     public class NodeMethodFactory : EnumerableMethodFactory
     {
-        INodeSource nodeSource = Locator.Current.GetService<INodeSource>();
 
         //public const string tableName = "TableName";
         public const string content_root = nameof(content_root);
