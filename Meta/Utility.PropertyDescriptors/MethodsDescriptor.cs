@@ -1,6 +1,4 @@
-﻿using Splat;
-
-namespace Utility.PropertyDescriptors;
+﻿namespace Utility.PropertyDescriptors;
 
 internal record MethodsDescriptor(Descriptor Descriptor, object Instance) : ReferenceDescriptor(Descriptor, Instance), IMethodsDescriptor
 {
