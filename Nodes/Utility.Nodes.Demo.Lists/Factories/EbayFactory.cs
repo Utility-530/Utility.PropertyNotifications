@@ -43,10 +43,8 @@ namespace Utility.Nodes.Demo.Lists.Factories
 
 
                     }){ Name= controllerPath },
-                    new ListModel(type, attach: model=>{
+                    new ListModel(type, attach: listModel=>{
 
-                        if(model is not ListModel listModel)
-                            throw new Exception("dsdsdddd333");
                         listModel.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a);
 
                         listModel.WhenReceivedFrom(a => a.Add, includeNulls: false)
@@ -82,9 +80,9 @@ namespace Utility.Nodes.Demo.Lists.Factories
                         editModel.ReactTo<SelectionReturnParam>(setAction: (a) => { (editModel as ISetValue).Value = a; editModel.RaisePropertyChanged(nameof(EditModel.Value)); });
 
                     }) { Name = edit },
-                    new Model<string>(nodeAction: n => n.DataTemplate = "Json", attach: jsonModel=>{
+                    new Model<string, Model>(nodeAction: n => n.DataTemplate = "Json", attach: jsonModel => {
 
-                    jsonModel.ReactTo<FullPathParam>(a =>
+                        jsonModel.ReactTo<FullPathParam>(a =>
                         {
                             var path = Path.Combine(a.ToString(), "data.json");
                             if (!File.Exists(path))

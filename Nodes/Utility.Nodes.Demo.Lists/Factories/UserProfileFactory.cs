@@ -1,18 +1,15 @@
-﻿using Newtonsoft.Json;
-using Splat;
-using System.Collections;
-using System.IO;
+﻿using System.Collections;
 using System.Reactive.Linq;
 using Utility.Enums;
 using Utility.Interfaces.Exs;
 using Utility.Models;
 using Utility.Models.Trees;
-using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Filters;
 using Utility.PropertyNotifications;
 using Utility.Services;
 using Utility.Extensions;
+
 namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
