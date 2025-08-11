@@ -53,8 +53,8 @@ namespace Utility.Nodify.Demo
 
         private void initialise()
         {
-            Utility.Globals.Register.Register< IServiceResolver>(() => new ServiceResolver());
-            Locator.CurrentMutable.RegisterLazySingleton(() => new CollectionViewService());
+            Utility.Globals.Register.Register<IServiceResolver>(() => new ServiceResolver());
+            Locator.CurrentMutable.RegisterLazySingleton(() => new CollectionViewService() { Name = nameof(CollectionViewService) });
 
             Utility.Globals.Register.Register<IPlaybackEngine>(new PlaybackEngine());
 

@@ -5,8 +5,8 @@
              xmlns:nodify="https://miroiu.github.io/nodify"    
              xmlns:vm="clr-namespace:Utility.Nodify.Models;assembly=Utility.Nodify.Models"
              xmlns:vm1="clr-namespace:Utility.Nodify.ViewModels;assembly=Utility.Nodify.ViewModels" 
-             xmlns:models="clr-namespace:Utility.Models;assembly=Utility.Models.Diagrams"
-             xmlns:templates="http://schemas.utility.com/templates">
+             xmlns:templates="http://schemas.utility.com/templates" 
+             xmlns:models="clr-namespace:Utility.Models.Diagrams;assembly=Utility.Models.Diagrams">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

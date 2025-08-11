@@ -68,7 +68,7 @@ namespace Utility.Nodify.Transitions.Demo
 
         private void initialise(IMutableDependencyResolver resolver)
         {
-            resolver.RegisterLazySingleton(() => new CollectionViewService());
+            resolver.RegisterLazySingleton(() => new CollectionViewService() { Name = nameof(CollectionViewService) });
         }
 
         private static IContainer initialiseContainer()
