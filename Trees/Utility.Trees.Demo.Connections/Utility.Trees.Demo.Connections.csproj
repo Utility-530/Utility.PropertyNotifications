@@ -13,6 +13,7 @@
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Base\Utility.WPF.Controls.Base.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Trees\Utility.WPF.Controls.Trees.csproj" />
     <ProjectReference Include="..\Utility.Pipes\Utility.Pipes.csproj" />
+    <ProjectReference Include="..\Utility.Trees.Extensions\Utility.Trees.Extensions.csproj" />
     <ProjectReference Include="..\Utility.Trees\Utility.Trees.csproj" />
     <ProjectReference Include="..\Utility.WPF.Pipes\Utility.WPF.Pipes.csproj" />
   </ItemGroup>
