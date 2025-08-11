@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.Reactive" Version="6.0.0" />
     <PackageReference Include="XPlat.UI" Version="1.8.1" />
   </ItemGroup>
 

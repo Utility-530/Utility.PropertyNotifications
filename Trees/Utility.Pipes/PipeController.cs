@@ -5,12 +5,12 @@ using System.Threading;
 using System.Timers;
 using System.Windows.Input;
 using Utility.Commands;
-using Utility.ViewModels.Base;
+using Utility.PropertyNotifications;
 using XPlat.UI;
 
 namespace Utility.Pipes
 {
-    public class PipeController : BaseViewModel, IPipeInitialiser
+    public class PipeController : NotifyPropertyClass, IPipeInitialiser
     {
         private DispatcherTimer dispatcherTimer;
         private System.Threading.Timer timer;
@@ -59,7 +59,7 @@ namespace Utility.Pipes
             set
             {
                 isPlaying = value;
-                OnPropertyChanged(nameof(IsPlaying));
+                RaisePropertyChanged(nameof(IsPlaying));
             }
         }
 
