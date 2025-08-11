@@ -253,7 +253,7 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class AssemblyTypePropertyModel : Model<PropertyInfo>, IBreadCrumb
+    public class AssemblyTypePropertyModel : Model<PropertyInfo, AssemblyTypePropertyModel>, IBreadCrumb
     {
         public AssemblyTypePropertyModel()
         {
@@ -281,7 +281,7 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class PropertyModel : Model<PropertyInfo>, IBreadCrumb
+    public class PropertyModel : Model<PropertyInfo, PropertyModel>, IBreadCrumb
     {
         public PropertyModel()
         {
@@ -301,7 +301,7 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class ValueModel : Model<object>, IAutoList
+    public class ValueModel : Model<object, ValueModel>, IAutoList
     {
         private bool isListening;
 
@@ -314,7 +314,7 @@ namespace Utility.Models.Trees
     }
 
 
-    public class MethodModel : Model<MethodInfo>, IBreadCrumb
+    public class MethodModel : Model<MethodInfo, MethodModel>, IBreadCrumb
     {
         public MethodModel()
         {
@@ -427,13 +427,13 @@ namespace Utility.Models.Trees
     }
 
 
-    public class IndexModel : Model<int>
+    public class IndexModel : Model<int, IndexModel>
     {
     }
 
 
 
-    public class ReadOnlyStringModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null) : Model<string>(func, nodeAction, addition, attach, false, false)
+    public class ReadOnlyStringModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null) : Model<string, ReadOnlyStringModel>(func, nodeAction, addition, attach, false, false)
     {
     }
 
@@ -447,7 +447,7 @@ namespace Utility.Models.Trees
 
     }
 
-    public class AndOrModel : CollectionModel<AndOr, IPredicate>, IAndOr, System.IObservable<Unit>, IPredicate
+    public class AndOrModel : CollectionModel<AndOr, IPredicate, AndOrModel>, IAndOr, System.IObservable<Unit>, IPredicate
     {
         protected AndOr value = 0;
         List<System.IObserver<Unit>> observers = [];
@@ -643,7 +643,7 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class ComparisonModel : Model<Enum>
+    public class ComparisonModel : Model<Enum, ComparisonModel>
     {
         private Enum _value;
         private ComparisonType type;
@@ -830,7 +830,7 @@ namespace Utility.Models.Trees
     }
 
 
-    public class TransformersModel : CollectionModel<TransformerModel>
+    public class TransformersModel : CollectionModel<TransformerModel, TransformersModel>
     {
         public TransformersModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
         base(null, func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
@@ -854,10 +854,10 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class FiltersModel : CollectionModel<FilterModel>
+    public class FiltersModel : CollectionModel<FilterModel, FiltersModel>
     {
-        public FiltersModel(Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
-   base(null, null, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
+        public FiltersModel(Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<FiltersModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
+        base(null, null, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
         {
         }
         public override void SetNode(INode node)
@@ -939,7 +939,7 @@ namespace Utility.Models.Trees
     public readonly record struct DataFile(string Alias, string FilePath);
 
 
-    public class DataFileModel : Model<DataFile>
+    public class DataFileModel : Model<DataFile, DataFileModel>
     {
 
         public DataFileModel()
@@ -973,7 +973,7 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class DataFilesModel : CollectionModel<DataFileModel>, ISelectable
+    public class DataFilesModel : CollectionModel<DataFileModel, DataFilesModel>, ISelectable
     {
         public override void SetNode(INode node)
         {
@@ -1029,7 +1029,7 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class ThroughPutModel : Model<string>
+    public class ThroughPutModel : Model<string, ThroughPutModel>
     {
         const string element = nameof(element);
         const string filter = nameof(filter);
@@ -1106,7 +1106,7 @@ namespace Utility.Models.Trees
 
     }
 
-    public class InputsModel : CollectionModel<ThroughPutModel>
+    public class InputsModel : CollectionModel<ThroughPutModel, InputsModel>
     {
         private ParameterInfo[] parameters;
 
@@ -1525,7 +1525,7 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class ModelTypeModel : Model<ModelType>, ISelectable
+    public class ModelTypeModel : Model<ModelType, ModelTypeModel>, ISelectable
     {
         public override void SetNode(INode node)
         {

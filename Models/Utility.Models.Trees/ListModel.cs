@@ -10,7 +10,7 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Models.Trees
 {
-    public class ListModel(Type type, Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : Model<IId<Guid>>(func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
+    public class ListModel(Type type, Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<ListModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : Model<IId<Guid>, ListModel>(func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
     {
         private IEnumerable collection;
         private IId<Guid> add;

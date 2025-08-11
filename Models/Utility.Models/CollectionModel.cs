@@ -6,7 +6,6 @@ using Utility.PropertyNotifications;
 using Utility.Reactives;
 using System.Reactive.Linq;
 using Utility.Exceptions;
-using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
 using Newtonsoft.Json;
 
@@ -21,21 +20,21 @@ namespace Utility.Models
     {
     }
 
-    public abstract class BaseCollectionModel<TValue> : Model<TValue>, IChildCollection 
+    public abstract class BaseCollectionModel<TValue, TR> : Model<TValue, TR>, IChildCollection 
     {
-        public BaseCollectionModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
+        public BaseCollectionModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<TR>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
             base(func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
         {
         }
         public virtual IEnumerable Collection { get; }
     }
 
-    public class CollectionModel<TValue, T> : BaseCollectionModel<TValue> 
+    public class CollectionModel<TValue, T, TR> : BaseCollectionModel<TValue, TR> 
     {
         private int limit = int.MaxValue;
         private Func<T>? create;
 
-        public CollectionModel(Func<T>? create = null, Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
+        public CollectionModel(Func<T>? create = null, Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<TR>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
         base(func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
         {
             this.create = create;
@@ -103,19 +102,19 @@ namespace Utility.Models
         public int Limit { get => limit; set => RaisePropertyChanged(ref limit, value); }
     }
 
-    public class CollectionModel(Func<Model>? create = null) : CollectionModel<Model>(create)
+    public class CollectionModel(Func<Model>? create = null) : CollectionModel<Model, CollectionModel>(create)
     {
 
     }
-    public class CollectionModel<TModel> : CollectionModel<object, TModel> where TModel : class
+    public class CollectionModel<TModel>(Func<Model>? create = null) : CollectionModel<Model, CollectionModel<TModel>>(create)
     {
-        public CollectionModel(Func<TModel>? create = null, Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<IValueModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
-    base(create, func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
-        {
-        }
+
+    }
+    public class CollectionModel<TModel, TAttach>(Func<TModel>? create = null, Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<TAttach>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : CollectionModel<object, TModel, TAttach>(create, func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived) where TModel : class
+    {
     }
 
-    public class CollectionRootModel : CollectionModel
+    public class CollectionRootModel : CollectionModel<CollectionRootModel>
     {
 
     }
