@@ -5,7 +5,6 @@ using System.Collections.Specialized;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
-using Utility.Interfaces.Trees;
 using Utility.PropertyNotifications;
 using Utility.Trees.Abstractions;
 using IIndex = Utility.Interfaces.Trees.IIndex;

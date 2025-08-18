@@ -3,6 +3,7 @@ using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
+using Utility.Interfaces.Generic;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
 
@@ -20,22 +21,22 @@ namespace Utility.Trees.Extensions
             }
         }
 
-
-        public static IEnumerable<ITree<T>> ToTree<T, K>(this IEnumerable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, K? root_id = default)
+        public static IEnumerable<ITree<T>> ToTree<T, K>(this IEnumerable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, T root)
         {
-            return ToTree(collection, id_selector, parent_id_selector, a => (ITree<T>)new Tree<T>(a), root_id);
+            return ToTree<T, K, ITree<T>>(collection, id_selector, parent_id_selector, (a, r) => (ITree<T>)new Tree<T>(a) { Parent = r}, root, null);
         }
 
-        public static IEnumerable<TTree> ToTree<T, K, TTree>(this IEnumerable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, Func<T, TTree> conversion, K? root_id = default) where TTree : Utility.Interfaces.Generic.IAdd<TTree>
+        public static IEnumerable<TTree> ToTree<T, K, TTree>(this IEnumerable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, Func<T, TTree?, TTree> conversion, T root, TTree? rootTree = default)
         {
-
-            foreach (var item in collection.Where(c => EqualityComparer<K>.Default.Equals(parent_id_selector(c), root_id)))
+            foreach (var item in collection.Where(c => EqualityComparer<K>.Default.Equals(parent_id_selector(c), id_selector(root))))
             {
-                var tree = conversion(item);
+                var tree = conversion(item, rootTree);
                 yield return tree;
-                ToTree(collection, id_selector, parent_id_selector, conversion, id_selector(item)).ForEach(tree.Add);
+                foreach (var x in ToTree(collection, id_selector, parent_id_selector, conversion, item, tree))
+                    yield return x;
             }
         }
+
         public static void Visit<T>(this T tree, Func<T, IEnumerable<T>> children, Action<T> action)
         {
             action(tree);
@@ -43,11 +44,9 @@ namespace Utility.Trees.Extensions
                 Visit(item, children, action);
         }
 
-        public static bool IsRoot(this IReadOnlyTree tree) => tree.Parent == null;
+        public static bool IsRoot(this IReadOnlyTree tree) => (tree as IGetParent<IReadOnlyTree>).Parent == null;
 
         public static bool IsLeaf<T>(this ITree<T> tree) => tree.Count() == 0;
-
-        //public static int Level<T>(this ITree<T> tree) => tree.IsRoot() ? 0 : tree.Parent.Level() + 1;
 
         public static void Add<T>(this ITree<T> tree, T data)
         {
