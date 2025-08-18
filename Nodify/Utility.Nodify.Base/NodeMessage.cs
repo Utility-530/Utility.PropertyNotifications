@@ -7,7 +7,7 @@ using Utility.Nodify.Core;
 
 namespace Utility.Nodify.Base
 {
-    public record NodeMessage(Key Key, IOValue[] Inputs, INodeViewModel Node, Exception Exception = default) : Message(Key, default)
+    public record NodeMessage(string Key, IOValue[] Inputs, INodeViewModel Node, Exception Exception = default) : Message(Key, default)
     {
 
     }

@@ -17,7 +17,7 @@ namespace Utility.Nodify.Models
         public Guid Id { get; } = Guid.NewGuid();
 
 
-        public Key Key => new(Id, string.Empty);
+        public string Key {get=> new { Id, string.Empty }.ToString(); set=> throw new NotSupportedException("Key is read-only and generated from Id."); }
 
 
         public string Title
@@ -32,6 +32,7 @@ namespace Utility.Nodify.Models
             set => RaisePropertyChanged(ref _input, value)
                 .Then(() =>
                 {
+        
                 });
         }
         public NodeState State { get; set; } = NodeState.None;

@@ -5,6 +5,7 @@ using Utility.Nodify.Base;
 using System.Collections.Generic;
 using Utility.Nodify.Core;
 using Utility.Enums;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Nodify.Models
 {
@@ -22,10 +23,7 @@ namespace Utility.Nodify.Models
         }
 
         public Guid Id { get; } = Guid.NewGuid();
-        public Key Key => new(Id, Title);
-
-        public virtual ICore Core { get; set; }
-
+  
         private void NewMethod()
         {
             if (input is RangeObservableCollection<IConnectorViewModel> range)

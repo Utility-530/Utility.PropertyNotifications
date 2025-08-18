@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Linq;
 using System.Windows;
 using Utility.Collections;
-using Utility.Enums;
 using Utility.Helpers.Generic;
 using Utility.Nodify.Core;
 using Utility.Nodify.Enums;
@@ -59,14 +58,14 @@ namespace Utility.Nodify.Models
         public PointF Anchor
         {
             get => _anchor;
-            set => RaisePropertyChanged(ref _anchor, value);
+            set => RaisePropertyChanged(ref _anchor, new PointF(value.X , value.Y));
         }
 
 
         public INodeViewModel Node
         {
             get => _node;
-            set => RaisePropertyChanged(ref _node, value).Then(a=>OnNodeChanged());
+            set => RaisePropertyChanged(ref _node, value).Then(a => OnNodeChanged());
         }
         public ConnectorShape Shape { get; set; }
 
@@ -75,6 +74,8 @@ namespace Utility.Nodify.Models
         public int MaxConnections { get; set; } = 2;
 
         public IReadOnlyCollection<IConnectionViewModel> Connections => connections;
+
+        public object AnchorElement { get; set; }
 
         public ConnectorViewModel()
         {
@@ -102,6 +103,7 @@ namespace Utility.Nodify.Models
             {
                 Flow = flow.Input.Contains(this) ? ConnectorFlow.Input : ConnectorFlow.Output;
             }
+
             //else if (Node is KnotNodeViewModel knot)
             //{
             //    Flow = knot.Flow;
@@ -116,6 +118,6 @@ namespace Utility.Nodify.Models
 
         public void Disconnect()
         { }
-            //=> Node.Graph.Schema.DisconnectConnector(this);
+        //=> Node.Graph.Schema.DisconnectConnector(this);
     }
 }

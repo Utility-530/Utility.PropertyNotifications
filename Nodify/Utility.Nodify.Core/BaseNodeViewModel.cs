@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows;
+using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
 
 namespace Utility.Nodify.Base
 {
-    public class BaseNodeViewModel : NotifyPropertyClass
+    public class BaseNodeViewModel : NotifyPropertyClass, IKey
     {
         public event Action? Closed;
 
@@ -29,6 +30,8 @@ namespace Utility.Nodify.Base
             }
         }
 
+        public string Key { get; set; }
+
         public PointF Location
         {
             get => _location;
@@ -40,13 +43,6 @@ namespace Utility.Nodify.Base
         {
             get => _size;
             set => RaisePropertyChanged(ref _size, value);
-        }
-
-
-        public string? Title
-        {
-            get => _title;
-            set => RaisePropertyChanged(ref _title, value);
         }
 
 

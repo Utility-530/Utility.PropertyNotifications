@@ -86,7 +86,10 @@ namespace Utility.Nodify.Models
                 }
             });
         }
-        
+
+        public virtual string Key { get; set; }
+
+
         public ICollection<INodeViewModel> Nodes => _operations;
 
         public ICollection<INodeViewModel> SelectedNodes => _selectedOperations;

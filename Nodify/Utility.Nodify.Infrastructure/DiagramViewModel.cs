@@ -11,6 +11,7 @@ using MenuItem = Utility.Nodify.Operations.Infrastructure.MenuItem;
 using System.Drawing;
 using Utility.Nodify.Models;
 using Utility.Nodify.Engine;
+using Utility.Enums;
 
 namespace Utility.Nodify.ViewModels
 {
@@ -23,7 +24,16 @@ namespace Utility.Nodify.ViewModels
         public DiagramViewModel(IContainer container) : base()
         {
             this.container = container;
-            container.Resolve<IDiagramFactory>().Build(this);
+        }
+
+        public override string Key
+        {
+            get => base.Key;
+            set
+            {
+                base.Key = value;
+                container.Resolve<IDiagramFactory>().Build(this);
+            }
         }
 
         public MenuViewModel Menu
@@ -38,6 +48,8 @@ namespace Utility.Nodify.ViewModels
                 return menu;
             }
         }
+
+        public Arrangement Arrangement { get; set; }
 
         protected void OperationsMenu_MenuItemSelected(PointF location, MenuItemViewModel menuItem)
         {

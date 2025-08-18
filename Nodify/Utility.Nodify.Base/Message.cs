@@ -1,5 +1,5 @@
 ﻿namespace Utility.Nodify.Core
 {
-    public record Message(Key Key, Exception Exception);
+    public record Message(string Key, Exception Exception);
 
 }
