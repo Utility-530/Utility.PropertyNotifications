@@ -49,6 +49,34 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ListBox>
+
+
+            <ListBox ItemsSource="{Binding Path=Collection, Source={x:Static controls:DemoViewModel.Instance}}" Height="400" Width="500">
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <pnl:UniformRow />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Viewbox>
+                            <Grid Background="PaleVioletRed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <TextBlock
+                            Text="{Binding }"
+                            Foreground="Wheat"                       
+                            VerticalAlignment="Stretch" 
+                            HorizontalAlignment="Stretch"
+                            Background="Blue" />
+                            </Grid>
+
+
+            
+                        </Viewbox>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ListBox>
         </UniformGrid>
     </DockPanel>
 </UserControl>
