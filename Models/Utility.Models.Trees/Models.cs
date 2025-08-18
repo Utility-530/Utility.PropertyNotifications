@@ -134,9 +134,9 @@ namespace Utility.Models.Trees
 
         public override IEnumerable<IModel> CreateChildren()
         {
-            if (func != null)
+            if (childrenLambda != null)
             {
-                foreach (var item in func.Invoke())
+                foreach (var item in childrenLambda.Invoke())
                 {
                     yield return item;
                 }
@@ -232,9 +232,9 @@ namespace Utility.Models.Trees
 
         public override IEnumerable<IModel> CreateChildren()
         {
-            if (func != null)
+            if (childrenLambda != null)
             {
-                foreach (var x in func.Invoke())
+                foreach (var x in childrenLambda.Invoke())
                     yield return x;
                 yield break;
             }
