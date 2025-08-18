@@ -16,14 +16,13 @@ namespace Utility.Nodify.Generator.Services
 
     public class CollectionCreationService
     {
-
-        public static IList Instance(System.Type type)
+        public static IList Instance(Type type)
         {
             var instance = createCollectionInstance(type);
 
             return instance;
 
-            static IList createCollectionInstance(System.Type type)
+            static IList createCollectionInstance(Type type)
             {
                 var constructedListType = typeof(ObservableCollection<>).MakeGenericType(type);
                 var instance = (IList)Activator.CreateInstance(constructedListType);

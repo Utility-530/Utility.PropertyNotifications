@@ -33,8 +33,8 @@ namespace Utility.Nodify.Engine.Infrastructure
             container.RegisterMany<Dictionary<string, FilterInfo>>();
             container.Register<RangeObservableCollection<Diagram>>(serviceKey: OperationKeys.SelectedDiagram);
             container.RegisterDelegate(c => c.Resolve<IEnumerable<Diagram>>(), serviceKey: OperationKeys.Diagrams);
-            container.RegisterMany<Dictionary<Core.Key, NodeViewModel>>(serviceKey: OperationKeys.Nodes);
-            container.RegisterMany<Dictionary<Core.Key, ConnectionViewModel>>(serviceKey: OperationKeys.Connections);
+            container.RegisterMany<Dictionary<string, NodeViewModel>>(serviceKey: OperationKeys.Nodes);
+            container.RegisterMany<Dictionary<string, ConnectionViewModel>>(serviceKey: OperationKeys.Connections);
             container.RegisterDelegate<IDictionary<string, FilterInfo>>(() => new Dictionary<string, FilterInfo>(), serviceKey: OperationKeys.Filters);
             container.Register<RangeObservableCollection<Message>>(serviceKey: OperationKeys.Future);
             container.Register<RangeObservableCollection<Message>>(serviceKey: OperationKeys.Current);

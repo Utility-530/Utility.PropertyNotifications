@@ -20,7 +20,7 @@ using ServiceResolver = Utility.Services.ServiceResolver;
 using Utility.Extensions;
 using Utility.Interfaces.NonGeneric.Dependencies;
 using Utility.Models.Diagrams;
-
+using Nodify;
 
 namespace Utility.Nodify.Transitions.Demo
 {
@@ -51,19 +51,26 @@ namespace Utility.Nodify.Transitions.Demo
             register.Register(() => new MasterPlayViewModel());
             register.Register(() => new MainViewModel());
             register.Register<IPlaybackEngine>(() => new PlaybackEngine(Utility.Enums.Playback.Pause));
-            register.Register<Services.PlaybackService>(() => new Services.PlaybackService());
+            register.Register(() => new Services.PlaybackService());
             register.Register<IFactory<INode>>(() => new NodeFactory());
             register.Register<IServiceResolver>(() => new ServiceResolver());
-            register.Register(() => new DiagramViewModel(initialiseContainer()));
+            register.Register(() => new DiagramViewModel(initialiseContainer()) { Key = "Master" , Arrangement = Utility.Enums.Arrangement.UniformRow});
         }
+
 
         private static void connect(IServiceResolver serviceResolver)
         {
+            var x = new ValueModel<Type>() { Name = "react_to_4", Value = typeof(List<object>) };
+            var y = new ValueModel<string>() { Name = "react_to_3", Value = "something" };
+            var root = new Model(() => [x, y]) { Name = "root" };
+            x.Parent = root;
+            y.Parent = root;
+
             serviceResolver.Connect<PredicateReturnParam, PredicateParam>();
             serviceResolver.Connect<ListInstanceReturnParam, ListInParam>();
             serviceResolver.Connect<ListInstanceReturnParam, ListParam>();
-            serviceResolver.Observe<InstanceTypeParam>(new ValueModel<Type>() { Name = "react_to_4", Value = typeof(List<object>) });
-            serviceResolver.Observe<FilterParam>(new ValueModel<string>() { Name = "react_to_3", Value = "something" });
+            serviceResolver.Observe<InstanceTypeParam>(x);
+            serviceResolver.Observe<FilterParam>(y);
         }
 
         private void initialise(IMutableDependencyResolver resolver)
@@ -75,11 +82,13 @@ namespace Utility.Nodify.Transitions.Demo
         {
             var container = new DryIoc.Container(DiConfiguration.SetRules);
             //container.Register<INodeSource, NodeSource>();
-
+            Locator.CurrentMutable.RegisterConstant<IContainer>(container);
             _ = Bootstrapper.Build(container);
 
             //container.RegisterInstance<Diagram>(diagram);
+
             container.Register<IConverter, Converter>();
+
 
             return container;
         }
@@ -113,7 +122,7 @@ namespace Utility.Nodify.Transitions.Demo
     {
         public INode Create(object config)
         {
-            return new Node() { Data = config };
+            return new Utility.Nodes.Node() { Data = config };
         }
     }
 }

@@ -1,9 +1,4 @@
 ﻿using Splat;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Utility.Entities;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;

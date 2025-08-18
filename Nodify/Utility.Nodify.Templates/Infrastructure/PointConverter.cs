@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Nodify;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -26,6 +28,21 @@ namespace Utility.Nodify.Engine.Infrastructure
             {
                 return new PointF((float)x, (float)y);
             }
+            throw new Exception("£%GG%%ff");
+        }
+    }
+
+    internal class ArrangementConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(value is Enum)
+            return Enum.Parse<Arrangement>(value.ToString());
+            throw new Exception("£%GG%%ff");
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
             throw new Exception("£%GG%%ff");
         }
     }

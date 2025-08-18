@@ -27,8 +27,8 @@
 
             
             <Style x:Key="IconButton"
-           TargetType="{x:Type Button}"
-           BasedOn="{StaticResource {x:Type Button}}">
+                   TargetType="{x:Type Button}"
+                   BasedOn="{StaticResource {x:Type Button}}">
                 <Setter Property="Padding"
                 Value="1 2" />
                 <Setter Property="HorizontalAlignment"

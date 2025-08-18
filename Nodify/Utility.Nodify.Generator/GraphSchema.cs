@@ -18,7 +18,7 @@ namespace Nodify.Playground
             {
                 if (source != con)
                     if (source.Node != con.Node)
-                        if (source.Node.Graph == con.Node.Graph)
+                        //if (source.Node.Graph == con.Node.Graph)
                             if (source.Shape == con.Shape)
                                 if (con.AllowsNewConnections())
                                     if (con.AllowsNewConnections())

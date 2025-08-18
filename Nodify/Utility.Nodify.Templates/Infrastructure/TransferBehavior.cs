@@ -6,7 +6,7 @@ using Utility.Nodify.Models;
 
 namespace Utility.Nodify.Views.Infrastructure
 {
-    internal class TransferBehavior:Behavior<BaseConnection>
+    internal class TransferBehavior : Behavior<BaseConnection>
     {
         protected override void OnAttached()
         {

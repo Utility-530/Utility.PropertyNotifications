@@ -60,18 +60,18 @@ namespace Utility.Nodify.Engine.Infrastructure
         {
             var nodeViewModel = new NodeViewModel
             {
-                Title = node.Name,
+                Key = node.Name,
                 Location = new PointF((float)node.Location.X, (float)node.Location.Y)
             };
             container.RegisterInstanceMany<INodeViewModel>(nodeViewModel);
             if (node.Content.DeserialiseMethod() is MethodInfo methodInfo)
             {
-                nodeViewModel.Core = new MethodOperation(methodInfo);
+                nodeViewModel.Data = new MethodOperation(methodInfo);
             }
             else
             {
                 var proto = JsonConvert.DeserializeObject<ObjectInfo>(node.Content);
-                nodeViewModel.Core = new ObjectOperation(proto);
+                nodeViewModel.Data = new ObjectOperation(proto);
             }
 
             var inputs = node.Inputs.Select(a => new ConnectorViewModel() { Title = a.Key, IsInput = true, Node = nodeViewModel, Type = a.Content.FromString() }).ToArray();
@@ -120,12 +120,12 @@ namespace Utility.Nodify.Engine.Infrastructure
         {
             Node node = new ()
             {
-                Name = nodeViewModel.Title,
+                Name = nodeViewModel.Key,
                 Location = new Utility.Structs.Point(nodeViewModel.Location.X, nodeViewModel.Location.Y),
                 Inputs = new Collection<Connector>(),
                 Outputs = new Collection<Connector>()
             };
-            if (nodeViewModel is NodeViewModel { Core: Interfaces.NonGeneric.ISerialise serialise } operationNode)
+            if (nodeViewModel is NodeViewModel { Data: Interfaces.NonGeneric.ISerialise serialise } operationNode)
             {
                 node.Content = serialise.ToString();
             }
