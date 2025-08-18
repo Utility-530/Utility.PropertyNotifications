@@ -11,10 +11,7 @@ namespace Utility.Structs
     /// <summary>
     /// Holds the width or height of a <see cref="Grid"/>'s column and row definitions.
     /// </summary>
-#if !BUILDTASK
-    public
-#endif
-    struct Dimension : IEquatable<Dimension>
+    public struct Dimension : IEquatable<Dimension>
     {
         private DimensionUnitType _type;
         private double _value;
