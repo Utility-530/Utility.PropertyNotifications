@@ -27,15 +27,15 @@ namespace Utility.Models
         {
         }
 
-        public Model(Func<IEnumerable<IModel>> func, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<Model>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(func, nodeAction, addition, attach: attach, raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
+        public Model(Func<IEnumerable<IModel>> children, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<Model>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(children, nodeAction, addition, attach: attach, raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
         {
         }
     }
 
     public class Model<T> : Model<T, Model>
     {
-        public Model(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<Model>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
-            base(func, nodeAction, addition, attach, raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
+        public Model(Func<IEnumerable<IModel>>? childrenLambda = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<Model>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
+            base(childrenLambda, nodeAction, addition, attach, raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
         {   
         }
 
@@ -45,7 +45,7 @@ namespace Utility.Models
     {
         private INode node;
         int i = 0;
-        protected readonly Func<IEnumerable<IModel>>? func;
+        protected readonly Func<IEnumerable<IModel>>? childrenLambda;
         private readonly Action<INode>? nodeAction;
         private readonly Action<IReadOnlyTree, IReadOnlyTree>? addition;
         private readonly Action<TAttach>? attach;
@@ -53,9 +53,9 @@ namespace Utility.Models
         protected Lazy<IContext> context = new(() => Locator.Current.GetService<IContext>());
         public virtual Version Version { get; set; } = new();
 
-        public Model(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<TAttach>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
+        public Model(Func<IEnumerable<IModel>>? childrenLambda = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<TAttach>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
         {
-            this.func = func;
+            this.childrenLambda = childrenLambda;
             this.nodeAction = nodeAction;
             this.addition = addition;
             this.attach = attach;
@@ -131,6 +131,7 @@ namespace Utility.Models
         public IEnumerable Children => CreateChildren();
 
         string IKey.Key { get => Node.Key; set => Node.Key = value; }
+        public IModel Parent { get; set; }
 
         public virtual void SetNode(INode node)
         {
@@ -184,10 +185,18 @@ namespace Utility.Models
 
         public virtual IEnumerable<IModel> CreateChildren()
         {
-            if (func != null)
-                return func.Invoke();
+            if (childrenLambda != null)
+                foreach(var child in childrenLambda())
+                {
+                    child.Parent = this;
+                    yield return child;
+                }
             else
-                return nodesFromProperties();
+                foreach(var child in nodesFromProperties())
+                {
+                    child.Parent = this;
+                    yield return child;
+                }
 
             IEnumerable<IModel> nodesFromProperties()
             {
@@ -207,6 +216,7 @@ namespace Utility.Models
                     {
                         throw new NotSupportedException();
                     }
+                    instance.Parent = this;
                     (instance as ISetName).Name = x.Attribute.attribute.Name;
 
                     yield return instance;

@@ -13,6 +13,7 @@ namespace Utility.Models
         {
             this.value = value;
         }
+        public IModel Parent { get; set; }
 
         public virtual required string Name
         {
