@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
-using Utility.Interfaces.Generic;
 
 namespace Utility.Interfaces.NonGeneric
 {
-    public interface IModel : IName, IParent<IModel>
+    public interface ILocation
     {
+        PointF Location { get; set; }
     }
 }

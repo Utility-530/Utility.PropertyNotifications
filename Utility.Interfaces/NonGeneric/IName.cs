@@ -1,6 +1,6 @@
 ﻿namespace Utility.Interfaces.NonGeneric
 {
-    public interface IName :IGetName, ISetName
+    public interface IName : IGetName, ISetName
     {
     }
 

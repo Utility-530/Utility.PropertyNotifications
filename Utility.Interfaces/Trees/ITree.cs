@@ -12,11 +12,9 @@ namespace Utility.Trees.Abstractions
     /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ITree : IReadOnlyTree, ISetIsReadOnly, IEquatable<ITree>, IEnumerable<ITree>, IRemove, IRemoveAt, IAdd, INotifyCollectionChanged, INotifyPropertyChanged, ICollection<ITree> //, IRemove<Guid>
+    public interface ITree : ITreeIndex, IReadOnlyTree, ISetIsReadOnly, IEquatable<ITree>, IRemove, IRemoveAt, IAdd, INotifyCollectionChanged, INotifyPropertyChanged, ICollection<ITree> //, IRemove<Guid>
     {
         bool HasItems { get; }
-
-        IIndex Index { get; }
 
         ITree? this[int index] { get; set; }
 
@@ -26,6 +24,4 @@ namespace Utility.Trees.Abstractions
 
         Task<ITree> ToTree(object d);
     }
-
-
 }
