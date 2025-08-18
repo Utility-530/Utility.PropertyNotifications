@@ -10,6 +10,9 @@
         Custom, 
         UniformStack, 
         Dock,
-        TreeMap
+        TreeMap,
+        Tree,
+        UniformRow,
+        Standard
     }
 }
