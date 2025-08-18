@@ -6,7 +6,7 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Reactives
 {
-    public class Observer<T> : IObserver<T>
+    public class Observer<T> : IObserver<T>, IReference
     {
         private readonly Action<T> onNext;
         private readonly Action<Exception> onError;
@@ -23,7 +23,11 @@ namespace Utility.Reactives
         {
         }
 
+        public object Reference { get; set; }
+
         public List<object> Observations { get; } = new();
+
+        object ISetReference.Reference { set => throw new NotImplementedException(); }
 
         public virtual void OnNext(T value)
         {
