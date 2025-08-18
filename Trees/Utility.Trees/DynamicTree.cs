@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 
@@ -33,7 +34,7 @@ namespace Utility.Trees
 
     public class DynamicTree : IDynamicTree, System.IObservable<ITree>, System.IObserver<ITree>, INotifyPropertyChanged
     {
-        private IReadOnlyList<ITree> children => Current.Parent?.Items.Cast<ITree>().ToList();
+        private IReadOnlyList<ITree> children => (Current as IGetParent<IReadOnlyTree>).Parent?.Items.Cast<ITree>().ToList();
         private ITree tree;
         private List<System.IObserver<ITree>> observers = new();
         private ITree current;
@@ -52,14 +53,14 @@ namespace Utility.Trees
             items = new(Array.Empty<ITree>());
         }
 
-        public bool CanMoveUp => current?.Parent != null;
+        public bool CanMoveUp => (current as IGetParent<IReadOnlyTree>)?.Parent != null;
         public bool CanMoveDown => current?.HasItems == true;
         public bool CanMoveForward => Index < children?.Count - 1;
         public bool CanMoveBack => Index > 0;
         public bool CanAdd => current != null;
-        public bool CanRemove => current?.Parent != null;
+        public bool CanRemove => (current as IGetParent<IReadOnlyTree>)?.Parent != null;
 
-        public ITree Up => Current.Parent as ITree;
+        public ITree Up => (Current as IGetParent<IReadOnlyTree>).Parent as ITree;
 
         public ITree Down => Current[0];
 
@@ -225,11 +226,11 @@ namespace Utility.Trees
             }
         }
 
-        public int Index => Current.Parent?.IndexOf(Current) ?? 0;
+        public int Index => (Current as IGetParent<IReadOnlyTree>).Parent?.IndexOf(Current) ?? 0;
 
         public void Dispose()
         {
-            (Current.Parent?.Items as IList)?.Clear();
+            ((Current as IGetParent<IReadOnlyTree>).Parent?.Items as IList)?.Clear();
         }
 
         public void Broadcast()

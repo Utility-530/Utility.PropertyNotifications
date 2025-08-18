@@ -1,5 +1,6 @@
 ﻿using MoreLinq;
 using System.Reactive.Linq;
+using Utility.Interfaces.Generic;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Trees.Extensions
@@ -16,7 +17,7 @@ namespace Utility.Trees.Extensions
 
         public static IEnumerable<IReadOnlyTree> Ancestors(this IReadOnlyTree tree, Predicate<(IReadOnlyTree tree, int level)>? action = null)
         {
-            return SelfAndAncestors(tree.Parent, action);
+            return SelfAndAncestors((tree as IGetParent<IReadOnlyTree>).Parent, action);
         }
 
 
@@ -28,7 +29,7 @@ namespace Utility.Trees.Extensions
                 yield return tree;
             }
 
-            if (tree?.Parent is IReadOnlyTree parent)
+            if (tree is IGetParent<IReadOnlyTree> { Parent: IReadOnlyTree parent })
             {
                 foreach (var x in SelfAndAncestors(parent, action, level++))
                     yield return x;

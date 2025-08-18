@@ -5,6 +5,7 @@ using Utility.Trees.Abstractions;
 using Utility.Reactives;
 using Type = Utility.Changes.Type;
 using Utility.PropertyNotifications;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Trees.Extensions.Async
 {
@@ -60,7 +61,7 @@ namespace Utility.Trees.Extensions.Async
                     observer.OnNext(tree);
                 }
 
-                if (tree?.Parent is ITree parent)
+                if ((tree as IGetParent<ITree>)?.Parent is ITree parent)
                 {
                     return SelfAndAncestors(parent, action, level++)
                         .Subscribe(a => observer.OnNext(a))
@@ -79,9 +80,9 @@ namespace Utility.Trees.Extensions.Async
                             .DisposeWith(disposables);
                         })
                         .DisposeWith(disposables);
-                    else if (tree.Parent != null)
+                    else if ((tree as IGetParent<IReadOnlyTree>).Parent != null)
                     {
-                        return SelfAndAncestors(tree.Parent, action, level++)
+                        return SelfAndAncestors((tree as IGetParent<IReadOnlyTree>).Parent, action, level++)
                       .Subscribe(a =>
                       observer.OnNext(a));
                     }
@@ -95,7 +96,7 @@ namespace Utility.Trees.Extensions.Async
 
         public static IObservable<IReadOnlyTree> Ancestors(this IReadOnlyTree tree, Predicate<(IReadOnlyTree tree, int level)>? action = null)
         {
-            return SelfAndAncestors(tree.Parent, action);
+            return SelfAndAncestors((tree as IGetParent<IReadOnlyTree>).Parent, action);
         }
 
         public static IObservable<TreeChange<IReadOnlyTree>> Descendants(this IReadOnlyTree tree, Predicate<(IReadOnlyTree tree, int level)>? action = null)

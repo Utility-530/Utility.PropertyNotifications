@@ -84,10 +84,10 @@ namespace Utility.Nodes
             {
                 IReadOnlyTree parent = this;
                 int depth = 0;
-                while (parent.Parent != null)
+                while ((parent as IGetParent<IReadOnlyTree>).Parent != null)
                 {
                     depth++;
-                    parent = parent.Parent;
+                    parent = (parent as IGetParent<IReadOnlyTree>).Parent;
                 }
                 return depth;
             }

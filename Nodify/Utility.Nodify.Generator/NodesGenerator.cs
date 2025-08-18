@@ -275,7 +275,7 @@ namespace Nodify.Playground
 
         private static string? parentIdSelector(T n)
         {
-            if (n.Data is IGetReference { Reference: IParent<IModel> { Parent: { } parent } })
+            if (n.Data is IGetReference { Reference: IGetParent<IModel> { Parent: { } parent } })
                 return parent is IGetName { Name: { } name } ? name : throw new Exception("ds32222222"); ;
             // root
             return null;
@@ -288,11 +288,11 @@ namespace Nodify.Playground
             {
                 if (node is IGetReference { Reference: { } reference } index)
                 {
-                    if (reference is IParent<IModel> { Parent: null } _root)
+                    if (reference is IGetParent<IModel> { Parent: null } _root)
                     {
                         return (T)_root;
                     }
-                    else if (reference is IParent<IModel> { Parent: { } } parent)
+                    else if (reference is IGetParent<IModel> { Parent: { } } parent)
                     {
                         if (this.root([parent]) is T t)
                             return t;
@@ -301,7 +301,7 @@ namespace Nodify.Playground
                 }
                 else if (node is IModel model)
                 {
-                    if (model.Parent == null)
+                    if ((model as IGetParent<IModel>).Parent == null)
                     {
                         var _node = new T { Data = model, Key = "0" };
                         var output = new ConnectorViewModel { Node = _node, Shape = ConnectorShape.Square, Flow = ConnectorFlow.Output };
@@ -310,7 +310,7 @@ namespace Nodify.Playground
                         output.Node = _node;
                         return _node;
                     }
-                    else if (this.root([model.Parent]) is T t)
+                    else if (this.root([(model as IGetParent<IModel>).Parent]) is T t)
                         return t;
 
 

@@ -9,6 +9,7 @@
     using Utility.Reactives;
     using Type = Changes.Type;
     using System.Collections.Specialized;
+    using Utility.Interfaces.Generic;
 
     public static partial class Basic
     {
@@ -25,10 +26,10 @@
         public static int Level(this IReadOnlyTree IReadOnlyTree)
         {
             int i = 0;
-            while (IReadOnlyTree.Parent != null)
+            while ((IReadOnlyTree as IGetParent<IReadOnlyTree>).Parent != null)
             {
                 i++;
-                IReadOnlyTree = IReadOnlyTree.Parent;
+                IReadOnlyTree = (IReadOnlyTree as IGetParent<IReadOnlyTree>).Parent;
             }
             return i;
         }
@@ -36,10 +37,10 @@
         public static int Level(this IReadOnlyTree IReadOnlyTree, IReadOnlyTree parent)
         {
             int i = 0;
-            while (IReadOnlyTree.Parent != parent)
+            while ((IReadOnlyTree as IGetParent<IReadOnlyTree>).Parent != parent)
             {
                 i++;
-                IReadOnlyTree = IReadOnlyTree.Parent;
+                IReadOnlyTree = (IReadOnlyTree as IGetParent<IReadOnlyTree>).Parent;
                 if (IReadOnlyTree == null)
                     throw new Exception("FD 444");
             }
@@ -76,7 +77,7 @@
         public static void VisitAncestors(this IReadOnlyTree tree, Action<IReadOnlyTree> action)
         {
             action(tree);
-            if (tree.Parent is ITree parent)
+            if ((tree as IGetParent<IReadOnlyTree>).Parent is ITree parent)
                 parent.VisitAncestors(action);
         }
 
@@ -103,7 +104,7 @@
                     {
                         foreach (IReadOnlyTree item in args.NewItems.Cast<IReadOnlyTree>())
                         {
-                            item.Parent = tree;
+                            (item as ISetParent<IReadOnlyTree>).Parent = tree;
                             observer.OnNext(new Change<IReadOnlyTree>(item, Type.Add));
 
                             if (item is ITree _tree)
@@ -133,7 +134,7 @@
             tree.AndAdditions<ITree>().Subscribe(async item =>
             {
                 var childClone = (ITree)(await item.ToClone());
-                childClone.Parent = clone;
+                (childClone as ISetParent<IReadOnlyTree>).Parent = clone;
                 clone.Add(childClone);
             });
             return clone;
@@ -147,7 +148,7 @@
             tree.AndAdditions<ITree>().Subscribe(async item =>
             {
                 var childClone = (ITree)(item.Simplify());
-                childClone.Parent = clone;
+                (childClone as ISetParent<IReadOnlyTree>).Parent = clone;
                 clone.Add(childClone);
             });
             return clone;

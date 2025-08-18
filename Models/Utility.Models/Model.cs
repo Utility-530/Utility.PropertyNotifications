@@ -188,13 +188,13 @@ namespace Utility.Models
             if (childrenLambda != null)
                 foreach(var child in childrenLambda())
                 {
-                    child.Parent = this;
+                    (child as ISetParent<IModel>).Parent = this;
                     yield return child;
                 }
             else
                 foreach(var child in nodesFromProperties())
                 {
-                    child.Parent = this;
+                    (child as ISetParent<IModel>).Parent = this;
                     yield return child;
                 }
 
@@ -216,7 +216,7 @@ namespace Utility.Models
                     {
                         throw new NotSupportedException();
                     }
-                    instance.Parent = this;
+                    (instance as ISetParent<IModel>).Parent = this;
                     (instance as ISetName).Name = x.Attribute.attribute.Name;
 
                     yield return instance;
@@ -236,10 +236,10 @@ namespace Utility.Models
             if (node is INode _node)
             {
 
-                _node.WithChangesTo(a => a.Parent)
+                _node.WithChangesTo(a => (a as IGetParent<IReadOnlyTree>).Parent)
                     .Subscribe(a =>
                     {
-                        (a.Data as Model)?.Update(node.Parent, current);
+                        (a.Data as Model)?.Update((node as IGetParent<IReadOnlyTree>).Parent, current);
                     });
             }
             //(node.Parent?.Data as Model)?.Update(node.Parent as IReadOnlyTree, current);
@@ -247,9 +247,9 @@ namespace Utility.Models
 
         public virtual void Addition(IReadOnlyTree value, IReadOnlyTree a)
         {
-            if (a.Parent == null)
+            if ((a as IGetParent<IReadOnlyTree>).Parent == null)
             {
-                a.Parent = value;
+                (a as ISetParent<IReadOnlyTree>).Parent = value;
                 //if (a.Key != default)
                 //    source.Add(a as INode);
                 //else
