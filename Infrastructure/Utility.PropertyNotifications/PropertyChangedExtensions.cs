@@ -3,9 +3,10 @@ using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Utility.Interfaces.NonGeneric;
 using Utility.Helpers.Reflection;
 using Utility.Helpers;
+using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyNotifications
 {
@@ -43,7 +44,7 @@ namespace Utility.PropertyNotifications
         }
 
 
-        private class PropertyObservable<TModel, T> : IObservable<T> where TModel : INotifyPropertyChanged
+        private class PropertyObservable<TModel, T> : IObservable<T>, IGetReference where TModel : INotifyPropertyChanged
         {
             private readonly TModel _target;
             private readonly PropertyInfo? _info;
@@ -57,6 +58,8 @@ namespace Utility.PropertyNotifications
                 _includeNulls = includeNulls;
                 this.includeInitialValue = includeInitialValue;
             }
+
+            public object Reference => _target;
 
             private class Subscription : IDisposable
             {
@@ -126,7 +129,7 @@ namespace Utility.PropertyNotifications
             }
         }
 
-        private class PropertyObservable : IObservable<PropertyChange?>
+        private class PropertyObservable : IObservable<PropertyChange?>, IGetReference
         {
             private readonly INotifyPropertyChanged _target;
             private readonly PropertyInfo? _info;
@@ -136,6 +139,8 @@ namespace Utility.PropertyNotifications
                 _target = target;
                 _info = info;
             }
+
+            public object Reference => _target;
 
             private class Subscription : IDisposable
             {

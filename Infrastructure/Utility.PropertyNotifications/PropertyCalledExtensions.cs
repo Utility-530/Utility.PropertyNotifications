@@ -1,7 +1,5 @@
-﻿using System;
-using System.Linq.Expressions;
-using System.Reflection;
-using Utility.Interfaces;
+﻿using Utility.Interfaces;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyNotifications
 {
@@ -9,7 +7,7 @@ namespace Utility.PropertyNotifications
 
     public static partial class PropertyCalledExtensions
     {
-        private class PropertyObservable : IObservable<PropertyCall>
+        private class PropertyObservable : IObservable<PropertyCall>, IGetReference
         {
             private readonly INotifyPropertyCalled _target;
             private readonly bool includeNonInitial;
@@ -19,6 +17,8 @@ namespace Utility.PropertyNotifications
                 _target = target;
                 this.includeNonInitial = includeNonInitial;
             }
+
+            public object Reference => _target;
 
             private class Subscription : IDisposable
             {

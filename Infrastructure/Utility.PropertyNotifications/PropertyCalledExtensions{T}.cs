@@ -3,13 +3,14 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Utility.Interfaces;
 using Utility.Helpers.Reflection;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyNotifications
 {
 
     public static partial class PropertyCalledExtensions
     {
-        private class PropertyObservable<T> : IObservable<T>
+        private class PropertyObservable<T> : IObservable<T>, IGetReference
         {
             private readonly INotifyPropertyCalled _target;
             private readonly PropertyInfo _info;
@@ -19,6 +20,8 @@ namespace Utility.PropertyNotifications
                 _target = target;
                 _info = info;
             }
+
+            public object Reference => _target;
 
             private class Subscription : IDisposable
             {

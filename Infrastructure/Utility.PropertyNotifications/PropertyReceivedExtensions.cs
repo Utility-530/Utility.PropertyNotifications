@@ -1,4 +1,5 @@
 ﻿using Utility.Interfaces;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyNotifications
 {
@@ -6,7 +7,7 @@ namespace Utility.PropertyNotifications
 
     public static partial class PropertyReceivedExtensions
     {
-        private class PropertyObservable : IObservable<PropertyReception>
+        private class PropertyObservable : IObservable<PropertyReception>, IGetReference
         {
             private readonly INotifyPropertyReceived _target;
             private readonly bool includeNulls;
@@ -17,6 +18,8 @@ namespace Utility.PropertyNotifications
                 this.includeNulls = includeNulls;
             }
 
+            public object Reference => _target;
+            
             private class Subscription : IDisposable
             {
                 private readonly INotifyPropertyReceived _target;

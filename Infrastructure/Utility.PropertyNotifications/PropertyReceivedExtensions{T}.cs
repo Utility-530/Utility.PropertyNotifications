@@ -2,26 +2,28 @@
 using System.Reflection;
 using Utility.Interfaces;
 using Utility.Helpers.Reflection;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyNotifications
 {
-
     public static partial class PropertyReceivedExtensions
     {
-        private class PropertyObservable<T> : IObservable<T>
+        private class PropertyObservable<TTarget, T> : IObservable<T>, IGetReference where TTarget: INotifyPropertyReceived
         {
-            private readonly INotifyPropertyReceived _target;
+            private readonly TTarget _target;
             private readonly PropertyInfo _info;
             private readonly bool includeInitial;
             private readonly bool includeNulls;
 
-            public PropertyObservable(INotifyPropertyReceived target, PropertyInfo info, bool includeInitial = true, bool includeNulls = true)
+            public PropertyObservable(TTarget target, PropertyInfo info, bool includeInitial = true, bool includeNulls = true)
             {
                 _target = target;
                 _info = info;
                 this.includeInitial = includeInitial;
                 this.includeNulls = includeNulls;
             }
+
+            public object Reference => _target;
 
             private class Subscription : IDisposable
             {
@@ -79,13 +81,12 @@ namespace Utility.PropertyNotifications
             return new PropertyObservable(model, includeNulls);
         }
 
-
         public static IObservable<TRes> WhenReceivedFrom<TModel, TRes>(this TModel model, Expression<Func<TModel, TRes>> expr, bool includeInitial = true, bool includeNulls = true) where TModel : INotifyPropertyReceived
         {
             var l = (LambdaExpression)expr;
             var ma = (MemberExpression)l.Body;
             var prop = (PropertyInfo)ma.Member;
-            return new PropertyObservable<TRes>(model, prop, includeInitial, includeNulls);
+            return new PropertyObservable<TModel, TRes>(model, prop, includeInitial, includeNulls);
         }
     }
 }
