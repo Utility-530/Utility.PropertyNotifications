@@ -27,7 +27,6 @@ namespace Utility.Reactives
 
         public List<object> Observations { get; } = new();
 
-        object ISetReference.Reference { set => throw new NotImplementedException(); }
 
         public virtual void OnNext(T value)
         {

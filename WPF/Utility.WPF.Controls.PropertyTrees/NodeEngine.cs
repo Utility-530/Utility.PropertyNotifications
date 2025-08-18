@@ -231,12 +231,14 @@ namespace Utility.WPF.Controls.PropertyTrees
             throw new NotImplementedException();
         }
 
-        public IObservable<INode> Create(string name, Guid guid, Func<string, INode> nodeFactory, Func<string, object> modelFactory)
+
+
+        public IObservable<INode> FindChild(INode node, Guid guid)
         {
             throw new NotImplementedException();
         }
 
-        public IObservable<INode> FindChild(INode node, Guid guid)
+        public IObservable<INode> Create(string name, Guid guid, Func<string, object> modelFactory)
         {
             throw new NotImplementedException();
         }
