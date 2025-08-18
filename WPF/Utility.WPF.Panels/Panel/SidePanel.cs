@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
+    using Utility.WPF.Panels.Infrastructure;
 
     public class SidePanel : Panel
     {

@@ -4,24 +4,35 @@ using System.Windows.Controls;
 namespace Utility.WPF.Panels
 {
     /// <summary>
-    /// UniformGrid is used to arrange children in a grid with all equal cell sizes.
+    /// UniformRow is used to arrange children in a single row with all equal cell sizes.
     /// </summary>
     public class UniformRow : Panel
     {
-        private int _columns;
-
         protected override Size MeasureOverride(Size constraint)
         {
-            _columns = InternalChildren.Count > 1 ? InternalChildren.Count - 1 : InternalChildren.Count;
+            return MeasureOverride(constraint, InternalChildren);
+        }
 
-            Size childConstraint = new Size(constraint.Width / _columns, constraint.Height);
+        public static Size MeasureOverride(Size constraint, UIElementCollection internalChildren)
+        {
+            if (internalChildren.Count == 0)
+                return new Size(0, 0);
+
+            int visibleChildren = GetVisibleChildrenCount(internalChildren);
+            if (visibleChildren == 0)
+                return new Size(0, 0);
+
+            Size childConstraint = new Size(constraint.Width / visibleChildren, constraint.Height);
             double maxChildDesiredWidth = 0.0;
             double maxChildDesiredHeight = 0.0;
 
-            //  Measure each child, keeping track of maximum desired width and height.
-            for (int i = 0, count = InternalChildren.Count; i < count; ++i)
+            // Measure each child, keeping track of maximum desired width and height.
+            for (int i = 0; i < internalChildren.Count; i++)
             {
-                UIElement child = InternalChildren[i];
+                UIElement child = internalChildren[i];
+
+                if (child.Visibility == Visibility.Collapsed)
+                    continue;
 
                 // Measure the child.
                 child.Measure(childConstraint);
@@ -38,28 +49,55 @@ namespace Utility.WPF.Panels
                 }
             }
 
-            return new Size(maxChildDesiredWidth * _columns, maxChildDesiredHeight);
+            return new Size(maxChildDesiredWidth * visibleChildren, maxChildDesiredHeight);
         }
 
         protected override Size ArrangeOverride(Size arrangeSize)
         {
-            Rect childBounds = new Rect(0, 0, arrangeSize.Width / _columns, arrangeSize.Height / 1);
-            double xStep = childBounds.Width;
-            double xBound = arrangeSize.Width - 1.0;
+            return ArrangeOverride(InternalChildren, arrangeSize);
+        }
+
+        public static Size ArrangeOverride(UIElementCollection internalChildren, Size arrangeSize)
+        {
+            if (internalChildren.Count == 0)
+                return arrangeSize;
+
+            int visibleChildren = GetVisibleChildrenCount(internalChildren);
+            if (visibleChildren == 0)
+                return arrangeSize;
+
+            double cellWidth = arrangeSize.Width / visibleChildren;
+            double currentX = 0;
 
             // Arrange and Position each child to the same cell size
-            foreach (UIElement child in InternalChildren)
+            foreach (UIElement child in internalChildren)
             {
-                child.Arrange(new Rect(childBounds.X - child.DesiredSize.Width / 2d, childBounds.Y, childBounds.Width, childBounds.Height));
-
-                // only advance to the next grid cell if the child was not collapsed
-                if (child.Visibility != Visibility.Collapsed)
+                if (child.Visibility == Visibility.Collapsed)
                 {
-                    childBounds.X += xStep;
+                    // Still need to arrange collapsed children (required by WPF)
+                    child.Arrange(new Rect(0, 0, 0, 0));
+                    continue;
                 }
+
+                // Arrange child to fill the entire cell
+                Rect childBounds = new Rect(currentX, 0, cellWidth, arrangeSize.Height);
+                child.Arrange(childBounds);
+
+                currentX += cellWidth;
             }
 
             return arrangeSize;
+        }
+
+        private static int GetVisibleChildrenCount(UIElementCollection internalChildren)
+        {
+            int count = 0;
+            foreach (UIElement child in internalChildren)
+            {
+                if (child.Visibility != Visibility.Collapsed)
+                    count++;
+            }
+            return count;
         }
     }
 }

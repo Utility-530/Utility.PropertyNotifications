@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows;
 
-namespace Utility.WPF.Demo.Panels
+namespace Utility.WPF.Panels.Infrastructure
 {
     public static class MeasureHelper
     {
@@ -34,14 +34,14 @@ namespace Utility.WPF.Demo.Panels
         public static (int rows, int columns) GetRowsColumns(Size availableSize, int count)
         {
             int division = 1;
-            while (GetLowestRatio((int)(availableSize.Width / (division)), (int)(availableSize.Height / division)) is
+            while (GetLowestRatio((int)(availableSize.Width / division), (int)(availableSize.Height / division)) is
                  (int r, int c) &&
-                 (r > 1 && c > 1))
+                 r > 1 && c > 1)
             {
                 division *= 2;
             }
 
-            var (a, b) = GetLowestRatio((int)(availableSize.Width / (division)), (int)(availableSize.Height / division));
+            var (a, b) = GetLowestRatio((int)(availableSize.Width / division), (int)(availableSize.Height / division));
 
             (a, b) = Expand(count, a, b);
 
@@ -91,8 +91,8 @@ namespace Utility.WPF.Demo.Panels
                 int tempMin = min;
                 while (tempMin > 1 && tempMin <= min)
                 {
-                    var overMax = (1d * max / tempMin) % 1;
-                    var overMin = (1d * min / tempMin) % 1;
+                    var overMax = 1d * max / tempMin % 1;
+                    var overMin = 1d * min / tempMin % 1;
                     if (overMax < double.Epsilon && overMin < double.Epsilon)
                     {
                         min /= tempMin;

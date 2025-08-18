@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using Utility.WPF.Demo.Panels;
+using Utility.WPF.Panels.Infrastructure;
 
 namespace Utility.WPF.Panels
 {

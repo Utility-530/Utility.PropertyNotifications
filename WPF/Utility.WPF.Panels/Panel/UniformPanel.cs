@@ -1,9 +1,11 @@
 ﻿namespace Auxide.Controls
 {
     using System;
+    using System.Collections;
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
+    using Utility.WPF.Panels.Infrastructure;
 
     public class UniformPanel : Panel
     {
@@ -63,19 +65,31 @@
         /// <returns>Size desired</returns>
         protected override Size MeasureOverride(Size availableSize)
         {
-            if (!columnsChanged && !rowsChanged)
-            {
-                (rows, columns) = Utility.WPF.Demo.Panels.MeasureHelper.GetRowsColumns(availableSize, this.Children.Count);
-            }
-            else
-            {
-                columns = Math.Max(Columns, 1);
-                rows = Math.Max(Rows, 1);
-            }
+            (rows, columns) = rowsAndColumns(availableSize);
+            return MeasureOverride(availableSize, Children, columnsChanged, rowsChanged, columns, rows);
 
+            (int rows, int columns) rowsAndColumns(Size availableSize)
+            {
+                if (!columnsChanged && !rowsChanged)
+                {
+                    return MeasureHelper.GetRowsColumns(availableSize, this.Children.Count);
+                }
+                else
+                {
+                    var columns = Math.Max(Columns, 1);
+                    var rows = Math.Max(Rows, 1);
+                    return (rows, columns);
+                }
+            }
+        }
+
+
+
+        public static Size MeasureOverride(Size availableSize, UIElementCollection children, bool columnsChanged, bool rowsChanged, int columns, int rows)
+        {
             var individualSize = GetChildSize(availableSize, columns, rows);
 
-            foreach (var child in InternalChildren.Cast<UIElement>())
+            foreach (var child in children.Cast<UIElement>())
             {
                 child.Measure(individualSize);
             }
@@ -86,6 +100,7 @@
             return availableSize;
         }
 
+
         /// <summary>
         /// Arrange the children
         /// </summary>
@@ -93,13 +108,18 @@
         /// <returns>Size used</returns>
         protected override Size ArrangeOverride(Size finalSize)
         {
+            return ArrangeOverride(finalSize, Children, columns, rows, Orientation);
+        }
+
+        public static Size ArrangeOverride(Size finalSize, UIElementCollection children, int columns, int rows, Orientation orientation)
+        {
             Size childSize = GetChildSize(finalSize, columns, rows);
 
-            for (int i = 0; i < this.Children.Count; i++)
+            for (int i = 0; i < children.Count; i++)
             {
-                UIElement child = this.Children[i];
+                UIElement child = children[i];
 
-                child.Arrange(GetChildRect(i, childSize, columns, rows, Orientation));
+                child.Arrange(GetChildRect(i, childSize, columns, rows, orientation));
             }
 
             return finalSize;
