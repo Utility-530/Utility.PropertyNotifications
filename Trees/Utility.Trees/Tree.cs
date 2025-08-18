@@ -5,8 +5,10 @@ using System.Collections.Specialized;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
+using Utility.Interfaces.Trees;
 using Utility.PropertyNotifications;
 using Utility.Trees.Abstractions;
+using IIndex = Utility.Interfaces.Trees.IIndex;
 
 namespace Utility.Trees
 {
@@ -14,10 +16,10 @@ namespace Utility.Trees
     /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
     /// </summary>
     /// <typeparam name="object"></typeparam>
-    public class Tree : NotifyPropertyClass, ITree, IEquatable, IParent<ITree>
+    public class Tree : NotifyPropertyClass, ITree, IEquatable
     {
         private IList items;
-        protected ITree? parent;
+        protected IReadOnlyTree? parent;
         private bool flag;
         private string key;
         private bool? hasItems;
@@ -118,7 +120,8 @@ namespace Utility.Trees
             if (data is ITree tree)
             {
                 m_items.Add(tree);
-                tree.Parent ??= this;
+                if((tree as IGetParent<IReadOnlyTree>).Parent == null)
+                    (tree as ISetParent<IReadOnlyTree>).Parent = this;
                 return;
             }
             if (data is IEnumerable treeCollection)
@@ -212,10 +215,10 @@ namespace Utility.Trees
         //    return tree as ITree;
         //}
 
-        public virtual Task<ITree> Remove()
+        public virtual Task<IReadOnlyTree> Remove()
         {
             this.Parent = null;
-            this.Parent?.Remove(this);
+            (this.Parent as ITree)?.Remove(this);
             return Task.FromResult(this.Parent);
         }
 
@@ -229,7 +232,7 @@ namespace Utility.Trees
 
         public virtual bool HasItems { get => hasItems ?? Items != null && Items.Count() > 0; set => hasItems = value; }
 
-        public virtual ITree? Parent { get => parent; set => parent = value; }
+        public virtual IReadOnlyTree? Parent { get => parent; set => parent = value; }
 
         public virtual IEnumerable Items
         {
@@ -245,7 +248,7 @@ namespace Utility.Trees
             get
             {
                 var indices = Indices();
-                return new Index(indices.Reverse().ToArray());
+                return new Utility.Structs.Index(indices.Reverse().ToArray());
                 IEnumerable<int> Indices()
                 {
                     IReadOnlyTree? parent = this.Parent;
@@ -254,9 +257,9 @@ namespace Utility.Trees
                     {
                         yield return _parent.IndexOf(child);
                         child = _parent;
-                        if (parent.Parent == parent)
+                        if ((parent as IGetParent<IReadOnlyTree>).Parent == parent)
                             throw new Exception("r sdfsd3232 bf");
-                        parent = parent.Parent;
+                        parent = (parent as IGetParent<IReadOnlyTree>).Parent;
                     }
                     yield return 0;
                 }
@@ -270,18 +273,16 @@ namespace Utility.Trees
             {
                 IReadOnlyTree parent = this;
                 int depth = 0;
-                while (parent.Parent != null)
+                while ((parent as IGetParent<IReadOnlyTree>).Parent != null)
                 {
                     depth++;
-                    parent = parent.Parent;
+                    parent = (parent as IGetParent<IReadOnlyTree>).Parent;
                 }
                 return depth;
             }
         }
 
         public virtual Task<bool> HasMoreChildren() => Task.FromResult(false);
-
-        IReadOnlyTree IParent<IReadOnlyTree>.Parent { get => Parent; set => Parent = value as ITree; }
 
         object IValue.Value => Data;
 
