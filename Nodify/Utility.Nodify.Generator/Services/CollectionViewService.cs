@@ -9,7 +9,6 @@ namespace Utility.Nodify.Generator.Services
     public record PredicateParam() : MethodParameter<CollectionViewService>(nameof(CollectionViewService.Set), "predicate", ParameterTypes: [typeof(Predicate<object>)]);
     public record ListInParam() : MethodParameter<CollectionViewService>(nameof(CollectionViewService.Create), "list");
     public record ListCollectionViewReturnParam() : MethodParameter<CollectionViewService>(nameof(CollectionViewService.Create));
-
     public class CollectionViewService : ValueModel<ListCollectionView>
     {
         public ListCollectionView Create(IList list) => Value = new(list);

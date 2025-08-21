@@ -11,6 +11,7 @@ namespace Utility.Nodify.Generator.Services
 
     public class FilterService
     {
-        public static Predicate<object> Filter(string filter) => new((v) => Locator.Current.GetService<IFilter>().Filter(new FilterQuery(filter, v)));
+        //public static Predicate<object> Filter(string filter) => new((v) => Locator.Current.GetService<IFilter>().Filter(new FilterQuery(filter, v)));
+        public static Predicate<object> Filter(string filter) =>  throw new Exception("sdfdsfsddsdfsd");
     }
 }
