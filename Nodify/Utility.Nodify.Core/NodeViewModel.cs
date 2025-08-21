@@ -23,7 +23,9 @@ namespace Utility.Nodify.Models
         }
 
         public Guid Id { get; } = Guid.NewGuid();
-  
+
+        public string GroupKey { get; set; }
+
         private void NewMethod()
         {
             if (input is RangeObservableCollection<IConnectorViewModel> range)
@@ -71,6 +73,5 @@ namespace Utility.Nodify.Models
 
         public IDiagramViewModel Graph { get; set; }
         public Orientation Orientation { get; set; }
-
     }
 }
