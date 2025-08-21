@@ -19,12 +19,12 @@ namespace Utility.Conversions.Json.Newtonsoft
 
         public override bool CanConvert(Type objectType)
         {
-            return 
-                objectType != typeof(Type) && 
-                objectType.Name != "RuntimeType" && 
-                objectType.Name != "RuntimeMethodInfo" && 
-                PropertyHelper.ValueTypes.Contains(objectType) == false && 
-                objectType != typeof(string) && 
+            return
+                objectType != typeof(Type) &&
+                !objectType.Name.Contains("Runtime") &&
+                !objectType.Name.Contains("Method") &&
+                PropertyHelper.ValueTypes.Contains(objectType) == false &&
+                objectType != typeof(string) &&
                 typeof(IEnumerable).IsAssignableFrom(objectType) == false;
         }
 
@@ -94,6 +94,7 @@ namespace Utility.Conversions.Json.Newtonsoft
                 else
                 {
                     writer.WritePropertyName(stringBuilder.ToString());
+
                     serializer.Serialize(writer, propValue);
                 }
             }
