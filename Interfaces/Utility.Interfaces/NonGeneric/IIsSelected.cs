@@ -1,6 +1,10 @@
 ﻿namespace Utility.Interfaces.NonGeneric
 {
-    public interface IIsSelected
+    public interface IIsSelected : IGetIsSelected, ISetIsSelected
+    {
+    }
+
+    public interface IGetIsSelected
     {
         bool IsSelected { get; }
     }
