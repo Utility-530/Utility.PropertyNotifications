@@ -13,35 +13,26 @@ namespace Utility.Nodify.Engine
         NodesGenerator<NodeViewModel> gen = new();
         NodesGeneratorTree<NodeViewModel> genTree = new();
         NodesGeneratorMaster<NodeViewModel> genMaster = new();
+        ReactiveNodeGroupManager manager = new ReactiveNodeGroupManager();
 
         public void Build(IDiagramViewModel diagram)
         {
-            if(diagram.Key == "Master")
-            {
-                genMaster.GenerateNodes(new NodesGeneratorSettings(1000)).SelfAndAdditions().Subscribe(node =>
-                {
-                    diagram.Nodes.Add(node);
-                });
-                ConnectNodesMaster(diagram);
-            }
-            else if(diagram.Key == "Tree")
-            {
-                genTree.GenerateNodes(new NodesGeneratorSettings(1000)).SelfAndAdditions().Subscribe(node =>
-                {
-                    diagram.Nodes.Add(node);
-                });
 
-                ConnectNodesTree(diagram);
-            }
-            else if(diagram.Key == "Diagram")
+            genTree.GenerateNodes(new NodesGeneratorSettings(1000)).SelfAndAdditions().Subscribe(node =>
             {
-                gen.GenerateNodes(new NodesGeneratorSettings(1000)).SelfAndAdditions().Subscribe(node =>
-                {
-                    diagram.Nodes.Add(node);
-                });
+                diagram.Nodes.Add(node);
+    
+            });
 
-                ConnectNodes(diagram);
-            }             
+            ConnectNodesTree(diagram);
+ 
+            gen.GenerateNodes(new NodesGeneratorSettings(1000)).SelfAndAdditions().Subscribe(node =>
+            {
+                diagram.Nodes.Add(node);
+            });
+
+            ConnectNodes(diagram);
+            ConnectNodesMaster(diagram);           
         }
 
         private void ConnectNodes(IDiagramViewModel diagram)
@@ -55,6 +46,7 @@ namespace Utility.Nodify.Engine
                     if (schema.TryAddConnection(con.Input, con.Output, out var connection))
                     {
                         connection.Data = con.Data;
+                        manager.AddNode(connection);
                         diagram.Connections.Add(connection);
                     }
                     else
@@ -93,6 +85,7 @@ namespace Utility.Nodify.Engine
                     if (schema.TryAddConnection(con.Input, con.Output, out var connection))
                     {
                         connection.Data = con.Data;
+                        manager.AddNode(connection);
                         diagram.Connections.Add(connection);
                     }
                 }
