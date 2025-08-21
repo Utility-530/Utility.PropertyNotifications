@@ -80,7 +80,6 @@ namespace Utility.Simulation
 
                 });
 
-            //DispatcherScheduler.Current
             Observable
                 .Interval(TimeSpan.FromSeconds(0.1), Globals.Resolver.Resolve<IScheduler>())
                 .Select(a =>
@@ -98,7 +97,8 @@ namespace Utility.Simulation
                     {
                         return (defaultValue == Playback.Play ? Playback.Play : Playback.Pause | Playback.Backward | Playback.Forward);
                     }
-                }).Subscribe(a =>
+                })
+                .Subscribe(a =>
                 {
                     //Debug.WriteLine($"{a}");
                     playBackviewmodel.Enabled = a;
@@ -126,10 +126,6 @@ namespace Utility.Simulation
                 var created = Globals.Resolver.Resolve<IFactory<INode>>().Create(a);
                 viewmodel.Collection.Add(created);
             }, value);
-            //Application.Current.Dispatcher.BeginInvoke(new Action(() =>
-            //{
-
-            //}));
         }
     }
 }
