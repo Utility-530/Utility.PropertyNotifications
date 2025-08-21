@@ -1,10 +1,7 @@
 ﻿using System.Collections;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Generic;
-using Utility.Trees;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Trees.Extensions
@@ -21,9 +18,23 @@ namespace Utility.Trees.Extensions
             }
         }
 
+        public static int[] Index<T>(T child, Func<T, T?> parentFunc, Func<T, T, int> childFunc, List<int>? indices = null)
+        {
+            indices ??= [0];
+            var parent = parentFunc(child);
+            if (parent == null)
+                return [.. indices];
+            else
+            {
+                indices.Add(childFunc(parent, child));
+                return Index(parent, parentFunc, childFunc, indices);
+            }
+
+        }
+
         public static IEnumerable<ITree<T>> ToTree<T, K>(this IEnumerable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, T root)
         {
-            return ToTree<T, K, ITree<T>>(collection, id_selector, parent_id_selector, (a, r) => (ITree<T>)new Tree<T>(a) { Parent = r}, root, null);
+            return ToTree<T, K, ITree<T>>(collection, id_selector, parent_id_selector, (a, r) => (ITree<T>)new Tree<T>(a) { Parent = r }, root, null);
         }
 
         public static IEnumerable<TTree> ToTree<T, K, TTree>(this IEnumerable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, Func<T, TTree?, TTree> conversion, T root, TTree? rootTree = default)
@@ -98,6 +109,8 @@ namespace Utility.Trees.Extensions
 
             return null;
         }
+
+
 
         public static ITree<T>? Match<T>(this ITree<T> tree, T data)
         {
