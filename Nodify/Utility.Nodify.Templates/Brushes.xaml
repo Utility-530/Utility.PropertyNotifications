@@ -4,7 +4,7 @@
 
     <Color x:Key="PanelBackgroundColor">#2A1B47</Color>
 
-    <Color x:Key="ActiveStateColor">#A6D99C</Color>
+    <Color x:Key="ActiveStateColor">#ff48</Color>
     <Color x:Key="ReadOnlyStateColor">#FD5618</Color>
     
     <SolidColorBrush x:Key="PanelBackgroundBrush"
