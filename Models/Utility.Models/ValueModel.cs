@@ -4,10 +4,11 @@ using Utility.PropertyNotifications;
 
 namespace Utility.Models
 {
-    public class ValueModel<T> : NotifyPropertyClass, IValue<T?>, IValueModel, IGet, IGet<T>, Utility.Interfaces.Generic.ISet<T>, IModel
+    public class ValueModel<T> : NotifyPropertyClass, IValue<T?>, IValueModel, IGet, IGet<T>, Utility.Interfaces.Generic.ISet<T>, IModel, IIsActive
     {
         private T? value;
         protected string m_name = "unknown";
+        private bool isActive;
 
         public ValueModel(T? value = default, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(raisePropertyCalled, raisePropertyReceived)
         {
@@ -42,6 +43,8 @@ namespace Utility.Models
                 //this.RaisePropertyChanged(nameof(Value));
             }
         }
+
+        public bool IsActive { get => isActive; set => this.RaisePropertyChanged(ref isActive, value); }
 
         object? IGet.Get() => this.value;
 

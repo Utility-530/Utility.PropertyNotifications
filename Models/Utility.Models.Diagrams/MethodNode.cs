@@ -1,70 +1,100 @@
-﻿using Utility.Interfaces.Exs;
+﻿using DryIoc;
+using System.Reflection;
+using Utility.Extensions;
+using Utility.Interfaces.Exs;
 using Utility.PropertyNotifications;
 using Utility.ServiceLocation;
 using IMethod = Utility.Interfaces.Exs.IMethod;
-using Utility.Extensions;
 
 namespace Utility.Models.Diagrams
 {
     public class MethodNode : NotifyPropertyClass, IResolvableNode
     {
 
-        readonly Dictionary<string, object> names = new();
+        readonly Dictionary<string, object> values = new();
 
         private readonly Lazy<Dictionary<string, MethodConnector>> inValues;
+        private ParameterInfo[] parameters;
+        public Action next;
+        private bool isActive;
+        private Exception exception;
 
         public MethodNode(IMethod method)
         {
             Method = method;
-            var parameters = method.MethodInfo.GetParameters();
+            parameters = method.MethodInfo.GetParameters();
+            if (method.MethodInfo.ReturnType != typeof(void))
+            {
+                OutValue = new() { Key = "return" };
+            }
             inValues = new(() => parameters.ToDictionary(a => a.Name ?? throw new Exception("s e!"), a =>
             {
-                var model = new MethodConnector { Key = Guid.NewGuid().ToString() };
+                var model = new MethodConnector { Key = a.Name };
                 model
                 .Subscribe(value =>
-                {
-                    bool contains = names.ContainsKey(a.Name);
-                    var previousResult = OutValue.Value;
-                    var action = new Action(() =>
-                    {
-                        names[a.Name] = value;
-                        if (names.Count == parameters.Length)
-                        {
-                            var result = method.Execute(names);
-                            OutValue.Value = result;
-                        }
-                    });
-
+                {  
                     Action? undoaction = new(() => { });
-                    if (names.TryGetValue(a.Name, out var oldValue))
+                    bool contains = values.ContainsKey(a.Name);
+                    var previousResult = OutValue?.Value;
+                    if (values.TryGetValue(a.Name, out var oldValue))
                     {
+
                         undoaction = new Action(() =>
                         {
                             if (contains)
-                                names[a.Name] = oldValue;
+                                values[a.Name] = oldValue;
                             else
-                                names.Remove(a.Name);
-                            if (previousResult == null)
+                                values.Remove(a.Name);
+                            if (previousResult == null && OutValue != null)
                             {
                                 OutValue.Value = previousResult;
                             }
-                            //if (names.Count == parameters.Length)
-                            //{
-                            //    var result = method.Execute(names);
-                            //    OutValue.Value = result;
-                            //}
                         });
                     }
-                    IsActive = true;
+
                     RaisePropertyChanged(nameof(IsActive));
-                    Globals.Resolver.Resolve<IPlaybackEngine>().OnNext(new MethodAction(this, action, undoaction));
+                    Globals.Resolver.Resolve<IPlaybackEngine>().OnNext(
+                        new PlaybackAction(this,
+                        () => _action(a.Name, value),
+                        undoaction,
+                        a => IsActive = a,
+                        new Dictionary<string, object> {
+                            { "Value", value },
+                            { "Name", a.Name },
+                            { "PreviousValue", previousResult }
+                            }
+                         )
+                        { Name = a.Name });
 
                 });
                 return model;
             }));
         }
 
-        public bool IsActive { get; set; }
+        public void _action(string name, object value)
+        {
+            if (OutValue == null)
+                return;
+            next?.Invoke();
+            values[name] = value;
+            if (values.Count == parameters.Length)
+            {
+                try
+                {
+                    var result = Method.Execute(values);
+                    OutValue.Value = result;
+                }
+                catch (Exception ex)
+                {
+                    Exception = ex;
+                    Globals.Exceptions.OnNext(ex);
+                }
+
+            }
+        }
+
+        public bool IsActive { get => isActive; set => this.RaisePropertyChanged(ref isActive, value); }
+        public Exception Exception { get => exception; set => this.RaisePropertyChanged(ref exception, value); }
 
         public Dictionary<string, MethodConnector> InValues => inValues.Value;
 
@@ -73,9 +103,10 @@ namespace Utility.Models.Diagrams
             set => InValues[index].Value = value;
         }
 
-        public MethodConnector OutValue { get; } = new() { Key = Guid.NewGuid().ToString() };
+        public MethodConnector OutValue { get; }
 
         public IMethod Method { get; set; }
+
 
         public override bool Equals(object? obj)
         {

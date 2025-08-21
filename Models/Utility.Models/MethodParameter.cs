@@ -20,7 +20,7 @@ namespace Utility.Models
             throw new Exception("ee3433333");
         });
         public IMethod Method => info.Value;
-        public ParameterInfo Parameter => info.Value.MethodInfo.GetParameters().Single(a => a.Name == Name);
+        public ParameterInfo Parameter => Name== string.Empty? info.Value.MethodInfo.ReturnParameter : info.Value.MethodInfo.GetParameters().Single(a => a.Name == Name);
 
 
         static Method method(MethodInfo methodInfo, object? Instance = null)
