@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using Utility.Helpers.Reflection;
 using Utility.Helpers;
-using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.PropertyNotifications

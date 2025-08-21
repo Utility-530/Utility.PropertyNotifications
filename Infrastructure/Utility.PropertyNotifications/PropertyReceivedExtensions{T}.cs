@@ -81,12 +81,12 @@ namespace Utility.PropertyNotifications
             return new PropertyObservable(model, includeNulls);
         }
 
-        public static IObservable<TRes> WhenReceivedFrom<TModel, TRes>(this TModel model, Expression<Func<TModel, TRes>> expr, bool includeInitial = true, bool includeNulls = true) where TModel : INotifyPropertyReceived
+        public static IObservable<TRes> WhenReceivedFrom<TModel, TRes>(this TModel model, Expression<Func<TModel, TRes>> expr, bool includeInitialValue = true, bool includeNulls = true) where TModel : INotifyPropertyReceived
         {
             var l = (LambdaExpression)expr;
             var ma = (MemberExpression)l.Body;
             var prop = (PropertyInfo)ma.Member;
-            return new PropertyObservable<TModel, TRes>(model, prop, includeInitial, includeNulls);
+            return new PropertyObservable<TModel, TRes>(model, prop, includeInitialValue, includeNulls);
         }
     }
 }

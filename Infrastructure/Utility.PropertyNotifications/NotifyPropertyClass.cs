@@ -108,6 +108,7 @@ namespace Utility.PropertyNotifications
         #region INotifyPropertyCalled Members
 
         private ObservableCollection<PropertyCalledEventArgs> missedCalls = [];
+        private SynchronizationContext? context;
         private readonly bool raisePropertyCalled;
 
 
@@ -131,6 +132,7 @@ namespace Utility.PropertyNotifications
 
         public virtual bool RaisePropertyCalled(object? value, [CallerMemberName] string? propertyName = null)
         {
+            context ??= SynchronizationContext.Current;
             if (flag == false)
             {
                 var args = PropertyCalledArgs(propertyName, value);
@@ -139,8 +141,9 @@ namespace Utility.PropertyNotifications
                     handler.Invoke(this, args);
                     return true;
                 }
-                else
-                    missedCalls.Add(args);
+                else if (context != null)
+                    context.Post(a => missedCalls.Add(args), args);
+                    
             }
             return false;
         }
