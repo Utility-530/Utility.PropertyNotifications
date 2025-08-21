@@ -229,7 +229,7 @@ namespace Utility.WPF.Controls.Objects
             {
                 return value switch
                 {
-                    PropertyInfo propertyInfo => propertyInfo.GetValue(parameter) ?? DependencyProperty.UnsetValue,
+                    PropertyInfo propertyInfo => propertyInfo?.GetValue(parameter) ?? DependencyProperty.UnsetValue,
                     FieldInfo fieldInfo => fieldInfo.GetValue(parameter) ?? DependencyProperty.UnsetValue,
                     _ => DependencyProperty.UnsetValue
                 };

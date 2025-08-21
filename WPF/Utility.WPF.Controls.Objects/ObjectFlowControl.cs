@@ -366,7 +366,8 @@ namespace Utility.WPF.Controls.Objects
 
             if (obj is null)
             {
-                throw new ArgumentNullException(nameof(obj));
+                //throw new ArgumentNullException(nameof(obj));
+                return;
             }
 
             treeView.Items.Clear();
@@ -438,7 +439,8 @@ namespace Utility.WPF.Controls.Objects
                 Properties = EnumerateProperties(await Task.Run(() => GetInformation(e).Where(a => a != default).ToArray()), innerProperty, fontSizes.Medium).ToArray()
             };
 
-            static IEnumerable<(PropertyInfo, object?)> GetInformation(object e) => e.GetType().GetProperties().Select(info => (info, info.GetValue(e, null)));
+            static IEnumerable<(PropertyInfo, object?)> GetInformation(object e) => e.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public).Select(info => (info, info.GetIndexParameters().Length == 0 ? info.GetValue(e) : null));
+  
 
             static IEnumerable<(string name, Inline[] inlines)> EnumerateProperties((PropertyInfo, object?)[] props, string? innerProperty, double fontSize)
             {
