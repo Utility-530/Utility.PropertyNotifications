@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Infrastructure\Utility.Simulation\Utility.Simulation.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Buttons\Utility.WPF.Controls.Buttons.csproj" />
+    <ProjectReference Include="..\Utility.WPF.Controls.Objects\Utility.WPF.Controls.Objects.csproj" />
   </ItemGroup>
 
 </Project>

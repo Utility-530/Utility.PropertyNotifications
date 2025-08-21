@@ -1,7 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Utility.Simulation;assembly=Utility.Simulation" 
-                    xmlns:btn="http://schemas.utility.com/buttons">
+                    xmlns:conv="http://schemas.utility.com/converters"
+                    xmlns:btn="http://schemas.utility.com/buttons" 
+                    xmlns:obj="http://schemas.utility.com/objects" xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
 
 
     <DataTemplate DataType="{x:Type local:PlayBackViewModel}">
@@ -11,34 +13,90 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:HistoryViewModel}">
-        <ListBox ItemsSource="{Binding Collection}" VerticalAlignment="Stretch" >
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <HeaderedContentControl DataContext="{Binding ElementName=ListBox, Path=SelectedItem}">
+                <HeaderedContentControl.Header>
+                    <TextBlock FontWeight="Bold">Arguments</TextBlock>
+                </HeaderedContentControl.Header>
+                <!--<obj:JsonControl>
+                    <i:Interaction.Behaviors>
+                        <obj:ObjectBehavior Object="{Binding Data}"/>
+                    </i:Interaction.Behaviors>
+                </obj:JsonControl>-->
+                <obj:ObjectControl Object="{Binding Data.Arguments}"></obj:ObjectControl>
+                <!--<obj:ObjectFlowControl Object="{Binding Data}"></obj:ObjectFlowControl>-->
+            </HeaderedContentControl>
+            <ListBox x:Name="ListBox" Grid.Row="1" ItemsSource="{Binding Collection}" VerticalAlignment="Stretch" >
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+
+                        <!-- to prevent user selection -->
+                        <Setter Property="Focusable" Value="False"/>
+                        <Setter Property="IsHitTestVisible" Value="False"/>
+                        <Setter Property="Background" Value="Transparent"/>
+                        <!--to prevent user selection -->
+
+                        <Setter Property="Content" Value="{Binding Data, Mode=OneTime}"></Setter>
+
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"></Setter>
+                        <Setter Property="MaxHeight" Value="120"></Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True" >
+                                <Setter Property="FontWeight" Value="Bold" />
+                                <Setter Property="FontSize" Value="32" />
+                                <Setter Property="Background" Value="DarkSeaGreen" />
+                                <Setter Property="BorderBrush" Value="DarkSeaGreen" />
+                                <Setter Property="BorderThickness" Value="4" />
+                                <Setter Property="Foreground" Value="#ff48" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </Grid>
+
+    </DataTemplate>
     
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="{x:Type ListBoxItem}">
-                    
-                    <!-- to prevent user selection -->
-                    <Setter Property="Focusable" Value="False"/>                 
-                    <Setter Property="IsHitTestVisible" Value="False"/>
-                    <Setter Property="Background" Value="Transparent"/>
-                    <!--to prevent user selection -->
+    <DataTemplate DataType="{x:Type local:ExceptionsViewModel}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <HeaderedContentControl DataContext="{Binding ElementName=ListBox, Path=SelectedItem}">
+                <HeaderedContentControl.Header>
+                    <TextBlock FontWeight="Bold">Selected</TextBlock>
+                </HeaderedContentControl.Header>              
+                <obj:ObjectFlowControl Object="{Binding Data}"></obj:ObjectFlowControl>
+            </HeaderedContentControl>
+            <ListBox x:Name="ListBox" Grid.Row="1" ItemsSource="{Binding Collection}" VerticalAlignment="Stretch" >
+                <!--<ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}">
+                        --><!-- to prevent user selection --><!--
+                        <Setter Property="Content" Value="{Binding Message}"></Setter>
+                        <Setter Property="Focusable" Value="False"/>
+                        <Setter Property="IsHitTestVisible" Value="False"/>
+                        <Setter Property="Background" Value="Transparent"/>   
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"></Setter>
+                        <Setter Property="MaxHeight" Value="120"></Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True" >
+                                <Setter Property="FontWeight" Value="Bold" />                            
+                                <Setter Property="Background" Value="DarkSeaGreen" />
+                                <Setter Property="BorderBrush" Value="DarkSeaGreen" />
+                                <Setter Property="BorderThickness" Value="4" />          
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListBox.ItemContainerStyle>-->
+            </ListBox>
+        </Grid>
 
-                    <Setter Property="Content" Value="{Binding Data, Mode=OneTime}"></Setter>
-
-                    <Setter Property="IsSelected" Value="{Binding IsSelected}"></Setter>
-                    <Setter Property="MaxHeight" Value="120"></Setter>
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True" >
-                            <Setter Property="FontWeight" Value="Bold" />
-                            <Setter Property="FontSize" Value="48" />
-                            <Setter Property="Background" Value="DarkSeaGreen" />
-                            <Setter Property="BorderBrush" Value="DarkSeaGreen" />
-                            <Setter Property="BorderThickness" Value="4" />
-                            <Setter Property="Foreground" Value="Peru" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </ListBox.ItemContainerStyle>
-        </ListBox>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type local:MasterPlayViewModel}">
@@ -52,7 +110,8 @@
                 <ItemsPanelTemplate>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"></RowDefinition>
+                            <RowDefinition Height="50"></RowDefinition>
+                            <RowDefinition Height="*"></RowDefinition>
                             <RowDefinition Height="*"></RowDefinition>
                         </Grid.RowDefinitions>
                     </Grid>
