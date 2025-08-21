@@ -1265,7 +1265,7 @@ namespace Utility.Models.Trees
 
         public override void SetNode(INode node)
         {
-            node.WithChangesTo(a => a.Parent).Subscribe(a =>
+            node.WithChangesTo(a => (a as IGetParent<INode>).Parent).Subscribe(a =>
             {
                 node.LocalIndex = a.Items.Count();
                 node.Arrangement = Arrangement.Uniform;
@@ -1297,7 +1297,7 @@ namespace Utility.Models.Trees
 
         public override void SetNode(INode node)
         {
-            node.WithChangesTo(a => a.Parent).Subscribe(a =>
+            node.WithChangesTo(a => (a as IGetParent<INode>).Parent).Subscribe(a =>
             {
                 node.LocalIndex = a.Items.Count();
                 node.IsPersistable = true;
