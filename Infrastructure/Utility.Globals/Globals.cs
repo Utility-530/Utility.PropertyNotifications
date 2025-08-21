@@ -33,6 +33,7 @@ namespace Utility
         public static SynchronizationContext UI => ui;        
 
         public static ReplaySubject<Log> Logs { get; } = new();
+        public static ReplaySubject<Exception> Exceptions { get; } = new();
 
         public static IConnectableObservable<TimeSpan> Time { get; }
         public static IConnectableObservable<DateTime> Date { get; }
