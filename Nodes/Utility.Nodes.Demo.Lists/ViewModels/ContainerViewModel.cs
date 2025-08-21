@@ -39,8 +39,7 @@ namespace Utility.Nodes.Demo.Lists
         {
             get => _selected;
             set
-            {
-         
+            {         
                 foreach (var v in Children)
                     v.IsSelected = false;
                 value?.IsSelected = true;

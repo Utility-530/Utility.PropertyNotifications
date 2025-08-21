@@ -42,7 +42,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     (parent,addition)=>{
 
 
-                    }){ Name= controllerPath },
+                    }){ Name = controllerPath },
                     new ListModel(type, attach: listModel=>{
 
                         listModel.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a);
