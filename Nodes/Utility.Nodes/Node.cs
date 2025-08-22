@@ -29,7 +29,7 @@ namespace Utility.Nodes
 
             RemoveCommand = new Command<object>(a =>
             {
-                Parent.Remove(this);
+                (Parent as ITree).Remove(this);
             });
 
             EditCommand = new Command<object>(a =>
@@ -91,7 +91,7 @@ namespace Utility.Nodes
             }
         }
 
-        public override ITree Parent
+        public override IReadOnlyTree Parent
         {
             get => parent;
             set
