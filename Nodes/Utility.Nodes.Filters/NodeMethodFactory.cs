@@ -16,7 +16,8 @@ namespace Utility.Nodes.Filters
 
     public class EnumerableMethodFactory : Utility.Interfaces.Generic.IEnumerableFactory<Method>
     {
-        protected INodeSource nodeSource = Globals.Resolver.Resolve<INodeSource>();
+        // needs to be a property in case INodeSource changes
+        protected INodeSource nodeSource => Globals.Resolver.Resolve<INodeSource>();
         public IEnumerable<Method> Create(object config) => this.GetType().InstantMethods().Where(a => a.Name != nameof(Create)).Select(a => new Method(a, this));
 
     }

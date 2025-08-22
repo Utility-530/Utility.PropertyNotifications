@@ -27,9 +27,9 @@ using System.ComponentModel;
 using System.Reactive.Disposables;
 using CompositeDisposable = Utility.Observables.CompositeDisposable;
 using System.Reactive.Subjects;
-using Castle.Components.DictionaryAdapter;
 using Utility.Helpers.Reflection;
 using Utility.ServiceLocation;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Nodes.Filters
 {
@@ -90,11 +90,11 @@ namespace Utility.Nodes.Filters
                 return;
             if (node.Key is null)
             {
-                var index = node.Parent.Items.Count(a => ((INode)a).Name() == node.Name());
+                var index = (node as IGetParent<IReadOnlyTree>).Parent.Items.Count(a => ((INode)a).Name() == node.Name());
                 var type =
                 repository
                     .Value
-                    .Find((GuidKey)node.Parent.Key, node.Name(), type: toType(node.Data), index: index == 0 ? null : index)
+                    .Find((GuidKey)(node as IGetParent<IReadOnlyTree>).Parent.Key, node.Name(), type: toType(node.Data), index: index == 0 ? null : index)
                     .Subscribe(_key =>
                     {
                         if (_key.HasValue == false)
@@ -171,7 +171,7 @@ namespace Utility.Nodes.Filters
                     {
                         if (name == nameof(ViewModelTree.Order))
                         {
-                            ((value as ITree).Parent as INode).Sort(null);
+                            ((node as IGetParent<IReadOnlyTree>).Parent as INode).Sort(null);
                         }
                         if (name == nameof(ViewModelTree.IsSelected) && value is true)
                         {
@@ -180,7 +180,7 @@ namespace Utility.Nodes.Filters
                         if (names.Contains(name))
                         {
                             if (nodeInterface.Value.Getter(name)?.Get(node) is { } _value)
-                                repository.Value.Set((GuidKey)node.Key, name, _value, DateTime.Now);
+                                repository?.Value.Set((GuidKey)node.Key, name, _value, DateTime.Now);
                         }
                         else
                             Globals.UI.Post((a) =>
@@ -268,7 +268,7 @@ namespace Utility.Nodes.Filters
                         if (reception.Name == nameof(Model.Name))
                         {
                             (reception.Target as INotifyPropertyChanged).RaisePropertyChanged(reception.Name);
-                            repository.Value.UpdateName((GuidKey)node.Parent.Key, (GuidKey)node.Key, (string)reception.OldValue, (string)reception.Value);
+                            repository.Value.UpdateName((GuidKey)(node as IGetParent<IReadOnlyTree>).Parent.Key, (GuidKey)node.Key, (string)reception.OldValue, (string)reception.Value);
                         }
                         else
                             repository.Value.Set((GuidKey)node.Key, nameof(Node.Data) + "." + reception.Name, reception.Value, DateTime.Now);
@@ -432,6 +432,14 @@ namespace Utility.Nodes.Filters
                                     throw new Exception("u 333333312");
                                 }
 
+                            }
+                            else if(key is Utility.Structs.Repos.Key _key)
+                            {
+                                flag = true;
+                                FindChild(node, _key.Guid).Subscribe(a =>
+                                {
+
+                                });
                             }
                         }
                         , () =>

@@ -1,16 +1,10 @@
-﻿using Splat;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Utility.Interfaces.Exs;
-using Utility.Keys;
+using Utility.Interfaces.Generic;
 using Utility.Models.Trees;
-using Utility.PropertyNotifications;
-using Utility.Trees.Abstractions;
-using Utility.Helpers.Reflection;
 
 namespace Utility.Nodes.Filters
 {
@@ -23,9 +17,9 @@ namespace Utility.Nodes.Filters
         private Lazy<Dictionary<string, PropertyInterface>> setdictionary = new(() =>
         {
             var dict  = typeof(Node)
-                                               .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                               .Where(a => a.Name != nameof(IReadOnlyTree.Parent))
-                                               .ToDictionary(a => a.Name, a => Rules.Decide(a));
+                            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                            .Where(a => a.Name != nameof(IGetParent<>.Parent))
+                            .ToDictionary(a => a.Name, a => Rules.Decide(a));
             return dict;
         });
 
