@@ -121,7 +121,7 @@ namespace Utility.Nodes.Demo.Filters.Services
 
             IElement newElement;
 
-            if (n != node && dictionary.ContainsKey(n.Parent) == false)
+            if (n != node && dictionary.ContainsKey((n as IGetParent<IReadOnlyTree>).Parent) == false)
             {
                 return document;
             }
@@ -151,7 +151,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 newElement.TextContent = headerDescriptor.Name;
 
             }
-            else if (n.Parent?.Data is ICollectionDescriptor collectionItemDescriptor)
+            else if ((n as IGetParent<IReadOnlyTree>).Parent?.Data is ICollectionDescriptor collectionItemDescriptor)
             {
                 if (n.Data is IReferenceDescriptor)
                     newElement = document.CreateElement<IHtmlTableRowElement>();
@@ -161,10 +161,10 @@ namespace Utility.Nodes.Demo.Filters.Services
             }
             else if (n.Data is IPropertiesDescriptor prsdescriptor)
             {
-                dictionary[n] = dictionary[n.Parent];
+                dictionary[n] = dictionary[(n as IGetParent<IReadOnlyTree>).Parent];
                 return document;
             }
-            else if (n.Parent?.Data is IPropertiesDescriptor _prsdescriptor && n.Data is IValueDescriptor descriptor1)
+            else if ((n as IGetParent<IReadOnlyTree>).Parent?.Data is IPropertiesDescriptor _prsdescriptor && n.Data is IValueDescriptor descriptor1)
             {
                 newElement = document.CreateElement<IHtmlTableDataCellElement>();
                 newElement.TextContent = (descriptor1 as IValue).Value?.ToString();
@@ -187,11 +187,11 @@ namespace Utility.Nodes.Demo.Filters.Services
 
 
 
-            if (n.Parent == null)
+            if ((n as IGetParent<IReadOnlyTree>).Parent == null)
             {
                 document.Body.AppendChild(newElement);
             }
-            else if ((dictionary.TryGetValue(n.Parent, out var elem)))
+            else if ((dictionary.TryGetValue((n as IGetParent<IReadOnlyTree>).Parent, out var elem)))
             {
                 elem.AppendChild(newElement);
             }
@@ -212,7 +212,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 //{
                 //}
 
-                if (n.Parent?.Data is IPropertiesDescriptor _prsdescriptor && n.Data is IValueDescriptor descriptor1)
+                if ((n as IGetParent<IReadOnlyTree>).Parent?.Data is IPropertiesDescriptor _prsdescriptor && n.Data is IValueDescriptor descriptor1)
                 {
 
                 }
@@ -221,7 +221,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                     var innerElement = create(value);
                     newElement.AppendChild(innerElement);
                 }
-                else if (n.Parent.Data is ICollectionHeadersDescriptor headersDescriptor)
+                else if ((n as IGetParent<IReadOnlyTree>).Parent.Data is ICollectionHeadersDescriptor headersDescriptor)
                 {
 
                 }
@@ -230,7 +230,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 //    var p = document.CreateElement<IHtmlParagraphElement>();
                 //    newElement.AppendChild();
                 //}
-                else if (descriptor is IReferenceDescriptor iRef && n.Parent.Data is not ICollectionDescriptor)
+                else if (descriptor is IReferenceDescriptor iRef && (n as IGetParent<IReadOnlyTree>).Parent.Data is not ICollectionDescriptor)
                 {
                     //var index = (n as IIndex).Index.Local.ToString();
                     var x = (n as ITree).Index.ToString().Split('.').Length;
@@ -239,7 +239,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                     p.TextContent = iRef.Name;
                     newElement.AppendChild(p);
                 }
-                else if (descriptor is IPropertiesDescriptor prd && n.Parent.Data is not ICollectionDescriptor)
+                else if (descriptor is IPropertiesDescriptor prd && (n as IGetParent<IReadOnlyTree>).Parent.Data is not ICollectionDescriptor)
                 {
                     //var p = document.CreateElement<IHtmlParagraphElement>();
                     //p.TextContent = iRef.Name;

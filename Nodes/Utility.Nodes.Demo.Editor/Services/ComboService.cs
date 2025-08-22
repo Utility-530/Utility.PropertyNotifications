@@ -7,6 +7,7 @@ using Utility.Nodes.Demo.Editor;
 using Utility.Repos;
 using Utility.Models.Trees;
 using Utility.Interfaces.Generic;
+using Utility.ServiceLocation;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -29,12 +30,12 @@ namespace Utility.Nodes.Demo.Filters.Services
                             else
                                 Locator.Current.GetService<SlaveViewModel>()?.Dispose();
 
-                            Locator.CurrentMutable.UnregisterAll<ITreeRepository>();
-                            Locator.CurrentMutable.Register<ITreeRepository>(() => new TreeRepository(filePath));
+                            Globals.Register.UnregisterAll<ITreeRepository>();
+                            Globals.Register.Register<ITreeRepository>(() => new TreeRepository(filePath));
 
-                            Locator.Current.GetService<INodeSource>().Dispose();
-                            Locator.CurrentMutable.UnregisterAll<INodeSource>();
-                            Locator.CurrentMutable.RegisterLazySingleton<INodeSource>(() => new NodeEngine());
+                            Globals.Resolver.Resolve<INodeSource>().Dispose();
+                            Globals.Register.UnregisterAll<INodeSource>();
+                            Globals.Register.Register<INodeSource>(() => new NodeEngine());
 
                             if (Locator.Current.GetService<ParserService>() is { } parserService)
                             {

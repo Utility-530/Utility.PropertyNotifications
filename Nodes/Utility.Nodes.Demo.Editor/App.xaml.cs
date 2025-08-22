@@ -11,7 +11,7 @@ using Utility.Nodes.Demo.Filters.Services;
 using Utility.Nodes.Filters;
 using Utility.Repos;
 using Utility.WPF.Templates;
-
+using Utility.ServiceLocation;
 
 namespace Utility.Nodes.Demo.Editor
 {
@@ -24,9 +24,9 @@ namespace Utility.Nodes.Demo.Editor
         {
             SQLitePCL.Batteries.Init();
 
-            Locator.CurrentMutable.Register<ITreeRepository>(()=> new TreeRepository("../../../Data"));
+            Globals.Register.Register<ITreeRepository>(()=> new TreeRepository("../../../Data"));
             //Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeSource.Instance);
-            Locator.CurrentMutable.RegisterLazySingleton<INodeSource>(()=>new NodeEngine());
+            Globals.Register.Register<INodeSource>(()=>new NodeEngine());
             Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
             Locator.CurrentMutable.RegisterConstant<IExpander>(WPF.Expander.Instance);
             //Locator.CurrentMutable.RegisterConstant<IContext>(Context.Instance);

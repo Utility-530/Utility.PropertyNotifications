@@ -129,7 +129,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                                                             //    results.Add(value);
 
                                                             var list = new List<object>();
-                                                            foreach (var source in input.Element.Collection)
+                                                            foreach (ResolvableModel source in input.Element.Collection)
                                                             {
                                                                 if (source.TryGetValue(a, out var value))
                                                                     list.Add(value);
@@ -244,12 +244,14 @@ namespace Utility.Nodes.Demo.Filters.Services
                                                                 var ee = transformer.Output.Element.Collection.GetEnumerator();
                                                                 while (mr.MoveNext() && ee.MoveNext())
                                                                 {
-                                                                    if (ee.Current.Types.Count != ee.Current.Properties.Count)
+                                                                    if (ee.Current is not ResolvableModel rModel)
+                                                                        throw new Exception("sd 3sdads");
+                                                                    if (rModel.Types.Count != rModel.Properties.Count)
                                                                     {
-                                                                        observer.OnNext(new TransformerException(transformer, $"types count {ee.Current.Types.Count} doesn't match properties count, {ee.Current.Properties.Count}"));
+                                                                        observer.OnNext(new TransformerException(transformer, $"types count {rModel.Types.Count} doesn't match properties count, {rModel.Properties.Count}"));
                                                                         return;
                                                                     }
-                                                                    ee.Current.TrySetValue(a, mr.Current);
+                                                                    rModel.TrySetValue(a, mr.Current);
                                                                 }
 
 
@@ -257,7 +259,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                                                             }
                                                             else
                                                             {
-                                                                foreach (var target in transformer.Output.Element.Collection)
+                                                                foreach (ResolvableModel target in transformer.Output.Element.Collection)
                                                                 {
                                                                     if (target.Types.Count != target.Properties.Count)
                                                                     {
@@ -319,8 +321,8 @@ namespace Utility.Nodes.Demo.Filters.Services
                                 a.Value?.Collection.Changes()
                                 .Subscribe(a =>
                                 {
-                                    a.Value.Types.Changes().Subscribe(a => observer.OnNext(Unit.Default));
-                                    a.Value.Properties.Changes().Subscribe(a => observer.OnNext(Unit.Default));
+                                    (a.Value as ResolvableModel).Types.Changes().Subscribe(a => observer.OnNext(Unit.Default));
+                                    (a.Value as ResolvableModel).Properties.Changes().Subscribe(a => observer.OnNext(Unit.Default));
 
                                 }).DisposeWith(composite);
                             });
@@ -349,8 +351,8 @@ namespace Utility.Nodes.Demo.Filters.Services
                     {
                         a.Value?.Collection.Changes().Subscribe(a =>
                         {
-                            a.Value.Types.Changes().Subscribe(a => observer.OnNext(Unit.Default));
-                            a.Value.Properties.Changes().Subscribe(a => observer.OnNext(Unit.Default));
+                            (a.Value as ResolvableModel).Types.Changes().Subscribe(a => observer.OnNext(Unit.Default));
+                            (a.Value as ResolvableModel).Properties.Changes().Subscribe(a => observer.OnNext(Unit.Default));
                         }).DisposeWith(composite);
                     });
 
