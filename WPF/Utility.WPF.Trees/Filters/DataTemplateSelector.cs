@@ -5,6 +5,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using Utility.Interfaces;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
@@ -38,7 +39,7 @@ namespace Utility.Nodes.WPF
                     //    new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => true), )
                     //},
                     //new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionItemDescriptor!=null){  }, md=>MakeLineTemplate()),
-                    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Parent!=null){  })
+                    new DataTemplateDecisionTree(new Decision<IGetParent<IReadOnlyTree>>(item => item.Parent!=null){  })
                     {
                         new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => true){  }, md=>() => MakeTemplate(md)),
                         //new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => ((item.Parent ).Parent!=null)){  })

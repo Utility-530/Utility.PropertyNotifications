@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows.Data;
 using Utility.Enums;
 using Utility.Interfaces;
+using Utility.Interfaces.Generic;
 using Utility.PropertyDescriptors;
 using Utility.Structs;
 using Utility.Trees.Abstractions;
@@ -24,7 +25,7 @@ namespace Utility.Nodes.WPF
             //{
             //    return ItemsPanelFactory.Template(1, 1, O.Horizontal, Arrangement.Uniform);
             //}
-            if (value is IReadOnlyTree { Data: IReferenceDescriptor { Count: int _count }, Parent.Data: ICollectionDescriptor { } })
+            if (value is IReadOnlyTree { Data: IReferenceDescriptor { Count: int _count } } && value is IGetParent<IReadOnlyTree>{ Parent.Data: ICollectionDescriptor { } })
             {
                 return ItemsPanelFactory.Template([new Dimension()] , Enumerable.Repeat(new Dimension(), Math.Max(_count, 1)).ToArray(), O.Horizontal, Arrangement.Uniform);
             }

@@ -84,7 +84,7 @@ namespace Utility.WPF.Controls.Trees
 
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
-            if (item is IIsSelected { IsSelected: true })
+            if (item is IGetIsSelected { IsSelected: true })
             {
 
             }

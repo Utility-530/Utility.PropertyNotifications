@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using Utility.Interfaces.Generic;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Decisions;
@@ -73,7 +74,7 @@ namespace Utility.Nodes.WPF
                     new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionDescriptor != null){  }, md=>"LineStyle"),
                     new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionHeadersDescriptor != null){  }, md=>"ItemsStyle"),
                     new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IPropertiesDescriptor != null){  }, md=>"ItemsStyle"),
-                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Parent !=null && item.Parent.Data is ICollectionDescriptor){  }, md =>"ThinLineStyle"),
+                    new StringDecisionTree(new Decision<IGetParent<IReadOnlyTree>>(item => item.Parent !=null && item.Parent.Data is ICollectionDescriptor){  }, md =>"ThinLineStyle"),
 
                     //new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Parent!=null){  })
                     //{
