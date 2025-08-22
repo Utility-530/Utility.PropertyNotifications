@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Disposables;
 using System.Reflection;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models.Trees;
 using Utility.PropertyNotifications;
@@ -83,7 +84,7 @@ namespace Utility.Nodes.Ex
             {
                 var childClone = (ITree)item.Abstract(out var _disposables);
                 (c_disposables).Add(_disposables);
-                childClone.Parent = clone;
+                (childClone as ISetParent<IReadOnlyTree>).Parent = clone;
                 clone.Add(childClone);
             }).DisposeWith(c_disposables);
 
