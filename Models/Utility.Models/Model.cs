@@ -11,6 +11,7 @@ using Utility.Interfaces.Exs;
 using Utility.Trees.Extensions.Async;
 using Utility.Helpers.Reflection;
 using Utility.Interfaces.Generic;
+using Utility.ServiceLocation;
 
 namespace Utility.Models
 {
@@ -49,8 +50,7 @@ namespace Utility.Models
         private readonly Action<INode>? nodeAction;
         private readonly Action<IReadOnlyTree, IReadOnlyTree>? addition;
         private readonly Action<TAttach>? attach;
-        protected INodeSource source = Locator.Current.GetService<INodeSource>();
-        protected Lazy<IContext> context = new(() => Locator.Current.GetService<IContext>());
+        protected INodeSource source = Utility.Globals.Resolver.Resolve<INodeSource>();
         public virtual Version Version { get; set; } = new();
 
         public Model(Func<IEnumerable<IModel>>? childrenLambda = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<TAttach>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
