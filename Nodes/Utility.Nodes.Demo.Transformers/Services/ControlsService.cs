@@ -273,7 +273,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                             //    results.Add(value);
 
                             var list = new List<object>();
-                            foreach (var source in input.Element.Collection)
+                            foreach (ResolvableModel source in input.Element.Collection)
                             {
                                 if (source.TryGetValue(a, out var value))
                                     list.Add(value);
@@ -413,12 +413,12 @@ namespace Utility.Nodes.Demo.Filters.Services
                             var ee = transformer.Output.Element.Collection.GetEnumerator();
                             while (mr.MoveNext() && ee.MoveNext())
                             {
-                                if (ee.Current.Types.Count != ee.Current.Properties.Count)
+                                if ((ee.Current as ResolvableModel).Types.Count != (ee.Current as ResolvableModel).Properties.Count)
                                 {
                                     //observer.OnNext(new TransformerException(transformer, $"types count {ee.Current.Types.Count} doesn't match properties count, {ee.Current.Properties.Count}"));
                                     return;
                                 }
-                                ee.Current.TrySetValue(a, mr.Current);
+                                (ee.Current as ResolvableModel).TrySetValue(a, mr.Current);
                             }
 
 
@@ -428,12 +428,15 @@ namespace Utility.Nodes.Demo.Filters.Services
                         {
                             foreach (var target in transformer.Output.Element.Collection)
                             {
-                                if (target.Types.Count != target.Properties.Count)
+                                if (target is ResolvableModel model)
                                 {
-                                    //observer.OnNext(new TransformerException(transformer, $"types count {target.Types.Count} doesn't match properties count, {target.Properties.Count}"));
-                                    return;
+                                    if (model.Types.Count != model.Properties.Count)
+                                    {
+                                        //observer.OnNext(new TransformerException(transformer, $"types count {target.Types.Count} doesn't match properties count, {target.Properties.Count}"));
+                                        return;
+                                    }
+                                    model.TrySetValue(a, output);
                                 }
-                                target.TrySetValue(a, output);
                             }
 
                         }

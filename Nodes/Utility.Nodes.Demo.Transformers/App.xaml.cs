@@ -16,6 +16,7 @@ using Utility.Nodes.Filters;
 using Utility.Nodes.WPF;
 using Utility.Repos;
 using Utility.WPF.Templates;
+using Utility.ServiceLocation;
 
 
 namespace Utility.Nodes.Demo.Transformers
@@ -29,8 +30,8 @@ namespace Utility.Nodes.Demo.Transformers
         {
             SQLitePCL.Batteries.Init();
 
-            Locator.CurrentMutable.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
-            Locator.CurrentMutable.RegisterLazySingleton<INodeSource>(() => new NodeEngine());
+            registerGlobals();
+
             Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
             Locator.CurrentMutable.RegisterConstant<IExpander>(WPF.Expander.Instance);
 
@@ -56,6 +57,12 @@ namespace Utility.Nodes.Demo.Transformers
             window.Show();
 
             base.OnStartup(e);
+        }
+
+        void registerGlobals()
+        {
+            Globals.Register.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
+            Globals.Register.Register<INodeSource>(() => new NodeEngine());
         }
     }
 
