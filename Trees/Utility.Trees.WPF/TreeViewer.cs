@@ -232,7 +232,7 @@ namespace Utility.Trees.WPF
             }, a =>
             {
 
-                if (a is HeaderedItemsControl { Header: IIsSelected { IsSelected: true } viewModel })
+                if (a is HeaderedItemsControl { Header: IGetIsSelected { IsSelected: true } viewModel })
                     obj = viewModel;
                 else
                 {
@@ -254,7 +254,7 @@ namespace Utility.Trees.WPF
             }, a =>
             {
 
-                if (a is HeaderedItemsControl { Header: IIsSelected { IsSelected: true } viewModel })
+                if (a is HeaderedItemsControl { Header: IGetIsSelected { IsSelected: true } viewModel })
                 {
                     if (viewModel is IDelete delete)
                         delete.Delete(null);

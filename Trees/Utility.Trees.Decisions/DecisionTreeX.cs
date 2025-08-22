@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Text;
 using Utility.Helpers.NonGeneric;
+using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Pipes;
 using Utility.Trees.Abstractions;
@@ -64,7 +65,7 @@ namespace Utility.Trees.Decisions
                 {
                     foreach (IDecisionTreeX item in Items)
                     {
-                        item.Parent = this;
+                        (item as ISetParent<IDecisionTreeX>).Parent = this;
                         var queueItem = new ForwardItem(item, Output, new List<object>(keys));
                         Pipe.Instance.Queue(queueItem);
                     }
