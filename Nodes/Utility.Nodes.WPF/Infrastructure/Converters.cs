@@ -15,6 +15,7 @@ using Utility.WPF.Controls.ComboBoxes;
 using Utility.Interfaces.Exs;
 using System.Text.RegularExpressions;
 using System.IO;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Nodes.WPF
 {
@@ -57,7 +58,7 @@ namespace Utility.Nodes.WPF
             if (value is ChangeRoutedEventArgs { Type: Changes.Type.Add, Instance: INode nObject } args)
             {
                 args.Handled = true;
-                if (nObject is { Data: DataFileModel model, Parent.Data: DataFilesModel { Collection: { } collection } dModels })
+                if (nObject is { Data: DataFileModel model } && nObject is IGetParent<INode> { Parent.Data: DataFilesModel { Collection: { } collection } dModels })
                 {
                     var alias = toFileName(dModels, model);
 
