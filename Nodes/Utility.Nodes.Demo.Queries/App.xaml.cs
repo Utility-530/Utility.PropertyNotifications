@@ -12,6 +12,7 @@ using Utility.Models.Trees.Converters;
 using Utility.Nodes.Demo.Queries.Infrastructure;
 using Utility.Nodes.Filters;
 using Utility.Repos;
+using Utility.ServiceLocation;
 
 namespace Utility.Nodes.Demo.Queries
 {
@@ -27,8 +28,7 @@ namespace Utility.Nodes.Demo.Queries
         }
         protected override void OnStartup(StartupEventArgs e)
         {
-            Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeEngine.Instance);
-            Locator.CurrentMutable.RegisterConstant<IContext>(new Context());
+            Globals.Register.Register<INodeSource>(NodeEngine.Instance);
             Locator.CurrentMutable.RegisterConstant<ITreeRepository>(new JsonRepository());
             Locator.CurrentMutable.RegisterConstant<IMainViewModel>(new MainViewModel());
             Locator.CurrentMutable.RegisterLazySingleton<ILiteRepository>(() => new LiteDBRepository(new LiteDBRepository.DatabaseSettings("../../../Data/lite.db", typeof(FilterEntity))));
@@ -43,7 +43,7 @@ namespace Utility.Nodes.Demo.Queries
             var dataTemplate = App.Current.Resources["MainTemplate"] as DataTemplate;
             var window = new Window() { Content = Locator.Current.GetService<IMainViewModel>() };
             window.Closing += Window_Closing;
-            SchemaStore.Instance.Schemas.Add(typeof(FilterEntity), new Schema
+            SchemaStore.Instance.Add(typeof(FilterEntity), new Schema
             {
                 Properties = [
                 //new SchemaProperty { Name = nameof(FilterEntity.Key), IsVisible = false },
