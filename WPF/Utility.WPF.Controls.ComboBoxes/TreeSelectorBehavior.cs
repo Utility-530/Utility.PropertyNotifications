@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Utility.Interfaces.Generic;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
 
@@ -27,7 +28,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                 return contentControl;
             }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Items)) });
             AssociatedObject.ItemTemplate = hierarchicalDataTemplate;
-            AssociatedObject.ParentPath = nameof(IReadOnlyTree.Parent);
+            AssociatedObject.ParentPath = nameof(IGetParent<>.Parent);
 
             base.OnAttached();
         }

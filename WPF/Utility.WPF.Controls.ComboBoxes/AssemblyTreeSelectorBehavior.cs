@@ -10,6 +10,7 @@ using Utility.Trees.Extensions;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
 using Utility.WPF.ResourceDictionarys;
+using Utility.Interfaces.Generic;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
@@ -140,9 +141,9 @@ namespace Utility.WPF.Controls.ComboBoxes
             if (descendants.SingleOrDefault(a => a
                 is { Data: DictionaryEntry { Key: { } key } }
                 && NewMethod(x.Element, key)
-                && a.Parent is { Data: ResourceDictionaryKeyValue { } res } parent
+                && (a as IGetParent<IReadOnlyTree>).Parent is { Data: ResourceDictionaryKeyValue { } res } parent
                 && res.Entry.Key.Equals(x.ResourceDictionary) == true
-                && parent.Parent is { Data: Assembly assembly }
+                && (a as IGetParent<IReadOnlyTree>).Parent is { Data: Assembly assembly }
                 && assembly.GetName().Name.Equals(x.Assembly)) is { } innerTree)
             {
                 AssociatedObject.IsError = false;
