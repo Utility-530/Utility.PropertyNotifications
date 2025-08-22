@@ -1265,7 +1265,7 @@ namespace Utility.Models.Trees
 
         public override void SetNode(INode node)
         {
-            node.WithChangesTo(a => (a as IGetParent<INode>).Parent).Subscribe(a =>
+            node.WithChangesTo(a => (a as IGetParent<IReadOnlyTree>).Parent).Subscribe(a =>
             {
                 node.LocalIndex = a.Items.Count();
                 node.Arrangement = Arrangement.Uniform;
@@ -1297,7 +1297,7 @@ namespace Utility.Models.Trees
 
         public override void SetNode(INode node)
         {
-            node.WithChangesTo(a => (a as IGetParent<INode>).Parent).Subscribe(a =>
+            node.WithChangesTo(a => (a as IGetParent<IReadOnlyTree>).Parent).Subscribe(a =>
             {
                 node.LocalIndex = a.Items.Count();
                 node.IsPersistable = true;
@@ -1492,7 +1492,7 @@ namespace Utility.Models.Trees
                             }
                             catch (InvalidOperationException ex) when (ex.Message == "Cannot change ObservableCollection during a CollectionChanged event.")
                             {
-                                this.context.Value.UI.Post(a => topNode.Add(a as INode), items[i]);
+                                Utility.Globals.UI.Post(a => topNode.Add(a as INode), items[i]);
                             }
                         }
                     }
