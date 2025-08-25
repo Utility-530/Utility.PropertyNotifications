@@ -10,6 +10,7 @@
     using Type = Changes.Type;
     using System.Collections.Specialized;
     using Utility.Interfaces.Generic;
+    using Utility.Interfaces.NonGeneric;
 
     public static partial class Basic
     {
@@ -142,7 +143,7 @@
 
         public static IReadOnlyTree Simplify(this ITree tree)
         {
-            var clone = new Tree(tree.Data.ToString()) { Key = tree.Key, };
+            var clone = new Tree(tree.Data.ToString()) { Key = (tree as IGetKey).Key, };
 
             CompositeDisposable disposables = new();
             tree.AndAdditions<ITree>().Subscribe(async item =>

@@ -223,7 +223,7 @@ namespace Utility.Trees
 
         public void Remove(Guid index)
         {
-            var single = m_items.OfType<ITree>().Single(t => t.Key.Equals(index));
+            var single = m_items.OfType<ITree>().Single(t => (t as IGetKey).Key.Equals(index));
             m_items.Remove(single);
         }
 
@@ -347,13 +347,13 @@ namespace Utility.Trees
 
         public virtual bool Equals(ITree? other)
         {
-            return other?.Key?.Equals(this.Key) == true;
+            return (other as IGetKey)?.Key?.Equals(this.Key) == true;
         }
 
 
         bool IEquatable<IReadOnlyTree>.Equals(IReadOnlyTree? other)
         {
-            return other?.Key?.Equals(this.Key) == true;
+            return (other as IGetKey)?.Key?.Equals(this.Key) == true;
         }
 
         public virtual bool Equals(IEquatable? other)

@@ -1,7 +1,10 @@
 ﻿using System.Collections;
+using System.Collections.Specialized;
 using System.Reactive.Linq;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
+using Utility.Reactives;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Trees.Extensions
@@ -18,18 +21,24 @@ namespace Utility.Trees.Extensions
             }
         }
 
-        public static int[] Index<T>(T child, Func<T, T?> parentFunc, Func<T, T, int> childFunc, List<int>? indices = null)
-        {
-            indices ??= [0];
-            var parent = parentFunc(child);
-            if (parent == null)
-                return [.. indices];
-            else
-            {
-                indices.Add(childFunc(parent, child));
-                return Index(parent, parentFunc, childFunc, indices);
-            }
 
+        public static int[] Index<T>(T node, Func<T, T?> getParent, Func<T, T, int> getChildIndex)
+        {
+            var path = new List<int>();
+            var current = node;
+
+            while (getParent(current) is T parent)
+            {
+                int index = getChildIndex(parent, current);
+                if (index < 0)
+                    throw new ArgumentException("Child not found in parent");
+
+                path.Add(index);
+                current = parent;
+            }
+            path.Add(0);
+            path.Reverse(); // Convert from root-to-leaf order
+            return [.. path];
         }
 
         public static IEnumerable<ITree<T>> ToTree<T, K>(this IEnumerable<T> collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, T root)
@@ -46,6 +55,30 @@ namespace Utility.Trees.Extensions
                 foreach (var x in ToTree(collection, id_selector, parent_id_selector, conversion, item, tree))
                     yield return x;
             }
+        }
+
+        public static IObservable<TTree> ToTree<X, T, K, TTree>(this X collection, Func<T, K> id_selector, Func<T, K> parent_id_selector, Func<T, TTree?, TTree> conversion, T root, TTree? rootTree = default)
+            where X : INotifyCollectionChanged, IEnumerable<T>
+        {
+            return Observable.Create<TTree>(observer =>
+            {
+                return collection
+                    .AndAdditions<T>()
+                    .Where(c => EqualityComparer<K>.Default.Equals(parent_id_selector(c), id_selector(root)))
+                    .Subscribe(item =>
+                    {
+                        Task.Run(() =>
+                        {
+                            var tree = conversion(item, rootTree);
+                            observer.OnNext(tree);
+
+                            ToTree(collection, id_selector, parent_id_selector, conversion, item, tree).Subscribe(x => observer.OnNext(x));
+                        });
+                        //foreach (var x in ToTree(collection, id_selector, parent_id_selector, conversion, item, tree))
+                        //    yield return x;
+                    });
+            });
+          
         }
 
         public static void Visit<T>(this T tree, Func<T, IEnumerable<T>> children, Action<T> action)
@@ -119,7 +152,7 @@ namespace Utility.Trees.Extensions
 
         public static ITree<T>? Match<T>(this ITree<T> tree, Guid guid)
         {
-            return Match(tree, a => a.Key.Equals(guid));
+            return Match(tree, a => (a as IGetKey).Key.Equals(guid));
         }
     }
 }
