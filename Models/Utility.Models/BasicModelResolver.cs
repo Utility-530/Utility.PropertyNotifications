@@ -9,7 +9,7 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Models
 {
-    public class ModelResolver : IModelResolver
+    public class BasicModelResolver : IModelResolver
     {
         private readonly Dictionary<string, Lazy<IModel>> _factories = new Dictionary<string, Lazy<IModel>>();
 
