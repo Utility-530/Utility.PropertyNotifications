@@ -10,7 +10,7 @@ namespace Utility.Reactives
 {
     public class Observable<T> : IObservable<T>, IGetReference
     {
-        private readonly IObservable<T>[] observables;
+        public readonly IObservable<T>[] observables;
         T previousValue;
 
         public Observable(IObservable<T>[] observables)
