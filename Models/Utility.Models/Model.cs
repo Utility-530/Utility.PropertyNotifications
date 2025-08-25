@@ -130,8 +130,9 @@ namespace Utility.Models
         [JsonIgnore]
         public IEnumerable Children => CreateChildren();
 
-        string IKey.Key { get => Node.Key; set => Node.Key = value; }
         public IModel Parent { get; set; }
+        public string Key { get; }
+        string ISetKey.Key { set => throw new NotImplementedException(); }
 
         public virtual void SetNode(INode node)
         {
