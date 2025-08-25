@@ -39,7 +39,7 @@ namespace Utility.PropertyDescriptors
         {
             get
             {
-                return children ??= new ObservableCollection<IDescriptor>(new[] { new CollectionHeadersDescriptor(ElementType, Instance.GetType()) }.Concat(AddFromInstance()));
+                return children ??= new ObservableCollection<IDescriptor>(new[] { new CollectionHeadersDescriptor(ElementType, Instance.GetType()) { Parent = this } }.Concat(AddFromInstance()));
             }
         }
 
@@ -96,6 +96,7 @@ namespace Utility.PropertyDescriptors
         IDescriptor Next(object item, Type type, Type parentType, Changes.Type changeType, int i, bool refresh = false, DateTime? removed = null)
         {
             var descriptor = DescriptorConverter.ToDescriptor(item, new RootDescriptor(type, parentType, type.Name + $" [{i}]"));
+            descriptor.Parent = this;
             descriptors.Add(descriptor, (item, i));
             if (refresh)
                 descriptor.Initialise();

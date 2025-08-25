@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Utility.Interfaces;
+using Utility.Interfaces.Generic;
 
 namespace Utility.PropertyDescriptors;
 
@@ -11,7 +12,7 @@ public interface ICollectionDetailsDescriptor
 }
 
 
-public abstract record MemberDescriptor(Descriptor Descriptor) : NotifyProperty, IDescriptor, IIsReadOnly, ICollectionDetailsDescriptor, IAsyncClone, IHasChildren
+public abstract record MemberDescriptor(Descriptor Descriptor) : NotifyProperty, IDescriptor, IIsReadOnly, ICollectionDetailsDescriptor, IAsyncClone, IHasChildren, IModel
 {
     public virtual string Name => Descriptor.Name;
     public virtual Type ParentType => Descriptor.ComponentType;
@@ -40,7 +41,8 @@ public abstract record MemberDescriptor(Descriptor Descriptor) : NotifyProperty,
     public override int GetHashCode() => this.Name.GetHashCode();
 
     public virtual bool HasChildren { get; } = true;
-
+    string ISetName.Name { set => throw new NotImplementedException(); }
+    public IModel Parent { get; set; }
     public virtual void Initialise(object? item = null)
     {
         VisitChildren(this, a =>

@@ -25,7 +25,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Me
                 if (Descriptor.PropertyType.IsAssignableTo(typeof(IEnumerable)) && Descriptor.PropertyType.IsAssignableTo(typeof(string)) == false && this.CollectionItemPropertyType is Type _elementType)
                 {
                     var enumerable = (IEnumerable?)Activator.CreateInstance(Descriptor.PropertyType);
-                    var collectionDescriptor = new CollectionDescriptor(Descriptor, _elementType, enumerable);
+                    var collectionDescriptor = new CollectionDescriptor(Descriptor, _elementType, enumerable) { Parent = this };
                     if (i++ > 0)
                     {
                         yield break;
@@ -35,7 +35,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Me
                 else
                 {
                     var inst = ActivateAnything.Activate.New(Descriptor.PropertyType);
-                    propertiesDescriptor = new PropertiesDescriptor(Descriptor, inst) { };
+                    propertiesDescriptor = new PropertiesDescriptor(Descriptor, inst) { Parent = this };
                     yield return propertiesDescriptor;
                 }
             }
@@ -46,7 +46,7 @@ internal record ReferenceDescriptor(Descriptor Descriptor, object Instance) : Me
             if (Instance is IEnumerable _enumerable && Instance is not string s && Instance.GetType() is Type _type && _type.ElementType() is Type elementType)
             {
                 int i = 0;
-                yield return new CollectionDescriptor(Descriptor, elementType, _enumerable);
+                yield return new CollectionDescriptor(Descriptor, elementType, _enumerable) { Parent = this }; 
 
             }
         }

@@ -20,7 +20,7 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
     {
         get
         {
-            if (Type.GetConstructor(Type.EmptyTypes) == null || Type.IsValueOrString())
+            if (Type?.GetConstructor(Type.EmptyTypes) == null || Type.IsValueOrString())
                 yield break;
             else if (descriptors.IsEmpty())
             {

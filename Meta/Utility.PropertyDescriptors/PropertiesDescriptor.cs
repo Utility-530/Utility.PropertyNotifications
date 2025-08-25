@@ -26,6 +26,7 @@ namespace Utility.PropertyDescriptors
                 foreach (Descriptor descriptor in descriptors)
                 {
                     var propertyDescriptor = DescriptorConverter.ToDescriptor(Instance, descriptor);
+                    propertyDescriptor.Parent = this;
                     yield return propertyDescriptor;
                 }
             }
