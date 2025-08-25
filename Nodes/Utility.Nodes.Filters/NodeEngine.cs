@@ -81,20 +81,20 @@ namespace Utility.Nodes.Filters
         public void Remove(INode node)
         {
             nodes.Remove(node);
-            repository.Value.Remove((GuidKey)node.Key);
+            repository.Value.Remove((GuidKey)node.Key());
         }
 
         public void Add(INode node)
         {
             if (node.Data is IIgnore)
                 return;
-            if (node.Key is null)
+            if (node.Key() is null)
             {
                 var index = (node as IGetParent<IReadOnlyTree>).Parent.Items.Count(a => ((INode)a).Name() == node.Name());
                 var type =
                 repository
                     .Value
-                    .Find((GuidKey)(node as IGetParent<IReadOnlyTree>).Parent.Key, node.Name(), type: toType(node.Data), index: index == 0 ? null : index)
+                    .Find((GuidKey)(node as IGetParent<IReadOnlyTree>).Parent.Key(), node.Name(), type: toType(node.Data), index: index == 0 ? null : index)
                     .Subscribe(_key =>
                     {
                         if (_key.HasValue == false)
@@ -102,12 +102,12 @@ namespace Utility.Nodes.Filters
                             throw new Exception("dde33443 21");
                         }
 
-                        node.Key = new GuidKey(_key.Value.Guid);
+                        node.SetKey(new GuidKey(_key.Value.Guid));
                         Add(node);
                     });
                 return;
             }
-            else if (nodes.Any(a => a.Key == node.Key))
+            else if (nodes.Any(a => a.Key() == node.Key()))
             {
 
             }
@@ -180,14 +180,14 @@ namespace Utility.Nodes.Filters
                         if (names.Contains(name))
                         {
                             if (nodeInterface.Value.Getter(name)?.Get(node) is { } _value)
-                                repository?.Value.Set((GuidKey)node.Key, name, _value, DateTime.Now);
+                                repository?.Value.Set((GuidKey)node.Key(), name, _value, DateTime.Now);
                         }
                         else
                             Globals.UI.Post((a) =>
                             {
                                 dirty.OnNext((DirtyModel)a);
 
-                            }, new DirtyModel { Name = name + node.Items.Count(), SourceKey = node.Key, PropertyName = name, NewValue = value });
+                            }, new DirtyModel { Name = name + node.Items.Count(), SourceKey = node.Key(), PropertyName = name, NewValue = value });
                     }
                     else
                         throw new Exception("ss FGre333333333");
@@ -197,7 +197,7 @@ namespace Utility.Nodes.Filters
 
             void initialiseData(object data)
             {
-                if (node.Key == "5b672a24-2269-4c3b-861b-eb6d529ab41a")
+                if (node.Key() == "5b672a24-2269-4c3b-861b-eb6d529ab41a")
                 {
 
                 }
@@ -214,7 +214,7 @@ namespace Utility.Nodes.Filters
                         {
                         }
                         repository.Value
-                        .Get((GuidKey)node.Key, nameof(Node.Data) + "." + call.Name)
+                        .Get((GuidKey)node.Key(), nameof(Node.Data) + "." + call.Name)
                         .Subscribe(a =>
                         {
                             if (a.Value != null)
@@ -268,10 +268,10 @@ namespace Utility.Nodes.Filters
                         if (reception.Name == nameof(Model.Name))
                         {
                             (reception.Target as INotifyPropertyChanged).RaisePropertyChanged(reception.Name);
-                            repository.Value.UpdateName((GuidKey)(node as IGetParent<IReadOnlyTree>).Parent.Key, (GuidKey)node.Key, (string)reception.OldValue, (string)reception.Value);
+                            repository.Value.UpdateName((GuidKey)(node as IGetParent<IReadOnlyTree>).Parent.Key(), (GuidKey)node.Key(), (string)reception.OldValue, (string)reception.Value);
                         }
                         else
-                            repository.Value.Set((GuidKey)node.Key, nameof(Node.Data) + "." + reception.Name, reception.Value, DateTime.Now);
+                            repository.Value.Set((GuidKey)node.Key(), nameof(Node.Data) + "." + reception.Name, reception.Value, DateTime.Now);
                     }).DisposeWith(compositeDisposable);
                 }
                 if (data is INotifyPropertyChanged changed)
@@ -295,7 +295,7 @@ namespace Utility.Nodes.Filters
                                         .Get(reception.Name, a => node.Data.GetType().GetProperty(reception.Name).ToGetter<object>())
                                         .Invoke(node.Data);
                         }
-                        repository.Value.Set((GuidKey)node.Key, nameof(Node.Data) + "." + reception.Name, value, DateTime.Now);
+                        repository.Value.Set((GuidKey)node.Key(), nameof(Node.Data) + "." + reception.Name, value, DateTime.Now);
 
                     }).DisposeWith(compositeDisposable);
                 }
@@ -311,7 +311,7 @@ namespace Utility.Nodes.Filters
 
 
                 if (data is IValue value && Helpers.Reflection.Comparison.IsDefaultValue(value.Value) == false)
-                    repository.Value.Set((GuidKey)node.Key, nameof(Node.Data) + "." + nameof(IValue.Value), value.Value, DateTime.Now);
+                    repository.Value.Set((GuidKey)node.Key(), nameof(Node.Data) + "." + nameof(IValue.Value), value.Value, DateTime.Now);
 
             }
 
@@ -319,7 +319,7 @@ namespace Utility.Nodes.Filters
             {
                 return Observable.Create<INode>(observer =>
                 {
-                    return repository.Value.Get(Guid.Parse(node.Key)).Subscribe(_d =>
+                    return repository.Value.Get(Guid.Parse(node.Key())).Subscribe(_d =>
                     {
                         if (_d.Name == null)
                         {
@@ -360,18 +360,18 @@ namespace Utility.Nodes.Filters
                         {
                             if (_value is IKey _key)
                             {
-                                return key.Key.Equals(_key.Key);
+                                return key.Key().Equals(_key.Key());
                             }
                             else if (_value is IGetGuid guid)
                             {
-                                return key.Key.Equals(new GuidKey(guid.Guid));
+                                return key.Key().Equals(new GuidKey(guid.Guid));
                             }
                         }
                         throw new Exception("44c dd");
 
                     });
 
-                    repository.Value.Remove((GuidKey)node.Key);
+                    repository.Value.Remove((GuidKey)node.Key());
                 }
                 else if (a is Change { Type: Changes.Type.Update, Value: INode newValue, OldValue: INode oldValue })
                 {
@@ -381,7 +381,7 @@ namespace Utility.Nodes.Filters
                         {
                             if (oldValue is IKey _key)
                             {
-                                return key.Key.Equals(oldValue.Key);
+                                return key.Key().Equals(oldValue.Key());
                             }
                             //else if (_value is IGetGuid guid)
                             //{
@@ -389,7 +389,6 @@ namespace Utility.Nodes.Filters
                             //}
                         }
                         throw new Exception("44c dd");
-
                     });
                 }
             }
@@ -400,7 +399,7 @@ namespace Utility.Nodes.Filters
                 {
                     int i = 0;
                     bool flag = false;
-                    return repository.Value.Find((GuidKey)node.Key)
+                    return repository.Value.Find((GuidKey)node.Key())
                         .Subscribe(async key =>
                         {
                             if (key.HasValue == false)
@@ -416,7 +415,7 @@ namespace Utility.Nodes.Filters
                             else if (children is IChildCollection)
                             {
                                 i++;
-                                var nodes = Nodes.Where(a => a.Key == new GuidKey(key.Value.Guid)).ToArray();
+                                var nodes = Nodes.Where(a => a.Key() == new GuidKey(key.Value.Guid)).ToArray();
                                 if (nodes.Length > 1)
                                 {
                                     throw new Exception("33 44");
@@ -473,12 +472,12 @@ namespace Utility.Nodes.Filters
         {
             return Observable.Create<INode>(observer =>
             {
-                if (Nodes.SingleOrDefault(a => a.Key == guid.ToString()) is INode cnode)
+                if (Nodes.SingleOrDefault(a => a.Key() == guid.ToString()) is INode cnode)
                     observer.OnNext(cnode);
 
                 repository
                 .Value
-                .Find((GuidKey)node.Key, guid: guid)
+                .Find((GuidKey)node.Key(), guid: guid)
                 .Subscribe(_key =>
                 {
                     activate(node, _key).Subscribe(a =>
@@ -492,7 +491,7 @@ namespace Utility.Nodes.Filters
                 .AndAdditions<INode>()
                 .Subscribe(ax =>
                 {
-                    if (ax.Key.Equals(guid.ToString()))
+                    if (ax.Key().Equals(guid.ToString()))
                     {
                         observer.OnNext(ax);
 
@@ -510,7 +509,7 @@ namespace Utility.Nodes.Filters
                      .Cast<INode>()
                      .Subscribe(_new =>
                      {
-                         _new.Key = new GuidKey(_key.Value.Guid);
+                         _new.SetKey(new GuidKey(_key.Value.Guid));
                          _new.Removed = _key.Value.Removed;
 
                          //if (d is IIsReadOnly readOnly)
@@ -535,7 +534,7 @@ namespace Utility.Nodes.Filters
                 {
                     repository
                     .Value
-                    .Find((GuidKey)node.Key, _new.Name(), type: toType(d), index: ++i)
+                    .Find((GuidKey)node.Key(), _new.Name(), type: toType(d), index: ++i)
                     .Subscribe(_key =>
                     {
 
@@ -548,7 +547,7 @@ namespace Utility.Nodes.Filters
                         {
                             throw new Exception("dde33443 21");
                         }
-                        _new.Key = new GuidKey(_key.Value.Guid);
+                        _new.SetKey( new GuidKey(_key.Value.Guid));
 
                         observer.OnNext(_new);
                     });
@@ -591,7 +590,7 @@ namespace Utility.Nodes.Filters
                     .AndAdditions<INode>()
                     .Subscribe(ax =>
                     {
-                        if (ax.Key.Equals(key))
+                        if (ax.Key().Equals(key))
                         {
                             observer.OnNext(ax);
                             observer.OnCompleted();
@@ -608,7 +607,7 @@ namespace Utility.Nodes.Filters
             return Observable.Create<INode>(observer =>
             {
                 INode node;
-                if (Nodes.SingleOrDefault(a => (GuidKey)a.Key == guid) is { } _node)
+                if (Nodes.SingleOrDefault(a => (GuidKey)a.Key() == guid) is { } _node)
                 {
                     lock (nodes)
                         observer.OnNext(_node);

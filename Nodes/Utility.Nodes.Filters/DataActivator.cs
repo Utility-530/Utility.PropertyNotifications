@@ -18,7 +18,13 @@ namespace Utility.Nodes.Filters
 
             if (_data is ISetName sname)
             {
-                sname.Name = a.Value.Name;
+                if (_data is IGetName { Name: { } name })
+                {
+                    if (name != a.Value.Name)
+                        sname.Name = a.Value.Name;
+                }
+                else
+                    sname.Name = a.Value.Name;
             }
             return _data;
 
