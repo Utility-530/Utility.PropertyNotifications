@@ -25,7 +25,8 @@ namespace Utility.Nodes
         {
             _children.CollectionChanged += (s, e) => CollectionChanged?.Invoke(this, e);
         }
-        string IKey.Key { get; set; }
+        string IGetKey.Key { get; }
+        string ISetKey.Key { set => throw new NotImplementedException(); }
 
         public IReadOnlyTree Parent { get; set; }
 
@@ -93,8 +94,6 @@ namespace Utility.Nodes
             }
         }
 
-
-
         protected virtual void PropertyChanged_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Item[]")
@@ -127,7 +126,7 @@ namespace Utility.Nodes
 
         public bool Equals(IReadOnlyTree? other)
         {
-            return Key.Equals(other?.Key);
+            return Key.Equals((other as IGetKey)?.Key);
         }
 
         public bool Equals(IKey<IEquatable>? other)
