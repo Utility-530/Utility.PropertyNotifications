@@ -29,7 +29,7 @@ namespace Utility.Models.Diagrams
             }
             inValues = new(() => parameters.ToDictionary(a => a.Name ?? throw new Exception("s e!"), a =>
             {
-                var model = new MethodConnector { Key = a.Name };
+                var model = new MethodConnector { Key = a.Name, Type =a.ParameterType };
                 model
                 .Subscribe(value =>
                 {  

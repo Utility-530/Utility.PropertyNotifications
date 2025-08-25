@@ -4,7 +4,7 @@ using Utility.Reactives;
 
 namespace Utility.Models.Diagrams
 {
-    public class MethodConnector : ReactiveProperty<object>, IKey
+    public class MethodConnector : ReactiveProperty<object>, IKey, IType
     {
         public string Key { get; set; }
 
@@ -21,6 +21,7 @@ namespace Utility.Models.Diagrams
 
         public bool IsActive { get; set; }
 
+        public Type Type { get; set; }
     }
 
 }
