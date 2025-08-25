@@ -206,7 +206,18 @@ namespace Utility.PropertyNotifications
             var l = (LambdaExpression)expr;
             var ma = (MemberExpression)l.Body;
             var prop = (PropertyInfo)ma.Member;
-            return new PropertyObservable<TModel, TRes>(model, prop, includeNulls, includeInitialValue);
+            return WithChangesTo<TModel, TRes>(model, prop, includeNulls, includeInitialValue);
+        }
+
+        public static IObservable<TRes> WithChangesTo<TModel, TRes>(this TModel model,
+            PropertyInfo? propertyInfo = null, bool includeNulls = false, bool includeInitialValue = true) where TModel : INotifyPropertyChanged
+        {
+            return new PropertyObservable<TModel, TRes>(model, propertyInfo, includeNulls, includeInitialValue);
+        }
+        public static IObservable<object> WithChangesTo<TModel>(this TModel model,
+            PropertyInfo? propertyInfo = null, bool includeNulls = false, bool includeInitialValue = true) where TModel : INotifyPropertyChanged
+        {
+            return new PropertyObservable<TModel, object>(model, propertyInfo, includeNulls, includeInitialValue);
         }
 
         public static IObservable<PropertyChange> WhenChanged<TModel>(this TModel model, Expression<Func<TModel, object>>? expr = null) where TModel : INotifyPropertyChanged
