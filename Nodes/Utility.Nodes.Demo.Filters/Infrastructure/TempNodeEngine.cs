@@ -26,7 +26,13 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
             if (nodes.Add(node) == false)
                 return;
 
-            node.Key ??= new GuidKey();
+            if(node is IGetKey { Key: null })
+            {
+                if (node is ISetKey setKey)
+                {
+                    setKey.Key = new GuidKey(); 
+                }
+            }   
 
             if (node is INode { Data: ISetNode setNode })
             {

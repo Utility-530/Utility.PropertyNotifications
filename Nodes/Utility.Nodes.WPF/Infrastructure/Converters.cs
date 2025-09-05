@@ -126,7 +126,7 @@ namespace Utility.Nodes.WPF
         {
             if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: IReadOnlyTree { Data: TypeModel { Type: Type type } } })
             {
-                if (parameter is IKey { Key: string key } && Guid.TryParse(key, out var guid))
+                if (parameter is IGetKey { Key: string key } && Guid.TryParse(key, out var guid))
                 {
                     var root = CreateRoot(type, guid);
                     return root;

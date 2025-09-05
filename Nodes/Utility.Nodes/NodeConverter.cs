@@ -53,7 +53,7 @@ namespace Utility.Nodes
             if (value.Current != null)
             {
                 writer.WritePropertyName("Current");
-                writer.WriteValue(value.Current.Key);
+                writer.WriteValue((value.Current as IGetKey).Key);
             }
 
             if (value.Data != null)

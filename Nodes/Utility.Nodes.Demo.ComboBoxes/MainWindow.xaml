@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:Utility.Nodes.Demo.ComboBoxes"
         xmlns:io="clr-namespace:System.IO;assembly=mscorlib"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:cb="http://schemas.utility.com/cboxes" xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        xmlns:cb="http://schemas.utility.com/cboxes"
+        xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks" 
+        xmlns:inf="clr-namespace:Utility.Nodes.Demo.ComboBoxes.Infrastructure" xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
@@ -78,11 +80,21 @@
                         </Setter.Value>
                     </Setter>
                 </Style>
+                <Style x:Key="PropertyStyle" TargetType="{x:Type cb:ComboBoxTreeView}" BasedOn="{StaticResource ButtonComboBoxTreeViewStyle}">
+                    <Setter Property="ToggleButtonContent">
+                        <Setter.Value>
+                            <icons:PackIconIonicons x:Name="Icon" Kind="AddCircleOutlineiOS" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"/>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
 
                 <Style x:Key="FilingStyle" TargetType="{x:Type cb:ComboBoxTreeView}" BasedOn="{StaticResource ButtonComboBoxTreeViewStyle}">
                     <Setter Property="ToggleButtonContent">
                         <Setter.Value>
-                            <icons:PackIconIonicons x:Name="Icon" Kind="FolderiOS" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"/>
+                            <icons:PackIconIonicons x:Name="Icon" Kind="FolderiOS"
+                                                    BorderBrush="Transparent"
+                                                    Width="16" Height="16"
+                                                    VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"/>
                         </Setter.Value>
                     </Setter>
                 </Style>
@@ -110,6 +122,12 @@
             <cb:ComboBoxTreeView Style="{StaticResource BTCStyle}">
                 <i:Interaction.Behaviors>
                     <cb:TypeSelectorBehavior  x:Name="Type2Selector" UseEntryAssembly="True" ></cb:TypeSelectorBehavior>
+                </i:Interaction.Behaviors>
+            </cb:ComboBoxTreeView>
+
+            <cb:ComboBoxTreeView Style="{StaticResource PropertyStyle}">
+                <i:Interaction.Behaviors>
+                    <cb:PropertySelectorBehavior Type="{x:Type nodes:ViewModelTree}" />
                 </i:Interaction.Behaviors>
             </cb:ComboBoxTreeView>
 

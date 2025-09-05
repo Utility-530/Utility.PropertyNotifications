@@ -73,7 +73,7 @@ namespace Utility.Nodes.Ex
         public static INode Abstract(this INode tree, out IDisposable disposables)
         {
             var _name = tree.Data is IGetName { Name: { } name } ? name : tree.Data.ToString();
-            var clone = new Node(new Abstract { Name = _name }) { Key = tree.Key, AddCommand = tree.AddCommand, RemoveCommand = tree.RemoveCommand, Removed = tree.Removed };
+            var clone = new Node(new Abstract { Name = _name }) { Key = (tree as IGetKey).Key, AddCommand = tree.AddCommand, RemoveCommand = tree.RemoveCommand, Removed = tree.Removed };
             var c_disposables = new CompositeDisposable();
 
             tree.WithChangesTo(a => a.Removed).Subscribe(a => clone.Removed = a).DisposeWith(c_disposables);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
 using Utility.Models.Trees;
 
 namespace Utility.Nodes.Filters
@@ -75,7 +76,7 @@ namespace Utility.Nodes.Filters
 
         public override object Get(object instance)
         {
-            return (instance as INode).Current?.Key;
+            return ((instance as INode).Current as IGetKey)?.Key;
         }
     }
 
