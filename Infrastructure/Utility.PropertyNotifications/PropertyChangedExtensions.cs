@@ -43,7 +43,7 @@ namespace Utility.PropertyNotifications
         }
 
 
-        private class PropertyObservable<TModel, T> : IObservable<T>, IGetReference where TModel : INotifyPropertyChanged
+        private class PropertyObservable<TModel, T> : IObservable<T>, IPropertyInfo, IGetReference where TModel : INotifyPropertyChanged
         {
             private readonly TModel _target;
             private readonly PropertyInfo? _info;
@@ -59,6 +59,8 @@ namespace Utility.PropertyNotifications
             }
 
             public object Reference => _target;
+
+            public PropertyInfo? PropertyInfo => _info;
 
             private class Subscription : IDisposable
             {
@@ -125,6 +127,11 @@ namespace Utility.PropertyNotifications
             public IDisposable Subscribe(IObserver<T> observer)
             {
                 return new Subscription(_target, _info, observer, _includeNulls, includeInitialValue);
+            }
+
+            public override string ToString()
+            {
+                return _target.ToString() + " -> " + _info.Name;
             }
         }
 
@@ -197,6 +204,11 @@ namespace Utility.PropertyNotifications
             public IDisposable Subscribe(IObserver<PropertyChange?> observer)
             {
                 return new Subscription(_target, _info, observer);
+            }
+
+            public override string ToString()
+            {
+                return _target.ToString() + " -> " + _info.Name;
             }
         }
 
