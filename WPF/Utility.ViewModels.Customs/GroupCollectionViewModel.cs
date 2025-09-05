@@ -89,7 +89,7 @@ public static class GroupCollectionBuilder
         return objects
             .OnItemAdded(addItem =>
                                 addItem
-                                    .WhenAnyValue(a => a.IsSelected)
+                                    .WhenAnyValue(a => (a as IGetIsSelected).IsSelected)
                                     .Where(a => a)
                                     .WithLatestFrom(objects.ToCollection(), (a, b) => b)
                                     .Subscribe(collection =>
@@ -107,7 +107,7 @@ public static class GroupCollectionBuilder
         return objects
             .OnItemAdded(addItem =>
                                 addItem
-                                    .WhenAnyValue(a => a.IsSelected)
+                                    .WhenAnyValue(a => (a as IGetIsSelected).IsSelected)
                                     .Where(a => a)
                                     .WithLatestFrom(objects.ToCollection(), (a, b) => b)
                                     .Subscribe(collection =>

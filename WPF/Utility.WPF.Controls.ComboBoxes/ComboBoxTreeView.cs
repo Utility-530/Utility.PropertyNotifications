@@ -26,6 +26,10 @@ namespace Utility.WPF.Controls.ComboBoxes
         public static readonly RoutedEvent SelectedNodeChangedEvent = EventManager.RegisterRoutedEvent("SelectedNodeChanged", RoutingStrategy.Bubble, typeof(SelectedNodeEventHandler), typeof(ComboBoxTreeView));
         public static readonly DependencyProperty ToggleButtonContentProperty = DependencyProperty.Register("ToggleButtonContent", typeof(object), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty TreeItemContainerStyleProperty = DependencyProperty.Register("TreeItemContainerStyle", typeof(Style), typeof(ComboBoxTreeView), new PropertyMetadata());
+        public static readonly DependencyProperty ToggleButtonTemplateProperty =    DependencyProperty.Register("ToggleButtonTemplate", typeof(ControlTemplate), typeof(ComboBoxTreeView), new PropertyMetadata());
+
+
+
 
         public delegate void SelectedNodeEventHandler(object sender, SelectedNodeEventArgs e);
 
@@ -200,6 +204,11 @@ namespace Utility.WPF.Controls.ComboBoxes
         //    get { return (string)GetValue(IsCheckedPathProperty); }
         //    set { SetValue(IsCheckedPathProperty, value); }
         //}
+        public ControlTemplate ToggleButtonTemplate
+        {
+            get { return (ControlTemplate)GetValue(ToggleButtonTemplateProperty); }
+            set { SetValue(ToggleButtonTemplateProperty, value); }
+        }
 
         public Style TreeItemContainerStyle
         {

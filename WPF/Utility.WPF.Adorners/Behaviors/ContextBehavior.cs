@@ -46,6 +46,7 @@ namespace Utility.WPF.Adorners
             {
                 AdornerPlacement.Outside => new Thickness(0, 0, -element.Width - 2, 0),
                 AdornerPlacement.Inside => new Thickness(0, 0, 2, 0),
+                AdornerPlacement.Across => new Thickness(0, 0, 0, 0),
                 _ => throw new Exception("35gbbb 3"),
             };
             adorners.Add(element);

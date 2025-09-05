@@ -1,7 +1,10 @@
-﻿using System.Windows;
+﻿using MaterialDesignThemes.Wpf;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Input;
 using Utility.Commands;
+using Utility.WPF.Adorners;
 
 namespace Utility.WPF.Demo.Adorners
 {
@@ -16,6 +19,7 @@ namespace Utility.WPF.Demo.Adorners
         {
             InitializeComponent();
             TextCommand = new Command(() => TextBlock1.Text += " New Text");
+            PlusCommand = new Command(() => TextBlock1.Text += " Plus");
             Grid1.DataContext = this;
 
             //adornerController = new(Square3Grid);
@@ -28,6 +32,7 @@ namespace Utility.WPF.Demo.Adorners
         //Square3Grid.SetValue(AdornerEx.AdornerProperty, adorner);
 
         public ICommand TextCommand { get; }
+        public ICommand PlusCommand { get; }
 
         private void button1_Click(object sender, RoutedEventArgs e)
         {
@@ -38,8 +43,18 @@ namespace Utility.WPF.Demo.Adorners
         }
 
 
-    
 
 
+
+    }
+
+    public class PlusAdornerBehavior : AdornerBehavior
+    {
+        override protected Adorner CreateAdorner() => new PlusAdorner(AssociatedObject, Command);
+    }
+
+    public class PopUpAdornerBehavior : AdornerBehavior
+    {
+        override protected Adorner CreateAdorner() => new FrameworkElementAdorner<PopupBox>(AssociatedObject as FrameworkElement, ()=> Application.Current.Resources["PopupBox"] as FrameworkElement);
     }
 }

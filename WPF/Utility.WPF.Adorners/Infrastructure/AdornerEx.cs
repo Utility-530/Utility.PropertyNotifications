@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Utility.WPF.Adorners.Infrastructure
 {
@@ -20,6 +23,34 @@ namespace Utility.WPF.Adorners.Infrastructure
         public static readonly DependencyProperty IsEnabledProperty =
             DependencyProperty.RegisterAttached("IsEnabled", typeof(bool), typeof(AdornerEx),
                 new FrameworkPropertyMetadata(true, OnPropertyChanged));
+
+
+        public static readonly DependencyProperty LastItemAdornerProperty =
+            DependencyProperty.RegisterAttached("LastItemAdorner", typeof(ICommand), typeof(AdornerEx),
+                new FrameworkPropertyMetadata(null, LastItemAdornerChanged));
+
+        private static void LastItemAdornerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if(e.NewValue is ICommand command)
+            {
+                var adornerLayer = AdornerLayer.GetAdornerLayer(d as Visual);
+                if (adornerLayer != null)
+                {
+                    var adorner = new LastItemAdorner(d as ItemsControl, null) { Command = command };
+                    adornerLayer.Add(adorner);
+                }
+                else if(d  is FrameworkElement { IsLoaded:false  } el)
+                {
+                    el.Loaded += (s, e) =>
+                    {
+                        var adornerLayer = AdornerLayer.GetAdornerLayer(d as Visual);
+                        var adorner = new LastItemAdorner(d as ItemsControl, null) { Command = command };
+                        adornerLayer.Add(adorner);
+                    };
+                }
+            }
+
+        }
 
         /// <summary>
         /// The internal encapsulating adorner
@@ -119,6 +150,16 @@ namespace Utility.WPF.Adorners.Infrastructure
         public static void SetIsEnabled(DependencyObject d, bool value)
         {
             d.SetValue(IsEnabledProperty, value);
+        }
+
+        public static ICommand GetLastItemAdorner(DependencyObject d)
+        {
+            return (ICommand)d.GetValue(LastItemAdornerProperty);
+        }
+
+        public static void SetLastItemAdorner(DependencyObject d, ICommand value)
+        {
+            d.SetValue(LastItemAdornerProperty, value);
         }
 
         public static AdornerPlacement GetHorizontalPlacement(DependencyObject d)

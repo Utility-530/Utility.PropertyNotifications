@@ -25,7 +25,7 @@ namespace Utility.WPF.Demo.Adorners
             AdornerLayer layer = AdornerLayer.GetAdornerLayer(canvas);
             foreach (UIElement ui in canvas.Children)
             {
-                layer.AddIfMissingAdorner(resizeAdorners.GetValueOrCreate(ui, () => new ResizeAdorner(ui)));
+                layer.AddIfMissingAdorner(resizeAdorners.Get(ui, () => new ResizeAdorner(ui)));
             }
         }
         private void Remove_Click(object sender, RoutedEventArgs e)

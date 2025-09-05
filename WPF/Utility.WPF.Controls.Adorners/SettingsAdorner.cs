@@ -22,25 +22,6 @@ namespace Utility.WPF.Controls.Adorners
         private ControlColourer? controlColourer;
 
 
-        /// <summary>
-        /// The internal encapsulating adorner
-        /// </summary>
-        //public static readonly DependencyProperty AdornerProperty =
-        //    DependencyProperty.RegisterAttached("Adorner", typeof(object), typeof(SettingsAdorner), new PropertyMetadata(Changed));
-
-        //private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        //{
-        //    if (d is FrameworkElement element)
-        //    {
-        //        AddTo(element);
-        //    }
-        //    //if (e.NewValue is SettingsAdorner)
-        //    //{
-        //    //    d.SetValue(AdornerEx.IsEnabledProperty, true);
-        //    //}
-        //}
-
-
         private SettingsAdorner(FrameworkElement adornedElement) : base(adornedElement)
         {
         }
@@ -58,15 +39,6 @@ namespace Utility.WPF.Controls.Adorners
             return settingsAdorner;
         }
 
-        //public static object GetAdorner(DependencyObject d)
-        //{
-        //    return d.GetValue(AdornerProperty);
-        //}
-
-        //public static void SetAdorner(DependencyObject d, object value)
-        //{
-        //    d.SetValue(AdornerProperty, value);
-        //}
 
 
         protected override IDisposable SetAdornedElement(SettingsControl settingsControl, FrameworkElement? adornedElement)

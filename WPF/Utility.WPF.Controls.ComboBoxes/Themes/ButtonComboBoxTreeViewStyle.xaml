@@ -21,7 +21,7 @@
                 <ColumnDefinition />
                 <!--<ColumnDefinition Width="20" />-->
             </Grid.ColumnDefinitions>
-            <Border Name="Border" Grid.ColumnSpan="2" CornerRadius="0"  BorderBrush="#FF97A0A5" BorderThickness="1" Background="Transparent" />
+            <Border Name="Border" Grid.ColumnSpan="2" CornerRadius="0"  BorderBrush="#FF97A0A5" BorderThickness="0" Background="Transparent" />
             <!--<Border Grid.Column="0" CornerRadius="0" Margin="2,2,2,2" BorderBrush="#FF97A0A5" BorderThickness="1" />-->
             <ContentPresenter x:Name="Icon"></ContentPresenter>
             <!--<Path Name="Arrow" Grid.Column="1" Fill="Black" Margin="0,0,4,0" HorizontalAlignment="Center" VerticalAlignment="Center" Data="F0 M 0,0 L 0,2 4,6 8,2 8,0 4,4 Z" />-->
@@ -61,9 +61,10 @@
         <Setter Property="HorizontalAlignment"
           Value="Center" />
         <Setter Property="MinWidth"
-          Value="24" />
+          Value="14" />
         <Setter Property="MinHeight"
-          Value="24" />
+          Value="14" />
+        <Setter Property="ToggleButtonTemplate" Value="{StaticResource ComboBox_ToggleButton}"></Setter>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type cb:ComboBoxTreeView}">
@@ -73,13 +74,13 @@
                                 <VisualState x:Name="Normal" />
                                 <VisualState x:Name="MouseOver" />
                                 <VisualState x:Name="Disabled">
-                    
+
                                 </VisualState>
                             </VisualStateGroup>
                             <VisualStateGroup x:Name="EditStates">
                                 <VisualState x:Name="Editable">
                                     <Storyboard>
-      
+
                                         <ObjectAnimationUsingKeyFrames
                       Storyboard.TargetProperty="(UIElement.Visibility)"
                                                  Storyboard.TargetName="ContentSite">
@@ -95,12 +96,12 @@
                             <RowDefinition />
                             <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
-                        <Border x:Name="ErrorBorder" Padding="3 2">
+                        <Border x:Name="ErrorBorder" Padding="0">
                             <Grid x:Name="templateRoot" SnapsToDevicePixels="true">
                                 <!-- The actual content of the ComboBox Control Template -->
-                                <ToggleButton x:Name="ToggleButton"
-                                            Content="{TemplateBinding ToggleButtonContent}"
-                                            Template="{StaticResource ComboBox_ToggleButton}"    
+                                <ToggleButton x:Name="ToggleButton"                                              
+                                            Content="{TemplateBinding ToggleButtonContent}"                                      
+                                            Template="{TemplateBinding ToggleButtonTemplate}"    
                                             Focusable="false"
                                             ClickMode="Press"
                                           />
@@ -111,8 +112,8 @@
                                     IsOpen="{Binding ElementName=ToggleButton, Path=IsChecked}"     
                                     AllowsTransparency="True"
                                     Focusable="False"
-                                    PopupAnimation="Slide">              
-        
+                                    PopupAnimation="Slide">
+
                                     <Grid x:Name="DropDown"
                                         SnapsToDevicePixels="True"
                                         MinWidth="{TemplateBinding ActualWidth}"
@@ -120,7 +121,7 @@
                                         Background="Transparent">
                                         <Border x:Name="DropDownBorder"
                                                 Background="Transparent"
-                                                BorderThickness="1">                 
+                                                BorderThickness="1">
                                             <ScrollViewer Margin="4,6,4,6"
                                                     SnapsToDevicePixels="True">
                                                 <trees:CustomTreeView x:Name="treeView"                                                                   

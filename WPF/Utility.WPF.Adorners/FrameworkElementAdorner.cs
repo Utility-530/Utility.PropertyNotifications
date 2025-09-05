@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
 using Utility.WPF.Adorners.Infrastructure;
 
@@ -25,12 +26,31 @@ namespace Utility.WPF.Adorners
     }
 
 
-    public abstract class FrameworkElementAdorner<T> : FrameworkElementAdorner where T : Control
+    public class FrameworkElementAdorner<T> : FrameworkElementAdorner where T : Control
     {
         private IDisposable? disposable;
 
-        public FrameworkElementAdorner(FrameworkElement adornedElement) : base(adornedElement)
+        public FrameworkElementAdorner(FrameworkElement adornedElement, Func<FrameworkElement>? factory = null) : base(adornedElement)
         {
+            if (factory != null)
+            {
+                var adorner = factory();
+                adorner.MouseEnter += Adorner_MouseEnter;
+                adorner.MouseLeave += Adorner_MouseLeave;
+                adornedElement.AddIfMissingAdorner(adorner);
+                Adorners = AdornerEx.GetAdorners(adornedElement);
+
+            }
+        }
+
+        private void Adorner_MouseLeave(object sender, MouseEventArgs e)
+        {
+            this.RaiseEvent(new System.Windows.Input.MouseEventArgs(e.MouseDevice, e.Timestamp) { RoutedEvent = MouseLeaveEvent });
+        }
+
+        private void Adorner_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            this.RaiseEvent(new System.Windows.Input.MouseEventArgs(e.MouseDevice, e.Timestamp) { RoutedEvent = MouseEnterEvent });
         }
 
         public override void SetAdornedElement(DependencyObject adorner, FrameworkElement? adornedElement)
@@ -43,7 +63,7 @@ namespace Utility.WPF.Adorners
             disposable = SetAdornedElement(adorner as T ?? throw new Exception("gd6fnb54 fdgd,,f"), adornedElement);
         }
 
-        protected abstract IDisposable SetAdornedElement(T control, FrameworkElement? adornedElement);
+        protected virtual IDisposable SetAdornedElement(T control, FrameworkElement? adornedElement) { return null; }
     }
 
     /// <summary>
@@ -59,7 +79,7 @@ namespace Utility.WPF.Adorners
 
         private static void Changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-          if(d is FrameworkElementAdorner adorner && e.NewValue is AdornerCollection collection)
+            if (d is FrameworkElementAdorner adorner && e.NewValue is AdornerCollection collection)
             {
                 adorner.Subscribe(collection);
             }
@@ -410,7 +430,7 @@ namespace Utility.WPF.Adorners
             get
             {
                 // if Adorners is null then maybe wait until adorned element is loaded before applying the adorner
-                return Adorners?.GetEnumerator()?? throw new Exception("dfg bfdgfd ..v,v");
+                return Adorners?.GetEnumerator() ?? throw new Exception("dfg bfdgfd ..v,v");
             }
         }
 

@@ -21,7 +21,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
                 case IGetName name:
                     return name.Name;
-                case IKey keyValue:
+                case IGetKey keyValue:
                     return keyValue.Key;   
  
 

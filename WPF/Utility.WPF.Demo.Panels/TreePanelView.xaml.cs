@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Utility.Interfaces.Trees;
 using Utility.Structs;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
