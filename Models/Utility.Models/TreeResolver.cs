@@ -56,6 +56,10 @@ namespace Utility.Models
 
         public class NamedTree : Tree, IName
         {
+            public NamedTree()
+            {
+                Data = Name;
+            }
             public string Name { get; set; } = "root";
         }
 

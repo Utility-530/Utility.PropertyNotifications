@@ -1,10 +1,11 @@
-﻿using Utility.Interfaces.NonGeneric;
+﻿using System.Reflection;
+using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
 
 namespace Utility.Models.Diagrams
 {
-    public class MethodConnector : ReactiveProperty<object>, IKey, IType
+    public class MethodConnector : ReactiveProperty<object>, IKey
     {
         public string Key { get; set; }
 
@@ -21,7 +22,7 @@ namespace Utility.Models.Diagrams
 
         public bool IsActive { get; set; }
 
-        public Type Type { get; set; }
+        public ParameterInfo Parameter { get; set; }
     }
 
 }

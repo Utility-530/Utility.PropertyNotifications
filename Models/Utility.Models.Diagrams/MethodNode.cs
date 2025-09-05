@@ -8,28 +8,29 @@ using IMethod = Utility.Interfaces.Exs.IMethod;
 
 namespace Utility.Models.Diagrams
 {
-    public class MethodNode : NotifyPropertyClass, IResolvableNode
+    public class MethodNode : NotifyPropertyClass, IResolvableNode, IMethod
     {
 
         readonly Dictionary<string, object> values = new();
 
         private readonly Lazy<Dictionary<string, MethodConnector>> inValues;
+        private MethodInfo method;
         private ParameterInfo[] parameters;
         public Action next;
         private bool isActive;
         private Exception exception;
 
-        public MethodNode(IMethod method)
+        public MethodNode(MethodInfo method, object instance)
         {
-            Method = method;
-            parameters = method.MethodInfo.GetParameters();
-            if (method.MethodInfo.ReturnType != typeof(void))
+            this.method = method;
+            parameters = method.GetParameters();
+            if (method.ReturnType != typeof(void))
             {
                 OutValue = new() { Key = "return" };
             }
             inValues = new(() => parameters.ToDictionary(a => a.Name ?? throw new Exception("s e!"), a =>
             {
-                var model = new MethodConnector { Key = a.Name, Type =a.ParameterType };
+                var model = new MethodConnector { Key = a.Name, Parameter =a };
                 model
                 .Subscribe(value =>
                 {  
@@ -81,7 +82,7 @@ namespace Utility.Models.Diagrams
             {
                 try
                 {
-                    var result = Method.Execute(values);
+                    var result = this.Execute(values);
                     OutValue.Value = result;
                 }
                 catch (Exception ex)
@@ -105,20 +106,22 @@ namespace Utility.Models.Diagrams
 
         public MethodConnector OutValue { get; }
 
-        public IMethod Method { get; set; }
-
+        public object? Instance => Instance;
+        public MethodInfo MethodInfo => method;
+        public string Name => method.Name;
+        public IReadOnlyCollection<ParameterInfo> Parameters { get; }
 
         public override bool Equals(object? obj)
         {
             if (obj is MethodNode mNode)
-                return Method.Equals(mNode.Method);
+                return this.MethodInfo.Equals(mNode.MethodInfo);
             else
                 return false;
         }
 
         public override int GetHashCode()
         {
-            return Method.GetHashCode();
+            return MethodInfo.GetHashCode();
         }
     }
 

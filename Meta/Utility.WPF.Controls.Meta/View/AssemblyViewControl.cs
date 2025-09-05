@@ -39,7 +39,7 @@ namespace Utility.WPF.Controls.Meta
                     };
                     Binding binding = new()
                     {
-                        Path = new PropertyPath(nameof(IKey.Key)),
+                        Path = new PropertyPath(nameof(IGetKey.Key)),
                     };
                     textBlock.SetBinding(TextBlock.TextProperty, binding);
                     return textBlock;
