@@ -2,9 +2,8 @@
 
 namespace Utility.Interfaces.NonGeneric
 {
-    public interface IGuid
+    public interface IGuid : IGetGuid, ISetGuid
     {
-        Guid Guid { get; set; }
     }
 
     public interface IGetGuid

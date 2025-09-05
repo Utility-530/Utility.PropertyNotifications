@@ -1,7 +1,7 @@
-﻿namespace Utility.Interfaces.NonGeneric
-{
-    public interface IMethod
-    {
-        object Method(object t);
-    }
-}
+﻿//namespace Utility.Interfaces.NonGeneric
+//{
+//    public interface IMethod
+//    {
+//        object Method(object t);
+//    }
+//}
