@@ -21,13 +21,6 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
     }
 
 
-    public class SplitViewModel
-    {
-        object[] collection = [Globals.Resolver.Resolve<DiagramViewModel>(), Globals.Resolver.Resolve<MasterPlayViewModel>()];
-
-        public object[] Collection => collection;
-    }
-
 
     public class MainViewModel
     {

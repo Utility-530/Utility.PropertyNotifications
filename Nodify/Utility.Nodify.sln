@@ -105,6 +105,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.Object
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Conversions.Json.Newtonsoft", "..\Conversions\Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj", "{42625453-DB5E-5F65-FFCC-53E06ACA8F64}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "..\Nodes\Models\Models.csproj", "{77228E76-F766-9B08-5FA8-0D1FFD46DD41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -307,6 +309,10 @@ Global
 		{42625453-DB5E-5F65-FFCC-53E06ACA8F64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42625453-DB5E-5F65-FFCC-53E06ACA8F64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42625453-DB5E-5F65-FFCC-53E06ACA8F64}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77228E76-F766-9B08-5FA8-0D1FFD46DD41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77228E76-F766-9B08-5FA8-0D1FFD46DD41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77228E76-F766-9B08-5FA8-0D1FFD46DD41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77228E76-F766-9B08-5FA8-0D1FFD46DD41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -352,6 +358,7 @@ Global
 		{32D33ECD-8D06-9AD6-461C-B974DD9B86EF} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{595741FA-DB0F-8297-5893-51EE6CF7B371} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{42625453-DB5E-5F65-FFCC-53E06ACA8F64} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
+		{77228E76-F766-9B08-5FA8-0D1FFD46DD41} = {0A03D064-3582-4B1C-AC57-F16299199866}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C218ADB7-210D-4A37-BC47-800268D4894F}

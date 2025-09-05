@@ -1,15 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using Utility.Nodify.Entities;
+﻿using Splat;
+using Utility.Interfaces.NonGeneric;
+using Utility.Nodify.Core;
 
 namespace Utility.Nodify.Operations.Infrastructure
 {
     public interface INodeSource
     {
-        IEnumerable<MenuItem> Filter(bool? isInput, Type? type);
+        IEnumerable<MenuItem> Filter(object viewModel);
 
-        Node Find(MenuItem guid);
+        INodeViewModel Find(object guid);
     }
 
-    public record MenuItem(string Key, Guid Guid);
+    public record MenuItem(string Key, Guid Guid): IReference
+    {
+        public IEnumerable<MenuItem> Children => Locator.Current.GetService<INodeSource>().Filter(this);
+
+        public object Reference { get; set; }
+    };
 }

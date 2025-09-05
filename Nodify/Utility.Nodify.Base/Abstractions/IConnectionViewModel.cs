@@ -5,9 +5,8 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Nodify.Core
 {
-    public interface IConnectionViewModel: IKey, IId<Guid>
+    public interface IConnectionViewModel : IKey, IId<Guid>
     {
-        NodeState State { get; set; }
         IConnectorViewModel Input { get; }
         IConnectorViewModel Output { get; }
     }

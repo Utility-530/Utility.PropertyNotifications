@@ -19,8 +19,8 @@ namespace Utility.Nodify.Models
         {
 
             CreateConnectionCommand = new Command<ConnectorViewModel>(
-                _ => CreateConnection(PendingConnection.Source, PendingConnection.Target),
-                _ => CanCreateConnection(PendingConnection.Source, PendingConnection.Target));
+                _ => CreateConnection(PendingConnection.Input, PendingConnection.Output),
+                _ => CanCreateConnection(PendingConnection.Input, PendingConnection.Output));
             StartConnectionCommand = new Command<object>(_ => PendingConnection.IsVisible = true);
             DisconnectConnectorCommand = new Command<ConnectorViewModel>(DisconnectConnector);
             DeleteSelectionCommand = new Command(DeleteSelection);

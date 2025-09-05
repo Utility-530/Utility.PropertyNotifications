@@ -12,27 +12,37 @@ namespace Utility.Nodify.Engine
         GraphSchema schema = new();
         NodesGenerator<NodeViewModel> gen = new();
         NodesGeneratorTree<NodeViewModel> genTree = new();
+        NodesGeneratorTree2<NodeViewModel> gen2Tree = new();
         NodesGeneratorMaster<NodeViewModel> genMaster = new();
         ReactiveNodeGroupManager manager = new ReactiveNodeGroupManager();
 
         public void Build(IDiagramViewModel diagram)
         {
 
-            genTree.GenerateNodes(new NodesGeneratorSettings(1000)).SelfAndAdditions().Subscribe(node =>
+            //genTree.GenerateNodes(new NodesGeneratorSettings(1000)).SelfAndAdditions().Subscribe(node =>
+            //{
+            //    diagram.Nodes.Add(node);
+
+            //});
+
+            //ConnectNodesTree(diagram);
+
+
+            gen2Tree.GenerateNodes(new NodesGeneratorSettings(1000)).SelfAndAdditions().Subscribe(node =>
             {
                 diagram.Nodes.Add(node);
-    
+
             });
 
-            ConnectNodesTree(diagram);
- 
-            gen.GenerateNodes(new NodesGeneratorSettings(1000)).SelfAndAdditions().Subscribe(node =>
-            {
-                diagram.Nodes.Add(node);
-            });
+            //ConnectNodesTree2(diagram);
 
-            ConnectNodes(diagram);
-            ConnectNodesMaster(diagram);           
+            //gen.GenerateNodes(new NodesGeneratorSettings(1000)).SelfAndAdditions().Subscribe(node =>
+            //{
+            //    diagram.Nodes.Add(node);
+            //});
+
+            //ConnectNodes(diagram);
+            //ConnectNodesMaster(diagram);           
         }
 
         private void ConnectNodes(IDiagramViewModel diagram)
@@ -60,18 +70,29 @@ namespace Utility.Nodify.Engine
         private void ConnectNodesTree(IDiagramViewModel diagram)
         {
 
-            var connections = genTree.GenerateConnections();
+            var connections = genTree.GenerateConnections().AndAdditions<ConnectionViewModel>().Subscribe(con =>
             {
-                for (int i = 0; i < connections.Count; i++)
+                if (schema.TryAddConnection(con.Input, con.Output, out var connection))
                 {
-                    var con = connections[i];
-                    if (schema.TryAddConnection(con.Input, con.Output, out var connection))
-                    {
-                        connection.Data = con.Data;
-                        diagram.Connections.Add(connection);
-                    }
+                    connection.Data = con.Data;
+                    diagram.Connections.Add(connection);
                 }
-            }
+
+            });
+        }
+
+        private void ConnectNodesTree2(IDiagramViewModel diagram)
+        {
+
+            var connections = gen2Tree.GenerateConnections().AndAdditions<ConnectionViewModel>().Subscribe(con =>
+            {
+                if (schema.TryAddConnection(con.Input, con.Output, out var connection))
+                {
+                    connection.Data = con.Data;
+                    diagram.Connections.Add(connection);
+                }
+
+            });
         }
 
         private void ConnectNodesMaster(IDiagramViewModel diagram)

@@ -11,20 +11,20 @@ namespace Utility.Nodify.Views.Infrastructure
     {
         protected override void OnAttached()
         {
-            if (this.AssociatedObject.Arrangement == Arrangement.Standard)
-            {
+            //if (this.AssociatedObject.Arrangement == Arrangement.Standard)
+            //{
 
-            }
-            if (this.AssociatedObject.Arrangement == Arrangement.Tree)
-            {
+            //}
+            //if (this.AssociatedObject.Arrangement == Arrangement.Tree)
+            //{
 
 
-            }
-            else if (this.AssociatedObject.Arrangement == Arrangement.UniformRow)
-            {
-                this.AssociatedObject.DisplayConnectionsOnTop = true;
+            //}
+            //else if (this.AssociatedObject.Arrangement == Arrangement.UniformRow)
+            //{
+            //    this.AssociatedObject.DisplayConnectionsOnTop = true;
 
-            }
+            //}
             base.OnAttached();
         }
     }

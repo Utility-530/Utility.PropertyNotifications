@@ -30,14 +30,16 @@ namespace Utility.Nodify.Engine.Infrastructure
             }
             throw new Exception("£%GG%%ff");
         }
+
+        public static PointConverter Instance { get; } = new PointConverter();
     }
 
     internal class ArrangementConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value is Enum)
-            return Enum.Parse<Arrangement>(value.ToString());
+            //if(value is Enum)
+            //return Enum.Parse<Arrangement>(value.ToString());
             throw new Exception("£%GG%%ff");
         }
 

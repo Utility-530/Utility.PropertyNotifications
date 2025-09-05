@@ -14,6 +14,8 @@ namespace Utility.Nodify.Views.Infrastructure
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
+            if(item == null)
+                return NullTemplate ?? base.SelectTemplate(item, container);
             var type = item.GetType();
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Observable<>))
             {
@@ -30,5 +32,6 @@ namespace Utility.Nodify.Views.Infrastructure
 
         public DataTemplate ObservableTemplate { get; set; }
         public DataTemplate ValueModelTemplate { get; set; }
+        public DataTemplate NullTemplate { get; set; }
     }
 }

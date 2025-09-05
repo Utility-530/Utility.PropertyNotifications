@@ -2,17 +2,20 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:core="clr-namespace:Utility.Nodify.ViewModels;assembly=Utility.Nodify.ViewModels"
                     xmlns:nodify="https://miroiu.github.io/nodify" 
+                    xmlns:op="clr-namespace:Utility.Nodify.Operations.Infrastructure;assembly=Utility.Nodify.Base"
                     xmlns:shared="http://schemas.microsoft.com/netfx/2009/xaml/presentation" 
-                    xmlns:tabs="http://schemas.utility.com/tabs">
+                    xmlns:tabs="http://schemas.utility.com/tabs"
+                    xmlns:conv="http://schemas.utility.com/converters">
 
 
 
     <shared:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    <conv:CountToBooleanConverter x:Key="CountToBooleanConverter" ></conv:CountToBooleanConverter>
     <!--<local:ItemToListConverter x:Key="ItemToListConverter" />-->
 
 
-    <DataTemplate DataType="{x:Type core:MenuItemViewModel}">
-        <Button Content="{Binding Content}"
+    <HierarchicalDataTemplate DataType="{x:Type core:MenuItemViewModel}"  ItemsSource="{Binding Children}">
+        <Button Content="{Binding Content.Key}"
                                 Command="{Binding Command}"
                                 Background="Transparent"
                                 BorderBrush="Transparent"
@@ -44,21 +47,27 @@
                 </Style>
             </Button.Style>
         </Button>
-    </DataTemplate>
-    
-    
-    
+    </HierarchicalDataTemplate>
+
     
     <DataTemplate DataType="{x:Type core:MenuViewModel}">
-        <Border Padding="7"
+        <Border Padding="7" MaxWidth="220"
             CornerRadius="3"
             Background="{DynamicResource Node.BackgroundBrush}"
             BorderBrush="{StaticResource NodifyEditor.SelectionRectangleStrokeBrush}"
             BorderThickness="2"
             Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <ItemsControl Grid.Row="1" ItemsSource="{Binding Items}">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <!-- Define the hierarchical data template for menu items -->
 
-            </ItemsControl>
+                <TreeView ItemsSource="{Binding Items}" BorderThickness="0">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="TreeViewItem">
+                            <Setter Property="IsExpanded" Value="{Binding IsExpanded}" />
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                </TreeView>
+            </ScrollViewer>
         </Border>
     </DataTemplate>
 

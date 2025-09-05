@@ -69,8 +69,8 @@
     <DataTemplate x:Key="PendingConnectionTemplate"
                     DataType="{x:Type models:PendingConnectionViewModel}">
         <nodify:PendingConnection IsVisible="{Binding IsVisible}"
-                                    Source="{Binding Source, Mode=OneWayToSource}"
-                                    Target="{Binding Target, Mode=OneWayToSource}"
+                                    Source="{Binding Input, Mode=OneWayToSource}"
+                                    Target="{Binding Output, Mode=OneWayToSource}"
                                     TargetAnchor="{Binding TargetLocation, Mode=OneWayToSource, Converter={StaticResource PointConverter}}"
                                     StartedCommand="{Binding DataContext.StartConnectionCommand, RelativeSource={RelativeSource AncestorType={x:Type nodify:NodifyEditor}}}"
                                     CompletedCommand="{Binding DataContext.CreateConnectionCommand, RelativeSource={RelativeSource AncestorType={x:Type nodify:NodifyEditor}}}" >
@@ -124,8 +124,7 @@
                                 PendingConnectionTemplate="{StaticResource PendingConnectionTemplate}"
                                 ConnectionTemplate="{StaticResource ConnectionTemplate}"
                                 Background="{StaticResource SmallGridLinesDrawingBrush}"
-                                ItemContainerStyle="{StaticResource ItemContainerStyle}"
-                                Arrangement="{Binding Arrangement, Converter={StaticResource ArrangementConverter}}"
+                                ItemContainerStyle="{StaticResource ItemContainerStyle}"                              
                                 GridCellSize="15"                         
                                 x:Name="Editor">
                 <i:Interaction.Behaviors>
@@ -237,8 +236,9 @@
 
                 <CompositeCollection>
                     <nodify:DecoratorContainer DataContext="{Binding Menu}"
-                                           Location="{Binding Location}">
-                        <ContentControl Content="{Binding}"/>
+                                               Visibility="Visible"
+                                           Location="{Binding Location, Converter={x:Static inf:PointConverter.Instance}}">
+                        <ContentControl Content="{Binding}" Height="400" Width="400" Background="Aqua"/>
                     </nodify:DecoratorContainer>
                 </CompositeCollection>
             </nodify:NodifyEditor>

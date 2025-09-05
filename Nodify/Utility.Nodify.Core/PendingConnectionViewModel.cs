@@ -1,23 +1,30 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows;
+using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+using Utility.Nodify.Core;
 using Utility.PropertyNotifications;
 
 namespace Utility.Nodify.Models
 {
-    public class PendingConnectionViewModel : NotifyPropertyClass
+    public class PendingConnectionViewModel : NotifyPropertyClass, IConnectionViewModel
     {
-        private ConnectorViewModel _source = default!, _target;
+        private IConnectorViewModel _source = default!, _target;
         private bool _isVisible;
         private PointF _targetLocation;
 
-        public ConnectorViewModel Source
+        public string Key { get; set; }
+
+        public Guid Id { get; }
+
+        public IConnectorViewModel Input
         {
             get => _source;
             set => RaisePropertyChanged(ref _source, value);
         }
 
-        public ConnectorViewModel? Target
+        public IConnectorViewModel? Output
         {
             get => _target;
             set => RaisePropertyChanged(ref _target, value);

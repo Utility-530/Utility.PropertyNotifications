@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Utility.Nodify.Models;
 using Utility.Nodify.Operations;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Nodify.Engine.Infrastructure
 {
@@ -120,7 +121,7 @@ namespace Utility.Nodify.Engine.Infrastructure
         {
             Node node = new ()
             {
-                Name = nodeViewModel.Key,
+                Name = (nodeViewModel as IGetKey).Key,
                 Location = new Utility.Structs.Point(nodeViewModel.Location.X, nodeViewModel.Location.Y),
                 Inputs = new Collection<Connector>(),
                 Outputs = new Collection<Connector>()

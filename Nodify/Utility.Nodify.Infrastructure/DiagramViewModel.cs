@@ -12,6 +12,8 @@ using System.Drawing;
 using Utility.Nodify.Models;
 using Utility.Nodify.Engine;
 using Utility.Enums;
+using Splat;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Nodify.ViewModels
 {
@@ -19,7 +21,23 @@ namespace Utility.Nodify.ViewModels
     {
         private readonly IContainer container;
         private MenuViewModel menu;
-        private INodeSource operations => container.Resolve<INodeSource>();
+
+        public int GridColumn = 1;
+        private INodeSource operations
+        {
+            get
+            {
+                try
+                {
+                    return Splat.Locator.Current.GetService<INodeSource>();
+                }
+                catch (Exception ex)
+                {
+                    return null;
+
+                }
+            }
+        }
 
         public DiagramViewModel(IContainer container) : base()
         {
@@ -53,20 +71,28 @@ namespace Utility.Nodify.ViewModels
 
         protected void OperationsMenu_MenuItemSelected(PointF location, MenuItemViewModel menuItem)
         {
-            var _menuItem = new MenuItem(menuItem.Content, menuItem.Guid);
-            var node = operations.Find(_menuItem);
-            INodeViewModel nodeViewModel = container.Resolve<IConverter>().Convert(node);
-            nodeViewModel.Location = new PointF((float)location.X, (float)location.Y);
-            Nodes.Add(nodeViewModel);
-
+            var nodeViewModel = operations.Find(menuItem.Content);
+            IConnectorViewModel connector = null;
             var pending = PendingConnection;
+
+            if (menuItem.Content is IType { Type: { } type })
+            {
+                if (pending.IsVisible)
+                {
+                     connector = pending.Input.IsInput ? nodeViewModel.Output.FirstOrDefault() : nodeViewModel.Input.FirstOrDefault(a => (a.Data as IType)?.Type == type);
+                }
+            }
+
             if (pending.IsVisible)
             {
-                var connector = pending.Source.IsInput ? nodeViewModel.Output.FirstOrDefault() : nodeViewModel.Input.FirstOrDefault();
-                if (connector != null && CanCreateConnection(pending.Source, connector))
-                {
-                    CreateConnection(pending.Source, connector);
-                }
+                connector = pending.Input.IsInput ? nodeViewModel.Output.FirstOrDefault() : nodeViewModel.Input.FirstOrDefault();
+            }
+
+            if (connector != null && CanCreateConnection(pending.Input, connector))
+            {
+                CreateConnection(pending.Input, connector);
+                nodeViewModel.Location = location;
+                Nodes.Add(nodeViewModel);
             }
         }
 
@@ -103,20 +129,21 @@ namespace Utility.Nodify.ViewModels
         public void OpenAt(PointF mouseLocation)
         {
             menu.Items.Clear();
-            if (PendingConnection.Source != null)
+            if (PendingConnection.Input != null)
             {
-                var x = operations
-                    .Filter(PendingConnection.Source.IsInput, PendingConnection.Source.Type)
-                    .Select(a => new MenuItemViewModel() { Content = a.Key, Guid = a.Guid })
+                var x = operations?
+                    .Filter(PendingConnection)
+                    .Select(a => new MenuItemViewModel() { Content = a, Guid = a.Guid })
                     .ToArray();
-
+                if (x == null)
+                    return;
                 foreach (var y in x)
                     menu.Items.Add(y);
             }
             else
             {
                 var x = operations
-                    .Filter(null, null)
+                    .Filter(null)
                     .Select(a => new MenuItemViewModel() { Content = a.Key, Guid = a.Guid })
                     .ToArray();
 
