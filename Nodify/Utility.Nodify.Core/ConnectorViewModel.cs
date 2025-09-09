@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Linq;
 using System.Windows;
 using Utility.Collections;
 using Utility.Helpers.Generic;
+using Utility.Interfaces.NonGeneric;
 using Utility.Nodify.Core;
 using Utility.Nodify.Enums;
 using Utility.PropertyNotifications;
@@ -22,16 +24,36 @@ namespace Utility.Nodify.Models
         private bool _isConnected;
         private bool _isInput;
         private PointF _anchor;
-        private Type type;
 
+        public ConnectorViewModel()
+        {
+            connections.WhenAdded(c =>
+            {
+                c.Input.IsConnected = true;
+                c.Output.IsConnected = true;
+            }).WhenRemoved(c =>
+            {
+                if (c.Input.Connections.Count == 0)
+                {
+                    c.Input.IsConnected = false;
+                }
 
-        public string? Title
+                if (c.Output.Connections.Count == 0)
+                {
+                    c.Output.IsConnected = false;
+                }
+            });
+        }
+
+        public Guid Guid { get; set; }
+
+        public required string? Key
         {
             get => _title;
             set => RaisePropertyChanged(ref _title, value);
         }
 
-        public object Data
+        public required object Data
         {
             get => data;
             set => RaisePropertyChanged(ref data, value);
@@ -41,12 +63,6 @@ namespace Utility.Nodify.Models
         {
             get => _isConnected;
             set => RaisePropertyChanged(ref _isConnected, value);
-        }
-
-        public Type Type
-        {
-            get => type;
-            set => RaisePropertyChanged(ref type, value);
         }
 
         public bool IsInput
@@ -77,25 +93,6 @@ namespace Utility.Nodify.Models
 
         public object AnchorElement { get; set; }
 
-        public ConnectorViewModel()
-        {
-            connections.WhenAdded(c =>
-            {
-                c.Input.IsConnected = true;
-                c.Output.IsConnected = true;
-            }).WhenRemoved(c =>
-            {
-                if (c.Input.Connections.Count == 0)
-                {
-                    c.Input.IsConnected = false;
-                }
-
-                if (c.Output.Connections.Count == 0)
-                {
-                    c.Output.IsConnected = false;
-                }
-            });
-        }
 
         protected virtual void OnNodeChanged()
         {

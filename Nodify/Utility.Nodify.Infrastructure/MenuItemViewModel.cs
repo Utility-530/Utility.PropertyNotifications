@@ -30,7 +30,7 @@ namespace Utility.Nodify.ViewModels
                         {
                             flag = true;
                             var menuItemViewModel = new MenuItemViewModel() { Content = item };
-                            menuItemViewModel.Selected += a => Selected?.Invoke(menuItemViewModel);
+                            menuItemViewModel.Selected += a => Selected?.Invoke(a);
                             children.Add(menuItemViewModel);
                         }
                         if (flag)

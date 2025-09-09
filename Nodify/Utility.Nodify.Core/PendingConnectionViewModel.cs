@@ -16,7 +16,7 @@ namespace Utility.Nodify.Models
 
         public string Key { get; set; }
 
-        public Guid Id { get; }
+        public Guid Guid { get; set; }
 
         public IConnectorViewModel Input
         {

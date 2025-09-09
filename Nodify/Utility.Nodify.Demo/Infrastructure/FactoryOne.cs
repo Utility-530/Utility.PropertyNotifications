@@ -5,8 +5,10 @@ using Utility.Nodify.Generator.Services;
 using Utility.ServiceLocation;
 using Utility.Interfaces.NonGeneric;
 using Utility.Extensions;
+using System;
+using System.Collections.Generic;
 
-namespace Utility.Nodify.Transitions.Demo.NewFolder
+namespace Utility.Nodify.Demo
 {
     internal class FactoryOne
     {

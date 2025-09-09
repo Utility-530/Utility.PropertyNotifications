@@ -20,7 +20,12 @@
     <ProjectReference Include="..\Utility.Nodify.Core\Utility.Nodify.Models.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Engine\Utility.Nodify.Engine.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Generator\Utility.Nodify.Generator.csproj" />
+    <ProjectReference Include="..\Utility.Nodify.Repository\Utility.Nodify.Repository.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Templates\Utility.Nodify.Views.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>

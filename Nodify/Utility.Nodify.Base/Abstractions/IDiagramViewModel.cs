@@ -3,9 +3,9 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Nodify.Core
 {
-    public interface IDiagramViewModel: IKey
+    public interface IDiagramViewModel: IKey, IGuid
     {
-        ICollection<IConnectionViewModel> Connections { get; }
-        ICollection<INodeViewModel> Nodes { get;  }
+        ObservableCollection<IConnectionViewModel> Connections { get; }
+        ObservableCollection<INodeViewModel> Nodes { get;  }
     }
 }

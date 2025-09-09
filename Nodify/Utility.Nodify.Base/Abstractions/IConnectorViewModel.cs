@@ -1,18 +1,18 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Drawing;
+using Utility.Interfaces.Generic.Data;
+using Utility.Interfaces.NonGeneric;
 using Utility.Nodify.Enums;
 
 namespace Utility.Nodify.Core
 {
-    public interface IConnectorViewModel : INotifyPropertyChanged
+    public interface IConnectorViewModel : IGetKey, INotifyPropertyChanged, IGuid
     {
         bool IsConnected { get; set; }
-        string? Title { get; set; }
-        Type Type { get; set; }
         object Data { get; set; }
         bool IsInput { get; set; }
-        INodeViewModel Node { get; set; }
+        INodeViewModel Node { get; set; }        
         IReadOnlyCollection<IConnectionViewModel> Connections { get; }
         PointF Anchor { get; set; }
         ConnectorFlow Flow { get; }

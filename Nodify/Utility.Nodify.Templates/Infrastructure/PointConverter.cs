@@ -48,4 +48,23 @@ namespace Utility.Nodify.Engine.Infrastructure
             throw new Exception("£%GG%%ff");
         }
     }
+
+    internal class DirectionConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(value is bool b)
+            {
+                if (b)
+                    return ConnectionDirection.Forward;
+                return ConnectionDirection.Backward;
+            }
+            throw new Exception("G%%ff");
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new Exception("£%GG%%ff");
+        }
+    }
 }

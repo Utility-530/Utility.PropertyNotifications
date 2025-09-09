@@ -39,7 +39,7 @@ namespace Utility.Nodify.Engine.Infrastructure
             container.Register<RangeObservableCollection<Message>>(serviceKey: OperationKeys.Future);
             container.Register<RangeObservableCollection<Message>>(serviceKey: OperationKeys.Current);
             container.Register<RangeObservableCollection<Message>>(serviceKey: OperationKeys.Past);
-            container.Register<IDiagramFactory, DiagramFactory>();
+        
 
             return container;
         }

@@ -14,6 +14,7 @@ using Utility.Nodify.Engine;
 using Utility.Enums;
 using Splat;
 using Utility.Interfaces.NonGeneric;
+using Utility.Trees;
 
 namespace Utility.Nodify.ViewModels
 {
@@ -114,7 +115,8 @@ namespace Utility.Nodify.ViewModels
             var connectionViewModel = new ConnectionViewModel
             {
                 Input = input,
-                Output = output
+                Output = output,
+                IsDirectionForward = source.Node?.Data is Tree && target.Node.Data?.GetType().Name.Contains("observable", StringComparison.InvariantCultureIgnoreCase) == true
             };
             container.RegisterInstanceMany<IConnectionViewModel>(connectionViewModel);
             Connections.Add(connectionViewModel);

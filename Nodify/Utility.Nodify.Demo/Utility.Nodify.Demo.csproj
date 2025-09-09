@@ -12,13 +12,19 @@
     <ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Services.Meta\Utility.Services.Meta.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.Simulation\Utility.Simulation.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.PropertyDescriptors\Utility.PropertyDescriptors.csproj" />
     <ProjectReference Include="..\..\Nodes\Utility.Nodes\Utility.Nodes.csproj" />
     <ProjectReference Include="..\..\Repos\Utility.Repos\Utility.Repos.csproj" />
+    <ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Simulation\Utility.WPF.Controls.Simulation.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Core\Utility.Nodify.Models.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Engine\Utility.Nodify.Engine.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Generator\Utility.Nodify.Generator.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Templates\Utility.Nodify.Views.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\" />
   </ItemGroup>
 
 </Project>

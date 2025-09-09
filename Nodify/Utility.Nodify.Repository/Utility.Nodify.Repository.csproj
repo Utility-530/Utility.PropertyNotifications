@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="sqlite-net-base" Version="1.8.116" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
+	  <ProjectReference Include="..\..\Models\Utility.Models.Diagrams\Utility.Models.Diagrams.csproj" />
+	  <ProjectReference Include="..\Utility.Nodify.Infrastructure\Utility.Nodify.ViewModels.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -17,6 +17,7 @@ using System.Linq;
 using Utility.Nodify.Models;
 using Utility.Nodify.Operations;
 using Utility.Interfaces.NonGeneric;
+using System;
 
 namespace Utility.Nodify.Engine.Infrastructure
 {
@@ -47,8 +48,8 @@ namespace Utility.Nodify.Engine.Infrastructure
             {
                 var connectionViewModel = new ConnectionViewModel
                 {
-                    Input = connectors.SingleOrDefault(a => a.Title == connection.Input),
-                    Output = connectors.SingleOrDefault(a => a.Title == connection.Output)
+                    Input = connectors.SingleOrDefault(a => a.Key == connection.Input),
+                    Output = connectors.SingleOrDefault(a => a.Key == connection.Output)
                 };
                 container.RegisterInstanceMany<IConnectionViewModel>(connectionViewModel);
                 diagramViewModel.Connections.Add(connectionViewModel);
@@ -75,8 +76,8 @@ namespace Utility.Nodify.Engine.Infrastructure
                 nodeViewModel.Data = new ObjectOperation(proto);
             }
 
-            var inputs = node.Inputs.Select(a => new ConnectorViewModel() { Title = a.Key, IsInput = true, Node = nodeViewModel, Type = a.Content.FromString() }).ToArray();
-            var outputs = node.Outputs.Select(a => new ConnectorViewModel() { Title = a.Key, Node = nodeViewModel, Type = a.Content.FromString() }).ToArray();
+            var inputs = node.Inputs.Select(a => new ConnectorViewModel() { Key = a.Key, IsInput = true, Node = nodeViewModel, Data = a.Content.FromString() }).ToArray();
+            var outputs = node.Outputs.Select(a => new ConnectorViewModel() { Key = a.Key, Node = nodeViewModel, Data = a.Content.FromString() }).ToArray();
             nodeViewModel.Input.AddRange(inputs);
             nodeViewModel.Output.AddRange(outputs);
 
@@ -107,8 +108,8 @@ namespace Utility.Nodify.Engine.Infrastructure
             {
                 var connection = new Connection
                 {
-                    Input = connectionViewModel.Input?.Title,
-                    Output = connectionViewModel.Output?.Title
+                    Input = connectionViewModel.Input?.Key,
+                    Output = connectionViewModel.Output?.Key
                 };
                 //diagram.Connections.Add(connection);
                 diagram.Connections.AddOrReplaceBy(a => a.Input + a.Output, connection);
@@ -130,8 +131,8 @@ namespace Utility.Nodify.Engine.Infrastructure
             {
                 node.Content = serialise.ToString();
             }
-            var inputs = nodeViewModel.Input.Select(a => new Connector() { Key = a.Title, IsInput = a.IsInput, Content = a.Type.AsString() }).ToArray();
-            var outputs = nodeViewModel.Output.Select(a => new Connector() { Key = a.Title, IsInput = a.IsInput, Content = a.Type.AsString() }).ToArray();
+            var inputs = nodeViewModel.Input.Select(a => new Connector() { Key = a.Key, IsInput = a.IsInput, Content = a is Type type ? type.AsString() : null }).ToArray();
+            var outputs = nodeViewModel.Output.Select(a => new Connector() { Key = a.Key, IsInput = a.IsInput, Content = a is Type type ? type.AsString() : null }).ToArray();
             node.Inputs.AddRange(inputs);
             node.Outputs.AddRange(outputs);
             return node;

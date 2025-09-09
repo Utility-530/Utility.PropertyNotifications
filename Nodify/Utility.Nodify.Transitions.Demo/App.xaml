@@ -8,6 +8,8 @@
              xmlns:vm1="clr-namespace:Utility.Nodify.ViewModels;assembly=Utility.Nodify.ViewModels" 
              xmlns:templates="http://schemas.utility.com/templates" 
              xmlns:models="clr-namespace:Utility.Models.Diagrams;assembly=Utility.Models.Diagrams"
+             xmlns:prop="clr-namespace:Utility.PropertyDescriptors;assembly=Utility.PropertyDescriptors"
+             xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
              xmlns:propertynotifications="clr-namespace:Utility.PropertyNotifications;assembly=Utility.PropertyNotifications">
     <Application.Resources>
         <ResourceDictionary>
@@ -107,7 +109,6 @@
             </DataTemplate>
 
             <DataTemplate DataType="{x:Type vm:ConnectionViewModel}">
-
                 <ItemsControl>
                     <ContentControl Content="{Binding Input}"></ContentControl>
                     <Rectangle  Height="4" HorizontalAlignment="Stretch" MinWidth="4">
@@ -161,9 +162,17 @@
             <DataTemplate DataType="{x:Type propertynotifications:NotifyPropertyClass}">
                 <TextBlock Text="{Binding Name}"></TextBlock>
             </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type tree:Tree}">
+                <TextBlock Text="{Binding Data}"></TextBlock>
+            </DataTemplate>
 
             <DataTemplate DataType="{x:Type models:MethodNode}">
                 <TextBlock VerticalAlignment="Center" Text="{Binding Method.Name}" FontSize="16" FontWeight="DemiBold" ToolTip="{Binding Method.MethodInfo.ReflectedType.FullName}"></TextBlock>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type prop:MemberDescriptor}">
+                <TextBlock Text="{Binding Name}"></TextBlock>
             </DataTemplate>
             
             <DataTemplate DataType="{x:Type models:PlaybackAction}">

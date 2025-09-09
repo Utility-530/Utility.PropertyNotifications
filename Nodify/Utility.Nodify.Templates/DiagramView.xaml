@@ -12,11 +12,35 @@
                     xmlns:beh="http://schemas.utility.com/behaviors"
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
                      xmlns:local="clr-namespace:Utility.Nodify.Enums;assembly=Utility.Nodify.Enums"
-                     xmlns:conv="http://schemas.utility.com/converters"
+                     xmlns:conv="http://schemas.utility.com/converters" xmlns:ad="http://schemas.utility.com/adorners"
+                     xmlns:lsts="http://schemas.utility.com/lists"
+                     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+                     xmlns:cb="http://schemas.utility.com/cboxes" 
+                     xmlns:res="http://schemas.utility.com/resourcedictionary"
+                     xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks" xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
                      mc:Ignorable="d">
 
+    <ResourceDictionary.MergedDictionaries>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/ButtonComboBoxTreeViewStyle.xaml"></res:SharedResourceDictionary>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style x:Key="PropertyStyle"  TargetType="{x:Type cb:ComboBoxTreeView}" BasedOn="{StaticResource ButtonComboBoxTreeViewStyle}">
+        <Setter Property="ToggleButtonTemplate">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <materialDesign:PackIcon Kind="PlusBox" Foreground="LightCoral" Background="Transparent"></materialDesign:PackIcon>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+    
     <inf:PointConverter x:Key="PointConverter"/>
     <inf:ArrangementConverter x:Key="ArrangementConverter"/>
+    <inf1:NodeEventArgsConverter x:Key="NodeEventArgsConverter"/>
+    <inf:DirectionConverter x:Key="DirectionConverter"/>
     <inf1:NodeTemplateSelector x:Key="NodeTemplateSelector">
         <inf1:NodeTemplateSelector.ObservableTemplate>
             <DataTemplate>
@@ -30,12 +54,16 @@
         </inf1:NodeTemplateSelector.ValueModelTemplate>
     </inf1:NodeTemplateSelector>
 
-    <Style x:Key="ConnectionStyle"
+
+        
+        <Style x:Key="ConnectionStyle"
                TargetType="{x:Type nodify:BaseConnection}"
                BasedOn="{StaticResource {x:Type nodify:BaseConnection}}">
         <!--<Setter Property="IsAnimatingDirectionalArrows" Value="True"></Setter>-->
         <Setter Property="DirectionalArrowsAnimationDuration" Value="1"></Setter>
         <Setter Property="DirectionalArrowsCount" Value="1"></Setter>
+
+        <Setter Property="Direction" Value="{Binding IsDirectionForward, Converter={StaticResource DirectionConverter}}"></Setter>
     </Style>
 
     <DataTemplate x:Key="ConnectionTemplate"
@@ -78,7 +106,127 @@
         </nodify:PendingConnection>
     </DataTemplate>
 
+    <Style x:Key="Pending" TargetType="{x:Type nodify:NodeOutput}">
+        <Style.Resources>
+            <LinearGradientBrush x:Key="FadeOpacityMask"
+                         StartPoint="0 0"
+                         EndPoint="1 0">
+                <GradientStop Color="#22FFFFFF"
+                      Offset="0" />
+                <GradientStop Color="#88FFFFFF"
+                      Offset="0.3" />
+                <GradientStop Color="#88FFFFFF"
+                      Offset="0.7" />
+                <GradientStop Color="#22FFFFFF"
+                      Offset="1" />
+            </LinearGradientBrush>
+        </Style.Resources>
+        <Setter Property="Orientation" Value="Horizontal"/>
+        <Setter Property="BorderBrush"
+                Value="DodgerBlue" />
+        <Setter Property="Background"
+                Value="Transparent" />
+        <Setter Property="Foreground"
+                Value="White" />
+        <Setter Property="Padding"
+                Value="4 2" />
 
+        <!--<Setter Property="ConnectorTemplate"
+                Value="{StaticResource ConnectorThumbTemplate}" />-->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type nodify:NodeOutput}">
+
+                    <Grid Background="{TemplateBinding Background}">
+                        <Border Visibility="Collapsed"
+                                x:Name="Highlight"
+                                OpacityMask="{StaticResource FadeOpacityMask}"
+                                Background="{TemplateBinding BorderBrush}" />
+
+                        <StackPanel Orientation="{TemplateBinding Orientation}"
+                                    HorizontalAlignment="Right"
+                                    Margin="{TemplateBinding Padding}">
+
+                            <ContentPresenter ContentSource="Header" />
+
+                            <!--<Ellipse Width="14"
+                                           x:Name="PART_Connector"
+                 Height="14"
+                 Stroke="{TemplateBinding BorderBrush}"
+                 Fill="{TemplateBinding Background}"
+                 StrokeThickness="2" />-->
+                            
+                            
+                            <cb:ComboBoxTreeView     
+                                Height="14" Width="14"
+                                x:Name="PART_Connector"
+                             
+                                Style="{StaticResource PropertyStyle}"  
+                                     VerticalAlignment="Center"
+                                     HorizontalAlignment="Center"
+                                     Background="Transparent"
+                                     BorderBrush="{TemplateBinding BorderBrush}"
+                                Margin="5 0 0 0">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="SelectedNodeChanged">
+                                        <beh:InvokeCommandAction PassEventArgsToCommand="False" 
+                                                                 EventArgsConverter="{StaticResource NodeEventArgsConverter}"
+                                                                 Command="{Binding DataContext.AddConnectorCommand, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <i:Interaction.Behaviors>
+                                    <cb:PropertySelectorBehavior Type="{x:Type nodes:ViewModelTree}" />
+                   
+                                </i:Interaction.Behaviors>
+                   
+                            </cb:ComboBoxTreeView>
+                        </StackPanel>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="Orientation"
+                                 Value="Vertical">
+                            <Setter TargetName="PART_Connector"
+                                    Property="Margin"
+                                    Value="0 5 0 0" />
+                            <Setter Property="Padding"
+                                    Value="2 4" />
+                            <Setter TargetName="Highlight"
+                                    Property="OpacityMask"
+                                    Value="{StaticResource FadeOpacityMaskVertical}" />
+                        </Trigger>
+
+                        <Trigger Property="IsConnected"
+                                 Value="True">
+                            <!--<Setter TargetName="PART_Connector"
+                                    Property="Background"
+                                    Value="{Binding BorderBrush, RelativeSource={RelativeSource TemplatedParent}}" />-->
+                        </Trigger>
+                        <Trigger Property="nodify:PendingConnection.IsOverElement"
+                                 Value="True">
+                            <!--<Setter TargetName="PART_Connector"
+                                    Property="Background"
+                                    Value="{Binding BorderBrush, RelativeSource={RelativeSource TemplatedParent}}" />-->
+                        </Trigger>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="Highlight"
+                                    Property="Visibility"
+                                    Value="Visible" />
+                        </Trigger>
+                        <Trigger Property="nodify:PendingConnection.IsOverElement"
+                                 Value="True">
+                            <Setter TargetName="Highlight"
+                                    Property="Visibility"
+                                    Value="Visible" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    
     <Style x:Key="ItemContainerStyle"
                TargetType="{x:Type nodify:ItemContainer}"
                BasedOn="{StaticResource {x:Type nodify:ItemContainer}}">
@@ -115,7 +263,7 @@
     <DataTemplate DataType="{x:Type core:DiagramViewModel}">
         <Grid MinWidth="300" MinHeight="300" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" >
             <nodify:NodifyEditor DataContext="{Binding }"               
-                                  
+                                  DisplayConnectionsOnTop="True"
                                  ItemsSource="{Binding Nodes}"
                                 Connections="{Binding Connections}"
                                 SelectedItems="{Binding SelectedNodes}"
@@ -163,17 +311,28 @@
                         </Style.Triggers>-->
                     </Style>
 
+
                     <DataTemplate DataType="{x:Type models:NodeViewModel}">
-                        <nodify:Node 
-                                    Input="{Binding Input}"
-                                    Output="{Binding Output}"
-                                    Content="{Binding Data}"   
-                                    ContentTemplateSelector="{StaticResource NodeTemplateSelector}"
-                                    Padding="5 0 0 0" >
+                        <!--<DataTemplate.Resources>
+                 
+                                <CollectionViewSource x:Key="TheWeeksBlocksSource" Source="{Binding Output}" />
+
+                            <CompositeCollection x:Key="CompositeCollectionSource">
+                                <CollectionContainer Collection="{Binding Source={StaticResource TheWeeksBlocksSource}}" />
+                                <ListBoxItem Foreground="Red">Other</ListBoxItem>
+                            </CompositeCollection>
+                        </DataTemplate.Resources>-->
+                        <nodify:Node Content="{Binding Data}"
+                                 ContentTemplateSelector="{StaticResource NodeTemplateSelector}">
                             <nodify:Node.Style>
                                 <Style TargetType="{x:Type nodify:Node}"
-                                    BasedOn="{StaticResource {x:Type nodify:Node}}">
+                                    BasedOn="{StaticResource {x:Type nodify:Node}}">    
                                     <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsConnectorsReversed}" Value="True">
+                                            <Setter Property="Footer" Value="{Binding Input}"></Setter>
+                                            <Setter Property="Header" Value="{Binding Output}"></Setter>
+                                        </DataTrigger>
+
                                         <DataTrigger Binding="{Binding Data.IsActive}"
                                                     Value="True">
                                             <Setter Property="ContentBrush"
@@ -208,12 +367,16 @@
                                                 Value="Red" />
                                         </DataTrigger>
                                     </Style.Triggers>
-
+                                    <Setter Property="Footer" Value="{Binding Output}" />                                     
+            
+                                    <Setter Property="Header" Value="{Binding Input}">
+                                       
+                                    </Setter>
                                     <Setter Property="VerticalAlignment" Value="Stretch"></Setter>
                                     <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
                                     <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
                                     <Setter Property="VerticalContentAlignment" Value="Stretch"></Setter>
-
+                            
                                     <Setter Property="BorderBrush">
                                         <Setter.Value>
                                             <SolidColorBrush Color="Transparent"/>
@@ -223,8 +386,65 @@
 
                                 </Style>
                             </nodify:Node.Style>
+                            <!--<nodify:Node.ContentTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding}"
+                                           Margin="5" />
+                                </DataTemplate>
+                            </nodify:Node.ContentTemplate>-->
+                            <nodify:Node.HeaderTemplate>
+                                <DataTemplate>
+                                    <ItemsControl ItemsSource="{Binding}"
+                                              Focusable="False">
+                                        <!--<ad:AdornerEx.LastItemAdorner>
+                                            <x:Static Member="inf1:MessageBoxCommand.Instance" />
+                                        </ad:AdornerEx.LastItemAdorner>-->
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type models:ConnectorViewModel}">
+                                                <nodify:NodeInput Orientation="Horizontal" />
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Vertical"
+                                                        HorizontalAlignment="Center" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </DataTemplate>
+                            </nodify:Node.HeaderTemplate>
+                            <nodify:Node.FooterTemplate>
+                                <DataTemplate>
+                                    <ItemsControl ItemsSource="{Binding}"                                                  
+                                              Focusable="False">
+                                        <ItemsControl.ItemTemplateSelector>
+                                            <inf1:ConnectorTemplateSelector>
+                                                <inf1:ConnectorTemplateSelector.DefaultTemplate>
+                                                    <DataTemplate DataType="{x:Type models:ConnectorViewModel}">
+                                                        <nodify:NodeOutput Orientation="Horizontal" />
+                                                    </DataTemplate>
+                                                </inf1:ConnectorTemplateSelector.DefaultTemplate>
+                                                <inf1:ConnectorTemplateSelector.PendingTemplate>
+                                                    <DataTemplate DataType="{x:Type models:PendingConnectorViewModel}">
+                                                        <nodify:NodeOutput Orientation="Horizontal" Style="{StaticResource Pending}"/>
+                                                    </DataTemplate>
+                                                </inf1:ConnectorTemplateSelector.PendingTemplate>
+                                            </inf1:ConnectorTemplateSelector>
+                                        </ItemsControl.ItemTemplateSelector>
+
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Vertical"
+                                                        HorizontalAlignment="Center" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                    </ItemsControl>
+                                </DataTemplate>
+                            </nodify:Node.FooterTemplate>
                         </nodify:Node>
                     </DataTemplate>
+
+
                 </nodify:NodifyEditor.Resources>
 
                 <nodify:NodifyEditor.InputBindings>
@@ -282,8 +502,11 @@
                      StrokeThickness="2" />
     </ControlTemplate>
 
+
+
     <Style TargetType="{x:Type nodify:NodeInput}"
                        BasedOn="{StaticResource {x:Type nodify:NodeInput}}">
+        <Setter Property="Orientation" Value="Horizontal"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding Shape}"
                                      Value="{x:Static local:ConnectorShape.Square}">
@@ -295,7 +518,7 @@
                     <Setter.Value>
                         <DataTemplate DataType="{x:Type models:ConnectorViewModel}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Title}"
+                                <TextBlock Text="{Binding Key}"
                                                        Margin="0 0 5 0" />
                                 <TextBox Text="{Binding MaxConnections}"
                                                      MinWidth="30" />
@@ -314,7 +537,7 @@
                     <Setter.Value>
                         <DataTemplate DataType="{x:Type models:ConnectorViewModel}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Title}"
+                                <TextBlock Text="{Binding Key}"
                                                        Margin="0 0 5 0"
                                                        VerticalAlignment="Center" />
                                 <CheckBox />
@@ -328,6 +551,7 @@
 
     <Style TargetType="{x:Type nodify:NodeOutput}"
                        BasedOn="{StaticResource {x:Type nodify:NodeOutput}}">
+        <Setter Property="Orientation" Value="Horizontal"/>
         <Style.Triggers>
             <DataTrigger Binding="{Binding Shape}"
                                      Value="{x:Static local:ConnectorShape.Square}">
@@ -339,7 +563,7 @@
                     <Setter.Value>
                         <DataTemplate DataType="{x:Type models:ConnectorViewModel}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Title}"
+                                <TextBlock Text="{Binding Key}"
                                                        Margin="0 0 5 0" />
                                 <TextBox Text="{Binding MaxConnections}"
                                                      MinWidth="30" />
@@ -358,7 +582,7 @@
                     <Setter.Value>
                         <DataTemplate DataType="{x:Type models:ConnectorViewModel}">
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding Title}"
+                                <TextBlock Text="{Binding Key}"
                                                        Margin="0 0 5 0"
                                                        VerticalAlignment="Center" />
                                 <CheckBox />

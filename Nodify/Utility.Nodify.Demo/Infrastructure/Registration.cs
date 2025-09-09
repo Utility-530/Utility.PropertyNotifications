@@ -1,11 +1,14 @@
 ﻿using DryIoc;
 using Splat;
+using System;
 using System.Reactive.Concurrency;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric.Dependencies;
 using Utility.Models;
+using Utility.Nodify.Engine;
 using Utility.Nodify.Engine.Infrastructure;
+using Utility.Nodify.Generator.Services;
 using Utility.Nodify.ViewModels;
 using Utility.Repos;
 using Utility.ServiceLocation;
@@ -13,13 +16,12 @@ using Utility.Services;
 using Utility.Simulation;
 using Utility.Trees.Abstractions;
 
-namespace Utility.Nodify.Transitions.Demo.Infrastructure
+namespace Utility.Nodify.Demo.Infrastructure
 {
-    internal class GlobalRegistration
+    internal class Registration
     {
         public static void registerGlobals(IRegister register)
         {
-            const string sqliteName = "O:\\Users\\rytal\\source\\repos\\Utility\\Nodes\\Utility.Nodes.Demo.Editor\\Data\\first_7.sqlite";
 
             register.Register<IScheduler>(DispatcherScheduler.Current);
             register.Register(() => new PlayBackViewModel());
@@ -31,9 +33,9 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
             register.Register<IFactory<INode>>(() => new NodeFactory());
             register.Register<IServiceResolver>(() => new ServiceResolver());
             register.Register<IModelResolver>(() => new BasicModelResolver());
-            register.Register<IObservable<IReadOnlyTree>>(() => new TreeResolver());
+            //register.Register<IObservable<IReadOnlyTree>>(() => new TreeResolver());
             register.Register<ExceptionsViewModel>(() => new ExceptionsViewModel());
-            Globals.Register.Register<ITreeRepository>(() => new TreeRepository(sqliteName));
+            //Globals.Register.Register<ITreeRepository>(() => new TreeRepository(sqliteName));
             Globals.Exceptions.Subscribe(a => Globals.Resolver.Resolve<ExceptionsViewModel>().Collection.Add(a));
             register.Register(() => new DiagramViewModel(initialiseContainer()) { Key = "Master", Arrangement = Utility.Enums.Arrangement.UniformRow });
         }
@@ -42,9 +44,17 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
         {
             var container = new Container(DiConfiguration.SetRules);
             Locator.CurrentMutable.RegisterConstant<IContainer>(container);
+            container.Register<IDiagramFactory, DiagramFactory2>();
             _ = Bootstrapper.Build(container);
             //container.Register<IConverter, Converter>();
             return container;
+        }
+
+
+        public static void initialise(IMutableDependencyResolver resolver)
+        {
+            resolver.RegisterLazySingleton(() => new CollectionViewService() { Name = nameof(CollectionViewService) });
+            //resolver.RegisterLazySingleton<Utility.Nodify.Operations.Infrastructure.INodeSource>(() => new NodeSource() { });
         }
 
         class DiConfiguration

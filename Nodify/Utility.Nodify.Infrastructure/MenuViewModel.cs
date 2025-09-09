@@ -3,10 +3,11 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Reactive.Subjects;
 using Utility.Nodify.Base;
+using Utility.Nodify.Models;
 
 namespace Utility.Nodify.ViewModels
 {
-    public class MenuViewModel : BaseNodeViewModel, IObservable<(PointF, MenuItemViewModel)>
+    public class MenuViewModel : NodeViewModel, IObservable<(PointF, MenuItemViewModel)>
     {
         private RangeObservableCollection<MenuItemViewModel> items = new RangeObservableCollection<MenuItemViewModel>();
         readonly ReplaySubject<(PointF, MenuItemViewModel)> replaySubject = new();

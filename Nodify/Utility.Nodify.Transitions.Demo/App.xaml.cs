@@ -1,12 +1,14 @@
 ﻿using DryIoc;
+using Jonnidip;
+using Newtonsoft.Json;
 using Splat;
 using System.Windows;
-using Utility.Interfaces.Exs;
-using Utility.Nodify.Generator.Services;
-using Utility.Nodify.Transitions.Demo.NewFolder;
+using Utility.Conversions.Json.Newtonsoft;
+using Utility.Models.Trees.Converters;
+using Utility.Nodes;
+using Utility.Nodify.Transitions.Demo.Infrastructure;
 using Utility.ServiceLocation;
 using MainViewModel = Utility.Nodify.Transitions.Demo.Infrastructure.MainViewModel;
-using Utility.Nodify.Transitions.Demo.Infrastructure;
 
 namespace Utility.Nodify.Transitions.Demo
 {
@@ -19,12 +21,9 @@ namespace Utility.Nodify.Transitions.Demo
         {
             SQLitePCL.Batteries.Init();
 
-            GlobalRegistration.registerGlobals(Globals.Register);
-            initialise(Locator.CurrentMutable);
-
-            register();
-
-
+            Registration.registerGlobals(Globals.Register);
+            Registration.initialise(Locator.CurrentMutable);
+            JsonConvert.DefaultSettings = () => settings;
             var window = new Window()
             {
                 Content = Globals.Resolver.Resolve<MainViewModel>()
@@ -33,17 +32,23 @@ namespace Utility.Nodify.Transitions.Demo
             base.OnStartup(e);
         }
 
-        private void register()
+        public JsonSerializerSettings settings = new()
         {
-            FactoryOne.build(Globals.Resolver.Resolve<IModelResolver>());
-            FactoryOne.connect(Globals.Resolver.Resolve<IServiceResolver>(), Globals.Resolver.Resolve<IModelResolver>());
-            FactoryOne.initialise(Globals.Resolver.Resolve<IModelResolver>());
-        }
-
-        private void initialise(IMutableDependencyResolver resolver)
-        {
-            resolver.RegisterLazySingleton(() => new CollectionViewService() { Name = nameof(CollectionViewService) });
-            resolver.RegisterLazySingleton<Utility.Nodify.Operations.Infrastructure.INodeSource>(() => new NodeSource() {  });
-        }
+            TypeNameHandling = TypeNameHandling.All,
+            //Formatting = Formatting.Indented,
+            Converters = [
+                new AssemblyJsonConverter(),
+                new PropertyInfoJsonConverter(),
+                new MethodInfoJsonConverter(),
+                new ParameterInfoJsonConverter(),
+                new AttributeCollectionConverter(),
+                new DescriptorConverter(),
+                new StringTypeEnumConverter(),
+                //new TypeConverter(),
+                new ValueModelConverter(),
+                new NodeConverter(),
+                new NonGenericPropertyInfoJsonConverter()
+            ]
+        };
     }
 }

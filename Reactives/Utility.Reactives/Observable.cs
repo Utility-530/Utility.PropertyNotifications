@@ -57,6 +57,11 @@ namespace Utility.Reactives
 
             return compositeDisposable;
         }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
     }
 
 }

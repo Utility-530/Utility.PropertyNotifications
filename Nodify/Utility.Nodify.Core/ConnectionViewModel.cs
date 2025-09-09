@@ -1,5 +1,7 @@
 ﻿using System;
 using Utility.Helpers.Generic;
+using Utility.Interfaces.Generic.Data;
+using Utility.Interfaces.NonGeneric.Data;
 using Utility.Nodify.Core;
 using Utility.PropertyNotifications;
 
@@ -14,10 +16,10 @@ namespace Utility.Nodify.Models
         {
         }
 
-        public Guid Id { get; } = Guid.NewGuid();
+        public Guid Guid { get; set; }
 
 
-        public string Key {get=> new { Id, string.Empty }.ToString(); set=> throw new NotSupportedException("Key is read-only and generated from Id."); }
+        public string Key {get=> new { Guid, string.Empty }.ToString(); set=> throw new NotSupportedException("Key is read-only and generated from Id."); }
 
 
         public string Title
@@ -48,5 +50,7 @@ namespace Utility.Nodify.Models
         }
         public object Data { get; set; }
 
+
+        public bool IsDirectionForward { get; set; }
     }
 }

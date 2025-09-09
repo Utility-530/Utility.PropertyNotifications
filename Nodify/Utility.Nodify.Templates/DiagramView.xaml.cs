@@ -1,6 +1,4 @@
-﻿using Utility.Nodify.Core;
-using Utility.Nodify.Demo;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Nodify;
@@ -36,6 +34,11 @@ namespace Utility.Nodify.Demo
             {
                 calculator.Menu.Close();
             }
+        }
+
+        private void PART_Connector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

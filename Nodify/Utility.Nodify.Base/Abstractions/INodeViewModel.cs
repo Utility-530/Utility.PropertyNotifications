@@ -1,13 +1,10 @@
-﻿using System;
-using System.Drawing;
-using System.Windows;
+﻿using System.Drawing;
 using Utility.Enums;
-using Utility.Interfaces.Generic.Data;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Nodify.Core
 {
-    public interface INodeViewModel: IKey, IId<Guid>, IData
+    public interface INodeViewModel: IKey, IGuid, IData
     {
         ICollection<IConnectorViewModel> Input { get; }
         ICollection<IConnectorViewModel> Output { get; }

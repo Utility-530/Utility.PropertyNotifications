@@ -1,4 +1,5 @@
 ﻿using MoreLinq;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -18,11 +19,11 @@ namespace Utility.Nodify.Models
         public DiagramViewModel()
         {
 
-            CreateConnectionCommand = new Command<ConnectorViewModel>(
+            CreateConnectionCommand = new Command<IConnectorViewModel>(
                 _ => CreateConnection(PendingConnection.Input, PendingConnection.Output),
                 _ => CanCreateConnection(PendingConnection.Input, PendingConnection.Output));
             StartConnectionCommand = new Command<object>(_ => PendingConnection.IsVisible = true);
-            DisconnectConnectorCommand = new Command<ConnectorViewModel>(DisconnectConnector);
+            DisconnectConnectorCommand = new Command<IConnectorViewModel>(DisconnectConnector);
             DeleteSelectionCommand = new Command(DeleteSelection);
             GroupSelectionCommand = new Command(GroupSelectedOperations, () => SelectedNodes.Count > 0);
 
@@ -87,14 +88,16 @@ namespace Utility.Nodify.Models
             });
         }
 
+
+        public Guid Guid { get; set; }
         public virtual string Key { get; set; }
 
 
-        public ICollection<INodeViewModel> Nodes => _operations;
+        public ObservableCollection<INodeViewModel> Nodes => _operations;
 
         public ICollection<INodeViewModel> SelectedNodes => _selectedOperations;
  
-        public ICollection<IConnectionViewModel> Connections { get; } = new RangeObservableCollection<IConnectionViewModel>();
+        public ObservableCollection<IConnectionViewModel> Connections { get; } = new RangeObservableCollection<IConnectionViewModel>();
         public PendingConnectionViewModel PendingConnection { get; set; } = new PendingConnectionViewModel();
 
 
