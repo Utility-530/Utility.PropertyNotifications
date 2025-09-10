@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Threading.Tasks;
-using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Trees.Abstractions
@@ -12,7 +11,7 @@ namespace Utility.Trees.Abstractions
     /// <a href="https://github.com/yuramag/ObservableTreeDemo"></a>
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ITree : ITreeIndex, IReadOnlyTree, ISetIsReadOnly, IEquatable<ITree>, IRemove, IRemoveAt, IAdd, INotifyCollectionChanged, INotifyPropertyChanged, ICollection<ITree> //, IRemove<Guid>
+    public interface ITree : IReadOnlyTree, ISetIsReadOnly, IEquatable<ITree>, IRemove, IRemoveAt, IAdd, INotifyCollectionChanged, INotifyPropertyChanged, ICollection<ITree> //, IRemove<Guid>
     {
         bool HasItems { get; }
 
