@@ -546,9 +546,6 @@
                                                                           IsEditing="{Binding IsDropDownOpen, Mode=TwoWay}"
                                                                           Tag="{Binding Data}"
                                                                           Style="{StaticResource PendingInput}">
-                                                            <!--<i:Interaction.Behaviors>
-                                                                <inf1:DropDownBehavior Boolean="{Binding IsDropDownOpen, Mode=TwoWay}" ></inf1:DropDownBehavior>
-                                                            </i:Interaction.Behaviors>-->
                                                         </nodify:NodeInput>
                                                     </DataTemplate>
                                                 </inf1:ConnectorTemplateSelector.PendingTemplate>
