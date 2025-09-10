@@ -91,7 +91,10 @@ namespace Utility.Trees
 
         public virtual Task<ITree> ToTree(object data)
         {
-            return Task.FromResult((ITree)new Tree((object)data));
+            var tree = (ITree)new Tree((object)data);
+            this.Add(tree);
+            (tree as ISetParent<IReadOnlyTree>).Parent = this;
+            return Task.FromResult(tree);
         }
 
         public virtual ITree? this[int index]
