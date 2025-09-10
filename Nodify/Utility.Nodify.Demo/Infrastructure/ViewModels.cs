@@ -1,13 +1,13 @@
 ﻿using System.Windows.Input;
 using Utility.Commands;
 using Utility.Models.Diagrams;
-using Utility.Nodify.ViewModels;
 using Utility.Simulation;
 using Utility.Helpers;
 using Splat;
 using Utility.ServiceLocation;
 using Utility.Interfaces.Exs;
 using System.Linq;
+using Utility.Nodify.Models;
 
 namespace Utility.Nodify.Demo.Infrastructure
 {
