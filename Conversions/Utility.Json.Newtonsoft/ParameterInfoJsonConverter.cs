@@ -31,7 +31,7 @@ namespace Utility.Conversions.Json.Newtonsoft
             writer.WritePropertyName("IsReturn");
             writer.WriteValue(isReturn);
 
-            if (isReturn ==false)
+            if (isReturn == false)
             {
                 writer.WritePropertyName("ParameterName");
                 writer.WriteValue(value.Name);
@@ -69,7 +69,7 @@ namespace Utility.Conversions.Json.Newtonsoft
                 throw new JsonSerializationException("Method name is missing or invalid.");
             }
 
-            var method = type.GetMethod(methodName);
+            var method = type.GetMethods().FirstOrDefault(a => a.Name == methodName);
 
             if (jObject["IsReturn"].Value<bool>())
             {
@@ -90,7 +90,7 @@ namespace Utility.Conversions.Json.Newtonsoft
                     throw new JsonSerializationException($"Parameter '{parameterName}' not found on type '{type.FullName}' of method {methodName}.");
                 }
                 return parameterInfo;
-            }  
+            }
         }
     }
 }

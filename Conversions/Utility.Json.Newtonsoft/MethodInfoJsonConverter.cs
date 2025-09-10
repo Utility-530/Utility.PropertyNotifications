@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.Reflection;
 using System;
+using Utility.Helpers.NonGeneric;
 
 namespace Utility.Conversions.Json.Newtonsoft
 {
@@ -67,7 +68,7 @@ namespace Utility.Conversions.Json.Newtonsoft
                 throw new JsonSerializationException("Method name is missing or invalid.");
             }
 
-            var propertyInfo = type.GetMethod(methodName);
+            var propertyInfo = (MethodInfo)type.GetMethods().FirstOrDefault(a => (a as MethodInfo).Name == methodName);
             if (propertyInfo == null)
             {
                 throw new JsonSerializationException($"Method '{methodName}' not found on type '{type.FullName}'.");
