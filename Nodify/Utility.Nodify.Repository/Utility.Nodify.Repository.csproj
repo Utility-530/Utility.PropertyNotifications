@@ -11,7 +11,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
 	  <ProjectReference Include="..\..\Models\Utility.Models.Diagrams\Utility.Models.Diagrams.csproj" />
-	  <ProjectReference Include="..\Utility.Nodify.Infrastructure\Utility.Nodify.ViewModels.csproj" />
+	  <ProjectReference Include="..\Utility.Nodify.Base\Utility.Nodify.Base.csproj" />
 	</ItemGroup>
 
 </Project>
