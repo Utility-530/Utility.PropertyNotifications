@@ -22,7 +22,7 @@ namespace Utility.Nodify.Transitions.Demo
             SQLitePCL.Batteries.Init();
 
             Registration.registerGlobals(Globals.Register);
-            Registration.initialise(Locator.CurrentMutable);
+            //Registration.initialise(Locator.CurrentMutable);
             JsonConvert.DefaultSettings = () => settings;
             var window = new Window()
             {
