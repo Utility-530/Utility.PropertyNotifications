@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Utility.Commands;
+using Utility.Nodify.Base.Abstractions;
 using Utility.Nodify.Operations.Infrastructure;
 using Utility.PropertyNotifications;
 
@@ -10,10 +11,10 @@ namespace Utility.Nodify.ViewModels
 {
 
 
-    public class MenuItemViewModel : NotifyPropertyClass
+    public class MenuItemViewModel : NotifyPropertyClass, IMenuItemViewModel
     {
         private readonly ObservableCollection<MenuItemViewModel> children = new();
-        public event Action<MenuItemViewModel> Selected;
+        public event Action<IMenuItemViewModel> Selected;
 
         public MenuItemViewModel()
         {

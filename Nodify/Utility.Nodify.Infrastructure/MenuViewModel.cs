@@ -1,33 +1,35 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Reactive.Subjects;
 using Utility.Nodify.Base;
+using Utility.Nodify.Base.Abstractions;
 using Utility.Nodify.Models;
 
 namespace Utility.Nodify.ViewModels
 {
-    public class MenuViewModel : NodeViewModel, IObservable<(PointF, MenuItemViewModel)>
+    public class MenuViewModel : NodeViewModel, IMenuViewModel
     {
-        private RangeObservableCollection<MenuItemViewModel> items = new RangeObservableCollection<MenuItemViewModel>();
-        readonly ReplaySubject<(PointF, MenuItemViewModel)> replaySubject = new();
+        private RangeObservableCollection<IMenuItemViewModel> items = new RangeObservableCollection<IMenuItemViewModel>();
+        readonly ReplaySubject<(PointF, IMenuItemViewModel)> replaySubject = new();
 
         public MenuViewModel()
         {
-            Items
+            items
                 .WhenAdded(a =>
             {
                 a.Selected += selected;
             });
         }
 
-        private void selected(MenuItemViewModel obj)
+        private void selected(IMenuItemViewModel obj)
         {
             replaySubject.OnNext((Location, obj));
             Close();
         }
 
-        public RangeObservableCollection<MenuItemViewModel> Items
+        public IList<IMenuItemViewModel> Items
         {
             get
             {
@@ -37,12 +39,8 @@ namespace Utility.Nodify.ViewModels
             {
                 foreach (var item in value)
                     item.Selected += selected;
-                value
-                    .WhenAdded(a =>
-                    {
-                        a.Selected += selected;
-                    });
-                items = value;
+
+                items.AddRange(value);
             }
         }
 
@@ -58,7 +56,7 @@ namespace Utility.Nodify.ViewModels
             IsVisible = false;
         }
 
-        public IDisposable Subscribe(IObserver<(PointF, MenuItemViewModel)> observer)
+        public IDisposable Subscribe(IObserver<(PointF, IMenuItemViewModel)> observer)
         {
             return replaySubject.Subscribe(observer);
         }
