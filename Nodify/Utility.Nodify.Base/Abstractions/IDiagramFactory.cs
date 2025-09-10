@@ -1,9 +1,9 @@
 ﻿using Utility.Nodify.Core;
 
-namespace Utility.Nodify.Engine
+namespace Utility.Nodify.Base.Abstractions
 {
     public interface IDiagramFactory
     {
-        void Build(IDiagramViewModel diagram);
+        Task Build(IDiagramViewModel diagram);
     }
 }
