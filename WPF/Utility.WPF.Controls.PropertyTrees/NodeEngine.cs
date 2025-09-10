@@ -14,6 +14,8 @@ using Utility.Interfaces.NonGeneric;
 using Utility.PropertyNotifications;
 using Utility.PropertyDescriptors;
 using Utility.Observables;
+using Utility.Interfaces.Generic;
+using Utility.Trees.Abstractions;
 
 namespace Utility.WPF.Controls.PropertyTrees
 {
@@ -99,9 +101,9 @@ namespace Utility.WPF.Controls.PropertyTrees
         {
             if (node.Data is not IDescriptor descriptor)
                 throw new Exception("Vd 222");
-            if (node.Key is null)
-                node.Key = new GuidKey(Guid.NewGuid());
-            if (Nodes.Any(a => a.Key == node.Key) == false)
+            if ((node as IGetKey).Key is null)
+                (node as ISetKey).Key = new GuidKey(Guid.NewGuid());
+            if (Nodes.Any(a => (a as IGetKey).Key == (node as IGetKey).Key) == false)
             {
                 nodes.Add(node);
                 { 
@@ -140,7 +142,7 @@ namespace Utility.WPF.Controls.PropertyTrees
 
             void configure(INode node)
             {
-                if (node.Parent?.Data is ICollectionDescriptor d)
+                if ((node as IGetParent<IReadOnlyTree>).Parent?.Data is ICollectionDescriptor d)
                 {
 
                 }
@@ -149,7 +151,7 @@ namespace Utility.WPF.Controls.PropertyTrees
                 .Take(1)
                 .Subscribe(data =>
                 {
-                    if (node.Parent?.Data is ICollectionDescriptor d)
+                    if ((node as IGetParent<IReadOnlyTree>).Parent?.Data is ICollectionDescriptor d)
                     {
 
                     }
@@ -157,9 +159,9 @@ namespace Utility.WPF.Controls.PropertyTrees
                     {
                         iSetNode.SetNode(node);
                     }
-                    if (data is IGetGuid guid && node.Key == null)
+                    if (data is IGetGuid guid && (node as IGetKey).Key == null)
                     {
-                        node.Key = new GuidKey(guid.Guid);
+                        (node as ISetKey).Key = new GuidKey(guid.Guid);
                     }
 
 
@@ -201,11 +203,11 @@ namespace Utility.WPF.Controls.PropertyTrees
                             {
                                 if (_value is IKey _key)
                                 {
-                                    return key.Key.Equals(_key.Key);
+                                    return (key as IGetKey).Key.Equals((_key as IGetKey).Key);
                                 }
                                 else if (_value is IGetGuid guid)
                                 {
-                                    return key.Key.Equals(new GuidKey(guid.Guid));
+                                    return (key as IGetKey).Key.Equals(new GuidKey(guid.Guid));
                                 }
                             }
                             throw new Exception("44c dd");
