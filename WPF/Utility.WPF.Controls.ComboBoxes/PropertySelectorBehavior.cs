@@ -13,17 +13,19 @@ namespace Utility.WPF.Controls.ComboBoxes
 {
     public class PropertySelectorBehavior : TreeSelectorBehavior
     {
-        //public static readonly DependencyProperty AssembliesProperty = DependencyProperty.Register("Assemblies", typeof(IEnumerable), typeof(TypeSelectorBehavior), new PropertyMetadata(AssembliesChanged));
         public static readonly DependencyProperty TypeProperty = DependencyProperty.Register("Type", typeof(Type), typeof(PropertySelectorBehavior), new PropertyMetadata(TypeChanged));
         public static readonly DependencyProperty PropertyInfoProperty = DependencyProperty.Register("PropertyInfo", typeof(PropertyInfo), typeof(PropertySelectorBehavior), new PropertyMetadata(PropertyInfoChanged));
 
         private static void TypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if (d is PropertySelectorBehavior { AssociatedObject:{ } ass } typeSelector)
+            if (d is PropertySelectorBehavior { AssociatedObject: { } ass } typeSelector)
             {
                 if (e.NewValue is Type type)
                 {
-                    typeSelector.AssociatedObject.ItemsSource = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+                    typeSelector.AssociatedObject.ItemsSource = type
+                        .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                        .Where(a => typeSelector.Filter?.Equals(a.PropertyType) != false)
+                        .Select(a => new ViewModelTree(a));
                 }
             }
         }
@@ -73,9 +75,12 @@ namespace Utility.WPF.Controls.ComboBoxes
 
             AssociatedObject.OnLoaded(a =>
             {
-                if (Type is Type type )
+                if (Type is Type type)
                 {
-                    AssociatedObject.ItemsSource = type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly).Select(a=> new ViewModelTree(a));
+                    AssociatedObject.ItemsSource =
+                    type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                    .Where(a => Filter?.Equals(a.PropertyType) != false)
+                    .Select(a => new ViewModelTree(a));
                 }
                 if (PropertyInfo is PropertyInfo propertyInfo && AssociatedObject.TreeView != null && AssociatedObject.ItemsSource is IReadOnlyTree _tree)
                 {
@@ -102,11 +107,7 @@ namespace Utility.WPF.Controls.ComboBoxes
             }
         }
 
-        //static void Set(PropertySelectorBehavior typeSelector, IEnumerable enumerable)
-        //{
-        //    var assemblyTree = enumerable.Cast<Assembly>().ToArray().ToViewModelTree();
-        //    typeSelector.AssociatedObject.ItemsSource = assemblyTree;
-        //}
+
 
         public Type Type
         {
@@ -121,40 +122,29 @@ namespace Utility.WPF.Controls.ComboBoxes
         }
 
 
-        //public IEnumerable Assemblies
-        //{
-        //    get { return (IEnumerable)GetValue(AssembliesProperty); }
-        //    set { SetValue(AssembliesProperty, value); }
-        //}
 
-        //public bool UseEntryAssembly
-        //{
-        //    get { return (bool)GetValue(UseEntryAssemblyProperty); }
-        //    set { SetValue(UseEntryAssemblyProperty, value); }
-        //}
+        public Type Filter
+        {
+            get { return (Type)GetValue(FilterProperty); }
+            set { SetValue(FilterProperty, value); }
+        }
 
-        //class CustomItemTemplateSelector : DataTemplateSelector
-        //{
-        //    public override DataTemplate SelectTemplate(object item, DependencyObject container)
-        //    {
-        //        if (item is IReadOnlyTree { Data: var data } tree)
-        //        {
-        //            if (data is Type || data is IType || data is Assembly || data is IGetAssembly)
-        //                return TemplateGenerator.CreateDataTemplate(() =>
-        //                {
-        //                    var textBlock = new TextBlock { };
-        //                    Binding binding = new() { Path = new PropertyPath(nameof(System.Type.Name)) };
-        //                    Binding binding2 = new() { Path = new PropertyPath(nameof(IReadOnlyTree.Data)) };
-        //                    textBlock.SetBinding(TextBlock.TextProperty, binding);
-        //                    textBlock.SetBinding(FrameworkElement.DataContextProperty, binding2);
-        //                    return textBlock;
-        //                });
-        //            return TemplateGenerator.CreateDataTemplate(() => new Ellipse { Fill = Brushes.Black, Height = 2, Width = 2, VerticalAlignment = VerticalAlignment.Bottom, ToolTip = new ContentControl { Content = data }, Margin = new Thickness(4, 0, 4, 0) });
-        //        }
-        //        throw new Exception("d ss!$sd");
-        //    }
+        // Using a DependencyProperty as the backing store for Filter.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty FilterProperty =
+            DependencyProperty.Register("Filter", typeof(Type), typeof(PropertySelectorBehavior), new PropertyMetadata(_changed));
 
-        //    public static CustomItemTemplateSelector Instance { get; } = new();
-        //}
+        private static void _changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is PropertySelectorBehavior { AssociatedObject: { } ass } typeSelector)
+            {
+                if (e.NewValue is Type type)
+                {
+                    typeSelector.AssociatedObject.ItemsSource = typeSelector.Type
+                        .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
+                        .Where(a => typeSelector.Filter?.Equals(a.PropertyType) != false)
+                        .Select(a => new ViewModelTree(a));
+                }
+            }
+        }
     }
 }
