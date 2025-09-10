@@ -183,6 +183,11 @@ namespace Utility.Repos
             throw new NotImplementedException();
         }
 
+        public IObservable<Key> FindRecursive(Guid parentGuid, int? maxIndex = null)
+        {
+            throw new NotImplementedException();
+        }
+
         public static JsonRepository Instance { get; } = new();
     }
 }

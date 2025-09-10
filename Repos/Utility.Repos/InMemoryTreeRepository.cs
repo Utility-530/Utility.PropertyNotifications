@@ -344,6 +344,11 @@ namespace Utility.Repos
         {
             throw new NotImplementedException();
         }
+
+        public IObservable<Key> FindRecursive(Guid parentGuid, int? maxIndex = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 

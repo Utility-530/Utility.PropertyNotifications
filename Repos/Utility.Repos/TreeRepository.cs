@@ -1,16 +1,10 @@
-﻿using Guid = System.Guid;
-using SQLite;
-using Newtonsoft.Json;
-using System.Reactive.Linq;
-using System.Reflection;
+﻿using SQLite;
 using System.Reactive.Disposables;
-using static System.Environment;
-using Utility.Structs.Repos;
-using Utility.Helpers;
 using Utility.Interfaces.Exs;
-using System;
-using System.ComponentModel;
 using Utility.Reactives;
+using Utility.Structs.Repos;
+using static System.Environment;
+using Guid = System.Guid;
 
 namespace Utility.Repos
 {
@@ -263,6 +257,43 @@ namespace Utility.Repos
                             throw new Exception("3e909re 4323");
                         }
                         //throw new Exception("09re 4323");
+                    });
+            });
+        }
+
+        public virtual IObservable<Key> FindRecursive(Guid parentGuid, int? maxIndex = null)
+        {
+            return Observable.Create<Key>(observer =>
+            {
+                return
+                    initialisationTask.ToObservable()
+                    .Subscribe(a =>
+                    {
+                        var table_name = getName(parentGuid);
+                        var stmt =
+                        "WITH RECURSIVE descendants_inclusive AS (\r\n" +
+                        "SELECT Guid, Parent, Name, TypeId, Removed, 0  as Level    \r\n" +
+                        $"FROM {table_name} WHERE Parent = '{parentGuid.ToString()}'    \r\n    " +
+                        "UNION ALL       \r\n\t" +
+                        "SELECT t.Guid, t.Parent, t.Name, t.TypeId, t.Removed, Level + 1  as Level  \r\n\t" +
+                        $"FROM {table_name} t    \r\n\t" +
+                        $"JOIN descendants_inclusive d \r\n\t" +
+                        "ON t.Parent = d.Guid)\r\n\t" +
+                        "SELECT Guid, Parent, Name, TypeId, Removed, Level as _Index " +
+                        "FROM descendants_inclusive " +
+                        "ORDER BY _Index;";
+
+                        var rows = connection.Query<Relationships>(stmt);
+
+
+                        foreach (var row in rows)
+                        {
+                            setName(row.Guid, table_name);
+                            observer.OnNext(new Key(row.Guid, row.Parent, row.TypeId.HasValue ? ToType(row.TypeId.Value) : null, row.Name, row._Index, row.Removed));
+
+                        }
+                        observer.OnCompleted();
+
                     });
             });
         }
