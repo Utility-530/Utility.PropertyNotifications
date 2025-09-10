@@ -94,6 +94,8 @@ namespace Utility.Nodes
             }
         }
 
+        public Interfaces.Trees.IIndex Index { get; }
+
         protected virtual void PropertyChanged_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == "Item[]")
