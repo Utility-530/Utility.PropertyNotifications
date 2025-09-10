@@ -19,5 +19,6 @@ namespace Utility.Interfaces.Exs
         void UpdateName(Guid parentGuid, Guid guid, string name, string newName);
 
         void Reset();
+        IObservable<Key> FindRecursive(Guid parentGuid, int? maxIndex = null);
     }
 }
