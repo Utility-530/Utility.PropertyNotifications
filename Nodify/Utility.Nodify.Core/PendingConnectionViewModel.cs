@@ -8,7 +8,7 @@ using Utility.PropertyNotifications;
 
 namespace Utility.Nodify.Models
 {
-    public class PendingConnectionViewModel : NotifyPropertyClass, IConnectionViewModel
+    public class PendingConnectionViewModel : NotifyPropertyClass, IConnectionViewModel, IPendingConnectionViewModel
     {
         private IConnectorViewModel _source = default!, _target;
         private bool _isVisible;
@@ -20,14 +20,14 @@ namespace Utility.Nodify.Models
 
         public IConnectorViewModel Input
         {
-            get => _source;
-            set => RaisePropertyChanged(ref _source, value);
+            get => _target;
+            set => RaisePropertyChanged(ref _target, value);
         }
 
         public IConnectorViewModel? Output
         {
-            get => _target;
-            set => RaisePropertyChanged(ref _target, value);
+            get => _source;
+            set => RaisePropertyChanged(ref _source, value);
         }
 
         public bool IsVisible

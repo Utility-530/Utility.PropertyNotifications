@@ -14,7 +14,7 @@ namespace Utility.Nodify.Models
 
     public class NodeViewModel : NotifyPropertyClass, INodeViewModel
     {
-        private ICollection<IConnectorViewModel> input = new RangeObservableCollection<IConnectorViewModel>();
+        private ICollection<IConnectorViewModel> input;
         private ICollection<IConnectorViewModel> output;
 
         public event Action<NodeViewModel> InputChanged;
@@ -32,9 +32,8 @@ namespace Utility.Nodify.Models
 
         public NodeViewModel()
         {
-            NewMethod();
+            inputMethod();
             Orientation = Orientation.Horizontal;
-            output = new CollectionWithFixedLast<IConnectorViewModel>(new PendingConnectorViewModel() { Node = this });
         }
 
         public Guid Guid { get; set; }
@@ -88,14 +87,6 @@ namespace Utility.Nodify.Models
         public bool IsConnectorsReversed { get; set; }
 
 
-        private void NewMethod()
-        {
-            if (input is RangeObservableCollection<IConnectorViewModel> range)
-                _ = range.WhenAdded(x =>
-                {
-                    Add(x);
-                });
-        }
 
         void Add(IConnectorViewModel x)
         {
@@ -109,7 +100,7 @@ namespace Utility.Nodify.Models
 
         public object Data { get; set; }
 
-        public ICollection<IConnectorViewModel> Input
+        public required ICollection<IConnectorViewModel> Input
         {
             get =>
                 input;
@@ -120,10 +111,20 @@ namespace Utility.Nodify.Models
                 {
                     Add(inp);
                 }
-                NewMethod();
+                inputMethod();
             }
         }
-        public ICollection<IConnectorViewModel> Output
+
+        private void inputMethod()
+        {
+            if (input is RangeObservableCollection<IConnectorViewModel> range)
+                _ = range.WhenAdded(x =>
+                {
+                    Add(x);
+                });
+        }
+
+        public required ICollection<IConnectorViewModel> Output
         {
             get => output;
             set

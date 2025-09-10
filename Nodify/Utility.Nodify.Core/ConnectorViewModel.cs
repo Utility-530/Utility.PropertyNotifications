@@ -77,12 +77,12 @@ namespace Utility.Nodify.Models
             set => RaisePropertyChanged(ref _anchor, new PointF(value.X , value.Y));
         }
 
-
         public INodeViewModel Node
         {
             get => _node;
             set => RaisePropertyChanged(ref _node, value).Then(a => OnNodeChanged());
         }
+
         public ConnectorShape Shape { get; set; }
 
         public ConnectorFlow Flow { get; set; }
@@ -92,7 +92,6 @@ namespace Utility.Nodify.Models
         public IReadOnlyCollection<IConnectionViewModel> Connections => connections;
 
         public object AnchorElement { get; set; }
-
 
         protected virtual void OnNodeChanged()
         {
