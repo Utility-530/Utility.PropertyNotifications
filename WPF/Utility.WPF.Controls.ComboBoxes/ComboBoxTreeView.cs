@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DryIoc;
+using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -24,14 +25,40 @@ namespace Utility.WPF.Controls.ComboBoxes
         public static readonly DependencyProperty SelectedItemTemplateSelectorProperty = DependencyProperty.Register("SelectedItemTemplateSelector", typeof(DataTemplateSelector), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty IsErrorProperty = DependencyProperty.Register("IsError", typeof(bool), typeof(ComboBoxTreeView), new PropertyMetadata(false));
         public static readonly RoutedEvent SelectedNodeChangedEvent = EventManager.RegisterRoutedEvent("SelectedNodeChanged", RoutingStrategy.Bubble, typeof(SelectedNodeEventHandler), typeof(ComboBoxTreeView));
+        public static readonly RoutedEvent CheckedItemsChangedEvent = EventManager.RegisterRoutedEvent("CheckedItemsChanged", RoutingStrategy.Bubble, typeof(CheckedItemsChangedEventHandler), typeof(ComboBoxTreeView));
         public static readonly DependencyProperty ToggleButtonContentProperty = DependencyProperty.Register("ToggleButtonContent", typeof(object), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty TreeItemContainerStyleProperty = DependencyProperty.Register("TreeItemContainerStyle", typeof(Style), typeof(ComboBoxTreeView), new PropertyMetadata());
-        public static readonly DependencyProperty ToggleButtonTemplateProperty =    DependencyProperty.Register("ToggleButtonTemplate", typeof(ControlTemplate), typeof(ComboBoxTreeView), new PropertyMetadata());
+        public static readonly DependencyProperty ToggleButtonTemplateProperty = DependencyProperty.Register("ToggleButtonTemplate", typeof(ControlTemplate), typeof(ComboBoxTreeView), new PropertyMetadata());
 
 
 
+
+        public bool IsOpen
+        {
+            get { return (bool)GetValue(IsOpenProperty); }
+            set { SetValue(IsOpenProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsOpenProperty =
+            DependencyProperty.Register("IsOpen", typeof(bool), typeof(ComboBoxTreeView), new PropertyMetadata(_changed));
+
+        private static void _changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if(d is ComboBoxTreeView treeView && e.NewValue is bool b)
+            {
+                if (!treeView.IsFocused)
+                {
+                    treeView.Focus();
+                }
+                //treeView.ToggleButton.IsChecked = b;
+                treeView.IsDropDownOpen = b;
+                treeView.Popup.IsOpen = b;
+            }
+        }
 
         public delegate void SelectedNodeEventHandler(object sender, SelectedNodeEventArgs e);
+        public delegate void CheckedItemsChangedEventHandler(object sender, CheckedItemsEventArgs e);
 
         public class SelectedNodeEventArgs : RoutedEventArgs
         {
@@ -42,32 +69,55 @@ namespace Utility.WPF.Controls.ComboBoxes
 
             public object Value { get; }
         }
+
+        public class CheckedItemsEventArgs : RoutedEventArgs
+        {
+            public CheckedItemsEventArgs(RoutedEvent routedEvent, object source, IEnumerable checkedItems, IEnumerable unCheckedItems) : base(routedEvent, source)
+            {
+                CheckedItems = checkedItems;
+                UnCheckedItems = unCheckedItems;
+            }
+
+            public IEnumerable CheckedItems { get; }
+            public IEnumerable UnCheckedItems { get; }
+        }
+
         public ComboBoxTreeView()
         {
-            this.DropDownClosed += ComboBoxTreeView_DropDownClosed;
+            this.DropDownOpened += ComboBoxTreeView_DropDownOpened;
             this.LostFocus += ComboBoxTreeView_LostFocus;
+            SelectedItems = List;
+
+        }
+
+        private void ComboBoxTreeView_DropDownOpened(object? sender, EventArgs e)
+        {
 
         }
 
         private void ComboBoxTreeView_LostFocus(object sender, RoutedEventArgs e)
         {
+            IsOpen = false;
             //IsDropDownOpen = false;
         }
 
         protected override void OnMouseLeave(MouseEventArgs e)
         {
+            IsOpen = false;
             IsDropDownOpen = false;
             base.OnMouseLeave(e);
         }
 
-
         protected override void OnMouseLeftButtonUp(MouseButtonEventArgs e)
         {
+            IsOpen = false;
             IsDropDownOpen = false;
             base.OnMouseLeftButtonDown(e);
         }
+
         private void ComboBoxTreeView_DropDownClosed(object? sender, EventArgs e)
         {
+            IsOpen = false;
         }
 
         public CustomTreeView TreeView { get; set; }
@@ -106,10 +156,6 @@ namespace Utility.WPF.Controls.ComboBoxes
             base.OnApplyTemplate();
         }
 
-        private void ComboBoxTreeView_DropDownClosed1(object? sender, EventArgs e)
-        {
-
-        }
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
@@ -133,19 +179,24 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         private void _treeView_OnChecked(object sender, RoutedEventArgs e)
         {
-            if (sender is CustomTreeViewItem { IsChecked: bool isChecked } item)
+            if (e is CheckedEventArgs { IsChecked: bool isChecked, OriginalSource: CustomTreeViewItem item })
             {
+                CheckedItemsEventArgs args = null;
                 if (isChecked)
                 {
                     List.Add(item.DataContext);
+                    args = new CheckedItemsEventArgs(CheckedItemsChangedEvent, this, new object[] { item.DataContext }, null);
                 }
-                else if (List.Contains(item))
+                else if (List.Contains(item.DataContext))
                 {
                     List.Remove(item.DataContext);
+                    args = new CheckedItemsEventArgs(CheckedItemsChangedEvent, this, null, new object[] { item.DataContext });
                 }
-                SelectedItems = List;
+                IsDropDownOpen = false;
+
+                RaiseEvent(args);
             }
-            IsDropDownOpen = false;
+
         }
 
         protected override void OnDropDownClosed(EventArgs e)
@@ -173,7 +224,7 @@ namespace Utility.WPF.Controls.ComboBoxes
             }
         }
 
-        private void RaiseSelectedNodeChangedEvent(object value)
+        private void RaiseSelectedNodeChangedEvent(object value, IEnumerable selectedItems)
         {
             RoutedEventArgs newEventArgs = new SelectedNodeEventArgs(SelectedNodeChangedEvent, this, value);
             RaiseEvent(newEventArgs);
@@ -257,6 +308,12 @@ namespace Utility.WPF.Controls.ComboBoxes
             remove { RemoveHandler(SelectedNodeChangedEvent, value); }
         }
 
+        public event CheckedItemsChangedEventHandler CheckedItemsChanged
+        {
+            add { AddHandler(CheckedItemsChangedEvent, value); }
+            remove { RemoveHandler(CheckedItemsChangedEvent, value); }
+        }
+
         #endregion properties
 
         public void UpdateSelectedItems(object selectedItem)
@@ -265,7 +322,7 @@ namespace Utility.WPF.Controls.ComboBoxes
             var hierarchy = SelectItems(selectedItem);
             SelectedItems = hierarchy;
             SelectedNode = selectedItem;
-            RaiseSelectedNodeChangedEvent(selectedItem);
+            RaiseSelectedNodeChangedEvent(selectedItem, SelectedItems);
         }
 
         private object[] SelectItems(object selectedItem)
