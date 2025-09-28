@@ -163,6 +163,19 @@ namespace Utility.Reactives
             });
         }
 
+        public static IObservable<T> AndAdditions<T>(this IEnumerable<T> collection)
+        {
+            return Observable.Create<T>(observer =>
+            {
+                foreach (var x in collection.ToArray())
+                    observer.OnNext(x);
+
+                if (collection is INotifyCollectionChanged notifyCollection)
+                    return Additions<T>(notifyCollection).Subscribe(observer);
+                return Disposable.Empty;
+            });
+        }
+
         public static IObservable<object> AndAdditions(this IEnumerable collection) => AndAdditions<object>(collection);
 
         public static IObservable<TR> SelfAndAdditions<T, TR>(this T collection) where T : IEnumerable<TR>, INotifyCollectionChanged
@@ -173,6 +186,17 @@ namespace Utility.Reactives
                     observer.OnNext(x);
 
                 return Additions<TR>((INotifyCollectionChanged)collection).Subscribe(observer);
+            });
+        }
+        public static IObservable<TR> SelfAndAdditions<TR>(this IEnumerable collection)
+        {
+            return O.Create<TR>(observer =>
+            {
+                foreach (TR x in collection)
+                    observer.OnNext(x);
+                if(collection is INotifyCollectionChanged incc)
+                    return Additions<TR>(incc).Subscribe(observer);
+                return Disposable.Empty;
             });
         }
 

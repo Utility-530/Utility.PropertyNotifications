@@ -120,8 +120,8 @@ namespace Utility.Reactives
             }
         }
 
-        object IValue.Value => this.value;
         object ISetValue.Value { set => Value = (T)value; }
+        object IGetValue.Value { get; }
 
         public IDisposable Subscribe(IObserver<T> observer)
         {
