@@ -1,6 +1,7 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Utility.Entities;
+using Utility.Entities.Comms;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric.Dependencies;
 using Utility.ServiceLocation;
@@ -34,6 +35,7 @@ namespace Utility
 
         public static ReplaySubject<Log> Logs { get; } = new();
         public static ReplaySubject<Exception> Exceptions { get; } = new();
+        public static ReplaySubject<Event> Events { get; } = new();
 
         public static IConnectableObservable<TimeSpan> Time { get; }
         public static IConnectableObservable<DateTime> Date { get; }
@@ -41,6 +43,8 @@ namespace Utility
 
         public static IResolver Resolver => store;
         public static IRegister Register => store;
+
+        public static Type[] Types { get; } = [.. System.AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes())];
 
     }
 }
