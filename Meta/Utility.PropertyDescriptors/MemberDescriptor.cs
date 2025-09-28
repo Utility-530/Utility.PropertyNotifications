@@ -1,8 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
 using Utility.Interfaces;
 using Utility.Interfaces.Exs.Diagrams;
-using Utility.Interfaces.Generic;
 using Utility.Nodes;
 
 namespace Utility.PropertyDescriptors;
@@ -42,8 +40,6 @@ public abstract class MemberDescriptor : NodeViewModel, IDescriptor, IIsReadOnly
 
     public override bool IsReadOnly => Descriptor.IsReadOnly;
 
-    //[JsonIgnore]
-    //public abstract IEnumerable Children { get; }
 
     public virtual bool Equals(MemberDescriptor? other) => this.Name.Equals(other?.Name) && this.Type == other.ParentType;
 
@@ -55,40 +51,16 @@ public abstract class MemberDescriptor : NodeViewModel, IDescriptor, IIsReadOnly
     public override object Data { get => Descriptor; set => throw new Exception("sdf2g3r"); }
 
     public virtual void Initialise(object? item = null)
-    {
-        //VisitChildren(this, a =>
-        //{
-        //    if (a is IDescriptor descriptor)
-        //    {
-        //        descriptor.Initialise();
-        //    }
-        //});
+    { 
     }
 
     public abstract IEnumerable Items();
 
     public virtual void Finalise(object? item = null)
     {
-        //VisitChildren(this, a =>
-        //{
-        //    if (a is IDescriptor descriptor)
-        //    {
-        //        descriptor.Finalise();
-        //    }
-        //});
+  
     }
-    //static void VisitChildren(IYieldItems tree, Action<object> action)
-    //{
-    //    tree.Items()
-    //        .Cast<IDescriptor>()
-    //        .ForEach(a =>
-    //        {
-
-    //            Trace.WriteLine(a.ParentType + " " + a.Type?.Name + " " + a.Name);
-    //            action(a);
-
-    //        });
-    //}
+ 
 
     public Task<object> AsyncClone()
     {
@@ -104,22 +76,6 @@ public abstract class MemberDescriptor : NodeViewModel, IDescriptor, IIsReadOnly
 
 public abstract class ValueMemberDescriptor(Descriptor Descriptor) : MemberDescriptor(Descriptor), IValueDescriptor
 {
-    //[JsonIgnore]
-    //public virtual object? Value
-    //{
-    //    get
-    //    {
-    //        var value = Get();
-    //        RaisePropertyCalled(value);
-    //        return value;
-    //    }
-    //    set
-    //    {
-    //        var _value = value;
-    //        Set(value);
-    //        RaisePropertyReceived(value, _value);
-    //    }
-    //}
 
     public abstract object? Get();
 
