@@ -1,120 +1,134 @@
-﻿using Utility.Trees.Abstractions;
-using System.Collections.ObjectModel;
-using System.Collections;
-using Utility.Interfaces.Exs;
-using Utility.PropertyNotifications;
-using Utility.Reactives;
+﻿using System.Collections;
 using System.Reactive.Linq;
 using Utility.Exceptions;
+using Utility.Interfaces.Exs;
+using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
-using Newtonsoft.Json;
+using Utility.Nodes;
+using Utility.PropertyNotifications;
+using Utility.Reactives;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Models
 {
     public interface IChildCollection
     {
-        IEnumerable Collection { get; }
+        int Limit { get; set; }
     }
 
     public interface ICollectionItem
     {
     }
 
-    public abstract class BaseCollectionModel<TValue, TR> : Model<TValue, TR>, IChildCollection 
-    {
-        public BaseCollectionModel(Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<TR>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
-            base(func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
-        {
-        }
-        public virtual IEnumerable Collection { get; }
-    }
-
-    public class CollectionModel<TValue, T, TR> : BaseCollectionModel<TValue, TR> 
+    public abstract class BaseCollectionModel<TValue> : NodeViewModel, IChildCollection, IGet<TValue>, Interfaces.Generic.ISet<TValue>
     {
         private int limit = int.MaxValue;
-        private Func<T>? create;
+        private TValue? value;
 
-        public CollectionModel(Func<T>? create = null, Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<TR>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
-        base(func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
+        public BaseCollectionModel() :
+            base()
         {
-            this.create = create;
-        }
 
-        public override ObservableCollection<T> Collection { get; } = [];
-
-
-        public virtual void Initialise()
-        {
-            this.WithChangesTo(a => a.Limit)
-                .CombineLatest(this.WithChangesTo(a => a.Node, includeNulls: false))
+            this.Children
+                .AndAdditions<IReadOnlyTree>()
                 .Subscribe(a =>
                 {
-                    a.Second.Items.AndChanges<IReadOnlyTree>().Subscribe(c =>
-                    {
-                        Helpers.Generic.LinqEx.RemoveTypeOf<LimitExceededException, Exception>(Node.Errors);
-                        var count = a.Second.Count(a => a is IRemoved { Removed: null });
-                        a.Second.IsAugmentable = count < a.First;
-                        if (count > a.First)
-                            Node.Errors.Add(new LimitExceededException(a.First, count - a.First));
-                    });
+                    Addition(a);
                 });
 
-            Collection
-                .AndAdditions()
-                .Subscribe(e =>
+            this.Children
+                .Subtractions<IReadOnlyTree>()
+                .Subscribe(a =>
                 {
-                    Node.Add(e);
+                    Subtraction(a);
+                });
+            this.Children
+                .Replacements<IReadOnlyTree>()
+                .Subscribe(a =>
+                {
+                    Replacement(a.@new, a.old);
                 });
         }
 
-        [JsonIgnore]
-        public virtual T New
+        protected virtual void Replacement(IReadOnlyTree @new, IReadOnlyTree old)
         {
-            get
-            {
-                if (this.create == default)
-                    throw new Exception("33 RGEg");
-                return create.Invoke();
-            }
         }
 
-        public override void Addition(IReadOnlyTree value, IReadOnlyTree a)
+        protected virtual void Subtraction(IReadOnlyTree a)
         {
-            if (Collection.Contains((T)a.Data) == false)
-                Collection.Add((T)a.Data);
-            base.Addition(value, a);
         }
 
-        public override void Subtraction(IReadOnlyTree value, IReadOnlyTree a)
+        protected virtual void Addition(IReadOnlyTree a)
         {
-            Collection.Remove((T)a.Data);
-            base.Subtraction(value, a);
         }
 
-        public override void SetNode(INode node)
+        public override object? Value
         {
-            node.IsAugmentable = true;
-            Initialise();
-            base.SetNode(node);
+            get { RaisePropertyCalled(value); return value; }
+            set => this.RaisePropertyReceived<TValue>(ref this.value, (TValue)value);
         }
 
+
+        public TValue? Get()
+        {
+            return value;
+        }
+
+        public void Set(TValue value)
+        {
+            this.value = value;
+        }
 
         public int Limit { get => limit; set => RaisePropertyChanged(ref limit, value); }
     }
 
-    public class CollectionModel(Func<Model>? create = null) : CollectionModel<Model, CollectionModel>(create)
-    {
-
-    }
-    public class CollectionModel<TModel>(Func<Model>? create = null) : CollectionModel<Model, CollectionModel<TModel>>(create)
-    {
-
-    }
-    public class CollectionModel<TModel, TAttach>(Func<TModel>? create = null, Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<TAttach>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : CollectionModel<object, TModel, TAttach>(create, func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived) where TModel : class
+    public class CustomCollectionModel<TValue, T> : CollectionModel<TValue, T> where TValue : new()
     {
     }
 
-    public class CollectionRootModel : CollectionModel<CollectionRootModel>
+    public class CollectionModel<TValue, T> : BaseCollectionModel<TValue>, IProliferation
+    {
+        private Func<TValue>? create;
+
+        public CollectionModel(Func<TValue>? create = null)
+        {
+            this.create = create;
+            this.IsAugmentable = true;
+            Initialise();
+        }
+
+        //public override ObservableCollection<T> Collection { get; } = [];
+
+
+        public void Initialise()
+        {
+            this.WithChangesTo(a => a.Limit)
+                .Subscribe(a =>
+                {
+                    this.Children.AndChanges<IReadOnlyTree>().Subscribe(c =>
+                    {
+                        Helpers.Generic.LinqEx.RemoveTypeOf<LimitExceededException, Exception>(this.Errors);
+                        var count = this.Count(a => a is IRemoved { Removed: null });
+                        this.IsAugmentable = count < a;
+                        if (count > a)
+                            this.Errors.Add(new LimitExceededException(a, count - a));
+                    });
+                });
+        }
+
+        public virtual IEnumerable Proliferation()
+        {
+            if (create is not null)
+                yield return create.Invoke();
+        }
+    }
+
+
+    public class CollectionModel<TModel>(Func<Model>? create = null) : CollectionModel<object, Model>(create)
+    {
+
+    }
+    public class CollectionModel() : CollectionModel<NodeViewModel>()
     {
 
     }
