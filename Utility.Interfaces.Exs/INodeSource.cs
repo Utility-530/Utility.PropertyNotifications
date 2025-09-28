@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Structs.Repos;
 using Utility.Trees.Abstractions;
 
@@ -8,16 +9,18 @@ namespace Utility.Interfaces.Exs
     public interface INodeSource: IDisposable
     {
         string New { get; }
-        IReadOnlyCollection<INode> Nodes { get; }
+        IReadOnlyCollection<INodeViewModel> Nodes { get; }
 
-        void Remove(INode node);
+        void Remove(INodeViewModel node);
 
-        void Add(INode node);
-        IObservable<INode?> Single(string v);
+        void Add(INodeViewModel node);
+        IObservable<INodeViewModel?> Single(string v);
 
         void Save();
-        IObservable<INode> Create(string name, Guid guid, Func<string, object> modelFactory);
-        IObservable<INode> FindChild(INode node, Guid guid);
-        IObservable<INode> Selections { get; }
+        IObservable<INodeViewModel> Create(string name, Guid guid, Func<string, object> modelFactory);
+        IObservable<INodeViewModel> FindChild(INodeViewModel node, Guid guid);
+        void RemoveBy(Predicate<INodeViewModel> predicate);
+
+        IObservable<INodeViewModel> Selections { get; }
     }
 }
