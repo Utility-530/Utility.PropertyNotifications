@@ -2,9 +2,9 @@
 
 namespace Utility.PropertyDescriptors;
 
-public abstract record BasePropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor), IInstance, IPropertyDescriptor
+public abstract class BasePropertyDescriptor(Descriptor Descriptor, object Instance) : MemberDescriptor(Descriptor), IInstance, IPropertyDescriptor
 {
-
+    public object Instance { get; } = Instance;
 }
 
 

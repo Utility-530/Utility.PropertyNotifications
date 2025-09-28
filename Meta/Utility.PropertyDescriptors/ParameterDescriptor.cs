@@ -3,13 +3,15 @@ using Utility.Meta;
 
 namespace Utility.PropertyDescriptors
 {
-    internal record ParameterDescriptor(ParameterInfo ParameterInfo, Dictionary<int, object?> Component) : ValueMemberDescriptor(new RootDescriptor(ParameterInfo.ParameterType, typeof(Dictionary<string, object?>), ParameterInfo.Name ?? ParameterInfo.Position.ToString()))
+    internal class ParameterDescriptor(ParameterInfo ParameterInfo, Dictionary<int, object?> Component) : ValueMemberDescriptor(new RootDescriptor(ParameterInfo.ParameterType, typeof(Dictionary<string, object?>), ParameterInfo.Name ?? ParameterInfo.Position.ToString()))
     {
         public override bool IsReadOnly => false;
 
-        public override IEnumerable<object> Children => Array.Empty<object>();
+        public override IEnumerable Items() => Array.Empty<object>();
 
         public override bool HasChildren => false;
+
+        public ParameterInfo ParameterInfo { get; } = ParameterInfo;
 
         public override void Finalise(object? item = null)
         {

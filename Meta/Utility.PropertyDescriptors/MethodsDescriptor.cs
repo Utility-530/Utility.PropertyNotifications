@@ -1,19 +1,16 @@
 ﻿namespace Utility.PropertyDescriptors;
 
-internal record MethodsDescriptor(Descriptor Descriptor, object Instance) : ReferenceDescriptor(Descriptor, Instance), IMethodsDescriptor
+internal class MethodsDescriptor(Descriptor Descriptor, object Instance) : ReferenceDescriptor(Descriptor, Instance), IMethodsDescriptor
 {
     public static readonly string? _Name = "Methods";
 
     public override string? Name => _Name;
 
 
-    public override IEnumerable<object> Children
+    public override IEnumerable Items()
     {
-        get
-        {
-            var children = MethodExplorer.MethodInfos(Descriptor.PropertyType).ToArray();   
-            return children.Select(methodInfo => DescriptorFactory.CreateMethodItem(Instance, methodInfo, Type));
-        }
+        var children = MethodExplorer.MethodInfos(Descriptor.PropertyType).ToArray();
+        return children.Select(methodInfo => DescriptorFactory.CreateMethodItem(Instance, methodInfo, Type));
     }
 }
 

@@ -2,7 +2,7 @@
 
 namespace Utility.PropertyDescriptors;
 
-internal record MethodDescriptor : MemberDescriptor, IMethodDescriptor
+internal class MethodDescriptor : MemberDescriptor, IMethodDescriptor
 {
     Dictionary<int, object?> dictionary = new();
 
@@ -29,32 +29,28 @@ internal record MethodDescriptor : MemberDescriptor, IMethodDescriptor
 
     public override bool IsReadOnly => true;
 
-    public override IEnumerable<object> Children
+    public override IEnumerable Items()
     {
-        get
+        var descriptors = methodInfo
+        .GetParameters()
+        .Select(a => new ParameterDescriptor(a, dictionary) { Input = [], Output = [] }).ToArray();
+
+        foreach (var paramDescriptor in descriptors)
         {
+            dictionary[paramDescriptor.ParameterInfo.Position] = GetValue(paramDescriptor.ParameterInfo);
+            yield return paramDescriptor;
+        }
 
-            var descriptors = methodInfo
-            .GetParameters()
-            .Select(a => new ParameterDescriptor(a, dictionary)).ToArray();
 
-            foreach (var paramDescriptor in descriptors)
+        static object? GetValue(ParameterInfo a)
+        {
+            return a.HasDefaultValue ? a.DefaultValue : AlternateValue(a);
+
+            static object? AlternateValue(ParameterInfo a)
             {
-                dictionary[paramDescriptor.ParameterInfo.Position] = GetValue(paramDescriptor.ParameterInfo);
-                yield return paramDescriptor;
-            }
-
-
-            static object? GetValue(ParameterInfo a)
-            {
-                return a.HasDefaultValue ? a.DefaultValue : AlternateValue(a);
-
-                static object? AlternateValue(ParameterInfo a)
-                {
-                    if (a.ParameterType.IsValueType || a.ParameterType.GetConstructor(System.Type.EmptyTypes) != null)
-                        return Activator.CreateInstance(a.ParameterType);
-                    return null;
-                }
+                if (a.ParameterType.IsValueType || a.ParameterType.GetConstructor(System.Type.EmptyTypes) != null)
+                    return Activator.CreateInstance(a.ParameterType);
+                return null;
             }
         }
     }

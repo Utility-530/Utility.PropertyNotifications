@@ -1,9 +1,9 @@
-﻿namespace Utility.PropertyDescriptors
-{
-    public interface ICollectionDescriptor : IDescriptor, ICount, IObserver<RefreshEventArgs>
-    {
-        IEnumerable Collection { get; }
+﻿using Utility.Interfaces.Exs;
 
+namespace Utility.PropertyDescriptors
+{
+    public interface ICollectionDescriptor : IDescriptor, IProliferation, ICount, IObserver<RefreshEventArgs>
+    {
         Type ElementType { get; }
 
     }

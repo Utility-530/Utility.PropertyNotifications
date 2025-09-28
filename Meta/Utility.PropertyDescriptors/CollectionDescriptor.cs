@@ -5,25 +5,19 @@ using Utility.Meta;
 
 namespace Utility.PropertyDescriptors
 {
-    public interface IValueCollection
-    {
-        IEnumerable Collection { get; }
-    }
-
-    internal record CollectionDescriptor<T, TR>(string name) : CollectionDescriptor<T>(new RootDescriptor(typeof(T), typeof(TR), name), (IEnumerable)Activator.CreateInstance(typeof(T)))
+    internal class CollectionDescriptor<T, TR>(string name) : CollectionDescriptor<T>(new RootDescriptor(typeof(T), typeof(TR), name), (IEnumerable)Activator.CreateInstance(typeof(T)))
     {
     }
 
-    internal record CollectionDescriptor<T>(Descriptor PropertyDescriptor, IEnumerable Collection) : CollectionDescriptor(PropertyDescriptor, typeof(T).ElementType(), Collection), IGetType
+    internal class CollectionDescriptor<T>(Descriptor PropertyDescriptor, IEnumerable Collection) : CollectionDescriptor(PropertyDescriptor, typeof(T).ElementType(), Collection), IGetType
     {
         public CollectionDescriptor(string name) : this(new RootDescriptor(typeof(T), null, name), new ObservableCollection<T>())
         {
         }
     }
 
-    internal record CollectionDescriptor(Descriptor PropertyDescriptor, Type ElementType, IEnumerable Collection) : BasePropertyDescriptor(PropertyDescriptor, Collection),
+    internal class CollectionDescriptor(Descriptor PropertyDescriptor, Type ElementType, IEnumerable Collection) : BasePropertyDescriptor(PropertyDescriptor, Collection),
         ICollectionDescriptor,
-        IValueCollection,
         IRefresh,
         IGetType
     {
@@ -35,17 +29,16 @@ namespace Utility.PropertyDescriptors
 
         public override string? Name => _Name;
 
-        public override IEnumerable Children
+        public override IEnumerable Items()
         {
-            get
-            {
-                return children ??= new ObservableCollection<IDescriptor>(new[] { new CollectionHeadersDescriptor(ElementType, Instance.GetType()) { Parent = this } }.Concat(AddFromInstance()));
-            }
+            return children ??= new ObservableCollection<IDescriptor>(new[] { 
+                new CollectionHeadersDescriptor(ElementType, Instance.GetType()) { Parent = this, Input = [], Output = [] } }
+            .Concat(addFromInstance()));
         }
 
+        public override int Count => Instance is IEnumerable enumerable ? enumerable.Count() : 0;
 
-        // collection
-        public virtual int Count => Instance is IEnumerable enumerable ? enumerable.Count() : 0;
+        public Type ElementType { get; } = ElementType;
 
         public override void Finalise(object? item = null)
         {
@@ -58,14 +51,56 @@ namespace Utility.PropertyDescriptors
             });
         }
 
-        IEnumerable<IDescriptor> AddFromInstance()
+        public void OnCompleted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnError(Exception error)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OnNext(RefreshEventArgs value)
+        {
+            foreach (var item in addFromInstance())
+                children.Add(item);
+        }
+        public void Refresh()
+        {
+            foreach (var item in addFromInstance())
+                children.Add(item);
+        }
+
+        public new Type GetType()
+        {
+            if (ParentType == null)
+            {
+                Type[] typeArguments = { Type };
+                Type genericType = typeof(CollectionDescriptor<>).MakeGenericType(typeArguments);
+                return genericType;
+            }
+            else
+            {
+                Type[] typeArguments = { Type, ParentType };
+                Type genericType = typeof(CollectionDescriptor<,>).MakeGenericType(typeArguments);
+                return genericType;
+            }
+        }
+
+        public IEnumerable Proliferation()
+        {
+            yield return Activator.CreateInstance(ElementType)!;
+        }
+
+        IEnumerable<IDescriptor> addFromInstance()
         {
             foreach (var item in Collection)
             {
                 if (descriptors.Any(a => a.Value.Item == item) == false)
                 {
                     int i = (descriptors.LastOrDefault().Value.Index) + 1;
-                    yield return Next(item, item.GetType(), Type, Changes.Type.Add, i);
+                    yield return next(item, item.GetType(), Type, Changes.Type.Add, i);
                 }
                 else
                 {
@@ -91,54 +126,20 @@ namespace Utility.PropertyDescriptors
                 }
                 return false;
             }
-        }
 
-        IDescriptor Next(object item, Type type, Type parentType, Changes.Type changeType, int i, bool refresh = false, DateTime? removed = null)
-        {
-            var descriptor = DescriptorConverter.ToDescriptor(item, new RootDescriptor(type, parentType, type.Name + $" [{i}]"));
-            descriptor.Parent = this;
-            descriptors.Add(descriptor, (item, i));
-            if (refresh)
-                descriptor.Initialise();
-            return descriptor;
-        }
-
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnNext(RefreshEventArgs value)
-        {
-            foreach (var item in AddFromInstance())
-                children.Add(item);
-        }
-        public void Refresh()
-        {
-            foreach (var item in AddFromInstance())
-                children.Add(item);
-        }
-
-        public new Type GetType()
-        {
-            if (ParentType == null)
+            IDescriptor next(object item, Type type, Type parentType, Changes.Type changeType, int i, bool refresh = false, DateTime? removed = null)
             {
-                Type[] typeArguments = { Type };
-                Type genericType = typeof(CollectionDescriptor<>).MakeGenericType(typeArguments);
-                return genericType;
-            }
-            else
-            {
-                Type[] typeArguments = { Type, ParentType };
-                Type genericType = typeof(CollectionDescriptor<,>).MakeGenericType(typeArguments);
-                return genericType;
+                var descriptor = DescriptorConverter.ToDescriptor(item, new RootDescriptor(type, parentType, type.Name + $" [{i}]"));
+                descriptor.Parent = this;
+                descriptors.Add(descriptor, (item, i));
+                if (refresh)
+                    descriptor.Initialise();
+                return descriptor;
             }
         }
+
+
+
     }
 }
 

@@ -2,7 +2,7 @@
 
 namespace Utility.PropertyDescriptors;
 
-internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeadersDescriptor, IEquatable
+internal class CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeadersDescriptor, IEquatable
 {
     private DateTime? removed;
 
@@ -10,51 +10,50 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
     public CollectionHeadersDescriptor(Type propertyType, Type componentType) : base(new RootDescriptor(propertyType, componentType, "Header"))
     {
     }
-
-    public int Index => 0;
+    //public override int Index => 0;
 
     public override bool IsReadOnly => true;
 
-    [JsonIgnore]
-    public override IEnumerable<object> Children
+    public override IEnumerable Items()
     {
-        get
+
+        if (Type?.GetConstructor(Type.EmptyTypes) == null || Type.IsValueOrString())
+            yield break;
+        else if (descriptors.IsEmpty())
         {
-            if (Type?.GetConstructor(Type.EmptyTypes) == null || Type.IsValueOrString())
-                yield break;
-            else if (descriptors.IsEmpty())
+            foreach (Descriptor descriptor in TypeDescriptor.GetProperties(Type))
             {
-                foreach (Descriptor descriptor in TypeDescriptor.GetProperties(Type))
-                {
-                    var hd = new HeaderDescriptor(descriptor.PropertyType, descriptor.ComponentType, descriptor.Name) { };
-                    descriptors.Add(hd);
-                    yield return hd;
-                }
-            }
-            else
-            {
-                foreach (Descriptor descriptor in descriptors)
-                {
-                    yield return descriptor;
-                }
+                var hd = new HeaderDescriptor(descriptor.PropertyType, descriptor.ComponentType, descriptor.Name) { Input = [], Output = [] };
+                descriptors.Add(hd);
+                yield return hd;
             }
         }
-
+        else
+        {
+            foreach (Descriptor descriptor in descriptors)
+            {
+                yield return descriptor;
+            }
+        }
     }
-
-    public DateTime? Removed { get => removed; set => removed = value; }
 
     public object Item => null;
 
-    public int Count => descriptors.Count;
+    public override int Count => descriptors.Count;
 
-    public bool Equals(IEquatable? other)
+    public override bool Equals(IEquatable? other)
     {
         if (other is CollectionHeadersDescriptor collectionHeaderDescriptor)
             return this.Type.Equals(collectionHeaderDescriptor.Type);
         return false;
     }
 
+
+    public override int GetHashCode()
+    {
+        var x= base.GetHashCode();
+        return x;
+    }
 
 
     public override void Initialise(object? item = null)
@@ -67,15 +66,15 @@ internal record CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeade
 
 }
 
-internal record HeaderDescriptor<T, TR>(string Name) : HeaderDescriptor(new RootDescriptor(typeof(T), typeof(TR), Name))
+internal class HeaderDescriptor<T, TR>(string Name) : HeaderDescriptor(new RootDescriptor(typeof(T), typeof(TR), Name))
 {
 }
 
-internal record HeaderDescriptor<T>(string Name) : HeaderDescriptor(new RootDescriptor(typeof(T), null, Name))
+internal class HeaderDescriptor<T>(string Name) : HeaderDescriptor(new RootDescriptor(typeof(T), null, Name))
 {
 }
 
-internal record HeaderDescriptor : ChildlessMemberDescriptor, IHeaderDescriptor, IGetType
+internal class HeaderDescriptor : ChildlessMemberDescriptor, IHeaderDescriptor, IGetType
 {
     public HeaderDescriptor(Type type, Type parentType, string name) : base(new RootDescriptor(type, parentType, name))
     {

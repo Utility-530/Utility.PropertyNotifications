@@ -4,13 +4,13 @@ using Utility.Meta;
 
 namespace Utility.PropertyDescriptors;
 
-internal record ValueDescriptor<T, TR>(string name) : ValueDescriptor<T>(new RootDescriptor(typeof(T), typeof(TR), name), null)
+internal class ValueDescriptor<T, TR>(string name) : ValueDescriptor<T>(new RootDescriptor(typeof(T), typeof(TR), name), null)
 {
 }
 
-internal record ValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IValue<T>, IGetType
+internal class ValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IGetValue<T>, IGetType
 {
-    T IValue<T>.Value => Get() is T t ? t : default;
+    T IGetValue<T>.Value => Get() is T t ? t : default;
 
     public ValueDescriptor(string name) : this(new RootDescriptor(typeof(T), null, name), null)
     {
@@ -33,17 +33,19 @@ internal record ValueDescriptor<T>(Descriptor Descriptor, object Instance) : Val
     }
 }
 
-internal abstract record NullableValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IValue<T?>
+internal abstract class NullableValueDescriptor<T>(Descriptor Descriptor, object Instance) : ValueDescriptor(Descriptor, Instance), IGetValue<T?>
 {
-    T? IValue<T?>.Value => Get() is T t ? t : default;
+    T? IGetValue<T?>.Value => Get() is T t ? t : default;
 
 }
 
-internal record ValueDescriptor(Descriptor Descriptor, object Instance) : ValueMemberDescriptor(Descriptor), IRaisePropertyChanged, IInstance
+internal class ValueDescriptor(Descriptor Descriptor, object Instance) : ValueMemberDescriptor(Descriptor), IRaisePropertyChanged, IInstance
 {
-    public override IEnumerable<object> Children => Array.Empty<object>();
+    public override IEnumerable Items() => Array.Empty<object>();
 
     public override bool HasChildren => false;
+
+    public object Instance { get; } = Instance;
 
     public override object? Get()
     {
