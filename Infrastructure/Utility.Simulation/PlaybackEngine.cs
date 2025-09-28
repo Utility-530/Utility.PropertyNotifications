@@ -63,7 +63,7 @@ namespace Utility.Simulation
                     var data = viewmodel.CurrentItem as IData;
                     //viewmodel.Index %= viewmodel.Collection.Count;
                     x.IsSelected = true;
-                    if (data?.Data is IAction methodAction)
+                    if (data is IGetData { Data: IAction methodAction })
                     {
                         if ((int)item.Value - (int)item.PreviousValue > 0)
                         {
@@ -123,7 +123,7 @@ namespace Utility.Simulation
         {
             Utility.Globals.UI.Post(a =>
             {
-                var created = Globals.Resolver.Resolve<IFactory<INode>>().Create(a);
+                var created = Globals.Resolver.Resolve<IFactory<IViewModelTree>>().Create(a);
                 viewmodel.Collection.Add(created);
             }, value);
         }
