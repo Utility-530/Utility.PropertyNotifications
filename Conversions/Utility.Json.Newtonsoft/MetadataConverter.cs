@@ -59,8 +59,17 @@ namespace Utility.Conversions.Json.Newtonsoft
                     continue;
                 }
                 var propName = prop.Name;
-                var propValue = prop.GetValue(value);
                 stringBuilder.Append(propName);
+                object propValue = null;
+                try
+                {
+                    propValue = prop.GetValue(value);
+                  
+                }
+                catch (Exception ex)
+                {
+                    propValue = ex.Message;
+                }
 
                 // Write metadata about whether the property is readonly (no setter or private setter)
                 bool isReadOnly = !prop.CanWrite || prop.SetMethod == null || !prop.SetMethod.IsPublic;
@@ -68,8 +77,10 @@ namespace Utility.Conversions.Json.Newtonsoft
                 {
                     stringBuilder.AppendLine(IsReadonly);
                 }
-
-                if (prop.PropertyType.IsEnum)
+                if(prop.PropertyType == typeof(IntPtr))
+                {
+                }
+                else if (prop.PropertyType.IsEnum)
                 {
                     stringBuilder.AppendLine(IsEnum);
                     writer.WritePropertyName(stringBuilder.ToString());
