@@ -1,17 +1,21 @@
-﻿using Splat;
+﻿using DryIoc.ImTools;
+using Splat;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.Generic.Data;
 using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Models.Trees
-{
-    public class ListModel(Type type, Func<IEnumerable<IModel>>? func = null, Action<INode>? nodeAction = null, Action<IReadOnlyTree, IReadOnlyTree>? addition = null, Action<ListModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : Model<IId<Guid>, ListModel>(func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived)
+{ 
+    public class ListModel(Type type, Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<ListModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
+        Model<IId<Guid>, ListModel>(func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived),
+        IGetType
     {
+        private Type type = type;
         private IEnumerable collection;
         private IId<Guid> add;
         private IId<Guid> remove;
@@ -22,28 +26,25 @@ namespace Utility.Models.Trees
         {
             get
             {
-
                 var factory = Locator.Current.GetService<IFactory<IId<Guid>>>();
                 var c = factory.Create(type);
                 return c;
-
             }
- 
         }
 
-        public IId<Guid> Add
+        public override object Data { get => type; set => this.type = value is Type type ? type : throw new NotImplementedException("ds dd2111"); }
+
+        public new IId<Guid> Add
         {
             get => add;
             set { this.add = value; this.RaisePropertyReceived(value, null); }
-
         }
-        public IId<Guid> Remove
+
+        public new IId<Guid> Remove
         {
             get => remove;
             set { this.remove = value; this.RaisePropertyReceived(value, null); }
 
         }
-
     }
-
 }
