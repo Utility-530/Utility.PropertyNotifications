@@ -14,7 +14,7 @@
                 <ResourceDictionary Source="/Utility.WPF.Controls.Breadcrumbs;component/Themes/Generic.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <HierarchicalDataTemplate DataType="{x:Type inf:Node}" ItemsSource="{Binding Items}">
+            <HierarchicalDataTemplate DataType="{x:Type inf:NodeViewModel}" ItemsSource="{Binding Children}">
                 <Border BorderBrush="CadetBlue" BorderThickness="2" TextBlock.FontSize="16">
                     <ContentControl Content="{Binding Data}" Margin="4" />
                 </Border>
@@ -36,12 +36,12 @@
             </bc:ItemContainerStyleSelector>
 
 
-            <DataTemplate x:Key="main" DataType="{x:Type inf:Node}" >
+            <DataTemplate x:Key="main" DataType="{x:Type inf:NodeViewModel}" >
                 <DockPanel>
                     <Button DockPanel.Dock="Top" FontSize="10" Width="50" Click="Button_Click">SAVE</Button>
                     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                         <bc:BreadCrumbTree   
-                ItemsSource="{Binding Items}" 
+                ItemsSource="{Binding Children}" 
                 ItemContainerStyleSelector="{StaticResource StyleSelector}"/>
                     </Grid>
                 </DockPanel>

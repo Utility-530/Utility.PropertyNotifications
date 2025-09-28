@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Models.Trees;
@@ -33,7 +34,7 @@ namespace Utility.Trees.Demo.Filters
     {
         public override Style SelectStyle(object item, DependencyObject container)
         {
-            if (item is INode { Data: IRoot data })
+            if (item is IRoot data)
             {
                 return RootStyle;
 
@@ -49,7 +50,7 @@ namespace Utility.Trees.Demo.Filters
     public class TreeConverter : IValueConverter
     {
         string _value = null;
-        Node node = null;
+        NodeViewModel node = null;
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -58,16 +59,16 @@ namespace Utility.Trees.Demo.Filters
                 if (s != _value)
                 {
                     _value = s;
-                    node = JsonConvert.DeserializeObject<Node>(s);
+                    node = JsonConvert.DeserializeObject<NodeViewModel>(s);
                     TempNodeEngine.Instance.Add(node);
                 }
-                return new[] {node };
+                return new[] { node };
             }
             else if (value is null)
             {
                 //var coll = new ObservableCollection<INode>();
                 var model = new AndOrModel() { Name = "and_or" };
-                var andOr = new Node(model);
+                var andOr = new NodeViewModel(model);
 
                 TempNodeEngine.Instance.Add(andOr);
                 //coll.Add(andOr as INode);
@@ -76,10 +77,10 @@ namespace Utility.Trees.Demo.Filters
             throw new Exception("44656767 44");
         }
 
-    
+
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is IEnumerable<INode> nodes)
+            if (value is IEnumerable<INodeViewModel> nodes)
             {
                 return JsonConvert.SerializeObject(nodes.First());
             }
@@ -99,7 +100,7 @@ namespace Utility.Trees.Demo.Filters
                 value.Handled = true;
                 var x = AssociatedObject;
                 ;
-                if (x.DataContext is ITree { Data: StringModel descriptor } tree)
+                if (x.DataContext is StringModel tree)
                 {
                     tree.Add(tree.ToTree(instance).Result);
                 }
@@ -128,12 +129,12 @@ namespace Utility.Trees.Demo.Filters
 
             if (parameter is MouseEventArgs { OriginalSource: UIElement originalSource, Source: TreeView source } mouseEventArgs)
             {
-    
+
                 // establish that the mouse click has taken place in the top level treeview i.e source 
                 var x = HitTestHelper.GetSelectedItem<TreeViewItem>(originalSource, source);
                 //if (x is TreeViewItem { Header: INode { Data: AndOrModel } })
                 //    return;
-                if (x is TreeViewItem { Header: INode { Data: IRoot } })
+                if (x is TreeViewItem { Header:  IRoot })
                     return;
                 // and not in the bottom-level treeview
                 var y = HitTestHelper.GetSelectedItem<TreeViewItem>(originalSource, AssociatedObject);

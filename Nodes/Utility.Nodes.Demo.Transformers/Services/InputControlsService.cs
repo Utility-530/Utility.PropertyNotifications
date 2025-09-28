@@ -1,13 +1,16 @@
 ﻿using System.Reactive.Linq;
-using Utility.Nodes.Filters;
+using Utility.Nodes.Meta;
 using Utility.Models;
 using Utility.Interfaces.Exs;
 using Splat;
 using System.Reactive.Subjects;
 using Utility.PropertyNotifications;
-using Utility.Models.Trees;
 using Utility.Reactives;
 using Utility.Interfaces.Generic;
+using Utility.Nodes.Demo.Transformers.Services;
+using Utility.Interfaces.Exs.Diagrams;
+using Utility.Interfaces.NonGeneric;
+using System.ComponentModel;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -20,14 +23,14 @@ namespace Utility.Nodes.Demo.Filters.Services
 
         public InputControlsService()
         {
-            Locator.Current.GetService<IObservableIndex<INode>>()
+            Locator.Current.GetService<IObservableIndex<INodeViewModel>>()
                 [nameof(NodeMethodFactory.BuildInputControlRoot)]
                 .Subscribe(_n =>
                 {
                     Utility.Trees.Extensions.Async.Match.Descendants(_n)
                     .Subscribe(node =>
                     {
-                        if (node.NewItem is INode { Data: Model { Name: string name } model })
+                        if (node.NewItem is IGetName { Name: string name } and INotifyPropertyChanged  model )
                         {
                             model.WhenChanged().WhereIsNull().Subscribe(_ =>
                             {
@@ -38,7 +41,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 });
         }
 
-        private void Switch(string name, Model model)
+        private void Switch(string name, INotifyPropertyChanged model)
         {
             switch (name)
             {

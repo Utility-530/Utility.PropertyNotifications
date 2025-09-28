@@ -25,7 +25,7 @@ namespace Utility.Nodes.Demo.ComboBoxes
         {
             InitializeComponent();
 
-            this.DirectorySelector.ItemsSource = new DirectoryNode(new System.IO.DirectoryInfo(@"C:\")).Items;
+            this.DirectorySelector.ItemsSource = new DirectoryNode(new System.IO.DirectoryInfo(@"C:\")).Children;
 
             Type2Selector.Assemblies = new Assembly[] { typeof(Tree).Assembly, new SystemAssembly() };
             Type2Selector.Type = typeof(string);

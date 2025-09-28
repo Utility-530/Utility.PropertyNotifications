@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using Utility.Nodify.Core;
 using Utility.PropertyNotifications;
 
-namespace Utility.Nodify.Models
+namespace Utility.Nodes
 {
     public class PendingConnectionViewModel : NotifyPropertyClass, IConnectionViewModel, IPendingConnectionViewModel
     {

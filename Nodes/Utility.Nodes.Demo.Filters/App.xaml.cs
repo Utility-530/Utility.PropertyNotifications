@@ -4,12 +4,14 @@ using Splat;
 using System.Windows;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Models;
 using Utility.Models.Trees.Converters;
 using Utility.Nodes;
-using Utility.Nodes.Filters;
+using Utility.Nodes.Meta;
 using Utility.Repos;
+using Utility.ServiceLocation;
 
 namespace Utility.Trees.Demo.Filters
 {
@@ -22,9 +24,9 @@ namespace Utility.Trees.Demo.Filters
         {
             SQLitePCL.Batteries.Init();
 
-            Locator.CurrentMutable.RegisterConstant<ITreeRepository>(TreeRepository.Instance);
-            Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeEngine.Instance);
-            Locator.CurrentMutable.RegisterConstant<IObservableIndex<INode>>(MethodCache.Instance);
+            Globals.Register.Register<ITreeRepository>(TreeRepository.Instance);
+            Globals.Register.Register<INodeSource>(NodeEngine.Instance);
+            Locator.CurrentMutable.RegisterConstant<IObservableIndex<INodeViewModel>>(MethodCache.Instance);
             Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => NodeMethodFactory.Instance);
 
 

@@ -21,7 +21,7 @@ namespace Utility.Nodes.Demo.Transformers
 
             return item switch
             {
-                IData { Data: ISelectable } => ComboStyle,
+                ISelectable => ComboStyle,
                 _ => DefaultStyle ?? base.SelectStyle(item, container),
             };
         }
@@ -41,8 +41,8 @@ namespace Utility.Nodes.Demo.Transformers
 
             return item switch
             {
-                IData { Data: IChildCollection } => CollectionStyle,
-                IData { Data: ICollectionItem } => ItemStyle,
+                IChildCollection  => CollectionStyle,
+                ICollectionItem  => ItemStyle,
             };
         }
 

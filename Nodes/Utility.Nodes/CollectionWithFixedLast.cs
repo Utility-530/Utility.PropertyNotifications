@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 
-namespace Utility.Nodify.Models
+namespace Utility.Nodes
 {
     public class CollectionWithFixedLast<T> : RangeObservableCollection<T>
     {
@@ -10,7 +10,7 @@ namespace Utility.Nodify.Models
         public CollectionWithFixedLast(T fixedLastItem)
         {
             _fixedLastItem = fixedLastItem;
-            base.Add(_fixedLastItem);
+            Add(_fixedLastItem);
         }
 
 

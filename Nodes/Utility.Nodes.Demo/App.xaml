@@ -64,7 +64,7 @@
                 </Border>
             </DataTemplate>
 
-            <HierarchicalDataTemplate x:Key="template" ItemsSource="{Binding Items}">
+            <HierarchicalDataTemplate x:Key="template" ItemsSource="{Binding Children}">
                 <StackPanel Orientation="Horizontal">
                     <StackPanel.Style>
                         <Style>
@@ -87,7 +87,7 @@
             <local:StyleSelector x:Key="styleSelector"></local:StyleSelector>
 
             <DataTemplate DataType="{x:Type local:DemoRootNode}">
-                <TreeView ItemsSource="{Binding Items}" 
+                <TreeView ItemsSource="{Binding Children}" 
                                      ItemTemplateSelector="{StaticResource selector}"
                                      ItemContainerStyleSelector="{StaticResource styleSelector}"/>
             </DataTemplate>

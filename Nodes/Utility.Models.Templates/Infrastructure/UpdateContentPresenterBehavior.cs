@@ -3,7 +3,7 @@ using System.Windows.Data;
 using System.Windows;
 using Microsoft.Xaml.Behaviors;
 
-namespace Utility.Nodes.WPF
+namespace Utility.Models.Templates
 {
     /// <summary>
     /// <a href="https://stackoverflow.com/questions/8715315/how-to-trigger-datatemplateselector-when-property-changes"></a>

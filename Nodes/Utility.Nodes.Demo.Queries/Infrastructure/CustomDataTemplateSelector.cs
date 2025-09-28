@@ -1,12 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Splat;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,10 +12,7 @@ using Utility.Reactives;
 using Utility.Repos;
 using Utility.Trees.Extensions;
 using Utility.WPF.Factorys;
-using Utility.WPF.Templates;
 using Utility.Helpers;
-using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace Utility.Nodes.Demo.Queries
 {
@@ -58,15 +50,9 @@ namespace Utility.Nodes.Demo.Queries
                         {
                             if (filter.Body != null)
                             {
-                                var node = JsonConvert.DeserializeObject<Node>(filter.Body);
-                                node.SelfAndDescendants().ForEach(a =>
-                                {
-                                    if (a.Data is ISetNode setNode)
-                                        setNode.SetNode((INode)a);
-                                });
+                                var node = JsonConvert.DeserializeObject<NodeViewModel>(filter.Body);
 
-
-                                if (node.Data is AndOrModel { } andOrModel)
+                                if (node is AndOrModel { } andOrModel)
                                 {
                                     if (andOrModel.Evaluate(item))
                                     {

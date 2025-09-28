@@ -1,25 +1,31 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Windows.Input;
 using Utility.Commands;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
+using Utility.Nodify.Base;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
-    public class Node : ViewModelTree, INode, IIsEditable, IIsExpanded, IIsPersistable
+    public class NodeViewModel : ViewModelTree, INodeViewModel
     {
         object data;
+        private ICollection<IConnectorViewModel> input;
+        private ICollection<IConnectorViewModel> output;
 
-        public Node(object data) : this()
+
+        public NodeViewModel(object data) : this()
         {
             Data = data;
         }
 
-        public Node()
+        public NodeViewModel()
         {
-            //IsExpanded = true;
+            Orientation = Enums.Orientation.Horizontal;
             AddCommand = new Command<object>(async a =>
             {
                 var node = await ToTree(a);
@@ -29,7 +35,7 @@ namespace Utility.Nodes
 
             RemoveCommand = new Command<object>(a =>
             {
-                (Parent as ITree).Remove(this);
+                (this as ITree)?.Remove(a);
             });
 
             EditCommand = new Command<object>(a =>
@@ -40,10 +46,9 @@ namespace Utility.Nodes
 
             AddParentCommand = new Command<object>(async a =>
             {
-                Node node = (Node)(await ToTree(a));
+                NodeViewModel node = (NodeViewModel)(await ToTree(a));
                 node.Add(this);
             });
-
         }
 
         public ICommand AddCommand { get; init; }
@@ -53,13 +58,18 @@ namespace Utility.Nodes
 
         public override Task<ITree> ToTree(object value)
         {
-            var node = new Node(value)
+            var node = new NodeViewModel(value)
             {
                 Parent = this,
+                Input = [],
+                Output = []
             };
 
             return Task.FromResult((ITree)node);
         }
+
+        //public NodeState State { get; set; } = NodeState.None;
+
 
         public override object Data
         {
@@ -105,16 +115,60 @@ namespace Utility.Nodes
             }
         }
 
-        public bool SuppressExceptions { get; set; }    
+        public IDiagramViewModel Diagram { get; set; }
 
-        public static Node Create(object? data, object[] items, string? key = null)
+        public virtual ICollection<IConnectorViewModel> Input
         {
-            Node node = null;
+            get =>
+                input;
+            set
+            {
+                input = value;
+                foreach (var inp in value)
+                {
+                    addInput(inp);
+                }
+                inputMethod();
+            }
+        }
+
+        void addInput(IConnectorViewModel x)
+        {
+            x.Node = this;
+            x.IsInput = true;
+
+        }
+
+        private void inputMethod()
+        {
+            if (input is RangeObservableCollection<IConnectorViewModel> range)
+                _ = range.WhenAdded(x =>
+                {
+                    Add(x);
+                });
+        }
+
+        public virtual ICollection<IConnectorViewModel> Output
+        {
+            get => output;
+            set
+            {
+                output = value;
+            }
+        }
+
+        public bool SuppressExceptions { get; set; }
+        public NodeState State { get; set; }
+
+
+        public static NodeViewModel Create(object? data, object[] items, string? key = null)
+        {
+            NodeViewModel node = null;
 
             if (data != null)
-                node = new Node(data) { Key = key ?? new GuidKey() };
+                node = new NodeViewModel(data) { Key = key ?? new GuidKey() };
             else
-                node = new Node() { Key = key ?? new GuidKey() };
+                node = new NodeViewModel() { Key = key ?? new GuidKey() };
             node.SuppressExceptions = true;
             if (items.Any())
                 node.Add(items);

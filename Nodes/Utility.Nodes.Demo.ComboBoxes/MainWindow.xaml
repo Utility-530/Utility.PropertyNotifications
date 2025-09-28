@@ -7,8 +7,8 @@
         xmlns:io="clr-namespace:System.IO;assembly=mscorlib"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:cb="http://schemas.utility.com/cboxes"
-        xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks" 
-        xmlns:inf="clr-namespace:Utility.Nodes.Demo.ComboBoxes.Infrastructure" xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
+        xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"     
+        xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
@@ -20,7 +20,7 @@
                     <ResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/ButtonComboBoxTreeViewStyle.xaml"></ResourceDictionary>
                 </ResourceDictionary.MergedDictionaries>
 
-                <HierarchicalDataTemplate x:Key="treeViewDataTemplate" ItemsSource="{Binding Items}">
+                <HierarchicalDataTemplate x:Key="treeViewDataTemplate" ItemsSource="{Binding Children}">
                     <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
                         <ContentControl Content="{Binding Data}"/>
                     </Border>

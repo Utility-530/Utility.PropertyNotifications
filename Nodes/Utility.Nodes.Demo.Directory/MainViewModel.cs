@@ -1,7 +1,7 @@
 ﻿using Splat;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
-using Utility.Nodes.Filters;
+using Utility.Nodes.Meta;
 using Utility.Nodes.WPF;
 using Utility.PropertyNotifications;
 using Utility.Trees;

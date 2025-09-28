@@ -12,7 +12,7 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Demo
 {
-    public class DemoRootNode : Node<NodeType>
+    public class DemoRootNode : NodeViewModel<NodeType>
     {
         const string _guid = "c5eb6a09-2787-4b85-9f1c-bf9abb9ccb06";
         bool flag;
@@ -80,7 +80,7 @@ namespace Utility.Nodes.Demo
         }
     }
 
-    public class ExceptionNode : Node<object>
+    public class ExceptionNode : NodeViewModel<object>
     {
         private Exception exception;
         private object data;

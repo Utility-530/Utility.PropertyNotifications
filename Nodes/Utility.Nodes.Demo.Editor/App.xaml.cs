@@ -8,10 +8,11 @@ using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Nodes.Demo.Filters.Services;
-using Utility.Nodes.Filters;
+using Utility.Nodes.Meta;
 using Utility.Repos;
 using Utility.WPF.Templates;
 using Utility.ServiceLocation;
+using Utility.Interfaces.Exs.Diagrams;
 
 namespace Utility.Nodes.Demo.Editor
 {
@@ -31,7 +32,7 @@ namespace Utility.Nodes.Demo.Editor
             Locator.CurrentMutable.RegisterConstant<IExpander>(WPF.Expander.Instance);
             //Locator.CurrentMutable.RegisterConstant<IContext>(Context.Instance);
             Locator.CurrentMutable.RegisterLazySingleton<MethodCache>(() => MethodCache.Instance);
-            Locator.CurrentMutable.RegisterLazySingleton<IObservableIndex<INode>>(() => MethodCache.Instance);
+            Locator.CurrentMutable.RegisterLazySingleton<IObservableIndex<INodeViewModel>>(() => MethodCache.Instance);
             Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => NodeMethodFactory.Instance);
 
             Locator.CurrentMutable.RegisterLazySingleton<MasterViewModel>(() => new MasterViewModel());
@@ -49,6 +50,11 @@ namespace Utility.Nodes.Demo.Editor
 
             window.Show();
 
+
+            Globals.Events.Subscribe(a => { 
+            
+            
+            });
             base.OnStartup(e);
 
         }

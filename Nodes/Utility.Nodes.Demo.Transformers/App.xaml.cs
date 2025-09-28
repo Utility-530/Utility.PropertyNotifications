@@ -12,11 +12,14 @@ using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Nodes.Demo.Filters.Services;
 using Utility.Nodes.Demo.Transformers;
-using Utility.Nodes.Filters;
+using Utility.Nodes.Meta;
 using Utility.Nodes.WPF;
 using Utility.Repos;
 using Utility.WPF.Templates;
 using Utility.ServiceLocation;
+using Utility.Nodify.Base.Abstractions;
+using Utility.Interfaces.Exs.Diagrams;
+using Utility.Nodes.Demo.Transformers.Services;
 
 
 namespace Utility.Nodes.Demo.Transformers
@@ -39,10 +42,10 @@ namespace Utility.Nodes.Demo.Transformers
             Locator.CurrentMutable.RegisterConstant<IEnumerableFactory<PropertyInfo>>(PropertyFactory.Instance);
 
 
-            Locator.CurrentMutable.RegisterConstant<Type>(typeof(Node));
+            Locator.CurrentMutable.RegisterConstant<Type>(typeof(NodeViewModel));
 
-            Locator.CurrentMutable.Register<IObservableIndex<INode>>(() => MethodCache.Instance);
-            Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() =>  Nodes.Filters.NodeMethodFactory.Instance);
+            Locator.CurrentMutable.Register<IObservableIndex<INodeViewModel>>(() => MethodCache.Instance);
+            Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() =>  NodeMethodFactory.Instance);
             Locator.CurrentMutable.RegisterLazySingleton<MainViewModel>(() => new MainViewModel());
             Locator.CurrentMutable.Register<InputSelectionViewModel>(() => new InputSelectionViewModel());
             Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
@@ -84,7 +87,7 @@ namespace Utility.Nodes.Demo.Transformers
 
     public class PropertyFactory : IEnumerableFactory<PropertyInfo>
     {
-        Lazy<IEnumerable<PropertyInfo>> _properties = new(() => [typeof(Node).GetProperty(nameof(Node.Key)), typeof(Node).GetProperty(nameof(Node.Data))]);
+        Lazy<IEnumerable<PropertyInfo>> _properties = new(() => [typeof(NodeViewModel).GetProperty(nameof(NodeViewModel.Key)), typeof(NodeViewModel).GetProperty(nameof(NodeViewModel.Data))]);
 
         public static PropertyFactory Instance { get; } = new();
 

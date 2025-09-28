@@ -10,7 +10,7 @@ using Utility.Helpers.Reflection;
 
 namespace Utility.Nodes.Demo
 {
-    public class ViewModelNode : Node<object>
+    public class ViewModelNode : NodeViewModel<object>
     {
         private Type type;
         bool flag;

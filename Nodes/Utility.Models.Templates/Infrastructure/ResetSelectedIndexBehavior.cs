@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace Utility.Nodes.WPF
+namespace Utility.Models.Templates
 {
     public class ResetSelectedIndexBehavior : Behavior<Selector>
     {

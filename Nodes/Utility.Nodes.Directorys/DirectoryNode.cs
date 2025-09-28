@@ -11,7 +11,7 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
-    public class DirectoryNode : Node<FileSystemInfo>, IObserver
+    public class DirectoryNode : NodeViewModel<FileSystemInfo>, IObserver
     {
         private readonly Lazy<FileSystemInfo> lazyContent;
         private readonly string path;

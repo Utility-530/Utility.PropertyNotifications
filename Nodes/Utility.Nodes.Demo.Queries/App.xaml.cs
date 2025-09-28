@@ -10,7 +10,7 @@ using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Models.Trees.Converters;
 using Utility.Nodes.Demo.Queries.Infrastructure;
-using Utility.Nodes.Filters;
+using Utility.Nodes.Meta;
 using Utility.Repos;
 using Utility.ServiceLocation;
 

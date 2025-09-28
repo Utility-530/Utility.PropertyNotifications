@@ -12,7 +12,7 @@ using Utility.WPF.ResourceDictionarys;
 
 namespace Utility.Nodes.Solutions
 {
-    public class AssemblyNode : Node<object?>
+    public class AssemblyNode : NodeViewModel<object?>
     {
         Lazy<IList> lazy = new();
         object data;

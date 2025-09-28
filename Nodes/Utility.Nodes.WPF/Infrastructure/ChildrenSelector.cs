@@ -3,9 +3,11 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Meta;
 using Utility.Nodes.Ex;
 using Utility.WPF.Controls.Trees;
+using Utility.Helpers.NonGeneric;
 
 namespace Utility.Nodes.WPF
 {
@@ -17,12 +19,32 @@ namespace Utility.Nodes.WPF
         }
     }
 
+    public class NewObjectConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is IProliferation proliferation)
+            {
+                var x = proliferation.Proliferation().FirstOrDefault();
+                return x;
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+
     public class ChildrenSelectorConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             var childrenSelector = values.SingleOrDefault(a => a is IChildrenSelector);
-            var node = values.SingleOrDefault(a => a is INode);
+            var node = values.SingleOrDefault(a => a is INodeViewModel);
 
             if (node != null)
             {
@@ -30,9 +52,9 @@ namespace Utility.Nodes.WPF
                 {
                     return selector.Select(node);
                 }
-                if (node is Node { Data: IProliferation data })
+                if (node is IProliferation {  } proliferation)
                 {
-                    return data.Proliferation();
+                    return proliferation.Proliferation();
                 }
             }
 

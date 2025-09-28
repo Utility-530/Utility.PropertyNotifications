@@ -1,5 +1,5 @@
 ﻿using Splat;
-using Utility.Nodes.Filters;
+using Utility.Nodes.Meta;
 using Utility.Nodes.WPF;
 using Utility.Observables.Generic;
 using Utility.Trees.Abstractions;

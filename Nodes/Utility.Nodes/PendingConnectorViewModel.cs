@@ -7,14 +7,13 @@ using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using Utility.Commands;
-using Utility.Nodify.Core;
-using Utility.Nodify.Enums;
 using Utility.Helpers.Generic;
 using Utility.PropertyNotifications;
-using Utility.Nodify.Base.Abstractions;
 using System.Collections.Specialized;
+using Utility.Enums;
+using Utility.Interfaces.Exs.Diagrams;
 
-namespace Utility.Nodify.Models
+namespace Utility.Nodes
 {
     public class PendingConnectorViewModel : NotifyPropertyClass, IConnectorViewModel,IPendingConnectorViewModel
     {
@@ -65,15 +64,15 @@ namespace Utility.Nodify.Models
 
         }
 
-        public bool IsDropDownOpen { get => isDropDownOpen; set => this.RaisePropertyChanged(ref isDropDownOpen, value); }
+        public bool IsDropDownOpen { get => isDropDownOpen; set => RaisePropertyChanged(ref isDropDownOpen, value); }
         public bool IsConnected { get; set; }
-        public object Data { get => data; set => this.RaisePropertyChanged(ref data, value); }
+        public object Data { get => data; set => RaisePropertyChanged(ref data, value); }
         public bool IsInput { get; set; }
         public INodeViewModel Node { get; set; }
         public IReadOnlyCollection<IConnectionViewModel> Connections { get; }
         public PointF Anchor { get; set; }
-        public ConnectorFlow Flow { get; }
-        public ConnectorShape Shape { get; }
+        public IO Flow { get; }
+        public FlatShape Shape { get; }
         public string Key { get; }
         public Guid Guid { get; set; }
 

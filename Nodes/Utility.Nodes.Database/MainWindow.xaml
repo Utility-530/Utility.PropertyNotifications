@@ -17,7 +17,7 @@
         </ComboBox>
         <TreeView x:Name="TreeView">
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                     <StackPanel>      
                     <TextBlock Text="{Binding Data.Name}"/>
                     <!--<ContentControl Content="{Binding Data}"/>-->

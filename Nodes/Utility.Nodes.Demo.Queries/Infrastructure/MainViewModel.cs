@@ -41,7 +41,7 @@ namespace Utility.Nodes.Demo.Queries
         private Command refreshCommand, saveCommand;
         private ICollectionView collectionView;
         private FilterEntity filterEntity;
-        private INode[] nodes;
+        private INodeViewModel[] nodes;
         private Lazy<INodeSource> source = new(() => Locator.Current.GetService<INodeSource>());
         private Lazy<ILiteRepository> repo = new(() => Locator.Current.GetService<ILiteRepository>());
         private Dictionary<FilterEntity, bool> _checked = new();
@@ -69,7 +69,7 @@ namespace Utility.Nodes.Demo.Queries
 
         public ICommand SaveCommand { get; }
 
-        public INode[] Nodes => nodes;
+        public INodeViewModel[] Nodes => nodes;
 
         public FilterEntity Filter
         {
@@ -158,16 +158,16 @@ namespace Utility.Nodes.Demo.Queries
         }
 
 
-        private IObservable<INode> find(FilterEntity filter)
+        private IObservable<INodeViewModel> find(FilterEntity filter)
         {
             return find(filter, () =>
             {
                 var model = new AndOrModel { Name = "and_or" };
-                var node = new Node(model) { IsExpanded = true, Key = new GuidKey(filter.Id), Orientation = Enums.Orientation.Vertical };
+                var node = new NodeViewModel(model) { IsExpanded = true, Key = new GuidKey(filter.Id), Orientation = Enums.Orientation.Vertical };
                 return node;
             });
 
-            IObservable<INode> find(FilterEntity filter, Func<INode> factory)
+            IObservable<INodeViewModel> find(FilterEntity filter, Func<INodeViewModel> factory)
             {
                 if (string.IsNullOrEmpty(filter.Body))
                 {
@@ -177,9 +177,9 @@ namespace Utility.Nodes.Demo.Queries
                 }
                 else
                 {
-                    return Observable.Create<INode>(observer =>
+                    return Observable.Create<INodeViewModel>(observer =>
                     {
-                        INode? node = null;
+                        INodeViewModel? node = null;
                         return source.Value
                         .Single(new GuidKey(filter.Id))
                         .Subscribe(a =>
@@ -188,7 +188,7 @@ namespace Utility.Nodes.Demo.Queries
                         },
                         () =>
                         {
-                            node ??= JsonConvert.DeserializeObject<Node>(filter.Body);
+                            node ??= JsonConvert.DeserializeObject<NodeViewModel>(filter.Body);
                             source.Value.Add(node);
                             observer.OnNext(node);
                         });

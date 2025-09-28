@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
-using Utility.Nodes.Filters;
+using Utility.Nodes.Meta;
 using Utility.Models;
 using Utility.Interfaces.Exs;
 using Utility.Trees.Extensions;
@@ -14,8 +14,10 @@ using LanguageExt.Pipes;
 using Utility.Trees.Abstractions;
 using System.Reactive.Disposables;
 using Utility.Interfaces.Generic;
+using Utility.Interfaces.Exs.Diagrams;
+using Utility.Interfaces.NonGeneric;
 
-namespace Utility.Nodes.Demo.Filters.Services
+namespace Utility.Nodes.Demo.Transformers.Services
 {
     public enum ControlEventType
     {
@@ -25,7 +27,7 @@ namespace Utility.Nodes.Demo.Filters.Services
     }
     public readonly record struct ControlEvent(ControlEventType ControlEventType, int Count);
 
-    public class ControlsService : Model, System.IObservable<ControlEvent>
+    public class ControlsService : Model, IObservable<ControlEvent>
     {
         Dictionary<Guid, IDisposable> disposables = new();
         ReplaySubject<ControlEvent> replaySubject = new(1);
@@ -34,14 +36,14 @@ namespace Utility.Nodes.Demo.Filters.Services
         public ControlsService()
         {
             Locator.Current
-                .GetService<IObservableIndex<INode>>()
+                .GetService<IObservableIndex<INodeViewModel>>()
                 [nameof(NodeMethodFactory.BuildControlRoot)]
                 .Subscribe(_n =>
                 {
-                    Utility.Trees.Extensions.Async.Match.Descendants(_n)
+                    Trees.Extensions.Async.Match.Descendants(_n)
                     .Subscribe(node =>
                     {
-                        if (node.NewItem is INode { Data: Model { Name: string name } model })
+                        if (node.NewItem is INodeViewModel { }  model  and IGetName { Name: string name })
                         {
                             model.WhenChanged().Where(a => a.Name == ".ctor").Subscribe(_ =>
                             {
@@ -52,22 +54,22 @@ namespace Utility.Nodes.Demo.Filters.Services
                 });
         }
 
-        private void Switch(string name, Model model)
+        private void Switch(string name, INodeViewModel model)
         {
             switch (name)
             {
                 case NodeMethodFactory.Run:
                     {
                         Locator.Current
-                            .GetService<IObservableIndex<INode>>()
+                            .GetService<IObservableIndex<INodeViewModel>>()
                             [nameof(NodeMethodFactory.BuildTransformersRoot)]
                             .Subscribe(c_node =>
                             {
-                                if (c_node is { Data: TransformersModel ts })
+                                if (c_node is  TransformersModel ts)
                                 {
                                     Origin.Content().Subscribe(c =>
                                     {
-                                        foreach (var t in ts.Collection)
+                                        foreach (TransformerModel t in ts.Children)
                                         {
                                             NodesSource.nodes(c).Subscribe(x =>
                                             {
@@ -122,7 +124,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 {
                     var previous = resolvableModel;
                     resolvableModel = value;
-                    this.RaisePropertyChanged(previous, value);
+                    RaisePropertyChanged(previous, value);
                 }
             }
         }
@@ -137,7 +139,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 {
                     var previous = outputYielder;
                     outputYielder = value;
-                    this.RaisePropertyChanged(previous, value);
+                    RaisePropertyChanged(previous, value);
                 }
 
             }
@@ -153,7 +155,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 {
                     var previous = inputsPrimer;
                     inputsPrimer = value;
-                    this.RaisePropertyChanged(previous, value);
+                    RaisePropertyChanged(previous, value);
                 }
             }
         }
@@ -169,7 +171,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 {
                     var previous = nodesModel;
                     nodesModel = value;
-                    this.RaisePropertyChanged(previous, value);
+                    RaisePropertyChanged(previous, value);
                 }
             }
         }
@@ -195,8 +197,8 @@ namespace Utility.Nodes.Demo.Filters.Services
             private readonly List<Action<object, object>> output;
             private readonly Predicate<object> outputFilter;
 
-            public Node Source { get; set; }
-            public Node Destination { get; set; }
+            public NodeViewModel Source { get; set; }
+            public NodeViewModel Destination { get; set; }
 
             public DataConnector(
                 List<Func<object, object>> inputs,
@@ -204,7 +206,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 List<Action<object, object>> output,
                 Predicate<object> outputFilter)
             {
-                this.input = input;
+                input = input;
                 this.inputFilter = inputFilter;
                 this.output = output;
                 this.outputFilter = outputFilter;
@@ -257,10 +259,10 @@ namespace Utility.Nodes.Demo.Filters.Services
         {
             return Observable.Create<Dictionary<ThroughPutModel, ArrayList>>(observer =>
             {
-                var dict = transformer.Inputs.Collection.ToDictionary(a => a, a => new ArrayList());
+                var dict = transformer.Inputs.Children.Cast<ThroughPutModel>().ToDictionary(a => a, a => new ArrayList());
                 trees.ForEach(a =>
                 {
-                    foreach (var input in transformer.Inputs.Collection)
+                    foreach (ThroughPutModel input in transformer.Inputs.Children)
                     {
                         if (input.Filter == null)
                         {
@@ -273,7 +275,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                             //    results.Add(value);
 
                             var list = new List<object>();
-                            foreach (ResolvableModel source in input.Element.Collection)
+                            foreach (ResolvableModel source in input.Element.Children)
                             {
                                 if (source.TryGetValue(a, out var value))
                                     list.Add(value);
@@ -373,7 +375,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 .Descendants()
                     .ForEach(n =>
                     {
-                        if (n.Data is Model m)
+                        if (n is INodeViewModel m)
                             nodes.Add(n);
                     });
                 observer.OnNext(nodes);
@@ -410,7 +412,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                         if (output is IEnumerable enumerable)
                         {
                             var mr = enumerable.GetEnumerator();
-                            var ee = transformer.Output.Element.Collection.GetEnumerator();
+                            var ee = transformer.Output.Element.Children.GetEnumerator();
                             while (mr.MoveNext() && ee.MoveNext())
                             {
                                 if ((ee.Current as ResolvableModel).Types.Count != (ee.Current as ResolvableModel).Properties.Count)
@@ -426,7 +428,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                         }
                         else
                         {
-                            foreach (var target in transformer.Output.Element.Collection)
+                            foreach (var target in transformer.Output.Element.Children)
                             {
                                 if (target is ResolvableModel model)
                                 {

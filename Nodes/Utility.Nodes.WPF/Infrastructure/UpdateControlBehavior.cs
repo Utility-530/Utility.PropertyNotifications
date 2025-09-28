@@ -8,9 +8,9 @@ namespace Utility.Nodes.WPF
     public class UpdateControlBehavior : Behavior<Control>
     {
 
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(object), typeof(UpdateContentPresenterBehavior), new FrameworkPropertyMetadata(null, OnValueChanged));
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(object), typeof(UpdateControlBehavior), new FrameworkPropertyMetadata(null, OnValueChanged));
 
-        public static readonly DependencyProperty UpdateOnNullProperty = DependencyProperty.Register("UpdateOnNull", typeof(bool), typeof(UpdateContentPresenterBehavior), new PropertyMetadata(false));
+        public static readonly DependencyProperty UpdateOnNullProperty = DependencyProperty.Register("UpdateOnNull", typeof(bool), typeof(UpdateControlBehavior), new PropertyMetadata(false));
 
 
         public object Value

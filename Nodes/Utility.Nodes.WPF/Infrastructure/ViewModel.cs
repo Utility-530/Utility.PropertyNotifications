@@ -6,6 +6,7 @@ using Utility.PropertyNotifications;
 using Utility.Trees.Abstractions;
 using Utility.Helpers;
 using Utility.Interfaces.Generic;
+using Utility.Interfaces.Exs.Diagrams;
 
 namespace Utility.Nodes.WPF
 {
@@ -13,7 +14,7 @@ namespace Utility.Nodes.WPF
     {
         private bool _disposed;
         private bool isSelected;
-        protected Lazy<IObservableIndex<INode>> source = new(() => Locator.Current.GetService<IObservableIndex<INode>>());
+        protected Lazy<IObservableIndex<INodeViewModel>> source = new(() => Locator.Current.GetService<IObservableIndex<INodeViewModel>>());
         private readonly Dictionary<string, ObservableCollection<IReadOnlyTree>> dictionary = [];
 
         public virtual string Name => GetType().Name;

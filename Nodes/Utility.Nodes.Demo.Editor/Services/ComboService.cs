@@ -1,5 +1,5 @@
 ﻿using System.Reactive.Linq;
-using Utility.Nodes.Filters;
+using Utility.Nodes.Meta;
 using Utility.Interfaces.Exs;
 using Splat;
 using Utility.PropertyNotifications;
@@ -8,6 +8,7 @@ using Utility.Repos;
 using Utility.Models.Trees;
 using Utility.Interfaces.Generic;
 using Utility.ServiceLocation;
+using Utility.Interfaces.Exs.Diagrams;
 
 namespace Utility.Nodes.Demo.Filters.Services
 {
@@ -15,13 +16,13 @@ namespace Utility.Nodes.Demo.Filters.Services
     {
         public ComboService()
         {
-            Locator.Current.GetService<IObservableIndex<INode>>()[nameof(NodeMethodFactory.BuildComboRoot)]
+            Locator.Current.GetService<IObservableIndex<INodeViewModel>>()[nameof(NodeMethodFactory.BuildComboRoot)]
                 .Subscribe(node =>
                 {
-                    node.WithChangesTo(a => a.Current)
+                    node.WhenReceivedFrom(a => a.Current)
                     .Subscribe(a =>
                     {
-                        if (a is INode { Data: DataFileModel { FilePath: { } filePath } data })
+                        if (a is  DataFileModel { FilePath: { } filePath } data )
                         {
                             if (Locator.Current.GetService<SlaveViewModel>() is null)
                             {
@@ -43,7 +44,8 @@ namespace Utility.Nodes.Demo.Filters.Services
                                 Locator.CurrentMutable.UnregisterAll<ParserService>();
                             }
                             Locator.CurrentMutable.RegisterConstant(new ParserService());
-                            Locator.Current.GetService<ContainerViewModel>().RaisePropertyChanged(nameof(ContainerViewModel.Slave));
+                            var containerViewModel = Locator.Current.GetService<ContainerViewModel>();
+                            containerViewModel.RaisePropertyChanged(nameof(ContainerViewModel.Slave));
                         }
                     });
                 });

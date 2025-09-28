@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System.Windows.Input;
 using Utility.Commands;
 using Utility.Nodes;
-using Utility.Nodes.Filters;
+using Utility.Nodes.Meta;
 using Utility.Nodes.WPF;
 using Utility.Trees.Abstractions;
 
@@ -11,7 +11,7 @@ namespace Utility.Trees.Demo.Filters.Infrastructure
 {
     internal class MainViewModel : ViewModel
     {
-        private Node[] filters;
+        private NodeViewModel[] filters;
         JsonSerializerSettings settings = new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.All,
@@ -41,7 +41,7 @@ namespace Utility.Trees.Demo.Filters.Infrastructure
                     Subscribe(nameof(NodeMethodFactory.BuildCollectionRoot),
                         a =>
                         {
-                            filters = [(Node)a];
+                            filters = [(NodeViewModel)a];
                         });
                 return filters;
             }

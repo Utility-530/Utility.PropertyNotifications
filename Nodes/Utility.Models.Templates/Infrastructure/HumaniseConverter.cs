@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Data;
 using Utility.Helpers;
 
-namespace Utility.Nodes.WPF
+namespace Utility.Models.Templates
 {
     internal class HumaniseConverter : IValueConverter
     {

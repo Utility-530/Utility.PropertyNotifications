@@ -10,25 +10,25 @@ using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
-using Utility.Nodes.Filters;
+using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
 using Utility.Services;
 using Utility.Extensions;
+using Utility.Entities.Comms;
+using Utility.Interfaces.Exs.Diagrams;
 
 namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
     {
-
-        public IObservable<INode> BuildEbayRoot(Guid guid, Type type)
+        public IObservable<INodeViewModel> BuildEbayRoot(Guid guid, Type type)
         {
             return nodeSource.Create(nameof(BuildEbayRoot), guid, (s) =>
                 new Model(() => [
                     new Model(()=>
                     [
-                        new CommandModel() { Name = refresh },
+                        new CommandModel<RefreshEvent>() { Name = refresh },
                         new StringModel(nodeAction: node=> {node.DataTemplate = "SearchEditor"; node.Title = "Search"; }, attach: searchModel=>{
-
                                   searchModel.Observe<FilterParam>();
                         }) { Name = search },
                         new StringModel(nodeAction: node=> {node.DataTemplate = "DirectoryEditor"; node.Title = "Base Directory"; }, attach: stringModel=>{
@@ -39,7 +39,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                         }) { Name = indexPath },
                     ],
                     node=> {node.IsExpanded = true;  node.Orientation = Orientation.Horizontal; },
-                    (parent,addition)=>{
+                    (addition)=>{
 
 
                     }){ Name = controllerPath },
@@ -60,7 +60,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     }) { Name = list1 },
                     new EditModel(attach: editModel =>
                     {
-                        editModel.WithChangesTo(a => (a as IValue).Value)
+                        editModel.WithChangesTo(a => (a as IGetValue).Value)
                         .Subscribe(model =>
                         {
                             if (model is EbayModel eModel)
@@ -102,7 +102,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     }) { Name = html2 },
                 ],
                 (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; },
-                (parent, addition) =>
+                (addition) =>
                 {
 
                 }

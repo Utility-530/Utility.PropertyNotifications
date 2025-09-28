@@ -1,5 +1,6 @@
 ﻿using Utility.Entities;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Demo.Lists.Entities;
 using Utility.Nodes.Demo.Lists.Infrastructure;
@@ -13,7 +14,7 @@ namespace Utility.Nodes.Demo.Lists.Services
         {
             if (o is FilterQuery fq)
                 return filter(fq);
-            else if (o is INode)
+            else if (o is INodeViewModel)
                 return true;
             throw new Exception("44333 3gw");
         }

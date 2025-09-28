@@ -4,7 +4,7 @@
                     xmlns:conv="http://schemas.utility.com/converters" 
                     xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
                     xmlns:mvvm="http://hexinnovation.com/math" 
-                    >
+                    xmlns:mt="clr-namespace:Utility.Models.Templates;assembly=Utility.Models.Templates">
 
 
 
@@ -19,9 +19,9 @@
     <local:FinishEditConverter x:Key="FinishEditConverter"/>
     <local:AddDataFileConverter x:Key="AddDataFileConverter"/>
     <local:RemoveConverter x:Key="RemoveConverter"/>
-    <conv:PropertyNamesConverter x:Key="PropertyNamesConverter"/>
-    <mvvm:MathConverter x:Key="Math"/>
 
+    <mvvm:MathConverter x:Key="Math"/>
+    <mt:ModelTemplateSelector x:Key="ModelTemplateSelector"/>
 
 
 </ResourceDictionary>

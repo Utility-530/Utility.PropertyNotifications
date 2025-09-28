@@ -4,17 +4,18 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using Utility.Collections;
+using Utility.Enums;
 using Utility.Helpers.Generic;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
-using Utility.Nodify.Core;
-using Utility.Nodify.Enums;
 using Utility.PropertyNotifications;
 
-namespace Utility.Nodify.Models
+namespace Utility.Nodes
 {
-    public class ConnectorViewModel : NotifyPropertyClass, IConnectorViewModel
+    public class ConnectorViewModel : NotifyPropertyClass, IValueConnectorViewModel, IValue, IType
     {
         ThreadSafeObservableCollection<IConnectionViewModel> connections = [];
         private INodeViewModel _node = default!;
@@ -24,6 +25,7 @@ namespace Utility.Nodify.Models
         private bool _isConnected;
         private bool _isInput;
         private PointF _anchor;
+        private object value;
 
         public ConnectorViewModel()
         {
@@ -47,6 +49,11 @@ namespace Utility.Nodify.Models
 
         public Guid Guid { get; set; }
 
+        public Type Type => Data is ParameterInfo parameterInfo ?
+            parameterInfo.ParameterType :
+            Data is PropertyInfo propertyInfo ? propertyInfo.PropertyType :
+            throw new Exception("ds322d 11");
+
         public required string? Key
         {
             get => _title;
@@ -57,6 +64,22 @@ namespace Utility.Nodify.Models
         {
             get => data;
             set => RaisePropertyChanged(ref data, value);
+        }
+
+        public object Value
+        {
+            get => this.value;
+            set
+            {
+                if (value?.Equals(default) == true && this.value?.Equals(default) == true)
+                    return;
+                if (value?.Equals(this.value) == true)
+                    return;
+
+                var _previousValue = this.value;
+                this.value = value;
+                RaisePropertyChanged(_previousValue, value, nameof(Value));
+            }
         }
 
         public bool IsConnected
@@ -74,7 +97,7 @@ namespace Utility.Nodify.Models
         public PointF Anchor
         {
             get => _anchor;
-            set => RaisePropertyChanged(ref _anchor, new PointF(value.X , value.Y));
+            set => RaisePropertyChanged(ref _anchor, new PointF(value.X, value.Y));
         }
 
         public INodeViewModel Node
@@ -83,9 +106,9 @@ namespace Utility.Nodify.Models
             set => RaisePropertyChanged(ref _node, value).Then(a => OnNodeChanged());
         }
 
-        public ConnectorShape Shape { get; set; }
+        public FlatShape Shape { get; set; }
 
-        public ConnectorFlow Flow { get; set; }
+        public IO Flow { get; set; }
 
         public int MaxConnections { get; set; } = 2;
 
@@ -93,11 +116,12 @@ namespace Utility.Nodify.Models
 
         public object AnchorElement { get; set; }
 
+
         protected virtual void OnNodeChanged()
         {
-            if (Node is NodeViewModel flow)
+            if (Node is INodeViewModel flow)
             {
-                Flow = flow.Input.Contains(this) ? ConnectorFlow.Input : ConnectorFlow.Output;
+                Flow = flow.Input.Contains(this) ? IO.Input : IO.Output;
             }
 
             //else if (Node is KnotNodeViewModel knot)

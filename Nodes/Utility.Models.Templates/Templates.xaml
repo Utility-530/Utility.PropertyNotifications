@@ -1,0 +1,467 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    x:Class="Utility.Models.Templates.Templates"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:bc="Breadcrumbs.WPF" 
+                    xmlns:beh="http://schemas.utility.com/behaviors"
+                    xmlns:test="clr-namespace:TextBoxEx;assembly=TextBoxEx"
+                    xmlns:ui="http://toniccomputing.com/patterns/ui" 
+                    xmlns:local="clr-namespace:Utility.Models.Templates"     
+                    xmlns:e="clr-namespace:Utility.Enums;assembly=Utility.Enums"
+                    xmlns:inf="clr-namespace:Utility.Models.Trees;assembly=Utility.Models.Trees"
+                    xmlns:model="clr-namespace:Utility.Models;assembly=Utility.Models"
+                    xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
+                    xmlns:des="clr-namespace:Utility.PropertyDescriptors;assembly=Utility.PropertyDescriptors"
+                    xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit" 
+                    xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+                    xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020"
+                    xmlns:templates="http://schemas.utility.com/templates" 
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:conv="http://schemas.utility.com/converters" 
+                    xmlns:res="http://schemas.utility.com/resourcedictionary" 
+                    xmlns:html="http://schemas.utility.com/html"
+                    xmlns:controls="http://schemas.utility.com"
+                    xmlns:att="http://schemas.utility.com/attached"
+                    xmlns:c="http://schemas.utility.com/colours"
+                    xmlns:btns="http://schemas.utility.com/buttons" 
+                    xmlns:text="http://schemas.utility.com/texts"
+                    xmlns:fs="http://schemas.utility.com/filesystem"
+                    xmlns:markup="http://schemas.utility.com/markup"
+                    xmlns:list="http://schemas.utility.com/lists"
+                    xmlns:obj="http://schemas.utility.com/objects"
+                    xmlns:wpf1="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF">
+
+
+    <ResourceDictionary.MergedDictionaries>
+        <!--<res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml"/>-->
+        <res:SharedResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <conv:PropertyNamesConverter x:Key="PropertyNamesConverter"/>
+    <conv:TypeNameConverter x:Key="TypeNameConverter"/>
+
+
+    <DataTemplate DataType="{x:Type nodes:ViewModelTree}">
+        <TextBlock Text="{Binding Name}"/>
+    </DataTemplate>
+
+
+    <!--<DataTemplate DataType="{x:Type model:CollectionModel}">
+        <ItemsControl ItemsSource="{Binding  Converter={StaticResource PropertyNamesConverter}, ConverterParameter={x:Static conv:PropertyType.TopLevelAndGenericArgument1}}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <DataTemplate.Resources>
+                        <Style TargetType="{x:Type TextBlock}">
+                            --><!--<Setter Property="Width" Value="100"/>--><!--
+                            <Setter Property="FontWeight" Value="DemiBold"/>
+                            <Setter Property="FontSize" Value="8"></Setter>
+                            <Setter Property="MaxWidth" Value="200"/>
+                            <Setter Property="Margin" Value="4,0,8,0"/>
+                        </Style>
+                    </DataTemplate.Resources>
+                    <TextBlock Text="{Binding }" ></TextBlock>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="1"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </DataTemplate>-->
+    
+    <DataTemplate DataType="{x:Type inf:IndexModel}">
+        <xc:IntegerUpDown   Value="{Binding Value}"></xc:IntegerUpDown>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type inf:RelationModel}">
+        <ComboBox Grid.Column="0" ItemsSource="{ui:EnumSource {x:Type e:Relation}}" SelectedItem="{ui:EnumBinding {Binding Relation, Mode=TwoWay}}" />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type inf:CommandModel}">
+        <Button Content="{Binding Name}" Command="{Binding Command}" Width="200"></Button>
+    </DataTemplate>
+
+
+    <DataTemplate DataType="{x:Type inf:AndOrModel}">
+        <ComboBox  Margin="4" Grid.Row="1" 
+                    ItemsSource="{ui:EnumSource {Binding Value, Mode=OneTime}}" 
+                    SelectedItem="{ui:EnumBinding {Binding Value}}" 
+                    />
+    </DataTemplate>
+
+    <DataTemplate x:Key="SearchEditor" DataType="{x:Type model:StringModel}">
+        <text:SearchBox x:Name="Searchbox" Text="{Binding Value, Mode=TwoWay}" Height="25" MinWidth="200">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Search" >
+                    <beh:SetterAction TargetObject="{Binding ElementName=Searchbox, Path=DataContext}" 
+                                      PropertyName="Value" 
+                                      Value="{Binding ElementName=Searchbox, Path=Text}"></beh:SetterAction>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </text:SearchBox>
+    </DataTemplate>
+
+
+    <DataTemplate DataType="{x:Type inf:AssemblyModel}">
+        <TextBlock Text="{Binding Assembly, Converter={x:Static conv:AssemblyNameConverter.Instance}}">
+        </TextBlock>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type inf:TypeModel}">
+        <!--<controls:BreadCrumbs
+            ItemsSource="{Binding Type, Converter={x:Static conv:TypeHierarchyConverter.Instance}}">
+        </controls:BreadCrumbs>-->
+        <TextBlock Text="{Binding Type, Converter={x:Static conv:TypeNameConverter.Instance}}">
+        </TextBlock>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type inf:EditModel}">
+        <obj:JsonControl Width="500" Height="400">
+            <i:Interaction.Behaviors>
+                <obj:ObjectBehavior Object="{Binding Value, Mode=OneWay}" RaisePropertyChanged="True"/>
+            </i:Interaction.Behaviors>
+        </obj:JsonControl>
+    </DataTemplate>  
+    
+    <DataTemplate x:Key="Json" DataType="{x:Type model:Model}">
+        <obj:JsonControl Width="500" Height="400" Json="{Binding Value}">
+          
+        </obj:JsonControl>
+    </DataTemplate>  
+    
+    <DataTemplate x:Key="StringRoot">
+        <Grid>
+            <TextBlock Text="{Binding Name}" Background="AliceBlue">
+            </TextBlock>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type inf:FileModel}">
+        <Grid>
+            <TextBox Text="{Binding Value}" Background="CadetBlue">
+            </TextBox>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type inf:ValueModel}">
+        <WrapPanel>
+            <ContentPresenter 
+            att:Base.Enumerable="{Binding AutoList}"
+            ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance}" Content="{Binding }">
+                <i:Interaction.Behaviors>
+                    <local:UpdateContentPresenterBehavior Value="{Binding Value}" UpdateOnNull="True"/>
+                </i:Interaction.Behaviors>
+            </ContentPresenter>
+            <btns:GeometryToggleButton  
+                IsChecked="{Binding IsListening}"
+                    Fill="Black"
+                    StrokeThickness="1"
+                    PressedForegroundBrush="{c:Red}"
+                    Height="20"
+                    Data="{StaticResource TargetGeometry}"
+                    HoverForegroundBrush="{c:Blue}" />
+        </WrapPanel>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type inf:ComparisonModel}">
+        <ComboBox
+                  ItemsSource="{ui:EnumSource {Binding Value}}" 
+                  SelectedItem="{ui:EnumBinding {Binding Value, Mode=TwoWay}}" >
+            <i:Interaction.Behaviors>
+                <local:ResetSelectedIndexBehavior></local:ResetSelectedIndexBehavior>
+            </i:Interaction.Behaviors>
+        </ComboBox>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type model:BooleanModel}">
+        <CheckBox  IsChecked="{Binding Value}"></CheckBox>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type model:GuidModel}">
+        <TextBox Text="{Binding Value}"/>
+    </DataTemplate>
+    
+    <DataTemplate DataType="{x:Type inf:ExceptionModel}">
+        <TextBlock Text="{Binding Exception.Message}" Foreground="{c:Red}" MinHeight="25" MinWidth="180" Background="GhostWhite"/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type inf:ListModel}">    
+        <list:CustomSelector
+            Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
+            SelectedItem="{Binding Value, Mode=TwoWay}"
+            x:Name="CustomSelector"                
+            ItemsWidth="300" ItemsHeight="500"
+            IsGrid="True"
+            RemoveCommand="{markup:Command Remove}"
+            CheckedPropertyName="IsRhPositive"    
+            Edit="{Binding New, Mode=OneWay}"
+            ItemsSource="{Binding Collection, Mode=OneWay}" >
+            <!--Edit="{Binding Edit,Mode=TwoWay}">-->
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="FinishEdit">
+                    <beh:SetterAction PropertyName="Add" TargetObject="{Binding }" Converter="{StaticResource FinishEditConverter}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>           
+        </list:CustomSelector>      
+    </DataTemplate>
+
+
+    <DataTemplate DataType="{x:Type model:StringModel}">
+        <Grid>
+            <TextBox Text="{Binding Value}" MinWidth="60" Background="AliceBlue">
+            </TextBox>
+        </Grid>
+    </DataTemplate>
+
+
+
+    <DataTemplate x:Key="HtmlEditor" DataType="{x:Type model:StringModel}">
+        <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
+
+        <avalonedit:TextEditor x:Name="_htmlEditor" 
+                           
+                                       VerticalScrollBarVisibility="Visible"                                    
+                                       BorderThickness="0"    
+                                       SyntaxHighlighting="HTML" 
+                                       ShowLineNumbers="True" >
+            <i:Interaction.Behaviors>
+                <html:TextEditorTextBehavior Html="{Binding Value}"/>
+            </i:Interaction.Behaviors>
+        </avalonedit:TextEditor>
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="HtmlWebViewer" DataType="{x:Type model:StringModel}">
+        <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
+        <WebBrowser >
+            <i:Interaction.Behaviors>
+                <beh:WebBrowserNavigationBehavior Html="{Binding Value, Mode=OneWay, Converter={x:Static conv:DefaultConverter.Instance}}"/>
+            </i:Interaction.Behaviors>
+        </WebBrowser>
+    </DataTemplate>
+
+
+
+    <DataTemplate x:Key="Html">
+        <TextBlock Text="Html"></TextBlock>
+        <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
+        <!--<html:TinyHtmlEditorControl Html="{Binding Value, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>-->
+        <!--<wpf1:HtmlPanel Text="{Binding Value, Mode=OneWay,Converter={x:Static conv:DefaultConverter.Instance}}"></wpf1:HtmlPanel>-->
+        <!--<avalonedit:TextEditor x:Name="_htmlEditor" 
+                           
+                                       VerticalScrollBarVisibility="Visible"                                    
+                                       BorderThickness="0"    
+                                       SyntaxHighlighting="HTML" 
+                                       ShowLineNumbers="True" >
+            <i:Interaction.Behaviors>
+                <html:TextEditorTextBehavior Html="{Binding Value}"/>
+            </i:Interaction.Behaviors>
+        </avalonedit:TextEditor>-->
+    </DataTemplate>
+
+    <DataTemplate x:Key="ChromiumOutput" >
+        <!--<Border BorderThickness="1" BorderBrush="Blue">
+            <cefsharpwpf:ChromiumWebBrowser
+                    Address="{Binding Mode=OneWay, Path=Address}"
+                    Name="Browser">
+                -->
+        <!--<i:Interaction.Behaviors>
+                    <behavior:ChromiumWebBrowserBehavior/>
+                </i:Interaction.Behaviors>-->
+        <!--
+            </cefsharpwpf:ChromiumWebBrowser>
+        </Border>-->
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type des:MemberDescriptor}">
+        <Expander Header="{Binding Converter={StaticResource TypeNameConverter}}" Content="{Binding }" >
+            <Expander.ContentTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Converter={StaticResource ObjectDumperConverter}}"></TextBlock>
+                </DataTemplate>
+            </Expander.ContentTemplate>
+        </Expander>
+    </DataTemplate>
+
+
+
+    <DataTemplate DataType="{x:Type inf:DirtyModel}">
+        <DataTemplate.Resources>
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="FontSize" Value="8"></Setter>
+                <Setter Property="MaxWidth" Value="60"/>
+                <Setter Property="Margin" Value="4,0,4,0"/>
+            </Style>
+        </DataTemplate.Resources>
+        <UniformGrid Rows="1">    
+            <TextBlock Text="{Binding Path=SourceKey}"/>                   
+            <TextBlock Text="{Binding Path=PropertyName}"/>
+            <TextBlock Text="{Binding Path=OldValue}"/>
+            <TextBlock Text="{Binding Path=NewValue}"/>
+        </UniformGrid>
+
+    </DataTemplate>
+
+
+    <Style x:Key="inlineText" TargetType="{x:Type TextBlock}">
+        <Setter Property="Margin" Value="10,5,10,0"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontSize" Value="12"/>
+    </Style>
+    <Style x:Key="titleText" TargetType="{x:Type TextBlock}">
+        <Setter Property="DockPanel.Dock" Value="Top"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Margin" Value="10,5,10,0"/>
+    </Style>
+    <Style TargetType="{x:Type Button}">
+        <Setter Property="Margin" Value="10,5,10,0"/>
+        <Setter Property="Width" Value="60"/>
+    </Style>
+    
+    <DataTemplate DataType="{x:Type inf:DataFileModel}" x:Shared="false">
+        <Grid Background="#DCDCDC" Name="rootElement" >
+            <Grid.Resources>
+                <Style TargetType="{x:Type TextBox}">
+                    <Setter Property="Margin" Value="10,5,10,0"/>
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0"
+        Grid.Row="1"
+        Style="{StaticResource inlineText}"
+        Name="aliasLabel">Alias</TextBlock>
+            <TextBlock Grid.Column="0"
+        Grid.Row="2"
+        Style="{StaticResource inlineText}"
+        Name="nameLabel">File Path</TextBlock>
+
+            <TextBlock Grid.Column="1"
+                       Width="100"
+                       Grid.Row="1"
+                       Grid.ColumnSpan="3"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Bottom"
+                       Text="{Binding Alias}"
+                       Name="txtName"/>
+            
+            <TextBlock Grid.Column="1" Width="600"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Bottom"
+                       Grid.Row="2"
+                       Grid.ColumnSpan="3"
+                       Text="{Binding FilePath}"
+                       Name="txtAddress"/>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="EditTemplate" DataType="{x:Type inf:DataFileModel}">
+        <Grid Background="#DCDCDC" Name="rootElement">
+            <Grid.Resources>             
+                <Style TargetType="{x:Type TextBlock}">
+                    <Setter Property="Margin" Value="10,5,10,0"/>
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0"
+        Grid.Row="1"
+        Style="{StaticResource inlineText}"
+        Name="aliasLabel">Alias</TextBlock>
+            <TextBlock Grid.Column="0"
+        Grid.Row="2"
+        Style="{StaticResource inlineText}"
+        Name="nameLabel">File Path</TextBlock>
+
+            <TextBox Grid.Column="1"
+        Grid.Row="1"
+        Grid.ColumnSpan="3"
+        Text="{Binding Alias, Mode=TwoWay}"
+        Name="txtName"/>
+
+
+            <TextBox Grid.Column="1"
+        Grid.Row="2"
+        Grid.ColumnSpan="3"
+        Text="{Binding FilePath, Mode=TwoWay}"
+        Name="txtAddress"/>
+        </Grid>
+    </DataTemplate>
+
+    <DataTemplate x:Key="DirectoryEditor" DataType="{x:Type model:StringModel}">
+        <fs:FolderComboBrowser Margin="4"
+                               MaxWidth="220"
+                    Path="{Binding Value, Mode=TwoWay}"
+                    x:Name="FolderComboBrowser"/>
+    </DataTemplate>    
+
+    <DataTemplate x:Key="FilePathEditor" DataType="{x:Type model:StringModel}">
+        <fs:FileComboBrowser Margin="8"
+                                 MaxWidth="180"
+                             Path="{Binding Value, Mode=TwoWay}"
+                             x:Name="FileComboBrowser"
+                       
+                    />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type inf:ModelTypeModel}">
+        <Grid
+                            Margin="0,4,4,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+
+            <ContentControl Content="{Binding Value, Mode=OneWay}">
+                <ContentControl.ContentTemplate>
+                    <DataTemplate>
+                        <Grid Background="Transparent" 
+                                x:Name="tile"
+                                Grid.Column="0"
+                                Margin="5"
+                                >
+                          
+                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                          
+                                    FontSize="24"
+                                    FontWeight="DemiBold"
+                                    Text="{Binding Alias, Converter={x:Static local:HumaniseConverter.Instance}}"
+                                    TextWrapping="WrapWithOverflow" />
+                       
+                        </Grid>
+                    </DataTemplate>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+        
+        </Grid>
+    </DataTemplate>
+
+
+    <DataTemplate x:Key="Missing">
+        <TextBlock Text="missing"></TextBlock>
+    </DataTemplate>
+</ResourceDictionary>

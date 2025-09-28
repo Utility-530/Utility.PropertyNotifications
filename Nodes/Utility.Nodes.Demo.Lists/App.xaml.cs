@@ -10,25 +10,27 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Utility.Attributes;
 using Utility.Conversions.Json.Newtonsoft;
+using Utility.Entities;
 using Utility.Extensions;
 using Utility.Helpers.Reflection;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.Generic.Data;
 using Utility.Interfaces.NonGeneric;
+using Utility.Interfaces.NonGeneric.Dependencies;
 using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Nodes.Demo.Lists.Entities;
 using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
-using Utility.Nodes.Filters;
+using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
+using Utility.Reactives;
 using Utility.Repos;
+using Utility.ServiceLocation;
 using Utility.Services;
 using Utility.WPF.Controls;
-using Utility.WPF.Templates;
-using Utility.ServiceLocation;
-using Utility.Interfaces.NonGeneric.Dependencies;
 
 namespace Utility.Nodes.Demo.Lists
 {
@@ -56,13 +58,12 @@ namespace Utility.Nodes.Demo.Lists
         private static void initialise(IMutableDependencyResolver register)
         {
             register.RegisterConstant<IExpander>(WPF.Expander.Instance);
-            register.RegisterLazySingleton<IObservableIndex<INode>>(() => MethodCache.Instance);
+            register.RegisterLazySingleton<IObservableIndex<INodeViewModel>>(() => MethodCache.Instance);
             register.RegisterLazySingleton<MethodCache>(() => MethodCache.Instance);
             register.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new Factories.NodeMethodFactory());
-            register.RegisterLazySingleton<IEnumerableFactory<Method>>(() => Nodes.Filters.NodeMethodFactory.Instance);
+            register.RegisterLazySingleton<IEnumerableFactory<Method>>(() => Nodes.Meta.NodeMethodFactory.Instance);
             register.RegisterLazySingleton(() => new MasterViewModel());
             register.RegisterConstant(new ContainerService());
- 
             register.RegisterConstant(new RazorService());
             register.RegisterLazySingleton<IEnumerableFactory<Type>>(() => new ModelTypesFactory());
             register.RegisterLazySingleton<IFactory<IId<Guid>>>(() => new ModelFactory());
@@ -92,14 +93,10 @@ namespace Utility.Nodes.Demo.Lists
         {
             //var sswindow = new Window();
             //sswindow.Show();
-            //var playBack = new PlayBackUserControl()
-            //{
-            //};
+            //var playBack = new PlayBackUserControl() //{ //};
             //sswindow.Content = playBack;
             //var window = new Window() { Content = Locator.Current.GetService<ContainerViewModel>() };
-
             //window.Show();
-
         }
 
         private static void showSplashscreen()
@@ -122,14 +119,14 @@ namespace Utility.Nodes.Demo.Lists
 
         public void subscribeToTypeChanges()
         {
-            Locator.Current.GetService<IObservableIndex<INode>>()[nameof(Utility.Nodes.Filters.NodeMethodFactory.BuildListRoot)]
+            Locator.Current.GetService<IObservableIndex<INodeViewModel>>()[nameof(Utility.Nodes.Meta.NodeMethodFactory.BuildListRoot)]
                 .Subscribe(node =>
                 {
                     node
-                    .WithChangesTo(a => a.Current)
-                    .Select(a =>
+                    .WhenReceivedFrom(a => a.Current, includeNulls: false)
+                    .Select(current =>
                     {
-                        if (a.Data is ModelTypeModel { Value.Type: { } stype } data)
+                        if (current is ModelTypeModel { Value: ModelType { Type: { } stype } value } data)
                         {
                             var type = Type.GetType(stype);
                             return type;
@@ -145,7 +142,7 @@ namespace Utility.Nodes.Demo.Lists
     {
         public IEnumerable<Type> Create(object? o = null)
         {
-            return typeof(ModelTypesFactory).Assembly.TypesByAttribute<ModelAttribute>();
+            return typeof(ModelTypesFactory).Assembly.TypesByAttribute<ModelAttribute>(a => a.Index);
         }
     }
 
@@ -206,9 +203,6 @@ namespace Utility.Nodes.Demo.Lists
             return TabEmptiedResponse.CloseWindowOrLayoutBranch;
         }
     }
-
-
-
 
     public class PlaybackEngine : IPlaybackEngine
     {

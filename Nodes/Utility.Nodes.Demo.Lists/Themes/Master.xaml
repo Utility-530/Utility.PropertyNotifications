@@ -8,8 +8,13 @@
                     xmlns:beh="http://schemas.utility.com/behaviors" 
                     xmlns:panels="http://schemas.utility.com/panels"
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                    xmlns:c="http://schemas.utility.com/colours">
+                    xmlns:c="http://schemas.utility.com/colours" 
+                    xmlns:res="http://schemas.utility.com/resourcedictionary">
 
+    <ResourceDictionary.MergedDictionaries>
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+    
     <Style x:Key="DefaultChildCustomStyle" TargetType="{x:Type t:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type t:CustomTreeViewItem}}">
         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"></Setter>
         <Setter Property="SelectionItem" Value="{Binding Current, Mode=TwoWay}"/>
@@ -43,6 +48,16 @@
 
 
     <Style x:Key="DefaultCustomStyle" TargetType="{x:Type t:CustomTreeViewItem}">
+        <!--<Setter Property="ItemTemplate">
+            <Setter.Value>
+                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                    <Border  BorderThickness="1" Margin="1">
+                        <ContentControl Content="{Binding Name}" Foreground="{Binding TemplatedParent.Foreground, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
+                    </Border>
+                </HierarchicalDataTemplate>
+            </Setter.Value>
+        </Setter>-->
+
         <Setter Property="SelectedIndex" Value="-1"/>
         <Setter Property="SelectionItem" Value="{Binding Current, Mode=TwoWay}"/>
         <att:InteractivitySetter Property="att:InteractivityItems.Template">
@@ -64,11 +79,10 @@
             </Setter.Value>
         </att:InteractivitySetter>
     </Style>
-    
+
     <local:ComboContainerStyleSelector x:Key="ComboContainerStyleSelector"
                                        ComboStyle="{StaticResource DefaultChildCustomStyle}"
-                                    DefaultStyle="{StaticResource DefaultCustomStyle}" 
-                                  >
+                                    DefaultStyle="{StaticResource DefaultCustomStyle}">
     </local:ComboContainerStyleSelector>
 
 
@@ -85,7 +99,16 @@
 
             <t:CustomTreeView   
                 Grid.Row="1"
-                ItemsSource="{Binding Selection, Mode=OneWay}" ItemContainerStyleSelector="{StaticResource ComboContainerStyleSelector}" >
+                ItemsSource="{Binding Selection, Mode=OneWay}" ItemContainerStyleSelector="{StaticResource ComboContainerStyleSelector}" 
+               >
+                <!--<t:CustomTreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                        <Border  BorderThickness="1" Margin="1">
+                            <ContentControl Content="{Binding Name}" Foreground="{Binding TemplatedParent.Foreground, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
+                        </Border>
+                    </HierarchicalDataTemplate>
+                </t:CustomTreeView.ItemTemplate>-->
+
                 <t:CustomTreeView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel></StackPanel>

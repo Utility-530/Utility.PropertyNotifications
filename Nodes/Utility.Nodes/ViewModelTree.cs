@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Reactive.Linq;
+using Utility.Attributes;
 using Utility.Collections;
 using Utility.Enums;
 using Utility.Helpers.NonGeneric;
@@ -12,7 +14,7 @@ using Utility.Trees;
 namespace Utility.Nodes
 {
 
-    public class ViewModelTree : Tree, IIsEditable, IIsExpanded, IIsPersistable, IIsVisible, IRemoved, IIsReadOnly, ISortOrder, ISort, IDataTemplate
+    public class ViewModelTree : Tree, IViewModelTree, ISet, IGet
     {
         private bool? isHighlighted;
         private bool isExpanded = false;
@@ -24,7 +26,7 @@ namespace Utility.Nodes
         private bool? isValid = null;
         private bool isReadOnly;
         private bool isEditable;
-        private INode current;
+        private IViewModelTree current;
         private bool isClicked;
         private bool isSelected;
         private DateTime? removed;
@@ -38,16 +40,17 @@ namespace Utility.Nodes
         private string dataTemplate;
         private string itemsPanelTemplate;
         private string title;
-
-        public ViewModelTree(/*string name,*/ object data) : this()
-        {
-            //Name = name;
-            Data = data;
-        }
+        private PointF location;
+        private SizeF size;
+        private bool isActive;
+        protected string name;
+        private bool isChildrenRefreshed;
+        private bool isPersistable;
+        private object? value;
+        public event Action? Closed;
 
         public ViewModelTree()
         {
-
         }
 
         protected override IList CreateChildren()
@@ -58,87 +61,125 @@ namespace Utility.Nodes
             return collection;
         }
 
-        public static string Field(string propertyName) => propertyName switch { nameof(Current) => nameof(current), _ => throw new NotImplementedException("vc3333") };
+        //public static string Field(string propertyName) => propertyName switch { nameof(Current) => nameof(current), _ => throw new NotImplementedException("vc3333") };
+
+        public virtual Guid Guid { get => Guid.TryParse(Key, out var guid) ? guid : default; set => Key = value.ToString(); }
 
         public int? LocalIndex { get; set; }
 
-        public INode Root
+        public string GroupKey { get; set; }
+
+        public override object? Value
         {
-            get => this.m_items.FirstOrDefault() as INode;
+            get { _ = RaisePropertyCalled(value); return value; }
+            set => this.RaisePropertyReceived(ref this.value, value);
+        }
+
+        public IViewModelTree Root
+        {
+            get => this.m_items.FirstOrDefault() as IViewModelTree;
             set => this.Add(value);
+        }
+
+        public bool IsActive
+        {
+            get { RaisePropertyCalled(isActive); return isActive; }
+            set => this.RaisePropertyReceived(ref this.isActive, value);
+        }
+
+        public bool IsConnectorsReversed { get; set; }
+
+        public virtual string Name
+        {
+            get { RaisePropertyCalled(name); return name; }
+            set => this.RaisePropertyReceived(ref this.name, value);
+        }
+
+        public PointF Location
+        {
+            get { RaisePropertyCalled(location); return location; }
+            set => this.RaisePropertyReceived(ref this.location, value);
+        }
+
+        public SizeF Size
+        {
+            get { RaisePropertyCalled(size); return size; }
+            set => this.RaisePropertyReceived(ref this.size, value);
         }
 
         public DateTime? Removed
         {
-            get => removed;
-            set => RaisePropertyChanged(ref removed, value);
+            get { RaisePropertyCalled(removed); return removed; }
+            set => this.RaisePropertyReceived(ref this.removed, value);
         }
 
         public bool? IsValid
         {
-            get => isValid;
-            set => RaisePropertyChanged(ref isValid, value);
+            get { RaisePropertyCalled(isValid); return isValid; }
+            set => this.RaisePropertyReceived(ref this.isValid, value);
         }
 
         // relates to the ability to modify the value
         public override bool IsReadOnly
         {
-            get => isReadOnly; set => RaisePropertyChanged(ref isReadOnly, value);
+            get { RaisePropertyCalled(isReadOnly); return isReadOnly; }
+            set => this.RaisePropertyReceived(ref this.isReadOnly, value);
         }
 
         // relates to the ability to add/remove nodes 
         public bool IsEditable
         {
-            get => isEditable;
-            set => RaisePropertyChanged(ref isEditable, value);
+            get { RaisePropertyCalled(isEditable); return isEditable; }
+            set => this.RaisePropertyReceived(ref this.isEditable, value);
         }
 
         public bool IsAugmentable
         {
-            get => isAugmentable;
-            set => RaisePropertyChanged(ref isAugmentable, value);
+            get { RaisePropertyCalled(isAugmentable); return isAugmentable; }
+            set => this.RaisePropertyReceived(ref this.isAugmentable, value);
         }
 
         public bool? IsHighlighted
         {
-            get => isHighlighted;
-            set => RaisePropertyChanged(ref isHighlighted, value);
+            get { RaisePropertyCalled(isHighlighted); return isHighlighted; }
+            set => this.RaisePropertyReceived(ref this.isHighlighted, value);
         }
 
         public bool IsClicked
         {
-            get => isClicked;
-            set => RaisePropertyChanged(ref isClicked, value);
+            get { RaisePropertyCalled(isClicked); return isClicked; }
+            set => this.RaisePropertyReceived(ref this.isClicked, value);
         }
 
         public bool IsSelected
         {
-            get => isSelected;
-            set => RaisePropertyChanged(ref isSelected, value);
+            get { RaisePropertyCalled(isSelected); return isSelected; }
+            set => this.RaisePropertyReceived(ref this.isSelected, value);
         }
 
         public bool IsExpanded
         {
-            get => isExpanded;
-            set => RaisePropertyChanged(ref isExpanded, value);
+            get { RaisePropertyCalled(isExpanded); return isExpanded; }
+            set => this.RaisePropertyReceived(ref this.isExpanded, value);
         }
 
         public Arrangement Arrangement
         {
-            get => arrangement;
-            set => RaisePropertyChanged(ref arrangement, value);
+            get { RaisePropertyCalled(arrangement); return arrangement; }
+            set => this.RaisePropertyReceived(ref this.arrangement, value);
         }
 
         public Orientation Orientation
         {
-            get => orientation;
-            set => RaisePropertyChanged(ref orientation, value);
+            get { RaisePropertyCalled(orientation); return orientation; }
+            set => this.RaisePropertyReceived(ref this.orientation, value);
         }
 
+        [FieldName(nameof(connectorPosition))]
         public Position2D ConnectorPosition
         {
-            get => connectorPosition;
-            set => RaisePropertyChanged(ref connectorPosition, value);
+            get { RaisePropertyCalled(connectorPosition); return connectorPosition; }
+            set => this.RaisePropertyReceived(ref this.connectorPosition, value);
         }
 
         public ObservableCollection<Dimension> Columns { get; set; } = new();
@@ -147,65 +188,89 @@ namespace Utility.Nodes
 
         public int Row
         {
-            get => row;
-            set => RaisePropertyChanged(ref row, value);
+            get { RaisePropertyCalled(row); return row; }
+            set => this.RaisePropertyReceived(ref this.row, value);
         }
 
         public int Column
         {
-            get => column; set => RaisePropertyChanged(ref column, value);
+            get { RaisePropertyCalled(column); return column; }
+            set => this.RaisePropertyReceived(ref this.column, value);
         }
 
         public int Order
         {
-            get => order; set => RaisePropertyChanged(ref order, value);
+            get { RaisePropertyCalled(order); return order; }
+            set => this.RaisePropertyReceived(ref this.order, value);
         }
 
 
         public bool? IsVisible
         {
-            get => isVisible; set => RaisePropertyChanged(ref isVisible, value);
+            get { RaisePropertyCalled(isVisible); return isVisible; }
+            set
+            {
+                this.RaisePropertyReceived(ref this.isVisible, value);
+
+                if (value == false)
+                {
+                    Closed?.Invoke();
+                }
+            }
+
         }
 
         public bool? IsContentVisible
         {
-            get => isContentVisible; set => RaisePropertyChanged(ref isContentVisible, value);
+            get { RaisePropertyCalled(isContentVisible); return isContentVisible; }
+            set => this.RaisePropertyReceived(ref this.isContentVisible, value);
         }
 
         public bool IsReplicable
         {
-            get => isReplicable; set => RaisePropertyChanged(ref isReplicable, value);
+            get { RaisePropertyCalled(isReplicable); return isReplicable; }
+            set => this.RaisePropertyReceived(ref this.isReplicable, value);
         }
 
         public bool IsRemovable
         {
-            get => isRemovable; set => RaisePropertyChanged(ref isRemovable, value);
+            get { RaisePropertyCalled(isRemovable); return isRemovable; }
+            set => this.RaisePropertyReceived(ref this.isRemovable, value);
         }
 
+        [FieldName(nameof(dataTemplate))]
         public string DataTemplate
         {
-            get => dataTemplate; set => RaisePropertyChanged(ref dataTemplate, value);
+            get { RaisePropertyCalled(dataTemplate); return dataTemplate; }
+            set => this.RaisePropertyReceived(ref this.dataTemplate, value);
         }
 
+        [FieldName(nameof(itemsPanelTemplate))]
         public string ItemsPanelTemplate
         {
-            get => itemsPanelTemplate; set => RaisePropertyChanged(ref itemsPanelTemplate, value);
+            get { RaisePropertyCalled(itemsPanelTemplate); return itemsPanelTemplate; }
+            set => this.RaisePropertyReceived(ref this.itemsPanelTemplate, value);
         }
 
-        public bool IsPersistable { get; set; }
+        public bool IsPersistable
+        {
+            get { RaisePropertyCalled(isPersistable); return isPersistable; }
+            set => this.RaisePropertyReceived(ref this.isPersistable, value);
+        }
 
         public string Title
         {
-            get => title; set => RaisePropertyChanged(ref title, value);
+            get { RaisePropertyCalled(title); return title; }
+            set => this.RaisePropertyReceived(ref this.title, value);
         }
 
         public ObservableCollection<Exception> Errors { get; set; } = new();
 
-        public INode Current
+        public IViewModelTree Current
         {
-            get => current;
-            set
-            {
+            get { RaisePropertyCalled(title); return current; }
+            set 
+            {        
                 if (current != value)
                 {
                     var previousValue = current;
@@ -213,10 +278,15 @@ namespace Utility.Nodes
                         current.IsPersistable = false;
                     if (value != null)
                         value.IsPersistable = true;
-                    current = value;
-                    RaisePropertyChanged(previousValue, value);
+                    this.RaisePropertyReceived(ref this.current, value);
                 }
             }
+        }
+
+        public bool IsChildrenRefreshed
+        {
+            get { RaisePropertyCalled(isChildrenRefreshed); return isChildrenRefreshed; }
+            set => this.RaisePropertyReceived(ref this.isChildrenRefreshed, value);
         }
 
         public bool Sort(object? o = null)
@@ -229,8 +299,85 @@ namespace Utility.Nodes
         {
             return Data?.ToString();
         }
-    }
 
+        public virtual void Set(object value, string name)
+        {
+            switch (name)
+            {
+                case nameof(Current): /*current = value as IViewModelTree;*/ break;
+                case nameof(Name): name = value as string; break;
+                case nameof(IsActive): isActive = Convert.ToBoolean(value); break;
+                case nameof(IsEditable): isEditable = Convert.ToBoolean(value); break;
+                case nameof(IsReadOnly): isReadOnly = Convert.ToBoolean(value); break;
+                case nameof(IsVisible): isVisible = value as bool?; break;
+                case nameof(IsContentVisible): isContentVisible = value as bool?; break;
+                case nameof(IsValid): isValid = value as bool?; break;
+                case nameof(IsHighlighted): isHighlighted = value as bool?; break;
+                case nameof(IsClicked): isClicked = Convert.ToBoolean(value); break;
+                case nameof(IsSelected): isSelected = Convert.ToBoolean(value); break;
+                case nameof(IsExpanded): isExpanded = Convert.ToBoolean(value); break;
+                case nameof(IsReplicable): isReplicable = Convert.ToBoolean(value); break;
+                case nameof(IsRemovable): isRemovable = Convert.ToBoolean(value); break;
+                case nameof(IsAugmentable): isAugmentable = Convert.ToBoolean(value); break;
+                case nameof(IsPersistable): isPersistable = Convert.ToBoolean(value); break;
+                case nameof(IsChildrenRefreshed): isChildrenRefreshed = Convert.ToBoolean(value); break;
+                case nameof(Order): order = Convert.ToInt32(value); break;
+                case nameof(Row): row = Convert.ToInt32(value); break;
+                case nameof(Column): column = Convert.ToInt32(value); break;
+                case nameof(Removed): removed = value as DateTime?; break;
+                case nameof(Arrangement): arrangement = (Arrangement)value; break;
+                case nameof(Orientation): orientation = (Orientation)value; break;
+                case nameof(ConnectorPosition): connectorPosition = (Position2D)value; break;
+                case nameof(Location): location = (PointF)value; break;
+                case nameof(Size): size = (SizeF)value; break;
+                case nameof(DataTemplate): dataTemplate = value as string; break;
+                case nameof(ItemsPanelTemplate): itemsPanelTemplate = value as string; break;
+                case nameof(Title): title = value as string; break;
+                case nameof(Value): this.value = value; break;
+                default: throw new ArgumentException($"Unknown field: {name}");
+            }
+            RaisePropertyChanged(name);
+        }
+
+
+        public virtual object? Get(string name)
+        {
+            return name switch
+            {
+                nameof(Current) => current,
+                nameof(Name) => name,
+                nameof(IsActive) => isActive,
+                nameof(IsEditable) => isEditable,
+                nameof(IsReadOnly) => isReadOnly,
+                nameof(IsVisible) => isVisible,
+                nameof(IsContentVisible) => isContentVisible,
+                nameof(IsValid) => isValid,
+                nameof(IsHighlighted) => isHighlighted,
+                nameof(IsClicked) => isClicked,
+                nameof(IsSelected) => isSelected,
+                nameof(IsExpanded) => isExpanded,
+                nameof(IsReplicable) => isReplicable,
+                nameof(IsRemovable) => isRemovable,
+                nameof(IsAugmentable) => isAugmentable,
+                nameof(IsPersistable) => isPersistable,
+                nameof(IsChildrenRefreshed) => isChildrenRefreshed,
+                nameof(Order) => order,
+                nameof(Row) => row,
+                nameof(Column) => column,
+                nameof(Removed) => removed,
+                nameof(Arrangement) => arrangement,
+                nameof(Orientation) => orientation,
+                nameof(ConnectorPosition) => connectorPosition,
+                nameof(Location) => location,
+                nameof(Size) => size,
+                nameof(DataTemplate) => dataTemplate,
+                nameof(ItemsPanelTemplate) => itemsPanelTemplate,
+                nameof(Title) => title,
+                nameof(Value) => value,
+                _ => throw new ArgumentException($"Unknown field: {name}")
+            };
+        }
+    }
 
     public class Comparer : IComparer<object>
     {

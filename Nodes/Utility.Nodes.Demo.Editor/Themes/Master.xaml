@@ -6,15 +6,18 @@
                     xmlns:bc="http://schemas.utility.com/Breadcrumbs" 
                     xmlns:att="http://schemas.utility.com/attached" 
                     xmlns:beh="http://schemas.utility.com/behaviors" 
-                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:res="http://schemas.utility.com/resourcedictionary">
 
-
+    <!--<ResourceDictionary.MergedDictionaries>
+        <res:SharedResourceDictionary 
+    </ResourceDictionary.MergedDictionaries>-->
 
     <Style x:Key="ComboEx2Style" TargetType="{x:Type t:CustomTreeViewItem}" BasedOn="{StaticResource ComboExStyle}">
         <Setter Property="bc:TreeViewEx.CurrentItem" Value="{Binding Current, Mode=TwoWay}"/>
-        <Setter Property="Selection" Value="{Binding Path=SelectionItem.Data, RelativeSource={RelativeSource Mode=Self}}"/>
+        <Setter Property="Selection" Value="{Binding Path=SelectionItem, RelativeSource={RelativeSource Mode=Self}}"/>
+        <!--<Setter Property="ItemsSource" Value="{Binding Children}"></Setter>-->
         <!--<Setter Property="Selection" Value="{Binding Path=(att:TreeEx.SelectedItem), RelativeSource={RelativeSource Mode=Self}}"></Setter>-->
-        <Setter Property="ItemTemplate">
+        <!--<Setter Property="ItemTemplate">
             <Setter.Value>
                 <StaticResource ResourceKey="ItemTemplate"/>
             </Setter.Value>
@@ -23,7 +26,7 @@
             <Setter.Value >
                 <StaticResource ResourceKey="EditTemplate"/>
             </Setter.Value>
-        </Setter>
+        </Setter>-->
         <att:InteractivitySetter Property="att:InteractivityItems.Template">
             <Setter.Value>
                 <att:InteractivityTemplate>

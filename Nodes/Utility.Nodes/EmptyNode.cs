@@ -2,7 +2,7 @@
 
 namespace Utility.Nodes
 {
-    public class EmptyNode : Node<object>
+    public class EmptyNode : NodeViewModel<object>
     {
         public override async Task<bool> HasMoreChildren()
         {

@@ -1,11 +1,9 @@
 ﻿using DryIoc;
-using Utility.Nodify.Core;
 using System.Linq;
 using System;
 using System.Collections.ObjectModel;
 using Utility.Nodify.Operations.Infrastructure;
 using System.Drawing;
-using Utility.Nodify.Engine;
 using Utility.Enums;
 using Splat;
 using Utility.Interfaces.NonGeneric;
@@ -20,14 +18,15 @@ using System.Windows.Input;
 using Utility.Collections;
 using Utility.Commands;
 using Utility.PropertyNotifications;
+using Utility.Interfaces.Exs.Diagrams;
 
-namespace Utility.Nodify.Models
+namespace Utility.Nodes
 {
     public class DiagramViewModel : NotifyPropertyClass, IDiagramViewModel
     {
         private readonly IContainer container;
         private IMenuViewModel menu;
-        private RangeObservableCollection<INodeViewModel> _operations = [];
+        private RangeObservableCollection<INodeViewModel> nodes = [];
         private RangeObservableCollection<INodeViewModel> _selectedOperations = [];
 
         public int GridColumn = 1;
@@ -38,7 +37,7 @@ namespace Utility.Nodify.Models
             {
                 try
                 {
-                    return Locator.Current.GetService<INodeSource>();
+                    return container.Resolve<INodeSource>();
                 }
                 catch (Exception ex)
                 {
@@ -61,7 +60,7 @@ namespace Utility.Nodify.Models
             GroupSelectionCommand = new Command(GroupSelectedOperations, () => SelectedNodes.Count > 0);
 
             // Setup collection behaviors
-            _operations.WhenAdded(x => x.Graph = this);
+            nodes.WhenAdded(x => x.Diagram = this);
 
             if (Connections is ThreadSafeObservableCollection<IConnectionViewModel> threadSafe)
                 threadSafe.WhenAdded(c =>
@@ -85,7 +84,7 @@ namespace Utility.Nodify.Models
                     }
                 });
 
-            if (_operations is ThreadSafeObservableCollection<INodeViewModel> _threadSafe)
+            if (nodes is ThreadSafeObservableCollection<INodeViewModel> _threadSafe)
                 _threadSafe.WhenAdded(x =>
                 {
                     if (x.Input is ThreadSafeObservableCollection<IConnectorViewModel> _tt_)
@@ -134,7 +133,7 @@ namespace Utility.Nodify.Models
 
         public Arrangement Arrangement { get; set; }
 
-        public ObservableCollection<INodeViewModel> Nodes => _operations;
+        public ObservableCollection<INodeViewModel> Nodes => nodes;
 
         public ICollection<INodeViewModel> SelectedNodes => _selectedOperations;
 
@@ -158,7 +157,7 @@ namespace Utility.Nodify.Models
             {
                 if (pending.IsVisible)
                 {
-                    connector = nodeViewModel.Input.FirstOrDefault(a => (a.Data as IType)?.Type == type);
+                    connector = nodeViewModel.Input.FirstOrDefault(a => a is IGetData { Data: IType { Type: { } _type } } && _type == type);
                 }
             }
 
@@ -188,12 +187,23 @@ namespace Utility.Nodify.Models
             if (target is PendingConnectorViewModel pending)
             {
                 pending.IsDropDownOpen = true;
-                pending.Data = (source.Data as PropertyInfo).PropertyType;
+                if (source is IGetData { Data : ParameterInfo { ParameterType: Type type } })
+                {
+                    pending.Data = type;
+                }
+                else if (source is IGetData{ Data: PropertyInfo { PropertyType: { } _type } })
+                {
+                    pending.Data = _type;
+                }
                 pending.Node.Input.Additions<ConnectorViewModel>().Take(1).Subscribe(connector =>
                 {
                     CreateConnection(source, connector);
                 });
                 return;
+            }
+            else if (target is ConnectorViewModel connector)
+            {
+
             }
 
             var input = source.IsInput ? source : target;
@@ -202,7 +212,7 @@ namespace Utility.Nodify.Models
             PendingConnection.IsVisible = false;
             DisconnectConnector(input);
 
- 
+
             var connectionViewModel = container.Resolve<IViewModelFactory>().CreateConnection(input, output);
             container.RegisterInstanceMany(connectionViewModel);
             Connections.Add(connectionViewModel);
@@ -227,7 +237,7 @@ namespace Utility.Nodify.Models
                 foreach (var y in x)
                     menu.Items.Add(y);
             }
-            else
+            else if (operations != null)
             {
                 var x = operations
                     .Filter(null)

@@ -5,16 +5,17 @@ using Utility.Interfaces.Exs;
 using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Nodes.Demo.Lists.Services;
-using Utility.Nodes.Filters;
+using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
 using Utility.Services;
 using Utility.Extensions;
+using Utility.Interfaces.Exs.Diagrams;
 
 namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
     {
-        public IObservable<INode> BuildUserProfileRoot(Guid guid, Type type)
+        public IObservable<INodeViewModel> BuildUserProfileRoot(Guid guid, Type type)
         {
             return nodeSource.Create(nameof(BuildUserProfileRoot),
                 guid,
@@ -25,19 +26,19 @@ namespace Utility.Nodes.Demo.Lists.Factories
                      new EditModel { Name = edit },
                 ],
                 (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; },
-                (parent, addition) =>
+                (addition) =>
                 {
-                    if (addition.Data is EditModel { } editModel)
+                    if (addition is EditModel { } editModel)
                     {
                         editModel.ReactTo<SelectionReturnParam>(setAction: (a) => { editModel.Value = a; editModel.RaisePropertyChanged(nameof(EditModel.Value)); });
                     }
 
-                    if (addition.Data is StringModel { Name: search } searchModel)
+                    if (addition is StringModel { Name: search } searchModel)
                     {
                         searchModel.Observe<FilterParam>();
                     }
 
-                    if (addition.Data is ListModel { } listModel)
+                    if (addition is ListModel { } listModel)
                     {
                         listModel.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a);
 

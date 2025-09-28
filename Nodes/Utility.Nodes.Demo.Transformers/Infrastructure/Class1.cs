@@ -17,7 +17,7 @@ using System.Windows.Media;
 using Utility.Models.Trees;
 using Utility.WPF.Trees.Connectors;
 using System.Reactive.Linq;
-using Utility.Nodes.Demo.Filters.Services;
+using Utility.Nodes.Demo.Transformers.Services;
 
 namespace Utility.Nodes.Demo.Transformers
 {
@@ -57,7 +57,7 @@ namespace Utility.Nodes.Demo.Transformers
             var methodQuery = Helper.CreateVariableQuery()
                         //.WithArgumentType(TypeSpecifier.FromType<int>())
                         //.WithVisibleFrom(TypeSpecifier.FromType<string>())
-                        .WithType(TypeSpecifier.FromType<Node>())
+                        .WithType(TypeSpecifier.FromType<NodeViewModel>())
                         .WithStatic(true)
                         .AndName("Static Methods");
 
@@ -183,19 +183,19 @@ namespace Utility.Nodes.Demo.Transformers
                     adornerLayer.Remove(ca);
 
                     var rootsModel = new NodePropertyRootsModel { Name = "a" };
-                    rootsModel.Collection.Add(new NodePropertyRootModel { Name = "csd ", NodeModel = new NodeModel { Name = "s", Model = new NodePropertiesModel(() => [new PropertyModel { Name = "", Value = typeof(Node).GetProperty(nameof(Node.Key)) }]) { Name = "", } } });
+                    rootsModel.Add(new NodePropertyRootModel { Name = "csd ", NodeModel = new NodeModel { Name = "s", Model = new NodePropertiesModel(() => [new PropertyModel { Name = "", Value = typeof(NodeViewModel).GetProperty(nameof(NodeViewModel.Key)) }]) { Name = "", } } });
 
                     var methodInfo = MethodSpecifier.ToMethod(specifier);
 
 
                     var andorModel = new AndOrModel { Name = "", };
-                    andorModel.Collection.Add(
+                    andorModel.Add(
                         new FilterModel
                         {
                             Name = "",
-                            ResolvableModel = new ResolvableModel { Name = "", GlobalAssembliesModel = new GlobalAssembliesModel(() => [new AssemblyTypePropertyModel { Name = "", Value = typeof(Node).GetProperty(nameof(Node.Key)) }]) { Name = "" } },
+                            ResolvableModel = new ResolvableModel { Name = "", GlobalAssembliesModel = new GlobalAssembliesModel(() => [new AssemblyTypePropertyModel { Name = "", Value = typeof(NodeViewModel).GetProperty(nameof(NodeViewModel.Key)) }]) { Name = "" } },
                             ComparisonModel = new ComparisonModel { Name = "", Type = Models.Trees.ComparisonType.String },
-                            Model = new ValueModel { Name = "", Value = (_args.SourceConnector.element.DataContext as Node).Key }
+                            Model = new ValueModel { Name = "", Value = (_args.SourceConnector.element.DataContext as NodeViewModel).Key }
                         });
 
 

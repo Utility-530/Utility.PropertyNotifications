@@ -31,16 +31,16 @@ namespace Utility.Nodes.Demo.Transformers
         public JsonSerializer Serialiser { get; set; }
     }
 
-    public class NodeConverter : JsonConverter<Node>
+    public class NodeConverter : JsonConverter<NodeViewModel>
     {
         public override bool CanRead => base.CanRead;
 
-        public override Node? ReadJson(JsonReader reader, Type objectType, Node? existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override NodeViewModel? ReadJson(JsonReader reader, Type objectType, NodeViewModel? existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             throw new NotImplementedException();
         }
 
-        public override void WriteJson(JsonWriter writer, Node value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, NodeViewModel value, JsonSerializer serializer)
         {
             // Begin object
             writer.WriteStartObject();
@@ -74,10 +74,10 @@ namespace Utility.Nodes.Demo.Transformers
 
 
             writer.WritePropertyName($"$isenum");
-            serializer.Serialize(writer, new[] { nameof(Node.Arrangement), nameof(Node.Orientation) });
+            serializer.Serialize(writer, new[] { nameof(NodeViewModel.Arrangement), nameof(NodeViewModel.Orientation) });
 
             writer.WritePropertyName($"$isreadonly");
-            serializer.Serialize(writer, new[] { nameof(Node.Key) });
+            serializer.Serialize(writer, new[] { nameof(NodeViewModel.Key) });
 
             writer.WriteEndObject();
         }

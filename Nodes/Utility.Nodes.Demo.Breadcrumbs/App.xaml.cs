@@ -6,8 +6,9 @@ using System.Windows;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Interfaces.Exs;
 using Utility.Nodes.Demo.Queries.Infrastructure;
-using Utility.Nodes.Filters;
+using Utility.Nodes.Meta;
 using Utility.Repos;
+using Utility.ServiceLocation;
 
 namespace Utility.Nodes.Breadcrumbs
 {
@@ -16,14 +17,14 @@ namespace Utility.Nodes.Breadcrumbs
     /// </summary>
     public partial class App : Application
     {
-        INode node;
+        INodeViewModel node;
 
         protected override void OnStartup(StartupEventArgs e)
         {
             SQLitePCL.Batteries.Init();
-            Locator.CurrentMutable.RegisterLazySingleton<ITreeRepository>(() => JsonRepository.Instance);
+            Globals.Register.Register<ITreeRepository>(() => JsonRepository.Instance);
             Locator.CurrentMutable.RegisterLazySingleton<INodeSource>(() => NodeEngine.Instance);
-            Locator.CurrentMutable.RegisterLazySingleton<Type>(() => typeof(Node));
+            Locator.CurrentMutable.RegisterLazySingleton<Type>(() => typeof(NodeViewModel));
             Locator.CurrentMutable.RegisterLazySingleton<IJObjectService>(() => new JObjectService());
 
             JsonConvert.DefaultSettings = () => settings;
@@ -37,7 +38,7 @@ namespace Utility.Nodes.Breadcrumbs
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var obj = JObject.FromObject(this.node as Node);
+            var obj = JObject.FromObject(this.node as NodeViewModel);
             Locator.Current.GetService<IJObjectService>().Set(obj);
 
         }
@@ -56,7 +57,7 @@ namespace Utility.Nodes.Breadcrumbs
             }
             else
             {
-                var node = jObject.ToObject<Node>();
+                var node = jObject.ToObject<NodeViewModel>();
                 Locator.Current.GetService<INodeSource>().Add(node);
                 this.node = node;
             }
@@ -67,6 +68,7 @@ namespace Utility.Nodes.Breadcrumbs
         public JsonSerializerSettings settings = new()
         {
             TypeNameHandling = TypeNameHandling.All,
+            SerializationBinder = new CustomSerializationBinder(),
             //Formatting = Formatting.Indented,
             Converters = [
                 new AssemblyJsonConverter(),

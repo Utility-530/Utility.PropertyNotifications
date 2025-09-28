@@ -10,13 +10,13 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes
 {
-    public abstract class Node<T> : ViewModelTree, IExpand
+    public abstract class NodeViewModel<T> : ViewModelTree, IExpand
     {
         protected ReplaySubject<Changes.Change<T>> changes = new();
         private bool isRefreshing;
         bool flag;
 
-        public Node(bool isExpanded = true)
+        public NodeViewModel(bool isExpanded = true)
         {
             this.IsExpanded = isExpanded;
 
@@ -26,8 +26,8 @@ namespace Utility.Nodes
                 {
                     if (value.First)
                     {
-                        if (Data is IChildren children)
-                            children.Children.Cast<Changes.Change<T>>().Subscribe(changes);
+                        if (Data is IChanges children)
+                            children.Changes.Cast<Changes.Change<T>>().Subscribe(changes);
                     }
                     else
                     {
@@ -36,7 +36,7 @@ namespace Utility.Nodes
                 });
         }
 
-        public override IEnumerable Items
+        public override IEnumerable Children
         {
             get
             {
@@ -105,7 +105,7 @@ namespace Utility.Nodes
                                 }
                             case Changes.Type.Remove:
                                 {
-                                    m_items.RemoveOne(e => (e as IReadOnlyTree)?.Data.Equals(change.Value) == true);
+                                    m_items.RemoveOne(e => (e as IReadOnlyTree)?.Equals(change.Value) == true);
                                     break;
                                 }
                             case Changes.Type.Reset:

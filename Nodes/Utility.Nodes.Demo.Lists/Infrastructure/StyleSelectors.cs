@@ -17,7 +17,7 @@ namespace Utility.Nodes.Demo.Lists
 
             return item switch
             {
-                IData { Data : ISelectable } => ComboStyle,
+                 ISelectable => ComboStyle,
                 //IData { Data: IRoot } => BreadcrumbRootStyle,
                 //IData { Data: IBreadCrumb } when parent?.Style == BreadcrumbStyle => SelectableStyle,
                 //IData { Data: IBreadCrumb } => BreadcrumbStyle,
@@ -40,8 +40,8 @@ namespace Utility.Nodes.Demo.Lists
 
             return item switch
             {
-                IData { Data: IChildCollection } => CollectionStyle,
-                IData { Data: ICollectionItem } => ItemStyle,
+                 IChildCollection => CollectionStyle,
+                 ICollectionItem => ItemStyle,
             };
         }
 

@@ -4,13 +4,18 @@
                     xmlns:panels="http://schemas.utility.com/panels" 
                     xmlns:local="clr-namespace:Utility.Nodes.Demo.Lists"
                     xmlns:t="http://schemas.utility.com/trees"
+                    xmlns:mt="clr-namespace:Utility.Models.Templates;assembly=Utility.Models.Templates"
+                    xmlns:res="http://schemas.utility.com/resourcedictionary"
                     xmlns:conv="http://schemas.utility.com/converters">
 
-    <local:HeaderTemplateSelector x:Key="HeaderTemplateSelector"/>
+    <ResourceDictionary.MergedDictionaries>
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
     <!--BasedOn="{StaticResource {x:Type t:CustomTreeViewItem}}"-->
     <Style x:Key="DefaultCustomStyle" TargetType="{x:Type t:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type t:CustomTreeViewItem}}" >
-        <Setter Property="Header" Value="{Binding Data, Mode=OneWay}"></Setter>
-        <Setter Property="HeaderTemplateSelector" Value="{StaticResource HeaderTemplateSelector}"></Setter>   
+        <!--<Setter Property="Header" Value="{Binding Data, Mode=OneWay}"></Setter>-->
+        <!--<Setter Property="HeaderTemplateSelector" Value="{StaticResource ModelTemplateSelector}"></Setter>-->   
         <!--<Setter Property="HeaderTemplate">
             <Setter.Value>
                 <DataTemplate>

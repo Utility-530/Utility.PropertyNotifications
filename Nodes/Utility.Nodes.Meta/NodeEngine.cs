@@ -1,694 +1,453 @@
-﻿using System.Collections.ObjectModel;
-using System.Reactive.Linq;
-using System.Reflection;
-using Splat;
-using Utility.Reactives;
-using Utility.Keys;
-using Utility.Structs.Repos;
-using Utility.Interfaces.Exs;
-using Utility.Changes;
-using Utility.Interfaces;
-using Utility.Helpers;
-using System.Linq;
-using Utility.Helpers.Generic;
-using Utility.Interfaces.NonGeneric;
-using Utility.PropertyNotifications;
-using Utility.Helpers.NonGeneric;
-using System.Collections.Generic;
-using System;
-using System.Threading.Tasks;
-using Utility.Nodes.Ex;
-using Utility.Extensions;
-using Utility.Models.Trees;
-using Utility.Trees.Abstractions;
-using Utility.Models;
+﻿using DynamicData;
 using Fasterflect;
-using System.ComponentModel;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive.Disposables;
-using CompositeDisposable = Utility.Observables.CompositeDisposable;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using Utility.Helpers.Reflection;
-using Utility.ServiceLocation;
+using System.Threading.Tasks;
+using Utility.Extensions;
+using Utility.Helpers;
+using Utility.Helpers.Generic;
+using Utility.Helpers.NonGeneric;
+using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
-using Utility.Nodify.Base.Abstractions;
+using Utility.Interfaces.NonGeneric;
+using Utility.Keys;
+using Utility.Models;
+using Utility.Models.Trees;
+using Utility.Nodes.Ex;
+using Utility.PropertyNotifications;
+using Utility.Reactives;
+using Utility.ServiceLocation;
+using Utility.Trees.Abstractions;
+using CompositeDisposable = Utility.Observables.CompositeDisposable;
 
 namespace Utility.Nodes.Meta
 {
     public readonly record struct DirtyNode(string Property, INodeViewModel Node);
-    public class NodeEngine : INodeSource
+
+    public class NodeEngine : INodeSource, IDisposable
     {
-        ReplaySubject<INodeViewModel> selections = new(1);
-        ReplaySubject<DirtyModel> dirty = new(1);
-        string[] names = [nameof(NodeViewModel.IsSelected), nameof(NodeViewModel.IsExpanded), nameof(NodeViewModel.Orientation), nameof(NodeViewModel.Order), nameof(NodeViewModel.Arrangement), nameof(NodeViewModel.Order), nameof(NodeViewModel.Current)];
-        Dictionary<string, Func<object, object>> getters = new();
+        private const string ERROR_KEY_NOT_FOUND = "Key not found: dde33443 21";
+        private const string ERROR_INVALID_GUID = "Invalid GUID format: sd ddsdfdfsd";
+        private const string ERROR_INVALID_DIRTY_MODEL = "Expected CollectionModel<DirtyModel>: DSF 64333";
 
-        public static string New = "new";
+        private static readonly string[] TRACKED_PROPERTIES = [
+            nameof(NodeViewModel.IsSelected),
+            nameof(NodeViewModel.IsExpanded),
+            nameof(NodeViewModel.Orientation),
+            nameof(NodeViewModel.Order),
+            nameof(NodeViewModel.Arrangement),
+            nameof(NodeViewModel.Current)
+        ];
+
+        public static string New => "new";
         public static readonly string Key = nameof(NodeEngine);
+        public static NodeEngine Instance { get; } = new();
 
-        Lazy<NodeInterface> nodeInterface = new(() => new NodeInterface());
-        Lazy<IFilter> filter;
-        Lazy<IExpander> expander;
-        //Lazy<IContext> context;
-        Lazy<ITreeRepository> repository;
+        private readonly ReplaySubject<INodeViewModel> _selections = new(1);
+        private readonly ReplaySubject<DirtyModel> _dirty = new(1);
+        private readonly ObservableCollection<INodeViewModel> _nodes = [];
+        private readonly CompositeDisposable _compositeDisposable = new();
+        private readonly ChangeTracker _changeTracker = new();
+        private readonly DataTracker _dataInitialiser = new();
 
-        CompositeDisposable compositeDisposable = new();
-
+        private readonly Lazy<IFilter> _filter;
+        private readonly Lazy<IExpander> _expander;
+        private readonly Lazy<ITreeRepository> _repository;
 
         private bool _disposed;
-        private readonly ObservableCollection<INodeViewModel> nodes = [];
 
         public NodeEngine()
         {
-            filter = new(() => Globals.Resolver.Resolve<IFilter>());
-            expander = new(() => Globals.Resolver.Resolve<IExpander>());
-            //context = new(() => Locator.Current.GetService<IContext>());
+            _filter = new(() => Globals.Resolver.Resolve<IFilter>());
+            _expander = new(() => Globals.Resolver.Resolve<IExpander>());
             var repo = Globals.Resolver.Resolve<ITreeRepository>();
-            repository = new(() => repo);
+            _repository = new(() => repo);
         }
 
         public Guid Guid { get; } = Guid.NewGuid();
-
-        public IReadOnlyCollection<INodeViewModel> Nodes => nodes;
-
-        public static NodeEngine Instance { get; } = new();
-
+        public IReadOnlyCollection<INodeViewModel> Nodes => _nodes;
         string INodeSource.New => New;
-
-
-        public IObservable<INodeViewModel> Selections => selections;
-
-        public IObservable<DirtyModel> Dirty => dirty;
+        public IObservable<INodeViewModel> Selections => _selections;
+        public IObservable<DirtyModel> Dirty => _dirty;
 
         public void Remove(INodeViewModel node)
         {
-            nodes.Remove(node);
-            repository.Value.Remove((GuidKey)node.Key());
+            ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
+            _nodes.Remove(node);
+            _repository.Value.Remove((GuidKey)node.Key());
+        }
+
+        public void RemoveBy(Predicate<INodeViewModel> predicate)
+        {
+            ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
+            _nodes.RemoveBy(predicate);
         }
 
         public void Add(INodeViewModel node)
         {
-            if (node.Data is IIgnore)
-                return;
+            ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
+
+            if (shouldIgnoreNode(node)) return;
+
             if (node.Key() is null)
             {
-                var index = node.Parent().Children.Count(a => ((INodeViewModel)a).Name() == node.Name());
-                var type =
-                repository
-                    .Value
-                    .Find((GuidKey)node.Parent().Key(), node.Name(), type: toType(node.Data), index: index == 0 ? null : index)
-                    .Subscribe(_key =>
-                    {
-                        if (_key.HasValue == false)
-                        {
-                            throw new Exception("dde33443 21");
-                        }
-
-                        node.SetKey(new GuidKey(_key.Value.Guid));
-                        Add(node);
-                    });
+                handleNodeWithoutKey(node);
                 return;
             }
-            else if (nodes.Any(a => a.Key() == node.Key()))
+
+            if (nodeAlreadyExists(node)) return;
+
+            addNodeToCollection(node);
+
+            void handleNodeWithoutKey(INodeViewModel node)
             {
-
-            }
-            else
-            {
-
-                nodes.Add(node);
-                configure(node);
-
-                node
-                    .WithChangesTo(a => a.Data)
-                    .Where(a => a is not string)
-                    .Take(1)
-                    .Subscribe(data =>
+                var index = countSiblingNodesWithSameName(node);
+                var findSubscription = _repository.Value
+                    .Find((GuidKey)node.Parent().Key(), node.Name(), type: GetNodeType(node), index: index == 0 ? null : index)
+                    .Subscribe(key =>
                     {
-                        loadProperties(node)
-                        .Subscribe(a =>
-                        {
-                            initialiseData(a.Data);
-
-                            node.Children.AndChanges<INodeViewModel>().Subscribe(a =>
-                            {
-                                if (node.Data is not IRoot root || node.Count <= 1)
-                                    foreach (var item in a)
-                                        change(item);
-                            }).DisposeWith(compositeDisposable);
-
-                            node.WithChangesTo(a => a.IsExpanded)
-                            .Where(a => a == true)
-                            .Take(1)
-                            .Subscribe(a =>
-                            {
-                                if (data is IYieldItems ychildren)
-                                    _children(node, ychildren).Subscribe(a =>
-                                    {
-                                        node.Add(a);
-                                    });
-                            }).DisposeWith(compositeDisposable);
-                        }).DisposeWith(compositeDisposable);
-                    }).DisposeWith(compositeDisposable);
-
-
-            }
-
-
-            void configure(INodeViewModel node)
-            {
-                if (filter.Value?.Filter(node) == false)
-                {
-                    node.IsVisible = false;
-                    return;
-                }
-                if (expander.Value?.Expand(node) == true)
-                {
-                    node.IsExpanded = true;
-                }
-
-                node.WhenChanged().Subscribe(e =>
-                {
-                    if (e is PropertyChange { Name: string name, Value: var value })
-                    {
-                        if (name == nameof(ViewModelTree.Order))
-                        {
-                            ((node as IGetParent<IReadOnlyTree>).Parent as INodeViewModel).Sort(null);
-                        }
-                        if (name == nameof(ViewModelTree.IsSelected) && value is true)
-                        {
-                            selections.OnNext(node);
-                        }
-                        if (names.Contains(name))
-                        {
-                            if (nodeInterface.Value.Getter(name)?.Get(node) is { } _value)
-                                repository?.Value.Set((GuidKey)node.Key(), name, _value, DateTime.Now);
-                        }
-                        else
-                            Globals.UI.Post((a) =>
-                            {
-                                dirty.OnNext((DirtyModel)a);
-
-                            }, new DirtyModel { Name = name + node.Children.Count(), SourceKey = node.Key(), PropertyName = name, NewValue = value });
-                    }
-                    else
-                        throw new Exception("ss FGre333333333");
-                });
-            }
-
-
-            void initialiseData(object data)
-            {
-                if (node.Key() == "5b672a24-2269-4c3b-861b-eb6d529ab41a")
-                {
-
-                }
-                if (data is INotifyPropertyCalled called)
-                {
-                    called.WhenCalled(true)
-                    .Subscribe(call =>
-                    {
-                        if (call.Name == nameof(Model.Name))
-                        {
-                            return;
-                        }
-                        if (call.Name == nameof(ValueModel.Value))
-                        {
-                        }
-                        repository.Value
-                        .Get((GuidKey)node.Key(), nameof(NodeViewModel.Data) + "." + call.Name)
-                        .Subscribe(a =>
-                        {
-                            if (a.Value != null)
-                            {
-                                object output = null;
-                                FieldInfo fieldInfo = null;
-
-                                if (call.Target is IGet get)
-                                {
-                                    output = get.Get();
-                                }
-                                else if (call.Target.TryGetPrivateFieldValue(call.Name.ToLower(), out var _output, out var _fieldInfo) == false)
-                                {
-                                    output = _output;
-                                    fieldInfo = _fieldInfo;
-                                }
-                                else
-                                {
-                                    throw new Exception($"no field for property, {call.Name}");
-                                }
-
-
-                                if (output?.Equals(a.Value) == true)
-                                    return;
-                                else
-                                {
-                                    if (call.Target is ISet set)
-                                    {
-                                        set.Set(a.Value);
-                                    }
-                                    else if (fieldInfo != null)
-                                    {
-                                        fieldInfo.SetValue(call.Target, a.Value);
-                                        if (call.Target is INotifyPropertyChanged changed)
-                                            changed.RaisePropertyChanged(call.Name);
-                                    }
-                                    else
-                                    {
-                                        throw new Exception($"no field for property, {call.Name}");
-                                    }
-                                }
-                            }
-                        }).DisposeWith(compositeDisposable);
-                    }).DisposeWith(compositeDisposable);
-                }
-                if (data is INotifyPropertyReceived received)
-                {
-                    received.WhenReceived()
-                    .Subscribe(reception =>
-                    {
-                        if (reception.Name == nameof(Model.Name))
-                        {
-                            (reception.Target as INotifyPropertyChanged).RaisePropertyChanged(reception.Name);
-                            repository.Value.UpdateName((GuidKey)(node as IGetParent<IReadOnlyTree>).Parent.Key(), (GuidKey)node.Key(), (string)reception.OldValue, (string)reception.Value);
-                        }
-                        else
-                            repository.Value.Set((GuidKey)node.Key(), nameof(NodeViewModel.Data) + "." + reception.Name, reception.Value, DateTime.Now);
-                    }).DisposeWith(compositeDisposable);
-                }
-                if (data is INotifyPropertyChanged changed)
-                {
-                    changed.WhenChanged()
-                        .WhereIsNotNull()
-                    .Subscribe(reception =>
-                    {
-                        object value;
-                        if (reception.Name != nameof(ValueModel.Value))
-                        {
-                            return;
-                        }
-                        else if (reception is PropertyChange ex)
-                        {
-                            value = ex.Value;
-                        }
-                        else
-                        {
-                            value = getters
-                                        .Get(reception.Name, a => node.Data.GetType().GetProperty(reception.Name).ToGetter<object>())
-                                        .Invoke(node.Data);
-                        }
-                        repository.Value.Set((GuidKey)node.Key(), nameof(NodeViewModel.Data) + "." + reception.Name, value, DateTime.Now);
-
-                    }).DisposeWith(compositeDisposable);
-                }
-
-                if (data is ISetNode iSetNode)
-                {
-                    iSetNode.SetNode(node);
-                }
-                else
-                {
-                    //throw new Exception("R333 ");
-                }
-
-
-                if (data is IGetValue value && Helpers.Reflection.Comparison.IsDefaultValue(value.Value) == false)
-                    repository.Value.Set((GuidKey)node.Key(), nameof(NodeViewModel.Data) + "." + nameof(IGetValue.Value), value.Value, DateTime.Now);
-
-            }
-
-            IObservable<INodeViewModel> loadProperties(INodeViewModel node)
-            {
-                return Observable.Create<INodeViewModel>(observer =>
-                {
-                    return repository.Value.Get(Guid.Parse(node.Key())).Subscribe(_d =>
-                    {
-                        if (_d.Name == null)
-                        {
-                        }
-                        else if (_d.Value != null)
-                            nodeInterface.Value.Setter(_d.Name)?.Set(node, _d.Value);
-                    }, () =>
-                    {
-                        observer.OnNext(node);
-                        observer.OnCompleted();
+                        validateKey(key);
+                        node.SetKey(new GuidKey(key.Value.Guid));
+                        Add(node);
                     });
-                });
             }
 
+            static bool shouldIgnoreNode(INodeViewModel node) => node is IIgnore;
 
-
-            void change(Change a)
+            int countSiblingNodesWithSameName(INodeViewModel node)
             {
-                if (a is Change { Type: Changes.Type.Add, Value: { } value })
-                {
-                    if (value is INodeViewModel _node)
-                        Add(_node);
-                    else
-                    {
-                        //node.Add(await node.ToTree(value));
-                    }
-                }
-                else if (a is Change { Type: Changes.Type.Remove, Value: { } _value })
-                {
-                    if (_value is not INodeViewModel node)
-                    {
-                        throw new Exception("  333 sdsdf");
-                    }
-                    nodes.RemoveBy<INodeViewModel>(c =>
-
-                    {
-                        if (c is IKey key)
-                        {
-                            if (_value is IKey _key)
-                            {
-                                return key.Key().Equals(_key.Key());
-                            }
-                            else if (_value is IGetGuid guid)
-                            {
-                                return key.Key().Equals(new GuidKey(guid.Guid));
-                            }
-                        }
-                        throw new Exception("44c dd");
-
-                    });
-
-                    repository.Value.Remove((GuidKey)node.Key());
-                }
-                else if (a is Change { Type: Changes.Type.Update, Value: INodeViewModel newValue, OldValue: INodeViewModel oldValue })
-                {
-                    nodes.RemoveBy<INodeViewModel>(c =>
-                    {
-                        if (c is IKey key)
-                        {
-                            if (oldValue is IKey _key)
-                            {
-                                return key.Key().Equals(oldValue.Key());
-                            }
-                            //else if (_value is IGetGuid guid)
-                            //{
-                            //    return key.Key.Equals(new GuidKey(guid.Guid));
-                            //}
-                        }
-                        throw new Exception("44c dd");
-                    });
-                }
+                return node.Parent().Children.Count(child => ((INodeViewModel)child).Name() == node.Name());
+            }
+            bool nodeAlreadyExists(INodeViewModel node)
+            {
+                return _nodes.Any(existingNode => existingNode.Key() == node.Key());
             }
 
-            IObservable<INodeViewModel> _children(INodeViewModel node, IYieldItems children)
+            void addNodeToCollection(INodeViewModel node)
             {
-                return Observable.Create<INodeViewModel>(observer =>
+                _nodes.Add(node);
+
+                _dataInitialiser
+                    .Load(node)
+                    .Subscribe(loadedNode =>
+                    {
+                        configureNode(loadedNode);
+                        setupChildrenTracking(loadedNode);
+                        setupExpansionHandling(loadedNode);
+                    })
+                    .DisposeWith(_compositeDisposable);
+
+                void configureNode(INodeViewModel node)
                 {
-                    int i = 0;
-                    bool flag = false;
-                    return repository.Value.Find((GuidKey)node.Key())
-                        .Subscribe(async key =>
+                    _dataInitialiser.Track(node);
+
+                    //if (node is IGetValue { Value: var value } && !Helpers.Reflection.Comparison.IsDefaultValue(value))
+                    //{
+                    //    _repository.Value.Set(
+                    //        (GuidKey)node.Key(),
+                    //        $"{nameof(NodeViewModel.Data)}.{nameof(IGetValue.Value)}",
+                    //        value,
+                    //        DateTime.Now
+                    //    );
+                    //}
+                }
+
+                void setupChildrenTracking(INodeViewModel node)
+                {
+                    node.Children
+                        .AndChanges<INodeViewModel>()
+                        .Where(_ => node is not IRoot || node.Count <= 1)
+                        .SelectMany(changes => changes)
+                        .Subscribe(_changeTracker.Track)
+                        .DisposeWith(_compositeDisposable);
+                }
+
+                void setupExpansionHandling(INodeViewModel node)
+                {
+                    node.WhenReceivedFrom(n => n.IsExpanded)
+                        .Where(isExpanded => isExpanded)
+                        .Take(1)
+                        .SelectMany(_ => loadChildren(node))
+                        .Subscribe(child => node.Add(child))
+                        .DisposeWith(_compositeDisposable);
+
+                    IObservable<INodeViewModel> loadChildren(INodeViewModel node)
+                    {
+                        int childIndex = 0;
+                        return Observable.Create<INodeViewModel>(observer =>
                         {
-                            if (key.HasValue == false)
+                            CompositeDisposable disposables = new();
+                            if (node is IYieldItems _yieldItems)
                             {
-                                flag = true;
-                                children
-                                    .Items()
-                                        .ForEach(async d =>
-                                        {
-                                            createChild(node, observer, d, ++i).DisposeWith(compositeDisposable);
-                                        });
+                                processYieldItems(_yieldItems, observer)
+                                .DisposeWith(disposables);
                             }
-                            else if (children is IChildCollection)
+                            if (node is IProliferation yieldItems)
                             {
-                                i++;
-                                var nodes = Nodes.Where(a => a.Key() == new GuidKey(key.Value.Guid)).ToArray();
-                                if (nodes.Length > 1)
-                                {
-                                    throw new Exception("33 44");
-                                }
-                                else if (nodes.Length == 0)
-                                {
-                                    activate(node, key).Subscribe(observer);
-                                }
-                                else if (nodes.Length == 1)
-                                {
-                                    // child node expanded before parent
-                                    return;
-                                    throw new Exception("u 333333312");
-                                }
+                                return _repository.Value
+                                    .Find((GuidKey)node.Key())
+                                    .Subscribe(
+                                        key => processFoundKey(node, key, observer, ref childIndex),
+                                        observer.OnError,
+                                        () => { }
+                                    ).DisposeWith(disposables);
+                            }
+                            return disposables;
+                        });
 
-                            }
-                            else if(key is Utility.Structs.Repos.Key _key)
-                            {
-                                flag = true;
-                                FindChild(node, _key.Guid).Subscribe(a =>
-                                {
-
-                                });
-                            }
+                        void processFoundKey(INodeViewModel node, Structs.Repos.Key? key, IObserver<INodeViewModel> observer, ref int childIndex)
+                        {
+                            if (key.HasValue)
+                                findChild(node, key.Value.Guid)
+                                    .Subscribe(child => observer.OnNext(child));
+                            else
+                                throw new Exception("DSF 33443");
                         }
-                        , () =>
-                            {
 
-                                if (children is not IChildCollection && flag == false)
-                                    children
-                                    .Items()
-                                    .ForEach(d =>
-                                    {
-                                        createChild(node, observer, d, ++i).DisposeWith(compositeDisposable);
-                                    });
+                        IDisposable processYieldItems(IYieldItems yieldItems, IObserver<INodeViewModel> observer)
+                        {
+                            CompositeDisposable composite = new();
 
-                                children
+                            yieldItems
                                 .Items()
-                                .Additions()
-                                .Subscribe(d =>
-                                {
-                                    createChild(node, observer, d, ++i).DisposeWith(compositeDisposable);
-                                }).DisposeWith(compositeDisposable);
-                            }
+                                .AndAdditions()
+                                .Cast<INodeViewModel>()
+                                .Subscribe(child => createChildNode(node, child, ++childIndex, observer).DisposeWith(composite))
+                                .DisposeWith(composite);
 
-                                /*,() => observer.OnCompleted()*/);
-                });
+                            return composite;
+                            IDisposable createChildNode(INodeViewModel parent, INodeViewModel child, int index, IObserver<INodeViewModel> observer)
+                            {
+                                return _repository.Value
+                                    .Find((GuidKey)parent.Key(), child.Name(), type: GetNodeType(child), index: index)
+                                    .Subscribe(key =>
+                                    {
+                                        var existingNode = _nodes.SingleOrDefault(a => a.Key() == key.Value.Guid.ToString());
+                                        if (existingNode != null)
+                                        {
+                                            // if current value set then already created
+                                        }
+                                        else
+                                        {
+                                            validateKey(key);
+                                            child.SetKey(new GuidKey(key.Value.Guid));
+                                            observer.OnNext(child);
+                                        }
+                                    });
+                            }
+                        }
+                    }
+                }
             }
         }
+
+
 
         public IObservable<INodeViewModel> FindChild(INodeViewModel node, Guid guid)
         {
             return Observable.Create<INodeViewModel>(observer =>
             {
-                if (Nodes.SingleOrDefault(a => a.Key() == guid.ToString()) is INodeViewModel cnode)
-                    observer.OnNext(cnode);
-
-                repository
-                .Value
-                .Find((GuidKey)node.Key(), guid: guid)
-                .Subscribe(_key =>
+                var _compositeDisposable = new CompositeDisposable();
+                findChild(node, guid).Subscribe(child => { if (child != null) Add(child); }).DisposeWith(_compositeDisposable);
+                _nodes.AndAdditions().Subscribe(addition =>
                 {
-                    activate(node, _key).Subscribe(a =>
-                    {
-                        node.Add(a);
+                    if (addition.Guid == guid)
+                        observer.OnNext(addition);
 
-                    });
-                });
-
-                return Nodes
-                .AndAdditions<INodeViewModel>()
-                .Subscribe(ax =>
-                {
-                    if (ax.Key().Equals(guid.ToString()))
-                    {
-                        observer.OnNext(ax);
-
-                    }
-                });
+                }).DisposeWith(_compositeDisposable);
+                return _compositeDisposable;
             });
+           
         }
 
-
-        IObservable<INodeViewModel> activate(INodeViewModel node, Structs.Repos.Key? _key)
+        private IObservable<INodeViewModel> findChild(INodeViewModel node, Guid guid)
         {
+            ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
+
             return Observable.Create<INodeViewModel>(observer =>
             {
-                return node.ToTree(DataActivator.Activate(_key)).ToObservable()
-                     .Cast<INodeViewModel>()
-                     .Subscribe(_new =>
-                     {
-                         _new.SetKey(new GuidKey(_key.Value.Guid));
-                         _new.Removed = _key.Value.Removed;
-
-                         //if (d is IIsReadOnly readOnly)
-                         //{
-                         //    (_new as ISetIsReadOnly).IsReadOnly = readOnly.IsReadOnly;
-                         //}
-
-                         if (_key.HasValue == false)
-                         {
-                             throw new Exception("dde33443 21");
-                         }
-
-                         observer.OnNext(_new);
-                     });
-            });
-        }
-
-        IDisposable createChild(INodeViewModel node, IObserver<INodeViewModel> observer, object d, int i)
-        {
-            return node.ToTree(d).ToObservable().Cast<INodeViewModel>()
-                .Subscribe(_new =>
+                // Check if node already exists in collection
+                var existingNode = _nodes.SingleOrDefault(a => a.Key() == guid.ToString());
+                if (existingNode != null)
                 {
-                    repository
-                    .Value
-                    .Find((GuidKey)node.Key(), _new.Name(), type: toType(d), index: ++i)
-                    .Subscribe(_key =>
+                    //observer.OnNext(existingNode);
+                    //throw new Exception("FF 333ccd");
+                    return Disposable.Empty;
+                }
+
+                // Search in repository
+                var repositorySubscription = _repository.Value
+                    .Find((GuidKey)node.Key(), guid: guid)
+                    .SelectMany(key => activateNode(node, key))
+                    .Subscribe(activatedNode =>
                     {
-
-                        if (d is IIsReadOnly readOnly)
-                        {
-                            (_new as ISetIsReadOnly).IsReadOnly = readOnly.IsReadOnly;
-                        }
-
-                        if (_key.HasValue == false)
-                        {
-                            throw new Exception("dde33443 21");
-                        }
-                        _new.SetKey( new GuidKey(_key.Value.Guid));
-
-                        observer.OnNext(_new);
+                        observer.OnNext(activatedNode);
                     });
-                });
 
+                return new CompositeDisposable(repositorySubscription);
+            });
+
+            IObservable<INodeViewModel> activateNode(INodeViewModel parent, Structs.Repos.Key? key)
+            {
+                return Observable.Create<INodeViewModel>(observer =>
+                {
+                    validateKey(key);
+
+                    var newNode = (INodeViewModel)DataActivator.Activate(key);
+                    newNode.SetParent(parent);
+                    newNode.SetKey(new GuidKey(key.Value.Guid));
+                    newNode.Removed = key.Value.Removed;
+
+                    observer.OnNext(newNode);
+                    return Disposable.Empty;
+                });
+            }
         }
 
         public void Save()
         {
+            ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
+
             Single(nameof(NodeMethodFactory.BuildDirty))
                 .Subscribe(async tree =>
                 {
-                    if (tree.Data is not CollectionModel<DirtyModel> model)
-                        throw new Exception("DSF 64333");
-                    foreach (var item in tree.ToArray())
+                    if (tree is not CollectionModel<DirtyModel> model)
+                        throw new Exception(ERROR_INVALID_DIRTY_MODEL);
+
+                    await processDirtyItems(tree);
+                })
+                .DisposeWith(_compositeDisposable);
+
+            async Task processDirtyItems(INodeViewModel tree)
+            {
+                var itemsToProcess = tree.ToArray();
+
+                foreach (var item in itemsToProcess)
+                {
+                    if (item is DirtyModel { SourceKey: { } sourceKey, PropertyName: { } propertyName, NewValue: { } newValue })
                     {
-                        if (item.Data is DirtyModel { SourceKey: { } sk, PropertyName: { } pn, NewValue: { } nv } dmodel)
-                        {
-                            //var node = item.Value.Source as INode;
-                            repository.Value.Set(Guid.Parse(sk), pn, nv, DateTime.Now);
-                            tree.Remove(item);
-                            await Task.Delay(200);
-                        }
+                        _repository.Value.Set(Guid.Parse(sourceKey), propertyName, newValue, DateTime.Now);
+                        tree.Remove(item);
+                        await Task.Delay(200);
                     }
-                }).DisposeWith(compositeDisposable);
+                }
+            }
         }
 
-        public IObservable<INodeViewModel> Single(string key)
-        {
-            return Many(key).SelectMany(a => a.WithChangesTo(n => n.Data).Where(x => x is not string).Select(ax => a));
-        }
+        public IObservable<INodeViewModel> Single(string key) => Many(key).Take(1);
 
         public IObservable<INodeViewModel> Many(string key)
         {
+            ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
+
             return Observable.Create<INodeViewModel>(observer =>
             {
-                if (Guid.TryParse(key, out var _key))
-                {
-                    return Nodes
+                if (!Guid.TryParse(key, out var _))
+                    throw new Exception(ERROR_INVALID_GUID);
+
+                return _nodes
                     .AndAdditions<INodeViewModel>()
-                    .Subscribe(ax =>
+                    .Where(node => node.Key().Equals(key))
+                    .Take(1)
+                    .Subscribe(node =>
                     {
-                        if (ax.Key().Equals(key))
-                        {
-                            observer.OnNext(ax);
-                            observer.OnCompleted();
-                        }
+                        observer.OnNext(node);
+                        observer.OnCompleted();
                     });
-                }
-                else
-                    throw new Exception("sd ddsdfdfsd");
             });
         }
 
         public IObservable<INodeViewModel> Create(string name, Guid guid, Func<string, object> modelFactory)
         {
+            ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
+
             return Observable.Create<INodeViewModel>(observer =>
             {
-                INodeViewModel node;
-                if (Nodes.SingleOrDefault(a => (GuidKey)a.Key() == guid) is { } _node)
+                var existingNode = _nodes.SingleOrDefault(a => (GuidKey)a.Key() == guid);
+                if (existingNode != null)
                 {
-                    lock (nodes)
-                        observer.OnNext(_node);
+                    observer.OnNext(existingNode);
                     observer.OnCompleted();
                     return Disposable.Empty;
                 }
-                else
-                {
-                    node = new NodeViewModel
-                    {
-                        Key = new GuidKey(guid)
-                    };
-                }
 
-                var data = modelFactory(name);
-                node.Data = data;
+                var node = createNewNode(name, guid, modelFactory);
                 observer.OnNext(node);
 
-                var disposable = repository.Value
-                .InsertRoot(guid, name, toType(data))
-                .Subscribe(a =>
-                {
-                    if (a.HasValue && node.Data == null)
-                        node.Data = DataActivator.Activate(a);
-                    Add(node);
-                    observer.OnCompleted();
-                });
-
-                return disposable;
+                return _repository.Value
+                    .InsertRoot(guid, name, GetNodeType(node))
+                    .Subscribe(_ =>
+                    {
+                        Add(node);
+                        observer.OnCompleted();
+                    });
             });
+
+            static INodeViewModel createNewNode(string name, Guid guid, Func<string, object> modelFactory)
+            {
+                var data = (ISetKey)modelFactory(name);
+                data.Key = new GuidKey(guid);
+                return (INodeViewModel)data;
+            }
+
         }
 
+        #region Private Methods
 
 
-        System.Type toType(object data)
+        private static void validateKey(Structs.Repos.Key? key)
         {
-            return data is IGetType { } getType ? getType.GetType() : data.GetType();
+            if (!key.HasValue)
+                throw new Exception(ERROR_KEY_NOT_FOUND);
         }
+
+        private static Type GetNodeType(object node)
+        {
+            return node is IGetType getType ? getType.GetType() : node.GetType();
+        }
+
+        #endregion
+
+
+
+        #region Dispose Pattern
 
         public void Dispose()
         {
-            // Dispose of unmanaged resources.
             Dispose(true);
-            // Suppress finalization.
             GC.SuppressFinalize(this);
         }
-        //The Dispose method performs all object cleanup, so the garbage collector no longer needs to call the objects' Object.Finalize override. Therefore, the call to the SuppressFinalize method prevents the garbage collector from running the finalizer. If the type has no finalizer, the call to GC.SuppressFinalize has no effect. The actual cleanup is performed by the Dispose(bool) method overload.
-
-        //In the overload, the disposing parameter is a Boolean that indicates whether the method call comes from a Dispose method(its value is true) or from a finalizer(its value is false).
-
 
         protected virtual void Dispose(bool disposing)
         {
-            if (_disposed)
-            {
-                return;
-            }
+            if (_disposed) return;
 
             if (disposing)
             {
-                // Dispose managed state (managed objects).
-                // ...
-                compositeDisposable.Dispose();
-                nodes.Clear();
+                _compositeDisposable?.Dispose();
+                _nodes?.Clear();
+                _selections?.Dispose();
+                _dirty?.Dispose();
             }
-
-            // Free unmanaged resources.
-            // ...
 
             _disposed = true;
         }
+
+        #endregion
     }
 
     public class MethodValue
     {
-
         public bool IsAccessed => Task != null || Nodes != null;
         public object Instance { get; set; }
         public Method Method { get; set; }
-
         public Task Task { get; set; }
-
         public IList<INodeViewModel> Nodes { get; set; }
     }
 }

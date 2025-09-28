@@ -1,24 +1,24 @@
-﻿using AngleSharp.Dom;
-using AngleSharp;
-using AngleSharp.Html.Dom;
-using Utility.Trees.Abstractions;
-using Utility.Trees.Extensions.Async;
-using System.Reactive.Linq;
-using Utility.Nodes.Filters;
+﻿using AngleSharp;
+using AngleSharp.Dom;
 using AngleSharp.Html;
-using System.IO;
-using Utility.PropertyNotifications;
-using Utility.PropertyDescriptors;
-using Utility.Models.Trees;
-using Splat;
-using Utility.Interfaces.NonGeneric;
-using Utility.Interfaces;
+using AngleSharp.Html.Dom;
 using Chronic;
+using Splat;
+using System.IO;
+using System.Reactive.Linq;
+using Utility.Interfaces;
+using Utility.Interfaces.Exs.Diagrams;
+using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
+using Utility.Models;
+using Utility.Models.Trees;
+using Utility.Nodes.Meta;
 using Utility.Observables;
 using Utility.Observables.Generic;
-using Utility.Interfaces.Generic;
-using INode = Utility.Interfaces.Exs.INode;
-using Utility.Models;
+using Utility.PropertyDescriptors;
+using Utility.PropertyNotifications;
+using Utility.Trees.Abstractions;
+using Utility.Trees.Extensions.Async;
 
 
 namespace Utility.Nodes.Demo.Filters.Services
@@ -36,30 +36,28 @@ namespace Utility.Nodes.Demo.Filters.Services
 
         public ParserService()
         {
-            Locator.Current.GetService<IObservableIndex<INode>>()[nameof(NodeMethodFactory.BuildContentRoot)]
-                .CombineLatest(Locator.Current.GetService<IObservableIndex<INode>>()[nameof(NodeMethodFactory.BuildHtmlRoot)])
+            Locator.Current.GetService<IObservableIndex<INodeViewModel>>()[nameof(NodeMethodFactory.BuildContentRoot)]
+                .CombineLatest(Locator.Current.GetService<IObservableIndex<INodeViewModel>>()[nameof(NodeMethodFactory.BuildHtmlRoot)])
                 .Subscribe(nodes =>
                 {
                     var (node, htmlNode) = nodes;
 
-                    htmlNode.WithChangesTo(a => a.Data).Subscribe(data =>
+                    if (htmlNode is StringModel stringModel)
                     {
-                        if (data is StringModel stringModel)
+                        AddElementByPositionAsync(node)
+                        .Subscribe(html =>
                         {
-                            AddElementByPositionAsync(node)
-                            .Subscribe(html =>
-                            {
-                                stringModel.Set(html);
-                            }).DisposeWith(this);
+                            stringModel.Set(html);
+                        }).DisposeWith(this);
 
-                            ControlsService.Instance
-                            .Where(a => a.ControlEventType == ControlEventType.Refresh)
-                            .Subscribe(a =>
-                            {
-                                stringModel.Set(AddElementByPosition(node));
-                            }).DisposeWith(this);
-                        }
-                    }).DisposeWith(this);
+                        ControlsService.Instance
+                        .Where(a => a.ControlEventType == ControlEventType.Refresh)
+                        .Subscribe(a =>
+                        {
+                            stringModel.Set(AddElementByPosition(node));
+                        }).DisposeWith(this);
+
+                    }
                 }).DisposeWith(this);
         }
 
@@ -121,11 +119,12 @@ namespace Utility.Nodes.Demo.Filters.Services
 
             IElement newElement;
 
-            if (n != node && dictionary.ContainsKey((n as IGetParent<IReadOnlyTree>).Parent) == false)
-            {
-                return document;
-            }
-            if (n is Utility.Interfaces.Exs.INode _node)
+            if (n is IGetParent<IReadOnlyTree> { Parent: { } parent })
+                if (n != node && dictionary.ContainsKey(parent) == false)
+                {
+                    return document;
+                }
+            if (n is INodeViewModel _node)
             {
                 if (_node.IsVisible == false)
                     return document;
@@ -135,39 +134,39 @@ namespace Utility.Nodes.Demo.Filters.Services
             }
 
 
-            if (n.Data is ICollectionDescriptor collectionDescriptor)
+            if (n is ICollectionDescriptor collectionDescriptor)
             {
                 newElement = document.CreateElement<IHtmlTableElement>();
 
             }
-            else if (n.Data is ICollectionHeadersDescriptor headersDescriptor)
+            else if (n is ICollectionHeadersDescriptor headersDescriptor)
             {
                 newElement = document.CreateElement<IHtmlTableRowElement>();
 
             }
-            else if (n.Data is IHeaderDescriptor headerDescriptor)
+            else if (n is IHeaderDescriptor headerDescriptor)
             {
                 newElement = document.CreateElement<IHtmlTableHeaderCellElement>();
                 newElement.TextContent = headerDescriptor.Name;
 
             }
-            else if ((n as IGetParent<IReadOnlyTree>).Parent?.Data is ICollectionDescriptor collectionItemDescriptor)
+            else if ((n as IGetParent<IReadOnlyTree>).Parent is ICollectionDescriptor collectionItemDescriptor)
             {
-                if (n.Data is IReferenceDescriptor)
+                if (n is IReferenceDescriptor)
                     newElement = document.CreateElement<IHtmlTableRowElement>();
                 else
                     throw new Exception(" s33 sdsd");
                 //newElement = document.CreateElement<IHtmlTableDataCellElement>();
             }
-            else if (n.Data is IPropertiesDescriptor prsdescriptor)
+            else if (n is IPropertiesDescriptor prsdescriptor)
             {
                 dictionary[n] = dictionary[(n as IGetParent<IReadOnlyTree>).Parent];
                 return document;
             }
-            else if ((n as IGetParent<IReadOnlyTree>).Parent?.Data is IPropertiesDescriptor _prsdescriptor && n.Data is IValueDescriptor descriptor1)
+            else if ((n as IGetParent<IReadOnlyTree>).Parent is IPropertiesDescriptor _prsdescriptor && n is IValueDescriptor descriptor1)
             {
                 newElement = document.CreateElement<IHtmlTableDataCellElement>();
-                newElement.TextContent = (descriptor1 as IValue).Value?.ToString();
+                newElement.TextContent = (descriptor1 as IGetValue).Value?.ToString();
             }
             else
             {
@@ -182,7 +181,7 @@ namespace Utility.Nodes.Demo.Filters.Services
 
 
 
-            newElement.ClassName = n.Data.ToString();
+            newElement.ClassName = n.ToString();
             dictionary[n] = newElement;
 
 
@@ -201,7 +200,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 //body.AppendChild(newElement);
             }
 
-            if (n.Data is Utility.Interfaces.NonGeneric.IDescriptor descriptor)
+            if (n is IDescriptor descriptor)
             {
                 var key = StyleSelector.Instance.SelectKey(n);
 
@@ -212,16 +211,16 @@ namespace Utility.Nodes.Demo.Filters.Services
                 //{
                 //}
 
-                if ((n as IGetParent<IReadOnlyTree>).Parent?.Data is IPropertiesDescriptor _prsdescriptor && n.Data is IValueDescriptor descriptor1)
+                if ((n as IGetParent<IReadOnlyTree>).Parent is IPropertiesDescriptor _prsdescriptor && n is IValueDescriptor descriptor1)
                 {
 
                 }
-                else if (descriptor is Utility.Interfaces.NonGeneric.IValue { Value: var value })
+                else if (descriptor is Utility.Interfaces.NonGeneric.IGetValue { Value: var value })
                 {
                     var innerElement = create(value);
                     newElement.AppendChild(innerElement);
                 }
-                else if ((n as IGetParent<IReadOnlyTree>).Parent.Data is ICollectionHeadersDescriptor headersDescriptor)
+                else if ((n as IGetParent<IReadOnlyTree>).Parent is ICollectionHeadersDescriptor headersDescriptor)
                 {
 
                 }
@@ -230,7 +229,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                 //    var p = document.CreateElement<IHtmlParagraphElement>();
                 //    newElement.AppendChild();
                 //}
-                else if (descriptor is IReferenceDescriptor iRef && (n as IGetParent<IReadOnlyTree>).Parent.Data is not ICollectionDescriptor)
+                else if (descriptor is IReferenceDescriptor iRef && (n as IGetParent<IReadOnlyTree>).Parent is not ICollectionDescriptor)
                 {
                     //var index = (n as IIndex).Index.Local.ToString();
                     var x = (n as ITree).Index.ToString().Split('.').Length;
@@ -239,7 +238,7 @@ namespace Utility.Nodes.Demo.Filters.Services
                     p.TextContent = iRef.Name;
                     newElement.AppendChild(p);
                 }
-                else if (descriptor is IPropertiesDescriptor prd && (n as IGetParent<IReadOnlyTree>).Parent.Data is not ICollectionDescriptor)
+                else if (descriptor is IPropertiesDescriptor prd && (n as IGetParent<IReadOnlyTree>).Parent is not ICollectionDescriptor)
                 {
                     //var p = document.CreateElement<IHtmlParagraphElement>();
                     //p.TextContent = iRef.Name;

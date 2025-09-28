@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using Utility.Entities.Comms;
 using Utility.Enums;
 using Utility.Helpers.Reflection;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Keys;
 using Utility.Models;
 using Utility.Models.Trees;
@@ -101,7 +103,7 @@ namespace Utility.Nodes.Meta
         {
             return nodeSource.Create(controls,
                 controlsGuid,
-                s => new Model(() => [new CommandModel { Name = Save }, new CommandModel { Name = Refresh }, new CommandModel { Name = Run }],
+                s => new Model(() => [new CommandModel<SaveEvent> { Name = Save }, new CommandModel<RefreshEvent> { Name = Refresh }, new CommandModel<RunEvent> { Name = Run }],
                 n => { n.IsExpanded = true; n.Orientation = Enums.Orientation.Horizontal; })
                 { Name = s });
         }
@@ -110,7 +112,7 @@ namespace Utility.Nodes.Meta
         {
             return nodeSource.Create(input_control,
                 input_controlGuid,
-                s => new Model(() => [new CommandModel { Name = Select }, new CommandModel { Name = Cancel }], n =>
+                s => new Model(() => [new CommandModel<SelectEvent> { Name = Select }, new CommandModel<CancelEvent> { Name = Cancel }], n =>
                 {
                     n.IsExpanded = true; n.Orientation = Enums.Orientation.Horizontal; n.IsContentVisible = false;
                 })
@@ -141,14 +143,14 @@ namespace Utility.Nodes.Meta
         {
             return nodeSource.Create(transformers,
                 transformerGuid,
-                s => new TransformersModel(nodeAction: n => n.IsExpanded = true) { Name = s });
+                s => new TransformersModel() { Name = s,  IsExpanded = true });
         }
 
         public IObservable<INodeViewModel> BuildFiltersRoot()
         {
             return nodeSource.Create(filters,
                 filterGuid,
-                s => new FiltersModel(nodeAction: n => { n.IsExpanded = true; n.Orientation = Enums.Orientation.Vertical; }) { Name = s });
+                s => new FiltersModel() { Name = s, IsExpanded = true, Orientation = Orientation.Vertical });
         }
 
 
@@ -156,7 +158,7 @@ namespace Utility.Nodes.Meta
         {
             return nodeSource.Create(and_or,
                 and_orGuid,
-                s => new AndOrModel(nodeAction: n => { n.IsExpanded = true; n.Orientation = Enums.Orientation.Vertical; }) { Name = s });
+                s => new AndOrModel() { IsExpanded = true, Orientation = Enums.Orientation.Vertical });
         }
 
 
@@ -185,7 +187,7 @@ namespace Utility.Nodes.Meta
         public INodeViewModel BuildDirty()
         {
             var data = new DirtyModels { Name = dirty };
-            var node = new INodeViewModel(data)
+            var node = new NodeViewModel(data)
             {
                 Key = new GuidKey(guid)
             };
@@ -194,9 +196,7 @@ namespace Utility.Nodes.Meta
 
         public IObservable<INodeViewModel> BuildContentRoot()
         {
-            return nodeSource.Create("Root", contentGuid, s => new Model() { Name = s });
-
-
+            return nodeSource.Create("Root", contentGuid, s => new CollectionModel() { Name = s });
         }
 
         public IObservable<INodeViewModel> BuildDemoContentRoot()

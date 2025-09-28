@@ -1,24 +1,26 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using LanguageExt;
 using Newtonsoft.Json;
-using Utility.Helpers.NonGeneric;
-using Utility.Helpers;
-using Utility.Keys;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using Splat;
+using System.Diagnostics;
+using System.Reflection;
+using Utility.Enums;
+using Utility.Helpers;
+using Utility.Helpers.NonGeneric;
+using Utility.Helpers.Reflection;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
-using System.Reflection;
+using Utility.Keys;
 using Utility.Structs;
-using Utility.Enums;
-using LanguageExt;
-using Utility.Helpers.Reflection;
 
 namespace Utility.Nodes
 {
-    public class NodeConverter : JsonConverter<Node>
+    public class NodeConverter : JsonConverter<NodeViewModel>
     {
         private FieldInfo fieldInfo;
 
-        public override void WriteJson(JsonWriter writer, Node value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, NodeViewModel value, JsonSerializer serializer)
         {
             // Begin object
             writer.WriteStartObject();
@@ -62,13 +64,13 @@ namespace Utility.Nodes
                 var jObject = JToken.FromObject(value.Data, serializer);
                 jObject.WriteTo(writer);
             }
-            if (value.Items.Any() && value.Data is not IBreadCrumb)
+            if (value.Children.Any() && value.Data is not IBreadCrumb)
             {
                 writer.WritePropertyName("Items");
                 JArray jArray = [];  // Create a JArray to hold the items
 
                 int index = 0;
-                foreach (var item in value.Items)
+                foreach (var item in value.Children)
                 {
                     // Create a key based on the index or a custom logic
                     //jObject.AddAfterSelf(JToken.FromObject(item));
@@ -88,12 +90,12 @@ namespace Utility.Nodes
             }
 
             writer.WritePropertyName($"$isenum");
-            serializer.Serialize(writer, new[] { nameof(Node.Arrangement), nameof(Node.Orientation) });
+            serializer.Serialize(writer, new[] { nameof(NodeViewModel.Arrangement), nameof(NodeViewModel.Orientation) });
 
             writer.WriteEndObject();
         }
 
-        public override Node ReadJson(JsonReader reader, Type objectType, Node existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override NodeViewModel ReadJson(JsonReader reader, Type objectType, NodeViewModel? existingValue, bool hasExistingValue, JsonSerializer serializer)
         {
             if (reader.TokenType == JsonToken.Null)
             {
@@ -103,16 +105,17 @@ namespace Utility.Nodes
 
             JObject jObject = JObject.Load(reader);
 
-            Node node = null;
+            NodeViewModel node = null;
             if (jObject.TryGetValue("Data", StringComparison.InvariantCultureIgnoreCase, out var data))
             {
                 var type = Type.GetType(data["$type"].ToString());
+                Trace.WriteLine(type);
                 var _data = data.ToObject(type, serializer);
-                node = new Node(_data);
+                node = new NodeViewModel(_data) { Input = [], Output = [] };
             }
             else
             {
-                node = new Node();
+                node = new NodeViewModel() { Input = [], Output = [] };
             }
 
             node.Key = new GuidKey(Guid.Parse(jObject["Key"].ToString()));
@@ -153,7 +156,7 @@ namespace Utility.Nodes
             {
                 foreach (var item in items)
                 {
-                    var _node = item.ToObject<Node>(serializer);
+                    var _node = item.ToObject<NodeViewModel>(serializer);
                     _node.Parent = node;
                     node.Add(_node);
                 }
@@ -165,10 +168,30 @@ namespace Utility.Nodes
                 ((INodeSource)Utility.Globals.Resolver.Resolve(typeof(INodeSource))).Single(key).Subscribe(current =>
                 {
                     //node.Current = current;
-                    node.SetFieldValue(ViewModelTree.Field(nameof(ViewModelTree.Current)), current, ref fieldInfo);
+                    node.Set(current, nameof(ViewModelTree.Current));
                 });
             }
             return node;
+        }
+    }
+
+    public class CustomSerializationBinder : ISerializationBinder
+    {
+        public Type BindToType(string assemblyName, string typeName)
+        {
+            if (typeName == "System.Reflection.PropertyInfo")
+            {
+                // Return PropertyInfo type so your converter can handle it
+                return typeof(PropertyInfo);
+            }
+
+            return Type.GetType($"{typeName}, {assemblyName}");
+        }
+
+        public void BindToName(Type serializedType, out string assemblyName, out string typeName)
+        {
+            assemblyName = serializedType.Assembly.FullName;
+            typeName = serializedType.FullName;
         }
     }
 }

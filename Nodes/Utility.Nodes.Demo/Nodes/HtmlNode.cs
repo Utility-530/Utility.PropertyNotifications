@@ -13,7 +13,7 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Demo
 {
-    internal class HtmlNode : Node<object>
+    internal class HtmlNode : NodeViewModel<object>
     {
         private IElement type;
         bool flag;

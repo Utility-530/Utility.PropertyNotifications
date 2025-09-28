@@ -1,5 +1,6 @@
 ﻿using System.Reactive.Linq;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
 using Utility.PropertyNotifications;
@@ -11,7 +12,7 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
 {
     internal class TempNodeEngine : INodeSource
     {
-        private static HashSet<INode> nodes = new();
+        private static HashSet<INodeViewModel> nodes = new();
 
         public TempNodeEngine()
         {
@@ -19,7 +20,7 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
 
         public string New { get; }
 
-        public void Add(INode node)
+        public void Add(INodeViewModel node)
         {
 
             //_node.Key = new GuidKey();
@@ -34,13 +35,7 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
                 }
             }   
 
-            if (node is INode { Data: ISetNode setNode })
-            {
-                setNode.SetNode(node);
-
-            }
-
-            node.Items.AndChanges<INode>().Subscribe(set =>
+            node.Children.AndChanges<INodeViewModel>().Subscribe(set =>
             {
                 foreach (var change in set)
                 {
@@ -50,7 +45,7 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
                     }
                 }
             });
-            if (node.Data is IYieldChildren children)
+            if (node is IYieldItems children)
             {
                 node.WithChangesTo(a => a.IsExpanded)
                     .Where(a => a)
@@ -58,15 +53,15 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
                     .Subscribe(a =>
                     {
                         children
-                            .Children
+                            .Items()
                             .AndAdditions()
                             .Subscribe(async d =>
                             {
-                                if (node.Any(a => a.Data.ToString().Equals(d.ToString())))
+                                if (node.Any(a => a.ToString().Equals(d.ToString())))
                                 {
                                     return;
                                 }
-                                var _new = (INode)await node.ToTree(d);
+                                var _new = (INodeViewModel)await node.ToTree(d);
                                 node.Add(_new);
                             });
                     });
@@ -75,7 +70,7 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
 
         }
 
-        public IObservable<INode> Create(string name, Guid guid, Func<string, object> modelFactory)
+        public IObservable<INodeViewModel> Create(string name, Guid guid, Func<string, object> modelFactory)
         {
             throw new NotImplementedException();
         }
@@ -100,7 +95,7 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
             throw new NotImplementedException();
         }
 
-        public void Remove(INode node)
+        public void Remove(INodeViewModel node)
         {
             throw new NotImplementedException();
         }
@@ -120,7 +115,7 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
             throw new NotImplementedException();
         }
 
-        public IObservable<INode?> Single(string v)
+        public IObservable<INodeViewModel?> Single(string v)
         {
             throw new NotImplementedException();
         }
@@ -130,13 +125,18 @@ namespace Utility.Nodes.Demo.Filters.Infrastructure
             throw new NotImplementedException();
         }
 
-        public IObservable<INode> FindChild(INode node, Guid guid)
+        public IObservable<INodeViewModel> FindChild(INodeViewModel node, Guid guid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveBy(Predicate<INodeViewModel> predicate)
         {
             throw new NotImplementedException();
         }
 
         public static TempNodeEngine Instance { get; } = new TempNodeEngine();
-        public IReadOnlyCollection<INode> Nodes { get; }
-        public IObservable<INode> Selections { get; }
+        public IReadOnlyCollection<INodeViewModel> Nodes { get; }
+        public IObservable<INodeViewModel> Selections { get; }
     }
 }

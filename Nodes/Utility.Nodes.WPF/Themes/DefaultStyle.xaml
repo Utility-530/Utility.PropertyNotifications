@@ -16,7 +16,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style x:Key="DefaultStyle" TargetType="{x:Type trees:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type trees:CustomTreeViewItem}}">
-        <Setter Property="Header" Value="{Binding Data}"/>
+        <!--<Setter Property="Header" Value="{Binding Data}"/>-->
         <Setter Property="ToolTip" Value="{Binding Key}"></Setter>
         <!--<Setter Property="ChildrenSelector" Value="{StaticResource ChildrenSelector}"/>-->
         <Setter Property="NodeItemsSource">

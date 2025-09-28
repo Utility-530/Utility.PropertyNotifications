@@ -6,15 +6,15 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Reflections
 {
-    public class DescriptorNode : Node<IDescriptor>
+    public class DescriptorNode : NodeViewModel<IDescriptor>
     {
         IDescriptor data;
 
         public DescriptorNode(IDescriptor propertyData)
         {
             this.Data = propertyData;
-            if (data is IYieldChildren children)
-                children.Children.Cast<IDescriptor>().ForEach(a => changes.OnNext(new(a, Changes.Type.Add)));
+            if (data is IYieldItems children)
+                children.Items().Cast<IDescriptor>().ForEach(a => changes.OnNext(new(a, Changes.Type.Add)));
         }
 
         //public ReflectionNode()

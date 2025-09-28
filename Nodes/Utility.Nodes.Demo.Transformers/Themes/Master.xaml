@@ -5,8 +5,7 @@
              xmlns:filters="clr-namespace:Utility.Nodes.WPF;assembly=Utility.WPF.Trees" 
              xmlns:wpf="clr-namespace:Utility.Nodes.WPF;assembly=Utility.Nodes.WPF" 
              xmlns:node="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
-             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
-             xmlns:inf="clr-namespace:Utility.Nodes.Filters;assembly=Utility.Nodes.Filters"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"                    
              xmlns:trees="clr-namespace:Utility.Models.Trees;assembly=Utility.Models.Trees"
              xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"                       
              xmlns:conv="http://schemas.utility.com/converters"
@@ -119,7 +118,7 @@
                                                x:Name="ContentTreeView"
                                                tc:Ex.UsesCustomEventHandler="True">
                                 <!--<TreeView.ItemTemplate>
-                                    <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                         <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
                                             <ContentControl Content="{Binding Name}"/>
                                         </Border>

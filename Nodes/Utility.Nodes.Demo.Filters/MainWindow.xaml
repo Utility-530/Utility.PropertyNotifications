@@ -30,9 +30,9 @@
                 <Setter Property="ItemContainerStyleSelector" Value="{x:Static local:StyleSelector.Instance}"></Setter>
             </Style>-->
 
-            <DataTemplate DataType="{x:Type m:CollectionRootModel}">
+            <!--<DataTemplate DataType="{x:Type m:CollectionRootModel}">
                 <TextBlock Text="{Binding Name}"/>
-            </DataTemplate>
+            </DataTemplate>-->
 
 
         </ResourceDictionary>

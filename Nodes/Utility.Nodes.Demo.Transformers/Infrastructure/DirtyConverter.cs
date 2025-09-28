@@ -17,7 +17,7 @@ namespace Utility.Nodes.Demo.Transformers
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value is RoutedPropertyChangedEventArgs<object> { NewValue: Node { Data: DirtyModel { SourceKey: { } sourceKey } } newValue } args)
+            if(value is RoutedPropertyChangedEventArgs<object> { NewValue: NodeViewModel { Data: DirtyModel { SourceKey: { } sourceKey } } newValue } args)
             {
                 var x = Locator.Current.GetService<INodeSource>();
                 var single = x.Single(sourceKey).ToTask().Result;

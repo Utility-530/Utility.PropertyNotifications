@@ -12,6 +12,7 @@ using Utility.Trees.Extensions;
 using Utility.Helpers;
 using Utility.Interfaces.NonGeneric;
 using Utility.Interfaces.NonGeneric.Data;
+using Utility.Extensions;
 
 namespace Utility.Nodes.Demo.Queries
 {
@@ -31,8 +32,8 @@ namespace Utility.Nodes.Demo.Queries
 
             if (item is IKey key)
             {
-                (container as Control).SetResourceReference(Control.TemplateProperty, key.Key);
-                Application.Current.Resources[key.Key] = baseStyle.Setters.OfType<Setter>().Single(a => a.Property == Control.TemplateProperty).Value;
+                (container as Control).SetResourceReference(Control.TemplateProperty, key.Key());
+                Application.Current.Resources[key.Key()] = baseStyle.Setters.OfType<Setter>().Single(a => a.Property == Control.TemplateProperty).Value;
 
             }
             else if (item is IId id)
@@ -62,15 +63,9 @@ namespace Utility.Nodes.Demo.Queries
                                 {
                                     if (filter.Body != null)
                                     {
-                                        var node = JsonConvert.DeserializeObject<Node>(filter.Body);
-                                        node.SelfAndDescendants().ForEach(a =>
-                                        {
-                                            if (a.Data is ISetNode setNode)
-                                                setNode.SetNode((INode)a);
-                                        });
+                                        var node = JsonConvert.DeserializeObject<NodeViewModel>(filter.Body);
 
-
-                                        if (node.Data is AndOrModel { } andOrModel)
+                                        if (node is AndOrModel { } andOrModel)
                                         {
                                             if (andOrModel.Evaluate(item))
                                             {

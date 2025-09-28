@@ -1,8 +1,6 @@
-﻿using MaterialDesignThemes.Wpf;
-using System;
+﻿using System;
 using System.Collections;
 using System.Linq;
-using Utility.Interfaces.Generic;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Extensions;
@@ -26,8 +24,8 @@ namespace Utility.Nodes.Demo.Infrastructure
 
         public IEnumerable Children(Type type)
         {
-            if (root.Descendant((a) => (Type)a.tree.Data == type) is { } branch)
-                return branch.Items.Cast<IReadOnlyTree>().Select(a => a.Data).ToArray();
+            if (root.Descendant((a) => (Type)a.tree.Data == type) is IReadOnlyTree branch)
+                return branch.Children.Cast<IReadOnlyTree>().Select(a => a.Data).ToArray();
             return Array.Empty<Type>();
         }
 
@@ -40,7 +38,7 @@ namespace Utility.Nodes.Demo.Infrastructure
         {
             if (root.Descendant(a => (Type)a.tree.Data == parent) is Tree branch)
                 branch.Add(child);
-            else if (root.Items.Count == 0)
+            else if (root.Children.Count == 0)
             {
                 root.Data = parent;
                 Register(parent, child);

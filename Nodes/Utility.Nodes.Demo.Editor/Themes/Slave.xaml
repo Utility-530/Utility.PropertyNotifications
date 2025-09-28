@@ -6,7 +6,6 @@
              xmlns:ct="http://schemas.utility.com/trees"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
              xmlns:sys="clr-namespace:System;assembly=System.Runtime"
-             xmlns:inf="clr-namespace:Utility.Nodes.Filters;assembly=Utility.Nodes.Filters"
              xmlns:hc="https://handyorg.github.io/handycontrol"
              xmlns:beh="http://schemas.utility.com/behaviors"
              xmlns:att="http://schemas.utility.com/attached"
@@ -85,7 +84,7 @@
                             <Grid  Grid.Column="0">
                                 <ct:CustomTreeView ItemsSource="{Binding Content}" ItemContainerStyleSelector="{StaticResource StyleSelector }" >
                                     <TreeView.ItemTemplate>
-                                        <HierarchicalDataTemplate ItemsSource="{Binding Items}">
+                                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                             <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
                                                 <ContentControl Content="{Binding Path=.}" ContentTemplateSelector="{x:Static filters:DataTemplateSelector.Instance}"/>
                                             </Border>

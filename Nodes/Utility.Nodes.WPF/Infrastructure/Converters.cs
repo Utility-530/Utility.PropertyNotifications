@@ -16,23 +16,11 @@ using Utility.Interfaces.Exs;
 using System.Text.RegularExpressions;
 using System.IO;
 using Utility.Interfaces.Generic;
+using Utility.Interfaces.Exs.Diagrams;
+using System.Collections;
 
 namespace Utility.Nodes.WPF
 {
-    public class NewObjectConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            var x = (value as IProliferation).Proliferation().FirstOrDefault();
-            return x;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
 
     public class FinishEditConverter : IValueConverter
     {
@@ -55,10 +43,10 @@ namespace Utility.Nodes.WPF
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is ChangeRoutedEventArgs { Type: Changes.Type.Add, Instance: INode nObject } args)
+            if (value is ChangeRoutedEventArgs { Type: Changes.Type.Add, Instance: INodeViewModel nObject } args)
             {
                 args.Handled = true;
-                if (nObject is { Data: DataFileModel model } && nObject is IGetParent<INode> { Parent.Data: DataFilesModel { Collection: { } collection } dModels })
+                if (nObject is  DataFileModel model  && nObject is IGetParent<INodeViewModel> { Parent: DataFilesModel { Children: { } collection } dModels })
                 {
                     var alias = toFileName(dModels, model);
 
@@ -73,19 +61,19 @@ namespace Utility.Nodes.WPF
             {
                 var match = Regex.Match(dataFileModel.Alias, "(.*)_(\\d)$");
                 return match.Success ?
-                    name(match.Groups[1].Value, dataFilesModel.Collection) :
-                    name(dataFileModel.Alias, dataFilesModel.Collection);
+                    name(match.Groups[1].Value, dataFilesModel.Children) :
+                    name(dataFileModel.Alias, dataFilesModel.Children);
 
-                static string name(string name, IEnumerable<DataFileModel> dataFilesModel)
+                static string name(string name, IEnumerable dataFilesModel)
                 {
                     if (_match(name, dataFilesModel) is { } match)
                     {
                         return name + "_" + (int.Parse(match.Groups[1].Value) + 1);
                     }
                     return name + "_1";
-                    static Match? _match(string x, IEnumerable<DataFileModel> dataFilesModel)
+                    static Match? _match(string x, IEnumerable dataFilesModel)
                     {
-                        return dataFilesModel.Select(a => Regex.Match(a.Name, $"{x}_(\\d)$")).Where(a => a.Success).OrderBy(a => a.Groups[2]).LastOrDefault();
+                        return dataFilesModel.Cast<DataFileModel>().Select(a => Regex.Match(a.Name, $"{x}_(\\d)$")).Where(a => a.Success).OrderBy(a => a.Groups[2]).LastOrDefault();
                     }
                 }
 
@@ -124,7 +112,7 @@ namespace Utility.Nodes.WPF
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: IReadOnlyTree { Data: TypeModel { Type: Type type } } })
+            if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value:  TypeModel { Type: Type type }  })
             {
                 if (parameter is IGetKey { Key: string key } && Guid.TryParse(key, out var guid))
                 {
@@ -132,7 +120,7 @@ namespace Utility.Nodes.WPF
                     return root;
                 }
             }
-            else if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: IReadOnlyTree { Data: AssemblyModel { Assembly: Assembly ass } } })
+            else if (value is ComboBoxTreeView.SelectedNodeEventArgs { Value: AssemblyModel { Assembly: Assembly ass } })
             {
                 return DependencyProperty.UnsetValue;
             }

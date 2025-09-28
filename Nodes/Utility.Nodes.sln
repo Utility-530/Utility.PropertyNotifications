@@ -97,7 +97,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodes.Demo.Breadcru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodes.Demo.Editor", "Utility.Nodes.Demo.Editor\Utility.Nodes.Demo.Editor.csproj", "{D19A5BC8-9E15-468B-9CC8-CFE4201EF660}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodes.Meta", "Utility.Nodes.Filters\Utility.Nodes.Meta.csproj", "{59B453D0-81C0-4787-9ECE-D852C9CD66A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodes.Meta", "Utility.Nodes.Meta\Utility.Nodes.Meta.csproj", "{59B453D0-81C0-4787-9ECE-D852C9CD66A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextBoxEx", "..\External\TextBoxEx\TextBoxEx.csproj", "{92BB12E4-ECEB-49C1-8009-517A4203D53F}"
 EndProject
@@ -222,6 +222,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Models.Diagrams", "..\Models\Utility.Models.Diagrams\Utility.Models.Diagrams.csproj", "{0093F7DB-1833-7EDC-A87B-7655201520EB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Services.Meta", "..\Infrastructure\Utility.Services.Meta\Utility.Services.Meta.csproj", "{12A5B943-28A2-31B8-428A-26D5BFF691B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodify.Base", "..\Nodify\Utility.Nodify.Base\Utility.Nodify.Base.csproj", "{66E9E149-E8FE-59A3-9134-24F2C275CA88}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Models.Templates", "Utility.Models.Templates\Utility.Models.Templates.csproj", "{A703B35A-A6B9-4026-8DA4-A247EFB198A3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -649,6 +653,14 @@ Global
 		{12A5B943-28A2-31B8-428A-26D5BFF691B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{12A5B943-28A2-31B8-428A-26D5BFF691B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12A5B943-28A2-31B8-428A-26D5BFF691B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66E9E149-E8FE-59A3-9134-24F2C275CA88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66E9E149-E8FE-59A3-9134-24F2C275CA88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66E9E149-E8FE-59A3-9134-24F2C275CA88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66E9E149-E8FE-59A3-9134-24F2C275CA88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A703B35A-A6B9-4026-8DA4-A247EFB198A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A703B35A-A6B9-4026-8DA4-A247EFB198A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A703B35A-A6B9-4026-8DA4-A247EFB198A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A703B35A-A6B9-4026-8DA4-A247EFB198A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -751,6 +763,8 @@ Global
 		{F48DBCBE-F481-0A93-A2EF-D0EF2D756E82} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{0093F7DB-1833-7EDC-A87B-7655201520EB} = {3E113198-90F6-4584-81A9-8CA2724455B2}
 		{12A5B943-28A2-31B8-428A-26D5BFF691B1} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{66E9E149-E8FE-59A3-9134-24F2C275CA88} = {3E113198-90F6-4584-81A9-8CA2724455B2}
+		{A703B35A-A6B9-4026-8DA4-A247EFB198A3} = {28597BEF-6983-4377-A102-82F69FF978DE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B1F5991F-9180-4F40-A959-E24A6DDA6C5C}

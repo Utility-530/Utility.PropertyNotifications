@@ -25,7 +25,7 @@
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Trees\Utility.WPF.Trees.csproj" />
 		<ProjectReference Include="..\Utility.Nodes.Demo.Filters\Utility.Nodes.Demo.Filters.csproj" />
 		<ProjectReference Include="..\Utility.Nodes.WPF\Utility.Nodes.WPF.csproj" />
-		<ProjectReference Include="..\Utility.Nodes.Filters\Utility.Nodes.Meta.csproj" />
+		<ProjectReference Include="..\Utility.Nodes.Meta\Utility.Nodes.Meta.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
