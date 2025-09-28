@@ -64,7 +64,7 @@ namespace Pather.CSharp
 
                 }
 
-                pathElements.Last().Apply(tempResult, value);
+                pathElements.LastOrDefault()?.Apply(tempResult, value);
                 if(tempResult.GetType().GetTypeInfo().IsValueType)
                 {
                     pathElements[pathElements.Count - 2].Apply(tempResults[tempResults.Count-2], tempResult);
