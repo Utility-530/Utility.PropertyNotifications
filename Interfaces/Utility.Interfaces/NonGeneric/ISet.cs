@@ -2,6 +2,6 @@
 {
     public interface ISet
     {
-        public void Set(object value);
+        public void Set(object value, string name);
     }
 }

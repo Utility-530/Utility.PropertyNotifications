@@ -1,6 +1,12 @@
-﻿namespace Utility.Interfaces.Generic
+﻿using Utility.Interfaces.NonGeneric;
+
+namespace Utility.Interfaces.Generic
 {
-    public interface IValue<T> : Utility.Interfaces.NonGeneric.IValue
+    public interface IValue<T> : IGetValue<T>, ISetValue<T> 
+    {
+        new T Value { get; set; }
+    }
+    public interface IGetValue<T> : Utility.Interfaces.NonGeneric.IGetValue
     {
         new T Value { get; }
     }

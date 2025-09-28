@@ -2,8 +2,10 @@
 
 namespace Utility.Interfaces.NonGeneric
 {
-    public interface IItems
+    public interface IYieldItems
     {
-        IEnumerable Items { get; }
+        IEnumerable Items();// { get; }
     }
+
+
 }
