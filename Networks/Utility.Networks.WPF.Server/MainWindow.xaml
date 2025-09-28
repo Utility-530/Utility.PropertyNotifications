@@ -1,0 +1,88 @@
+﻿<Window x:Class="Utility.Networks.WPF.Server.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Utility.Networks.WPF.Server"
+        xmlns:local1="clr-namespace:Utility.Networks.WPF.Server.ViewModels"
+        xmlns:objects="http://schemas.utility.com/objects" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        mc:Ignorable="d"
+        xmlns:conv="http://schemas.utility.com/converters"
+        Title="MainWindow" Height="450" Width="800">
+    <FrameworkElement.Resources>
+    </FrameworkElement.Resources>
+    <Window.DataContext>
+        <local1:MainWindowViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.2*"/>
+
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Column="0" Grid.Row="0"
+                    Margin="5"
+                    Background="WhiteSmoke">
+            <Label>Port</Label>
+            <TextBox Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}" />
+            <Label Content="{Binding Status}" ContentStringFormat="Status: {0}"/>
+            <Button Margin="5" Command="{Binding RunCommand}">Run</Button>
+            <Button Margin="5,0" Command="{Binding StopCommand}">Stop</Button>
+        </StackPanel>
+
+        <DockPanel Grid.Column="1" Grid.Row="0" DataContext="{Binding Server}">
+            <Border  Margin="5">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.3*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <ListView ItemsSource="{Binding Connections}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Guid}"/>
+                                <GridViewColumn Header="Address" Width="150" DisplayMemberBinding="{Binding EndPoint.Address}"/>
+                                <GridViewColumn Header="Port" Width="150" DisplayMemberBinding="{Binding EndPoint.Port}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                    <ListView Grid.Row="1" ItemsSource="{Binding PacketEvents}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Type" Width="120" DisplayMemberBinding="{Binding Type}"/>
+
+                                <GridViewColumn Header="Sender" Width="100" DisplayMemberBinding="{Binding Sender}"/>
+                                <GridViewColumn Header="Receiver" Width="100" DisplayMemberBinding="{Binding Receiver}"/>
+                                <GridViewColumn Header="Packet" Width="500">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <objects:ObjectControl Object="{Binding Packet}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+
+                <!--<objects:JsonControl>
+                    <i:Interaction.Behaviors>
+                        <objects:ObjectBehavior Object="{Binding Server}" RaisePropertyChanged="True">
+                            <objects:ObjectBehavior.Collections>
+                                <MultiBinding Converter="{StaticResource CollectionsToEnumerableConverter}">
+                                    <Binding Path="Server.Connections"/>
+                                    <Binding Path="Server.PacketEvents"/>
+                                </MultiBinding>
+                            </objects:ObjectBehavior.Collections>
+                        </objects:ObjectBehavior>
+                    </i:Interaction.Behaviors>
+                </objects:JsonControl>-->
+            </Border>
+        </DockPanel>
+    </Grid>
+</Window>
