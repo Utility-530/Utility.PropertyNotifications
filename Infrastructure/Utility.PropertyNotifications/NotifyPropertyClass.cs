@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 using Utility.Interfaces;
 
 namespace Utility.PropertyNotifications
@@ -29,6 +30,8 @@ namespace Utility.PropertyNotifications
         /// Raised when a property on this object has a new value.
         /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        public bool IsPropertyChangedNotNull => PropertyChanged != null;
 
         /// <summary>
         /// Raises this object's PropertyChanged event.
@@ -111,7 +114,7 @@ namespace Utility.PropertyNotifications
         private SynchronizationContext? context;
         private readonly bool raisePropertyCalled;
 
-
+        [JsonIgnore]
         public IEnumerable<PropertyCalledEventArgs> MissedCalls => missedCalls;
 
         /// <summary>
@@ -143,7 +146,7 @@ namespace Utility.PropertyNotifications
                 }
                 else if (context != null)
                     context.Post(a => missedCalls.Add(args), args);
-                    
+
             }
             return false;
         }
