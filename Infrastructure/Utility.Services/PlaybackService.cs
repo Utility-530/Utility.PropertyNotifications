@@ -14,13 +14,12 @@ using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Services
 {
-    public class PlaybackService : IObservable<ZMovement>, IObserver<Playback>, IValue<Playback>
+    public class PlaybackService : IObservable<ZMovement>, IObserver<Playback>, IGetValue<Playback>
     {
         ReplaySubject<ZMovement> movement = new(1);
 
         public Playback Value { get; set; } = Playback.Pause;
-        object IValue.Value => (object)Value;
-
+        object IGetValue.Value => Value;
         public PlaybackService()
         {
         }
@@ -70,22 +69,3 @@ namespace Utility.Services
         }
     }
 }
-
-
-//using (var timer = new TaskTimer(1000).CancelWith(token).Start())
-//{
-//    try
-//    {
-//        foreach (var task in timer)
-//        {
-//            await task;
-
-        
-
-//        }
-//    }
-//    catch (TaskCanceledException)
-//    {
-//        Console.WriteLine("Timer Canceled");
-//    }
-//}
