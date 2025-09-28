@@ -18,12 +18,13 @@ namespace Utility.Models.Diagrams
                     IsActive = true;
                     OnPropertyChanged(nameof(IsActive));
                 });
+            Property = propertyInfo;
         
         }
 
         public bool IsActive { get; set; }
 
-        public PropertyInfo Parameter { get; set; }
+        public PropertyInfo Property { get; set; }
     }
 
 }

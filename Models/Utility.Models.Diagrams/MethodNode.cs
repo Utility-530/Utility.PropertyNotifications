@@ -1,4 +1,5 @@
 ﻿using DryIoc;
+using Splat;
 using System.Reflection;
 using Utility.Extensions;
 using Utility.Interfaces.Exs;
@@ -19,9 +20,14 @@ namespace Utility.Models.Diagrams
         public Action next;
         private bool isActive;
         private Exception exception;
+        private object? instance;
 
-        public MethodNode(MethodInfo method, object instance)
+        public MethodNode(MethodInfo method, object? instance = null)
         {
+            if (method.IsStatic == false)
+            {
+                this.instance = instance ??= Locator.Current.GetService(method.DeclaringType);
+            }
             this.method = method;
             parameters = method.GetParameters();
             if (method.ReturnType != typeof(void))
@@ -30,16 +36,15 @@ namespace Utility.Models.Diagrams
             }
             inValues = new(() => parameters.ToDictionary(a => a.Name ?? throw new Exception("s e!"), a =>
             {
-                var model = new MethodConnector { Key = a.Name, Parameter =a };
+                var model = new MethodConnector { Key = a.Name, Parameter = a };
                 model
                 .Subscribe(value =>
-                {  
+                {
                     Action? undoaction = new(() => { });
                     bool contains = values.ContainsKey(a.Name);
                     var previousResult = OutValue?.Value;
                     if (values.TryGetValue(a.Name, out var oldValue))
                     {
-
                         undoaction = new Action(() =>
                         {
                             if (contains)
@@ -74,8 +79,6 @@ namespace Utility.Models.Diagrams
 
         public void _action(string name, object value)
         {
-            if (OutValue == null)
-                return;
             next?.Invoke();
             values[name] = value;
             if (values.Count == parameters.Length)
@@ -83,6 +86,8 @@ namespace Utility.Models.Diagrams
                 try
                 {
                     var result = this.Execute(values);
+                    if (OutValue == null)
+                        return;
                     OutValue.Value = result;
                 }
                 catch (Exception ex)
@@ -106,10 +111,10 @@ namespace Utility.Models.Diagrams
 
         public MethodConnector OutValue { get; }
 
-        public object? Instance => Instance;
+        public object? Instance => instance;
         public MethodInfo MethodInfo => method;
         public string Name => method.Name;
-        public IReadOnlyCollection<ParameterInfo> Parameters { get; }
+        public IReadOnlyCollection<ParameterInfo> Parameters => parameters;
 
         public override bool Equals(object? obj)
         {

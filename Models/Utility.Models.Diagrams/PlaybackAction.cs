@@ -9,7 +9,6 @@ namespace Utility.Models.Diagrams
         private Func<object> reference;
         private Action action;
         private Action undoaction;
-        private readonly Action<bool> activeAction;
         private object arguments;
 
         public PlaybackAction(object reference, Action action, Action undoaction, Action<bool> activeAction = null, object? arguments = null)
@@ -17,9 +16,14 @@ namespace Utility.Models.Diagrams
             this.reference = () => reference;
             this.action = action;
             this.undoaction = undoaction;
-            this.activeAction = activeAction;
             this.arguments = arguments;
             Name = $"{action.Method.Name} on {reference.GetType().Name}";
+
+            this.WithChangesTo(a => (a as IGetIsSelected).IsSelected)
+                .Subscribe(a =>
+                {
+                    activeAction?.Invoke(a);
+                });
         }
 
         public PlaybackAction(Func<object> reference, Action action, Action undoaction, Action<bool> activeAction = null, object? arguments = null)
@@ -27,20 +31,11 @@ namespace Utility.Models.Diagrams
             this.reference = reference;
             this.action = action;
             this.undoaction = undoaction;
-            this.activeAction = activeAction;
             this.arguments = arguments;
             Name = $"{action.Method.Name} on {reference.GetType().Name}";
         }
 
-        public override void SetNode(INode node)
-        {
-            base.SetNode(node);
-            node.WithChangesTo(a => (a as IGetIsSelected).IsSelected)
-                .Subscribe(a =>
-                {
-                    activeAction?.Invoke(a);
-                });
-        }
+
 
         public object Reference => reference();
 
