@@ -1,9 +1,9 @@
-﻿using System;
+﻿using System.Collections;
 
 namespace Utility.Interfaces.NonGeneric
 {
     public interface IChildren
     {
-        IObservable<object> Children { get; }
+        IEnumerable Children { get; }
     }
 }

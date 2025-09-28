@@ -1,8 +1,8 @@
 ﻿namespace Utility.Interfaces.NonGeneric
 {
-    public interface IData
+    public interface IData: IGetData, ISetData
     {
-        object Data { get; set; }
+
 
     }
 
@@ -13,6 +13,6 @@
     
     public interface ISetData
     {
-        object Data { get; }
+        object Data { set; }
     }
 }

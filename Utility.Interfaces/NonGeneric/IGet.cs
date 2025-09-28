@@ -2,6 +2,6 @@
 {
     public interface IGet
     {
-        public object? Get();
+        public object? Get(string name);
     }  
 }
