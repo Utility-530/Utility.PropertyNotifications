@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Utility.Enums.Name;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
@@ -22,7 +21,7 @@ namespace Utility.Trees
         protected IReadOnlyTree? parent;
         private bool flag;
         private string key;
-        private bool? hasItems;       
+        private bool? hasItems;
 
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
@@ -102,7 +101,7 @@ namespace Utility.Trees
             if (data is ITree tree)
             {
                 m_items.Add(tree);
-                if((tree as IGetParent<IReadOnlyTree>).Parent == null)
+                if ((tree as IGetParent<IReadOnlyTree>).Parent == null)
                     (tree as ISetParent<IReadOnlyTree>).Parent = this;
                 return;
             }
@@ -117,7 +116,7 @@ namespace Utility.Trees
             }
             if (data is not null)
             {
-                if (this.All(a => (a as IGetData).Data.Equals(data)==false || (a as IGetData).Data != data))
+                if (this.All(a => (a as IGetData).Data.Equals(data) == false || (a as IGetData).Data != data))
                 {
                     Add(await ToTree(data));
                 }
@@ -183,20 +182,6 @@ namespace Utility.Trees
             return cloneTree;
         }
 
-        //public virtual async Task<ITree> Add()
-        //{
-        //    object clone = Data;
-        //    if (Data is IClone cln)
-        //    {
-        //        clone = cln.Clone();
-        //    }
-
-        //    var tree = await ToTree(clone);
-        //    this.items.Add(tree);
-        //    tree.Parent = this;
-        //    return tree as ITree;
-        //}
-
         public virtual Task<IReadOnlyTree> Remove()
         {
             this.Parent = null;
@@ -210,10 +195,7 @@ namespace Utility.Trees
             m_items.Remove(single);
         }
 
-        public virtual object? Value
-        {get;set;
-
-        }
+        public virtual object? Value { get; set; }
 
         public virtual object Data { get; set; }
 
