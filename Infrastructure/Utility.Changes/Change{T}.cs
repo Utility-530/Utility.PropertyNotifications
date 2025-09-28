@@ -2,7 +2,7 @@
 
 namespace Utility.Changes
 {
-    public record Change<T> : Change, IValue<T>
+    public record Change<T> : Change, IGetValue<T>
     {
         public Change(T? tValue, Type type) : this(tValue, default, type)
         {

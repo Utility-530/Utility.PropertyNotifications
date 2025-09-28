@@ -2,7 +2,7 @@
 
 namespace Utility.Changes
 {
-    public record Change : IValue
+    public record Change : IGetValue
     {
         public Change(object value, object oldValue, Type type, int? count = default)
         {
