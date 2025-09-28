@@ -23,6 +23,10 @@ namespace Utility.Commands
             : this(methodToExecute, null)
         {
         }
+        public Command(Func<Task> methodToExecute, Func<bool>? canExecuteEvaluator = null)
+            : this(new Action(async () => await methodToExecute()), canExecuteEvaluator)
+        {
+        }
 
         public bool CanExecute(object? parameter)
         {
