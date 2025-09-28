@@ -1,20 +1,35 @@
-﻿using Utility.Trees.Abstractions;
-using Utility.Interfaces.NonGeneric;
-using Utility.Enums;
+﻿using System;
 using System.Collections;
-using System.Windows.Input;
 using System.Collections.ObjectModel;
+using System.Drawing;
+using System.Windows.Input;
+using Utility.Enums;
+using Utility.Interfaces.NonGeneric;
 using Utility.Structs;
-using System;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Interfaces.Exs
 {
-    public interface INode : ITree, IIsExpanded, ICurrent<INode>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation, IRemoved, IIsVisible, IAddCommand, IRemoveCommand, IIsSelected, ISetIsSelected,
+    public interface IViewModelTree : ITree, IIsExpanded, ICurrent<IViewModelTree>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation, 
+        IRemoved, IIsVisible, IIsSelected, ISetIsSelected,
         IIsRemovable, IIsReplicable, ISort, ISortOrder,
-        IArrangement, IRows, IColumns, IIsAugmentable, IErrors, IConnectorPosition, IDataTemplate, IItemsPanelTemplate, ITitle, IIsContentVisible
+        IName,
+        IIsChildrenRefreshed,
+        IIsActive,
+        IArrangement, IRows, IColumns, IIsAugmentable, IErrors, IConnectorPosition, IDataTemplate, IItemsPanelTemplate, ITitle, IIsContentVisible  ,
+                   IGetGuid,
+       IIsReadOnly, ILocation
     {
-     
+  
+
     }
+
+
+    public interface IIsChildrenRefreshed
+    {
+        bool IsChildrenRefreshed { get; set; }
+    }
+
 
     public interface IIsContentVisible
     {
@@ -69,15 +84,6 @@ namespace Utility.Interfaces.Exs
     public interface IProliferation
     {
         IEnumerable Proliferation();
-    }
-
-    public interface ISetNode
-    {
-        void SetNode(INode node);
-    }
-    public interface IGetNode
-    {
-        public INode Node { get; }
     }
 
     public interface IIsAugmentable
