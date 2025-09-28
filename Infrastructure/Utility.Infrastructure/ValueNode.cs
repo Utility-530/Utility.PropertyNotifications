@@ -32,7 +32,7 @@ namespace Utility.Nodes
 
         public abstract string Name { get; }
 
-        public virtual IEnumerable Items
+        public virtual IEnumerable Children
         {
             get
             {
@@ -102,7 +102,7 @@ namespace Utility.Nodes
                 return;
             if (e.PropertyName == "Count")
                 return;
-            foreach (var child in Items)
+            foreach (var child in Children)
             {
                 if (child is ValueNode { Key: Key { Name: var name } } valueNode)
                     if (e.PropertyName == name)
