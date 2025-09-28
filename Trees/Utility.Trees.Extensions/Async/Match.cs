@@ -27,7 +27,7 @@ namespace Utility.Trees.Extensions.Async
                 }
                 level++;
 
-                tree.Items.AndAdditions<ITree>()
+                tree.Children.AndAdditions<ITree>()
                 .Subscribe(item =>
                 {
                     SelfAndDescendants(item, action, level)
@@ -39,7 +39,7 @@ namespace Utility.Trees.Extensions.Async
                 }).DisposeWith(disposables);
 
 
-                tree.Items.Subtractions<ITree>()
+                tree.Children.Subtractions<ITree>()
                 .Subscribe(item =>
                 {
                     observer.OnNext(new(item, null, Type.Remove, level));
@@ -104,7 +104,7 @@ namespace Utility.Trees.Extensions.Async
             return Observable.Create<TreeChange<IReadOnlyTree>>(observer =>
             {
                 CompositeDisposable disposables = [];
-                tree.Items
+                tree.Children
                 .AndChanges<ITree>()
                 .Subscribe(set =>
                 {

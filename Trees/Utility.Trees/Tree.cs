@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Utility.Enums.Name;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
@@ -21,7 +22,7 @@ namespace Utility.Trees
         protected IReadOnlyTree? parent;
         private bool flag;
         private string key;
-        private bool? hasItems;
+        private bool? hasItems;       
 
         public event NotifyCollectionChangedEventHandler? CollectionChanged;
 
@@ -66,31 +67,10 @@ namespace Utility.Trees
             }
         }
 
-
-
-        //public ITree? this[object key]
-        //{
-        //    get
-        //    {
-        //        if (TreeHelper2.MatchDescendant(this, a => key.Equals(a) == true) is not ITree match)
-        //            return TreeHelper2.MatchAncestor(this, a => key.Equals(a) == true) as ITree;
-        //        return match;
-        //    }
-        //    set
-        //    {
-        //        var x = TreeHelper2.MatchDescendant(this, a => key.Equals(a) == true);
-        //        if (x is not ITree match)
-        //        {
-        //            throw new Exception("4sd ss");
-        //            //x = new Tree(item);
-        //            //this.Add(x);
-        //        }
-        //        match.Parent[x.Key] = value;
-        //    }
-        //}
-
         public virtual Task<ITree> ToTree(object data)
         {
+            if (data is ITree)
+                throw new Exception("sd 3333333333311");
             var tree = (ITree)new Tree((object)data);
             this.Add(tree);
             (tree as ISetParent<IReadOnlyTree>).Parent = this;
@@ -137,7 +117,7 @@ namespace Utility.Trees
             }
             if (data is not null)
             {
-                if (this.All(a => a.Data.Equals(data)==false || a.Data != data))
+                if (this.All(a => (a as IGetData).Data.Equals(data)==false || (a as IGetData).Data != data))
                 {
                     Add(await ToTree(data));
                 }
@@ -172,7 +152,7 @@ namespace Utility.Trees
 
             if (data is not null)
             {
-                var single = m_items.OfType<IReadOnlyTree>().Single(t => t.Data == data);
+                var single = m_items.OfType<IReadOnlyTree>().Single(t => (t as IGetData).Data == data);
                 m_items.Remove(single);
                 return;
             }
@@ -230,13 +210,18 @@ namespace Utility.Trees
             m_items.Remove(single);
         }
 
+        public virtual object? Value
+        {get;set;
+
+        }
+
         public virtual object Data { get; set; }
 
-        public virtual bool HasItems { get => hasItems ?? Items != null && Items.Count() > 0; set => hasItems = value; }
+        public virtual bool HasChildren { get => hasItems ?? Children != null && Children.Count() > 0; }
 
         public virtual IReadOnlyTree? Parent { get => parent; set => parent = value; }
 
-        public virtual IEnumerable Items
+        public virtual IEnumerable Children
         {
             get
             {
@@ -285,8 +270,6 @@ namespace Utility.Trees
         }
 
         public virtual Task<bool> HasMoreChildren() => Task.FromResult(false);
-
-        object IValue.Value => Data;
 
         Type IType.Type => Data?.GetType();
 
@@ -364,7 +347,7 @@ namespace Utility.Trees
             return other?.Equals(this.Key) == true;
         }
 
-        public int Count => m_items.Count;
+        public virtual int Count => m_items.Count;
         public virtual bool IsReadOnly { get; set; }
 
         public void RemoveAt(int index)
@@ -405,7 +388,7 @@ namespace Utility.Trees
         public static int IndexOf(this IReadOnlyTree tree, IReadOnlyTree _item)
         {
             int i = 0;
-            foreach (var item in tree.Items)
+            foreach (var item in tree.Children)
             {
                 if (item.Equals(_item))
                     return i;

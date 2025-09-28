@@ -18,7 +18,7 @@
         {
             action(parent, level);
             ++level;
-            foreach (IReadOnlyTree item in parent.Items)
+            foreach (IReadOnlyTree item in parent.Children)
             {
                 item.Foreach(action, level);
             }
@@ -51,7 +51,7 @@
         public static int IndexOf(this IReadOnlyTree tree, IReadOnlyTree _item)
         {
             int i = 0;
-            foreach (var item in tree.Items)
+            foreach (var item in tree.Children)
             {
                 if (item.Equals(_item))
                     return i;
@@ -86,7 +86,7 @@
         {
             action(tree);
 
-            foreach (var item in tree.Items)
+            foreach (var item in tree.Children)
             {
                 if (item is IReadOnlyTree t)
                     t.VisitDescendants(action);
@@ -143,7 +143,7 @@
 
         public static IReadOnlyTree Simplify(this ITree tree)
         {
-            var clone = new Tree(tree.Data.ToString()) { Key = (tree as IGetKey).Key, };
+            var clone = new Tree((tree as IGetData).Data.ToString()) { Key = (tree as IGetKey).Key, };
 
             CompositeDisposable disposables = new();
             tree.AndAdditions<ITree>().Subscribe(async item =>

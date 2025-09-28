@@ -34,7 +34,7 @@ namespace Utility.Trees
 
     public class DynamicTree : IDynamicTree, System.IObservable<ITree>, System.IObserver<ITree>, INotifyPropertyChanged
     {
-        private IReadOnlyList<ITree> children => (Current as IGetParent<IReadOnlyTree>).Parent?.Items.Cast<ITree>().ToList();
+        private IReadOnlyList<ITree> children => (Current as IGetParent<IReadOnlyTree>).Parent?.Children.Cast<ITree>().ToList();
         private ITree tree;
         private List<System.IObserver<ITree>> observers = new();
         private ITree current;
@@ -54,7 +54,7 @@ namespace Utility.Trees
         }
 
         public bool CanMoveUp => (current as IGetParent<IReadOnlyTree>)?.Parent != null;
-        public bool CanMoveDown => current?.HasItems == true;
+        public bool CanMoveDown => current?.HasChildren == true;
         public bool CanMoveForward => Index < children?.Count - 1;
         public bool CanMoveBack => Index > 0;
         public bool CanAdd => current != null;
@@ -230,7 +230,7 @@ namespace Utility.Trees
 
         public void Dispose()
         {
-            ((Current as IGetParent<IReadOnlyTree>).Parent?.Items as IList)?.Clear();
+            ((Current as IGetParent<IReadOnlyTree>).Parent?.Children as IList)?.Clear();
         }
 
         public void Broadcast()

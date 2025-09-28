@@ -17,7 +17,7 @@ namespace Utility.Trees.Extensions
             foreach (IReadOnlyTree item in collection)
             {
                 var newTtem = action(parent, item, level);
-                Foreach(action, item.Items, newTtem, ++level);
+                Foreach(action, item.Children, newTtem, ++level);
             }
         }
 
@@ -118,7 +118,7 @@ namespace Utility.Trees.Extensions
         public static void Visit<T>(this ITree<T> tree, Action<ITree<T>> action)
         {
             action(tree);
-            if (tree.HasItems)
+            if (tree.HasChildren)
                 foreach (var item in tree as IEnumerable<ITree<T>>)
                     Visit(item, action);
         }
@@ -129,7 +129,7 @@ namespace Utility.Trees.Extensions
             {
                 return tree;
             }
-            else if (tree.HasItems)
+            else if (tree.HasChildren)
             {
                 foreach (var item in tree as IEnumerable<ITree<T>>)
                 {
@@ -147,7 +147,7 @@ namespace Utility.Trees.Extensions
 
         public static ITree<T>? Match<T>(this ITree<T> tree, T data)
         {
-            return Match(tree, a => a.Data?.Equals(data) == true);
+            return Match(tree, a => (a as IGetData).Data?.Equals(data) == true);
         }
 
         public static ITree<T>? Match<T>(this ITree<T> tree, Guid guid)

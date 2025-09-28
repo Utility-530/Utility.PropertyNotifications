@@ -61,9 +61,9 @@ namespace Utility.Trees.Decisions
             if (result == Match)
             {
                 Output = Transform(Input);
-                if (Items.Any())
+                if (Children.Any())
                 {
-                    foreach (IDecisionTreeX item in Items)
+                    foreach (IDecisionTreeX item in Children)
                     {
                         (item as ISetParent<IDecisionTreeX>).Parent = this;
                         var queueItem = new ForwardItem(item, Output, new List<object>(keys));
@@ -90,7 +90,7 @@ namespace Utility.Trees.Decisions
         {
             List<object> outputs = new();
 
-            foreach (IDecisionTreeX item in Items)
+            foreach (IDecisionTreeX item in Children)
             {
                 if (item.IsBackputSet == false)
                     return;

@@ -47,7 +47,7 @@ namespace Utility.Trees.Extensions
 
         public static IEnumerable<IReadOnlyTree> Descendants(this IReadOnlyTree tree, Predicate<(IReadOnlyTree tree, int level)>? action = null)
         {
-            foreach (IReadOnlyTree item in tree.Items)
+            foreach (IReadOnlyTree item in tree.Children)
                 foreach (var d in SelfAndDescendants(item, action))
                 {
                     yield return d;
@@ -62,7 +62,7 @@ namespace Utility.Trees.Extensions
                 yield return tree;
             }
             level++;
-            foreach (IReadOnlyTree item in tree.Items)
+            foreach (IReadOnlyTree item in tree.Children)
                 foreach (var x in SelfAndDescendants(item, action, level))
                     yield return x;
         }

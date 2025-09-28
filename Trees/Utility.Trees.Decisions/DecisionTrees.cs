@@ -184,9 +184,9 @@ namespace Utility.Trees.Decisions
                 Output = Transform(Input);
                 if (Output == null)
                     return;
-                if (Items.Any())
+                if (Children.Any())
                 {
-                    foreach (DecisionTree item in Items)
+                    foreach (DecisionTree item in Children)
                     {
                         item.Input = Output;
                         item.Evaluate();
@@ -208,52 +208,14 @@ namespace Utility.Trees.Decisions
             Input = null;
             Output = null;
             Backput = null;
-            if (Items.Any())
+            if (Children.Any())
             {
-                foreach (DecisionTree x in Items)
+                foreach (DecisionTree x in Children)
                 {
                     x.Reset();
                 }
             }
         }
-
-
-        //public void Eval()
-        //{
-        //    List<object> outputs = new();
-
-        //    //var compile = (Data as IDecision).Predicate.Compile().Invoke(Input);
-
-        //    var result = decision.Evaluate(Input);
-
-        //    if (result == Match)
-        //    {
-        //        Output = Transform(Input);
-        //        if (Items.Any())
-        //        {
-        //            Items.Cast<DecisionTree>()
-        //                .Select(x =>
-        //                {
-        //                    var xe = x.WithChangesTo(a => a.Backput);
-        //                    x.Input = Output;
-        //                    Pipe.Instance.Queue(new DecisionTreeQueueItem(x));
-        //                    return xe;
-        //                })
-        //                .Combine()
-        //                .Subscribe(outputs =>
-        //                {
-        //                    Backput = ToBackPut(outputs);
-        //                });
-        //        }
-        //        else
-        //        {
-        //            Backput = Output;
-        //        }
-
-        //        return;
-        //    }
-        //    Backput = null;
-        //}
 
         protected virtual object? Transform(object? value)
         {

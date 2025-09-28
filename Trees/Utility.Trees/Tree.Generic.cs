@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Trees
@@ -140,7 +141,7 @@ namespace Utility.Trees
 
         public void Remove(T data)
         {
-            var single = m_items.OfType<ITree<T>>().Single(a => a.Data.Equals(data));
+            var single = m_items.OfType<ITree<T>>().Single(a => (a as IGetData).Data.Equals(data));
             m_items.Remove(single);
             return;
         }
@@ -149,7 +150,7 @@ namespace Utility.Trees
 
         //public override ITree<T> Parent { get => (ITree<T>)parent; set => parent = value; }
 
-        public new IReadOnlyList<ITree<T>> Items
+        public new IReadOnlyList<ITree<T>> Children
         {
             get
             {
@@ -193,7 +194,7 @@ namespace Utility.Trees
 
         public override IEnumerator<ITree> GetEnumerator()
         {
-            return m_items == null ? Enumerable.Empty<ITree<T>>().GetEnumerator() : Items.GetEnumerator();
+            return m_items == null ? Enumerable.Empty<ITree<T>>().GetEnumerator() : Children.GetEnumerator();
         }
 
         public int IndexOf(ITree<T> tree)
@@ -210,7 +211,7 @@ namespace Utility.Trees
 
         IEnumerator<ITree<T>> IEnumerable<ITree<T>>.GetEnumerator()
         {
-            return m_items == null ? Enumerable.Empty<ITree<T>>().GetEnumerator() : Items.GetEnumerator();
+            return m_items == null ? Enumerable.Empty<ITree<T>>().GetEnumerator() : Children.GetEnumerator();
         }
 
 
