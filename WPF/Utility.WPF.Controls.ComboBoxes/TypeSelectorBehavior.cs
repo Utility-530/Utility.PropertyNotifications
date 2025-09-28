@@ -48,7 +48,7 @@ namespace Utility.WPF.Controls.ComboBoxes
             this.AssociatedObject.SelectedItemTemplateSelector = CustomItemTemplateSelector.Instance;
 
             this.AssociatedObject.WhenAnyValue(a => a.SelectedNode)
-                .OfType<IReadOnlyTree>()
+                .OfType<IGetData>()
                 .Select(a => a.Data)
                 .Subscribe(a =>
                 {
@@ -80,7 +80,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         void ChangeType(IReadOnlyTree tree, Type _type)
         {
-            if (tree.Descendant(a => (a.tree.Data is Type type && type == _type) || (a.tree.Data is IType itype && itype.Type == _type)) is IReadOnlyTree { } innerTree)
+            if (tree.Descendant(a => ((a.tree as IGetData).Data is Type type && type == _type) || ((a.tree as IGetData).Data is IType itype && itype.Type == _type)) is IReadOnlyTree { } innerTree)
             {
                 AssociatedObject.IsError = false;
                 AssociatedObject.UpdateSelectedItems(innerTree);
@@ -123,14 +123,14 @@ namespace Utility.WPF.Controls.ComboBoxes
         {
             public override DataTemplate SelectTemplate(object item, DependencyObject container)
             {
-                if (item is IReadOnlyTree { Data: var data } tree)
+                if (item is IGetData { Data: var data } tree)
                 {
                     if (data is Type || data is IType || data is Assembly || data is IGetAssembly)
                         return TemplateGenerator.CreateDataTemplate(() =>
                         {
                             var textBlock = new TextBlock { };
                             Binding binding = new() { Path = new PropertyPath(nameof(System.Type.Name)) };
-                            Binding binding2 = new() { Path = new PropertyPath(nameof(IReadOnlyTree.Data)) };
+                            Binding binding2 = new() { Path = new PropertyPath(nameof(IGetData.Data)) };
                             textBlock.SetBinding(TextBlock.TextProperty, binding);
                             textBlock.SetBinding(TextBlock.DataContextProperty, binding2);
                             return textBlock;

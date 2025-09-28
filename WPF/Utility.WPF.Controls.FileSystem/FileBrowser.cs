@@ -31,7 +31,7 @@ namespace Utility.WPF.Controls.FileSystem
         private void A_SelectedNodeChanged(object sender, ComboBoxTreeView.SelectedNodeEventArgs e)
         {
             //pathChanges.OnNext();
-            if(e.Value is IReadOnlyTree { Data: IFileSystemInfo { FileSystemInfo: { } info  } })
+            if(e.Value is IGetData { Data: IFileSystemInfo { FileSystemInfo: { } info  } })
             {
                 pathChanges.OnNext(info.FullName);
             }

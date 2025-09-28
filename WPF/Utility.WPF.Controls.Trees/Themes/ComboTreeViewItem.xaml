@@ -35,6 +35,7 @@
                 </Grid>
             </DataTemplate>
         </Style.Resources>
+        
         <Setter Property="Selection" Value="{Binding SelectionItem, RelativeSource={RelativeSource Mode=Self}}"/>
         <Setter Property="SnapsToDevicePixels"
           Value="true" />

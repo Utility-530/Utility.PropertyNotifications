@@ -25,7 +25,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                     typeSelector.AssociatedObject.ItemsSource = type
                         .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                         .Where(a => typeSelector.Filter?.Equals(a.PropertyType) != false)
-                        .Select(a => new ViewModelTree(a));
+                        .Select(a => a);
                 }
             }
         }
@@ -54,7 +54,7 @@ namespace Utility.WPF.Controls.ComboBoxes
             //AssociatedObject.SelectedItemTemplateSelector = CustomItemTemplateSelector.Instance;
 
             AssociatedObject.WhenAnyValue(a => a.SelectedNode)
-                .OfType<IReadOnlyTree>()
+                .OfType<IGetData>()
                 .Select(a => a.Data)
                 .Subscribe(a =>
                 {
@@ -80,7 +80,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                     AssociatedObject.ItemsSource =
                     type.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                     .Where(a => Filter?.Equals(a.PropertyType) != false)
-                    .Select(a => new ViewModelTree(a));
+                    .Select(a => a);
                 }
                 if (PropertyInfo is PropertyInfo propertyInfo && AssociatedObject.TreeView != null && AssociatedObject.ItemsSource is IReadOnlyTree _tree)
                 {
@@ -93,7 +93,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         void ChangeInfo(IReadOnlyTree tree, PropertyInfo _propertyInfo)
         {
-            if (tree.Descendant(a => a.tree.Data is PropertyInfo type && type == _propertyInfo || a.tree.Data is IPropertyInfo itype && itype.PropertyInfo == _propertyInfo) is IReadOnlyTree { } innerTree)
+            if (tree.Descendant(a => (a.tree as IGetData).Data is PropertyInfo type && type == _propertyInfo || (a.tree as IGetData).Data is IPropertyInfo itype && itype.PropertyInfo == _propertyInfo) is IReadOnlyTree { } innerTree)
             {
                 AssociatedObject.IsError = false;
                 AssociatedObject.UpdateSelectedItems(innerTree);
@@ -142,7 +142,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                     typeSelector.AssociatedObject.ItemsSource = typeSelector.Type
                         .GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                         .Where(a => typeSelector.Filter?.Equals(a.PropertyType) != false)
-                        .Select(a => new ViewModelTree(a));
+                        .Select(a => a);
                 }
             }
         }

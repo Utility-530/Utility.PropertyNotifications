@@ -7,4 +7,16 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Utility.WPF.ResourceDictionarys\Utility.WPF.ResourceDictionarys.csproj" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="SplitButton.cs">
+			<DependentUpon>SplitButton.xaml</DependentUpon>
+		</Compile>
+		<Compile Update="PopupButton.cs">
+			<DependentUpon>PopupButton.xaml</DependentUpon>
+		</Compile>
+	</ItemGroup>
 </Project>

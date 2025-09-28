@@ -21,7 +21,7 @@
                 <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Generic.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <HierarchicalDataTemplate DataType="{x:Type nodes:Node}" ItemsSource="{Binding Items}">
+            <HierarchicalDataTemplate DataType="{x:Type nodes:NodeViewModel}" ItemsSource="{Binding Children}">
                 <StackPanel>
                     <CheckBox IsChecked="{Binding IsEditable}"></CheckBox>
                     <TextBlock Text="{Binding Position}"></TextBlock>

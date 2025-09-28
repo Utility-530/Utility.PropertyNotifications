@@ -21,6 +21,7 @@ using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Nodes;
 using Utility.Trees.Abstractions;
+using NodeVM = Utility.Nodes.NodeViewModel;
 
 namespace Utility.WPF.Demo.Trees
 {
@@ -56,16 +57,16 @@ namespace Utility.WPF.Demo.Trees
 
     class SelectorMainViewModel
     {
-        Node node = null;
-        public Node[] Nodes
+        NodeVM node = null;
+        public NodeVM[] Nodes
         {
             get
             {
                 return [node ??= create().Result];
 
-                static async Task<Node> create()
+                static async Task<NodeVM> create()
                 {
-                    Node root = new Node(new StringRootModel { Name = "Big Daddy Root", Value="a"});
+                    NodeVM root = new NodeVM(new StringRootModel { Name = "Big Daddy Root", Value="a"});
 
                     int branches = 0;
                     int subBranches = 0;
@@ -107,7 +108,7 @@ namespace Utility.WPF.Demo.Trees
     {
         public override Style SelectStyle(object item, DependencyObject container)
         {
-            if (item is INode { Data: IRoot data })
+            if (item is INodeViewModel { Data: IRoot data })
             {
                 return RootStyle;
 

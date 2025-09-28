@@ -32,7 +32,7 @@ namespace Utility.WPF.Demo.Trees
 
         private void Button_Click_Drop(object sender, System.Windows.RoutedEventArgs e)
         {
-            tree = tree.Items.Cast<ITree>().LastOrDefault() ?? tree;
+            tree = tree.Children.Cast<ITree>().LastOrDefault() ?? tree;
         }
     }
 

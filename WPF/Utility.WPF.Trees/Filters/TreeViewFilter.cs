@@ -19,7 +19,7 @@ namespace Utility.Nodes.WPF
                  new TrueDecisionTree<IReadOnlyTree>(new Decision(item => true))
                  {
                      // prevents child items of a parent Descriptor that is being shown as a Treeviewer from also being shown
-                     new TrueDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Data as IPropertiesDescriptor != null))
+                     new TrueDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item) as IPropertiesDescriptor != null))
                         {
                             //new TrueDecisionTree<IReadOnlyTree>(new Decision(item => (((IReadOnlyTree)item).Data as IPropertiesDescriptor).Type == typeof(Table)))
                             //{
@@ -41,7 +41,7 @@ namespace Utility.Nodes.WPF
                             //}
                         },
 
-                      new TrueDecisionTree<IReadOnlyTree>(new Decision(item => true) { }, a => a.Data)
+                      new TrueDecisionTree<IReadOnlyTree>(new Decision(item => true) { }, a => a)
                     {
                         new TrueDecisionTree(new Decision(item => item as IMethodDescriptor!=null){  })
                         {

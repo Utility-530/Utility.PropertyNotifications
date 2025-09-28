@@ -281,6 +281,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Simulation", "..\In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Controls.Simulation", "Utility.WPF.Controls.Simulation\Utility.WPF.Controls.Simulation.csproj", "{98F74902-0E83-4A2B-BF19-3EB086BCCF6C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.WPF.Demo.SplitButtons", "Utility.WPF.Demo.SplitButtons\Utility.WPF.Demo.SplitButtons.csproj", "{6063AD84-B713-4FB2-91F3-E6B6CC253BF4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -819,6 +821,10 @@ Global
 		{98F74902-0E83-4A2B-BF19-3EB086BCCF6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98F74902-0E83-4A2B-BF19-3EB086BCCF6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98F74902-0E83-4A2B-BF19-3EB086BCCF6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6063AD84-B713-4FB2-91F3-E6B6CC253BF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6063AD84-B713-4FB2-91F3-E6B6CC253BF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6063AD84-B713-4FB2-91F3-E6B6CC253BF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6063AD84-B713-4FB2-91F3-E6B6CC253BF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -958,6 +964,7 @@ Global
 		{D245D032-877E-43C6-8D58-2426D38A7AAB} = {3E8F851B-BECA-4BAA-9275-2104CDEAEC3D}
 		{621E0004-EEA7-6613-DE02-FBE64149A2C9} = {CF03926E-9E72-4A61-B447-2EF7E3C17461}
 		{98F74902-0E83-4A2B-BF19-3EB086BCCF6C} = {2ED92AB3-1BF8-4B9F-85BF-2739EDF1915C}
+		{6063AD84-B713-4FB2-91F3-E6B6CC253BF4} = {3E8F851B-BECA-4BAA-9275-2104CDEAEC3D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7D60CFCE-498F-4A6D-9B9B-5546561C117E}

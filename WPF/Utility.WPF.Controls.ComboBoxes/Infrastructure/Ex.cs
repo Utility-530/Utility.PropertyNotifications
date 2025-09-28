@@ -39,7 +39,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
                         }
                     }
-                    if (_tree.HasItems)
+                    if (_tree.HasChildren)
                     {
                         _tree.Parent = tree;
                         tree.Add(_tree);

@@ -169,7 +169,7 @@ namespace Utility.WPF.Behaviors
 
         #endregion properties
 
-        public class EnumItem : NotifyPropertyClass, IValue<Enum>, IIsReadOnly
+        public class EnumItem : NotifyPropertyClass, IGetValue<Enum>, IIsReadOnly
         {
             private bool isChecked;
 
@@ -181,6 +181,8 @@ namespace Utility.WPF.Behaviors
             }
 
             public Enum Value { get; }
+
+            object IGetValue.Value => Value;
 
             public ReactiveCommand<Unit, Enum> Command { get; }
 
@@ -195,7 +197,8 @@ namespace Utility.WPF.Behaviors
 
             public bool IsReadOnly { get; set; }
 
-            object IValue.Value => Value;
+
+
 
             public override string ToString()
             {

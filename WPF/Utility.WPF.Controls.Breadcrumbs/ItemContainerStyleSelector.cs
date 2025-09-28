@@ -18,9 +18,9 @@ namespace Utility.WPF.Controls.Breadcrumbs
 
             return item switch
             {
-                IData { Data: IRoot } => BreadcrumbRootStyle,
-                IData { Data: IBreadCrumb } when parent?.Style == BreadcrumbStyle => SelectableStyle,
-                IData { Data: IBreadCrumb } => BreadcrumbStyle,
+                IRoot => BreadcrumbRootStyle,
+                IBreadCrumb when parent?.Style == BreadcrumbStyle => SelectableStyle,
+                IBreadCrumb => BreadcrumbStyle,
                 _ => DefaultStyle ?? base.SelectStyle(item, container),
             };
         }

@@ -4,8 +4,11 @@ using Newtonsoft.Json.Linq;
 using Pather.CSharp;
 using Pather.CSharp.PathElements;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -19,9 +22,40 @@ namespace Utility.WPF.Controls.Objects
         public static readonly DependencyProperty ObjectProperty = DependencyProperty.Register("Object", typeof(object), typeof(ObjectBehavior), new PropertyMetadata(null, changed));
         public static readonly DependencyProperty JsonSerializerProperty = DependencyProperty.Register("JsonSerializer", typeof(JsonSerializer), typeof(ObjectBehavior), new PropertyMetadata());
         public static readonly DependencyProperty RaisePropertyChangedProperty = DependencyProperty.Register("RaisePropertyChanged", typeof(bool), typeof(ObjectBehavior), new PropertyMetadata());
+        public static readonly DependencyProperty CollectionsProperty = DependencyProperty.Register("Collections", typeof(IEnumerable), typeof(ObjectBehavior), new PropertyMetadata(changed2));
 
+        private static void changed2(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is ObjectBehavior @object && e.NewValue is IEnumerable enumerable)
+            {
+                foreach (var item in enumerable)
+                {
+                    if (item is INotifyCollectionChanged inpc)
+                    {
+                        inpc.CollectionChanged -= (s, ev) =>
+                        {
+                            @object._playSubject.OnNext(@object.AssociatedObject);
+                        };
+                        inpc.CollectionChanged += (s, ev) =>
+                        {
+                            Application.Current.Dispatcher.Invoke(() => {
+                                @object._playSubject.OnNext(@object.AssociatedObject);
+                            });
 
+                        };
+                    }
+                }
+            }
+        }
 
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
+        {
+            if (e.Property.Name == nameof(Collections))
+            {
+
+            }
+            base.OnPropertyChanged(e);
+        }
         static ObjectBehavior()
         {
             serialiser = JsonSerializer.CreateDefault(new JsonSerializerSettings { Converters = Statics.converters, TypeNameHandling = TypeNameHandling.All });
@@ -33,6 +67,12 @@ namespace Utility.WPF.Controls.Objects
         {
             get { return (JsonSerializer)GetValue(JsonSerializerProperty); }
             set { SetValue(JsonSerializerProperty, value); }
+        }
+
+        public IEnumerable Collections
+        {
+            get { return (IEnumerable)GetValue(CollectionsProperty); }
+            set { SetValue(CollectionsProperty, value); }
         }
 
         private static void changed(DependencyObject d, DependencyPropertyChangedEventArgs e)

@@ -257,8 +257,7 @@
                                         </MultiBinding>
                                     </pnls:UniformStackPanel.Visibility>
 
-                                    <sb:SplitButton            
-                                   
+                                    <sb:SplitButton                                                                                    
                                         x:Name="SplitButton"
                                         Style="{TemplateBinding SplitButtonStyle}"
                                         ItemContainerStyleSelector="{TemplateBinding NodeContainerStyleSelector}"

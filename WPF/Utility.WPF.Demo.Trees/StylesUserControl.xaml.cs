@@ -18,6 +18,7 @@ using Utility.Reactives;
 using Utility.WPF.Controls.Trees;
 using Utility.WPF.Demo.Common.ViewModels;
 using Newtonsoft.Json.Converters;
+using NodeVM = Utility.Nodes.NodeViewModel;
 
 namespace Utility.WPF.Demo.Trees
 {
@@ -56,7 +57,7 @@ namespace Utility.WPF.Demo.Trees
             InitializeComponent();
             this.Loaded += CustomStyleUserControl_Loaded;
 
-            Items = new[] { Node.Create(null, [Node.Create(null, []), Node.Create(null, [Node.Create(null, []), Node.Create(null, [])]), Node.Create(null, [Node.Create(null, [])])]) };
+            Items = new[] { NodeVM.Create(null, [NodeVM.Create(null, []), NodeVM.Create(null, [NodeVM.Create(null, []), NodeVM.Create(null, [])]), NodeVM.Create(null, [NodeVM.Create(null, [])])]) };
 
             JsonConvert.DefaultSettings = () => settings;
 
@@ -84,7 +85,7 @@ namespace Utility.WPF.Demo.Trees
         {
             public int Compare(object? x, object? y)
             {
-                return (x as Node)?.Order.CompareTo((y as Node)?.Order) ?? 0;
+                return (x as NodeVM)?.Order.CompareTo((y as NodeVM)?.Order) ?? 0;
             }
 
         }

@@ -16,7 +16,10 @@ namespace Utility.WPF.Converters
                 else if (value is Type type)
                     return type?.Name ?? DependencyProperty.UnsetValue;
                 else if (value is string str)
-                    return Convert(Type.GetType(str), targetType, parameter, culture);
+                    if (Type.GetType(str) is Type _type)
+                        return Convert(_type, targetType, parameter, culture);
+                    else
+                        return str;
                 return Convert(value.GetType(), targetType, parameter, culture);
             }
             catch

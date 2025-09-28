@@ -3,28 +3,29 @@ using System.Collections;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using Utility.Interfaces.NonGeneric;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.WPF
 {
-    public class EditConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if(value is ICollectionDescriptor collectionDescriptor)
-            {
-                var instance = ActivateAnything.Activate.New(collectionDescriptor.ElementType);
-                return instance;
-            }
-            return DependencyProperty.UnsetValue;
-        }
+    //public class EditConverter : IValueConverter
+    //{
+    //    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        if(value is ICollectionDescriptor collectionDescriptor)
+    //        {
+    //            var instance = ActivateAnything.Activate.New(collectionDescriptor.ElementType);
+    //            return instance;
+    //        }
+    //        return DependencyProperty.UnsetValue;
+    //    }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 
     public class AddObjectAction : TriggerAction<FrameworkElement>
     {
@@ -35,12 +36,12 @@ namespace Utility.Nodes.WPF
             {
                 var x = AssociatedObject;
                 ;
-                if(x.DataContext is IReadOnlyTree{ Data: ICollectionDescriptor descriptor })
+                if(x.DataContext is IChildren descriptor )
                 {
-                    if (descriptor.Collection is IList list)
+                    if (descriptor.Children is IList list)
                     {
                         list?.Add(instance);
-                        descriptor.OnNext(new System.ComponentModel.RefreshEventArgs(instance));
+                        //descriptor.OnNext(new System.ComponentModel.RefreshEventArgs(instance));
                     }
                 }
 

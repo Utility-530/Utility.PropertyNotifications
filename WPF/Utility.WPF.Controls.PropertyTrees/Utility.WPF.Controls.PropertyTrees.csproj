@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Helpers\Utility.Extensions\Utility.Extensions.csproj" />
     <ProjectReference Include="..\..\Randoms\Utility.Randoms\Utility.Randoms.csproj" />
     <ProjectReference Include="..\Utility.WPF.Templates\Utility.WPF.Templates.csproj" />
     <ProjectReference Include="..\Utility.WPF.Trees\Utility.WPF.Trees.csproj" />

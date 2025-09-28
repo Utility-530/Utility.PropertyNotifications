@@ -16,15 +16,15 @@ namespace Utility.WPF.SandBox
 
 
 
-        public XYMovement Movement
+        public XYTraversal Movement
         {
-            get { return (XYMovement)GetValue(MovementProperty); }
+            get { return (XYTraversal)GetValue(MovementProperty); }
             set { SetValue(MovementProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Movement.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty MovementProperty =
-            DependencyProperty.Register("Movement", typeof(XYMovement), typeof(ToggleWindow), new PropertyMetadata(XYMovement.LeftToRight));
+            DependencyProperty.Register("Movement", typeof(XYTraversal), typeof(ToggleWindow), new PropertyMetadata(XYTraversal.LeftToRight));
 
 
     }

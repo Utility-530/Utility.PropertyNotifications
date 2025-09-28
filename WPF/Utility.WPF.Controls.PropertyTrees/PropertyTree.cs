@@ -26,13 +26,13 @@ namespace Utility.WPF.Controls.PropertyTrees
         {
             if (d is PropertyTree tree && e.NewValue is { } value)
             {
-                tree.ItemsSource = create(value).Items;
+                tree.ItemsSource = create(value).Children;
             }
 
-            Node create(object obj)
+            NodeViewModel create(object obj)
             {
                 var root = DescriptorFactory.CreateRoot(obj, tree._key);
-                var reflectionNode = new Node(root) { IsExpanded = true };
+                var reflectionNode = new NodeViewModel(root) { IsExpanded = true };
                 NodeEngine.Instance.Add(reflectionNode);
                 return reflectionNode;
             }
@@ -93,7 +93,7 @@ namespace Utility.WPF.Controls.PropertyTrees
 
         protected override void PrepareContainerForItemOverride(DependencyObject element, object item)
         {
-            if(element is CustomTreeViewItem treeViewItem && item is Node{ Data: ICollectionDescriptor collectionDescriptor })
+            if(element is CustomTreeViewItem treeViewItem && item is NodeViewModel { Data: ICollectionDescriptor collectionDescriptor })
             {
                 var innerType = collectionDescriptor.ElementType;
                 treeViewItem.Edit = ActivateAnything.Activate.New(innerType);

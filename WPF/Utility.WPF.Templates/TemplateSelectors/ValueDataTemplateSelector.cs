@@ -18,7 +18,7 @@ namespace Utility.WPF.Templates
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            if (item is not IValue { Value: var value })
+            if (item is not IGetValue { Value: var value })
             {
                 throw new Exception($"Unexpected type for item {item.GetType().Name}");
             }

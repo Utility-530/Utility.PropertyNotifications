@@ -11,6 +11,7 @@ using Utility.Trees.Abstractions;
 using Utility.WPF.Factorys;
 using Utility.WPF.ResourceDictionarys;
 using Utility.Interfaces.Generic;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
@@ -131,19 +132,19 @@ namespace Utility.WPF.Controls.ComboBoxes
 
             //}
             //else
-            if (AssociatedObject.SelectedNode is IReadOnlyTree { Data: DictionaryEntry { Key: { } key } })
+            if (AssociatedObject.SelectedNode is IGetData { Data: DictionaryEntry { Key: { } key } })
             {
                 if (key.Equals(x.Element))
                     return;
             }
 
-            var descendants = tree.Descendants(a => a.tree is IReadOnlyTree { Data: DictionaryEntry { Key: { } key } }).ToArray();
+            var descendants = tree.Descendants(a => a.tree is IGetData { Data: DictionaryEntry { Key: { } key } }).ToArray();
             if (descendants.SingleOrDefault(a => a
-                is { Data: DictionaryEntry { Key: { } key } }
+                is IGetData { Data: DictionaryEntry { Key: { } key } }
                 && NewMethod(x.Element, key)
-                && (a as IGetParent<IReadOnlyTree>).Parent is { Data: ResourceDictionaryKeyValue { } res } parent
+                && (a as IGetParent<IReadOnlyTree>).Parent is IGetData { Data: ResourceDictionaryKeyValue { } res } parent
                 && res.Entry.Key.Equals(x.ResourceDictionary) == true
-                && (a as IGetParent<IReadOnlyTree>).Parent is { Data: Assembly assembly }
+                && (a as IGetParent<IReadOnlyTree>).Parent is IGetData  { Data: Assembly assembly }
                 && assembly.GetName().Name.Equals(x.Assembly)) is { } innerTree)
             {
                 AssociatedObject.IsError = false;
@@ -193,15 +194,15 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         void Change(IReadOnlyTree tree, object _key)
         {
-            if (AssociatedObject.SelectedNode is IReadOnlyTree { Data: DictionaryEntry { Key: { } key } })
+            if (AssociatedObject.SelectedNode is IGetData { Data: DictionaryEntry { Key: { } key } })
             {
                 if (key.Equals(_key))
                     return;
             }
 
-            var descendants = tree.Descendants(a => a.tree is IReadOnlyTree { Data: DictionaryEntry { Key: { } key } }).ToArray();
+            var descendants = tree.Descendants(a => a.tree is IGetData { Data: DictionaryEntry { Key: { } key } }).ToArray();
             if (descendants.SingleOrDefault(a => a
-                is { Data: DictionaryEntry { Key: { } key } }
+                is IGetData { Data: DictionaryEntry { Key: { } key } }
                 && NewMethod(_key, key)) is { } innerTree)
             {
                 AssociatedObject.IsError = false;
@@ -269,7 +270,7 @@ namespace Utility.WPF.Controls.ComboBoxes
             {
                 foreach (var x in enumerable)
                 {
-                    if (x is IReadOnlyTree { Data: { } data })
+                    if (x is IGetData { Data: { } data })
                     {
                         if (data is Assembly assembly)
                         {
@@ -293,7 +294,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         protected void SelectedNodeChanged(object value)
         {
-            if (value is IReadOnlyTree { Data: DictionaryEntry { Key: { } key, Value: { } _value } } &&
+            if (value is IGetData { Data: DictionaryEntry { Key: { } key, Value: { } _value } } &&
                 _value.GetType() == Type)
             {
                 Key = key;
@@ -340,7 +341,7 @@ namespace Utility.WPF.Controls.ComboBoxes
         {
             public override DataTemplate SelectTemplate(object item, DependencyObject container)
             {
-                if (item is IReadOnlyTree { Data: { } data } tree)
+                if (item is IGetData { Data: { } data } tree)
                 {
                     return TemplateGenerator.CreateDataTemplate(() =>
                     {

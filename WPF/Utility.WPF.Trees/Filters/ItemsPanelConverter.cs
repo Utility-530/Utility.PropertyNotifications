@@ -25,16 +25,16 @@ namespace Utility.Nodes.WPF
             //{
             //    return ItemsPanelFactory.Template(1, 1, O.Horizontal, Arrangement.Uniform);
             //}
-            if (value is IReadOnlyTree { Data: IReferenceDescriptor { Count: int _count } } && value is IGetParent<IReadOnlyTree>{ Parent.Data: ICollectionDescriptor { } })
+            if (value is IReferenceDescriptor { Count: int _count } && value is IGetParent<IReadOnlyTree> { Parent: ICollectionDescriptor { } })
             {
                 return ItemsPanelFactory.Template([new Dimension()] , Enumerable.Repeat(new Dimension(), Math.Max(_count, 1)).ToArray(), O.Horizontal, Arrangement.Uniform);
             }
-            if (value is IReadOnlyTree { Data: ICollectionHeadersDescriptor { Count: var __count } })
+            if (value is ICollectionHeadersDescriptor { Count: var __count } )
             {
                 return ItemsPanelFactory.Template([new Dimension()], Enumerable.Repeat(new Dimension(), Math.Max(__count, 1)).ToArray(), O.Horizontal, Arrangement.Uniform);
             }
             {
-                if (tree.Data is IPropertyDescriptor { } _descriptor)
+                if (tree is IPropertyDescriptor { } _descriptor)
                     return ItemsPanelFactory.Template([new Dimension()], default, O.Horizontal, Arrangement.Stack);
             }
             //{

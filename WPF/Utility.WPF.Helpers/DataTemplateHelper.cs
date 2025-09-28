@@ -29,5 +29,19 @@ namespace Utility.WPF.Helpers
                 }
             }
         }
+        public static DataTemplate FindTemplate(this Type currentType, ResourceDictionary resourceDictionary)
+        {
+            DataTemplate baseTemplate = null;
+            while (currentType != typeof(object))
+            {
+                baseTemplate = (DataTemplate)resourceDictionary[new DataTemplateKey(currentType)];
+                if (baseTemplate != null)
+                    break;
+
+                currentType = currentType.BaseType;
+            }
+
+            return baseTemplate;
+        }
     }
 }

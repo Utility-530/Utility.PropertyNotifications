@@ -29,12 +29,12 @@ namespace Utility.Nodes.WPF
         {
             Predicate = new DataTemplateDecisionTree(new Decision(item => (item as IReadOnlyTree) != null) { })
                 {
-                    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IHeaderDescriptor!=null), md=> ()=>MakeHeaderTemplate(md, 1)),
-                    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IMethodDescriptor!=null){  },md=>()=>MakeButtonTemplate(md)),
-                    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IPropertiesDescriptor!=null){  },md=>()=>MakeEmptyTemplate(md)),
-                    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionDescriptor!=null){  },md=>()=>MakeEmptyTemplate(md)),
-                    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionHeadersDescriptor !=null){  },md=>()=>MakeEmptyTemplate(md)),
-                    new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => (item.Data as IReferenceDescriptor) != null),  md =>()=> MakeHeaderTemplate(md, md.Depth)),
+                    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item as IHeaderDescriptor!=null), md=> ()=>MakeHeaderTemplate(md, 1)),
+                    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item as IMethodDescriptor!=null){  },md=>()=>MakeButtonTemplate(md)),
+                    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item as IPropertiesDescriptor!=null){  },md=>()=>MakeEmptyTemplate(md)),
+                    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item as ICollectionDescriptor!=null){  },md=>()=>MakeEmptyTemplate(md)),
+                    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item as ICollectionHeadersDescriptor !=null){  },md=>()=>MakeEmptyTemplate(md)),
+                    new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => (item as IReferenceDescriptor) != null),  md =>()=> MakeHeaderTemplate(md, md.Depth)),
                     //{
                     //    new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => true), )
                     //},
@@ -47,8 +47,8 @@ namespace Utility.Nodes.WPF
                         //    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => (((item.Parent ).Parent).Data as ICollectionItemDescriptor!=null)){  }, md=> MakeTemplate(md)),
                         //},
                     },
-                    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IValueDescriptor != null){  }, md=> ()=>MakeTemplate(md)),
-                    new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => (item.Data as IPropertyDescriptor) != null), md =>()=> MakePropertyTemplate(md, md.Depth)),
+                    new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => item as IValueDescriptor != null){  }, md=> ()=>MakeTemplate(md)),
+                    new DataTemplateDecisionTree<IReadOnlyTree>(new Decision<IReadOnlyTree>(item => (item as IPropertyDescriptor) != null), md =>()=> MakePropertyTemplate(md, md.Depth)),
                     new DataTemplateDecisionTree(new Decision<IReadOnlyTree>(item => true), md=> () => MakeVoidTemplate()),
                 };
         }
@@ -69,7 +69,7 @@ namespace Utility.Nodes.WPF
 
             var template = TemplateGenerator.CreateHierarcialDataTemplate(() =>
             {
-                var binding = new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Data)), Source = item };
+                var binding = new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath("."), Source = item };
                 var contentControl = new ContentPresenter
                 {
                     ContentTemplateSelector = Locator.Current.GetService<System.Windows.Controls.DataTemplateSelector>()
@@ -80,7 +80,7 @@ namespace Utility.Nodes.WPF
 
                 contentControl.SetBinding(ContentPresenter.ContentProperty, binding);
                 return contentControl;
-            }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Items)), Source = item });
+            }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Children)), Source = item });
 
             return template;
         }
@@ -91,7 +91,7 @@ namespace Utility.Nodes.WPF
             return TemplateGenerator.CreateHierarcialDataTemplate(() =>
             {
                 return new System.Windows.Shapes.Rectangle { Fill = Brushes.Red, Height = 20, Width = 20 };
-            }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Items)), Source = item });
+            }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Children)), Source = item });
         }
 
 
@@ -146,14 +146,14 @@ namespace Utility.Nodes.WPF
                         return textBlock;
                     }),
                 };
-            }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Items)), Source = item });
+            }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Children)), Source = item });
 
             static Binding Binding(object item)
             {
                 return new()
                 {
                     Converter = Utility.WPF.Converters.LambdaConverter.HumanizerConverter,
-                    Path = new PropertyPath($"{nameof(IReadOnlyTree.Data)}.{nameof(IDescriptor.Name)}"),
+                    Path = new PropertyPath($"{nameof(IDescriptor.Name)}"),
                     Source = item
                 };
             }
@@ -173,8 +173,8 @@ namespace Utility.Nodes.WPF
 
                 var toggle = new DoubleClickCheckBox() { Content = textBlock/*, Style = App.Current.Resources["NullToggleButton"] as Style*/ };
 
-                if (item is IReadOnlyTree { Data: IDescriptor { } descriptor } data)
-                    if (data is IValue { Value: { } value } _value)
+                if (item is  IDescriptor { } descriptor )
+                    if (item is IGetValue { Value: { } value } _value)
                     {
                         toggle.IsChecked = true;
                     }
@@ -183,10 +183,10 @@ namespace Utility.Nodes.WPF
 
                 void Toggle_Click(object sender, RoutedEventArgs e)
                 {
-                    if (item is IReadOnlyTree { Data: IDescriptor { } descriptor } data)
-                        if (data is ISetValue _setValue)
-                            if (data is IValue _value)
-                                if (data is IValueChanges _values)
+                    if (item is  IDescriptor { } descriptor )
+                        if (item is ISetValue _setValue)
+                            if (item is IValue _value)
+                                if (item is IValueChanges _values)
                                 {
                                     _values.Subscribe(a =>
                                     {
@@ -195,24 +195,24 @@ namespace Utility.Nodes.WPF
                                         else
                                             toggle.IsChecked = true;
                                     });
-                                    if (toggle.IsChecked == true && _value.Value == null)
+                                    if (toggle.IsChecked == true && (_value as IGetValue).Value == null)
                                     {
                                         _setValue.Value = Activator.CreateInstance(descriptor.Type);
                                     }
-                                    else if (toggle.IsChecked != true && _value.Value != null)
+                                    else if (toggle.IsChecked != true && (_value as IGetValue).Value != null)
                                     {
                                         _setValue.Value = null;
                                     }
                                 }
                 }
-            }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Items)), Source = item });
+            }, new Binding { Mode = BindingMode.OneWay, Path = new PropertyPath(nameof(IReadOnlyTree.Children)), Source = item });
 
             static Binding Binding(object item)
             {
                 return new()
                 {
                     Converter = Utility.WPF.Converters.LambdaConverter.HumanizerConverter,
-                    Path = new PropertyPath($"{nameof(IReadOnlyTree.Data)}.{nameof(IDescriptor.Name)}"),
+                    Path = new PropertyPath($"{nameof(IDescriptor.Name)}"),
                     Source = item
                 };
             }
@@ -237,7 +237,7 @@ namespace Utility.Nodes.WPF
             {
                 return new()
                 {
-                    Path = new PropertyPath($"{nameof(IReadOnlyTree.Data)}.{nameof(IMethodDescriptor.Name)}"),
+                    Path = new PropertyPath($"{nameof(IMethodDescriptor.Name)}"),
                     Converter = Utility.WPF.Converters.LambdaConverter.HumanizerConverter,
                     Source = item
                 };

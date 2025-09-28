@@ -53,8 +53,8 @@
             <ResourceDictionary>
 
                 <HierarchicalDataTemplate 
-          DataType="{x:Type node:Node}" 
-          ItemsSource="{Binding Items}"
+          DataType="{x:Type node:NodeViewModel}" 
+          ItemsSource="{Binding Children}"
           >
                     <TextBlock Text="{Binding Data}" />
                 </HierarchicalDataTemplate>

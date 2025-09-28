@@ -78,7 +78,7 @@
                     <ColumnDefinition Width="500"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <TreeView x:Name="MyTreeView"   ItemsSource="{Binding ViewModel.Items}"
+                <TreeView x:Name="MyTreeView"   ItemsSource="{Binding ViewModel.Children}"
                   SelectedItemChanged="MyTreeView_SelectedItemChanged"  
                       VirtualizingStackPanel.IsVirtualizing="False"
                       PreviewMouseUp="MyTreeView1_PreviewMouseUp">

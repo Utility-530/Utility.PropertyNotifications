@@ -19,7 +19,7 @@ namespace Utility.WPF.Demo.ComboBoxes
                 return a.Value.GetType().ToString().Contains(sParameter);
 
             }));
-            return tree.Items;
+            return tree.Children;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

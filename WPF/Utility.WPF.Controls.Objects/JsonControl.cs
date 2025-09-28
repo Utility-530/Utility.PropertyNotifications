@@ -62,6 +62,8 @@ namespace Utility.WPF.Controls.Objects
         public static readonly DependencyProperty ValidationSchemaProperty = DependencyProperty.Register(nameof(ValidationSchema), typeof(JSchema), typeof(JsonControl), new PropertyMetadata(null, Change));
         //public static readonly DependencyProperty SchemaProperty = DependencyProperty.Register(nameof(Schema), typeof(Schema), typeof(JsonControl), new PropertyMetadata());
         public static readonly DependencyProperty ChangeValueCommandProperty = DependencyProperty.Register(nameof(ChangeValueCommand), typeof(ICommand), typeof(JsonControl), new PropertyMetadata());
+        public static readonly DependencyProperty IsReadOnlyVisibleProperty = DependencyProperty.Register("IsReadOnlyVisible", typeof(bool), typeof(JsonControl), new PropertyMetadata(true));
+        public static readonly DependencyProperty IsTypeVisibleProperty =    DependencyProperty.Register("IsTypeVisible", typeof(bool), typeof(JsonControl), new PropertyMetadata(false));
 
         public static readonly RoutedEvent ValueChangedEvent = EventManager.RegisterRoutedEvent(
             name: "ValueChanged",
@@ -200,6 +202,17 @@ namespace Utility.WPF.Controls.Objects
             set { SetValue(ValidationSchemaProperty, value); }
         }
 
+        public bool IsReadOnlyVisible
+        {
+            get { return (bool)GetValue(IsReadOnlyVisibleProperty); }
+            set { SetValue(IsReadOnlyVisibleProperty, value); }
+        }
+
+        public bool IsTypeVisible
+        {
+            get { return (bool)GetValue(IsTypeVisibleProperty); }
+            set { SetValue(IsTypeVisibleProperty, value); }
+        }
 
         public ICommand ChangeValueCommand
         {
@@ -290,12 +303,12 @@ namespace Utility.WPF.Controls.Objects
                 }
                 else if (item is JProperty { Value: { Type: { } _type } _value, Parent: var parent, Name: { } name } property)
                 {
-                    if (property.Name == MetadataConverter.Type)
+                    if (property.Name == MetadataConverter.Type && jsonControl.IsTypeVisible == false)
                     {
                         return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
                     }
 
-                    if (property.Name.Contains(MetadataConverter.IsReadonly))
+                    if (property.Name.Contains(MetadataConverter.IsReadonly) && jsonControl.IsReadOnlyVisible == false)
                     {
                         return frameworkElement.FindResource("InvisibleTemplate") as DataTemplate;
                     }

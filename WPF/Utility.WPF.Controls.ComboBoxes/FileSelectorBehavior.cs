@@ -55,16 +55,16 @@ namespace Utility.WPF.Controls.ComboBoxes
             this.AssociatedObject.SelectedItemTemplateSelector = CustomItemTemplateSelector.Instance;
 
             this.AssociatedObject.WhenAnyValue(a => a.SelectedNode)
-                .OfType<IReadOnlyTree>()
+                .OfType<IGetData>()
                 .Select(a => a.Data)
                 .OfType<DirectoryModel>()
-                .Subscribe(a =>
+                .Subscribe(tree =>
                 {
-                    var x = a.Children.OfType<ReadOnlyStringModel>().ToArray().ToViewModelTree(t_tree: a.Node);
+                    var x = tree.Items().OfType<ReadOnlyStringModel>().ToArray().ToViewModelTree(t_tree: tree);
 
-                    if (a.FileSystemInfo is FileSystemInfo fileSystemInfo)
+                    if (tree.FileSystemInfo is FileSystemInfo fileSystemInfo)
                         FileSystemInfo = fileSystemInfo;
-                    else if (a is IFileSystemInfo { FileSystemInfo: { } _FileSystemInfo })
+                    else if (tree is IFileSystemInfo { FileSystemInfo: { } _FileSystemInfo })
                     {
                         FileSystemInfo = _FileSystemInfo;
                     }
@@ -113,7 +113,7 @@ namespace Utility.WPF.Controls.ComboBoxes
             }
         }
 
-        private static bool filter(FileSystemInfo _FileSystemInfo, (IReadOnlyTree tree, int level) a)
+        private static bool filter(FileSystemInfo _FileSystemInfo, (IGetData tree, int level) a)
         {
             switch (a.tree.Data)
             {
@@ -133,7 +133,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                         {
                             if (_fsi.FileSystemInfo.FullName.TrimEnd('\\').Equals(_FileSystemInfo.FullName.TrimEnd('\\'), StringComparison.CurrentCultureIgnoreCase))
                                 return true;
-                            if (tree.Items.Count() == 0 && a.tree.Data is IYieldChildren model && a.tree is INode node)
+                            if (tree.Children.Count() == 0 && a.tree.Data is IYieldItems model && a.tree is IViewModelTree node)
                             {
                                 node.IsExpanded = true;
                             }
@@ -177,14 +177,14 @@ namespace Utility.WPF.Controls.ComboBoxes
         {
             public override DataTemplate SelectTemplate(object item, DependencyObject container)
             {
-                if (item is IReadOnlyTree { Data: var data } tree)
+                if (item is IGetData { Data: var data } tree)
                 {
                     if (data is FileSystemInfo || data is IFileSystemInfo)
                         return TemplateGenerator.CreateDataTemplate(() =>
                         {
                             var textBlock = new TextBlock { };
                             Binding binding = new() { Path = new PropertyPath(nameof(FileSystemInfo) + "." + "Name") };
-                            Binding binding2 = new() { Path = new PropertyPath(nameof(IReadOnlyTree.Data)) };
+                            Binding binding2 = new() { Path = new PropertyPath(nameof(IGetData.Data)) };
                             textBlock.SetBinding(TextBlock.TextProperty, binding);
                             textBlock.SetBinding(TextBlock.DataContextProperty, binding2);
                             return textBlock;

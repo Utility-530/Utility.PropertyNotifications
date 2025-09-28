@@ -12,7 +12,7 @@ namespace Utility.Nodes.WPF
                 new FalseDecisionTree<IReadOnlyTree>(new Decision(item => true))
                 {
                     // prevents child items of a parent Descriptor that is being shown as a Treeviewer from also being shown
-                    new FalseDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item).Data as IDescriptor != null), a=> true)
+                    new FalseDecisionTree<IReadOnlyTree>(new Decision(item => ((IReadOnlyTree)item) as IDescriptor != null), a=> true)
                     {
                     }
                 };

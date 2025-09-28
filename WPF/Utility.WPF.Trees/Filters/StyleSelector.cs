@@ -67,14 +67,14 @@ namespace Utility.Nodes.WPF
         {
             Predicate = new StringDecisionTree(new Decision(item => (item as IReadOnlyTree) != null) { })
                 {
-                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IHeaderDescriptor != null), md =>"HeaderItem"),
-                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IMethodDescriptor != null){  }, md=>"ExpandedTreeViewItem"),
+                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item as IHeaderDescriptor != null), md =>"HeaderItem"),
+                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item as IMethodDescriptor != null){  }, md=>"ExpandedTreeViewItem"),
                     ///new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionDescriptor != null && (item.Data as ICollectionDescriptor).ElementType == typeof(Table)){  }, md=>"ComboStyle"),
 
-                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionDescriptor != null){  }, md=>"LineStyle"),
-                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as ICollectionHeadersDescriptor != null){  }, md=>"ItemsStyle"),
-                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Data as IPropertiesDescriptor != null){  }, md=>"ItemsStyle"),
-                    new StringDecisionTree(new Decision<IGetParent<IReadOnlyTree>>(item => item.Parent !=null && item.Parent.Data is ICollectionDescriptor){  }, md =>"ThinLineStyle"),
+                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item as ICollectionDescriptor != null){  }, md=>"LineStyle"),
+                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item as ICollectionHeadersDescriptor != null){  }, md=>"ItemsStyle"),
+                    new StringDecisionTree(new Decision<IReadOnlyTree>(item => item as IPropertiesDescriptor != null){  }, md=>"ItemsStyle"),
+                    new StringDecisionTree(new Decision<IGetParent<IReadOnlyTree>>(item => item.Parent !=null && item.Parent is ICollectionDescriptor){  }, md =>"ThinLineStyle"),
 
                     //new StringDecisionTree(new Decision<IReadOnlyTree>(item => item.Parent!=null){  })
                     //{

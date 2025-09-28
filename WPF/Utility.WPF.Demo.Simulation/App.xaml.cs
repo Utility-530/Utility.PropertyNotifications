@@ -77,7 +77,7 @@ namespace Utility.WPF.Demo.Simulation
     {
         public INode Create(object config)
         {
-            return new Node() { Data = config };
+            return new NodeViewModel() { Data = config };
         }
     }
 

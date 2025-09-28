@@ -83,7 +83,6 @@
                 <ControlTemplate TargetType="{x:Type Thumb}">
                     <Border x:Name="rectangle"
                             SnapsToDevicePixels="True"
-                            Background="{StaticResource WordBlueBrush}"
                             Opacity="0.3"
                             CornerRadius="4"
                             Height="{TemplateBinding Height}"
