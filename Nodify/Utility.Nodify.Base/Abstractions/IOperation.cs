@@ -1,16 +1,16 @@
-﻿using Utility.Interfaces.NonGeneric;
-using Utility.Nodify.Core;
-using Utility.Nodify.Operations;
+﻿//using Utility.Interfaces.NonGeneric;
+//using Utility.Nodify.Core;
+//using Utility.Nodify.Operations;
 
-namespace Utility.Nodify.Operations
-{
-    public interface IOperation : ICore
-    {
-        IOValue Execute(params IOValue[] operands);
-    }
+//namespace Utility.Nodify.Operations
+//{
+//    public interface IOperation : ICore
+//    {
+//        IOValue Execute(params IOValue[] operands);
+//    }
 
-    public interface IFilter
-    {
-        bool Execute(object value);
-    }
-}
+//    public interface IFilter
+//    {
+//        bool Execute(object value);
+//    }
+//}

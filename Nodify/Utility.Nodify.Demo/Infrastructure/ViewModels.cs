@@ -7,7 +7,7 @@ using Splat;
 using Utility.ServiceLocation;
 using Utility.Interfaces.Exs;
 using System.Linq;
-using Utility.Nodify.Models;
+using Utility.Nodes;
 
 namespace Utility.Nodify.Demo.Infrastructure
 {

@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Enums\Utility.Enums\Utility.Enums.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.PropertyNotifications\Utility.PropertyNotifications.csproj" />
+    <ProjectReference Include="..\..\Interfaces\Utility.Interfaces.Exs\Utility.Interfaces.Exs.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Entities\Utility.Nodify.Entities.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Enums\Utility.Nodify.Enums.csproj" />
   </ItemGroup>

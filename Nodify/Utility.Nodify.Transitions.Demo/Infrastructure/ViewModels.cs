@@ -6,7 +6,9 @@ using Utility.Helpers;
 using Splat;
 using Utility.ServiceLocation;
 using Utility.Interfaces.Exs;
-using Utility.Nodify.Models;
+using Utility.Nodes;
+using DryIoc;
+using Utility.Interfaces.Exs.Diagrams;
 
 namespace Utility.Nodify.Transitions.Demo.Infrastructure
 {
@@ -24,7 +26,7 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
 
     public class MainViewModel
     {
-        object[] collection = [Globals.Resolver.Resolve<DiagramViewModel>(), Globals.Resolver.Resolve<MasterPlayViewModel>()];
+        object[] collection = [Globals.Resolver.Resolve<IDiagramViewModel>(), Globals.Resolver.Resolve<MasterPlayViewModel>()];
 
         public object[] Collection => collection;
     }

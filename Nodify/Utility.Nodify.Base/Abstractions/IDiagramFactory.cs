@@ -1,4 +1,4 @@
-﻿using Utility.Nodify.Core;
+﻿using Utility.Interfaces.Exs.Diagrams;
 
 namespace Utility.Nodify.Base.Abstractions
 {

@@ -38,7 +38,7 @@ namespace Utility.Nodify.Views.Infrastructure
                 if (x != null)
                     foreach (var item in x)
                     {
-                        if (item is IData { Data: { } data })
+                        if (item is IGetData { Data: { } data })
                             list.Add(data);
                     }
 
@@ -46,7 +46,7 @@ namespace Utility.Nodify.Views.Infrastructure
                 if (y != null)
                     foreach (var item in y)
                     {
-                        if (item is IData { Data: { } data })
+                        if (item is IGetData { Data: { } data })
                             list2.Add(data);
                     }
                 return (list, list2);

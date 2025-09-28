@@ -3,14 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Utility.Nodify.Demo"
              xmlns:inf="clr-namespace:Utility.Nodify.Demo.Infrastructure"
-             xmlns:nodify="https://miroiu.github.io/nodify"    
-             xmlns:vm="clr-namespace:Utility.Nodify.Models;assembly=Utility.Nodify.Models"
+             xmlns:nodify="https://miroiu.github.io/nodify"      
              xmlns:vm1="clr-namespace:Utility.Nodify.ViewModels;assembly=Utility.Nodify.ViewModels" 
              xmlns:templates="http://schemas.utility.com/templates" 
              xmlns:models="clr-namespace:Utility.Models.Diagrams;assembly=Utility.Models.Diagrams"
              xmlns:prop="clr-namespace:Utility.PropertyDescriptors;assembly=Utility.PropertyDescriptors"
              xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
-             xmlns:propertynotifications="clr-namespace:Utility.PropertyNotifications;assembly=Utility.PropertyNotifications">
+             xmlns:propertynotifications="clr-namespace:Utility.PropertyNotifications;assembly=Utility.PropertyNotifications"
+             xmlns:vm="clr-namespace:Utility.Nodes;assembly=Utility.Nodes">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

@@ -1,4 +1,4 @@
-﻿using Utility.Nodify.Models;
+﻿using Utility.Nodes;
 
 namespace Nodify.Playground
 {

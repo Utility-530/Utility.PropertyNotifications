@@ -1,9 +1,13 @@
 ﻿using DryIoc;
 using System;
 using System.Threading.Tasks;
+using Utility.Interfaces.Exs.Diagrams;
+using Utility.Interfaces.Generic;
+using Utility.Meta;
 using Utility.Models;
+using Utility.Nodes;
 using Utility.Nodify.Base.Abstractions;
-using Utility.Nodify.Core;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Nodify.Engine
 {
@@ -21,7 +25,11 @@ namespace Utility.Nodify.Engine
         {         
             var treeResolver = new TreeResolver();
 
-            var tree = new NamedTree() { Key = guid.ToString() };
+            var tree = new NodeViewModel() { 
+                Key = guid.ToString(), 
+                Data = new RootDescriptor(typeof(Model)), 
+                Diagram = diagram
+            };
             //_factories["004cf888-a762-4149-a3b9-7a0911cdf1a9"] = new(() => tree);
 
             var tcs = new TaskCompletionSource();
@@ -29,13 +37,7 @@ namespace Utility.Nodify.Engine
                 .Subscribe(item =>
                 {
                     var node = container.Resolve<IViewModelFactory>().CreateNode(item);
-                    //{
-                       
-                    //    Data = item,
-                    //    Guid = Guid.Parse((item as IGetKey).Key),
-                    //    Key = (item as IReadOnlyTree).Index.ToString()
-                    //    //Location = settings.NodeLocationGenerator(settings, ++i),
-                    //};
+  
                     diagram.Nodes.Add(node);
                 }, () =>
                 {

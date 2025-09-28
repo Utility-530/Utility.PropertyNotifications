@@ -2,9 +2,9 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows;
-using Utility.Nodify.Core;
-using Utility.Nodify.Enums;
-using Utility.Nodify.Models;
+using Utility.Enums;
+using Utility.Interfaces.Exs.Diagrams;
+using Utility.Nodes;
 
 namespace Nodify.Playground
 {
@@ -56,7 +56,7 @@ namespace Nodify.Playground
 
         private ConnectionViewModel AddConnection(IConnectorViewModel source, IConnectorViewModel target)
         {
-            var sourceIsInput = source.Flow == ConnectorFlow.Input;
+            var sourceIsInput = source.Flow == IO.Input;
 
             return new ConnectionViewModel
             {
@@ -67,7 +67,7 @@ namespace Nodify.Playground
 
         private ConnectionViewModel AddConnection(IConnectorViewModel source, INodeViewModel target)
         {
-            var allConnectors = source.Flow == ConnectorFlow.Input ? target.Output : target.Input;
+            var allConnectors = source.Flow == IO.Input ? target.Output : target.Input;
             var connector = allConnectors.First(c => (c as ConnectorViewModel)?.AllowsNewConnections() == true);
 
             return AddConnection(source, connector);
@@ -77,7 +77,7 @@ namespace Nodify.Playground
 
         public void DisconnectConnector(ConnectorViewModel connector)
         {
-            var graph = connector.Node.Graph;
+            var graph = connector.Node.Diagram;
             var connections = connector.Connections.ToList();
             connections.ForEach(c => graph.Connections.Remove(c));
         }
@@ -122,7 +122,7 @@ namespace Nodify.Playground
         /// <remarks>The source must be an input connector.</remarks>
         public void Rewire(ConnectorViewModel source, ConnectorViewModel target)
         {
-            if (source == target || source.Flow != ConnectorFlow.Input)
+            if (source == target || source.Flow != IO.Input)
                 return;
 
             var connectionsToRewire = source.Connections.ToList();
@@ -130,7 +130,7 @@ namespace Nodify.Playground
             {
                 if (CanAddConnection(connection.Output, target))
                 {
-                    source.Node.Graph.Connections.Remove(connection);
+                    source.Node.Diagram.Connections.Remove(connection);
                     AddConnection(connection.Output, target);
                 }
             }

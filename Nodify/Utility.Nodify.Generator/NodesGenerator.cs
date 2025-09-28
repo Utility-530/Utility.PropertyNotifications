@@ -1,12 +1,12 @@
 ﻿using DryIoc;
 using System.Collections.ObjectModel;
 using Utility.Changes;
+using Utility.Enums;
 using Utility.Helpers;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models.Diagrams;
-using Utility.Nodify.Enums;
-using Utility.Nodify.Models;
+using Utility.Nodes;
 using Utility.ServiceLocation;
 
 namespace Nodify.Playground
@@ -47,7 +47,7 @@ namespace Nodify.Playground
 
                             methodNode.InValues.ForEach(a =>
                             {
-                                var input = new ConnectorViewModel { Shape = ConnectorShape.Circle, Key = a.Value.Key, Data = a.Value };
+                                var input = new ConnectorViewModel { Shape = FlatShape.Circle, Key = a.Value.Key, Data = a.Value };
                                 Shared.serviceConnectors.Add(a.Value, input);
                                 node.Input.Add(input);
                                 input.Node = node;
@@ -55,7 +55,7 @@ namespace Nodify.Playground
 
                             if (methodNode.OutValue is { })
                             {
-                                var output = new ConnectorViewModel { Shape = ConnectorShape.Circle, Key = methodNode.MethodInfo.Name + ".", Data = methodNode.OutValue };
+                                var output = new ConnectorViewModel { Shape = FlatShape.Circle, Key = methodNode.MethodInfo.Name + ".", Data = methodNode.OutValue };
                                 Shared.serviceConnectors.Add(methodNode.OutValue, output);
                                 node.Output.Add(output);
                                 output.Node = node;
@@ -94,8 +94,8 @@ namespace Nodify.Playground
 
                             nodes.Add(node);
 
-                            var input = new ConnectorViewModel { Shape = ConnectorShape.Square, Flow = ConnectorFlow.Input, Node = node, Key = "input", Data = null };
-                            var output2 = new ConnectorViewModel { Node = node, Shape = ConnectorShape.Circle, Flow = ConnectorFlow.Output, Key = "output", Data = null };
+                            var input = new ConnectorViewModel { Shape = FlatShape.Square, Flow = IO.Input, Node = node, Key = "input", Data = null };
+                            var output2 = new ConnectorViewModel { Node = node, Shape = FlatShape.Circle, Flow = IO.Output, Key = "output", Data = null };
                             Shared.serviceConnectors.Add(rNode, output2);
 
                             node.Output.Add(output2);

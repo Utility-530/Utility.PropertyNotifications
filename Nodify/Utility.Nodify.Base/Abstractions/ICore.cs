@@ -1,7 +1,7 @@
-﻿namespace Utility.Nodify.Core
-{
-    public interface ICore
-    {
+﻿//namespace Utility.Nodify.Core
+//{
+//    public interface ICore
+//    {
 
-    }
-}
+//    }
+//}

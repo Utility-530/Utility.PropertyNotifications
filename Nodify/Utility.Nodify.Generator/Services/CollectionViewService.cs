@@ -9,15 +9,15 @@ namespace Utility.Nodify.Generator.Services
     public record PredicateParam() : MethodParameter<CollectionViewService>(nameof(CollectionViewService.Set), "predicate", ParameterTypes: [typeof(Predicate<object>)]);
     public record ListInParam() : MethodParameter<CollectionViewService>(nameof(CollectionViewService.Create), "list");
     public record ListCollectionViewReturnParam() : MethodParameter<CollectionViewService>(nameof(CollectionViewService.Create));
-    public class CollectionViewService : ValueModel<ListCollectionView>
+    public class CollectionViewService : Model<ListCollectionView>
     {
-        public ListCollectionView Create(IList list) => Value = new(list);
+        public ListCollectionView Create(IList list) => (ListCollectionView)(Value = new ListCollectionView(list));
 
         public void Set(Predicate<object> predicate)
         {
             this.WithChangesTo(a => a.Value).Subscribe(a =>
             {
-                a.Filter = predicate;
+                ((ListCollectionView)a).Filter = predicate;
             });
         }
 

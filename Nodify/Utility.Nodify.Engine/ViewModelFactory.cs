@@ -2,23 +2,21 @@
 using LanguageExt.Pipes;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Utility.Interfaces.NonGeneric;
-using Utility.Models;
 using Utility.Models.Diagrams;
 using Utility.Nodify.Base;
 using Utility.Nodify.Base.Abstractions;
-using Utility.Nodify.Core;
-using Utility.Nodify.Models;
 using Utility.Reactives;
 using Utility.Trees;
 using Utility.Trees.Abstractions;
 using Utility.Helpers.Generic;
+using Utility.Nodes;
+using Utility.Keys;
+using Utility.Interfaces.Exs.Diagrams;
+using Utility.Enums;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Nodify.Engine
 {
@@ -31,29 +29,19 @@ namespace Utility.Nodify.Engine
             this.container = container;
         }
 
-        public IConnectionViewModel CreateConnection(IConnectorViewModel source, IConnectorViewModel? target)
+        public IConnectionViewModel CreateConnection(IConnectorViewModel source, IConnectorViewModel target)
         {
 
-            //if (target == null)
-            //{
-            //    PendingConnection.IsVisible = true;
-            //    OpenAt(PendingConnection.TargetLocation);
-            //    Menu.Closed += OnOperationsMenuClosed;
-            //    return;
-            //}
 
             var connectionViewModel = new ConnectionViewModel
             {
-                Input = source,
-                Output = target,
-                Data = container.Resolve<IConnectionFactory>().CreateConnection(source.Data, target.Data),
-                IsDirectionForward = source.Node?.Data is Tree && target.Node.Data?.GetType().Name.Contains("observable", StringComparison.InvariantCultureIgnoreCase) == true
+                Input = target,
+                Output = source,
+                //Data = container.Resolve<IConnectionFactory>().CreateConnection(source.Data, target.Data),
+                IsDirectionForward = source.Node is IGetData { Data : Tree } && target.Node is IGetData { Data: { } data } && data.GetType().Name.Contains("observable", StringComparison.InvariantCultureIgnoreCase) == true
             };
 
             return connectionViewModel;
-
-            //container.RegisterInstanceMany<IConnectionViewModel>(connectionViewModel);
-            //Connections.Add(connectionViewModel);
         }
 
 
@@ -63,13 +51,13 @@ namespace Utility.Nodify.Engine
 
         public IConnectorViewModel CreateConnector(object dataContext)
         {
-            if (dataContext is Utility.Nodify.Base.ConnectorParameters { Guid: Guid guid, Data: var data, IsInput: bool isInput, Key: var key, Node: var node } s)
+            if (dataContext is ConnectorParameters { Guid: Guid guid, Data: var data, IsInput: bool isInput, Key: var key, Node: var node } s)
             {
                 return new ConnectorViewModel()
                 {
                     Guid = guid,
                     IsInput = isInput,
-                    Key = key,
+                    Key = "ObjectProp",
                     Node = node,
                     Data = data
                 };
@@ -86,88 +74,42 @@ namespace Utility.Nodify.Engine
         {
             if(dataContext is InstanceKey instanceKey)
             {
-                return new NodeViewModel() { Key = instanceKey.Key, Data = instanceKey.Data, Input = [], Output = [] };
+                return new NodeViewModel() {  Data = instanceKey.Data, Diagram = container.Resolve<IDiagramViewModel>(), Input = [], Output = [] };
             }
             else if (dataContext is IReadOnlyTree tree)
             {
-                if(tree is NamedTree namedTree)
+                if (tree is NodeViewModel nodeViewModel)
                 {
-                    return new NodeViewModel()
-                    {
-                        Data = tree.Data,
-                        Guid = Guid.Parse((tree as IGetKey).Key),
-                        Key = tree.Index.ToString(),
-                        Input = [],
-                        Output = []
-                    };
+                    var x = CreatePendingConnector(true);// new PendingConnectorViewModel() { IsInput = true };
+                    var y = CreatePendingConnector(null);
+
+                    nodeViewModel.Input = new CollectionWithFixedLast<IConnectorViewModel>(x);
+                    nodeViewModel.Output = new CollectionWithFixedLast<IConnectorViewModel>(y);
+
+                    x.Node = nodeViewModel;
+                    y.Node = nodeViewModel;
+                    return nodeViewModel;
                 }
-                var x = CreatePendingConnector(true);// new PendingConnectorViewModel() { IsInput = true };
-                var y = CreatePendingConnector(null);
-                var nodeViewModel = new NodeViewModel()
-                {
-
-                    Data = tree.Data,
-                    Guid = Guid.Parse((tree as IGetKey).Key),
-                    Key = tree.Index.ToString(),
-                    Input = new CollectionWithFixedLast<IConnectorViewModel>(x),
-                    Output = new CollectionWithFixedLast<IConnectorViewModel>(y)
-                    //location = settings.nodelocationgenerator(settings, ++i),
-                };
-                x.Node = nodeViewModel;
-                y.Node = nodeViewModel;
-                return nodeViewModel;
             }
-            //else if (dataContext is INotifyPropertyChanged npc)
-            //{
-            //    if (info.PropertyType == typeof(string))
-            //    {
-            //        observable = changed.WithChangesTo<INotifyPropertyChanged, string>(info);
-
-            //    }
-            //    else if (info.PropertyType == typeof(bool))
-            //    {
-            //        observable = changed.WithChangesTo<INotifyPropertyChanged, bool>(info);
-
-            //    }
-            //    else if (info.PropertyType == typeof(int))
-            //    {
-            //        observable = changed.WithChangesTo<INotifyPropertyChanged, int>(info);
-            //    }
-
-            //    var nodeViewModel = new NodeViewModel { Data = observable };
-
-            //    var input = new ConnectorViewModel { Data = info, Key = "input" };
-            //    var output = new ConnectorViewModel { Data = info, Key = "output" };
-            //    nodeViewModel.Input.Add(input);
-            //    nodeViewModel.Output.Add(output);
-            //    input.Node = nodeViewModel;
-            //    output.Node = nodeViewModel;
-            //    return nodeViewModel;
-            //}
             else if (dataContext is MethodInfo methodInfo)
             {
-                var methodNode = new MethodNode(methodInfo, null);
                 List<IConnectorViewModel> inputs = new();
                 List<IConnectorViewModel> outputs = new();
-                NodeViewModel nodeViewModel = new() { Data = methodNode, Input = inputs, Output = outputs };
-                foreach (var item in methodInfo.GetParameters().Select(a => a))
+                NodeViewModel nodeViewModel = new() { Data = methodInfo, Input = inputs, Output = outputs, Key = new GuidKey(Guid.NewGuid()) };
+                foreach (var parameter in methodInfo.GetParameters())
                 {
-                    var input = new ConnectorViewModel() { Key = item.Name, Data = methodNode.InValues.Single(a => a.Key == item.Name).Value, Flow = Enums.ConnectorFlow.Input, Node = nodeViewModel };
+                    var input = new ConnectorViewModel() { Key = parameter.Name, Data = parameter, Flow = IO.Input, Node = nodeViewModel };
                     inputs.Add(input);
                 }
-                if (methodNode.OutValue != null)
+                if (methodInfo.ReturnParameter != null)
                 {
-                    //var x = new ConnectorViewModel() { Flow = Enums.ConnectorFlow.Input, Node = nodeViewModel };
-                    var output = new ConnectorViewModel() { Flow = Enums.ConnectorFlow.Output, Node = nodeViewModel, Key = "output", Data = methodNode.OutValue };
-                    //nodeViewModel.Input.Add(x);
+                    var output = new ConnectorViewModel() { Flow = IO.Output, Node = nodeViewModel, Key = "output", Data = methodInfo.ReturnParameter };
                     outputs.Add(output);
                 }
-
 
                 return nodeViewModel;
             }
             throw new Exception("sdf 322das aas");
-            //return new NodeViewModel() { Data = dataContext };
         }
 
         public IConnectorViewModel CreatePendingConnector(object dataContext)
@@ -186,9 +128,7 @@ namespace Utility.Nodify.Engine
                     {
                         if (item is PropertyInfo propertyInfo)
                         {
-                            var objectConnector = new ObjectConnector(pending.Node.Data as INotifyPropertyChanged, propertyInfo);
-                            //container.Resolve<IConnectorFactory>().Create(new ConnectorParameters(pending.Node.Data, propertyInfo));
-                            var connectorViewModel = new ConnectorViewModel() { Data = objectConnector, Key = propertyInfo.Name, Node = pending.Node };
+                            var connectorViewModel = new ConnectorViewModel() { Data = propertyInfo, Key = propertyInfo.Name, Node = pending.Node };
                             connectorViewModel.Node.Output.Add(connectorViewModel);
                         }
                     }
@@ -197,7 +137,7 @@ namespace Utility.Nodify.Engine
                 {
                     foreach(var propertyInfo in a.OldItems)
                     {
-                        pending.Node.Output.RemoveBy(a => a.Data.Equals(propertyInfo));
+                        pending.Node.Output.RemoveBy(a => a is IGetData { Data: { } data } && data.Equals(propertyInfo));
                     }
                 }
             };

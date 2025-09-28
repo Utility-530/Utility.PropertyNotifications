@@ -3,6 +3,7 @@ using Splat;
 using System;
 using System.Reactive.Concurrency;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric.Dependencies;
 using Utility.Models;
@@ -29,7 +30,7 @@ namespace Utility.Nodify.Demo.Infrastructure
             register.Register(() => new MainViewModel());
             register.Register<IPlaybackEngine>(() => new PlaybackEngine(Utility.Enums.Playback.Pause));
             register.Register(() => new PlaybackService());
-            register.Register<IFactory<INode>>(() => new NodeFactory());
+            register.Register<IFactory<INodeViewModel>>(() => new NodeFactory());
             register.Register<IServiceResolver>(() => new ServiceResolver());
             register.Register<IModelResolver>(() => new BasicModelResolver());
             //register.Register<IObservable<IReadOnlyTree>>(() => new TreeResolver());

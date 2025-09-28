@@ -3,11 +3,13 @@ using System.Collections.ObjectModel;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
-using Utility.Nodify.Core;
-using Utility.Nodify.Enums;
-using Utility.Nodify.Models;
+using Utility.Nodes;
 using Utility.Reactives;
 using Utility.ServiceLocation;
+using Utility.Extensions;
+using Utility.Trees.Abstractions;
+using Utility.Interfaces.Exs.Diagrams;
+using Utility.Enums;
 
 namespace Nodify.Playground
 {
@@ -22,7 +24,7 @@ namespace Nodify.Playground
             (Utility.Globals.Resolver.Resolve<IModelResolver>())
                 .Subscribe(item =>
                 {
-                    var index = Utility.Trees.Extensions.Generic.Index(item, item => (item as IGetParent<IModel>).Parent, (item, child) => Utility.Helpers.NonGeneric.Linq.IndexOf((item as IYieldChildren).Children, a => (a as IGetName).Name.Equals((child as IGetName).Name)));
+                    var index = Utility.Trees.Extensions.Generic.Index(item, item => item.Parent(), (item, child) => Utility.Helpers.NonGeneric.Linq.IndexOf((item as IYieldItems).Items(), a => (a as IGetName).Name.Equals((child as IGetName).Name)));
 
                     var node = new NodeViewModel
                     {
@@ -35,9 +37,9 @@ namespace Nodify.Playground
 
                     nodes.Add(node);
 
-                    var input = new ConnectorViewModel { Shape = ConnectorShape.Square, Flow = ConnectorFlow.Input, Key = "input", Node = node, Data = null };
-                    var output1 = new ConnectorViewModel { Node = node, Shape = ConnectorShape.Circle, Flow = ConnectorFlow.Output , Key = "ouput1", Data = null };
-                    var output2 = new ConnectorViewModel { Node = node, Shape = ConnectorShape.Square, Flow = ConnectorFlow.Output, Key = "ouput2", Data = null };
+                    var input = new ConnectorViewModel { Shape = FlatShape.Square, Flow = IO.Input, Key = "input", Node = node, Data = null };
+                    var output1 = new ConnectorViewModel { Node = node, Shape = FlatShape.Circle, Flow = IO.Output , Key = "ouput1", Data = null };
+                    var output2 = new ConnectorViewModel { Node = node, Shape = FlatShape.Square, Flow = IO.Output, Key = "ouput2", Data = null };
                     Shared.serviceConnectors.Add(item, output1);
                     Shared.modelConnectors.Add(item, output2);
 
@@ -77,8 +79,8 @@ namespace Nodify.Playground
                             {
                                 return new ConnectionViewModel()
                                 {
-                                    Input = build(b?.Output?.Node ?? root, ConnectorFlow.Output, ConnectorShape.Square),
-                                    Output =build(a, ConnectorFlow.Input, ConnectorShape.Square) ,
+                                    Input = build(b?.Output?.Node ?? root, IO.Output, FlatShape.Square),
+                                    Output =build(a, IO.Input, FlatShape.Square) ,
                                     Data = b
                                 };
                             }
@@ -103,9 +105,9 @@ namespace Nodify.Playground
             return connections;
 
 
-            IConnectorViewModel build(INodeViewModel nodeViewModel, ConnectorFlow flow, ConnectorShape shape)
+            IConnectorViewModel build(INodeViewModel nodeViewModel, IO flow, FlatShape shape)
             {
-                if (flow == ConnectorFlow.Input)
+                if (flow == IO.Input)
                 {
 
                     foreach (var x in nodeViewModel.Input.Where(a => a.Shape == shape))
@@ -135,7 +137,7 @@ namespace Nodify.Playground
 
         private static string? parentIdSelector(NodeViewModel n)
         {
-            if (n.Data is IGetParent<IModel> { Parent: { } parent })
+            if (n.Data is IGetParent<IReadOnlyTree> { Parent: { } parent })
                 return parent is IGetName { Name: { } name } ? name : throw new Exception("ds32222222"); ;
             // root
             return null;
@@ -145,18 +147,18 @@ namespace Nodify.Playground
         {
             foreach (var node in enumerable)
             {
-                if (node is IModel model)
+                if (node is IReadOnlyTree model)
                 {
-                    if ((model as IGetParent<IModel>).Parent == null)
+                    if (model.Parent() == null)
                     {
                         var _node = new NodeViewModel { Data = model, Key = "0", Input = [], Output = [] };
-                        var output = new ConnectorViewModel { Node = _node, Shape = ConnectorShape.Square, Flow = ConnectorFlow.Output, Key = "output", Data = null };
+                        var output = new ConnectorViewModel { Node = _node, Shape = FlatShape.Square, Flow = IO.Output, Key = "output", Data = null };
                         Shared.serviceConnectors.Add(_node, output);
                         _node.Output.Add(output);
                         output.Node = _node;
                         return _node;
                     }
-                    else if (this._root([(model as IGetParent<IModel>).Parent]) is NodeViewModel t)
+                    else if (this._root([model.Parent()]) is NodeViewModel t)
                         return t;
                 }
             }

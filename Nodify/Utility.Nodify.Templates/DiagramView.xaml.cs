@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Nodify;
 using System.Drawing;
-using Utility.Nodify.Models;
+using Utility.Nodes;
 
 namespace Utility.Nodify.Demo
 {

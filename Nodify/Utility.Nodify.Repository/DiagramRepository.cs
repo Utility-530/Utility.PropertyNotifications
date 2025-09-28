@@ -1,15 +1,18 @@
 ﻿using ActivateAnything;
 using DryIoc;
+using Optional;
 using Splat;
 using SQLite;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
 using Utility.Common.Model;
+using Utility.Extensions;
 using Utility.Helpers.Reflection;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
+using Utility.Keys;
 using Utility.Nodify.Base;
 using Utility.Nodify.Base.Abstractions;
-using Utility.Nodify.Core;
 using Utility.Reactives;
 using Utility.ServiceLocation;
 using Utility.Trees;
@@ -68,7 +71,7 @@ namespace Utility.Nodify.Repository
         {
             var collection = new Collection<IReadOnlyTree>();
 
-            converter = new Converter(container, collection);
+            converter = new Converter();
             //Globals.Resolver.Resolve<IObservable<IReadOnlyTree>>().Subscribe(a =>
             //{
             //    collection.Add(a);
@@ -137,8 +140,8 @@ namespace Utility.Nodify.Repository
                 {
                     if ((a as IGetGuid).Guid != default)
                         return;
-               
-                    if((a.Output as IGetGuid).Guid==default)
+
+                    if ((a.Output as IGetGuid).Guid == default)
                         (a.Output as ISetGuid).Guid = Guid.NewGuid();
 
                     Add(new Connection() { Guid = Guid.NewGuid(), InputId = (a.Input as IGetGuid).Guid, OutputId = (a.Output as IGetGuid).Guid });
@@ -149,7 +152,7 @@ namespace Utility.Nodify.Repository
                 .AndAdditions<INodeViewModel>()
                 .Subscribe(a =>
                 {
-                    var key = converter.KeyExtractor(a.Data);
+                    var key = converter.Convert(a.Data());
                     var nodeId = (a as IGetGuid).Guid;
                     Add(new Node() { DiagramId = diagramId, Guid = nodeId, Key = key });
 
@@ -159,7 +162,10 @@ namespace Utility.Nodify.Repository
                         {
                             if ((input as IGetGuid).Guid == default)
                                 (input as ISetGuid).Guid = Guid.NewGuid();
-                            Add(new Connector() { NodeId = (input.Node as IGetGuid).Guid, Guid = (input as IGetGuid).Guid, Key = converter.KeyExtractor(input), IsInput = true });
+                            if (input is IGetData { Data: { } data })
+                                Add(new Connector() { NodeId = input.Node.Guid, Guid = (input as IGetGuid).Guid, Key = converter.Convert(data), IsInput = true });
+                            else
+                                throw new Exception("Input Connector data is null");
                         }
                     });
 
@@ -169,8 +175,10 @@ namespace Utility.Nodify.Repository
                         {
                             if ((output as IGetGuid).Guid == default)
                                 (output as ISetGuid).Guid = Guid.NewGuid();
-
-                            Add(new Connector() { NodeId = (output.Node as IGetGuid).Guid, Guid = (output as IGetGuid).Guid, Key = converter.KeyExtractor(output) });
+                            if (output is IGetData { Data: { } data })
+                                Add(new Connector() { NodeId = output.Node.Guid, Guid = (output as IGetGuid).Guid, Key = converter.Convert(data) });
+                            else
+                                throw new Exception("Output Connector data is null");
                         }
                     });
 
@@ -189,103 +197,118 @@ namespace Utility.Nodify.Repository
 
             foreach (var node in nodes)
             {
-                converter.CreateInstanceFromKey(node.Key).Subscribe(data =>
+
+                this.nodes(diagramViewModel, node, nodes).Subscribe(a => { });
+            }
+            return diagramViewModel;
+        }
+
+        List<INodeViewModel> loadedNodes = new List<INodeViewModel>();
+        IObservable<INodeViewModel> nodes(IDiagramViewModel diagramViewModel, Node node, List<Node> nodes)
+        {
+            return Observable.Create<INodeViewModel>(observer =>
+            {
+                return converter.ConvertBack(node.Key)
+                .Subscribe(data =>
                 {
                     INodeViewModel nodeViewModel;
-                    if (diagramViewModel.Nodes.Any(a => (a as IGetGuid).Guid == node.Guid))
+                    if (loadedNodes.Any(a => a.Guid == node.Guid))
                     {
-                        nodeViewModel = diagramViewModel.Nodes.SingleOrDefault(a => (a as IGetGuid).Guid.ToString() == node.Guid.ToString());
+                        observer.OnNext(loadedNodes.SingleOrDefault(a => a.Guid.ToString() == node.Guid.ToString()));
+                        return;
+                    }
+                    else if (diagramViewModel.Nodes.Any(a => a.Guid == node.Guid))
+                    {
+                        nodeViewModel = diagramViewModel.Nodes.SingleOrDefault(a => a.Guid.ToString() == node.Guid.ToString());
                     }
                     else
                     {
                         //nodeViewModel = new NodeViewModel() { Key = data.Key, Data = data.Data };
                         nodeViewModel = container.Resolve<IViewModelFactory>().CreateNode(data);
-                        diagramViewModel.Nodes.Add(nodeViewModel);                      
+                        (nodeViewModel as ISetKey).Key = new GuidKey(node.Guid);
+                        diagramViewModel.Nodes.Add(nodeViewModel);
                     }
+                    loadedNodes.Add(nodeViewModel);
+                    observer.OnNext(nodeViewModel);
 
-                    var connectors = connection.Query<Connector>("SELECT * FROM Connector WHERE NodeId = ?", node.Guid);
-                    foreach (var connector in connectors)
+                    var _outputConnectors = connection.Query<Connector>("SELECT * FROM Connector WHERE NodeId = ? AND IsInput = false", node.Guid);
+                    foreach (var _outputConnector in _outputConnectors)
                     {
-                        var inputConnections = connection.Query<Connection>("SELECT * FROM Connection WHERE InputId = ?", connector.Guid);
-                        foreach (var connectionRecord in inputConnections)
+                        converter
+                        .ConvertBack(_outputConnector.Key)
+                        .Subscribe(a =>
                         {
-                            converter.CreateInstanceFromKey(connector.Key).Subscribe(a =>
+                            var outputConnectorViewModel = nodeViewModel.Output.SingleOrDefault(a => (a as IGetGuid).Guid == _outputConnector.Guid);
+                            outputConnectorViewModel ??= container.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(_outputConnector.Guid, true, a.Key, nodeViewModel, a.Data));
+                            outputConnectorViewModel.Node = nodeViewModel;
+                            nodeViewModel.Output.Add(outputConnectorViewModel);
+
+                            var outputConnections = connection.Query<Connection>("SELECT * FROM Connection WHERE OutputId = ?", _outputConnector.Guid);
+                            foreach (var outputConnection in outputConnections)
                             {
-
-                                //var inputConnectorViewModel = new ConnectorViewModel() { Guid = connector.Guid, IsInput = true, Key = a.Key, Node = nodeViewModel, Data = a.Data };
-                                var inputConnectorViewModel = container.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(connector.Guid, true, a.Key, nodeViewModel, a.Data));
-                                nodeViewModel.Input.Add(inputConnectorViewModel);
                                 // Find the output connector
-                                var outputConnector = connection.Query<Connector>("SELECT * FROM Connector WHERE Guid = ?", connectionRecord.OutputId).FirstOrDefault();
+                                var inputConnector = connection.Query<Connector>("SELECT * FROM Connector WHERE Guid = ?", outputConnection.InputId).FirstOrDefault();
                                 //ConnectorViewModel? outputConnectorViewModel = null;
-                                if (outputConnector != null)
+                                if (inputConnector != null)
                                 {
-                                    // Find the output node
-                                    var outputNode = nodes.FirstOrDefault(n => n.Guid == outputConnector.NodeId);
-                                    if (outputNode != null)
+                                    converter
+                                    .ConvertBack(inputConnector.Key)
+                                    .Subscribe(al =>
                                     {
-                                        var outputNodeViewModel = diagramViewModel.Nodes.SingleOrDefault(a => (a as IGetGuid).Guid == outputNode.Guid);
-                                        //var outputNodeViewModel = new NodeViewModel() { Key = outputNode.Key, Guid = outputNode.Guid };
-                                  
-
-                                        converter.CreateInstanceFromKey(outputConnector.Key)
-                                        .Subscribe(al =>
+                                        Node inputNode = connection.Query<Node>("SELECT * FROM Node WHERE Guid = ?", inputConnector.NodeId).Single();
+                                        this.nodes(diagramViewModel, inputNode, nodes)
+                                        .Subscribe(inputNodeViewModel =>
                                         {
-                                            //outputConnectorViewModel = new ConnectorViewModel() { Guid = outputConnector.Guid, IsInput = false, Key = al.Key, Node = outputNodeViewModel, Data = al.Data };
-                                            var outputConnectorViewModel = container.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(outputConnector.Guid, false, al.Key, outputNodeViewModel, al.Data));
-                                            outputNodeViewModel.Output.Add(outputConnectorViewModel);
-                                            var connection = container.Resolve<IViewModelFactory>().CreateConnection(inputConnectorViewModel, outputConnectorViewModel);
-                                            (connection as ISetGuid).Guid = connectionRecord.Guid;
+
+                                            var inputConnectorViewModel = inputNodeViewModel.Input.SingleOrDefault(a => (a as IGetGuid).Guid == inputConnector.Guid);
+
+                                            if (inputConnectorViewModel == null)
+                                            {
+                                                inputConnectorViewModel = container.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(inputConnector.Guid, false, al.Key, inputNodeViewModel, al.Data));
+                                                inputConnectorViewModel.Node = inputNodeViewModel;
+                                                inputNodeViewModel.Input.Add(inputConnectorViewModel);
+                                            }
+
+                                            var connection = container.Resolve<IViewModelFactory>().CreateConnection(outputConnectorViewModel, inputConnectorViewModel);
+                                            (connection as ISetGuid).Guid = outputConnection.Guid;
                                             diagramViewModel.Connections.Add(connection);
-
-                                            //new ConnectionViewModel()
-                                            //{
-                                            //    Guid = connectionRecord.Guid,
-                                            //    Input = inputConnectorViewModel,
-                                            //    Output = outputConnectorViewModel
-                                            //}
-
                                         });
-                                    }
+                                    });
+
                                 }
-                            });
-                        }
+                            }
+                        });
 
-                        //var outputConnections = connection.Query<Connection>("SELECT * FROM Connection WHERE OutputId = ?", connector.Guid);
-                        //foreach (var connectionRecord in outputConnections)
-                        //{
-                        //    var outputConnectorViewModel = new ConnectorViewModel() { Guid = connectionRecord.Guid, IsInput = false, Key = connector.Key, Node = nodeViewModel, Data = null };
+                    }
+                    var inputConnectors = connection.Query<Connector>("SELECT * FROM Connector WHERE NodeId = ? AND IsInput = true", node.Guid);
 
-                        //    // Find the input connector
-                        //    var inputConnector = connection.Query<Connector>("SELECT * FROM Connector WHERE Guid = ?", connectionRecord.InputId).FirstOrDefault();
-                        //    ConnectorViewModel? inputConnectorViewModel = null;
-                        //    if (inputConnector != null)
-                        //    {
-                        //        // Find the input node
-                        //        var inputNode = nodes.FirstOrDefault(n => n.Guid == inputConnector.NodeId);
-                        //        if (inputNode != null)
-                        //        {
-                        //            //var inputNodeViewModel = new NodeViewModel() { Key = inputNode.Key, Guid = inputNode.Guid };
-                        //            var inputNodeViewModel = diagramViewModel.Nodes.SingleOrDefault(a => (a as IGetGuid).Guid == inputNode.Guid);
-                        //            inputConnectorViewModel = new ConnectorViewModel() { Guid = inputConnector.Guid, IsInput = true, Key = inputConnector.Key, Node = inputNodeViewModel, Data = null };
-                        //        }
-                        //    }
+                    foreach (var inputConnector in inputConnectors)
+                    {
+                        converter
+                        .ConvertBack(inputConnector.Key)
+                        .Subscribe(al =>
+                        {
+                            Node inputNode = connection.Query<Node>("SELECT * FROM Node WHERE Guid = ?", inputConnector.NodeId).Single();
 
-                        //    if (inputConnectorViewModel != null)
-                        //    {
-                        //        diagramViewModel.Connections.Add(new ConnectionViewModel()
-                        //        {
-                        //            Guid = connectionRecord.Guid,
-                        //            Input = inputConnectorViewModel,
-                        //            Output = outputConnectorViewModel
-                        //        });
-                        //    }
-                        //}
+                            {
+                                var inputConnectorViewModel = nodeViewModel.Input.SingleOrDefault(a => (a as IGetGuid).Guid == inputConnector.Guid);
+
+                                if (inputConnectorViewModel == null)
+                                {
+                                    inputConnectorViewModel = container.Resolve<IViewModelFactory>().CreateConnector(new ConnectorParameters(inputConnector.Guid, false, al.Key, nodeViewModel, al.Data));
+                                    inputConnectorViewModel.Node = nodeViewModel;
+                                    nodeViewModel.Input.Add(inputConnectorViewModel);
+                                }
+                                // Find the output node
+
+                            }
+                        });
+
                     }
                 });
-            }
-            return diagramViewModel;
+            });
         }
+
 
         bool filter(object instance)
         {

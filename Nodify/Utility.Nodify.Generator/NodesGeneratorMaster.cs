@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using Utility.Changes;
 using Utility.Interfaces.Exs;
 using Utility.Models.Diagrams;
-using Utility.Nodify.Models;
+using Utility.Nodes;
 using Utility.ServiceLocation;
 
 namespace Nodify.Playground

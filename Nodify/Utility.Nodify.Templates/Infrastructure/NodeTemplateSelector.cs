@@ -22,7 +22,7 @@ namespace Utility.Nodify.Views.Infrastructure
                 if (ObservableTemplate is not null)
                     return ObservableTemplate;
             }
-            else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ValueModel<>))
+            else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Model<>))
             {
                 if (ValueModelTemplate is not null)
                     return ValueModelTemplate;

@@ -4,12 +4,14 @@
              xmlns:local="clr-namespace:Utility.Nodify.Transitions.Demo"
              xmlns:inf="clr-namespace:Utility.Nodify.Transitions.Demo.Infrastructure"
              xmlns:nodify="https://miroiu.github.io/nodify"    
-             xmlns:vm="clr-namespace:Utility.Nodify.Models;assembly=Utility.Nodify.Models"
+             xmlns:vm="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
              xmlns:vm1="clr-namespace:Utility.Nodify.ViewModels;assembly=Utility.Nodify.ViewModels" 
              xmlns:templates="http://schemas.utility.com/templates" 
              xmlns:models="clr-namespace:Utility.Models.Diagrams;assembly=Utility.Models.Diagrams"
              xmlns:prop="clr-namespace:Utility.PropertyDescriptors;assembly=Utility.PropertyDescriptors"
              xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
+             xmlns:com="clr-namespace:System.ComponentModel;assembly=netstandard"
+             xmlns:ref="clr-namespace:System.Reflection;assembly=netstandard"
              xmlns:propertynotifications="clr-namespace:Utility.PropertyNotifications;assembly=Utility.PropertyNotifications">
     <Application.Resources>
         <ResourceDictionary>
@@ -83,7 +85,7 @@
                 </Setter>
             </Style>
 
-            <DataTemplate DataType="{x:Type vm:ConnectorViewModel}">
+            <!--<DataTemplate DataType="{x:Type vm:ConnectorViewModel}">
                 <Button Style="{StaticResource IconButton}"
                                                      Command="{x:Static nodify:EditorCommands.BringIntoView}"
                                                                     CommandParameter="{Binding Location}"
@@ -106,7 +108,7 @@
                         </TextBlock.Style>
                     </TextBlock>
                 </Button>
-            </DataTemplate>
+            </DataTemplate>-->
 
             <DataTemplate DataType="{x:Type vm:ConnectionViewModel}">
                 <ItemsControl>
@@ -171,7 +173,11 @@
                 <TextBlock VerticalAlignment="Center" Text="{Binding Method.Name}" FontSize="16" FontWeight="DemiBold" ToolTip="{Binding Method.MethodInfo.ReflectedType.FullName}"></TextBlock>
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type prop:MemberDescriptor}">
+            <DataTemplate DataType="{x:Type com:MemberDescriptor}">
+                    <TextBlock Text="{Binding Name}"></TextBlock>          
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type ref:MethodInfo}">
                 <TextBlock Text="{Binding Name}"></TextBlock>
             </DataTemplate>
             
@@ -179,7 +185,7 @@
                 <ContentControl Content="{Binding Reference}" />
             </DataTemplate>
 
-            <DataTemplate DataType="{x:Type models:MethodConnector}">
+            <!--<DataTemplate DataType="{x:Type models:MethodConnector}">
                 <Grid MaxWidth="80">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
@@ -191,7 +197,7 @@
                     </Viewbox>        
                 </Grid>
 
-            </DataTemplate>
+            </DataTemplate>-->
 
         </ResourceDictionary>
     </Application.Resources>

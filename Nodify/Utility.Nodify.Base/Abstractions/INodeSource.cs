@@ -1,6 +1,6 @@
 ﻿using Splat;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
-using Utility.Nodify.Core;
 
 namespace Utility.Nodify.Operations.Infrastructure
 {
@@ -11,9 +11,9 @@ namespace Utility.Nodify.Operations.Infrastructure
         INodeViewModel Find(object guid);
     }
 
-    public record MenuItem(string Key, Guid Guid): IReference
+    public record MenuItem(string Key, Guid Guid, INodeSource NodeSource) : IReference
     {
-        public IEnumerable<MenuItem> Children => Locator.Current.GetService<INodeSource>().Filter(this);
+        public IEnumerable<MenuItem> Children => NodeSource.Filter(this);
 
         public object Reference { get; set; }
     };

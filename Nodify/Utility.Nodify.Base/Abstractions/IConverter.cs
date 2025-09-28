@@ -1,7 +1,8 @@
-﻿using Utility.Nodify.Core;
+﻿using Utility.Interfaces.Exs.Diagrams;
+using Utility.Nodify.Core;
 using Utility.Nodify.Entities;
 
-namespace Utility.Nodify.Engine.Infrastructure
+namespace Utility.Nodify.Base.Abstractions
 {
     public interface IConverter
     {

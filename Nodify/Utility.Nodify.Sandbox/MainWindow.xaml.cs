@@ -8,7 +8,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Utility.Nodify.Models;
+using Utility.Nodes;
 
 namespace Utility.Nodify.Sandbox
 {

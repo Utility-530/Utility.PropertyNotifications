@@ -2,12 +2,13 @@
 using System.Collections.ObjectModel;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
-using Utility.Nodify.Core;
-using Utility.Nodify.Enums;
-using Utility.Nodify.Models;
+using Utility.Nodes;
 using Utility.Reactives;
 using Utility.ServiceLocation;
 using Utility.Trees.Abstractions;
+using Utility.Extensions;
+using Utility.Interfaces.Exs.Diagrams;
+using Utility.Enums;
 
 namespace Nodify.Playground
 {
@@ -22,7 +23,7 @@ namespace Nodify.Playground
             (Utility.Globals.Resolver.Resolve<IObservable<IReadOnlyTree>>())
                 .Subscribe(item =>
                 {
-                    var index = Utility.Trees.Extensions.Generic.Index(item, item => (item as IGetParent<IReadOnlyTree>).Parent, (item, child) => Utility.Helpers.NonGeneric.Linq.IndexOf((item as IReadOnlyTree).Items, a => (a as IGetKey).Key.Equals((child as IGetKey).Key)));
+                    var index = Utility.Trees.Extensions.Generic.Index(item, item => (item as IGetParent<IReadOnlyTree>).Parent, (item, child) => Utility.Helpers.NonGeneric.Linq.IndexOf((item as IReadOnlyTree).Children, a => (a as IGetKey).Key.Equals((child as IGetKey).Key)));
                     var newIndex = new Utility.Structs.Index(index.ToArray());
                     if (item is ITreeIndex { Index:{ } _index } treeIndex)
                     {
@@ -70,8 +71,8 @@ namespace Nodify.Playground
                             {
                                 return new ConnectionViewModel()
                                 {
-                                    Input = build(b?.Output?.Node ?? root, ConnectorFlow.Output, ConnectorShape.Square),
-                                    Output = build(a, ConnectorFlow.Input, ConnectorShape.Square),
+                                    Input = build(b?.Output?.Node ?? root, IO.Output, FlatShape.Square),
+                                    Output = build(a, IO.Input, FlatShape.Square),
                                     Data = b
                                 };
                             }
@@ -96,9 +97,9 @@ namespace Nodify.Playground
             return connections;
 
 
-            IConnectorViewModel build(INodeViewModel nodeViewModel, ConnectorFlow flow, ConnectorShape shape)
+            IConnectorViewModel build(INodeViewModel nodeViewModel, IO flow, FlatShape shape)
             {
-                if (flow == ConnectorFlow.Input)
+                if (flow == IO.Input)
                 {
 
                     foreach (var x in nodeViewModel.Input.Where(a => a.Shape == shape))
@@ -130,7 +131,7 @@ namespace Nodify.Playground
             if (n is IGetName _name)
                 return _name.Name;
 
-            if (n is IData { Data: IGetName{ Name: { } name  } })
+            if (n is IGetData { Data: IGetName{ Name: { } name  } })
                 return name;
             throw new Exception("d3fff");
         }
@@ -149,18 +150,18 @@ namespace Nodify.Playground
         {
             foreach (var node in enumerable)
             {
-                if (node is IModel model)
+                if (node is IReadOnlyTree model)
                 {
-                    if ((model as IGetParent<IModel>).Parent == null)
+                    if (model.Parent() == null)
                     {
                         var _node = new T { Data = model, Key = "0" };
-                        var output = new ConnectorViewModel { Node = _node, Shape = ConnectorShape.Square, Flow = ConnectorFlow.Output, Key = "output", Data = null };
+                        var output = new ConnectorViewModel { Node = _node, Shape = FlatShape.Square, Flow = IO.Output, Key = "output", Data = null };
                         Shared.serviceConnectors.Add(_node, output);
                         _node.Output.Add(output);
                         output.Node = _node;
                         return _node;
                     }
-                    else if (this._root([(model as IGetParent<IModel>).Parent]) is T t)
+                    else if (this._root([model.Parent()]) is T t)
                         return t;
                 }
             }

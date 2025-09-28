@@ -1,8 +1,7 @@
 ﻿using Microsoft.Xaml.Behaviors;
 using Nodify;
 using Utility.Models.Diagrams;
-using Utility.Nodify.Models;
-
+using Utility.Nodes;
 
 namespace Utility.Nodify.Views.Infrastructure
 {

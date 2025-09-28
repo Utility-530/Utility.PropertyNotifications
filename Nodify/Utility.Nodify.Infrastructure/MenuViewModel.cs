@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Reactive.Subjects;
-using Utility.Nodify.Base;
+using Utility.Nodes;
 using Utility.Nodify.Base.Abstractions;
-using Utility.Nodify.Models;
 
 namespace Utility.Nodify.ViewModels
 {
@@ -16,6 +15,7 @@ namespace Utility.Nodify.ViewModels
 
         public MenuViewModel()
         {
+            IsVisible = false;
             items
                 .WhenAdded(a =>
             {

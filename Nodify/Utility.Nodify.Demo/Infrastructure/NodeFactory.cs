@@ -3,15 +3,11 @@ using Utility.Interfaces.Generic;
 
 namespace Utility.Nodify.Demo
 {
-    public class NodeFactory : IFactory<INode>
+    public class NodeFactory : IFactory<IViewModelTree>
     {
-        public INode Create(object config)
+        public IViewModelTree Create(object config)
         {
-            var node = new Utility.Nodes.Node() { Data = config };
-            if (config is ISetNode iNode)
-            {
-                iNode.SetNode(node);
-            }
+            var node = new Utility.Nodes.NodeViewModel() { Data = config };
             return node;
         }
     }
