@@ -6,9 +6,10 @@ namespace Utility.WPF.Converters
 {
     public class EqualToBooleanConverter : IValueConverter
     {
+        public bool Invert { get; set; }
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return value.Equals(parameter);
+            return value.Equals(parameter) != Invert;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -17,13 +18,17 @@ namespace Utility.WPF.Converters
         }
 
         public static EqualToBooleanConverter Instance => new EqualToBooleanConverter();
+        public static EqualToBooleanConverter InverseInstance => new() { Invert = true };
     }
+
 
     public class EqualToVisibilityConverter : IValueConverter
     {
+        public bool Invert { get; set; }
+
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return value.Equals(parameter) ? Visibility.Visible : Visibility.Collapsed;
+            return value.Equals(parameter) != Invert ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -31,20 +36,7 @@ namespace Utility.WPF.Converters
             throw new NotImplementedException();
         }
 
-        public static EqualToVisibilityConverter Instance => new EqualToVisibilityConverter();
-    }
-    public class InverseEqualToVisibilityConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            return value.Equals(parameter) == false ? Visibility.Visible : Visibility.Collapsed;
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-
-        public static InverseEqualToVisibilityConverter Instance => new ();
-    }
+        public static EqualToVisibilityConverter Instance => new ();
+        public static EqualToVisibilityConverter InverseInstance => new () { Invert=true };
+    }   
 }
