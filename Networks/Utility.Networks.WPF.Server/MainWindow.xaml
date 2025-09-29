@@ -7,7 +7,7 @@
         xmlns:local1="clr-namespace:Utility.Networks.WPF.Server.ViewModels"
         xmlns:objects="http://schemas.utility.com/objects" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        xmlns:conv="http://schemas.utility.com/converters"
+        xmlns:conv="http://schemas.utility.com/converters" xmlns:services="clr-namespace:ChatterServer.Services"
         Title="MainWindow" Height="450" Width="800">
     <FrameworkElement.Resources>
     </FrameworkElement.Resources>
@@ -35,54 +35,12 @@
             <Button Margin="5,0" Command="{Binding StopCommand}">Stop</Button>
         </StackPanel>
 
-        <DockPanel Grid.Column="1" Grid.Row="0" DataContext="{Binding Server}">
-            <Border  Margin="5">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="0.3*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <ListView ItemsSource="{Binding Connections}">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Name" Width="120" DisplayMemberBinding="{Binding Guid}"/>
-                                <GridViewColumn Header="Address" Width="150" DisplayMemberBinding="{Binding EndPoint.Address}"/>
-                                <GridViewColumn Header="Port" Width="150" DisplayMemberBinding="{Binding EndPoint.Port}"/>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                    <ListView Grid.Row="1" ItemsSource="{Binding PacketEvents}">
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn Header="Type" Width="120" DisplayMemberBinding="{Binding Type}"/>
 
-                                <GridViewColumn Header="Sender" Width="100" DisplayMemberBinding="{Binding Sender}"/>
-                                <GridViewColumn Header="Receiver" Width="100" DisplayMemberBinding="{Binding Receiver}"/>
-                                <GridViewColumn Header="Packet" Width="500">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <objects:ObjectControl Object="{Binding Packet}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
-                </Grid>
-
-                <!--<objects:JsonControl>
-                    <i:Interaction.Behaviors>
-                        <objects:ObjectBehavior Object="{Binding Server}" RaisePropertyChanged="True">
-                            <objects:ObjectBehavior.Collections>
-                                <MultiBinding Converter="{StaticResource CollectionsToEnumerableConverter}">
-                                    <Binding Path="Server.Connections"/>
-                                    <Binding Path="Server.PacketEvents"/>
-                                </MultiBinding>
-                            </objects:ObjectBehavior.Collections>
-                        </objects:ObjectBehavior>
-                    </i:Interaction.Behaviors>
-                </objects:JsonControl>-->
-            </Border>
-        </DockPanel>
+        <Grid  Grid.Column="1" Grid.Row="0">
+            <Grid.DataContext>
+                <services:ServerService></services:ServerService>
+            </Grid.DataContext>
+            <ContentControl Content="{Binding Server}"></ContentControl>
+        </Grid>
     </Grid>
 </Window>

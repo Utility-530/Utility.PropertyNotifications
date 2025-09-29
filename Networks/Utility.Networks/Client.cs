@@ -1,5 +1,4 @@
-﻿using SimpleTcp;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Net;
 using System.Net.Sockets;
 using Utility.Helpers;
@@ -24,13 +23,13 @@ namespace Utility.Networks
         private bool _disposed;
         private bool raised = false;
         private TimeSpan timeSinceLastPing;
-        private List<TimeSpan> delays = new List<TimeSpan>();
+        private List<TimeSpan> delays = [];
         // Events
         private readonly Action<object>? _onDataReceived;
         private readonly Func<Client, object>? _onConnected;
         private readonly Action<Client>? _onDisconnected;
 
-        public TimeSpan Latency => delays.Any()? delays.Average(): TimeSpan.MinValue;
+        public TimeSpan Latency => delays.Any() ? delays.Average() : TimeSpan.MinValue;
         public ObservableCollection<object> Received { get; } = new();
 
         public ObservableCollection<object> Sent { get; } = new();
@@ -121,7 +120,7 @@ namespace Utility.Networks
             _onDisconnected = onDisconnected;
         }
 
-        public async Task<bool> ConnectAsync(CancellationToken cancellationToken = default)
+        public async Task<Exception?> ConnectAsync(CancellationToken cancellationToken = default)
         {
             if (_disposed)
                 throw new ObjectDisposedException(nameof(Client));
@@ -155,19 +154,19 @@ namespace Utility.Networks
                         await SendObjectAsync(new ConnectionPacket(Guid, item));
 
                     }, null);
-                    return true;
+                    return null;
                 }
                 else
                 {
                     //Status = StatusType.Failed;
-                    return false;
+                    return new Exception($"Guid, {guidString} not valid");
                 }
             }
             catch (Exception ex)
             {
                 //Status = StatusType.Failed;
                 // Log exception here
-                return false;
+                return ex;
             }
         }
 
@@ -351,8 +350,9 @@ namespace Utility.Networks
         }
 
         // Factory method for creating and connecting client
-        public static async Task<Client> CreateAndConnectAsync(
-            string address, int port,
+        public static async Task<object> CreateAndConnectAsync(
+            string address,
+            int port,
             Action<object>? onDataReceived = null,
             Func<Client, object>? onConnected = null,
             Action<Client>? onDisconnected = null,
@@ -369,20 +369,20 @@ namespace Utility.Networks
 
                 var client = new Client(ipAddress, port, onDataReceived, onConnected, onDisconnected);
 
-                if (await client.ConnectAsync(cancellationToken))
+                if (await client.ConnectAsync(cancellationToken) is not Exception ex)
                 {
                     return client;
                 }
                 else
                 {
                     client.Dispose();
-                    return null;
+                    return ex;
                 }
             }
             catch (Exception ex)
             {
                 // Log exception here
-                return null;
+                return ex;
             }
         }
 

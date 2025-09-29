@@ -1,17 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using System.Runtime.Serialization.Formatters.Binary;
-//using System.Text;
-//using System.Text.Json;
 using Newtonsoft.Json;
-
-using System.Threading;
-using System.Threading.Tasks;
 using System.Text;
 
-namespace SimpleTcp
+namespace Utility.Networks.Infrastructure
 {
     public static class Helper
     {
@@ -52,7 +44,7 @@ namespace SimpleTcp
         public static async Task<T> ReceiveObjectAsync<T>(NetworkStream stream, CancellationToken cancellationToken = default)
         {
             if (stream == null || !stream.CanRead)
-                return default(T);
+                return default;
 
             try
             {
@@ -63,13 +55,13 @@ namespace SimpleTcp
                 {
                     int read = await stream.ReadAsync(lengthBytes, bytesRead, 4 - bytesRead, cancellationToken);
                     if (read == 0)
-                        return default(T); // Connection closed
+                        return default; // Connection closed
                     bytesRead += read;
                 }
 
                 int dataLength = BitConverter.ToInt32(lengthBytes, 0);
                 if (dataLength <= 0 || dataLength > 1024 * 1024) // 1MB limit
-                    return default(T);
+                    return default;
 
                 // Read the data
                 var dataBytes = new byte[dataLength];
@@ -78,7 +70,7 @@ namespace SimpleTcp
                 {
                     int read = await stream.ReadAsync(dataBytes, bytesRead, dataLength - bytesRead, cancellationToken);
                     if (read == 0)
-                        return default(T); // Connection closed
+                        return default; // Connection closed
                     bytesRead += read;
                 }
 
@@ -88,7 +80,7 @@ namespace SimpleTcp
             catch (Exception ex)
             {
                 // Log exception here
-                return default(T);
+                return default;
             }
         }
 
@@ -96,7 +88,7 @@ namespace SimpleTcp
         public static T TryReceiveObject<T>(Socket socket)
         {
             if (socket == null || !socket.Connected || socket.Available == 0)
-                return default(T);
+                return default;
 
             try
             {
@@ -106,7 +98,7 @@ namespace SimpleTcp
             catch (Exception ex)
             {
                 // Log exception here
-                return default(T);
+                return default;
             }
         }
 
@@ -130,7 +122,7 @@ namespace SimpleTcp
         public static async Task<T> ReceiveObject<T>(this Socket socket)
         {
             if (socket == null || !socket.Connected)
-                return default(T);
+                return default;
 
             try
             {
@@ -140,7 +132,7 @@ namespace SimpleTcp
             catch (Exception ex)
             {
                 // Log exception here
-                return default(T);
+                return default;
             }
         }
 

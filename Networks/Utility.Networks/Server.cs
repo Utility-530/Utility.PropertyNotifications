@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Tasks;
 using Utility.Helpers;
 using Utility.Networks.Infrastructure;
-using static Utility.PropertyNotifications.PropertyChangedExtensions;
 
 namespace Utility.Networks
 {
@@ -30,6 +25,10 @@ namespace Utility.Networks
         private readonly TcpListener _listener;
         private readonly SynchronizationContext? _context;
         private readonly ConcurrentDictionary<Guid, Client> _connections = new();
+        private readonly Action<PacketEvent> onConnectionAccepted;
+        private readonly Action<PacketEvent> onConnectionRemoved;
+        private readonly Action<PacketEvent> onPacketReceived;
+        private readonly Action<PacketEvent> onPacketSent;
         private CancellationTokenSource _cancellationTokenSource;
         private Task _listenTask;
         private Task _monitorTask;
@@ -50,13 +49,35 @@ namespace Utility.Networks
         public int Port { get; }
         public bool IsRunning => _cancellationTokenSource?.Token.IsCancellationRequested == false;
         public TimeSpan PongEchoInterval { get; set; } = TimeSpan.FromSeconds(1);
-        public Server(IPAddress address, int port)
+
+        public Server(IPAddress address, 
+            int port,
+               Action<PacketEvent> onConnectionAccepted,
+            Action<PacketEvent> onConnectionRemoved,
+            Action<PacketEvent> onPacketReceived,
+            Action<PacketEvent> onPacketSent
+            )
         {
             Address = address ?? throw new ArgumentNullException(nameof(address));
             Port = port;
+            this.onConnectionAccepted = onConnectionAccepted;
+            this.onConnectionRemoved = onConnectionRemoved;
+            this.onPacketReceived = onPacketReceived;
+            this.onPacketSent = onPacketSent;
             _context = SynchronizationContext.Current;
             _listener = new TcpListener(address, port);
         }
+        public static async Task<object> CreateAndStartAsync(IPAddress address, int port,
+            Action<PacketEvent> onConnectionAccepted,
+            Action<PacketEvent> onConnectionRemoved,
+            Action<PacketEvent> onPacketReceived,
+            Action<PacketEvent> onPacketSent)
+        {
+            var server = new Server(address, port, onConnectionAccepted, onConnectionRemoved, onPacketReceived, onPacketSent);
+            await server.StartAsync();
+            return server;
+        }
+
 
         public async Task<bool> StartAsync()
         {
@@ -228,25 +249,10 @@ namespace Utility.Networks
                             AddEvent(OnPingIgnored, sender, null, info);
                         }
                         break;
-                    //case ConnectionPacket connectionPacket:
-                    //    {
-                    //        SendObjectToClients(connectionPacket, sender.Guid);
-                    //        break;
-                    //    }
-                    //case DisConnectionPacket disConnectionPacket:
-                    //    {
-                    //        SendObjectToClients(disConnectionPacket, sender.Guid);
-                    //        break;
-                    //    }
-                    //case PersonalPacket personalPacket:
-                    //    if (Guid.TryParse(personalPacket.Guid, out var targetGuid) &&
-                    //        _connections.TryGetValue(targetGuid, out var targetClient))
-                    //    {
-                    //        await targetClient.SendObjectAsync(personalPacket, cancellationToken);
-                    //        AddEvent(OnPacketSent, sender, targetClient, personalPacket);
-                    //    }
-                    //break;
-
+                    case ServerPacket serverPacket:
+                    {
+                        break;
+                    }
                     default:
                         await BroadcastObjectAsync(receivedObject, sender, cancellationToken);
                         break;
@@ -351,7 +357,30 @@ namespace Utility.Networks
             try
             {
                 var packetEvent = new PacketEvent(eventType, sender?.Guid, receiver?.Guid, data);
-                UpdateUICollection(() => PacketEvents.Add(packetEvent));
+                UpdateUICollection(() =>
+                {
+                    switch(packetEvent.Type)
+                    {
+                        case OnPacketReceived :
+                         onPacketReceived?.Invoke(packetEvent);
+                            break;
+                        case OnPacketSent:
+                            onPacketSent?.Invoke(packetEvent);
+                            break;
+                        case OnConnectionAccepted:
+                            onConnectionAccepted?.Invoke(packetEvent);
+                            break;
+                        case OnConnectionRemoved:
+                            onConnectionRemoved?.Invoke(packetEvent);
+                            break;
+                        default:
+                 
+                            break;
+                    }
+                    PacketEvents.Add(packetEvent);
+                });
+
+                
             }
             catch (Exception ex)
             {

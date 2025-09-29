@@ -12,7 +12,6 @@ namespace Utility.Networks.WPF.Server
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            var service = new Service();
             base.OnStartup(e);
         }
     }

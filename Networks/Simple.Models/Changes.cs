@@ -39,5 +39,8 @@ namespace Simple.Models
         public bool Value { get; }
     }
 
-
+    public record struct ExceptionChange(Exception Value) :IChange
+    {
+        public DateTime TimeStamp { get; } = DateTime.Now;
+    }
 }

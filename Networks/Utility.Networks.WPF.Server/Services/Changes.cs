@@ -5,6 +5,7 @@ namespace Utility.Networks.WPF.Server.Services
     public readonly record struct UserNameAddChange(string Key, object Value) : IDictionaryAddChange
     {
     }
+
     public readonly record struct UserNameRemoveChange(string Key) : IDictionaryRemoveChange
     {
     }
@@ -12,13 +13,14 @@ namespace Utility.Networks.WPF.Server.Services
     public readonly record struct StatusChange(string Value) : IStringChange
     {
     }
+
     public readonly record struct IsRunningChange(bool Value) : IBooleanChange
     {
     }
+
     public readonly record struct ExternalAddressChange(string Value) : IStringChange
     {
     }
-
 
     public readonly record struct PortChange(string Value) : IStringChange
     {

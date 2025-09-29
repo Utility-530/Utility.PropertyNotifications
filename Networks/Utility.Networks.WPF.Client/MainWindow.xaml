@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Utility.Networks.WPF.Client" 
         xmlns:conv="http://schemas.utility.com/converters"
-        xmlns:system="clr-namespace:System;assembly=netstandard"
+        xmlns:system="clr-namespace:System;assembly=netstandard" xmlns:services="clr-namespace:Utility.Networks.WPF.Client.Services"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Window.DataContext>
@@ -15,12 +15,6 @@
         <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
         <conv:InverseBooleanConverter x:Key="InverseConverter"/>
         <conv:BooleanToVisibilityConverter Invert="True"  x:Key="InverseBooleanToVisibilityConverter"/>
-
-        <LinearGradientBrush x:Key="FlashBrush" Opacity="0.6">
-            <GradientStop Color="White" x:Name="Stop1" Offset="0.25" />
-            <GradientStop Color="White" x:Name="Stop2" Offset="0.5" />
-            <GradientStop Color="White" Offset="1.0" />
-        </LinearGradientBrush>
     </Window.Resources>
     <Grid Margin="2">
         <Grid.ColumnDefinitions>
@@ -41,16 +35,16 @@
                     Background="WhiteSmoke">
             <Label>Username</Label>
             <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" 
-                     IsEnabled="{Binding ChatRoom.IsConnected, Converter={StaticResource InverseConverter}}"/>
+                     IsEnabled="{Binding IsConnected, Converter={StaticResource InverseConverter}}"/>
             <Label>IP Address</Label>
             <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}" 
-                     IsEnabled="{Binding ChatRoom.IsConnected, Converter={StaticResource InverseConverter}}"/>
+                     IsEnabled="{Binding IsConnected, Converter={StaticResource InverseConverter}}"/>
             <Label>Port</Label>
             <TextBox Text="{Binding Port, UpdateSourceTrigger=PropertyChanged}" 
-                     IsEnabled="{Binding ChatRoom.IsConnected, Converter={StaticResource InverseConverter}}"/>
+                     IsEnabled="{Binding IsConnected, Converter={StaticResource InverseConverter}}"/>
             <Button Command="{Binding ConnectCommand}">Connect</Button>
             <Button Command="{Binding DisconnectCommand}">Disconnect</Button>
-            <Label Content="{Binding ChatRoom.IsConnected}" ContentStringFormat="IsConnected: {0}"/>
+            <Label Content="{Binding IsConnected}" ContentStringFormat="IsConnected: {0}"/>
         </StackPanel>
 
         <StackPanel Grid.Column="0" Grid.Row="3"
@@ -142,7 +136,7 @@
         <DockPanel Grid.Column="1" Grid.Row="0"
                     Grid.ColumnSpan="3" Grid.RowSpan="3"
                    Margin="5"
-                    Background="#FFDEDEDE" Visibility="{Binding ChatRoom.IsConnected, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                    Background="#FFDEDEDE" Visibility="{Binding IsConnected, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
 
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Label FontSize="16" Foreground="#FF212121">
@@ -151,94 +145,11 @@
             </StackPanel>
         </DockPanel>
 
-
-        <DockPanel Grid.Column="4" Grid.Row="0"
-                   Grid.RowSpan="3"
-                   Margin="5"
-                    Background="#FFDEDEDE">
-
-            <Grid DataContext="{Binding ChatRoom}" >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="0.6*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <StackPanel>
-                    <Label DockPanel.Dock="Top">Last Server response</Label>
-                    <TextBlock Text="{Binding TimeSinceLastPong}" Margin="8,0"></TextBlock>
-                    <Label DockPanel.Dock="Top">Average Latency (s)</Label>
-                    <TextBlock Text="{Binding Latency, StringFormat=\{0:ss\\:ffffff\}}" Margin="8,0"></TextBlock>
-                </StackPanel>
-
-                <ListBox Grid.Row="1"  ItemsSource="{Binding Sent}"  Margin="5" ScrollViewer.VerticalScrollBarVisibility="Visible">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding}" Margin="2"/>
-                                <!--<Ellipse Fill="Red" Height="20" Width="20"></Ellipse>-->
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-
-                <ListBox ItemsSource="{Binding Received}" Grid.Row="2" Margin="5">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="{Binding}" Margin="2"/>
-                                <!--<Ellipse Fill="Red" Height="20" Width="20"></Ellipse>-->
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-
-            </Grid>
-        </DockPanel>
-
-        <Grid.Resources>
-            <!--<Setter Property="Background">
-                <Setter.Value>-->
-            <RadialGradientBrush x:Key="FlashBrush"  Opacity="0">
-                <GradientStop Color="White" x:Name="Stop1" Offset="0.5" />
-                <GradientStop Color="#579" x:Name="Stop2" Offset="1" />
-                <!--<GradientStop Color="CadetBlue"  Offset="1.0" />-->
-                    </RadialGradientBrush>
-                <!--</Setter.Value>
-            </Setter>-->
-        </Grid.Resources>
-
-        <Grid.Style>
-            <Style TargetType="Grid">
-                <Setter Property="Background" Value="{StaticResource FlashBrush}"></Setter>
-              
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsFlashing}" Value="True">
-                        <DataTrigger.EnterActions>
-                            <BeginStoryboard x:Name="FlashStoryboard">
-                                <Storyboard AutoReverse="True">
-                                    <DoubleAnimation Storyboard.TargetProperty="Background.Opacity" 
-                                       From="0" To="0.3" Duration="0:0:0.3"/>
-                                    <!--<ColorAnimation 
-                                                   Storyboard.Target="{StaticResource FlashBrush}"
-            Storyboard.TargetProperty="GradientStops[0].Color"
-                                                To="RoyalBlue"
-                                                Duration="0:0:0.5"/>
-                                    --><!-- Animate the second stop --><!--
-                                    <ColorAnimation 
-                        Storyboard.Target="{StaticResource FlashBrush}"
-            Storyboard.TargetProperty="GradientStops[1].Color"
-                                                To="LimeGreen"
-                                                Duration="0:0:0.5"/>-->
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </DataTrigger.EnterActions>
-                        <DataTrigger.ExitActions>
-                            <StopStoryboard BeginStoryboardName="FlashStoryboard"/>
-                        </DataTrigger.ExitActions>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </Grid.Style>
-
+        <Grid Grid.Column="4" Grid.RowSpan="3">
+            <Grid.DataContext>
+                <services:ClientService></services:ClientService>
+            </Grid.DataContext>
+            <ContentControl Content="{Binding Client}"></ContentControl>
+        </Grid>   
     </Grid>
 </Window>

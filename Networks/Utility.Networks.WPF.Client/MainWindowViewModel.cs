@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Simple.Models;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using System.Windows.Input;
 using Utility.Commands;
 using Utility.Networks.Infrastructure;
 using Utility.Networks.Packets;
+using Utility.Networks.WPF.Server.Services;
 using Utility.PropertyNotifications;
 
 namespace Utility.Networks.WPF.Client
@@ -20,12 +22,12 @@ namespace Utility.Networks.WPF.Client
         private string _username = "User" + new Random().Next(1000, 9999);
         private string _address = "127.0.0.1";
         private string _port = "8000";
-        private Networks.Client _chatRoom;
         private SynchronizationContext context;
         private string _message;
 
         private string _colorCode;
         private bool isFlashing;
+        private bool isConnected;
 
         public string Username
         {
@@ -56,28 +58,20 @@ namespace Utility.Networks.WPF.Client
             get { return _colorCode; }
             set { RaisePropertyChanged(ref _colorCode, value); }
         }
-        public bool IsFlashing
+
+        public bool IsConnected
         {
-            get { return isFlashing; }
-            set { RaisePropertyChanged(ref isFlashing, value); }
+            get { return isConnected; }
+            set { RaisePropertyChanged(ref isConnected, value); }
         }
 
         public ICommand ConnectCommand { get; set; }
         public ICommand DisconnectCommand { get; set; }
         public ICommand SendCommand { get; set; }
 
-
-        public Networks.Client ChatRoom
-        {
-            get { return _chatRoom; }
-            set { RaisePropertyChanged(ref _chatRoom, value); }
-        }
-
-
         public ObservableCollection<Message> Messages { get; } = new();
         public ObservableCollection<User> Users { get; } = new();
-
-
+        public ObservableCollection<Exception> Exceptions { get; } = new();
 
         public MainWindowViewModel()
         {
@@ -85,6 +79,16 @@ namespace Utility.Networks.WPF.Client
             ConnectCommand = new Command(Connect, canConnect);
             DisconnectCommand = new Command(Disconnect, canDisconnect);
             SendCommand = new Command(Send, canSend);
+            Model.Instance.Changes.CollectionChanged += (s, e) =>
+            {
+                foreach (IChange item in e.NewItems)
+                {
+                    if(item is ExceptionChange { Value: { } exception })
+                    {
+                        Exceptions.Add(exception);
+                    }
+                }
+            };
         }
 
         private async Task Connect()
@@ -95,22 +99,22 @@ namespace Utility.Networks.WPF.Client
             }
 
             Clear();
-            ChatRoom = await Networks.Client.CreateAndConnectAsync(Address, socketPort, 
-            packet =>
+
+            Model.Instance.AddChange(new ConnectChange(new ConnectParameters(Address, socketPort, packet =>
             {
                 switch (packet)
                 {
                     case PongPacket:
-                        IsFlashing = false;
-                        IsFlashing = true;
-                        return;
+                        {
+                            IsConnected = true;
+                            return;
+                        }
                     case MessagePacket { Value: string value } chatP:
                         {
                             var user = Users.Single(a => a.Guid == chatP.Source);
                             Messages.Add(new Client.Message(user.Name, user.Color, value));
                             break;
                         }
-
                     case ConnectionPacket { Source: { } source, Value: UserDetails { Name: { } name, ColorCode: { } color } }:
                         {
                             if (Users.Any(u => u.Guid == source) == false)
@@ -118,10 +122,8 @@ namespace Utility.Networks.WPF.Client
                                 Users.Add(new User(source, name, color));
                                 Messages.Add(new Message(name, color, $"{name} has connected to the server"));
                             }
-
                             break;
                         }
-
                     case DisConnectionPacket { Source: { } _source }:
                         {
                             var user = Users.Single(a => a.Guid == _source);
@@ -131,16 +133,17 @@ namespace Utility.Networks.WPF.Client
                         }
                 }
 
-            },
-            (chatRoom) =>
+
+            }, a =>
             {
                 Messages.Add(new Message(Username, ColorCode, "You have connected to the server"));
                 return new UserDetails(Username, ColorCode);
-            },
-            (chatRoom) =>
+
+            }, a =>
             {
+                IsConnected = false;
                 Messages.Add(new Message(Username, ColorCode, "You have disconnected from the server"));
-            });
+            })));
         }
 
         public void Clear()
@@ -151,31 +154,32 @@ namespace Utility.Networks.WPF.Client
 
         private async Task Disconnect()
         {
-            if (ChatRoom == null)
+            if (IsConnected == false)
                 displayError("You are not connected to a server.");
 
-            await ChatRoom.DisconnectAsync();
+            //await Client.DisconnectAsync();
+            Model.Instance.AddChange(new DisconnectChange());
+
         }
 
         private async Task Send()
         {
-            if (ChatRoom == null)
+            if (IsConnected == false)
                 displayError("You are not connected to a server.");
-            
-            MessagePacket chatPacket = new(ChatRoom.Guid, null, Message);
 
+            string message = Message;
             context.Post(_ =>
             {
-                Messages.Add(new Client.Message(Username, ColorCode, (string)chatPacket.Value));
+                Messages.Add(new Client.Message(Username, ColorCode, message));
             }, null);
-            await ChatRoom.SendObjectAsync(chatPacket);
 
+            Model.Instance.AddChange(new SendChange(message));
             Message = string.Empty;
         }
 
-        private bool canConnect() => !(ChatRoom?.IsConnected ?? false);
-        private bool canDisconnect() => (ChatRoom?.IsConnected ?? false);
-        private bool canSend() => !string.IsNullOrWhiteSpace(Message) && ChatRoom.IsConnected;
+        private bool canConnect() => IsConnected == false;
+        private bool canDisconnect() => IsConnected;
+        private bool canSend() => !string.IsNullOrWhiteSpace(Message) && IsConnected;
 
         private void displayError(string message) =>
             MessageBox.Show(message, "Woah there!", MessageBoxButton.OK, MessageBoxImage.Error);

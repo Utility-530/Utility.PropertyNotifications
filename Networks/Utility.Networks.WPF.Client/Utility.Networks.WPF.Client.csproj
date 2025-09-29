@@ -11,7 +11,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
     <ProjectReference Include="..\..\WPF\Utility.WPF.Converters\Utility.WPF.Converters.csproj" />
+    <ProjectReference Include="..\Simple.Models\Simple.Models.csproj" />
     <ProjectReference Include="..\Utility.Networks.Packets\Utility.Networks.Packets.csproj" />
+    <ProjectReference Include="..\Utility.Networks.Templates\Utility.Networks.Templates.csproj" />
     <ProjectReference Include="..\Utility.Networks\Utility.Networks.csproj" />
   </ItemGroup>
 

@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Utility.Networks.WPF.Server"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary Source="pack://application:,,,/Utility.Networks.Templates;component/ServerTemplate.xaml"/> 
     </Application.Resources>
 </Application>

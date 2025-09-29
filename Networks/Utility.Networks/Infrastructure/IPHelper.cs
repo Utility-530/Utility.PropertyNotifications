@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace SimpleTcp
+namespace Utility.Networks.Infrastructure
 {
     public class IPHelper
     {
