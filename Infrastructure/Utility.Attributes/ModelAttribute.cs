@@ -1,7 +1,9 @@
-﻿namespace Utility.Attributes
+﻿using System;
+
+namespace Utility.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class ModelAttribute(string guid, string? transformMethod = default, int index = default) : Attribute
+    public class ModelAttribute(string guid, string? transformMethod = default, int index = default, string? data = null) : Attribute
     {
         public Guid Guid { get; } = Guid.Parse(guid);
         public string? TransformMethod { get; } = transformMethod;
