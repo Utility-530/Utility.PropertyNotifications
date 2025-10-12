@@ -1,16 +1,15 @@
 ﻿using Dragablz;
 using Splat;
-using System.Collections.ObjectModel;
-using Utility.Nodes.WPF;
-using Utility.PropertyNotifications;
+using Utility.Interfaces.NonGeneric;
+using Utility.Models;
 
 namespace Utility.Nodes.Demo.Lists
 {
-    public class ContainerViewModel : NotifyPropertyClass
+    public class  ContainerModel : Model
     {
-        private ViewModel _selected;
+        private object _selected;
 
-        public ContainerViewModel()
+        public ContainerModel()
         {
             //_cleanUp = Disposable.Create(() =>
             //{
@@ -20,29 +19,31 @@ namespace Utility.Nodes.Demo.Lists
             //});
         }
 
-        public ObservableCollection<ViewModel> Children { get; } = [];
-
         public ItemActionCallback ClosingTabItemHandler => ClosingTabItemHandlerImpl;
 
         private void ClosingTabItemHandlerImpl(ItemActionCallbackArgs<TabablzControl> args)
         {
-            var container = (ViewModel)args.DragablzItem.DataContext;//.DataContext;
+            var container = args.DragablzItem.DataContext;//.DataContext;
             if (container?.Equals(Selected) == true)
             {
-                Selected = Children.FirstOrDefault(vc => vc != container);
+                Selected = m_items.Cast<object>().FirstOrDefault(vc => vc != container);
             }
             //var disposable = container.Content as IDisposable;
             //disposable?.Dispose();
         }
 
-        public ViewModel Selected
+        public object Selected
         {
             get => _selected;
             set
-            {         
+            {
                 foreach (var v in Children)
-                    v.IsSelected = false;
-                value?.IsSelected = true;
+                {
+                    if (v is ISetIsSelected setIsSelected)
+                        setIsSelected.IsSelected = false;
+                }
+                if(value is ISetIsSelected setSelected)
+                    setSelected.IsSelected = true;
                 RaisePropertyChanged(ref _selected, value);
             }
         }

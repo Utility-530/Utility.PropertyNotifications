@@ -1,32 +1,56 @@
 ﻿using System.Collections;
 using System.Reactive.Linq;
 using Utility.Enums;
+using Utility.Extensions;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
+using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Models.Trees;
+using Utility.Nodes.Demo.Lists.Models;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
-using Utility.Services;
-using Utility.Extensions;
-using Utility.Interfaces.Exs.Diagrams;
 using Utility.ServiceLocation;
+using Utility.Services;
 
 namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
     {
-        public IObservable<INodeViewModel> BuildUserProfileRoot(Guid guid, Type type)
+        public IObservable<INodeViewModel> BuildCreditCardRoot(Guid guid, Type type)
         {
             buildNetwork(guid);
 
-            return nodeSource.Create(nameof(BuildUserProfileRoot),
+            return nodeSource.Create(nameof(BuildCreditCardRoot),
                 guid,
                 s =>
                 new Model(() => [
-                     new StringModel(initialise: node=>node.DataTemplate = "SearchEditor") { Name = search },
-                     new ListModel(type) { Name = list },
-                     new EditModel { Name = edit },
+                    new StringModel(initialise: node=>node.DataTemplate = "SearchEditor") { Name = search },
+                    new ListModel(type) { Name = list },
+                    new EditModel(nodeAction: node =>
+                    {
+                        node
+                        .WithChangesTo(a => (a as IGetValue).Value)
+                        .Subscribe(model =>
+                        {
+                            if (model is CreditCardModel creditCardModel)
+                            {
+                                creditCardModel
+                                .WhenChanged()
+                                .Subscribe(a =>
+                                {
+                                    if(a.Name!= nameof(CreditCardModel.LastEdit))
+                                    {
+                                        creditCardModel.LastEdit = DateTime.Now;
+                                        creditCardModel.RaisePropertyChanged(nameof(CreditCardModel.LastEdit));
+                                    }
+                                });
+                            }
+                        });
+                    }) 
+                    { Name = edit },
+                    new StringModel(initialise: node=>node.DataTemplate = "MoneySumTemplate") { Name = summary }
                 ],
                 (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; },
                 (addition) =>
@@ -38,7 +62,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
 
                     if (addition is StringModel { Name: search } searchModel)
                     {
-                        searchModel.Observe<FilterParam>(guid);
+                        searchModel.Observe<FilterParam>(guid, includeInitial: true);
                     }
 
                     if (addition is ListModel { } listModel)
@@ -55,6 +79,10 @@ namespace Utility.Nodes.Demo.Lists.Factories
 
                         listModel.Observe<SelectionParam>(guid);
                     }
+                    if (addition is StringModel { Name: summary } summaryModel)
+                    {
+                        summaryModel.ReactTo<SumCollectionReturnParam>(guid: guid);
+                    }
                 })
                 { Name = main });
 
@@ -65,6 +93,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 serviceResolver.Connect<PredicateReturnParam, PredicateParam>();
                 serviceResolver.Connect<ListInstanceReturnParam, ListInParam>();
                 serviceResolver.Connect<ListInstanceReturnParam, ListParam>();
+                serviceResolver.Connect<ListInstanceReturnParam, SumCollectionInputParam>();
             }
         }
     }

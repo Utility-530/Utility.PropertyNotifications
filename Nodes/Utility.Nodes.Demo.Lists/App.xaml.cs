@@ -1,4 +1,4 @@
-﻿using Dragablz;
+﻿using Fasterflect;
 using Newtonsoft.Json;
 using Splat;
 using System;
@@ -8,11 +8,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using Utility.Attributes;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Entities;
 using Utility.Extensions;
-using Utility.Helpers.Reflection;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
@@ -21,8 +19,6 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Interfaces.NonGeneric.Dependencies;
 using Utility.Models;
 using Utility.Models.Trees;
-using Utility.Nodes.Demo.Lists.Entities;
-using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
@@ -39,19 +35,19 @@ namespace Utility.Nodes.Demo.Lists
     /// </summary>
     public partial class App : Application
     {
-
+        public const string DatabasePath = "O:\\Users\\rytal\\Data\\models.sqlite";
         protected override void OnStartup(StartupEventArgs e)
         {
-            CurrentMutable.RegisterLazySingleton(() => new ContainerViewModel());
+            CurrentMutable.RegisterLazySingleton(() => new ContainerModel());
             CurrentMutable.RegisterLazySingleton<PlaybackService>(() => new PlaybackService());
             showPlayback();
             SQLitePCL.Batteries.Init();
-            initialise(CurrentMutable);
             initialiseGlobals(Globals.Register);
+            initialise(CurrentMutable);   
             showSplashscreen();
-            buildNetwork(Globals.Resolver.Resolve<IServiceResolver>());
+
             JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
-            subscribeToTypeChanges();
+            //subscribeToTypeChanges();
             base.OnStartup(e);
         }
 
@@ -62,10 +58,10 @@ namespace Utility.Nodes.Demo.Lists
             register.RegisterLazySingleton<MethodCache>(() => MethodCache.Instance);
             register.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new Factories.NodeMethodFactory());
             register.RegisterLazySingleton<IEnumerableFactory<Method>>(() => Nodes.Meta.NodeMethodFactory.Instance);
-            register.RegisterLazySingleton(() => new MasterViewModel());
+            //register.RegisterLazySingleton(() => new MasterViewModel());
             register.RegisterConstant(new ContainerService());
             register.RegisterConstant(new RazorService());
-            register.RegisterLazySingleton<IEnumerableFactory<Type>>(() => new ModelTypesFactory());
+            register.RegisterLazySingleton<IEnumerableFactory<ModelType>>(() => new ModelTypesFactory());
             register.RegisterLazySingleton<IFactory<IId<Guid>>>(() => new ModelFactory());
             register.RegisterLazySingleton<FilterService>(() => new FilterService());
             register.RegisterLazySingleton<CollectionCreationService>(() => new CollectionCreationService());
@@ -82,12 +78,6 @@ namespace Utility.Nodes.Demo.Lists
             register.Register<IPlaybackEngine>(() => new PlaybackEngine());
         }
 
-        private static void buildNetwork(IServiceResolver serviceResolver)
-        {
-            serviceResolver.Connect<PredicateReturnParam, PredicateParam>();
-            serviceResolver.Connect<ListInstanceReturnParam, ListInParam>();
-            serviceResolver.Connect<ListInstanceReturnParam, ListParam>();
-        }
 
         private static void showPlayback()
         {
@@ -109,7 +99,7 @@ namespace Utility.Nodes.Demo.Lists
                 Content = new Image { Source = bmi, Stretch = Stretch.UniformToFill }
             };
             sswindow.Content = slashscreen;
-            var window = new Window() { Content = Locator.Current.GetService<ContainerViewModel>() };
+            var window = new Window() { Content = Locator.Current.GetService<ContainerModel>() };
             slashscreen.Finished += (s, e) =>
             {
                 window.Show();
@@ -117,109 +107,7 @@ namespace Utility.Nodes.Demo.Lists
             };
         }
 
-        public void subscribeToTypeChanges()
-        {
-            Locator.Current.GetService<IObservableIndex<INodeViewModel>>()[nameof(Utility.Nodes.Meta.NodeMethodFactory.BuildListRoot)]
-                .Subscribe(node =>
-                {
-                    node
-                    .WhenReceivedFrom(a => a.Current, includeNulls: false)
-                    .Select(current =>
-                    {
-                        if (current is ModelTypeModel { Value: ModelType { Type: { } stype } value } data)
-                        {
-                            var type = Type.GetType(stype);
-                            return type;
-                        }
-                        throw new Exception("£D£");
-                    }).Observe<ChangeTypeParam, Type>()
-                    .Observe<InstanceTypeParam, Type>();
-                });
-        }
-    }
 
-    public class ModelTypesFactory : IEnumerableFactory<Type>
-    {
-        public IEnumerable<Type> Create(object? o = null)
-        {
-            return typeof(ModelTypesFactory).Assembly.TypesByAttribute<ModelAttribute>(a => a.Index);
-        }
-    }
-
-    public class ModelFactory : IFactory<IId<Guid>>
-    {
-        public IId<Guid> Create(object config)
-        {
-            if (config is Type type)
-            {
-                if (type.GetConstructors().SingleOrDefault(a => a.TryGetAttribute<FactoryAttribute>(out var x)) is { } x)
-                {
-                    return (IId<Guid>)x.Invoke(new[] { default(object) });
-                }
-                if (type == typeof(UserProfileModel))
-                {
-                    return new UserProfileModel() { Id = Guid.NewGuid(), AddDate = DateTime.Now };
-                }
-                if (type == typeof(EbayModel))
-                {
-                    return new EbayModel { Id = Guid.NewGuid() };
-                }
-                if (Activator.CreateInstance(type) is IId<Guid> iid)
-                {
-                    if (iid is IIdSet<Guid> set)
-                        set.Id = Guid.NewGuid();
-                    return iid;
-                }
-                else
-                {
-                    throw new Exception("33889__e");
-                }
-            }
-            else
-            {
-                throw new Exception("545 fgfgddf");
-            }
-        }
-    }
-
-
-    public class InterTabClient : IInterTabClient
-    {
-        public InterTabClient()
-        {
-        }
-
-        public INewTabHost<Window> GetNewHost(IInterTabClient interTabClient, object partition, TabablzControl source)
-        {
-            var window = new Window();
-            var TabablzControl = new TabablzControl();
-            window.Content = TabablzControl;
-
-            return new NewTabHost<Window>(window, TabablzControl);
-        }
-
-        public TabEmptiedResponse TabEmptiedHandler(TabablzControl tabControl, Window window)
-        {
-            return TabEmptiedResponse.CloseWindowOrLayoutBranch;
-        }
-    }
-
-    public class PlaybackEngine : IPlaybackEngine
-    {
-        public void OnCompleted()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnError(Exception error)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnNext(IAction value)
-        {
-            value.Do();
-        }
     }
 
 

@@ -18,6 +18,7 @@
 		<ProjectReference Include="..\..\Infrastructure\Utility.Attributes\Utility.Attributes.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Services.Meta\Utility.Services.Meta.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Services\Utility.Services.csproj" />
+		<ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
 		<ProjectReference Include="..\..\Persists\Utility.Persists\Utility.Persists.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Lists\Utility.WPF.Controls.Lists.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Objects\Utility.WPF.Controls.Objects.csproj" />
@@ -36,9 +37,5 @@
 
 	<ItemGroup>
 	  <Resource Include="Assets\shuttle.png" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Views\" />
 	</ItemGroup>
 </Project>

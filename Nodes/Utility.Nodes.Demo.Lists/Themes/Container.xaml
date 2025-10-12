@@ -7,20 +7,15 @@
                     xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
                     xmlns:filters="clr-namespace:Utility.Nodes.WPF;assembly=Utility.WPF.Trees" 
                     xmlns:nwpf="clr-namespace:Utility.Nodes.WPF;assembly=Utility.Nodes.WPF"
-                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
+                    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+                    xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
+                    xmlns:markup="http://schemas.utility.com/markup" 
+                    xmlns:conv="http://schemas.utility.com/converters"
+                    xmlns:t="http://schemas.utility.com/trees">
 
     <ResourceDictionary.MergedDictionaries>
-        <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />-->
-        <!--<materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="{x:Null}" SecondaryColor="Lime" />
-
-        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign2.Defaults.xaml" />
-
-        <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/materialdesign.xaml"/>-->
-        <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/accent/materialdesigncolor.amber.xaml" />-->
-
-
         <ResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml"/>
-
+        <ResourceDictionary Source="/Themes/Master.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <filters:StyleSelector x:Key="StyleSelector" DefaultStyle="ViewContentStyle"/>
@@ -36,11 +31,19 @@
         </Setter>
     </Style>
 
-    <!--<Style TargetType="{x:Type dragablz:TabablzControl}" BasedOn="{StaticResource MaterialDesignTabablzControlStyle}" />-->
+    <local:CustomDataTemplateSelector x:Key="DataTemplateSelector">
+        <local:CustomDataTemplateSelector.DefaultTemplate>
+            <DataTemplate DataType="{x:Type nodes:NodeViewModel}">
+                <t:CustomTreeView ItemsSource="{markup:Array {Binding }}"/>
+            </DataTemplate>
+        </local:CustomDataTemplateSelector.DefaultTemplate>
+        <local:CustomDataTemplateSelector.MasterTemplate>
+            <StaticResource ResourceKey="MasterTemplate"/>
+        </local:CustomDataTemplateSelector.MasterTemplate>
+    </local:CustomDataTemplateSelector>
 
-    <DataTemplate DataType="{x:Type local:ContainerViewModel}">
+    <DataTemplate DataType="{x:Type local:ContainerModel}">
         <utl:SplitControl att:Ex.ToggleStyle="{StaticResource SettingsToggleStyle}" >
-            
             <utl:SplitControl.Header>
                 <TextBlock Text="Settings"/>
             </utl:SplitControl.Header>
@@ -58,11 +61,11 @@
                             <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" />
                         </dragablz:TabablzControl.InterTabController>
                         <dragablz:TabablzControl.HeaderItemTemplate>
-                            <DataTemplate DataType="{x:Type nwpf:ViewModel}">
+                            <DataTemplate DataType="{x:Type nodes:NodeViewModel}">
                                 <StackPanel>
                                     <Border CornerRadius="2" BorderThickness="1" x:Name="Rex">
                                         <TextBlock Margin="0,0,0,0" HorizontalAlignment="Center" Text="{Binding Name}" />
-                                    </Border>     
+                                    </Border>
                                 </StackPanel>
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding IsSelected}" Value="True">
@@ -70,17 +73,12 @@
                                             <Setter TargetName="Rex" Property="BorderBrush" Value="CadetBlue"></Setter>
                                         </DataTrigger.Setters>
                                     </DataTrigger>
-
                                 </DataTemplate.Triggers>
                             </DataTemplate>
                         </dragablz:TabablzControl.HeaderItemTemplate>
-                        <TabControl.ContentTemplate>
-                            <DataTemplate DataType="{x:Type nwpf:ViewModel}">
-                     
-                                    <ContentControl Margin="4" Content="{Binding }" />
-                        
-                            </DataTemplate>
-                        </TabControl.ContentTemplate>
+                        <TabControl.ContentTemplateSelector                            >
+                            <StaticResource ResourceKey="DataTemplateSelector"/>
+                        </TabControl.ContentTemplateSelector>
                     </dragablz:TabablzControl>
                 </dockablz:Layout>
             </utl:SplitControl.Content>

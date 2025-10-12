@@ -31,10 +31,6 @@
                 <res:SharedResourceDictionary Source="/Themes/Container.xaml"/>
                 <res:SharedResourceDictionary Source="/Themes/Tree.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-
-
-            
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -31,10 +31,10 @@ namespace Utility.Nodes.Demo.Lists.Services
                         userName?.Contains(filter, StringComparison.CurrentCultureIgnoreCase) == true ||
                         @class?.Contains(filter, StringComparison.CurrentCultureIgnoreCase) == true ||
                         group?.Contains(filter, StringComparison.CurrentCultureIgnoreCase) == true;
-                case { Filter: { } _filter, Value: SubscriptionModel { Name: var _name } }:
-                    if (string.IsNullOrEmpty(_filter))
-                        return true;
-                    return _name?.Contains(_filter, StringComparison.CurrentCultureIgnoreCase) == true;
+                //case { Filter: { } _filter, Value: SubscriptionModel { Name: var _name } }:
+                //    if (string.IsNullOrEmpty(_filter))
+                //        return true;
+                //    return _name?.Contains(_filter, StringComparison.CurrentCultureIgnoreCase) == true;
                 case { Filter: { } __filter, Value: EbayModel { RelativePath: var title } }:
                     if (string.IsNullOrEmpty(__filter))
                         return true;

@@ -9,7 +9,9 @@
                     xmlns:panels="http://schemas.utility.com/panels"
                     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
                     xmlns:c="http://schemas.utility.com/colours" 
-                    xmlns:res="http://schemas.utility.com/resourcedictionary">
+                    xmlns:res="http://schemas.utility.com/resourcedictionary" 
+                    xmlns:markup="http://schemas.utility.com/markup"
+                    xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes">
 
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml"/>
@@ -48,16 +50,6 @@
 
 
     <Style x:Key="DefaultCustomStyle" TargetType="{x:Type t:CustomTreeViewItem}">
-        <!--<Setter Property="ItemTemplate">
-            <Setter.Value>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <Border  BorderThickness="1" Margin="1">
-                        <ContentControl Content="{Binding Name}" Foreground="{Binding TemplatedParent.Foreground, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
-                    </Border>
-                </HierarchicalDataTemplate>
-            </Setter.Value>
-        </Setter>-->
-
         <Setter Property="SelectedIndex" Value="-1"/>
         <Setter Property="SelectionItem" Value="{Binding Current, Mode=TwoWay}"/>
         <att:InteractivitySetter Property="att:InteractivityItems.Template">
@@ -69,10 +61,10 @@
                                 <beh:SetterAction TargetObject="{Binding }" PropertyName="Current" Value="{x:Null}"></beh:SetterAction>
                                 <beh:SetterAction PropertyName="SelectedIndex" Value="-1"></beh:SetterAction>
                             </i:EventTrigger>-->
-                            <i:EventTrigger EventName="SelectionChanged">
-                                <beh:SetterAction TargetObject="{Binding }" PropertyName="Current" Value="{x:Null}"></beh:SetterAction>
-                                <beh:SetterAction PropertyName="SelectedIndex" Value="-1"></beh:SetterAction>
-                            </i:EventTrigger>
+                            <!--<i:EventTrigger EventName="SelectionChanged">
+                                <beh:SetterAction TargetObject="{Binding }" PropertyName="Current" Value="{x:Null}"/>
+                                <beh:SetterAction PropertyName="SelectedIndex" Value="-1"/>
+                            </i:EventTrigger>-->
                         </att:InteractivityItems.Triggers>
                     </att:InteractivityItems>
                 </att:InteractivityTemplate>
@@ -86,28 +78,14 @@
     </local:ComboContainerStyleSelector>
 
 
-    <DataTemplate DataType="{x:Type local:MasterViewModel}">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition  Height="Auto"></RowDefinition>
-                <RowDefinition Height="*"></RowDefinition>
-            </Grid.RowDefinitions>
+    <DataTemplate x:Key="MasterTemplate" DataType="{x:Type nodes:NodeViewModel}">
 
-            <!--<Viewbox  HorizontalAlignment="Left">
-                <t:CustomTreeView  ItemsSource="{Binding Controls}" ItemContainerStyle="{StaticResource DefaultStyle}"/>
-            </Viewbox>-->
 
             <t:CustomTreeView   
                 Grid.Row="1"
-                ItemsSource="{Binding Selection, Mode=OneWay}" ItemContainerStyleSelector="{StaticResource ComboContainerStyleSelector}" 
+                ItemsSource="{markup:Array {Binding}}" ItemContainerStyleSelector="{StaticResource ComboContainerStyleSelector}" 
                >
-                <!--<t:CustomTreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                        <Border  BorderThickness="1" Margin="1">
-                            <ContentControl Content="{Binding Name}" Foreground="{Binding TemplatedParent.Foreground, RelativeSource={RelativeSource Mode=TemplatedParent}}"/>
-                        </Border>
-                    </HierarchicalDataTemplate>
-                </t:CustomTreeView.ItemTemplate>-->
+
 
                 <t:CustomTreeView.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -116,7 +94,7 @@
                     </ItemsPanelTemplate>
                 </t:CustomTreeView.ItemsPanel>
             </t:CustomTreeView>
-        </Grid>
+        <!--</Grid>-->
     </DataTemplate>
 
 </ResourceDictionary>

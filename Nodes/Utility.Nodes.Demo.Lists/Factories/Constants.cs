@@ -10,13 +10,20 @@
         public const string edit = nameof(edit);
         public const string details = nameof(details);
         public const string search = nameof(search);
+        public const string summary = nameof(summary);
         public const string list1 = nameof(list1);
         public const string list = nameof(list);
         public const string directory = nameof(directory);
         public const string indexPath = nameof(indexPath);
         public const string controllerPath = nameof(controllerPath);
         public const string refresh = nameof(refresh);
+        public const string Reset = nameof(Reset);
+        public const string Settings = nameof(Settings);
+        public const string controls = nameof(controls);
 
+
+        readonly Guid settingsRootGuid = Guid.Parse("a743505d-128c-466f-afdb-d7dd97e37a08");
+        readonly Guid listRootGuid = Guid.Parse("7ed21df8-d54c-44e1-8d97-7fcc2591e6c1");
 
     }
 }
