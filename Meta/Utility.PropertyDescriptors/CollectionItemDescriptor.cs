@@ -48,6 +48,7 @@ internal class CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeader
         return false;
     }
 
+    public override bool IsSingular => true;
 
     public override int GetHashCode()
     {
