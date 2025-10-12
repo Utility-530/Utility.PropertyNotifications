@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:Utility.WPF.Demo.SplitButtons" 
              xmlns:sb="http://schemas.utility.com/splitbuttons"
-             Height="400" 
-        Width="600">
+      >
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <!--<ResourceDictionary.MergedDictionaries>
@@ -23,17 +22,27 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+
+
+                <Style TargetType="{x:Type sb:PopupButton}">
+                    <Setter Property="BorderBrush" Value="Transparent"></Setter>
+                    <Setter Property="Background" Value="Transparent"></Setter>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                    <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                    <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+                    <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                </Style>     
         </ResourceDictionary>
     </FrameworkElement.Resources>
 
-    <Grid Margin="20">
-        <StackPanel >
-            <!-- Basic Usage -->
-            <sb:PopupButton>
+
+        <UniformGrid  Columns="1">
+
+            <sb:PopupButton  Foreground="BlueViolet" PopupPlacement="Top">
                 <sb:PopupButton.Header>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Click Me" Margin="0,0,5,0"/>
-                        <Path Data="M 0 0 L 4 4 L 8 0 Z" Fill="Black" VerticalAlignment="Center"/>
+                    <TextBlock Text="Click Me"  FontSize="18" Margin="0,0,5,0"/>
+                        <Path Data="M 8 0 L 0 0 L 4 -4 Z" Fill="Black" VerticalAlignment="Center"/>
                     </StackPanel>
                 </sb:PopupButton.Header>
 
@@ -46,12 +55,11 @@
                 </sb:PopupButton.Content>
             </sb:PopupButton>
 
-            <!-- Advanced Usage with Custom Styling -->
-            <sb:PopupButton PopupPlacement="Bottom" 
-                                   Background="LightGreen" 
-                                   BorderBrush="DarkGreen">
+
+            <sb:PopupButton PopupPlacement="Bottom"
+                           >
                 <sb:PopupButton.Header>
-                    <TextBlock Text="Settings ⚙️" FontSize="14"/>
+                <TextBlock Text="⚙️"  FontSize="48" />
                 </sb:PopupButton.Header>
 
                 <sb:PopupButton.Content>
@@ -62,15 +70,13 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="Settings Panel" FontWeight="Bold" Grid.Row="0" Margin="0,0,0,10"/>
-
                         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,5">
-                            <CheckBox Content="Enable notifications" Margin="0,0,10,0"/>
+                            <CheckBox Content="Enable notifications" Margin="0,0,0,0"/>
                         </StackPanel>
 
                         <StackPanel Grid.Row="2" Orientation="Horizontal">
-                            <TextBlock Text="Theme:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                            <ComboBox SelectedIndex="0" Width="100">
+                            <TextBlock Text="Theme" VerticalAlignment="Center" Margin="0,0,0,5"/>
+                            <ComboBox SelectedIndex="0" >
                                 <ComboBoxItem Content="Light"/>
                                 <ComboBoxItem Content="Dark"/>
                             </ComboBox>
@@ -80,9 +86,10 @@
             </sb:PopupButton>
 
             <!-- Menu-style Usage -->
-            <sb:PopupButton PopupPlacement="Right">
+            <sb:PopupButton >
+ 
                 <sb:PopupButton.Header>
-                    <TextBlock Text="Menu ☰"/>
+                <TextBlock FontWeight="Bold" FontSize="48" Text="☰"/>
                 </sb:PopupButton.Header>
 
                 <sb:PopupButton.Content>
@@ -91,12 +98,11 @@
                         <Button Content="Open File" Style="{DynamicResource MenuButtonStyle}" Click="MenuItemClick"/>
                         <Button Content="Save File" Style="{DynamicResource MenuButtonStyle}" Click="MenuItemClick"/>
                         <Separator Margin="0,5"/>
-                        <Button Content="Exit" Style="{DynamicResource MenuButtonStyle}" Click="MenuItemClick"/>
+                        <Button Content="Delete File" Style="{DynamicResource MenuButtonStyle}" Click="MenuItemClick"/>
                     </StackPanel>
                 </sb:PopupButton.Content>
             </sb:PopupButton>
 
-        </StackPanel>
-    </Grid>
+        </UniformGrid>
 
 </UserControl>

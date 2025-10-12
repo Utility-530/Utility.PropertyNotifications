@@ -104,10 +104,9 @@
                     <sb:SplitButton Style="{StaticResource DemoSplitButton}"
                                        SelectionChanged="SplitButton_SelectionChanged">
                         <sb:SplitButton.Content>
-                            <StackPanel Orientation="Horizontal">
+           
                                 <TextBlock Text="📧" FontSize="14" Margin="0,0,5,0"/>
-                                <TextBlock Text="Email" VerticalAlignment="Center"/>
-                            </StackPanel>
+                        
                         </sb:SplitButton.Content>
                         <sb:SplitButton.Items>
                             <ComboBoxItem Content="📤 Send Email"/>
