@@ -19,33 +19,40 @@ namespace Utility.Nodes.Demo.Filters.Services
             Locator.Current.GetService<IObservableIndex<INodeViewModel>>()[nameof(NodeMethodFactory.BuildComboRoot)]
                 .Subscribe(node =>
                 {
-                    node.WhenReceivedFrom(a => a.Current)
-                    .Subscribe(a =>
+                    IViewModelTree current = null;
+                    node.WhenReceivedFrom(a => a.Current, includeNulls: false)
+                    .Subscribe(_current =>
                     {
-                        if (a is  DataFileModel { FilePath: { } filePath } data )
+                        if (_current is DataFileModel { FilePath: { } filePath, Guid: { } guid } data)
                         {
-                            if (Locator.Current.GetService<SlaveViewModel>() is null)
+                            if (Locator.Current.GetService<SlaveViewModel>(guid.ToString()) is null)
                             {
-                                Splat.Locator.CurrentMutable.Register<SlaveViewModel>(() => new SlaveViewModel());
+                                Splat.Locator.CurrentMutable.Register<SlaveViewModel>(() => new SlaveViewModel(data), guid.ToString());
                             }
                             else
                                 Locator.Current.GetService<SlaveViewModel>()?.Dispose();
 
-                            Globals.Register.UnregisterAll<ITreeRepository>();
-                            Globals.Register.Register<ITreeRepository>(() => new TreeRepository(filePath));
+                            //Globals.Register.UnregisterAll<ITreeRepository>();
+                            //Globals.Register.Register<ITreeRepository>(() => new TreeRepository(filePath));
 
-                            Globals.Resolver.Resolve<INodeSource>().Dispose();
-                            Globals.Register.UnregisterAll<INodeSource>();
-                            Globals.Register.Register<INodeSource>(() => new NodeEngine());
+                            //if (current != null)
+                            //{
+                            //Globals.Resolver.Resolve<INodeSource>().Dispose();
+                            //Globals.Register.Unregister<INodeSource>();
+                            //Globals.Register.Register<INodeSource>(() => new NodeEngine());
 
-                            if (Locator.Current.GetService<ParserService>() is { } parserService)
-                            {
-                                parserService.Dispose();
-                                Locator.CurrentMutable.UnregisterAll<ParserService>();
-                            }
-                            Locator.CurrentMutable.RegisterConstant(new ParserService());
+                            //if (Locator.Current.GetService<ParserService>() is { } parserService)
+                            //{
+                            //    parserService.Dispose();
+                            //    Locator.CurrentMutable.UnregisterAll<ParserService>();
+                            //}
+                            //Locator.CurrentMutable.RegisterConstant(new ParserService());
+                            //}
+
                             var containerViewModel = Locator.Current.GetService<ContainerViewModel>();
+                            containerViewModel.Slave = Locator.Current.GetService<SlaveViewModel>(guid.ToString());
                             containerViewModel.RaisePropertyChanged(nameof(ContainerViewModel.Slave));
+                            current = _current;
                         }
                     });
                 });

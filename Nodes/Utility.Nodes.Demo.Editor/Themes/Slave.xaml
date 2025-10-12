@@ -19,16 +19,11 @@
              xmlns:btns="http://schemas.utility.com/buttons" 
              xmlns:obj="http://schemas.utility.com/objects">
 
+    <filters:StyleSelector x:Key="StyleSelector" DefaultStyle="ViewContentStyle"/>
 
-
-    <filters:StyleSelector x:Key="StyleSelector" DefaultStyle="ViewContentStyle"></filters:StyleSelector>
     <local:CollectionStyleSelector x:Key="CollectionStyleSelector"
-                                           CollectionStyle="{StaticResource HeaderedItemsStyle}"
-                                           ItemStyle="{StaticResource ContentStyle}"/>
-
-
-
-  
+                                CollectionStyle="{StaticResource HeaderedItemsStyle}"
+                                ItemStyle="{StaticResource ContentStyle}"/>
 
     <local:DirtyConverter x:Key="DirtyConverter"/>
 
@@ -39,7 +34,7 @@
             <Grid DockPanel.Dock="Left">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="3*"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
+                    <!--<RowDefinition Height="*"></RowDefinition>-->
                 </Grid.RowDefinitions>
                 <ct:CustomTreeView ItemsSource="{Binding Clones}" ItemContainerStyle="{StaticResource DefaultContentStyle}">
                     <i:Interaction.Triggers>
@@ -49,13 +44,13 @@
                     </i:Interaction.Triggers>
                 </ct:CustomTreeView>
 
-                <TreeView Grid.Row="1" ItemsSource="{Binding Dirty}" Width="300" ItemContainerStyleSelector="{StaticResource CollectionStyleSelector}">
+                <!--<TreeView Grid.Row="1" ItemsSource="{Binding Dirty}" Width="300" ItemContainerStyleSelector="{StaticResource CollectionStyleSelector}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectedItemChanged">
                             <beh:SetSelectedItemAction PropertyName="DataContext" Converter="{StaticResource DirtyConverter}"  TargetObject="{Binding ElementName=splitcontrol, Path=Header}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                </TreeView>
+                </TreeView>-->
             </Grid>
 
 
@@ -70,15 +65,13 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="0.0*"/>
                         </Grid.RowDefinitions>
-
-
-                        <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"              ShowsPreview="True" />
+                        <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch" ShowsPreview="True" />
 
                         <Grid  Grid.Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition ></ColumnDefinition>
-                                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                                <ColumnDefinition ></ColumnDefinition>
+                                <!--<ColumnDefinition Width="Auto"></ColumnDefinition>
+                                <ColumnDefinition ></ColumnDefinition>-->
                             </Grid.ColumnDefinitions>
 
                             <Grid  Grid.Column="0">
@@ -97,12 +90,11 @@
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
                                 </ct:CustomTreeView>
-
                             </Grid>
 
-                            <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" ShowsPreview="True"/>
+                            <!--<GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" ShowsPreview="True"/>-->
 
-                            <TreeView Grid.Column="2" ItemsSource="{Binding Html}" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                            <!--<TreeView Grid.Column="2" ItemsSource="{Binding Html}" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                                 <ItemsControl.ItemContainerStyle>
                                     <Style TargetType="{x:Type TreeViewItem}">
                                         <Setter Property="Header" Value="{Binding Data}"/>
@@ -121,7 +113,7 @@
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
 
-                            </TreeView>
+                            </TreeView>-->
                         </Grid>
 
                         <btns:DirectionButton x:Name="ToggleButton2" Movement="LeftToRight" HorizontalAlignment="Right" Margin="0,0"></btns:DirectionButton>

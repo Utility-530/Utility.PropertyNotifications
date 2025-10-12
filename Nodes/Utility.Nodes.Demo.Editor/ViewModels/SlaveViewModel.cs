@@ -1,20 +1,42 @@
 ﻿using System.Reactive.Disposables;
+using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
+using Utility.Models;
+using Utility.Models.Trees;
 using Utility.Nodes.Ex;
 using Utility.Nodes.Meta;
+using Utility.PropertyNotifications;
+using Utility.Repos;
+using Utility.Structs;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Demo.Editor
 {
     public class SlaveViewModel : ViewModel
     {
-        IReadOnlyTree[] control, selection, content, transformers, html, html_render, clones, dirty;
+        private readonly DataFileModel dataFileModel;
+
+        //IReadOnlyTree[] control, selection, content, transformers, html, html_render, clones, dirty;
+        IReadOnlyTree[] content, clones;
+        private NodeEngine nodeSource;
+
+        public SlaveViewModel(DataFileModel dataFileModel)
+        {
+            var repo = new TreeRepository(dataFileModel.FilePath);
+            nodeSource = new NodeEngine(repo);
+            this.dataFileModel = dataFileModel;
+        }
+
 
         public IReadOnlyTree[] Content
         {
             get
             {
                 if (content == null)
-                    Subscribe(nameof(NodeMethodFactory.BuildContentRoot), a => content = [a]);
+                    nodeSource.Create(dataFileModel.Alias, dataFileModel.Guid, s => new CollectionModel() { Name = s }).Subscribe(a =>
+                    {
+                        content = [a];
+                    });
                 return content;
             }
         }
@@ -24,33 +46,33 @@ namespace Utility.Nodes.Demo.Editor
             get
             {
                 if (clones == null)
-                    source.Value[nameof(NodeMethodFactory.BuildContentRoot)]
+                    this.WithChangesTo(a => a.Content)
                         .Subscribe(a =>
                         {
-                            clones = [a.Abstract(out var disposables)]; RaisePropertyChanged(nameof(Clones));
+                            clones = [(a.Single() as INodeViewModel).Abstract(out var disposables)]; RaisePropertyChanged(nameof(Clones));
                         }).DisposeWith(disposables); ;
 
                 return clones;
             }
         }
-        public IReadOnlyTree[] Html
-        {
-            get
-            {
-                if (html == null)
-                    Subscribe(nameof(NodeMethodFactory.BuildHtmlRoot), a => html = [a]);
-                return html;
-            }
-        }
-        public IReadOnlyTree[] Dirty
-        {
-            get
-            {
-                if (dirty == null)
-                    Subscribe(nameof(NodeMethodFactory.BuildDirty), a => dirty = [a]);
-                return dirty;
-            }
-        }
+        //public IReadOnlyTree[] Html
+        //{
+        //    get
+        //    {
+        //        if (html == null)
+        //            Subscribe(nameof(NodeMethodFactory.BuildHtmlRoot), a => html = [a]);
+        //        return html;
+        //    }
+        //}
+        //public IReadOnlyTree[] Dirty
+        //{
+        //    get
+        //    {
+        //        if (dirty == null)
+        //            Subscribe(nameof(NodeMethodFactory.BuildDirty), a => dirty = [a]);
+        //        return dirty;
+        //    }
+        //}
     }
 }
 
