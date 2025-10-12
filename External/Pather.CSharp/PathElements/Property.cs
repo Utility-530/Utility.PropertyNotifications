@@ -18,7 +18,7 @@ namespace Pather.CSharp.PathElements
 
         public override object Apply(object target)
         {
-            return get(target)?.GetValue(target) ?? throw new ArgumentException($"The property {property} could not be found.");
+            return (get(target) ?? throw new ArgumentException($"The property {property} could not be found.")).GetValue(target);
         }
 
         public override void Apply(object target, object value)
