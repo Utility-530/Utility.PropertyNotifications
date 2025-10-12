@@ -27,7 +27,6 @@ namespace Utility.Services
             {
                 var constructedListType = typeof(ObservableCollection<>).MakeGenericType(type);
                 var instance = (IList)Activator.CreateInstance(constructedListType);
-
                 return instance;
             }
 
@@ -36,7 +35,7 @@ namespace Utility.Services
                 typeof(Utility.Persists.DatabaseHelper)
                     .GetMethod(nameof(Utility.Persists.DatabaseHelper.ToManager))
                     .MakeGenericMethod(instance.GetType())
-                    .Invoke(null, parameters: [instance, new Func<object, Guid>(a => (a as IId<Guid>).Id), null]);
+                    .Invoke(null, parameters: [instance, new Func<object, Guid>(a => (a as IId<Guid>).Id), Utility.Constants.DefaultModelsFilePath]);
             }
         }
 
