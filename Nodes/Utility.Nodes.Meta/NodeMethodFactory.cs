@@ -3,21 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using Utility.Entities;
 using Utility.Entities.Comms;
 using Utility.Enums;
 using Utility.Helpers.Reflection;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
+using Utility.Interfaces.Generic;
 using Utility.Keys;
 using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Nodify.Base.Abstractions;
 using Utility.ServiceLocation;
+using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Meta
 {
 
-    public class EnumerableMethodFactory : Utility.Interfaces.Generic.IEnumerableFactory<Method>
+    public class EnumerableMethodFactory : IEnumerableFactory<Method>
     {
         // needs to be a property in case INodeSource changes
         protected INodeSource nodeSource => Globals.Resolver.Resolve<INodeSource>();
@@ -47,7 +50,7 @@ namespace Utility.Nodes.Meta
         public const string demo_content = nameof(demo_content);
         public const string input_control = nameof(input_control);
         public const string input_node = nameof(input_node);
-        public const string list = nameof(list);
+
 
         // readonly Guid assGuid = Guid.Parse("10126895-6855-45ab-97af-21ed90c02fe8");
         // readonly Guid relGuid = Guid.Parse("5c90fcd6-2324-4f88-bffb-73b8f9fbcf6b");
@@ -69,7 +72,7 @@ namespace Utility.Nodes.Meta
         private readonly Guid collectionGuid = Guid.Parse("d6fa45af-e543-4ac9-bec4-fcbd3a800097");
         private readonly Guid input_controlGuid = Guid.Parse("d31ca5b1-0de0-41cb-8c7d-e83a4f0c8237");
         private readonly Guid input_nodeGuid = Guid.Parse("3dded14d-0f46-4ab8-bce3-50ac339e6d97");
-        private readonly Guid list_Guid = Guid.Parse("2dbf056e-f32e-4c21-aa72-1599cb783d6a");
+
 
         public const string Refresh = nameof(Refresh);
         public const string Run = nameof(Run);
@@ -132,18 +135,13 @@ namespace Utility.Nodes.Meta
                 subGuid,
                 s => new DataFilesModel { Name = s });
         }
-        public IObservable<INodeViewModel> BuildListRoot()
-        {
-            return nodeSource.Create(list,
-                list_Guid,
-                s => new ModelTypesModel { Name = s });
-        }
+
 
         public IObservable<INodeViewModel> BuildTransformersRoot()
         {
             return nodeSource.Create(transformers,
                 transformerGuid,
-                s => new TransformersModel() { Name = s,  IsExpanded = true });
+                s => new TransformersModel() { Name = s, IsExpanded = true });
         }
 
         public IObservable<INodeViewModel> BuildFiltersRoot()
@@ -166,21 +164,21 @@ namespace Utility.Nodes.Meta
         {
             return nodeSource.Create(collection,
                 collectionGuid,
-                s => new StringModel(nodeAction: n => { n.DataTemplate = "StringRoot"; n.IsExpanded = true; n.Orientation = Enums.Orientation.Vertical; }) { Name = s });
+                s => new StringModel(initialise: n => { n.DataTemplate = "StringRoot"; n.IsExpanded = true; n.Orientation = Enums.Orientation.Vertical; }) { Name = s });
         }
 
         public IObservable<INodeViewModel> BuildHtmlRoot()
         {
             return nodeSource.Create(html,
                 htmlGuid,
-                s => new StringModel(nodeAction: n => n.DataTemplate = "Html") { Name = s });
+                s => new StringModel(initialise: n => n.DataTemplate = "Html") { Name = s });
         }
 
         public IObservable<INodeViewModel> BuildHtmlRenderRoot()
         {
             return nodeSource.Create(_html,
                 htmlRenderGuid,
-                s => new StringModel(nodeAction: n => n.DataTemplate = "Html") { Name = s });
+                s => new StringModel(initialise: n => n.DataTemplate = "Html") { Name = s });
 
         }
 
@@ -230,8 +228,8 @@ namespace Utility.Nodes.Meta
         }
 
 
-            
-            
+
+
 
 
         public static NodeMethodFactory Instance { get; } = new();

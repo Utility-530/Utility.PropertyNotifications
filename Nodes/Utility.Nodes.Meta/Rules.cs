@@ -1,29 +1,42 @@
 ﻿#nullable enable
+using Splat;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Threading.Tasks;
 using System.Reflection;
+using System.Threading.Tasks;
+using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models.Trees;
-using Utility.Helpers.NonGeneric;
-using Splat;
+using Utility.Nodify.Operations.Infrastructure;
+using Utility.PropertyNotifications;
 using Utility.ServiceLocation;
 
 namespace Utility.Nodes.Meta
 {
     public class NodeInterface
     {
-        private readonly Lazy<Dictionary<string, PropertyInterface>> setdictionary = new(() =>
+        private Interfaces.Exs.INodeSource nodeSource;
+        private Rules rules;
+        private readonly Lazy<Dictionary<string, PropertyInterface>> setdictionary;
+
+        public NodeInterface(Interfaces.Exs.INodeSource nodeSource)
         {
-            var dict = typeof(NodeViewModel)
-                            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                            .Where(a => a.Name != nameof(IGetParent<>.Parent))
-                            .ToDictionary(a => a.Name, a => Rules.Decide(a));
-            return dict;
-        });
+            this.nodeSource = nodeSource;
+            this.rules = new Rules(nodeSource);
+            this.setdictionary = new(() =>
+            {
+                var dict = typeof(NodeViewModel)
+                                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                                .Where(a => a.Name != nameof(IGetParent<>.Parent))
+                                .ToDictionary(a => a.Name, a => rules.Decide(a));
+                return dict;
+            });
+        }
 
         public Getter? Getter(string name) => setdictionary.Value.TryGetValue(name, out var @interface) ? @interface.Getter : null;
         public Setter? Setter(string name) => setdictionary.Value.TryGetValue(name, out var @interface) ? @interface.Setter : null;
@@ -41,7 +54,7 @@ namespace Utility.Nodes.Meta
     {
         public virtual string Name { get; }
 
-        public abstract void Set(object instance, object value);
+        public abstract Task Set(object instance, object value);
     }
 
     public abstract class Getter
@@ -54,9 +67,16 @@ namespace Utility.Nodes.Meta
 
     public class CurrentSetter : Setter
     {
+        private Interfaces.Exs.INodeSource nodeSource;
+
+        public CurrentSetter(Interfaces.Exs.INodeSource nodeSource)
+        {
+            this.nodeSource = nodeSource;
+        }
+
         public override string Name => nameof(NodeViewModel.Current);
 
-        public override void Set(object instance, object value)
+        public override async Task Set(object instance, object value)
         {
             if (instance is INodeViewModel node)
             {
@@ -84,12 +104,8 @@ namespace Utility.Nodes.Meta
                     throw new Exception("ds 3££!!");
                 }
 
-                Globals.Resolver.Resolve<INodeSource>().FindChild(node, guid)
-                                .Subscribe(current =>
-                                {
-                                    node.Current = current;
-                                });
-
+                var task = await nodeSource.FindChild(node, guid).ToTask();
+                node.Current = task;
             }
         }
     }
@@ -127,10 +143,27 @@ namespace Utility.Nodes.Meta
 
         public override string Name { get; }
 
-        public override void Set(object instance, object value)
+        public override Task Set(object instance, object value)
         {
             //prop.SetValue(instance, value);
             (instance as ISet).Set(value, Name);
+            if (instance is IRaiseChanges raiseChanges)
+                raiseChanges.RaisePropertyReceived(value, null, Name);
+            else
+                throw new Exception("Dddazzzzz");
+            return Task.CompletedTask;
+        }
+    }
+    public class IgnoreSetter : Setter
+    {
+        public IgnoreSetter()
+        {
+        }
+
+        public override Task Set(object instance, object value)
+        {
+            return Task.CompletedTask;
+
         }
     }
 
@@ -157,13 +190,47 @@ namespace Utility.Nodes.Meta
         }
     }
 
-    public static class Rules
+    public class IgnoreGetter : Getter
     {
-        public static PropertyInterface Decide(PropertyInfo propertyInfo)
+
+
+        public IgnoreGetter()
+        {
+        }
+        
+        public override bool Equality(object instance, object value)
+        {
+            return false;
+        }
+
+        public override object Get(object instance)
+        {
+            return null;
+        }
+    }
+
+    public  class Rules
+    {
+        private Interfaces.Exs.INodeSource nodeSource;
+
+        public Rules(Interfaces.Exs.INodeSource nodeSource)
+        {
+            this.nodeSource = nodeSource;
+        }
+
+        public  PropertyInterface Decide(PropertyInfo propertyInfo)
         {
             if (propertyInfo.Name == nameof(INodeViewModel.Current))
             {
-                return new PropertyInterface { Name = propertyInfo.Name, Setter = new CurrentSetter(), Getter = new CurrentGetter() };
+                return new PropertyInterface { Name = propertyInfo.Name, Setter = new CurrentSetter(nodeSource), Getter = new CurrentGetter() };
+            }
+            if (propertyInfo.Name == nameof(ListModel.Add))
+            {
+                return new PropertyInterface { Name = propertyInfo.Name, Setter = new IgnoreSetter(), Getter = new IgnoreGetter() };
+            }
+            if (propertyInfo.Name == nameof(ListModel.Remove))
+            {
+                return new PropertyInterface { Name = propertyInfo.Name, Setter = new IgnoreSetter(), Getter = new IgnoreGetter() };
             }
             if (propertyInfo.Name == nameof(ValueModel.Value))
             {

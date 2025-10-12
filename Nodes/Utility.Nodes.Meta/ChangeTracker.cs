@@ -13,13 +13,13 @@ namespace Utility.Nodes.Meta
     {
 
         Lazy<ITreeRepository> repository;
-        Lazy<INodeSource> engine;
+        INodeSource engine;
 
-        public ChangeTracker()
+        public ChangeTracker(INodeSource nodeSource)
         {
             var repo = Globals.Resolver.Resolve<ITreeRepository>();
             repository = new(() => repo);
-            engine = new(() => Globals.Resolver.Resolve<INodeSource>());
+            engine = nodeSource;
         }
 
 
@@ -28,7 +28,7 @@ namespace Utility.Nodes.Meta
             if (a is Change { Type: Changes.Type.Add, Value: { } value })
             {
                 if (value is INodeViewModel _node)
-                    engine.Value.Add(_node);
+                    engine.Add(_node);
                 else
                 {
                     //node.Add(await node.ToTree(value));
@@ -40,7 +40,7 @@ namespace Utility.Nodes.Meta
                 {
                     throw new Exception("  333 sdsdf");
                 }
-                engine.Value.RemoveBy(c =>
+                engine.RemoveBy(c =>
 
                 {
                     if (c is IKey key)
@@ -62,7 +62,7 @@ namespace Utility.Nodes.Meta
             }
             else if (a is Change { Type: Changes.Type.Update, Value: INodeViewModel newValue, OldValue: INodeViewModel oldValue })
             {
-                engine.Value.RemoveBy(c =>
+                engine.RemoveBy(c =>
                 {
                     if (c is IKey key)
                     {

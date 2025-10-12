@@ -53,8 +53,8 @@ namespace Utility.Nodes.Meta
         private readonly ReplaySubject<DirtyModel> _dirty = new(1);
         private readonly ObservableCollection<INodeViewModel> _nodes = [];
         private readonly CompositeDisposable _compositeDisposable = new();
-        private readonly ChangeTracker _changeTracker = new();
-        private readonly DataTracker _dataInitialiser = new();
+        private readonly ChangeTracker _changeTracker;
+        private readonly DataTracker _dataInitialiser;
 
         private readonly Lazy<IFilter> _filter;
         private readonly Lazy<IExpander> _expander;
@@ -62,12 +62,15 @@ namespace Utility.Nodes.Meta
 
         private bool _disposed;
 
-        public NodeEngine()
+        public NodeEngine(ITreeRepository? treeRepo = null)
         {
+            _changeTracker = new(this);
+
             _filter = new(() => Globals.Resolver.Resolve<IFilter>());
             _expander = new(() => Globals.Resolver.Resolve<IExpander>());
-            var repo = Globals.Resolver.Resolve<ITreeRepository>();
+            var repo = treeRepo ?? Globals.Resolver.Resolve<ITreeRepository>() ?? throw new Exception("££SXXX");
             _repository = new(() => repo);
+            _dataInitialiser = new(repo, new NodeInterface(this));
         }
 
         public Guid Guid { get; } = Guid.NewGuid();
@@ -146,16 +149,6 @@ namespace Utility.Nodes.Meta
                 void configureNode(INodeViewModel node)
                 {
                     _dataInitialiser.Track(node);
-
-                    //if (node is IGetValue { Value: var value } && !Helpers.Reflection.Comparison.IsDefaultValue(value))
-                    //{
-                    //    _repository.Value.Set(
-                    //        (GuidKey)node.Key(),
-                    //        $"{nameof(NodeViewModel.Data)}.{nameof(IGetValue.Value)}",
-                    //        value,
-                    //        DateTime.Now
-                    //    );
-                    //}
                 }
 
                 void setupChildrenTracking(INodeViewModel node)
@@ -193,7 +186,7 @@ namespace Utility.Nodes.Meta
                                 return _repository.Value
                                     .Find((GuidKey)node.Key())
                                     .Subscribe(
-                                        key => processFoundKey(node, key, observer, ref childIndex),
+                                        key => processKey(node, key, observer, ref childIndex),
                                         observer.OnError,
                                         () => { }
                                     ).DisposeWith(disposables);
@@ -201,13 +194,29 @@ namespace Utility.Nodes.Meta
                             return disposables;
                         });
 
-                        void processFoundKey(INodeViewModel node, Structs.Repos.Key? key, IObserver<INodeViewModel> observer, ref int childIndex)
+                        void processKey(INodeViewModel node, Structs.Repos.Key? key, IObserver<INodeViewModel> observer, ref int childIndex)
                         {
                             if (key.HasValue)
                                 findChild(node, key.Value.Guid)
-                                    .Subscribe(child => observer.OnNext(child));
+                                    .Subscribe(child =>
+                                    {
+                                        if (child != null)
+                                        {
+                                            if (child.IsSingular == false)
+                                            {
+                                                throw new Exception("dddf33s xcc");
+                                            }
+                                        }
+                                        else
+                                        {
+                                            findInRepository(node, key.Value.Guid).Subscribe(observer.OnNext);
+                                        }
+                                    });
                             else
-                                throw new Exception("DSF 33443");
+                            {
+                                //"no child nodes created yet";
+                            }
+                            //throw new Exception("DSF 33443");
                         }
 
                         IDisposable processYieldItems(IYieldItems yieldItems, IObserver<INodeViewModel> observer)
@@ -247,23 +256,46 @@ namespace Utility.Nodes.Meta
             }
         }
 
+        private IObservable<INodeViewModel> findInRepository(INodeViewModel node, Guid guid)
+        {
+            return _repository.Value
+            .Find((GuidKey)node.Key(), guid: guid)
+            .SelectMany(key => activateNode(node, key));
 
+        }
 
         public IObservable<INodeViewModel> FindChild(INodeViewModel node, Guid guid)
         {
             return Observable.Create<INodeViewModel>(observer =>
             {
                 var _compositeDisposable = new CompositeDisposable();
-                findChild(node, guid).Subscribe(child => { if (child != null) Add(child); }).DisposeWith(_compositeDisposable);
-                _nodes.AndAdditions().Subscribe(addition =>
+                findChild(node, guid).Subscribe(child =>
                 {
-                    if (addition.Guid == guid)
-                        observer.OnNext(addition);
-
+                    if (child != null)
+                        Add(child);
+                    else
+                    {
+                        // Search in repository
+                        var repositorySubscription = findInRepository(node, guid)
+                            .Subscribe(activatedNode =>
+                            {
+                                observer.OnNext(activatedNode);
+                                observer.OnCompleted();
+                            });
+                    }
+                    //return new CompositeDisposable(repositorySubscription);
                 }).DisposeWith(_compositeDisposable);
+                //_nodes.AndAdditions().Subscribe(addition =>
+                //{
+                //    if (addition.Guid == guid)
+                //    {
+                //        observer.OnNext(addition);
+                //        observer.OnCompleted();
+                //    }
+                //}).DisposeWith(_compositeDisposable);
                 return _compositeDisposable;
             });
-           
+
         }
 
         private IObservable<INodeViewModel> findChild(INodeViewModel node, Guid guid)
@@ -276,38 +308,31 @@ namespace Utility.Nodes.Meta
                 var existingNode = _nodes.SingleOrDefault(a => a.Key() == guid.ToString());
                 if (existingNode != null)
                 {
-                    //observer.OnNext(existingNode);
+                    observer.OnNext(existingNode);
                     //throw new Exception("FF 333ccd");
+                    observer.OnCompleted();
                     return Disposable.Empty;
                 }
-
-                // Search in repository
-                var repositorySubscription = _repository.Value
-                    .Find((GuidKey)node.Key(), guid: guid)
-                    .SelectMany(key => activateNode(node, key))
-                    .Subscribe(activatedNode =>
-                    {
-                        observer.OnNext(activatedNode);
-                    });
-
-                return new CompositeDisposable(repositorySubscription);
+                observer.OnNext(null);
+                observer.OnCompleted();
+                return Disposable.Empty;
             });
+        }
 
-            IObservable<INodeViewModel> activateNode(INodeViewModel parent, Structs.Repos.Key? key)
+        IObservable<INodeViewModel> activateNode(INodeViewModel parent, Structs.Repos.Key? key)
+        {
+            return Observable.Create<INodeViewModel>(observer =>
             {
-                return Observable.Create<INodeViewModel>(observer =>
-                {
-                    validateKey(key);
+                validateKey(key);
 
-                    var newNode = (INodeViewModel)DataActivator.Activate(key);
-                    newNode.SetParent(parent);
-                    newNode.SetKey(new GuidKey(key.Value.Guid));
-                    newNode.Removed = key.Value.Removed;
+                var newNode = (INodeViewModel)DataActivator.Activate(key);
+                newNode.SetParent(parent);
+                newNode.SetKey(new GuidKey(key.Value.Guid));
+                newNode.Removed = key.Value.Removed;
 
-                    observer.OnNext(newNode);
-                    return Disposable.Empty;
-                });
-            }
+                observer.OnNext(newNode);
+                return Disposable.Empty;
+            });
         }
 
         public void Save()
@@ -380,13 +405,14 @@ namespace Utility.Nodes.Meta
                 var node = createNewNode(name, guid, modelFactory);
                 observer.OnNext(node);
 
-                return _repository.Value
-                    .InsertRoot(guid, name, GetNodeType(node))
-                    .Subscribe(_ =>
-                    {
-                        Add(node);
-                        observer.OnCompleted();
-                    });
+                return _repository
+                        .Value
+                        .InsertRoot(guid, name, GetNodeType(node))
+                        .Subscribe(_ =>
+                        {
+                            Add(node);
+                            observer.OnCompleted();
+                        });
             });
 
             static INodeViewModel createNewNode(string name, Guid guid, Func<string, object> modelFactory)
@@ -395,7 +421,6 @@ namespace Utility.Nodes.Meta
                 data.Key = new GuidKey(guid);
                 return (INodeViewModel)data;
             }
-
         }
 
         #region Private Methods
@@ -413,8 +438,6 @@ namespace Utility.Nodes.Meta
         }
 
         #endregion
-
-
 
         #region Dispose Pattern
 
