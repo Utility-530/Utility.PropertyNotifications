@@ -22,7 +22,11 @@
         public static readonly DependencyProperty ValueProperty =
             DependencyProperty.Register("Value", typeof(object), typeof(SetterAction),
                 new PropertyMetadata(null));
+        
+        public static readonly DependencyProperty ConverterProperty =
+            DependencyProperty.Register("Converter", typeof(IValueConverter), typeof(SetterAction), new PropertyMetadata());
 
+        #region properties
         /// <summary>
         /// Property that is being set by this setter.
         /// </summary>
@@ -48,11 +52,7 @@
             get { return (IValueConverter)GetValue(ConverterProperty); }
             set { SetValue(ConverterProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for Converter.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ConverterProperty =
-            DependencyProperty.Register("Converter", typeof(IValueConverter), typeof(SetterAction), new PropertyMetadata());
-
+        #endregion properties
 
 
         protected override void Invoke(object parameter)
