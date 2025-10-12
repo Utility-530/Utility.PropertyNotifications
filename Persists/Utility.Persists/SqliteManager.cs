@@ -8,6 +8,8 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Utility.Helpers.Ex;
 using Utility.Helpers.Reflection;
 using Utility.PropertyNotifications;
@@ -40,12 +42,15 @@ namespace Utility.Persists
     {
         public static IDisposable ToManager<TCollection>(this TCollection observableCollection, Func<object, Guid> funcId, string? dbPath = null) where TCollection : IList, INotifyCollectionChanged
         {
-            Directory.CreateDirectory("../../../Data/");
-            return new SqliteManager<TCollection>(dbPath ?? "../../../Data/models.sqlite", observableCollection, funcId).Subscribe(observableCollection.GetType().InnerType());
+            string path = "../../../Data/models.sqlite";
+            //string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);   
+            //string path = Path.Combine(userProfile, "Data", "models.sqlite");
+
+            return new SqliteManager<TCollection>(dbPath ?? path, observableCollection, funcId).Subscribe(observableCollection.GetType().InnerType());
         }
     }
 
-    public class SqliteManager<TCollection>(string dbPath, TCollection collection, Func<object, Guid> funcId) where TCollection : IList, INotifyCollectionChanged
+    public class SqliteManager<TCollection>(string dbPath, TCollection collection, Func<object, Guid> funcId) where TCollection : IList
     {
         const string extantItems = "SELECT * FROM {0} AS t JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed = '0') AS m ON t.Id = m.Id";
         const string removedItems = "SELECT * FROM {0} AS t JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed != '0') AS m ON t.Id = m.Id";
@@ -54,91 +59,112 @@ namespace Utility.Persists
 
         public IDisposable Subscribe(Type type)
         {
-            using var conn = new SQLiteConnection(dbPath, true);
-            conn.CreateTable(type, CreateFlags.ImplicitPK);
-            conn.CreateTable<Meta>();
-            conn.CreateTable<DataType>();
-
-            types = conn.Table<DataType>().ToList();
-            var typeString = TypeSerialization.TypeSerializer.Serialize(type);
-
-            if (types.All(a => a.Type != typeString))
+            Directory.CreateDirectory(Directory.GetParent(dbPath).FullName);
+            var context = SynchronizationContext.Current;
+            return Task.Run(() =>
             {
-                var dataType = new DataType { Id = types.Count + 1, Type = typeString };
-                conn.Insert(dataType);
-                types.Add(dataType);
-            }
-            var typeId = types.Single(a => a.Type == typeString).Id;
-            var mapping = conn.TableMappings.Single(a => a.TableName == type.Name);
+                using var conn = new SQLiteConnection(dbPath, true);
+                conn.CreateTable(type, CreateFlags.ImplicitPK);
+                conn.CreateTable<Meta>();
+                conn.CreateTable<DataType>();
 
-            var items = conn.Query(mapping, string.Format(extantItems, type.Name, nameof(Meta), typeId));
-            var removedItems = conn.Query(mapping, string.Format(SqliteManager<TCollection>.removedItems, type.Name, nameof(Meta), typeId));
+                types = conn.Table<DataType>().ToList();
+                var typeString = TypeSerialization.TypeSerializer.Serialize(type);
 
-            List<object> list = new List<object>();
-            List<object> toRemove = new List<object>();
-            foreach (var c in collection)
-            {
-                bool flag = false;
-                foreach (var item in removedItems)
+                if (types.All(a => a.Type != typeString))
                 {
-                    if (funcId(c) == funcId(item))
-                    {
-                        toRemove.Add(c);
+                    var dataType = new DataType { Id = types.Count + 1, Type = typeString };
+                    conn.Insert(dataType);
+                    types.Add(dataType);
+                }
+                var typeId = types.Single(a => a.Type == typeString).Id;
+                var mapping = conn.TableMappings.Single(a => a.TableName == type.Name);
 
+                var items = conn.Query(mapping, string.Format(extantItems, type.Name, nameof(Meta), typeId));
+                var removedItems = conn.Query(mapping, string.Format(SqliteManager<TCollection>.removedItems, type.Name, nameof(Meta), typeId));
+
+                List<object> list = new List<object>();
+                List<object> toRemove = new List<object>();
+                List<object> toAdd = new List<object>();
+                foreach (var c in collection)
+                {
+                    bool flag = false;
+                    foreach (var item in removedItems)
+                    {
+                        if (funcId(c) == funcId(item))
+                        {
+                            toRemove.Add(c);
+
+                        }
+                    }
+                    if (toRemove.Contains(c) == false)
+                    {
+                        foreach (var item in items)
+                        {
+
+                            if (funcId(c) == funcId(item))
+                            {
+                                flag = true;
+                                break;
+                            }
+
+                        }
+
+                        if (flag == false)
+                            list.Add(c);
                     }
                 }
-                if (toRemove.Contains(c) == false)
-                {
-                    foreach (var item in items)
-                    {
 
+                //foreach (var r in toRemove)
+                //    collection.Remove(r);
+
+                InsertBulk(list, type);
+
+                foreach (var item in items)
+                {
+                    bool flag = false;
+                    foreach (var c in collection)
+                    {
                         if (funcId(c) == funcId(item))
                         {
                             flag = true;
                             break;
                         }
-
                     }
 
                     if (flag == false)
-                        list.Add(c);
+                        toAdd.Add(item);
                 }
-            }
 
-            foreach (var r in toRemove)
-                collection.Remove(r);
-
-            InsertBulk(list, type);
-
-            foreach (var item in items)
-            {
-                bool flag = false;
-                foreach (var c in collection)
+                context.Post((a) =>
                 {
-                    if (funcId(c) == funcId(item))
+                    foreach(var item in toAdd.Except(toRemove))
                     {
-                        flag = true;
-                        break;
+                        collection.Add(item);
                     }
-                }
-
-                if (flag == false)
-                    collection.Add(item);
-            }
-
-            foreach (var item in collection)
-            {
-                if (item is INotifyPropertyChanged changed)
-                    changed.WhenChanged().Subscribe(a =>
+                    foreach(var item in toRemove)
                     {
-                        Update(item, type);
-                    });
-            }
+                        collection.Remove(item);
+                    }
 
-            return collection.SelectChanges().Subscribe(a =>
-            {
-                OnCollectionChanged(a, type);
-            });
+                    foreach (var item in collection)
+                    {
+                        if (item is INotifyPropertyChanged changed)
+                            changed.WhenChanged().Subscribe(a =>
+                            {
+                                Task.Run(() => Update(item, type));
+                            });
+                    }
+
+                    if (collection is INotifyCollectionChanged notifyCollection)
+                        notifyCollection.SelectChanges()
+                            .Subscribe(a =>
+                            {
+                                Task.Run(() => OnCollectionChanged(a, type));
+                            });
+       
+                }, null);            
+            });      
         }
 
         private void OnCollectionChanged(NotifyCollectionChangedEventArgs e, Type type)
