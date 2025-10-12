@@ -2,14 +2,12 @@
 using System.Reactive.Linq;
 using Utility.Helpers;
 using Utility.Helpers.Reflection;
-using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
-using Utility.ServiceLocation;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Extensions.Async;
 
@@ -33,13 +31,6 @@ namespace Utility.Models
         }
     }
 
-    //public class Model<T> : Model<T>
-    //{
-    //    public Model(Func<IEnumerable<IReadOnlyTree>>? childrenLambda = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<NodeViewModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
-    //        base(childrenLambda, nodeAction, addition, attach, raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
-    //    {
-    //    }
-    //}
 
     public class Model<T> : NodeViewModel, IClone, IYieldItems, IKey, IName, IAttach<IReadOnlyTree>, IGet<T>, Interfaces.Generic.ISet<T>
     {
@@ -205,7 +196,6 @@ namespace Utility.Models
 
                 //}
             }
-            var type = a.GetType();
 
             if (a is IAttach<IReadOnlyTree> attach)
             {
