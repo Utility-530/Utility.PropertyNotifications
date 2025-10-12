@@ -54,8 +54,8 @@ namespace Utility.WPF.Controls.ComboBoxes
             //AssociatedObject.SelectedItemTemplateSelector = CustomItemTemplateSelector.Instance;
 
             AssociatedObject.WhenAnyValue(a => a.SelectedNode)
-                .OfType<IGetData>()
-                .Select(a => a.Data)
+                .OfType<IGetValue>()
+                .Select(a => a.Value)
                 .Subscribe(a =>
                 {
                     if (a is Type type)
@@ -66,12 +66,6 @@ namespace Utility.WPF.Controls.ComboBoxes
                     }
                 });
 
-            //if (UseEntryAssembly)
-            //{
-            //    Assemblies = new List<Assembly>([Assembly.GetEntryAssembly()]);
-            //}
-            //if (Assemblies != null)
-            //    Set(this, Assemblies);
 
             AssociatedObject.OnLoaded(a =>
             {
@@ -93,7 +87,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         void ChangeInfo(IReadOnlyTree tree, PropertyInfo _propertyInfo)
         {
-            if (tree.Descendant(a => (a.tree as IGetData).Data is PropertyInfo type && type == _propertyInfo || (a.tree as IGetData).Data is IPropertyInfo itype && itype.PropertyInfo == _propertyInfo) is IReadOnlyTree { } innerTree)
+            if (tree.Descendant(a => (a.tree as IGetValue).Value is PropertyInfo type && type == _propertyInfo || (a.tree as IGetValue).Value is IPropertyInfo itype && itype.PropertyInfo == _propertyInfo) is IReadOnlyTree { } innerTree)
             {
                 AssociatedObject.IsError = false;
                 AssociatedObject.UpdateSelectedItems(innerTree);

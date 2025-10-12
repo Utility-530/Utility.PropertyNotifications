@@ -221,16 +221,11 @@ namespace Utility.WPF.Controls.ComboBoxes
         {
             return key.Equals(_type);
         }
-
-
-
-
         private static void ChangedAS(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is AssemblyTreeSelectorBehavior { FrameworkElementKind: string kind, Assemblies: IEnumerable enumerable } typeSelector)
             {
                 SetItemsSource(typeSelector, enumerable, kind);
-
             }
         }
 

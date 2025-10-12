@@ -120,15 +120,12 @@
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemContainerStyle>
                                             <Style TargetType="{x:Type ContentControl}">
-                                                <Setter Property="Tag"                     Value="{Binding RelativeSource={RelativeSource Self},                                     Path=(ItemsControl.AlternationIndex)}"/>
+                                                <Setter Property="Tag" Value="{Binding RelativeSource={RelativeSource Self}, Path=(ItemsControl.AlternationIndex)}"/>
                                                 <Setter Property="Control.Template">
                                                     <Setter.Value>
                                                         <ControlTemplate TargetType="ContentControl">
                                                             <StackPanel Orientation="Horizontal">
-
-
                                                                 <Grid>
-
                                                                     <Path 
                                                                         x:Name="Arrow" 
                                                                         Fill="#2e2c2a"         
@@ -139,7 +136,6 @@
                                                                         VerticalAlignment="Center"          
                                                                         Visibility="{Binding ElementName=Border, Path=Visibility}"
                                                                         Tag="{TemplateBinding Tag}">
-
                                                                         <Path.Style>
                                                                             <Style TargetType="{x:Type Path}">
                                                                                 <Setter Property="StrokeThickness" Value="2"></Setter>
@@ -165,7 +161,6 @@
                                                                                                 -->
                                                                                                 <Setter.Value>
                                                                                                     M 9.7 3 L 9.5 3.3 L 6.5 11.4 L 5 8.3 L 4.8 8 L 3 8 L 3 9 L 4.2 9 L 6 12.7 L 6.1 13 L 6.9 13 L 7 12.7 L 10.3 4 L 13 4 L 13 3 Z
-
                                                                                                 </Setter.Value>
                                                                                             </Setter>
                                                                                         </Trigger.Setters>
@@ -173,23 +168,16 @@
                                                                                 </Style.Triggers>
                                                                             </Style>
                                                                         </Path.Style>
-
                                                                     </Path>
-
                                                                 </Grid>
-
-
-
-                                                                <Border   x:Name="Border"
-                                                                          >
+                                                                <Border   x:Name="Border"                                                                          >
                                                                     <Border.Visibility>
-                                                                        <TemplateBinding Property="Tag" Converter="{x:Static conv:InverseEqualToVisibilityConverter.Instance}">
+                                                                        <TemplateBinding Property="Tag" Converter="{x:Static conv:EqualToVisibilityConverter.InverseInstance}">
                                                                             <TemplateBindingExtension.ConverterParameter>
                                                                                 <sys:Int32>0</sys:Int32>
                                                                             </TemplateBindingExtension.ConverterParameter>
                                                                         </TemplateBinding>
                                                                     </Border.Visibility>
-
                                                                     <ContentPresenter/>
                                                                 </Border>
                                                             </StackPanel>
@@ -221,7 +209,7 @@
                   MinWidth="{TemplateBinding ActualWidth}"
                   MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                         <Border x:Name="DropDownBorder"
-                      BorderThickness="1">
+                                                BorderThickness="1">
                                             <!--<Border.BorderBrush>
                                         <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
                                     </Border.BorderBrush>
@@ -240,7 +228,6 @@
                                     </Grid>
                                 </Popup>
                             </Grid>
-
                         </Border>
                         <TextBlock Grid.Row="1" x:Name="ErrorTextBlock" 
                                    Text="Type not found" 

@@ -11,16 +11,24 @@ using Utility.WPF.Controls.Trees;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
+    public class ValueCoercingEventArgs : EventArgs
+    {
+        public ValueCoercingEventArgs(object newValue, object oldValue)
+        {
+            NewValue = newValue;
+            OldValue = oldValue;
+        }
 
+        public object NewValue { get; set; }
+        public object OldValue { get; set; }
+        public bool Cancel { get; set; } = false;
+    }
 
     public class ComboBoxTreeView : ComboBox
     {
         public static readonly DependencyProperty SelectedItemsProperty = DependencyProperty.Register("SelectedItems", typeof(IEnumerable), typeof(ComboBoxTreeView), new PropertyMetadata(null));
         public static readonly DependencyProperty ParentPathProperty = DependencyProperty.Register("ParentPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata());
-        public static readonly DependencyProperty SelectedNodeProperty = DependencyProperty.Register("SelectedNode", typeof(object), typeof(ComboBoxTreeView), new FrameworkPropertyMetadata(default));
-        //public static readonly DependencyProperty IsCheckedPathProperty = DependencyProperty.Register("IsCheckedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata());
-        //public static readonly DependencyProperty IsExpandedPathProperty = DependencyProperty.Register("IsExpandedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata("IsExpanded"));
-        //public static readonly DependencyProperty IsSelectedPathProperty = DependencyProperty.Register("IsSelectedPath", typeof(string), typeof(ComboBoxTreeView), new PropertyMetadata("IsSelected"));
+        public static readonly DependencyProperty SelectedNodeProperty = DependencyProperty.Register("SelectedNode", typeof(object), typeof(ComboBoxTreeView), new FrameworkPropertyMetadata(default, CoerceValueCallback));
         public static readonly DependencyProperty SelectedItemTemplateProperty = DependencyProperty.Register("SelectedItemTemplate", typeof(DataTemplate), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty SelectedItemTemplateSelectorProperty = DependencyProperty.Register("SelectedItemTemplateSelector", typeof(DataTemplateSelector), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty IsErrorProperty = DependencyProperty.Register("IsError", typeof(bool), typeof(ComboBoxTreeView), new PropertyMetadata(false));
@@ -29,23 +37,32 @@ namespace Utility.WPF.Controls.ComboBoxes
         public static readonly DependencyProperty ToggleButtonContentProperty = DependencyProperty.Register("ToggleButtonContent", typeof(object), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty TreeItemContainerStyleProperty = DependencyProperty.Register("TreeItemContainerStyle", typeof(Style), typeof(ComboBoxTreeView), new PropertyMetadata());
         public static readonly DependencyProperty ToggleButtonTemplateProperty = DependencyProperty.Register("ToggleButtonTemplate", typeof(ControlTemplate), typeof(ComboBoxTreeView), new PropertyMetadata());
+        public static readonly DependencyProperty IsOpenProperty = DependencyProperty.Register("IsOpen", typeof(bool), typeof(ComboBoxTreeView), new PropertyMetadata(_changed));
 
 
+        public event EventHandler<ValueCoercingEventArgs>? ValueCoercing;
 
-
-        public bool IsOpen
+        private static object CoerceValueCallback(DependencyObject d, object baseValue)
         {
-            get { return (bool)GetValue(IsOpenProperty); }
-            set { SetValue(IsOpenProperty, value); }
-        }
+            object newValue = baseValue;
+            var control = (ComboBoxTreeView)d;
+            var args = new ValueCoercingEventArgs(newValue, control.SelectedNode);
 
-        // Using a DependencyProperty as the backing store for MyProperty.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty IsOpenProperty =
-            DependencyProperty.Register("IsOpen", typeof(bool), typeof(ComboBoxTreeView), new PropertyMetadata(_changed));
+            if (control.ValueCoercing == null)
+                return baseValue;
+            // Fire event for subscribers to approve/modify
+            control.ValueCoercing?.Invoke(d, args);
+
+            // If subscriber rejected the value, revert to current value
+            if (args.Cancel)
+                return control.SelectedNode;
+
+            return baseValue;
+        }
 
         private static void _changed(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            if(d is ComboBoxTreeView treeView && e.NewValue is bool b)
+            if (d is ComboBoxTreeView treeView && e.NewValue is bool b)
             {
                 if (!treeView.IsFocused)
                 {
@@ -142,11 +159,6 @@ namespace Utility.WPF.Controls.ComboBoxes
             Popup = (Popup)GetTemplateChild("Popup");
             ToggleButton = (ToggleButton)GetTemplateChild("ToggleButton");
             ToggleButton.Checked += ToggleButton_Checked;
-
-            //Popup.MouseEnter += (s, e) => e.Handled = true;
-            //Popup.MouseLeave += (s, e) => e.Handled = true;
-
-
             TreeView = (CustomTreeView)GetTemplateChild("treeView");
             TreeView.SelectedItemChanged += TreeView_SelectedItemChanged;
             TreeView.HierarchyMouseUp += (s, e) => OnTreeViewHierarchyMouseUp(s, e);
@@ -232,29 +244,18 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         #region properties
 
+        public bool IsOpen
+        {
+            get { return (bool)GetValue(IsOpenProperty); }
+            set { SetValue(IsOpenProperty, value); }
+        }
+
         public DataTemplate SelectedItemTemplate
         {
             get { return (DataTemplate)GetValue(SelectedItemTemplateProperty); }
             set { SetValue(SelectedItemTemplateProperty, value); }
         }
 
-        //public string IsExpandedPath
-        //{
-        //    get { return (string)GetValue(IsExpandedPathProperty); }
-        //    set { SetValue(IsExpandedPathProperty, value); }
-        //}
-
-        //public string IsSelectedPath
-        //{
-        //    get { return (string)GetValue(IsSelectedPathProperty); }
-        //    set { SetValue(IsSelectedPathProperty, value); }
-        //}
-
-        //public string IsCheckedPath
-        //{
-        //    get { return (string)GetValue(IsCheckedPathProperty); }
-        //    set { SetValue(IsCheckedPathProperty, value); }
-        //}
         public ControlTemplate ToggleButtonTemplate
         {
             get { return (ControlTemplate)GetValue(ToggleButtonTemplateProperty); }
@@ -318,7 +319,6 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         public void UpdateSelectedItems(object selectedItem)
         {
-
             var hierarchy = SelectItems(selectedItem);
             SelectedItems = hierarchy;
             SelectedNode = selectedItem;
@@ -329,11 +329,18 @@ namespace Utility.WPF.Controls.ComboBoxes
         {
             var type = selectedItem.GetType();
             var propInfo = type.GetProperty(ParentPath);
-            if (propInfo == null)
-            {
-                throw new Exception($"{type.Name} && {ParentPath}");
-            }
-            return TreeHelper.GetAncestors(selectedItem, a => propInfo.GetValue(a)).Reverse().ToArray();
+            return propInfo == null
+                ? throw new Exception($"{type.Name} && {ParentPath}")
+                :
+                [.. TreeHelper.GetAncestors(selectedItem, a => {
+                if (!propInfo.DeclaringType.IsInstanceOfType(a))
+                {
+                    throw new InvalidOperationException(
+                        $"Object of type {a.GetType().Name} does not derive from {propInfo.DeclaringType.Name}"
+                    );
+                }
+                return propInfo.GetValue(a);
+                }).Reverse()];
         }
     }
 

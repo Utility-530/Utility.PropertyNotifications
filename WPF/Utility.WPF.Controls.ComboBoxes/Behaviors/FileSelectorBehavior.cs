@@ -29,8 +29,6 @@ namespace Utility.WPF.Controls.ComboBoxes
         public static readonly DependencyProperty UseEntryAssemblyProperty = DependencyProperty.Register("UseEntryAssembly", typeof(bool), typeof(FileSelectorBehavior), new PropertyMetadata(true));
         public static readonly DependencyProperty ExcludesFilesProperty = DependencyProperty.Register("ExcludesFiles", typeof(bool), typeof(FileSelectorBehavior), new PropertyMetadata(false));
 
-
-
         private static void FileSystemInfoChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is FileSelectorBehavior { AssociatedObject.ItemsSource: IReadOnlyTree tree } FileSystemInfoSelector)
@@ -55,20 +53,19 @@ namespace Utility.WPF.Controls.ComboBoxes
             this.AssociatedObject.SelectedItemTemplateSelector = CustomItemTemplateSelector.Instance;
 
             this.AssociatedObject.WhenAnyValue(a => a.SelectedNode)
-                .OfType<IGetData>()
-                .Select(a => a.Data)
-                .OfType<DirectoryModel>()
-                .Subscribe(tree =>
+                .Subscribe(a =>
                 {
-                    var x = tree.Items().OfType<ReadOnlyStringModel>().ToArray().ToViewModelTree(t_tree: tree);
-
-                    if (tree.FileSystemInfo is FileSystemInfo fileSystemInfo)
-                        FileSystemInfo = fileSystemInfo;
-                    else if (tree is IFileSystemInfo { FileSystemInfo: { } _FileSystemInfo })
+                    if (a is DirectoryModel tree)
                     {
-                        FileSystemInfo = _FileSystemInfo;
-                    }
+                        var x = tree.Items().OfType<ReadOnlyStringModel>().ToArray().ToViewModelTree(t_tree: tree);
 
+                        if (tree.FileSystemInfo is FileSystemInfo fileSystemInfo)
+                            FileSystemInfo = fileSystemInfo;
+                        else if (tree is IFileSystemInfo { FileSystemInfo: { } _FileSystemInfo })
+                        {
+                            FileSystemInfo = _FileSystemInfo;
+                        }
+                    }
                 });
 
             if (Directories == null || UseEntryAssembly)
@@ -113,9 +110,9 @@ namespace Utility.WPF.Controls.ComboBoxes
             }
         }
 
-        private static bool filter(FileSystemInfo _FileSystemInfo, (IGetData tree, int level) a)
+        private static bool filter(FileSystemInfo _FileSystemInfo, (IGetValue tree, int level) a)
         {
-            switch (a.tree.Data)
+            switch (a.tree.Value)
             {
                 case "root":
                     return false;
@@ -133,7 +130,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                         {
                             if (_fsi.FileSystemInfo.FullName.TrimEnd('\\').Equals(_FileSystemInfo.FullName.TrimEnd('\\'), StringComparison.CurrentCultureIgnoreCase))
                                 return true;
-                            if (tree.Children.Count() == 0 && a.tree.Data is IYieldItems model && a.tree is IViewModelTree node)
+                            if (tree.Children.Count() == 0 && a.tree.Value is IYieldItems model && a.tree is IViewModelTree node)
                             {
                                 node.IsExpanded = true;
                             }
@@ -177,23 +174,28 @@ namespace Utility.WPF.Controls.ComboBoxes
         {
             public override DataTemplate SelectTemplate(object item, DependencyObject container)
             {
-                if (item is IGetData { Data: var data } tree)
+                if (item is IGetValue { Value: FileSystemInfo data } tree)
                 {
-                    if (data is FileSystemInfo || data is IFileSystemInfo)
                         return TemplateGenerator.CreateDataTemplate(() =>
                         {
-                            var textBlock = new TextBlock { };
-                            Binding binding = new() { Path = new PropertyPath(nameof(FileSystemInfo) + "." + "Name") };
-                            Binding binding2 = new() { Path = new PropertyPath(nameof(IGetData.Data)) };
-                            textBlock.SetBinding(TextBlock.TextProperty, binding);
-                            textBlock.SetBinding(TextBlock.DataContextProperty, binding2);
+                            var textBlock = new TextBlock { Text = data.Name };
                             return textBlock;
                         });
 
                     return TemplateGenerator.CreateDataTemplate(() => new Ellipse { Fill = Brushes.Black, Height = 2, Width = 2, VerticalAlignment = VerticalAlignment.Bottom, ToolTip = new ContentControl { Content = data }, Margin = new Thickness(4, 0, 4, 0) });
 
                 }
-                throw new Exception("d ss!$sd");
+                else if (item is IFileSystemInfo { FileSystemInfo: { } info })
+                {
+                    return TemplateGenerator.CreateDataTemplate(() =>
+                    {
+                        var textBlock = new TextBlock { Text = info.Name };
+
+                        return textBlock;
+                    });
+                }
+                else
+                    throw new Exception("d ss!$sd");
             }
 
             public static CustomItemTemplateSelector Instance { get; } = new();

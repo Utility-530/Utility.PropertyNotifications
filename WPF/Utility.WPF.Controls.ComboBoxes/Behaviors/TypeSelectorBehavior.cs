@@ -15,6 +15,7 @@ using Utility.WPF.Factorys;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Ex;
 using Utility.WPF.Reactives;
+using Utility.Extensions;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
@@ -46,10 +47,16 @@ namespace Utility.WPF.Controls.ComboBoxes
         protected override void OnAttached()
         {
             this.AssociatedObject.SelectedItemTemplateSelector = CustomItemTemplateSelector.Instance;
-
+            this.AssociatedObject.ValueCoercing += (s, e) =>
+            {
+                if (e.NewValue is not IGetValue { Value: Type { } type })
+                {
+                    e.Cancel = true;
+                }
+            };
             this.AssociatedObject.WhenAnyValue(a => a.SelectedNode)
-                .OfType<IGetData>()
-                .Select(a => a.Data)
+                .OfType<IGetValue>()
+                .Select(a => a.Value)
                 .Subscribe(a =>
                 {
                     if (a is Type type)
@@ -80,7 +87,7 @@ namespace Utility.WPF.Controls.ComboBoxes
 
         void ChangeType(IReadOnlyTree tree, Type _type)
         {
-            if (tree.Descendant(a => ((a.tree as IGetData).Data is Type type && type == _type) || ((a.tree as IGetData).Data is IType itype && itype.Type == _type)) is IReadOnlyTree { } innerTree)
+            if (tree.Descendant(a => (a.tree.Value() is Type type && type == _type) || (a.tree.Value() is IType itype && itype.Type == _type)) is IReadOnlyTree { } innerTree)
             {
                 AssociatedObject.IsError = false;
                 AssociatedObject.UpdateSelectedItems(innerTree);
@@ -123,19 +130,24 @@ namespace Utility.WPF.Controls.ComboBoxes
         {
             public override DataTemplate SelectTemplate(object item, DependencyObject container)
             {
-                if (item is IGetData { Data: var data } tree)
+                if (item is IGetValue { Value: var value } tree)
                 {
-                    if (data is Type || data is IType || data is Assembly || data is IGetAssembly)
+                    if (value is Type || value is IType)
                         return TemplateGenerator.CreateDataTemplate(() =>
                         {
                             var textBlock = new TextBlock { };
                             Binding binding = new() { Path = new PropertyPath(nameof(System.Type.Name)) };
-                            Binding binding2 = new() { Path = new PropertyPath(nameof(IGetData.Data)) };
+                            Binding binding2 = new() { Path = new PropertyPath(nameof(IGetValue.Value)) };
                             textBlock.SetBinding(TextBlock.TextProperty, binding);
                             textBlock.SetBinding(TextBlock.DataContextProperty, binding2);
                             return textBlock;
                         });
-                    return TemplateGenerator.CreateDataTemplate(() => new Ellipse { Fill = Brushes.Black, Height = 2, Width = 2, VerticalAlignment = VerticalAlignment.Bottom, ToolTip = new ContentControl { Content = data }, Margin = new Thickness(4, 0, 4, 0) });
+                    else if (value is Assembly assembly)
+                        return TemplateGenerator.CreateDataTemplate(() =>                        {
+                            var textBlock = new TextBlock { Text = assembly.GetName().Name };
+                            return textBlock;
+                        });
+                    return TemplateGenerator.CreateDataTemplate(() => new Ellipse { Fill = Brushes.Black, Height = 2, Width = 2, VerticalAlignment = VerticalAlignment.Bottom, ToolTip = new ContentControl { Content = value }, Margin = new Thickness(4, 0, 4, 0) });
                 }
                 throw new Exception("d ss!$sd");
             }
