@@ -128,7 +128,7 @@ namespace Utility.Repos
                     else
                     {
                         var data = token["Data"];
-                        if (data.ToObject(Type.GetType(data["$type"].Value<string>())) is IValue model)
+                        if (data.ToObject(Type.GetType(data["$type"].Value<string>())) is IGetValue model)
                         {
                             observer.OnNext(new DateValue { Value = model.Value });
                         }
