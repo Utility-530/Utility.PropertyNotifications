@@ -39,7 +39,7 @@ namespace Utility.Trees.WPF
                     if (ViewModel is ILoad load)
                         load.Load();
                     disposable?.Dispose();
-                    if (ViewModel is IItems items)
+                    if (ViewModel is IChildren items)
                     {
                         this.ItemContainerStyleSelector = StyleSelector;
                         this.ItemTemplateSelector = DataTemplateSelector;         
@@ -128,7 +128,7 @@ namespace Utility.Trees.WPF
         {
             if (e.Property == ViewModelProperty && e.NewValue!=e.OldValue)
             {
-                if (e.NewValue is IItems items && d is TreeViewer treeViewer && e.NewValue != treeViewer.IsInitialised && treeViewer.TreeViewBuilder != null)
+                if (e.NewValue is IChildren items && d is TreeViewer treeViewer && e.NewValue != treeViewer.IsInitialised && treeViewer.TreeViewBuilder != null)
                 {
                     treeViewer.ItemContainerStyleSelector = treeViewer.StyleSelector;
                     treeViewer.ItemTemplateSelector = treeViewer.DataTemplateSelector;
@@ -214,7 +214,7 @@ namespace Utility.Trees.WPF
             //root.Load(); 
             disposable.Dispose();
 
-            if (ViewModel is IItems items)
+            if (ViewModel is IChildren items)
                 disposable = TreeViewBuilder.Build(this, items, TreeViewItemFactory, PanelsConverter, StyleSelector, DataTemplateSelector, TreeViewFilter);
             else
                 throw new Exception("ds 38787");

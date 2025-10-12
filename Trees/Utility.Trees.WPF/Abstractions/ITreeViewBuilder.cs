@@ -9,7 +9,7 @@ namespace Utility.Trees.WPF.Abstractions
     {
         IDisposable Build(
             ItemsControl treeView,
-            IItems root,
+            IChildren root,
             ITreeViewItemFactory factory,
             IValueConverter ItemsPanelConverter,
             StyleSelector styleSelector,
