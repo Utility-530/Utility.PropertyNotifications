@@ -31,6 +31,8 @@ namespace Utility.PropertyNotifications
         /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public bool IsPropertyChangedNotNull => PropertyChanged != null;
 
         /// <summary>
@@ -115,6 +117,7 @@ namespace Utility.PropertyNotifications
         private readonly bool raisePropertyCalled;
 
         [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public IEnumerable<PropertyCalledEventArgs> MissedCalls => missedCalls;
 
         /// <summary>

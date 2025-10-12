@@ -8,7 +8,7 @@ namespace Utility.PropertyNotifications
 {
     public static partial class PropertyReceivedExtensions
     {
-        private class PropertyObservable<TTarget, T> : IObservable<T>, IGetReference where TTarget: INotifyPropertyReceived
+        private class PropertyObservable<TTarget, T> : IObservable<T>, IGetReference where TTarget : INotifyPropertyReceived
         {
             private readonly TTarget _target;
             private readonly PropertyInfo _info;
@@ -45,7 +45,7 @@ namespace Utility.PropertyNotifications
                     if (includeInitial)
                     {
                         var value = _getter.Invoke(_target);
-                        if (includeNulls || value != null)
+                        if (includeNulls || !Comparison.IsDefaultValue(value))
                             _observer.OnNext(value);
 
                     }
@@ -56,7 +56,7 @@ namespace Utility.PropertyNotifications
                     if (e.PropertyName == _info.Name)
                     {
                         var value = _getter.Invoke(e.Source ?? _target);
-                        if (includeNulls || value != null)
+                        if (includeNulls || !Comparison.IsDefaultValue(value))
                         {
                             _observer.OnNext(value);
                         }

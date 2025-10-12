@@ -119,7 +119,7 @@ namespace Utility.PropertyNotifications
                 private void raiseChange()
                 {
                     var value = func.Invoke(_target);
-                    if (value != null || _includeNulls)
+                    if (_includeNulls || !Utility.Helpers.Reflection.Comparison.IsDefaultValue(value))
                         _observer.OnNext(value);
                 }
             }

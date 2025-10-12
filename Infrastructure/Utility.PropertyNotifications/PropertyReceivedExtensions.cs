@@ -1,5 +1,6 @@
 ﻿using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
+using Utility.Helpers.Reflection;
 
 namespace Utility.PropertyNotifications
 {
@@ -36,7 +37,7 @@ namespace Utility.PropertyNotifications
 
                 private void onPropertyReceived(object sender, PropertyReceivedEventArgs e)
                 {
-                    if (includeNulls || e.Value != null)
+                    if (includeNulls || !Comparison.IsDefaultValue(e.Value))
                         _observer.OnNext(new(e.Source ?? _target, e.Value, e.OldValue, e.PropertyName));
                 }
 
