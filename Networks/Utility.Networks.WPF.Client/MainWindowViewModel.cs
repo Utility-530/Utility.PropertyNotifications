@@ -93,12 +93,13 @@ namespace Utility.Networks.WPF.Client
 
         private async Task Connect()
         {
+            Clear();
+
             if (!validate(out int socketPort))
             {
                 return;
             }
 
-            Clear();
 
             Model.Instance.AddChange(new ConnectChange(new ConnectParameters(Address, socketPort, packet =>
             {
