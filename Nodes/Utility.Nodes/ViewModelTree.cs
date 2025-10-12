@@ -264,6 +264,8 @@ namespace Utility.Nodes
             set => this.RaisePropertyReceived(ref this.title, value);
         }
 
+        public virtual bool IsSingular => false;
+
         public ObservableCollection<Exception> Errors { get; set; } = new();
 
         public IViewModelTree Current

@@ -93,7 +93,7 @@ namespace Utility.Nodes
         {
             get => base.Key; set
             {
-                if (Key != null && SuppressExceptions == false)
+                if (Key != null && SuppressExceptions == false && SuppressKeyException == false)
                 {
                     throw new Exception($"Key {Key} not null!");
                 }
@@ -101,19 +101,6 @@ namespace Utility.Nodes
             }
         }
 
-        public override IReadOnlyTree Parent
-        {
-            get => parent;
-            set
-            {
-                if (parent != value)
-                {
-                    var previous = parent;
-                    parent = value;
-                    RaisePropertyChanged(previous, value);
-                }
-            }
-        }
 
         public IDiagramViewModel Diagram { get; set; }
 
@@ -158,6 +145,7 @@ namespace Utility.Nodes
         }
 
         public bool SuppressExceptions { get; set; }
+        public bool SuppressKeyException { get; set; }
         public NodeState State { get; set; }
 
 
