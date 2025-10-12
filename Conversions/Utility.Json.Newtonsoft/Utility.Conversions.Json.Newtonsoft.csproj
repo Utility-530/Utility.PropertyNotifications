@@ -8,10 +8,12 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	  <PackageReference Include="StringTypeEnumConverter.Newtonsoft" Version="1.1.4" />
+	  <PackageReference Include="System.Text.Json" Version="9.0.9" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\Utility.Attributes\Utility.Attributes.csproj" />
     <ProjectReference Include="..\..\Meta\Utility.Meta\Utility.Meta.csproj" />
     <ProjectReference Include="..\..\Structs\Utility.Structs\Utility.Structs.csproj" />
   </ItemGroup>
