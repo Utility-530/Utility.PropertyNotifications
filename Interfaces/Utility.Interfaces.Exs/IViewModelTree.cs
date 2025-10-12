@@ -17,13 +17,13 @@ namespace Utility.Interfaces.Exs
         IIsChildrenRefreshed,
         IIsActive,
         IArrangement, IRows, IColumns, IIsAugmentable, IErrors, IConnectorPosition, IDataTemplate, IItemsPanelTemplate, ITitle, IIsContentVisible  ,
-                   IGetGuid,
-       IIsReadOnly, ILocation
+        IGetGuid,
+        IIsReadOnly, ILocation,
+        IGetIsSingular
     {
   
 
     }
-
 
     public interface IIsChildrenRefreshed
     {
