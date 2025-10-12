@@ -8,41 +8,87 @@ using Utility.Interfaces.NonGeneric.Dependencies;
 namespace Utility.ServiceLocation;
 
 /// <summary>
-/// Resolver Mixins.
+/// A set of extension methods that assist with the <see cref="IDependencyResolver"/> and <see cref="IDependencyRegister"/> interfaces.
 /// </summary>
 public static class ResolverMixins
 {
     /// <summary>
-    /// Registers a factory for the given <typeparamref name="T" />.
+    /// Gets an instance of the given <typeparamref name="T"/>. Must return <c>null</c>
+    /// if the service is not available (must not throw).
     /// </summary>
-    /// <typeparam name="T">The service type to register for.</typeparam>
-    /// <param name="resolver">The resolver to register the service type with.</param>
-    /// <param name="contract">A optional contract value which will indicates to only generate the value if this contract is specified.</param>
-    /// <returns>The resolver.</returns>
-    public static IRegister RegisterAnd<T>(this IRegister resolver, string? contract = null)
-        where T : new()
+    /// <typeparam name="T">The type for the object we want to retrieve.</typeparam>
+    /// <param name="resolver">The resolver we are getting the service from.</param>
+    /// <param name="contract">A optional value which will retrieve only a object registered with the same contract.</param>
+    /// <returns>The requested object, if found; <c>null</c> otherwise.</returns>
+    public static T? Resolve<T>(this IResolver resolver, string? contract = null)
     {
         resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
 
-        resolver.Register(() => new T(), typeof(T), contract);
-        return resolver;
+        return (T?)resolver.Resolve(typeof(T), contract);
     }
 
     /// <summary>
-    /// Registers a factory for the given <typeparamref name="T" />.
+    /// Gets all instances of the given <typeparamref name="T"/>. Must return an empty
+    /// collection if the service is not available (must not return <c>null</c> or throw).
+    /// </summary>
+    /// <typeparam name="T">The type for the object we want to retrieve.</typeparam>
+    /// <param name="resolver">The resolver we are getting the service from.</param>
+    /// <param name="contract">A optional value which will retrieve only a object registered with the same contract.</param>
+    /// <returns>A sequence of instances of the requested <typeparamref name="T"/>. The sequence
+    /// should be empty (not <c>null</c>) if no objects of the given type are available.</returns>
+    public static IEnumerable<T> ResolveMany<T>(this IResolver resolver, string? contract = null)
+    {
+        resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
+
+        return resolver.ResolveMany(typeof(T), contract).Cast<T>();
+    }
+
+    /// <summary>
+    /// Registers a new callback that occurs when a new service with the specified type is registered.
+    /// </summary>
+    /// <param name="resolver">The resolver we want to register the callback with.</param>
+    /// <param name="serviceType">The service type we are wanting to observe.</param>
+    /// <param name="callback">The callback which should be called.</param>
+    /// <returns>A disposable which will stop notifications to the callback.</returns>
+    //public static IDisposable ServiceRegistrationCallback(this IRegister resolver, Type serviceType, Action<IDisposable> callback)
+    //{
+    //    resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
+
+    //    return resolver.ServiceRegistrationCallback(serviceType, null, callback);
+    //}
+
+    ///// <summary>
+    ///// Override the default Dependency Resolver until the object returned
+    ///// is disposed.
+    ///// </summary>
+    ///// <param name="resolver">The test resolver to use.</param>
+    ///// <param name="suppressResolverCallback">If we should suppress the resolver callback notify.</param>
+    ///// <returns>A disposable which will reset the resolver back to the original.</returns>
+    //public static IDisposable WithResolver(this IDependencyResolver resolver, bool suppressResolverCallback = true)
+    //{
+    //    resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
+
+    //    var notificationDisposable = suppressResolverCallback ? Locator.SuppressResolverCallbackChangedNotifications() : ActionDisposable.Empty;
+
+    //    var origResolver = Locator.GetLocator();
+    //    Locator.SetLocator(resolver);
+
+    //    return new CompositeDisposable(new ActionDisposable(() => Locator.SetLocator(origResolver)), notificationDisposable);
+    //}
+
+    /// <summary>
+    /// Registers a factory for the given <typeparamref name="T"/>.
     /// </summary>
     /// <typeparam name="T">The service type to register for.</typeparam>
     /// <param name="resolver">The resolver to register the service type with.</param>
     /// <param name="factory">A factory method for generating a object of the specified type.</param>
     /// <param name="contract">A optional contract value which will indicates to only generate the value if this contract is specified.</param>
-    /// <returns>The resolver.</returns>
-    public static IRegister RegisterAnd<T>(this IRegister resolver, Func<T> factory, string? contract = null)
+    public static void RegisterLazy<T>(this IRegister resolver, Func<T?> factory, string? contract = null)
     {
         resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
         factory.ThrowArgumentNullExceptionIfNull(nameof(factory));
 
-        resolver.Register(() => factory()!, typeof(T), contract);
-        return resolver;
+        resolver.Register(() => factory(), typeof(T), contract);
     }
 
     /// <summary>
@@ -52,32 +98,12 @@ public static class ResolverMixins
     /// <typeparam name="T">The service type to register for.</typeparam>
     /// <param name="resolver">The resolver to register the service type with.</param>
     /// <param name="contract">A optional contract value which will indicates to only generate the value if this contract is specified.</param>
-    /// <returns>The resolver.</returns>
-    public static IRegister RegisterAnd<TAs, T>(this IRegister resolver, string? contract = null)
+    public static void RegisterLazy<TAs, T>(this IRegister resolver, string? contract = null)
         where T : new()
     {
         resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
 
         resolver.Register(() => new T(), typeof(TAs), contract);
-        return resolver;
-    }
-
-    /// <summary>
-    /// Registers a factory for the given <typeparamref name="T" />.
-    /// </summary>
-    /// <typeparam name="TAs">The type to register as.</typeparam>
-    /// <typeparam name="T">The service type to register for.</typeparam>
-    /// <param name="resolver">The resolver to register the service type with.</param>
-    /// <param name="factory">A factory method for generating a object of the specified type.</param>
-    /// <param name="contract">A optional contract value which will indicates to only generate the value if this contract is specified.</param>
-    /// <returns>The resolver.</returns>
-    public static IRegister RegisterAnd<TAs, T>(this IRegister resolver, Func<T> factory, string? contract = null)
-    {
-        resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
-        factory.ThrowArgumentNullExceptionIfNull(nameof(factory));
-
-        resolver.Register(() => factory()!, typeof(TAs), contract);
-        return resolver;
     }
 
     /// <summary>
@@ -87,29 +113,11 @@ public static class ResolverMixins
     /// <param name="value">The specified instance to always return.</param>
     /// <param name="serviceType">The type of service to register.</param>
     /// <param name="contract">A optional contract value which will indicates to only return the value if this contract is specified.</param>
-    /// <returns>The resolver.</returns>
-    public static IRegister RegisterConstantAnd(this IRegister resolver, object value, Type serviceType, string? contract = null)
+    public static void Register(this IRegister resolver, object? value, Type? serviceType, string? contract = null)
     {
         resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
 
         resolver.Register(() => value, serviceType, contract);
-        return resolver;
-    }
-
-    /// <summary>
-    /// Registers a constant value which will always return the specified object instance.
-    /// </summary>
-    /// <typeparam name="T">The service type to register for.</typeparam>
-    /// <param name="resolver">The resolver to register the service type with.</param>
-    /// <param name="contract">A optional contract value which will indicates to only return the value if this contract is specified.</param>
-    /// <returns>The resolver.</returns>
-    public static IRegister RegisterConstantAnd<T>(this IRegister resolver, string? contract = null)
-        where T : new()
-    {
-        resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
-
-        var value = new T();
-        return resolver.RegisterAnd(() => value, contract);
     }
 
     /// <summary>
@@ -119,12 +127,11 @@ public static class ResolverMixins
     /// <param name="resolver">The resolver to register the service type with.</param>
     /// <param name="value">The specified instance to always return.</param>
     /// <param name="contract">A optional contract value which will indicates to only return the value if this contract is specified.</param>
-    /// <returns>The resolver.</returns>
-    public static IRegister RegisterConstantAnd<T>(this IRegister resolver, T value, string? contract = null)
+    public static void Register<T>(this IRegister resolver, T? value, string? contract = null)
     {
         resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
 
-        return resolver.RegisterAnd(() => value, contract);
+        Register(resolver, value, typeof(T), contract);
     }
 
     /// <summary>
@@ -135,32 +142,12 @@ public static class ResolverMixins
     /// <param name="valueFactory">A factory method for generating a object of the specified type.</param>
     /// <param name="serviceType">The type of service to register.</param>
     /// <param name="contract">A optional contract value which will indicates to only return the value if this contract is specified.</param>
-    /// <returns>The resolver.</returns>
-    public static IRegister RegisterLazySingletonAnd(this IRegister resolver, Func<object> valueFactory, Type serviceType, string? contract = null)
+    public static void Register(this IRegister resolver, Func<object?> valueFactory, Type? serviceType, string? contract = null)
     {
         resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
 
-        var val = new Lazy<object>(valueFactory, LazyThreadSafetyMode.ExecutionAndPublication);
+        var val = new Lazy<object?>(valueFactory, LazyThreadSafetyMode.ExecutionAndPublication);
         resolver.Register(() => val.Value, serviceType, contract);
-        return resolver;
-    }
-
-    /// <summary>
-    /// Registers a lazy singleton value which will always return the specified object instance once created.
-    /// The value is only generated once someone requests the service from the resolver.
-    /// </summary>
-    /// <typeparam name="T">The service type to register for.</typeparam>
-    /// <param name="resolver">The resolver to register the service type with.</param>
-    /// <param name="contract">A optional contract value which will indicates to only return the value if this contract is specified.</param>
-    /// <returns>The resolver.</returns>
-    public static IRegister RegisterLazySingletonAnd<T>(this IRegister resolver, string? contract = null)
-        where T : new()
-    {
-        resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
-
-        var val = new Lazy<object>(() => new T(), LazyThreadSafetyMode.ExecutionAndPublication);
-        resolver.Register(() => val.Value, typeof(T), contract);
-        return resolver;
     }
 
     /// <summary>
@@ -171,13 +158,31 @@ public static class ResolverMixins
     /// <param name="resolver">The resolver to register the service type with.</param>
     /// <param name="valueFactory">A factory method for generating a object of the specified type.</param>
     /// <param name="contract">A optional contract value which will indicates to only return the value if this contract is specified.</param>
-    /// <returns>The resolver.</returns>
-    public static IRegister RegisterLazySingletonAnd<T>(this IRegister resolver, Func<T> valueFactory, string? contract = null)
+    public static void Register<T>(this IRegister resolver, Func<T?> valueFactory, string? contract = null) => Register(resolver, () => valueFactory(), typeof(T), contract);
+
+    /// <summary>
+    /// Unregisters the current the value for the specified type and the optional contract.
+    /// </summary>
+    /// <typeparam name="T">The type of item to unregister.</typeparam>
+    /// <param name="resolver">The resolver to unregister the service with.</param>
+    /// <param name="contract">A optional contract which indicates to only removed the item registered with this contract.</param>
+    public static void Unregister<T>(this IRegister resolver, string? contract = null)
     {
         resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
 
-        var val = new Lazy<object>(() => valueFactory()!, LazyThreadSafetyMode.ExecutionAndPublication);
-        resolver.Register(() => val.Value, typeof(T), contract);
-        return resolver;
+        resolver.UnregisterCurrent(typeof(T), contract);
+    }
+
+    /// <summary>
+    /// Unregisters the all the values for the specified type and the optional contract.
+    /// </summary>
+    /// <typeparam name="T">The type of items to unregister.</typeparam>
+    /// <param name="resolver">The resolver to unregister the services with.</param>
+    /// <param name="contract">A optional contract which indicates to only removed those items registered with this contract.</param>
+    public static void UnregisterAll<T>(this IRegister resolver, string? contract = null)
+    {
+        resolver.ThrowArgumentNullExceptionIfNull(nameof(resolver));
+
+        resolver.UnregisterAll(typeof(T), contract);
     }
 }
