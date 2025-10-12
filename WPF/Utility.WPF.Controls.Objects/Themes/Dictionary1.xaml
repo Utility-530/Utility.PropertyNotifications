@@ -2,7 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Utility.WPF.Controls.Objects"
                     xmlns:conv="http://schemas.utility.com/converters" 
-                    xmlns:res="http://schemas.utility.com/resourcedictionary">
+                    xmlns:res="http://schemas.utility.com/resourcedictionary"
+                    xmlns:sb="http://schemas.utility.com/splitbuttons"
+                    >
 
 
     <ResourceDictionary.MergedDictionaries>
@@ -12,6 +14,7 @@
     <!--Converter for Indentation of items-->
     <!--<tree:TreeListViewConverter x:Key="TreeListViewConverter" />-->
 
+    <local:TemplatesConverter x:Key="TemplatesConverter"/>
 
     <Style x:Key="BasicButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="Transparent"></Setter>
@@ -90,15 +93,65 @@
 
     <ControlTemplate TargetType="{x:Type local:TreeListViewItem}" x:Key="TreePropertyListViewItem" >
         <!--Grid containing the current information and the subnodes.-->
-        <StackPanel Orientation="Horizontal">
-            <Border x:Name="Border" Background="Transparent" BorderBrush="{TemplateBinding Foreground}">
-                <ContentPresenter x:Name="PART_Header"
-                                 
-                                        ContentSource="Header"
-                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
-            </Border>
-            <ItemsPresenter x:Name="ItemsPresenter"  />
-        </StackPanel>
+        <Grid>
+            <Grid.Resources>
+                <Style TargetType="{x:Type sb:PopupButton}">
+                    <Setter Property="BorderBrush" Value="Transparent"></Setter>
+                    <Setter Property="Background" Value="Transparent"></Setter>
+                    <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                    <Setter Property="HorizontalAlignment" Value="Center"></Setter>
+                    <Setter Property="VerticalContentAlignment" Value="Center"></Setter>
+                    <Setter Property="VerticalAlignment" Value="Center"></Setter>
+                </Style>
+            </Grid.Resources>
+
+            <StackPanel Orientation="Horizontal" >
+                <Border x:Name="Border" Background="Transparent" BorderBrush="{TemplateBinding Foreground}">
+                    <Grid>
+                        <ContentPresenter x:Name="PART_Header"
+                            ContentSource="Header"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                    </Grid>
+                </Border>
+                <ItemsPresenter x:Name="ItemsPresenter" Margin="0,0,18,0" />
+            </StackPanel>
+
+            <sb:PopupButton PopupPlacement="Bottom"
+                            Margin="0,0,-5,0"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Right">
+                <sb:PopupButton.Header>
+                    <Path Data="{StaticResource SettingsGeometry}"   Height="12"  Stretch="Uniform"  Fill="Gray"></Path>
+                </sb:PopupButton.Header>
+                <sb:PopupButton.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <!--<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,5">
+                                    <CheckBox Content="Enable Custom Template" Margin="0,0,0,0"/>
+                                </StackPanel>-->
+
+                        <StackPanel Grid.Row="2" Orientation="Horizontal">
+                            <TextBlock Text="Template" VerticalAlignment="Center" Margin="0,0,0,5"/>
+                            <!--<ComboBox SelectedIndex="0">
+                                -->
+                            <!--<ComboBox.ItemsSource>
+                                    <MultiBinding Converter="{StaticResource TemplatesConverter}">
+                                        <Binding RelativeSource="{RelativeSource  AncestorType=local:JsonControl}" />
+                                        <Binding Path="." />
+                                    </MultiBinding>
+                                </ComboBox.ItemsSource>-->
+                            <!--
+                            </ComboBox>-->
+                        </StackPanel>
+                    </Grid>
+                </sb:PopupButton.Content>
+            </sb:PopupButton>
+
+        </Grid>
         <ControlTemplate.Triggers>
             <!--Trigger used to show the sub items-->
             <!--<Trigger Property="IsExpanded" Value="True">
@@ -258,6 +311,12 @@
     <Style x:Key="RootStyle" TargetType="{x:Type local:TreeListViewItem}">
         <Setter Property="ItemContainerStyleSelector" Value="{StaticResource JsonContainerStyle2Selector}"/>
         <Setter Property="Template" Value="{StaticResource RootControlTemplate}"/>
+        <Setter Property="Schema" Value="{Binding Schema, RelativeSource={RelativeSource AncestorType={x:Type local:JsonControl}}}"></Setter>
+    </Style>
+    
+
+    <Style x:Key="RootValueStyle" TargetType="{x:Type local:TreeListViewItem}">
+        <Setter Property="Template" Value="{StaticResource TreeObjectListViewItem}" />
         <Setter Property="Schema" Value="{Binding Schema, RelativeSource={RelativeSource AncestorType={x:Type local:JsonControl}}}"></Setter>
     </Style>
 </ResourceDictionary>

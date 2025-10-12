@@ -1,6 +1,7 @@
 ﻿using AutoGenListView.Attributes;
 using Humanizer;
 using Itenso.Windows.Controls.ListViewLayout;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -38,6 +39,12 @@ namespace Utility.WPF.Controls.Objects
             // the propertty to it
             foreach (PropertyInfo info in properties)
             {
+                var x = info.GetCustomAttributes();
+                if (x.Any(a => a is JsonIgnoreAttribute or System.Text.Json.Serialization.JsonIgnoreAttribute))
+                {
+                    continue;
+                }
+      
                 (bool success, ColumnAttribute? dna) = info.GetAttributeSafe<ColumnAttribute>();
 
                 if (success && dna.Ignore == true)

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Chronic;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Utility.Helpers.Reflection;
 using Utility.WPF.ResourceDictionarys;
 
 namespace Utility.WPF.Controls.Objects
@@ -19,6 +21,21 @@ namespace Utility.WPF.Controls.Objects
             //    return Application.Current.Resources["RootStyle"] as Style;
             if (item is JArray { })
             {
+                var token = item as JToken;
+                while (token.Type != JTokenType.Object)
+                {
+                    token = token.Parent;
+                }
+
+                if (token["$type"] is { } type)
+                {
+                    var _type = Type.GetType(type.ToString());
+                    var elementType = TypeHelper.GetElementType(_type);
+
+                    if (elementType.IsValueType || elementType == typeof(string))
+                        return find("RootValueStyle");
+                }
+
                 return find("RootStyle");
             }
             else if (item is JProperty property)

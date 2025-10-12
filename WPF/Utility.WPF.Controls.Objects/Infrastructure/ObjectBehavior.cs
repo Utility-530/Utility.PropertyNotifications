@@ -38,7 +38,8 @@ namespace Utility.WPF.Controls.Objects
                         };
                         inpc.CollectionChanged += (s, ev) =>
                         {
-                            Application.Current.Dispatcher.Invoke(() => {
+                            Application.Current.Dispatcher.Invoke(() =>
+                            {
                                 @object._playSubject.OnNext(@object.AssociatedObject);
                             });
 
@@ -118,12 +119,19 @@ namespace Utility.WPF.Controls.Objects
 
         protected void AssociatedObject_ValueChanged(object sender, ValueChangedRoutedEventArgs e)
         {
-            resolver ??= ResolverFactory.Create(RaisePropertyChanged);
             var _value = value();
+
+            resolver ??= ResolverFactory.Create(RaisePropertyChanged);
+
             string pattern = @"\[\'";
             string result = Regex.Replace(e.JPropertyNewValue.JProperty.Path, pattern, "");
             var path = Regex.Match(result, JsonControl.LabelPattern).Groups[0].ToString();
-            resolver.Set(Object, path, _value);
+            var get = resolver.Get(Object, path);
+            if (_value != get)
+            {
+                resolver.Set(Object, path, _value);
+            }
+
 
             object value()
             {

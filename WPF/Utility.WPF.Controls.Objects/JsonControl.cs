@@ -1,4 +1,5 @@
 ﻿# nullable enable
+using Chronic;
 using Humanizer;
 using Microsoft.Xaml.Behaviors;
 using Newtonsoft.Json.Linq;
@@ -8,6 +9,7 @@ using SourceChord.FluentWPF;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reactive.Linq;
@@ -27,6 +29,7 @@ using Utility.Helpers.Reflection;
 using Utility.Models;
 using Utility.WPF.Controls.Trees;
 using static LambdaConverters.ValueConverter;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Utility.WPF.Controls.Objects
 {
@@ -63,7 +66,10 @@ namespace Utility.WPF.Controls.Objects
         //public static readonly DependencyProperty SchemaProperty = DependencyProperty.Register(nameof(Schema), typeof(Schema), typeof(JsonControl), new PropertyMetadata());
         public static readonly DependencyProperty ChangeValueCommandProperty = DependencyProperty.Register(nameof(ChangeValueCommand), typeof(ICommand), typeof(JsonControl), new PropertyMetadata());
         public static readonly DependencyProperty IsReadOnlyVisibleProperty = DependencyProperty.Register("IsReadOnlyVisible", typeof(bool), typeof(JsonControl), new PropertyMetadata(true));
-        public static readonly DependencyProperty IsTypeVisibleProperty =    DependencyProperty.Register("IsTypeVisible", typeof(bool), typeof(JsonControl), new PropertyMetadata(false));
+        public static readonly DependencyProperty IsTypeVisibleProperty = DependencyProperty.Register("IsTypeVisible", typeof(bool), typeof(JsonControl), new PropertyMetadata(false));
+        public static readonly DependencyProperty FallbackRootTypeProperty = DependencyProperty.Register("FallbackRootType", typeof(Type), typeof(JsonControl), new PropertyMetadata());
+
+
 
         public static readonly RoutedEvent ValueChangedEvent = EventManager.RegisterRoutedEvent(
             name: "ValueChanged",
@@ -138,7 +144,7 @@ namespace Utility.WPF.Controls.Objects
             {
                 jArray.Add(jArray[0]);
                 jToken = jArray.Last;
-                (jArray.Last as JObject).Reset();
+                (jArray.Last as JObject)?.Reset();
             }
             else
             {
@@ -184,6 +190,14 @@ namespace Utility.WPF.Controls.Objects
             remove { RemoveHandler(ValueChangedEvent, value); }
         }
 
+        #region properties
+
+        public Type FallbackRootType
+        {
+            get { return (Type)GetValue(FallbackRootTypeProperty); }
+            set { SetValue(FallbackRootTypeProperty, value); }
+        }
+
         public string Json
         {
             get => (string)GetValue(JsonProperty);
@@ -219,12 +233,15 @@ namespace Utility.WPF.Controls.Objects
             get { return (ICommand)GetValue(ChangeValueCommandProperty); }
             set { SetValue(ChangeValueCommandProperty, value); }
         }
+        #endregion properties
 
         public override void OnApplyTemplate()
         {
-            this.WhenAnyValue(a => a.Object)
-                .WhereNotNull()
-                .Merge(this.WhenAnyValue(a => a.Json).WhereNotNull().Select(convert))
+            this.ItemsSource = new[] { convert("{}") };
+
+            this.WhenAnyValue(a => a.Object).WhereNotNull()
+                .Merge(this.WhenAnyValue(a => a.Json).WhereNotNull().Where(a => Regex.Replace(a, @"\s+", "") != "{}").Select(convert))
+                .Merge(this.WhenAnyValue(a => a.FallbackRootType).WhereNotNull().Select(convertType))
                 .Subscribe(a =>
                 {
                     this.Load(a, this);
@@ -245,6 +262,18 @@ namespace Utility.WPF.Controls.Objects
                     return JToken.FromObject(ex);
                 }
             }
+            JToken convertType(Type type)
+            {
+                //return Newtonsoft.Json.JsonConvert.SerializeObject(e, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All, Converters = converters });
+                try
+                {
+                    return JToken.FromObject(Activator.CreateInstance(type));
+                }
+                catch (Exception ex)
+                {
+                    return JToken.FromObject(ex);
+                }
+            }
 
             base.OnApplyTemplate();
         }
@@ -252,18 +281,16 @@ namespace Utility.WPF.Controls.Objects
         private void Load(JToken jToken, TreeView jsonTreeView)
         {
             jsonTreeView.ItemsSource = null;
-            //jsonTreeView.Items.Clear();
 
             try
             {
-                //var jToken = JToken.Parse(json);
                 if (ValidationSchema != null)
                     if (jToken.IsValid(ValidationSchema) == false)
                     {
                         MessageBox.Show("Schema not valid!");
                     }
 
-                jsonTreeView.ItemsSource = new[] { jToken };//.Children();
+                jsonTreeView.ItemsSource = new[] { jToken };
             }
             catch (Exception ex)
             {
@@ -325,9 +352,25 @@ namespace Utility.WPF.Controls.Objects
                     {
                         return frameworkElement.FindResource("ReadOnlyTemplate") as DataTemplate;
                     }
+                    if (propertyName.Contains($"{MetadataConverter.Type}:{Utility.Enums.DataType.Money}"))
+                    {
+                        return frameworkElement.FindResource("MoneyTemplate") as DataTemplate;
+                    }
+                    if (propertyName.Contains($"{MetadataConverter.Type}:{Utility.Enums.DataType.PIN}"))
+                    {
+                        return frameworkElement.FindResource("PinTemplate") as DataTemplate;
+                    }
+                    if (propertyName.Contains($"{MetadataConverter.Type}:{Utility.Enums.DataType.Percentage}"))
+                    {
+                        return frameworkElement.FindResource("PercentageTemplate") as DataTemplate;
+                    }
                     if (propertyName.Contains($"{MetadataConverter.Type}:Double"))
                     {
                         return frameworkElement.FindResource("NumberNullTemplate") as DataTemplate;
+                    }
+                    if (propertyName.Contains($"{MetadataConverter.Type}:DateTime"))
+                    {
+                        return frameworkElement.FindResource("DateTimeNullTemplate") as DataTemplate;
                     }
                     if (propertyName.Contains($"{MetadataConverter.Type}:String"))
                     {
@@ -339,8 +382,11 @@ namespace Utility.WPF.Controls.Objects
                     }
                     return frameworkElement.FindResource(convert(jtype)) as DataTemplate;
                 }
-
-
+                else if (item is JValue { Type: { } jValueType, Path: { } path } && new Regex(@"\$values\[\d+\]").IsMatch(path))
+                {
+                    return frameworkElement.FindResource(convert(jValueType)) as DataTemplate;
+                }
+                return frameworkElement.FindResource("MissingTemplate") as DataTemplate;
             }
 
             if (item is JObject)
@@ -349,13 +395,13 @@ namespace Utility.WPF.Controls.Objects
             if (item is null)
                 return MissingTemplate;
 
-            return container.GetResource<DataTemplate>("MissingTemplate");
+            throw new Exception("Could not find template for " + item.GetType().FullName);
 
             static string convert(JTokenType _type)
             {
                 return _type switch
                 {
-                    JTokenType.Date => "DateTemplate",
+                    JTokenType.Date => "DateTimeTemplate",
                     JTokenType.TimeSpan => "TimeTemplate",
                     JTokenType.String => "StringTemplate",
                     JTokenType.Integer => "IntegerTemplate",
@@ -496,6 +542,85 @@ namespace Utility.WPF.Controls.Objects
         }
     }
 
+    public class DateTimeEventArgsConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is RoutedPropertyChangedEventArgs<object> { NewValue: DateTime newValue } && parameter is JValue { Parent: JProperty jProperty } jValue)
+            {
+                jValue.Value = newValue;
+                return new JPropertyNewValue(value, jProperty);
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
+    public class DecimalEventArgsConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is RoutedPropertyChangedEventArgs<decimal> { NewValue: { } newValue } && parameter is JValue { Parent: JProperty jProperty } jValue)
+            {
+                jValue.Value = newValue;
+                return new JPropertyNewValue(value, jProperty);
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class StringMoneyDecimalEventArgsConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is TextChangedEventArgs { Source: TextBox { Text: { } text } } && parameter is JValue { Parent: JProperty jProperty } jValue)
+            {
+                if (decimal.TryParse(text.Substring(1), out decimal _value))
+                {
+                    jValue.Value = _value;
+                    return new JPropertyNewValue(value, jProperty);
+                }
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class StringPercentageDecimalEventArgsConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is TextChangedEventArgs { Source: TextBox { Text: { } text } } && parameter is JValue { Parent: JProperty jProperty } jValue)
+            {
+                if (decimal.TryParse(text.Remove(text.Length - 1), out decimal _value))
+                {
+                    jValue.Value = _value;
+                    return new JPropertyNewValue(value, jProperty);
+                }
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 
     public class ComplexPropertyMethodValueConverter : IValueConverter
     {
@@ -538,11 +663,11 @@ namespace Utility.WPF.Controls.Objects
         public static IValueConverter JTokenTypeToColorConverter { get; } = Create<JTokenType, Color>(a => NiceColors.Value[(byte)a.Value]);
 
         public static IValueConverter MethodToValueConverter { get; } = Create<object, IEnumerable<JToken>?, string>(a =>
-                      {
-                          if (a.Parameter != null && a.Value?.GetType().GetMethod(a.Parameter, Array.Empty<Type>()) is MethodInfo methodInfo)
-                              return (IEnumerable<JToken>?)methodInfo.Invoke(a.Value, Array.Empty<object>());
-                          return Array.Empty<JToken>();
-                      });
+        {
+            if (a.Parameter != null && a.Value?.GetType().GetMethod(a.Parameter, Array.Empty<Type>()) is MethodInfo methodInfo)
+                return (IEnumerable<JToken>?)methodInfo.Invoke(a.Value, Array.Empty<object>());
+            return Array.Empty<JToken>();
+        });
 
         public static IValueConverter JArrayConverter { get; } = GetJArrayConverter();
         public static IValueConverter GetJArrayConverter()
@@ -749,7 +874,10 @@ namespace Utility.WPF.Controls.Objects
         {
             throw new NotImplementedException();
         }
+
+        public static OneTimeConverter Instance { get; } = new();
     }
+
     internal class DoubleToNullConverter : ToNullConverter<double>
     {
     }
@@ -760,6 +888,9 @@ namespace Utility.WPF.Controls.Objects
         {
             return string.Empty;
         }
+    }
+    internal class DateTimeToNullConverter : ToNullConverter<DateTime>
+    {
     }
 
     internal class ToNullConverter<T> : IValueConverter
