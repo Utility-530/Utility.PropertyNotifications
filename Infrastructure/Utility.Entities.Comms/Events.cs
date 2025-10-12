@@ -14,6 +14,8 @@ public record BroadcastEvent(object Source, object Target) : Event();
 public record SaveEvent(object Source) : Event();
 public record RefreshEvent(object Source) : Event();
 public record RunEvent(object Source) : Event();
+public record ResetEvent(object Source) : Event();
+public record OpenSettingsEvent(object Source) : Event();
 public record CancelEvent(object Source) : Event();
 public record SelectEvent(object Source) : Event();
 public record BroadcastSuccessEvent(object Source, object Target) : BroadcastEvent(Source, Target);
