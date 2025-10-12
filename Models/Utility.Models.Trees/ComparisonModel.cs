@@ -2,7 +2,7 @@
 
 namespace Utility.Models.Trees
 {
-    public class ComparisonModel : Model<Enum, ComparisonModel>
+    public class ComparisonModel : Model<Enum>
     {
         private Enum _value;
         private ComparisonType type;

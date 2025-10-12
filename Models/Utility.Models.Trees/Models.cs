@@ -24,11 +24,9 @@ using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
-using Utility.Nodify.Base.Abstractions;
 using Utility.Observables;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
-using Utility.Structs;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Extensions;
 using Type = System.Type;
@@ -37,9 +35,9 @@ namespace Utility.Models.Trees
 {
     public readonly record struct ValueChanged(PropertyInfo PropertyInfo, object Value);
 
-    public class TypeModel : Model, IBreadCrumb, IType
+    public class TypeModel : Model<Type>, IBreadCrumb, IType
     {
-        public Type Type { get; set; }
+        public Type Type { get => Value as Type; set => Value = value; }
 
         public override IEnumerable<IReadOnlyTree> Items()
         {
@@ -164,13 +162,13 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class AssemblyModel : Model, IBreadCrumb, IGetAssembly
+    public class AssemblyModel : Model<Assembly>, IBreadCrumb, IGetAssembly
     {
         public AssemblyModel()
         {
         }
 
-        public Assembly Assembly { get; set; }
+        public Assembly Assembly => Value as Assembly;
 
         public override string Name
         {
@@ -180,7 +178,7 @@ namespace Utility.Models.Trees
                 name = value;
                 if (Assembly == null)
                 {
-                    Assembly = Assembly.Load(value);
+                    Value = Assembly.Load(value);
                 }
                 //base.RaisePropertyChanged();
             }
@@ -200,7 +198,7 @@ namespace Utility.Models.Trees
             }
         }
 
-        public static AssemblyModel Create(Assembly assembly) => new() { Assembly = assembly, Name = assembly.FullName };
+        public static AssemblyModel Create(Assembly assembly) => new() { Value = assembly, Name = assembly.FullName };
 
         public override void SubtractDescendant(IReadOnlyTree node, int level)
         {
@@ -255,7 +253,7 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class AssemblyTypePropertyModel : Model<PropertyInfo, AssemblyTypePropertyModel>, IBreadCrumb
+    public class AssemblyTypePropertyModel : Model<PropertyInfo>, IBreadCrumb
     {
         public AssemblyTypePropertyModel()
         {
@@ -283,7 +281,7 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class PropertyModel : Model<PropertyInfo, PropertyModel>, IBreadCrumb
+    public class PropertyModel : Model<PropertyInfo>, IBreadCrumb
     {
         public PropertyModel()
         {
@@ -303,7 +301,7 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class ValueModel : Model<object, ValueModel>, IAutoList
+    public class ValueModel : Model<object>, IAutoList
     {
         private bool isListening;
 
@@ -316,7 +314,7 @@ namespace Utility.Models.Trees
     }
 
 
-    public class MethodModel : Model<MethodInfo, MethodModel>, IBreadCrumb
+    public class MethodModel : Model<MethodInfo>, IBreadCrumb
     {
         public MethodModel()
         {
@@ -327,13 +325,13 @@ namespace Utility.Models.Trees
         {
             foreach (var p in Get()?.GetParameters() ?? Array.Empty<ParameterInfo>())
                 yield return
-                    new ParameterModel { Name = p.Name, Parameter = p };
+                    new ParameterModel { Name = p.Name, Value = p };
         }
     }
 
-    public class ParameterModel : Model, IBreadCrumb
+    public class ParameterModel : Model<ParameterInfo>, IBreadCrumb
     {
-        public ParameterInfo Parameter { get; set; }
+        public ParameterInfo Parameter => Value as ParameterInfo;
 
     }
 
@@ -425,7 +423,7 @@ namespace Utility.Models.Trees
             this.type = type;
         }
 
-        public override object Data { get => type; set => type = (Type)value; }
+        //public override object Data { get => type; set => type = (Type)value; }
 
         public Type Type => type;
 
@@ -439,17 +437,17 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class IndexModel : Model<int, IndexModel>
+    public class IndexModel : Model<int>
     {
     }
 
 
 
-    public class ReadOnlyStringModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<ReadOnlyStringModel>? attach = null) : Model<string, ReadOnlyStringModel>(func, nodeAction, addition, attach, false, false)
+    public class ReadOnlyStringModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<ReadOnlyStringModel>? attach = null) : Model<string>(func, nodeAction, addition, a => attach?.Invoke((ReadOnlyStringModel)a), false, false)
     {
     }
 
-    public class EditModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<Model>? attach = null) : Model(func, nodeAction, addition, attach)
+    public class EditModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<EditModel>? attach = null) : Model(func, nodeAction, addition, a => attach?.Invoke((EditModel)a))
     {
         public EditModel() : this(null, null, null)
         {
@@ -749,7 +747,7 @@ namespace Utility.Models.Trees
     public readonly record struct DataFile(string Alias, string FilePath);
 
 
-    public class DataFileModel : Model<DataFile, DataFileModel>
+    public class DataFileModel : Model<DataFile>
     {
 
         public DataFileModel()
@@ -839,7 +837,7 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class ThroughPutModel : Model<string, ThroughPutModel>
+    public class ThroughPutModel : Model<string>
     {
         const string element = nameof(element);
         const string filter = nameof(filter);
@@ -968,12 +966,13 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class ModelTypeModel : Model<ModelType, ModelTypeModel>, ISelectable
+    public class ModelTypeModel : Model<ModelType>, ISelectable
     {
         public ModelTypeModel(string name) : this()
         {
-            this.Value = new ModelType(name, Globals.Types.FirstOrDefault(t => t.Name == name).AsString());
+            this.Value = new ModelType(name, Globals.Types.FirstOrDefault(t => t.Name == name));
         }
+
         public ModelTypeModel()
         {
             IsPersistable = true;
@@ -981,30 +980,10 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class ModelTypesModel : Model
-    {
-        public ModelTypesModel()
-        {
-            IsExpanded = true;
-            IsAugmentable = false;
-        }
-
-        public override IEnumerable<IReadOnlyTree> Items()
-        {
-            foreach (var type in Locator.Current.GetService<IEnumerableFactory<Type>>().Create(null))
-            {
-                var pnode = new ModelTypeModel { Name = type.Name, Value = new ModelType(type.Name, type.AsString()) };
-                yield return pnode;
-            }
-        }
-    }
-
     public class FileNameModel : StringModel
     {
 
     }
-
-
 
     public class DirectoryModel : ReadOnlyStringModel, IBreadCrumb, IFileSystemInfo
     {
@@ -1014,8 +993,6 @@ namespace Utility.Models.Trees
         }
 
         public FileSystemInfo FileSystemInfo { get => new DirectoryInfo((string)Get(nameof(Value))); set => Value = value.FullName; }
-
-        public override object Data { get => FileSystemInfo; set => throw new NotImplementedException(); }
 
         public override string Name
         {

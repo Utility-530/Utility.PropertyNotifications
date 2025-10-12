@@ -28,36 +28,36 @@ namespace Utility.Models
         {
         }
 
-        public Model(Func<IEnumerable<IReadOnlyTree>> children, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<Model>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(children, nodeAction, addition, attach: attach, raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
+        public Model(Func<IEnumerable<IReadOnlyTree>> children, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<Model>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(children, nodeAction, addition, attach: new Action<IReadOnlyTree>(a => attach?.Invoke((Model)a)), raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
         {
         }
     }
 
-    public class Model<T> : Model<T, Model>
-    {
-        public Model(Func<IEnumerable<IReadOnlyTree>>? childrenLambda = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<Model>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
-            base(childrenLambda, nodeAction, addition, attach, raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
-        {
-        }
-    }
+    //public class Model<T> : Model<T>
+    //{
+    //    public Model(Func<IEnumerable<IReadOnlyTree>>? childrenLambda = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<NodeViewModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
+    //        base(childrenLambda, nodeAction, addition, attach, raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
+    //    {
+    //    }
+    //}
 
-    public class Model<T, TAttach> : NodeViewModel, IClone, IYieldItems, IKey, IName, IAttach<TAttach>, IGet<T>, Interfaces.Generic.ISet<T> 
+    public class Model<T> : NodeViewModel, IClone, IYieldItems, IKey, IName, IAttach<IReadOnlyTree>, IGet<T>, Interfaces.Generic.ISet<T>
     {
         protected readonly Func<IEnumerable<IReadOnlyTree>>? childrenLambda;
         private readonly Action<INodeViewModel>? nodeAction;
         private readonly Action<IReadOnlyTree>? addition;
-        private readonly Action<TAttach>? attach;
-        protected INodeSource source = Utility.Globals.Resolver.Resolve<INodeSource>();
+        private readonly Action<IReadOnlyTree>? attach;
+
         public virtual Version Version { get; set; } = new();
         bool isInitialised = false;
         private T? value = default;
 
-        public Model(Func<IEnumerable<IReadOnlyTree>>? childrenLambda = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<TAttach>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true)
+        public Model(Func<IEnumerable<IReadOnlyTree>>? childrenLambda = null, Action<INodeViewModel>? initialise = null, Action<IReadOnlyTree>? addition = null, Action<Model<T>>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true)
         {
             this.childrenLambda = childrenLambda;
-            this.nodeAction = nodeAction;
+            this.nodeAction = initialise;
             this.addition = addition;
-            this.attach = attach;
+            this.attach = new Action<IReadOnlyTree>(a => attach?.Invoke((Model<T>)a));
             Initialise();
         }
 
@@ -205,9 +205,15 @@ namespace Utility.Models
 
                 //}
             }
-            if (a is IAttach<IReadOnlyTree> attach and IReadOnlyTree model)
+            var type = a.GetType();
+
+            if (a is IAttach<IReadOnlyTree> attach)
             {
-                attach.Attach(model);
+                attach.Attach(a);
+            }
+            else
+            {
+                throw new Exception("Ds453 ddd");
             }
             addition?.Invoke(a);
         }
@@ -234,12 +240,13 @@ namespace Utility.Models
             return instance;
         }
 
-        public virtual void Attach(TAttach value)
+        public virtual void Attach(IReadOnlyTree value)
         {
             attach?.Invoke(value);
         }
 
-        public override object? Value {
+        public override object? Value
+        {
             get { RaisePropertyCalled(value); return value; }
             set => this.RaisePropertyReceived<T>(ref this.value, (T)value);
         }
@@ -272,8 +279,8 @@ namespace Utility.Models
         }
     }
 
-    public class StringModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<StringModel>? attach = null) : 
-        Model<string, StringModel>(func, nodeAction, addition, attach)
+    public class StringModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? initialise = null, Action<IReadOnlyTree>? addition = null, Action<StringModel>? attach = null) :
+        Model<string>(func, initialise, addition, attach: new Action<IReadOnlyTree>(a => attach?.Invoke((StringModel)a)))
     {
         public StringModel() : this(null, null, null)
         {
@@ -281,11 +288,11 @@ namespace Utility.Models
         }
     }
 
-    public class GuidModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null) : Model<Guid, Model>(func, nodeAction, addition)
+    public class GuidModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? initialise = null, Action<IReadOnlyTree>? addition = null) : Model<Guid>(func, initialise, addition)
     {
     }
 
-    public class BooleanModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null) : Model<bool, Model>(func, nodeAction, addition)
+    public class BooleanModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? initialise = null, Action<IReadOnlyTree>? addition = null) : Model<bool>(func, initialise, addition)
     {
     }
 

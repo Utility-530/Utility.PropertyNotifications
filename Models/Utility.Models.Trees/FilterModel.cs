@@ -6,6 +6,7 @@ using System.Reactive.Linq;
 using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
 using Utility.Helpers.Reflection;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
@@ -14,6 +15,7 @@ using Utility.Reactives;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Extensions;
 using Type = System.Type;
+using Utility.ServiceLocation;
 
 namespace Utility.Models.Trees
 {
@@ -25,7 +27,8 @@ namespace Utility.Models.Trees
         private ResolvableModel resolvableModel;
         private ComparisonModel comparisonModel;
         private ValueModel model;
-
+        protected INodeSource source = Utility.Globals.Resolver.Resolve<INodeSource>();
+        
         public FilterModel()
         {
             this.WithChangesTo(a => (a as IGetParent<IReadOnlyTree>).Parent).Subscribe(a =>

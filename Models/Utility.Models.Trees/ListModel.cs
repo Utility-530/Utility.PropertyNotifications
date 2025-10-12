@@ -10,9 +10,9 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Models.Trees
-{ 
+{
     public class ListModel(Type type, Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<ListModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
-        Model<IId<Guid>, ListModel>(func, nodeAction, addition, attach, raisePropertyCalled, raisePropertyReceived),
+        Model<IId<Guid>>(func, nodeAction, addition, a => attach?.Invoke((ListModel)a), raisePropertyCalled, raisePropertyReceived),
         IGetType
     {
         private Type type = type;
@@ -37,13 +37,13 @@ namespace Utility.Models.Trees
         public new IId<Guid> Add
         {
             get => add;
-            set { this.add = value; this.RaisePropertyReceived(value, null); }
+            set { this.add = value; this.RaisePropertyChanged(value, null); }
         }
 
         public new IId<Guid> Remove
         {
             get => remove;
-            set { this.remove = value; this.RaisePropertyReceived(value, null); }
+            set { this.remove = value; this.RaisePropertyChanged(value, null); }
 
         }
     }
