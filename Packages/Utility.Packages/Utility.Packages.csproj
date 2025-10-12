@@ -24,6 +24,7 @@
 		<PackageReference Include="LanguageExt.Core" Version="4.2.7" />
 		<PackageReference Include="LinqToRegex" Version="2.5.0" />
 		<PackageReference Include="MintPlayer.ObservableCollection" Version="1.5.0" />
+		<PackageReference Include="NodaMoney" Version="2.5.0" />
 		<PackageReference Include="Object" Version="4.0.0" />
 		<PackageReference Include="ObjectCloner.Extensions" Version="2.0.1" />
 		<PackageReference Include="ObjectDumper.NET" Version="4.3.4-pre" />
