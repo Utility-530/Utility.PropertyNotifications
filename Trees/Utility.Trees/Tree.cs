@@ -18,7 +18,7 @@ namespace Utility.Trees
     public class Tree : NotifyPropertyClass, ITree, IEquatable
     {
         private IList items;
-        protected IReadOnlyTree? parent;
+        private IReadOnlyTree? parent;
         private bool flag;
         private string key;
         private bool? hasItems;
@@ -201,7 +201,20 @@ namespace Utility.Trees
 
         public virtual bool HasChildren { get => hasItems ?? Children != null && Children.Count() > 0; }
 
-        public virtual IReadOnlyTree? Parent { get => parent; set => parent = value; }
+        public virtual IReadOnlyTree Parent
+        {
+            get => parent;
+            set
+            {
+                if (parent != value)
+                {
+                    var previous = parent;
+                    parent = value;
+                    RaisePropertyChanged(previous, value);
+                }
+            }
+        }
+
 
         public virtual IEnumerable Children
         {
