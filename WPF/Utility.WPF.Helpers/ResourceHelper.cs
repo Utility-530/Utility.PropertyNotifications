@@ -23,17 +23,6 @@ namespace Utility.WPF.Helpers
             return (T)path;
         }
 
-        // Summary:
-        //     GetResource
-        //
-        // Parameters:
-        //   _:
-        //
-        //   key:
-        //     Resource Key
-        //
-        // Type parameters:
-        //   Target:
         public static TTarget? FindResource<TTarget>(string key)
         {
             if (!string.IsNullOrEmpty(key) && Application.Current != null)
