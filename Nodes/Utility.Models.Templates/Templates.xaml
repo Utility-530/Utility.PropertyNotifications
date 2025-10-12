@@ -107,6 +107,40 @@
         </TextBlock>
     </DataTemplate>
 
+    <DataTemplate  x:Key="MoneySumTemplate" DataType="{x:Type model:StringModel}">
+       
+        <Border Background="#F8F9FA" 
+        BorderBrush="#E9ECEF" 
+        BorderThickness="1" 
+        CornerRadius="8" 
+        Padding="16,12"
+        Margin="10">
+            <StackPanel>
+                <!-- Header -->
+                <TextBlock Text="SUM" 
+                   FontSize="14" 
+                   FontWeight="SemiBold" 
+                   Foreground="#495057"
+                   Margin="0,0,0,8"/>
+
+                <!-- Loan Amount Display -->
+                <TextBlock x:Name="TotalLoansTextBlock"
+                   Text="{Binding Value, StringFormat='£{0:N2}', ConverterCulture=en-GB}"
+                   FontSize="24" 
+                   FontWeight="Bold" 
+                   Foreground="#1A237E"
+                   HorizontalAlignment="Left"/>
+
+                <!-- Subtext --><!--
+                <TextBlock Text="Sum of all active loans" 
+                   FontSize="12" 
+                   Foreground="#6C757D"
+                   FontStyle="Italic"
+                   Margin="0,4,0,0"/>-->
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+
     <DataTemplate DataType="{x:Type inf:TypeModel}">
         <!--<controls:BreadCrumbs
             ItemsSource="{Binding Type, Converter={x:Static conv:TypeHierarchyConverter.Instance}}">
@@ -235,7 +269,7 @@
         <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
         <WebBrowser >
             <i:Interaction.Behaviors>
-                <beh:WebBrowserNavigationBehavior Html="{Binding Value, Mode=OneWay, Converter={x:Static conv:DefaultConverter.Instance}}"/>
+                <beh:WebBrowserNavigationBehavior Html="{Binding Value, Mode=OneWay}"/>
             </i:Interaction.Behaviors>
         </WebBrowser>
     </DataTemplate>
@@ -246,7 +280,7 @@
         <TextBlock Text="Html"></TextBlock>
         <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
         <!--<html:TinyHtmlEditorControl Html="{Binding Value, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>-->
-        <!--<wpf1:HtmlPanel Text="{Binding Value, Mode=OneWay,Converter={x:Static conv:DefaultConverter.Instance}}"></wpf1:HtmlPanel>-->
+        <!--<wpf1:HtmlPanel Text="{Binding Value, Mode=OneWay}"></wpf1:HtmlPanel>-->
         <!--<avalonedit:TextEditor x:Name="_htmlEditor" 
                            
                                        VerticalScrollBarVisibility="Visible"                                    
