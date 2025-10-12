@@ -24,11 +24,10 @@ namespace Utility.Nodes.Ex
 
         public static ITree ToViewModelTree(this Assembly[] assemblies, Predicate<Type>? typePredicate = null)
         {
-            ViewModelTree t_tree = new ViewModelTree() { Name = "root" };
+            ViewModelTree t_tree = new() { Name = "root" };
 
             foreach (var assembly in assemblies)
             {
-
                 ViewModelTree tree = AssemblyModel.Create(assembly);
 
                 foreach (var type in assembly.GetTypes())
@@ -55,7 +54,7 @@ namespace Utility.Nodes.Ex
             foreach (var model in models)
             {
 
-                model.WithChangesTo(a => a.IsExpanded).Subscribe(isExpanded =>
+                model.WhenReceivedFrom(a => a.IsExpanded).Subscribe(isExpanded =>
                 {
                     if (isExpanded)
                         ToViewModelTree([.. model.Items().OfType<ReadOnlyStringModel>()], t_tree: model);
@@ -74,12 +73,12 @@ namespace Utility.Nodes.Ex
         public static INodeViewModel Abstract(this INodeViewModel tree, out IDisposable disposables)
         {
             var _name = tree is IGetName { Name: { } name } ? name : tree.ToString();
-            var clone = new NodeViewModel(new Abstract { Name = _name }) { Key = (tree as IGetKey).Key, AddCommand = tree.AddCommand, RemoveCommand = tree.RemoveCommand, Removed = tree.Removed };
+            var clone = new NodeViewModel() { Name = _name, Key = (tree as IGetKey).Key, AddCommand = tree.AddCommand, RemoveCommand = tree.RemoveCommand, Removed = tree.Removed };
             var c_disposables = new CompositeDisposable();
 
-            tree.WithChangesTo(a => a.Removed).Subscribe(a => clone.Removed = a).DisposeWith(c_disposables);
-            tree.WithChangesTo(a => a.IsExpanded).Subscribe(a => clone.IsExpanded = a).DisposeWith(c_disposables);
-            clone.WithChangesTo(a => a.IsExpanded).Subscribe(a => tree.IsExpanded = a).DisposeWith(c_disposables);
+            tree.WhenReceivedFrom(a => a.Removed).Subscribe(a => clone.Removed = a).DisposeWith(c_disposables);
+            tree.WhenReceivedFrom(a => a.IsExpanded).Subscribe(a => clone.IsExpanded = a).DisposeWith(c_disposables);
+            clone.WhenReceivedFrom(a => a.IsExpanded).Subscribe(a => tree.IsExpanded = a).DisposeWith(c_disposables);
 
             tree.Children.AndAdditions<INodeViewModel>().Subscribe(async item =>
             {
