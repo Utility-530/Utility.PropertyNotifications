@@ -8,13 +8,11 @@ namespace Utility.WPF.Markup
     /// </summary>
     public class GenericTypesExtension : MarkupExtension
     {
-        //    public GenericTypesExtension()
-        //    {
-        //    }
-
-        public GenericTypesExtension(Type baseType, params Type[] innerTypes)
+        public GenericTypesExtension(string baseType, params Type[] innerTypes)
         {
-            BaseType = baseType;
+            //That’s because XAML’s type parser doesn’t recognize the CLR backtick notation (like List\1, Dictionary`2, etc.).
+            //It only supports **non-generic type names** — or **generic classes defined in XAML using x:TypeArguments`**.
+            BaseType = Type.GetType(baseType);
             InnerTypes = innerTypes;
         }
 
@@ -31,9 +29,9 @@ namespace Utility.WPF.Markup
 
     public class GenericTypeExtension : MarkupExtension
     {
-        public GenericTypeExtension(Type baseType, Type innerType)
+        public GenericTypeExtension(string baseType, Type innerType)
         {
-            BaseType = baseType;
+            BaseType = Type.GetType(baseType);
             InnerType = innerType;
         }
 
@@ -47,4 +45,5 @@ namespace Utility.WPF.Markup
             return result;
         }
     }
+
 }
