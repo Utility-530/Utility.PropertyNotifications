@@ -36,7 +36,8 @@ namespace Utility.WPF.Controls.Trees
     {
         protected override DependencyObject GetContainerForItemOverride()
         {
-            return new CustomTreeViewItem() {
+            return new CustomTreeViewItem()
+            {
                 ItemContainerStyleSelector = ItemContainerStyleSelector,
                 ItemContainerStyle = CustomHelper.Load<Style>(new Uri($"/{typeof(ComboTreeView).Assembly.GetName().Name};component/Themes/ComboTreeViewItem.xaml", UriKind.RelativeOrAbsolute), "ComboTreeViewItem"),
                 TreeView = this
@@ -147,7 +148,7 @@ namespace Utility.WPF.Controls.Trees
             //    EditTemplate ??= dataTemplate;
 
             SelectionTemplate ??= ItemTemplate;
- 
+
             this.onApplyAnimatedTemplate();
             this.apply_template();
             this._OnApplyTemplate();
@@ -283,8 +284,12 @@ namespace Utility.WPF.Controls.Trees
             var item = new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector, ItemContainerStyle = ItemContainerStyle, TreeView = this.TreeView };
             item.Selected += (s, e) =>
             {
-                SelectionItem = (s as FrameworkElement).DataContext;
-                _selectionChanged(this, default);
+                if (s is FrameworkElement { DataContext: { } dataContext } && SelectionItem != dataContext)
+                {
+                    var oldValue = SelectionItem;   
+                    SelectionItem = dataContext;
+                    _selectionChanged(SelectionItem, oldValue);
+                }
             };
             item.Unselected += (s, e) =>
             {
@@ -310,16 +315,14 @@ namespace Utility.WPF.Controls.Trees
             //}
         }
 
-        private static void _selectionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private void _selectionChanged(object newValue, object oldValue)
         {
-            if (d is CustomTreeViewItem combo)
-            {
-                combo.SetValue(IsDropDownOpenProperty, BooleanBoxes.FalseBox);
-                combo.RaiseEvent(new SelectionChangedEventArgs(SelectionChangedEvent, new[] { e.OldValue }, new[] { e.NewValue }));
-                //combo.Focus();
-                combo.ReleaseMouseCapture();
-                combo.Selection = e.NewValue;
-            }
+
+            this.SetValue(IsDropDownOpenProperty, BooleanBoxes.FalseBox);
+            this.RaiseEvent(new SelectionChangedEventArgs(SelectionChangedEvent, new[] { oldValue }, new[] { newValue }));
+            //combo.Focus();
+            this.ReleaseMouseCapture();
+            this.Selection = newValue;
 
         }
 

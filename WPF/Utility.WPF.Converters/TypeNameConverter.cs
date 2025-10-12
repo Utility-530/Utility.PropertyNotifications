@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Converters
 {
@@ -14,7 +15,7 @@ namespace Utility.WPF.Converters
                 if (value == null)
                     return DependencyProperty.UnsetValue;
                 else if (value is Type type)
-                    return type?.Name ?? DependencyProperty.UnsetValue;
+                    return type?.ToFriendlyName() ?? DependencyProperty.UnsetValue;
                 else if (value is string str)
                     if (Type.GetType(str) is Type _type)
                         return Convert(_type, targetType, parameter, culture);

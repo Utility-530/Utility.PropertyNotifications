@@ -22,6 +22,7 @@
                                     Padding="{TemplateBinding Padding}"
                                     IsChecked="{Binding IsPopupOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
 
+                                
                             <ContentPresenter ContentSource="Header" 
                                             HorizontalAlignment="Center" 
                                             VerticalAlignment="Center"/>

@@ -20,8 +20,10 @@ namespace Utility.WPF.Demo.ComboBoxes
         {
             InitializeComponent();
             TypeSelector.Assemblies = new Assembly[] { Assembly.GetEntryAssembly(), typeof(Tree).Assembly };
-            Type2Selector.Assemblies = new Assembly[] { typeof(Tree).Assembly, new SystemAssembly() };
             TypeSelector.Type = typeof(Tree);
+
+
+            Type2Selector.Assemblies = new Assembly[] { typeof(Tree).Assembly, new SystemAssembly() };
             Type2Selector.Type = typeof(string);
             FileSelector.FileSystemInfo = new DirectoryInfo("O:\\Users\\ry33tal\\");
             DataTemplate2Selector.FullKey = "{\"Assembly\":\"Utility.WPF.Demo.Data\",\"ResourceDictionary\":\"datatemplate/character.baml\",\"Element\":\"CharacterBaseClass\"}";

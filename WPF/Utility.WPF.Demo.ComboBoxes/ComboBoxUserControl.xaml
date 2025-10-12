@@ -11,17 +11,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <FrameworkElement.Resources>
-
-
         <ResourceDictionary>
-            <HierarchicalDataTemplate x:Key="treeViewDataTemplate" ItemsSource="{Binding Items}">
+            <HierarchicalDataTemplate x:Key="treeViewDataTemplate" ItemsSource="{Binding Children}">
                 <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
-                    <ContentControl Content="{Binding Data}"/>
+                    <ContentControl Content="{Binding Value}"/>
                 </Border>
             </HierarchicalDataTemplate>
-
-        </ResourceDictionary>
-        
+        </ResourceDictionary>        
     </FrameworkElement.Resources>
 
     <StackPanel>
@@ -101,7 +97,7 @@
         <ContentControl Content="{Binding ElementName=DataTemplate2Selector, Path=FullKey}"/>
 
 
-        <controls:ComboBoxTreeView >
+        <controls:ComboBoxTreeView x:Name="ComboBoxTreeView1">
             <i:Interaction.Behaviors>
                 <controls:TypeSelectorBehavior  x:Name="TypeSelector" />
             </i:Interaction.Behaviors>
