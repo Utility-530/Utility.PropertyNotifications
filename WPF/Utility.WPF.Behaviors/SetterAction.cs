@@ -45,15 +45,13 @@
             set => SetValue(ValueProperty, value);
         }
 
-
-
         public IValueConverter Converter
         {
             get { return (IValueConverter)GetValue(ConverterProperty); }
             set { SetValue(ConverterProperty, value); }
         }
-        #endregion properties
 
+        #endregion properties
 
         protected override void Invoke(object parameter)
         {
