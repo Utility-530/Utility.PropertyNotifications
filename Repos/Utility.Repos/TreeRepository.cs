@@ -1,6 +1,9 @@
-﻿using SQLite;
+﻿using ActivateAnything;
+using SQLite;
+using System;
 using System.Reactive.Disposables;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.NonGeneric;
 using Utility.Reactives;
 using Utility.Structs.Repos;
 using static System.Environment;
@@ -70,6 +73,8 @@ namespace Utility.Repos
 
         public const string SelectTypeId =
             "SELECT Id FROM Type WHERE Assembly = ? AND Namespace = ? AND Name = ? AND GenericTypeNames IS ?";
+
+        public const string SelectValues = "SELECT v.* FROM \"Values\" v JOIN (SELECT Guid, Name, MAX(Added) AS MaxAdded FROM \"Values\" GROUP BY Guid, Name) latest ON v.Guid = latest.Guid AND v.Name = latest.Name AND v.Added = latest.MaxAdded;";
     }
 
     public class TreeRepository : ITreeRepository
@@ -162,6 +167,32 @@ namespace Utility.Repos
                     foreach (var type in connection.Table<Type>().ToList())
                     {
                         types.Add(type.Id, convert(type));
+                    }
+
+                    foreach (var value in connection.Query<Values>(SqlQueries.SelectValues).ToList())
+                    {
+                        if (value.TypeId.HasValue == false)
+                            continue;
+                        System.Type? type = ToType(value.TypeId.Value);
+                        object? _value;
+                        try
+                        {
+                            _value = JsonConvert.DeserializeObject(value.Value, type, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                        }
+                        catch (JsonReaderException ex)
+                        {
+                            _value = value.Value;
+                        }
+
+                        var dateValue = new DateValue(value.Guid, value.Name, value.Added, _value);
+                        if (values.ContainsKey(value.Guid) == false)
+                        {
+                            values[value.Guid] = new() { { value.Name, dateValue } };
+                        }
+                        else if (values[value.Guid].ContainsKey(value.Name) == false)
+                        {
+                            values[value.Guid].Add(value.Name, dateValue);
+                        }
                     }
                     IsInitialised = true;
                 });
@@ -601,55 +632,6 @@ namespace Utility.Repos
                     observer.OnCompleted();
                     return Disposable.Empty;
                 }
-
-                List<Values>? tables = null;
-                if (name == null)
-                    tables = connection.Query<Values>($"SELECT * FROM 'Values' WHERE Guid = '{guid}' GROUP BY Name HAVING Max({nameof(Values.Added)})");
-                else
-                    tables = connection.Query<Values>($"SELECT * FROM 'Values' WHERE Guid = '{guid}' AND Name = '{name}' Order By '{nameof(Values.Added)}' Desc Limit 1");
-
-
-                if (tables.Count != 0)
-                {
-                    foreach (var table in tables)
-                    {
-                        if (table is Values { Value: { } text, Added: { } added, Name: { } _name, TypeId: { } typeId })
-                        {
-                            System.Type? type = ToType(typeId);
-
-                            if (type == null)
-                            {
-                                observer.OnNext(new DateValue(guid, _name, added, null));
-                                continue;
-                            }
-
-                            object? value = null;
-
-                            try
-                            {
-                                value = JsonConvert.DeserializeObject(text, type, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-                            }
-                            catch (JsonReaderException ex)
-                            {
-                                value = text;
-                            }
-
-                            var _value = new DateValue(guid, _name, added, value);
-                            lock (values)
-                                if (values.ContainsKey(guid) == false)
-                                {
-                                    values[guid] = new() { { _name, _value } };
-                                }
-                                else if (values[guid].ContainsKey(_name) == false)
-                                {
-                                    values[guid].Add(_name, _value);
-                                }
-                            observer.OnNext(_value);
-                        }
-                    }
-                    observer.OnCompleted();
-                }
-                else
                 {
                     observer.OnNext(new DateValue(guid, name, default, null));
                     observer.OnCompleted();
