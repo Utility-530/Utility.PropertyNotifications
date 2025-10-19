@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Utility.Enums
+namespace Utility.Enums.Attributes
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class NamesAttribute : Attribute
