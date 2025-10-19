@@ -41,13 +41,14 @@ namespace Utility.Nodes
         private string itemsPanelTemplate;
         private string title;
         private PointF location;
-        private SizeF size;
+        private SizeF? size;
         private bool isActive;
         protected string name;
         private bool isChildrenRefreshed;
         private bool isPersistable;
         private object? value;
         public event Action? Closed;
+        public bool isEnabled = true;
 
         public ViewModelTree()
         {
@@ -65,6 +66,7 @@ namespace Utility.Nodes
 
         public virtual Guid Guid { get => Guid.TryParse(Key, out var guid) ? guid : default; set => Key = value.ToString(); }
 
+        public virtual bool IsChildrenTracked { get; set; } = true;
         public int? LocalIndex { get; set; }
 
         public string GroupKey { get; set; }
@@ -101,7 +103,7 @@ namespace Utility.Nodes
             set => this.RaisePropertyReceived(ref this.location, value);
         }
 
-        public SizeF Size
+        public SizeF? Size
         {
             get { RaisePropertyCalled(size); return size; }
             set => this.RaisePropertyReceived(ref this.size, value);
@@ -217,7 +219,12 @@ namespace Utility.Nodes
                     Closed?.Invoke();
                 }
             }
+        }
 
+        public bool IsEnabled 
+        {
+            get { RaisePropertyCalled(isEnabled); return isEnabled; }
+            set => this.RaisePropertyReceived(ref this.isEnabled, value);
         }
 
         public bool? IsContentVisible
@@ -291,6 +298,8 @@ namespace Utility.Nodes
             set => this.RaisePropertyReceived(ref this.isChildrenRefreshed, value);
         }
 
+        public bool IsValueTracked { get; set; } = true;
+
         public bool Sort(object? o = null)
         {
             collection.Sort();
@@ -336,6 +345,7 @@ namespace Utility.Nodes
                 case nameof(ItemsPanelTemplate): itemsPanelTemplate = value as string; break;
                 case nameof(Title): title = value as string; break;
                 case nameof(Value): this.value = value; break;
+                case nameof(IsEnabled): this.isEnabled = (bool)value; break;
                 default: throw new ArgumentException($"Unknown field: {name}");
             }
             RaisePropertyChanged(name);
@@ -376,6 +386,7 @@ namespace Utility.Nodes
                 nameof(ItemsPanelTemplate) => itemsPanelTemplate,
                 nameof(Title) => title,
                 nameof(Value) => value,
+                nameof(IsEnabled) => isEnabled,
                 _ => throw new ArgumentException($"Unknown field: {name}")
             };
         }
