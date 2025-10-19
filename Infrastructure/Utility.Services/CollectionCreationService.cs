@@ -1,23 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
 using Utility.Changes;
+using Utility.Common.Collections;
 using Utility.Interfaces.Generic.Data;
 using Utility.Models;
+using Utility.Services.Meta;
 
 namespace Utility.Services
 {
-    public record InstanceTypeParam() : MethodParameter<CollectionCreationService>(nameof(CollectionCreationService.Instance), "type");
-    public record ListInstanceReturnParam() : MethodParameter<CollectionCreationService>(nameof(CollectionCreationService.Instance));
-   
-    public record ChangeParam() : MethodParameter<CollectionCreationService>(nameof(CollectionCreationService.Change), "change");
-    public record ListParam() : MethodParameter<CollectionCreationService>(nameof(CollectionCreationService.Change), "list");
+    public record InstanceTypeParam() : Param<CollectionCreationService>(nameof(CollectionCreationService.Instance), "type");
+    public record ListInstanceReturnParam() : Param<CollectionCreationService>(nameof(CollectionCreationService.Instance));
+
+    public record ChangeParam() : Param<CollectionCreationService>(nameof(CollectionCreationService.Change), "change");
+    public record ListParam() : Param<CollectionCreationService>(nameof(CollectionCreationService.Change), "list");
 
 
 
     public class CollectionCreationService
     {
 
-        public static IList Instance(System.Type type)            
+        public static IList Instance(System.Type type)
         {
             var instance = createCollectionInstance(type);
             subscribe(instance);
@@ -25,7 +27,7 @@ namespace Utility.Services
 
             static IList createCollectionInstance(System.Type type)
             {
-                var constructedListType = typeof(ObservableCollection<>).MakeGenericType(type);
+                var constructedListType = typeof(ObservableRangeCollection<>).MakeGenericType(type);
                 var instance = (IList)Activator.CreateInstance(constructedListType);
                 return instance;
             }

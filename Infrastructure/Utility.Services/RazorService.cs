@@ -1,13 +1,17 @@
 ﻿using RazorEngine.Templating;
 using Utility.Entities;
 using Utility.Models;
+using Utility.Services.Meta;
 using Utility.Structs;
 
 namespace Utility.Services
 {
-    public record RazorInstanceParam() : MethodParameter<RazorService>(nameof(RazorService.ToRazorFile), "instance");
-    public record RazorFilePathParam() : MethodParameter<RazorService>(nameof(RazorService.ToRazorFile), "filePath");
-    public record RazorFileReturnParam() : MethodParameter<RazorService>(nameof(RazorService.ToRazorFile));
+    public record RazorInstanceParam() : Param<RazorService>(nameof(RazorService.ToRazorFile), "instance");
+    public record RazorFilePathParam() : Param<RazorService>(nameof(RazorService.ToRazorFile), "filePath");
+    public record RazorFileReturnParam() : Param<RazorService>(nameof(RazorService.ToRazorFile));
+
+    public readonly record struct RazorFileDTO(string Content, object Value, string Text);
+
 
     public class RazorService //: IObserver<FilePath>, IObserver<Instance>, IObservable<RazorEngineOutput>
     {
@@ -15,7 +19,7 @@ namespace Utility.Services
         CancellationTokenSource? source = null;
 
 
-        public  async Task<RazorFileDTO> ToRazorFile(FilePath filePath, object instance)
+        public async Task<RazorFileDTO> ToRazorFile(FilePath filePath, object instance)
         {
             //Utility.Globals.Logs.OnNext(new Log { Date = DateTime.Now, Message = "Compiling model", Source = nameof(RazorService) });
             source?.Cancel(false);

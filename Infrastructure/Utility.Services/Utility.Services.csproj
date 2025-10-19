@@ -21,6 +21,8 @@
 
     <ProjectReference Include="..\Utility.Entities\Utility.Entities.csproj" />
 
+    <ProjectReference Include="..\Utility.Services.Meta\Utility.Services.Meta.csproj" />
+
   </ItemGroup>
 
 </Project>
