@@ -10,6 +10,7 @@
     using System.Diagnostics;
     using System.Linq;
     using Utility.Collections;
+    using Utility.Interfaces.Generic;
 
     /// <summary>
     /// <a href="https://gist.github.com/weitzhandler/"></a>
@@ -18,7 +19,7 @@
     /// implementing INotifyCollectionChanged to notify listeners
     /// when items get added, removed or the whole list is refreshed.
     /// </summary>
-    public class RangeObservableCollection<T> : ThreadSafeObservableCollection<T>
+    public class RangeObservableCollection<T> : ThreadSafeObservableCollection<T>, IAddRange<T>
     {
         //------------------------------------------------------
         //

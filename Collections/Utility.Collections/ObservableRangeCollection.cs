@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using Utility.Interfaces.Generic;
 
 namespace Utility.Common.Collections
 {
@@ -7,7 +8,7 @@ namespace Utility.Common.Collections
     /// <a href="https://stackoverflow.com/questions/3300845/observablecollection-calling-oncollectionchanged-with-multiple-new-items"></a>
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class ObservableRangeCollection<T> : ObservableCollection<T>
+    public class ObservableRangeCollection<T> : ObservableCollection<T>, IAddRange<T>
     {
         private bool suppressNotification;
 
@@ -69,11 +70,6 @@ namespace Utility.Common.Collections
             {
                 OnCollectionChangedMultiItem(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, itemList));
             }
-        }
-
-        public void AddRange(params T[] items)
-        {
-            AddRange((IEnumerable<T>)items);
         }
 
         public void ReplaceWithRange(IEnumerable<T> items)
