@@ -19,12 +19,19 @@ namespace Utility.Reactives
         {
             if (task.IsCompleted)
                 return Observable.Return(task.Result);
-            return Observable.Create<T>((observer =>
+            return Observable.Create<T>((async observer =>
             {
-                return task.ContinueWith(a =>
+                try
                 {
-                    observer.OnNext(a.Result);
-                }, TaskContinuationOptions.ExecuteSynchronously);
+                    var result = await task.ConfigureAwait(false);
+                    observer.OnNext(result);
+                    observer.OnCompleted();
+                }
+                catch (Exception ex)
+                {
+                    observer.OnError(ex);
+                }
+
             }));
         }
 
