@@ -13,11 +13,8 @@ using Utility.Trees.Extensions.Async;
 
 namespace Utility.Models
 {
-    public class ReadOnlyModel : Model
+    public class ReadOnlyModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<IReadOnlyTree>? addition = null) : Model(func, addition, null, false, false)
     {
-        public ReadOnlyModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null) : base(func, nodeAction, addition, null, false, false)
-        {
-        }
     }
 
     public class Model : Model<object>
@@ -26,7 +23,7 @@ namespace Utility.Models
         {
         }
 
-        public Model(Func<IEnumerable<IReadOnlyTree>> children, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<Model>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(children, nodeAction, addition, attach: new Action<IReadOnlyTree>(a => attach?.Invoke((Model)a)), raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
+        public Model(Func<IEnumerable<IReadOnlyTree>> children, Action<IReadOnlyTree>? addition = null, Action<Model>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(children, addition, attach: new Action<IReadOnlyTree>(a => attach?.Invoke((Model)a)), raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
         {
         }
     }
@@ -35,7 +32,6 @@ namespace Utility.Models
     public class Model<T> : NodeViewModel, IClone, IYieldItems, IKey, IName, IAttach<IReadOnlyTree>, IGet<T>, Interfaces.Generic.ISet<T>
     {
         protected readonly Func<IEnumerable<IReadOnlyTree>>? childrenLambda;
-        private readonly Action<INodeViewModel>? nodeAction;
         private readonly Action<IReadOnlyTree>? addition;
         private readonly Action<IReadOnlyTree>? attach;
 
@@ -43,19 +39,21 @@ namespace Utility.Models
         bool isInitialised = false;
         private T? value = default;
 
-        public Model(Func<IEnumerable<IReadOnlyTree>>? childrenLambda = null, Action<INodeViewModel>? initialise = null, Action<IReadOnlyTree>? addition = null, Action<Model<T>>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true)
+        public Model(Func<IEnumerable<IReadOnlyTree>>? childrenLambda = null, Action<IReadOnlyTree>? addition = null, Action<Model<T>>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true)
         {
             this.childrenLambda = childrenLambda;
-            this.nodeAction = initialise;
             this.addition = addition;
             this.attach = new Action<IReadOnlyTree>(a => attach?.Invoke((Model<T>)a));
             Initialise();
         }
 
+        public override object Data { get => typeof(T); set => throw new NotImplementedException("ds dd2111"); }
+
+
         public virtual void Initialise()
         {
             isInitialised = true;
-            nodeAction?.Invoke(this);
+
             this.WhenReceivedFrom(a => a.Current, includeNulls: true)
                 .Skip(1)
                 .Subscribe(a =>
@@ -169,10 +167,7 @@ namespace Utility.Models
             }
         }
 
-        public virtual IEnumerable Proliferation()
-        {
-            yield break;
-        }
+
 
         public virtual void Update(IReadOnlyTree current)
         {
@@ -269,8 +264,8 @@ namespace Utility.Models
         }
     }
 
-    public class StringModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? initialise = null, Action<IReadOnlyTree>? addition = null, Action<StringModel>? attach = null) :
-        Model<string>(func, initialise, addition, attach: new Action<IReadOnlyTree>(a => attach?.Invoke((StringModel)a)))
+    public class StringModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<IReadOnlyTree>? addition = null, Action<StringModel>? attach = null) :
+        Model<string>(func, addition, attach: new Action<IReadOnlyTree>(a => attach?.Invoke((StringModel)a)))
     {
         public StringModel() : this(null, null, null)
         {
@@ -278,11 +273,11 @@ namespace Utility.Models
         }
     }
 
-    public class GuidModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? initialise = null, Action<IReadOnlyTree>? addition = null) : Model<Guid>(func, initialise, addition)
+    public class GuidModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<IReadOnlyTree>? addition = null) : Model<Guid>(func,  addition)
     {
     }
 
-    public class BooleanModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? initialise = null, Action<IReadOnlyTree>? addition = null) : Model<bool>(func, initialise, addition)
+    public class BooleanModel(Func<IEnumerable<IReadOnlyTree>>? func = null,  Action<IReadOnlyTree>? addition = null) : Model<bool>(func, addition)
     {
     }
 

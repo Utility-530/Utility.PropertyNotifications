@@ -37,6 +37,14 @@ namespace Utility.Models.Trees
 
     public class TypeModel : Model<Type>, IBreadCrumb, IType
     {
+        public TypeModel(string name) : this(Globals.Types.FirstOrDefault(t => t.Name == name) ?? throw new Exception("DSC££!!!C c"))
+        {
+        }
+
+        public TypeModel(Type type)
+        {
+            this.Value = type;
+        }
         public Type Type { get => Value as Type; set => Value = value; }
 
         public override IEnumerable<IReadOnlyTree> Items()
@@ -193,7 +201,7 @@ namespace Utility.Models.Trees
 
             foreach (Type type in Assembly.ExportedTypes.Where(GlobalModelFilter.Instance.TypePredicate.Invoke))
             {
-                var _node = new TypeModel { Name = type.Name, Type = type };
+                var _node = new TypeModel(type) { Name = type.Name };
                 yield return _node;
             }
         }
@@ -406,7 +414,7 @@ namespace Utility.Models.Trees
     }
 
 
-    public class CommandModel<T> : CommandModel where T : Event
+    public class CommandModel<T> : CommandModel where T : Entities.Comms.Event
     {
         public CommandModel() : base(typeof(T))
         {
@@ -416,11 +424,17 @@ namespace Utility.Models.Trees
     public class CommandModel : Model, IGetType
     {
         private Type type;
+        public event Action? Executed;
 
         public CommandModel(Type type)
         {
-            Command = new Commands.Command(() => Utility.Globals.Events.OnNext((Event)Activator.CreateInstance(type, [this])));
+            Command = new Commands.Command(() => Utility.Globals.Events.OnNext((Entities.Comms.Event)Activator.CreateInstance(type, [this])));
             this.type = type;
+        }
+        public CommandModel()
+        {
+            Command = new Commands.Command(() => Executed?.Invoke());
+            this.type = typeof(void);
         }
 
         //public override object Data { get => type; set => type = (Type)value; }
@@ -431,6 +445,10 @@ namespace Utility.Models.Trees
 
         public new Type GetType()
         {
+            if (Type == typeof(void))
+            {
+                return typeof(CommandModel);
+            }
             Type[] typeArguments = { Type };
             Type genericType = typeof(CommandModel<>).MakeGenericType(typeArguments);
             return genericType;
@@ -443,11 +461,11 @@ namespace Utility.Models.Trees
 
 
 
-    public class ReadOnlyStringModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<ReadOnlyStringModel>? attach = null) : Model<string>(func, nodeAction, addition, a => attach?.Invoke((ReadOnlyStringModel)a), false, false)
+    public class ReadOnlyStringModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<ReadOnlyStringModel>? attach = null) : Model<string>(func, addition, a => attach?.Invoke((ReadOnlyStringModel)a), false, false)
     {
     }
 
-    public class EditModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<EditModel>? attach = null) : Model(func, nodeAction, addition, a => attach?.Invoke((EditModel)a))
+    public class EditModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<IReadOnlyTree>? addition = null, Action<EditModel>? attach = null) : Model(func, addition, a => attach?.Invoke((EditModel)a))
     {
         public EditModel() : this(null, null, null)
         {
@@ -707,7 +725,7 @@ namespace Utility.Models.Trees
         public override IEnumerable<IReadOnlyTree> Items()
         {
             yield return new StringModel { Name = _string };
-            yield return new TypeModel { Name = _type };
+            yield return new TypeModel((Type)null) { Name = _type };
         }
 
         public override void Addition(IReadOnlyTree a)
@@ -966,19 +984,6 @@ namespace Utility.Models.Trees
         }
     }
 
-    public class ModelTypeModel : Model<ModelType>, ISelectable
-    {
-        public ModelTypeModel(string name) : this()
-        {
-            this.Value = new ModelType(name, Globals.Types.FirstOrDefault(t => t.Name == name));
-        }
-
-        public ModelTypeModel()
-        {
-            IsPersistable = true;
-            IsExpanded = true;
-        }
-    }
 
     public class FileNameModel : StringModel
     {

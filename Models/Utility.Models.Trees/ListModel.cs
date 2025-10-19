@@ -3,6 +3,7 @@ using Splat;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.Generic.Data;
@@ -12,8 +13,8 @@ using Utility.Trees.Abstractions;
 namespace Utility.Models.Trees
 {
     public class ListModel(Type type, Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<ListModel>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) :
-        Model<IId<Guid>>(func, nodeAction, addition, a => attach?.Invoke((ListModel)a), raisePropertyCalled, raisePropertyReceived),
-        IGetType
+        Model<IId<Guid>>(func, addition, a => attach?.Invoke((ListModel)a), raisePropertyCalled, raisePropertyReceived),
+        IGetType, IProliferation
     {
         private Type type = type;
         private IEnumerable collection;
@@ -22,29 +23,32 @@ namespace Utility.Models.Trees
 
         public IEnumerable Collection { get => collection; set => RaisePropertyChanged(ref collection, value); }
 
-        public IId<Guid> New
-        {
-            get
-            {
-                var factory = Locator.Current.GetService<IFactory<IId<Guid>>>();
-                var c = factory.Create(type);
-                return c;
-            }
-        }
+        public override object Data { get => type; set => base.Data = value; }
 
-        public override object Data { get => type; set => this.type = value is Type type ? type : throw new NotImplementedException("ds dd2111"); }
+        public object Start { get; set; }
+        public object End { get; set; }
+
+        public string XAxis { get; set; }
+
+        public string YAxis { get; set; }
 
         public new IId<Guid> Add
         {
             get => add;
-            set { this.add = value; this.RaisePropertyChanged(value, null); }
+            set { this.add = value; this.RaisePropertyReceived(value, null); }
         }
 
         public new IId<Guid> Remove
         {
             get => remove;
-            set { this.remove = value; this.RaisePropertyChanged(value, null); }
+            set { this.remove = value; this.RaisePropertyReceived(value, null); }
 
+        }
+
+        public IEnumerable Proliferation()
+        {
+            var factory = Locator.Current.GetService<IFactory<IId<Guid>>>();
+            return new IId<Guid>[] { factory.Create(type) };
         }
     }
 }
