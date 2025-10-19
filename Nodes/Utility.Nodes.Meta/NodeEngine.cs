@@ -23,6 +23,7 @@ using Utility.Nodes.Ex;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.ServiceLocation;
+using Utility.Services.Meta;
 using Utility.Trees.Abstractions;
 using CompositeDisposable = Utility.Observables.CompositeDisposable;
 
@@ -140,15 +141,21 @@ namespace Utility.Nodes.Meta
                     .Load(node)
                     .Subscribe(loadedNode =>
                     {
-                        configureNode(loadedNode);
-                        setupChildrenTracking(loadedNode);
+       
+                        _dataInitialiser.Track(node);
+                        if (loadedNode.IsChildrenTracked)                        
+                            setupChildrenTracking(loadedNode);
+                        else
+                        {
+
+                        }
                         setupExpansionHandling(loadedNode);
                     })
                     .DisposeWith(_compositeDisposable);
 
                 void configureNode(INodeViewModel node)
                 {
-                    _dataInitialiser.Track(node);
+              
                 }
 
                 void setupChildrenTracking(INodeViewModel node)
@@ -429,7 +436,7 @@ namespace Utility.Nodes.Meta
         private static void validateKey(Structs.Repos.Key? key)
         {
             if (!key.HasValue)
-                throw new Exception(ERROR_KEY_NOT_FOUND);
+               throw new Exception(ERROR_KEY_NOT_FOUND);
         }
 
         private static Type GetNodeType(object node)

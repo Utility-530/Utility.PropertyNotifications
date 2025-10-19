@@ -15,6 +15,7 @@ using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Nodify.Base.Abstractions;
 using Utility.ServiceLocation;
+using Utility.Services.Meta;
 using Utility.Trees.Abstractions;
 
 namespace Utility.Nodes.Meta
@@ -107,7 +108,7 @@ namespace Utility.Nodes.Meta
             return nodeSource.Create(controls,
                 controlsGuid,
                 s => new Model(() => [new CommandModel<SaveEvent> { Name = Save }, new CommandModel<RefreshEvent> { Name = Refresh }, new CommandModel<RunEvent> { Name = Run }],
-                n => { n.IsExpanded = true; n.Orientation = Enums.Orientation.Horizontal; })
+                attach: n => { n.IsExpanded = true; n.Orientation = Enums.Orientation.Horizontal; })
                 { Name = s });
         }
 
@@ -115,7 +116,7 @@ namespace Utility.Nodes.Meta
         {
             return nodeSource.Create(input_control,
                 input_controlGuid,
-                s => new Model(() => [new CommandModel<SelectEvent> { Name = Select }, new CommandModel<CancelEvent> { Name = Cancel }], n =>
+                s => new Model(() => [new CommandModel<SelectEvent> { Name = Select }, new CommandModel<CancelEvent> { Name = Cancel }],attach: n =>
                 {
                     n.IsExpanded = true; n.Orientation = Enums.Orientation.Horizontal; n.IsContentVisible = false;
                 })
@@ -126,7 +127,7 @@ namespace Utility.Nodes.Meta
         {
             return nodeSource.Create(input_node,
                 input_nodeGuid,
-                s => new Model(() => [new NodePropertyRootModel { Name = "npm" }], n => n.IsExpanded = true) { Name = s });
+                s => new Model(() => [new NodePropertyRootModel { Name = "npm" }],attach: n => n.IsExpanded = true) { Name = s });
         }
 
         public IObservable<INodeViewModel> BuildComboRoot()
@@ -164,21 +165,21 @@ namespace Utility.Nodes.Meta
         {
             return nodeSource.Create(collection,
                 collectionGuid,
-                s => new StringModel(initialise: n => { n.DataTemplate = "StringRoot"; n.IsExpanded = true; n.Orientation = Enums.Orientation.Vertical; }) { Name = s });
+                s => new StringModel(attach: n => { n.DataTemplate = "StringRoot"; n.IsExpanded = true; n.Orientation = Enums.Orientation.Vertical; }) { Name = s });
         }
 
         public IObservable<INodeViewModel> BuildHtmlRoot()
         {
             return nodeSource.Create(html,
                 htmlGuid,
-                s => new StringModel(initialise: n => n.DataTemplate = "Html") { Name = s });
+                s => new StringModel(attach: n => n.DataTemplate = "Html") { Name = s });
         }
 
         public IObservable<INodeViewModel> BuildHtmlRenderRoot()
         {
             return nodeSource.Create(_html,
                 htmlRenderGuid,
-                s => new StringModel(initialise: n => n.DataTemplate = "Html") { Name = s });
+                s => new StringModel(attach: n => n.DataTemplate = "Html") { Name = s });
 
         }
 

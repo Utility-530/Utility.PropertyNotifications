@@ -148,7 +148,10 @@ namespace Utility.Nodes.Meta
             //prop.SetValue(instance, value);
             (instance as ISet).Set(value, Name);
             if (instance is IRaiseChanges raiseChanges)
+            {
                 raiseChanges.RaisePropertyReceived(value, null, Name);
+                raiseChanges.RaisePropertyChanged(Name);
+            }
             else
                 throw new Exception("Dddazzzzz");
             return Task.CompletedTask;
@@ -197,7 +200,7 @@ namespace Utility.Nodes.Meta
         public IgnoreGetter()
         {
         }
-        
+
         public override bool Equality(object instance, object value)
         {
             return false;
@@ -209,7 +212,7 @@ namespace Utility.Nodes.Meta
         }
     }
 
-    public  class Rules
+    public class Rules
     {
         private Interfaces.Exs.INodeSource nodeSource;
 
@@ -218,7 +221,7 @@ namespace Utility.Nodes.Meta
             this.nodeSource = nodeSource;
         }
 
-        public  PropertyInterface Decide(PropertyInfo propertyInfo)
+        public PropertyInterface Decide(PropertyInfo propertyInfo)
         {
             if (propertyInfo.Name == nameof(INodeViewModel.Current))
             {
