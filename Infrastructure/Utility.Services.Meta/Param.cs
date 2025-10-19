@@ -1,15 +1,14 @@
 ﻿using Splat;
 using System.Reflection;
-using Utility.Interfaces.Exs;
+using Utility.Interfaces.Methods;
 
-namespace Utility.Models
+namespace Utility.Services.Meta
 {
-
-    public record MethodParameter<T>(string InfoName, string Name = "", object? Instance = null, Type[]? ParameterTypes = null) : IMethodParameter
+    public record Param<T>(string InfoName, string Name = "", object? Instance = null, Type[]? ParameterTypes = null) : IParameter
     {
         private readonly Lazy<Method> info = new(() =>
         {
-            if (typeof(T).GetMethods().Where(a => a.Name == InfoName).ToArray() is MethodInfo[] { Length: >0 } methods)
+            if (typeof(T).GetMethods().Where(a => a.Name == InfoName).ToArray() is MethodInfo[] { Length: > 0 } methods)
             {
                 if (ParameterTypes == null && methods.Length == 1)
                     return method(methods.Single(), Instance);
@@ -20,16 +19,19 @@ namespace Utility.Models
             throw new Exception("ee3433333");
         });
         public IMethod Method => info.Value;
-        public ParameterInfo Parameter => Name== string.Empty? info.Value.MethodInfo.ReturnParameter : info.Value.MethodInfo.GetParameters().Single(a => a.Name == Name);
 
+        public ParameterInfo? Info => Name == string.Empty ? info.Value.MethodInfo.ReturnParameter : info.Value.MethodInfo.GetParameters().Single(a => a.Name == Name);
 
         static Method method(MethodInfo methodInfo, object? Instance = null)
         {
             if (methodInfo.IsStatic == false && Instance == null)
             {
-                Instance = Locator.Current.GetService(typeof(T)) ?? throw new Exception($"£36566 {typeof(T).Name}");
+                Instance = Locator.Current.GetService(typeof(T)) ?? throw new Exception($"3;;6 {typeof(T).Name}");
             }
             return new Method(methodInfo, Instance);
         }
     }
+
+
+
 }

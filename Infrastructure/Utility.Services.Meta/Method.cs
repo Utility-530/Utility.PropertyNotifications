@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
-using Utility.Interfaces.Exs;
+using Utility.Interfaces.Methods;
 
-namespace Utility.Models
+namespace Utility.Services.Meta
 {
     public class Method(MethodInfo methodInfo, object? instance) : IMethod
     {
@@ -17,7 +17,7 @@ namespace Utility.Models
         {
             if (obj is Method { MethodInfo: { } info } method)
             {
-                if (this.MethodInfo.Equals(info))
+                if (MethodInfo.Equals(info))
                     return true;
             }
             return base.Equals(obj);
