@@ -1,21 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	  <TargetFramework>netstandard2.0</TargetFramework>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <Nullable>enable</Nullable>
+	  <LangVersion>latest</LangVersion>
   </PropertyGroup>
-	<ItemGroup>
 
-		<ProjectReference Include="..\..\Interfaces\Utility.Interfaces.Exs\Utility.Interfaces.Exs.csproj" />
+  <ItemGroup>
+    <PackageReference Include="Splat" Version="15.4.1" />
+  </ItemGroup>
 
-		<ProjectReference Include="..\..\Models\Utility.Models.Diagrams\Utility.Models.Diagrams.csproj" />
-
-		<ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
-
-		<ProjectReference Include="..\..\Persists\Utility.Persists\Utility.Persists.csproj" />
-
-		<ProjectReference Include="..\Utility.Entities\Utility.Entities.csproj" />
-
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
+  </ItemGroup>
 </Project>
