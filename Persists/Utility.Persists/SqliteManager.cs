@@ -1,4 +1,4 @@
-﻿using DryIoc.ImTools;
+﻿using LanguageExt;
 using SQLite;
 using System;
 using System.Collections;
@@ -8,11 +8,13 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Utility.Helpers.Ex;
 using Utility.Helpers.Reflection;
+using Utility.Interfaces.Generic;
 using Utility.PropertyNotifications;
+using Utility.Reactives;
 
 namespace Utility.Persists
 {
@@ -52,8 +54,8 @@ namespace Utility.Persists
 
     public class SqliteManager<TCollection>(string dbPath, TCollection collection, Func<object, Guid> funcId) where TCollection : IList
     {
-        const string extantItems = "SELECT * FROM {0} AS t JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed = '0') AS m ON t.Id = m.Id";
-        const string removedItems = "SELECT * FROM {0} AS t JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed != '0') AS m ON t.Id = m.Id";
+        const string extantItems = "SELECT * FROM '{0}' AS t LEFT JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed = '0') AS m ON t.Id = m.Id";
+        const string removedItems = "SELECT * FROM '{0}' AS t JOIN (SELECT * from {1} WHERE Type = '{2}' AND Removed != '0') AS m ON t.Id = m.Id";
 
         List<DataType> types = new();
 
@@ -138,10 +140,26 @@ namespace Utility.Persists
 
                 context.Post((a) =>
                 {
-                    foreach(var item in toAdd.Except(toRemove))
+                    if(collection.GetType().GetMethod(nameof(IAddRange<>.AddRange)) is MethodInfo methodInfo)
                     {
-                        collection.Add(item);
+                        var itemType = methodInfo.GetParameters()[0].ParameterType.GetGenericArguments()[0];
+                        var castMethod = typeof(Enumerable).GetMethod("Cast").MakeGenericMethod(itemType);
+                        var toAddTyped = castMethod.Invoke(null, new object[] { toAdd });
+                        var toRemoveTyped = castMethod.Invoke(null, new object[] { toRemove });
+                        var exceptMethod = typeof(Enumerable)
+                        .GetMethods()
+                        .First(m => m.Name == "Except" && m.GetParameters().Length == 2)
+                        .MakeGenericMethod(itemType);
+
+                        var itemsToAdd = exceptMethod.Invoke(null, new object[] { toAddTyped, toRemoveTyped });
+
+                        methodInfo.Invoke(collection, new object[] { itemsToAdd });
                     }
+                    else 
+                        foreach (var item in toAdd.Except(toRemove))
+                        {
+                            collection.Add(item);
+                        }
                     foreach(var item in toRemove)
                     {
                         collection.Remove(item);
@@ -157,7 +175,7 @@ namespace Utility.Persists
                     }
 
                     if (collection is INotifyCollectionChanged notifyCollection)
-                        notifyCollection.SelectChanges()
+                        notifyCollection.Changes()
                             .Subscribe(a =>
                             {
                                 Task.Run(() => OnCollectionChanged(a, type));
@@ -195,8 +213,16 @@ namespace Utility.Persists
             using var conn = new SQLiteConnection(dbPath, true);
             conn.Update(item);
             var meta = conn.Find<Meta>(funcId(item));
-            conn.Update(meta with { LastUpdated = DateTime.Now });
-
+            if(meta==null)
+            {
+                var typeString = TypeSerialization.TypeSerializer.Serialize(type);
+                var typeId = types.Single(a => a.Type == typeString).Id;
+                conn.Insert(new Meta { Id = funcId(item), Added = DateTime.Now, Type = typeId });
+            }
+            else
+            {
+                conn.Update(meta with { LastUpdated = DateTime.Now });
+            }
         }
 
         private void InsertBulk(IEnumerable items, Type type)
