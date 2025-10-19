@@ -5,7 +5,7 @@ using Utility.Extensions;
 using Utility.Interfaces.Exs;
 using Utility.PropertyNotifications;
 using Utility.ServiceLocation;
-using IMethod = Utility.Interfaces.Exs.IMethod;
+using IMethod = Utility.Interfaces.Methods.IMethod;
 
 namespace Utility.Models.Diagrams
 {
@@ -34,7 +34,13 @@ namespace Utility.Models.Diagrams
             {
                 OutValue = new() { Key = "return" };
             }
-            inValues = new(() => parameters.ToDictionary(a => a.Name ?? throw new Exception("s e!"), a =>
+            inValues = new(() =>
+
+            parameters.Count() == 0 ? new Dictionary<string, MethodConnector>
+            {
+                { string.Empty, create() }
+            } :
+            parameters.ToDictionary(a => a.Name ?? throw new Exception("s e!"), a =>
             {
                 var model = new MethodConnector { Key = a.Name, Parameter = a };
                 model
@@ -75,6 +81,49 @@ namespace Utility.Models.Diagrams
                 });
                 return model;
             }));
+
+            // where the method has no parameters but it is still desirable to execute it
+            MethodConnector create()
+            {
+                var model = new MethodConnector { };
+
+                model.Subscribe(a =>
+                {
+
+                    Action? undoaction = new(() => { });
+           
+                    var previousResult = OutValue?.Value;       
+            
+
+                    RaisePropertyChanged(nameof(IsActive));
+                    Globals.Resolver.Resolve<IPlaybackEngine>().OnNext(
+                        new PlaybackAction(this,
+                        () =>{
+                            try
+                            {
+                                var result = this.Execute(values);
+                                if (OutValue == null)
+                                    return;
+                                OutValue.Value = result;
+                            }
+                            catch (Exception ex)
+                            {
+                                Exception = ex;
+                                Globals.Exceptions.OnNext(ex);
+                            }
+                        },
+                        undoaction,
+                        a => IsActive = a,
+                        new Dictionary<string, object> {
+                          
+                            { "PreviousValue", previousResult }
+                            }
+                         )
+                        {  });
+
+                });
+                return model;
+            }
         }
 
         public void _action(string name, object value)
