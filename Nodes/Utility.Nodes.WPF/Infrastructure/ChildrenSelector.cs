@@ -8,6 +8,7 @@ using Utility.Meta;
 using Utility.Nodes.Ex;
 using Utility.WPF.Controls.Trees;
 using Utility.Helpers.NonGeneric;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Nodes.WPF
 {
@@ -19,23 +20,7 @@ namespace Utility.Nodes.WPF
         }
     }
 
-    public class NewObjectConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value is IProliferation proliferation)
-            {
-                var x = proliferation.Proliferation().FirstOrDefault();
-                return x;
-            }
-            return DependencyProperty.UnsetValue;
-        }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
-    }
 
 
 

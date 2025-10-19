@@ -40,5 +40,4 @@
         <Setter Property="Selection" Value="{Binding Current, Mode=TwoWay}"></Setter>
     </Style>
 
-    
 </ResourceDictionary>
