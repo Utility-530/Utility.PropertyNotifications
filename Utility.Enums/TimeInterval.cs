@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using Utility.Enums.Attributes;
 
 
 namespace Utility.Enums
@@ -9,27 +11,67 @@ namespace Utility.Enums
 
     public enum TimeInterval
     {
-        Attosecond = 1,
-        Femtosecond = 2,
-        Picosecond = 3,
-        Nanosecond = 4,
-        Microsecond = 5,
-        Millisecond = 6,
-        Second = 7,
-        Minute = 8,
-        Hour = 9,
-        Day = 10,
-        Week = 11,
-        Fortnight = 12,
-        Month = 13,
-        Quarter = 14,
-        Year = 15,
-        Decade = 16,
-        Century = 17,
-        Millennium = 18,
-        Eon = 19,
-    }
+        [TimeSpan("FromTicks", 1)] // 1 tick = 100 ns
+        Tick = 0,
 
+        [TimeSpan("FromTicks", 0.00001)] // 1 attosecond = 1e-18 s
+        Attosecond = 1,
+
+        [TimeSpan("FromTicks", 0.0001)] // 1 femtosecond = 1e-15 s
+        Femtosecond = 2,
+
+        [TimeSpan("FromTicks", 0.001)] // 1 picosecond = 1e-12 s
+        Picosecond = 3,
+
+        [TimeSpan("FromTicks", 0.01)] // 1 nanosecond = 1e-9 s
+        Nanosecond = 4,
+
+        [TimeSpan("FromMilliseconds", 0.001)] // 1 microsecond = 1e-6 s
+        Microsecond = 5,
+
+        [TimeSpan("FromMilliseconds", 1)]
+        Millisecond = 6,
+
+        [TimeSpan("FromSeconds", 1)]
+        Second = 7,
+
+        [TimeSpan("FromMinutes", 1)]
+        Minute = 8,
+
+        [TimeSpan("FromHours", 1)]
+        Hour = 9,
+
+        [TimeSpan("FromDays", 1)]
+        Day = 10,
+
+        [TimeSpan("FromDays", 7)]
+        Week = 11,
+
+        [TimeSpan("FromDays", 14)]
+        Fortnight = 12,
+
+        [TimeSpan("FromDays", 30)]
+        Month = 13,
+
+        [TimeSpan("FromDays", 91)]
+        Quarter = 14,
+
+        [TimeSpan("FromDays", 365)]
+        Year = 15,
+
+        [TimeSpan("FromDays", 3650)]
+        Decade = 16,
+
+        [TimeSpan("FromDays", 36500)]
+        Century = 17,
+
+        [TimeSpan("FromDays", 365000)]
+        Millennium = 18,
+
+        [TimeSpan("FromDays", 3650000)]
+        Eon = 19,
+
+    }
 
 
     /// <summary>
@@ -40,29 +82,7 @@ namespace Utility.Enums
         /// <summary>
         /// Returns the TimeSpan representation  of a <see cref="TimeInterval"/>
         /// </summary>
-        public static TimeSpan? ToTimeSpan(this TimeInterval interval) => interval switch
-        {
-            TimeInterval.Nanosecond => throw new NotImplementedException(),
-            TimeInterval.Microsecond => TimeSpan.FromTicks(10),
-            TimeInterval.Millisecond => TimeSpan.FromMilliseconds(1),
-            TimeInterval.Second => TimeSpan.FromSeconds(1),
-            TimeInterval.Minute => TimeSpan.FromMinutes(1),
-            TimeInterval.Hour => TimeSpan.FromHours(1),
-            TimeInterval.Day => TimeSpan.FromDays(1),
-            TimeInterval.Week => TimeSpan.FromDays(7),
-            TimeInterval.Attosecond => throw new NotImplementedException(),
-            TimeInterval.Femtosecond => throw new NotImplementedException(),
-            TimeInterval.Picosecond => throw new NotImplementedException(),
-            TimeInterval.Fortnight => TimeSpan.FromDays(14),
-            TimeInterval.Month => throw new NotImplementedException(),
-            TimeInterval.Quarter => throw new NotImplementedException(),
-            TimeInterval.Year => throw new NotImplementedException(),
-            TimeInterval.Decade => throw new NotImplementedException(),
-            TimeInterval.Century => throw new NotImplementedException(),
-            TimeInterval.Millennium => throw new NotImplementedException(),
-            TimeInterval.Eon => throw new NotImplementedException(),
-            _ => null // Month, Quarter, Year, etc. don't have fixed TimeSpan values
-        };
+        public static TimeSpan? ToTimeSpan(this TimeInterval interval) => typeof(TimeInterval).GetCustomAttributes(false).OfType<TimeSpanAttribute>().Single().TimeSpan;
 
         /// <summary>
         /// Returns an approximate duration in seconds of a <see cref="TimeInterval"/>
