@@ -34,8 +34,10 @@
     <ResourceDictionary.MergedDictionaries>
         <!--<res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml"/>-->
         <res:SharedResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml"/>
+
     </ResourceDictionary.MergedDictionaries>
 
+    <conv:NewObjectConverter x:Key="NewObjectConverter"/>
     <conv:PropertyNamesConverter x:Key="PropertyNamesConverter"/>
     <conv:TypeNameConverter x:Key="TypeNameConverter"/>
 
@@ -83,6 +85,12 @@
 
 
     <DataTemplate DataType="{x:Type inf:AndOrModel}">
+        <ComboBox  Margin="4" Grid.Row="1" 
+                    ItemsSource="{ui:EnumSource {Binding Value, Mode=OneTime}}" 
+                    SelectedItem="{ui:EnumBinding {Binding Value}}" 
+                    />
+    </DataTemplate>
+    <DataTemplate x:Key="EnumTemplate" DataType="{x:Type model:Model}">
         <ComboBox  Margin="4" Grid.Row="1" 
                     ItemsSource="{ui:EnumSource {Binding Value, Mode=OneTime}}" 
                     SelectedItem="{ui:EnumBinding {Binding Value}}" 
@@ -220,7 +228,8 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:ListModel}">    
-        <list:CustomSelector
+        <list:CustomSelector 
+            Height="400"
             Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
             SelectedItem="{Binding Value, Mode=TwoWay}"
             x:Name="CustomSelector"                
@@ -228,7 +237,7 @@
             IsGrid="True"
             RemoveCommand="{markup:Command Remove}"
             CheckedPropertyName="IsRhPositive"    
-            Edit="{Binding New, Mode=OneWay}"
+            Edit="{Binding Converter={StaticResource NewObjectConverter}, Mode=OneWay}"
             ItemsSource="{Binding Collection, Mode=OneWay}" >
             <!--Edit="{Binding Edit,Mode=TwoWay}">-->
             <i:Interaction.Triggers>
@@ -458,7 +467,7 @@
                     />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type inf:ModelTypeModel}">
+    <DataTemplate x:Key="HeaderTypeModel" DataType="{x:Type inf:TypeModel}">
         <Grid
                             Margin="0,4,4,0"
                             HorizontalAlignment="Left"
@@ -483,7 +492,7 @@
                                           
                                     FontSize="24"
                                     FontWeight="DemiBold"
-                                    Text="{Binding Alias, Converter={x:Static local:HumaniseConverter.Instance}}"
+                                    Text="{Binding Name, Converter={x:Static local:HumaniseConverter.Instance}}"
                                     TextWrapping="WrapWithOverflow" />
                        
                         </Grid>
