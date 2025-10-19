@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
 
-namespace Utility.Interfaces.Exs
+namespace Utility.Interfaces.Methods
 {
-    public interface IMethodParameter
+    public interface IParameter
     {
         IMethod Method { get; }
-        ParameterInfo Parameter { get; }
+        ParameterInfo? Info { get; }
         public string Name { get; }
     }
 }
