@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+	  <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Coinbase" Version="6.0.1" />
+    <PackageReference Include="CsvHelper" Version="30.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Utility.API\Utility.API.csproj" />
+    <ProjectReference Include="..\Utility.Globals\Utility.Globals.csproj" />
+    <ProjectReference Include="..\Utility.Services.Meta\Utility.Services.Meta.csproj" />
+  </ItemGroup>
+
+</Project>
