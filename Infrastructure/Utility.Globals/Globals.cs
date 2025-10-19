@@ -1,8 +1,6 @@
 ﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using Utility.Entities;
-using Utility.Entities.Comms;
-using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric.Dependencies;
 using Utility.ServiceLocation;
 
@@ -35,7 +33,7 @@ namespace Utility
 
         public static ReplaySubject<Log> Logs { get; } = new();
         public static ReplaySubject<Exception> Exceptions { get; } = new();
-        public static ReplaySubject<Event> Events { get; } = new();
+        public static ReplaySubject<Entities.Comms.Event> Events { get; } = new();
 
         public static IConnectableObservable<TimeSpan> Time { get; }
         public static IConnectableObservable<DateTime> Date { get; }
