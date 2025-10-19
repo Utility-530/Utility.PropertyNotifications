@@ -55,7 +55,7 @@
                 ItemContainerStyleSelector="{StaticResource StyleSelector}"
                 ClosingItemCallback="{Binding ClosingTabItemHandler}"
                 ItemsSource="{Binding Children}"
-                SelectedItem="{Binding Selected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                SelectedItem="{Binding Current, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                 ShowDefaultCloseButton="True">
                         <dragablz:TabablzControl.InterTabController>
                             <dragablz:InterTabController InterTabClient="{Binding InterTabClient}" />

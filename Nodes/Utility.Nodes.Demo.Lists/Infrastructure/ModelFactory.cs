@@ -1,10 +1,9 @@
 ﻿using System.Reactive.Linq;
 using Utility.Attributes;
+using Utility.Entities;
 using Utility.Helpers.Reflection;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.Generic.Data;
-using Utility.Nodes.Demo.Lists.Entities;
-using Utility.Nodes.Demo.Lists.Infrastructure;
 
 namespace Utility.Nodes.Demo.Lists
 {
@@ -18,13 +17,17 @@ namespace Utility.Nodes.Demo.Lists
                 {
                     return (IId<Guid>)x.Invoke(new[] { default(object) });
                 }
-                if (type == typeof(UserProfileModel))
+                if (type == typeof(UserProfile))
                 {
-                    return new UserProfileModel() { Id = Guid.NewGuid(), AddDate = DateTime.Now };
+                    return new UserProfile() { Id = Guid.NewGuid(), AddDate = DateTime.Now };
                 }
-                if (type == typeof(EbayModel))
+                if (type == typeof(AuctionItem))
                 {
-                    return new EbayModel { Id = Guid.NewGuid() };
+                    return new AuctionItem { Id = Guid.NewGuid() };
+                }
+                if (type == typeof(Transaction))
+                {
+                    return new Transaction() { };
                 }
                 if (Activator.CreateInstance(type) is IId<Guid> iid)
                 {

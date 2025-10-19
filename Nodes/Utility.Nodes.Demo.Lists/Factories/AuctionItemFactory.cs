@@ -12,12 +12,12 @@ using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Models.Trees;
-using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
 using Utility.Services;
 using Utility.ServiceLocation;
+using Utility.Entities;
 
 namespace Utility.Nodes.Demo.Lists.Factories
 {
@@ -32,21 +32,19 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     new Model(()=>
                     [
                         new CommandModel<RefreshEvent>() { Name = refresh },
-                        new StringModel(initialise: node=> {node.DataTemplate = "SearchEditor"; node.Title = "Search"; }, attach: searchModel=>{
+                        new StringModel(attach: searchModel=>{
                                   searchModel.Observe<FilterParam>(guid);
-                        }) { Name = search },
-                        new StringModel(initialise: node=> {node.DataTemplate = "DirectoryEditor"; node.Title = "Base Directory"; }, attach: stringModel=>{
+                        }) { Name = search,DataTemplate = "SearchEditor", Title = "Search"  },
+                        new StringModel(attach: stringModel=>{
                                stringModel.Observe<BasePathParam>(guid);
-                        } ) { Name = directory },
-                        new StringModel(initialise: node=> {node.DataTemplate = "FilePathEditor"; node.Title = "Index Path"; }, attach: stringModel =>{
+                        } ) { Name = directory, DataTemplate = "DirectoryEditor",Title = "Base Directory" },
+                        new StringModel( attach: stringModel =>{
                                stringModel.Observe<FilePathParam>(guid);
-                        }) { Name = indexPath },
+                        }) { Name = indexPath,
+                        DataTemplate = "FilePathEditor",
+                            Title = "Index Path"},
                     ],
-                    node=> {node.IsExpanded = true;  node.Orientation = Orientation.Horizontal; },
-                    (addition)=>{
-
-
-                    }){ Name = controllerPath },
+                    attach : node=> {node.IsExpanded = true;  node.Orientation = Orientation.Horizontal; }                   ){ Name = controllerPath },
                     new ListModel(type, attach: listModel=>{
 
                         listModel.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a, guid : guid);
@@ -67,7 +65,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                         editModel.WithChangesTo(a => (a as IGetValue).Value)
                         .Subscribe(model =>
                         {
-                            if (model is EbayModel eModel)
+                            if (model is AuctionItem eModel)
                             {
                                 //eModel.WhenChanged()
                                 //.StartWith(default(PropertyChange))
@@ -80,36 +78,31 @@ namespace Utility.Nodes.Demo.Lists.Factories
 
                             }
                         });
-
                         editModel.ReactTo<SelectionReturnParam>(setAction: (a) => { (editModel as ISetValue).Value = a; editModel.RaisePropertyChanged(nameof(EditModel.Value)); }, guid: guid);
 
                     }) { Name = edit },
-                    new Model<string>(initialise: n => n.DataTemplate = "Json", attach: jsonModel => {
+                    new Model<string>(attach: jsonModel => {
 
                         jsonModel.ReactTo<FullPathParam>(a =>
                         {
                             var path = Path.Combine(a.ToString(), "data.json");
                             if (!File.Exists(path))
                             {
-                                return JsonConvert.SerializeObject(new { Error = "File does not exist: " + path });
+                                jsonModel.Set( JsonConvert.SerializeObject(new { Error = "File does not exist: " + path }));
                             }
                             var text = File.ReadAllText(path);
-                            return text;
-                        }, a =>  jsonModel.Set(a.ToString()), guid: guid);
-                        }, raisePropertyCalled:false, raisePropertyReceived:false) { Name = details },
-                    new StringModel(initialise: n=> n.DataTemplate="Html") { Name = html },
-                    new ReadOnlyStringModel(nodeAction: node=> node.DataTemplate = "HtmlEditor", attach: stringModel=>{
+                          jsonModel.Set(a.ToString());
+                        }, guid);
+                        }, raisePropertyCalled:false, raisePropertyReceived:false) {Name = details, DataTemplate = "Json"},
+                    new StringModel() { Name = html, DataTemplate="Html" },
+                    new ReadOnlyStringModel(attach: stringModel=>{
                               stringModel.ReactTo<RazorFileReturnParam>(setAction: a => stringModel.Set((string)a), guid: guid);
-                    }) { Name = html1 },
-                    new ReadOnlyStringModel(nodeAction: node=> node.DataTemplate = "HtmlWebViewer", attach: rstringModel =>{
+                    }) { Name = html1, DataTemplate = "HtmlEditor" },
+                    new ReadOnlyStringModel(attach: rstringModel =>{
                          rstringModel.ReactTo<RazorFileReturnParam>(setAction: a => rstringModel.Set((string)a), guid: guid);
-                    }) { Name = html2 },
+                    }) { Name = html2, DataTemplate = "HtmlWebViewer" },
                 ],
-                (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; },
-                (addition) =>
-                {
-
-                }
+                attach: (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; }
                 )
                 { Name = s });
 

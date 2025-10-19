@@ -9,8 +9,6 @@ namespace Utility.Nodes.Demo.Lists.Factories
 {
     internal partial class NodeMethodFactory : EnumerableMethodFactory
     {
-
-
         public IObservable<INodeViewModel> BuildSettingsRoot()
         {
             return nodeSource.Create(nameof(BuildSettingsRoot),
@@ -20,7 +18,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 new Model(() =>
                 [
                     new Model(() => [new CommandModel<ResetEvent> { Name = Reset }],
-                    n => {
+                    attach : n => {
                         n.IsExpanded = true;
                         n.Orientation = Enums.Orientation.Horizontal;
                     })

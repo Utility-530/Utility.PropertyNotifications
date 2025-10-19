@@ -22,8 +22,8 @@
         public const string controls = nameof(controls);
 
 
-        readonly Guid settingsRootGuid = Guid.Parse("a743505d-128c-466f-afdb-d7dd97e37a08");
-        readonly Guid listRootGuid = Guid.Parse("7ed21df8-d54c-44e1-8d97-7fcc2591e6c1");
+        public static readonly Guid settingsRootGuid = Guid.Parse("a743505d-128c-466f-afdb-d7dd97e37a08");
+        public static readonly Guid listRootGuid = Guid.Parse("7ed21df8-d54c-44e1-8d97-7fcc2591e6c1");
 
     }
 }

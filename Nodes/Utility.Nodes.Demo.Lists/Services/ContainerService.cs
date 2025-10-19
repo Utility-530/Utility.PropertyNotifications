@@ -1,27 +1,27 @@
 ﻿using Splat;
-using System;
 using System.Reactive.Linq;
-using Utility.Attributes;
-using Utility.Entities;
+using Utility.Common.Models;
 using Utility.Entities.Comms;
 using Utility.Extensions;
-using Utility.Helpers.Reflection;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Generic;
+using Utility.Meta;
 using Utility.Models;
+using Utility.Models.Diagrams;
 using Utility.Nodes.Meta;
 using Utility.Observables.Generic;
 using Utility.ServiceLocation;
 using Utility.Services;
+using Utility.Services.Meta;
+using Utility.Trees;
 
 namespace Utility.Nodes.Demo.Lists.Services
 {
-    internal record ChangeTypeParam() : MethodParameter<ContainerService>(nameof(ContainerService.ChangeType), "modelType");
+    internal record ChangeTypeParam() : Param<ContainerService>(nameof(ContainerService.ChangeType), "type");
 
     internal class ContainerService
     {
         private readonly ContainerModel container = Current.GetService<ContainerModel>();
-
-        static readonly Guid settingsGuid = new("ae276135-6a94-48ab-909a-00cadd79c4bc");
 
         public ContainerService()
         {
@@ -31,16 +31,11 @@ namespace Utility.Nodes.Demo.Lists.Services
             {
                 //var newItem = Locator.Current.GetService<MasterViewModel>();
                 MethodCache.Instance[nameof(Factories.NodeMethodFactory.BuildListRoot)]
-                    .Subscribe(root =>
-                    {
-                        root.SetIsSelected(true);
-                        container.Add(root);
-                        container.Selected = root;
-                    });
+                    .Subscribe(update);
             }
             else
             {
-                container.Selected = existing;
+                container.Current = existing;
             }
 
             Globals.Events
@@ -50,39 +45,31 @@ namespace Utility.Nodes.Demo.Lists.Services
                     Locator.Current.GetService<MethodCache>().Get(nameof(Factories.NodeMethodFactory.BuildSettingsRoot))
                         .Subscribe(model =>
                         {
-                            container.Selected = model;
-                            if (container.Contains(model) == false)
-                                container.Add(model);
+                            update(model);
                         });
-                    Globals.Register.Register<IServiceResolver>(() => new ServiceResolver(), settingsGuid.ToString());
+                    Globals.Register.Register<IServiceResolver>(() => new ServiceResolver(), Factories.NodeMethodFactory.settingsRootGuid.ToString());
                 });
         }
 
-        public void ChangeType(ModelType modelType)
+        public void ChangeType(Type type)
         {
-            if (modelType.Type.TryGetAttribute<ModelAttribute>(out var att) == false)
-                throw new Exception("33f $$");
-
-            Globals.Register.Register<IServiceResolver>(() => new ServiceResolver(), att.Guid.ToString());
-            Observable.Return(modelType.Type).Observe<InstanceTypeParam, Type>(att.Guid);
+            var factory = Locator.Current.GetService<IFactory<EntityMetaData>>();
+            var metaData = factory.Create(type);
+            Globals.Register.Register<IServiceResolver>(() => new ServiceResolver(), metaData.Guid.ToString());
+            Observable.Return(type).Observe<InstanceTypeParam, Type>(metaData.Guid);
 
             Locator.Current.GetService<MethodCache>()
-                .Get(transformMethod(modelType.Type), att.Guid, [modelType.Type])
-                .Subscribe(x =>
-                {         
-
-                    container.Selected = x;
-                    container.Add(x);
-                });
-
-            static string? transformMethod(Type type)
-            {
-                return type.
-                    TryGetAttribute<ModelAttribute>(out var att) ?
-                    att.TransformMethod :
-                    nameof(Factories.NodeMethodFactory.BuildUserProfileRoot);
-            }
+                .Get(metaData.TransformationMethod, metaData.Guid, [type])
+                .Subscribe(update);
         }
 
+        private void update(Interfaces.Exs.Diagrams.INodeViewModel x)
+        {
+            x.SetIsSelected(true);
+            container.Current = x;
+            if (container.Contains(x) == false)
+                container.Add(x);
+            container.RaisePropertyChanged(nameof(Current));
+        }
     }
 }

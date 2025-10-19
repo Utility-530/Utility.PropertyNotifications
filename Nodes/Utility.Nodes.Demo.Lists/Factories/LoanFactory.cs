@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Reactive.Linq;
+using Utility.Entities;
 using Utility.Enums;
 using Utility.Extensions;
 using Utility.Interfaces.Exs;
@@ -7,7 +9,6 @@ using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
 using Utility.Models.Trees;
-using Utility.Nodes.Demo.Lists.Models;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
@@ -26,40 +27,37 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 guid,
                 s =>
                 new Model(() => [
-                    new StringModel(initialise: node=>node.DataTemplate = "SearchEditor") { Name = search },
+                    new StringModel() { Name = search, DataTemplate = "SearchEditor" },
                     new ListModel(type) { Name = list },
-                    new EditModel(nodeAction: node =>
+                    new EditModel(attach: node =>
                     {
-                        node
-                        .WithChangesTo(a => (a as IGetValue).Value)
-                        .Subscribe(model =>
-                        {
-                            if (model is CreditCardModel creditCardModel)
-                            {
-                                creditCardModel
-                                .WhenChanged()
-                                .Subscribe(a =>
-                                {
-                                    if(a.Name!= nameof(CreditCardModel.LastEdit))
-                                    {
-                                        creditCardModel.LastEdit = DateTime.Now;
-                                        creditCardModel.RaisePropertyChanged(nameof(CreditCardModel.LastEdit));
-                                    }
-                                });
-                            }
-                        });
-                    }) 
+                        //node
+                        //.WithChangesTo(a => (a as IGetValue).Value)
+                        //.Subscribe(model =>
+                        //{
+                        //    if (model is Loan creditCardModel)
+                        //    {
+                        //        creditCardModel
+                        //        .WhenChanged()
+                        //        .Subscribe(a =>
+                        //        {
+                        //            if(a.Name!= nameof(Loan.LastEdit))
+                        //            {
+                        //                creditCardModel.LastEdit = DateTime.Now;
+                        //                creditCardModel.RaisePropertyChanged(nameof(Loan.LastEdit));
+                        //            }
+                        //        });
+                        //    }
+                        //});
+                        node.ReactTo<SelectionReturnParam>(setAction: (a) => { node.Value = a; node.RaisePropertyChanged(nameof(EditModel.Value)); }, guid: guid);
+
+                    })
                     { Name = edit },
-                    new StringModel(initialise: node=>node.DataTemplate = "MoneySumTemplate") { Name = summary }
+                    new StringModel() { Name = summary , DataTemplate = "MoneySumTemplate", IsValueTracked = false }
                 ],
-                (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; },
+
                 (addition) =>
                 {
-                    if (addition is EditModel { } editModel)
-                    {
-                        editModel.ReactTo<SelectionReturnParam>(setAction: (a) => { editModel.Value = a; editModel.RaisePropertyChanged(nameof(EditModel.Value)); }, guid: guid);
-                    }
-
                     if (addition is StringModel { Name: search } searchModel)
                     {
                         searchModel.Observe<FilterParam>(guid, includeInitial: true);
@@ -81,9 +79,10 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     }
                     if (addition is StringModel { Name: summary } summaryModel)
                     {
-                        summaryModel.ReactTo<SumCollectionReturnParam>(guid: guid);
+                        summaryModel.ReactTo<SumAmountReturnParam>(guid: guid);
                     }
-                })
+                },
+                (node) => { node.IsExpanded = true; node.Orientation = Orientation.Vertical; })
                 { Name = main });
 
             static void buildNetwork(Guid guid)
@@ -93,7 +92,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 serviceResolver.Connect<PredicateReturnParam, PredicateParam>();
                 serviceResolver.Connect<ListInstanceReturnParam, ListInParam>();
                 serviceResolver.Connect<ListInstanceReturnParam, ListParam>();
-                serviceResolver.Connect<ListInstanceReturnParam, SumCollectionInputParam>();
+                serviceResolver.Connect<ListInstanceReturnParam, SumAmountInputParam>();
             }
         }
     }

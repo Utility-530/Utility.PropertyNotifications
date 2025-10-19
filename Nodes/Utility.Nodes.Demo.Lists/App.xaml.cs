@@ -1,31 +1,27 @@
-﻿using Fasterflect;
+﻿using AdonisUI;
 using Newtonsoft.Json;
 using Splat;
-using System;
-using System.Reactive.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Utility.Conversions.Json.Newtonsoft;
-using Utility.Entities;
-using Utility.Extensions;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.Generic.Data;
 using Utility.Interfaces.NonGeneric;
 using Utility.Interfaces.NonGeneric.Dependencies;
+using Utility.Meta;
 using Utility.Models;
-using Utility.Models.Trees;
+using Utility.Models.Diagrams;
+using Utility.Nodes.Demo.Lists.Infrastructure;
 using Utility.Nodes.Demo.Lists.Services;
 using Utility.Nodes.Meta;
-using Utility.PropertyNotifications;
-using Utility.Reactives;
 using Utility.Repos;
 using Utility.ServiceLocation;
 using Utility.Services;
+using Utility.Services.Meta;
 using Utility.WPF.Controls;
 
 namespace Utility.Nodes.Demo.Lists
@@ -43,10 +39,11 @@ namespace Utility.Nodes.Demo.Lists
             showPlayback();
             SQLitePCL.Batteries.Init();
             initialiseGlobals(Globals.Register);
-            initialise(CurrentMutable);   
+            initialise(CurrentMutable);
             showSplashscreen();
 
             JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
+            _ = Utility.Nodes.WPF.Templates.SyncFusion.Templates.Instance;
             //subscribeToTypeChanges();
             base.OnStartup(e);
         }
@@ -61,7 +58,8 @@ namespace Utility.Nodes.Demo.Lists
             //register.RegisterLazySingleton(() => new MasterViewModel());
             register.RegisterConstant(new ContainerService());
             register.RegisterConstant(new RazorService());
-            register.RegisterLazySingleton<IEnumerableFactory<ModelType>>(() => new ModelTypesFactory());
+            register.RegisterLazySingleton<IEnumerableFactory<Type>>(() => new ModelTypesFactory());
+            register.RegisterLazySingleton<IFactory<EntityMetaData>>(() => new MetaDataFactory());
             register.RegisterLazySingleton<IFactory<IId<Guid>>>(() => new ModelFactory());
             register.RegisterLazySingleton<FilterService>(() => new FilterService());
             register.RegisterLazySingleton<CollectionCreationService>(() => new CollectionCreationService());

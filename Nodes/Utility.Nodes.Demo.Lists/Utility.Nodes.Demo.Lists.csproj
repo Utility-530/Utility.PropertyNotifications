@@ -15,9 +15,12 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Conversions\Utility.Json.Newtonsoft\Utility.Conversions.Json.Newtonsoft.csproj" />
+		<ProjectReference Include="..\..\Infrastructure\Utility.API.Services\Utility.API.Services.csproj" />
+		<ProjectReference Include="..\..\Infrastructure\Utility.API\Utility.API.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Attributes\Utility.Attributes.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Services.Meta\Utility.Services.Meta.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Services\Utility.Services.csproj" />
+		<ProjectReference Include="..\..\Models\Utility.Models.Diagrams\Utility.Models.Diagrams.csproj" />
 		<ProjectReference Include="..\..\Packages\Utility.Packages\Utility.Packages.csproj" />
 		<ProjectReference Include="..\..\Persists\Utility.Persists\Utility.Persists.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Controls.Lists\Utility.WPF.Controls.Lists.csproj" />
@@ -25,6 +28,7 @@
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Geometry\Utility.WPF.Geometries.csproj" />
 		<ProjectReference Include="..\..\WPF\Utility.WPF.Trees\Utility.WPF.Trees.csproj" />
 		<ProjectReference Include="..\Utility.Nodes.Demo.Filters\Utility.Nodes.Demo.Filters.csproj" />
+		<ProjectReference Include="..\Utility.Nodes.WPF.Templates.SyncFusion\Utility.Nodes.WPF.Templates.SyncFusion.csproj" />
 		<ProjectReference Include="..\Utility.Nodes.WPF\Utility.Nodes.WPF.csproj" />
 		<ProjectReference Include="..\Utility.Nodes.Meta\Utility.Nodes.Meta.csproj" />
 	</ItemGroup>
@@ -33,6 +37,18 @@
 	  <PackageReference Include="Dragablz" Version="0.0.3.234" />
 	  <PackageReference Include="MaterialDesignThemes" Version="5.2.2-ci998" />
 	  <PackageReference Include="RazorLight" Version="2.3.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Reference Include="Syncfusion.Data.WPF">
+	    <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\18.1.0.42\Assemblies\4.6\Syncfusion.Data.WPF.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Syncfusion.SfChart.WPF">
+	    <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\18.1.0.42\Assemblies\4.6\Syncfusion.SfChart.WPF.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Syncfusion.SfGrid.WPF">
+	    <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\18.1.0.42\Assemblies\4.6\Syncfusion.SfGrid.WPF.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
 
 	<ItemGroup>
