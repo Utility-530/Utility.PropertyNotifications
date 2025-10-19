@@ -108,6 +108,9 @@
         <Setter Property="Columns" Value="{Binding Columns}"/>
         <Setter Property="Errors" Value="{Binding Errors}"></Setter>
         <Setter Property="Title" Value="{Binding Title}"></Setter>
+        <Setter Property="Height" Value="{Binding Size, Converter={StaticResource SizeConverter}, ConverterParameter='Height'}"></Setter>
+        <Setter Property="Width" Value="{Binding Size, Converter={StaticResource SizeConverter}, ConverterParameter='Width'}"></Setter>
+        <Setter Property="IsEnabled" Value="{Binding IsEnabled}"></Setter>
         <Setter Property="Tag">
             <Setter.Value>
                 <MultiBinding Converter="{StaticResource RowColumnConverter}">

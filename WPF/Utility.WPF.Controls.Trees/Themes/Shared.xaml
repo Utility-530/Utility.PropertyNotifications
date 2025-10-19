@@ -6,6 +6,7 @@
     <math:MathConverter x:Key="MathConverter"></math:MathConverter>
     <local:MultiItemsPanelConverter x:Key="MultiItemsPanelConverter"/>
     <local:RowColumnConverter x:Key="RowColumnConverter"  />
+    <local:SizeConverter x:Key="SizeConverter"  />
     <conv:NullableBooleanToVisibilityConverter x:Key="VisibilityConverter"/>
     <conv:NullableBooleanToInverseConverter x:Key="InverseConverter"/>
     <conv:InverseNullToBooleanConverter x:Key="InverseNullToBooleanConverter"/>
