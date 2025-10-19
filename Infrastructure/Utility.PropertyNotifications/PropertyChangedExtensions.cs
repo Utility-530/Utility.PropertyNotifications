@@ -27,6 +27,11 @@ namespace Utility.PropertyNotifications
 
         private static void Raise(INotifyPropertyChanged sender, string propName, Type? targetType = null, bool cache = true)
         {
+            if (sender is IRaiseChanges r)
+            {
+                r.RaisePropertyChanged(propName);
+                return;
+            }
             PropertyChangedEventHandler? handler = null;
             targetType ??= sender.GetType();
             if (cache == false)
