@@ -34,7 +34,7 @@ namespace Utility.API.Services
         public async Task<GoldApi> Initialise(CancellationToken? token = null)
         {
             var connection = initialiseConnection();
-            var client = connection.InsertClient(nameof(Utility.API.GoldApi), maxCalls, timeInterval);
+            var client = connection.InsertClient(nameof(GoldApi), maxCalls, timeInterval);
             setPrice(findLatestPrice(Type.Gold));
             setPrice(findLatestPrice(Type.Silver));
             var availableCalls = findAvailableCalls();
@@ -90,7 +90,7 @@ namespace Utility.API.Services
                     $"FROM {nameof(Event)} " +
                     $"JOIN {nameof(Client)} " +
                     $"ON {nameof(Event)}.{nameof(Event.ParentId)} = {nameof(Client)}.{nameof(Client.Guid)} " +
-                    $"WHERE {nameof(Client)}.{nameof(Client.Name)} = ?", nameof(Utility.API.GoldApi));
+                    $"WHERE {nameof(Client)}.{nameof(Client.Name)} = ?", nameof(GoldApi));
 
                 DateTime[] x = [.. calls.Select(a => a.Time)];
                 return Infrastructure.Helpers.AvailableCalls(x, client.MaxCalls, client.MaxCallsTimeFrame, TimeInterval.Day);
