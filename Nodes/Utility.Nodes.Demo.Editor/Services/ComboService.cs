@@ -32,23 +32,6 @@ namespace Utility.Nodes.Demo.Filters.Services
                             else
                                 Locator.Current.GetService<SlaveViewModel>()?.Dispose();
 
-                            //Globals.Register.UnregisterAll<ITreeRepository>();
-                            //Globals.Register.Register<ITreeRepository>(() => new TreeRepository(filePath));
-
-                            //if (current != null)
-                            //{
-                            //Globals.Resolver.Resolve<INodeSource>().Dispose();
-                            //Globals.Register.Unregister<INodeSource>();
-                            //Globals.Register.Register<INodeSource>(() => new NodeEngine());
-
-                            //if (Locator.Current.GetService<ParserService>() is { } parserService)
-                            //{
-                            //    parserService.Dispose();
-                            //    Locator.CurrentMutable.UnregisterAll<ParserService>();
-                            //}
-                            //Locator.CurrentMutable.RegisterConstant(new ParserService());
-                            //}
-
                             var containerViewModel = Locator.Current.GetService<ContainerViewModel>();
                             containerViewModel.Slave = Locator.Current.GetService<SlaveViewModel>(guid.ToString());
                             containerViewModel.RaisePropertyChanged(nameof(ContainerViewModel.Slave));
