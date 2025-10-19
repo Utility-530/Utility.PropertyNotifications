@@ -10,21 +10,46 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Interfaces.Exs
 {
-    public interface IViewModelTree : ITree, IIsExpanded, ICurrent<IViewModelTree>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation, 
+    public interface IViewModelTree : ITree, IIsExpanded, ICurrent<IViewModelTree>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation,
         IRemoved, IIsVisible, IIsSelected, ISetIsSelected,
         IIsRemovable, IIsReplicable, ISort, ISortOrder,
         IName,
         IIsChildrenRefreshed,
         IIsActive,
-        IArrangement, IRows, IColumns, IIsAugmentable, IErrors, IConnectorPosition, IDataTemplate, IItemsPanelTemplate, ITitle, IIsContentVisible  ,
+        IArrangement, IRows, IColumns, IIsAugmentable, IErrors, IConnectorPosition, IDataTemplate, IItemsPanelTemplate, ITitle, IIsContentVisible,
         IGetGuid,
-        IIsReadOnly, ILocation,
-        IGetIsSingular
+        IIsReadOnly,
+        ILocation,
+        IGetIsSingular,
+        IIsChildrenTracked,
+        IIsValueTracked
+        //IHeight,
+        //IWidth
     {
-  
+
 
     }
 
+    public interface IHeight
+    {
+        double? Height { get; set; }
+    }
+
+    public interface IWidth
+    {
+        double? Width { get; set; }
+    }
+
+    public interface IIsValueTracked
+    {
+        bool IsValueTracked { get; set; }
+    }
+
+
+    public interface IIsChildrenTracked
+    {
+        bool IsChildrenTracked { get; set; }
+    }
     public interface IIsChildrenRefreshed
     {
         bool IsChildrenRefreshed { get; set; }
@@ -45,7 +70,7 @@ namespace Utility.Interfaces.Exs
     {
         ObservableCollection<Dimension> Columns { get; }
     }
-     
+
     public interface IRows
     {
         ObservableCollection<Dimension> Rows { get; }
@@ -80,11 +105,7 @@ namespace Utility.Interfaces.Exs
     {
         Arrangement Arrangement { get; set; }
     }
-        
-    public interface IProliferation
-    {
-        IEnumerable Proliferation();
-    }
+
 
     public interface IIsAugmentable
     {
@@ -103,7 +124,7 @@ namespace Utility.Interfaces.Exs
     {
         string DataTemplate { get; set; }
     }
-    
+
     public interface IItemsPanelTemplate
     {
         string ItemsPanelTemplate { get; set; }
