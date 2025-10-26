@@ -1,8 +1,6 @@
 ﻿using System.Collections;
 using System.Reactive;
 using System.Reactive.Linq;
-using Utility.API.Services;
-using Utility.Entities;
 using Utility.Enums;
 using Utility.Extensions;
 using Utility.Interfaces.Exs;
@@ -28,7 +26,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 s =>
                 new Model(() => [
                     new CommandModel() { Name = "Import"},
-                    new StringModel() { Name = search, DataTemplate = "SearchEditor"},
+                    new Model<string>() { Name = search, DataTemplate = "SearchEditor"},
                     new ListModel(type) { Name = list, DataTemplate =  "SFGridTemplate"},
                     new Model<CryptoCoin>(attach: a =>{
                         a.Observe<CryptoCoinParam>(guid);
@@ -36,16 +34,16 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     new Model<Currency>(attach: a =>{
                         a.Observe<CurrencyParam>(guid);
                     }){Name = nameof(Currency), DataTemplate = "EnumTemplate" },
-                    new StringModel(attach: a =>{
-                       a.ReactTo<ReturnPriceParam, decimal, string>(a => a.ToString("F2"), guid: guid);
-                    }){Name = "SpotPrice",  DataTemplate = "MoneySumTemplate", },
+                    new Model<decimal>(attach: a =>{
+                       a.ReactTo<ReturnPriceParam, decimal>(guid: guid);
+                    }){Name = "SpotPrice",  DataTemplate = "PriceTemplate", },
 
                     //new ListModel(type) { Name = list, DataTemplate =  "SFChartTemplate", XAxis = nameof(Transaction.Date), YAxis = nameof(Transaction.Balance00)},
                     //new StringModel() { Name = summary, DataTemplate = "MoneySumTemplate" }
                 ],
                 (addition) =>
                 {
-                    if (addition is StringModel { Name: search } searchModel)
+                    if (addition is Model<string> { Name: search } searchModel)
                     {
                         searchModel.Observe<FilterParam>(guid, includeInitial: true);
                     }
@@ -74,7 +72,6 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 serviceResolver.Connect<PredicateReturnParam, PredicateParam>();
                 serviceResolver.Connect<ListInstanceReturnParam, ListInParam>();
                 serviceResolver.Connect<ListInstanceReturnParam, ListParam>();
-                //serviceResolver.Connect<ListInstanceReturnParam, SumBalanceInputParam>();
             }
         }
     }

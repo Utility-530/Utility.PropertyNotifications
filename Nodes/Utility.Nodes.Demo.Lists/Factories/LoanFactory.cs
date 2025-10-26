@@ -27,7 +27,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 guid,
                 s =>
                 new Model(() => [
-                    new StringModel() { Name = search, DataTemplate = "SearchEditor" },
+                    new Model<string>() { Name = search, DataTemplate = "SearchEditor" },
                     new ListModel(type) { Name = list },
                     new EditModel(attach: node =>
                     {
@@ -53,12 +53,12 @@ namespace Utility.Nodes.Demo.Lists.Factories
 
                     })
                     { Name = edit },
-                    new StringModel() { Name = summary , DataTemplate = "MoneySumTemplate", IsValueTracked = false }
+                    new Model<string>() { Name = summary , DataTemplate = "MoneySumTemplate", IsValueTracked = false }
                 ],
 
                 (addition) =>
                 {
-                    if (addition is StringModel { Name: search } searchModel)
+                    if (addition is Model<string> { Name: search } searchModel)
                     {
                         searchModel.Observe<FilterParam>(guid, includeInitial: true);
                     }
@@ -77,7 +77,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
 
                         listModel.Observe<SelectionParam>(guid);
                     }
-                    if (addition is StringModel { Name: summary } summaryModel)
+                    if (addition is Model<string> { Name: summary } summaryModel)
                     {
                         summaryModel.ReactTo<SumAmountReturnParam>(guid: guid);
                     }

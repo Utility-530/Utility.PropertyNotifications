@@ -24,7 +24,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 guid,
                 s =>
                 new Model(() => [
-                     new StringModel() { Name = search,DataTemplate = "SearchEditor" },
+                     new Model<string>() { Name = search,DataTemplate = "SearchEditor" },
                      new ListModel(type) { Name = list },
                      new EditModel { Name = edit },
                 ],               
@@ -35,7 +35,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                         editModel.ReactTo<SelectionReturnParam>(setAction: (a) => { editModel.Value = a; editModel.RaisePropertyChanged(nameof(EditModel.Value)); }, guid: guid);
                     }
 
-                    if (addition is StringModel { Name: search } searchModel)
+                    if (addition is Model<string> { Name: search } searchModel)
                     {
                         searchModel.Observe<FilterParam>(guid);
                     }

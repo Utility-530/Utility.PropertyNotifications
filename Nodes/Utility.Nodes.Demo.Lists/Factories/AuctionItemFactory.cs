@@ -32,13 +32,13 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     new Model(()=>
                     [
                         new CommandModel<RefreshEvent>() { Name = refresh },
-                        new StringModel(attach: searchModel=>{
+                        new Model<string>(attach: searchModel=>{
                                   searchModel.Observe<FilterParam>(guid);
                         }) { Name = search,DataTemplate = "SearchEditor", Title = "Search"  },
-                        new StringModel(attach: stringModel=>{
+                        new Model<string>(attach: stringModel=>{
                                stringModel.Observe<BasePathParam>(guid);
                         } ) { Name = directory, DataTemplate = "DirectoryEditor",Title = "Base Directory" },
-                        new StringModel( attach: stringModel =>{
+                        new Model<string>( attach: stringModel =>{
                                stringModel.Observe<FilePathParam>(guid);
                         }) { Name = indexPath,
                         DataTemplate = "FilePathEditor",
@@ -94,7 +94,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                           jsonModel.Set(a.ToString());
                         }, guid);
                         }, raisePropertyCalled:false, raisePropertyReceived:false) {Name = details, DataTemplate = "Json"},
-                    new StringModel() { Name = html, DataTemplate="Html" },
+                    new Model<string>() { Name = html, DataTemplate="Html" },
                     new ReadOnlyStringModel(attach: stringModel=>{
                               stringModel.ReactTo<RazorFileReturnParam>(setAction: a => stringModel.Set((string)a), guid: guid);
                     }) { Name = html1, DataTemplate = "HtmlEditor" },

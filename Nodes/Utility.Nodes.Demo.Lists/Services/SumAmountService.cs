@@ -7,7 +7,7 @@ using Utility.Services.Meta;
 
 namespace Utility.Nodes.Demo.Lists.Services
 {
-    [ParamAttribute(true)]
+    [ParamAttribute(Enums.CLREvent.CollectionChanged)]
     public record SumAmountInputParam() : Param<SumAmountService>(nameof(SumAmountService.Sum), "list", true);
 
     public record SumAmountReturnParam() : Param<SumAmountService>(nameof(SumAmountService.Sum));
