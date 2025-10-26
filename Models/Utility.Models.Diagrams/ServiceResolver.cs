@@ -3,6 +3,8 @@ using DynamicData;
 using LanguageExt.ClassInstances;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Utility.Attributes;
 using Utility.Changes;
@@ -61,13 +63,16 @@ namespace Utility.Models.Diagrams
                     observables.Add(observable);
                     if (methodParameter.Info == null && cache.Parameters.Count == 0)
                     {
-                        connections.Add(new MethodConnection(a =>                         
+                        connections.Add(new MethodConnection(a =>
                         subscribe<TParam>(a, cache.InValues.Single().Value.OnNext), observable));
                         return;
                     }
+                    IDisposable? disposable = null;
                     connections.Add(new MethodConnection(a =>
                     {
-                        subscribe<TParam>(a, cache.InValues[methodParameter.Name].OnNext);
+                        if (disposable != null)
+                            disposable.Dispose();
+                        disposable = subscribe<TParam>(a, cache.InValues[methodParameter.Name].OnNext);
                     }, observable));
                 }
             }
@@ -101,9 +106,12 @@ namespace Utility.Models.Diagrams
                     {
                         if (get(methodParameterIn) is MethodNode cacheIn)
                         {
+                            IDisposable? disposable = null;
                             connections.Add(new MethodConnection(a =>
                             {
-                                subscribe<TParamOut>(a, cacheIn.InValues[methodParameterIn.Name].OnNext);
+                                if (disposable != null)
+                                    disposable.Dispose();
+                                disposable = subscribe<TParamOut>(a, cacheIn.InValues[methodParameterIn.Name].OnNext);
                             }, cache.OutValue));
                         }
                     }
@@ -111,16 +119,17 @@ namespace Utility.Models.Diagrams
             }
         }
 
-        private void subscribe<TParamOut>(object a, Action<object> action) where TParamOut : IParameter
+        private IDisposable subscribe<TParamOut>(object a, Action<object> action) where TParamOut : IParameter
         {
             if (AttributeHelper.TryGetAttribute<ParamAttribute>(typeof(TParamOut), out var attr))
             {
-                listen(a, attr).Subscribe(_ =>
+                return listen(a, attr).Subscribe(_ =>
                 {
                     action(a);
                 });
             }
             action(a);
+            return Disposable.Empty;
         }
 
         private IParameter get<TService>()
@@ -174,56 +183,92 @@ namespace Utility.Models.Diagrams
             return input;
 
         }
+
         private IObservable<object> listen(object a, ParamAttribute attribute)
         {
-            CancellationTokenSource? _delayCts = null;
             TimeSpan interval = TimeSpan.FromMinutes(1.0 / attribute.RatePerMinute);
-            object? lastSnapshot = null;
 
-            return Observable.Create<object>(async observer =>
+            return Observable.Create<object>(observer =>
             {
-                if (a is INotifyCollectionChanged changed)
+                var cts = new CancellationTokenSource();
+                object? lastSnapshot = null;
+                var disposables = new CompositeDisposable();
+
+
+                if (attribute.Event.HasFlag(Enums.CLREvent.CollectionChanged) &&
+                    a is INotifyCollectionChanged collectionChanged)
                 {
-
-                    return changed.Changes().Subscribe(async x => await triggerIfChangedAsync(observer, (a, b) => false));
-                }
-                else
-                {
-                    // Simulate periodic polling
-                    return Task.Run(async () =>
-                     {
-                         while (true)
-                         {
-                             await triggerIfChangedAsync(observer, (a, b) => false);
-                         }
-                     });
-                }
-            });
-
-            async Task triggerIfChangedAsync(IObserver<object> observer, Func<object, object, bool> equals)
-            {
-                _delayCts?.Cancel();
-                _delayCts = new CancellationTokenSource();
-                var token = _delayCts.Token;
-
-                try
-                {
-                    await Task.Delay(interval, token);
-                    if (token.IsCancellationRequested) return;
-
-                    // Example: compare current state to lastSnapshot
-                    if (!equals(a, lastSnapshot))
+                    var sub = collectionChanged.Changes().Subscribe(async _ =>
                     {
-                        lastSnapshot = a;
-                        observer.OnNext(a);
+                        await triggerIfChangedAsync((x, y) => false, cts.Token);
+                    });
+                    disposables.Add(sub);
+                }
+
+                if (attribute.Event.HasFlag(Enums.CLREvent.PropertyChanged) &&
+                    a is INotifyPropertyChanged propertyChanged)
+                {
+                    PropertyChangedEventHandler handler = async (_, __) =>
+                    {
+                        await triggerIfChangedAsync((x, y) => false, cts.Token);
+                    };
+                    propertyChanged.PropertyChanged += handler;
+                    disposables.Add(Disposable.Create(() => propertyChanged.PropertyChanged -= handler));
+                }
+
+                if (attribute.Event.HasFlag(Enums.CLREvent.CustomEvent))
+                {
+                    if (attribute.CustomEventName == null)
+                        throw new ArgumentException("CustomEventName must be provided when using CustomEvent flag.");
+                    if (a.GetType().GetEvent(attribute.CustomEventName) is { } eventInfo)
+                    {
+                        EventHandler handler = async (_, __) =>
+                        {
+                            await triggerIfChangedAsync((x, y) => false, cts.Token);
+                        };
+                        eventInfo.AddEventHandler(a, handler);
+                        disposables.Add(Disposable.Create(() => eventInfo.RemoveEventHandler(a, handler)));
                     }
                 }
-                catch (TaskCanceledException)
-                {
-                    // ignored
-                }
-            }
 
+                // Fallback to polling if no event types matched
+                if (disposables.Count == 0)
+                {
+                    var pollingTask = Task.Run(async () =>
+                    {
+                        while (!cts.Token.IsCancellationRequested)
+                        {
+                            await triggerIfChangedAsync((x, y) => false, cts.Token);
+                        }
+                    }, cts.Token);
+
+                    disposables.Add(Disposable.Create(() =>
+                    {
+                        cts.Cancel();
+                        cts.Dispose();
+                        _ = pollingTask.ContinueWith(t => _ = t.Exception, TaskContinuationOptions.OnlyOnFaulted);
+                    }));
+                }
+
+                return disposables;
+
+                async Task triggerIfChangedAsync(Func<object, object, bool> equals, CancellationToken token)
+                {
+                    try
+                    {                  
+                        if (token.IsCancellationRequested) return;
+
+                        if (!equals(a, lastSnapshot))
+                        {
+                            lastSnapshot = a;
+                            observer.OnNext(a);
+                        }
+                        await Task.Delay(interval, token);
+                    }
+                    catch (TaskCanceledException) { }
+                }
+
+            });
         }
 
     }
