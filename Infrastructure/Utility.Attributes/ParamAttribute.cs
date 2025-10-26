@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Utility.Enums;
 
 namespace Utility.Attributes
 {
-    public class ParamAttribute(bool listenToCollectionChanges = false, int ratePerMinute = 60) : Attribute
+    public class ParamAttribute(CLREvent @event = CLREvent.None, int ratePerMinute = 60, string? customEventName = default) : Attribute
     {
-        public bool ListenToCollectionChanges { get; } = listenToCollectionChanges;
+        public CLREvent Event { get; } = @event;
         public int RatePerMinute { get; } = ratePerMinute;
+        public string? CustomEventName { get; } = customEventName;
     }
 }
