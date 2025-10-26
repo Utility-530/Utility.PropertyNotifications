@@ -165,21 +165,21 @@ namespace Utility.Nodes.Meta
         {
             return nodeSource.Create(collection,
                 collectionGuid,
-                s => new StringModel(attach: n => { n.DataTemplate = "StringRoot"; n.IsExpanded = true; n.Orientation = Enums.Orientation.Vertical; }) { Name = s });
+                s => new Model<string>(attach: n => { n.DataTemplate = "StringRoot"; n.IsExpanded = true; n.Orientation = Enums.Orientation.Vertical; }) { Name = s });
         }
 
         public IObservable<INodeViewModel> BuildHtmlRoot()
         {
             return nodeSource.Create(html,
                 htmlGuid,
-                s => new StringModel(attach: n => n.DataTemplate = "Html") { Name = s });
+                s => new Model<string>(attach: n => n.DataTemplate = "Html") { Name = s });
         }
 
         public IObservable<INodeViewModel> BuildHtmlRenderRoot()
         {
             return nodeSource.Create(_html,
                 htmlRenderGuid,
-                s => new StringModel(attach: n => n.DataTemplate = "Html") { Name = s });
+                s => new Model<string>(attach: n => n.DataTemplate = "Html") { Name = s });
 
         }
 
