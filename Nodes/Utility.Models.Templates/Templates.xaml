@@ -40,7 +40,7 @@
     <conv:NewObjectConverter x:Key="NewObjectConverter"/>
     <conv:PropertyNamesConverter x:Key="PropertyNamesConverter"/>
     <conv:TypeNameConverter x:Key="TypeNameConverter"/>
-
+    <local:ValueChangeConverter x:Key="ValueChangeConverter"/>
 
     <DataTemplate DataType="{x:Type nodes:ViewModelTree}">
         <TextBlock Text="{Binding Name}"/>
@@ -53,7 +53,9 @@
                 <DataTemplate>
                     <DataTemplate.Resources>
                         <Style TargetType="{x:Type TextBlock}">
-                            --><!--<Setter Property="Width" Value="100"/>--><!--
+                            -->
+    <!--<Setter Property="Width" Value="100"/>-->
+    <!--
                             <Setter Property="FontWeight" Value="DemiBold"/>
                             <Setter Property="FontSize" Value="8"></Setter>
                             <Setter Property="MaxWidth" Value="200"/>
@@ -70,7 +72,7 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>
     </DataTemplate>-->
-    
+
     <DataTemplate DataType="{x:Type inf:IndexModel}">
         <xc:IntegerUpDown   Value="{Binding Value}"></xc:IntegerUpDown>
     </DataTemplate>
@@ -97,7 +99,7 @@
                     />
     </DataTemplate>
 
-    <DataTemplate x:Key="SearchEditor" DataType="{x:Type model:StringModel}">
+    <DataTemplate x:Key="SearchEditor" DataType="{x:Type nodes:NodeViewModel}">
         <text:SearchBox x:Name="Searchbox" Text="{Binding Value, Mode=TwoWay}" Height="25" MinWidth="200">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="Search" >
@@ -115,8 +117,8 @@
         </TextBlock>
     </DataTemplate>
 
-    <DataTemplate  x:Key="MoneySumTemplate" DataType="{x:Type model:StringModel}">
-       
+    <DataTemplate  x:Key="MoneySumTemplate" DataType="{x:Type nodes:NodeViewModel}">
+
         <Border Background="#F8F9FA" 
         BorderBrush="#E9ECEF" 
         BorderThickness="1" 
@@ -139,12 +141,115 @@
                    Foreground="#1A237E"
                    HorizontalAlignment="Left"/>
 
-                <!-- Subtext --><!--
+                <!-- Subtext -->
+                <!--
                 <TextBlock Text="Sum of all active loans" 
                    FontSize="12" 
                    Foreground="#6C757D"
                    FontStyle="Italic"
                    Margin="0,4,0,0"/>-->
+            </StackPanel>
+        </Border>
+    </DataTemplate>
+
+
+    <!-- Value Change Converter -->
+
+
+
+    <DataTemplate x:Key="PriceTemplate" DataType="{x:Type model:Model}">
+        <Border Background="#F8F9FA" 
+            BorderBrush="#E9ECEF" 
+            BorderThickness="1" 
+            CornerRadius="8" 
+            Padding="16,12"
+            Margin="10"
+            DataContext="{Binding Value}"
+            Tag="{Binding Converter={StaticResource ValueChangeConverter}}"
+            x:Name="MainBorder">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <!-- Green flash for increase -->
+                        <DataTrigger Binding="{Binding Path=Tag,RelativeSource={RelativeSource Mode=Self}}" Value="{x:Static local:ChangeType.Increase}">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                                    From="#90EE90"
+                                                    To="#F8F9FA" 
+                                                    Duration="0:0:1.5"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                                    From="#FFB3B3"
+                                                    To="#F8F9FA" 
+                                                    Duration="0:0:1.5"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+
+                        <!-- Red flash for decrease -->
+                        <!--<DataTrigger Binding="{Binding Path=Tag,RelativeSource={RelativeSource Mode=Self}}" Value="{x:Static local:ChangeType.Decrease}">
+                
+                        </DataTrigger>-->
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+
+            <StackPanel >
+                <!-- Header -->
+                <!--<TextBlock Text="SUM" 
+                       FontSize="14" 
+                       FontWeight="SemiBold" 
+                       Foreground="#495057"
+                       Margin="0,0,0,8"/>-->
+
+                <!-- Loan Amount Display with Change Indicator -->
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
+                    <TextBlock x:Name="TotalLoansTextBlock"
+                           Text="{Binding  StringFormat='£{0:N2}', ConverterCulture=en-GB}"
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="#1A237E"
+                           HorizontalAlignment="Left"/>
+
+                    <!-- Change Arrow -->
+                    <Polygon Margin="8,6,0,0" 
+                          VerticalAlignment="Center"
+                          >
+                        <Polygon.Style>
+                            <Style TargetType="Polygon">
+                                <!--<Setter Property="Visibility" Value="Collapsed"/>-->
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=MainBorder, Path=Tag}" Value="{x:Static local:ChangeType.Increase}">
+                                        <Setter Property="Fill" Value="#28A745"/>
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Setter Property="Points" Value="0,0 5,-5 10,0"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding ElementName=MainBorder, Path=Tag}"  Value="{x:Static local:ChangeType.Decrease}">
+                                        <Setter Property="Fill" Value="#DC3545"/>
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Setter Property="Points" Value="0,0 5,5 10,0"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Polygon.Style>
+                    </Polygon>
+                </StackPanel>
+
+                <!-- Subtext -->
+                <!--
+            <TextBlock Text="Sum of all active loans" 
+                       FontSize="12" 
+                       Foreground="#6C757D"
+                       FontStyle="Italic"
+                       Margin="0,4,0,0"/>-->
             </StackPanel>
         </Border>
     </DataTemplate>
@@ -163,14 +268,14 @@
                 <obj:ObjectBehavior Object="{Binding Value, Mode=OneWay}" RaisePropertyChanged="True"/>
             </i:Interaction.Behaviors>
         </obj:JsonControl>
-    </DataTemplate>  
-    
+    </DataTemplate>
+
     <DataTemplate x:Key="Json" DataType="{x:Type model:Model}">
         <obj:JsonControl Width="500" Height="400" Json="{Binding Value}">
-          
+
         </obj:JsonControl>
-    </DataTemplate>  
-    
+    </DataTemplate>
+
     <DataTemplate x:Key="StringRoot">
         <Grid>
             <TextBlock Text="{Binding Name}" Background="AliceBlue">
@@ -215,19 +320,16 @@
         </ComboBox>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type model:BooleanModel}">
+    <DataTemplate x:Key="BooleanTemplate" DataType="{x:Type nodes:NodeViewModel}">
         <CheckBox  IsChecked="{Binding Value}"></CheckBox>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type model:GuidModel}">
-        <TextBox Text="{Binding Value}"/>
-    </DataTemplate>
-    
+
     <DataTemplate DataType="{x:Type inf:ExceptionModel}">
         <TextBlock Text="{Binding Exception.Message}" Foreground="{c:Red}" MinHeight="25" MinWidth="180" Background="GhostWhite"/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type inf:ListModel}">    
+    <DataTemplate DataType="{x:Type inf:ListModel}">
         <list:CustomSelector 
             Height="400"
             Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
@@ -244,12 +346,12 @@
                 <i:EventTrigger EventName="FinishEdit">
                     <beh:SetterAction PropertyName="Add" TargetObject="{Binding }" Converter="{StaticResource FinishEditConverter}"/>
                 </i:EventTrigger>
-            </i:Interaction.Triggers>           
-        </list:CustomSelector>      
+            </i:Interaction.Triggers>
+        </list:CustomSelector>
     </DataTemplate>
 
 
-    <DataTemplate DataType="{x:Type model:StringModel}">
+    <DataTemplate DataType="{x:Type nodes:NodeViewModel}">
         <Grid>
             <TextBox Text="{Binding Value}" MinWidth="60" Background="AliceBlue">
             </TextBox>
@@ -258,7 +360,7 @@
 
 
 
-    <DataTemplate x:Key="HtmlEditor" DataType="{x:Type model:StringModel}">
+    <DataTemplate x:Key="HtmlEditor" DataType="{x:Type nodes:NodeViewModel}">
         <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
 
         <avalonedit:TextEditor x:Name="_htmlEditor" 
@@ -274,7 +376,7 @@
     </DataTemplate>
 
 
-    <DataTemplate x:Key="HtmlWebViewer" DataType="{x:Type model:StringModel}">
+    <DataTemplate x:Key="HtmlWebViewer" DataType="{x:Type nodes:NodeViewModel}">
         <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
         <WebBrowser >
             <i:Interaction.Behaviors>
@@ -336,8 +438,8 @@
                 <Setter Property="Margin" Value="4,0,4,0"/>
             </Style>
         </DataTemplate.Resources>
-        <UniformGrid Rows="1">    
-            <TextBlock Text="{Binding Path=SourceKey}"/>                   
+        <UniformGrid Rows="1">
+            <TextBlock Text="{Binding Path=SourceKey}"/>
             <TextBlock Text="{Binding Path=PropertyName}"/>
             <TextBlock Text="{Binding Path=OldValue}"/>
             <TextBlock Text="{Binding Path=NewValue}"/>
@@ -361,7 +463,7 @@
         <Setter Property="Margin" Value="10,5,10,0"/>
         <Setter Property="Width" Value="60"/>
     </Style>
-    
+
     <DataTemplate DataType="{x:Type inf:DataFileModel}" x:Shared="false">
         <Grid Background="#DCDCDC" Name="rootElement" >
             <Grid.Resources>
@@ -397,7 +499,7 @@
                        VerticalAlignment="Bottom"
                        Text="{Binding Alias}"
                        Name="txtName"/>
-            
+
             <TextBlock Grid.Column="1" Width="600"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Bottom"
@@ -410,7 +512,7 @@
 
     <DataTemplate x:Key="EditTemplate" DataType="{x:Type inf:DataFileModel}">
         <Grid Background="#DCDCDC" Name="rootElement">
-            <Grid.Resources>             
+            <Grid.Resources>
                 <Style TargetType="{x:Type TextBlock}">
                     <Setter Property="Margin" Value="10,5,10,0"/>
                 </Style>
@@ -451,14 +553,14 @@
         </Grid>
     </DataTemplate>
 
-    <DataTemplate x:Key="DirectoryEditor" DataType="{x:Type model:StringModel}">
+    <DataTemplate x:Key="DirectoryEditor" DataType="{x:Type nodes:NodeViewModel}">
         <fs:FolderComboBrowser Margin="4"
                                MaxWidth="220"
                     Path="{Binding Value, Mode=TwoWay}"
                     x:Name="FolderComboBrowser"/>
-    </DataTemplate>    
+    </DataTemplate>
 
-    <DataTemplate x:Key="FilePathEditor" DataType="{x:Type model:StringModel}">
+    <DataTemplate x:Key="FilePathEditor" DataType="{x:Type nodes:NodeViewModel}">
         <fs:FileComboBrowser Margin="8"
                                  MaxWidth="180"
                              Path="{Binding Value, Mode=TwoWay}"
@@ -487,19 +589,19 @@
                                 Grid.Column="0"
                                 Margin="5"
                                 >
-                          
-                                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
                                           
                                     FontSize="24"
                                     FontWeight="DemiBold"
                                     Text="{Binding Name, Converter={x:Static local:HumaniseConverter.Instance}}"
                                     TextWrapping="WrapWithOverflow" />
-                       
+
                         </Grid>
                     </DataTemplate>
                 </ContentControl.ContentTemplate>
             </ContentControl>
-        
+
         </Grid>
     </DataTemplate>
 
