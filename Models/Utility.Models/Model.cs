@@ -23,7 +23,7 @@ namespace Utility.Models
         {
         }
 
-        public Model(Func<IEnumerable<IReadOnlyTree>> children, Action<IReadOnlyTree>? addition = null, Action<Model>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(children, addition, attach: new Action<IReadOnlyTree>(a => attach?.Invoke((Model)a)), raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
+        public Model(Func<IEnumerable<IReadOnlyTree>> children = null, Action<IReadOnlyTree>? addition = null, Action<Model>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(children, addition, attach: new Action<IReadOnlyTree>(a => attach?.Invoke((Model)a)), raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
         {
         }
     }
@@ -264,22 +264,22 @@ namespace Utility.Models
         }
     }
 
-    public class StringModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<IReadOnlyTree>? addition = null, Action<StringModel>? attach = null) :
-        Model<string>(func, addition, attach: new Action<IReadOnlyTree>(a => attach?.Invoke((StringModel)a)))
-    {
-        public StringModel() : this(null, null, null)
-        {
+    //public class StringModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<IReadOnlyTree>? addition = null, Action<StringModel>? attach = null) :
+    //    Model<string>(func, addition, attach: new Action<IReadOnlyTree>(a => attach?.Invoke((StringModel)a)))
+    //{
+    //    public StringModel() : this(null, null, null)
+    //    {
 
-        }
-    }
+    //    }
+    //}
 
-    public class GuidModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<IReadOnlyTree>? addition = null) : Model<Guid>(func,  addition)
-    {
-    }
+    //public class GuidModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<IReadOnlyTree>? addition = null) : Model<Guid>(func,  addition)
+    //{
+    //}
 
-    public class BooleanModel(Func<IEnumerable<IReadOnlyTree>>? func = null,  Action<IReadOnlyTree>? addition = null) : Model<bool>(func, addition)
-    {
-    }
+    //public class BooleanModel(Func<IEnumerable<IReadOnlyTree>>? func = null,  Action<IReadOnlyTree>? addition = null) : Model<bool>(func, addition)
+    //{
+    //}
 
     [AttributeUsage(AttributeTargets.Property)]
     public class ChildAttribute(string Name, System.Type Type = null) : Attribute
