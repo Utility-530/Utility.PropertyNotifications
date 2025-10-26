@@ -29,7 +29,7 @@ namespace Utility.WPF.Demo.Objects
             JsonConvert.DefaultSettings = () => Combined;
             InitializeComponent();
             this.Resources.Add("exceptions", new List<Exception> { new ExceptionOne(), new ExceptionTwo(), new Exception() });
-            (this.Resources["AuctionItem"] as AuctionItem).WithChangesTo(a => a.SubTitle).Subscribe(c =>
+            (this.Resources["AuctionItem"] as DemoItem).WithChangesTo(a => a.NullString).Subscribe(c =>
             {
 
             });
@@ -89,63 +89,39 @@ namespace Utility.WPF.Demo.Objects
     }
 
     [Model("f65a5bcd-f725-4890-860d-ecd13ca6babb")]
-    public class AuctionItem : NotifyPropertyClass, IId<Guid>
+    public class DemoItem : NotifyPropertyClass
     {
-        private string? indexPath;
         private string? title;
-        private string? subTitle;
-        private string? descriptionOne;
-        private string? descriptionTwo;
-        private string? imagePathOne;
-        private string? imagePathTwo;
-        private string? disclaimerOne;
-        private double? sleeveLengthInCentimetres;
         private double? lengthInCentimetres;
-        private double? pitToPitWidthInCentimetres;
-        private double? shouldertWidthInCentimetres;
-        private bool hasShipping;
 
-        public AuctionItem()
+
+        public DemoItem()
         {
 
         }
-
-        public Guid Id { get; set; }
-        //public string? IndexPath { get => indexPath; set => RaisePropertyChanged(ref indexPath, value); }
 
         [JsonIgnore]
-        public string? Title { get => title; set => RaisePropertyChanged(ref title, value); }
+        public int Ignored { get; set; }
 
-        public string? SubTitle { get => subTitle; set => RaisePropertyChanged(ref subTitle, value); }
-        //public string? DescriptionOne { get => descriptionOne; set => RaisePropertyChanged(ref descriptionOne, value); }
-        //public string? DescriptionTwo { get => descriptionTwo; set => RaisePropertyChanged(ref descriptionTwo, value); }
-        //public string? ImagePathOne { get => imagePathOne; set => RaisePropertyChanged(ref imagePathOne, value); }
-        //public string? ImagePathTwo { get => imagePathTwo; set => RaisePropertyChanged(ref imagePathTwo, value); }
-        //public string? DisclaimerOne { get => disclaimerOne; set => RaisePropertyChanged(ref disclaimerOne, value); }
-        //public double? SleeveLengthInCentimetres { get => sleeveLengthInCentimetres; set => RaisePropertyChanged(ref lengthInCentimetres, value); }
-        public double? LengthInCentimetres { get => lengthInCentimetres; set => RaisePropertyChanged(ref lengthInCentimetres, value); }
-        //public double? PitToPitWidthInCentimetres { get => pitToPitWidthInCentimetres; set => RaisePropertyChanged(ref pitToPitWidthInCentimetres, value); }
-        //public double? ShouldertWidthInCentimetres { get => shouldertWidthInCentimetres; set => RaisePropertyChanged(ref shouldertWidthInCentimetres, value); }
-        public bool HasShipping
-        {
-            get => hasShipping; set => RaisePropertyChanged(ref hasShipping, value);
-        }
+        public Guid Guid { get; set; }
 
-        public bool HasTitle => Title != null;
-        //[Ignore]
-        //public bool HasDescriptions => Descriptions.Length != 0;
-        //[Ignore]
-        //public string[] Descriptions => [.. new string?[] { DescriptionOne, DescriptionTwo }.WhereNotNull()];
-        //[Ignore]
-        //public string[] ImagePaths => [.. new string?[] { ImagePathOne, ImagePathTwo }.WhereNotNull()];
-        //[Ignore]
-        //public bool HasImagePaths => ImagePaths.Length != 0;
-        //[Ignore]
-        //public bool HasMeasurements => SleeveLengthInCentimetres.HasValue || LengthInCentimetres.HasValue || PitToPitWidthInCentimetres.HasValue || ShouldertWidthInCentimetres.HasValue;
-        //[Ignore]
-        //public string[] Disclaimers => [.. new string?[] { DisclaimerOne }.WhereNotNull()];
-        //[Ignore]
-        //public bool HasDisclaimers => Disclaimers.Length != 0;
+
+        public string? NullString { get => title; set => RaisePropertyChanged(ref title, value); }
+        public double? NullDouble { get => lengthInCentimetres; set => RaisePropertyChanged(ref lengthInCentimetres, value); }
+        public bool ReadOnlyBoolean => NullString != null;
+        public bool Boolean { get; set; }
+        public DateTime DateTime { get; set; }
+        public DateTime? NullDateTime { get; set; }
+
+        [DataType(Enums.DataType.Money)]
+        public decimal Money { get; set; }
+
+        [DataType(Enums.DataType.PIN)]
+        public string Pin { get; set; }
+
+        [DataType( Enums.DataType.Percentage)]
+        public decimal Percentage { get; set; }
+      
     }
 
     public class JsonSerialiser : JsonSerializer
