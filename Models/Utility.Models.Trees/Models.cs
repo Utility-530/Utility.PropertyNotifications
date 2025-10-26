@@ -710,10 +710,10 @@ namespace Utility.Models.Trees
         public const string _string = nameof(_string);
         public const string _type = nameof(_type);
 
-        private StringModel @string;
+        private Model<string> @string;
         private TypeModel type;
 
-        public StringModel String { get => @string; set => @string = value; }
+        public Model<string> String { get => @string; set => @string = value; }
         public TypeModel Type { get => type; set => type = value; }
 
         public SelectionModel()
@@ -724,7 +724,7 @@ namespace Utility.Models.Trees
 
         public override IEnumerable<IReadOnlyTree> Items()
         {
-            yield return new StringModel { Name = _string };
+            yield return new Model<string> { Name = _string };
             yield return new TypeModel((Type)null) { Name = _type };
         }
 
@@ -732,7 +732,7 @@ namespace Utility.Models.Trees
         {
             switch (a.ToString())
             {
-                case _string: String = a as StringModel; break;
+                case _string: String = a as Model<string>; break;
                 case _type: Type = a as TypeModel; break;
                 default: throw new ArgumentOutOfRangeException("ds 33` 33kfl.. ");
             }
@@ -756,7 +756,7 @@ namespace Utility.Models.Trees
         {
         }
 
-        public StringModel Alias { get; set; }
+        public Model<string> Alias { get; set; }
 
         public FileModel File { get; set; }
 
@@ -985,7 +985,7 @@ namespace Utility.Models.Trees
     }
 
 
-    public class FileNameModel : StringModel
+    public class FileNameModel : Model<string>
     {
 
     }
