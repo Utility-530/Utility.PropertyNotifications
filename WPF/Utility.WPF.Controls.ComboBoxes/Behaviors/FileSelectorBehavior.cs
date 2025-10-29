@@ -11,6 +11,7 @@ using System.Windows.Shapes;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.NonGeneric;
+using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Nodes.Ex;
 using Utility.Reactives;
@@ -57,7 +58,7 @@ namespace Utility.WPF.Controls.ComboBoxes
                 {
                     if (a is DirectoryModel tree)
                     {
-                        var x = tree.Items().OfType<ReadOnlyStringModel>().ToArray().ToViewModelTree(t_tree: tree);
+                        var x = tree.Items().OfType<Model<string>>().ToArray().ToViewModelTree(t_tree: tree);
 
                         if (tree.FileSystemInfo is FileSystemInfo fileSystemInfo)
                             FileSystemInfo = fileSystemInfo;
