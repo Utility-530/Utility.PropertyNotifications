@@ -4,7 +4,6 @@ using Utility.Entities;
 using Utility.Entities.Comms;
 using Utility.Enums;
 using Utility.Extensions;
-using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Models;
@@ -25,14 +24,13 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 str =>
                 new Model(() =>
                 [
-                     new Model(() => [new CommandModel<OpenSettingsEvent> { Name = Settings }],
-                     attach:n => { n.IsExpanded = true; n.Orientation = Enums.Orientation.Horizontal; })
-                     { Name = controls },
-
-                    new Model(Items, attach: node =>
+                    new Model(() => [new CommandModel<OpenSettingsEvent> { Name = Settings }])
+                    { 
+                         Name = controls,
+                         Orientation = Enums.Orientation.Horizontal
+                    },
+                    new Model(items, attach: node =>
                     {
-                        node.IsExpanded = true;
-                        node.Orientation = Orientation.Vertical;
                         node
                         .WhenReceivedFrom(a => a.Current, includeNulls: false)
                         .Select(current =>
@@ -47,17 +45,16 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     })
                     {
                         Name = list,
-                        IsExpanded = true,
+                        Orientation = Orientation.Vertical,
                         IsChildrenTracked = false
                     }
                 ])
                 {
                     Name = str,
-                    IsExpanded = true,
                     Orientation = Orientation.Vertical
                 });
 
-            static IEnumerable<IReadOnlyTree> Items()
+            static IEnumerable<IReadOnlyTree> items()
             {
                 foreach (var type in Locator.Current.GetService<IEnumerableFactory<Type>>().Create(null))
                 {

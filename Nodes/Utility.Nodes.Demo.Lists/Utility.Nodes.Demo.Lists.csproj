@@ -40,13 +40,13 @@
 
 	<ItemGroup>
 	  <Reference Include="Syncfusion.Data.WPF">
-	    <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\18.1.0.42\Assemblies\4.6\Syncfusion.Data.WPF.dll</HintPath>
+	    <HintPath>O:\Syncfusion\Essential Studio\WPF\18.1.0.42\Assemblies\4.6\Syncfusion.Data.WPF.dll</HintPath>
 	  </Reference>
 	  <Reference Include="Syncfusion.SfChart.WPF">
-	    <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\18.1.0.42\Assemblies\4.6\Syncfusion.SfChart.WPF.dll</HintPath>
+	    <HintPath>O:\Syncfusion\Essential Studio\WPF\18.1.0.42\Assemblies\4.6\Syncfusion.SfChart.WPF.dll</HintPath>
 	  </Reference>
 	  <Reference Include="Syncfusion.SfGrid.WPF">
-	    <HintPath>C:\Program Files (x86)\Syncfusion\Essential Studio\WPF\18.1.0.42\Assemblies\4.6\Syncfusion.SfGrid.WPF.dll</HintPath>
+	    <HintPath>O:\Syncfusion\Essential Studio\WPF\18.1.0.42\Assemblies\4.6\Syncfusion.SfGrid.WPF.dll</HintPath>
 	  </Reference>
 	</ItemGroup>
 

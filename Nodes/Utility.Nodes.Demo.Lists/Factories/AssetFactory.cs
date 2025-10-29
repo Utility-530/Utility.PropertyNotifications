@@ -29,7 +29,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 s =>
                 new Model(() => [
                     new Model<string>() { Name = search, DataTemplate = "SearchEditor" },
-                   new ListModel(type) { Name = list, DataTemplate =  "SFGridTemplate"},
+                    new ListModel(type) { Name = list, DataTemplate =  "SFGridTemplate"},
                     new EditModel(attach: node =>
                     {
                         //node
@@ -51,7 +51,6 @@ namespace Utility.Nodes.Demo.Lists.Factories
                         //    }
                         //});
                         node.ReactTo<SelectionReturnParam>(setAction: (a) => { node.Value = a; node.RaisePropertyChanged(nameof(EditModel.Value)); }, guid: guid);
-
                     })
                     { Name = edit },
                     new Model<string>() { Name = summary , DataTemplate = "MoneySumTemplate", IsValueTracked = false }
