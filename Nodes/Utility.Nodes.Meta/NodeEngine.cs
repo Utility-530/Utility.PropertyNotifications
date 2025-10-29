@@ -14,7 +14,6 @@ using Utility.Helpers.Generic;
 using Utility.Helpers.NonGeneric;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
-using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
 using Utility.Models;
@@ -24,7 +23,6 @@ using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.ServiceLocation;
 using Utility.Services.Meta;
-using Utility.Trees.Abstractions;
 using CompositeDisposable = Utility.Observables.CompositeDisposable;
 
 namespace Utility.Nodes.Meta
@@ -51,7 +49,6 @@ namespace Utility.Nodes.Meta
         public static NodeEngine Instance { get; } = new();
 
         private readonly ReplaySubject<INodeViewModel> _selections = new(1);
-        private readonly ReplaySubject<DirtyModel> _dirty = new(1);
         private readonly ObservableCollection<INodeViewModel> _nodes = [];
         private readonly CompositeDisposable _compositeDisposable = new();
         private readonly ChangeTracker _changeTracker;
@@ -78,7 +75,6 @@ namespace Utility.Nodes.Meta
         public IReadOnlyCollection<INodeViewModel> Nodes => _nodes;
         string INodeSource.New => New;
         public IObservable<INodeViewModel> Selections => _selections;
-        public IObservable<DirtyModel> Dirty => _dirty;
 
         public void Remove(INodeViewModel node)
         {
@@ -141,13 +137,11 @@ namespace Utility.Nodes.Meta
                     .Load(node)
                     .Subscribe(loadedNode =>
                     {
-       
                         _dataInitialiser.Track(node);
-                        if (loadedNode.IsChildrenTracked)                        
+                        if (loadedNode.IsChildrenTracked)
                             setupChildrenTracking(loadedNode);
                         else
                         {
-
                         }
                         setupExpansionHandling(loadedNode);
                     })
@@ -155,7 +149,6 @@ namespace Utility.Nodes.Meta
 
                 void configureNode(INodeViewModel node)
                 {
-              
                 }
 
                 void setupChildrenTracking(INodeViewModel node)
@@ -196,7 +189,7 @@ namespace Utility.Nodes.Meta
                                         key => processKey(node, key, observer, ref childIndex),
                                         observer.OnError,
                                         () => { }
-                                    ).DisposeWith(disposables);
+                                              ).DisposeWith(disposables);
                             }
                             return disposables;
                         });
@@ -240,10 +233,15 @@ namespace Utility.Nodes.Meta
                             return composite;
                             IDisposable createChildNode(INodeViewModel parent, INodeViewModel child, int index, IObserver<INodeViewModel> observer)
                             {
+                                if (child.Name() == null)
+                                    throw new Exception("child name is null");
                                 return _repository.Value
                                     .Find((GuidKey)parent.Key(), child.Name(), type: GetNodeType(child), index: index)
                                     .Subscribe(key =>
                                     {
+                                        if (key == null)
+                                            throw new Exception("Key is null");
+
                                         var existingNode = _nodes.SingleOrDefault(a => a.Key() == key.Value.Guid.ToString());
                                         if (existingNode != null)
                                         {
@@ -268,7 +266,6 @@ namespace Utility.Nodes.Meta
             return _repository.Value
             .Find((GuidKey)node.Key(), guid: guid)
             .SelectMany(key => activateNode(node, key));
-
         }
 
         public IObservable<INodeViewModel> FindChild(INodeViewModel node, Guid guid)
@@ -302,7 +299,6 @@ namespace Utility.Nodes.Meta
                 //}).DisposeWith(_compositeDisposable);
                 return _compositeDisposable;
             });
-
         }
 
         private IObservable<INodeViewModel> findChild(INodeViewModel node, Guid guid)
@@ -326,7 +322,7 @@ namespace Utility.Nodes.Meta
             });
         }
 
-        IObservable<INodeViewModel> activateNode(INodeViewModel parent, Structs.Repos.Key? key)
+        private IObservable<INodeViewModel> activateNode(INodeViewModel parent, Structs.Repos.Key? key)
         {
             return Observable.Create<INodeViewModel>(observer =>
             {
@@ -340,36 +336,6 @@ namespace Utility.Nodes.Meta
                 observer.OnNext(newNode);
                 return Disposable.Empty;
             });
-        }
-
-        public void Save()
-        {
-            ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
-
-            Single(nameof(NodeMethodFactory.BuildDirty))
-                .Subscribe(async tree =>
-                {
-                    if (tree is not CollectionModel<DirtyModel> model)
-                        throw new Exception(ERROR_INVALID_DIRTY_MODEL);
-
-                    await processDirtyItems(tree);
-                })
-                .DisposeWith(_compositeDisposable);
-
-            async Task processDirtyItems(INodeViewModel tree)
-            {
-                var itemsToProcess = tree.ToArray();
-
-                foreach (var item in itemsToProcess)
-                {
-                    if (item is DirtyModel { SourceKey: { } sourceKey, PropertyName: { } propertyName, NewValue: { } newValue })
-                    {
-                        _repository.Value.Set(Guid.Parse(sourceKey), propertyName, newValue, DateTime.Now);
-                        tree.Remove(item);
-                        await Task.Delay(200);
-                    }
-                }
-            }
         }
 
         public IObservable<INodeViewModel> Single(string key) => Many(key).Take(1);
@@ -413,9 +379,9 @@ namespace Utility.Nodes.Meta
                 observer.OnNext(node);
 
                 return _repository
-                        .Value
-                        .InsertRoot(guid, name, GetNodeType(node))
-                        .Subscribe(_ =>
+                       .Value
+                       .InsertRoot(guid, name, GetNodeType(node))
+                       .Subscribe(_ =>
                         {
                             Add(node);
                             observer.OnCompleted();
@@ -432,11 +398,10 @@ namespace Utility.Nodes.Meta
 
         #region Private Methods
 
-
         private static void validateKey(Structs.Repos.Key? key)
         {
             if (!key.HasValue)
-               throw new Exception(ERROR_KEY_NOT_FOUND);
+                throw new Exception(ERROR_KEY_NOT_FOUND);
         }
 
         private static Type GetNodeType(object node)
@@ -444,7 +409,7 @@ namespace Utility.Nodes.Meta
             return node is IGetType getType ? getType.GetType() : node.GetType();
         }
 
-        #endregion
+        #endregion Private Methods
 
         #region Dispose Pattern
 
@@ -463,13 +428,12 @@ namespace Utility.Nodes.Meta
                 _compositeDisposable?.Dispose();
                 _nodes?.Clear();
                 _selections?.Dispose();
-                _dirty?.Dispose();
             }
 
             _disposed = true;
         }
 
-        #endregion
+        #endregion Dispose Pattern
     }
 
     public class MethodValue

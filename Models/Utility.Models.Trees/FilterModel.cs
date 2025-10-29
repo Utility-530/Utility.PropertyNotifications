@@ -34,8 +34,6 @@ namespace Utility.Models.Trees
             this.WithChangesTo(a => (a as IGetParent<IReadOnlyTree>).Parent).Subscribe(a =>
             {
                 this.LocalIndex = a.Children.Count();
-                this.IsPersistable = true;
-                this.IsExpanded = true;
             });
         }
 

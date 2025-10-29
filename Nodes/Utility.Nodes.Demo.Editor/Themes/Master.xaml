@@ -1,70 +1,58 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:t="http://schemas.utility.com/trees"
                     xmlns:local="clr-namespace:Utility.Nodes.Demo.Editor"
+                    xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
                     xmlns:conv="http://schemas.utility.com/converters"
-                    xmlns:bc="http://schemas.utility.com/Breadcrumbs" 
-                    xmlns:att="http://schemas.utility.com/attached" 
-                    xmlns:beh="http://schemas.utility.com/behaviors" 
-                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors" xmlns:res="http://schemas.utility.com/resourcedictionary">
+                    xmlns:bc="http://schemas.utility.com/Breadcrumbs"
+                    xmlns:att="http://schemas.utility.com/attached"
+                    xmlns:beh="http://schemas.utility.com/behaviors"
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors" 
+                    xmlns:res="http://schemas.utility.com/resourcedictionary">
 
     <!--<ResourceDictionary.MergedDictionaries>
-        <res:SharedResourceDictionary 
+        <res:SharedResourceDictionary
     </ResourceDictionary.MergedDictionaries>-->
 
     <Style x:Key="ComboEx2Style" TargetType="{x:Type t:CustomTreeViewItem}" BasedOn="{StaticResource ComboExStyle}">
-        <Setter Property="bc:TreeViewEx.CurrentItem" Value="{Binding Current, Mode=TwoWay}"/>
-        <Setter Property="Selection" Value="{Binding Path=SelectionItem, RelativeSource={RelativeSource Mode=Self}}"/>
-        <!--<Setter Property="ItemsSource" Value="{Binding Children}"></Setter>-->
-        <!--<Setter Property="Selection" Value="{Binding Path=(att:TreeEx.SelectedItem), RelativeSource={RelativeSource Mode=Self}}"></Setter>-->
-        <!--<Setter Property="ItemTemplate">
-            <Setter.Value>
-                <StaticResource ResourceKey="ItemTemplate"/>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="EditTemplate">
-            <Setter.Value >
-                <StaticResource ResourceKey="EditTemplate"/>
-            </Setter.Value>
-        </Setter>-->
+        <Setter Property="bc:TreeViewEx.CurrentItem" Value="{Binding Current, Mode=TwoWay}" />
+        <Setter Property="Selection" Value="{Binding Path=SelectionItem, RelativeSource={RelativeSource Mode=Self}}" />
+
         <att:InteractivitySetter Property="att:InteractivityItems.Template">
             <Setter.Value>
                 <att:InteractivityTemplate>
                     <att:InteractivityItems>
                         <att:InteractivityItems.Triggers>
                             <i:EventTrigger EventName="Change">
-                                <beh:InvokeCommandAction Command="{Binding AddCommand}" EventArgsConverter="{StaticResource AddDataFileConverter}"/>
+                                <beh:InvokeCommandAction Command="{Binding AddCommand}" EventArgsConverter="{StaticResource AddDataFileConverter}" />
                             </i:EventTrigger>
                         </att:InteractivityItems.Triggers>
                     </att:InteractivityItems>
                 </att:InteractivityTemplate>
             </Setter.Value>
         </att:InteractivitySetter>
-        <!--<Setter Property="Selection" Value="{Binding Current, Mode=TwoWay}"></Setter>-->
     </Style>
 
     <local:ComboContainerStyleSelector x:Key="ComboContainerStyleSelector"
-                                    DefaultStyle="{StaticResource DefaultStyle}" 
+                                    DefaultStyle="{StaticResource DefaultStyle}"
                                     ComboStyle="{StaticResource ComboEx2Style}">
     </local:ComboContainerStyleSelector>
 
-
-    <DataTemplate DataType="{x:Type local:MasterViewModel}">
+    <HierarchicalDataTemplate x:Key="MasterTemplate" DataType="{x:Type nodes:NodeViewModel}" ItemsSource="{Binding Children}">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition  Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
 
-            <t:CustomTreeView   
-                ItemsSource="{Binding Selection, Mode=OneWay}"    
+            <t:CustomTreeView
+                ItemsSource="{Binding Selection, Mode=OneWay}"
                 ItemContainerStyleSelector="{StaticResource ComboContainerStyleSelector}">
             </t:CustomTreeView>
 
-            <Viewbox Grid.Row="1" HorizontalAlignment="Left">
-                <t:CustomTreeView  ItemsSource="{Binding Controls}" ItemContainerStyle="{StaticResource DefaultStyle}"/>
-            </Viewbox>
+            <!--<Viewbox Grid.Row="1" HorizontalAlignment="Left">
+                <t:CustomTreeView  ItemsSource="{Binding Controls}" ItemContainerStyle="{StaticResource DefaultStyle}" />
+            </Viewbox>-->
         </Grid>
-    </DataTemplate>
-
+    </HierarchicalDataTemplate>
 </ResourceDictionary>

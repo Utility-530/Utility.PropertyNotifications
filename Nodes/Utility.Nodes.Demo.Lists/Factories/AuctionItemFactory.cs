@@ -95,10 +95,10 @@ namespace Utility.Nodes.Demo.Lists.Factories
                         }, guid);
                         }, raisePropertyCalled:false, raisePropertyReceived:false) {Name = details, DataTemplate = "Json"},
                     new Model<string>() { Name = html, DataTemplate="Html" },
-                    new ReadOnlyStringModel(attach: stringModel=>{
+                    new Model<string>(attach: stringModel=>{
                               stringModel.ReactTo<RazorFileReturnParam>(setAction: a => stringModel.Set((string)a), guid: guid);
                     }) { Name = html1, DataTemplate = "HtmlEditor" },
-                    new ReadOnlyStringModel(attach: rstringModel =>{
+                    new Model<string>(attach: rstringModel =>{
                          rstringModel.ReactTo<RazorFileReturnParam>(setAction: a => rstringModel.Set((string)a), guid: guid);
                     }) { Name = html2, DataTemplate = "HtmlWebViewer" },
                 ],

@@ -6,17 +6,16 @@ using Chronic;
 using Splat;
 using System.IO;
 using System.Reactive.Linq;
+using Utility.Entities.Comms;
 using Utility.Interfaces;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
-using Utility.Models.Trees;
 using Utility.Nodes.Meta;
 using Utility.Observables;
 using Utility.Observables.Generic;
 using Utility.PropertyDescriptors;
-using Utility.PropertyNotifications;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Extensions.Async;
 
@@ -36,29 +35,29 @@ namespace Utility.Nodes.Demo.Filters.Services
 
         public ParserService()
         {
-            Locator.Current.GetService<IObservableIndex<INodeViewModel>>()[nameof(NodeMethodFactory.BuildContentRoot)]
-                .CombineLatest(Locator.Current.GetService<IObservableIndex<INodeViewModel>>()[nameof(NodeMethodFactory.BuildHtmlRoot)])
-                .Subscribe(nodes =>
-                {
-                    var (node, htmlNode) = nodes;
+            //Locator.Current.GetService<IObservableIndex<INodeViewModel>>()[nameof(NodeMethodFactory.BuildContentRoot)]
+            //    .CombineLatest(Locator.Current.GetService<IObservableIndex<INodeViewModel>>()[nameof(NodeMethodFactory.BuildHtmlRoot)])
+            //    .Subscribe(nodes =>
+            //    {
+            //        var (node, htmlNode) = nodes;
 
-                    if (htmlNode is StringModel stringModel)
-                    {
-                        AddElementByPositionAsync(node)
-                        .Subscribe(html =>
-                        {
-                            stringModel.Set(html);
-                        }).DisposeWith(this);
+            //        if (htmlNode is Model<string> stringModel)
+            //        {
+            //            AddElementByPositionAsync(node)
+            //            .Subscribe(html =>
+            //            {
+            //                stringModel.Set(html);
+            //            }).DisposeWith(this);
 
-                        ControlsService.Instance
-                        .Where(a => a.ControlEventType == ControlEventType.Refresh)
-                        .Subscribe(a =>
-                        {
-                            stringModel.Set(AddElementByPosition(node));
-                        }).DisposeWith(this);
+            //            Globals.Events
+            //            .OfType<RefreshEvent>()
+            //            .Subscribe(a =>
+            //            {
+            //                stringModel.Set(AddElementByPosition(node));
+            //            }).DisposeWith(this);
 
-                    }
-                }).DisposeWith(this);
+            //        }
+            //    }).DisposeWith(this);
         }
 
 

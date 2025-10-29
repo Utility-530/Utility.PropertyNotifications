@@ -29,30 +29,15 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 new Model(() => [
                     new Model<string>() { Name = search, DataTemplate = "SearchEditor" },
                     new ListModel(type) { Name = list },
-                    new EditModel(attach: node =>
+                    new Model(attach: node =>
                     {
-                        //node
-                        //.WithChangesTo(a => (a as IGetValue).Value)
-                        //.Subscribe(model =>
-                        //{
-                        //    if (model is Loan creditCardModel)
-                        //    {
-                        //        creditCardModel
-                        //        .WhenChanged()
-                        //        .Subscribe(a =>
-                        //        {
-                        //            if(a.Name!= nameof(Loan.LastEdit))
-                        //            {
-                        //                creditCardModel.LastEdit = DateTime.Now;
-                        //                creditCardModel.RaisePropertyChanged(nameof(Loan.LastEdit));
-                        //            }
-                        //        });
-                        //    }
-                        //});
                         node.ReactTo<SelectionReturnParam>(setAction: (a) => { node.Value = a; node.RaisePropertyChanged(nameof(EditModel.Value)); }, guid: guid);
-
                     })
-                    { Name = edit },
+                    { 
+                        Name = edit,
+                        IsValueTracked = false,
+                        DataTemplate = "EditTemplate"
+                    },
                     new Model<string>() { Name = summary , DataTemplate = "MoneySumTemplate", IsValueTracked = false }
                 ],
 

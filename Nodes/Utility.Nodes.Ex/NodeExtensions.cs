@@ -4,6 +4,7 @@ using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
+using Utility.Models;
 using Utility.Models.Trees;
 using Utility.PropertyNotifications;
 using Utility.Reactives;
@@ -46,17 +47,16 @@ namespace Utility.Nodes.Ex
             return t_tree;
         }
 
-        public static ITree ToViewModelTree(this ReadOnlyStringModel[] models, Predicate<Type>? typePredicate = null, IViewModelTree? t_tree = null)
+        public static ITree ToViewModelTree(this Model<string>[] models, Predicate<Type>? typePredicate = null, IViewModelTree? t_tree = null)
         {
             t_tree ??= new NodeViewModel("root");
 
             foreach (var model in models)
             {
-
                 model.WhenReceivedFrom(a => a.IsExpanded).Subscribe(isExpanded =>
                 {
                     if (isExpanded)
-                        ToViewModelTree([.. model.Items().OfType<ReadOnlyStringModel>()], t_tree: model);
+                        ToViewModelTree([.. model.Items().OfType<Model<string>>()], t_tree: model);
                 });
 
                 t_tree.Add(model);
@@ -101,7 +101,5 @@ namespace Utility.Nodes.Ex
         {
             return Name;
         }
-
-
     }
 }

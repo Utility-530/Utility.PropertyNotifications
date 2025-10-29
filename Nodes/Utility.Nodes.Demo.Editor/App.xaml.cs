@@ -4,15 +4,17 @@ using System.Reflection;
 using System.Windows;
 using Utility.Conversions.Json.Newtonsoft;
 using Utility.Interfaces.Exs;
+using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
-using Utility.Models;
+using Utility.Interfaces.NonGeneric.Dependencies;
+using Utility.Models.Diagrams;
 using Utility.Nodes.Demo.Filters.Services;
 using Utility.Nodes.Meta;
 using Utility.Repos;
-using Utility.WPF.Templates;
 using Utility.ServiceLocation;
-using Utility.Interfaces.Exs.Diagrams;
+using Utility.Services.Meta;
+using Utility.WPF.Templates;
 
 namespace Utility.Nodes.Demo.Editor
 {
@@ -25,39 +27,56 @@ namespace Utility.Nodes.Demo.Editor
         {
             SQLitePCL.Batteries.Init();
 
-            Globals.Register.Register<ITreeRepository>(()=> new TreeRepository("../../../Data"));
-            //Locator.CurrentMutable.RegisterConstant<INodeSource>(NodeSource.Instance);
-            Globals.Register.Register<INodeSource>(()=>new NodeEngine());
+
             Locator.CurrentMutable.RegisterConstant<IFilter>(TreeViewFilter.Instance);
             Locator.CurrentMutable.RegisterConstant<IExpander>(WPF.Expander.Instance);
             //Locator.CurrentMutable.RegisterConstant<IContext>(Context.Instance);
             Locator.CurrentMutable.RegisterLazySingleton<MethodCache>(() => MethodCache.Instance);
             Locator.CurrentMutable.RegisterLazySingleton<IObservableIndex<INodeViewModel>>(() => MethodCache.Instance);
-            Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => NodeMethodFactory.Instance);
+            //Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => NodeMethodFactory.Instance);
+            Locator.CurrentMutable.RegisterLazySingleton<IEnumerableFactory<Method>>(() => new NodeMethodFactory());
 
-            Locator.CurrentMutable.RegisterLazySingleton<MasterViewModel>(() => new MasterViewModel());
-            Locator.CurrentMutable.RegisterLazySingleton<ContainerViewModel>(() => new ContainerViewModel());
+            //Locator.CurrentMutable.RegisterLazySingleton<MasterViewModel>(() => new MasterViewModel());
+            //Locator.CurrentMutable.RegisterLazySingleton<ContainerViewModel>(() => new ContainerViewModel());
             Locator.CurrentMutable.RegisterLazySingleton<System.Windows.Controls.DataTemplateSelector>(() => CustomDataTemplateSelector.Instance);
 
+            initialiseGlobals(Globals.Register);
 
             JsonConvert.DefaultSettings = () => SettingsFactory.Combined;
 
-            ControlsService _service = ControlsService.Instance;
 
-            ComboService comboService = new ();
-
-            var window = new Window() { Content = Locator.Current.GetService<ContainerViewModel>() };
+            ComboService comboService = new();
+            var res = this.FindResource("MasterTemplate") as DataTemplate;
+            var window = new Window()
+            {/* Content = Locator.Current.GetService<ContainerViewModel>()*/
+                ContentTemplate = this.FindResource("MasterTemplate") as DataTemplate
+            };
 
             window.Show();
+            MethodCache.Instance[nameof(NodeMethodFactory.BuildContainer)]
+                .Subscribe(node =>
+                {
+                    window.Content = node;
+
+                });
 
 
-            Globals.Events.Subscribe(a => { 
-            
-            
-            });
             base.OnStartup(e);
 
         }
 
+
+        private static void initialiseGlobals(IRegister register)
+        {
+            register.Register<IServiceResolver>(() => new ServiceResolver());
+            register.Register<INodeSource>(() => new NodeEngine());
+            register.Register<ITreeRepository>(() => new TreeRepository("../../../Data"));
+            register.Register<IPlaybackEngine>(() => new PlaybackEngine());
+        }
+
     }
+
+
+
+
 }

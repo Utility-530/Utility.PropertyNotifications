@@ -18,7 +18,7 @@ namespace Utility.Nodes.Demo.Editor
 
         public override Style SelectStyle(object item, DependencyObject container)
         {
-             //var parent = (container as TreeViewItem).FindParent<TreeViewItem>();
+            //var parent = (container as TreeViewItem).FindParent<TreeViewItem>();
 
             return item switch
             {
@@ -33,9 +33,9 @@ namespace Utility.Nodes.Demo.Editor
         public Style DefaultStyle { get; set; }
         public Style ComboStyle { get; set; }
 
-    }  
-    
-    
+    }
+
+
     public class CollectionStyleSelector : StyleSelector
     {
 
@@ -45,8 +45,8 @@ namespace Utility.Nodes.Demo.Editor
 
             return item switch
             {
-                IChildCollection  => CollectionStyle,
-                 _  => ItemStyle,
+                //IChildCollection  => CollectionStyle,
+                _ => ItemStyle,
             };
         }
 

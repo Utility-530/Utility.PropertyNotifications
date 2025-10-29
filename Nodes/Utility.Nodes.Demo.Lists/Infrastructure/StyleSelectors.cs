@@ -29,23 +29,4 @@ namespace Utility.Nodes.Demo.Lists
 
     }  
     
-    
-    public class CollectionStyleSelector : StyleSelector
-    {
-
-        public override Style SelectStyle(object item, DependencyObject container)
-        {
-            var parent = (container as TreeViewItem).FindParent<TreeViewItem>();
-
-            return item switch
-            {
-                 IChildCollection => CollectionStyle,
-                 ICollectionItem => ItemStyle,
-            };
-        }
-
-        public Style CollectionStyle { get; set; }
-        public Style ItemStyle { get; set; }
-
-    }
 }

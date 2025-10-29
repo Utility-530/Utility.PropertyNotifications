@@ -6,7 +6,7 @@
 
 
 
-    <DataTemplate DataType="{x:Type local:ContainerViewModel}" >
+    <!--<DataTemplate DataType="{x:Type local:ContainerViewModel}" >
         <utl:SplitControl Movement="BottomToTop" att:Ex.Indent="100">
             <utl:SplitControl.Header>
                 <Binding Path="Master"></Binding>
@@ -15,6 +15,6 @@
                 <Binding Path="Slave"></Binding>
             </utl:SplitControl.Content>
         </utl:SplitControl>
-    </DataTemplate>
+    </DataTemplate>-->
 
 </ResourceDictionary>

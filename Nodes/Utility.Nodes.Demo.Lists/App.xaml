@@ -18,13 +18,12 @@
              xmlns:res="http://schemas.utility.com/resourcedictionary" 
              xmlns:utl="http://schemas.utility.com/utilitywpf" 
              xmlns:btns="http://schemas.utility.com/buttons"
-                    xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                    xmlns:grid="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF"
-         
-                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                    xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-                    mc:Ignorable="d">
+             xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:grid="clr-namespace:Syncfusion.UI.Xaml.Grid;assembly=Syncfusion.SfGrid.WPF"        
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             mc:Ignorable="d">
 
     <Application.Resources>
         <ResourceDictionary>
@@ -34,13 +33,11 @@
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml"/>
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml"/>
                 <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Generic.xaml"/>
+                <res:SharedResourceDictionary Source="/Utility.Models.Templates;component/Templates.xaml"/>
                 <res:SharedResourceDictionary Source="/Themes/Master.xaml"/>
                 <res:SharedResourceDictionary Source="/Themes/Container.xaml"/>
                 <res:SharedResourceDictionary Source="/Utility.Nodes.WPF.Templates.SyncFusion;component/Templates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-
-
-     
 
             <!--  Style for Chromeless Window Title Bar  -->
             <!--<ControlTemplate x:Key="Titlebartemplate" TargetType="{x:Type syncfusion:TitleBar}">
@@ -688,7 +685,7 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

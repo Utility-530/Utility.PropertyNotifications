@@ -13,11 +13,10 @@ using Utility.Trees;
 
 namespace Utility.Nodes
 {
-
     public class ViewModelTree : Tree, IViewModelTree, ISet, IGet
     {
         private bool? isHighlighted;
-        private bool isExpanded = false;
+        private bool isExpanded = true;
         private Arrangement arrangement;
         private int column;
         private int row;
@@ -45,9 +44,10 @@ namespace Utility.Nodes
         private bool isActive;
         protected string name;
         private bool isChildrenRefreshed;
-        private bool isPersistable;
         private object? value;
+
         public event Action? Closed;
+
         public bool isEnabled = true;
 
         public ViewModelTree()
@@ -128,7 +128,7 @@ namespace Utility.Nodes
             set => this.RaisePropertyReceived(ref this.isReadOnly, value);
         }
 
-        // relates to the ability to add/remove nodes 
+        // relates to the ability to add/remove nodes
         public bool IsEditable
         {
             get { RaisePropertyCalled(isEditable); return isEditable; }
@@ -206,7 +206,6 @@ namespace Utility.Nodes
             set => this.RaisePropertyReceived(ref this.order, value);
         }
 
-
         public bool? IsVisible
         {
             get { RaisePropertyCalled(isVisible); return isVisible; }
@@ -221,7 +220,7 @@ namespace Utility.Nodes
             }
         }
 
-        public bool IsEnabled 
+        public bool IsEnabled
         {
             get { RaisePropertyCalled(isEnabled); return isEnabled; }
             set => this.RaisePropertyReceived(ref this.isEnabled, value);
@@ -259,11 +258,6 @@ namespace Utility.Nodes
             set => this.RaisePropertyReceived(ref this.itemsPanelTemplate, value);
         }
 
-        public bool IsPersistable
-        {
-            get { RaisePropertyCalled(isPersistable); return isPersistable; }
-            set => this.RaisePropertyReceived(ref this.isPersistable, value);
-        }
 
         public string Title
         {
@@ -278,18 +272,7 @@ namespace Utility.Nodes
         public IViewModelTree Current
         {
             get { RaisePropertyCalled(title); return current; }
-            set 
-            {        
-                if (current != value)
-                {
-                    var previousValue = current;
-                    if (current != null)
-                        current.IsPersistable = false;
-                    if (value != null)
-                        value.IsPersistable = true;
-                    this.RaisePropertyReceived(ref this.current, value);
-                }
-            }
+            set => this.RaisePropertyReceived(ref this.current, value);
         }
 
         public bool IsChildrenRefreshed
@@ -329,8 +312,6 @@ namespace Utility.Nodes
                 case nameof(IsExpanded): isExpanded = Convert.ToBoolean(value); break;
                 case nameof(IsReplicable): isReplicable = Convert.ToBoolean(value); break;
                 case nameof(IsRemovable): isRemovable = Convert.ToBoolean(value); break;
-                case nameof(IsAugmentable): isAugmentable = Convert.ToBoolean(value); break;
-                case nameof(IsPersistable): isPersistable = Convert.ToBoolean(value); break;
                 case nameof(IsChildrenRefreshed): isChildrenRefreshed = Convert.ToBoolean(value); break;
                 case nameof(Order): order = Convert.ToInt32(value); break;
                 case nameof(Row): row = Convert.ToInt32(value); break;
@@ -351,7 +332,6 @@ namespace Utility.Nodes
             RaisePropertyChanged(name);
         }
 
-
         public virtual object? Get(string name)
         {
             return name switch
@@ -370,8 +350,6 @@ namespace Utility.Nodes
                 nameof(IsExpanded) => isExpanded,
                 nameof(IsReplicable) => isReplicable,
                 nameof(IsRemovable) => isRemovable,
-                nameof(IsAugmentable) => isAugmentable,
-                nameof(IsPersistable) => isPersistable,
                 nameof(IsChildrenRefreshed) => isChildrenRefreshed,
                 nameof(Order) => order,
                 nameof(Row) => row,

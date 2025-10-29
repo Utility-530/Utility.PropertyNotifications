@@ -17,6 +17,7 @@
              xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020" 
              xmlns:res="http://schemas.utility.com/resourcedictionary" 
              xmlns:utl="http://schemas.utility.com/utilitywpf" 
+             xmlns:markup="http://schemas.utility.com/markup"
              xmlns:btns="http://schemas.utility.com/buttons">
 
     <Application.Resources>
@@ -30,11 +31,79 @@
                 <res:SharedResourceDictionary Source="/Themes/Slave.xaml"/>
                 <res:SharedResourceDictionary Source="/Themes/Master.xaml"/>
                 <res:SharedResourceDictionary Source="/Themes/Container.xaml"/>
+                <res:SharedResourceDictionary Source="/Utility.Models.Templates;component/Templates.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
 
+            <Style x:Key="ComboEx2Style" TargetType="{x:Type ct:CustomTreeViewItem}" BasedOn="{StaticResource ComboExStyle}">
+                <Setter Property="bc:TreeViewEx.CurrentItem" Value="{Binding Current, Mode=TwoWay}" />
+                <Setter Property="Selection" Value="{Binding Path=SelectionItem, RelativeSource={RelativeSource Mode=Self}}" />
 
-            
+                <att:InteractivitySetter Property="att:InteractivityItems.Template">
+                    <Setter.Value>
+                        <att:InteractivityTemplate>
+                            <att:InteractivityItems>
+                                <att:InteractivityItems.Triggers>
+                                    <i:EventTrigger EventName="Change">
+                                        <beh:InvokeCommandAction Command="{Binding AddCommand}" EventArgsConverter="{StaticResource AddDataFileConverter}" />
+                                    </i:EventTrigger>
+                                </att:InteractivityItems.Triggers>
+                            </att:InteractivityItems>
+                        </att:InteractivityTemplate>
+                    </Setter.Value>
+                </att:InteractivitySetter>
+            </Style>
+
+            <filters:StyleSelector x:Key="StyleSelector" DefaultStyle="ViewContentStyle" />
+
+            <Style x:Key="SlaveStyle" TargetType="{x:Type ct:CustomTreeViewItem}" >
+                <Setter Property="ItemContainerStyleSelector" Value="{StaticResource StyleSelector }" />
+                <Setter Property="ItemTemplate">
+                    <Setter.Value>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                            <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
+                                <ContentControl Content="{Binding Path=.}" ContentTemplateSelector="{x:Static filters:DataTemplateSelector.Instance}" />
+                            </Border>
+                        </HierarchicalDataTemplate>
+                    </Setter.Value>
+                </Setter>
+
+            </Style>
+            <!--<ct:CustomTreeView ItemsSource="{Binding Content}" ItemContainerStyleSelector="{StaticResource StyleSelector }">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                        <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
+                            <ContentControl Content="{Binding Path=.}" ContentTemplateSelector="{x:Static filters:DataTemplateSelector.Instance}" />
+                        </Border>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectedItemChanged">
+                        <beh:SetSelectedItemAction PropertyName="DataContext" TargetObject="{Binding ElementName=splitcontrol, Path=Header}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ct:CustomTreeView>-->
+
+
+            <local:ComboContainerStyleSelector x:Key="ComboContainerStyleSelector"
+                                    DefaultStyle="{StaticResource SlaveStyle}"
+                                    ComboStyle="{StaticResource ComboEx2Style}">
+            </local:ComboContainerStyleSelector>
+
+
+
+            <DataTemplate x:Key="MasterTemplate" DataType="{x:Type node:NodeViewModel}">
+                <ct:CustomTreeView       
+                    ItemsSource="{Binding Children}" 
+             >
+                    <ct:CustomTreeView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel/>
+                        </ItemsPanelTemplate>
+                    </ct:CustomTreeView.ItemsPanel>
+                </ct:CustomTreeView>
+            </DataTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
