@@ -1,111 +1,135 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    x:Class="Utility.Models.Templates.Templates"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:bc="Breadcrumbs.WPF" 
-                    xmlns:beh="http://schemas.utility.com/behaviors"
-                    xmlns:test="clr-namespace:TextBoxEx;assembly=TextBoxEx"
-                    xmlns:ui="http://toniccomputing.com/patterns/ui" 
-                    xmlns:local="clr-namespace:Utility.Models.Templates"     
-                    xmlns:e="clr-namespace:Utility.Enums;assembly=Utility.Enums"
-                    xmlns:inf="clr-namespace:Utility.Models.Trees;assembly=Utility.Models.Trees"
-                    xmlns:model="clr-namespace:Utility.Models;assembly=Utility.Models"
-                    xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
-                    xmlns:des="clr-namespace:Utility.PropertyDescriptors;assembly=Utility.PropertyDescriptors"
-                    xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit" 
-                    xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
-                    xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020"
-                    xmlns:templates="http://schemas.utility.com/templates" 
-                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-                    xmlns:conv="http://schemas.utility.com/converters" 
-                    xmlns:res="http://schemas.utility.com/resourcedictionary" 
-                    xmlns:html="http://schemas.utility.com/html"
-                    xmlns:controls="http://schemas.utility.com"
-                    xmlns:att="http://schemas.utility.com/attached"
-                    xmlns:c="http://schemas.utility.com/colours"
-                    xmlns:btns="http://schemas.utility.com/buttons" 
-                    xmlns:text="http://schemas.utility.com/texts"
-                    xmlns:fs="http://schemas.utility.com/filesystem"
-                    xmlns:markup="http://schemas.utility.com/markup"
-                    xmlns:list="http://schemas.utility.com/lists"
-                    xmlns:obj="http://schemas.utility.com/objects"
-                    xmlns:wpf1="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF">
+﻿<ResourceDictionary
+    x:Class="Utility.Models.Templates.Templates"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:abel="http://schemas.danielsabel.com/tinyhtmlwpf/2020"
+    xmlns:att="http://schemas.utility.com/attached"
+    xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+    xmlns:bc="Breadcrumbs.WPF"
+    xmlns:beh="http://schemas.utility.com/behaviors"
+    xmlns:btns="http://schemas.utility.com/buttons"
+    xmlns:c="http://schemas.utility.com/colours"
+    xmlns:controls="http://schemas.utility.com"
+    xmlns:conv="http://schemas.utility.com/converters"
+    xmlns:des="clr-namespace:Utility.PropertyDescriptors;assembly=Utility.PropertyDescriptors"
+    xmlns:e="clr-namespace:Utility.Enums;assembly=Utility.Enums"
+    xmlns:fs="http://schemas.utility.com/filesystem"
+    xmlns:html="http://schemas.utility.com/html"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:inf="clr-namespace:Utility.Models.Trees;assembly=Utility.Models.Trees"
+    xmlns:list="http://schemas.utility.com/lists"
+    xmlns:local="clr-namespace:Utility.Models.Templates"
+    xmlns:markup="http://schemas.utility.com/markup"
+    xmlns:model="clr-namespace:Utility.Models;assembly=Utility.Models"
+    xmlns:nodes="clr-namespace:Utility.Nodes;assembly=Utility.Nodes"
+    xmlns:obj="http://schemas.utility.com/objects"
+    xmlns:res="http://schemas.utility.com/resourcedictionary"
+    xmlns:templates="http://schemas.utility.com/templates"
+    xmlns:test="clr-namespace:TextBoxEx;assembly=TextBoxEx"
+    xmlns:text="http://schemas.utility.com/texts"
+    xmlns:ui="http://toniccomputing.com/patterns/ui"
+    xmlns:wpf1="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
+    xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit">
 
 
     <ResourceDictionary.MergedDictionaries>
         <!--<res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml"/>-->
-        <res:SharedResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Geometries;component/Resources.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml" />
 
     </ResourceDictionary.MergedDictionaries>
 
-    <conv:NewObjectConverter x:Key="NewObjectConverter"/>
-    <conv:PropertyNamesConverter x:Key="PropertyNamesConverter"/>
-    <conv:TypeNameConverter x:Key="TypeNameConverter"/>
-    <local:ValueChangeConverter x:Key="ValueChangeConverter"/>
-
-    <DataTemplate DataType="{x:Type nodes:ViewModelTree}">
-        <TextBlock Text="{Binding Name}"/>
-    </DataTemplate>
+    <conv:NewObjectConverter x:Key="NewObjectConverter" />
+    <conv:PropertyNamesConverter x:Key="PropertyNamesConverter" />
+    <conv:TypeNameConverter x:Key="TypeNameConverter" />
+    <local:ValueChangeConverter x:Key="ValueChangeConverter" />
+    <local:ModelTemplateSelector x:Key="ModelTemplateSelector" />
 
 
-    <!--<DataTemplate DataType="{x:Type model:CollectionModel}">
-        <ItemsControl ItemsSource="{Binding  Converter={StaticResource PropertyNamesConverter}, ConverterParameter={x:Static conv:PropertyType.TopLevelAndGenericArgument1}}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <DataTemplate.Resources>
-                        <Style TargetType="{x:Type TextBlock}">
-                            -->
-    <!--<Setter Property="Width" Value="100"/>-->
-    <!--
-                            <Setter Property="FontWeight" Value="DemiBold"/>
-                            <Setter Property="FontSize" Value="8"></Setter>
-                            <Setter Property="MaxWidth" Value="200"/>
-                            <Setter Property="Margin" Value="4,0,8,0"/>
-                        </Style>
-                    </DataTemplate.Resources>
-                    <TextBlock Text="{Binding }" ></TextBlock>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Rows="1"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-    </DataTemplate>-->
+    <HierarchicalDataTemplate
+        DataType="{x:Type nodes:NodeViewModel}"
+        ItemTemplateSelector="{StaticResource ModelTemplateSelector}"
+        ItemsSource="{Binding Children}">
+        <WrapPanel>
+            <ContentControl Content="{Binding}" ContentTemplateSelector="{StaticResource ModelTemplateSelector}">
+                <ContentControl.Style>
+                    <Style TargetType="{x:Type ContentControl}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Path=IsHighlighted}" Value="False">
+                                <Setter Property="Opacity" Value="0.3" />
+                            </DataTrigger>
+                            <!--<DataTrigger Binding="{Binding Path=IsHighlighted}" Value="{x:Null}">
+                                        <Setter Property="Foreground" Value="LightSkyBlue" />
+                                    </DataTrigger>-->
+                            <DataTrigger Binding="{Binding Path=IsHighlighted}" Value="True">
+                                <Setter Property="Opacity" Value="1" />
+                                <Setter Property="Foreground" Value="Orange" />
+                                <Setter Property="FontSize" Value="14" />
+                                <Setter Property="FontWeight" Value="Bold" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+            </ContentControl>
+        </WrapPanel>
+    </HierarchicalDataTemplate>
 
-    <DataTemplate DataType="{x:Type inf:IndexModel}">
-        <xc:IntegerUpDown   Value="{Binding Value}"></xc:IntegerUpDown>
+
+
+    <HierarchicalDataTemplate
+        x:Key="DefaultTemplate"
+        DataType="{x:Type nodes:NodeViewModel}"
+        ItemTemplateSelector="{StaticResource ModelTemplateSelector}"
+        ItemsSource="{Binding Children}">
+        <TextBlock Text="{Binding Name}" />
+    </HierarchicalDataTemplate>
+
+    <DataTemplate x:Key="IndexTemplate" DataType="{x:Type nodes:NodeViewModel}">
+        <xc:IntegerUpDown Value="{Binding Value}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:RelationModel}">
-        <ComboBox Grid.Column="0" ItemsSource="{ui:EnumSource {x:Type e:Relation}}" SelectedItem="{ui:EnumBinding {Binding Relation, Mode=TwoWay}}" />
+        <ComboBox
+            Grid.Column="0"
+            ItemsSource="{ui:EnumSource {x:Type e:Relation}}"
+            SelectedItem="{ui:EnumBinding {Binding Relation, Mode=TwoWay}}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:CommandModel}">
-        <Button Content="{Binding Name}" Command="{Binding Command}" Width="200"></Button>
+        <Button
+            Width="200"
+            Command="{Binding Command}"
+            Content="{Binding Name}" />
     </DataTemplate>
 
 
     <DataTemplate DataType="{x:Type inf:AndOrModel}">
-        <ComboBox  Margin="4" Grid.Row="1" 
-                    ItemsSource="{ui:EnumSource {Binding Value, Mode=OneTime}}" 
-                    SelectedItem="{ui:EnumBinding {Binding Value}}" 
-                    />
+        <ComboBox
+            Grid.Row="1"
+            Margin="4"
+            ItemsSource="{ui:EnumSource {Binding Value, Mode=OneTime}}"
+            SelectedItem="{ui:EnumBinding {Binding Value}}" />
     </DataTemplate>
     <DataTemplate x:Key="EnumTemplate" DataType="{x:Type model:Model}">
-        <ComboBox  Margin="4" Grid.Row="1" 
-                    ItemsSource="{ui:EnumSource {Binding Value, Mode=OneTime}}" 
-                    SelectedItem="{ui:EnumBinding {Binding Value}}" 
-                    />
+        <ComboBox
+            Grid.Row="1"
+            Margin="4"
+            ItemsSource="{ui:EnumSource {Binding Value, Mode=OneTime}}"
+            SelectedItem="{ui:EnumBinding {Binding Value}}" />
     </DataTemplate>
 
     <DataTemplate x:Key="SearchEditor" DataType="{x:Type nodes:NodeViewModel}">
-        <text:SearchBox x:Name="Searchbox" Text="{Binding Value, Mode=TwoWay}" Height="25" MinWidth="200">
+        <text:SearchBox
+            x:Name="Searchbox"
+            Height="25"
+            MinWidth="200"
+            Text="{Binding Value, Mode=TwoWay}">
             <i:Interaction.Triggers>
-                <i:EventTrigger EventName="Search" >
-                    <beh:SetterAction TargetObject="{Binding ElementName=Searchbox, Path=DataContext}" 
-                                      PropertyName="Value" 
-                                      Value="{Binding ElementName=Searchbox, Path=Text}"></beh:SetterAction>
+                <i:EventTrigger EventName="Search">
+                    <beh:SetterAction
+                        PropertyName="Value"
+                        TargetObject="{Binding ElementName=Searchbox, Path=DataContext}"
+                        Value="{Binding ElementName=Searchbox, Path=Text}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </text:SearchBox>
@@ -113,38 +137,40 @@
 
 
     <DataTemplate DataType="{x:Type inf:AssemblyModel}">
-        <TextBlock Text="{Binding Assembly, Converter={x:Static conv:AssemblyNameConverter.Instance}}">
-        </TextBlock>
+        <TextBlock Text="{Binding Assembly, Converter={x:Static conv:AssemblyNameConverter.Instance}}" />
     </DataTemplate>
 
-    <DataTemplate  x:Key="MoneySumTemplate" DataType="{x:Type nodes:NodeViewModel}">
+    <DataTemplate x:Key="MoneySumTemplate" DataType="{x:Type nodes:NodeViewModel}">
 
-        <Border Background="#F8F9FA" 
-        BorderBrush="#E9ECEF" 
-        BorderThickness="1" 
-        CornerRadius="8" 
-        Padding="16,12"
-        Margin="10">
+        <Border
+            Margin="10"
+            Padding="16,12"
+            Background="#F8F9FA"
+            BorderBrush="#E9ECEF"
+            BorderThickness="1"
+            CornerRadius="8">
             <StackPanel>
-                <!-- Header -->
-                <TextBlock Text="SUM" 
-                   FontSize="14" 
-                   FontWeight="SemiBold" 
-                   Foreground="#495057"
-                   Margin="0,0,0,8"/>
+                <!--  Header  -->
+                <TextBlock
+                    Margin="0,0,0,8"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Foreground="#495057"
+                    Text="SUM" />
 
-                <!-- Loan Amount Display -->
-                <TextBlock x:Name="TotalLoansTextBlock"
-                   Text="{Binding Value, StringFormat='£{0:N2}', ConverterCulture=en-GB}"
-                   FontSize="24" 
-                   FontWeight="Bold" 
-                   Foreground="#1A237E"
-                   HorizontalAlignment="Left"/>
+                <!--  Loan Amount Display  -->
+                <TextBlock
+                    x:Name="TotalLoansTextBlock"
+                    HorizontalAlignment="Left"
+                    FontSize="24"
+                    FontWeight="Bold"
+                    Foreground="#1A237E"
+                    Text="{Binding Value, StringFormat='£{0:N2}', ConverterCulture=en-GB}" />
 
-                <!-- Subtext -->
+                <!--  Subtext  -->
                 <!--
-                <TextBlock Text="Sum of all active loans" 
-                   FontSize="12" 
+                <TextBlock Text="Sum of all active loans"
+                   FontSize="12"
                    Foreground="#6C757D"
                    FontStyle="Italic"
                    Margin="0,4,0,0"/>-->
@@ -153,89 +179,91 @@
     </DataTemplate>
 
 
-    <!-- Value Change Converter -->
+    <!--  Value Change Converter  -->
 
 
 
     <DataTemplate x:Key="PriceTemplate" DataType="{x:Type model:Model}">
-        <Border Background="#F8F9FA" 
-            BorderBrush="#E9ECEF" 
-            BorderThickness="1" 
-            CornerRadius="8" 
-            Padding="16,12"
+        <Border
+            x:Name="MainBorder"
             Margin="10"
+            Padding="16,12"
+            Background="#F8F9FA"
+            BorderBrush="#E9ECEF"
+            BorderThickness="1"
+            CornerRadius="8"
             DataContext="{Binding Value}"
-            Tag="{Binding Converter={StaticResource ValueChangeConverter}}"
-            x:Name="MainBorder">
+            Tag="{Binding Converter={StaticResource ValueChangeConverter}}">
             <Border.Style>
                 <Style TargetType="Border">
                     <Style.Triggers>
-                        <!-- Green flash for increase -->
-                        <DataTrigger Binding="{Binding Path=Tag,RelativeSource={RelativeSource Mode=Self}}" Value="{x:Static local:ChangeType.Increase}">
+                        <!--  Green flash for increase  -->
+                        <DataTrigger Binding="{Binding Path=Tag, RelativeSource={RelativeSource Mode=Self}}" Value="{x:Static local:ChangeType.Increase}">
                             <DataTrigger.EnterActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
-                                                    From="#90EE90"
-                                                    To="#F8F9FA" 
-                                                    Duration="0:0:1.5"/>
+                                        <ColorAnimation
+                                            Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                            From="#90EE90"
+                                            To="#F8F9FA"
+                                            Duration="0:0:1.5" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </DataTrigger.EnterActions>
                             <DataTrigger.ExitActions>
                                 <BeginStoryboard>
                                     <Storyboard>
-                                        <ColorAnimation Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
-                                                    From="#FFB3B3"
-                                                    To="#F8F9FA" 
-                                                    Duration="0:0:1.5"/>
+                                        <ColorAnimation
+                                            Storyboard.TargetProperty="Background.(SolidColorBrush.Color)"
+                                            From="#FFB3B3"
+                                            To="#F8F9FA"
+                                            Duration="0:0:1.5" />
                                     </Storyboard>
                                 </BeginStoryboard>
                             </DataTrigger.ExitActions>
                         </DataTrigger>
 
-                        <!-- Red flash for decrease -->
+                        <!--  Red flash for decrease  -->
                         <!--<DataTrigger Binding="{Binding Path=Tag,RelativeSource={RelativeSource Mode=Self}}" Value="{x:Static local:ChangeType.Decrease}">
-                
+
                         </DataTrigger>-->
                     </Style.Triggers>
                 </Style>
             </Border.Style>
 
-            <StackPanel >
-                <!-- Header -->
-                <!--<TextBlock Text="SUM" 
-                       FontSize="14" 
-                       FontWeight="SemiBold" 
+            <StackPanel>
+                <!--  Header  -->
+                <!--<TextBlock Text="SUM"
+                       FontSize="14"
+                       FontWeight="SemiBold"
                        Foreground="#495057"
                        Margin="0,0,0,8"/>-->
 
-                <!-- Loan Amount Display with Change Indicator -->
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                    <TextBlock x:Name="TotalLoansTextBlock"
-                           Text="{Binding  StringFormat='£{0:N2}', ConverterCulture=en-GB}"
-                           FontSize="24" 
-                           FontWeight="Bold" 
-                           Foreground="#1A237E"
-                           HorizontalAlignment="Left"/>
+                <!--  Loan Amount Display with Change Indicator  -->
+                <StackPanel Margin="0,0,0,4" Orientation="Horizontal">
+                    <TextBlock
+                        x:Name="TotalLoansTextBlock"
+                        HorizontalAlignment="Left"
+                        FontSize="24"
+                        FontWeight="Bold"
+                        Foreground="#1A237E"
+                        Text="{Binding StringFormat='£{0:N2}', ConverterCulture=en-GB}" />
 
-                    <!-- Change Arrow -->
-                    <Polygon Margin="8,6,0,0" 
-                          VerticalAlignment="Center"
-                          >
+                    <!--  Change Arrow  -->
+                    <Polygon Margin="8,6,0,0" VerticalAlignment="Center">
                         <Polygon.Style>
                             <Style TargetType="Polygon">
                                 <!--<Setter Property="Visibility" Value="Collapsed"/>-->
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding ElementName=MainBorder, Path=Tag}" Value="{x:Static local:ChangeType.Increase}">
-                                        <Setter Property="Fill" Value="#28A745"/>
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                        <Setter Property="Points" Value="0,0 5,-5 10,0"/>
+                                        <Setter Property="Fill" Value="#28A745" />
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Setter Property="Points" Value="0,0 5,-5 10,0" />
                                     </DataTrigger>
-                                    <DataTrigger Binding="{Binding ElementName=MainBorder, Path=Tag}"  Value="{x:Static local:ChangeType.Decrease}">
-                                        <Setter Property="Fill" Value="#DC3545"/>
-                                        <Setter Property="Visibility" Value="Visible"/>
-                                        <Setter Property="Points" Value="0,0 5,5 10,0"/>
+                                    <DataTrigger Binding="{Binding ElementName=MainBorder, Path=Tag}" Value="{x:Static local:ChangeType.Decrease}">
+                                        <Setter Property="Fill" Value="#DC3545" />
+                                        <Setter Property="Visibility" Value="Visible" />
+                                        <Setter Property="Points" Value="0,0 5,5 10,0" />
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -243,10 +271,10 @@
                     </Polygon>
                 </StackPanel>
 
-                <!-- Subtext -->
+                <!--  Subtext  -->
                 <!--
-            <TextBlock Text="Sum of all active loans" 
-                       FontSize="12" 
+            <TextBlock Text="Sum of all active loans"
+                       FontSize="12"
                        Foreground="#6C757D"
                        FontStyle="Italic"
                        Margin="0,4,0,0"/>-->
@@ -258,145 +286,148 @@
         <!--<controls:BreadCrumbs
             ItemsSource="{Binding Type, Converter={x:Static conv:TypeHierarchyConverter.Instance}}">
         </controls:BreadCrumbs>-->
-        <TextBlock Text="{Binding Type, Converter={x:Static conv:TypeNameConverter.Instance}}">
-        </TextBlock>
+        <TextBlock Text="{Binding Type, Converter={x:Static conv:TypeNameConverter.Instance}}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:EditModel}">
         <obj:JsonControl Width="500" Height="400">
             <i:Interaction.Behaviors>
-                <obj:ObjectBehavior Object="{Binding Value, Mode=OneWay}" RaisePropertyChanged="True"/>
+                <obj:ObjectBehavior Object="{Binding Value, Mode=OneWay}" RaisePropertyChanged="True" />
+            </i:Interaction.Behaviors>
+        </obj:JsonControl>
+    </DataTemplate>
+
+    <DataTemplate x:Key="EditTemplate" DataType="{x:Type nodes:NodeViewModel}">
+        <obj:JsonControl Width="500" Height="400">
+            <i:Interaction.Behaviors>
+                <obj:ObjectBehavior Object="{Binding Value, Mode=OneWay}" RaisePropertyChanged="True" />
             </i:Interaction.Behaviors>
         </obj:JsonControl>
     </DataTemplate>
 
     <DataTemplate x:Key="Json" DataType="{x:Type model:Model}">
-        <obj:JsonControl Width="500" Height="400" Json="{Binding Value}">
-
-        </obj:JsonControl>
-    </DataTemplate>
-
-    <DataTemplate x:Key="StringRoot">
-        <Grid>
-            <TextBlock Text="{Binding Name}" Background="AliceBlue">
-            </TextBlock>
-        </Grid>
+        <obj:JsonControl
+            Width="500"
+            Height="400"
+            Json="{Binding Value}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:FileModel}">
         <Grid>
-            <TextBox Text="{Binding Value}" Background="CadetBlue">
-            </TextBox>
+            <TextBox Background="CadetBlue" Text="{Binding Value}" />
         </Grid>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:ValueModel}">
         <WrapPanel>
-            <ContentPresenter 
-            att:Base.Enumerable="{Binding AutoList}"
-            ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance}" Content="{Binding }">
+            <ContentPresenter
+                att:Base.Enumerable="{Binding AutoList}"
+                Content="{Binding}"
+                ContentTemplateSelector="{x:Static templates:CustomDataTemplateSelector.Instance}">
                 <i:Interaction.Behaviors>
-                    <local:UpdateContentPresenterBehavior Value="{Binding Value}" UpdateOnNull="True"/>
+                    <local:UpdateContentPresenterBehavior UpdateOnNull="True" Value="{Binding Value}" />
                 </i:Interaction.Behaviors>
             </ContentPresenter>
-            <btns:GeometryToggleButton  
+            <btns:GeometryToggleButton
+                Height="20"
+                Data="{StaticResource TargetGeometry}"
+                Fill="Black"
+                HoverForegroundBrush="{c:Blue}"
                 IsChecked="{Binding IsListening}"
-                    Fill="Black"
-                    StrokeThickness="1"
-                    PressedForegroundBrush="{c:Red}"
-                    Height="20"
-                    Data="{StaticResource TargetGeometry}"
-                    HoverForegroundBrush="{c:Blue}" />
+                PressedForegroundBrush="{c:Red}"
+                StrokeThickness="1" />
         </WrapPanel>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:ComparisonModel}">
-        <ComboBox
-                  ItemsSource="{ui:EnumSource {Binding Value}}" 
-                  SelectedItem="{ui:EnumBinding {Binding Value, Mode=TwoWay}}" >
+        <ComboBox ItemsSource="{ui:EnumSource {Binding Value}}" SelectedItem="{ui:EnumBinding {Binding Value, Mode=TwoWay}}">
             <i:Interaction.Behaviors>
-                <local:ResetSelectedIndexBehavior></local:ResetSelectedIndexBehavior>
+                <local:ResetSelectedIndexBehavior />
             </i:Interaction.Behaviors>
         </ComboBox>
     </DataTemplate>
 
     <DataTemplate x:Key="BooleanTemplate" DataType="{x:Type nodes:NodeViewModel}">
-        <CheckBox  IsChecked="{Binding Value}"></CheckBox>
+        <CheckBox IsChecked="{Binding Value}" />
     </DataTemplate>
 
-
     <DataTemplate DataType="{x:Type inf:ExceptionModel}">
-        <TextBlock Text="{Binding Exception.Message}" Foreground="{c:Red}" MinHeight="25" MinWidth="180" Background="GhostWhite"/>
+        <TextBlock
+            MinWidth="180"
+            MinHeight="25"
+            Background="GhostWhite"
+            Foreground="{c:Red}"
+            Text="{Binding Exception.Message}" />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type inf:ListModel}">
-        <list:CustomSelector 
-            Height="400"
+        <list:CustomSelector
+            x:Name="CustomSelector"
             Width="{Binding Path=ActualWidth, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"
-            SelectedItem="{Binding Value, Mode=TwoWay}"
-            x:Name="CustomSelector"                
-            ItemsWidth="300" ItemsHeight="500"
-            IsGrid="True"
-            RemoveCommand="{markup:Command Remove}"
-            CheckedPropertyName="IsRhPositive"    
+            Height="400"
+            CheckedPropertyName="IsRhPositive"
             Edit="{Binding Converter={StaticResource NewObjectConverter}, Mode=OneWay}"
-            ItemsSource="{Binding Collection, Mode=OneWay}" >
-            <!--Edit="{Binding Edit,Mode=TwoWay}">-->
+            IsGrid="True"
+            ItemsHeight="500"
+            ItemsSource="{Binding Collection, Mode=OneWay}"
+            ItemsWidth="300"
+            RemoveCommand="{markup:Command Remove}"
+            SelectedItem="{Binding Value, Mode=TwoWay}">
+            <!--  Edit="{Binding Edit,Mode=TwoWay}">  -->
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="FinishEdit">
-                    <beh:SetterAction PropertyName="Add" TargetObject="{Binding }" Converter="{StaticResource FinishEditConverter}"/>
+                    <beh:SetterAction
+                        Converter="{StaticResource FinishEditConverter}"
+                        PropertyName="Add"
+                        TargetObject="{Binding}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </list:CustomSelector>
     </DataTemplate>
 
-
-    <DataTemplate DataType="{x:Type nodes:NodeViewModel}">
+    <DataTemplate x:Key="ReadOnlyStringTemplate" DataType="{x:Type nodes:NodeViewModel}">
         <Grid>
-            <TextBox Text="{Binding Value}" MinWidth="60" Background="AliceBlue">
-            </TextBox>
+            <TextBlock
+                MinWidth="60"
+                Background="AliceBlue"
+                Text="{Binding Value}" />
         </Grid>
     </DataTemplate>
-
-
 
     <DataTemplate x:Key="HtmlEditor" DataType="{x:Type nodes:NodeViewModel}">
         <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
 
-        <avalonedit:TextEditor x:Name="_htmlEditor" 
-                           
-                                       VerticalScrollBarVisibility="Visible"                                    
-                                       BorderThickness="0"    
-                                       SyntaxHighlighting="HTML" 
-                                       ShowLineNumbers="True" >
+        <avalonedit:TextEditor
+            x:Name="_htmlEditor"
+            BorderThickness="0"
+            ShowLineNumbers="True"
+            SyntaxHighlighting="HTML"
+            VerticalScrollBarVisibility="Visible">
             <i:Interaction.Behaviors>
-                <html:TextEditorTextBehavior Html="{Binding Value}"/>
+                <html:TextEditorTextBehavior Html="{Binding Value}" />
             </i:Interaction.Behaviors>
         </avalonedit:TextEditor>
     </DataTemplate>
 
-
     <DataTemplate x:Key="HtmlWebViewer" DataType="{x:Type nodes:NodeViewModel}">
         <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
-        <WebBrowser >
+        <WebBrowser>
             <i:Interaction.Behaviors>
-                <beh:WebBrowserNavigationBehavior Html="{Binding Value, Mode=OneWay}"/>
+                <beh:WebBrowserNavigationBehavior Html="{Binding Value, Mode=OneWay}" />
             </i:Interaction.Behaviors>
         </WebBrowser>
     </DataTemplate>
 
-
-
     <DataTemplate x:Key="Html">
-        <TextBlock Text="Html"></TextBlock>
+        <TextBlock Text="Html" />
         <!--<html:HtmlEditorControl Html="{Binding Value, Mode=OneWay, HorizontalAlignment="Stretch" VerticalAlignment="Stretch"></html:HtmlEditorControl>-->
         <!--<html:TinyHtmlEditorControl Html="{Binding Value, Mode=OneWay}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>-->
         <!--<wpf1:HtmlPanel Text="{Binding Value, Mode=OneWay}"></wpf1:HtmlPanel>-->
-        <!--<avalonedit:TextEditor x:Name="_htmlEditor" 
-                           
-                                       VerticalScrollBarVisibility="Visible"                                    
-                                       BorderThickness="0"    
-                                       SyntaxHighlighting="HTML" 
+        <!--<avalonedit:TextEditor x:Name="_htmlEditor"
+
+                                       VerticalScrollBarVisibility="Visible"
+                                       BorderThickness="0"
+                                       SyntaxHighlighting="HTML"
                                        ShowLineNumbers="True" >
             <i:Interaction.Behaviors>
                 <html:TextEditorTextBehavior Html="{Binding Value}"/>
@@ -404,12 +435,12 @@
         </avalonedit:TextEditor>-->
     </DataTemplate>
 
-    <DataTemplate x:Key="ChromiumOutput" >
+    <DataTemplate x:Key="ChromiumOutput">
         <!--<Border BorderThickness="1" BorderBrush="Blue">
             <cefsharpwpf:ChromiumWebBrowser
                     Address="{Binding Mode=OneWay, Path=Address}"
                     Name="Browser">
-                -->
+        -->
         <!--<i:Interaction.Behaviors>
                     <behavior:ChromiumWebBrowserBehavior/>
                 </i:Interaction.Behaviors>-->
@@ -419,62 +450,43 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type des:MemberDescriptor}">
-        <Expander Header="{Binding Converter={StaticResource TypeNameConverter}}" Content="{Binding }" >
+        <Expander Content="{Binding}" Header="{Binding Converter={StaticResource TypeNameConverter}}">
             <Expander.ContentTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Converter={StaticResource ObjectDumperConverter}}"></TextBlock>
+                    <TextBlock Text="{Binding Converter={StaticResource ObjectDumperConverter}}" />
                 </DataTemplate>
             </Expander.ContentTemplate>
         </Expander>
     </DataTemplate>
 
 
-
-    <DataTemplate DataType="{x:Type inf:DirtyModel}">
-        <DataTemplate.Resources>
-            <Style TargetType="{x:Type TextBlock}">
-                <Setter Property="FontSize" Value="8"></Setter>
-                <Setter Property="MaxWidth" Value="60"/>
-                <Setter Property="Margin" Value="4,0,4,0"/>
-            </Style>
-        </DataTemplate.Resources>
-        <UniformGrid Rows="1">
-            <TextBlock Text="{Binding Path=SourceKey}"/>
-            <TextBlock Text="{Binding Path=PropertyName}"/>
-            <TextBlock Text="{Binding Path=OldValue}"/>
-            <TextBlock Text="{Binding Path=NewValue}"/>
-        </UniformGrid>
-
-    </DataTemplate>
-
-
     <Style x:Key="inlineText" TargetType="{x:Type TextBlock}">
-        <Setter Property="Margin" Value="10,5,10,0"/>
-        <Setter Property="FontWeight" Value="Normal"/>
-        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Margin" Value="10,5,10,0" />
+        <Setter Property="FontWeight" Value="Normal" />
+        <Setter Property="FontSize" Value="12" />
     </Style>
     <Style x:Key="titleText" TargetType="{x:Type TextBlock}">
-        <Setter Property="DockPanel.Dock" Value="Top"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="FontSize" Value="14"/>
-        <Setter Property="Margin" Value="10,5,10,0"/>
+        <Setter Property="DockPanel.Dock" Value="Top" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Margin" Value="10,5,10,0" />
     </Style>
     <Style TargetType="{x:Type Button}">
-        <Setter Property="Margin" Value="10,5,10,0"/>
-        <Setter Property="Width" Value="60"/>
+        <Setter Property="Margin" Value="10,5,10,0" />
+        <Setter Property="Width" Value="60" />
     </Style>
 
-    <DataTemplate DataType="{x:Type inf:DataFileModel}" x:Shared="false">
-        <Grid Background="#DCDCDC" Name="rootElement" >
+    <DataTemplate x:Shared="false" DataType="{x:Type inf:DataFileModel}">
+        <Grid Name="rootElement" Background="#DCDCDC">
             <Grid.Resources>
                 <Style TargetType="{x:Type TextBox}">
-                    <Setter Property="Margin" Value="10,5,10,0"/>
+                    <Setter Property="Margin" Value="10,5,10,0" />
                 </Style>
             </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -482,45 +494,54 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="0"
-        Grid.Row="1"
-        Style="{StaticResource inlineText}"
-        Name="aliasLabel">Alias</TextBlock>
-            <TextBlock Grid.Column="0"
-        Grid.Row="2"
-        Style="{StaticResource inlineText}"
-        Name="nameLabel">File Path</TextBlock>
+            <TextBlock
+                Name="aliasLabel"
+                Grid.Row="1"
+                Grid.Column="0"
+                Style="{StaticResource inlineText}">
+                Alias
+            </TextBlock>
+            <TextBlock
+                Name="nameLabel"
+                Grid.Row="2"
+                Grid.Column="0"
+                Style="{StaticResource inlineText}">
+                File Path
+            </TextBlock>
 
-            <TextBlock Grid.Column="1"
-                       Width="100"
-                       Grid.Row="1"
-                       Grid.ColumnSpan="3"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Bottom"
-                       Text="{Binding Alias}"
-                       Name="txtName"/>
+            <TextBlock
+                Name="txtName"
+                Grid.Row="1"
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                Width="100"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Text="{Binding Alias}" />
 
-            <TextBlock Grid.Column="1" Width="600"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Bottom"
-                       Grid.Row="2"
-                       Grid.ColumnSpan="3"
-                       Text="{Binding FilePath}"
-                       Name="txtAddress"/>
+            <TextBlock
+                Name="txtAddress"
+                Grid.Row="2"
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                Width="600"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Text="{Binding FilePath}" />
         </Grid>
     </DataTemplate>
 
-    <DataTemplate x:Key="EditTemplate" DataType="{x:Type inf:DataFileModel}">
-        <Grid Background="#DCDCDC" Name="rootElement">
+    <DataTemplate x:Key="EditDataFileTemplate" DataType="{x:Type inf:DataFileModel}">
+        <Grid Name="rootElement" Background="#DCDCDC">
             <Grid.Resources>
                 <Style TargetType="{x:Type TextBlock}">
-                    <Setter Property="Margin" Value="10,5,10,0"/>
+                    <Setter Property="Margin" Value="10,5,10,0" />
                 </Style>
             </Grid.Resources>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <Grid.RowDefinitions>
@@ -529,51 +550,59 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="0"
-        Grid.Row="1"
-        Style="{StaticResource inlineText}"
-        Name="aliasLabel">Alias</TextBlock>
-            <TextBlock Grid.Column="0"
-        Grid.Row="2"
-        Style="{StaticResource inlineText}"
-        Name="nameLabel">File Path</TextBlock>
+            <TextBlock
+                Name="aliasLabel"
+                Grid.Row="1"
+                Grid.Column="0"
+                Style="{StaticResource inlineText}">
+                Alias
+            </TextBlock>
+            <TextBlock
+                Name="nameLabel"
+                Grid.Row="2"
+                Grid.Column="0"
+                Style="{StaticResource inlineText}">
+                File Path
+            </TextBlock>
 
-            <TextBox Grid.Column="1"
-        Grid.Row="1"
-        Grid.ColumnSpan="3"
-        Text="{Binding Alias, Mode=TwoWay}"
-        Name="txtName"/>
+            <TextBox
+                Name="txtName"
+                Grid.Row="1"
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                Text="{Binding Alias, Mode=TwoWay}" />
 
 
-            <TextBox Grid.Column="1"
-        Grid.Row="2"
-        Grid.ColumnSpan="3"
-        Text="{Binding FilePath, Mode=TwoWay}"
-        Name="txtAddress"/>
+            <TextBox
+                Name="txtAddress"
+                Grid.Row="2"
+                Grid.Column="1"
+                Grid.ColumnSpan="3"
+                Text="{Binding FilePath, Mode=TwoWay}" />
         </Grid>
     </DataTemplate>
 
     <DataTemplate x:Key="DirectoryEditor" DataType="{x:Type nodes:NodeViewModel}">
-        <fs:FolderComboBrowser Margin="4"
-                               MaxWidth="220"
-                    Path="{Binding Value, Mode=TwoWay}"
-                    x:Name="FolderComboBrowser"/>
+        <fs:FolderComboBrowser
+            x:Name="FolderComboBrowser"
+            MaxWidth="220"
+            Margin="4"
+            Path="{Binding Value, Mode=TwoWay}" />
     </DataTemplate>
 
     <DataTemplate x:Key="FilePathEditor" DataType="{x:Type nodes:NodeViewModel}">
-        <fs:FileComboBrowser Margin="8"
-                                 MaxWidth="180"
-                             Path="{Binding Value, Mode=TwoWay}"
-                             x:Name="FileComboBrowser"
-                       
-                    />
+        <fs:FileComboBrowser
+            x:Name="FileComboBrowser"
+            MaxWidth="180"
+            Margin="8"
+            Path="{Binding Value, Mode=TwoWay}" />
     </DataTemplate>
 
     <DataTemplate x:Key="HeaderTypeModel" DataType="{x:Type inf:TypeModel}">
         <Grid
-                            Margin="0,4,4,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center">
+            Margin="0,4,4,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -584,18 +613,19 @@
             <ContentControl Content="{Binding Value, Mode=OneWay}">
                 <ContentControl.ContentTemplate>
                     <DataTemplate>
-                        <Grid Background="Transparent" 
-                                x:Name="tile"
-                                Grid.Column="0"
-                                Margin="5"
-                                >
+                        <Grid
+                            x:Name="tile"
+                            Grid.Column="0"
+                            Margin="5"
+                            Background="Transparent">
 
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
-                                          
-                                    FontSize="24"
-                                    FontWeight="DemiBold"
-                                    Text="{Binding Name, Converter={x:Static local:HumaniseConverter.Instance}}"
-                                    TextWrapping="WrapWithOverflow" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                FontSize="24"
+                                FontWeight="DemiBold"
+                                Text="{Binding Name, Converter={x:Static local:HumaniseConverter.Instance}}"
+                                TextWrapping="WrapWithOverflow" />
 
                         </Grid>
                     </DataTemplate>
@@ -607,6 +637,6 @@
 
 
     <DataTemplate x:Key="Missing">
-        <TextBlock Text="missing"></TextBlock>
+        <TextBlock Text="missing" />
     </DataTemplate>
 </ResourceDictionary>
