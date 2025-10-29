@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Utility.Interfaces.Exs.Diagrams;
-using Utility.Structs.Repos;
-using Utility.Trees.Abstractions;
 
 namespace Utility.Interfaces.Exs
 {
@@ -16,7 +14,8 @@ namespace Utility.Interfaces.Exs
         void Add(INodeViewModel node);
         IObservable<INodeViewModel?> Single(string v);
 
-        void Save();
+        //void Save();
+
         IObservable<INodeViewModel> Create(string name, Guid guid, Func<string, object> modelFactory);
         IObservable<INodeViewModel> FindChild(INodeViewModel node, Guid guid);
         void RemoveBy(Predicate<INodeViewModel> predicate);

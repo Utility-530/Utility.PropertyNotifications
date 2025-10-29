@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Windows.Input;
 using Utility.Enums;
 using Utility.Interfaces.NonGeneric;
@@ -10,7 +8,7 @@ using Utility.Trees.Abstractions;
 
 namespace Utility.Interfaces.Exs
 {
-    public interface IViewModelTree : ITree, IIsExpanded, ICurrent<IViewModelTree>, IAdd, IKey, ILocalIndex, IIsPersistable, IIsEditable, IOrientation,
+    public interface IViewModelTree : ITree, IIsExpanded, ICurrent<IViewModelTree>, IAdd, IKey, ILocalIndex, IIsEditable, IOrientation,
         IRemoved, IIsVisible, IIsSelected, ISetIsSelected,
         IIsRemovable, IIsReplicable, ISort, ISortOrder,
         IName,
@@ -23,11 +21,10 @@ namespace Utility.Interfaces.Exs
         IGetIsSingular,
         IIsChildrenTracked,
         IIsValueTracked
-        //IHeight,
-        //IWidth
+    //IIsPersistable
+    //IHeight,
+    //IWidth
     {
-
-
     }
 
     public interface IHeight
@@ -45,16 +42,15 @@ namespace Utility.Interfaces.Exs
         bool IsValueTracked { get; set; }
     }
 
-
     public interface IIsChildrenTracked
     {
         bool IsChildrenTracked { get; set; }
     }
+
     public interface IIsChildrenRefreshed
     {
         bool IsChildrenRefreshed { get; set; }
     }
-
 
     public interface IIsContentVisible
     {
@@ -84,7 +80,6 @@ namespace Utility.Interfaces.Exs
     public interface IAddCommand
     {
         ICommand RemoveCommand { get; }
-
     }
 
     public interface ICurrent<T>
@@ -101,11 +96,11 @@ namespace Utility.Interfaces.Exs
     {
         Orientation Orientation { get; set; }
     }
+
     public interface IArrangement
     {
         Arrangement Arrangement { get; set; }
     }
-
 
     public interface IIsAugmentable
     {
@@ -116,10 +111,12 @@ namespace Utility.Interfaces.Exs
     {
         Position2D ConnectorPosition { get; set; }
     }
+
     public interface IIsReactivationRequired
     {
         bool IsReactivationRequested { get; set; }
     }
+
     public interface IDataTemplate
     {
         string DataTemplate { get; set; }
