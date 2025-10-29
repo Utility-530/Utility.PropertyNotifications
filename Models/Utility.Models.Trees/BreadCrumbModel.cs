@@ -13,7 +13,6 @@ namespace Utility.Models.Trees
     {
         public BreadCrumbModel()
         {
-            this.IsPersistable = true;
         }
 
         public override void Update(IReadOnlyTree current)

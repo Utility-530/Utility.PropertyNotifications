@@ -118,7 +118,6 @@ namespace Utility.Models.Trees
                 this.Columns.Add(new Structs.Dimension());
                 this.Rows.Add(new Structs.Dimension());
                 this.IsExpanded = true;
-                this.IsPersistable = true;
                 //base.SetNode(node);
             });
 
