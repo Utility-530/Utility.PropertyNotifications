@@ -13,23 +13,58 @@ using Utility.Trees.Extensions.Async;
 
 namespace Utility.Models
 {
-    public class ReadOnlyModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<IReadOnlyTree>? addition = null) : Model(func, addition, null, false, false)
+    public class Model<T> : Model, IGet<T>, Interfaces.Generic.ISet<T>
     {
-    }
+        private T? value = default;
 
-    public class Model : Model<object>
-    {
         public Model()
         {
         }
 
-        public Model(Func<IEnumerable<IReadOnlyTree>> children = null, Action<IReadOnlyTree>? addition = null, Action<Model>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(children, addition, attach: new Action<IReadOnlyTree>(a => attach?.Invoke((Model)a)), raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
+        public Model(Func<IEnumerable<IReadOnlyTree>>? children = null, Action<IReadOnlyTree>? addition = null, Action<Model<T>>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true) : base(children, addition, attach: new Action<IReadOnlyTree>(a => attach?.Invoke((Model<T>)a)), raisePropertyCalled: raisePropertyCalled, raisePropertyReceived: raisePropertyReceived)
         {
+        }
+
+        public T? Get()
+        {
+            return this.value;
+        }
+
+        public void Set(T value)
+        {
+            this.value = value;
+        }
+
+        public override object Data { get => typeof(T); set => throw new NotImplementedException("ds dd2111"); }
+
+
+        public override object? Value
+        {
+            get { RaisePropertyCalled(value); return value; }
+            set => this.RaisePropertyReceived<T>(ref this.value, (T)value);
+        }
+
+
+        public override object? Get(string name)
+        {
+            if (name == nameof(Value))
+                return Get();
+            return base.Get(name);
+        }
+
+        public override void Set(object value, string name)
+        {
+            if (name == nameof(Value) && value is T tValue)
+            {
+                Set(tValue);
+                return;
+            }
+            base.Set(value, name);
         }
     }
 
 
-    public class Model<T> : NodeViewModel, IClone, IYieldItems, IKey, IName, IAttach<IReadOnlyTree>, IGet<T>, Interfaces.Generic.ISet<T>
+    public class Model : NodeViewModel, IClone, IYieldItems, IKey, IName, IAttach<IReadOnlyTree>
     {
         protected readonly Func<IEnumerable<IReadOnlyTree>>? childrenLambda;
         private readonly Action<IReadOnlyTree>? addition;
@@ -37,17 +72,15 @@ namespace Utility.Models
 
         public virtual Version Version { get; set; } = new();
         bool isInitialised = false;
-        private T? value = default;
 
-        public Model(Func<IEnumerable<IReadOnlyTree>>? childrenLambda = null, Action<IReadOnlyTree>? addition = null, Action<Model<T>>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true)
+
+        public Model(Func<IEnumerable<IReadOnlyTree>>? childrenLambda = null, Action<IReadOnlyTree>? addition = null, Action<Model>? attach = null, bool raisePropertyCalled = true, bool raisePropertyReceived = true)
         {
             this.childrenLambda = childrenLambda;
             this.addition = addition;
-            this.attach = new Action<IReadOnlyTree>(a => attach?.Invoke((Model<T>)a));
+            this.attach = new Action<IReadOnlyTree>(a => attach?.Invoke((Model)a));
             Initialise();
         }
-
-        public override object Data { get => typeof(T); set => throw new NotImplementedException("ds dd2111"); }
 
 
         public virtual void Initialise()
@@ -102,8 +135,6 @@ namespace Utility.Models
                     else
                         throw new Exception("Cds 333222");
                 });
-
-
         }
 
         public virtual void AddDescendant(IReadOnlyTree node, int level)
@@ -230,56 +261,8 @@ namespace Utility.Models
             attach?.Invoke(value);
         }
 
-        public override object? Value
-        {
-            get { RaisePropertyCalled(value); return value; }
-            set => this.RaisePropertyReceived<T>(ref this.value, (T)value);
-        }
-
-        public T? Get()
-        {
-            return this.value;
-        }
-
-        public void Set(T value)
-        {
-            this.value = value;
-        }
-
-        public override object? Get(string name)
-        {
-            if (name == nameof(Value))
-                return Get();
-            return base.Get(name);
-        }
-
-        public override void Set(object value, string name)
-        {
-            if (name == nameof(Value) && value is T tValue)
-            {
-                Set(tValue);
-                return;
-            }
-            base.Set(value, name);
-        }
     }
 
-    //public class StringModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<IReadOnlyTree>? addition = null, Action<StringModel>? attach = null) :
-    //    Model<string>(func, addition, attach: new Action<IReadOnlyTree>(a => attach?.Invoke((StringModel)a)))
-    //{
-    //    public StringModel() : this(null, null, null)
-    //    {
-
-    //    }
-    //}
-
-    //public class GuidModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<IReadOnlyTree>? addition = null) : Model<Guid>(func,  addition)
-    //{
-    //}
-
-    //public class BooleanModel(Func<IEnumerable<IReadOnlyTree>>? func = null,  Action<IReadOnlyTree>? addition = null) : Model<bool>(func, addition)
-    //{
-    //}
 
     [AttributeUsage(AttributeTargets.Property)]
     public class ChildAttribute(string Name, System.Type Type = null) : Attribute
