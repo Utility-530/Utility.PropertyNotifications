@@ -6,6 +6,10 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="WpfScreenHelper" Version="2.1.1" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
 	</ItemGroup>
