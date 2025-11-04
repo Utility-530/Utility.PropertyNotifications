@@ -9,9 +9,9 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
-using System.Xaml;
 using Utility.Commands;
 using Utility.WPF.Abstract;
+using Utility.WPF.Reactives;
 using Utility.Helpers.Reflection;
 
 namespace Utility.WPF.Markup
@@ -123,15 +123,14 @@ namespace Utility.WPF.Markup
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void InvokeCommand(object sender, EventArgs args)
+        private void InvokeCommand(object sender, System.EventArgs args)
         {
             if (string.IsNullOrEmpty(commandName) == false &&
                 sender is FrameworkElement frameworkElement)
             {
                 disposable?.Dispose();
                 disposable =
-                    frameworkElement
-                    .WhenAnyValue(a => a.DataContext)
+                   DependencyObjectHelper.Observe(frameworkElement, FrameworkElement.DataContextProperty)
                     .WhereNotNull()
                     .Select(context => (context, context.GetType().GetProperty(commandName)))
                     .Subscribe(a =>
@@ -142,7 +141,7 @@ namespace Utility.WPF.Markup
                             {
                                 var conversion = ConversionType switch
                                 {
-                                    ConversionType.None => NoConversion(args, command),
+                                    //ConversionType.None => NoConversion(args, command),
                                     ConversionType.Default => Conversion(args, command, frameworkElement),
                                     ConversionType.SingleAdds => SingleSelectorConversion(args, frameworkElement),
                                     _ => throw new NotImplementedException(),
@@ -164,7 +163,7 @@ namespace Utility.WPF.Markup
                 throw new Exception("55jjsdsd");
         }
 
-        private object? SingleSelectorConversion(EventArgs args, FrameworkElement element)
+        private object? SingleSelectorConversion(System.EventArgs args, FrameworkElement element)
         {
             if (args is SelectionChangedEventArgs selectionArgs)
                 if (element.GetValue(ListBox.SelectionModeProperty) is SelectionMode.Single)
@@ -174,27 +173,27 @@ namespace Utility.WPF.Markup
             return null;
         }
 
-        protected virtual object? NoConversion(EventArgs args, ICommand cmd)
-        {
-            switch (cmd)
-            {
-                case ICommand when cmd.GetType().BaseType?.Name == typeof(ReactiveCommandBase<,>).Name &&
-                                    cmd.GetType().GenericTypeArguments.First().GetConstructors().Any(c => c.GetParameters().Length == 0):
-                    {
-                        var type = cmd.GetType().GenericTypeArguments.First();
-                        return Activator.CreateInstance(type);
-                    }
-                case ICommand when cmd.GetType().BaseType?.Name == typeof(ReactiveCommandBase<,>).Name &&
-                cmd.GetType().GenericTypeArguments.First().IsValueType:
-                    {
-                        return default;
-                    }
-                default:
-                    throw new Exception("s33333dfsdsd");
-            }
-        }
+        //protected virtual object? NoConversion(EventArgs args, ICommand cmd)
+        //{
+        //    switch (cmd)
+        //    {
+        //        case ICommand when cmd.GetType().BaseType?.Name == typeof(ReactiveCommandBase<,>).Name &&
+        //                            cmd.GetType().GenericTypeArguments.First().GetConstructors().Any(c => c.GetParameters().Length == 0):
+        //            {
+        //                var type = cmd.GetType().GenericTypeArguments.First();
+        //                return Activator.CreateInstance(type);
+        //            }
+        //        case ICommand when cmd.GetType().BaseType?.Name == typeof(ReactiveCommandBase<,>).Name &&
+        //        cmd.GetType().GenericTypeArguments.First().IsValueType:
+        //            {
+        //                return default;
+        //            }
+        //        default:
+        //            throw new Exception("s33333dfsdsd");
+        //    }
+        //}
 
-        protected virtual object? Conversion(EventArgs args, ICommand cmd, FrameworkElement element)
+        protected virtual object? Conversion(System.EventArgs args, ICommand cmd, FrameworkElement element)
         {
             if (args is SelectionChangedEventArgs selectionArgs)
                 if (element.GetValue(ListBox.SelectionModeProperty) is SelectionMode.Single)
@@ -206,7 +205,7 @@ namespace Utility.WPF.Markup
                     }
                 }
             if (args is CollectionItemChangedEventArgs { Item: var item, EventType: var eventType, Index: var index, RoutedEvent: var @event } collectionArgs)
-                return new Utility.Common.EventArgs.CollectionItemEventArgs(eventType, item, index);
+                return new Utility.EventArgs.CollectionItemEventArgs(eventType, item, index);
             switch (cmd)
             {
                 //case ICommand when cmd.GetType().BaseType?.Name == typeof(ReactiveCommandBase<,>).Name:
@@ -252,7 +251,7 @@ namespace Utility.WPF.Markup
                     throw new Exception("s33333dfsdsd");
             }
         }
-        internal class MyEventArgs : EventArgs
+        internal class MyEventArgs : System.EventArgs
         {
             public object? a;
 
