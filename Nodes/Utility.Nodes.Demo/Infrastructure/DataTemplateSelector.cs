@@ -19,7 +19,7 @@ namespace Utility.Nodes.Demo
         {
             if(item is IReadOnlyTree { Data: IDescriptor data } )
             {
-                return Utility.Nodes.WPF.DataTemplateSelector.Instance.SelectTemplate(item, container);
+                return Utility.WPF.Trees.Filters.DataTemplateSelector.Instance.SelectTemplate(item, container);
             }
             return DefaultTemplate;
         }
