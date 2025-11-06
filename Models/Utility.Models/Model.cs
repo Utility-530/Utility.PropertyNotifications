@@ -63,6 +63,18 @@ namespace Utility.Models
         }
     }
 
+    public class ProliferationModel : NodeViewModel, IProliferation, IKey, IName
+    {
+        public ProliferationModel()
+            : base()
+        {
+        }
+
+        public IEnumerable Proliferation()
+        {
+            yield break;
+        }
+    }
 
     public class Model : NodeViewModel, IClone, IYieldItems, IKey, IName, IAttach<IReadOnlyTree>
     {
@@ -226,6 +238,14 @@ namespace Utility.Models
             if (a is IAttach<IReadOnlyTree> attach)
             {
                 attach.Attach(a);
+            }
+            else if (a is IDescriptor)
+            {
+                //ignore
+            }
+            else if (a is ProliferationModel)
+            {
+                //ignore
             }
             else
             {
