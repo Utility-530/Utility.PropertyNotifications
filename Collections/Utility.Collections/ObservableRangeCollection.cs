@@ -2,7 +2,7 @@
 using System.Collections.Specialized;
 using Utility.Interfaces.Generic;
 
-namespace Utility.Common.Collections
+namespace Utility.Collections
 {
     /// <summary>
     /// <a href="https://stackoverflow.com/questions/3300845/observablecollection-calling-oncollectionchanged-with-multiple-new-items"></a>

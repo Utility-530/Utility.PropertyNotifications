@@ -5,7 +5,7 @@ using System.Linq;
 
 #pragma warning disable RCS1104 // Simplify conditional expression
 
-namespace Utility.Common.Collections
+namespace Utility.Collections
 {
     /// <summary>
     /// Represents a generic collection of keys and values where keys can be
