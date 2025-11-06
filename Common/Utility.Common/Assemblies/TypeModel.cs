@@ -5,7 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Utility.WPF.Model
+namespace Utility.WPF.Models
 {
     public class TypeModel //: ITypeModel
     {

@@ -3,7 +3,7 @@ using ReactiveUI;
 using Utility.Helpers.Ex;
 using Utility.Interfaces.Generic.Data;
 
-namespace Utility.Common.Model
+namespace Utility.Common.Models
 {
     public class GuidModel<T> : ReactiveObject, IEquatable<T>, IId<Guid> where T : IId<Guid>
     {

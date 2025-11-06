@@ -1,8 +1,7 @@
 ﻿using Autofac;
 using Nito.AsyncEx;
 using System.Threading.Tasks;
-using Utility.Common;
-using Utility.WPF.Model;
+using Utility.WPF.Models;
 
 namespace Utility.Common.Assemblies
 {
