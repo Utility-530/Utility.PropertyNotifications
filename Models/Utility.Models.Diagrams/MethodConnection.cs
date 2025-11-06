@@ -1,15 +1,19 @@
-﻿using Utility.Interfaces.Exs;
+﻿using System.Reactive;
+using Utility.Interfaces.Exs;
+using Utility.Reactives;
 
 namespace Utility.Models.Diagrams
 {
     public class MethodConnection : IResolvableConnection
     {
-        public MethodConnection(Action<object> @in, IObservable<object> @out)
+        public static MethodConnection FromAction(Action<object> @in, IObservable<object> @out) => new (Observer.Create(@in), @out);
+
+        public MethodConnection(IObserver<object> @in, IObservable<object> @out)
         {
             Disposable = @out.Subscribe(a =>
             {
                 Transfer?.Invoke();
-                @in.Invoke(a);
+                @in.OnNext(a);
             });
             In = @in;
             Out = @out;
@@ -24,7 +28,7 @@ namespace Utility.Models.Diagrams
         }
 
         public IDisposable Disposable { get; }
-        public Action<object> In { get; }
+        public IObserver<object> In { get; }
         public IObservable<object> Out { get; }
     }
 
