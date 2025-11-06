@@ -2,12 +2,11 @@
 using System.Collections.Specialized;
 using System.Windows.Input;
 using Utility.Commands;
-using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
-using Utility.Interfaces.NonGeneric;
 using Utility.Keys;
 using Utility.Nodify.Base;
 using Utility.Trees.Abstractions;
+using Utility.Interfaces;
 
 namespace Utility.Nodes
 {
@@ -28,14 +27,14 @@ namespace Utility.Nodes
             Orientation = Enums.Orientation.Horizontal;
             AddCommand = new Command<object>(async a =>
             {
-                var node = await ToTree(a);
+                var node = a is IReadOnlyTree ? a : await ToTree(a);
                 Add(node);
                 this.IsExpanded = true;
             });
 
             RemoveCommand = new Command<object>(a =>
             {
-                (this as ITree)?.Remove(a);
+                (this.Parent() as ITree)?.Remove(a);
             });
 
             EditCommand = new Command<object>(a =>
@@ -56,8 +55,9 @@ namespace Utility.Nodes
         public ICommand EditCommand { get; init; }
         public ICommand AddParentCommand { get; init; }
 
-        public override Task<ITree> ToTree(object value)
+        public override Task<ITree> ToTree(object? value)
         {
+            throw new Exception("sdsdfdsd");
             var node = new NodeViewModel(value)
             {
                 Parent = this,
