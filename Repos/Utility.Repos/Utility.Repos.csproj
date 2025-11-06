@@ -15,7 +15,6 @@
     <ProjectReference Include="..\..\External\TypeSerialization\TypeSerialization\TypeSerialization.csproj" />
     <ProjectReference Include="..\..\Conversions\Utility.Conversions\Utility.Conversions.csproj" />
     <ProjectReference Include="..\..\Helpers\Utility.Helpers\Utility.Helpers.csproj" />
-    <ProjectReference Include="..\..\Infrastructure\Utility.Constants\Utility.Constants.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Guids\Utility.Guids.csproj" />
     <ProjectReference Include="..\..\Interfaces\Utility.Interfaces.Exs\Utility.Interfaces.Exs.csproj" />
     <ProjectReference Include="..\..\Interfaces\Utility.Interfaces\Utility.Interfaces.csproj" />
