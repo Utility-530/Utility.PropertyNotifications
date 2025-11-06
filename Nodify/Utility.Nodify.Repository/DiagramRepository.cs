@@ -5,7 +5,6 @@ using Splat;
 using SQLite;
 using System.Collections.ObjectModel;
 using System.Reactive.Linq;
-using Utility.Common.Model;
 using Utility.Extensions;
 using Utility.Helpers.Reflection;
 using Utility.Interfaces.Exs.Diagrams;

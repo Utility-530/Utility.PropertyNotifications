@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.4.33403.182
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11123.170 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Nodify.Demo", "Utility.Nodify.Demo\Utility.Nodify.Demo.csproj", "{D0F6166A-E27E-4518-A6E8-29C5E528F9EE}"
 EndProject
@@ -53,8 +53,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Interfaces", "..\In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Extensions", "..\Helpers\Utility.Extensions\Utility.Extensions.csproj", "{0ED2B99D-7446-4047-86E1-81AD1B765C20}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Constants", "..\Infrastructure\Utility.Constants\Utility.Constants.csproj", "{644F7DB5-FAF3-4E53-9CA4-8EDC9C3E2334}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodify.Entities", "Utility.Nodify.Entities\Utility.Nodify.Entities.csproj", "{ABD39AF2-61AB-4C02-9B2B-87B9B7FC23B4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Repos", "..\Repos\Utility.Repos\Utility.Repos.csproj", "{0579BD56-5FA1-BF10-5AA1-82FEA23EFAF6}"
@@ -62,8 +60,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodify.Generator", "Utility.Nodify.Generator\Utility.Nodify.Generator.csproj", "{C789A1AA-9026-4D79-9180-D0BEFA82011F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodify.Views", "Utility.Nodify.Templates\Utility.Nodify.Views.csproj", "{F6F463F3-2AEC-4B2C-A751-44AE15A9DC18}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Nodify.Enums", "Utility.Nodify.Enums\Utility.Nodify.Enums.csproj", "{881EB87C-530C-4907-8B3B-B00929DDE455}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Enums", "..\Enums\Utility.Enums\Utility.Enums.csproj", "{8CA7CD09-0F63-DC89-A802-A7E5BD1C4C27}"
 EndProject
@@ -221,10 +217,6 @@ Global
 		{0ED2B99D-7446-4047-86E1-81AD1B765C20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0ED2B99D-7446-4047-86E1-81AD1B765C20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0ED2B99D-7446-4047-86E1-81AD1B765C20}.Release|Any CPU.Build.0 = Release|Any CPU
-		{644F7DB5-FAF3-4E53-9CA4-8EDC9C3E2334}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{644F7DB5-FAF3-4E53-9CA4-8EDC9C3E2334}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{644F7DB5-FAF3-4E53-9CA4-8EDC9C3E2334}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{644F7DB5-FAF3-4E53-9CA4-8EDC9C3E2334}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ABD39AF2-61AB-4C02-9B2B-87B9B7FC23B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ABD39AF2-61AB-4C02-9B2B-87B9B7FC23B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABD39AF2-61AB-4C02-9B2B-87B9B7FC23B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -241,10 +233,6 @@ Global
 		{F6F463F3-2AEC-4B2C-A751-44AE15A9DC18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6F463F3-2AEC-4B2C-A751-44AE15A9DC18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6F463F3-2AEC-4B2C-A751-44AE15A9DC18}.Release|Any CPU.Build.0 = Release|Any CPU
-		{881EB87C-530C-4907-8B3B-B00929DDE455}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{881EB87C-530C-4907-8B3B-B00929DDE455}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{881EB87C-530C-4907-8B3B-B00929DDE455}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{881EB87C-530C-4907-8B3B-B00929DDE455}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8CA7CD09-0F63-DC89-A802-A7E5BD1C4C27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{8CA7CD09-0F63-DC89-A802-A7E5BD1C4C27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CA7CD09-0F63-DC89-A802-A7E5BD1C4C27}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -384,7 +372,6 @@ Global
 		{05F4319F-40CD-423F-A62F-55E1E577DCAC} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{96920FE9-1C99-49DB-8D75-F684711A3CBE} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{0ED2B99D-7446-4047-86E1-81AD1B765C20} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
-		{644F7DB5-FAF3-4E53-9CA4-8EDC9C3E2334} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{0579BD56-5FA1-BF10-5AA1-82FEA23EFAF6} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}
 		{C789A1AA-9026-4D79-9180-D0BEFA82011F} = {0A03D064-3582-4B1C-AC57-F16299199866}
 		{8CA7CD09-0F63-DC89-A802-A7E5BD1C4C27} = {A2CA3C39-4192-4501-9F41-7D1F911F9950}

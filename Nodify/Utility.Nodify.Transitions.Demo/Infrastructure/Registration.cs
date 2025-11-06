@@ -6,6 +6,7 @@ using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric.Dependencies;
 using Utility.Models;
+using Utility.Models.Diagrams;
 using Utility.Nodes;
 using Utility.Nodify.Base.Abstractions;
 using Utility.Nodify.Engine;
@@ -24,7 +25,7 @@ namespace Utility.Nodify.Transitions.Demo.Infrastructure
     {
         public static async void registerGlobals(IRegister register)
         {
-            const string sqliteName = "O:\\Users\\rytal\\source\\repos\\Utility\\Nodes\\Utility.Nodes.Demo.Editor\\Data\\first_7.sqlite";
+            const string sqliteName = "O:\\source\\repos\\Utility\\Nodes\\Utility.Nodes.Demo.Editor\\Data\\first_7.sqlite";
             const string diagramKey = "Master";
 
             register.Register<IScheduler>(DispatcherScheduler.Current);
