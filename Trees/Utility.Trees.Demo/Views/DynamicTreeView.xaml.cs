@@ -14,6 +14,7 @@ using Utility.Helpers;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Demo.Infrastructure;
 using Svc = Utility.Trees.Demo.Infrastructure.Service;
+using Utility.Extensions;
 
 namespace Utility.Trees.Demo
 {
@@ -67,7 +68,7 @@ namespace Utility.Trees.Demo
                 {
                     case Persistence.Load:
                         var load = TreePersist.Instance.Load<Persist>();
-                        if (load.Data != null)
+                        if (load.Data() != null)
                             tree.Tree = (load);
                         break;
                     case Persistence.Save:
@@ -146,14 +147,14 @@ namespace Utility.Trees.Demo
             var _treeView = new TreeView();
             TreeHelper.ExploreTree(
                 _treeView.Items,
-                (a, b) => { a.Add(new TreeViewItem() { Header = (b.Data), HeaderTemplateSelector = HeaderTemplateSelector }); return a; },
+                (a, b) => { a.Add(new TreeViewItem() { Header = (b.Data()), HeaderTemplateSelector = HeaderTemplateSelector }); return a; },
                 (a, b) => { },
                 _tree,
                 (a) =>
                 {
                     return System.Reactive.Linq.Observable.Create<NotifyCollectionChangedEventArgs>(observer =>
                     {
-                        observer.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, (IList)a.Items));
+                        observer.OnNext(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, (IList)a));
                         return Disposable.Empty;
                     });
                 },

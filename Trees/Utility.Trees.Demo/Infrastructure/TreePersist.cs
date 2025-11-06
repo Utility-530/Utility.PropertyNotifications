@@ -8,6 +8,7 @@ using Utility.Models;
 using Utility.Persists;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Extensions;
+using Utility.Extensions;
 
 namespace Utility.Trees.Demo.Infrastructure
 {
@@ -72,27 +73,27 @@ namespace Utility.Trees.Demo.Infrastructure
                 {
                     //if (t.IsRoot())
                     //    return;
-                    if (t.Data is not IPersist persist)
+                    if (t.Data() is not IPersist persist)
                     {
                         throw new Exception("dsf");
                     }
-                    if (t.Data is not IGuid key)
+                    if (t.Data() is not IGuid key)
                     {
                         throw new Exception("ds2 w");
                     }
-                    if (t.Parent is not null && t.Parent.Data is not IGuid)
+                    if (t.Parent() is not null && (t.Parent() as IGetData).Data is not IGuid)
                     {
                         throw new Exception("ds2 w");
                     }
-                    var keyParent = t.Parent as IGuid;
+                    var keyParent = t.Parent() as IGetGuid;
                     //var key = t.Parent?.Key;
 
-                    if (t.Data is IOrm orm)
+                    if (t.Data() is IOrm orm)
                         orm.Orm = uow.Orm;
-                    persist.Save(key.Guid);
+                    persist.Save(key.Guid());
                     if (t.IsRoot() == false)
                     {
-                        var x = new ChildParentPair { Parent = keyParent?.Guid ?? Guid.Empty, Child = key.Guid };
+                        var x = new ChildParentPair { Parent = keyParent?.Guid ?? Guid.Empty, Child = key.Guid() };
                         pairs.Add(x);
                     }
                 });

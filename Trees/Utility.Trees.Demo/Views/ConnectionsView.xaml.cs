@@ -8,10 +8,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using Utility.Common.Helper;
 using Utility.Helpers.Generic;
 using Utility.Persists;
 using Utility.Trees.Demo.Infrastructure;
+using Utility.Extensions;
 
 namespace Utility.Trees.Demo
 {
@@ -75,7 +75,7 @@ namespace Utility.Trees.Demo
    
                     connectionsView.WhenAnyValue(a => a.ViewModel).WhereNotNull().Subscribe(a =>
                     {
-                        treeView.ItemsSource = a.ViewModel.Items;
+                        treeView.ItemsSource = a.ViewModel;
                     });
                 
 

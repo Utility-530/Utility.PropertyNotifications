@@ -24,6 +24,7 @@ using Utility.Entities.Comms;
 using Utility.Interfaces.Exs;
 using Utility.Trees.Extensions.Async;
 using Utility.Nodes.WPF;
+using Utility.WPF.Trees.Filters;
 
 namespace Utility.Nodes.Demo.MVVM
 {

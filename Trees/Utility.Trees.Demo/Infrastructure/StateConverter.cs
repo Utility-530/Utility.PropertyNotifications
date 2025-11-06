@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using Utility.Helpers.NonGeneric;
 using Utility.Trees.Abstractions;
+using Utility.Extensions;
 
 namespace Utility.Trees.Demo.Infrastructure
 {
@@ -35,19 +36,19 @@ namespace Utility.Trees.Demo.Infrastructure
             var index0 = index(one);
             var index1 = index(two);
 
-            if (index(one)==0 && one.Parent == two)
+            if (index(one)==0 && one.Parent() == two)
             {
                 return State.Down;
             }
-            if (one.HasItems && one[0] == two)
+            if (one.Any() && one[0] == two)
             {
                 return State.Up;
             }
-            if (one.Parent?.Items.Any() == true && two.Parent == one.Parent && index(one) + 1 == index(two))
+            if (one.Parent().Children.Any() == true && two.Parent() == one.Parent() && index(one) + 1 == index(two))
             {
                 return State.Back;
             }
-            if (one.Parent?.Items.Any() == true && two.Parent == one.Parent && index(one) - 1 == index(two))
+            if (one.Parent().Children.Any() == true && two.Parent() == one.Parent() && index(one) - 1 == index(two))
             {
                 return State.Forward;
             }
@@ -62,7 +63,7 @@ namespace Utility.Trees.Demo.Infrastructure
 
         int index(ITree tree)
         {
-            return (tree.Parent?.Items.Cast<ITree>())?.IndexOf(tree) ?? -1;
+            return (tree.Parent()?.Children.Cast<ITree>())?.IndexOf(tree) ?? -1;
         }
     }
 

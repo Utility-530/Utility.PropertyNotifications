@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Utility.Enums;
 
-namespace Utility.EventArgs
+namespace Utility.EventArguments
 {
     public class CollectionChangedEventArgs : CollectionItemEventArgs
     {

@@ -6,6 +6,7 @@ using System.Windows;
 using Utility.Trees.Extensions.Async;
 using Utility.Pipes;
 using Utility.Trees.Abstractions;
+using Utility.Extensions;
 
 namespace Utility.Trees.Demo.Connections
 {
@@ -16,13 +17,13 @@ namespace Utility.Trees.Demo.Connections
             Service.OnNext(new Change(Connection.ParameterName, Change.Value));
         }
     }
-    
+
     public record TreeQueueItem(IReadOnlyTree Tree, object Value) : QueueItem
     {
         public override void Invoke()
         {
-            (Tree.Data as ViewModel).Value = Value;
-            (Tree.Data as ViewModel).RaisePropertyChanged(nameof(ViewModel.Value));
+            (Tree.Data<ViewModel>()).Value = Value;
+            (Tree.Data<ViewModel>()).RaisePropertyChanged(nameof(ViewModel.Value));
         }
     }
 
@@ -35,7 +36,7 @@ namespace Utility.Trees.Demo.Connections
             ViewModelTree tree = getTree();
             List<Service> ms = typeof(Methods).ToServices().ToList();
 
-            ConnectionsViewModel _viewModel = new ()
+            ConnectionsViewModel _viewModel = new()
             {
                 ServiceModel = ms,
                 Tree = tree
@@ -43,11 +44,11 @@ namespace Utility.Trees.Demo.Connections
 
             tree.Subscribe(t =>
             {
-           
+
                 foreach (var connection in _viewModel.Connections.Where(a => a.ViewModelName == t.Name && a.Movement == Movement.FromViewModelToService))
                 {
                     var serviceName = connection.ServiceName;
-                    var service = _viewModel.ServiceModel.Single(a => a.Name == serviceName);                    
+                    var service = _viewModel.ServiceModel.Single(a => a.Name == serviceName);
                     Pipe.Instance.Queue(new ConnectionQueueItem(connection, service, t));
                 }
             });
@@ -62,7 +63,7 @@ namespace Utility.Trees.Demo.Connections
                     foreach (var connection in _viewModel.Connections.Where(a => a.ServiceName == service.Name && a.Movement == Movement.ToViewModelFromService))
                     {
                         var viewModelName = connection.ViewModelName;
-                        tree.Descendant(a => (a.tree.Data as ViewModel).Name == viewModelName)
+                        tree.Descendant(a => (a.tree.Data<ViewModel>()).Name == viewModelName)
                         .Subscribe(viewModel =>
                         {
                             //(viewModel.Data as ViewModel).Value = a;
@@ -75,7 +76,7 @@ namespace Utility.Trees.Demo.Connections
             }
 
             DataContext = _viewModel;
-            this.Loaded += (s,e)=> MainWindow_Loaded(_viewModel);
+            this.Loaded += (s, e) => MainWindow_Loaded(_viewModel);
         }
 
         private static ViewModelTree getTree()
@@ -89,7 +90,7 @@ namespace Utility.Trees.Demo.Connections
 
 
 
-        private void MainWindow_Loaded(ConnectionsViewModel  _viewModel)
+        private void MainWindow_Loaded(ConnectionsViewModel _viewModel)
         {
             //var x = new ConnectionEditor()
             var x = new ConnectionsService()

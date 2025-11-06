@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.4.33110.190
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11123.170 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Trees.Demo", "Utility.Trees.Demo\Utility.Trees.Demo.csproj", "{65861572-3539-494B-AD03-BBA4D7C8E082}"
 EndProject
@@ -120,6 +120,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Packages", "..\Packages\Utility.Packages\Utility.Packages.csproj", "{32372B28-939B-4A50-BA62-00F6B34BF922}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Interfaces.Exs", "..\Interfaces\Utility.Interfaces.Exs\Utility.Interfaces.Exs.csproj", "{65B83EA1-532D-4A12-87AF-324E9FDACAD1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Extensions", "..\Helpers\Utility.Extensions\Utility.Extensions.csproj", "{9456F9E7-3572-E1EC-6D00-89D900843298}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -355,6 +357,10 @@ Global
 		{65B83EA1-532D-4A12-87AF-324E9FDACAD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65B83EA1-532D-4A12-87AF-324E9FDACAD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65B83EA1-532D-4A12-87AF-324E9FDACAD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9456F9E7-3572-E1EC-6D00-89D900843298}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9456F9E7-3572-E1EC-6D00-89D900843298}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9456F9E7-3572-E1EC-6D00-89D900843298}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9456F9E7-3572-E1EC-6D00-89D900843298}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -413,6 +419,7 @@ Global
 		{5D1FA88E-D5D2-4A97-8EBD-4EAA16651582} = {72C8D224-6E72-442B-A16A-29A6E7EA2051}
 		{32372B28-939B-4A50-BA62-00F6B34BF922} = {72C8D224-6E72-442B-A16A-29A6E7EA2051}
 		{65B83EA1-532D-4A12-87AF-324E9FDACAD1} = {72C8D224-6E72-442B-A16A-29A6E7EA2051}
+		{9456F9E7-3572-E1EC-6D00-89D900843298} = {72C8D224-6E72-442B-A16A-29A6E7EA2051}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {00EBD15C-E22A-4F19-88DE-BC9861507581}

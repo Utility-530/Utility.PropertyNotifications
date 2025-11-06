@@ -3,7 +3,7 @@ using System.Reactive.Subjects;
 using Utility.Observables;
 using Utility.Observables.Generic;
 
-namespace Utility.Common.Model
+namespace Utility.Common.Models
 {
     public class OutputNode<TOut> : IObservable<TOut>, IDisposable
     {

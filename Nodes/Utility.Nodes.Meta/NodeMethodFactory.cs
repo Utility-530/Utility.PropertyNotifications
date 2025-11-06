@@ -21,7 +21,6 @@ namespace Utility.Nodes.Meta
         // needs to be a property in case INodeSource changes
         protected INodeSource nodeSource => Globals.Resolver.Resolve<INodeSource>();
 
-
         public IEnumerable<Method> Create(object config) => this.GetType().InstantMethods().Where(a => a.Name != nameof(Create)).Select(a => new Method(a, this));
     }
 
@@ -29,7 +28,6 @@ namespace Utility.Nodes.Meta
     {
         //public const string tableName = "TableName";
         public const string content_root = nameof(content_root);
-
 
         public const string filter_root = nameof(filter_root);
         public const string transformer_root = nameof(transformer_root);

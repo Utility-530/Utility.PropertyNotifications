@@ -21,9 +21,9 @@ namespace Utility.PropertyDescriptors
         IRefresh,
         IGetType
     {
-        Dictionary<IDescriptor, (object Item, int Index)> descriptors = new();
+        private Dictionary<IDescriptor, (object Item, int Index)> descriptors = new();
 
-        ObservableCollection<IDescriptor>? children;
+        private ObservableCollection<IDescriptor>? children;
 
         public static string _Name => "Collection";
 
@@ -31,7 +31,8 @@ namespace Utility.PropertyDescriptors
 
         public override IEnumerable Items()
         {
-            return children ??= new ObservableCollection<IDescriptor>(new[] { 
+            return children ??= new ObservableCollection<IDescriptor>(new[]
+            {
                 new CollectionHeadersDescriptor(ElementType, Instance.GetType()) { Parent = this, Input = [], Output = [] } }
             .Concat(addFromInstance()));
         }
@@ -66,6 +67,7 @@ namespace Utility.PropertyDescriptors
             foreach (var item in addFromInstance())
                 children.Add(item);
         }
+
         public void Refresh()
         {
             foreach (var item in addFromInstance())
@@ -93,7 +95,7 @@ namespace Utility.PropertyDescriptors
             yield return Activator.CreateInstance(ElementType)!;
         }
 
-        IEnumerable<IDescriptor> addFromInstance()
+        private IEnumerable<IDescriptor> addFromInstance()
         {
             foreach (var item in Collection)
             {
@@ -104,7 +106,6 @@ namespace Utility.PropertyDescriptors
                 }
                 else
                 {
-
                 }
             }
 
@@ -137,10 +138,5 @@ namespace Utility.PropertyDescriptors
                 return descriptor;
             }
         }
-
-
-
     }
 }
-
-

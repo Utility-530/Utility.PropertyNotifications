@@ -3,6 +3,8 @@ using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 using System.Collections;
+using Utility.Meta;
+using System.Collections.ObjectModel;
 
 namespace Utility.Conversions.Json.Newtonsoft
 {
@@ -66,7 +68,8 @@ namespace Utility.Conversions.Json.Newtonsoft
                 if (TypeDescriptor.GetProperties(type)[propertyName] is PropertyDescriptor propertyDescriptor)
                     return propertyDescriptor;
                 else
-                    throw new Exception($"{type}.{propertyName}");
+                    return new RootDescriptor(typeof(Collection<object>));
+                    //throw new Exception($"{type}.{propertyName}");
             }
             else
                 throw new JsonSerializationException($"Unable to resolve type: {typeName}");

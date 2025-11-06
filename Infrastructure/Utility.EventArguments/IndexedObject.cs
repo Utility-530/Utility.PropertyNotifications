@@ -1,4 +1,4 @@
-﻿namespace Utility.EventArgs
+﻿namespace Utility.EventArguments
 {
     public class IndexedObject
     {

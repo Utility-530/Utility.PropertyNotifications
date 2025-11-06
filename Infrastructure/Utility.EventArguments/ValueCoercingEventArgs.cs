@@ -1,6 +1,8 @@
-﻿namespace Utility.EventArgs
+﻿using System;
+
+namespace Utility.EventArguments
 {
-    public class ValueCoercingEventArgs : System.EventArgs
+    public class ValueCoercingEventArgs : EventArgs
     {
         public ValueCoercingEventArgs(object newValue, object oldValue)
         {

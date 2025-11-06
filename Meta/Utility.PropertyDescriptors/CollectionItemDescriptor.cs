@@ -6,17 +6,18 @@ internal class CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeader
 {
     private DateTime? removed;
 
-    List<IDescriptor> descriptors = new();
+    private List<IDescriptor> descriptors = new();
+
     public CollectionHeadersDescriptor(Type propertyType, Type componentType) : base(new RootDescriptor(propertyType, componentType, "Header"))
     {
     }
+
     //public override int Index => 0;
 
     public override bool IsReadOnly => true;
 
     public override IEnumerable Items()
     {
-
         if (Type?.GetConstructor(Type.EmptyTypes) == null || Type.IsValueOrString())
             yield break;
         else if (descriptors.IsEmpty())
@@ -52,10 +53,9 @@ internal class CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeader
 
     public override int GetHashCode()
     {
-        var x= base.GetHashCode();
+        var x = base.GetHashCode();
         return x;
     }
-
 
     public override void Initialise(object? item = null)
     {
@@ -64,7 +64,6 @@ internal class CollectionHeadersDescriptor : MemberDescriptor, ICollectionHeader
     public override void Finalise(object? item = null)
     {
     }
-
 }
 
 internal class HeaderDescriptor<T, TR>(string Name) : HeaderDescriptor(new RootDescriptor(typeof(T), typeof(TR), Name))
@@ -80,6 +79,7 @@ internal class HeaderDescriptor : ChildlessMemberDescriptor, IHeaderDescriptor, 
     public HeaderDescriptor(Type type, Type parentType, string name) : base(new RootDescriptor(type, parentType, name))
     {
     }
+
     public HeaderDescriptor(PropertyDescriptor descriptor) : base(descriptor)
     {
     }

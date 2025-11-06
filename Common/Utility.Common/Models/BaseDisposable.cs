@@ -2,7 +2,7 @@
 using System;
 using System.Reactive.Disposables;
 
-namespace Utility.Common.Model
+namespace Utility.Common.Models
 {
     public class BaseDisposable : IDisposable
     {

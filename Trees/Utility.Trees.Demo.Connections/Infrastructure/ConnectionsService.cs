@@ -22,6 +22,7 @@ using Utility.Reactives;
 using DynamicData;
 using System.Collections.Specialized;
 using Utility.Trees.Extensions.Async;
+using Utility.Extensions;
 
 namespace Utility.Trees.Demo.Connections
 {
@@ -111,7 +112,7 @@ namespace Utility.Trees.Demo.Connections
             }
             else
                 Add(Direction.EndToStart);
-            
+
             //dsf2(rangeChange);
             //dsf(rangeChange);
 
@@ -235,7 +236,12 @@ namespace Utility.Trees.Demo.Connections
                     });
 
                 item.WithChangesTo(a => a.IsSelected)
-                    .Subscribe(a => viewModel.Lines.Single(a => a.Id == item.Id).IsSelected = a);
+                    .Subscribe(a =>
+                    {
+                        if (viewModel.Lines.SingleOrDefault(a => a.Id == item.Id) is { } sord)
+                            sord.IsSelected = a;
+                    }
+                );
             }
 
 
@@ -249,7 +255,7 @@ namespace Utility.Trees.Demo.Connections
                         {
                             foreach (var s in set)
                             {
-                                if(s.Value.Id == item.Id)
+                                if (s.Value.Id == item.Id)
                                     s.Value.IsSelected = a;
                             }
                         }));
@@ -383,11 +389,11 @@ namespace Utility.Trees.Demo.Connections
             {
                 //if (viewModel.Tree is INotifyCollectionChanged oTree)
                 //{
-                    return viewModel.Tree.Descendant(new((a) => (a.tree.Data as IGetName).Name == connectionViewModel.ViewModelName))
-                        .Subscribe(a =>
-                        {
-                            MatchTree(a.NewItem).Subscribe(observer);
-                        });
+                return viewModel.Tree.Descendant(new((a) => (a.tree.Data<IGetName>()).Name == connectionViewModel.ViewModelName))
+                    .Subscribe(a =>
+                    {
+                        MatchTree(a.NewItem).Subscribe(observer);
+                    });
                 //}
                 //else
                 //{

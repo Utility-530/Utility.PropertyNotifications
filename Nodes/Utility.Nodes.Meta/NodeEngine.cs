@@ -342,36 +342,6 @@ namespace Utility.Nodes.Meta
             });
         }
 
-        //public void Save()
-        //{
-        //    ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
-
-        //    Single(nameof(NodeMethodFactory.BuildDirty))
-        //        .Subscribe(async tree =>
-        //        {
-        //            //if (tree is not CollectionModel<DirtyModel> model)
-        //            //    throw new Exception(ERROR_INVALID_DIRTY_MODEL);
-
-        //            await processDirtyItems(tree);
-        //        })
-        //        .DisposeWith(_compositeDisposable);
-
-        //    async Task processDirtyItems(INodeViewModel tree)
-        //    {
-        //        var itemsToProcess = tree.ToArray();
-
-        //        foreach (var item in itemsToProcess)
-        //        {
-        //            if (item is DirtyModel { SourceKey: { } sourceKey, PropertyName: { } propertyName, NewValue: { } newValue })
-        //            {
-        //                _repository.Value.Set(Guid.Parse(sourceKey), propertyName, newValue, DateTime.Now);
-        //                tree.Remove(item);
-        //                await Task.Delay(200);
-        //            }
-        //        }
-        //    }
-        //}
-
         public IObservable<INodeViewModel> Single(string key) => Many(key).Take(1);
 
         public IObservable<INodeViewModel> Many(string key)

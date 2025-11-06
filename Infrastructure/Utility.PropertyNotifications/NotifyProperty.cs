@@ -5,7 +5,6 @@ using Utility.Interfaces;
 
 namespace Utility.PropertyNotifications
 {
-
     /// <summary>
     /// Base class for all ViewModel records.
     /// It provides support for property change notifications.
@@ -48,8 +47,8 @@ namespace Utility.PropertyNotifications
             }
             return false;
         }
-            
-        public virtual bool RaisePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null) 
+
+        public virtual bool RaisePropertyChanged<T>(ref T previousValue, T value, [CallerMemberName] string? propertyName = null)
         {
             if (value?.Equals(previousValue) == true)
                 return false;
@@ -65,7 +64,6 @@ namespace Utility.PropertyNotifications
                 return true;
             }
             return false;
-
         }
 
         /// <summary>
@@ -87,7 +85,6 @@ namespace Utility.PropertyNotifications
         #endregion INotifyPropertyChanged Members
 
         #region INotifyPropertyCalled Members
-
 
         private ObservableCollection<PropertyCalledEventArgs> missedCalls = [];
 
@@ -129,8 +126,6 @@ namespace Utility.PropertyNotifications
         /// </summary>
         public event PropertyReceivedEventHandler? PropertyReceived;
 
-
-
         /// <summary>
         /// Raises this object's PropertyChanged event.
         /// </summary>
@@ -146,11 +141,8 @@ namespace Utility.PropertyNotifications
                 flag = false;
             }
             return true;
-
         }
+
         #endregion INotifyPropertyReceived Members
-
-
-
     }
 }

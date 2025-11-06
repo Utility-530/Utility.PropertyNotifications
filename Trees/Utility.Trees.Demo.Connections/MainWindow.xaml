@@ -1,42 +1,45 @@
-﻿<Window x:Class="Utility.Trees.Demo.Connections.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Utility.Trees.Demo.Connections"      
-        xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
-        xmlns:conn="clr-namespace:Utility.Trees.Demo.Connections"
-        d:DataContext="{d:DesignInstance local:ConnectionsViewModel}"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+﻿<Window
+    x:Class="Utility.Trees.Demo.Connections.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conn="clr-namespace:Utility.Trees.Demo.Connections"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Utility.Trees.Demo.Connections"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:tree="clr-namespace:Utility.Trees;assembly=Utility.Trees"
+    Title="MainWindow"
+    Width="800"
+    Height="450"
+    d:DataContext="{d:DesignInstance local:ConnectionsViewModel}"
+    mc:Ignorable="d">
 
     <FrameworkElement.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Aligned.xaml"/>
-                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/TreeListView.xaml"/>
-                <ResourceDictionary Source="/Utility.WPF.Pipes;component/Themes/Generic.xaml"/>
+                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Aligned.xaml" />
+                <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/TreeListView.xaml" />
+                <ResourceDictionary Source="/Utility.WPF.Pipes;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="TreeViewItem" BasedOn="{StaticResource AlignedTreeViewitemStyle}">
+            <Style BasedOn="{StaticResource AlignedTreeViewitemStyle}" TargetType="TreeViewItem">
                 <Setter Property="IsExpanded" Value="True" />
                 <Setter Property="Background" Value="GhostWhite" />
             </Style>
 
             <Style TargetType="Button">
-                <Setter Property="Width" Value="100"  />
-                <Setter Property="Margin" Value="2"  />
+                <Setter Property="Width" Value="100" />
+                <Setter Property="Margin" Value="2" />
             </Style>
 
-            <Style TargetType="Grid" x:Key="HeaderGridStyle">
+            <Style x:Key="HeaderGridStyle" TargetType="Grid">
                 <Setter Property="Height" Value="20" />
             </Style>
 
-            <Style TargetType="TextBlock" x:Key="HeaderTextBlockStyle">
+            <Style x:Key="HeaderTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="Margin" Value="5,0,0,0" />
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
 
-            <Style TargetType="Path" x:Key="HeaderPathStyle">
+            <Style x:Key="HeaderPathStyle" TargetType="Path">
                 <Setter Property="StrokeThickness" Value="1" />
                 <Setter Property="Fill" Value="Gray" />
                 <Setter Property="Width" Value="20" />
@@ -47,41 +50,43 @@
 
             <DataTemplate x:Key="HeaderTemplateDefault">
                 <Grid Style="{StaticResource HeaderGridStyle}">
-                    <TextBlock Text="{Binding }" Style="{StaticResource HeaderTextBlockStyle}" />
+                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" Text="{Binding}" />
                 </Grid>
             </DataTemplate>
 
             <DataTemplate x:Key="HeaderTemplateArrowUp">
                 <Grid Style="{StaticResource HeaderGridStyle}">
                     <Path Data="M 7,3 L 13,3 L 10,0 L 7,3" Style="{StaticResource HeaderPathStyle}" />
-                    <TextBlock Text="{Binding }" Style="{StaticResource HeaderTextBlockStyle}" />
+                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" Text="{Binding}" />
                 </Grid>
             </DataTemplate>
 
             <DataTemplate x:Key="HeaderTemplateArrowDown">
                 <Grid Style="{StaticResource HeaderGridStyle}">
-                    <Path Data="M 7,0 L 10,3 L 13,0 L 7,0"  Style="{StaticResource HeaderPathStyle}" />
-                    <TextBlock Text="{Binding }" Style="{StaticResource HeaderTextBlockStyle}" />
+                    <Path Data="M 7,0 L 10,3 L 13,0 L 7,0" Style="{StaticResource HeaderPathStyle}" />
+                    <TextBlock Style="{StaticResource HeaderTextBlockStyle}" Text="{Binding}" />
                 </Grid>
             </DataTemplate>
 
-            <local:DirectionBrushConverter x:Key="DirectionBrushConverter"/>
+            <local:DirectionBrushConverter x:Key="DirectionBrushConverter" />
 
             <PathGeometry x:Key="CrossGeometry">
                 <PathGeometry.Figures>
                     <PathFigure StartPoint="0,0">
                         <PathFigure.Segments>
                             <LineSegment Point="100,100" />
-                            <ArcSegment Size="50,50"
-                                        RotationAngle="45"
-                                        IsLargeArc="True"
-                                        SweepDirection="Clockwise"
-                                        Point="0,0" />
-                            <ArcSegment Size="50,50"
-                                        RotationAngle="45"
-                                        IsLargeArc="True"
-                                        SweepDirection="Clockwise"
-                                        Point="100,100" />
+                            <ArcSegment
+                                IsLargeArc="True"
+                                Point="0,0"
+                                RotationAngle="45"
+                                Size="50,50"
+                                SweepDirection="Clockwise" />
+                            <ArcSegment
+                                IsLargeArc="True"
+                                Point="100,100"
+                                RotationAngle="45"
+                                Size="50,50"
+                                SweepDirection="Clockwise" />
                         </PathFigure.Segments>
                     </PathFigure>
                 </PathGeometry.Figures>
@@ -90,116 +95,120 @@
     </FrameworkElement.Resources>
 
 
-    <DockPanel>        
+    <DockPanel>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="auto"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
-                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Grid x:Name="Grid" >
+                <Grid x:Name="Grid">
 
-                    <Grid  Background="Transparent">
+                    <Grid Background="Transparent">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*" />
                             <!--<ColumnDefinition Width="500"></ColumnDefinition>-->
-                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
 
-                        <TreeView x:Name="TreeView" ItemsSource="{Binding Tree.Items}"
-                              BorderThickness="0"
-                      VirtualizingStackPanel.IsVirtualizing="False"
-                      >
+                        <TreeView
+                            x:Name="TreeView"
+                            BorderThickness="0"
+                            ItemsSource="{Binding Tree.Items}"
+                            VirtualizingStackPanel.IsVirtualizing="False">
                             <TreeView.ItemContainerStyle>
                                 <Style TargetType="{x:Type TreeViewItem}">
-                                    <!--BasedOn="{StaticResource TreeListViewItemStyle}">-->
+                                    <!--  BasedOn="{StaticResource TreeListViewItemStyle}">  -->
                                     <Setter Property="IsExpanded" Value="True" />
                                 </Style>
                             </TreeView.ItemContainerStyle>
                             <TreeView.ItemTemplate>
-                                <HierarchicalDataTemplate ItemsSource="{Binding Items}" >
+                                <HierarchicalDataTemplate ItemsSource="{Binding Items}">
                                     <Viewbox Height="15">
                                         <StackPanel Orientation="Horizontal">
-                                            <ContentControl Content="{Binding Data.Name}"/>
-                                            <TextBox Width="100" Text="{Binding Data.Value, Mode=TwoWay}"></TextBox>
+                                            <ContentControl Content="{Binding Data.Name}" />
+                                            <TextBox Width="100" Text="{Binding Data.Value, Mode=TwoWay}" />
                                         </StackPanel>
                                     </Viewbox>
                                 </HierarchicalDataTemplate>
                             </TreeView.ItemTemplate>
                             <!--<tree:TreeListView.Columns>
-                        -->
-                            <!--Create the first column containing the expand button and the type name.-->
+                            -->
+                            <!--  Create the first column containing the expand button and the type name.  -->
                             <!--
                         <GridViewColumn Header="Name" Width="150">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Viewbox Height="15">
                                         <StackPanel Orientation="Horizontal">
-                                            -->
-                            <!--The Expander Button (can be used in any column (typically the first one))-->
+                            -->
+                            <!--  The Expander Button (can be used in any column (typically the first one))  -->
                             <!--
                                             <tree:TreeListViewExpander/>
                                             <ContentControl Content="{Binding Data.Name}"/>
                                             <TextBox Width="100" Text="{Binding Data.Value}">                                                </TextBox>
-                                                -->
-                            <!--Display the name of the DataElement-->
+                            -->
+                            <!--  Display the name of the DataElement  -->
                             <!--<TextBlock Text="{Binding Content}"/>-->
                             <!--
                                         </StackPanel>
                                     </Viewbox>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
-                        </GridViewColumn>                     
+                        </GridViewColumn>
                     </tree:TreeListView.Columns>-->
                         </TreeView>
 
                         <!--<Grid Grid.Column="1" Background="Transparent"/>-->
 
-                        <local:NodeGroup Grid.Column="1" Background="Transparent"
-                     ItemsSource="{Binding ServiceModel}"
-                     x:Name="TreeView2">
+                        <local:NodeGroup
+                            x:Name="TreeView2"
+                            Grid.Column="1"
+                            Background="Transparent"
+                            ItemsSource="{Binding ServiceModel}">
                             <local:NodeGroup.Style>
                                 <Style TargetType="{x:Type local:NodeGroup}">
-                                    <Setter Property="BorderThickness" Value="0"></Setter>
+                                    <Setter Property="BorderThickness" Value="0" />
                                 </Style>
                             </local:NodeGroup.Style>
                             <ItemsControl.ItemContainerStyle>
-                                <Style TargetType="{x:Type local:Node}" BasedOn="{StaticResource {x:Type local:Node}}">
-                                    <Setter Property="Inputs" Value="{Binding Inputs}"/>
-                                    <Setter Property="Outputs" Value="{Binding Outputs}"/>
+                                <Style BasedOn="{StaticResource {x:Type local:Node}}" TargetType="{x:Type local:Node}">
+                                    <Setter Property="Inputs" Value="{Binding Inputs}" />
+                                    <Setter Property="Outputs" Value="{Binding Outputs}" />
                                 </Style>
                             </ItemsControl.ItemContainerStyle>
                         </local:NodeGroup>
                     </Grid>
 
-                    <ItemsControl  x:Name="ItemsControl" ItemsSource="{Binding Lines}" >
+                    <ItemsControl x:Name="ItemsControl" ItemsSource="{Binding Lines}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <Canvas IsItemsHost="True"/>
+                                <Canvas IsItemsHost="True" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Line x:Name="line"
-                            X1="{Binding StartPoint.X}"
-                            Y1="{Binding StartPoint.Y}"
-                            X2="{Binding EndPoint.X}"
-                            Y2="{Binding EndPoint.Y}"                         
-                            Stroke="{Binding Direction, Converter={StaticResource DirectionBrushConverter}}"        
-                            StrokeDashArray="1"                            
-                            StrokeThickness="1"/>
+                                <Line
+                                    x:Name="line"
+                                    Stroke="{Binding Direction, Converter={StaticResource DirectionBrushConverter}}"
+                                    StrokeDashArray="1"
+                                    StrokeThickness="1"
+                                    X1="{Binding StartPoint.X}"
+                                    X2="{Binding EndPoint.X}"
+                                    Y1="{Binding StartPoint.Y}"
+                                    Y2="{Binding EndPoint.Y}" />
                                 <DataTemplate.Triggers>
                                     <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                        <Setter Property="StrokeThickness" TargetName="line" Value="3"/>
+                                        <Setter TargetName="line" Property="StrokeThickness" Value="3" />
                                     </DataTrigger>
                                     <!--<DataTrigger Binding="{Binding IsDeleted}" Value="True">
                                     <Setter Property="IsEnabled" TargetName="line" Value="False"/>
@@ -215,49 +224,88 @@
                 <ItemsControl Grid.Row="1" HorizontalAlignment="Right">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel/>
+                            <WrapPanel />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
-                    <Button Content="Clear" Click="Clear_Click">
+                    <Button Click="Clear_Click" Content="Clear" />
 
-                    </Button>
-                    
-                    
+
                 </ItemsControl>
-                
 
-                <Grid Grid.Row="1" DockPanel.Dock="Top" HorizontalAlignment="Left">
+
+                <Grid
+                    Grid.Row="1"
+                    HorizontalAlignment="Left"
+                    DockPanel.Dock="Top">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
-                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="*" />
 
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock TextAlignment="Right" Margin="0,0,8,0" Text="Point0"></TextBlock>
-                    <TextBlock TextAlignment="Right" Margin="0,0,8,0" Text="Point1" Grid.Row="1"></TextBlock>
-                    <TextBlock TextAlignment="Right" Margin="0,0,8,0" Text="Last" Grid.Row="2"></TextBlock>
-                    <ContentControl Grid.Column="1" Content="{Binding Point0}"></ContentControl>
-                    <ContentControl Grid.Column="1" Grid.Row="1" Content="{Binding Point0}"></ContentControl>
-                    <ContentControl Grid.Column="1" Grid.Row="2" Content="{Binding Last}"></ContentControl>
+                    <TextBlock
+                        Margin="0,0,8,0"
+                        Text="Point0"
+                        TextAlignment="Right" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Margin="0,0,8,0"
+                        Text="Point1"
+                        TextAlignment="Right" />
+                    <TextBlock
+                        Grid.Row="2"
+                        Margin="0,0,8,0"
+                        Text="Last"
+                        TextAlignment="Right" />
+                    <ContentControl Grid.Column="1" Content="{Binding Point0}" />
+                    <ContentControl
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Content="{Binding Point0}" />
+                    <ContentControl
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Content="{Binding Last}" />
 
                 </Grid>
-                <local:SortableListView x:Name="listView_Lines" ItemsSource="{Binding Lines}" Grid.Row="2" >
+                <local:SortableListView
+                    x:Name="listView_Lines"
+                    Grid.Row="2"
+                    ItemsSource="{Binding Lines}">
 
                     <ListView.View>
 
                         <GridView AllowsColumnReorder="true" ColumnHeaderTemplate="{StaticResource HeaderTemplateDefault}">
 
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Id}" Header="Id" Width="100"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=StartPoint.X}" Header="X1" Width="100"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path= StartPoint.Y}"  Header="Y1"  Width="100"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=EndPoint.X}" Header="X2" Width="100"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path= EndPoint.Y}"  Header="Y2"  Width="100"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path= Direction}"  Header="Direction"  Width="100"/>
+                            <GridViewColumn
+                                Width="100"
+                                DisplayMemberBinding="{Binding Path=Id}"
+                                Header="Id" />
+                            <GridViewColumn
+                                Width="100"
+                                DisplayMemberBinding="{Binding Path=StartPoint.X}"
+                                Header="X1" />
+                            <GridViewColumn
+                                Width="100"
+                                DisplayMemberBinding="{Binding Path=StartPoint.Y}"
+                                Header="Y1" />
+                            <GridViewColumn
+                                Width="100"
+                                DisplayMemberBinding="{Binding Path=EndPoint.X}"
+                                Header="X2" />
+                            <GridViewColumn
+                                Width="100"
+                                DisplayMemberBinding="{Binding Path=EndPoint.Y}"
+                                Header="Y2" />
+                            <GridViewColumn
+                                Width="100"
+                                DisplayMemberBinding="{Binding Path=Direction}"
+                                Header="Direction" />
                             <!--<GridViewColumn Width="auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -273,21 +321,47 @@
                     </ListView.View>
                 </local:SortableListView>
 
-                <local:SortableListView x:Name="listView_Connections" ItemsSource="{Binding Connections}" Grid.Row="3">
+                <local:SortableListView
+                    x:Name="listView_Connections"
+                    Grid.Row="3"
+                    ItemsSource="{Binding Connections}">
                     <ListView.View>
                         <GridView AllowsColumnReorder="true" ColumnHeaderTemplate="{StaticResource HeaderTemplateDefault}">
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Id}" Header="Id" Width="100"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=ViewModelName}" Header="ViewModel" Width="70"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path= ServiceName}"  Header="Service"  Width="70"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path= ParameterName}"  Header="Parameter"  Width="70"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path= Movement}"  Header="Movement"  Width="200"/>
+                            <GridViewColumn
+                                Width="100"
+                                DisplayMemberBinding="{Binding Path=Id}"
+                                Header="Id" />
+                            <GridViewColumn
+                                Width="70"
+                                DisplayMemberBinding="{Binding Path=ViewModelName}"
+                                Header="ViewModel" />
+                            <GridViewColumn
+                                Width="70"
+                                DisplayMemberBinding="{Binding Path=ServiceName}"
+                                Header="Service" />
+                            <GridViewColumn
+                                Width="70"
+                                DisplayMemberBinding="{Binding Path=ParameterName}"
+                                Header="Parameter" />
+                            <GridViewColumn
+                                Width="200"
+                                DisplayMemberBinding="{Binding Path=Movement}"
+                                Header="Movement" />
                             <GridViewColumn Width="auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ToggleButton IsChecked="{Binding IsDeleted}"  Background="Transparent" BorderBrush="Transparent">
-                                            <Path Stroke="Red" Data="{StaticResource CrossGeometry}" Stretch="Uniform" Width="20"
-                                              StrokeThickness="4" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                            </Path>
+                                        <ToggleButton
+                                            Background="Transparent"
+                                            BorderBrush="Transparent"
+                                            IsChecked="{Binding IsDeleted}">
+                                            <Path
+                                                Width="20"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Data="{StaticResource CrossGeometry}"
+                                                Stretch="Uniform"
+                                                Stroke="Red"
+                                                StrokeThickness="4" />
                                         </ToggleButton>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -296,11 +370,17 @@
                     </ListView.View>
                 </local:SortableListView>
 
-                <local:SortableListView ItemsSource="{Binding Logs}" Grid.Row="4">
+                <local:SortableListView Grid.Row="4" ItemsSource="{Binding Logs}">
                     <ListView.View>
                         <GridView AllowsColumnReorder="true" ColumnHeaderTemplate="{StaticResource HeaderTemplateDefault}">
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=MethodName}" Header="Name" Width="300"/>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateTime}" Header="Time" Width="200"/>
+                            <GridViewColumn
+                                Width="300"
+                                DisplayMemberBinding="{Binding Path=MethodName}"
+                                Header="Name" />
+                            <GridViewColumn
+                                Width="200"
+                                DisplayMemberBinding="{Binding Path=DateTime}"
+                                Header="Time" />
                         </GridView>
                     </ListView.View>
                 </local:SortableListView>
@@ -308,8 +388,8 @@
 
 
             <DockPanel Grid.Column="1">
-                <ContentControl x:Name="pipe_view" DockPanel.Dock="Top"></ContentControl>
-                <ContentControl x:Name="queue_view"></ContentControl>
+                <ContentControl x:Name="pipe_view" DockPanel.Dock="Top" />
+                <ContentControl x:Name="queue_view" />
             </DockPanel>
         </Grid>
 

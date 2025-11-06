@@ -1,21 +1,16 @@
-﻿using DynamicData;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Splat;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Reactive;
-using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using System.Xml.Linq;
-using Utility.Entities;
-using Utility.Entities.Comms;
+using Utility.Attributes;
 using Utility.Enums;
 using Utility.Helpers;
 using Utility.Helpers.NonGeneric;
@@ -449,9 +444,6 @@ namespace Utility.Models.Trees
     }
 
 
-    //public class ReadOnlyStringModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<INodeViewModel>? nodeAction = null, Action<IReadOnlyTree>? addition = null, Action<ReadOnlyStringModel>? attach = null) : Model<string>(func, addition, a => attach?.Invoke((ReadOnlyStringModel)a), false, false)
-    //{
-    //}
 
     public class EditModel(Func<IEnumerable<IReadOnlyTree>>? func = null, Action<IReadOnlyTree>? addition = null, Action<EditModel>? attach = null) : Model(func, addition, a => attach?.Invoke((EditModel)a))
     {
@@ -462,7 +454,6 @@ namespace Utility.Models.Trees
         public override object Value { get; set; }
 
     }
-
 
     public class RelationshipModel : Model
     {
@@ -611,7 +602,7 @@ namespace Utility.Models.Trees
 
     }
 
-    public readonly record struct DataFile(string Alias, string FilePath);
+    public readonly record struct DataFile(string TableName, string FileName, string FilePath);
 
 
     public class DataFileModel : Model<DataFile>
@@ -621,19 +612,25 @@ namespace Utility.Models.Trees
         {
             this.IsRemovable = true;
             this.IsReplicable = true;
+            this.IsValueSaved = true;
+            this.IsValueLoaded = true;
         }
 
-        public virtual string Alias
+        public virtual string TableName
         {
-
-            get => this.Get().Alias;
-            set { this.Set(Get() with { Alias = value }); }
+            get => ((DataFile)this.Value).TableName;
+            set { this.Value = (Get() with { TableName = value }); }
+        }
+        public virtual string FileName
+        {
+            get => ((DataFile)this.Value).FileName;
+            set { this.Value = (Get() with { FileName = value }); }
         }
 
         public virtual string FilePath
         {
-            get => this.Get().FilePath;
-            set { this.Set(Get() with { FilePath = value }); }
+            get => ((DataFile)this.Value).FilePath;
+            set { this.Value = (Get() with { FilePath = value }); }
         }
 
         public override object Clone()
@@ -642,7 +639,7 @@ namespace Utility.Models.Trees
         }
     }
 
- 
+
     public class ThroughPutModel : Model<string>
     {
         const string element = nameof(element);
@@ -748,6 +745,7 @@ namespace Utility.Models.Trees
         {
             IncludeFiles = includeFiles;
             DataTemplate = "ReadOnlyStringTemplate";
+            IsExpanded = false;
         }
 
         public FileSystemInfo FileSystemInfo { get => new DirectoryInfo((string)Get(nameof(Value))); set => Value = value.FullName; }
@@ -771,7 +769,7 @@ namespace Utility.Models.Trees
         {
             if (FileSystemInfo == null)
                 throw new Exception("d90222fs sd");
-
+    
             foreach (var d in Directory.EnumerateDirectories(FileSystemInfo.FullName).Select(item => new DirectoryModel(IncludeFiles) { Value = item, Name = item }))
             {
                 yield return d;

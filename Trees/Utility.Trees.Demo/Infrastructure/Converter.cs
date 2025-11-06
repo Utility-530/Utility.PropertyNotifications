@@ -5,6 +5,7 @@ using Utility.Interfaces.NonGeneric;
 using Utility.Trees.Demo.Infrastructure;
 using Svc = Utility.Trees.Demo.Infrastructure.Service;
 using Utility.Trees.Extensions;
+using Utility.Interfaces;
 
 namespace Utility.Trees.Demo
 {
@@ -26,7 +27,7 @@ namespace Utility.Trees.Demo
         {
             dataContext = userControl.DataContext as ConnectionsViewModel;
             Point pointA, pointB;
-            Tree viewmodel = dataContext.ViewModel.Descendant(new((a) => (a.tree.Data as IGuid).Guid == connectionViewModel.Guid)) as Tree;
+            Tree viewmodel = dataContext.ViewModel.Descendant(new((a) => (a.tree.Data<IGetGuid>()).Guid == connectionViewModel.Guid)) as Tree;
 
             if (viewmodel == null)
                 return null;
@@ -40,7 +41,7 @@ namespace Utility.Trees.Demo
             foreach (var x in dataContext.ServiceModel)
             {
                 var data = x as IName;
-                if (connectionViewModel.ServiceGuid == (x as IGuid).Guid)
+                if (connectionViewModel.ServiceGuid == (x as IGetGuid).Guid)
                     service = data;
             }
 
@@ -69,7 +70,7 @@ namespace Utility.Trees.Demo
             var persist = (hitResultsList.DataContext as Tree).Data as IGuid;
             VisualTreeHelper.HitTest(userControl.ListBox, new HitTestFilterCallback(MyHitTestFilter2), new HitTestResultCallback(MyHitTestResult2), new PointHitTestParameters(new Point(10, lineViewModel.EndPoint.Y)));
             var service = hitResultsList2.DataContext as Svc;
-            return new ConnectionModel { Guid = lineViewModel.Guid, ServiceGuid = service.Guid, ViewModelGuid = persist.Guid };
+            return new ConnectionModel { Guid = lineViewModel.Guid, ServiceGuid = service.Guid, ViewModelGuid = persist.Guid() };
         }
 
         // Filter the hit test values for each object in the enumeration.

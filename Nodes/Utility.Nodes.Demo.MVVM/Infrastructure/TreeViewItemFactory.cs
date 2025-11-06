@@ -250,7 +250,7 @@ namespace Utility.Nodes.Demo.MVVM
                 TreeViewItemFactory = TreeViewItemFactory.Instance,
                 TreeViewBuilder = TreeViewBuilder.Instance,
                 PanelsConverter = ItemsPanelConverter.Instance,
-                DataTemplateSelector = Utility.Nodes.WPF.DataTemplateSelector.Instance,
+                DataTemplateSelector = Utility.WPF.Trees.Filters.DataTemplateSelector.Instance,
                 TreeViewFilter = TreeViewFilter.Instance,
                 StyleSelector = Utility.Nodes.WPF.StyleSelector.Instance,
                 EventListener = EventListener.Instance

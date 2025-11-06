@@ -9,7 +9,7 @@ using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Reflection;
 using System.Windows;
-using Utility.Common.Model;
+
 using Utility.Persists;
 using Utility.Interfaces.NonGeneric;
 using Utility.WPF.Meta;
@@ -20,6 +20,7 @@ using System.Reactive;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using TypeSerialization;
+using Utility.Common.Models;
 
 namespace Utility.WPF.Controls.Meta.ViewModels
 {

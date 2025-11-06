@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reflection;
@@ -25,7 +26,7 @@ namespace Utility.Models.Trees
 
         public override IEnumerable Proliferation()
         {
-            yield return new DataFileModel { Name = "db", FilePath = "c:\\", Alias = "New" };
+            yield return new DataFileModel { Name = "datafile", FilePath = Path.Combine(Utility.Constants.DefaultDataPath, "Models"), FileName = "New", TableName = "Model" };
         }
     }
 

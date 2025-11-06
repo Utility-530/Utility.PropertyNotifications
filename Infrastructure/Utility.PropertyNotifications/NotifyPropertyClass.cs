@@ -12,7 +12,7 @@ namespace Utility.PropertyNotifications
     /// </summary>
     public abstract class NotifyPropertyClass : INotifyPropertyCalled, INotifyPropertyReceived, INotifyPropertyChanged, IRaiseChanges
     {
-        bool flag;
+        private bool flag;
 
         protected NotifyPropertyClass(bool raisePropertyCalled = true, bool raisePropertyReceived = true, bool raisePropertyChanged = true) : base()
         {
@@ -25,7 +25,8 @@ namespace Utility.PropertyNotifications
 
         #region INotifyPropertyChanged Members
 
-        bool raisePropertyChanged;
+        private bool raisePropertyChanged;
+
         /// <summary>
         /// Raised when a property on this object has a new value.
         /// </summary>
@@ -149,7 +150,6 @@ namespace Utility.PropertyNotifications
                 }
                 else if (context != null)
                     context.Post(a => missedCalls.Add(args), args);
-
             }
             return false;
         }
@@ -164,12 +164,11 @@ namespace Utility.PropertyNotifications
         #region INotifyPropertyReceived Members
 
         private readonly bool raisePropertyReceived;
+
         /// <summary>
         /// Raised when a property on this object has a new value.
         /// </summary>
         public event PropertyReceivedEventHandler? PropertyReceived;
-
-
 
         /// <summary>
         /// Raises this object's PropertyChanged event.
@@ -180,7 +179,6 @@ namespace Utility.PropertyNotifications
             var handler = PropertyReceived;
             if (handler != null)
             {
-
                 flag = true;
                 var e = new PropertyReceivedEventArgs(propertyName, value, oldValue);
                 handler(this, e);
