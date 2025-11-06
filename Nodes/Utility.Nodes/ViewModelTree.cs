@@ -158,7 +158,7 @@ namespace Utility.Nodes
             get { RaisePropertyCalled(isSelected); return isSelected; }
             set => this.RaisePropertyReceived(ref this.isSelected, value);
         }
-
+         
         public bool IsExpanded
         {
             get { RaisePropertyCalled(isExpanded); return isExpanded; }
@@ -282,6 +282,8 @@ namespace Utility.Nodes
         }
 
         public bool IsValueTracked { get; set; } = true;
+        public bool IsValueSaved { get; set; }
+        public bool IsValueLoaded { get; set; }
 
         public bool Sort(object? o = null)
         {
