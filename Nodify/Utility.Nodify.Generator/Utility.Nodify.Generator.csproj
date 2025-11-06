@@ -18,7 +18,6 @@
     <ProjectReference Include="..\..\Models\Utility.Models.Diagrams\Utility.Models.Diagrams.csproj" />
     <ProjectReference Include="..\..\Models\Utility.Models\Utility.Models.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Base\Utility.Nodify.Base.csproj" />
-    <ProjectReference Include="..\Utility.Nodify.Enums\Utility.Nodify.Enums.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Infrastructure\Utility.Nodify.ViewModels.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Operations\Utility.Nodify.Operations.csproj" />
   </ItemGroup>

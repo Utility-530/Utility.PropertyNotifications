@@ -2,11 +2,12 @@
 using Utility.Entities;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models;
+using Utility.Services.Meta;
 
 namespace Utility.Nodify.Generator.Services
 {
-    public record FilterParam() : MethodParameter<FilterService>(nameof(FilterService.Filter), "filter");
-    public record PredicateReturnParam() : MethodParameter<FilterService>(nameof(FilterService.Filter));
+    public record FilterParam() : Param<FilterService>(nameof(FilterService.Filter), "filter");
+    public record PredicateReturnParam() : Param<FilterService>(nameof(FilterService.Filter));
 
 
     public class FilterService

@@ -2,15 +2,16 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using Utility.Models;
+using Utility.Services.Meta;
 
 namespace Utility.Nodify.Generator.Services
 {
 
-    public record InstanceTypeParam() : MethodParameter<CollectionCreationService>(nameof(CollectionCreationService.Instance), "type");
-    public record ListInstanceReturnParam() : MethodParameter<CollectionCreationService>(nameof(CollectionCreationService.Instance));
+    public record InstanceTypeParam() : Param<CollectionCreationService>(nameof(CollectionCreationService.Instance), "type");
+    public record ListInstanceReturnParam() : Param<CollectionCreationService>(nameof(CollectionCreationService.Instance));
 
-    public record ChangeParam() : MethodParameter<CollectionCreationService>(nameof(CollectionCreationService.Change), "change");
-    public record ListParam() : MethodParameter<CollectionCreationService>(nameof(CollectionCreationService.Change), "list");
+    public record ChangeParam() : Param<CollectionCreationService>(nameof(CollectionCreationService.Change), "change");
+    public record ListParam() : Param<CollectionCreationService>(nameof(CollectionCreationService.Change), "list");
 
 
 
