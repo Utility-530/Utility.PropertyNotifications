@@ -5,6 +5,7 @@ namespace Utility.Models.Templates
     using System.Windows;
     using System.Windows.Controls;
     using Utility.Interfaces.Exs;
+    using Utility.Models.Trees;
     using Utility.WPF.Helpers;
 
     public class ModelTemplateSelector : DataTemplateSelector
