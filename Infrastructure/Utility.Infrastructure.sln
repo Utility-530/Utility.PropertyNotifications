@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.4.33403.182
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11123.170 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility.Infrastructure", "Utility.Infrastructure\Utility.Infrastructure.csproj", "{A814C4D0-E0A9-4B38-9D9C-B2FF685541DE}"
 EndProject
@@ -59,13 +59,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Services.Meta", "Ut
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.Models.Diagrams", "..\Models\Utility.Models.Diagrams\Utility.Models.Diagrams.csproj", "{0093F7DB-1833-7EDC-A87B-7655201520EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.API", "Utility.API\Utility.API.csproj", "{E60EB725-874C-463D-ACF6-4528186DDADF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.API.Services", "Utility.API.Services\Utility.API.Services.csproj", "{4D14139A-B663-4670-A3A7-955D13A89025}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.API.Entities", "Utility.API.Entities\Utility.API.Entities.csproj", "{CEABA75C-437E-153B-FAEB-6E5B8F0DBA2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility.EventArgs", "Utility.EventArgs\Utility.EventArgs.csproj", "{03EFD3C3-B33C-4EF4-A398-BD59C53C2764}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -181,10 +181,6 @@ Global
 		{0093F7DB-1833-7EDC-A87B-7655201520EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0093F7DB-1833-7EDC-A87B-7655201520EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0093F7DB-1833-7EDC-A87B-7655201520EB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E60EB725-874C-463D-ACF6-4528186DDADF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E60EB725-874C-463D-ACF6-4528186DDADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E60EB725-874C-463D-ACF6-4528186DDADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E60EB725-874C-463D-ACF6-4528186DDADF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4D14139A-B663-4670-A3A7-955D13A89025}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4D14139A-B663-4670-A3A7-955D13A89025}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D14139A-B663-4670-A3A7-955D13A89025}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -193,6 +189,10 @@ Global
 		{CEABA75C-437E-153B-FAEB-6E5B8F0DBA2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEABA75C-437E-153B-FAEB-6E5B8F0DBA2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CEABA75C-437E-153B-FAEB-6E5B8F0DBA2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03EFD3C3-B33C-4EF4-A398-BD59C53C2764}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03EFD3C3-B33C-4EF4-A398-BD59C53C2764}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03EFD3C3-B33C-4EF4-A398-BD59C53C2764}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03EFD3C3-B33C-4EF4-A398-BD59C53C2764}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -211,7 +211,6 @@ Global
 		{C7EC664F-D555-4529-96D2-EEFDAFED3E4D} = {88263C16-EE22-4B31-9791-A9F31B2E6A17}
 		{99295D40-18B6-49F8-B3A7-A53F032D44AA} = {88263C16-EE22-4B31-9791-A9F31B2E6A17}
 		{0093F7DB-1833-7EDC-A87B-7655201520EB} = {88263C16-EE22-4B31-9791-A9F31B2E6A17}
-		{E60EB725-874C-463D-ACF6-4528186DDADF} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{4D14139A-B663-4670-A3A7-955D13A89025} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{CEABA75C-437E-153B-FAEB-6E5B8F0DBA2E} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
