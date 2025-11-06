@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace Utility.Common
+namespace Utility.Meta
 {
     public class AutoMapperSingleton
     {
@@ -14,4 +14,8 @@ namespace Utility.Common
 
         public static IMapper Instance { get; } = new AutoMapperSingleton().mapper;
     }
+
+
 }
+
+
