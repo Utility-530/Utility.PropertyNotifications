@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Nodify.Operations
 {

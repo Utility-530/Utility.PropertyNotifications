@@ -12,7 +12,7 @@ using Utility.Nodify.Core;
 
 namespace Utility.Nodify.Operations
 {
-    public class MethodOperation(MethodInfo methodInfo) : IOperation, ISerialise, IValue, IIsReadOnly, IType
+    public class MethodOperation(MethodInfo methodInfo) : IOperation, ISerialise, IGetValue, IIsReadOnly, IType
     {
         Lazy<Dictionary<string, ParameterInfo>> dictionary = new(() => methodInfo.GetParameters().ToDictionary(a => a.Name, a => a));
         public object Value => methodInfo.Name;
