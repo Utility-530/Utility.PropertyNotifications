@@ -9,7 +9,7 @@ namespace Utility
 {
     public class Constants
     {
-        public const string DefaultDataPath = "O:\\Users\\rytal\\Data";
+        public const string DefaultDataPath = "O:\\Data";
         public const string DefaultModelsFileName = "models.sqlite";
         public const string DefaultAPIFileName = "api.sqlite";
         public static readonly string DefaultModelsFilePath = Path.Combine(DefaultDataPath, DefaultModelsFileName);
