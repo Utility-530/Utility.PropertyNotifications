@@ -20,11 +20,21 @@ namespace Utility.Interfaces.Exs
         ILocation,
         IGetIsSingular,
         IIsChildrenTracked,
-        IIsValueTracked
-    //IIsPersistable
+        IIsValueTracked,
+        IIsValueLoaded,
+        IIsValueSaved
     //IHeight,
     //IWidth
     {
+    }
+
+    public interface IIsValueLoaded
+    {
+        bool IsValueLoaded { get; set; }
+    }
+    public interface IIsValueSaved
+    {
+        bool IsValueSaved { get; set; }
     }
 
     public interface IHeight
@@ -46,6 +56,7 @@ namespace Utility.Interfaces.Exs
     {
         bool IsChildrenTracked { get; set; }
     }
+
 
     public interface IIsChildrenRefreshed
     {
@@ -97,6 +108,7 @@ namespace Utility.Interfaces.Exs
         Orientation Orientation { get; set; }
     }
 
+
     public interface IArrangement
     {
         Arrangement Arrangement { get; set; }
@@ -112,10 +124,12 @@ namespace Utility.Interfaces.Exs
         Position2D ConnectorPosition { get; set; }
     }
 
+
     public interface IIsReactivationRequired
     {
         bool IsReactivationRequested { get; set; }
     }
+
 
     public interface IDataTemplate
     {
