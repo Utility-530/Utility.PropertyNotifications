@@ -1,12 +1,9 @@
-﻿using Splat;
-using Utility.Entities.Comms;
+﻿using Utility.Entities.Comms;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Models;
 using Utility.Models.Trees;
 using Utility.Nodes.Meta;
 using Utility.PropertyNotifications;
-using Utility.Repos;
-using Utility.Structs;
 using Utility.Extensions;
 using Utility.Nodes.Demo.Filters.Services;
 using System.Reactive.Linq;
@@ -36,6 +33,7 @@ namespace Utility.Nodes.Demo.Editor
         public const string Slave = nameof(Slave);
         public const string Commands = nameof(Commands);
 
+
         public IObservable<INodeViewModel> BuildContainer()
         {
             return nodeSource.Create(
@@ -47,14 +45,14 @@ namespace Utility.Nodes.Demo.Editor
                 [
                     new Model(() =>
                     [
-                        new DataFilesModel { Name = nameof(DataFilesModel), DataTemplate = "MasterTemplate" },
+                        new DataFilesModel { Name = nameof(DataFilesModel) },
                         new Model(() => [new CommandModel<SaveEvent> { Name = Save }, new CommandModel<RefreshEvent> { Name = Refresh }, new CommandModel<RunEvent> { Name = Run }],
-                        attach: n => { n.IsExpanded = true; n.Orientation = Enums.Orientation.Horizontal; })
+                        attach: n => {
+                            n.Orientation = Enums.Orientation.Horizontal; })
                         { Name = Commands,
-                        IsExpanded = true}
+                       }
                     ], addition:a=>
                     {
-
                         if(a is DataFilesModel dfm)
                         {
                             dfm.WhenReceivedFrom(a => a.Current, includeNulls: false)
@@ -64,30 +62,22 @@ namespace Utility.Nodes.Demo.Editor
                     })
                     {
                         Name = Master,
-                        IsExpanded = true
+                        Orientation = Enums.Orientation.Vertical
                     },
-                new Model(attach:a=>
-                {
-                    a.ReactTo<ComboServiceOutputParam, DataFileModel>(setAction: (a) =>
+                    new Model(attach:attach=>
                     {
-                        var repo = new TreeRepository(a.FilePath);
-                        var nodeSource = new NodeEngine(repo);
-                        nodeSource.Create(a.Alias, a.Guid, s => new Model() { Name = s })
-                        .Subscribe(ca =>
-                        {
-                            a.Add(ca);
+                        attach.ReactTo<ComboServiceOutputParam, INodeViewModel>(setAction: (node) =>
+                        {  
+                            attach.Add(node);                        
                         });
-                    });
-                })
+                    })
+                    {
+                        Name = Slave,
+                    }])
                 {
-                    Name = Slave,
-                    IsExpanded = true
-                }])
-                {
-                    IsExpanded = true,
-                    Name = s
-                })
-                ;
+                    Name = s,
+                    Orientation = Enums.Orientation.Vertical
+                });
         }
     }
 }

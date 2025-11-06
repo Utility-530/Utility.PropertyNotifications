@@ -12,10 +12,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Themes\**" />
+    <EmbeddedResource Remove="Themes\**" />
+    <None Remove="Themes\**" />
+    <Page Remove="Themes\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Data\entireframework.min.css" />
     <None Remove="Data\master.css" />
     <None Remove="Data\pico.classless.blue.css" />
     <None Remove="Data\pico.min.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Container.xaml" />
+    <Page Remove="Master.xaml" />
+    <Page Remove="Slave.xaml" />
   </ItemGroup>
 
   <ItemGroup>

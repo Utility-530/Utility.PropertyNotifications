@@ -14,6 +14,7 @@ using Utility.Nodes.Meta;
 using Utility.Repos;
 using Utility.ServiceLocation;
 using Utility.Services.Meta;
+using Utility.WPF.Helpers;
 using Utility.WPF.Templates;
 
 namespace Utility.Nodes.Demo.Editor
@@ -46,23 +47,27 @@ namespace Utility.Nodes.Demo.Editor
 
 
             ComboService comboService = new();
-            var res = this.FindResource("MasterTemplate") as DataTemplate;
+            //var res = this.FindResource("MasterTemplate") as DataTemplate;
             var window = new Window()
-            {/* Content = Locator.Current.GetService<ContainerViewModel>()*/
-                ContentTemplate = this.FindResource("MasterTemplate") as DataTemplate
+            { 
+                ContentTemplate = this.FindResource("ContainerTemplate") as DataTemplate
             };
-
+            var shadowWindow = new Window()
+            { 
+                ContentTemplate = this.FindResource("ShadowTemplate") as DataTemplate
+            };
+            shadowWindow.ToLeft();
             window.Show();
+            shadowWindow.Show();
             MethodCache.Instance[nameof(NodeMethodFactory.BuildContainer)]
                 .Subscribe(node =>
                 {
                     window.Content = node;
-
+                    shadowWindow.Content = node;
+            
                 });
 
-
             base.OnStartup(e);
-
         }
 
 

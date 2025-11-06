@@ -21,9 +21,9 @@
 
     <filters:StyleSelector x:Key="StyleSelector" DefaultStyle="ViewContentStyle" />
 
-    <local:CollectionStyleSelector x:Key="CollectionStyleSelector"
+    <!--<local:CollectionStyleSelector x:Key="CollectionStyleSelector"
                                 CollectionStyle="{StaticResource HeaderedItemsStyle}"
-                                ItemStyle="{StaticResource ContentStyle}" />
+                                ItemStyle="{StaticResource ContentStyle}" />-->
 
     <!--<local:DirtyConverter x:Key="DirtyConverter" />-->
 
@@ -47,13 +47,13 @@
                 </ct:CustomTreeView>
 
 
-                <TreeView Grid.Row="1" ItemsSource="{Binding Dirty}" Width="300" ItemContainerStyleSelector="{StaticResource CollectionStyleSelector}">
+                <!--<TreeView Grid.Row="1" ItemsSource="{Binding Dirty}" Width="300" ItemContainerStyleSelector="{StaticResource CollectionStyleSelector}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="SelectedItemChanged">
                             <beh:SetSelectedItemAction PropertyName="DataContext" Converter="{StaticResource DirtyConverter}"  TargetObject="{Binding ElementName=splitcontrol, Path=Header}" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                </TreeView>
+                </TreeView>-->
 
             </Grid>
 
