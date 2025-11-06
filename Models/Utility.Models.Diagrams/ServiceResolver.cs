@@ -1,6 +1,5 @@
 ﻿using Cogs.Collections;
 using DynamicData;
-using LanguageExt.ClassInstances;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -63,12 +62,12 @@ namespace Utility.Models.Diagrams
                     observables.Add(observable);
                     if (methodParameter.Info == null && cache.Parameters.Count == 0)
                     {
-                        connections.Add(new MethodConnection(a =>
+                        connections.Add(MethodConnection.FromAction(a =>
                         subscribe<TParam>(a, cache.InValues.Single().Value.OnNext), observable));
                         return;
                     }
                     IDisposable? disposable = null;
-                    connections.Add(new MethodConnection(a =>
+                    connections.Add(MethodConnection.FromAction(a =>
                     {
                         if (disposable != null)
                             disposable.Dispose();
@@ -86,7 +85,7 @@ namespace Utility.Models.Diagrams
                 {
                     observers.Add(observer);
 
-                    connections.Add(new MethodConnection(async a =>
+                    connections.Add(MethodConnection.FromAction(async a =>
                     {
                         convert<TOutput>(a).Subscribe(observer.OnNext);
                     }, cache.OutValue));
@@ -107,7 +106,7 @@ namespace Utility.Models.Diagrams
                         if (get(methodParameterIn) is MethodNode cacheIn)
                         {
                             IDisposable? disposable = null;
-                            connections.Add(new MethodConnection(a =>
+                            connections.Add(MethodConnection.FromAction(a =>
                             {
                                 if (disposable != null)
                                     disposable.Dispose();
