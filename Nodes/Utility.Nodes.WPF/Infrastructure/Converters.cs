@@ -48,37 +48,37 @@ namespace Utility.Nodes.WPF
                 args.Handled = true;
                 if (nObject is  DataFileModel model  && nObject is IGetParent<INodeViewModel> { Parent: DataFilesModel { Children: { } collection } dModels })
                 {
-                    var alias = toFileName(dModels, model);
-
-                    var filePath = Utility.Helpers.PathHelper.ChangeFilename(model.FilePath, alias);
-                    return new DataFileModel { Name = alias, Alias = alias, FilePath = filePath };
+                    //var alias = toFileName(dModels, model);
+                    var newName = StringExtensions.IncrementSuffixNumber(model.TableName);
+                    //var filePath = Utility.Helpers.PathHelper.ChangeFilename(model.FilePath, alias);
+                    return new DataFileModel { Name = newName, FileName = model.FileName, FilePath = model.FilePath, TableName = newName };
                 }
                 throw new NotImplementedException("V FDF$3");
             }
             return DependencyProperty.UnsetValue;
 
-            static string toFileName(DataFilesModel dataFilesModel, DataFileModel dataFileModel)
-            {
-                var match = Regex.Match(dataFileModel.Alias, "(.*)_(\\d)$");
-                return match.Success ?
-                    name(match.Groups[1].Value, dataFilesModel.Children) :
-                    name(dataFileModel.Alias, dataFilesModel.Children);
+            //static string toFileName(DataFilesModel dataFilesModel, DataFileModel dataFileModel)
+            //{
+            //    var match = Regex.Match(dataFileModel.TableName, "(.*)_(\\d)$");
+            //    return match.Success ?
+            //        name(match.Groups[1].Value, dataFilesModel.Children) :
+            //        name(dataFileModel.Alias, dataFilesModel.Children);
 
-                static string name(string name, IEnumerable dataFilesModel)
-                {
-                    if (_match(name, dataFilesModel) is { } match)
-                    {
-                        return name + "_" + (int.Parse(match.Groups[1].Value) + 1);
-                    }
-                    return name + "_1";
-                    static Match? _match(string x, IEnumerable dataFilesModel)
-                    {
-                        return dataFilesModel.Cast<DataFileModel>().Select(a => Regex.Match(a.Name, $"{x}_(\\d)$")).Where(a => a.Success).OrderBy(a => a.Groups[2]).LastOrDefault();
-                    }
-                }
+            //    static string name(string name, IEnumerable dataFilesModel)
+            //    {
+            //        if (_match(name, dataFilesModel) is { } match)
+            //        {
+            //            return name + "_" + (int.Parse(match.Groups[1].Value) + 1);
+            //        }
+            //        return name + "_1";
+            //        static Match? _match(string x, IEnumerable dataFilesModel)
+            //        {
+            //            return dataFilesModel.Cast<DataFileModel>().Select(a => Regex.Match(a.Name, $"{x}_(\\d)$")).Where(a => a.Success).OrderBy(a => a.Groups[2]).LastOrDefault();
+            //        }
+            //    }
 
 
-            }
+            //}
         }
 
 
@@ -148,5 +148,39 @@ namespace Utility.Nodes.WPF
             }
         }
     }
+    public static class StringExtensions
+    {
+        private static readonly Regex NumberAtEnd = new Regex(@"(\d+)$", RegexOptions.Compiled);
 
+        /// <summary>
+        /// Adds a number to a string or increments the trailing number if present.
+        /// </summary>
+        public static string IncrementSuffixNumber(this string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return string.Empty;
+
+            var match = NumberAtEnd.Match(input);
+            if (!match.Success)
+            {
+                // No number at the end → append "1"
+                return input + "1";
+            }
+
+            // Extract the numeric part
+            var numberPart = match.Groups[1].Value;
+            var prefix = input.Substring(0, match.Index);
+
+            // Parse and increment
+            if (int.TryParse(numberPart, out int number))
+            {
+                var incremented = (number + 1).ToString($"D{numberPart.Length}");
+                // "D{length}" keeps leading zeros
+                return prefix + incremented;
+            }
+
+            // Fallback — if number parsing failed, just append "1"
+            return input + "1";
+        }
+    }
 }

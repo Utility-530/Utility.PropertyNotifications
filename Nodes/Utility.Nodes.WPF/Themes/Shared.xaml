@@ -1,27 +1,36 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-                    xmlns:local="clr-namespace:Utility.Nodes.WPF" 
-                    xmlns:conv="http://schemas.utility.com/converters" 
-                    xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                    xmlns:mvvm="http://hexinnovation.com/math" 
-                    xmlns:mt="clr-namespace:Utility.Models.Templates;assembly=Utility.Models.Templates">
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:conv="http://schemas.utility.com/converters"
+    xmlns:icons="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    xmlns:local="clr-namespace:Utility.Nodes.WPF"
+    xmlns:mt="clr-namespace:Utility.Models.Templates;assembly=Utility.Models.Templates"
+    xmlns:mvvm="http://hexinnovation.com/math">
 
 
 
-    <local:SelectedNodeChangeConverter x:Key="SelectedNodeChangeConverter"/>
-    <conv:TypeNameConverter x:Key="TypeNameConverter"/>
-    <local:ChildrenSelector x:Key="ChildrenSelector"/>
-    <local:ChildrenSelectorConverter x:Key="ChildrenSelectorConverter"/>
-    <conv:ObjectDumperConverter x:Key="ObjectDumperConverter"/>
-    <conv:InverseNullToBooleanConverter x:Key="InverseNullToBooleanConverter"/>
-    <icons:PackIconIonicons x:Key="Icon" x:Shared="false" Kind="AddMD" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center" Background="Transparent"/>
-    <conv:NewObjectConverter x:Key="NewObjectConverter"/>
-    <local:FinishEditConverter x:Key="FinishEditConverter"/>
-    <local:AddDataFileConverter x:Key="AddDataFileConverter"/>
-    <local:RemoveConverter x:Key="RemoveConverter"/>
+    <local:SelectedNodeChangeConverter x:Key="SelectedNodeChangeConverter" />
+    <conv:TypeNameConverter x:Key="TypeNameConverter" />
+    <local:ChildrenSelector x:Key="ChildrenSelector" />
+    <local:ChildrenSelectorConverter x:Key="ChildrenSelectorConverter" />
+    <conv:ObjectDumperConverter x:Key="ObjectDumperConverter" />
+    <conv:InverseNullToBooleanConverter x:Key="InverseNullToBooleanConverter" />
+    <icons:PackIconIonicons
+        x:Key="Icon"
+        Width="16"
+        Height="16"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        x:Shared="false"
+        Background="Transparent"
+        Kind="AddMD" />
+    <conv:NewObjectConverter x:Key="NewObjectConverter" />
+    <local:FinishEditConverter x:Key="FinishEditConverter" />
+    <local:AddDataFileConverter x:Key="AddDataFileConverter" />
+    <local:RemoveConverter x:Key="RemoveConverter" />
 
-    <mvvm:MathConverter x:Key="Math"/>
-    <mt:ModelTemplateSelector x:Key="ModelTemplateSelector"/>
+    <mvvm:MathConverter x:Key="Math" />
+
 
 
 </ResourceDictionary>

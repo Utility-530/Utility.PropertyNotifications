@@ -7,6 +7,9 @@
         <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/ComboExStyle.xaml" />
         <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/DefaultContentStyle.xaml" />
         <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/DefaultStyle.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/ComboExStyle.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/DefaultContentStyle.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/DefaultStyle.xaml" />
 
         <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Styles.xaml" />
         <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/ViewContentStyle.xaml" />
