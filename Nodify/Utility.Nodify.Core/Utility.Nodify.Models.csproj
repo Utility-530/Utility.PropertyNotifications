@@ -10,7 +10,6 @@
     <ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Utility.Infrastructure\Utility.Infrastructure.csproj" />
     <ProjectReference Include="..\Utility.Nodify.Base\Utility.Nodify.Base.csproj" />
-    <ProjectReference Include="..\Utility.Nodify.Enums\Utility.Nodify.Enums.csproj" />
   </ItemGroup>
 
 </Project>
