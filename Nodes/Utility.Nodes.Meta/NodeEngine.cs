@@ -23,6 +23,8 @@ using Utility.PropertyNotifications;
 using Utility.Reactives;
 using Utility.ServiceLocation;
 using Utility.Services.Meta;
+using Utility.Interfaces;
+
 using CompositeDisposable = Utility.Observables.CompositeDisposable;
 
 namespace Utility.Nodes.Meta
@@ -49,6 +51,7 @@ namespace Utility.Nodes.Meta
         public static NodeEngine Instance { get; } = new();
 
         private readonly ReplaySubject<INodeViewModel> _selections = new(1);
+        //private readonly ReplaySubject<DirtyModel> _dirty = new(1);
         private readonly ObservableCollection<INodeViewModel> _nodes = [];
         private readonly CompositeDisposable _compositeDisposable = new();
         private readonly ChangeTracker _changeTracker;
@@ -75,6 +78,7 @@ namespace Utility.Nodes.Meta
         public IReadOnlyCollection<INodeViewModel> Nodes => _nodes;
         string INodeSource.New => New;
         public IObservable<INodeViewModel> Selections => _selections;
+        //public IObservable<DirtyModel> Dirty => _dirty;
 
         public void Remove(INodeViewModel node)
         {
@@ -338,6 +342,36 @@ namespace Utility.Nodes.Meta
             });
         }
 
+        //public void Save()
+        //{
+        //    ObjectDisposedException.ThrowIf(_disposed, nameof(NodeEngine));
+
+        //    Single(nameof(NodeMethodFactory.BuildDirty))
+        //        .Subscribe(async tree =>
+        //        {
+        //            //if (tree is not CollectionModel<DirtyModel> model)
+        //            //    throw new Exception(ERROR_INVALID_DIRTY_MODEL);
+
+        //            await processDirtyItems(tree);
+        //        })
+        //        .DisposeWith(_compositeDisposable);
+
+        //    async Task processDirtyItems(INodeViewModel tree)
+        //    {
+        //        var itemsToProcess = tree.ToArray();
+
+        //        foreach (var item in itemsToProcess)
+        //        {
+        //            if (item is DirtyModel { SourceKey: { } sourceKey, PropertyName: { } propertyName, NewValue: { } newValue })
+        //            {
+        //                _repository.Value.Set(Guid.Parse(sourceKey), propertyName, newValue, DateTime.Now);
+        //                tree.Remove(item);
+        //                await Task.Delay(200);
+        //            }
+        //        }
+        //    }
+        //}
+
         public IObservable<INodeViewModel> Single(string key) => Many(key).Take(1);
 
         public IObservable<INodeViewModel> Many(string key)
@@ -428,6 +462,7 @@ namespace Utility.Nodes.Meta
                 _compositeDisposable?.Dispose();
                 _nodes?.Clear();
                 _selections?.Dispose();
+                //_dirty?.Dispose();
             }
 
             _disposed = true;

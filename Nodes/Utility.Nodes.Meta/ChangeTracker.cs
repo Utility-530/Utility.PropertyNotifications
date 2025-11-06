@@ -3,7 +3,7 @@ using Utility.Changes;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Keys;
-using Utility.Extensions;
+using Utility.Interfaces;
 using Utility.Interfaces.NonGeneric;
 using Utility.ServiceLocation;
 

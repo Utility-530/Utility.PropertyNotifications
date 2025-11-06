@@ -1,5 +1,5 @@
 ﻿#nullable enable
-using Splat;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +7,11 @@ using System.Reactive.Threading.Tasks;
 using System.Reflection;
 using System.Threading.Tasks;
 using Utility.Helpers.NonGeneric;
-using Utility.Interfaces.Exs;
 using Utility.Interfaces.Exs.Diagrams;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
 using Utility.Models.Trees;
-using Utility.Nodify.Operations.Infrastructure;
 using Utility.PropertyNotifications;
-using Utility.ServiceLocation;
 
 namespace Utility.Nodes.Meta
 {
@@ -31,14 +28,15 @@ namespace Utility.Nodes.Meta
             this.setdictionary = new(() =>
             {
                 var dict = typeof(NodeViewModel)
-                                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
-                                .Where(a => a.Name != nameof(IGetParent<>.Parent))
-                                .ToDictionary(a => a.Name, a => rules.Decide(a));
+                               .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                               .Where(a => a.Name != nameof(IGetParent<>.Parent))
+                               .ToDictionary(a => a.Name, a => rules.Decide(a));
                 return dict;
             });
         }
 
         public Getter? Getter(string name) => setdictionary.Value.TryGetValue(name, out var @interface) ? @interface.Getter : null;
+
         public Setter? Setter(string name) => setdictionary.Value.TryGetValue(name, out var @interface) ? @interface.Setter : null;
     }
 
@@ -48,7 +46,6 @@ namespace Utility.Nodes.Meta
         public Getter Getter { get; set; }
         public Setter Setter { get; set; }
     }
-
 
     public abstract class Setter
     {
@@ -62,6 +59,7 @@ namespace Utility.Nodes.Meta
         public virtual string Name { get; }
 
         public abstract object Get(object instance);
+
         public abstract bool Equality(object instance, object value);
     }
 
@@ -157,6 +155,7 @@ namespace Utility.Nodes.Meta
             return Task.CompletedTask;
         }
     }
+
     public class IgnoreSetter : Setter
     {
         public IgnoreSetter()
@@ -166,10 +165,8 @@ namespace Utility.Nodes.Meta
         public override Task Set(object instance, object value)
         {
             return Task.CompletedTask;
-
         }
     }
-
 
     public class GenericGetter : Getter
     {
@@ -195,8 +192,6 @@ namespace Utility.Nodes.Meta
 
     public class IgnoreGetter : Getter
     {
-
-
         public IgnoreGetter()
         {
         }
@@ -245,5 +240,4 @@ namespace Utility.Nodes.Meta
             }
         }
     }
-
 }
