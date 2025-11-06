@@ -19,6 +19,4 @@ namespace Utility.Nodes.Demo.Lists
             value.Do();
         }
     }
-
-
 }

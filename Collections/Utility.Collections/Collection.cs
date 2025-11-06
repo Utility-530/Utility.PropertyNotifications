@@ -12,7 +12,7 @@ namespace Utility.Collections
     public class Collection : SortableObservableCollection<object>, IObservable, IComplete
     {
         private DeferredEventsCollection _deferredEvents;
-        List<IObserver> observers = new List<IObserver>();
+        private List<IObserver> observers = new List<IObserver>();
         private bool isCompleted;
 
         public IEnumerable<IObserver> Observers => observers;
@@ -58,10 +58,12 @@ namespace Utility.Collections
                 observer.OnNext(e);
             }
         }
+
         public void Reset()
         {
             isCompleted = false;
         }
+
         public void Complete()
         {
             isCompleted = true;
@@ -84,7 +86,7 @@ namespace Utility.Collections
                 return Disposer.Empty;
             }
             isCompleted = false;
-   
+
             return new Disposer(observers, observer);
         }
 

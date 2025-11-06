@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Utility.PropertyNotifications;
-using Utility.WPF.Demo.Common.Meta;
-using Utility.ServiceLocation;
 using Utility.Helpers.Ex;
+using Utility.PropertyNotifications;
+using Utility.ServiceLocation;
+using Utility.WPF.Demo.Common.Meta;
 
 namespace Utility.WPF.Demo.Common.ViewModels
 {

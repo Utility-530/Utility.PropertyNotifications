@@ -34,7 +34,6 @@ namespace Utility.Nodes.Common
                     }
                     else
                         collection.Add(a);
-
                 }).DisposeWith(composite);
 
                 filter

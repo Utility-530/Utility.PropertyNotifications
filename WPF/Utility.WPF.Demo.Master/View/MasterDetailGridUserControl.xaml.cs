@@ -1,9 +1,9 @@
-﻿using Endless;
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using Endless;
 using Utility.ServiceLocation;
 using Utility.WPF.Demo.Common.Meta;
 using Utility.WPF.Demo.Common.ViewModels;

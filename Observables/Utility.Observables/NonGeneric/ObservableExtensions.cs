@@ -1,17 +1,12 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
-// See the LICENSE file in the project root for more information. 
+// See the LICENSE file in the project root for more information.
 
-using System;
-using System.ComponentModel;
 using System.Runtime.ExceptionServices;
-using System.Threading;
 using Utility.Interfaces.Reactive.NonGeneric;
-using Utility.Observables.Generic;
 
 namespace Utility.Observables.NonGeneric
 {
-
     internal static class Stubs
     {
         public static readonly Action<object> Ignore = static _ => { };
@@ -23,6 +18,7 @@ namespace Utility.Observables.NonGeneric
     }
 
 #if !NO_THREAD
+
     internal static class TimerStubs
     {
 #if NETSTANDARD1_3
@@ -31,6 +27,7 @@ namespace Utility.Observables.NonGeneric
         public static readonly Timer Never = new Timer(static _ => { });
 #endif
     }
+
 #endif
 
     /// <summary>
@@ -189,7 +186,6 @@ namespace Utility.Observables.NonGeneric
             return source.Subscribe/*Unsafe*/(new Observer(onNext, onError, onCompleted, Stubs.IgnoreProgress));
         }
 
-
         /// <summary>
         /// Subscribes an element handler, an exception handler, and a completion handler to an observable sequence.
         /// </summary>
@@ -234,7 +230,6 @@ namespace Utility.Observables.NonGeneric
         }
 
         #endregion Subscribe delegate-based overloads
-
 
         public static IObservable Create(Func<IObserver, IDisposable> subscribe)
         {

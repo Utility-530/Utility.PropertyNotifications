@@ -106,8 +106,7 @@
                                                 ItemsSource="{Binding Data, Mode=OneTime, Converter={x:Static conv:DefaultConverter.Instance}}"
                                                 CommandParameter="{Binding NewItem}"
                                                 RemoveOrder="Last"
-                                                ButtonTypes="Add,Remove"
-                                                >
+                                                ButtonTypes="Add,Remove">
                                 <ListBox x:Name="DragablzItemsControl2" Width="200"
                                                                     VerticalAlignment="Center"
                                                                     MouseDown="DragablzItemsControl_MouseDown">

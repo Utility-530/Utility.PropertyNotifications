@@ -1,17 +1,12 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT License.
-// See the LICENSE file in the project root for more information. 
+// See the LICENSE file in the project root for more information.
 
 //using System;
-using System.ComponentModel;
 using System.Runtime.ExceptionServices;
-using System.Threading;
-using Utility.Interfaces.NonGeneric;
-using Utility.Observables.Generic;
 
 namespace Utility.Observables.Generic
 {
-
     internal static class Stubs<T>
     {
         public static readonly Action<T> Ignore = static _ => { };
@@ -23,6 +18,7 @@ namespace Utility.Observables.Generic
     }
 
 #if !NO_THREAD
+
     internal static class TimerStubs
     {
 #if NETSTANDARD1_3
@@ -31,6 +27,7 @@ namespace Utility.Observables.Generic
         public static readonly Timer Never = new Timer(static _ => { });
 #endif
     }
+
 #endif
 
     /// <summary>
@@ -189,7 +186,6 @@ namespace Utility.Observables.Generic
             return source.Subscribe/*Unsafe*/(new Observer<T>(onNext, onError, onCompleted, Stubs<T>.IgnoreProgress));
         }
 
-
         /// <summary>
         /// Subscribes an element handler, an exception handler, and a completion handler to an observable sequence.
         /// </summary>
@@ -235,7 +231,6 @@ namespace Utility.Observables.Generic
 
         #endregion Subscribe delegate-based overloads
 
-
         public static Interfaces.Reactive.Generic.IObservable<T> Create<T>(Func<Interfaces.Reactive.Generic.IObserver<T>, IDisposable> subscribe)
         {
             var subject = new Subject<T>();
@@ -247,28 +242,24 @@ namespace Utility.Observables.Generic
             return subject;
         }
 
-
         public static Interfaces.Reactive.Generic.IObservable<T> Empty<T>()
         {
-            var subject = new Subject<T>(); 
+            var subject = new Subject<T>();
             subject.OnCompleted();
             return subject;
         }
-
-
 
         public static Interfaces.Reactive.Generic.IObservable<TOut> Select<TIn, TOut>(this Interfaces.Reactive.Generic.IObservable<TIn> observable, Func<TIn, TOut> func)
         {
             var subject = new Subject<TIn, TOut>(func);
             var disposable = observable.Subscribe(subject);
             subject.Add(disposable);
-            return subject; 
+            return subject;
         }
 
         public static Interfaces.Reactive.Generic.IObservable<TOutput> CastAs<TInput, TOutput>(this Interfaces.Reactive.Generic.IObservable<TInput> observable) where TOutput : class
         {
-            return observable.Select(a=>(a as TOutput ?? throw new Exception("dfs w2121")));
-        }      
- 
+            return observable.Select(a => (a as TOutput ?? throw new Exception("dfs w2121")));
+        }
     }
 }

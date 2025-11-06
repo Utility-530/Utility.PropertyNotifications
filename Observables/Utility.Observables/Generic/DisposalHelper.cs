@@ -2,7 +2,6 @@
 {
     public static class DisposalHelper
     {
-
         /// <summary>
         /// Ensures the provided disposable is disposed with the specified <see cref="CompositeDisposable"/>.
         /// </summary>

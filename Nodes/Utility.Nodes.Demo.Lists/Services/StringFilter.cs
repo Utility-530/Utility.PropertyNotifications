@@ -17,7 +17,7 @@ namespace Utility.Nodes.Demo.Lists.Services
             throw new Exception("44333 3gw");
         }
 
-        private static bool filter(StringFilterParameters filterQuery) 
+        private static bool filter(StringFilterParameters filterQuery)
         {
             switch (filterQuery)
             {
@@ -37,18 +37,22 @@ namespace Utility.Nodes.Demo.Lists.Services
                     if (string.IsNullOrEmpty(__filter))
                         return true;
                     return title?.Contains(__filter, StringComparison.CurrentCultureIgnoreCase) == true;
+
                 case { Filter: { } __filter, Value: Loan { Name: var title } }:
                     if (string.IsNullOrEmpty(__filter))
                         return true;
                     return title?.Contains(__filter, StringComparison.CurrentCultureIgnoreCase) == true;
+
                 case { Filter: { } __filter, Value: Transaction { Description: var title } }:
                     if (string.IsNullOrEmpty(__filter))
                         return true;
                     return title?.Contains(__filter, StringComparison.CurrentCultureIgnoreCase) == true;
+
                 case { Filter: { } __filter, Value: API.Services.Coinbase.CoinbaseTransaction { Notes: var title } }:
                     if (string.IsNullOrEmpty(__filter))
                         return true;
                     return title?.Contains(__filter, StringComparison.CurrentCultureIgnoreCase) == true;
+
                 default:
                     throw new Exception("44333 3gw");
             }

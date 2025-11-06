@@ -12,10 +12,9 @@ namespace Utility.Nodes
 {
     public class NodeViewModel : ViewModelTree, INodeViewModel
     {
-        object data;
+        private object data;
         private ICollection<IConnectorViewModel> input;
         private ICollection<IConnectorViewModel> output;
-
 
         public NodeViewModel(object data) : this()
         {
@@ -70,7 +69,6 @@ namespace Utility.Nodes
 
         //public NodeState State { get; set; } = NodeState.None;
 
-
         public override object Data
         {
             get => data;
@@ -101,7 +99,6 @@ namespace Utility.Nodes
             }
         }
 
-
         public IDiagramViewModel Diagram { get; set; }
 
         public virtual ICollection<IConnectorViewModel> Input
@@ -119,11 +116,10 @@ namespace Utility.Nodes
             }
         }
 
-        void addInput(IConnectorViewModel x)
+        private void addInput(IConnectorViewModel x)
         {
             x.Node = this;
             x.IsInput = true;
-
         }
 
         private void inputMethod()
@@ -148,7 +144,6 @@ namespace Utility.Nodes
         public bool SuppressKeyException { get; set; }
         public NodeState State { get; set; }
 
-
         public static NodeViewModel Create(object? data, object[] items, string? key = null)
         {
             NodeViewModel node = null;
@@ -165,7 +160,6 @@ namespace Utility.Nodes
 
         protected override void ItemsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
-
         }
     }
 }

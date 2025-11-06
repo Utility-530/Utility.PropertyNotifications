@@ -5,10 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using Utility.Models;
 using Utility.Models.Trees;
+using Utility.PropertyDescriptors;
 
 namespace Utility.Nodes.WPF
 {
+
     public class EditTemplateSelector : DataTemplateSelector
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)

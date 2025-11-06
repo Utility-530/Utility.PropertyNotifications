@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace Utility.Observables.Generic
 {
-    public class Disposer<TObserver,T> : IDisposable where TObserver:IObserver<T>
+    public class Disposer<TObserver, T> : IDisposable where TObserver : IObserver<T>
     {
         private readonly ICollection<TObserver> observers;
         private readonly TObserver observer;
@@ -23,10 +23,7 @@ namespace Utility.Observables.Generic
         }
 
         public static Disposer<TObserver, T> Empty => new(new Collection<TObserver>(), default);
-
     }
-
-
 
     //public sealed class Disposer<T> : IDisposable
     //{

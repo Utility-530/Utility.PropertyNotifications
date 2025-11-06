@@ -18,7 +18,6 @@ namespace Utility.Collections
     /// <see cref="Map{TKey, TVal}"/>.</typeparam>
     public class Map<TKey, TVal> : IDictionary<TKey, TVal>
     {
-
         /// <summary>
         /// An empty read-only collection to avoid instantiating new empty
         /// collections when one needs to be returned.
@@ -33,7 +32,6 @@ namespace Utility.Collections
         /// it because dictRev cannot hold null as keys.
         /// </summary>
         private readonly HashSet<TKey> keysWithNullValue;
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Map{TKey, TVal}"/>
@@ -157,9 +155,6 @@ namespace Utility.Collections
             PopulateReverseFromOtherDictionary(keyValuePairs);
         }
 
-
-
-
         /// <summary>
         /// Gets the <see cref="IEqualityComparer{T}"/> that is used to
         /// determine equality of keys for the
@@ -201,14 +196,11 @@ namespace Utility.Collections
         ICollection<TKey> IDictionary<TKey, TVal>.Keys
             => ((IDictionary<TKey, TVal>)forward).Keys;
 
-
         bool ICollection<KeyValuePair<TKey, TVal>>.IsReadOnly
             => ((IDictionary<TKey, TVal>)forward).IsReadOnly;
 
         ICollection<TVal> IDictionary<TKey, TVal>.Values
             => ((IDictionary<TKey, TVal>)forward).Values;
-
-
 
         /// <summary>
         /// Gets or sets the value associated with the specified key.
@@ -234,7 +226,6 @@ namespace Utility.Collections
             }
         }
 
-
         public TKey this[TVal val]
         {
             get => reverse[val].Single();
@@ -250,8 +241,6 @@ namespace Utility.Collections
                 }
             }
         }
-
-
 
         /// <summary>
         /// Adds the specified key and value to the
@@ -376,8 +365,6 @@ namespace Utility.Collections
 
         IEnumerator IEnumerable.GetEnumerator()
             => ((IDictionary<TKey, TVal>)forward).GetEnumerator();
-
-
 
         private void AddRevEntry(TKey key, TVal value)
         {

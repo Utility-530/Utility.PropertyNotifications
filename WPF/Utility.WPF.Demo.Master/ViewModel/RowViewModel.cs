@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xaml.Behaviors.Core;
-using Utility.EventArguments;
 using Utility.Enums;
+using Utility.EventArguments;
 
 namespace Utility.WPF.Demo.Master.ViewModels
 {

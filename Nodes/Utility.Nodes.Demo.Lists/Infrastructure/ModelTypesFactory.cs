@@ -16,12 +16,9 @@ namespace Utility.Nodes.Demo.Lists
             yield return typeof(Asset);
             yield return typeof(CoinbaseTransaction);
 
-
             //return typeof(ModelTypesFactory)
             //    .Assembly
             //    .TypesByAttribute<ModelAttribute>(a => a.Index);
         }
     }
-
-
 }

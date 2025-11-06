@@ -15,13 +15,14 @@ using Utility.Interfaces.Exs.Diagrams;
 
 namespace Utility.Nodes
 {
-    public class PendingConnectorViewModel : NotifyPropertyClass, IConnectorViewModel,IPendingConnectorViewModel
+    public class PendingConnectorViewModel : NotifyPropertyClass, IConnectorViewModel, IPendingConnectorViewModel
     {
         private bool isDropDownOpen;
         private object data;
 
-        public event Action<PropertyInfo> ConnectorAdded;   
-        public event Action<NotifyCollectionChangedEventArgs> ConnectorsChanged;   
+        public event Action<PropertyInfo> ConnectorAdded;
+
+        public event Action<NotifyCollectionChangedEventArgs> ConnectorsChanged;
 
         public PendingConnectorViewModel()
         {
@@ -33,7 +34,6 @@ namespace Utility.Nodes
                     //this.Node.Input.Add();
                     ConnectorAdded.Invoke(propertyInfo);
                 }
-
             });
             ChangeConnectorsCommand = new Command<object>((a) =>
             {
@@ -48,9 +48,8 @@ namespace Utility.Nodes
                     {
                         ConnectorsChanged?.Invoke(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, (IList)y));
                         return;
-
                     }
-                
+
                     //foreach (PropertyInfo propertyInfo in x)
                     //{
                     //    var x = new ConnectorViewModel() { Data = propertyInfo, Key = propertyInfo.Name, Node = this.Node };
@@ -61,7 +60,6 @@ namespace Utility.Nodes
                     //    this.Node.Output.RemoveBy(a => a.Data.Equals(propertyInfo));
                 }
             });
-
         }
 
         public bool IsDropDownOpen { get => isDropDownOpen; set => RaisePropertyChanged(ref isDropDownOpen, value); }

@@ -33,7 +33,7 @@ namespace Utility.Observables.Generic
 
         public override ObservableCollection<TOutput> Outputs { get; } = new();
 
-        List<IDisposable> disposables = new();
+        private List<IDisposable> disposables = new();
         public override ObservableCollection<Interfaces.Reactive.Generic.IObserver<TOutput>> Observers => _observers;
 
         public bool IsCompleted { get; set; }
@@ -63,14 +63,12 @@ namespace Utility.Observables.Generic
             {
                 observer.OnNext(output);
             }
-           
         }
 
         public void OnCompleted()
         {
-            if(InType.Name=="ChildrenResponse")
+            if (InType.Name == "ChildrenResponse")
             {
-            
             }
             IsCompleted = true;
             //if (Outputs.Count > 0)
@@ -90,6 +88,7 @@ namespace Utility.Observables.Generic
                 observer.OnError(error);
             }
         }
+
         public void OnProgress(int complete, int total)
         {
             Progress = new(complete, total);
@@ -104,20 +103,18 @@ namespace Utility.Observables.Generic
             throw new NotImplementedException();
         }
 
-
         public IDisposable Subscribe(Interfaces.Reactive.Generic.IObserver<TOutput> observer)
         {
             foreach (var output in Outputs)
             {
                 observer.OnNext(output);
             }
-            if (InType.Name == "ChildrenResponse" )
+            if (InType.Name == "ChildrenResponse")
             {
-                
             }
             if (IsCompleted) { observer.OnCompleted(); return Disposer<Interfaces.Reactive.Generic.IObserver<TOutput>>.Empty; }
             if (Exception != null) { observer.OnError(Exception); }
-            if (Progress != null) { observer.OnProgress(Progress.Amount, Progress.Total);}
+            if (Progress != null) { observer.OnProgress(Progress.Amount, Progress.Total); }
             return new Disposer<Interfaces.Reactive.Generic.IObserver<TOutput>, TOutput>(_observers, observer)
                 .DisposeWith(new CompositeDisposable(disposables));
         }
@@ -126,8 +123,6 @@ namespace Utility.Observables.Generic
         {
             return typeof(TInput).Name + " ~ " + typeof(TOutput).Name;
         }
-
-
 
         public IEnumerator GetEnumerator()
         {

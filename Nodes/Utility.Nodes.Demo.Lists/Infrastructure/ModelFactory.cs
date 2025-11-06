@@ -46,6 +46,4 @@ namespace Utility.Nodes.Demo.Lists
             }
         }
     }
-
-
 }

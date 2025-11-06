@@ -19,9 +19,7 @@ namespace Utility.Nodes
 
         public Guid Guid { get; set; }
 
-
-        public string Key {get=> new { Guid, string.Empty }.ToString(); set=> throw new NotSupportedException("Key is read-only and generated from Id."); }
-
+        public string Key { get => new { Guid, string.Empty }.ToString(); set => throw new NotSupportedException("Key is read-only and generated from Id."); }
 
         public string Title
         {
@@ -35,9 +33,9 @@ namespace Utility.Nodes
             set => RaisePropertyChanged(ref _input, value)
                 .Then(() =>
                 {
-        
                 });
         }
+
         public NodeState State { get; set; } = NodeState.None;
 
         public IConnectorViewModel Output
@@ -46,11 +44,10 @@ namespace Utility.Nodes
             set => RaisePropertyChanged(ref _output, value)
                 .Then(() =>
                 {
-                    
                 });
         }
-        public object Data { get; set; }
 
+        public object Data { get; set; }
 
         public bool IsDirectionForward { get; set; }
     }

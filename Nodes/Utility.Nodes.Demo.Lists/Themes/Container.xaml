@@ -39,7 +39,8 @@
     <local:CustomDataTemplateSelector x:Key="DataTemplateSelector">
         <local:CustomDataTemplateSelector.DefaultTemplate>
             <DataTemplate DataType="{x:Type nodes:NodeViewModel}">
-                <t:CustomTreeView ItemsSource="{markup:Array {Binding}}" />
+                <t:CustomTreeView ItemsSource="{markup:Array {Binding}}" 
+                                  ItemTemplateSelector="{StaticResource ContainerTemplateSelector}" />
             </DataTemplate>
         </local:CustomDataTemplateSelector.DefaultTemplate>
         <local:CustomDataTemplateSelector.MasterTemplate>

@@ -1,13 +1,12 @@
 ﻿using System.Collections;
 using Utility.Interfaces.NonGeneric;
 using Utility.Interfaces.Reactive.NonGeneric;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Utility.Observables.NonGeneric
 {
     public class Subject : ISubject
     {
-        List<IObserver> observers = new();
+        private List<IObserver> observers = new();
         private readonly List<IDisposable> disposables = new();
 
         public IEnumerable<IObserver> Observers => observers;
@@ -16,8 +15,8 @@ namespace Utility.Observables.NonGeneric
 
         public Subject()
         {
-
         }
+
         public Subject(params IDisposable[] disposables)
         {
             this.disposables.AddRange(disposables);
@@ -75,7 +74,6 @@ namespace Utility.Observables.NonGeneric
         {
             foreach (var observer in Observers)
                 observer.OnProgress(i, total);
-
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Utility.Interfaces.Reactive.NonGeneric;
 
 namespace Utility.Observables.NonGeneric
@@ -30,9 +28,9 @@ namespace Utility.Observables.NonGeneric
             observers?.Remove(observer);
         }
 
-        public static Disposer Empty => new (new Collection<IObserver>(), new Observer());
-
+        public static Disposer Empty => new(new Collection<IObserver>(), new Observer());
     }
+
     //public class Disposer<T> : IDisposable where T : IEquatable
     //{
     //    private readonly ICollection<IObserver> observers;
@@ -57,5 +55,4 @@ namespace Utility.Observables.NonGeneric
     //        observers?.Remove(observer);
     //    }
     //}
-
 }

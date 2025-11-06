@@ -32,7 +32,6 @@ namespace Utility.Collections
         private readonly List<Action<T>> _removed = new List<Action<T>>();
         private readonly List<Action<IList<T>>> _cleared = new List<Action<IList<T>>>();
 
-
         public ThreadSafeObservableCollection<T> WhenAdded(Action<T> added)
         {
             if (added != null)
@@ -84,8 +83,7 @@ namespace Utility.Collections
             }
         }
 
-        #endregion
-
+        #endregion Collection Events
 
         protected override void ClearItems()
         {
@@ -113,7 +111,6 @@ namespace Utility.Collections
             {
                 base.InsertItem(index, item);
                 NotifyOnItemAdded(item);
-
             }), null);
         }
 
@@ -121,11 +118,9 @@ namespace Utility.Collections
         {
             Context.Send(new SendOrPostCallback((param) =>
             {
-
                 var item = base[index];
                 base.RemoveItem(index);
                 NotifyOnItemRemoved(item);
-
             }), null);
         }
 

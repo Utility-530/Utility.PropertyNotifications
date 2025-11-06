@@ -8,14 +8,12 @@ using System.Threading.Tasks;
 
 namespace Utility.Collections
 {
-
     /// <summary>
-    /// for inserting items with arbitary indices 
+    /// for inserting items with arbitary indices
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class CustomCollection<T> : ObservableCollection<T>
     {
-
         private Dictionary<int, int> indexMapping = [];
 
         public CustomCollection()
@@ -68,7 +66,6 @@ namespace Utility.Collections
             }
             catch (Exception ex)
             {
-
             }
 
             // If the index is beyond the current size, we insert at the end
@@ -88,7 +85,6 @@ namespace Utility.Collections
             //    }
             //    catch (Exception ex)
             //    {
-
             //    }
             //    // Adjust the mapping for future insertions
             //    updateIndexMappingAfterInsertion(actualIndex);
@@ -143,7 +139,7 @@ namespace Utility.Collections
             }
         }
 
-        static (int, int) findClosestSmallerAndLarger(int[] numbers, int target)
+        private static (int, int) findClosestSmallerAndLarger(int[] numbers, int target)
         {
             // Sort the numbers to easily find the closest smaller and larger numbers
             var sortedNumbers = numbers.OrderBy(num => num).ToArray();

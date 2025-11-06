@@ -14,7 +14,7 @@ namespace Utility.Nodes
     {
         protected ReplaySubject<Changes.Change<T>> changes = new();
         private bool isRefreshing;
-        bool flag;
+        private bool flag;
 
         public NodeViewModel(bool isExpanded = true)
         {
@@ -67,8 +67,6 @@ namespace Utility.Nodes
             }
         }
 
-
-
         public virtual async Task<bool> RefreshChildrenAsync()
         {
             if (await HasMoreChildren() == false)
@@ -114,7 +112,7 @@ namespace Utility.Nodes
                                     break;
                                 }
                         }
-                    else if(a is T t)
+                    else if (a is T t)
                     {
                         var node = await ToTree(t);
                         //await node.RefreshChildrenAsync();
@@ -132,7 +130,6 @@ namespace Utility.Nodes
             return true;
         }
 
-
         public virtual IObservable<object?> GetChildren()
         {
             return changes;
@@ -143,10 +140,6 @@ namespace Utility.Nodes
             return Task.FromResult(Data != null && flag == false);
         }
 
-
         public Exception Error { get; set; }
-
-
     }
 }
-

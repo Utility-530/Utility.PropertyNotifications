@@ -1,8 +1,8 @@
-﻿using Humanizer;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Humanizer;
 using Utility.Interfaces.NonGeneric.Data;
 
 namespace Utility.WPF.Demo.Master.Infrastructure

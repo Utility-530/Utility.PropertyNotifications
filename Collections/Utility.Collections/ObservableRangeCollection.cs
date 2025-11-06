@@ -29,7 +29,7 @@ namespace Utility.Collections
 
             foreach (NotifyCollectionChangedEventHandler handler in handlers.GetInvocationList())
             {
-                var collectionViewMethod = handler.Target?.GetType().GetMethods().SingleOrDefault(a=>a.Name == "Refresh");
+                var collectionViewMethod = handler.Target?.GetType().GetMethods().SingleOrDefault(a => a.Name == "Refresh");
                 if (collectionViewMethod != null)
                 {
                     collectionViewMethod.Invoke(handler.Target, null);

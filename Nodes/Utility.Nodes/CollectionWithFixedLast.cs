@@ -13,12 +13,9 @@ namespace Utility.Nodes
             Add(_fixedLastItem);
         }
 
-
         protected override void InsertItem(int index, T item)
         {
             base.InsertItem(Count > 0 ? Math.Min(index, Count - 1) : index, item);
         }
-
-
     }
 }

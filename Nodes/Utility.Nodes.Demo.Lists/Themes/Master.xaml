@@ -16,7 +16,7 @@
     <ResourceDictionary.MergedDictionaries>
         <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Shared.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
+
     <Style x:Key="DefaultChildCustomStyle" TargetType="{x:Type t:CustomTreeViewItem}" BasedOn="{StaticResource {x:Type t:CustomTreeViewItem}}">
         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"></Setter>
         <Setter Property="SelectionItem" Value="{Binding Current, Mode=TwoWay}"/>
@@ -47,6 +47,7 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <local:ContainerTemplateSelector x:Key="ContainerTemplateSelector"/>
 
 
     <Style x:Key="DefaultCustomStyle" TargetType="{x:Type t:CustomTreeViewItem}">
@@ -79,22 +80,20 @@
 
 
     <DataTemplate x:Key="MasterTemplate" DataType="{x:Type nodes:NodeViewModel}">
-
-
-            <t:CustomTreeView   
+        <t:CustomTreeView   
                 Grid.Row="1"
-                ItemsSource="{markup:Array {Binding}}" ItemContainerStyleSelector="{StaticResource ComboContainerStyleSelector}" 
+                ItemsSource="{markup:Array {Binding}}" 
+            ItemTemplateSelector="{StaticResource ContainerTemplateSelector}"
+            ItemContainerStyleSelector="{StaticResource ComboContainerStyleSelector}"
+
                >
-
-
-                <t:CustomTreeView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel></StackPanel>
-                        <!--<panels:AnimatedWrapPanel/>-->
-                    </ItemsPanelTemplate>
-                </t:CustomTreeView.ItemsPanel>
-            </t:CustomTreeView>
-        <!--</Grid>-->
+            <t:CustomTreeView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel></StackPanel>
+                    <!--<panels:AnimatedWrapPanel/>-->
+                </ItemsPanelTemplate>
+            </t:CustomTreeView.ItemsPanel>
+        </t:CustomTreeView>
     </DataTemplate>
 
 </ResourceDictionary>

@@ -1,5 +1,4 @@
-﻿
-using Utility.Interfaces.NonGeneric;
+﻿using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Observables.Generic
 {

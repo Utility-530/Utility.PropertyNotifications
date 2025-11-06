@@ -1,5 +1,4 @@
-﻿using Autofac;
-//using Utility.Common;
+﻿//using Utility.Common;
 
 namespace Utility.WPF.Demo.Common.Meta
 {

@@ -34,7 +34,7 @@
             </view1:DragablzVerticalItemsControl>
 
             <ResourceDictionary.MergedDictionaries>
-                <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Dragablz;component/DragablzItemStyle.xaml"/>
+                <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Dragablz;component/DragablzItemStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -46,7 +46,7 @@
                     <b:ToggleButtonContentBehavior UnCheckedContent="{x:Static Orientation.Horizontal}" />
                 </i:Interaction.Behaviors>
             </ToggleButton>-->
-            <btns:DirectionButton x:Name="OrientationToggleButton"/>
+            <btns:DirectionButton x:Name="OrientationToggleButton" />
         </ToolBar>
 
         <TabControl>

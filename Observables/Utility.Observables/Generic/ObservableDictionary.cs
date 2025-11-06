@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+
 //using System.Reactive.Concurrency;
 using System.Runtime.CompilerServices;
 
@@ -19,7 +17,6 @@ public interface IReadOnlyObservableDictionary<TKey, TValue> :
     INotifyDictionaryChanged<TKey, TValue>,
     INotifyCollectionChanged
 {
-
 }
 
 /// <summary>
@@ -40,6 +37,7 @@ public class ObservableDictionary<TKey, TValue> :
     {
         this.scheduler = scheduler;
     }
+
     /// <summary>
     /// Initializes a new instance of the <see cref="ObservableDictionary{TKey, TValue}"/> class that is empty, has the default initial capacity, and uses the default equality comparer for the key type
     /// </summary>
@@ -143,16 +141,16 @@ public class ObservableDictionary<TKey, TValue> :
         this.comparer = comparer;
     }
 
-    readonly IEqualityComparer<TKey> comparer;
+    private readonly IEqualityComparer<TKey> comparer;
     private readonly SynchronizationContext scheduler;
-    Dictionary<TKey, TValue> gd;
-    ICollection ci;
-    ICollection<KeyValuePair<TKey, TValue>> gci;
-    IDictionary di;
-    IDictionary<TKey, TValue> gdi;
-    IEnumerable ei;
-    IEnumerable<KeyValuePair<TKey, TValue>> gei;
-    IReadOnlyDictionary<TKey, TValue> grodi;
+    private Dictionary<TKey, TValue> gd;
+    private ICollection ci;
+    private ICollection<KeyValuePair<TKey, TValue>> gci;
+    private IDictionary di;
+    private IDictionary<TKey, TValue> gdi;
+    private IEnumerable ei;
+    private IEnumerable<KeyValuePair<TKey, TValue>> gei;
+    private IReadOnlyDictionary<TKey, TValue> grodi;
 
     /// <summary>
     /// Occurs when the collection changes
@@ -164,7 +162,7 @@ public class ObservableDictionary<TKey, TValue> :
     /// </summary>
     public event EventHandler<NotifyDictionaryChangedEventArgs<TKey, TValue>>? DictionaryChanged;
 
-    event EventHandler<NotifyDictionaryChangedEventArgs<object?, object?>>? DictionaryChangedBoxed;
+    private event EventHandler<NotifyDictionaryChangedEventArgs<object?, object?>>? DictionaryChangedBoxed;
 
     /// <summary>
     /// Adds the specified key and value to the dictionary
@@ -246,7 +244,7 @@ public class ObservableDictionary<TKey, TValue> :
         }
     }
 
-    void CastAndNotifyReset()
+    private void CastAndNotifyReset()
     {
         ci = gd;
         gci = gd;
@@ -419,15 +417,19 @@ public class ObservableDictionary<TKey, TValue> :
                 case NotifyDictionaryChangedAction.Add:
                     OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, e.NewItems));
                     break;
+
                 case NotifyDictionaryChangedAction.Remove:
                     OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, e.OldItems));
                     break;
+
                 case NotifyDictionaryChangedAction.Replace:
                     OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, e.NewItems, e.OldItems));
                     break;
+
                 case NotifyDictionaryChangedAction.Reset:
                     OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
                     break;
+
                 default:
                     throw new NotSupportedException();
             }
@@ -437,12 +439,15 @@ public class ObservableDictionary<TKey, TValue> :
                 case NotifyDictionaryChangedAction.Add:
                     OnDictionaryChangedBoxed(new NotifyDictionaryChangedEventArgs<object?, object?>(NotifyDictionaryChangedAction.Add, e.NewItems.Select(kv => new KeyValuePair<object?, object?>(kv.Key, kv.Value))));
                     break;
+
                 case NotifyDictionaryChangedAction.Remove:
                     OnDictionaryChangedBoxed(new NotifyDictionaryChangedEventArgs<object?, object?>(NotifyDictionaryChangedAction.Remove, e.OldItems.Select(kv => new KeyValuePair<object?, object?>(kv.Key, kv.Value))));
                     break;
+
                 case NotifyDictionaryChangedAction.Replace:
                     OnDictionaryChangedBoxed(new NotifyDictionaryChangedEventArgs<object?, object?>(NotifyDictionaryChangedAction.Replace, e.NewItems.Select(kv => new KeyValuePair<object?, object?>(kv.Key, kv.Value)), e.OldItems.Select(kv => new KeyValuePair<object?, object?>(kv.Key, kv.Value))));
                     break;
+
                 case NotifyDictionaryChangedAction.Reset:
                     OnDictionaryChangedBoxed(new NotifyDictionaryChangedEventArgs<object?, object?>(NotifyDictionaryChangedAction.Reset));
                     break;
@@ -465,6 +470,7 @@ public class ObservableDictionary<TKey, TValue> :
         else
             CollectionChanged?.Invoke(this, e);
     }
+
     /// <summary>
     /// Raises the <see cref="INotifyDictionaryChanged{TKey, TValue}.DictionaryChanged"/> event
     /// </summary>
@@ -803,7 +809,6 @@ public class ObservableDictionary<TKey, TValue> :
             {
                 gd.Add(key, value);
                 OnChanged(new NotifyDictionaryChangedEventArgs<TKey, TValue>(NotifyDictionaryChangedAction.Add, key, value));
-
             }
         }
     }
@@ -946,8 +951,6 @@ public class ObservableDictionary<TKey, TValue> :
         grodi.Values;
 }
 
-
-
 /// <summary>
 /// Provides data for the <see cref="INotifyDictionaryChanged{TKey, TValue}.DictionaryChanged"/> event
 /// </summary>
@@ -1000,9 +1003,11 @@ public sealed class NotifyDictionaryChangedEventArgs<TKey, TValue> :
             case NotifyDictionaryChangedAction.Add:
                 InitializeAdd(action, changedItems);
                 break;
+
             case NotifyDictionaryChangedAction.Remove:
                 InitializeRemove(action, changedItems);
                 break;
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(action));
         }
@@ -1045,14 +1050,14 @@ public sealed class NotifyDictionaryChangedEventArgs<TKey, TValue> :
         InitializeRemove(action, oldItems);
     }
 
-    void InitializeAdd(NotifyDictionaryChangedAction action, IEnumerable<KeyValuePair<TKey, TValue>>? newItems = null)
+    private void InitializeAdd(NotifyDictionaryChangedAction action, IEnumerable<KeyValuePair<TKey, TValue>>? newItems = null)
     {
         Action = action;
         if (newItems is IEnumerable<KeyValuePair<TKey, TValue>> actualNewItems)
             NewItems = actualNewItems.ToArray();
     }
 
-    void InitializeRemove(NotifyDictionaryChangedAction action, IEnumerable<KeyValuePair<TKey, TValue>>? oldItems)
+    private void InitializeRemove(NotifyDictionaryChangedAction action, IEnumerable<KeyValuePair<TKey, TValue>>? oldItems)
     {
         Action = action;
         if (oldItems is IEnumerable<KeyValuePair<TKey, TValue>> actualOldItems)
@@ -1100,7 +1105,6 @@ public enum NotifyDictionaryChangedAction
     /// </summary>
     Reset
 }
-
 
 /// <summary>
 /// Provides a mechanism for notifying about property changes

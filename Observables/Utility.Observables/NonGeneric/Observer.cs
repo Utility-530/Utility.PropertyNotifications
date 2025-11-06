@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using Utility.Interfaces.NonGeneric;
+﻿using Utility.Interfaces.NonGeneric;
 using Utility.Interfaces.Reactive.NonGeneric;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Utility.Observables.NonGeneric
 {
@@ -12,7 +10,7 @@ namespace Utility.Observables.NonGeneric
         private Action onCompleted;
         private readonly Action<int, int> onProgress;
 
-        public Observer(Action<object> onNext, Action<Exception> onError, Action onCompleted, Action<int,int> onProgress)
+        public Observer(Action<object> onNext, Action<Exception> onError, Action onCompleted, Action<int, int> onProgress)
         {
             this.onNext = onNext;
             this.onError = onError;
@@ -23,11 +21,9 @@ namespace Utility.Observables.NonGeneric
         // Used by disposer
         internal Observer()
         {
-
         }
 
         public List<object> Observations { get; } = new();
-
 
         public void OnNext(object value)
         {
@@ -54,6 +50,5 @@ namespace Utility.Observables.NonGeneric
         {
             throw new NotImplementedException();
         }
-
     }
 }

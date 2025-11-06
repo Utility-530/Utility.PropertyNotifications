@@ -27,7 +27,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                      new Model<string>() { Name = search,DataTemplate = "SearchEditor" },
                      new ListModel(type) { Name = list },
                      new EditModel { Name = edit },
-                ],               
+                ],
                 (addition) =>
                 {
                     if (addition is EditModel { } editModel)

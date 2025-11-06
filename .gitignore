@@ -374,3 +374,4 @@ bootstrap-5.3.3-dist
 /Nodes/Utility.Nodes.Demo.Breadcrumbs/Data/data.sqlite-journal
 /Nodes/Utility.Nodes.Demo.Breadcrumbs/Data/data.json
 /WPF/Utility.WPF.Demo.Objects/Data
+*.sqlite-journal

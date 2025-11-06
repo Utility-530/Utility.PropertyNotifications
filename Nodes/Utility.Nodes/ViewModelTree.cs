@@ -158,7 +158,7 @@ namespace Utility.Nodes
             get { RaisePropertyCalled(isSelected); return isSelected; }
             set => this.RaisePropertyReceived(ref this.isSelected, value);
         }
-         
+
         public bool IsExpanded
         {
             get { RaisePropertyCalled(isExpanded); return isExpanded; }
@@ -257,7 +257,6 @@ namespace Utility.Nodes
             get { RaisePropertyCalled(itemsPanelTemplate); return itemsPanelTemplate; }
             set => this.RaisePropertyReceived(ref this.itemsPanelTemplate, value);
         }
-
 
         public string Title
         {

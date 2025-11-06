@@ -13,17 +13,12 @@ using Utility.Services.Meta;
 
 namespace Utility.Nodes.Demo.Lists.Services
 {
+    public record SumBalanceInputParam() : Param<SumAmountService>(nameof(SumBalanceService.Sum), "list");
 
-    public record SumBalanceInputParam() :Param<SumAmountService>(nameof(SumBalanceService.Sum), "list");
-
-    public record SumBalanceReturnParam() :Param<SumAmountService>(nameof(SumBalanceService.Sum));
+    public record SumBalanceReturnParam() : Param<SumAmountService>(nameof(SumBalanceService.Sum));
 
     public class SumBalanceService
     {
         public static string Sum(IList list) => list.OfType<IGetBalance>().Aggregate(0m, (a, b) => a + b.Balance).ToString();
     }
-
-
- 
-
 }

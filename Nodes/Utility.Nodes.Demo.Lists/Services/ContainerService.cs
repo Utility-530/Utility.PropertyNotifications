@@ -1,19 +1,17 @@
 ﻿using Splat;
 using System.Reactive.Linq;
-using Utility.Common.Models;
 using Utility.Entities.Comms;
 using Utility.Extensions;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
 using Utility.Meta;
-using Utility.Models;
 using Utility.Models.Diagrams;
 using Utility.Nodes.Meta;
 using Utility.Observables.Generic;
 using Utility.ServiceLocation;
 using Utility.Services;
 using Utility.Services.Meta;
-using Utility.Trees;
+using Utility.Interfaces;
 
 namespace Utility.Nodes.Demo.Lists.Services
 {
@@ -25,7 +23,6 @@ namespace Utility.Nodes.Demo.Lists.Services
 
         public ContainerService()
         {
-
             var existing = container.Children.Cast<NodeViewModel>().FirstOrDefault(vc => vc.Name == nameof(Factories.NodeMethodFactory.BuildListRoot));
             if (existing == null)
             {

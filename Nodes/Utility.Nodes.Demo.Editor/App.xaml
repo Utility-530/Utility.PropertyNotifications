@@ -31,9 +31,6 @@
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.ComboBoxes;component/Themes/CustomComboTreeViewItemStyle.xaml" />
                 <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml" />
                 <res:SharedResourceDictionary Source="/Utility.Nodes.WPF;component/Themes/Generic.xaml" />
-                <!--<res:SharedResourceDictionary Source="/Themes/Slave.xaml" />
-                <res:SharedResourceDictionary Source="/Themes/Master.xaml" />
-                <res:SharedResourceDictionary Source="/Themes/Container.xaml" />-->
                 <res:SharedResourceDictionary Source="/Utility.Models.Templates;component/Templates.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
@@ -85,43 +82,6 @@
                 </att:InteractivitySetter>
             </Style>
 
-            <!--<filters:StyleSelector x:Key="StyleSelector" DefaultStyle="ViewContentStyle" />-->
-
-            <!--<Style x:Key="SlaveStyle" TargetType="{x:Type ct:CustomTreeViewItem}">
-                --><!--<Setter Property="ItemContainerStyleSelector" Value="{StaticResource StyleSelector}" />--><!--
-                <Setter Property="ItemTemplate">
-                    <Setter.Value>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                            <Border
-                                Margin="1"
-                                BorderBrush="GhostWhite"
-                                BorderThickness="1">
-                                <ContentControl Content="{Binding Path=.}" ContentTemplateSelector="{x:Static filters:DataTemplateSelector.Instance}" />
-                            </Border>
-                        </HierarchicalDataTemplate>
-                    </Setter.Value>
-                </Setter>
-
-            </Style>-->
-
-
-
-            <!--<ct:CustomTreeView ItemsSource="{Binding Content}" ItemContainerStyleSelector="{StaticResource StyleSelector }">
-                <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                        <Border BorderThickness="1" BorderBrush="GhostWhite" Margin="1">
-                            <ContentControl Content="{Binding Path=.}" ContentTemplateSelector="{x:Static filters:DataTemplateSelector.Instance}" />
-                        </Border>
-                    </HierarchicalDataTemplate>
-                </TreeView.ItemTemplate>
-
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="SelectedItemChanged">
-                        <beh:SetSelectedItemAction PropertyName="DataContext" TargetObject="{Binding ElementName=splitcontrol, Path=Header}" />
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </ct:CustomTreeView>-->
-
 
             <local:ContainerStyleSelector
                 x:Key="ContainerStyleSelector"
@@ -131,16 +91,7 @@
             <local:ContainerTemplateSelector x:Key="ContainerTemplateSelector" />
 
 
-            <!--<DataTemplate x:Key="MasterTemplate" DataType="{x:Type node:NodeViewModel}">
-                <ct:CustomTreeView
-                    ItemsSource="{Binding Children}">
-                    <ct:CustomTreeView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel/>
-                        </ItemsPanelTemplate>
-                    </ct:CustomTreeView.ItemsPanel>
-                </ct:CustomTreeView>
-            </DataTemplate>-->
+
 
             <DataTemplate x:Key="ContainerTemplate" DataType="{x:Type node:NodeViewModel}">
                 <ct:CustomTreeView

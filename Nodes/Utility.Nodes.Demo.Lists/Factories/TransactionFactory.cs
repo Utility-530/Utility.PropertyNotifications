@@ -29,9 +29,9 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     new ListModel(type) { Name = list, DataTemplate =  "SFGridTemplate"},
                     new ListModel(type) { Name = list, DataTemplate =  "SFChartTemplate", XAxis = nameof(Transaction.Date), YAxis = nameof(Transaction.Balance00)},
                     new Model<string>() { Name = summary, DataTemplate = "MoneySumTemplate" }
-                ],              
+                ],
                 (addition) =>
-                {              
+                {
                     if (addition is Model<string> { Name: search } searchModel)
                     {
                         searchModel.Observe<FilterParam>(guid, includeInitial: true);

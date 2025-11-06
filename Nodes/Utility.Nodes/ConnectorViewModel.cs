@@ -17,7 +17,7 @@ namespace Utility.Nodes
 {
     public class ConnectorViewModel : NotifyPropertyClass, IValueConnectorViewModel, IValue, IType
     {
-        ThreadSafeObservableCollection<IConnectionViewModel> connections = [];
+        private ThreadSafeObservableCollection<IConnectionViewModel> connections = [];
         private INodeViewModel _node = default!;
 
         private string? _title;
@@ -54,13 +54,13 @@ namespace Utility.Nodes
             Data is PropertyInfo propertyInfo ? propertyInfo.PropertyType :
             throw new Exception("ds322d 11");
 
-        public required string? Key
+        public string? Key
         {
             get => _title;
             set => RaisePropertyChanged(ref _title, value);
         }
 
-        public required object Data
+        public object Data
         {
             get => data;
             set => RaisePropertyChanged(ref data, value);
@@ -116,7 +116,6 @@ namespace Utility.Nodes
 
         public object AnchorElement { get; set; }
 
-
         protected virtual void OnNodeChanged()
         {
             if (Node is INodeViewModel flow)
@@ -138,6 +137,7 @@ namespace Utility.Nodes
 
         public void Disconnect()
         { }
+
         //=> Node.Graph.Schema.DisconnectConnector(this);
     }
 }

@@ -28,7 +28,6 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     IsExpanded = true,
                     Orientation = Orientation.Vertical
                 });
-
         }
     }
 }

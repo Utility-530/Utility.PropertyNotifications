@@ -24,12 +24,12 @@ namespace Utility.WPF.Demo.Panels
             {
                 IComparable value = x.GetType().GetProperty(sd.PropertyName).GetValue(x) as IComparable;
                 diff = value.CompareTo((IComparable)y.GetType().GetProperty(sd.PropertyName).GetValue(y));
-                
-                if (sd.Direction == ListSortDirection.Ascending ? diff <0 : diff >0)
+
+                if (sd.Direction == ListSortDirection.Ascending ? diff < 0 : diff > 0)
                 {
                     //diff = value.CompareTo((IComparable)items[i].GetType().GetProperty(sd.PropertyName).GetValue(items[i]));
                     break;
-                }     
+                }
             }
 
             return diff;
@@ -56,15 +56,14 @@ namespace Utility.WPF.Demo.Panels
     /// </summary>
     public partial class AnimatedListPanelView : UserControl, INotifyPropertyChanged
     {
-        SortableObservableCollection<RankedString> collection;
-        SortDescriptionCollection sortDescriptions = new();
+        private SortableObservableCollection<RankedString> collection;
+        private SortDescriptionCollection sortDescriptions = new();
 
         public AnimatedListPanelView()
         {
             DataContext = this;
 
             InitializeComponent();
-
 
             collection = new SortableObservableCollection<RankedString>(new Comparer<object>(sortDescriptions))
             {
@@ -96,8 +95,6 @@ namespace Utility.WPF.Demo.Panels
             //}
         }
 
-        
-
         private void AddItemClicked(object sender, RoutedEventArgs e)
         {
             if (TB1.Text != "")
@@ -112,7 +109,6 @@ namespace Utility.WPF.Demo.Panels
             }
         }
 
-
         private void FilterClicked(object sender, RoutedEventArgs e)
         {
             //if (collection.Filter == null)
@@ -120,8 +116,6 @@ namespace Utility.WPF.Demo.Panels
             //else
             //    collection.Filter = null;
         }
-
-
 
         private void DeleteItemClicked(object sender, RoutedEventArgs e)
         {
@@ -145,14 +139,16 @@ namespace Utility.WPF.Demo.Panels
 
         private void SortItemsClicked(object sender, RoutedEventArgs e)
         {
-             switch (sortDescriptions.Count)
+            switch (sortDescriptions.Count)
             {
                 case 0:
                     sortDescriptions.Add(new SortDescription("Content", ListSortDirection.Ascending));
                     break;
+
                 case 1:
                     sortDescriptions.Add(new SortDescription("Rank", ListSortDirection.Ascending));
                     break;
+
                 default:
                     sortDescriptions.Clear();
                     break;
@@ -167,21 +163,25 @@ namespace Utility.WPF.Demo.Panels
         }
 
         #region INotifyPropertyChanged implementation
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string property)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
-        #endregion
+
+        #endregion INotifyPropertyChanged implementation
     }
 
     [DebuggerDisplay("{Rank} : {Content}")]
     public class RankedString : INotifyPropertyChanged
     {
-        public string RankedContent { get { return $"{Rank} : {Content}"; } }
+        public string RankedContent
+        { get { return $"{Rank} : {Content}"; } }
 
         private int _rank;
+
         public int Rank
         {
             get { return _rank; }
@@ -189,6 +189,7 @@ namespace Utility.WPF.Demo.Panels
         }
 
         private string _content;
+
         public string Content
         {
             get { return _content; }
@@ -196,6 +197,7 @@ namespace Utility.WPF.Demo.Panels
         }
 
         private NonComparable _nonComparable;
+
         public NonComparable NC
         {
             get { return _nonComparable; }
@@ -214,16 +216,17 @@ namespace Utility.WPF.Demo.Panels
         }
 
         #region INotifyPropertyChanged implementation
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        #endregion
 
-        public class NonComparable { }
+        #endregion INotifyPropertyChanged implementation
+
+        public class NonComparable
+        { }
     }
-
-
 }

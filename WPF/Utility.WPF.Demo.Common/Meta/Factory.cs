@@ -1,7 +1,7 @@
-﻿using Microsoft.Xaml.Behaviors.Core;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Microsoft.Xaml.Behaviors.Core;
 using Utility.Helpers;
 using Utility.ServiceLocation;
 using Utility.WPF.Demo.Common.ViewModels;

@@ -1,6 +1,6 @@
 ﻿namespace Utility.Nodes.Demo.Lists.Factories
 {
-    internal partial class NodeMethodFactory 
+    internal partial class NodeMethodFactory
     {
         public const string file_path = nameof(file_path);
         public const string html = nameof(html);
@@ -21,9 +21,7 @@
         public const string Settings = nameof(Settings);
         public const string controls = nameof(controls);
 
-
         public static readonly Guid settingsRootGuid = Guid.Parse("a743505d-128c-466f-afdb-d7dd97e37a08");
         public static readonly Guid listRootGuid = Guid.Parse("7ed21df8-d54c-44e1-8d97-7fcc2591e6c1");
-
     }
 }

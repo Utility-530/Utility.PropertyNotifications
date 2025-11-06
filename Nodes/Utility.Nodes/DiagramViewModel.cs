@@ -187,11 +187,11 @@ namespace Utility.Nodes
             if (target is PendingConnectorViewModel pending)
             {
                 pending.IsDropDownOpen = true;
-                if (source is IGetData { Data : ParameterInfo { ParameterType: Type type } })
+                if (source is IGetData { Data: ParameterInfo { ParameterType: Type type } })
                 {
                     pending.Data = type;
                 }
-                else if (source is IGetData{ Data: PropertyInfo { PropertyType: { } _type } })
+                else if (source is IGetData { Data: PropertyInfo { PropertyType: { } _type } })
                 {
                     pending.Data = _type;
                 }
@@ -203,7 +203,6 @@ namespace Utility.Nodes
             }
             else if (target is ConnectorViewModel connector)
             {
-
             }
 
             var input = source.IsInput ? source : target;
@@ -212,11 +211,11 @@ namespace Utility.Nodes
             PendingConnection.IsVisible = false;
             DisconnectConnector(input);
 
-
             var connectionViewModel = container.Resolve<IViewModelFactory>().CreateConnection(input, output);
             container.RegisterInstanceMany(connectionViewModel);
             Connections.Add(connectionViewModel);
         }
+
         protected void OnOperationsMenuClosed()
         {
             PendingConnection.IsVisible = false;

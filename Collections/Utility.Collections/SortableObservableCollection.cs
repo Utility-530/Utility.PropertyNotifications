@@ -8,14 +8,13 @@ using Utility.Interfaces.Generic;
 
 namespace Utility.Collections
 {
-
     /// <summary>
     /// <a href="https://gist.github.com/weitzhandler/"></a>
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class SortableObservableCollection<T> : RangeObservableCollection<T>, IPredicate_<T>
     {
-        Dictionary<int, VisibleItem> filteredItems;
+        private Dictionary<int, VisibleItem> filteredItems;
 
         public SortableObservableCollection()
         {
@@ -30,7 +29,7 @@ namespace Utility.Collections
         public SortableObservableCollection(IEnumerable<T> collection, IComparer<T>? comparer = null, bool descending = false) : base(collection)
         {
             IsDescending = descending;
-            Comparer = comparer; 
+            Comparer = comparer;
         }
 
         private IComparer<T>? _Comparer;
@@ -47,6 +46,7 @@ namespace Utility.Collections
         }
 
         private Predicate<T> _filter;
+
         public Predicate<T> Filter
         {
             get { return _filter; }
@@ -61,11 +61,11 @@ namespace Utility.Collections
         {
             int index = 0;
 
-            if(filteredItems ==null)
+            if (filteredItems == null)
             {
                 filteredItems = new();
                 int i = 0;
-                foreach(var item in Items)
+                foreach (var item in Items)
                 {
                     filteredItems[i] = new(i, item, true);
                     i++;
@@ -153,17 +153,15 @@ namespace Utility.Collections
 
         private bool _Reordering;
 
-        public void Sort() 
+        public void Sort()
         {
             _Reordering = true;
             Sort<T>(this, Comparer);
             _Reordering = false;
-
         }
 
         public static void Sort<T>(ObservableCollection<T> collection, IComparer<T> comparison)
         {
-
             var sortableList = new List<T>(collection);
             sortableList.Sort(comparison);
 

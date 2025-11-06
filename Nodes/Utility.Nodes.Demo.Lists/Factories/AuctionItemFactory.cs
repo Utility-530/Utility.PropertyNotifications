@@ -46,7 +46,6 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     ],
                     attach : node=> {node.IsExpanded = true;  node.Orientation = Orientation.Horizontal; }                   ){ Name = controllerPath },
                     new ListModel(type, attach: listModel=>{
-
                         listModel.ReactTo<ListCollectionViewReturnParam>(setAction: (a) => listModel.Collection = (IEnumerable)a, guid : guid);
 
                         listModel.WhenReceivedFrom(a => a.Add, includeNulls: false)
@@ -58,7 +57,6 @@ namespace Utility.Nodes.Demo.Lists.Factories
                         .Observe<ChangeParam, Changes.Change>(guid);
 
                         listModel.Observe<SelectionParam>(guid);
-
                     }) { Name = list1 },
                     new EditModel(attach: editModel =>
                     {
@@ -75,14 +73,11 @@ namespace Utility.Nodes.Demo.Lists.Factories
                                 //});
 
                                 eModel.WithChangesTo(a => a.RelativePath).Observe<FilePathParam, string>(guid: guid);
-
                             }
                         });
                         editModel.ReactTo<SelectionReturnParam>(setAction: (a) => { (editModel as ISetValue).Value = a; editModel.RaisePropertyChanged(nameof(EditModel.Value)); }, guid: guid);
-
                     }) { Name = edit },
                     new Model<string>(attach: jsonModel => {
-
                         jsonModel.ReactTo<FullPathParam>(a =>
                         {
                             var path = Path.Combine(a.ToString(), "data.json");
@@ -115,7 +110,5 @@ namespace Utility.Nodes.Demo.Lists.Factories
                 serviceResolver.Connect<ListInstanceReturnParam, ListParam>();
             }
         }
-
-
     }
 }

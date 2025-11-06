@@ -50,7 +50,6 @@
                 </ItemsControl.ItemTemplate>
             </ListBox>
 
-
             <ListBox ItemsSource="{Binding Path=Collection, Source={x:Static controls:DemoViewModel.Instance}}" Height="400" Width="500">
 
                 <ItemsControl.ItemsPanel>
@@ -65,14 +64,11 @@
                             <Grid Background="PaleVioletRed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                                 <TextBlock
                             Text="{Binding }"
-                            Foreground="Wheat"                       
-                            VerticalAlignment="Stretch" 
+                            Foreground="Wheat"
+                            VerticalAlignment="Stretch"
                             HorizontalAlignment="Stretch"
                             Background="Blue" />
                             </Grid>
-
-
-            
                         </Viewbox>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

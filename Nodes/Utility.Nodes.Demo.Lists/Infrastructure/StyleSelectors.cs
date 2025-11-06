@@ -9,14 +9,13 @@ namespace Utility.Nodes.Demo.Lists
 {
     public class ComboContainerStyleSelector : StyleSelector
     {
-
         public override Style SelectStyle(object item, DependencyObject container)
         {
             var parent = (container as TreeViewItem).FindParent<TreeViewItem>();
 
             return item switch
             {
-                 ISelectable => ComboStyle,
+                ISelectable => ComboStyle,
                 //IData { Data: IRoot } => BreadcrumbRootStyle,
                 //IData { Data: IBreadCrumb } when parent?.Style == BreadcrumbStyle => SelectableStyle,
                 //IData { Data: IBreadCrumb } => BreadcrumbStyle,
@@ -26,7 +25,5 @@ namespace Utility.Nodes.Demo.Lists
 
         public Style DefaultStyle { get; set; }
         public Style ComboStyle { get; set; }
-
-    }  
-    
+    }
 }

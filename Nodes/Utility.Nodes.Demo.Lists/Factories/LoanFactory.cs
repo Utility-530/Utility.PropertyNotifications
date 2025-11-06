@@ -33,7 +33,7 @@ namespace Utility.Nodes.Demo.Lists.Factories
                     {
                         node.ReactTo<SelectionReturnParam>(setAction: (a) => { node.Value = a; node.RaisePropertyChanged(nameof(EditModel.Value)); }, guid: guid);
                     })
-                    { 
+                    {
                         Name = edit,
                         IsValueTracked = false,
                         DataTemplate = "EditTemplate"

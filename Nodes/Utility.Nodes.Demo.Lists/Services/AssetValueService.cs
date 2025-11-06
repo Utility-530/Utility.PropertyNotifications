@@ -9,7 +9,6 @@ namespace Utility.Nodes.Demo.Lists.Services
     public record ValueListInputParam() : Param<AssetValueService>(nameof(AssetValueService.Execute), "list");
     public record ValueListReturnParam() : Param<AssetValueService>(nameof(AssetValueService.Execute));
 
-
     public class AssetValueService
     {
         public async Task<decimal> Execute(IList list)
@@ -40,5 +39,4 @@ namespace Utility.Nodes.Demo.Lists.Services
             return totalValue;
         }
     }
-
 }

@@ -1,23 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Utility.Interfaces.Trees;
-using Utility.Structs;
-using Utility.Trees;
 using Utility.Trees.Abstractions;
 using Utility.WPF.Panels;
-using Zio;
 using Index = Utility.Structs.Index;
 
 namespace Utility.WPF.Demo.Panels
@@ -74,6 +61,7 @@ namespace Utility.WPF.Demo.Panels
     {
         private TreePanel currentTreePanel;
         private ComboBox exampleSelector;
+
         public TreePanelView()
         {
             InitializeComponent();
@@ -148,9 +136,11 @@ namespace Utility.WPF.Demo.Panels
                 case 0:
                     LoadFileSystemExample();
                     break;
+
                 case 1:
                     LoadOrganizationExample();
                     break;
+
                 case 2:
                     LoadProjectTasksExample();
                     break;

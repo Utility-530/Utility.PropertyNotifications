@@ -16,6 +16,4 @@ namespace Utility.Nodes.Demo.Lists.Services
     {
         public static string Sum(IList list) => list.OfType<IGetAmount>().Aggregate(0m, (a, b) => a + b.Amount).ToString();
     }
-
-
 }
