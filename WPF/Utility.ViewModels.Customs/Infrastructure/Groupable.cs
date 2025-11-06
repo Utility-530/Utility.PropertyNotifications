@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Utility.Common
+namespace Utility.ViewModels.Customs.Infrastructure
 {
     public record struct ClassProperty(string Name, string ClassName);
 

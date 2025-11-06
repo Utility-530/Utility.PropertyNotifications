@@ -10,7 +10,7 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 using Utility.Common.Contract;
-using Utility.Common.Model;
+using Utility.Common.Models;
 using Utility.Helpers;
 using Utility.Helpers.Ex;
 using Utility.Interfaces.NonGeneric;
