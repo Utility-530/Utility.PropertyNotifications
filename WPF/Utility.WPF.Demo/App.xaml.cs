@@ -1,5 +1,4 @@
 ﻿using System.Windows;
-using Utility.Common;
 using Utility.WPF.Controls.Meta;
 
 namespace Utility.WPF.Demo
@@ -11,7 +10,7 @@ namespace Utility.WPF.Demo
     {
         public App()
         {
-            Resolver.Instance.AutoRegister();
+            //Resolver.Instance.AutoRegister();
 
             new Window
             {

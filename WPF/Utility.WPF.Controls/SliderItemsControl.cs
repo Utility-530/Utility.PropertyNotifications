@@ -12,7 +12,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Utility.Common;
 using Utility.Helpers.NonGeneric;
 using Utility.WPF.Controls.Base;
 using Utility.Helpers.Reflection;
@@ -20,7 +19,33 @@ using Utility.WPF.Reactives;
 
 namespace Utility.WPF.Controls
 {
+
     using static DependencyPropertyFactory<SliderItemsControl>;
+
+    public class KeyRange : INotifyPropertyChanged
+    {
+        private double value;
+
+        public KeyRange(string key, double value, double? min = null, double? max = null)
+        {
+            Key = key;
+            Value = value;
+            Min = min ?? 0;
+            Max = max ?? value * 2;
+        }
+
+        public int TickFrequency => (int)((Max - Min) / 10);
+        public string Key { get; set; }
+
+        public double Value
+        { get { return value; } set { this.value = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Value))); } }
+
+        public double Min { get; set; }
+        public double Max { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+    }
+
 
     public class SliderItemsControl : Controlx
     {

@@ -1,4 +1,4 @@
-﻿using Utility.Common.EventArgs;
+﻿using Utility.EventArguments;
 
 namespace Utility.WPF.Meta
 {

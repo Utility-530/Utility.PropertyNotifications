@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Splat.Autofac;
 using System.Windows;
-using Utility.Common;
 using Utility.WPF.Controls.Meta;
 
 namespace Utility.WPF.Demo.Controls
@@ -14,7 +13,7 @@ namespace Utility.WPF.Demo.Controls
         public App()
         {
             var builder = new ContainerBuilder();
-            Resolver.Instance.AutoRegister();
+            //Resolver.Instance.AutoRegister();
             builder.UseAutofacDependencyResolver();
 
             new Window

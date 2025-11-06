@@ -12,7 +12,7 @@
         <ObjectDataProvider x:Key="GetProfiles" MethodName="BuildPool" ObjectType="{x:Type dd:ProfileFactory}"/>
     </FrameworkElement.Resources>
     <UniformGrid Columns="1">
-        <pt:PropertyTree Object="{StaticResource Bart}"></pt:PropertyTree>
-        <pt:PropertyTree Object="{Binding Source={StaticResource GetProfiles}}"></pt:PropertyTree>
+        <!--<pt:PropertyTree Object="{StaticResource Bart}"></pt:PropertyTree>
+        <pt:PropertyTree Object="{Binding Source={StaticResource GetProfiles}}"></pt:PropertyTree>-->
     </UniformGrid>
 </UserControl>

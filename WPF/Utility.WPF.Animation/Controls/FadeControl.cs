@@ -5,7 +5,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
-using DynamicData;
 using Utility.WPF.Animations.Helpers;
 
 namespace Utility.WPF.Animation

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using Utility.Common;
-using Utility.Helpers.Ex;
 using Utility.PropertyNotifications;
 using Utility.WPF.Demo.Common.Meta;
+using Utility.ServiceLocation;
+using Utility.Helpers.Ex;
 
 namespace Utility.WPF.Demo.Common.ViewModels
 {
@@ -34,7 +34,7 @@ namespace Utility.WPF.Demo.Common.ViewModels
     {
         public ButtonsViewModel()
         {
-            Data = (Resolver.Instance.Resolve<Factory>() ?? throw new Exception("df___fsd")).Create<ButtonViewModel>(3).ToObservableCollection();
+            Data = (Globals.Resolver.Resolve<Factory>() ?? throw new Exception("df___fsd")).Create<ButtonViewModel>(3).ToObservableCollection();
         }
 
         public ObservableCollection<ButtonViewModel> Data { get; }

@@ -83,7 +83,7 @@ DependencyProperty.Register("ContainerWidth", typeof(double), typeof(BreadCrumbs
             AssociatedObject.LayoutUpdated -= ScrollToBottom;
         }
 
-        private void ScrollToBottom(object sender, System.EventArgs e)
+        private void ScrollToBottom(object sender, EventArgs e)
         {
             AssociatedObject.ScrollToBottom();
         }

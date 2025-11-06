@@ -19,7 +19,7 @@ namespace Utility.WPF.Controls.Hybrid
 
         public MasterButtonsControl()
         {
-            Movement = Enums.XYMovement.TopToBottom;
+            Movement = Enums.XYTraversal.TopToBottom;
         }
 
         #region properties

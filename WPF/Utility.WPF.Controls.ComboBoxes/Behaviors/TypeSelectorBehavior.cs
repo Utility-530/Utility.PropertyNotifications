@@ -15,7 +15,7 @@ using Utility.WPF.Factorys;
 using Utility.Interfaces.NonGeneric;
 using Utility.Nodes.Ex;
 using Utility.WPF.Reactives;
-using Utility.Extensions;
+using Utility.Interfaces;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {

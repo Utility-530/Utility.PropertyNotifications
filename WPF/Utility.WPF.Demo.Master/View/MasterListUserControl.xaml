@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:common="clr-namespace:Utility.Common.EventArgs;assembly=Utility.Common"
     xmlns:conv="http://schemas.utility.com/converters"
     xmlns:conv2="clr-namespace:Utility.WPF.Converters"
     xmlns:view="http://schemas.utility.com/master"
@@ -33,12 +32,12 @@
                 <DataTemplate>
                     <view:MasterControl CommandParameter="{Binding NewItem}" Movement="RightToLeft" RemoveOrder="Last" ButtonTypes="Add,Remove">
                         <i:Interaction.Triggers>
-                            <i:EventTrigger  EventName="Change">
+                            <!--<i:EventTrigger  EventName="Change">
                                 <i:InvokeCommandAction Command="{Binding ChangeCommand}" PassEventArgsToCommand="True"
                                                        EventArgsConverter="{x:Static conv2:AutoMapperConverter.Instance}"
                                                        EventArgsConverterParameter="{x:Type common:CollectionEventArgs}"
                                                        ></i:InvokeCommandAction>
-                            </i:EventTrigger>
+                            </i:EventTrigger>-->
                         </i:Interaction.Triggers>
                         <view1:DragablzHorizontalItemsControl x:Name="DragablzItemsControl"
                                                        ItemsSource="{Binding Data}"

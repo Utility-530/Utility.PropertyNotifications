@@ -3,7 +3,6 @@ using Splat.Autofac;
 using System.Configuration;
 using System.Data;
 using System.Windows;
-using Utility.Common;
 using Utility.WPF.Controls.Meta;
 
 namespace Utility.WPF.Demo.ComboBoxes

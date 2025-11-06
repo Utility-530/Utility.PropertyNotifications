@@ -13,19 +13,21 @@
                     FontWeight="Bold"
                     Text="{Binding First}"
                     TextAlignment="Center" />
-                <Image Margin="0,5,0,0" Source="{Binding Image}" Height="80" />
+                <Image
+                    Height="80"
+                    Margin="0,5,0,0"
+                    Source="{Binding Image}" />
             </StackPanel>
         </DataTemplate>
 
-        <local:DoubleClickViewModel x:Key="DoubleClickViewModel"></local:DoubleClickViewModel>
+        <local:DoubleClickViewModel x:Key="DoubleClickViewModel" />
     </UserControl.Resources>
 
     <Grid DataContext="{StaticResource DoubleClickViewModel}">
         <ListBox ItemsSource="{DynamicResource Characters}">
             <ListBox.ItemContainerStyle>
                 <Style>
-                    <Setter Property="util:MouseDoubleClick.Command"
-                            Value="{Binding DataContext.MyCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}" />
+                    <Setter Property="util:MouseDoubleClick.Command" Value="{Binding DataContext.MyCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}" />
                 </Style>
             </ListBox.ItemContainerStyle>
         </ListBox>

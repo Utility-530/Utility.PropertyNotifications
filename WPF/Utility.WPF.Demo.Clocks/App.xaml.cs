@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Splat.Autofac;
 using System.Windows;
-using Utility.Common;
 
 namespace Utility.WPF.Demo.Clocks
 {
@@ -14,7 +13,7 @@ namespace Utility.WPF.Demo.Clocks
         {
             var builder = new ContainerBuilder();
             var d = typeof(Utility.WPF.Demo.Common.ViewModels.Tick);
-            Resolver.Instance.AutoRegister();
+            //Resolver.Instance.AutoRegister();
             builder.UseAutofacDependencyResolver();
         }
     }

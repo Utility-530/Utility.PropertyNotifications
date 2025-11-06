@@ -1,26 +1,35 @@
-﻿<UserControl x:Class="Utility.WPF.Demo.Controls.HeaderedUserControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:data="clr-namespace:Utility.WPF.Demo.Data.Model;assembly=Utility.WPF.Demo.Data"
-             xmlns:controls="http://schemas.utility.com"
-             mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="Utility.WPF.Demo.Controls.HeaderedUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="http://schemas.utility.com"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:data="clr-namespace:Utility.WPF.Demo.Data.Model;assembly=Utility.WPF.Demo.Data"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <DockPanel>
-        <ToggleButton DockPanel.Dock="Top" Width="100" x:Name="ShowCountToggleButton">Show Count</ToggleButton>
+        <ToggleButton
+            x:Name="ShowCountToggleButton"
+            Width="100"
+            DockPanel.Dock="Top">
+            Show Count
+        </ToggleButton>
 
         <UniformGrid>
-            <controls:HeaderedDataGrid Header="Test HeaderedDataGrid"
-                                       ShowCountInHeader="{Binding ElementName=ShowCountToggleButton, Path=IsChecked}"
-                                       ItemsSource="{x:Static data:Finance.Sectors}" />
+            <controls:HeaderedDataGrid
+                Header="Test HeaderedDataGrid"
+                ItemsSource="{x:Static data:Finance.Sectors}"
+                ShowCountInHeader="{Binding ElementName=ShowCountToggleButton, Path=IsChecked}" />
 
-            <controls:HeaderedListBox Header="Test HeaderedListBox"
-                                        ShowCountInHeader="{Binding ElementName=ShowCountToggleButton, Path=IsChecked}"
-                                  ItemsSource="{Binding Source={x:Static data:Finance.Sectors}}">
+            <controls:HeaderedListBox
+                Header="Test HeaderedListBox"
+                ItemsSource="{Binding Source={x:Static data:Finance.Sectors}}"
+                ShowCountInHeader="{Binding ElementName=ShowCountToggleButton, Path=IsChecked}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Key, Mode=OneTime}"></TextBlock>
+                        <TextBlock Text="{Binding Key, Mode=OneTime}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </controls:HeaderedListBox>

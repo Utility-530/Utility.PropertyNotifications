@@ -2,8 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Utility.Common;
 using Utility.Helpers;
+using Utility.ServiceLocation;
 using Utility.WPF.Demo.Common.ViewModels;
 
 namespace Utility.WPF.Demo.Common.Meta
@@ -25,7 +25,7 @@ namespace Utility.WPF.Demo.Common.Meta
 
     public class Factory
     {
-        private FactoryLogger logger = Resolver.Instance.Resolve<FactoryLogger>();
+        private FactoryLogger logger = Globals.Resolver.Resolve<FactoryLogger>();
 
         public T Create<T>() where T : class
         {
@@ -55,7 +55,7 @@ namespace Utility.WPF.Demo.Common.Meta
 
         private class Shelf
         {
-            private static KeyStore Store = Resolver.Instance.Resolve<KeyStore>();
+            private static KeyStore Store = Globals.Resolver.Resolve<KeyStore>();
 
             public static TickViewModel TickViewModel => new(Guid.NewGuid(), Store.CreateNewKey()) { IsChecked = Statics.Random.NextBoolean() };
             public static ButtonViewModel ButtonViewModel => new(Store.CreateNewKey(), new ActionCommand(() => { })) { IsRefreshable = Statics.Random.NextBoolean() };

@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using Utility.Common;
+using Utility.ServiceLocation;
 using Utility.WPF.Demo.Common.Meta;
 using Utility.WPF.Demo.Common.ViewModels;
 
@@ -32,7 +32,7 @@ namespace Utility.WPF.Demo.Master.View
         {
             try
             {
-                return Resolver.Instance.Resolve<Factory>().Create<Fields>(Statics.Random.Next(10, 20)).Cached();
+                return Globals.Resolver.Resolve<Factory>().Create<Fields>(Statics.Random.Next(10, 20)).Cached();
             }
             catch
             {

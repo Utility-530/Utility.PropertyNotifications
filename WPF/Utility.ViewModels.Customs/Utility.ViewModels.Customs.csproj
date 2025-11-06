@@ -8,7 +8,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
-		<ProjectReference Include="..\..\Infrastructure\Utility.EventArgs\Utility.EventArgs.csproj" />
+		<ProjectReference Include="..\..\Infrastructure\Utility.EventArguments\Utility.EventArguments.csproj" />
 		<ProjectReference Include="..\..\Infrastructure\Utility.Services.Deprecated\Utility.Services.Deprecated.csproj" />
 		<ProjectReference Include="..\..\Models\Utility.Models.Filters\Utility.Models.Filters.csproj" />
 	</ItemGroup>

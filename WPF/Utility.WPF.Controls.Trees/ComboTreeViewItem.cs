@@ -281,7 +281,11 @@ namespace Utility.WPF.Controls.Trees
 
         protected override DependencyObject GetContainerForItemOverride()
         {
-            var item = new CustomTreeViewItem() { ItemContainerStyleSelector = ItemContainerStyleSelector, ItemContainerStyle = ItemContainerStyle, TreeView = this.TreeView };
+            var item = new CustomTreeViewItem() { 
+                ItemContainerStyleSelector = ItemContainerStyleSelector, 
+                ItemContainerStyle = ItemContainerStyle, 
+                HeaderTemplateSelector = ItemTemplateSelector, 
+                TreeView = this.TreeView };
             item.Selected += (s, e) =>
             {
                 if (s is FrameworkElement { DataContext: { } dataContext } && SelectionItem != dataContext)

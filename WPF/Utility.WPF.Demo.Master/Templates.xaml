@@ -5,7 +5,6 @@
                     xmlns:view="http://schemas.utility.com/dragablz"
                     xmlns:view111="http://schemas.utility.com/master"
                     xmlns:res="http://schemas.utility.com/resourcedictionary"
-                    xmlns:common="clr-namespace:Utility.Common.EventArgs;assembly=Utility.Common"
                     xmlns:vm="clr-namespace:Utility.WPF.Demo.Common.ViewModels;assembly=Utility.WPF.Demo.Common">
 
     <ResourceDictionary.MergedDictionaries>
@@ -20,12 +19,12 @@
                              ButtonTypes="Add,Remove"
                              Height="200">
             <i:Interaction.Triggers>
-                <i:EventTrigger  EventName="Change">
+                <!--<i:EventTrigger  EventName="Change">
                     <i:InvokeCommandAction Command="{Binding ChangeCommand}"
                                                            PassEventArgsToCommand="True"
                                                            EventArgsConverter="{x:Static conv:AutoMapperConverter.Instance}"
                                                            EventArgsConverterParameter="{x:Type common:CollectionItemEventArgs}"></i:InvokeCommandAction>
-                </i:EventTrigger>
+                </i:EventTrigger>-->
             </i:Interaction.Triggers>
             <view:DragablzHorizontalItemsControl
                                                        ItemsSource="{Binding Data}"

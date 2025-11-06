@@ -3,13 +3,13 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Utility.Common;
-using Utility.Common.EventArgs;
 using Utility.Enums;
+using Utility.EventArguments;
 using Utility.ViewModels;
+using Utility.ViewModels.Customs.Infrastructure;
 using Utility.WPF.Demo.Data.Factory;
 using Utility.WPF.Demo.Data.Model;
-using sim = Utility.Services.FilterDictionaryService<Utility.WPF.Demo.Data.Model.Stock>;
+using sim = Utility.Services.Deprecated.FilterDictionaryService<Utility.WPF.Demo.Data.Model.Stock>;
 
 namespace Utility.WPF.Demo.Hybrid
 {

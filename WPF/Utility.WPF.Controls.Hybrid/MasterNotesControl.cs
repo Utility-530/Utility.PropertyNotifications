@@ -16,7 +16,7 @@ namespace Utility.WPF.Controls.Hybrid
 
         public MasterNotesControl()
         {
-            Movement = Enums.XYMovement.TopToBottom;
+            Movement = Enums.XYTraversal.TopToBottom;
         }
 
         public override void OnApplyTemplate()

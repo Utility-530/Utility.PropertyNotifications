@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Meta\Utility.Meta\Utility.Meta.csproj" />
     <ProjectReference Include="..\..\Persists\Utility.Persists\Utility.Persists.csproj" />
     <ProjectReference Include="..\Utility.ViewModels.Customs\Utility.ViewModels.Customs.csproj" />
     <ProjectReference Include="..\Utility.WPF.Controls.Date\Utility.WPF.Controls.Date.csproj" />

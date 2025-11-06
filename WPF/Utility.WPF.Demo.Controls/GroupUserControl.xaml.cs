@@ -8,11 +8,6 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Windows;
 using System.Windows.Controls;
-using Utility.Common;
-using Utility.Common.Helper;
-using Utility.WPF.Reactives;
-using Utility.Helpers.NonGeneric;
-using Utility.Helpers.Ex;
 using Utility.WPF.Demo.Data.Factory;
 using Utility.WPF.Demo.Data.Model;
 using Utility.ViewModels;
@@ -24,67 +19,67 @@ namespace Utility.WPF.Demo.Controls
     /// </summary>
     public partial class GroupUserControl : UserControl
     {
-        private readonly Subject<ClassProperty> subject = new Subject<ClassProperty>();
+        //private readonly Subject<ClassProperty> subject = new Subject<ClassProperty>();
 
-        public GroupUserControl()
-        {
-            InitializeComponent();
+        //public GroupUserControl()
+        //{
+        //    InitializeComponent();
 
-            var groupUserControlViewModel = new GroupUserControlViewModel();
+        //    var groupUserControlViewModel = new GroupUserControlViewModel();
 
-            Combobox1.ItemsSource = groupUserControlViewModel.Types;
+        //    Combobox1.ItemsSource = groupUserControlViewModel.Types;
 
-            _ = Combobox1
-                .Changes()
-                .Select(a => a.ToString())
-                .Subscribe(a =>
-                {
-                    groupUserControlViewModel.OnNext(a);
-                });
+        //    _ = Combobox1
+        //        .Changes()
+        //        .Select(a => a.ToString())
+        //        .Subscribe(a =>
+        //        {
+        //            groupUserControlViewModel.OnNext(a);
+        //        });
 
-            _ = ComboBox
-                 .ItemChanges<ClassProperty>()
-                 .Subscribe(a =>
-                 {
-                     subject.OnNext(a);
-                 });
+        //    _ = ComboBox
+        //         .ItemChanges<ClassProperty>()
+        //         .Subscribe(a =>
+        //         {
+        //             subject.OnNext(a);
+        //         });
 
-            groupUserControlViewModel.WhenAnyValue(a => a.Collection)
-                .BindTo(this, a => a.ListBox1.ItemsSource);
+        //    groupUserControlViewModel.WhenAnyValue(a => a.Collection)
+        //        .BindTo(this, a => a.ListBox1.ItemsSource);
 
-            var group2UserControlViewModel = new Group2UserControlViewModel(subject);
+        //    var group2UserControlViewModel = new Group2UserControlViewModel(subject);
 
-            group2UserControlViewModel.WhenAnyValue(a => a.ErrorMessage)
-                .ObserveOnDispatcher()
-                .Subscribe(a => CompletedLabel.Content = a);
+        //    group2UserControlViewModel.WhenAnyValue(a => a.ErrorMessage)
+        //        .ObserveOnDispatcher()
+        //        .Subscribe(a => CompletedLabel.Content = a);
 
-            //ListBox2.ItemsSource = group2UserControlViewModel.Collection;
+        //    //ListBox2.ItemsSource = group2UserControlViewModel.Collection;
 
-            //var group3UserControlViewModel = StockObservableFactory.GenerateUnlimitedGroupableChangeSet(subject).ToGroupOnViewModel(out var disposable);
+        //    //var group3UserControlViewModel = StockObservableFactory.GenerateUnlimitedGroupableChangeSet(subject).ToGroupOnViewModel(out var disposable);
 
-            //ListBox3.ItemsSource = group3UserControlViewModel.Children;
-            //ComboBox.ItemsSource = group3UserControlViewModel.Properties;
-        }
+        //    //ListBox3.ItemsSource = group3UserControlViewModel.Children;
+        //    //ComboBox.ItemsSource = group3UserControlViewModel.Properties;
+        //}
 
         public class Group2UserControlViewModel : ReactiveObject
         {
-            private IObservable<IChangeSet<Groupable<Stock>, string>> changeSet;
-            //private GroupCollectionViewModel viewmodel;
+            //private IObservable<IChangeSet<Groupable<Stock>, string>> changeSet;
+            ////private GroupCollectionViewModel viewmodel;
 
-            public Group2UserControlViewModel(IObservable<ClassProperty> subject)
-            {
-                changeSet = StockObservableFactory.GenerateLimitedGroupableChangeSet(subject).RefCount();
+            //public Group2UserControlViewModel(IObservable<ClassProperty> subject)
+            //{
+            //    changeSet = StockObservableFactory.GenerateLimitedGroupableChangeSet(subject).RefCount();
 
-                _ = changeSet
-                    .Subscribe(a => { }, () =>
-                    {
-                        ErrorMessage = "Observer OnCompleted method called - unable to modify grouping list - hereafter";
-                        this.RaisePropertyChanged(nameof(ErrorMessage));
-                    });
-                //viewmodel = changeSet.ToGroupOnViewModel(out var disposable);
-            }
+            //    _ = changeSet
+            //        .Subscribe(a => { }, () =>
+            //        {
+            //            ErrorMessage = "Observer OnCompleted method called - unable to modify grouping list - hereafter";
+            //            this.RaisePropertyChanged(nameof(ErrorMessage));
+            //        });
+            //    //viewmodel = changeSet.ToGroupOnViewModel(out var disposable);
+            //}
 
-            public string ErrorMessage { get; private set; }
+            //public string ErrorMessage { get; private set; }
             //public IEnumerable Collection => viewmodel.Children;
             //public IEnumerable Properties => viewmodel.Properties;
         }

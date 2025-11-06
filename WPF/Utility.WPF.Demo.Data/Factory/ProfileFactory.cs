@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Media.Imaging;
-using Utility.Common.Helper;
 using Utility.Helpers;
 using Utility.WPF.Demo.Data.Model;
 

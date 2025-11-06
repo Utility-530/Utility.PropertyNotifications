@@ -1,52 +1,59 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Geometry x:Key="DownGeometry">M0,0 L50,50 L100,0</Geometry>
     <Geometry x:Key="UpGeometry">M0,50 L50,0 L100,50</Geometry>
     <Geometry x:Key="RightGeometry">M0,0 L50,50 L0,100</Geometry>
     <Geometry x:Key="LeftGeometry">M50,0 L0,50 L50,100</Geometry>
-    
-    
-    <EllipseGeometry x:Key="DotGeometry" Center="0,0" RadiusX="1" RadiusY="1" />
+
+
+    <EllipseGeometry
+        x:Key="DotGeometry"
+        Center="0,0"
+        RadiusX="1"
+        RadiusY="1" />
 
     <Geometry x:Key="TickGeometry">M908.3,132.5L336.7,704.2l-245-245L10,540.8l326.7,326.7l81.7-81.7L990,214.2L908.3,132.5z</Geometry>
 
     <Geometry x:Key="XGeometry">M0,0L16,16M16,0L0,16</Geometry>
 
-    <Geometry x:Key="RefreshGeometry">M307.475,141.686c-6.893-4.598-16.207-2.736-20.802,4.157l-0.446,0.669c-5.426-74.107-67.45-132.745-142.918-132.745
-	C64.288,13.768,0,78.056,0,157.077s64.288,143.309,143.309,143.309c11.046,0,20-8.954,20-20s-8.954-20-20-20
-	C86.344,260.385,40,214.041,40,157.077S86.344,53.768,143.309,53.768c52.798,0,96.465,39.815,102.571,90.996
-	c-4.813-5.991-13.486-7.422-20-3.078c-6.893,4.596-8.754,13.91-4.158,20.802l29.702,44.541c3.505,5.256,9.208,8.394,15.255,8.394
-	c6.047,0,11.749-3.139,15.252-8.394l29.702-44.541C316.228,155.595,314.367,146.282,307.475,141.686z</Geometry>
+    <Geometry x:Key="RefreshGeometry">
+        M307.475,141.686c-6.893-4.598-16.207-2.736-20.802,4.157l-0.446,0.669c-5.426-74.107-67.45-132.745-142.918-132.745
+        C64.288,13.768,0,78.056,0,157.077s64.288,143.309,143.309,143.309c11.046,0,20-8.954,20-20s-8.954-20-20-20
+        C86.344,260.385,40,214.041,40,157.077S86.344,53.768,143.309,53.768c52.798,0,96.465,39.815,102.571,90.996
+        c-4.813-5.991-13.486-7.422-20-3.078c-6.893,4.596-8.754,13.91-4.158,20.802l29.702,44.541c3.505,5.256,9.208,8.394,15.255,8.394
+        c6.047,0,11.749-3.139,15.252-8.394l29.702-44.541C316.228,155.595,314.367,146.282,307.475,141.686z
+    </Geometry>
 
-    <Geometry x:Key="NoneGeometry">M256,0C114.844,0,0,114.844,0,256s114.844,256,256,256s256-114.844,256-256S397.156,0,256,0z M256,448
-			c-105.865,0-192-86.135-192-192c0-40.406,12.25-78.604,35.542-111.198l267.656,267.656C334.604,435.75,296.406,448,256,448z
-			 M412.458,367.198L144.802,99.542C177.396,76.25,215.594,64,256,64c105.865,0,192,86.135,192,192
-			C448,296.406,435.75,334.604,412.458,367.198z</Geometry>
+    <Geometry x:Key="NoneGeometry">
+        M256,0C114.844,0,0,114.844,0,256s114.844,256,256,256s256-114.844,256-256S397.156,0,256,0z M256,448
+        c-105.865,0-192-86.135-192-192c0-40.406,12.25-78.604,35.542-111.198l267.656,267.656C334.604,435.75,296.406,448,256,448z
+        M412.458,367.198L144.802,99.542C177.396,76.25,215.594,64,256,64c105.865,0,192,86.135,192,192
+        C448,296.406,435.75,334.604,412.458,367.198z
+    </Geometry>
 
     <Geometry x:Key="RightChevronGeometry">M 6.0,23.5 17.5,12.0 6.0,0.5</Geometry>
-    
+
     <Geometry x:Key="RightChevronGeometry2">M0,0 L2,0 L6,4 L2,8 L0,8 L4,4 z</Geometry>
 
     <Geometry x:Key="Tick">M 21.7,52.2 L 74.4,0 L 74.4,18.667 L 22,70.708 L 0.,49 L 0,29.8 L 21.7,52.2 Z</Geometry>
 
-    <Geometry x:Key="Edit"
-        >M320 112L368 64 448 144 400 192 320 112ZM128 304L288 144 368 224 208 384 128 304ZM96 336L176 416 64 448 96 336Z
+    <Geometry x:Key="Edit">
+        M320 112L368 64 448 144 400 192 320 112ZM128 304L288 144 368 224 208 384 128 304ZM96 336L176 416 64 448 96 336Z
     </Geometry>
 
-    <Geometry  x:Key="TargetGeometry">
+    <Geometry x:Key="TargetGeometry">
         M17.020 8h-2.045c-0.245-3.194-2.806-5.745-6.004-5.977v-2.062h-1v2.065c-3.172 0.258-5.702 2.799-5.946 5.974h-2.045v1h2.045c0.244 3.175 2.774 5.716 5.945 5.974v2.026h1v-2.023c3.198-0.231 5.759-2.782 6.004-5.977h2.045v-1zM8.971 13.977v-1.977h-1v1.974c-2.621-0.252-4.708-2.35-4.946-4.974h1.955v-1h-1.955c0.238-2.624 2.325-4.722 4.946-4.974v1.935h1v-1.938c2.647 0.227 4.764 2.333 5.004 4.977h-1.955v1h1.955c-0.24 2.644-2.357 4.75-5.004 4.977z
     </Geometry>
 
-    <Geometry  x:Key="SettingsGeometry">
-        M12.7848 0.449982C13.8239 0.449982 14.7167 1.16546 14.9122 2.15495L14.9991 2.59495C15.3408 4.32442 17.1859 5.35722 18.9016 4.7794L19.3383 4.63233C20.3199 4.30175 21.4054 4.69358 21.9249 5.56605L22.7097 6.88386C23.2293 7.75636 23.0365 8.86366 22.2504 9.52253L21.9008 9.81555C20.5267 10.9672 20.5267 13.0328 21.9008 14.1844L22.2504 14.4774C23.0365 15.1363 23.2293 16.2436 22.7097 17.1161L21.925 18.4339C21.4054 19.3064 20.3199 19.6982 19.3382 19.3676L18.9017 19.2205C17.1859 18.6426 15.3408 19.6754 14.9991 21.405L14.9122 21.845C14.7167 22.8345 13.8239 23.55 12.7848 23.55H11.2152C10.1761 23.55 9.28331 22.8345 9.08781 21.8451L9.00082 21.4048C8.65909 19.6754 6.81395 18.6426 5.09822 19.2205L4.66179 19.3675C3.68016 19.6982 2.59465 19.3063 2.07505 18.4338L1.2903 17.1161C0.770719 16.2436 0.963446 15.1363 1.74956 14.4774L2.09922 14.1844C3.47324 13.0327 3.47324 10.9672 2.09922 9.8156L1.74956 9.52254C0.963446 8.86366 0.77072 7.75638 1.2903 6.8839L2.07508 5.56608C2.59466 4.69359 3.68014 4.30176 4.66176 4.63236L5.09831 4.77939C6.81401 5.35722 8.65909 4.32449 9.00082 2.59506L9.0878 2.15487C9.28331 1.16542 10.176 0.449982 11.2152 0.449982H12.7848ZM12 15.3C13.8225 15.3 15.3 13.8225 15.3 12C15.3 10.1774 13.8225 8.69998 12 8.69998C10.1774 8.69998 8.69997 10.1774 8.69997 12C8.69997 13.8225 10.1774 15.3 12 15.3Z  
+    <Geometry x:Key="SettingsGeometry">
+        M12.7848 0.449982C13.8239 0.449982 14.7167 1.16546 14.9122 2.15495L14.9991 2.59495C15.3408 4.32442 17.1859 5.35722 18.9016 4.7794L19.3383 4.63233C20.3199 4.30175 21.4054 4.69358 21.9249 5.56605L22.7097 6.88386C23.2293 7.75636 23.0365 8.86366 22.2504 9.52253L21.9008 9.81555C20.5267 10.9672 20.5267 13.0328 21.9008 14.1844L22.2504 14.4774C23.0365 15.1363 23.2293 16.2436 22.7097 17.1161L21.925 18.4339C21.4054 19.3064 20.3199 19.6982 19.3382 19.3676L18.9017 19.2205C17.1859 18.6426 15.3408 19.6754 14.9991 21.405L14.9122 21.845C14.7167 22.8345 13.8239 23.55 12.7848 23.55H11.2152C10.1761 23.55 9.28331 22.8345 9.08781 21.8451L9.00082 21.4048C8.65909 19.6754 6.81395 18.6426 5.09822 19.2205L4.66179 19.3675C3.68016 19.6982 2.59465 19.3063 2.07505 18.4338L1.2903 17.1161C0.770719 16.2436 0.963446 15.1363 1.74956 14.4774L2.09922 14.1844C3.47324 13.0327 3.47324 10.9672 2.09922 9.8156L1.74956 9.52254C0.963446 8.86366 0.77072 7.75638 1.2903 6.8839L2.07508 5.56608C2.59466 4.69359 3.68014 4.30176 4.66176 4.63236L5.09831 4.77939C6.81401 5.35722 8.65909 4.32449 9.00082 2.59506L9.0878 2.15487C9.28331 1.16542 10.176 0.449982 11.2152 0.449982H12.7848ZM12 15.3C13.8225 15.3 15.3 13.8225 15.3 12C15.3 10.1774 13.8225 8.69998 12 8.69998C10.1774 8.69998 8.69997 10.1774 8.69997 12C8.69997 13.8225 10.1774 15.3 12 15.3Z
     </Geometry>
 
 
     <PathGeometry x:Key="Search">
         M8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12zm6.32-1.094l3.58 3.58a1 1 0 1 1-1.415 1.413l-3.58-3.58a8 8 0 1 1 1.414-1.414z
     </PathGeometry>
-    
+
     <PathGeometry x:Key="Plus">
         <PathGeometry.Figures>
             <PathFigure StartPoint="0,1">
@@ -70,7 +77,7 @@
     </PathGeometry>
 
 
-    <PathGeometry x:Key="RightArrow" >
+    <PathGeometry x:Key="RightArrow">
         <PathGeometry.Figures>
             <PathFigure StartPoint="0,0.5">
                 <LineSegment Point="1,0.5" />
@@ -78,13 +85,13 @@
             <PathFigure StartPoint="0.5,0">
                 <LineSegment Point="1,0.5" />
             </PathFigure>
-            <PathFigure StartPoint="0.5,1" >
+            <PathFigure StartPoint="0.5,1">
                 <LineSegment Point="1,0.5" />
             </PathFigure>
         </PathGeometry.Figures>
     </PathGeometry>
 
-    <PathGeometry x:Key="LeftArrow" >
+    <PathGeometry x:Key="LeftArrow">
         <PathGeometry.Figures>
             <PathFigure StartPoint="1,0.5">
                 <LineSegment Point="0,0.5" />
@@ -93,13 +100,13 @@
             <PathFigure StartPoint="0.5,0">
                 <LineSegment Point="0,0.5" />
             </PathFigure>
-            <PathFigure StartPoint="0.5,1" >
+            <PathFigure StartPoint="0.5,1">
                 <LineSegment Point="0,0.5" />
             </PathFigure>
         </PathGeometry.Figures>
     </PathGeometry>
 
-    <PathGeometry x:Key="UpArrow" >
+    <PathGeometry x:Key="UpArrow">
         <PathGeometry.Figures>
             <PathFigure StartPoint="0.5,0">
                 <LineSegment Point="0,0.5" />
@@ -107,13 +114,13 @@
             <PathFigure StartPoint="0.5,0">
                 <LineSegment Point="1,0.5" />
             </PathFigure>
-            <PathFigure StartPoint="0.5,0" >
+            <PathFigure StartPoint="0.5,0">
                 <LineSegment Point="0.5,1" />
             </PathFigure>
         </PathGeometry.Figures>
     </PathGeometry>
 
-    <PathGeometry x:Key="DownArrow" >
+    <PathGeometry x:Key="DownArrow">
         <PathGeometry.Figures>
             <PathFigure StartPoint="1,0.5">
                 <LineSegment Point="0.5,1" />
@@ -122,29 +129,35 @@
             <PathFigure StartPoint="0,0.5">
                 <LineSegment Point="0.5,1" />
             </PathFigure>
-            <PathFigure StartPoint="0.5,1" >
+            <PathFigure StartPoint="0.5,1">
                 <LineSegment Point="0.5,0" />
             </PathFigure>
         </PathGeometry.Figures>
     </PathGeometry>
 
-    
+
 
     <GeometryGroup x:Key="Null">
-        <EllipseGeometry Center="10,10" RadiusX="7.5" RadiusY="7.5" />
+        <EllipseGeometry
+            Center="10,10"
+            RadiusX="7.5"
+            RadiusY="7.5" />
         <LineGeometry StartPoint="0,20" EndPoint="20,0" />
     </GeometryGroup>
 
     <GeometryGroup x:Key="NotNull">
-        <EllipseGeometry Center="10,10" RadiusX="7.5" RadiusY="7.5" />
+        <EllipseGeometry
+            Center="10,10"
+            RadiusX="7.5"
+            RadiusY="7.5" />
     </GeometryGroup>
 
 
 
-    <PathGeometry x:Key="Tick_Rounded" >
+    <PathGeometry x:Key="Tick_Rounded">
         <PathGeometry.Figures>
             <PathFigureCollection>
-                <PathFigure IsClosed="False"  StartPoint="4,2">
+                <PathFigure IsClosed="False" StartPoint="4,2">
                     <PathFigure.Segments>
                         <PathSegmentCollection>
                             <LineSegment Point="8,6" />
@@ -160,7 +173,7 @@
     <PathGeometry x:Key="Cancel_Rounded">
         <PathGeometry.Figures>
             <PathFigureCollection>
-                <PathFigure IsClosed="False"  StartPoint="9,9">
+                <PathFigure IsClosed="False" StartPoint="9,9">
                     <PathFigure.Segments>
                         <PathSegmentCollection>
                             <LineSegment Point="21,21" />
@@ -168,7 +181,7 @@
                     </PathFigure.Segments>
                 </PathFigure>
 
-                <PathFigure IsClosed="False"  StartPoint="9,21">
+                <PathFigure IsClosed="False" StartPoint="9,21">
                     <PathFigure.Segments>
                         <PathSegmentCollection>
                             <LineSegment Point="21,9" />

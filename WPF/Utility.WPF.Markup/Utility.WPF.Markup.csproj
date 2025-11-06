@@ -8,7 +8,7 @@
 
   <ItemGroup> 
     <ProjectReference Include="..\..\Commands\Utility.Commands\Utility.Commands.csproj" /> 
-    <ProjectReference Include="..\..\Infrastructure\Utility.EventArgs\Utility.EventArgs.csproj" /> 
+    <ProjectReference Include="..\..\Infrastructure\Utility.EventArguments\Utility.EventArguments.csproj" /> 
     <ProjectReference Include="..\Utility.WPF.Abstract\Utility.WPF.Abstract.csproj" /> 
     <ProjectReference Include="..\Utility.WPF.Reactives\Utility.WPF.Reactives.csproj" />
   </ItemGroup>

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.Reactive;
 using Utility.Common.Contract;
-using Utility.EventArgs;
+using Utility.EventArguments;
 using Utility.Enums;
 using Utility.Interfaces.NonGeneric.Data;
 

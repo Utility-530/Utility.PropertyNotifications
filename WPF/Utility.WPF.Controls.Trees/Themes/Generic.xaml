@@ -1,27 +1,27 @@
-﻿<ResourceDictionary  xmlns:res="http://schemas.utility.com/resourcedictionary"
-                             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                             xmlns:local="clr-namespace:Utility.WPF.Controls.Trees"
-                             >
-    <!-- use standard resourcedictionary to avoid issue with TreeListView.xaml -->
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Utility.WPF.Controls.Trees"
+    xmlns:res="http://schemas.utility.com/resourcedictionary">
+    <!--  use standard resourcedictionary to avoid issue with TreeListView.xaml  -->
     <ResourceDictionary.MergedDictionaries>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/AddRemoveButtons.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Aligned.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/BasicStyle.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ButtonsFlank.xaml"/>        
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboBoxToggleButton.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml"/>
-        
-        <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItem.xaml"/>
-        
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/TreeViewItemStyle.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/GraphStyle.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/LinesStyle.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/SelectedHorizontalStyle.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CheckableTreeViewItem.xaml"/>
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomHasItemsStyle.xaml"/>
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/AddRemoveButtons.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Aligned.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/BasicStyle.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ButtonsFlank.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboBoxToggleButton.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/ComboTreeViewItem.xaml" />
 
-        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/TreeListView.xaml"/>
+        <ResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomTreeViewItem.xaml" />
+
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/TreeViewItemStyle.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/GraphStyle.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/LinesStyle.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/Shared.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/SelectedHorizontalStyle.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CheckableTreeViewItem.xaml" />
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/Themes/CustomHasItemsStyle.xaml" />
+
+        <res:SharedResourceDictionary Source="/Utility.WPF.Controls.Trees;component/TreeListView.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

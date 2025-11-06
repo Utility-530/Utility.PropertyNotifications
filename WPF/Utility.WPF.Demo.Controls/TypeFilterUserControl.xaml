@@ -1,22 +1,26 @@
-﻿<UserControl x:Class="Utility.WPF.Demo.Controls.TypeFilterUserControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:testdata="clr-namespace:Utility.WPF.Demo.Data.Model;assembly=Utility.WPF.Demo.Data"
-             xmlns:util="http://schemas.utility.com"
-             mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+﻿<UserControl
+    x:Class="Utility.WPF.Demo.Controls.TypeFilterUserControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:testdata="clr-namespace:Utility.WPF.Demo.Data.Model;assembly=Utility.WPF.Demo.Data"
+    xmlns:util="http://schemas.utility.com"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
     <Grid>
         <UniformGrid Columns="1">
             <DockPanel Margin="10">
-                <util:TypeControl x:Name="TypeControl" Type="{x:Type testdata:Character}" Changed="TypeControl_Changed_2"></util:TypeControl>
+                <util:TypeControl
+                    x:Name="TypeControl"
+                    Changed="TypeControl_Changed_2"
+                    Type="{x:Type testdata:Character}" />
             </DockPanel>
-            <ListBox x:Name="listBox"
-                 ItemsSource="{DynamicResource Characters}">
+            <ListBox x:Name="listBox" ItemsSource="{DynamicResource Characters}">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal"></WrapPanel>
+                        <WrapPanel Orientation="Horizontal" />
                     </ItemsPanelTemplate>
                 </ListBox.ItemsPanel>
                 <ListBox.ItemContainerStyle>

@@ -7,22 +7,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using Utility.EventArguments;
 using Utility.WPF.Controls.Trees;
 
 namespace Utility.WPF.Controls.ComboBoxes
 {
-    public class ValueCoercingEventArgs : EventArgs
-    {
-        public ValueCoercingEventArgs(object newValue, object oldValue)
-        {
-            NewValue = newValue;
-            OldValue = oldValue;
-        }
-
-        public object NewValue { get; set; }
-        public object OldValue { get; set; }
-        public bool Cancel { get; set; } = false;
-    }
 
     public class ComboBoxTreeView : ComboBox
     {

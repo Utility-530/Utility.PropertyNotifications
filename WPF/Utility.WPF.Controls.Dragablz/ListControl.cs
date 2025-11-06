@@ -6,7 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
-using Utility.Common;
 using Utility.WPF.Attached;
 using Utility.WPF.Helpers;
 using Utility.Helpers.Reflection;

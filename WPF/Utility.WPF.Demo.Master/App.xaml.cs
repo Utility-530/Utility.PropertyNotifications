@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Splat.Autofac;
 using System.Windows;
-using Utility.Common;
 
 namespace Utility.WPF.Demo.Master
 {

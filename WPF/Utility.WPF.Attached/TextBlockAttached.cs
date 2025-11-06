@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using Utility.Singletons;
 
 namespace Utility.WPF.Attached
 {

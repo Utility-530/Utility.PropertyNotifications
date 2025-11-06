@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
-using Utility.Common.EventArgs;
+using Utility.EventArguments;
 
 namespace Utility.WPF.Demo.Common.ViewModels
 {

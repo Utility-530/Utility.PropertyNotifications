@@ -12,6 +12,7 @@ namespace Utility.WPF.Controls.Trees
             return new CustomTreeViewItem() { 
                 ItemContainerStyleSelector = ItemContainerStyleSelector, 
                 ItemContainerStyle = ItemContainerStyle,
+                HeaderTemplateSelector = ItemTemplateSelector,
                 TreeView = this
             };
         }

@@ -6,7 +6,7 @@ using System.Reactive.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Utility.Common.Collections;
+using Utility.Collections;
 using Utility.Enums;
 using Utility.Helpers;
 using Utility.WPF.Helpers;

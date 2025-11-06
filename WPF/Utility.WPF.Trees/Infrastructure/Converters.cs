@@ -53,7 +53,7 @@ namespace Utility.Nodes.WPF
     {
         public bool IsHandled { get; set; } = true;
 
-        protected override void OnEvent(System.EventArgs eventArgs)
+        protected override void OnEvent(EventArgs eventArgs)
         {
             var routedEventArgs = eventArgs as RoutedEventArgs;
             if (routedEventArgs != null)

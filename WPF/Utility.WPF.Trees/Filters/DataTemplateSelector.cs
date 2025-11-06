@@ -7,13 +7,14 @@ using Utility.Interfaces;
 using Utility.Interfaces.Exs;
 using Utility.Interfaces.Generic;
 using Utility.Interfaces.NonGeneric;
+using Utility.Nodes.WPF;
 using Utility.PropertyDescriptors;
 using Utility.Trees.Abstractions;
 using Utility.Trees.Decisions;
 using Utility.WPF.Controls;
 using Utility.WPF.Factorys;
 
-namespace Utility.Nodes.WPF
+namespace Utility.WPF.Trees.Filters
 {
     public class DataTemplateSelector : System.Windows.Controls.DataTemplateSelector
     {

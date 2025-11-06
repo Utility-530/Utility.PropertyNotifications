@@ -38,7 +38,7 @@
 
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
+		<ProjectReference Include="..\..\Infrastructure\Utility.EventArguments\Utility.EventArguments.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Attached\Utility.WPF.Attached.csproj" />
 		<ProjectReference Include="..\..\Packages\Utility.WPF.Packages\Utility.WPF.Packages.csproj" />
 		<ProjectReference Include="..\Utility.WPF.Reactives\Utility.WPF.Reactives.csproj" />

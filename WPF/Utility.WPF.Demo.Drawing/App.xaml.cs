@@ -7,8 +7,6 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using Utility.Common;
-using Utility.WPF;
 using Utility.WPF.Meta;
 
 namespace Utility.WPF.Demo.Drawing
@@ -22,7 +20,7 @@ namespace Utility.WPF.Demo.Drawing
         {
             var builder = new ContainerBuilder();
             //var d = typeof(Utility.WPF.Demo.Common.ViewModels.Tick);
-            Resolver.Instance.AutoRegister();
+            //Resolver.Instance.AutoRegister();
             builder.UseAutofacDependencyResolver();
 
             new Window

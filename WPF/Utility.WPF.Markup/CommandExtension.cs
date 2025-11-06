@@ -123,7 +123,7 @@ namespace Utility.WPF.Markup
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private void InvokeCommand(object sender, System.EventArgs args)
+        private void InvokeCommand(object sender, EventArgs args)
         {
             if (string.IsNullOrEmpty(commandName) == false &&
                 sender is FrameworkElement frameworkElement)
@@ -163,7 +163,7 @@ namespace Utility.WPF.Markup
                 throw new Exception("55jjsdsd");
         }
 
-        private object? SingleSelectorConversion(System.EventArgs args, FrameworkElement element)
+        private object? SingleSelectorConversion(EventArgs args, FrameworkElement element)
         {
             if (args is SelectionChangedEventArgs selectionArgs)
                 if (element.GetValue(ListBox.SelectionModeProperty) is SelectionMode.Single)
@@ -193,7 +193,7 @@ namespace Utility.WPF.Markup
         //    }
         //}
 
-        protected virtual object? Conversion(System.EventArgs args, ICommand cmd, FrameworkElement element)
+        protected virtual object? Conversion(EventArgs args, ICommand cmd, FrameworkElement element)
         {
             if (args is SelectionChangedEventArgs selectionArgs)
                 if (element.GetValue(ListBox.SelectionModeProperty) is SelectionMode.Single)
@@ -205,7 +205,7 @@ namespace Utility.WPF.Markup
                     }
                 }
             if (args is CollectionItemChangedEventArgs { Item: var item, EventType: var eventType, Index: var index, RoutedEvent: var @event } collectionArgs)
-                return new Utility.EventArgs.CollectionItemEventArgs(eventType, item, index);
+                return new Utility.EventArguments.CollectionItemEventArgs(eventType, item, index);
             switch (cmd)
             {
                 //case ICommand when cmd.GetType().BaseType?.Name == typeof(ReactiveCommandBase<,>).Name:
@@ -251,7 +251,7 @@ namespace Utility.WPF.Markup
                     throw new Exception("s33333dfsdsd");
             }
         }
-        internal class MyEventArgs : System.EventArgs
+        internal class MyEventArgs : EventArgs
         {
             public object? a;
 

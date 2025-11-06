@@ -41,7 +41,8 @@ namespace Utility.WPF.Controls.PropertyTrees
         static PropertyTree()
         {
             Style dynamicStyle = new(typeof(CustomTreeView)) { };
-            dynamicStyle.Setters.Add(new Setter(TreeView.ItemTemplateSelectorProperty, Utility.Nodes.WPF.DataTemplateSelector.Instance));
+            //TODO : replace
+            //dynamicStyle.Setters.Add(new Setter(TreeView.ItemTemplateSelectorProperty, Utility.Nodes.WPF.DataTemplateSelector.Instance));
             dynamicStyle.Setters.Add(new Setter(TreeView.ItemContainerStyleSelectorProperty, Utility.Nodes.WPF.StyleSelector.Instance));
         
 

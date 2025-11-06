@@ -153,7 +153,7 @@ namespace Utility.WPF.Behaviors
 
         //
         // Summary:
-        //     Gets or sets the parameter path used to extract a value from an System.EventArgs
+        //     Gets or sets the parameter path used to extract a value from an EventArgs
         //     property to pass to the Command as a parameter.
         //
         // Remarks:

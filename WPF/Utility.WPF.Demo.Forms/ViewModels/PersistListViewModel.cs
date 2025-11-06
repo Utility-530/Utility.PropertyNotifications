@@ -1,6 +1,5 @@
 ﻿using ReactiveUI;
 using System.Reactive;
-using Utility.Common.EventArgs;
 using Utility.Interfaces.NonGeneric.Data;
 
 namespace Utility.WPF.Demo.Forms.ViewModels

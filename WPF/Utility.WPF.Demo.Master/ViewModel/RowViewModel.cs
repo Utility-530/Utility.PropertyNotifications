@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xaml.Behaviors.Core;
-using Utility.Common.EventArgs;
+using Utility.EventArguments;
 using Utility.Enums;
 
 namespace Utility.WPF.Demo.Master.ViewModels

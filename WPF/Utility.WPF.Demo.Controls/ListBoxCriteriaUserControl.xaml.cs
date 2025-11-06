@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Windows.Controls;
-using Utility.Common;
+using Utility.Helpers;
 
 namespace Utility.WPF.Demo.Controls
 {
@@ -27,7 +27,7 @@ namespace Utility.WPF.Demo.Controls
                 .GenerateLazy(10000)
                 .ToObservable().Zip(Observable.Interval(TimeSpan.FromSeconds(3)), (a, b) => a)
                 .ToObservableChangeSet(a => a.Key)
-                .Sort(Comparer.Create<PassFail, string>(a => a.Key))
+                .Sort(ComparerHelper.By<PassFail, string>(a => a.Key))
                 .Top(10)
                 .ObserveOnDispatcher()
                 .Bind(out a)

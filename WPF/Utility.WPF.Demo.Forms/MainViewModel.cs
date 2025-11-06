@@ -2,8 +2,6 @@
 using System;
 using System.ComponentModel;
 using System.Reactive.Linq;
-using Utility.Common;
-using Utility.Helpers.Ex;
 using Utility.Persists;
 using Utility.PropertyNotifications;
 using Utility.WPF.Demo.Forms.Infrastructure;
@@ -28,7 +26,7 @@ namespace Utility.WPF.Demo.Forms
 
             EditViewModel
                 .WhenChanged()
-                .StartWith(new PropertyChange(EditViewModel, default, default))
+                .StartWith(new PropertyChange(EditViewModel, default, default, default))
                 .Subscribe(a =>
                 {
                     EditModel = mapper.Map<EditModel>(a.Source);

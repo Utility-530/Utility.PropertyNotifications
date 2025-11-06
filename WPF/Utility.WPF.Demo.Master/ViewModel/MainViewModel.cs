@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Reactive;
 using System.Windows.Input;
-using Utility.Common.EventArgs;
+using Utility.EventArguments;
 
 namespace Utility.WPF.Demo.Master.ViewModels
 {

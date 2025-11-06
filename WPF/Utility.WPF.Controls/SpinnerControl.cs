@@ -19,7 +19,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Evan.Wpf;
-using Utility.Common;
 using Utility.WPF.Controls.Base;
 
 namespace Utility.WPF.Controls

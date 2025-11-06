@@ -1,10 +1,5 @@
-﻿using Autofac;
-using Splat.Autofac;
-using System.Windows;
-using Utility.Common;
-using Utility.WPF;
+﻿using System.Windows;
 using Utility.WPF.Controls.Meta;
-using Utility.WPF.Meta;
 
 namespace Utility.WPF.Demo.Lists
 {
@@ -17,7 +12,7 @@ namespace Utility.WPF.Demo.Lists
         {
  
             var d = typeof(Utility.WPF.Demo.Common.ViewModels.Tick);
-            Resolver.Instance.AutoRegister();
+            //Resolver.Instance.AutoRegister();
             //builder.UseAutofacDependencyResolver();
             SQLitePCL.Batteries.Init();
             new Window

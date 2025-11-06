@@ -1,8 +1,4 @@
-﻿using Autofac;
-using Splat.Autofac;
-using System.Windows;
-using Utility.Common;
-using Utility.WPF;
+﻿using System.Windows;
 using Utility.WPF.Meta;
 
 namespace Utility.WPF.Demo.Adorners
@@ -14,7 +10,7 @@ namespace Utility.WPF.Demo.Adorners
     {
         public App()
         {
-               Resolver.Instance.AutoRegister();
+               //Resolver.Instance.AutoRegister();
 
             new Window
             {

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Utility.Common.EventArgs;
+using Utility.EventArguments;
 using Utility.WPF.Demo.Data.Factory;
 
 namespace Utility.WPF.Demo.Master.View
