@@ -1,6 +1,4 @@
-﻿using ReactiveUI;
-using System;
-using Utility.Common.Models;
+﻿using System;
 using Utility.Reactives;
 using Utility.Interfaces.NonGeneric;
 

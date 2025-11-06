@@ -1,5 +1,4 @@
-﻿using Utility.Common.Models;
-using Utility.Interfaces.NonGeneric;
+﻿using Utility.Interfaces.NonGeneric;
 
 namespace Utility.Models.Filters;
 

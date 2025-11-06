@@ -7,7 +7,6 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\Utility.Common\Utility.Common.csproj" />
     <ProjectReference Include="..\..\Reactives\Utility.Reactives\Utility.Reactives.csproj" />
     <ProjectReference Include="..\Utility.Models\Utility.Models.csproj" />
   </ItemGroup>
